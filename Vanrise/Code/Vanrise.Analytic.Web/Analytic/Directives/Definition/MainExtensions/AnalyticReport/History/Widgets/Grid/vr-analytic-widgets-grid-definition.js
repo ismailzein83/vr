@@ -402,7 +402,7 @@
                             dimensions.push({
                                 DimensionName: dimension.Name,
                                 Title: dimension.Title,
-                                TitleResourceKey: dimension.textResourceSeletorAPI != undefined ? dimension.textResourceSeletorAPI.getSelectedValues() : undefined,
+                                TitleResourceKey: dimension.textResourceSeletorAPI != undefined ? dimension.textResourceSeletorAPI.getSelectedValues() : dimension.oldTitleResourceKey,
                                 IsRootDimension: dimension.IsRootDimension,
                                 ColumnSettings: dimension.dimensionGridWidthFactorAPI.getData(),
                                 ColumnStyleId: dimension.dimensionGridStyleAPI.getSelectedIds()
@@ -418,7 +418,7 @@
                             measures.push({
                                 MeasureName: measure.Name,
                                 Title: measure.Title,
-                                TitleResourceKey: measure.textResourceSeletorAPI != undefined ? measure.textResourceSeletorAPI.getSelectedValues() : undefined,
+                                TitleResourceKey: measure.textResourceSeletorAPI != undefined ? measure.textResourceSeletorAPI.getSelectedValues() : measure.oldTitleResourceKey,
                                 ColumnSettings: measure.measureGridWidthFactorAPI.getData(),
                                 ColumnStyleId: measure.measureGridStyleAPI.getSelectedIds(),
                                 IsHidden: measure.isHidden,
@@ -436,7 +436,7 @@
                             var measure = {
                                 MeasureName: subTable.measureSelectorAPI != undefined ? subTable.measureSelectorAPI.getSelectedIds() : undefined,
                                 Title: subTable.Title,
-                                TitleResourceKey: subTable.textResourceSeletorAPI != undefined ? subTable.textResourceSeletorAPI.getSelectedValues() : undefined,
+                                TitleResourceKey: subTable.textResourceSeletorAPI != undefined ? subTable.textResourceSeletorAPI.getSelectedValues() : subTable.oldTitleResourceKey,
                                 ColumnSettings: subTable.measureGridWidthFactorAPI.getData(),
                                 ColumnStyleId: subTable.measureGridStyleAPI.getSelectedIds(),
                             };
@@ -484,6 +484,7 @@
                     dataItem.Name = gridField.payload.DimensionName;
                     dataItem.Title = gridField.payload.Title;
                     dataItem.IsRootDimension = gridField.payload.IsRootDimension;
+                    dataItem.oldTitleResourceKey = gridField.payload.TitleResourceKey;
                     dataItemPayload.data = gridField.payload.ColumnSettings;
                     stylePayload = { selectedIds: gridField.payload.ColumnStyleId };
                     textResourcePayload = {
@@ -532,6 +533,7 @@
                     dataItem.Title = gridField.payload.Title;
                     dataItem.isHidden = gridField.payload.IsHidden;
                     dataItem.isHiddenInListView = gridField.payload.IsHiddenInListView;
+                    dataItem.oldTitleResourceKey = gridField.payload.TitleResourceKey;
                     dataItemPayload.data = gridField.payload.ColumnSettings;
                     stylePayload = { selectedIds: gridField.payload.ColumnStyleId };
                     textResourcePayload = {
@@ -604,6 +606,7 @@
                         selectedMeasureId = measure.MeasureName;
                         titleResourceKey = measure.TitleResourceKey;
                         dataItem.Title = measure.Title;
+                        dataItem.oldTitleResourceKey = measure.TitleResourceKey;
                         columnSettingPayload.data = measure.ColumnSettings;
                         stylePayload = { selectedIds: measure.ColumnStyleId };
                     }

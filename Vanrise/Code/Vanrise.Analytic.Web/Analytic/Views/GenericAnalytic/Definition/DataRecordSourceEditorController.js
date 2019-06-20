@@ -520,6 +520,7 @@
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItemPayload.data = payload.ColumnSettings;
                 dataItem.isHidden = payload.IsHidden;
+                dataItem.oldTitleResourceKey = payload.TitleResourceKey;
                 stylePayload = { selectedIds: payload.ColumnStyleId };
                 textResourcePayload = { selectedValue: payload.TitleResourceKey};
             }
@@ -560,6 +561,8 @@
 
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
+                dataItem.oldTitleResourceKey = payload.TitleResourceKey;
+
             }
             dataItem.onTextResourceSelectorReady = function (api) {
                 dataItem.textResourceSeletorAPI = api;
@@ -595,6 +598,7 @@
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItem.IsRequired = payload.IsRequired;
+                dataItem.oldTitleResourceKey = payload.TitleResourceKey;
                 textResourcePayload = { selectedValue: payload.TitleResourceKey };
             }
             dataItem.onTextResourceSelectorReady = function (api) {
@@ -634,7 +638,7 @@
                     ColumnSettings: currentItem.gridWidthFactorAPI.getData(),
                     IsHidden: currentItem.isHidden,
                     ColumnStyleId: currentItem.dataRecordGridStyleAPI.getSelectedIds(),
-                    TitleResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : undefined
+                    TitleResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : currentItem.oldTitleResourceKey
                 });
             }
 
@@ -645,7 +649,7 @@
                     FieldName: currentFilter.FieldName,
                     FieldTitle: currentFilter.FieldTitle,
                     IsRequired: currentFilter.IsRequired,
-                    TitleResourceKey: currentFilter.textResourceSeletorAPI != undefined ? currentFilter.textResourceSeletorAPI.getSelectedValues() : undefined
+                    TitleResourceKey: currentFilter.textResourceSeletorAPI != undefined ? currentFilter.textResourceSeletorAPI.getSelectedValues(): currentFilter.oldTitleResourceKey
                 });
             }
 
@@ -656,7 +660,7 @@
                     FieldName: currentDetail.FieldName,
                     FieldTitle: currentDetail.FieldTitle,
                     ColumnWidth: currentDetail.SelectedDetailWidth.value,
-                    TitleResourceKey: currentDetail.textResourceSeletorAPI != undefined ? currentDetail.textResourceSeletorAPI.getSelectedValues() : undefined
+                    TitleResourceKey: currentDetail.textResourceSeletorAPI != undefined ? currentDetail.textResourceSeletorAPI.getSelectedValues() : currentDetail.oldTitleResourceKey
                 });
             }
 

@@ -186,6 +186,7 @@
                     dataItem.Name = gridDimension.payload.DimensionName;
                     dataItem.Title = gridDimension.payload.Title != undefined ? gridDimension.payload.Title : gridDimension.payload.DimensionName;
                     dataItem.IsSelected = gridDimension.payload.IsRequired;
+                    dataItem.oldTitleResourceKey = gridDimension.payload.TitleResourceKey;
                     textResourcePayload = { selectedValue: gridDimension.payload.TitleResourceKey };
 
                 }
@@ -211,6 +212,7 @@
                     dataItem.Name = filterDimension.payload.DimensionName;
                     dataItem.Title = filterDimension.payload.Title != undefined ? filterDimension.payload.Title : filterDimension.payload.DimensionName;
                     dataItem.IsRequired = filterDimension.payload.IsSelected;
+                    dataItem.oldTitleResourceKey = filterDimension.payload.TitleResourceKey;
                     textResourcePayload = { selectedValue: filterDimension.payload.TitleResourceKey };
 
                 }
@@ -380,7 +382,7 @@
                                 DimensionName: groupingDimension.Name,
                                 IsSelected: groupingDimension.IsSelected,
                                 Title: groupingDimension.Title,
-                                TitleResourceKey: groupingDimension.textResourceSeletorAPI != undefined ? groupingDimension.textResourceSeletorAPI.getSelectedValues() : undefined
+                                TitleResourceKey: groupingDimension.textResourceSeletorAPI != undefined ? groupingDimension.textResourceSeletorAPI.getSelectedValues() : groupingDimension.oldTitleResourceKey
                             });
                         }
                     }
@@ -394,7 +396,7 @@
                                 DimensionName: filterDimension.Name,
                                 Title: filterDimension.Title,
                                 IsRequired: filterDimension.IsRequired,
-                                TitleResourceKey: filterDimension.textResourceSeletorAPI != undefined ? filterDimension.textResourceSeletorAPI.getSelectedValues() : undefined
+                                TitleResourceKey: filterDimension.textResourceSeletorAPI != undefined ? filterDimension.textResourceSeletorAPI.getSelectedValues() : filterDimension.oldTitleResourceKey
                             });
                         }
                     }

@@ -88,6 +88,7 @@
                     dataItem.Name = gridDimension.payload.DimensionName;
                     dataItem.Title = gridDimension.payload.Title;
                     dataItem.IsRequired = gridDimension.IsRequired;
+                    dataItem.oldTitleResourceKey = gridDimension.payload.TitleResourceKey;
                     textResourcePayload = { selectedValue: gridDimension.payload.TitleResourceKey };
 
                 }
@@ -166,7 +167,7 @@
                                 DimensionName:filterDimension.Name,
                                 Title: filterDimension.Title,
                                 IsRequired: filterDimension.IsRequired,
-                                TitleResourceKey: filterDimension.textResourceSeletorAPI != undefined ? filterDimension.textResourceSeletorAPI.getSelectedValues() : undefined
+                                TitleResourceKey: filterDimension.textResourceSeletorAPI != undefined ? filterDimension.textResourceSeletorAPI.getSelectedValues() : filterDimension.oldTitleResourceKey
                             });
                         }
                     }
