@@ -39,6 +39,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.CRM.FixedOperator", "SQ
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.NIM.FixedOperator", "SQL.NIM.FixedOperator\SQL.NIM.FixedOperator.sqlproj", "{6DFB5AA3-4952-4F8E-A120-4F4F95A198B4}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.Retail.Billing", "SQL.Retail.Billing\SQL.Retail.Billing.sqlproj", "{137EA505-8353-46DA-B1F0-24828B0551D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,12 @@ Global
 		{6DFB5AA3-4952-4F8E-A120-4F4F95A198B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DFB5AA3-4952-4F8E-A120-4F4F95A198B4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DFB5AA3-4952-4F8E-A120-4F4F95A198B4}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{137EA505-8353-46DA-B1F0-24828B0551D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{137EA505-8353-46DA-B1F0-24828B0551D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{137EA505-8353-46DA-B1F0-24828B0551D0}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{137EA505-8353-46DA-B1F0-24828B0551D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{137EA505-8353-46DA-B1F0-24828B0551D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{137EA505-8353-46DA-B1F0-24828B0551D0}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,9 +160,9 @@ Global
 		SolutionGuid = {6368FAF0-4E49-43BC-A244-28822B5F68CE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = SQL.RA.ICX\\SQL.RA.ICX.sqlproj
 		SccProjectTopLevelParentUniqueName1 = Retail.SQL.sln
@@ -208,5 +216,8 @@ Global
 		SccProjectUniqueName14 = SQL.NIM.FixedOperator\\SQL.NIM.FixedOperator.sqlproj
 		SccProjectName14 = SQL.NIM.FixedOperator
 		SccLocalPath14 = SQL.NIM.FixedOperator
+		SccProjectUniqueName15 = SQL.Retail.Billing\\SQL.Retail.Billing.sqlproj
+		SccProjectName15 = SQL.Retail.Billing
+		SccLocalPath15 = SQL.Retail.Billing
 	EndGlobalSection
 EndGlobal
