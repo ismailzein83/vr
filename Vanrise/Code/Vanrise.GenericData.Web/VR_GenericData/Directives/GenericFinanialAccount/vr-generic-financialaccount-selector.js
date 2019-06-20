@@ -64,7 +64,7 @@ app.directive("vrGenericFinancialaccountSelector", ["UtilsService", "VRUIUtilsSe
                 };
 
                 api.getSelectedIds = function () {
-                    return genericFinancialAccountSelectorApi.getSelectedIds();
+                    return { selectedIds: genericFinancialAccountSelectorApi.getSelectedIds() };
                 };
 
                 if (ctrl.onReady != null)

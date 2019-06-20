@@ -14,7 +14,7 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public abstract class GenericPartnerSettings : InvoicePartnerManager
     {
-        GenericFinancialAccountConfiguration _configuration;
+        protected GenericFinancialAccountConfiguration _configuration;
         public GenericPartnerSettings(GenericFinancialAccountConfiguration configuration)
         {
             configuration.ThrowIfNull("financialAccountMappingFieldsConfigration");
@@ -53,5 +53,5 @@ namespace Vanrise.Invoice.MainExtensions
             };
         }
     }
- 
+
 }

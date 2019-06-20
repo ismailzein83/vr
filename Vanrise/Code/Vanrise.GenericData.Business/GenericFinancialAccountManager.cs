@@ -40,8 +40,7 @@ namespace Vanrise.GenericData.Business
             }
             if (_configuration.FinancialAccountIdFieldName != null)
             {
-                genericFinancialAccount.Name = genericBusinessEntity.FieldValues.GetRecord(_configuration.FinancialAccountIdFieldName) as string;
-
+                genericFinancialAccount.Name = genericBusinessEntity.FieldValues.GetRecord(_configuration.AccountNameFieldName) as string;
             }
             if (_configuration.FinancialAccountIdFieldName != null)
             {
