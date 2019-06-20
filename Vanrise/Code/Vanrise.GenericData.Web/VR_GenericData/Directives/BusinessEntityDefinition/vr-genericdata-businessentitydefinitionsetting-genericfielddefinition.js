@@ -72,12 +72,11 @@
                 + '              <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onLocalizationTextResourceDirectiveReady" normal-col-num="6"></vr-common - vrlocalizationtextresource - selector > '
                 + '         </span>'
                 + '      </vr-row>'
-                + '      <vr-row removeline>'
-                + '          <span vr-loader="scopeModel.isRuntimeViewSettingsEditorDirectiveLoading">'
-                + '              <vr-directivewrapper ng-if="dataItem.runtimeViewSettingEditor !=undefined" directive="dataItem.runtimeViewSettingEditor" '
+                + '          <span vr-loader="scopeModel.isRuntimeViewSettingsEditorDirectiveLoading" ng-if="dataItem.runtimeViewSettingEditor !=undefined">'
+                + '              <vr-directivewrapper  directive="dataItem.runtimeViewSettingEditor" '
                 + 'selectionmode=single isrequired="true" normal-col-num="6" on-ready="dataItem.onRuntimeViewSettingsEditorDirectiveReady"></vr-directivewrapper>'
                 + '        </span>'
-                + '      </vr-row>'
+             
                 + '  </vr-datalist>'
                 + '</vr-columns>';
         }

@@ -43,7 +43,7 @@
             if (attrs.isnotrequired != undefined)
                 required = "";
 
-            return '<vr-columns colnum="{{normalColNum}}">'
+            return '<vr-row><vr-columns colnum="{{normalColNum}}">'
                   + '<vr-select on-ready="scopeModel.onSelectorReady"'
                 + 'datasource="scopeModel.runtimeViewTypesConfigs"'
                 + 'selectedvalues="scopeModel.selectedFieldTypeConfig"'
@@ -54,7 +54,7 @@
                   + ' ' + required
                   + ' hideremoveicon>'
            + '</vr-select>'
-          + '</vr-columns>'
+                + '</vr-columns></vr-row>'
         + ' <span  ng-if="scopeModel.selectedFieldTypeConfig != undefined" vr-loader="scopeModel.isLoadingDirective">'
                 + ' <vr-directivewrapper normal-col-num="{{normalColNum}}" directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onDirectiveReady" ></vr-directivewrapper>'
          + '</span>';

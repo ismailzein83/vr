@@ -35,6 +35,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
             ctrl.datasource = [];
             $scope.scopeModel.columns = [];
             var recordTypeFields = {};
+            var availableFields;
 
             var gridAPI;
             function initializeController() {
@@ -57,15 +58,18 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                 };
             }
             function prepareAddedField(field, dataRow) {
+
                 var entity = {
                     runtimeEditor: field.fieldType.RuntimeEditor,
                     directiveAPI: undefined,
-                    fieldName: field.fieldName
+                    fieldName: field.fieldName,
+                    isRequired: field.isRequired,
+                    isDisabled: field.isDisabled
                 };
                 entity.onRunTimeEditorDirectiveReady = function (api) {
                     entity.directiveAPI = api;
                     var payload = {
-                        fieldTitle: field.fieldTitle,
+                        fieldTitle: '',
                         fieldType: field.fieldType,
                        
                     };
@@ -74,19 +78,35 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                 };
                 dataRow.push(entity);
             }
-
+            function checkIfFieldIsAvailable(entity) {
+                if (availableFields == undefined || availableFields.length == 0) {
+                    entity.isRequired = true;
+                    return true;
+                }
+                var item = UtilsService.getItemByVal(availableFields, entity.Name, "FieldName");
+                if (item != undefined) {
+                    entity.isDisabled = item.IsDisabled;
+                    entity.isRequired = item.IsRequired;
+                    return true;
+                }
+                return false;
+            }
         
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
-
                     var dataRecordTypeId = payload.dataRecordTypeId;
                     var fieldsValues = payload.fieldValue;
                     $scope.scopeModel.fieldTitle = payload.fieldTitle;
                     var rootPromiseNode = {
                         promises: []
                     };
-
+                    if (payload.definitionSettings != undefined) {
+                        var definitionSettings = payload.definitionSettings
+                        $scope.scopeModel.hideAddButton = definitionSettings.HideAddButton;
+                        $scope.scopeModel.hideSection = definitionSettings.HideSection;
+                        availableFields = definitionSettings.AvailableFields;
+                    }
                     if (dataRecordTypeId != undefined) {
                         var dataRecordFields;
                         var dataRecordFieldsInfoPromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId, undefined).then(function (response) {
@@ -98,15 +118,20 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                             if (dataRecordFields != undefined) {
                                 for (var i = 0; i < dataRecordFields.length; i++) {
                                     var entity = dataRecordFields[i].Entity;
-                                    var name = entity.Name;
-                                    $scope.scopeModel.columns.push({ name: name, title: entity.Title });
-                                    recordTypeFields[name] = {
-                                        fieldTitle: entity.Title,
-                                        fieldType: entity.Type,
-                                        fieldName: entity.Name
-                                    };
+                                    if (checkIfFieldIsAvailable(entity)) {
+                                        var name = entity.Name;
+                                        $scope.scopeModel.columns.push({ name: name, title: entity.Title });
+                                        recordTypeFields[name] = {
+                                            fieldTitle: '',
+                                            fieldType: entity.Type,
+                                            fieldName: entity.Name,
+                                            isRequired: entity.isRequired,
+                                            isDisabled: entity.isDisabled
+                                        };
+                                    }
                                 }
                             }
+                   
                             if (fieldsValues != undefined) {
                                 for (var i = 0; i < fieldsValues.length; i++) {
                                     var dataRow = [];
@@ -121,7 +146,6 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                         };
                                         childPromises.push(genericBEFieldObject.runtimeFieldLoadPromiseDeferred.promise);
                                         prepareEditedField(genericBEFieldObject, dataRow);
-
                                     }
                                     ctrl.datasource.push({ Entity: dataRow });
                                 }
@@ -130,7 +154,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                     var entity = {
                                         runtimeEditor: genericBEFieldObject.fieldInfo.fieldType.RuntimeEditor,
                                         fieldValue: genericBEFieldObject.fieldValue,
-                                        fieldName: genericBEFieldObject.fieldInfo.fieldName
+                                        fieldName: genericBEFieldObject.fieldInfo.fieldName,
+                                        isRequired: genericBEFieldObject.fieldInfo.isRequired,
+                                        isDisabled: genericBEFieldObject.fieldInfo.isDisabled
                                     };
                                     entity.onRunTimeEditorDirectiveReady = function (api) {
                                         entity.directiveAPI = api;
@@ -140,7 +166,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                     genericBEFieldObject.runtimeFieldReadyPromiseDeferred.promise.then(function () {
                                         var payload = {
                                             fieldName: genericBEFieldObject.fieldInfo.fieldName,
-                                            fieldTitle: genericBEFieldObject.fieldInfo.fieldTitle,
+                                            fieldTitle: '',
                                             fieldType: genericBEFieldObject.fieldInfo.fieldType,
                                             fieldValue: genericBEFieldObject.fieldValue
                                         };

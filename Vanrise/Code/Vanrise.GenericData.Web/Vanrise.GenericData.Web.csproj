@@ -347,6 +347,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericEditorSubViewViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-genericeditorsubview-runtime.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\Templates\GenericBusinessEntity360DegreeViewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\vr-genericdata-genericbusinessentity-360degree-view.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBEFilterRuntimeRootContainerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntitySelectorCondition.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntitySelectorFilter.html" />

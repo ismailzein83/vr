@@ -126,6 +126,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public override Guid ConfigId =>  new Guid("661E02F1-7A44-4D56-A73F-7912EF3017B1");
         public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-gridview-runtime";
+        public bool HideAddButton { get; set; }
+        public bool HideSection { get; set; }
+        public List<GridViewListAvailableFields> AvailableFields { get; set; }
+    }
+    public class GridViewListAvailableFields
+    {
+        public string FieldName { get; set; }
+        public bool IsRequired { get; set; }
+        public bool IsDisabled { get; set; }
     }
     public class GridEditorViewListRecordRuntimeViewType : ListRecordRuntimeViewType
     {
