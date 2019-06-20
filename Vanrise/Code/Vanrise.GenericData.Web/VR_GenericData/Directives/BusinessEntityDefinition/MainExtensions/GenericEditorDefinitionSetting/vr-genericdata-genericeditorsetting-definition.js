@@ -142,9 +142,8 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                     var data = sectionDirectiveApi.getData();
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.GenericEditorDefinitionSetting, Vanrise.GenericData.MainExtensions",
-                        Rows: sectionDirectiveApi.getData().Rows
+                        Rows: data != undefined ? data.Rows : undefined
                     };
-                    return data;
                 };
 
                 if (ctrl.onReady != null)
