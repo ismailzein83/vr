@@ -1,5 +1,18 @@
 ﻿<span ng-repeat="field in ctrl.fields">
-    <span vr-disabled="field.IsDisabled">
+    <span vr-disabled="field.IsDisabled" ng-if="!field.ShowAsLabel">
         <vr-directivewrapper directive="field.runTimeEditor" enableadd on-ready="field.onFieldDirectiveReady" selectionmode="single" normal-col-num="4" isrequired="field.IsRequired"></vr-directivewrapper>
     </span>
+    <vr-columns colnum="4" haschildcolumns ng-if="field.ShowAsLabel">
+        <div style="display:flex;width:100%">
+            <div style="display:inline-flex;width:50%">
+                <vr-label> {{field.FieldTitle}}</vr-label>
+            </div>
+            <div style="width:30px;text-align:center">
+                <vr-label> : </vr-label>
+            </div>
+            <div style="display:inline-flex;width:50%">
+                <vr-label isvalue> {{valueAsString}} </vr-label>
+            </div>
+        </div>
+    </vr-columns>
 </span>

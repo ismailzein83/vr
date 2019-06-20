@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -39,7 +39,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 var api = {};
 
                 api.load = function (payload) {
-                    
+
                     if (payload.fields != undefined) {
                         currentContext = payload.context;
                         genericContext = payload.genericContext;
@@ -53,7 +53,12 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             var field = payload.fields[i];
                             field.readyPromiseDeferred = UtilsService.createPromiseDeferred();
                             field.loadPromiseDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(field.loadPromiseDeferred.promise);
+                            if (field.ShowAsLabel) {
+                                promises.push(getFieldTypeDescription(field));
+                            }
+                            else {
+                                promises.push(field.loadPromiseDeferred.promise);
+                            }
                             prepareFieldObject(field);
                         }
 
@@ -136,6 +141,13 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 }
 
                 ctrl.fields.push(field);
+            }
+
+            function getFieldTypeDescription(field) {
+                var fieldValue = currentContext != undefined ? currentContext.getFieldPathValue(field.FieldPath) : undefined;
+                return VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription(field.FieldType, fieldValue).then(function (response) {
+                    $scope.valueAsString = response;
+                });
             }
         }
 
