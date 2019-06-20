@@ -9,7 +9,7 @@ ECHO Retail.Billing WebSite
 
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
-xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.Retail.Billing.exclud" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Web.config"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.Retail.Billing.exclud" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Web.config*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Images\menu-icons\"
 ::by default load flat theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\nTegra-flat-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Images\logoonheader.png*"
