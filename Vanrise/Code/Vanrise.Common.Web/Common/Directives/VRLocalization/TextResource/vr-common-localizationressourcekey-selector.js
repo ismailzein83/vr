@@ -72,8 +72,9 @@ app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationServic
                     return UtilsService.waitMultiplePromises(promises);
                 };
                 api.getResourceKey = function () {
-                    if (VRLocalizationService.isLocalizationEnabled())
-                        return $scope.scopeModel.selectedResourceKey.ResourceKey;
+                    if (VRLocalizationService.isLocalizationEnabled()) {
+                        return $scope.scopeModel.selectedResourceKey != undefined ? $scope.scopeModel.selectedResourceKey.ResourceKey : undefined;
+                    }
                 };
 
                 if (ctrl.onReady != null)

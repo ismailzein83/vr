@@ -49,7 +49,7 @@ namespace Vanrise.GenericData.Business
             {
                 genericFinancialAccount.EED = (DateTime?)genericBusinessEntity.FieldValues.GetRecord(_configuration.EEDFieldName);
             }
-            if (_configuration.FinancialAccountIdFieldName != null)
+            if (_configuration.AccountNameFieldName != null)
             {
                 genericFinancialAccount.Name = genericBusinessEntity.FieldValues.GetRecord(_configuration.AccountNameFieldName) as string;
             }
