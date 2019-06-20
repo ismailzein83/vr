@@ -108,6 +108,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			decimal? minAmount = _partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
             if (resolvedPayload.Adjustment.HasValue)
             {
+                if (invoiceByCostCurrency == null)
+                    invoiceByCostCurrency = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
                 AddAdjustmentToSupplierCurrency(invoiceByCostCurrency, currencyId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Adjustment.Value);
             }
 

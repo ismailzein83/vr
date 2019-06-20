@@ -115,6 +115,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             if(resolvedPayload.Adjustment.HasValue)
             {
+                if (invoiceBySaleCurrency == null)
+                    invoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
                 AddAdjustmentToCustomerCurrency(invoiceBySaleCurrency, currencyId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Adjustment.Value);
             }
 
@@ -296,8 +298,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
         #region Private Methods
         private void AddAdjustmentToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails, int currency, DateTime fromDate, DateTime toDate, decimal value)
         {
-            if (customerInvoiceBySaleCurrencyItemDetails == null)
-                customerInvoiceBySaleCurrencyItemDetails = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
             string month = fromDate.Year == toDate.Year && fromDate.Month == toDate.Month ? fromDate.ToString("MMMM - yyyy") : string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
             var customerInvoiceBySaleCurrencyItemDetail = customerInvoiceBySaleCurrencyItemDetails.FindRecord(x => x.CurrencyId == currency && x.Month == month);
             if (customerInvoiceBySaleCurrencyItemDetail != null)
