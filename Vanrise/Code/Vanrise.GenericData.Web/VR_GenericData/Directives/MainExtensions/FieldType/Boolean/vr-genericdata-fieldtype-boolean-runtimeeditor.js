@@ -162,9 +162,15 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
         }
 
         function getSingleSelectionModeTemplate() {
+
+            var hidelabel = "";
+
+            if (attrs.hidelabel != undefined)
+                hidelabel = " hidelabel ";
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.label != undefined ">'
                         + '<vr-label>{{scopeModel.label}}</vr-label>'
-                + '<vr-validator validate="scopeModel.validateValue()"><vr-switch value="scopeModel.value" onvaluechanged="scopeModel.onSwitchChanged"></vr-switch></vr-validator>'
+                + '<vr-validator validate="scopeModel.validateValue()"><vr-switch  ' + hidelabel+' value="scopeModel.value" onvaluechanged="scopeModel.onSwitchChanged"></vr-switch></vr-validator>'
                 + '</vr-columns>';
         }
     }

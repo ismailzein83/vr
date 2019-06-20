@@ -215,15 +215,19 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
         }
 
         function getSingleSelectionModeTemplate() {
+            var hidelabel = "";
+
+            if (attrs.hidelabel != undefined)
+                hidelabel = " hidelabel ";
 
             return '<vr-columns ng-if="scopeModel.isRichText" colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                + ' <vr-editor label="{{scopeModel.label}}" value="scopeModel.value" isrequired="runtimeEditorCtrl.isrequired"></vr-editor>'
+                + ' <vr-editor ' + hidelabel+' label="{{scopeModel.label}}" value="scopeModel.value" isrequired="runtimeEditorCtrl.isrequired"></vr-editor>'
                 + '</vr-columns>'
                 + '<vr-columns  ng-if="scopeModel.isMultipleText"   colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                + '<vr-textarea  value="scopeModel.value" label="{{scopeModel.label}}" rows="2" isrequired ="runtimeEditorCtrl.isrequired" ></vr-textarea>'
+                + '<vr-textarea ' + hidelabel+'  value="scopeModel.value" label="{{scopeModel.label}}" rows="2" isrequired ="runtimeEditorCtrl.isrequired" ></vr-textarea>'
                 + '</vr-columns>'
                 + '<vr-columns  ng-if="scopeModel.isSingleText"   colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                + '<vr-textbox type="text" label="{{scopeModel.label}}" hint="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" customvalidate="scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired" ></vr - textbox > '
+                + '<vr-textbox ' + hidelabel+' type="text" label="{{scopeModel.label}}" hint="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" customvalidate="scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired" ></vr - textbox > '
                 + '</vr-columns>';
 
         }

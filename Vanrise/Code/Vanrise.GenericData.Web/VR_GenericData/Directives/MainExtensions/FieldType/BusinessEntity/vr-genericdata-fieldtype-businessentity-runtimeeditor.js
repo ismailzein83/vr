@@ -54,19 +54,24 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 showaddbutton = ' showaddbutton="true" ';
             }
 
+            var hidelabel = "";
+
+            if (attrs.hidelabel != undefined)
+                hidelabel = " hidelabel ";
+
             if (attrs.selectionmode == "dynamic") {
                 return '<span vr-loader="isLoading">'
-                    + '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
+                    + '<vr-directivewrapper ' + hidelabel+' directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
                     + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
-                    + ' <vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
+                    + ' <vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper ' + hidelabel+' directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                     '</vr-section> '
                     + '</span>';
             }
             else {
                 return '<span vr-loader="isLoading">'
-                    + '<vr-directivewrapper directive="selector.directive" ' + showaddbutton + ' normal-col-num="{{scopeModel.calculatedColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
+                    + '<vr-directivewrapper ' + hidelabel+' directive="selector.directive" ' + showaddbutton + ' normal-col-num="{{scopeModel.calculatedColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
                     + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
-                    + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
+                    + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper ' + hidelabel+' directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                     '</vr-section>'
                     + '</span>';
             }

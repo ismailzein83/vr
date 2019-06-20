@@ -271,6 +271,10 @@
                     else
                         labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
                 }
+
+                if (attrs.hidelabel != undefined)
+                    labelTemplate = '';
+
                 var type = 'text';
                 var isolationFormStart = "";
                 var isolationFormEnd = "";

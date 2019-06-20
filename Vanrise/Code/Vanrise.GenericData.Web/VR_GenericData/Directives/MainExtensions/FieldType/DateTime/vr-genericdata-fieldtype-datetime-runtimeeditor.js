@@ -212,9 +212,16 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             }
 
             function getSingleSelectionModeTemplate() {
+
+                var hidelabel = "";
+
+                if (attrs.hidelabel != undefined)
+                    hidelabel = " hidelabel ";
+
+
                 return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType != undefined && scopeModel.label != undefined ">'
                     + '<vr-label>{{scopeModel.label}}</vr-label>'
-                    + '<vr-directivewrapper directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" onvaluechanged="scopeModel.onDateChanged()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
+                    + '<vr-directivewrapper ' + hidelabel+' directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" onvaluechanged="scopeModel.onDateChanged()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                     + '</vr-columns>';
             }
         }

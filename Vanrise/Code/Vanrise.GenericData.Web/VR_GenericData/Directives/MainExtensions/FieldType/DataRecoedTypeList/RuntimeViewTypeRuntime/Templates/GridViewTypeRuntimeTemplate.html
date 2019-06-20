@@ -8,7 +8,7 @@
                                  on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
                         <vr-datagridcolumn ng-repeat="column in scopeModel.columns" headertext="column.title" columnindex="$index">
                             <span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
-                                <vr-directivewrapper directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" selectionmode=single isrequired="dataItem.Entity[{{colDef.columnIndex}}].isRequired" vr-disabled="dataItem.Entity[{{colDef.columnIndex}}].isDisabled" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
+                                <vr-directivewrapper  hidelabel directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" selectionmode=single isrequired="dataItem.Entity[{{colDef.columnIndex}}].isRequired" vr-disabled="dataItem.Entity[{{colDef.columnIndex}}].isDisabled" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
                             </span>
                         </vr-datagridcolumn>
                     </vr-datagrid>
@@ -19,7 +19,7 @@
                                  on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
                         <vr-datagridcolumn ng-repeat="column in scopeModel.columns" headertext="column.title" columnindex="$index">
                             <span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
-                                <vr-directivewrapper directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" label="" selectionmode=single isrequired="dataItem.Entity[{{colDef.columnIndex}}].isRequired" vr-disabled="dataItem.Entity[{{colDef.columnIndex}}].isDisabled" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
+                                <vr-directivewrapper hidelabel directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" label="" selectionmode=single isrequired="dataItem.Entity[{{colDef.columnIndex}}].isRequired" vr-disabled="dataItem.Entity[{{colDef.columnIndex}}].isDisabled" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
                             </span>
                         </vr-datagridcolumn>
                     </vr-datagrid>
