@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', function (UtilsService) {
+app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_GenericData_FieldTextTextTypeEnum', function (UtilsService, VR_GenericData_FieldTextTextTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -47,7 +47,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                 defineScopeForSingleMode();
             }
 
-            
+
 
             defineAPI();
         }
@@ -107,13 +107,19 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                 $scope.scopeModel.value = undefined;
                 var fieldType;
                 var fieldValue;
-                 
+
                 if (payload != undefined) {
                     fieldName = payload.fieldName;
                     $scope.scopeModel.label = payload.fieldTitle;
                     fieldType = payload.fieldType;
-                    if (fieldType != undefined)
+                    if (fieldType != undefined) {
                         $scope.scopeModel.hint = fieldType.Hint;
+                        switch (fieldType.TextType) {
+                            case VR_GenericData_FieldTextTextTypeEnum.RichText.value: $scope.scopeModel.isRichText = true; break;
+                            case VR_GenericData_FieldTextTextTypeEnum.MultipleText.value: $scope.scopeModel.isMultipleText = true; break;
+                            default: $scope.scopeModel.isSingleText = true; break;
+                        }
+                    }
                     fieldValue = payload.fieldValue;
                     genericContext = payload.genericContext;
                 }
@@ -209,9 +215,15 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
         }
 
         function getSingleSelectionModeTemplate() {
-            
-            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                + '<vr-textbox type="text" label="{{scopeModel.label}}" hint ="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
+
+            return '<vr-columns ng-if="scopeModel.isRichText" colnum="{{runtimeEditorCtrl.normalColNum}}">'
+                + ' <vr-editor label="{{scopeModel.label}}" value="scopeModel.value" isrequired="runtimeEditorCtrl.isrequired"></vr-editor>'
+                + '</vr-columns>'
+                + '<vr-columns  ng-if="scopeModel.isMultipleText"   colnum="{{runtimeEditorCtrl.normalColNum}}">'
+                + '<vr-textarea  value="scopeModel.value" label="{{scopeModel.label}}" rows="2" isrequired ="runtimeEditorCtrl.isrequired" ></vr-textarea>'
+                + '</vr-columns>'
+                + '<vr-columns  ng-if="scopeModel.isSingleText"   colnum="{{runtimeEditorCtrl.normalColNum}}">'
+                + '<vr-textbox type="text" label="{{scopeModel.label}}" hint="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" customvalidate="scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired" ></vr - textbox > '
                 + '</vr-columns>';
 
         }

@@ -42,6 +42,8 @@
             function getDirectiveAPI() {
                 var api = {};
                 api.load = function (payload) {
+                    if (payload.fieldType != undefined)
+                        payload.fieldType.TextType = undefined;
                     if (payload.fieldValue != undefined && Array.isArray(payload.fieldValue)) {
                         payload.fieldValue = payload.fieldValue[0];
                     }

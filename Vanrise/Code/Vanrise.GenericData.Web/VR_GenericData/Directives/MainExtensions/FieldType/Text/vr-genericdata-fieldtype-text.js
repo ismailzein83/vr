@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeText', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataFieldtypeText', ['UtilsService','VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -34,7 +34,15 @@ app.directive('vrGenericdataFieldtypeText', ['UtilsService',
 
         function textTypeCtor(ctrl, $scope) {
 
+            var textTypeSelectorApi;
+            var textTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+         
             function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.onTextTypeSelectorReady = function (api) {
+                    textTypeSelectorApi = api;
+                    textTypeSelectorReadyDeferred.resolve();
+                };
                 defineAPI();
             }
 
@@ -42,15 +50,26 @@ app.directive('vrGenericdataFieldtypeText', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+                    var textTypePayload;
                     if (payload != undefined) {
                         $scope.hint = payload.Hint;
+                        textTypePayload = { selectedIds: payload.TextType };
                     }
+                    var textTypeLoadDeferred = UtilsService.createPromiseDeferred();
+                    textTypeSelectorReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(textTypeSelectorApi, textTypePayload, textTypeLoadDeferred);
+                    });
+                    promises.push(textTypeLoadDeferred.promise);
+
+                    return UtilsService.waitPromiseNode({ promises: promises });
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions",
-                        Hint : $scope.hint
+                        Hint: $scope.hint,
+                        TextType: textTypeSelectorApi.getSelectedIds()
                     };
                 };
 

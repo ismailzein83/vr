@@ -8,11 +8,12 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
+    public enum TextType { RichText = 0, MultipleText = 1}
+
     public class FieldTextType : DataRecordFieldType
     {
 
         RecordFilterManager _recordFilterManager = new RecordFilterManager();
-
         public override Guid ConfigId { get { return new Guid("3f29315e-b542-43b8-9618-7de216cd9653"); } }
 
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-text-runtimeeditor"; } }
@@ -24,6 +25,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override Type GetRuntimeType() { return GetNonNullableRuntimeType(); }
 
         public string Hint { get; set; }
+        public TextType? TextType { get; set; }
 
 
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)

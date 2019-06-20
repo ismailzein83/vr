@@ -39,21 +39,26 @@ app.directive('vrGenericdataFieldtypeTextRulefiltereditor', ['VR_GenericData_Str
                 api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_StringRecordFilterOperatorEnum);
                     $scope.selectedFilter = $scope.filters[0];
-                    if (payload && payload.filterObj) {
-                        filterObj = payload.filterObj;
+                    var promises = [];
+                    if (payload) {
                         dataRecordTypeField = payload.dataRecordTypeField;
-                        $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
-                        var promises = [];
-
+                        filterObj = payload.filterObj;
+                        if (filterObj != undefined) {
+                            $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, filterObj.CompareOperator, 'value');
+                        }
                         var textFilterLoadDeferred = UtilsService.createPromiseDeferred();
 
                         textFilterReadyDeferred.promise.then(function () {
-                            var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
-                            VRUIUtilsService.callDirectiveLoad(textFilterEditorApi, payload, textFilterLoadDeferred);
+                            var textFilterPayload = {
+                                fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : undefined,
+                                fieldValue: filterObj != undefined ? filterObj.Value : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(textFilterEditorApi, textFilterPayload, textFilterLoadDeferred);
                         });
                         promises.push(textFilterLoadDeferred.promise);
-                        return UtilsService.waitMultiplePromises(promises);
                     }
+                    return UtilsService.waitMultiplePromises(promises);
+
                 };
 
                 api.getData = function () {
