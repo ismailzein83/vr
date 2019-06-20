@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_GenericData_DataRecordFieldAPIService',
-    function (UtilsService, VR_GenericData_DataRecordFieldAPIService) {
+app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
+    function (UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -29,7 +29,6 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
 
             var fieldType;
             var fieldName;
-            var fieldValue;
             var genericContext;
             var oldValue;
 
@@ -98,9 +97,10 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
                     $scope.scopeModel.values = [];
                     $scope.scopeModel.value = undefined;
+
+                    var fieldValue;
 
                     if (payload != undefined) {
                         $scope.scopeModel.label = payload.fieldTitle;
@@ -108,16 +108,11 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
                         genericContext = payload.genericContext;
-                        $scope.scopeModel.showAsLabel = payload.showAsLabel;
-                        if (payload.showAsLabel) {
-                            promises.push(getFieldTypeDescription());
-                        }
                     }
 
                     if (fieldValue != undefined) {
                         setFieldValue(fieldValue);
                     }
-                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -204,12 +199,6 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                     return ctrl.customvalidate();
                 return undefined;
             }
-
-            function getFieldTypeDescription() {
-                return VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription(fieldType, fieldValue).then(function (response) {
-                    $scope.scopeModel.valueAsString = response;
-                });
-            }
         }
 
         function getDirectiveTemplate(attrs) {
@@ -234,21 +223,9 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
             }
 
             function getSingleSelectionModeTemplate() {
-                return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="!scopeModel.showAsLabel">'
+                return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
                     + '<vr-textbox type="number" label="{{scopeModel.label}}" value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" '
                     + 'customvalidate = "scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired" ></vr - textbox > '
-                    + '</vr-columns>'
-
-                    + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" haschildcolumns ng-if="scopeModel.showAsLabel">'
-                    + '<vr-columns colnum="3"> '
-                    + '<vr-label> {{scopeModel.label}}</vr-label>'
-                    + '</vr-columns>'
-                    + '<vr-columns colnum="1">'
-                    + '<vr-label> : </vr-label>'
-                    + '</vr-columns>'
-                    + '<vr-columns colnum="8">'
-                    + '<vr-label isvalue> {{scopeModel.valueAsString}} </vr-label>'
-                    + '</vr-columns>'
                     + '</vr-columns>';
             }
         }

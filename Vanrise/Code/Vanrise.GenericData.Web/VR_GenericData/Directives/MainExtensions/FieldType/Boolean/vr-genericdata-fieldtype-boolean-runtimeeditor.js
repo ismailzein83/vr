@@ -93,7 +93,6 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                     fieldValue = payload.fieldValue;
                     fieldName = payload.fieldName;
                     genericContext = payload.genericContext;
-                    $scope.scopeModel.showAsLabel = payload.showAsLabel;
                 }
 
                 if (fieldValue != undefined) {
@@ -163,21 +162,9 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
         }
 
         function getSingleSelectionModeTemplate() {
-            return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.label != undefined && !scopeModel.showAsLabel">'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.label != undefined ">'
                         + '<vr-label>{{scopeModel.label}}</vr-label>'
                 + '<vr-validator validate="scopeModel.validateValue()"><vr-switch value="scopeModel.value" onvaluechanged="scopeModel.onSwitchChanged"></vr-switch></vr-validator>'
-                + '</vr-columns>'
-
-                + '<vr-columns colnum="{{ctrl.normalColNum}}" haschildcolumns ng-if="scopeModel.showAsLabel">'
-                   + '<vr-columns colnum="3"> '
-                       + '<vr-label> {{scopeModel.label}}</vr-label>'
-                   + '</vr-columns>'
-                   + '<vr-columns colnum="1">'
-                      + '<vr-label> : </vr-label>'
-                   + '</vr-columns>'
-                   + '<vr-columns colnum="8">'
-                      + '<vr-label isvalue> {{scopeModel.value}} </vr-label>'
-                   + '</vr-columns>'
                 + '</vr-columns>';
         }
     }
