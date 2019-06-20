@@ -174,7 +174,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
                                 $scope.dynamic.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                                if ($scope.dynamic.directiveAPI != undefined) {
+                                if (!$scope.scopeModel.showAsLabel) {
                                     innerSectionPromises.push($scope.dynamic.directiveLoadPromiseDeferred.promise);
                                 }
                                 $scope.dynamic.directiveReadyPromiseDeferred.promise.then(function () {
@@ -217,7 +217,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                 };
 
                                 $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                                if ($scope.selector.directiveAPI != undefined) {
+                                if (!$scope.scopeModel.showAsLabel) {
                                     innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
                                 }
 
