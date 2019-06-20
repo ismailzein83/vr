@@ -12,7 +12,7 @@ namespace Vanrise.AccountBalance.MainExtensions
 
         public override string AccountSelector
         {
-            get { return "retail-be-extendedsettings-account-selector"; }
+            get { return "vr-accountbalance-generic-financialaccount-selector"; }
         }
         public GenericFinancialAccountConfiguration Configuration { get; set; }
         public override IAccountManager GetAccountManager()

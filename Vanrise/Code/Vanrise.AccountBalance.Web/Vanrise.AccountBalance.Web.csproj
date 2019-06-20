@@ -223,6 +223,9 @@
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-accountbalancerule-settings.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BillingTransaction\Templates\BillingTransactionSynchronizer.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BillingTransaction\vr-accountbalance-billingtransaction-synchronizer.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\GenericData\Templates\GenericFinancialAccountBalanceSettingsTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\GenericData\vr-accountbalance-generic-financialaccount-selector.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\GenericData\vr-accountbalance-generic-financialaccountbalance-settings.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\InvoiceDataSourceSettings\Templates\BillingTransactionDataSource.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\InvoiceDataSourceSettings\vr-invoicetype-datasourcesettings-billingtransaction.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\QueueActivators\Templates\QueueActivatorUpdateAccountBalancesTemplate.html" />
