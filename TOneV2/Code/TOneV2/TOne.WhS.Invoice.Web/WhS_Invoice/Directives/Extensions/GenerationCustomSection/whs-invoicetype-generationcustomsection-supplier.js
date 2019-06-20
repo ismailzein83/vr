@@ -30,6 +30,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
             var context;
 
             var oldCommission;
+            var oldAdjustment;
 
             var timeZoneSelectorAPI;
             var timeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -67,7 +68,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
 
 				$scope.scopeModel.adjustmentTypes = UtilsService.getArrayEnum(WhS_Invoice_AdjustmentTypeEnum);
 				$scope.scopeModel.onCommissionAdjustmentSelectionChanged = function (option) {
-					if (option != undefined) {
+                    if (option != undefined) {
+                        onvaluechanged();
 						$scope.scopeModel.isPercentage = option.value == WhS_Invoice_AdjustmentTypeEnum.Percentage.value;
 					}
 				};
@@ -77,6 +79,13 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
 
 					oldCommission != $scope.scopeModel.commission;
 					$scope.scopeModel.hasCommission = (value != undefined) ? true : false;
+                };
+
+                $scope.scopeModel.onAdjustmentFocusChanged = function () {
+                    if (oldAdjustment != $scope.scopeModel.adjustment)
+                        onvaluechanged();
+
+                    oldAdjustment != $scope.scopeModel.adjustment;
                 };
 
                 $scope.scopeModel.onCommissionTypeSelectionChanged = function (value) {
@@ -115,10 +124,12 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                         }
                         if (customPayload != undefined) {
                             selectedCommissionTypeReadyDeferred = UtilsService.createPromiseDeferred();
+                            oldAdjustment = $scope.scopeModel.adjustment = customPayload.Adjustment;
                             oldCommission = $scope.scopeModel.commission = customPayload.Commission;
                             $scope.scopeModel.selectedCommissionType = UtilsService.getItemByVal($scope.scopeModel.commissionTypes, customPayload.CommissionType, "value");
                         }
-						if (invoice != undefined && invoice.Details != undefined) {
+                        if (invoice != undefined && invoice.Details != undefined) {
+                            oldAdjustment = $scope.scopeModel.adjustment = invoice.Details.Adjustment;
 							oldCommission = $scope.scopeModel.commission = invoice.Details.Commission;
 							$scope.scopeModel.adjustment = invoice.Details.Adjustment;
 							if (invoice.Details.Adjustment != undefined) {
