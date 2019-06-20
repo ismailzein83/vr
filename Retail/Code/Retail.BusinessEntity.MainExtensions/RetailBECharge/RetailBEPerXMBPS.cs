@@ -13,6 +13,11 @@ namespace Retail.BusinessEntity.MainExtensions.RetailBECharge
         public decimal ChargeValue { get; set; }
         public decimal MBPS { get; set; }
 
+        public override decimal CalculateCharge(IRetailBEChargeCalculateChargeContext context)
+        {
+            return this.ChargeValue;
+        }
+
         public override string GetDescription()
         {
             var chargeValue = string.Format("{0:#,0.##} per ", ChargeValue);

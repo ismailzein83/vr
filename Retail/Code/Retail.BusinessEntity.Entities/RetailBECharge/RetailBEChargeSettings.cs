@@ -10,5 +10,12 @@ namespace Retail.BusinessEntity.Entities
     {
         public abstract Guid ConfigId { get; }
         public abstract string GetDescription();
+
+        public abstract Decimal CalculateCharge(IRetailBEChargeCalculateChargeContext context);
+    }
+
+    public interface IRetailBEChargeCalculateChargeContext
+    {
+
     }
 }
