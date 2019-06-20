@@ -152,9 +152,8 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-
+                    var promises = [];
                     if (payload != undefined) {
-
                         onBusinessEntityDefinitionSelectionChangePromiseDeferred = UtilsService.createPromiseDeferred();
 
                         beDefinitionId = payload.FinancialAccountBEDefinitionId;
@@ -164,20 +163,23 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
                         selectedBED = payload.BEDFieldName;
                         selectedEED = payload.EEDFieldName;
                         selectedCurrency = payload.CurrencyIdFieldName;
+
+                        promises.push(getDataRecordTypeId());
                     }
-
+                    promises.push(loadBEDefinitionSelector());
                     var rootPromiseNode = {
-                        promises: [loadBEDefinitionSelector(), getDataRecordTypeId()],
+                        promises: promises,
                         getChildNode: function () {
-
                             var selectorsPromises = [];
-                            selectorsPromises.push(loadEEDFieldSelectorDirective());
-                            selectorsPromises.push(loadBEDFieldSelectorDirective());
-                            selectorsPromises.push(loadStatusNameFieldSelectorDirective());
-                            selectorsPromises.push(loadAccountNameFieldSelectorDirective());
-                            selectorsPromises.push(loadFinancialAccountFieldSelectorDirective());
-                            selectorsPromises.push(loadCurrencyFieldSelectorDirective());
 
+                            if (dataRecordTypeId != undefined) {
+                                selectorsPromises.push(loadEEDFieldSelectorDirective());
+                                selectorsPromises.push(loadBEDFieldSelectorDirective());
+                                selectorsPromises.push(loadStatusNameFieldSelectorDirective());
+                                selectorsPromises.push(loadAccountNameFieldSelectorDirective());
+                                selectorsPromises.push(loadFinancialAccountFieldSelectorDirective());
+                                selectorsPromises.push(loadCurrencyFieldSelectorDirective());
+                            }
                             return {
                                 promises: selectorsPromises,
                                 getChildNode: function () {
