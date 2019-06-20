@@ -13,6 +13,7 @@
 
         var genericBusinessEntityId;
         var businessEntityDefinitionId;
+        var isReadOnly;
 
         var additionalErrorsDirectiveAPI;
         var additionalErrorsReadyDeferred = UtilsService.createPromiseDeferred();
@@ -37,6 +38,7 @@
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
                 genericBusinessEntityId = parameters.genericBusinessEntityId;
                 fieldValues = parameters.fieldValues;
+                isReadOnly = parameters.isReadOnly;
             }
             $scope.scopeModel.isEditMode = (genericBusinessEntityId != undefined);
         }
@@ -78,7 +80,8 @@
                         businessEntityDefinitionId: businessEntityDefinitionId,
                         genericBusinessEntityId: genericBusinessEntityId,
                         fieldValues: fieldValues,
-                        context: getContext()
+                        context: getContext(),
+                        isReadOnly: isReadOnly
                     };
                     VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
                 });

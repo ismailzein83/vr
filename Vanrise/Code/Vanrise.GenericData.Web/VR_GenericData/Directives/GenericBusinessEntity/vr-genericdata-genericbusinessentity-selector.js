@@ -75,6 +75,12 @@
                     };
                     VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId);
                 };
+
+                $scope.onViewIconClicked = function (item) {
+                    if (item != undefined) {
+                        VR_GenericData_GenericBusinessEntityService.viewGenericBusinessEntity(businessEntityDefinitionId, item.GenericBusinessEntityId);
+                    }
+                };
             }
 
             function defineAPI() {
@@ -289,6 +295,7 @@
                 + ' isrequired="ctrl.isrequired"  '
                 + ' ' + hideremoveicon
                 + ' ' + addCliked
+                + ' onviewclicked="onViewIconClicked"'
                 + ' limitcharactercount="ctrl.limitcharactercount">'
                 + '</vr-select></span></vr-columns>';
         }

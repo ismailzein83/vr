@@ -46,7 +46,8 @@
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
                 genericBusinessEntityId: genericBusinessEntityId,
-                fieldValues: fieldValues
+                fieldValues: fieldValues,
+                isReadOnly: true
             };
 
             var settings = {
