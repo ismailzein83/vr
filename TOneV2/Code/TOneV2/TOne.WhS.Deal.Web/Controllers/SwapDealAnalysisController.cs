@@ -62,5 +62,12 @@ namespace TOne.WhS.Deal.Web.Controllers
             var manager = new SwapDealAnalysisManager();
             return manager.UpdateDealAnalysis(dealDefinitionInput.DealId, dealDefinitionInput.GenericBusinessEntityId, dealDefinitionInput.BusinessEntityDefinitionId);
         }
+        [HttpGet]
+        [Route("GetSwapDealAnalysis")]
+        public SwapDealAnalysisDefinition GetSwapDealAnalysis(int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        {
+            var manager = new SwapDealAnalysisManager();
+            return manager.GetSwapDealAnalysis(genericBusinessEntityId, businessEntityDefinitionId);
+        }
     }
 }

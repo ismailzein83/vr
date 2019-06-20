@@ -2,7 +2,7 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealAnalysisAPIService','WhS_Deal_DealService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealAnalysisAPIService', 'WhS_Deal_DealService'];
 
     function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealAnalysisAPIService, WhS_Deal_DealService) {
         var isEditMode;
@@ -37,6 +37,7 @@
         var genericBusinessEntityId;
         var businessEntityDefinitionId;
         var isCreateDealFromAnalysis;
+        var isViewOnyFromAnalysis;
 
         loadParameters();
         defineScope();
@@ -45,10 +46,15 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
+                console.log(parameters);
                 if (parameters.genericBusinessEntityId != undefined) {
                     //the editor is opened from action in deal analysis
                     genericBusinessEntityId = parameters.genericBusinessEntityId;
                     businessEntityDefinitionId = parameters.businessEntityDefinitionId;
+                    if (parameters.genericBEAction.Settings.ConfigId == "8493394D-6B95-4870-92D3-AF81169BC8D4")
+                        isViewOnyFromAnalysis = true;
+                    if (parameters.genericBEAction.Settings.ConfigId == "e5666599-ff4c-423e-bc6a-724b4a68ca69")
+                        isCreateDealFromAnalysis = true;
                 }
                 else {
                     dealId = parameters.dealId;
@@ -60,7 +66,6 @@
             }
 
             isEditMode = (dealId != undefined);
-            isCreateDealFromAnalysis = (genericBusinessEntityId != undefined);
             if (isReadOnly && !isEditable)
                 UtilsService.setContextReadOnly($scope);
         }
@@ -97,7 +102,7 @@
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
                         context: getContext(),
-                        dealId: dealId 
+                        dealId: dealId
                     };
                     var payloadOutbound = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
@@ -272,6 +277,13 @@
                     });
                 });
             }
+            else if (isViewOnyFromAnalysis) {
+                getSwapDealAalysis.then(function () {
+                    loadAllControls().finally(function () {
+                        dealEntity = undefined;
+                    });
+                });
+            }
             else {
                 loadAllControls();
             }
@@ -289,6 +301,16 @@
                 dealEntity.Settings.DealType = undefined;
                 dealEntity.Settings.CurrencyId = undefined;
                 dealEntity.Settings.Priority = undefined;
+            });
+        }
+        function getSwapDealAalysis() {
+            return WhS_Deal_SwapDealAnalysisAPIServiceGetSwapDealAnalysis(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
+                if (response != undefined && response.Settings != undefined) {
+                    var swapDealId = response.Settings.SwapDealId;
+                    WhS_Deal_SwapDealAPIService.GetDeal(swapDealId).then(function (response) {
+                        dealEntity = response;
+                    });
+                }
             });
         }
         function getSwapDeal() {
@@ -447,16 +469,16 @@
                     if (createDealFromAnalysis) {
                         WhS_Deal_SwapDealAnalysisAPIService.UpdateDealAnalysis(response.InsertedObject.Entity.DealId, genericBusinessEntityId, businessEntityDefinitionId)
                             .then(function () {
-                            if ($scope.IsItemInserted != undefined)
-                                $scope.IsItemInserted(true);
-                        }).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                            if ($scope.IsItemInserted != undefined)
-                                $scope.IsItemInserted(false);
-                        }).finally(function () {
-                            $scope.scopeModel.isLoading = false;
-                            $scope.modalContext.closeModal();
-                        });
+                                if ($scope.IsItemInserted != undefined)
+                                    $scope.IsItemInserted(true);
+                            }).catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                                if ($scope.IsItemInserted != undefined)
+                                    $scope.IsItemInserted(false);
+                            }).finally(function () {
+                                $scope.scopeModel.isLoading = false;
+                                $scope.modalContext.closeModal();
+                            });
                     }
                 }
                 else {

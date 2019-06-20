@@ -35,13 +35,20 @@
                     BusinessEntityDefinitionId: businessEntityDefinitionId
                 });
         }
+        function GetSwapDealAnalysis(genericBusinessEntityId, businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealAnalysis'), {
+                genericBusinessEntityId: genericBusinessEntityId,
+                businessEntityDefinitionId: businessEntityDefinitionId
+            });
+        }
         return {
             AnalyzeDeal: AnalyzeDeal,
             GetOutboundRateCalcMethodExtensionConfigs: GetOutboundRateCalcMethodExtensionConfigs,
             GetInboundRateCalcMethodExtensionConfigs: GetInboundRateCalcMethodExtensionConfigs,
             CalculateInboundRate: CalculateInboundRate,
             CalculateOutboundRate: CalculateOutboundRate,
-            UpdateDealAnalysis: UpdateDealAnalysis
+            UpdateDealAnalysis: UpdateDealAnalysis,
+            GetSwapDealAnalysis: GetSwapDealAnalysis
         };
     }
 

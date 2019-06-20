@@ -6,4 +6,5 @@
         WhS_Deal_SwapDealService.registerObjectTrackingDrillDownToSwapDeal();
         WhS_Deal_SwapDealService.registerHistoryViewAction();
         WhS_Deal_SwapDealAnalysisService.registerCreateSwapDealGenericBEAction();
+        WhS_Deal_SwapDealAnalysisService.registerViewSwapDealGenericBEAction();
     }]);

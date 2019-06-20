@@ -128,6 +128,13 @@ namespace TOne.WhS.Deal.Business
                 return swapDealAnalysisesById;
             });
         }
+
+        public SwapDealAnalysisDefinition GetSwapDealAnalysis(int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        {
+            var swapDealAnalysisDefinitionById = GetSwapDealAnalysisSettingById(businessEntityDefinitionId);
+            return swapDealAnalysisDefinitionById.GetRecord(genericBusinessEntityId);
+        }
+
         #endregion
 
         #region Private Methods

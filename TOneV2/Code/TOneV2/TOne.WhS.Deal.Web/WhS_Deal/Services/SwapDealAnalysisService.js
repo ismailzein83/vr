@@ -91,12 +91,31 @@
             };
             VR_GenericData_GenericBEActionService.registerActionType(CreateSwapDealActionType);
         }
+
+        function registerViewSwapDealGenericBEAction() {
+            var CreateSwapDealActionType = {
+                ActionTypeName: "ViewSwapDealGenericBEAction",
+                ExecuteAction: function (payload) {
+
+                    if (payload == undefined)
+                        return;
+
+                    settings.onScopeReady = function (modalScope) {
+                        UtilsService.setContextReadOnly(modalScope);
+                    };
+                    VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html', payload, settings);
+
+                }
+            };
+            VR_GenericData_GenericBEActionService.registerActionType(CreateSwapDealActionType);
+        }
         return {
             addInbound: addInbound,
             editInbound: editInbound,
             addOutbound: addOutbound,
             editOutbound: editOutbound,
-            registerCreateSwapDealGenericBEAction: registerCreateSwapDealGenericBEAction
+            registerCreateSwapDealGenericBEAction: registerCreateSwapDealGenericBEAction,
+            registerViewSwapDealGenericBEAction: registerViewSwapDealGenericBEAction
         };
     }
 

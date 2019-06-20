@@ -263,7 +263,9 @@
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\vr-whs-deal-swapdealanalysis-settings-inbound-editor.js" />
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\vr-whs-deal-swapdealanalysis-settings-outbound-editor.js" />
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\vr-whs-deal-swapdeal-settings-editor.js" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\GenericBEActionDefinition\Templates\ViewSwapDealDefinitionActionTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\GenericBEActionDefinition\Templates\CreateSwapDealDefinitionActionTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\GenericBEActionDefinition\vr-whs-deal-viewswapdealaction-definition.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\GenericBEActionDefinition\vr-whs-deal-createswapdealaction-definition.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultCustomObjectTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisInboundCustomObjectTemplate.html" />
