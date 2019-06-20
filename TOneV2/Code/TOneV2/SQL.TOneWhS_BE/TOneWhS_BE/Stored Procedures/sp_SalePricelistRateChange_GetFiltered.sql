@@ -19,7 +19,8 @@ SELECT [PricelistId]
 	  BED,
 	  EED,
 	  RoutingProductID,
-	  CurrencyID
+	  CurrencyID,
+	  Note
   FROM [TOneWhS_BE].[SalePricelistRateChange] SR WITH(NOLOCK)
   WHERE SR.PricelistId = @PriceListID
 		AND (@CountryIDs  is null or Sr.CountryID in (select CountryID from @CountryIDsTable))

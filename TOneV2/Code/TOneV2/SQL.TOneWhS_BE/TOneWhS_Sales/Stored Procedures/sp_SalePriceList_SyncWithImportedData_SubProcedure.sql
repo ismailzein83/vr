@@ -22,8 +22,8 @@ BEGIN
 	
 				-- Sync rates
 				
-				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, Change, BED, EED)
-				select ID, PriceListID, ZoneID, CurrencyId, RateTypeID, Rate, ChangeType, BED, EED
+				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, Change, BED, EED,Note)
+				select ID, PriceListID, ZoneID, CurrencyId, RateTypeID, Rate, ChangeType, BED, EED,Note
 				from TOneWhS_Sales.RP_SaleRate_New newRate with(nolock)
 				where newRate.ProcessInstanceID = @ProcessInstanceId
 
@@ -69,8 +69,8 @@ BEGIN
 				select [BatchID],[PricelistID],[CountryID],[CustomerID]
 				from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc  with(nolock)where spcc.[BatchID]= @ProcessInstanceID
 
-				INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RateTypeId],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID],ZoneID)
-				select sprc.[PricelistId],sprc.[Rate],sprc.[RateTypeId],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.BED,sprc.EED,sprc.RoutingProductID,CurrencyID,sprc.ZoneID
+				INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RateTypeId],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID],ZoneID,Note)
+				select sprc.[PricelistId],sprc.[Rate],sprc.[RateTypeId],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.BED,sprc.EED,sprc.RoutingProductID,CurrencyID,sprc.ZoneID,Note
 				from [TOneWhS_BE].[SalePricelistRateChange_New] sprc WITH(NOLOCK)
 				where sprc.ProcessInstanceID = @ProcessInstanceID
 

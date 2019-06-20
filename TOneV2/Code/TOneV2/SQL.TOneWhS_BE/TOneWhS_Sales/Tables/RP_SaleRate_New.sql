@@ -8,8 +8,11 @@
     [CurrencyID]        INT             NULL,
     [BED]               DATETIME        NOT NULL,
     [EED]               DATETIME        NULL,
-    [ChangeType]        INT             NULL
+    [ChangeType]        INT             NULL,
+    [Note]              NVARCHAR (MAX)  NULL
 );
+
+
 
 
 

@@ -10,8 +10,11 @@
     [SourceID]         VARCHAR (50)    NULL,
     [Change]           INT             NULL,
     [StateBackupID]    BIGINT          NOT NULL,
-    [LastModifiedTime] DATETIME        NULL
+    [LastModifiedTime] DATETIME        NULL,
+    [Note]             NVARCHAR (MAX)  NULL
 );
+
+
 
 
 

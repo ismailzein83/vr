@@ -13,8 +13,11 @@
     [BED]                 DATETIME        NOT NULL,
     [EED]                 DATETIME        NULL,
     [RoutingProductID]    INT             NULL,
-    [CurrencyID]          INT             NULL
+    [CurrencyID]          INT             NULL,
+    [Note]                NVARCHAR (MAX)  NULL
 );
+
+
 
 
 

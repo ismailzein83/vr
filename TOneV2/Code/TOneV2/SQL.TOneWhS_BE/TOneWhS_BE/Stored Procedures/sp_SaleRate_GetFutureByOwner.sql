@@ -6,7 +6,7 @@ BEGIN
 	declare @Now datetime;
 	set @Now = getdate();
 
-    select [ID], [PriceListID], [ZoneID], [CurrencyID], [RateTypeID], [Rate], [BED], [EED], [timestamp], [SourceID], [Change]
+    select [ID], [PriceListID], [ZoneID], [CurrencyID], [RateTypeID], [Rate], [BED], [EED], [timestamp], [SourceID], [Change],[Note]
 	from [TOneWhS_BE].[SaleRate] with(nolock)
 	where PriceListId in (select Id from TOneWhS_BE.SalePriceList with(nolock) where OwnerType = @OwnerType and OwnerId = @OwnerId)
 		and (EED is null or (EED > BED and BED > @Now))

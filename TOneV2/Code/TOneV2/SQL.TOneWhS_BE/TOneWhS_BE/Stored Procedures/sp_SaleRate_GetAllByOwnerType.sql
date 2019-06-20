@@ -17,7 +17,7 @@ BEGIN
 	declare @ZoneIdsTable as table (ZoneId bigint)
 	if (@ZoneIds is not null) begin insert into @ZoneIdsTable select convert(bigint, ParsedString) from TOneWhS_BE.ParseStringList(@ZoneIds) end
 
-	select rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[RateTypeID], rate.[Rate], rate.[BED], rate.[EED], rate.[SourceID], rate.[Change]
+	select rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[RateTypeID], rate.[Rate], rate.[BED], rate.[EED], rate.[SourceID], rate.[Change],rate.[Note]
 	from TOneWhS_BE.SaleRate rate inner join TOneWhS_BE.SalePriceList priceList with(nolock) on rate.PriceListID = priceList.ID
 	where (rate.EED is null or rate.EED > rate.BED)
 		and ((rate.RateTypeID is null and @GetNormalRates = 1) or (rate.RateTypeID is not null and @GetOtherRates = 1))
