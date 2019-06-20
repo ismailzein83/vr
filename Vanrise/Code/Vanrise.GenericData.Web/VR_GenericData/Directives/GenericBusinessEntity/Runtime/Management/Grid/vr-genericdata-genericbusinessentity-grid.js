@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_GenericBEActionService', 'VR_GenericData_GenericBusinessEntityService', 'VRCommon_VRBulkActionDraftService', 'VRCommon_StyleDefinitionAPIService'];
+    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_GenericBEActionService', 'VR_GenericData_GenericBusinessEntityService', 'VRCommon_VRBulkActionDraftService', 'VRCommon_StyleDefinitionAPIService','VR_GenericData_BusinessEntityDefinitionAPIService'];
 
-    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService, VR_GenericData_GenericBEActionService, VR_GenericData_GenericBusinessEntityService, VRCommon_VRBulkActionDraftService, VRCommon_StyleDefinitionAPIService) {
+    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService, VR_GenericData_GenericBEActionService, VR_GenericData_GenericBusinessEntityService, VRCommon_VRBulkActionDraftService, VRCommon_StyleDefinitionAPIService, VR_GenericData_BusinessEntityDefinitionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -133,6 +133,7 @@
 
                 api.load = function (payload) {
                     initialQueryOrderType = payload.query.OrderType;
+                    var treePromises = [];
 
                     if (payload != undefined) {
                         if (businessEntityDefinitionId != undefined && businessEntityDefinitionId != payload.businessEntityDefinitionId) {
@@ -141,9 +142,19 @@
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         bulkActionId = payload.bulkActionId;
                         doNotLoadByDefault = payload.doNotLoadByDefault;
-                        threeSixtyDegreeSettings = payload.threeSixtyDegreeSettings;
+                        threeSixtyDegreeSettings = payload.threeSixtyDegreeSettings; 
                         if (threeSixtyDegreeSettings != undefined) {
                             $scope.scopeModel.rowViewSettings.expandAsFullScreen = threeSixtyDegreeSettings.Use360Degree;
+                            //if (threeSixtyDegreeSettings.ViewSettings != undefined && threeSixtyDegreeSettings.ViewSettings.DirectiveSettings != undefined) {
+                            //    $scope.scopeModel.rowViewSettings.viewDirective = "vr-genericdata-genericbusinessentity-360degree-view";
+                            //    $scope.scopeModel.rowViewSettings.viewSettings = threeSixtyDegreeSettings.ViewSettings;
+                            //    $scope.scopeModel.rowViewSettings.viewSettings.BusinessEntityDefinitionId = businessEntityDefinitionId;
+                            //}
+
+                            var objectTypePromise = VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId).then(function (response) {
+                                $scope.scopeModel.rowViewSettings.objectType = response.Title;
+                            });
+                            treePromises.push(objectTypePromise);
                         }
                         context = payload.context;
                         gridQuery = payload.query;
@@ -151,7 +162,6 @@
                             fieldValues = gridQuery.fieldValues;
                     }
 
-                    var treePromises = [];
                     if ($scope.scopeModel.columns.length == 0) {
                         treePromises.push(getIdFieldTypeForGenericBELoadPromise());
                     }
