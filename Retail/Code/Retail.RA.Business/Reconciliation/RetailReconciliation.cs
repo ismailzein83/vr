@@ -88,7 +88,7 @@ namespace Retail.RA.Business
             AnalyticQuery prepaidTransactionAnalyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("d31fdfeb-056f-4a47-8df6-c4956912f989"),
-                MeasureFields = new List<string> { "TotalAmount" },
+                MeasureFields = new List<string> { "TotalRevenue" },
                 DimensionFields = new List<string> { "Operator", "Period",  "TransactionType" },
                 FromTime = Utilities.Min(minDate, query.FromTime),
                 ToTime = Utilities.Max(maxDate, toTime),
@@ -98,7 +98,7 @@ namespace Retail.RA.Business
             AnalyticQuery postpaidTransactionAnalyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("659d5871-ae42-446e-b755-89cd2b3f2652"),
-                MeasureFields = new List<string> { "TotalAmount" },
+                MeasureFields = new List<string> { "TotalRevenue" },
                 DimensionFields = new List<string> { "Operator", "Period",  "TransactionType" },
                 FromTime = Utilities.Min(minDate, query.FromTime),
                 ToTime = Utilities.Max(maxDate, toTime),
@@ -577,7 +577,7 @@ namespace Retail.RA.Business
                 };
 
                 MeasureValue calculatedAmount;
-                analyticRecord.MeasureValues.TryGetValue("TotalAmount", out calculatedAmount);
+                analyticRecord.MeasureValues.TryGetValue("TotalRevenue", out calculatedAmount);
                 if (calculatedAmount?.Value != null)
                     billingRecord.TransactionAmount = Convert.ToDecimal(calculatedAmount.Value ?? 0.0);
 
