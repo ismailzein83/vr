@@ -5,7 +5,7 @@ app.directive('vrInvtoaccbalancerelationExtendedsettingsGenericaccount', ['Utils
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -36,7 +36,7 @@ app.directive('vrInvtoaccbalancerelationExtendedsettingsGenericaccount', ['Utils
                 $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
                     invoiceTypeSelectorAPI = api;
                     invoiceTypeSelectorReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
                     accountTypeSelectorApi = api;
@@ -101,7 +101,7 @@ app.directive('vrInvtoaccbalancerelationExtendedsettingsGenericaccount', ['Utils
                         var accountTypeSelectorPayload;
                         if (balanceAccountTypeId != undefined) {
                             accountTypeSelectorPayload = { selectedIds: balanceAccountTypeId };
-                        };
+                        }
                         VRUIUtilsService.callDirectiveLoad(accountTypeSelectorApi, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
                     });
                     return accountTypeSelectorLoadDeferred.promise;

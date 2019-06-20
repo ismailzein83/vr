@@ -57,7 +57,7 @@ app.directive("vrGenericFinancialaccountSelector", ["UtilsService", "VRUIUtilsSe
                                 businessEntityDefinitionId: payload.businessEntityDefinitionId
                             };
                             VRUIUtilsService.callDirectiveLoad(genericFinancialAccountSelectorApi, genericFinancialAccountSelectorPayload, genericFinancialAccountSelectorLoadDeferred);
-                        })
+                        });
                         return genericFinancialAccountSelectorLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises);
