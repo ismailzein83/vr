@@ -24,5 +24,6 @@ namespace TOne.WhS.Deal.Entities
         public string GroupName { get; set; }
         public decimal Revenue { get; set; }
         public decimal Savings { get; set; }
+        public decimal RateSavings { get; set; }
     }
 }

@@ -157,7 +157,10 @@ app.directive('vrWhsDealSwapdealanalysisInboundManagement', ['WhS_Deal_SwapDealA
                     ItemCalculationMethod: inbounObject.ItemCalculationMethod,
                     CalculationMethodId: inbounObject.CalculationMethodId,
                     GroupName: inbounObject.GroupName,
-                    SaleZoneIds: inbounObject.SaleZoneIds
+                    SaleZoneIds: inbounObject.SaleZoneIds,
+                    Profit: inbounObject.Profit,
+                    RateProfit: inbounObject.RateProfit,
+                    Revenue: inbounObject.Revenue
                 };
                 inbounds.push(inboundSetting);
             }

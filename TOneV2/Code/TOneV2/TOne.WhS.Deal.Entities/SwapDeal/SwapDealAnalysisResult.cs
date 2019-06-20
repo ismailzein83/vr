@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
@@ -59,5 +56,23 @@ namespace TOne.WhS.Deal.Entities
         public SwapDealAnalysisOutboundItemRateCalcMethod ItemCalculationMethod { get; set; }
         public List<long> SupplierZoneIds { get; set; }
         public int CountryId { get; set; }
+    }
+    public class AnalysisResultCustomObject
+    {
+        public int DealPeriodInDays { get; set; }
+
+        public Decimal TotalCostRevenue { get; set; }
+
+        public Decimal TotalSaleRevenue { get; set; }
+
+        public Decimal? TotalCostMargin { get; set; }
+
+        public Decimal? TotalSaleMargin { get; set; }
+
+        public Decimal? OverallProfit { get; set; }
+
+        public Decimal? Margins { get; set; }
+
+        public Decimal OverallRevenue { get; set; }
     }
 }

@@ -19,6 +19,9 @@ namespace TOne.WhS.Deal.Entities
         public int DailyVolume { get; set; }
         public int Volume { get; set; }
         public decimal DealRate { get; set; }
+        public Decimal? RateProfit { get; set; }
+        public Decimal? Profit { get; set; } 
+        public Decimal Revenue { get; set; }
         public SwapDealAnalysisInboundItemRateCalcMethod ItemCalculationMethod { get; set; }
         public Guid CalculationMethodId { get; set; }
         public List<long> SaleZoneIds { get; set; }

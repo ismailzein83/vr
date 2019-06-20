@@ -265,6 +265,7 @@
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\vr-whs-deal-swapdeal-settings-editor.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\GenericBEActionDefinition\Templates\CreateSwapDealDefinitionActionTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\GenericBEActionDefinition\vr-whs-deal-createswapdealaction-definition.js" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultCustomObjectTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisInboundCustomObjectTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisOutboundCustomObjectTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultTemplate.html" />
@@ -272,6 +273,7 @@
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-inbound-customobjectsettings.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-outbound-customobjectsettings.js" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-result-customobjectsettings.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-staticeditor.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealGridTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealLastDealProgressTemplate.html" />

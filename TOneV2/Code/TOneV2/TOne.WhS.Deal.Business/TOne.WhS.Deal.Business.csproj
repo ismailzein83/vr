@@ -131,6 +131,7 @@
     <Compile Include="RouteRules\StructureRulesBehaviors\RuleBehaviorByDeal.cs" />
     <Compile Include="SaleZoneFilter.cs" />
     <Compile Include="SupplierZoneFilter.cs" />
+    <Compile Include="SwapDealAnalysis\SwapDealResultCustomObjectTypeSettings.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealInboundCustomObjectTypeSettings.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealOutboundCustomObjectTypeSettings.cs" />
     <Compile Include="SwapDeals\SwapDealSettings.cs" />
