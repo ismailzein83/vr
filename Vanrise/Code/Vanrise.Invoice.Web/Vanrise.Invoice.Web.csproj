@@ -230,6 +230,7 @@
     <Content Include="VR_Invoice\Directives\BillingCycle\vr-invoice-startdatecalculationmethod.js" />
     <Content Include="VR_Invoice\Directives\Extensions\GenericData\Templates\GenericInvoiceSettings.html" />
     <Content Include="VR_Invoice\Directives\Extensions\GenericData\Templates\InvoiceBusinessObjectDataProviderSettingsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Extensions\GenericData\vr-invoice-genericinvoiceaccount-selector.js" />
     <Content Include="VR_Invoice\Directives\Extensions\GenericData\vr-invoice-genericinvoicesettings.js" />
     <Content Include="VR_Invoice\Directives\Extensions\GenericData\vr-invoice-businessobject-dataprovidersettings.js" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\Templates\InvoiceConvertorTemplate.html" />

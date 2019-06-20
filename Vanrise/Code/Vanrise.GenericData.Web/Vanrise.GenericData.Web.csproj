@@ -356,6 +356,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-selectorfilter.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericeditor-rootcontainer.js" />
     <Content Include="VR_GenericData\Directives\GenericFinanialAccount\Templates\GenericFinancialAccountDefinition.html" />
+    <Content Include="VR_GenericData\Directives\GenericFinanialAccount\vr-generic-financialaccount-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericFinanialAccount\vr-genericdata-genericfinancialaccount-configuration.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordConditionDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinitiongroup.js" />

@@ -24,14 +24,14 @@ namespace Vanrise.Invoice.MainExtensions
         {
             get
             {
-                return "vr-genericdata-generic-financialaccount-selector";
+                return "vr-invoice-genericinvoiceaccount-selector";
             }
         }
         public override string PartnerSelector
         {
             get
             {
-                return "vr-genericdata-generic-financialaccount-selector";
+                return "vr-invoice-genericinvoiceaccount-selector";
             }
         }
         public override string PartnerInvoiceSettingFilterFQTN
