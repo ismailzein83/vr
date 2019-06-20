@@ -107,7 +107,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                 $scope.scopeModel.value = undefined;
                 var fieldType;
                 var fieldValue;
-
+                 
                 if (payload != undefined) {
                     fieldName = payload.fieldName;
                     $scope.scopeModel.label = payload.fieldTitle;
@@ -116,6 +116,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                         $scope.scopeModel.hint = fieldType.Hint;
                     fieldValue = payload.fieldValue;
                     genericContext = payload.genericContext;
+                    $scope.scopeModel.showAsLabel = payload.showAsLabel;
                 }
 
                 if (fieldValue != undefined) {
@@ -210,9 +211,21 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
 
         function getSingleSelectionModeTemplate() {
             
-            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
+            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="!scopeModel.showAsLabel">'
                 + '<vr-textbox type="text" label="{{scopeModel.label}}" hint ="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
-                + '</vr-columns>';
+                + '</vr-columns>'
+
+            + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" haschildcolumns ng-if="scopeModel.showAsLabel">'
+                + '<vr-columns colnum="3"> '
+                     + '<vr-label> {{scopeModel.label}}</vr-label>'
+                + '</vr-columns>'
+                + '<vr-columns colnum="1">'
+                     + '<vr-label> : </vr-label>'
+                + '</vr-columns>'
+                + '<vr-columns colnum="8">'
+                     + '<vr-label isvalue> {{scopeModel.value}} </vr-label>'
+                + '</vr-columns>'
+             + '</vr-columns>';
 
         }
     }
