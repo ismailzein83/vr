@@ -17,3 +17,4 @@ Demo\
 \bin\Vanrise.MobileNetwork.
 \bin\RecordAnalysis.
 \bin\Retail.NIM.
+\bin\Retail.Billing.

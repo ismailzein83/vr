@@ -506,6 +506,10 @@ when not matched by target then
             {
                 sb = sb.Replace(mainItem, "StandardInterconnectStructure");
             }
+            if (projectName == "Retail.Billing")
+            {
+                sb = sb.Replace(mainItem, "StandardRetail_Billing");
+            }            
 
             if (projectName == "ISP" || projectName == "Component-ISP")
             {

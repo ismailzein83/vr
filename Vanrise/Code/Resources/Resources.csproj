@@ -502,6 +502,15 @@
     <None Include="BatchScripts\Inspkt\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Inspkt\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Inspkt\All.bat" />
+    <None Include="BatchScripts\Retail.Billing\01-Runtime.bat" />
+    <None Include="BatchScripts\Retail.Billing\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\Retail.Billing\03-WebSite.bat" />
+    <None Include="BatchScripts\Retail.Billing\05-CompressFiles.bat" />
+    <None Include="BatchScripts\Retail.Billing\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\Retail.Billing\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\Retail.Billing\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Retail.Billing\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\Retail.Billing\All.bat" />
     <None Include="BatchScripts\TelecomCRM\01-Runtime.bat" />
     <None Include="BatchScripts\TelecomCRM\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\TelecomCRM\03-WebSite.bat" />
