@@ -21,7 +21,7 @@ namespace TOne.WhS.Deal.Business
                 return null;
 
             var result = new SwapDealAnalysisResult();
-            int dealPeriodInDays = (settings.ToDate - settings.FromDate).Days;
+            int dealPeriodInDays = (settings.ToDate - settings.FromDate).Days + 1;
 
             decimal? totalSaleMargin;
             decimal totalSaleRevenue;

@@ -41,6 +41,8 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
             var settings;
             var inbounds;
             var outbounds;
+            var analysisResult;
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -160,6 +162,7 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                             settings.ToDate = selectedValues.DealEED;
                             inbounds = selectedValues.Inbounds.SwapDealAnalysisInbounds;
                             outbounds = selectedValues.Outbounds.SwapDealAnalysisOutbounds;
+                            analysisResult = selectedValues.AnalysisResult;
                         }
                     }
                     loadAllControls();
@@ -182,6 +185,7 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                                 $type: "TOne.WhS.Deal.Entities.SwapDealAnalysisOutbound,TOne.WhS.Deal.Entities",
                                 SwapDealAnalysisOutbounds: outboundAPI.getData()
                             };
+                        swapDealAnalysisObject.AnalysisResult = resultAPI.getData();
                     }
                 };
 
@@ -190,7 +194,7 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadSwapDealSettings, loadSettings, loadInboundManagement, loadOutboundManagement]).catch(function (error) {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadSwapDealSettings, loadSettings, loadInboundManagement, loadOutboundManagement, loadResult]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -328,11 +332,16 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
 
             function loadResult(result) {
                 var resultLoadDeferred = UtilsService.createPromiseDeferred();
+                UtilsService.waitMultiplePromises([resultReadyDeferred.promise]).then(function () {
 
-                resultReadyDeferred.promise.then(function () {
-                    var resultPayload = {
-                        Result: result
-                    };
+                    var resultPayload = {};
+
+                    if (result != undefined)
+                        resultPayload.Result = result;
+
+                    else if (analysisResult != undefined)
+                        resultPayload.Result = analysisResult;
+
                     VRUIUtilsService.callDirectiveLoad(resultAPI, resultPayload, resultLoadDeferred);
                 });
 
