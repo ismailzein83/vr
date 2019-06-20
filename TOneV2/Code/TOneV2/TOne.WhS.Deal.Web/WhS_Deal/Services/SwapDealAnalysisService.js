@@ -96,6 +96,7 @@
             var CreateSwapDealActionType = {
                 ActionTypeName: "ViewSwapDealGenericBEAction",
                 ExecuteAction: function (payload) {
+                    var settings = {};
 
                     if (payload == undefined)
                         return;

@@ -46,12 +46,11 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                console.log(parameters);
                 if (parameters.genericBusinessEntityId != undefined) {
                     //the editor is opened from action in deal analysis
                     genericBusinessEntityId = parameters.genericBusinessEntityId;
                     businessEntityDefinitionId = parameters.businessEntityDefinitionId;
-                    if (parameters.genericBEAction.Settings.ConfigId == "8493394D-6B95-4870-92D3-AF81169BC8D4")
+                    if (parameters.genericBEAction.Settings.ConfigId == "8493394d-6b95-4870-92d3-af81169bc8d4")
                         isViewOnyFromAnalysis = true;
                     if (parameters.genericBEAction.Settings.ConfigId == "e5666599-ff4c-423e-bc6a-724b4a68ca69")
                         isCreateDealFromAnalysis = true;
@@ -278,10 +277,19 @@
                 });
             }
             else if (isViewOnyFromAnalysis) {
-                getSwapDealAalysis.then(function () {
-                    loadAllControls().finally(function () {
-                        dealEntity = undefined;
-                    });
+                var swapDealId;
+
+                WhS_Deal_SwapDealAnalysisAPIService.GetSwapDealAnalysis(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
+                    if (response != undefined && response.Settings != undefined) {
+                        swapDealId = response.Settings.SwapDealId;
+                        WhS_Deal_SwapDealAPIService.GetDeal(swapDealId).then(function (response) {
+                            dealEntity = response;
+                            isEditMode = true;
+                            loadAllControls().finally(function () {
+                                dealEntity = undefined;
+                            });
+                        });
+                    }
                 });
             }
             else {
@@ -301,16 +309,6 @@
                 dealEntity.Settings.DealType = undefined;
                 dealEntity.Settings.CurrencyId = undefined;
                 dealEntity.Settings.Priority = undefined;
-            });
-        }
-        function getSwapDealAalysis() {
-            return WhS_Deal_SwapDealAnalysisAPIServiceGetSwapDealAnalysis(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
-                if (response != undefined && response.Settings != undefined) {
-                    var swapDealId = response.Settings.SwapDealId;
-                    WhS_Deal_SwapDealAPIService.GetDeal(swapDealId).then(function (response) {
-                        dealEntity = response;
-                    });
-                }
             });
         }
         function getSwapDeal() {
@@ -347,7 +345,7 @@
         function setTitle() {
             if (isEditMode) {
                 if (dealEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(dealEntity.Name, 'Swap Deal');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(dealEntity.Name, 'Swap Deal', $scope);
             }
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Swap Deal');

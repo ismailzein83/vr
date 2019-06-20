@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CreateSwapDealActionDirective.$inject = ['UtilsService', 'VRNotificationService'];
+    ViewSwapDealActionDirective.$inject = ['UtilsService', 'VRNotificationService'];
 
-    function CreateSwapDealActionDirective(UtilsService, VRNotificationService) {
+    function ViewSwapDealActionDirective(UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -49,6 +49,6 @@
         }
     }
 
-    app.directive('vrWhsDealviewswapdealactionDefinition', ViewSwapDealActionDirective);
+    app.directive('vrWhsDealViewswapdealactionDefinition', ViewSwapDealActionDirective);
 
 })(app);
