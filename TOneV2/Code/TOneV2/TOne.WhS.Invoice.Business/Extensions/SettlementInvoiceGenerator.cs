@@ -250,6 +250,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         {
                                             if (canUseCurrency)
                                             {
+                                                settlementInvoiceDetailByCurrency.OriginalAmount += originalDataCurrrency.SMSAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmountWithCommission += originalDataCurrrency.SMSAmount.Value;
+
                                                 settlementInvoiceItemSummaryDetail.DueToSystemTotalSMSAmount += originalDataCurrrency.SMSAmount.Value;
                                                 dueToSystemFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.SMSAmount.Value;
                                             }
@@ -267,6 +270,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         {
                                             if (canUseCurrency)
                                             {
+                                                settlementInvoiceDetailByCurrency.OriginalAmount += originalDataCurrrency.DealAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmountWithCommission += originalDataCurrrency.DealAmount.Value;
+
                                                 settlementInvoiceItemSummaryDetail.DueToSystemTotalDealAmount += originalDataCurrrency.DealAmount.Value;
                                                 dueToSystemFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.DealAmount.Value;
                                             }
@@ -285,6 +291,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         {
                                             if (canUseCurrency)
                                             {
+                                                settlementInvoiceDetailByCurrency.OriginalAmount += originalDataCurrrency.RecurringChargeAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmountWithCommission += originalDataCurrrency.RecurringChargeAmount.Value;
+
                                                 settlementInvoiceItemSummaryDetail.DueToSystemAmountRecurringCharges += originalDataCurrrency.RecurringChargeAmount.Value;
                                                 settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = originalDataCurrrency.RecurringChargeAmount.Value;
                                                 dueToSystemFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.RecurringChargeAmount.Value;
@@ -522,6 +531,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         {
                                             if (canUseCurrency)
                                             {
+                                                settlementInvoiceDetailByCurrency.OriginalAmount += originalDataCurrrency.SMSAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmountWithCommission += originalDataCurrrency.SMSAmount.Value;
+
                                                 dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.SMSAmount.Value;
 
                                                 settlementInvoiceItemSummaryDetail.DueToCarrierTotalSMSAmount += originalDataCurrrency.SMSAmount.Value;
@@ -540,6 +552,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         {
                                             if (canUseCurrency)
                                             {
+                                                settlementInvoiceDetailByCurrency.OriginalAmount += originalDataCurrrency.DealAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmountWithCommission += originalDataCurrrency.DealAmount.Value;
+
                                                 dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.DealAmount.Value;
 
                                                 settlementInvoiceItemSummaryDetail.DueToCarrierTotalDealAmount += originalDataCurrrency.DealAmount.Value;
@@ -558,6 +573,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         {
                                             if (canUseCurrency)
                                             {
+                                                settlementInvoiceDetailByCurrency.OriginalAmount += originalDataCurrrency.RecurringChargeAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmountWithCommission += originalDataCurrrency.RecurringChargeAmount.Value;
+
                                                 dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.RecurringChargeAmount.Value;
 
                                                 settlementInvoiceItemSummaryDetail.DueToCarrierAmountRecurringCharges += originalDataCurrrency.RecurringChargeAmount.Value;
