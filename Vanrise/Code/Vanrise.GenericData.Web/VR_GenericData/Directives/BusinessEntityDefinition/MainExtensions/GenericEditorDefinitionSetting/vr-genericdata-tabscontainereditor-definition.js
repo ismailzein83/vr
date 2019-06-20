@@ -121,12 +121,13 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
             }
 
             function editTabContainer(tabObj) {
+                var obj = UtilsService.cloneObject(tabObj);
                 var onTabContainerUpdated = function (tab) {
                     var index = ctrl.datasource.indexOf(tabObj);
                     ctrl.datasource[index] = tab;
                 };
-
-                VR_GenericData_GenericBEDefinitionService.editGenericBETabContainer(onTabContainerUpdated, tabObj, getContext());
+                 
+                VR_GenericData_GenericBEDefinitionService.editGenericBETabContainer(onTabContainerUpdated, obj, getContext());
             }
             function getContext() {
 
