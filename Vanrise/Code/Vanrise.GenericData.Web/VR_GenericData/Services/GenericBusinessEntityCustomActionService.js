@@ -8,6 +8,7 @@
     function GenericBECustomActionService(VRModalService, UtilsService, VRButtonTypeEnum, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService) {
 
         var customActionTypes = [];
+        var customActions;
 
         function getCustomActionTypeIfExist(actionTypeName) {
             for (var i = 0; i < customActionTypes.length; i++) {
@@ -36,13 +37,13 @@
             registerCustomActionType(bulkAddCustomAction);
         }
         function buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId, parentFieldValues) {
-           var customActions=[];
+            customActions = [];
             if (genericBEDefinitionSettings != undefined && genericBEDefinitionSettings.CustomActions != undefined) {
-                var customActions = genericBEDefinitionSettings.CustomActions;
+                var actions = genericBEDefinitionSettings.CustomActions;
                 var actionsDictionary = {};
 
-                for (var i = 0; i < customActions.length; i++) {
-                    var customAction = customActions[i];
+                for (var i = 0; i < actions.length; i++) {
+                    var customAction = actions[i];
                     var buttonType = UtilsService.getEnum(VRButtonTypeEnum, "value", customAction.ButtonType);
                     if (buttonType != undefined) {
                         if (actionsDictionary[buttonType.value] == undefined) {
