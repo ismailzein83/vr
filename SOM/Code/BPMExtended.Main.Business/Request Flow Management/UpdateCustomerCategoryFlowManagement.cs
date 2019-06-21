@@ -8,14 +8,12 @@ namespace BPMExtended.Main.Business
 {
     public class UpdateCustomerCategoryFlowManagement
     {
-        const string startingProcess = "337976F9-2F42-4382-9111-817975698969";
-        const string reserveNumber = "170E4B07-9263-4631-BF82-D647EC0D484E";
-        const string payment = "5292113D-BC65-403F-8765-7B69B70DD443";
-        const string print = "BF1F7C56-5219-4206-9834-C9813DB540B0";
-        const string attachment = "F81E6A38-9763-47BD-89A9-2297062F0CCC";
-        const string technicalStep = "A8F7C0E8-4903-4343-93E4-87295BF4D64E";
-        const string submitToOM = "0F79F674-EAEA-4380-BB4F-648251A92D74";
-        const string endProcess = "2A290E4F-A034-46A5-95BF-E0C8ED760805";
+        const string startingProcess = "4D8F183D-DA35-4D2B-9ABB-31366203A5BB";
+        const string update = "57919F14-2759-413F-BCBA-8A82577B863A"; 
+        const string payment = "921C2034-D89C-4A75-9B03-D10F59038CF3";
+        const string technicalStep = "12A76A8F-F759-492A-9335-4FC01AEFF95E";
+        const string submitToOM = "E07B3ABC-4713-46A7-AD13-11A6AFC079AA";
+        const string endProcess = "9434699C-CA76-498F-A245-B993E3A3756F";
 
         public string GetNextStep(string id, string currentStepId)
         {
@@ -23,11 +21,11 @@ namespace BPMExtended.Main.Business
             string nextStepId = "";
             switch (currentStepId)
             {
-                case startingProcess: nextStepId = reserveNumber; break;
-                case reserveNumber: nextStepId = print; break;
-                case print: nextStepId = payment; break;
-                case payment: nextStepId = attachment; break;
-                case attachment: nextStepId = submitToOM; break;
+                case startingProcess: nextStepId = update; break;
+                case update: nextStepId = payment; break;
+                case payment: nextStepId = technicalStep; break;
+                case technicalStep: nextStepId = submitToOM; break;
+                case submitToOM: nextStepId = endProcess; break;
             }
             return nextStepId;
         }

@@ -328,7 +328,7 @@ namespace BPMExtended.Main.Entities
         [Description("Update Customer Category")]
         [EntitySchemaName("StUpdateCustomerCategory")]
         [CompletedStep("StTypeId")]
-        [CompletedStepId("27F9394B-B0EC-402B-9A92-4184C3BBD033")]
+        [CompletedStepId("9434699C-CA76-498F-A245-B993E3A3756F")]
         UpdateCustomerCategory = 37,
         
         [Description("Update Customer Address")]
