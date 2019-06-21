@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUIUtilsService', 'UtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService',
-    function (VRUIUtilsService, UtilsService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService) {
+app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUIUtilsService', 'UtilsService','VR_GenericData_DataRecordFieldAPIService',
+    function (VRUIUtilsService, UtilsService, VR_GenericData_DataRecordFieldAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -15,7 +15,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUI
                 ctor.initializeController();
 
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'ctrlFieldView',
             bindToController: true,
             compile: function (element, attrs) {
                 return {
@@ -30,33 +30,19 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUI
         };
 
         function fieldViewTypeListTypeCtor(ctrl, $scope) {
-
-            $scope.scopeModel = {};
-            var definitionSettings;
-            var selectedValues;
+            this.initializeController = initializeController;
+            var runtimeEditorDirectiveAPI;
+            var runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var dataRecordTypeId;
             var fieldName;
-            $scope.scopeModel.itemList = [];
+            var dataRecordTypeFields;
+            var definitionSettings;
             function initializeController() {
+                $scope.scopeModel = {};
 
-                $scope.scopeModel.isItemValid = function () {
-
-                    var itemToAdd = $scope.scopeModel.itemToAdd;
-                    if (itemToAdd == undefined || itemToAdd.length == 0 || itemToAdd == '') {
-                        return "should add at least one element";
-                    }
-                    else {
-                        for (var j = 0; j < $scope.scopeModel.itemList.length; j++) {
-                            var listItem = $scope.scopeModel.itemList[j];
-                            if (itemToAdd == listItem) {
-                                return "item already exist";
-                            }
-                        }
-                    }
-                    return null;
-                };
-                $scope.scopeModel.addItem = function () {
-                    $scope.scopeModel.itemList.push($scope.scopeModel.itemToAdd);
-                    $scope.scopeModel.itemToAdd = undefined;
+                $scope.scopeModel.onRuntimeEditorDirectiveReady = function (api) {
+                    runtimeEditorDirectiveAPI = api;
+                    runtimeEditorReadyPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -65,31 +51,65 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUI
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
-                    definitionSettings = payload.definitionSettings != undefined ? payload.definitionSettings.RecordField : undefined;
-                    fieldName = definitionSettings.Name;
-                    selectedValues = payload.fieldValue;
+                    var fieldValue;
+                    var fieldType;
+                    var fieldTitle;
+                    var promises = [];
+                  
+                    if (payload != undefined) {
+                        fieldType = payload.fieldType;
+                        fieldValue = payload.fieldValue;
+                        fieldTitle = payload.fieldTitle;
+                        definitionSettings = payload.definitionSettings;
 
-                    if (selectedValues != undefined) {
-                        for (var j = 0; j < selectedValues.length; j++) {
-                            $scope.scopeModel.itemList.push(selectedValues[j][fieldName]);
-                        }
+                        fieldName = definitionSettings != undefined && definitionSettings.RecordField != undefined ? definitionSettings.RecordField.Name : undefined;
+                        dataRecordTypeId = payload.dataRecordTypeId;
+                        promises.push(getDataRecordFields());
+
                     }
 
-                    $scope.scopeModel.fieldTitle = fieldName;
-                    var rootPromiseNode = {
-                        promises: []
-                    };
+                    function getDataRecordFields() {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId).then(function (response) {
+                            dataRecordTypeFields = response;
+                        });
+                    }
 
+                    var rootPromiseNode = {
+                        promises: promises,
+                        getChildNode: function () {
+                            var childPromises = [];
+                            var targetFieldType = UtilsService.getItemByVal(dataRecordTypeFields, fieldName, "Entity.Name");
+                            $scope.scopeModel.runtimeEditor = targetFieldType != undefined && targetFieldType.Entity != undefined && targetFieldType.Entity.Type != undefined ? targetFieldType.Entity.Type.RuntimeEditor : undefined;
+                            var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                            runtimeEditorReadyPromiseDeferred.promise.then(function () {
+                                VRUIUtilsService.callDirectiveLoad(runtimeEditorDirectiveAPI, {
+                                    fieldTitle: targetFieldType.Entity.Title,
+                                    fieldValue: fieldValue,
+                                    fieldType: targetFieldType.Entity.Type
+                                }, runtimeEditorLoadPromiseDeferred);
+                            });
+
+                            childPromises.push(runtimeEditorLoadPromiseDeferred.promise);
+                            return {
+                                promises: childPromises
+                            };
+                        }
+                    };
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
+                    var values = runtimeEditorDirectiveAPI.getData();
                     var returnedData = [];
-                    for (var i = 0; i < $scope.scopeModel.itemList.length; i++) {
-                        var listData = {};
-                        listData[fieldName] = $scope.scopeModel.itemList[i];
-                        returnedData.push(listData);
+                    if (values != undefined && values.length > 0) {
+                        for (var i = 0; i < values.length; i++) {
+                            var listData = {};
+                            listData[fieldName] = values[i];
+                            returnedData.push(listData);
+                        }
                     }
+                  
                     return returnedData;
                 };
 
@@ -97,6 +117,5 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUI
                     ctrl.onReady(api);
                 }
             }
-            this.initializeController = initializeController;
         }
     }]);

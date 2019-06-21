@@ -1,20 +1,3 @@
-﻿<vr-row>
-    <vr-row>
-        <vr-row>
-            <vr-columns colnum="4">
-                <vr-textbox value="scopeModel.itemToAdd" type="text" label={{scopeModel.fieldTitle}} customvalidate="scopeModel.isItemValid()"></vr-textbox>
-            </vr-columns>
-            <vr-columns colnum="1" withemptyline haschildcolumns>
-                <vr-button type="Add" data-onclick="scopeModel.addItem" standalone  vr-disabled="scopeModel.isItemValid()!=null"></vr-button>
-            </vr-columns>
-        </vr-row>
-    </vr-row>
-
-    <vr-columns colnum="12" haschildcolumns>
-        <vr-datalist maxitemsperrow="4" datasource="scopeModel.itemList" autoremoveitem="true">
-            <vr-columns colnum="4">
-                <vr-label>{{dataItem}}</vr-label>
-            </vr-columns>
-        </vr-datalist>
-    </vr-columns>
-</vr-row>
+﻿<span ng-if="scopeModel.runtimeEditor != undefined">
+    <vr-directivewrapper directive="scopeModel.runtimeEditor" on-ready="scopeModel.onRuntimeEditorDirectiveReady" selectionmode="multiple" isrequired="ctrlFieldView.isrequired" normal-col-num="{{ctrlFieldView.normalColNum}}"></vr-directivewrapper>
+</span>

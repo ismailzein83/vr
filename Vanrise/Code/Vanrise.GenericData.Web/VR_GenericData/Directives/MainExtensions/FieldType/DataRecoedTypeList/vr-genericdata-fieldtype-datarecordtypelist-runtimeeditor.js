@@ -74,7 +74,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                                 fieldTitle: fieldTitle,
                                 fieldValue: fieldValue,
                                 dataRecordTypeId: fieldType.DataRecordTypeId,
-                                definitionSettings: fieldViewSettings
+                                definitionSettings: fieldViewSettings,
+                                fieldType: fieldType
                             }, runtimeEditorLoadPromiseDeferred);
                         });
                     }
@@ -94,7 +95,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
         function getDirectiveTemplate(attrs) {
 
             return '<vr-columns colnum="12">'
-                + '<vr-directivewrapper directive="scopeModel.runtimeEditor" on-ready="scopeModel.onRuntimeEditorDirectiveReady"   isrequired="true"></vr-directivewrapper>'
+                + '<vr-directivewrapper directive="scopeModel.runtimeEditor" on-ready="scopeModel.onRuntimeEditorDirectiveReady" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"   isrequired="true"></vr-directivewrapper>'
                 + '</vr-columns>';
         }
 
