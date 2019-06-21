@@ -24,10 +24,9 @@
                 <vr-validator validate="ctrl.validateColumns()">
                     <vr-datagrid on-ready="ctrl.onGridReady"
                                  datasource="ctrl.columns"
-                                 enabledraggablerow="true"
                                  ondeleterow="ctrl.removeColumn"
-                                 maxheight="400px"
-                                 hidegridmenu>
+                                 enabledraggablerow="true"
+                                 maxheight="400px" hidegridmenu>
                         <vr-datagridcolumn headertext="'Field Name'" widthfactor="3" disablesorting>
                             <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordTypeFieldsSelectorReady" onselectionchanged="dataItem.onDataRecordTypeFieldsChanged" vr-loader="dataItem.isLoadingDataRecordTypeFieldsDirective" hidelabel isrequired="true"></vr-genericdata-datarecordtypefields-selector>
                         </vr-datagridcolumn>

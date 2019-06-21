@@ -8,8 +8,8 @@
         <vr-datagrid on-ready="scopeModel.onExpressionFieldGridReady"
                      datasource="scopeModel.expressionFields"
                      ondeleterow="scopeModel.removeExpressionField"
-                     hidegridmenu
-                     menuactions="scopeModel.menuActions">
+                     menuactions="scopeModel.menuActions"
+                     hidegridmenu enabledraggablerow="true">
             <vr-datagridcolumn headertext="'Name'" widthfactor="6" field="'FieldName'" type="'Text'"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>

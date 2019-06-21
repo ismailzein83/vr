@@ -9,9 +9,8 @@
             <vr-datagrid on-ready="scopeModel.onJoinGridReady"
                          datasource="scopeModel.joins"
                          ondeleterow="scopeModel.removeJoinColumn"
-                         maxheight="400px"
-                         hidegridmenu
-                         menuactions="scopeModel.menuActions">
+                         menuactions="scopeModel.menuActions"
+                         maxheight="400px" enabledraggablerow="true" hidegridmenu>
                 <vr-datagridcolumn headertext="'Name'" widthfactor="6" field="'RDBRecordStorageJoinName'" type="'Text'"></vr-datagridcolumn>
             </vr-datagrid>
         </vr-validator>
