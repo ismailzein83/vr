@@ -1622,9 +1622,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    dataItem.expandableRowTemplate = expandableRowTemplate;
 	                    dataItem.showRow = true;
 	                    dataItem.isRowExpanded = true;
+	                    var data = VRDataGridService.getDataItemByRegisterdObjectTypeId(ctrl.objectType.objectTypeId);
 	                    dataItem.viewReadyPromiseDeffered && dataItem.viewReadyPromiseDeffered.promise.then(function () {
 	                        dataItem.viewDirectiveApi.load({
-	                            dataItem: UtilsService.cloneObject(dataItem, true),
+	                            dataItem: data,
 	                            directiveSettings: ctrl.directiveSettings
 	                        }).then(function () {
 	                            dataItem.isLoadingRowView = false;
@@ -1655,6 +1656,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    dataItem.fullScreenMode = true;
 	                    ctrl.hasOpenedDataItem = true;
 	                    ctrl.objectType.objectTypeId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
+	                    ctrl.objectType.dataItem = UtilsService.cloneObject(dataItem);
 	                    VRDataGridService.addObjectType(ctrl.objectType);
 	                    ctrl.parentNames = VRDataGridService.getRegisterdObjectTypes();
 	                    if (ctrl.viewDirective) {
@@ -2003,6 +2005,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
         function getRegisterdObjectTypes() {
             return objectTypes;
         }
+
+        function getDataItemByRegisterdObjectTypeId(objectTypeId) {
+            var objectType = UtilsService.getItemByVal(objectTypes, objectTypeId, "objectTypeId");
+            return objectType && objectType.dataItem || null;
+        }
+
         function clearobjectTypes() {
             objectTypes.length = 0;
         }
@@ -2010,7 +2018,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
             getRegisterdObjectTypes: getRegisterdObjectTypes,
             addObjectType: addObjectType,
             removeObjectType: removeObjectType,
-            clearobjectTypes: clearobjectTypes
+            clearobjectTypes: clearobjectTypes,
+            getDataItemByRegisterdObjectTypeId: getDataItemByRegisterdObjectTypeId
         };
     }
     app.service('VRDataGridService', VRDataGridService);
