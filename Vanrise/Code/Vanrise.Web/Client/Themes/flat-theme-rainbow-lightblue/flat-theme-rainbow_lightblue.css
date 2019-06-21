@@ -1,0 +1,68 @@
+﻿.flat.login-body {
+    background-color: #65a3c7;
+}
+
+.flat.login-body .flat-logo-container > img {
+    position: relative;
+    top: -100px;
+}
+
+.flat.login-body .flat-logo-container:after {
+    content: "";
+    border-top: 2px solid #fff;
+    position: relative;
+    top: -115px;
+    display: block;
+    border-right: 125px solid transparent;
+    border-left: 125px solid transparent;
+    width: 100px;
+    margin: auto;
+}
+
+.flat .flat-logo-container {   
+    margin-bottom: 45px;
+}
+
+
+.flat .login-btn {
+    background-color: #82b7d6 !important;
+}
+
+
+.flat .vr-nav-custom .navbar-header {  
+    background-color: #65a3c7;
+}
+
+.flat .vr-sidebar-header { 
+    background-color: #65a3c7;
+}
+vr-section[header="Modules"] > div.panel-vr-child > div.panel-heading,
+vr-section[header="Pages"] > div.panel-vr-child > div.panel-heading {
+    border-color: #65a3c7;
+}
+
+vr-section[header="Modules"] > div.panel-vr-child > div.panel-heading > label,
+vr-section[header="Pages"] > div.panel-vr-child > div.panel-heading > label {
+    color: #65a3c7;
+}
+
+
+.flat .menu-tile.module:hover {
+    background-color: #65a3c7 !important;
+}
+
+.flat .vr-datagrid-header-simple {
+    background: #65a3c7 !important;
+}
+/*.flat .vr-datagrid-header-simple {
+    background: #65a3c7  !important;
+}*/
+.flat .vr-remote-footer.vr-datagrid-header-simple {
+    background-color: #e3e3e3 !important;
+}
+
+
+
+.flat .vr-modal-header {
+    background: #65a3c7 !important;
+}
