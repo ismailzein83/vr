@@ -7,6 +7,7 @@ namespace Vanrise.GenericData.Entities
         public string FieldTitle { get; set; }
         public Object FieldViewSettings { get; set; }
 		public string TextResourceKey { get; set; }
+        public Object DefaultFieldValue { get; set; }
 	}
 
 }

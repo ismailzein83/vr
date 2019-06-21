@@ -106,6 +106,7 @@ namespace Vanrise.GenericData.Business
             runtimeField.FieldPath = field.FieldPath;
             runtimeField.FieldViewSettings = field.FieldViewSettings;
             runtimeField.FieldType = GetFieldType(field.FieldPath, dataRecordTypeFieldsByName, dataRecordTypeId);
+            runtimeField.DefaultFieldValue = field.DefaultFieldValue;
             return runtimeField;
         }
 

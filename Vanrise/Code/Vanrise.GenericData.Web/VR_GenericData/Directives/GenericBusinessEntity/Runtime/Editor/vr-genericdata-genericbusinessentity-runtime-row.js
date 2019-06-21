@@ -119,15 +119,24 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                     field.readyPromiseDeferred.resolve();
                 };
 
+
                 if (field.readyPromiseDeferred != undefined) {
+
+                    var useDefaultValue = genericContext.isAddMode() && field.DefaultFieldValue != undefined && allFieldValuesByName[field.FieldPath] == undefined;
+
                     field.readyPromiseDeferred.promise.then(function () {
                         field.readyPromiseDeferred = undefined;
+                        var fieldValue;
+                        if (currentContext != undefined)
+                            fieldValue = currentContext.getFieldPathValue(field.FieldPath);
+                        if (useDefaultValue)
+                            fieldValue = field.DefaultFieldValue;
 
                         var payload = {
                             fieldName: field.FieldPath,
                             fieldTitle: field.FieldTitle,
                             fieldType: field.FieldType,
-                            fieldValue: currentContext != undefined ? currentContext.getFieldPathValue(field.FieldPath) : undefined,
+                            fieldValue: fieldValue,
                             fieldViewSettings: field.FieldViewSettings,
                             TextResourceKey: field.TextResourceKey,
                             showAsLabel: field.ShowAsLabel,
@@ -138,7 +147,19 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                         };
                         VRUIUtilsService.callDirectiveLoad(field.fieldAPI, payload, field.loadPromiseDeferred);
                     });
+
+                    field.loadPromiseDeferred.promise.then(function () {
+                        if (useDefaultValue) {
+                            genericContext.notifyFieldValueChanged({
+                                fieldName: field.FieldPath,
+                                fieldValues: [field.DefaultFieldValue]
+                            });
+                        }
+                    });
                 }
+
+
+                
 
                 ctrl.fields.push(field);
             }

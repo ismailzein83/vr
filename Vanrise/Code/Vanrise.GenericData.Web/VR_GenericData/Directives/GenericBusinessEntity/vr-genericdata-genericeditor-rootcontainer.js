@@ -31,7 +31,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
             //allRootContainerChildDirectivesLoadDeferred
             var allRootContainerChildDirectivesLoadDeferred = UtilsService.createPromiseDeferred();
-
+            var isEditMode;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -55,6 +55,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                     var parentFieldValues;
 
                     if (payload != undefined) {
+                        isEditMode = payload.isEditMode;
                         selectedValues = payload.selectedValues;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         definitionSettings = payload.definitionSettings;
@@ -66,7 +67,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                     if (selectedValues != undefined) {
                         for (var key in selectedValues) {
                             var value = selectedValues[key];
-                            if (typeof (value) == "object")
+                            if (Array.isArray(value))
                                 allFieldValuesByFieldNames[key] = value;
                             else
                                 allFieldValuesByFieldNames[key] = [value];
@@ -265,6 +266,9 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                         return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
                             $scope.scopeModel.isRootContainerLoading = false;
                         });
+                    },
+                    isAddMode: function () {
+                        return isEditMode == false;
                     }
                 };
 

@@ -12,5 +12,6 @@ namespace Vanrise.GenericData.Entities
         public string FieldTitle { get; set; }
         public Object FieldViewSettings { get; set; }
         public DataRecordFieldType FieldType { get; set; }
+        public Object DefaultFieldValue { get; set; }
     }
 }

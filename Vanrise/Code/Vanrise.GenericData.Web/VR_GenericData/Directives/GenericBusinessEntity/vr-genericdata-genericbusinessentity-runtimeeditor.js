@@ -170,7 +170,8 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                             definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings,
                             historyId: historyId,
                             parentFieldValues: fieldValues,
-                            runtimeEditor: $scope.scopeModel.runtimeEditor
+                            runtimeEditor: $scope.scopeModel.runtimeEditor,
+                            isEditMode: isEditMode
                         };
                         VRUIUtilsService.callDirectiveLoad(rootRuntimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
                     });
