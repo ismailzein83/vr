@@ -146,7 +146,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
             function getFieldTypeDescription(field) {
                 var fieldValue = currentContext != undefined ? currentContext.getFieldPathValue(field.FieldPath) : undefined;
                 return VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription(field.FieldType, fieldValue).then(function (response) {
-                    $scope.valueAsString = response;
+                    field.valueAsString = response;
                 });
             }
         }
