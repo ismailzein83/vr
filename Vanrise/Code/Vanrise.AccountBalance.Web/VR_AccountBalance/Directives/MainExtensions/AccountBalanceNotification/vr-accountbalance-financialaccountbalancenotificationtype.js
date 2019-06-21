@@ -1,6 +1,6 @@
 ﻿'use strict';
-       
-app.directive('vrAccountbalanceFinancialaccountbalanceNotificationType', ['UtilsService', 'VRUIUtilsService', 'VR_AccountBalance_AccountBalanceNotificationTypeAPIService',
+
+app.directive('vrAccountbalanceFinancialaccountbalancenotificationtype', ['UtilsService', 'VRUIUtilsService', 'VR_AccountBalance_AccountBalanceNotificationTypeAPIService',
 	function (UtilsService, VRUIUtilsService, VR_AccountBalance_AccountBalanceNotificationTypeAPIService) {
 		return {
 			restrict: 'E',
@@ -15,7 +15,7 @@ app.directive('vrAccountbalanceFinancialaccountbalanceNotificationType', ['Utils
 			},
 			controllerAs: 'ctrl',
 			bindToController: true,
-			templateUrl: "/Client/Modules/VR_AccountBalance/Directives/AccountBalanceNotification/Templates/AccountBalanceFinancialAccountBalanceNotificationTypeTemplate.html"
+			templateUrl: '/Client/Modules/VR_AccountBalance/Directives/MainExtensions/AccountBalanceNotification/Templates/AccountBalanceFinancialAccountBalanceNotificationTypeTemplate.html'
 		};
 
 		function FinancialAccountBalanceNotificationTypeSettings($scope, ctrl, $attrs) {
@@ -23,7 +23,7 @@ app.directive('vrAccountbalanceFinancialaccountbalanceNotificationType', ['Utils
 
 			var beDefinitionSelectorAPI;
 			var beDefinitionSelectorDeferredReady = UtilsService.createPromiseDeferred();
-			
+
 			function initializeController() {
 				$scope.scopeModel = {};
 				$scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {

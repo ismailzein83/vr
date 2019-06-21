@@ -1,13 +1,15 @@
-﻿<vr-columns colnum="6">
-	<vr-genericdata-businessentitydefinition-selector customlabel="Business Entity Definitions"
-													  on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
-													  isrequired="true">
-	</vr-genericdata-businessentitydefinition-selector>
-</vr-columns>
+﻿<vr-row haschildcolumns>
+	<vr-columns colnum="6">
+		<vr-genericdata-businessentitydefinition-selector customlabel="Financial Account BE Definition"
+														  on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
+														  isrequired="true">
+		</vr-genericdata-businessentitydefinition-selector>
+	</vr-columns>
 
-<vr-columns colnum="6">
-	<vr-common-mailmessagetype-selector customlabel="Mail Types"
-													  on-ready="scopeModel.onMailMessageTypeSelectorReady"
-													  isrequired="true">
-	</vr-common-mailmessagetype-selector>
-</vr-columns>
+	<vr-columns colnum="6">
+		<vr-common-mailmessagetype-selector customlabel="Mail Message Type"
+											on-ready="scopeModel.onMailMessageTypeSelectorReady"
+											isrequired="true">
+		</vr-common-mailmessagetype-selector>
+	</vr-columns>
+</vr-row>

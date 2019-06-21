@@ -165,9 +165,7 @@
     <Content Include="VR_AccountBalance\Constants\BalanceOrderByEnum.js" />
     <Content Include="VR_AccountBalance\Constants\AccountStatusEnum.js" />
     <Content Include="VR_AccountBalance\Constants\BillingTransactionSourceEnum.js" />
-    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceFinancialAccountBalanceNotificationTypeTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationGridTemplate.html" />
-    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-financialaccountbalance-notification-type.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notifications-grid.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\Templates\AccountBalancesGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\Templates\AccountBalancesViewEditor.html" />
@@ -198,6 +196,12 @@
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notification-bodyeditor.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notification-searcheditor.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notificationtype-settings.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceAction\Templates\AccountBalanceActionSendEmail.html" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceAction\vr-accountbalance-accountaction-sendemail.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\Templates\AccountBalanceFinancialAccountBalanceNotificationTypeTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\Templates\FinancialAccountBalanceNotificationSearchEditor.html" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\vr-accountbalance-financialaccountbalancenotificationtype-searcheditor.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\vr-accountbalance-financialaccountbalancenotificationtype.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\MainExtensions\BillingTransactionFieldEditorContoller.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\MainExtensions\Templates\BillingTransactionFieldEditor.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\MainExtensions\Templates\BillingTransactionSourceSetting.html" />
