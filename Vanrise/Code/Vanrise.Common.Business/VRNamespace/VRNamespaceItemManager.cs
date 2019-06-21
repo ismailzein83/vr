@@ -233,7 +233,7 @@ namespace Vanrise.Common.Business
 
         #region Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRNamespaceItemDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRNamespaceItemDataManager>();
             object _updateHandle;

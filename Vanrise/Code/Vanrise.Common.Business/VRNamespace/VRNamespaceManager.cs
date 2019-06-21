@@ -345,10 +345,13 @@ namespace Vanrise.Common.Business
         {
             IVRNamespaceDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRNamespaceDataManager>();
             object _updateHandle;
+            DateTime? _namespaceItemCacheLastCheck;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreVRNamespaceUpdated(ref _updateHandle);
+                return _dataManager.AreVRNamespaceUpdated(ref _updateHandle)
+                    |
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<VRNamespaceItemManager.CacheManager>().IsCacheExpired(ref _namespaceItemCacheLastCheck);
             }
         }
 

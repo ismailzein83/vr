@@ -263,18 +263,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
         {
-            FieldBusinessEntityType fieldTypeAsBusinessEntityType = fieldType as FieldBusinessEntityType;
-            if (fieldTypeAsBusinessEntityType == null)
-                return false;
-            if (fieldTypeAsBusinessEntityType.BusinessEntityDefinitionId != this.BusinessEntityDefinitionId)
-                return false;
-
-            if (fieldTypeAsBusinessEntityType.BERuntimeSelectorFilter == null && this.BERuntimeSelectorFilter == null)
-                return true;
-            else if (Vanrise.Common.Serializer.Serialize(fieldTypeAsBusinessEntityType.BERuntimeSelectorFilter) == Vanrise.Common.Serializer.Serialize(this.BERuntimeSelectorFilter))
-                return true;
-            else
-                return false;
+            return GetNonNullableRuntimeType() == fieldType.GetNonNullableRuntimeType();
         }
 
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)

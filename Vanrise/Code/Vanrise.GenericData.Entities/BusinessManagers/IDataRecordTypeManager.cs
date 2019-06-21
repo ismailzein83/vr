@@ -15,5 +15,7 @@ namespace Vanrise.GenericData.Entities
         string SerializeRecord(dynamic record, Guid dataRecordTypeId);
 
         dynamic DeserializeRecord(string serializedRecord, Guid dataRecordTypeId);
+
+        bool IsCacheExpired(ref DateTime? lastCheckTime);
     }
 }

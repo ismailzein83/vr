@@ -21,7 +21,7 @@ namespace Vanrise.Common.Business
 
         public List<VRWorkflowRetrySettings> WorkflowRetrySettings { get; set; }
 
-        public VRHttpConnectionCallInterceptor Interceptor { get; set; }
+        public virtual VRHttpConnectionCallInterceptor Interceptor { get; set; }
 
         public virtual bool TrySendRequest(string actionPath, VRHttpMethod httpMethod, VRHttpMessageFormat messageFormat, Dictionary<string, string> urlParameters,
             Dictionary<string, string> headers, string body, Action<VRHttpResponse> onResponseReceived, bool throwIfError, Action<VRHttpFault> onError)
@@ -135,10 +135,7 @@ namespace Vanrise.Common.Business
             vrConnection.ThrowIfNull("vrConnection");
             vrConnection.Settings.ThrowIfNull("vrConnection.Settings", vrConnection.VRConnectionId);
 
-            if (vrConnection.Settings.ConfigId != VRHttpConnection.s_ConfigId)
-                return false;
-
-            return true;
+            return vrConnection.Settings is VRHttpConnection;
         }
     }
 

@@ -289,6 +289,20 @@ namespace Vanrise.GenericData.Business
             return runtimeType;
         }
 
+        public Type GetDataRecordListRuntimeType(Guid dataRecordTypeId)
+        {
+            Type dataRecordType = new DataRecordTypeManager().GetDataRecordRuntimeType(dataRecordTypeId);
+            dataRecordType.ThrowIfNull("dataRecordType", dataRecordTypeId);
+            return typeof(List<>).MakeGenericType(dataRecordType);
+        }
+
+        public Type GetDataRecordListRuntimeType(string dataRecordTypeName)
+        {
+            Type dataRecordType = new DataRecordTypeManager().GetDataRecordRuntimeType(dataRecordTypeName);
+            dataRecordType.ThrowIfNull("dataRecordType", dataRecordTypeName);
+            return typeof(List<>).MakeGenericType(dataRecordType);
+        }
+
         public dynamic ConvertDynamicToDataRecord(dynamic dynamicObject, Guid dataRecordTypeId)
         {
             return Serializer.Deserialize(SerializeRecord(dynamicObject, dataRecordTypeId), GetDataRecordRuntimeType(dataRecordTypeId));
@@ -368,6 +382,11 @@ namespace Vanrise.GenericData.Business
             }
 
             return dataRecordFieldTransaltedToRDBs;
+        }
+
+        public bool IsCacheExpired(ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
         #endregion
