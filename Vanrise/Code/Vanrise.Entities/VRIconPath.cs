@@ -17,6 +17,8 @@ namespace Vanrise.Entities
         [Description("~/Images/figure-icons")]
         Figure = 1,
         [Description("~/Client/Images/menu-icons")]
-        View = 2       
+        View = 2,
+        [Description("~/Client/Images/mini-icons")]
+        MiniIcons = 3
     }
 }
