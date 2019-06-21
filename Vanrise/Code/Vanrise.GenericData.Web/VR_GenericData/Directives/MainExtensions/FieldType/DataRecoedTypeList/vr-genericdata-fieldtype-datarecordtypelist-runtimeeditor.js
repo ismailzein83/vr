@@ -93,10 +93,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
         }
 
         function getDirectiveTemplate(attrs) {
-
-            return '<vr-columns colnum="12">'
-                + '<vr-directivewrapper directive="scopeModel.runtimeEditor" on-ready="scopeModel.onRuntimeEditorDirectiveReady" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"   isrequired="true"></vr-directivewrapper>'
-                + '</vr-columns>';
+            return '<vr-directivewrapper directive="scopeModel.runtimeEditor" on-ready="scopeModel.onRuntimeEditorDirectiveReady" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"   isrequired="true"></vr-directivewrapper>';
         }
 
         return directiveDefinitionObject;
