@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsService','VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService',
+app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService',
     function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
 
         var directiveDefinitionObject = {
@@ -32,6 +32,11 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
 
         function dataRecordTypeListCtor(ctrl, $scope, $attrs) {
 
+            var fieldType;
+            var fieldTitle;
+            var fieldName;
+            var fieldViewSettings;
+
             var runtimeEditorDirectiveAPI;
             var runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -53,9 +58,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                 api.load = function (payload) {
 
                     var fieldValue;
-                    var fieldType;
-                    var fieldTitle;
-                    var fieldViewSettings;
+
                     var promises = [];
                     var rootPromiseNode = {
                         promises: promises
@@ -64,6 +67,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
                         fieldTitle = payload.fieldTitle;
+                        fieldName = payload.fieldName;
                         fieldViewSettings = payload.fieldViewSettings;
                         $scope.scopeModel.runtimeEditor = fieldViewSettings != undefined ? fieldViewSettings.RuntimeEditor : undefined;
                         var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -86,6 +90,28 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                     return runtimeEditorDirectiveAPI != undefined ? runtimeEditorDirectiveAPI.getData() : undefined;
                 };
 
+                api.setFieldValues = function (fieldValuesByNames) {
+
+                    var setFieldValuesDeferred = UtilsService.createPromiseDeferred();
+                    var payload = {
+                        fieldTitle: fieldTitle,
+                        fieldValue: fieldValuesByNames[fieldName],
+                        dataRecordTypeId: fieldType.DataRecordTypeId,
+                        definitionSettings: fieldViewSettings,
+                        fieldType: fieldType
+                    };
+
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isDirectiveLoading = value;
+                    };
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, runtimeEditorDirectiveAPI, payload, setLoader, undefined).then(function () {
+                        setFieldValuesDeferred.resolve();
+                    });
+
+                    return setFieldValuesDeferred.promise;
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
@@ -93,7 +119,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-directivewrapper directive="scopeModel.runtimeEditor" on-ready="scopeModel.onRuntimeEditorDirectiveReady" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"   isrequired="true"></vr-directivewrapper>';
+            return '<span vr-loader="scopeModel.isDirectiveLoading">'
+                + '<vr-directivewrapper directive="scopeModel.runtimeEditor" on-ready="scopeModel.onRuntimeEditorDirectiveReady" normal-col-num="{{runtimeEditorCtrl.normalColNum}}" isrequired="true"></vr-directivewrapper>'
+                + '</span>';
         }
 
         return directiveDefinitionObject;
