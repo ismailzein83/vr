@@ -133,6 +133,7 @@ as (select * from (values
 ('F0FCE857-0119-4895-9459-648E14EFA60A','Comment View','Comment','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-common-comment-genericbeview-definition"}'),
 
 ('043E058A-0E0E-40E2-82AB-FE04C896E615','VR_GenericData_ParentDataRecordType','Parent Data Record Type','VR_GenericData_DataRecordTypeExtraField','{"Editor":"vr-genericdata-datarecordtypeextrafields-parentrecordtype"}'),
+('466EECEE-F3AC-4880-8818-8FEDD8D92BA8','VR_GenericData_MultipleParentDataRecordType','Multiple Parent Data Record Type','VR_GenericData_DataRecordTypeExtraField','{"Editor":"vr-genericdata-datarecordtypextrafields-multipleparentrecordtype"}'),
 ('DEC7A24F-6439-4DEB-A912-1AA3B0290F21','RDBDataRecordStorageExpressionFieldFromJoin','From Join','VR_GenericData_RDBDataRecordStorageExpressionFieldSettingsConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-expressionfield-fromjoin"}'),
 ('FF293CA2-522F-47F1-808A-6178DF488E11','RDBDataRecordStorageCustomCodeJoin','Custom Code','VR_GenericData_RDBDataRecordStorageJoinSettingsConfig','{"Editor":"vr-genericadata-rdbdatarecordstoragesettings-customcodejoin"}'),
 ('2E000BBE-3842-49D5-BCAE-C9B20D778F18','RDBDataRecordStorageCustomCodeExpressionField','Custom Code','VR_GenericData_RDBDataRecordStorageExpressionFieldSettingsConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-expressionfield-customcode"}'),
