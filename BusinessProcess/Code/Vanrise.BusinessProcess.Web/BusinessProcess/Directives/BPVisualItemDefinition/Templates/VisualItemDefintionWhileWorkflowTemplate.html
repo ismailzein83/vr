@@ -1,0 +1,26 @@
+﻿<div>
+    <div style="margin:15px auto;text-align:center">
+        <vr-label> While {{scopeModel.conditionDescription}}</vr-label>
+    </div>
+    <div class="vr-visualitem-counterIcon">
+        <div class="counter-value">{{scopeModel.nbOfIteration}}</div>
+    </div>
+
+
+    <div class="vr-visualitem-separatordesign" ng-if="scopeModel.childVisualItem.Settings.Editor!=undefined">
+        <div class="vr-visualitem-separatordesignline" ng-class="{'vr-visualitem-separatorcompleted': childVisualItem.classEventCompleted}"></div>
+        <i class="vr-visualitem-separatordesigndown" ng-class="{'vr-visualitem-separatorcompleted': childVisualItem.classEventCompleted}"></i>
+    </div>
+
+    <div class="vr-visualitem-closeLoop-top"></div>
+
+    <vr-columns width="fullrow">
+        <vr-directivewrapper directive="scopeModel.childVisualItem.Settings.Editor" on-ready="scopeModel.onChildVisualItemReady">
+        </vr-directivewrapper>
+    </vr-columns>
+
+    <div class="vr-visualitem-closeLoop-buttom">
+        <div class="buttom-border"></div>
+    </div>
+</div>
+
