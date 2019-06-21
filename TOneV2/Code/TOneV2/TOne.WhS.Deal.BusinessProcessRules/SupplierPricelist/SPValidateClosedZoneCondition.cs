@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using TOne.WhS.Deal.Business;
-using TOne.WhS.SupplierPriceList;
 using System.Collections.Generic;
+using TOne.WhS.SupplierPriceList;
 using Vanrise.BusinessProcess.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
 
@@ -17,23 +16,21 @@ namespace TOne.WhS.Deal.BusinessProcessRules
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var countryZones = context.Target as AllZones;
+            var allZones = context.Target as AllZones;
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
-            var zoneMessages = new List<string>();
-            foreach (var notImportedZone in countryZones.NotImportedZones.Where(c => c.HasChanged))
+            var zoneMessages = new HashSet<string>();
+            foreach (var notImportedZone in allZones.NotImportedZones)
             {
-                if (notImportedZone.EED.HasValue)
-                {
-                    string dealMessage = Helper.GetDealZoneMessage(importSPLContext.SupplierId, notImportedZone.ZoneId, notImportedZone.ZoneName, notImportedZone.EED.Value, false);
-                    if (dealMessage != null)
-                        zoneMessages.Add(dealMessage);
-                }
+                string dealMessage = Helper.GetDealZoneMessage(importSPLContext.SupplierId, notImportedZone.ZoneId, notImportedZone.ZoneName, DateTime.Now, false);
+                if (dealMessage != null)
+                    zoneMessages.Add(dealMessage);
             }
+
             if (zoneMessages.Any())
             {
                 string zoneMessageString = string.Join(",", zoneMessages);
-                context.Message = String.Format("Following closed zones are included in effective deals : {0}", zoneMessageString);
+                context.Message = $"Following closed zones are included in effective deals : {zoneMessageString}";
                 return false;
             }
             return true;

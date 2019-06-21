@@ -176,10 +176,12 @@ namespace TOne.WhS.Deal.Business
             if (zoneInfos == null || zoneInfos.Count() == 0)
                 return null;
 
-            var zoneInfo = zoneInfos.First().Value;
-            if (Utilities.IsEffective(effectiveAfter, zoneInfo.BED, zoneInfo.EED))
-                return zoneInfo.DealId;
-
+            foreach (var zoneInfo in zoneInfos)
+            {
+                var zoneInfoValue = zoneInfo.Value;
+                if (Utilities.IsEffective(effectiveAfter, zoneInfoValue.BED, zoneInfoValue.EED))
+                    return zoneInfoValue.DealId;
+            }
             return null;
         }
         public DealDefinition GetLastDealByCarrierAccountId(int carrierAccountId)

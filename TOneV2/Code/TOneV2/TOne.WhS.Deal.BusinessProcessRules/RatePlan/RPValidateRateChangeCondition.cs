@@ -32,12 +32,8 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                 if (dataByZone.NormalRateToChange == null && dataByZone.NormalRateToClose == null)
                     return true;
 
-                DateTime effectiveDate = dataByZone.NormalRateToChange != null
-                    ? dataByZone.NormalRateToChange.BED
-                    : dataByZone.NormalRateToClose.CloseEffectiveDate;
-
                 var zoneName = new SaleZoneManager().GetSaleZoneName(dataByZone.ZoneId);
-                string dealMessage = Helper.GetDealZoneMessage(ratePlanContext.OwnerId, dataByZone.ZoneId, zoneName, effectiveDate, true);
+                string dealMessage = Helper.GetDealZoneMessage(ratePlanContext.OwnerId, dataByZone.ZoneId, zoneName, DateTime.Now, true);
                 if (dealMessage != null)
                     zoneMessages.Add(dealMessage);
 
@@ -45,7 +41,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             if (zoneMessages.Any())
             {
                 string zoneMessagesString = string.Join(",", zoneMessages);
-                context.Message = String.Format("Modified rates cannot be done for zones included in deals. Following zones are : {0}", zoneMessagesString);
+                context.Message = $"Cannot modify rate(s) for zone(s) included in deals. Following zones are: {zoneMessagesString}";
                 return false;
             }
             return true;

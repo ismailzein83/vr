@@ -34,7 +34,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             var countrySaleZones = salezoneManager.GetSaleZonesByCountryId(ratePlanContext.OwnerSellingNumberPlanId, countryId, ratePlanContext.EffectiveDate);
             foreach (var saleZone in countrySaleZones)
             {
-                var dealId = dealDefinitionManager.IsZoneIncludedInDeal(ratePlanContext.OwnerId, saleZone.SaleZoneId, ratePlanContext.EffectiveDate, true);
+                var dealId = dealDefinitionManager.IsZoneIncludedInDeal(ratePlanContext.OwnerId, saleZone.SaleZoneId, DateTime.Now, true);
                 if (dealId.HasValue)
                 {
                     var countryName = new CountryManager().GetCountryName(countryId);
@@ -46,7 +46,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             if (zoneMessages.Any())
             {
                 string zoneMessagesString = string.Join(",", zoneMessages);
-                context.Message = String.Format("Following countries having zones included in effective deals and they cannot be ended: {0}", zoneMessagesString);
+                context.Message = $"Cannot Close Country(ies) having zones included in effective deals. Following zones are:  {zoneMessagesString}";
                 return false;
             }
             return true;

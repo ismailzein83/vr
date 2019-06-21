@@ -8,7 +8,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
         public static string GetDealZoneMessage(int carrierId, long zoneId, string zoneName, DateTime effectiveDate, bool isSale)
         {
             var dealDefinitionManager = new DealDefinitionManager();
-            var dealId = dealDefinitionManager.IsZoneIncludedInDeal(carrierId, zoneId, effectiveDate, isSale);
+            var dealId = dealDefinitionManager.IsZoneIncludedInEffectiveDeal(carrierId, zoneId, effectiveDate, isSale);
             if (dealId.HasValue)
             {
                 var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);

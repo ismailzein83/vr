@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using TOne.WhS.Deal.Business;
-using System.Collections.Generic;
 using TOne.WhS.SupplierPriceList;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.Deal.BusinessProcessRules
 {
@@ -18,32 +17,29 @@ namespace TOne.WhS.Deal.BusinessProcessRules
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var dealDefinitionManager = new DealDefinitionManager();
-            var countryZones = context.Target as AllZones;
+            var allZones = context.Target as AllZones;
+
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
             var zoneMessages = new List<string>();
-            foreach (var importedZone in countryZones.ImportedZones.Zones)
+            foreach (var importedZone in allZones.ImportedZones.Zones)
             {
                 var importedRate = importedZone.ImportedNormalRate;
 
-                if (importedRate.NewRates != null || importedRate.NewRates.Count == 0)
+                if (importedRate.NewRates == null || importedRate.NewRates.Count == 0)
                     continue;
 
                 var rate = importedRate.NewRates.First();
-                DateTime effectivedate = DateTime.Now;
-
-                if (importedRate.ChangeType == RateChangeType.Decrease || importedRate.ChangeType == RateChangeType.Increase)
-                    effectivedate = importedRate.BED;
-
-                string dealMessage = Helper.GetDealZoneMessage(importSPLContext.SupplierId, rate.Zone.ZoneId, importedRate.ZoneName, effectivedate, false);
+                string dealMessage = Helper.GetDealZoneMessage(importSPLContext.SupplierId, rate.Zone.ZoneId, importedRate.ZoneName, DateTime.Now, false);
                 if (dealMessage != null)
                     zoneMessages.Add(dealMessage);
+
             }
+
             if (zoneMessages.Any())
             {
                 string zoneMessageString = string.Join(",", zoneMessages);
-                context.Message = String.Format("Modified rates cannot be done for zones included in deals. Following zones are : {0}", zoneMessageString);
+                context.Message = $"Modified rates cannot be done for zones included in deals. Following zones are : {zoneMessageString}";
                 return false;
             }
             return true;

@@ -47,7 +47,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                                     throw new DataIntegrityValidationException("ZoneToProcess has no existing zones");
                                 foreach (var existingZone in zoneToProcess.ExistingZones)
                                 {
-                                    string dealMessage = Helper.GetDealZoneMessage(carrierAccountInfo.CarrierAccountId, existingZone.ZoneId, existingZone.Name, codePreparationContext.EffectiveDate, true);
+                                    string dealMessage = Helper.GetDealZoneMessage(carrierAccountInfo.CarrierAccountId, existingZone.ZoneId, existingZone.Name, DateTime.Now, true);
                                     if (dealMessage != null)
                                         zoneMessages.Add(dealMessage);
                                 }
@@ -56,7 +56,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                         if (zoneMessages.Any())
                         {
                             string zoneMessageString = string.Join(",", zoneMessages);
-                            context.Message = String.Format("Following closed zones are included in effective deals : {0}", zoneMessageString);
+                            context.Message = $"Cannot close zone(s) included in effective deals : {zoneMessageString}";
                             return false;
                         }
                     }
