@@ -9,7 +9,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
-namespace Vanrise.GenericData.RDBDataStorage
+namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Filters
 {
     public class RDBDataRecordStorageLoggedInUserFilter : RDBDataRecordStorageSettingsFilter
     {
