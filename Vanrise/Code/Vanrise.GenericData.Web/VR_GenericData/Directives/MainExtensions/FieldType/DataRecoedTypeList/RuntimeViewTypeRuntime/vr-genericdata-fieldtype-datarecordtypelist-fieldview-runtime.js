@@ -81,11 +81,17 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUI
                             var targetFieldType = UtilsService.getItemByVal(dataRecordTypeFields, fieldName, "Entity.Name");
                             $scope.scopeModel.runtimeEditor = targetFieldType != undefined && targetFieldType.Entity != undefined && targetFieldType.Entity.Type != undefined ? targetFieldType.Entity.Type.RuntimeEditor : undefined;
                             var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            var fieldValues = [];
+                            if (fieldValue != undefined && fieldValue.length > 0) {
+                                for (var i = 0; i < fieldValue.length; i++) {
+                                    fieldValues.push(fieldValue[i][fieldName]);
+                                }
+                            }
 
                             runtimeEditorReadyPromiseDeferred.promise.then(function () {
                                 VRUIUtilsService.callDirectiveLoad(runtimeEditorDirectiveAPI, {
                                     fieldTitle: targetFieldType.Entity.Title,
-                                    fieldValue: fieldValue,
+                                    fieldValue: fieldValues,
                                     fieldType: targetFieldType.Entity.Type
                                 }, runtimeEditorLoadPromiseDeferred);
                             });
