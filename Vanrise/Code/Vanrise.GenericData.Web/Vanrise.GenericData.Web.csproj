@@ -145,6 +145,7 @@
     <Compile Include="Controllers\ExtensibleBEItemController.cs" />
     <Compile Include="Controllers\GenericBusinessEntityController.cs" />
     <Compile Include="Controllers\GenericBusinessEntityDefinitionController.cs" />
+    <Compile Include="Controllers\BusinessEntityStatusHistoryController.cs" />
     <Compile Include="Controllers\GenericUIRuntimeController.cs" />
     <Compile Include="Controllers\GenericRuleController.cs" />
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
@@ -275,6 +276,8 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-restapiitem-input-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-dependantfield-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinitionsetting-genericfielddefinition.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityStatusHistory\Templates\BusinessEntityStatusHistoryGrid.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityStatusHistory\vr-genericdata-be-statushistory-grid.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\Templates\CDRCorrelationDefinitionSettings.html" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-settings.js" />
@@ -337,6 +340,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\vr-genericdata-genericbe-ordertype-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\Templates\GenericEditorSubViewViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-genericeditorsubview-definition.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-statushistorysubview-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\Templates\FixedValuesHandlerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\vr-genericdata-genericbe-beforeinserthandler-fixedvalues.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\CustomActions\BulkAddRuntimEditorController.js" />
@@ -345,8 +349,11 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-filterruntime-isempty.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBERuntimeManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericEditorSubViewViewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\Templates\StatusHistoryGenericBEDefinitionViewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\StatusHistoryGenericBERuntimeViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-genericeditorsubview-runtime.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-statushistorysubview-runtime.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\Templates\GenericBusinessEntity360DegreeViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\vr-genericdata-genericbusinessentity-360degree-view.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBEFilterRuntimeRootContainerEditor.html" />
@@ -964,6 +971,7 @@
     <Content Include="VR_GenericData\Services\APIServices\ExtensibleBEItemAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericBusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericBusinessEntityDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\BusinessEntityStatusHistoryAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericUIRuntimeAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
