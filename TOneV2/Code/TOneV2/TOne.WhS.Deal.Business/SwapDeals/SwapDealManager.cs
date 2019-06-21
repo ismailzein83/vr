@@ -185,8 +185,8 @@ namespace TOne.WhS.Deal.Business
             if (deal == null)
                 throw new NullReferenceException(dealId.ToString());
 
-            if (!deal.Settings.IsRecurrable)
-                throw new VRBusinessException("This Deal is not Recurrable");
+            //if (!deal.Settings.IsRecurrable)
+            //    throw new VRBusinessException("This Deal is not Recurrable");
 
             var dealDefinitionManager = new DealDefinitionManager();
 

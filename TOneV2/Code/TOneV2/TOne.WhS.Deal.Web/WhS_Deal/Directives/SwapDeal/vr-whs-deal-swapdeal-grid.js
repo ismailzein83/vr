@@ -90,7 +90,7 @@
                         };
                     }
                     menuActions.push(menuAction);
-                    if (dataItem.StatusDescription == WhS_Deal_DealStatusTypeEnum.Active.description && dataItem.Entity.Settings.IsRecurrable == true) {
+                    if (dataItem.StatusDescription == WhS_Deal_DealStatusTypeEnum.Active.description) {
                         var recurMenuAction = {
                             name: 'Recur',
                             clicked: recurDeal
