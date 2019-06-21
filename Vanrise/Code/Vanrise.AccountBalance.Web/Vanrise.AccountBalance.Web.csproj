@@ -165,7 +165,9 @@
     <Content Include="VR_AccountBalance\Constants\BalanceOrderByEnum.js" />
     <Content Include="VR_AccountBalance\Constants\AccountStatusEnum.js" />
     <Content Include="VR_AccountBalance\Constants\BillingTransactionSourceEnum.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceFinancialAccountBalanceNotificationTypeTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationGridTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-financialaccountbalance-notification-type.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notifications-grid.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\Templates\AccountBalancesGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\Templates\AccountBalancesViewEditor.html" />

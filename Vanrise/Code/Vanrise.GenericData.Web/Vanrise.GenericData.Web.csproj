@@ -592,7 +592,9 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-parentbusinessentity.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-singlemathoperation.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-switchcase.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\Templates\VRActionDefinitionGenericSendEmail.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\Templates\VRActionDefinitionSendEmail.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\vr-genericdata-datarecord-vractiondefinition-extendedsettings-genericsendemail.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\vr-genericdata-datarecord-vractiondefinition-extendedsettings-sendemail.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\Templates\SendEmail.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\vr-genericdata-datarecord-vraction-sendemail.js" />
