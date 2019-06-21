@@ -78,6 +78,7 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                     if (payload != undefined && payload.settings != undefined) {
                         accountTypeId = payload.settings.AccountTypeId;
                         notificationTypeId = payload.settings.NotificationTypeId;
+                        if (payload.settings.CriteriaDefinition != undefined && payload.settings.CriteriaDefinition.Fields != undefined)
                         criteriaFields = payload.settings.CriteriaDefinition.Fields;
                         ruleObjects = payload.settings.Objects;
 
