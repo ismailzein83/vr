@@ -11,6 +11,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 {
     public class BPTaskDataManager : BaseSQLDataManager, IBPTaskDataManager
     {
+        static IBPTaskTypeManager s_taskTypeManager = Vanrise.BusinessProcess.Entities.BusinessManagerFactory.GetManager<IBPTaskTypeManager>();
         public BPTaskDataManager()
             : base(GetConnectionStringName("BusinessProcessDBConnStringKey", "BusinessProcessDBConnString"))
         {
@@ -27,8 +28,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
             object obj;
             taskId = default(long);
 
-
-            if (ExecuteNonQuerySP("[bp].[sp_BPTask_Insert]", out obj, title, processInstanceId, typeId, taskData != null ? Serializer.Serialize(taskData) : null, (int)bpTaskStatus, assignedUsers, assignedUsersDescription) > 0)
+            BPTaskType taskType = GetTaskTypeWithValidate(typeId);
+            if (ExecuteNonQuerySP("[bp].[sp_BPTask_Insert]", out obj, title, processInstanceId, typeId, taskData != null ? taskType.Settings.SerializeTaskData(taskData) : null, (int)bpTaskStatus, assignedUsers, assignedUsersDescription) > 0)
             {
                 taskId = (long)obj;
                 return true;
@@ -49,8 +50,17 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public bool UpdateTask(long taskId, BPTaskData taskData)
         {
-            int recordsAffected = ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTask]", taskId, taskData != null ? Serializer.Serialize(taskData) : null);
-            return recordsAffected > 0;
+            var task = GetTask(taskId);
+            if (task != null)
+            {
+                BPTaskType taskType = GetTaskTypeWithValidate(task.TypeId);
+                int recordsAffected = ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTask]", taskId, taskData != null ? taskType.Settings.SerializeTaskData(taskData) : null);
+                return recordsAffected > 0;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public List<BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId, List<BPTaskStatus> excludedStatuses, BPTaskFilter bPTaskFilter)
@@ -178,7 +188,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             string taskData = reader["TaskData"] as string;
             if (!String.IsNullOrWhiteSpace(taskData))
-                bpTask.TaskData = Serializer.Deserialize<BPTaskData>(taskData);
+            {
+                BPTaskType taskType = GetTaskTypeWithValidate(bpTask.TypeId);
+
+                bpTask.TaskData = taskType.Settings.DeserializeTaskData(taskData);
+            }
 
             string taskExecutionInformation = reader["TaskExecutionInformation"] as string;
             if (!String.IsNullOrWhiteSpace(taskExecutionInformation))
@@ -191,6 +205,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 bpTask.AssignedUsers = assignedUsers.Split(',').Select(itm => int.Parse(itm)).ToList();
 
             return bpTask;
+        }
+
+        private static BPTaskType GetTaskTypeWithValidate(Guid taskTypeId)
+        {
+            var taskType = s_taskTypeManager.GetBPTaskType(taskTypeId);
+            taskType.ThrowIfNull("taskType", taskTypeId);
+            taskType.Settings.ThrowIfNull("taskType.Settings", taskTypeId);
+            return taskType;
         }
 
         BPTaskDetail BPTaskDetailMapper(IDataReader reader)

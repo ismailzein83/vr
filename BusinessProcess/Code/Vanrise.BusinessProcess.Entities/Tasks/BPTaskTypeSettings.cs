@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Entities
@@ -14,6 +15,20 @@ namespace Vanrise.BusinessProcess.Entities
         public virtual string Editor { get; set; }
 
         public virtual bool AutoOpenTask { get; set; }
+
+        public virtual string SerializeTaskData(BPTaskData taskData)
+        {
+            return Serializer.Serialize(taskData);
+        }
+
+        public virtual BPTaskData DeserializeTaskData(string serializedTaskData)
+        {
+            if (serializedTaskData != null)
+                return Serializer.Deserialize(serializedTaskData).CastWithValidate<BPTaskData>("deserializedTaskData");
+            else
+                return null;
+
+        }
 
     }
 

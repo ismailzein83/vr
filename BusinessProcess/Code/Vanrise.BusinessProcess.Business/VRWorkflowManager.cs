@@ -675,9 +675,14 @@ namespace Vanrise.BusinessProcess.Business
             IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
             object _lastReceivedDataInfo;
 
+            Vanrise.GenericData.Entities.IDataRecordTypeManager _dataRecordTypeManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<Vanrise.GenericData.Entities.IDataRecordTypeManager>();
+            DateTime? _dataRecordTypeCacheLastCheck;
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreVRWorkflowsUpdated(ref _lastReceivedDataInfo);
+                return dataManager.AreVRWorkflowsUpdated(ref _lastReceivedDataInfo)
+                    |
+                    _dataRecordTypeManager.IsCacheExpired(ref _dataRecordTypeCacheLastCheck);
             }
         }
 

@@ -10,4 +10,9 @@ namespace Vanrise.BusinessProcess.Entities
     {
         VRWorkflow GetVRWorkflow(Guid vrWorkflowId);
     }
+
+    public interface IBPTaskTypeManager : IBusinessManager
+    {
+        BPTaskType GetBPTaskType(Guid taskTypeId);
+    }
 }

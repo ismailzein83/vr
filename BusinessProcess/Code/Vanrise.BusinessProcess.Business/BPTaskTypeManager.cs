@@ -8,7 +8,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
-    public class BPTaskTypeManager
+    public class BPTaskTypeManager : IBPTaskTypeManager
     {
         static Guid businessEntityDefinitionId = new Guid("d33fd65a-721f-4ae1-9d41-628be9425796");
 
