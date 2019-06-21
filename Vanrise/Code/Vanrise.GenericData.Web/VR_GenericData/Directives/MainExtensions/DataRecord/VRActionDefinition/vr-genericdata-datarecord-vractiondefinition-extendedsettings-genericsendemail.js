@@ -29,7 +29,7 @@
 					beDefinitionSelectorAPI = api;
 					beDefinitionSelectorDeferredReady.resolve();
 				};
-				$scope.scopeModel.onMailMessageTemplateSelectorReady = function (api) {
+				$scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
 					mailMessageTypeSelectorAPI = api;
 					mailMessageTypeSelectorDeferredReady.resolve();
 				};
@@ -47,7 +47,7 @@
 						mailMessageTypeId = payload.Settings.ExtendedSettings.MailMessageTypeId;;
 					}
 					promises.push(loadBEDefinitionSelector());
-					promises.push(loadMailMessageTemplateSelector());
+					promises.push(loadMailMessageTypeSelector());
 
 					function loadBEDefinitionSelector() {
 						var selectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -58,7 +58,7 @@
 						return selectorLoadPromiseDeferred.promise;
 					}
 
-					function loadMailMessageTemplateSelector() {
+					function loadMailMessageTypeSelector() {
 						var selectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 						beDefinitionSelectorDeferredReady.promise.then(function () {
 							var selectorPayload = { selectedIds: mailMessageTypeId };
