@@ -95,7 +95,7 @@
                 </div>
             </div>
             <div ng-sortable="ctrl.itemsSortable" ng-class="ctrl.dragdropsetting && ctrl.datasource.length==0  ?'empty-vrdatagrid-drop' : '' ">
-                <div id="rowSection1" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body {{dataItem.fullScreenMode ? 'row-full-screen':''}}" ng-repeat="dataItem in ctrl.datasource">
+                <div id="rowSection1" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body {{dataItem.fullScreenMode ? 'row-full-screen':''}}" ng-repeat="dataItem in ctrl.datasource" vr-loader="ctrl.isLoadingRowFullScreen">
                 </div>
             </div>
 
@@ -103,7 +103,7 @@
     </div>
     <div id="gridBodyContainer_2" ng-style="ctrl.gridStyle" ng-show="!ctrl.isMainItemsShown">
         <div id="gridBody_2">
-            <div id="rowSection2" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.updateItems">
+            <div id="rowSection2" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body {{dataItem.fullScreenMode ? 'row-full-screen':''}}" ng-repeat="dataItem in ctrl.updateItems" vr-loader="ctrl.isLoadingRowFullScreen">
 
             </div>
         </div>
@@ -175,15 +175,15 @@
 
             <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event,dataItem);showMenu=$parent.ctrl.isActionMenuVisible(dataItem); " ng-mouseleave="showMenu = false">
                 <div ng-show="!dataItem.fullScreenMode" ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
-                <div ng-if="$parent.ctrl.expandAsfullScreen" class="row"  ng-show="dataItem.fullScreenMode" style="width: calc(100% + 25px);">
-                    <div ng-if="!$parent.ctrl.viewDirective" class="col-lg-12" >
+                <div ng-if="$parent.ctrl.expandAsfullScreen" class="row" ng-show="dataItem.fullScreenMode" style="width: calc(100% + 25px);">
+                    <div ng-if="!$parent.ctrl.viewDirective" class="col-lg-12 vr-detail-summary">
                         <div class="col-lg-4 col-md-6 parent-col-container" ng-repeat="colDef in ctrl.columnDefs">
                             <div class="col-lg-6 col-md-6">
-                                <label class="mobile-label">{{colDef.name}}: </label>
+                                <label class="control-label vr-control-label grid-cell-label" >{{colDef.name}}: </label>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="vr-datagrid-celltext ">
-                                    <div style="text-align: left;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;font-weight:bold">
+                                    <div class="grid-cell-value" >
                                         <span ng-style="::$parent.ctrl.cellLayoutStyle" ng-bind="ctrl.getCellValue(dataItem, colDef) {{colDef.filter}}" ng-class="::dataItem.columnsValues['col_' + colDef.columnId].cellClass" style="white-space: nowrap;">
                                         </span>
                                     </div>
@@ -191,7 +191,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="padding:5px" ng-if="$parent.ctrl.viewDirective && dataItem.isRowExpanded" vr-loader="dataItem.isLoadingRowView">
+                    <div class="vr-detail-summary-custom" style="padding:5px" ng-if="$parent.ctrl.viewDirective && dataItem.isRowExpanded" vr-loader="dataItem.isLoadingRowView">
                         <vr-directivewrapper directive="$parent.ctrl.viewDirective" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper>
                     </div>
                 </div>
@@ -241,7 +241,7 @@
     <div id="divExpandableRowContent_{{$index}}" class="expandable-row-content {{ ::ctrl.isMobile ?'am-fade-and-slide-left' : ''}}" ng-class="dataItem.isRowExpanded ? 'row-content-expanded':''" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
         <div ng-if="!ctrl.isMobile" style="width:100%;position:relative;">
             <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
-            
+
             <div ng-class="dataItem.fullScreenMode?'expanded-row-content-full':''" vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': $parent.ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #D0D0D0'}">
 
             </div>

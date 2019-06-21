@@ -2660,6 +2660,14 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     z-index: 10;
     overflow-x: hidden;
 }
+.vr-datagrid-body.row-full-screen .vr-detail-summary .grid-cell-value {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #0f21e6;
+}
 
 .vr-datagrid-body.row-full-screen .row-main-content.expanded {
     border-right: none !important;
@@ -2857,7 +2865,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
         color: #fff;
     }
 
-.divLoading {
+.divLoading{
     pointer-events: none;
     opacity: 0.5;
 }
@@ -2866,7 +2874,13 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     pointer-events: none;
     opacity: 0.5;
 }*/
+.vr-invisible {
+    visibility: hidden;
+}
 
+.vr-visible {
+    visibility: visible;
+}
 .divDisabled vr-validator > div {
     pointer-events: none;
     opacity: 0.8 !important;
