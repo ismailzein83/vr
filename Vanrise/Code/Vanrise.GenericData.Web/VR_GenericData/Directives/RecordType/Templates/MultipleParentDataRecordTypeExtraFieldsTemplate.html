@@ -1,1 +1,38 @@
-﻿
+﻿<vr-columns width="fullrow">
+    <vr-row removeline>
+        <vr-columns width="fullrow" simplecol>
+            <vr-button type="Add" data-onclick="scopeModel.addParentDataRecordType" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow" simplecol>
+            <span vr-loader="scopeModel.isLoading">
+                <vr-validator validate="scopeModel.isGridValid()">
+                    <vr-datagrid datasource="scopeModel.datasource"
+                                 pagingtype="'PagingOnScroll'"
+                                 on-ready="scopeModel.onGridReady"
+                                 ondeleterow="scopeModel.removeParentDataRecordType"
+                                 enabledraggablerow="true">
+
+                        <vr-datagridcolumn headertext="'Record Type'">
+                            <span vr-loader="dataItem.isLoadingExtraFields">
+                                <vr-genericdata-datarecordtypeextrafields-selector on-ready="dataItem.onDataRecordTypeExtraFieldsSelectorReady"
+                                                                                   selectedvalues="dataItem.selectedDataRecordTypeExtraFields"
+                                                                                   onselectionchanged="dataItem.onDataRecordTypeExtraFieldsSelectionChanged"
+                                                                                   isrequired="true" normal-col-num="4">
+                                </vr-genericdata-datarecordtypeextrafields-selector>
+                            </span>
+                            <span vr-loader="dataItem.isLoadingDirective">
+                                <vr-directivewrapper ng-if="dataItem.selectedDataRecordTypeExtraFields != undefined"
+                                                     directive="dataItem.selectedDataRecordTypeExtraFields.Editor"
+                                                     on-ready="dataItem.onDirectiveReady"
+                                                     normal-col-num="4">
+                                </vr-directivewrapper>
+                            </span>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </span>
+        </vr-columns>
+    </vr-row>
+</vr-columns>

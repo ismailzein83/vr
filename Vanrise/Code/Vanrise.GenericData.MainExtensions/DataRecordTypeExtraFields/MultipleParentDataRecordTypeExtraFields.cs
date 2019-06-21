@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordTypeExtraFields
 {
@@ -15,7 +13,25 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordTypeExtraFields
 
         public override List<DataRecordField> GetFields(IDataRecordExtraFieldContext context)
         {
-            return null;
+            DataRecordTypeExtraFields.ThrowIfNull("DataRecordTypeExtraFields");
+
+            var dataRecordFields = new List<DataRecordField>();
+            List<string> fieldNames = new List<string>();
+
+            foreach (var dataRecordTypeExtraField in this.DataRecordTypeExtraFields)
+            {
+                var dataRecordTypeExtraFields = dataRecordTypeExtraField.GetFields(context);
+                foreach (var field in dataRecordTypeExtraFields)
+                {
+                    if (fieldNames.Contains(field.Name))
+                        continue;
+
+                    dataRecordFields.Add(field);
+                    fieldNames.Add(field.Name);
+                }
+            }
+
+            return dataRecordFields;
         }
     }
 }
