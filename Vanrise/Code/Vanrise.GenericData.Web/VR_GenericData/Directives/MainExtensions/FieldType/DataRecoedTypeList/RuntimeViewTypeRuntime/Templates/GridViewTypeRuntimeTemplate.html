@@ -1,31 +1,27 @@
-﻿<vr-row>
-    <vr-row>
-        <vr-columns width="fullrow">
-            <vr-row>
-                <vr-section ng-if="!scopeModel.hideSection" title={{scopeModel.fieldTitle}}>
-                    <vr-button ng-if="!scopeModel.hideAddButton" type="Add" data-onclick="scopeModel.addRecord" standalone></vr-button>
-                    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                                 on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
-                        <vr-datagridcolumn ng-repeat="column in scopeModel.columns" headertext="column.title" columnindex="$index">
-                            <span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
-                                <vr-directivewrapper  hidelabel directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" selectionmode=single isrequired="dataItem.Entity[{{colDef.columnIndex}}].isRequired" vr-disabled="dataItem.Entity[{{colDef.columnIndex}}].isDisabled" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
-                            </span>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
-                </vr-section>
-                <span ng-if="scopeModel.hideSection">
-                    <vr-button ng-if="!scopeModel.hideAddButton" type="Add" data-onclick="scopeModel.addRecord" standalone></vr-button>
-                    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                                 on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
-                        <vr-datagridcolumn ng-repeat="column in scopeModel.columns" headertext="column.title" columnindex="$index">
-                            <span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
-                                <vr-directivewrapper hidelabel directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" label="" selectionmode=single isrequired="dataItem.Entity[{{colDef.columnIndex}}].isRequired" vr-disabled="dataItem.Entity[{{colDef.columnIndex}}].isDisabled" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
-                            </span>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
-                </span>
-            </vr-row>
-        </vr-columns>
-    </vr-row>
-</vr-row>    
+﻿<vr-columns width="fullrow">
+        <vr-section ng-if="!scopeModel.hideSection" title={{scopeModel.fieldTitle}}>
+            <vr-button ng-if="!scopeModel.hideAddButton" type="Add" data-onclick="scopeModel.addRecord" standalone></vr-button>
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                            on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
+                <vr-datagridcolumn ng-repeat="column in scopeModel.columns" headertext="column.title" columnindex="$index">
+                    <span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
+                        <vr-directivewrapper  hidelabel directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" selectionmode=single isrequired="dataItem.Entity[{{colDef.columnIndex}}].isRequired" vr-disabled="dataItem.Entity[{{colDef.columnIndex}}].isDisabled" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
+                    </span>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-section>
+        <span ng-if="scopeModel.hideSection">
+            <vr-button ng-if="!scopeModel.hideAddButton" type="Add" data-onclick="scopeModel.addRecord" standalone></vr-button>
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                            on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
+                <vr-datagridcolumn ng-repeat="column in scopeModel.columns" headertext="column.title" columnindex="$index">
+                    <span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
+                        <vr-directivewrapper hidelabel directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" label="" selectionmode=single isrequired="dataItem.Entity[{{colDef.columnIndex}}].isRequired" vr-disabled="dataItem.Entity[{{colDef.columnIndex}}].isDisabled" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
+                    </span>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </span>
+</vr-columns>
+
+ 
 
