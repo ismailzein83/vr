@@ -1082,7 +1082,7 @@ namespace TOne.WhS.Sales.Business
 
         private IEnumerable<ZoneItem> BuildZoneItems(RatePlanZoneCreationInput input)
         {
-           
+
             var zoneItems = new List<ZoneItem>();
 
             var zoneDraftsByZone = new Dictionary<long, ZoneChanges>();
@@ -1171,7 +1171,7 @@ namespace TOne.WhS.Sales.Business
                     ZoneEED = saleZone.EED,
                     TargetCurrencyId = input.CurrencyId
                 };
-               
+
                 DateTime countryBED;
                 if (input.CountryBEDsByCountryId.TryGetValue(saleZone.CountryId, out countryBED))
                     zoneItem.CountryBED = countryBED;
@@ -1207,7 +1207,7 @@ namespace TOne.WhS.Sales.Business
                     AddZoneBaseRates(baseRatesByZone, zoneItem); // Check if the customer zone has any inherited rate
                     rpManager.SetCustomerZoneRP(zoneItem, input.OwnerId, input.SellingProductId.Value, zoneDraft);
                     var effectiveDate = saleZone.BED > DateTime.Today ? saleZone.BED : input.EffectiveOn;
-                    zoneItem.DealId = dealDefinitionManager.IsZoneIncludedInDeal(input.OwnerId, zoneItem.ZoneId,effectiveDate, true);
+                    zoneItem.DealId = dealDefinitionManager.IsZoneIncludedInEffectiveDeal(input.OwnerId, zoneItem.ZoneId, effectiveDate, true);
                 }
 
                 zoneItem.IsCountryNew = newCountryIds.Contains(zoneItem.CountryId) || (input.AdditionalCountryIds != null && input.AdditionalCountryIds.Contains(zoneItem.CountryId));
@@ -1215,7 +1215,7 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.ProfitPerc = (zoneDraft != null) ? zoneDraft.ProfitPerc : 0;
                 if (zoneItem.NewOtherRateBED == null)
                     zoneItem.NewOtherRateBED = (zoneDraft != null) ? zoneDraft.NewOtherRateBED : null;
-              
+
                 zoneItems.Add(zoneItem);
             }
 
@@ -1229,7 +1229,7 @@ namespace TOne.WhS.Sales.Business
             IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { SaleZoneId = x.ZoneId, RoutingProductId = x.EffectiveRoutingProductId.Value }, x => x.EffectiveRoutingProductId.HasValue);
             routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, null, null, input.CurrencyId, longPrecisionValue, normalPrecisionValue, input.IncludeBlockedSuppliers);
             routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
-            
+
             return zoneItems;
         }
         private void SetContextZoneItems(ref Dictionary<long, ZoneItem> contextZoneItems, ContextZoneItemInput input)

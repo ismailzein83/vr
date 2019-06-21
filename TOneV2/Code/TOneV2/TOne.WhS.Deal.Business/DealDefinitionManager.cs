@@ -159,6 +159,29 @@ namespace TOne.WhS.Deal.Business
 
             return zoneInfo.DealId;
         }
+        public int? IsZoneIncludedInEffectiveDeal(int carrierId, long zoneId, DateTime effectiveAfter, bool isSale)
+        {
+            var dealZoneInfoByCarrierId = isSale
+                ? GetCachedCustomerDealZoneInfoByCustomerId()
+                : GetCachedSupplierDealZoneInfoBySupplierId();
+
+            var carrierDeals = dealZoneInfoByCarrierId.GetRecord(carrierId);
+            var dealZoneInfo = carrierDeals.GetRecord(zoneId);
+
+            if (dealZoneInfo == null)
+                return null;
+
+            var zoneInfos = dealZoneInfo.Where(deal => deal.Value.DealStatus != DealStatus.Draft);
+
+            if (zoneInfos == null || zoneInfos.Count() == 0)
+                return null;
+
+            var zoneInfo = zoneInfos.First().Value;
+            if (Utilities.IsEffective(effectiveAfter, zoneInfo.BED, zoneInfo.EED))
+                return zoneInfo.DealId;
+
+            return null;
+        }
         public DealDefinition GetLastDealByCarrierAccountId(int carrierAccountId)
         {
             var allDealDefinitions = GetAllCachedDealDefinitions(false);
@@ -237,7 +260,7 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var progress in dealProgress)
             {
-              
+
                 decimal reachedProgress = progress.ReachedDurationInSeconds.HasValue ? progress.ReachedDurationInSeconds.Value : 0;
 
                 //In case the TargetDurationInSeconds has not a value (null) that means dal is in extra rate phase so target is completed
@@ -278,7 +301,7 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var progress in dealProgress)
             {
-                
+
                 decimal reachedProgress = progress.ReachedDurationInSeconds.HasValue ? progress.ReachedDurationInSeconds.Value : 0;
                 var volCommitmentProgressDetail = volumeCommitmentProgressDetails.Find(x => x.ZoneGroupNumber == progress.ZoneGroupNb);
                 volCommitmentProgressDetail.ThrowIfNull("swapDealProgressDetail");
@@ -851,7 +874,8 @@ namespace TOne.WhS.Deal.Business
                                         DealId = dealDef.DealId,
                                         ZoneId = zoneId,
                                         BED = dealDef.Settings.RealBED,
-                                        EED = dealDef.Settings.RealEED
+                                        EED = dealDef.Settings.RealEED,
+                                        DealStatus = dealDef.Settings.Status
                                     });
                                 }
                             }
