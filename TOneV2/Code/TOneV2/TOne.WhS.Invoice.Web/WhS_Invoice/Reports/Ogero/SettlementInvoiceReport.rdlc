@@ -3664,6 +3664,9 @@
         <Height>0.6cm</Height>
         <Width>19.70283cm</Width>
         <ZIndex>11</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((CountRows("AdjustmentInvoiceMonth") &gt; 0),False,True)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>

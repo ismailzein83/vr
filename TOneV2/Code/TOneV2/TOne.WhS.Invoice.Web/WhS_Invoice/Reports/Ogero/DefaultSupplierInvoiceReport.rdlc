@@ -681,7 +681,7 @@
         <KeepTogether>true</KeepTogether>
         <Top>13.19698cm</Top>
         <Left>0.35395cm</Left>
-        <Height>0.39687cm</Height>
+        <Height>0.39688cm</Height>
         <Width>18.47753cm</Width>
         <ZIndex>4</ZIndex>
         <Visibility>
@@ -1787,7 +1787,7 @@
               <Width>4.75664cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.99128cm</Width>
+              <Width>6.00599cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.76141cm</Width>
@@ -1959,8 +1959,11 @@
         <Top>10.92953cm</Top>
         <Left>0.36561cm</Left>
         <Height>0.6cm</Height>
-        <Width>18.47757cm</Width>
+        <Width>18.49228cm</Width>
         <ZIndex>9</ZIndex>
+        <Visibility>
+          <Hidden>=IIF(Parameters!Adjustment.Value&gt;0,false,true)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
