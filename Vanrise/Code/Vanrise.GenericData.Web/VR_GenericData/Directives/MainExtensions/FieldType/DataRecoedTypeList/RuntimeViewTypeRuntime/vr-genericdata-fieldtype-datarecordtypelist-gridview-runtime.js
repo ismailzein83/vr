@@ -95,6 +95,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
+                    $scope.scopeModel.columns.length = 0;
                     var dataRecordTypeId = payload.dataRecordTypeId;
                     var fieldsValues = payload.fieldValue;
                     $scope.scopeModel.fieldTitle = payload.fieldTitle;
