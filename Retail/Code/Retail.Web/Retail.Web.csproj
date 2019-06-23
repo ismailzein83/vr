@@ -1110,6 +1110,18 @@
       <Project>{ce5f6fa1-bd80-4690-b728-496a0e7a0fc9}</Project>
       <Name>Retail.MultiNet.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.NIM.Business\Retail.NIM.Business.csproj">
+      <Project>{78a6cce1-fb4e-4bf1-ace9-b0b845128cfd}</Project>
+      <Name>Retail.NIM.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.NIM.Entities\Retail.NIM.Entities.csproj">
+      <Project>{541debf8-b1cb-4608-b09e-f31099ad7dc5}</Project>
+      <Name>Retail.NIM.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.NIM.Web\Retail.NIM.Web.csproj">
+      <Project>{40cd9cfd-2361-4fc8-ba6c-225a8516f0e1}</Project>
+      <Name>Retail.NIM.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.RA.Business\Retail.RA.Business.csproj">
       <Project>{87cd3228-cc6d-4dd7-8f3d-3f1f9b8567e9}</Project>
       <Name>Retail.RA.Business</Name>

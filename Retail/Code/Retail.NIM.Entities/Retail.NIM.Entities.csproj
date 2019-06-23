@@ -45,7 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildingAddress.cs" />
+    <Compile Include="DP\DP.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="FDB\FDB.cs" />
+    <Compile Include="FDB\FDBPort.cs" />
+    <Compile Include="Path\Path.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
