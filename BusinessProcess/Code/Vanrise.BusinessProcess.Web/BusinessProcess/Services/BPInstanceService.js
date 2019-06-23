@@ -155,7 +155,6 @@
                             var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
                             var context = {
                                 onBPInstanceViewerClosed: function () {
-                                    console.log("test");
                                     promiseDeferred.resolve(true);
                                 }
                             };
