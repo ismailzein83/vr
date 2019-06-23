@@ -27,9 +27,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
             var runtimeEditorAPI;
             var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
-            //var runtimeEditorLoadDeferred
 
-            //allRootContainerChildDirectivesLoadDeferred
             var allRootContainerChildDirectivesLoadDeferred = UtilsService.createPromiseDeferred();
             var isEditMode;
             function initializeController() {

@@ -57,7 +57,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
 
             var fieldName;
             var genericContext;
-          
+
             var selectorAPI;
 
 
@@ -96,7 +96,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                     var filter = {};
                     var fieldType;
                     var fieldValue;
-                   
+
                     if (payload != undefined) {
                         ctrl.label = payload.fieldTitle;
                         filter = payload.filter;
@@ -111,27 +111,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                             ctrl.datasource.push(fieldType.Choices[i]);
 
                         if (fieldValue != undefined) {
-                            if (ctrl.selectionmode == "dynamic") {
-                                if (fieldValue.Values != undefined) {
-                                    for (var i = 0; i < fieldValue.Values.length; i++) {
-                                        var selectedValue = UtilsService.getItemByVal(ctrl.datasource, fieldValue.Values[i], "Value");
-                                        if (selectedValue != null)
-                                            ctrl.selectedvalues.push(selectedValue);
-                                    }
-                                }
-                            }
-                            else if (ctrl.selectionmode == "multiple") {
-                                for (var i = 0; i < fieldValue.length; i++) {
-                                    var selectedValue = UtilsService.getItemByVal(ctrl.datasource, fieldValue[i], "Value");
-                                    if (selectedValue != null)
-                                        ctrl.selectedvalues.push(selectedValue);
-                                }
-                            }
-                            else if (ctrl.selectionmode == "single") {
-                                var selectedValue = UtilsService.getItemByVal(ctrl.datasource, fieldValue, "Value");
-                                if (selectedValue != null)
-                                    ctrl.selectedvalues = selectedValue;
-                            }
+                            setFieldValues(fieldValue);
                         }
                     }
                 };
@@ -161,8 +141,50 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                     return retVal;
                 };
 
+                api.setFieldValues = function (fieldValuesByNames) {
+                    if (fieldValuesByNames == undefined || !(fieldName in fieldValuesByNames))
+                        return;
+
+                    var fieldValue = fieldValuesByNames[fieldName];
+                    if (fieldValue != undefined) {
+                        setFieldValues(fieldValue);
+                    }
+                    else {
+                        if (Array.isArray(ctrl.selectedvalues)) {
+                            ctrl.selectedvalues.length = 0;
+                        }
+                        else {
+                            ctrl.selectedvalues = undefined;
+                        }
+                    }
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function setFieldValues(fieldValue) {
+                if (ctrl.selectionmode == "dynamic") {
+                    if (fieldValue.Values != undefined) {
+                        for (var i = 0; i < fieldValue.Values.length; i++) {
+                            var selectedValue = UtilsService.getItemByVal(ctrl.datasource, fieldValue.Values[i], "Value");
+                            if (selectedValue != null)
+                                ctrl.selectedvalues.push(selectedValue);
+                        }
+                    }
+                }
+                else if (ctrl.selectionmode == "multiple") {
+                    for (var i = 0; i < fieldValue.length; i++) {
+                        var selectedValue = UtilsService.getItemByVal(ctrl.datasource, fieldValue[i], "Value");
+                        if (selectedValue != null)
+                            ctrl.selectedvalues.push(selectedValue);
+                    }
+                }
+                else if (ctrl.selectionmode == "single") {
+                    var selectedValue = UtilsService.getItemByVal(ctrl.datasource, fieldValue, "Value");
+                    if (selectedValue != null)
+                        ctrl.selectedvalues = selectedValue;
+                }
             }
         }
 

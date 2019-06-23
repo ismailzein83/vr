@@ -18,13 +18,6 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
             },
             controllerAs: 'runtimeEditorCtrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
             }
@@ -63,6 +56,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                     var rootPromiseNode = {
                         promises: promises
                     };
+
                     if (payload != undefined) {
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
@@ -83,6 +77,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                             }, runtimeEditorLoadPromiseDeferred);
                         });
                     }
+
                     return UtilsService.waitPromiseNode(rootPromiseNode);
 
                 };
@@ -91,8 +86,11 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                 };
 
                 api.setFieldValues = function (fieldValuesByNames) {
+                    if (fieldValuesByNames == undefined || !(fieldName in fieldValuesByNames))
+                        return;
 
                     var setFieldValuesDeferred = UtilsService.createPromiseDeferred();
+
                     var payload = {
                         fieldTitle: fieldTitle,
                         fieldValue: fieldValuesByNames[fieldName],
@@ -100,11 +98,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                         definitionSettings: fieldViewSettings,
                         fieldType: fieldType
                     };
-
                     var setLoader = function (value) {
                         $scope.scopeModel.isDirectiveLoading = value;
                     };
-
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, runtimeEditorDirectiveAPI, payload, setLoader, undefined).then(function () {
                         setFieldValuesDeferred.resolve();
                     });

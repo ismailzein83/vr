@@ -61,17 +61,17 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
             if (attrs.selectionmode == "dynamic") {
                 return '<span vr-loader="isLoading">'
-                    + '<vr-directivewrapper ' + hidelabel+' directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
+                    + '<vr-directivewrapper ' + hidelabel + ' directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
                     + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
-                    + ' <vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper ' + hidelabel+' directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
+                    + ' <vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper ' + hidelabel + ' directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                     '</vr-section> '
                     + '</span>';
             }
             else {
                 return '<span vr-loader="isLoading">'
-                    + '<vr-directivewrapper ' + hidelabel+' directive="selector.directive" ' + showaddbutton + ' normal-col-num="{{scopeModel.calculatedColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
+                    + '<vr-directivewrapper ' + hidelabel + ' directive="selector.directive" ' + showaddbutton + ' normal-col-num="{{scopeModel.calculatedColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
                     + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
-                    + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper ' + hidelabel+' directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
+                    + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper ' + hidelabel + ' directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                     '</vr-section>'
                     + '</span>';
             }
@@ -400,7 +400,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     UtilsService.waitMultiplePromises([$scope.selector.directiveLoadPromiseDeferred.promise]).then(function () {
 
                         fieldValuesByName[fieldName] = valueToSet;
-
+                        evaluateAndApplyFieldState(fieldValuesByNames);
                         var context = {
                             isDisabled: true,
                             filter: getFilter()
@@ -451,7 +451,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     if ((dependentFieldName in fieldValuesByName) && fieldValuesByName[dependentFieldName] != undefined) {
                         if (genericBusinessEntityFilters == undefined)
                             genericBusinessEntityFilters = [];
-                        genericBusinessEntityFilters.push({ FieldName: currentDependentField.MappedFieldName, FilterValues: fieldValuesByName[dependentFieldName] });
+                        var filterValue = fieldValuesByName[dependentFieldName];
+                        genericBusinessEntityFilters.push({ FieldName: currentDependentField.MappedFieldName, FilterValues: Array.isArray(filterValue) ? filterValue : [filterValue] });
                     }
                 }
 
@@ -511,7 +512,9 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         else {
                             if (data.genericBusinessEntityFilters == undefined)
                                 data.genericBusinessEntityFilters = [];
-                            data.genericBusinessEntityFilters.push({ FieldName: currentDependentField.MappedFieldName, FilterValues: fieldValuesByName[dependentFieldName] });
+
+                            var filterValue = fieldValuesByName[dependentFieldName];
+                            data.genericBusinessEntityFilters.push({ FieldName: currentDependentField.MappedFieldName, FilterValues: Array.isArray(filterValue) ? filterValue : [filterValue] });
                         }
                     }
 

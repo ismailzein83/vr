@@ -112,23 +112,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     }
 
                     if (fieldValue != undefined) {
-                        if (ctrl.selectionmode == "dynamic") {
-                            angular.forEach(fieldValue.Values, function (val) {
-                                $scope.scopeModel.values.push(getDataItem(val));
-                            });
-                        }
-                        else if (ctrl.selectionmode == "multiple") {
-                            for (var i = 0; i < fieldValue.length; i++) {
-                                $scope.scopeModel.values.push(getDataItem(fieldValue[i]));
-                            }
-                        }
-                        else {
-                            if ($scope.scopeModel.fieldType.type != "time")
-                                $scope.scopeModel.value = fieldValue;
-                            else {
-                                $scope.scopeModel.value = fieldValue;
-                            }
-                        }
+                        setFieldValue(fieldValue);
                     }
                 };
 
@@ -159,7 +143,41 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     $scope.scopeModel.label = value;
                 };
 
+                api.setFieldValues = function (fieldValuesByNames) {
+                    if (fieldValuesByNames == undefined || !(fieldName in fieldValuesByNames))
+                        return;
+
+                    var fieldValue = fieldValuesByNames[fieldName];
+                    if (fieldValue != undefined) {
+                        setFieldValue(fieldValue);
+                    }
+                    else {
+                        $scope.scopeModel.values.length = 0;
+                        $scope.scopeModel.value = undefined;
+                    }
+                };
+
                 return api;
+            }
+
+            function setFieldValue(fieldValue) {
+                if (ctrl.selectionmode == "dynamic") {
+                    angular.forEach(fieldValue.Values, function (val) {
+                        $scope.scopeModel.values.push(getDataItem(val));
+                    });
+                }
+                else if (ctrl.selectionmode == "multiple") {
+                    for (var i = 0; i < fieldValue.length; i++) {
+                        $scope.scopeModel.values.push(getDataItem(fieldValue[i]));
+                    }
+                }
+                else {
+                    if ($scope.scopeModel.fieldType.type != "time")
+                        $scope.scopeModel.value = fieldValue;
+                    else {
+                        $scope.scopeModel.value = fieldValue;
+                    }
+                }
             }
 
             function getDataItem(value) {
@@ -221,7 +239,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
 
                 return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType != undefined && scopeModel.label != undefined ">'
                     + '<vr-label>{{scopeModel.label}}</vr-label>'
-                    + '<vr-directivewrapper ' + hidelabel+' directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" onvaluechanged="scopeModel.onDateChanged()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
+                    + '<vr-directivewrapper ' + hidelabel + ' directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" onvaluechanged="scopeModel.onDateChanged()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                     + '</vr-columns>';
             }
         }
