@@ -89,6 +89,6 @@ namespace Vanrise.BusinessProcess.Entities
 
     public interface IVRWorkflowActivityGetVisualItemDefinitionContext
     {
-
+        string SubProcessActivityName { get; }
     }
 }

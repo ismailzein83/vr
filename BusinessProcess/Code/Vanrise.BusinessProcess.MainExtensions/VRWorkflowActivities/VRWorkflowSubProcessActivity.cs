@@ -11,6 +11,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowSubProcessActivity : VRWorkflowActivitySettings
     {
+        public VRWorkflowSubProcessActivity()
+        {
+            this.DisplayName = "Connect the Verticals to the FDB";
+        }
+
         public override Guid ConfigId { get { return new Guid("173258F8-2AC9-4214-BCE2-D3DB6D902423"); } }
 
         public override string Editor { get { return "businessprocess-vr-workflowactivity-subprocess"; } }
@@ -22,6 +27,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public Dictionary<string, VRWorkflowExpression> InArguments { get; set; }
 
         public Dictionary<string, VRWorkflowExpression> OutArguments { get; set; }
+
+        public string DisplayName { get; set; }
 
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
@@ -117,6 +124,29 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             string activityType = CSharpCompiler.TypeToString(activity.GetType());
 
             return string.Format("new {0}(){1}", activityType, argumentsList.Count > 0 ? string.Format("{0}{1}{2}", "{", string.Join<string>(",", argumentsList), "}") : string.Empty);
+        }
+
+        public override BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
+        {
+            VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(this.VRWorkflowId);
+            string displayName = this.DisplayName;
+            if (context.SubProcessActivityName != null)
+                displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
+            return vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
+        }
+
+        private class VRWorkflowActivityGetVisualItemDefinitionContext : IVRWorkflowActivityGetVisualItemDefinitionContext
+        {
+            IVRWorkflowActivityGetVisualItemDefinitionContext _parentContext;
+
+            string _displayName;
+            public VRWorkflowActivityGetVisualItemDefinitionContext(IVRWorkflowActivityGetVisualItemDefinitionContext parentContext, string displayName)
+            {
+                _parentContext = parentContext;
+                _displayName = displayName;
+            }
+
+            public string SubProcessActivityName => this._displayName;
         }
     }
 }

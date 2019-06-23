@@ -852,8 +852,9 @@ namespace Vanrise.BusinessProcess.Business
             }
         }
 
-        private class VRWorkflowActivityGetVisualItemDefinitionContext: IVRWorkflowActivityGetVisualItemDefinitionContext
+        private class VRWorkflowActivityGetVisualItemDefinitionContext : IVRWorkflowActivityGetVisualItemDefinitionContext
         {
+            public string SubProcessActivityName { get; set;}
         }
 
         private class VRWorkflowActivityGetVisualItemDefinition

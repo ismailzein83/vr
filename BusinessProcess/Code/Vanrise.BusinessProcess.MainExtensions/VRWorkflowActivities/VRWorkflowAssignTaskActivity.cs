@@ -271,9 +271,12 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         {
             if(this.EnableVisualization)
             {
+                string displayName = this.DisplayName;
+                if (context.SubProcessActivityName != null)
+                    displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
                 return new BPVisualItemDefinition
-                {
-                    Settings = new BPHumanTaskVisualItemDefinitionSettings { TaskName = DisplayName }
+                {                    
+                    Settings = new BPHumanTaskVisualItemDefinitionSettings { TaskName = displayName }
                 };
             }
             else
