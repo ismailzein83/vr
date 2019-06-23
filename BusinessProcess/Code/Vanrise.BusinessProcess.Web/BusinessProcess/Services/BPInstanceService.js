@@ -111,13 +111,27 @@
                     if (payload != undefined) {
                         var businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         var genericBusinessEntityId = payload.genericBusinessEntityId;
+                        var promiseDeferred = UtilsService.createPromiseDeferred();
+
                         VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
                             if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
                                 var processInstanceFieldName = payload.genericBEAction.Settings.ProcessInstanceIdFieldName;
-                                if (processInstanceFieldName != undefined && response.FieldValues != undefined && response.FieldValues[processInstanceFieldName] != undefined)
-                                    openProcessTracking(response.FieldValues[processInstanceFieldName].Value);
-                            }
-                        });
+                                if (processInstanceFieldName != undefined && response.FieldValues != undefined && response.FieldValues[processInstanceFieldName] != undefined) {
+                                    var context = {
+                                        onBPInstanceViewerClosed : function () {
+                                            promiseDeferred.resolve(true);
+                                        }
+                                    };
+                                    openProcessTracking(response.FieldValues[processInstanceFieldName].Value, context);
+                                } else
+                                    promiseDeferred.reject();
+                            } else
+                                promiseDeferred.reject();
+                        }).catch(function () {
+                            promiseDeferred.reject();
+                            });
+                        return promiseDeferred.promise;
+
                     }
                 }
             };
@@ -139,12 +153,13 @@
                         BusinessProcess_BPDefinitionAPIService.GetBPDefintion(genericBEActionSettings.BPDefinitionId).then(function (response) {
                             var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", response.Configuration.EditorSize);
                             var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
-
-                            startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, editorSize).then(function () {
-                                promiseDeferred.resolve(true);
-                            }).catch(function () {
-                                promiseDeferred.reject();
-                            });
+                            var context = {
+                                onBPInstanceViewerClosed: function () {
+                                    console.log("test");
+                                    promiseDeferred.resolve(true);
+                                }
+                            };
+                            startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, context, editorSize);
                         }).catch(function () {
                             promiseDeferred.reject();
                         });
@@ -156,11 +171,12 @@
             VR_GenericData_GenericBEActionService.registerActionType(actionType);
         }
 
-        function startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, editorSize) {
+        function startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, context, editorSize) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
                 genericBusinessEntityId: genericBusinessEntityId,
-                genericBEActionSettings: genericBEActionSettings
+                genericBEActionSettings: genericBEActionSettings,
+                context: context
             };
             var settings = {
                 size: editorSize != undefined ? editorSize : "medium"

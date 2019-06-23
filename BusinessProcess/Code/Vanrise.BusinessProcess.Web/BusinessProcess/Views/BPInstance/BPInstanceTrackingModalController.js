@@ -149,9 +149,13 @@
                     $scope.jobIds.length = 0;
                 }
 
-                if (context != undefined && context.onClose != undefined) {
-                    var bpInstanceClosureContext = { bpInstanceStatusValue: bpInstanceStatusValue };
-                    context.onClose(bpInstanceClosureContext);
+                if (context != undefined) {
+                    if (context.onClose != undefined) {
+                        var bpInstanceClosureContext = { bpInstanceStatusValue: bpInstanceStatusValue };
+                        context.onClose(bpInstanceClosureContext);
+                    }
+                    if (context.onBPInstanceViewerClosed != undefined)
+                        context.onBPInstanceViewerClosed();
                 }
             };
         }

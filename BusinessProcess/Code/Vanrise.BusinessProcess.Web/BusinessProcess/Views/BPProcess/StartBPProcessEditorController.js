@@ -14,7 +14,7 @@
 
         var bpDefinitionDirectiveApi;
         var bpDefinitionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        var context;
         loadParameters();
         defineScope();
         load();
@@ -26,6 +26,7 @@
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
                 genericBusinessEntityId = parameters.genericBusinessEntityId;
                 genericBEActionSettings = parameters.genericBEActionSettings;
+                context = parameters.context;
             }
         }
 
@@ -45,7 +46,7 @@
 
                 function getCreateNewProcessPromise(createProcessInput) {
                     return BusinessProcess_DynamicBusinessProcessAPIService.StartProcess(UtilsService.replaceAll($scope.bpDefinitionObj.Title, ' ', ''), createProcessInput).then(function (response) {
-                        BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessId);
+                        BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessId, context);
                         $scope.modalContext.closeModal();
 
                     }).catch(function (error) {
