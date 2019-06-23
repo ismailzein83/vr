@@ -5,7 +5,7 @@ using Vanrise.Web.Base;
 namespace Retail.NIM.Web.Controller
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "FDB")]
-    [JSONWithTypeAttribute]
+    //[JSONWithTypeAttribute]
     public class FDBController : BaseAPIController
     {
         FDBManager fdbManager = new FDBManager();
