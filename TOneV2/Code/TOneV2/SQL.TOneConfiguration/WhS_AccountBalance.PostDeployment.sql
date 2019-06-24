@@ -30,7 +30,24 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
---[sec].[View]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('9ED29AE9-1A08-49DD-B083-242078BBBE71','Financial Alerts','Financial Alerts',null,'2fbf14b9-fba8-4926-96f2-10e9846f55a4',null,null,null,'{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib","$values":[{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities","VRNotificationTypeId":"d307a418-81c0-424c-9b2b-5890de5a69cb"}]}}','A196C40A-30B5-4297-B7B0-4344C41CE5A2',30,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
+--[sec].[View]--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('9ED29AE9-1A08-49DD-B083-242078BBBE71','Financial Alerts','Financial Alerts',null,'2fbf14b9-fba8-4926-96f2-10e9846f55a4',null,null,null,'{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib","$values":[{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities","VRNotificationTypeId":"d307a418-81c0-424c-9b2b-5890de5a69cb"}]}}','A196C40A-30B5-4297-B7B0-4344C41CE5A2',30,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+when not matched by target then
+	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
 
 
 
@@ -54,4 +71,24 @@ when matched then
 	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);--[common].[VRComponentType]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[ConfigID],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('D307A418-81C0-424C-9B2B-5890DE5A69CB','Account Balance Notification','FDD73530-067F-4160-AB71-7852303C785C','{"$type":"Vanrise.Notification.Entities.VRNotificationTypeSettings, Vanrise.Notification.Entities","VRComponentTypeConfigId":"fdd73530-067f-4160-ab71-7852303c785c","VRAlertLevelDefinitionId":"48fc148c-299a-4717-bd03-401bb79c082e","ExtendedSettings":{"$type":"Vanrise.AccountBalance.Business.AccountBalanceNotificationTypeSettings, Vanrise.AccountBalance.Business","ConfigId":"0fc411d1-90fd-417c-bfdf-ec0c35b1a666","SearchRuntimeEditor":"vr-accountbalance-notification-searcheditor","BodyRuntimeEditor":"vr-accountbalance-notification-bodyeditor","AccountColumnHeader":"Financial Account","ShowAccountTypeColumn":false,"AccountBalanceNotificationTypeExtendedSettings":{"$type":"TOne.WhS.AccountBalance.Business.TOneAccountBalanceNotificationTypeSettings, TOne.WhS.AccountBalance.Business","ConfigId":"ee2c731e-a5f7-481e-b350-7771c8a0f3bc","NotificationQueryEditor":"whs-accountbalance-notificationtype-searcheditor"}},"Security":{"$type":"Vanrise.Notification.Entities.VRNotificationTypeSecurity, Vanrise.Notification.Entities","ViewRequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"3d6b033d-07a5-4f90-bf81-b295c95a27a7","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View Alerts"]}}]}},"HideRequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}}}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[ConfigID],[Settings]))merge	[common].[VRComponentType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[ConfigID] = s.[ConfigID],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[ConfigID],[Settings])	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);
+	values(s.[ID],s.[Name],s.[Settings]);
+
+
+--[common].[VRComponentType]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[ConfigID],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('D307A418-81C0-424C-9B2B-5890DE5A69CB','Account Balance Notification','FDD73530-067F-4160-AB71-7852303C785C','{"$type":"Vanrise.Notification.Entities.VRNotificationTypeSettings, Vanrise.Notification.Entities","VRComponentTypeConfigId":"fdd73530-067f-4160-ab71-7852303c785c","VRAlertLevelDefinitionId":"48fc148c-299a-4717-bd03-401bb79c082e","ExtendedSettings":{"$type":"Vanrise.AccountBalance.Business.AccountBalanceNotificationTypeSettings, Vanrise.AccountBalance.Business","ConfigId":"0fc411d1-90fd-417c-bfdf-ec0c35b1a666","SearchRuntimeEditor":"vr-accountbalance-notification-searcheditor","BodyRuntimeEditor":"vr-accountbalance-notification-bodyeditor","AccountColumnHeader":"Financial Account","ShowAccountTypeColumn":false,"AccountBalanceNotificationTypeExtendedSettings":{"$type":"TOne.WhS.AccountBalance.Business.TOneAccountBalanceNotificationTypeSettings, TOne.WhS.AccountBalance.Business","ConfigId":"ee2c731e-a5f7-481e-b350-7771c8a0f3bc","NotificationQueryEditor":"whs-accountbalance-notificationtype-searcheditor"}},"Security":{"$type":"Vanrise.Notification.Entities.VRNotificationTypeSecurity, Vanrise.Notification.Entities","ViewRequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"3d6b033d-07a5-4f90-bf81-b295c95a27a7","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View Alerts"]}}]}},"HideRequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ConfigID],[Settings]))
+merge	[common].[VRComponentType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ConfigID] = s.[ConfigID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ConfigID],[Settings])
+	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);

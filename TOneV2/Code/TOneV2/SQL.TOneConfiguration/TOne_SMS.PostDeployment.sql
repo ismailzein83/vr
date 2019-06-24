@@ -264,9 +264,8 @@ as (select * from (values
 ('48F0F23E-D27C-4D08-91C7-5114CEC5C1B6','Sale Pricelists','Sale Pricelists','#/view/WhS_SMSBusinessEntity/Views/CustomerSMSPriceList'					,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_SMSBE/CustomerSMSPriceList/GetFilteredCustomerPriceList',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8,null),
 ('54C62DFA-0261-4E15-AB8A-02E66BBC470E','Supplier Rates','Supplier Rates','#/view/WhS_SMSBusinessEntity/Views/SupplierSMSRatePlan'						,'D66F9910-48EC-4FFD-8A09-C7960A6EE434','WhS_SMSBE/SupplierSMSRate/GetFilteredSupplierSMSRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3,null),
 ('1CAC2CB0-F015-4E6A-A6F5-BA12055E2B76','Supplier Pricelists','Supplier Pricelists','#/view/WhS_SMSBusinessEntity/Views/SupplierSMSPriceList'			,'D66F9910-48EC-4FFD-8A09-C7960A6EE434','WhS_SMSBE/SupplierSMSPriceList/GetFilteredSupplierPriceList',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8,null),
-
 ('7C2BD918-EFE6-4D60-AA2A-52146514871F','SMSs','SMSs',null																								,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"82aa89f6-4d19-4168-a499-cdd2875f1702","AnalyticReportId":"72b0e924-b55d-4024-83da-e89c0728e115"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',null,null),
-('5b0589a6-69aa-4b65-abc1-6e99a6208852','SMS Service Type','SMS Service Type',null																				,'89254e36-5d91-4db1-970f-9bfef404679a',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"e32b1008-f956-4055-8b94-48583e34ae83"}]}}','b99b2b0a-9a80-49fc-b68f-c946e1628595',45,null)
+('5b0589a6-69aa-4b65-abc1-6e99a6208852','SMS Service Type','SMS Service Type',null																		,'89254e36-5d91-4db1-970f-9bfef404679a',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"e32b1008-f956-4055-8b94-48583e34ae83"}]}}','b99b2b0a-9a80-49fc-b68f-c946e1628595',45,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
@@ -274,7 +273,7 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
