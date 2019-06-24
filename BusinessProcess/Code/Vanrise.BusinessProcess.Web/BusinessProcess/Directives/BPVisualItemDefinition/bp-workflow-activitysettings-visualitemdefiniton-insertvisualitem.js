@@ -34,13 +34,6 @@
                 });
 
                 $scope.scopeModel = {};
-                $scope.scopeModel.classEventStarted = false;
-                $scope.scopeModel.classEventCompleted = false;
-                $scope.scopeModel.classEventError = false;
-                $scope.scopeModel.classEventRetrying = false;
-                $scope.scopeModel.isHintStarted = false;
-                $scope.scopeModel.hint = "Not Started";
-
 
                 $scope.scopeModel.onInsertVisualEventActivityClick = function () {
                     if ($scope.scopeModel.isHintStarted) {
@@ -56,6 +49,13 @@
 
                 api.load = function (payload) {
                     var initialPromises = [];
+
+                    $scope.scopeModel.classEventStarted = false;
+                    $scope.scopeModel.isHintStarted = false;
+                    $scope.scopeModel.classEventCompleted = false;
+                    $scope.scopeModel.classEventError = false;
+                    $scope.scopeModel.classEventRetrying = false;
+                    $scope.scopeModel.hint = "Not Started";
 
                     if (payload != undefined) {
                         visualItemDefinition = payload.visualItemDefinition;
@@ -77,19 +77,12 @@
                 };
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
-                result.isEventUsed = false; 
+                    result.isEventUsed = false;
 
                     if (visualItemEvent != undefined) {
                         var eventTypeId = visualItemEvent.EventTypeId;
 
-                        if (eventTypeId == VisualEventTypeEnum.NewIteration.value.toLowerCase()) {
-                            $scope.scopeModel.classEventStarted = false;
-                            $scope.scopeModel.isHintStarted = false;
-                            $scope.scopeModel.classEventCompleted = false;
-                            $scope.scopeModel.classEventError = false;
-                            $scope.scopeModel.classEventRetrying = false;
-                        }
-                        else if (eventTypeId == VisualEventTypeEnum.Started.value.toLowerCase()) {
+                        if (eventTypeId == VisualEventTypeEnum.Started.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.classEventCompleted = false;
@@ -117,7 +110,7 @@
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Retrying";
                         }
-                        result.isEventUsed = true; 
+                        result.isEventUsed = true;
                     }
                     return result;
                 };
