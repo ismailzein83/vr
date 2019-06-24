@@ -5596,7 +5596,7 @@ span.option-marketprice {
     height: 0;
     border-top: 13px solid transparent;
     border-bottom: 13px solid transparent;
-    border-left: 10px solid rgb(173, 173, 173);
+    border-left: 13px solid #709449;
     position: absolute;
     top: 50%;
     margin-top: -13px;
@@ -5606,31 +5606,76 @@ span.option-marketprice {
 }
 
 /** The Spacing **/
+
 .btn-breadcrumb .btn {
     padding: 3px 12px 3px 24px;
+    background-color: #76c224;
+    color: #fff;
 }
+
+
+.btn-breadcrumb .btn.level-4 {
+    background-color: #7fd425;
+}
+.btn-breadcrumb .btn.level-4:after {
+    border-left: 10px solid #7fd425;
+}
+.btn-breadcrumb .btn.level-4:not(:last-child):after {
+    border-left: 10px solid #7fd425;
+}
+.btn-breadcrumb .btn.level-4:hover {
+    background-color: #7fd425 !important;
+}
+
+.btn-breadcrumb .btn.level-3 {
+    background-color: #a5e460;
+}
+
+.btn-breadcrumb .btn.level-3:after {
+    border-left: 10px solid #a5e460;
+}
+
+.btn-breadcrumb .btn.level-3:not(:last-child):after {
+    border-left: 10px solid #a5e460;
+}
+.btn-breadcrumb .btn.level-3:hover {
+    background-color: #a5e460 !important;
+}
+
+
+.btn-breadcrumb .btn.level-2 {
+    background-color: #aae26d;
+}
+
+.btn-breadcrumb .btn.level-2:after {
+    border-left: 10px solid #aae26d;
+}
+
+.btn-breadcrumb .btn.level-2:not(:last-child):after {
+    border-left: 10px solid #aae26d;
+}
+
+.btn-breadcrumb .btn.level-2:hover {
+    background-color: #aae26d !important;
+}
+
 
 .btn-breadcrumb .btn:first-child {
     padding: 3px 6px 3px 10px;
+    background-color: #76c224;
 }
+
+.btn-breadcrumb .btn:hover {
+    background-color: #76c224 !important;
+}
+
 
 .btn-breadcrumb .btn:last-child {
     padding: 3px 18px 3px 24px;
 }
-.btn-breadcrumb .btn.btn-default:not(:last-child):after {
-    border-left: 10px solid #fff;
-}
 
-.btn-breadcrumb .btn.btn-default:not(:last-child):before {
-    border-left: 10px solid #ccc;
-}
-
-.btn-breadcrumb .btn.btn-default:hover:not(:last-child):after {
-    border-left: 10px solid #ebebeb;
-}
-
-.btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
-    border-left: 10px solid #adadad;
+.btn-breadcrumb .btn:not(:last-child):after {
+    border-left: 10px solid #76c224;
 }
 
 /*end vr-progress*/

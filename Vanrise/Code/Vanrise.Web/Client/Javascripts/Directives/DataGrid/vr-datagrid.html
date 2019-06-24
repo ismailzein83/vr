@@ -119,7 +119,7 @@
     <div ng-show="dataItem.fullScreenMode" class="vr-datarow-breadcrumb" >
         <div class="btn-group btn-breadcrumb">
             <span class="btn btn-default" style=" cursor: default; font-size:13px"><i class="glyphicon"></i></span>
-            <span class="btn btn-default" style=" cursor: default; font-size:13px" ng-repeat="p in $parent.ctrl.parentNames">{{p.objectTypeName}}</span>
+            <span class="btn btn-default level-{{ 5 + (($index + 1) - $parent.ctrl.parentNames.length )}}" index="{{$index}}" len="{{$parent.ctrl.parentNames.length}}" style=" cursor: default; font-size:13px"  ng-repeat="p in $parent.ctrl.parentNames">{{p.objectTypeName}}</span>
         </div>
     </div>
     <div vr-desktop-element class="exist-full-screen-icon inline-btn" ng-show="dataItem.fullScreenMode">

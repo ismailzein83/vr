@@ -516,35 +516,69 @@
     
 }
 
-.rtl .btn-breadcrumb .btn.btn-default:not(:last-child):after {
+.rtl .btn-breadcrumb .btn:not(:last-child):after {
     border-left: unset;
-    border-right: 10px solid #fff;
+    border-right: 13px solid #fff;
 }
 
 .rtl .btn-breadcrumb .btn.btn-default:not(:last-child):before {
     border-left: unset;
-    border-right: 10px solid #ccc;
+    border-right: 13px solid #709449;
 }
 
 /** Default button **/
 .rtl .btn-breadcrumb .btn.btn-default:not(:last-child):after {
     border-left: unset;
-    border-right: 10px solid #fff;
+    border-right: 10px solid #76c224;
 }
 
 .rtl .btn-breadcrumb .btn.btn-default:not(:last-child):before {
     border-left: unset;
-    border-right: 10px solid #ccc;
+    border-right: 13px solid #709449;
 }
 
-.rtl .btn-breadcrumb .btn.btn-default:hover:not(:last-child):after {
-    border-left: unset;
-    border-right: 10px solid #ebebeb;
-}
+
 
 .rtl .btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
     border-left: unset;
     border-right: 10px solid #adadad;
+}
+
+
+.rtl .btn-breadcrumb .btn:not(:last-child):after {
+    border-left:unset;
+    border-right: 10px solid #76c224;
+}
+
+.rtl .btn-breadcrumb .btn.level-4:after {
+    border-left: unset;
+    border-right: 10px solid #7fd425;
+}
+
+.rtl .btn-breadcrumb .btn.level-4:not(:last-child):after {
+    border-left: unset;
+    border-right: 10px solid #7fd425;
+}
+
+
+.rtl .btn-breadcrumb .btn.level-3:after {
+    border-left: unset;
+    border-right: 10px solid #a5e460;
+}
+
+.rtl .btn-breadcrumb .btn.level-3:not(:last-child):after {
+    border-left: unset;
+    border-right: 10px solid #a5e460;
+}
+
+.rtl .btn-breadcrumb .btn.level-2:after {
+    border-left: unset;
+    border-right: 10px solid #aae26d;
+}
+
+.rtl .btn-breadcrumb .btn.level-2:not(:last-child):after {
+    border-left: unset;
+    border-right: 10px solid #aae26d;
 }
 
 .rtl .vr-grid-menu-h-dote {
