@@ -127,7 +127,9 @@
                     }
                     return result;
                 };
-
+                api.checkIfCompleted = function () {
+                    return result.isCompleted;
+                };
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }

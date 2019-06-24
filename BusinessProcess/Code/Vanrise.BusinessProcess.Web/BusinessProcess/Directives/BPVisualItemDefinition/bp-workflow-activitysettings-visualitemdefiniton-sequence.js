@@ -93,15 +93,17 @@
                                     //    }
                                     //}
                                     if (visualEvent.ActivityId == childVisualItem.ChildActivityId) {
-                                        var childItemResult = childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent);
+                                        if (childVisualItem.directiveAPI.checkIfCompleted != undefined && !childVisualItem.directiveAPI.checkIfCompleted()) {
+                                            var childItemResult = childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent);
 
-                                        if (childItemResult != undefined && childItemResult.isEventUsed) {
-                                            if (i != 0)
-                                                childVisualItems[i - 1].classEventCompleted = true;
-                                            eventsStatus.push({
-                                                event: visualEvent,
-                                                isEventUsed: childItemResult.isEventUsed,
-                                            })
+                                            if (childItemResult != undefined && childItemResult.isEventUsed) {
+                                                if (i != 0)
+                                                    childVisualItems[i - 1].classEventCompleted = true;
+                                                eventsStatus.push({
+                                                    event: visualEvent,
+                                                    isEventUsed: childItemResult.isEventUsed,
+                                                });
+                                            }
                                         }
                                     }
                                 }

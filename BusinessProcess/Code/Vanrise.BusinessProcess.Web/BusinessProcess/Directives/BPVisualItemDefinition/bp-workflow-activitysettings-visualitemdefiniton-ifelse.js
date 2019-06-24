@@ -91,35 +91,40 @@
 
                             if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
                                 if (visualItemDefinition != undefined && visualItemDefinition.Settings.TrueBranchActivityId == visualEvent.ActivityId) {
-                                    var trueBranchResult = trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent);
-                                    if (trueBranchResult != undefined && trueBranchResult.isEventUsed) {
-                                        $scope.scopeModel.trueConditionCompleted = true;
-                                        eventsStatus.push({
-                                            event: visualEvent,
-                                            isEventUsed: trueBranchResult.isEventUsed,
-                                        });
-                                        continue;
+                                    if (trueBranchDirectiveAPI.checkIfCompleted != undefined && !trueBranchDirectiveAPI.checkIfCompleted()) {
+                                        var trueBranchResult = trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent);
+                                        if (trueBranchResult != undefined && trueBranchResult.isEventUsed) {
+                                            $scope.scopeModel.trueConditionCompleted = true;
+                                            eventsStatus.push({
+                                                event: visualEvent,
+                                                isEventUsed: trueBranchResult.isEventUsed,
+                                            });
+                                            continue;
+                                        }
                                     }
+                                  
                                 }
                             }
 
                             if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
                                 if (visualItemDefinition != undefined && visualItemDefinition.Settings.FalseBranchActivityId == visualEvent.ActivityId) {
-                                    var falseBranchResult = falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent);
-                                    if (falseBranchResult != undefined && falseBranchResult.isEventUsed) {
-                                        $scope.scopeModel.falseConditionCompleted = true;
-                                        eventsStatus.push({
-                                            event: visualEvent,
-                                            isEventUsed: trueBranchResult.isEventUsed,
-                                        });
-                                        continue;
+                                    if (falseBranchDirectiveAPI.checkIfCompleted != undefined && !falseBranchDirectiveAPI.checkIfCompleted()) {
+                                        var falseBranchResult = falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent);
+                                        if (falseBranchResult != undefined && falseBranchResult.isEventUsed) {
+                                            $scope.scopeModel.falseConditionCompleted = true;
+                                            eventsStatus.push({
+                                                event: visualEvent,
+                                                isEventUsed: trueBranchResult.isEventUsed,
+                                            });
+                                            continue;
+                                        }
                                     }
                                 }
                             }
 
                             unsucceededVisualEvents.push(visualEvent);
                         }
-
+                         
                         if (unsucceededVisualEvents.length > 0) {
                             if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
                                 var trueEventsResult = trueBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents);
