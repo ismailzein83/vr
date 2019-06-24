@@ -29,7 +29,7 @@
 
                 $(document).ready(function () {
                     $('[data-toggle="tooltip"]').tooltip();
-                }); 
+                });
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.classEventStarted = false;
@@ -42,7 +42,7 @@
                 $scope.scopeModel.eventCreatedTime = "N/A";
                 $scope.scopeModel.eventStartedTime = "N/A";
                 $scope.scopeModel.eventOverdueTime = "N/A";
-                $scope.scopeModel.eventCompletedTime = "N/A";        
+                $scope.scopeModel.eventCompletedTime = "N/A";
 
                 $scope.scopeModel.onHumanTasksClick = function () {
                     if ($scope.scopeModel.isHintStarted) {
@@ -79,8 +79,9 @@
                 };
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
-                    if (visualItemEvent != undefined) {
+                    if (visualItemEvent != undefined && UtilsService.getItemIndexByVal(events, visualItemEvent.EventTypeId, "EventTypeId") < 0) {
                         events.push(visualItemEvent);
+
                         var eventTypeId = visualItemEvent.EventTypeId;
 
                         if (eventTypeId == VisualEventTypeEnum.Started.value.toLowerCase()) {

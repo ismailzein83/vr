@@ -74,7 +74,7 @@
                     var status = false;
                     if (visualEvents != undefined && visualEvents.length > 0) {
                         var childVisualItemsWithSubChilds = [];
-                        var unsucceededVisualEvents = [];
+                        var succeededVisualEvents = [];
                         for (var i = 0; i < childVisualItems.length; i++) {
                             var childVisualItem = childVisualItems[i];
                             if (childVisualItem.directiveAPI.tryApplyVisualEventToChilds != undefined) {
@@ -90,15 +90,19 @@
                                             if (i != 0)
                                                 childVisualItems[i - 1].classEventCompleted = true;
                                             status = true;
+                                            if (UtilsService.getItemIndexByVal(succeededVisualEvents, visualEvent.BPVisualEventId, "BPVisualEventId") < 0)
+                                                succeededVisualEvents.push(visualEvent);
                                         }
-                                    }
-                                    else {
-                                        
-                                        if (UtilsService.getItemIndexByVal(unsucceededVisualEvents, visualEvent.BPVisualEventId,"BPVisualEventId")< 0)
-                                          unsucceededVisualEvents.push(visualEvent);
                                     }
                                 }
                             }
+                        }
+
+                        var unsucceededVisualEvents = [];
+                        for (var j = 0; j < visualEvents.length; j++) {
+                            var visualEvent = visualEvents[j];
+                            if (UtilsService.getItemIndexByVal(succeededVisualEvents, visualEvent.BPVisualEventId, "BPVisualEventId") < 0)
+                                unsucceededVisualEvents.push(visualEvent);
                         }
 
                         if (childVisualItemsWithSubChilds.length > 0) {

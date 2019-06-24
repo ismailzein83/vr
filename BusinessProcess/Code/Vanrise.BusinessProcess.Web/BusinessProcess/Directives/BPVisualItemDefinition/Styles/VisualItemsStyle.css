@@ -7,13 +7,15 @@
 
 @-webkit-keyframes vr-visualitem-block-blinker {
     from {
-        opacity: 1.0;
+        opacity: 1;
         background-color: #d7e9f1;
+        z-index: 1
     }
 
     to {
         opacity: 1.0;
         background-color: yellow;
+        z-index: 10
     }
 }
 .vr-visualitem-event-started {
@@ -26,11 +28,12 @@
     -webkit-animation-direction: alternate;
 }
 
-    .vr-visualitem-event-started:hover {
-        opacity: 0.8 !important;
-        transition: 0.3s;
-        cursor: pointer !important;
-    }
+
+.vr-visualitem-event-started:hover {
+    opacity: 0.8 !important;
+    transition: 0.3s;
+    cursor: pointer !important;
+}
 
 .vr-visualitem-event-completed {
     background-color: #0acc19 !important;
@@ -330,7 +333,7 @@
     width: calc(25% - 150px);
     height: 15px;
     margin-left: calc(50% - 230px);
-    display: inline-block;
+    display: block;
     float: left;
     border-left: 2px solid #d7e9f1;
     border-top: 2px solid #d7e9f1;
@@ -344,6 +347,18 @@
     float: left;
     border-left: 2px solid #d7e9f1;
     border-bottom: 2px solid #d7e9f1;
+}
+
+.vr-visualitem-closeLoop-arrowright {
+    float: right;
+    margin-right: calc(50% + 23px);
+    margin-top: -34px !important;
+    border: solid #d7e9f1;
+    border-width: 2px 2px 0 0;
+    display: block;
+    padding: 4px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
 }
 
 @keyframes hideprograssbar {
