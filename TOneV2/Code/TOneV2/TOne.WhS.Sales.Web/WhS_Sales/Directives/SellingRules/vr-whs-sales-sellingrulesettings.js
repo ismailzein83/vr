@@ -60,15 +60,15 @@
                     var loadThresholdTemplatesPromise = loadThresholdTemplates();
                     promises.push(loadThresholdTemplatesPromise);
 
-                    var loadDirectivePromise = loadDirective();
-                    promises.push(loadDirectivePromise);
+                    if ($scope.thresholdSelectedTemplate != undefined) {
+                        var loadDirectivePromise = loadDirective();
+                        promises.push(loadDirectivePromise);
+                    }
 
                     loadThresholdTemplatesPromise.then(function () {
                         if (settings != undefined && settings.Threshold != undefined) {
                             $scope.thresholdSelectedTemplate = UtilsService.getItemByVal($scope.thresholdTemplateDataSource, settings.Threshold.ConfigId, 'ExtensionConfigurationId');
                         }
-                        else if ($scope.thresholdTemplateDataSource != undefined && $scope.thresholdTemplateDataSource.length > 0)
-                            $scope.thresholdSelectedTemplate = $scope.thresholdTemplateDataSource[0];
                     });
                     function loadThresholdTemplates() {
                         return WhS_Sales_SellingRuleAPIService.GetSellingRuleThresholdTemplates().then(function (response) {
