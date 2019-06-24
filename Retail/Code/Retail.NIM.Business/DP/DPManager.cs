@@ -9,7 +9,7 @@ namespace Retail.NIM.Business
 {
     public class DPManager
     {
-        static Guid beDefinitionId = new Guid("fc1ef5b2-dd2a-4fd1-968c-a412651377cb");
+        public static Guid s_beDefinitionId = new Guid("fc1ef5b2-dd2a-4fd1-968c-a412651377cb");
 
         #region Public Methods
 
@@ -32,7 +32,7 @@ namespace Retail.NIM.Business
         private Dictionary<string, DP> GetCachedDPsByNumber()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedDPsByNumber", beDefinitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedDPsByNumber", s_beDefinitionId, () =>
             {
                 Dictionary<long, DP> cachedDPs = this.GetCachedDPs();
                 return cachedDPs.Values.ToDictionary(itm => itm.Number, itm => itm);
@@ -42,9 +42,9 @@ namespace Retail.NIM.Business
         private Dictionary<long, DP> GetCachedDPs()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedDPs", beDefinitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedDPs", s_beDefinitionId, () =>
             {
-                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(beDefinitionId);
+                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(s_beDefinitionId);
 
                 Dictionary<long, DP> results = new Dictionary<long, DP>();
 

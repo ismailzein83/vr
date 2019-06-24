@@ -5,7 +5,6 @@ using Vanrise.Web.Base;
 namespace Retail.NIM.Web.Controller
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "FDB")]
-    //[JSONWithTypeAttribute]
     public class FDBController : BaseAPIController
     {
         FDBManager fdbManager = new FDBManager();
@@ -15,6 +14,13 @@ namespace Retail.NIM.Web.Controller
         public GetFDBReservationInfoOutput GetFDBReservationInfo(GetFDBReservationInfoInput input)
         {
             return fdbManager.GetFDBReservationInfo(input);
+        }
+
+        [HttpPost]
+        [Route("ReserveFTTHPath")]
+        public ReserveFTTHPathOutput ReserveFTTHPath(ReserveFTTHPathInput input)
+        {
+            return fdbManager.ReserveFTTHPath(input);
         }
     }
 }

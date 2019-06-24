@@ -50,7 +50,9 @@
     <Compile Include="Enums.cs" />
     <Compile Include="FDB\FDB.cs" />
     <Compile Include="FDB\FDBPort.cs" />
-    <Compile Include="Path\Path.cs" />
+    <Compile Include="CopperPath\CopperPath.cs" />
+    <Compile Include="FreeFTTHPath\FreeFTTHPath.cs" />
+    <Compile Include="PortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

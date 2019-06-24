@@ -1,9 +1,6 @@
 ﻿using Retail.NIM.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
@@ -11,18 +8,18 @@ namespace Retail.NIM.Business
 {
     public class FDBPortManager
     {
-        static Guid beDefinitionId = new Guid("70b2ee0b-9508-4a77-82bc-b14702b99f27");
+        public static Guid s_beDefinitionId = new Guid("70b2ee0b-9508-4a77-82bc-b14702b99f27");
 
         #region Public Methods
 
         public int GetFreePortsNb(long fdbId)
         {
-            return GetPortsNb(fdbId, new Guid("d65f6900-7e1f-479d-be8c-c5ecbc45c7c5"));
+            return GetPortsNb(fdbId, PortStatus.Free);
         }
 
         public int GetUsedPortsNb(long fdbId)
         {
-            return GetPortsNb(fdbId, new Guid("e648730c-4a0c-4354-8c4e-5e0d8c34f855"));
+            return GetPortsNb(fdbId, PortStatus.Used);
         }
 
         public int GetPortsNb(long fdbId, Guid statusId)
@@ -55,7 +52,7 @@ namespace Retail.NIM.Business
         private Dictionary<long, List<FDBPort>> GetCachedFDBPortsByFDB()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedFDBPortsByFDB", beDefinitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedFDBPortsByFDB", s_beDefinitionId, () =>
             {
                 List<FDBPort> fdbPorts = this.GetCachedFDBPorts();
 
@@ -74,9 +71,9 @@ namespace Retail.NIM.Business
         private List<FDBPort> GetCachedFDBPorts()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedFDBPorts", beDefinitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedFDBPorts", s_beDefinitionId, () =>
             {
-                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(beDefinitionId);
+                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(s_beDefinitionId);
 
                 List<FDBPort> results = new List<FDBPort>();
 

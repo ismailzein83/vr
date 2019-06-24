@@ -2,7 +2,7 @@
 
 namespace Retail.NIM.Entities
 {
-    public class Path
+    public class CopperPath
     {
         public long Id { get; set; }
 
