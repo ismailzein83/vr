@@ -1,6 +1,6 @@
 ﻿<vr-row removeline>
-	<vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="{{ctrlSupplierGeneration.normalColNum / 2}}" selectedvalues="scopeModel.selectedTimeZone" onselectionchanged="    scopeModel.onTimeZoneSelectionChanged"></vr-common-timezone-selector>
-	<vr-columns colnum="{{ctrlSupplierGeneration.normalColNum / 2}}">
+	<vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="3" selectedvalues="scopeModel.selectedTimeZone" onselectionchanged="    scopeModel.onTimeZoneSelectionChanged"></vr-common-timezone-selector>
+	<vr-columns colnum="3">
 		<vr-select datasource="scopeModel.adjustmentTypes"
 				   datatextfield="description"
 				   datavaluefield="value"
@@ -11,13 +11,13 @@
 				   onselectionchanged="scopeModel.onCommissionAdjustmentSelectionChanged">
 		</vr-select>
 	</vr-columns>
-	<vr-columns colnum="{{ctrlSupplierGeneration.normalColNum / 2}}" ng-if="scopeModel.isPercentage">
+	<vr-columns colnum="3" ng-if="scopeModel.isPercentage">
 		<vr-textbox type="number" label="Adjustment (%)" value="scopeModel.commission" minvalue="-100" maxvalue="100" onvaluechanged="scopeModel.onCommissionFocusChanged"></vr-textbox>
 	</vr-columns>
-	<vr-columns colnum="{{ctrlSupplierGeneration.normalColNum / 2}}" ng-if="!scopeModel.isPercentage">
+	<vr-columns colnum="3" ng-if="!scopeModel.isPercentage">
 		<vr-textbox type="number" label="Adjustment Value" value="scopeModel.adjustment" onblurtextbox="scopeModel.onAdjustmentFocusChanged"></vr-textbox>
 	</vr-columns>
-	<vr-columns colnum="{{ctrlSupplierGeneration.normalColNum / 2}}" ng-show="scopeModel.hasCommission" ng-if="scopeModel.isPercentage">
+	<vr-columns colnum="3" ng-show="scopeModel.hasCommission" ng-if="scopeModel.isPercentage">
 		<vr-select datasource="scopeModel.commissionTypes"
 				   datatextfield="description"
 				   datavaluefield="value"
@@ -26,5 +26,8 @@
 				   label="Visibility"
 				   hideremoveicon onselectionchanged="scopeModel.onCommissionTypeSelectionChanged">
 		</vr-select>
+	</vr-columns>
+	<vr-columns colnum="3" withemptyline>
+		<vr-label>{{scopeModel.currencyDescription}}</vr-label>
 	</vr-columns>
 </vr-row>

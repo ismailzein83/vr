@@ -27,11 +27,17 @@
 				isCustomer: isCustomer
 			});
 		}
+		function GetFinancialAccountCurrencyDescription(partnerId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, 'GetFinancialAccountCurrencyDescription'), {
+				partnerId: partnerId
+			});
+		}
         return ({
             UpdateOriginalInvoiceData: UpdateOriginalInvoiceData,
             GetOriginalInvoiceDataRuntime: GetOriginalInvoiceDataRuntime,
 			GetInvoiceDetails: GetInvoiceDetails,
-			DoesInvoiceReportExist: DoesInvoiceReportExist
+			DoesInvoiceReportExist: DoesInvoiceReportExist,
+			GetFinancialAccountCurrencyDescription: GetFinancialAccountCurrencyDescription
         });
     }
 

@@ -348,7 +348,14 @@ namespace TOne.WhS.Invoice.Business
                 physicalPath = VRWebContext.MapVirtualToPhysicalPath("~/Client/Modules/WhS_Invoice/Reports/SupplierCompareInvoiceReport.rdlc");
             return Utilities.PhysicalPathExists(physicalPath);
         }
+		public string GetFinancialAccountCurrencyDescription(int partnerId)
+		{
+			WHSFinancialAccountManager wHSFinancialAccountManager = new WHSFinancialAccountManager();
+			CurrencyManager currencyManager = new CurrencyManager();
+			int currencyId = wHSFinancialAccountManager.GetFinancialAccountCurrencyId(partnerId);
+			return currencyManager.GetCurrencySymbol(currencyId);
+		}
 
 
-    }
+	}
 }

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_FinancialAccountAPIService", "WhS_BE_CommisssionTypeEnum","WhS_Invoice_AdjustmentTypeEnum",
-	function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_FinancialAccountAPIService, WhS_BE_CommisssionTypeEnum, WhS_Invoice_AdjustmentTypeEnum) {
+app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_FinancialAccountAPIService", "WhS_BE_CommisssionTypeEnum", "WhS_Invoice_AdjustmentTypeEnum","WhS_Invoice_InvoiceAPIService",
+	function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_FinancialAccountAPIService, WhS_BE_CommisssionTypeEnum, WhS_Invoice_AdjustmentTypeEnum, WhS_Invoice_InvoiceAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -111,7 +111,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+				api.load = function (payload) {
+					var promises = [];
                     var invoice;
                     var financialAccountId;
                     var customPayload;
@@ -143,10 +144,14 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
 						else {
 							$scope.scopeModel.selectedAdjustmentType = WhS_Invoice_AdjustmentTypeEnum.Percentage;
 						}
-                        context = payload.context;
+						context = payload.context;
+						if (payload.partnerId != undefined) {
+							promises.push(loadCarrierCurrency(payload.partnerId));
+						}
+						if (payload.invoice != undefined && payload.invoice.PartnerId != undefined) {
+							promises.push(loadCarrierCurrency(payload.invoice.PartnerId));
+						}
                     }
-                    var promises = [];
-
                     if (customPayload == undefined) {
                         if (financialAccountId != undefined) {
                             var loadTimeZonePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -189,7 +194,16 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                             promises.push(selectedTimeZoneReadyDeferred.promise);
 
                         return timeZoneSelectorAPI.load(timeZoneSelectorPayload);
-                    }
+					}
+					function loadCarrierCurrency(partnerId) {
+						var loadCarrierCurrencyDeferred = UtilsService.createPromiseDeferred();
+						WhS_Invoice_InvoiceAPIService.GetFinancialAccountCurrencyDescription(partnerId).then(function (result) {
+							$scope.scopeModel.currencyDescription = result;
+							loadCarrierCurrencyDeferred.resolve();
+						});
+						return loadCarrierCurrencyDeferred.promise;
+					}
+
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         selectedTimeZoneReadyDeferred = undefined;
                         emptyTimeZonePromiseDeferred = undefined;

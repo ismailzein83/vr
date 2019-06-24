@@ -49,6 +49,13 @@ namespace TOne.WhS.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.DoesInvoiceReportExist(isCustomer);
         }
+		[HttpGet]
+		[Route("GetFinancialAccountCurrencyDescription")]
+		public string GetFinancialAccountCurrencyDescription(int partnerId)
+		{
+			InvoiceManager manager = new InvoiceManager();
+			return manager.GetFinancialAccountCurrencyDescription(partnerId);
+		}
 
-    }
+	}
 }
