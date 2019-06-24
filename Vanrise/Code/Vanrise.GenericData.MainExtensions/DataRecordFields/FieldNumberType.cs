@@ -45,11 +45,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
         {
-            FieldNumberType fieldTypeAsNumberType = fieldType as FieldNumberType;
-            if (fieldTypeAsNumberType == null)
-                return false;
-
-            return fieldTypeAsNumberType.DataType == this.DataType;
+            return GetNonNullableRuntimeType() == fieldType.GetNonNullableRuntimeType();
         }
 
         #region Public Methods
