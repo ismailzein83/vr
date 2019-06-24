@@ -404,7 +404,8 @@ as (select * from (values
 
 ('17BF5CD6-31D6-4D9F-B8C1-C9878C599EB7','Fault Ticket',null,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,10,0,1),
 
-('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',100,0,null)
+('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',100,0,null),
+('DBEFC1B4-2538-4A2B-BF47-7CAD1CE31C42','Sale',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,0,0)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView]))
@@ -454,7 +455,9 @@ as (select * from (values
 ('072124B2-C47E-4BE8-96BD-C9F9AE27EDA5','Purchase Pricelists','Purchase Pricelists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist'	,'8F443685-3AC6-4C48-9298-017D74221EAF','WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
 
 ('0D413348-8F8B-4282-8738-6F5178FE99E0','CDR','CDR Rules',null																						,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["2692b7da-cd6a-4444-afb0-c5f31e73c796","e1adf1f2-6bc3-4541-8de4-e5f578a79372"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',5),
-('8C00BBB3-D71F-4A7A-A51B-007FDECD8211','Sale','Sale Pricing Rules',null																			,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["90a47a0a-3ef9-4941-bc21-ca0be44fc5a4","8a637067-0056-4bae-b4d5-f80f00c0141b","f24cb510-0b65-48c8-a723-1f6ebfeea9e8"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',15),
+('8C00BBB3-D71F-4A7A-A51B-007FDECD8211','Sale Pricing Rules','Sale Pricing Rules',null																			,'DBEFC1B4-2538-4A2B-BF47-7CAD1CE31C42',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["90a47a0a-3ef9-4941-bc21-ca0be44fc5a4","8a637067-0056-4bae-b4d5-f80f00c0141b","f24cb510-0b65-48c8-a723-1f6ebfeea9e8"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',5),
+('C8E0DA0A-F0AA-4677-8386-2A8D0CA42E0B','Selling Rules','Selling Rules',null																					,'DBEFC1B4-2538-4A2B-BF47-7CAD1CE31C42',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["3d638c43-0191-464c-9e6e-caaa5a2e2fdc"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',10),
+
 ('B2FC9B65-A056-4E8A-91EA-B7014C5C59A7','Purchase','Purchase Pricing Rules',null																	,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["aded2932-bb9f-49b7-a561-cb7c1413084f","fcf48f89-d6bd-4e93-8221-1b7e2153116b","5aeb0dad-4bb8-44b4-acbe-c8c917e88b58"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',10),
 ('3C53D6DC-BBE7-49CA-A222-8211AF25DD31','Business Rules','Business Rules','#/view/BusinessProcess/Views/BPBusinessRule/BPBusinessRuleSetManagement'	,'1C7569FA-43C9-4853-AE4C-1152746A34FD','BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',110),
 
@@ -2074,7 +2077,6 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 end
-
 --[queue].[ExecutionFlowDefinition]-----------------------------------------------------------------
 BEGIN
 set nocount on;
