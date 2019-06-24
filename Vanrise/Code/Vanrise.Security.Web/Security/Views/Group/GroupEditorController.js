@@ -11,7 +11,7 @@
         var context;
         var isViewHistoryMode;
         var groupeTypeAPI;
-        var groupeTypeReadyPromiseDeferred; 
+        var groupeTypeReadyPromiseDeferred;
 
         loadParameters();
         defineScope();
@@ -118,7 +118,7 @@
         }
 
         function setTitle()
-        {
+        {        
             if (isEditMode && groupEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(groupEntity.Name, 'Group');
             else if (isViewHistoryMode && groupEntity != undefined)
@@ -135,11 +135,11 @@
             $scope.scopeModal.name = groupEntity.Name;
             $scope.scopeModal.description = groupEntity.Description;
         }
-        
+
         function loadGroupTemplate() {
             var promises = [];
             var goupPayload;
-            if (groupEntity != undefined && groupEntity.Settings!=undefined) {
+            if (groupEntity != undefined && groupEntity.Settings != undefined) {
                 goupPayload = {
                     settings: groupEntity.Settings
                 };
@@ -153,6 +153,11 @@
                 if (goupPayload) {
                     $scope.scopeModal.selectedGroupTypeTemplate = UtilsService.getItemByVal($scope.scopeModal.groupTypeTemplates, goupPayload.settings.ConfigId, "ExtensionConfigurationId");
                 }
+
+                if ($scope.scopeModal.groupTypeTemplates.length == 1 && (goupPayload == undefined || goupPayload.settings == undefined || goupPayload.settings.ConfigId == undefined))
+                    $scope.scopeModal.selectedGroupTypeTemplate = $scope.scopeModal.groupTypeTemplates[0];
+
+
             });
             promises.push(groupTemplateLoad);
             if (goupPayload) {
@@ -160,14 +165,14 @@
                 groupeTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 promises.push(loadGroupTypePromiseDeferred.promise);
                 groupeTypeReadyPromiseDeferred.promise.then(function () {
-                    groupeTypeReadyPromiseDeferred = undefined;                  
+                    groupeTypeReadyPromiseDeferred = undefined;
                     VRUIUtilsService.callDirectiveLoad(groupeTypeAPI, goupPayload, loadGroupTypePromiseDeferred);
 
                 });
             }
             return UtilsService.waitMultiplePromises(promises);
         }
-       
+
         function buildGroupObjFromScope() {
             var settings = VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, groupeTypeAPI, 'selectedGroupTypeTemplate');
             var groupObj = {
