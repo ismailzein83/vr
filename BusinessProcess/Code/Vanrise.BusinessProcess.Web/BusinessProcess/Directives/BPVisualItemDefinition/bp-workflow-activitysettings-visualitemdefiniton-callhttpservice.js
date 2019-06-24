@@ -25,6 +25,7 @@
 
             var visualItemDefinition;
             var events = [];
+            var result = {};
 
             function initializeController() {
 
@@ -76,6 +77,8 @@
                 };
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
+                result.isEventUsed = false; 
+
                     if (visualItemEvent != undefined) {
 
                         events.push(visualItemEvent);
@@ -92,6 +95,7 @@
                             $scope.scopeModel.classEventCompleted = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Completed";
+                            result.isCompleted = true;
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Error.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
@@ -112,11 +116,9 @@
                             $scope.scopeModel.retryCount = visualItemEvent.EventPayload.RetryCount + 1;
                             $scope.scopeModel.showRetryIcon = true;
                         }
-
-                        
-                        return true;
+                        result.isEventUsed = true; 
                     }
-                    return false;
+                    return result;
                 };
 
                 if (ctrl.onReady != null) {

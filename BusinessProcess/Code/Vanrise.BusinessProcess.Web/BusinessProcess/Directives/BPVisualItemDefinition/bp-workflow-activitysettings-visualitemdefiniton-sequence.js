@@ -53,7 +53,7 @@
                                 initialPromises.push(childVisualItem.loadPromiseDeferred.promise);
                                 loadChildDirective(childVisualItem);
                             }
-                           
+
                         }
                     }
 
@@ -71,7 +71,8 @@
                 };
 
                 api.tryApplyVisualEventToChilds = function (visualEvents) {
-                    var status = false;
+                    var eventsStatus = [];
+
                     if (visualEvents != undefined && visualEvents.length > 0) {
                         var childVisualItemsWithSubChilds = [];
                         var succeededVisualEvents = [];
@@ -80,44 +81,60 @@
                             if (childVisualItem.directiveAPI.tryApplyVisualEventToChilds != undefined) {
                                 childVisualItemsWithSubChilds.push({
                                     childVisualItem: childVisualItem,
-                                    index:i
+                                    index: i
                                 });
                             } else {
                                 for (var j = 0; j < visualEvents.length; j++) {
                                     var visualEvent = visualEvents[j];
                                     if (visualEvent.ActivityId == childVisualItem.ChildActivityId) {
-                                        if (childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                        var childItemResult = childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent);
+
+                                        if (childItemResult != undefined && childItemResult.isEventUsed) {
                                             if (i != 0)
                                                 childVisualItems[i - 1].classEventCompleted = true;
-                                            status = true;
-                                            if (UtilsService.getItemIndexByVal(succeededVisualEvents, visualEvent.BPVisualEventId, "BPVisualEventId") < 0)
-                                                succeededVisualEvents.push(visualEvent);
+                                            eventsStatus.push({
+                                                event: visualEvent,
+                                                isEventUsed: childItemResult.isEventUsed,
+                                            })
                                         }
                                     }
                                 }
                             }
                         }
 
-                        var unsucceededVisualEvents = [];
-                        for (var j = 0; j < visualEvents.length; j++) {
-                            var visualEvent = visualEvents[j];
-                            if (UtilsService.getItemIndexByVal(succeededVisualEvents, visualEvent.BPVisualEventId, "BPVisualEventId") < 0)
-                                unsucceededVisualEvents.push(visualEvent);
-                        }
+                        var unsucceededVisualEvents = getAvailableEvents(visualEvents, eventsStatus); 
 
                         if (childVisualItemsWithSubChilds.length > 0) {
                             for (var j = 0; j < childVisualItemsWithSubChilds.length; j++) {
                                 var childVisualItemsWithSubChild = childVisualItemsWithSubChilds[j];
-                                if (childVisualItemsWithSubChild.childVisualItem.directiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents)) {
+                                var childEventsResult = childVisualItemsWithSubChild.childVisualItem.directiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents);
+                                if (childEventsResult != undefined && childEventsResult.length > 0) {
+                                    for (var k = 0; k < childEventsResult.length; k++) {
+                                        eventsStatus.push(childEventsResult[k]);
+                                    }
+                                    unsucceededVisualEvents = getAvailableEvents(unsucceededVisualEvents, childEventsResult);
                                     if (childVisualItemsWithSubChild.index != 0)
                                         childVisualItems[childVisualItemsWithSubChild.index - 1].classEventCompleted = true;
-                                    status = true;
                                 }
                             }
                         }
                     }
-                    return status;
+                    return eventsStatus;
                 };
+
+                function getAvailableEvents(visualEvents, eventsStatus) {
+                    var unsucceededVisualEvents = [];
+                    if (visualEvents != undefined && eventsStatus != undefined) {
+                        for (var j = 0; j < visualEvents.length; j++) {
+                            var visualEvent = visualEvents[j];
+                            var eventItem = UtilsService.getItemByVal(eventsStatus, visualEvent.BPVisualEventId, "event.BPVisualEventId");
+                            if (eventItem == undefined || !eventItem.isEventUsed)
+                                unsucceededVisualEvents.push(visualEvent);
+                        }
+                    }
+                    
+                    return unsucceededVisualEvents;
+                }
 
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);

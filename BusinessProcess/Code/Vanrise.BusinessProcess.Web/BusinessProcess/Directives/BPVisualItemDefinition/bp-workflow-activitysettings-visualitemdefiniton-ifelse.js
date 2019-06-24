@@ -80,6 +80,8 @@
 
 
                 api.tryApplyVisualEventToChilds = function (visualEvents) {
+                    var eventsStatus = [];
+
                     var status = false;
                     if (visualEvents != undefined && visualEvents.length >= 0) {
                         var unsucceededVisualEvents = [];
@@ -89,9 +91,13 @@
 
                             if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
                                 if (visualItemDefinition != undefined && visualItemDefinition.Settings.TrueBranchActivityId == visualEvent.ActivityId) {
-                                    if (trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                    var trueBranchResult = trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent);
+                                    if (trueBranchResult != undefined && trueBranchResult.isEventUsed) {
                                         $scope.scopeModel.trueConditionCompleted = true;
-                                        status = true;
+                                        eventsStatus.push({
+                                            event: visualEvent,
+                                            isEventUsed: trueBranchResult.isEventUsed,
+                                        });
                                         continue;
                                     }
                                 }
@@ -99,9 +105,13 @@
 
                             if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
                                 if (visualItemDefinition != undefined && visualItemDefinition.Settings.FalseBranchActivityId == visualEvent.ActivityId) {
-                                    if (falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                    var falseBranchResult = falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent);
+                                    if (falseBranchResult != undefined && falseBranchResult.isEventUsed) {
                                         $scope.scopeModel.falseConditionCompleted = true;
-                                        status = true;
+                                        eventsStatus.push({
+                                            event: visualEvent,
+                                            isEventUsed: trueBranchResult.isEventUsed,
+                                        });
                                         continue;
                                     }
                                 }
@@ -112,22 +122,29 @@
 
                         if (unsucceededVisualEvents.length > 0) {
                             if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                if (trueBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents)) {
+                                var trueEventsResult = trueBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents);
+                                if (trueEventsResult != undefined && trueEventsResult.length > 0) {
                                     $scope.scopeModel.trueConditionCompleted = true;
-                                    status = true;
+                                    for (var i = 0; i < trueEventsResult.length; i++) {
+                                        eventsStatus.push(trueEventsResult[i]);
+                                    }
                                 }
+                               
                             }
 
                             if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                if (falseBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents)) {
+                                var falseEventsResult = falseBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents);
+                                if (falseEventsResult != undefined && falseEventsResult.length > 0) {
                                     $scope.scopeModel.falseConditionCompleted = true;
-                                    status = true;
+                                    for (var i = 0; i < falseEventsResult.length; i++) {
+                                        eventsStatus.push(falseEventsResult[i]);
+                                    }
                                 }
                             }
 
                         }
                     }
-                    return status;
+                    return eventsStatus;
                 };
 
 

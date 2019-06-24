@@ -25,6 +25,8 @@
 
             var visualItemDefinition;
             var events = [];
+
+            var result = {};
             function initializeController() {
 
                 $(document).ready(function () {
@@ -79,11 +81,11 @@
                 };
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
-                    if (visualItemEvent != undefined && UtilsService.getItemIndexByVal(events, visualItemEvent.EventTypeId, "EventTypeId") < 0) {
+                    result.isEventUsed = false; 
+
+                    if (visualItemEvent != undefined) {
                         events.push(visualItemEvent);
-
-                        var eventTypeId = visualItemEvent.EventTypeId;
-
+                        var eventTypeId = visualItemEvent.EventTypeId; 
                         if (eventTypeId == VisualEventTypeEnum.Started.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = true;
                             $scope.scopeModel.isHintStarted = true;
@@ -99,6 +101,7 @@
                             $scope.scopeModel.classEventCompleted = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Completed";
+                            result.isCompleted = true;
                             $scope.scopeModel.eventCompletedTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Overdue.value.toLowerCase()) {
@@ -120,9 +123,9 @@
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Retrying";
                         }
-                        return true;
+                        result.isEventUsed = true; 
                     }
-                    return false;
+                    return result;
                 };
 
                 if (ctrl.onReady != null) {
