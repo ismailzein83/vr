@@ -2,7 +2,7 @@
 
     'use strict';
 
-    GenericBERuntimeManagementDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRCommon_ModalWidthEnum','VR_GenericData_GenericBECustomActionService'];
+    GenericBERuntimeManagementDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBECustomActionService'];
 
     function GenericBERuntimeManagementDirective(VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VR_GenericData_GenericBusinessEntityAPIService, VRCommon_ModalWidthEnum, VR_GenericData_GenericBECustomActionService) {
         return {
@@ -250,7 +250,8 @@
                     var filterRuntimeRootDirectivePayload = {
                         settings: genericBEDefinitionSettings.FilterDefinition.Settings,
                         dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
-                        filterRuntimeEditor: $scope.scopeModel.filterRuntimeEditor
+                        filterRuntimeEditor: $scope.scopeModel.filterRuntimeEditor,
+                        isFromManagementScreen: true
                     };
                     VRUIUtilsService.callDirectiveLoad(filterRuntimeRootDirectiveAPI, filterRuntimeRootDirectivePayload, filterRuntimeRootDirectiveLoadDeferred);
                 });
@@ -263,7 +264,7 @@
                     gridDirectiveAPI.load(getGridFilter());
                 });
             }
-           
+
 
             function getGridFilter() {
                 var filterData = filterRuntimeRootDirectiveAPI != undefined ? filterRuntimeRootDirectiveAPI.getData() : undefined;

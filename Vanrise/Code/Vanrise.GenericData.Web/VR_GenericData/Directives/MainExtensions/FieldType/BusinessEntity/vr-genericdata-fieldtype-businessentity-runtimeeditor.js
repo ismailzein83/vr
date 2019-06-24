@@ -89,6 +89,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             var fieldValuesByName = {};
             var dependentFields = [];
             //var dataRecordTypeId;
+            var isFromManagementScreen;
 
             function initializeController() {
                 //ctrl.showSelector = ($attrs.selectionmode == "dynamic");
@@ -116,6 +117,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         allFieldValuesByName = payload.allFieldValuesByName;
                         parentFieldValues = payload.parentFieldValues;
                         //dataRecordTypeId = payload.dataRecordTypeId;
+                        isFromManagementScreen = payload.isFromManagementScreen;
                     }
 
                     businessEntityDefinitionId = fieldType.BusinessEntityDefinitionId;
@@ -216,7 +218,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                         beRuntimeSelectorFilter: fieldType.BERuntimeSelectorFilter,
                                         genericUIContext: genericUIContext,
                                         hasEmtyRequiredDependentField: hasEmtyRequiredDependentField,
-                                        filter: data != undefined && data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : getFilter()
+                                        filter: data != undefined && data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : getFilter(),
+                                        isFromManagementScreen: isFromManagementScreen 
                                     };
 
                                     if (fieldValue != undefined) {
@@ -531,7 +534,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     businessEntityDefinitionId: businessEntityDefinitionId,
                     selectedIds: data.isDependentFieldDeselected ? undefined : directiveAPI != undefined ? directiveAPI.getSelectedIds() : fieldValue,
                     filter: data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : undefined,
-                    hasEmtyRequiredDependentField: data.hasEmtyRequiredDependentField
+                    hasEmtyRequiredDependentField: data.hasEmtyRequiredDependentField,
+                    isFromManagementScreen: isFromManagementScreen
                 };
                 var setLoader = function (value) {
                     $scope.isLoading = value;

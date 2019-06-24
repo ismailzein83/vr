@@ -93,7 +93,7 @@
                     var selectedIds;
                     var selectIfSingleItem;
                     var beRuntimeSelectorFilter;
-
+                    var isFromManagementScreen;
                     if (payload != undefined) {
                         ctrl.fieldTitle = payload.fieldTitle;
                         ctrl.isDisabled = payload.isDisabled;
@@ -101,6 +101,7 @@
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         filter = payload.filter;
                         beRuntimeSelectorFilter = payload.beRuntimeSelectorFilter;
+                        isFromManagementScreen = payload.isFromManagementScreen;
 
                         selectedIds = payload.selectedIds;
                         selectIfSingleItem = payload.selectIfSingleItem;
@@ -110,12 +111,14 @@
                         promises.push(getGenericBERuntimeInfoPromise);
                     }
 
-                    //Added by Anthony 
-                    //if (beRuntimeSelectorFilter != undefined) {
-                    //    if (filter == undefined) {
-                    //        filter = { GenericBESelectorCondition: beRuntimeSelectorFilter.GenericBESelectorCondition };
-                    //    }
-                    //}
+                    if (beRuntimeSelectorFilter != undefined) {
+                        if (!isFromManagementScreen || !beRuntimeSelectorFilter.NotApplicableInSearch) {
+                            if (filter == undefined) {
+                                filter = {};
+                            }
+                            filter.GenericBESelectorCondition = beRuntimeSelectorFilter.GenericBESelectorCondition;
+                        }
+                    }
 
                     if (!hasEmtyRequiredDependentField) {
                         var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
