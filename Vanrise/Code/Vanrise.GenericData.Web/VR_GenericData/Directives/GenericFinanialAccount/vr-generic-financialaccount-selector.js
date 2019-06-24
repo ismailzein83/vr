@@ -27,6 +27,7 @@ app.directive("vrGenericFinancialaccountSelector", ["UtilsService", "VRUIUtilsSe
         };
         function genericFinancialAccountSelectorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var selectedIds;
 
             var genericFinancialAccountSelectorApi;
             var genericFinancialAccountPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -54,7 +55,8 @@ app.directive("vrGenericFinancialaccountSelector", ["UtilsService", "VRUIUtilsSe
                         genericFinancialAccountPromiseDeferred.promise.then(function () {
 
                             var genericFinancialAccountSelectorPayload = {
-                                businessEntityDefinitionId: payload.businessEntityDefinitionId
+                                businessEntityDefinitionId: payload.businessEntityDefinitionId,
+                                selectedIds: payload.selectedIds
                             };
                             VRUIUtilsService.callDirectiveLoad(genericFinancialAccountSelectorApi, genericFinancialAccountSelectorPayload, genericFinancialAccountSelectorLoadDeferred);
                         });

@@ -25,6 +25,7 @@ app.directive("vrAccountbalanceGenericFinancialaccountSelector", ["UtilsService"
         function GenericFinancialAccount($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var businessEntityDefinitionId;
+            var selectedIds;
 
             var genericFinancialAccountSelectorAPI;
             var genericFinancialAccountSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -46,8 +47,12 @@ app.directive("vrAccountbalanceGenericFinancialaccountSelector", ["UtilsService"
 
                 api.load = function (payload) {
                     var promises = [];
-                    if (payload != undefined && payload.extendedSettings != undefined && payload.extendedSettings.Configuration != undefined) {
-                        businessEntityDefinitionId = payload.extendedSettings.Configuration.FinancialAccountBEDefinitionId;
+
+                    if (payload != undefined) {
+                        selectedIds = payload.selectedIds;
+                        if (payload != undefined && payload.extendedSettings != undefined && payload.extendedSettings.Configuration != undefined) {
+                            businessEntityDefinitionId = payload.extendedSettings.Configuration.FinancialAccountBEDefinitionId;
+                        }
                     }
 
                     var loadDataProviderSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -55,7 +60,8 @@ app.directive("vrAccountbalanceGenericFinancialaccountSelector", ["UtilsService"
                     genericFinancialAccountSelectorReadyPromiseDeferred.promise.then(function () {
 
                         var dataProviderSettingsPayload = {
-                            businessEntityDefinitionId: businessEntityDefinitionId
+                            businessEntityDefinitionId: businessEntityDefinitionId,
+                            selectedIds: selectedIds
                         };
                         VRUIUtilsService.callDirectiveLoad(genericFinancialAccountSelectorAPI, dataProviderSettingsPayload, loadDataProviderSettingsPromiseDeferred);
                     });
