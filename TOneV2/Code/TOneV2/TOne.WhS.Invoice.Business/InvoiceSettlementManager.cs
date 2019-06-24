@@ -197,7 +197,7 @@ namespace TOne.WhS.Invoice.Business
                                 if (!supplierInvoiceDetail.HasRecurringCharge)
                                     supplierInvoiceDetail.HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0;
 								if (!supplierInvoiceDetail.HasAdjustment)
-									supplierInvoiceDetail.HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount > 0;
+									supplierInvoiceDetail.HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount != 0;
 
 							}
                             else
@@ -223,7 +223,7 @@ namespace TOne.WhS.Invoice.Business
                                 UseOriginalAmount= useOriginalAmount,
                                 IsLocked = invoiceDetail.Entity.LockDate.HasValue,
                                 HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0,
-								HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount > 0
+								HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount != 0
 
 								});
                             }
@@ -290,7 +290,7 @@ namespace TOne.WhS.Invoice.Business
                                 if (!customerInvoiceDetail.HasRecurringCharge)
                                     customerInvoiceDetail.HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0;
 								if (!customerInvoiceDetail.HasAdjustment)
-									customerInvoiceDetail.HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount > 0;
+									customerInvoiceDetail.HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount != 0;
 							}
                             else
                             {
@@ -315,7 +315,7 @@ namespace TOne.WhS.Invoice.Business
                                     OriginalAmount = originalAmount,
                                     UseOriginalAmount = useOriginalAmount,
                                     HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0,
-									HasAdjustment= currentInvoiceItemDetail.AdjustmentAmount>0
+									HasAdjustment= currentInvoiceItemDetail.AdjustmentAmount!=0
 
 								});
                             }
