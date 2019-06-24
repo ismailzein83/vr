@@ -67,7 +67,6 @@ app.directive("vrWhsDealSwapdealLastdealprogress", ["UtilsService", "VRNotificat
 
                         return WhS_Deal_DealDefinitionAPIService.GetLastSwapDealProgress(dealInfo.DealId).then(function (response) {
                             var swapDealProgress = response;
-                            console.log(response);
                             if (swapDealProgress != undefined) {
                                 for (var i = 0; i < swapDealProgress.length; i++) {
                                     var progress = swapDealProgress[i];
