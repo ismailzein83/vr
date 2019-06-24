@@ -1962,7 +1962,7 @@
         <Width>18.49228cm</Width>
         <ZIndex>9</ZIndex>
         <Visibility>
-          <Hidden>=IIF(Parameters!Adjustment.Value&gt;0,false,true)</Hidden>
+          <Hidden>=IIF(Parameters!Adjustment.Value&lt;&gt;0,false,true)</Hidden>
         </Visibility>
         <Style>
           <Border>

@@ -1801,7 +1801,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value) &gt; 0,FormatNumber(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value, "")</Value>
+                              <Value>=IIF(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value) &lt;&gt; 0,FormatNumber(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value, "")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1836,7 +1836,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value) &gt; 0,FormatNumber(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value, "")</Value>
+                              <Value>=IIF(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value) &lt;&gt; 0,FormatNumber(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value, "")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1895,6 +1895,9 @@
         <Height>2.4cm</Height>
         <Width>19.10996cm</Width>
         <ZIndex>6</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((CountRows("AdjustmentInvoiceMonths") &gt; 0),False,True)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1962,7 +1965,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=iif(Round(Fields!DueToCarrierAdjustmentAmount.Value,Parameters!NormalPrecisionValue.Value)&gt;0,FormatNumber(Round(Fields!DueToCarrierAdjustmentAmount.Value,Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
+                              <Value>=iif(Round(Fields!DueToCarrierAdjustmentAmount.Value,Parameters!NormalPrecisionValue.Value)&lt;&gt;0,FormatNumber(Round(Fields!DueToCarrierAdjustmentAmount.Value,Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1997,7 +2000,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value)&gt;0,FormatNumber(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value,"")</Value>
+                              <Value>=IIF(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value)&lt;&gt;0,FormatNumber(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value,"")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2047,6 +2050,9 @@
         <Height>0.6cm</Height>
         <Width>19.10996cm</Width>
         <ZIndex>7</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((CountRows("AdjustmentInvoiceItemsDetails") &gt; 0),False,True)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>

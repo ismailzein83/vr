@@ -3574,7 +3574,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value)&gt;0,FormatNumber(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
+                              <Value>=IIF(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value)&lt;&gt;0,FormatNumber(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
                               <Style>
                                 <FontFamily>verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3611,7 +3611,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value) &gt; 0,FormatNumber(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value, "")</Value>
+                              <Value>=IIF(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value) &lt;&gt; 0,FormatNumber(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value, "")</Value>
                               <Style>
                                 <FontFamily>verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
