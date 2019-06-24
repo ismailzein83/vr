@@ -515,6 +515,7 @@ namespace TOne.WhS.Invoice.Business
 
                                             if (!amountByCurrency.TryGetValue(currencySymbol, out amountValue))
                                             {
+                                                currenciesPerInvoice.Add(invoiceItemDetail.CurrencyId);
                                                 amountByCurrency.Add(currencySymbol, Math.Round(totalOriginalAmount, normalPrecisionValue));
                                             }
                                             else if(!currenciesPerInvoice.Contains(invoiceItemDetail.CurrencyId))
