@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_RecurDealService', 'UtilsService', 'VRDateTimeService', 'WhS_Deal_DealDefinitionAPIService'];
+    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_RecurDealService', 'UtilsService', 'VRDateTimeService', 'WhS_Deal_DealDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityService'];
 
-    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum, WhS_Deal_DealStatusTypeEnum, WhS_Deal_RecurDealService, UtilsService, VRDateTimeService, WhS_Deal_DealDefinitionAPIService) {
+    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum, WhS_Deal_DealStatusTypeEnum, WhS_Deal_RecurDealService, UtilsService, VRDateTimeService, WhS_Deal_DealDefinitionAPIService, VR_GenericData_GenericBusinessEntityService) {
         return {
             restrict: 'E',
             scope: {
@@ -97,6 +97,13 @@
                         };
                         menuActions.push(recurMenuAction);
                     }
+                    if (dataItem.Entity.Settings.SwapDealAnalysisId != undefined) {
+                        var viewSwapDealAnalysisMenuAction = {
+                            name: 'View Swap Deal Analysis',
+                            clicked: viewSwapDealAnalysis
+                        };
+                        menuActions.push(viewSwapDealAnalysisMenuAction);
+                    }
                     var deleteMenuAction = {
                         name: 'Delete',
                         clicked: deleteDeal
@@ -147,6 +154,10 @@
                     });
                 };
                 WhS_Deal_RecurDealService.recurDeal(dataItem.Entity.DealId, dataItem.Entity.Name, onRecur);
+            }
+            function viewSwapDealAnalysis(dataItem) {
+              var swapDealAnalaysisBEDefinitionId = 'C4EC0507-29D3-48ED-AD54-6EE092CB7957';
+                VR_GenericData_GenericBusinessEntityService.viewGenericBusinessEntity(swapDealAnalaysisBEDefinitionId, dataItem.Entity.Settings.SwapDealAnalysisId);
             }
             function deleteDeal(dataItem) {
                 if (dataItem.Entity.DealId)

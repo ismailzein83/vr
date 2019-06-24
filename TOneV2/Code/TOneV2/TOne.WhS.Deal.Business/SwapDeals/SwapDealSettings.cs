@@ -84,6 +84,7 @@ namespace TOne.WhS.Deal.Business
                 return EndDate;
             }
         }
+        public int? SwapDealAnalysisId { get; set; }
 
         #region Public Methods
 

@@ -60,14 +60,14 @@ namespace TOne.WhS.Deal.Web.Controllers
         public UpdateOperationOutput<GenericBusinessEntityDetail> UpdateDealAnalysis(DealDefinitionInput dealDefinitionInput)
         {
             var manager = new SwapDealAnalysisManager();
-            return manager.UpdateDealAnalysis(dealDefinitionInput.DealId, dealDefinitionInput.GenericBusinessEntityId, dealDefinitionInput.BusinessEntityDefinitionId);
+            return manager.UpdateDealAnalysis(dealDefinitionInput.DealId, dealDefinitionInput.GenericBusinessEntityId);
         }
         [HttpGet]
         [Route("GetSwapDealAnalysis")]
-        public SwapDealAnalysisDefinition GetSwapDealAnalysis(int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        public SwapDealAnalysisDefinition GetSwapDealAnalysis(int genericBusinessEntityId)
         {
             var manager = new SwapDealAnalysisManager();
-            return manager.GetSwapDealAnalysis(genericBusinessEntityId, businessEntityDefinitionId);
+            return manager.GetSwapDealAnalysis(genericBusinessEntityId);
         }
     }
 }

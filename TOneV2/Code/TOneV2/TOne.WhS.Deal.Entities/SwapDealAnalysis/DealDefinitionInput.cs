@@ -6,6 +6,5 @@ namespace TOne.WhS.Deal.Entities
     {
         public int DealId { get; set; }
         public int GenericBusinessEntityId { get; set; }
-        public Guid BusinessEntityDefinitionId { get; set; }
     }
 }

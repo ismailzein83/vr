@@ -63,9 +63,9 @@ namespace TOne.WhS.Deal.Web.Controllers
         }
         [HttpGet]
         [Route("GetSwapDealFromAnalysis")]
-        public DealDefinition GetSwapDealFromAnalysis(int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        public DealDefinition GetSwapDealFromAnalysis(int genericBusinessEntityId)
         {
-            return _manager.GetSwapDealFromAnalysis(genericBusinessEntityId, businessEntityDefinitionId);
+            return _manager.GetSwapDealFromAnalysis(genericBusinessEntityId);
         }
     }
 }

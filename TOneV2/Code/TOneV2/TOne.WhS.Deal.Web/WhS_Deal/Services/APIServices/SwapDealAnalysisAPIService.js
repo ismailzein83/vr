@@ -27,18 +27,16 @@
         function CalculateOutboundRate(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'CalculateOutboundRate'), input);
         }
-        function UpdateDealAnalysis(dealId, genericBusinessEntityId, businessEntityDefinitionId) {
+        function UpdateDealAnalysis(dealId, genericBusinessEntityId) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'UpdateDealAnalysis')
                 , {
                     DealId: dealId,
-                    GenericBusinessEntityId: genericBusinessEntityId,
-                    BusinessEntityDefinitionId: businessEntityDefinitionId
+                    GenericBusinessEntityId: genericBusinessEntityId
                 });
         }
-        function GetSwapDealAnalysis(genericBusinessEntityId, businessEntityDefinitionId) {
+        function GetSwapDealAnalysis(genericBusinessEntityId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealAnalysis'), {
-                genericBusinessEntityId: genericBusinessEntityId,
-                businessEntityDefinitionId: businessEntityDefinitionId
+                genericBusinessEntityId: genericBusinessEntityId
             });
         }
         return {

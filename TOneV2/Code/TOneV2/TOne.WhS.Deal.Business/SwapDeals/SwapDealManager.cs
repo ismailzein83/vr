@@ -80,10 +80,10 @@ namespace TOne.WhS.Deal.Business
             var dealDefinition = s_vrObjectTrackingManager.GetObjectDetailById(swapDealHistoryId);
             return dealDefinition.CastWithValidate<DealDefinition>("DealDefinition : historyId ", swapDealHistoryId);
         }
-        public DealDefinition GetSwapDealFromAnalysis(int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        public DealDefinition GetSwapDealFromAnalysis(int genericBusinessEntityId)
         {
             var swapDealAnalysisManager = new SwapDealAnalysisManager();
-            var swapDealAnalysisDefinitionById = swapDealAnalysisManager.GetSwapDealAnalysisSettingById(businessEntityDefinitionId);
+            var swapDealAnalysisDefinitionById = swapDealAnalysisManager.GetSwapDealAnalysisSettingById();
 
             var swapDealAnalysisDefinition = swapDealAnalysisDefinitionById.GetRecord(genericBusinessEntityId);
 

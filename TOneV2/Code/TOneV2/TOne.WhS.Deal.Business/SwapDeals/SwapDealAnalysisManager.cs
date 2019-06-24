@@ -12,6 +12,7 @@ namespace TOne.WhS.Deal.Business
     {
         #region Public Methods
 
+        public static Guid SwapDealAnalaysisBEDefinitionId = new Guid("C4EC0507-29D3-48ED-AD54-6EE092CB7957");
         public SwapDealAnalysisResult AnalyzeDeal(SwapDealAnalysisSettings settings)
         {
             if (settings == null)
@@ -93,12 +94,12 @@ namespace TOne.WhS.Deal.Business
             decimal? calculatedRate = input.OutboundItemRateCalcMethod.Execute(context);
             return RoundNullableDecimal(calculatedRate);
         }
-        public UpdateOperationOutput<GenericBusinessEntityDetail> UpdateDealAnalysis(int dealId, int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        public UpdateOperationOutput<GenericBusinessEntityDetail> UpdateDealAnalysis(int dealId, int genericBusinessEntityId)
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             var genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate
             {
-                BusinessEntityDefinitionId = businessEntityDefinitionId,
+                BusinessEntityDefinitionId = SwapDealAnalaysisBEDefinitionId,
                 GenericBusinessEntityId = genericBusinessEntityId
             };
             var fieldValues = new Dictionary<string, object>();
@@ -106,12 +107,12 @@ namespace TOne.WhS.Deal.Business
             genericBusinessEntityToUpdate.FieldValues = fieldValues;
             return genericBusinessEntityManager.UpdateGenericBusinessEntity(genericBusinessEntityToUpdate);
         }
-        public Dictionary<int, SwapDealAnalysisDefinition> GetSwapDealAnalysisSettingById(Guid BeDefinitionId)
+        public Dictionary<int, SwapDealAnalysisDefinition> GetSwapDealAnalysisSettingById()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetSwapDealAnalysisSettings", BeDefinitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetSwapDealAnalysisSettings", SwapDealAnalaysisBEDefinitionId, () =>
             {
-                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(BeDefinitionId);
+                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(SwapDealAnalaysisBEDefinitionId);
                 var swapDealAnalysisesById = new Dictionary<int, SwapDealAnalysisDefinition>();
                 if (genericBusinessEntities != null)
                 {
@@ -129,9 +130,9 @@ namespace TOne.WhS.Deal.Business
             });
         }
 
-        public SwapDealAnalysisDefinition GetSwapDealAnalysis(int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        public SwapDealAnalysisDefinition GetSwapDealAnalysis(int genericBusinessEntityId)
         {
-            var swapDealAnalysisDefinitionById = GetSwapDealAnalysisSettingById(businessEntityDefinitionId);
+            var swapDealAnalysisDefinitionById = GetSwapDealAnalysisSettingById();
             return swapDealAnalysisDefinitionById.GetRecord(genericBusinessEntityId);
         }
 

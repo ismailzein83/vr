@@ -279,7 +279,7 @@
             else if (isViewOnyFromAnalysis) {
                 var swapDealId;
 
-                WhS_Deal_SwapDealAnalysisAPIService.GetSwapDealAnalysis(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
+                WhS_Deal_SwapDealAnalysisAPIService.GetSwapDealAnalysis(genericBusinessEntityId).then(function (response) {
                     if (response != undefined && response.Settings != undefined) {
                         swapDealId = response.Settings.SwapDealId;
                         WhS_Deal_SwapDealAPIService.GetDeal(swapDealId).then(function (response) {
@@ -303,7 +303,7 @@
             });
         }
         function getSwapDealFromAnalysis() {
-            return WhS_Deal_SwapDealAPIService.getSwapDealFromAnalysis(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
+            return WhS_Deal_SwapDealAPIService.getSwapDealFromAnalysis(genericBusinessEntityId).then(function (response) {
                 dealEntity = response;
                 dealEntity.Settings.DealContract = undefined;
                 dealEntity.Settings.DealType = undefined;
@@ -465,7 +465,7 @@
                         $scope.onSwapDealAdded(response.InsertedObject);
                     createDealFromAnalysis = isCreateDealFromAnalysis && response != undefined && response.InsertedObject != undefined && response.InsertedObject.Entity != undefined;
                     if (createDealFromAnalysis) {
-                        WhS_Deal_SwapDealAnalysisAPIService.UpdateDealAnalysis(response.InsertedObject.Entity.DealId, genericBusinessEntityId, businessEntityDefinitionId)
+                        WhS_Deal_SwapDealAnalysisAPIService.UpdateDealAnalysis(response.InsertedObject.Entity.DealId, genericBusinessEntityId)
                             .then(function () {
                                 if ($scope.IsItemInserted != undefined)
                                     $scope.IsItemInserted(true);
@@ -536,8 +536,8 @@
                     IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true,
                     SwapDealTimeZone: $scope.scopeModel.selectedTimeZone.value,
                     SendOrPay: $scope.scopeModel.sendOrPay,
-                    Priority: $scope.scopeModel.priority
-
+                    Priority: $scope.scopeModel.priority,
+                    SwapDealAnalysisId: genericBusinessEntityId
                 }
             };
             return obj;
