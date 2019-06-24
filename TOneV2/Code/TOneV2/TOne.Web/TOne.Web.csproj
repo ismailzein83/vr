@@ -814,6 +814,9 @@
     <Content Include="images\flat-CentralAuth-iconheader.ico" />
     <Content Include="images\flat-CentralAuth-login.png" />
     <Content Include="images\flat-CentralAuth-logoonheader.png" />
+    <Content Include="images\flat-Ogero-iconheader.ico" />
+    <Content Include="images\flat-Ogero-login.png" />
+    <Content Include="images\flat-Ogero-logoonheader.png" />
     <Content Include="images\menu-icons\CDR Compare Tool-tile.png" />
     <Content Include="images\menu-icons\CDR Compare Tool.png" />
     <Content Include="images\menu-icons\Deals Module-tile.png" />
