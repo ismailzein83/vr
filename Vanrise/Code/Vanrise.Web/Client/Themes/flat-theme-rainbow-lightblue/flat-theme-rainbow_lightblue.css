@@ -2,24 +2,24 @@
     background-color: #65a3c7;
 }
 
-.flat.login-body .flat-logo-container > img {
-    position: relative;
-    top: -100px;
-}
+    .flat.login-body .flat-logo-container > img {
+        position: relative;
+        top: -100px;
+    }
 
-.flat.login-body .flat-logo-container:after {
-    content: "";
-    border-top: 2px solid #fff;
-    position: relative;
-    top: -115px;
-    display: block;
-    border-right: 125px solid transparent;
-    border-left: 125px solid transparent;
-    width: 100px;
-    margin: auto;
-}
+    .flat.login-body .flat-logo-container:after {
+        content: "";
+        border-top: 2px solid #fff;
+        position: relative;
+        top: -115px;
+        display: block;
+        border-right: 125px solid transparent;
+        border-left: 125px solid transparent;
+        width: 100px;
+        margin: auto;
+    }
 
-.flat .flat-logo-container {   
+.flat .flat-logo-container {
     margin-bottom: 45px;
 }
 
@@ -29,12 +29,19 @@
 }
 
 
-.flat .vr-nav-custom .navbar-header {  
+.flat .vr-nav-custom .navbar-header {
     background-color: #65a3c7;
 }
 
-.flat .vr-sidebar-header { 
+.flat .vr-sidebar-header {
     background-color: #65a3c7;
+}
+.flat .module-icon {
+    background-color: inherit !important;
+}
+
+.flat #sidebar-wrapper {
+    background: #65a3c7;
 }
 vr-section[header="Modules"] > div.panel-vr-child > div.panel-heading,
 vr-section[header="Pages"] > div.panel-vr-child > div.panel-heading {
@@ -51,18 +58,174 @@ vr-section[header="Pages"] > div.panel-vr-child > div.panel-heading > label {
     background-color: #65a3c7 !important;
 }
 
+.flat .dll-menu-theme {
+    color: #FFF !important;
+}
+
+
 .flat .vr-datagrid-header-simple {
     background: #65a3c7 !important;
 }
-/*.flat .vr-datagrid-header-simple {
-    background: #65a3c7  !important;
-}*/
+
 .flat .vr-remote-footer.vr-datagrid-header-simple {
     background-color: #e3e3e3 !important;
 }
 
-
-
 .flat .vr-modal-header {
     background: #65a3c7 !important;
+}
+
+.panel-heading-vr, .panel-heading-vr .vr-module-name {
+    color: #fff !important;
+    font-weight: normal !important;
+}
+
+.flat .panel-heading-vr.selected-menu .vr-module-name {  
+    font-weight: bold !important;
+}
+
+.panel-heading-vr.bgcolor-0, .menu-tile.app-tile.bgcolor-0,
+.dropdown-custom-serf.bgcolor-0 {
+    background: #9cb938 !important;
+}
+
+.panel-heading-vr.bgcolor-0.selected-menu, .menu-tile.app-tile.bgcolor-0:hover {
+    background: #BDD85E !important;
+}
+
+.panel-heading-vr.bgcolor-1, .menu-tile.app-tile.bgcolor-1,
+.dropdown-custom-serf.bgcolor-1 {
+    background: #71a7c5 !important;
+}
+
+.panel-heading-vr.bgcolor-1.selected-menu, .menu-tile.app-tile.bgcolor-1:hover {
+    background: #A0CAE0 !important;  
+}
+
+.panel-heading-vr.bgcolor-2, .menu-tile.app-tile.bgcolor-2,
+.dropdown-custom-serf.bgcolor-2 {
+    background: #7872ab !important;
+}
+
+.panel-heading-vr.bgcolor-2.selected-menu, .menu-tile.app-tile.bgcolor-2:hover {
+    background: #A49FCA !important;  
+}
+
+
+.panel-heading-vr.bgcolor-3, .menu-tile.app-tile.bgcolor-3,
+.dropdown-custom-serf.bgcolor-3 {
+    background: #375d92 !important;
+}
+
+.panel-heading-vr.bgcolor-3.selected-menu, .menu-tile.app-tile.bgcolor-3:hover {
+    background: #819EC7 !important;  
+}
+.panel-heading-vr.bgcolor-4, .menu-tile.app-tile.bgcolor-4,
+.dropdown-custom-serf.bgcolor-4 {
+    background: #2b8a6f !important;
+}
+
+.panel-heading-vr.bgcolor-4.selected-menu, .menu-tile.app-tile.bgcolor-4:hover {
+    background: #6a9845 !important;  
+}
+
+.panel-heading-vr.bgcolor-5, .menu-tile.app-tile.bgcolor-5,
+.dropdown-custom-serf.bgcolor-5 {
+    background: #83af5f !important;
+}
+
+.panel-heading-vr.bgcolor-5.selected-menu, .menu-tile.app-tile.bgcolor-5:hover {
+    background: #c6dc78 !important;  
+}
+
+.panel-heading-vr.bgcolor-6, .menu-tile.app-tile.bgcolor-6,
+.dropdown-custom-serf.bgcolor-6 {
+    background: #9992dc !important;
+}
+
+.panel-heading-vr.bgcolor-6.selected-menu, .menu-tile.app-tile.bgcolor-6:hover {
+    background: #b6afff !important;  
+}
+
+
+.panel-heading-vr.bgcolor-7, .menu-tile.app-tile.bgcolor-7,
+.dropdown-custom-serf.bgcolor-7 {
+    background: #8ec0dd !important;
+}
+
+.panel-heading-vr.bgcolor-7.selected-menu, .menu-tile.app-tile.bgcolor-7:hover {
+    background: #98d0f1 !important;  
+}
+
+.panel-heading-vr.bgcolor-8, .menu-tile.app-tile.bgcolor-8,
+.dropdown-custom-serf.bgcolor-8 {
+    background: #507cba !important;
+}
+
+.panel-heading-vr.bgcolor-8.selected-menu, .menu-tile.app-tile.bgcolor-8:hover {
+    background: #A8C3E9 !important;  
+}
+
+.panel-heading-vr.bgcolor-9, .menu-tile.app-tile.bgcolor-9,
+.dropdown-custom-serf.bgcolor-9 {
+    background: #485e7c !important;
+}
+
+.panel-heading-vr.bgcolor-9.selected-menu, .menu-tile.app-tile.bgcolor-9:hover {
+    background: #5c7392 !important;  
+}
+
+.panel-heading-vr.bgcolor-10, .menu-tile.app-tile.bgcolor-10,
+.dropdown-custom-serf.bgcolor-10 {
+    background: #207950 !important;
+}
+
+.panel-heading-vr.bgcolor-10.selected-menu, .menu-tile.app-tile.bgcolor-10:hover {
+    background: #196b45 !important;  
+}
+
+.panel-heading-vr.bgcolor-11, .menu-tile.app-tile.bgcolor-11,
+.dropdown-custom-serf.bgcolor-11 {
+    background: #7caebb !important;
+}
+
+.panel-heading-vr.bgcolor-11.selected-menu, .menu-tile.app-tile.bgcolor-11:hover {
+    background: #86bac8 !important;  
+}
+
+.panel-heading-vr.bgcolor-12, .menu-tile.app-tile.bgcolor-12,
+.dropdown-custom-serf.bgcolor-12 {
+    background: #23ade2 !important;
+}
+
+.panel-heading-vr.bgcolor-12.selected-menu, .menu-tile.app-tile.bgcolor-12:hover {
+    background: #4ABCE7 !important;  
+}
+
+.panel-heading-vr.bgcolor-13, .menu-tile.app-tile.bgcolor-13,
+.dropdown-custom-serf.bgcolor-13 {
+    background: #858e67 !important;
+}
+
+.panel-heading-vr.bgcolor-13.selected-menu, .menu-tile.app-tile.bgcolor-13:hover {
+    background: #9aa37d !important;  
+}
+
+
+.panel-heading-vr.bgcolor-14, .menu-tile.app-tile.bgcolor-14,
+.dropdown-custom-serf.bgcolor-14 {
+    background: #4f778c !important;
+}
+
+.panel-heading-vr.bgcolor-14.selected-menu, .menu-tile.app-tile.bgcolor-14:hover {
+    background: #668ca0 !important;  
+}
+
+.panel-heading-vr.bgcolor-15, .menu-tile.app-tile.bgcolor-15,
+.dropdown-custom-serf.bgcolor-15 {
+    background: #847c25 !important;
+}
+
+.panel-heading-vr.bgcolor-15.selected-menu, .menu-tile.app-tile.bgcolor-15:hover {
+    background: #9d953d !important;  
 }
