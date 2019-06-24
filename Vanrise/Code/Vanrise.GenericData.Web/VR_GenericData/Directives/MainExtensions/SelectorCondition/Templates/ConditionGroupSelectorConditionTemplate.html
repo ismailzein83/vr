@@ -1,1 +1,18 @@
-﻿
+﻿<vr-section title="Condition Group" collapsible>
+    <vr-validator validate="scopeModel.isValid()">
+
+        <vr-genericdata-recordfilter-logicaloperator on-ready="scopeModel.onLogicalOperatorReady" normal-col-num="3"></vr-genericdata-recordfilter-logicaloperator>
+
+        <vr-columns width="1/4row" class="vr-groupfilter-button">
+            <button type="button" class="btn btn-xs" ng-click="scopeModel.addCondition()" style="background-color:#6DA279;color:white;">
+                <i class="glyphicon glyphicon-plus"></i> Add
+            </button>
+        </vr-columns>
+
+        <span vr-loader="scopeModel.isLoadingCondition">
+            <vr-datalist maxitemsperrow="1" datasource="scopeModel.conditions" autoremoveitem="true">
+                <vr-genericdata-genericbusinessentity-selectorcondition on-ready="dataItem.onSelectorConditionDirectiveReady" isrequired="true"></vr-genericdata-genericbusinessentity-selectorcondition>
+            </vr-datalist>
+        </span>
+    </vr-validator>
+</vr-section>

@@ -1,1 +1,14 @@
-﻿
+﻿<vr-columns colnum="4">
+    <vr-select on-ready="scopeModel.onSelectorReady"
+               datasource="scopeModel.templateConfigs"
+               datatextfield="Title"
+               datavaluefield="ExtensionConfigurationId"
+               label="Condition"
+               selectedvalues="scopeModel.selectedTemplateConfig"
+               isrequired="ctrl.isrequired">
+    </vr-select>
+</vr-columns>
+<vr-columns colnum="fullrow">
+    <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"
+                         on-ready="scopeModel.onDirectiveReady" isrequired="true" vr-loader="scopeModel.isLoadingDirective"></vr-directivewrapper>
+</vr-columns>

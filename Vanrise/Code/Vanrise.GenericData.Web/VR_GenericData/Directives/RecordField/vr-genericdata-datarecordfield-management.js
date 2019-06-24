@@ -210,7 +210,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
             function getDataRecordExtraFieldsReturnedPromise(allFields) {
                 var addDataRecordFieldReadyDeferred = UtilsService.createPromiseDeferred();
 
-                var extraFieldsEvaluator = dataRecordTypeExtraFieldsApi != undefined ? dataRecordTypeExtraFieldsApi.getData() : undefined;
+                var extraFieldsEvaluator = (dataRecordTypeExtraFieldsApi != undefined && ctrl.hasExtraFields) ? dataRecordTypeExtraFieldsApi.getData() : undefined;
 
                 if (ctrl.hasExtraFields && extraFieldsEvaluator != undefined) {
                     VR_GenericData_DataRecordTypeAPIService.GetDataRecordExtraFields(extraFieldsEvaluator).then(function (response) {

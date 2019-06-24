@@ -20,8 +20,16 @@ app.directive("vrGenericdataGenericbusinessentitySelectorfilter", ["UtilsService
         function GenericBusinessEntitySelectorFilterCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var selectorConditionDirectiveAPI;
+            var selectorConditionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onSelectorConditionDirectiveReady = function (api) {
+                    selectorConditionDirectiveAPI = api;
+                    selectorConditionDirectiveReadyDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -31,15 +39,47 @@ app.directive("vrGenericdataGenericbusinessentitySelectorfilter", ["UtilsService
 
                 api.load = function (payload) {
                     var promises = [];
+                    var beDefinitionId;
 
                     if (payload != undefined) {
+                        beDefinitionId = payload.beDefinitionId;
 
+                        if (payload.beRuntimeSelectorFilter != undefined)
+                            $scope.scopeModel.IsNotApplicableInSearch = payload.beRuntimeSelectorFilter.NotApplicableInSearch;
+                    }
+
+                    var loadSelectorConditionDirectivePromise = loadSelectorConditionDirective();
+                    promises.push(loadSelectorConditionDirectivePromise);
+
+                    function loadSelectorConditionDirective() {
+                        var loadSelectorConditionDirectiveDeferred = UtilsService.createPromiseDeferred();
+
+                        selectorConditionDirectiveReadyDeferred.promise.then(function () {
+
+                            var selectorConditionDirectivePayload = {
+                                beDefinitionId: beDefinitionId
+                            };
+                            if (payload != undefined && payload.beRuntimeSelectorFilter != undefined) {
+                                selectorConditionDirectivePayload.genericBESelectorCondition = payload.beRuntimeSelectorFilter.GenericBESelectorCondition;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(selectorConditionDirectiveAPI, selectorConditionDirectivePayload, loadSelectorConditionDirectiveDeferred);
+                        });
+                        return loadSelectorConditionDirectiveDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
+                    var result = selectorConditionDirectiveAPI.getData();
+
+                    if (result != undefined) {
+                        return {
+                            $type: "Vanrise.GenericData.Business.GenericBERuntimeSelectorFilter,Vanrise.GenericData.Business",
+                            NotApplicableInSearch: $scope.scopeModel.IsNotApplicableInSearch,
+                            GenericBESelectorCondition: result
+                        };
+                    }
                     return null;
                 };
 

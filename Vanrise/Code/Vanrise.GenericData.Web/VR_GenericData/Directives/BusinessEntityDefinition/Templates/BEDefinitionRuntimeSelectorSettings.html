@@ -5,10 +5,10 @@
                                                       isrequired="true" customlabel="{{ctrlRuntimeSelectorSettings.customlabel}}" hideremoveicon>
     </vr-genericdata-businessentitydefinition-selector>
 </vr-columns>
-<vr-directivewrapper vr-loader="scopeModel.isLoadingSelectorFilter"
+<vr-directivewrapper ng-if="scopeModel.selectedBusinessEntityDefinition != undefined && scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor != undefined"
                      directive="scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor"
                      on-ready="scopeModel.onSelectorFilterEditorDirectiveReady"
-                     ng-if="scopeModel.selectedBusinessEntityDefinition != undefined && scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor != undefined"
+                     vr-loader="scopeModel.isLoadingSelectorFilter"
                      normal-col-num="{{ctrlRuntimeSelectorSettings.normalColNum}}">
 </vr-directivewrapper>
 <vr-columns colnum="12">

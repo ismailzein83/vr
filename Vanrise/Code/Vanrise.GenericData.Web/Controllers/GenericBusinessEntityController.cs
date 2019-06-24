@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
+using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.Entities;
 using Vanrise.Web.Base;
-using Vanrise.Common;
 
 namespace Vanrise.GenericData.Web.Controllers
 {
@@ -182,6 +180,14 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.ExecuteRangeGenericEditorProcess(input);
         }
+
+        [HttpGet]
+        [Route("GetGenericBESelectorConditionConfigs")]
+        public IEnumerable<GenericBESelectorConditionConfig> GetGenericBESelectorConditionConfigs()
+        {
+            return _manager.GetGenericBESelectorConditionConfigs();
+        }
+
         public class GetDependentFieldValuesInput
         {
             public Guid DataRecordTypeId { get; set; }

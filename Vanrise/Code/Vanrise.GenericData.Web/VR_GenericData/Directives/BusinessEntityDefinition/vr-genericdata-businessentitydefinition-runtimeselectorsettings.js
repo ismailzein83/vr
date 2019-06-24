@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BEDefinitionRuntimeSelectorSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService'];
+    BEDefinitionRuntimeSelectorSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function BEDefinitionRuntimeSelectorSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService) {
+    function BEDefinitionRuntimeSelectorSettingsDirective(UtilsService, VRUIUtilsService) {
 
         return {
             restrict: 'E',
@@ -29,17 +29,16 @@
             this.initializeController = initializeController;
 
             var context;
+            var selectedSelectorFilterEditor;
 
             var beDefinitionSelectorAPI;
             var beDefinitionSelectionChangedPromiseDeferred;
 
             var selectorFilterEditorAPI;
-            var selectorFilterEditorReadyDeferred;
-            var selectedSelectorFilterEditor;
+            var selectorFilterEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var dependantFieldsGridAPI;
             var dependantFieldsGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -55,32 +54,35 @@
                 };
 
                 $scope.scopeModel.onSelectorFilterEditorDirectiveReady = function (api) {
-                    selectedSelectorFilterEditor = $scope.scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor;
                     selectorFilterEditorAPI = api;
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingSelectorFilter = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, undefined, setLoader, selectorFilterEditorReadyDeferred);
+                    var selectorFilterEditorPayload = {
+                        beDefinitionId: beDefinitionSelectorAPI.getSelectedIds()
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, selectorFilterEditorPayload, setLoader, selectorFilterEditorReadyDeferred);
                 };
 
                 $scope.scopeModel.onBEDefinitionSelectionChanged = function (selectedValue) {
                     if (selectedValue != undefined) {
+                        var previousSelectedSelectorFilterEditor = selectedSelectorFilterEditor;
+                        selectedSelectorFilterEditor = selectedValue.SelectorFilterEditor;
 
                         if (beDefinitionSelectionChangedPromiseDeferred != undefined) {
                             beDefinitionSelectionChangedPromiseDeferred.resolve();
                         }
                         else {
-                            reloadDependantFieldsGrid(selectedValue);
-
-                            if (selectedValue.SelectorFilterEditor != undefined && selectedSelectorFilterEditor == selectedValue.SelectorFilterEditor) {
+                            if (selectedSelectorFilterEditor == previousSelectedSelectorFilterEditor) {
+                                var setLoader = function (value) {
+                                    $scope.scopeModel.isLoadingSelectorFilter = value;
+                                };
                                 var selectorFilterEditorPayload = {
-                                    beDefinitionId: selectedValue.Id
+                                    beDefinitionId: beDefinitionSelectorAPI.getSelectedIds()
                                 };
-                                var setLoader = function (selectedValue) {
-                                    $scope.scopeModel.isLoadingSelectorFilter = selectedValue;
-                                };
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, undefined, setLoader);
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, selectorFilterEditorPayload, setLoader);
                             }
+                            reloadDependantFieldsGrid(selectedValue);
                         }
                     }
 
@@ -120,23 +122,21 @@
                         }
                     }
 
-                    var beDefinitionSelectorLoadPromise = getBEDefinitionSelectorLoadPromise();
-                    promises.push(beDefinitionSelectorLoadPromise);
+                    var loadBEDefinitionSelectorPromise = loadBEDefinitionSelector();
+                    promises.push(loadBEDefinitionSelectorPromise);
 
                     if (beDefinitionId != undefined) {
                         beDefinitionSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
 
+                        var loadDependantFieldsGridPromise = loadDependantFieldsGrid();
+                        promises.push(loadDependantFieldsGridPromise);
+
                         var selectorFilterPromise = UtilsService.createPromiseDeferred();
                         promises.push(selectorFilterPromise.promise);
 
-                        var loadSelectorFilterEditorPromise = getDependantFieldsGridLoadPromise();
-                        promises.push(loadSelectorFilterEditorPromise);
-
-                        VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(beDefinitionId).then(function (response) {
-                            if (response && response.Settings != undefined && response.Settings.SelectorFilterEditor != undefined) {
-
-                                selectorFilterEditorReadyDeferred = UtilsService.createPromiseDeferred();
-                                getSelectorFilterEditorDirectiveLoadPromise().then(function () {
+                        beDefinitionSelectionChangedPromiseDeferred.promise.then(function () {
+                            if (selectedSelectorFilterEditor != undefined) {
+                                loadSelectorFilterEditorDirective().then(function () {
                                     selectorFilterPromise.resolve();
                                 }).catch(function (error) {
                                     selectorFilterPromise.reject(error);
@@ -144,12 +144,10 @@
                             } else {
                                 selectorFilterPromise.resolve();
                             }
-                        }).catch(function (error) {
-                            selectorFilterPromise.reject(error);
                         });
                     }
 
-                    function getBEDefinitionSelectorLoadPromise() {
+                    function loadBEDefinitionSelector() {
                         var beDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         var beDefinitionSelectorPayload = {
@@ -160,11 +158,10 @@
                         return beDefinitionSelectorLoadDeferred.promise;
                     }
 
-                    function getSelectorFilterEditorDirectiveLoadPromise() {
+                    function loadSelectorFilterEditorDirective() {
                         var loadSelectorFilterEditorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        UtilsService.waitMultiplePromises([selectorFilterEditorReadyDeferred.promise, beDefinitionSelectionChangedPromiseDeferred.promise]).then(function () {
-                            selectorFilterEditorReadyDeferred = undefined;
+                        selectorFilterEditorReadyDeferred.promise.then(function () {
 
                             var directivePayload = {
                                 beDefinitionId: beDefinitionId,
@@ -176,7 +173,7 @@
                         return loadSelectorFilterEditorPromiseDeferred.promise;
                     }
 
-                    function getDependantFieldsGridLoadPromise() {
+                    function loadDependantFieldsGrid() {
                         var loadDependantFieldsGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         dependantFieldsGridReadyPromiseDeferred.promise.then(function () {
@@ -196,6 +193,7 @@
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         beDefinitionSelectionChangedPromiseDeferred = undefined;
+                        selectorFilterEditorReadyDeferred = undefined;
                     });
                 };
 

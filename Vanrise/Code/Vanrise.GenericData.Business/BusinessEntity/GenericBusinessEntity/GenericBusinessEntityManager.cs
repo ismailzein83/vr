@@ -1,25 +1,19 @@
-﻿using System;
+﻿using Aspose.Cells;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Caching;
-using Vanrise.Entities;
-using Vanrise.GenericData.Data;
-using Vanrise.GenericData.Entities;
-using Vanrise.Common;
-using System.Collections.Concurrent;
-using System.Reflection;
-using Vanrise.Security.Business;
-using Vanrise.Security.Entities;
-using Vanrise.Common.Business;
-using System.Collections;
-using Vanrise.Common.Excel;
-using Aspose.Cells;
-using Vanrise.GenericData.Entities.GenericRules;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Text;
 using Vanrise.BusinessProcess.Business;
+using Vanrise.Caching;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Common.Excel;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Entities.GenericRules;
+using Vanrise.Security.Business;
 
 namespace Vanrise.GenericData.Business
 {
@@ -133,7 +127,8 @@ namespace Vanrise.GenericData.Business
 
                 List<GenericBusinessEntity> genericBusinessEntities = new List<GenericBusinessEntity>();
 
-                var storageRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId.Value, columns, recordFilterGroup.Filters.Count > 0 ? recordFilterGroup : null, mappedDataRecordFilters);                if (storageRecords != null && storageRecords.Count() > 0)
+                var storageRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId.Value, columns, recordFilterGroup.Filters.Count > 0 ? recordFilterGroup : null, mappedDataRecordFilters);
+                if (storageRecords != null && storageRecords.Count() > 0)
                 {
                     foreach (var storageRecord in storageRecords)
                     {
@@ -1180,6 +1175,12 @@ namespace Vanrise.GenericData.Business
             }
 
             return dependentFieldValues;
+        }
+
+        public IEnumerable<GenericBESelectorConditionConfig> GetGenericBESelectorConditionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<GenericBESelectorConditionConfig>(GenericBESelectorConditionConfig.EXTENSION_TYPE);
         }
 
         #endregion

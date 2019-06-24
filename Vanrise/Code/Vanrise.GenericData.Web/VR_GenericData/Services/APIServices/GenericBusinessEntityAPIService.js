@@ -116,6 +116,11 @@
         function ExecuteRangeGenericEditorProcess(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'ExecuteRangeGenericEditorProcess'), input);
         }
+
+        function GetGenericBESelectorConditionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBESelectorConditionConfigs"));
+        }
+
         return {
             GetGenericBETitleFieldValue: GetGenericBETitleFieldValue,
             GetFilteredGenericBusinessEntities: GetFilteredGenericBusinessEntities,
@@ -135,7 +140,8 @@
             DoesUserHaveViewAccess: DoesUserHaveViewAccess,
             GetDependentFieldValues: GetDependentFieldValues,
             GetGenericEditorColumnsInfo: GetGenericEditorColumnsInfo,
-            ExecuteRangeGenericEditorProcess: ExecuteRangeGenericEditorProcess
+            ExecuteRangeGenericEditorProcess: ExecuteRangeGenericEditorProcess,
+            GetGenericBESelectorConditionConfigs: GetGenericBESelectorConditionConfigs
         };
     }
 

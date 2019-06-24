@@ -108,10 +108,14 @@ app.directive('vrAnalyticDataanalysisitemdefinitionSelector', ['VR_Analytic_Data
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
+            var hideremoveicon = '';
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = 'hideremoveicon';
+
             var template =
                 '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="DataAnalysisItemDefinitionId" isrequired="ctrl.isrequired" label="' + label +
-                    '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" entityName="' + label +
-                    '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" entityName="' + label +
+                '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon +' customvalidate="ctrl.customvalidate">' +
                 '</vr-select>';
 
             return template;

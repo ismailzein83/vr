@@ -1,1 +1,5 @@
-﻿
+﻿<span ng-if="scopeModel.hasRecordFields">
+    <vr-section title="Advanced Filter">
+        <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady" isrequired="true"></vr-genericdata-recordfilter>
+    </vr-section>
+</span>

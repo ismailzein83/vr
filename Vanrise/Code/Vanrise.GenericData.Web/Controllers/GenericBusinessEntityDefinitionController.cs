@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -185,6 +183,13 @@ namespace Vanrise.GenericData.Web.Controllers
         public IEnumerable<GenericBEAdditionalSettingsConfig> GetGenericBEAdditionalSettingsConfigs()
         {
             return _manager.GetGenericBEAdditionalSettingsConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetDataRecordTypeFieldsListByBEDefinitionId")]
+        public List<DataRecordField> GetDataRecordTypeFieldsListByBEDefinitionId(Guid beDefinitionId)
+        {
+            return _manager.GetDataRecordTypeFieldsListByBEDefinitionId(beDefinitionId);
         }
 
         [HttpGet]

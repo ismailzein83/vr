@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
@@ -155,6 +153,17 @@ namespace Vanrise.GenericData.Business
             idDataRecordField.ThrowIfNull("idDataRecordField");
             return idDataRecordField;
         }
+
+        public List<DataRecordField> GetDataRecordTypeFieldsListByBEDefinitionId(Guid businessEntityDefinitionId)
+        {
+            Dictionary<string, DataRecordField> dataRecordFieldsDic = GetDataRecordTypeFieldsByBEDefinitionId(businessEntityDefinitionId);
+
+            if (dataRecordFieldsDic == null || dataRecordFieldsDic.Count == 0)
+                return null;
+
+            return dataRecordFieldsDic.Values.ToList();
+        }
+
         public Dictionary<string, DataRecordField> GetDataRecordTypeFieldsByBEDefinitionId(Guid businessEntityDefinitionId)
         {
             var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);

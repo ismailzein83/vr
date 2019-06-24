@@ -10,7 +10,8 @@
             scope: {
                 onReady: "=",
                 validateedit: "=",
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -33,6 +34,15 @@
                 $scope.scopeModel = {};
 
                 ctrl.expression;
+                ctrl.isValid = function () {
+                    if (!ctrl.isrequired)
+                        return null;
+
+                    if (filterObj != undefined || ctrl.expression != undefined)
+                        return null;
+
+                    return 'At least one filter should be added';
+                };
 
                 ctrl.addFilter = function () {
                     if (context != undefined) {

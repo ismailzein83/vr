@@ -1,1 +1,8 @@
-﻿
+﻿<vr-columns width="fullrow">
+    <vr-section title="Condition" collapsible>
+        <vr-columns colnum="4">
+            <vr-switch value="scopeModel.IsNotApplicableInSearch" label="Not Applicable In Search"></vr-switch>
+        </vr-columns>
+        <vr-genericdata-genericbusinessentity-selectorcondition on-ready="scopeModel.onSelectorConditionDirectiveReady"></vr-genericdata-genericbusinessentity-selectorcondition>
+    </vr-section>
+</vr-columns>
