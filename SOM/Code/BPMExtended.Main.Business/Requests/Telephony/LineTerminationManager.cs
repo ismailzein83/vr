@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
@@ -21,7 +22,7 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region public
-        public void PostLineTerminationRequestToOM(Guid requestId)
+        public void SubmitLineTerminationToOM(Guid requestId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -30,11 +31,7 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineTerminationRequest");
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
-
+            esq.AddColumn("StLinePathId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -43,9 +40,8 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var pathId = entities[0].GetColumnValue("StLinePathId");
 
                 SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
@@ -54,12 +50,10 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            // ContractId = contractId.ToString(),
-                            // ContactId = contactId.ToString(),
-                            // AccountId = null,
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            // CustomerId = customerId.ToString()
-                        }
+                        },
+                        LinePathId=pathId.ToString()
                     }
 
                 };
@@ -68,11 +62,69 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_TerminateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitLineTermination/StartProcess", somRequestInput);
                 }
 
             }
 
+        }
+
+        public void ActivateLineTerminationToOM(Guid requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineTerminationRequest");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StLinePathId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var pathId = entities[0].GetColumnValue("StLinePathId");
+
+                SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
+                {
+
+                    InputArguments = new LineTerminationRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                        },
+                        LinePathId = pathId.ToString()
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateLineTermination/StartProcess", somRequestInput);
+                }
+
+            }
+
+        }
+        public List<Reason> GetStatusChangeReasons()
+        {
+            List<Reason> items = new List<Reason>();
+
+            using (SOMClient client = new SOMClient())
+            {
+                items = client.Get<List<Reason>>(String.Format("api/SOM.ST/Billing/GetStatusChangeReasons"));
+            }
+
+            return items;
         }
 
         #endregion

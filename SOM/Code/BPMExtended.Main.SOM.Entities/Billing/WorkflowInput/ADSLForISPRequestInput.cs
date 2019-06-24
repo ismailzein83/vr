@@ -10,6 +10,8 @@ namespace BPMExtended.Main.SOMAPI
     public class ADSLForISPRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public PaymentData PaymentData { get; set; }
+        public string LinePathId { get; set; }
 
     }
 }

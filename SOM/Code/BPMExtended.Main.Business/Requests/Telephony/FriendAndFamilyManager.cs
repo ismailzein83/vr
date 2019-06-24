@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
@@ -22,6 +23,30 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region public
+
+
+        public bool CheckIfNumberExist(string phoneNumber)
+        {
+            bool result;
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<bool>(String.Format("api/SOM.ST/Inventory/CheckIfNumberExist?phoneNumber={0}", phoneNumber));
+            }
+
+            return result;
+        }
+
+        public List<FAFNumbersOutput> GetFAFNumbers(string contractId)
+        {
+            List<FAFNumbersOutput> result;
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<List<FAFNumbersOutput>>(String.Format("api/SOM.ST/Billing/GetFAFNumbers?ContractId={0}", contractId));
+            }
+
+            return result;
+        }
+
         public void PostFAFManagementToOM(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table
@@ -61,7 +86,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<FAFManagementRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_FAFManagement/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<FAFManagementRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ManageFAF/StartProcess", somRequestInput);
                 }
 
             }

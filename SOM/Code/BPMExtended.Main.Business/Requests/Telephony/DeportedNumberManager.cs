@@ -36,11 +36,8 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeportedNumber");
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
-
+            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StOldLinePathId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -50,8 +47,8 @@ namespace BPMExtended.Main.Business
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var oldPathId = entities[0].GetColumnValue("StOldLinePathId");
+                var newPathId = entities[0].GetColumnValue("StLinePathID");
 
                 SOMRequestInput<DeportedNumberRequestInput> somRequestInput = new SOMRequestInput<DeportedNumberRequestInput>
                 {
@@ -60,12 +57,11 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            //AccountId = null,
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            // CustomerId = customerId.ToString()
-                        }
+                        },
+                        OldLinePath=oldPathId.ToString(),
+                        NewLinePath = newPathId.ToString()
                     }
 
                 };
@@ -74,7 +70,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<DeportedNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_DeportNumber/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<DeportedNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitDeportNumber/StartProcess", somRequestInput);
                 }
 
             }

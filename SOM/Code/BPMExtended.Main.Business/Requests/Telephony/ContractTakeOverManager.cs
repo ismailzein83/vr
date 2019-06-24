@@ -121,7 +121,7 @@ namespace BPMExtended.Main.Business
             return hasAnADSL;
         }
 
-        public bool checkBillOnDemand(string requestId)
+        public bool checkBillOnDemand(string requestId)//to be removed
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -141,14 +141,14 @@ namespace BPMExtended.Main.Business
 
                 //get number of contracts
                 List<TelephonyContractDetail> telephonyContracts = new ContractManager().GetTelephonyContracts(customerId.ToString());
-                telephonyContracts.RemoveAll(item => item.ContractId == contractId.ToString());
-
+                //telephonyContracts.RemoveAll(item => item.ContractId == contractId.ToString());
+                return telephonyContracts.Count <= 1;
                 //check if account type is official or operation is advantageous then skip BOD
 
             }
 
 
-            return true;
+            return false;
         }
 
         public string GetADSLDivisionName(string contractId, string requestId)

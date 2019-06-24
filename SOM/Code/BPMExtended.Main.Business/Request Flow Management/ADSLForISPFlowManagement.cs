@@ -8,27 +8,24 @@ namespace BPMExtended.Main.Business
 {
     public class ADSLForISPFlowManagement
     {
-        string welcomeStep = "F7BCCABF-7970-4CBD-A040-AA0D0FD89C08";
-        string requestISPStep = "B45BAFD9-769E-421B-9157-8086F51BD509";
-        string printStep = "94F2A388-B758-4175-A022-BBD1E6ED3171";
-        string portReservationStep = "C01F3AD2-B611-43CA-8F86-F628A8A22688";
-        string paymentStep = "424131A8-9D04-4F9F-8D18-279BB00BCDDA";
-        string attachmentStep = "A7B0D465-8D20-46DC-9C79-833C59F4EA09";
-        // string mDFStep = "F7760F00-F66F-4C89-A779-CE74E0E93294";
+        const string startingProcessStep = "F7BCCABF-7970-4CBD-A040-AA0D0FD89C08";
+        const string portAndIspStep = "B45BAFD9-769E-421B-9157-8086F51BD509";
+        const string printStep = "94F2A388-B758-4175-A022-BBD1E6ED3171";
+        const string paymentStep = "424131A8-9D04-4F9F-8D18-279BB00BCDDA";
+        const string attachmentStep = "A7B0D465-8D20-46DC-9C79-833C59F4EA09";
         const string technicalStep = "E3DB01E7-71B5-4658-9681-2DBC3DF301F9";
-        string completedStep = "72EE0965-4F1F-4A3E-A78F-02DBDD96F168";
-        public string GetNextStep(string id, string currentStepId , bool isAbort)
+        const string submitToOM = "2B26EAC5-CEF8-47BF-9D01-9766DE951F7B";
+        public string GetNextStep(string id, string currentStepId)
         {
 
             string nextStepId = "";
-            switch (currentStepId.ToLower())
+            switch (currentStepId)
             {
-                case "f7bccabf-7970-4cbd-a040-aa0d0fd89c08": nextStepId = requestISPStep; break;
-                case "b45bafd9-769e-421b-9157-8086f51bd509": nextStepId = printStep; break;
-                case "94f2a388-b758-4175-a022-bbd1e6ed3171": nextStepId = portReservationStep; break;
-                case "c01f3ad2-b611-43ca-8f86-f628a8a22688": nextStepId = isAbort? completedStep : paymentStep; break;
-                case "424131a8-9d04-4f9f-8d18-279bb00bcdda": nextStepId = attachmentStep; break;
-                case "a7b0d465-8d20-46dc-9c79-833c59f4ea09": nextStepId = technicalStep; break;
+                case startingProcessStep: nextStepId = portAndIspStep; break;
+                case portAndIspStep: nextStepId = paymentStep; break;
+                case paymentStep: nextStepId = printStep; break;
+                case printStep: nextStepId = attachmentStep; break;
+                case attachmentStep: nextStepId = submitToOM; break;
             }
             return nextStepId;
         }

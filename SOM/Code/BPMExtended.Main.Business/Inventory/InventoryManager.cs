@@ -112,6 +112,7 @@ namespace BPMExtended.Main.Business
             */
         }
 
+
         public TechnicalReservation GetTechnicalReservation(string phoneNumber)
         {
             TechnicalReservation item = null;
@@ -171,12 +172,31 @@ namespace BPMExtended.Main.Business
             //};
         }
 
+        public TechnicalReservation GetFullTechnicalReservation(string phoneNumber, string pathType)
+        {
+            TechnicalReservation item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<TechnicalReservation>(String.Format("api/SOM.ST/Inventory/GetFullTemporaryTechnicalReservation?phoneNumber={0}&pathType={1}", phoneNumber,pathType));
+            }
+            return item;
+        }
+
         public string GetPhoneCategory(string phoneNumber)
         {
             return GetTechnicalDetails(phoneNumber).PhoneCategory;
         }
 
-       
+        public string GetChildADSLContractId(string contractId)
+        {
+            string id;
+            using (SOMClient client = new SOMClient())
+            {
+                id = client.Get<string>(String.Format("api/SOM.ST/Billing/GetChildADSLContractId?ContractId={0}", contractId));
+            }
+
+            return id;
+        }
 
         public string GetADSLUserName(string telephonyContractId)
         {
@@ -339,29 +359,7 @@ namespace BPMExtended.Main.Business
             }).ToList();
         }
 
-        public List<ISPInfo> GetISPs()
-        {
-            List<ISPInfo> result = new List<ISPInfo>();
-            List<ISPInfo> phoneNumbers;
-            using (SOMClient client = new SOMClient())
-            {
-                phoneNumbers = client.Get<List<ISPInfo>>(String.Format("api/SOM.ST/Inventory/GetISPs"));
-            }
-
-            if (phoneNumbers != null)
-            {
-                foreach (var phoneNumber in phoneNumbers)
-                {
-                    result.Add(new ISPInfo
-                    {
-                        Id = phoneNumber.Id,
-                        Name = phoneNumber.Name
-                    });
-                }
-            }
-            return result;
-
-        }
+       
 
         public List<Device> GetDevices(string phoneNumbers)
         {
@@ -394,16 +392,14 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public string CreateFullPath(string phoneNumber , string pathID)
+        public void CreateFullPath(string phoneNumber , string pathID)
         {
-            string apiResult="";
 
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<string>(String.Format("api/SOM.ST/Inventory/CreateFullPath?phoneNumber={0}&pathID={1}", phoneNumber, pathID));
+                client.Get<string>(String.Format("api/SOM.ST/Inventory/AddNodeToPath?phoneNumber={0}&pathID={1}", phoneNumber, pathID));
             }
 
-            return apiResult;
         }
 
         //public ADSLLinePath CheckADSL(string phoneNumber)

@@ -449,13 +449,13 @@ namespace BPMExtended.Main.Business
         {
             List<SaleService> fees = new List<SaleService>();
             EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceInGeneralSettings");
+            //IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StContractTakeOverADSLFees");
             var Id = esq.AddColumn("StServiceID");
             esq.AddColumn("StServiceName");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "204A6410-8947-4E88-AF4E-F705DF7A0984");
-            esq.Filters.Add(esqFirstFilter);
+            //esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "204A6410-8947-4E88-AF4E-F705DF7A0984");
+            //esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
@@ -475,17 +475,36 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public List<SaleService> GetCPTFees()
+        public string GetCPTServiceId()
         {
             List<SaleService> fees = new List<SaleService>();
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceInGeneralSettings");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("StCptServiceId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "E3CE1E0B-1DBE-4AE0-B80D-CBB2F1E46C63");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return entities[0].GetTypedColumnValue<string>("StCptServiceId");
+            }
+            return null;
+        }
+
+        public List<SaleService> GetADSLFeesForLineTermination()
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            //IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineTerminationADSLFees");
             var Id = esq.AddColumn("StServiceID");
             esq.AddColumn("StServiceName");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "E3CE1E0B-1DBE-4AE0-B80D-CBB2F1E46C63");
-            esq.Filters.Add(esqFirstFilter);
+            //esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "08C36F0B-2509-40D8-AD0A-4AAEC7B6DFF2");
+            //esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
@@ -497,7 +516,7 @@ namespace BPMExtended.Main.Business
 
                         Id = item.GetTypedColumnValue<string>(Id.Name),
                         Name = item.GetTypedColumnValue<string>("StServiceName"),
-                        UpFront = true
+                        UpFront = false
                     });
                 }
             }

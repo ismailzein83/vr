@@ -106,8 +106,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL for ISP Subscription")]
         [EntitySchemaName("StISPADSL")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("72EE0965-4F1F-4A3E-A78F-02DBDD96F168")]
         ADSLForISPSubscription = 6,
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
@@ -183,15 +183,15 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Deported Number")]
         [EntitySchemaName("StDeportedNumber")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("5442DDB1-82C0-4763-9BE8-DB8C6AD58B7A")]
         DeportedNumber = 17,
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Friend And Family")]
         [EntitySchemaName("StFriendAndFamily")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("498A1C06-03A9-4EB7-A3BF-B0CC6554C40A")]
         FriendAndFamily = 18,
 
         [LineOfBusiness(LineOfBusiness.Telephony)]

@@ -112,7 +112,7 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        CPTService ="",
+                        CPTService = new CatalogManager().GetCPTServiceId(),
                         CPTId = cptId.ToString(),
                         CPTNumber = cptNumber.ToString()
                     }

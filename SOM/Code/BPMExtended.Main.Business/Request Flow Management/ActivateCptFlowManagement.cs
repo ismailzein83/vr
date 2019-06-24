@@ -22,7 +22,7 @@ namespace BPMExtended.Main.Business
 
             string nextStepId = "";
             switch (currentStepId)
-            {
+            {   
                 case startingProcess: nextStepId = reserveNumber; break;
                 case reserveNumber: nextStepId = print; break;
                 case print: nextStepId = payment; break;

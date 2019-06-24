@@ -53,5 +53,8 @@ namespace BPMExtended.Main.SOMAPI
         public string Threshold { get; set; }
 
         public string DSLAMPortId { get; set; }
+
+        public bool MoreThanOneEquipment { get; set; }
+        public string PathId { get; set; }
     }
 }

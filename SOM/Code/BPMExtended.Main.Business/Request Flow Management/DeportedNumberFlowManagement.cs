@@ -22,30 +22,29 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        string welcomeStep = "C4509023-33CD-454F-A427-62B2538E947C";
-        string printStep = "6074BB55-EF09-4FFC-B633-D1902397AC2C";
-        string nearByNumberStep = "0EA15672-4E18-4A85-94C5-BD96ECC1154D";
-        string reservationStep = "17F57607-72D1-4155-8892-8C038A43029E";
-        string networkAdminStep = "8664DD40-00FC-43D5-A72D-6DC28A7F4FA4";
-        string paymentStep = "37858CF1-30F2-4AEA-9F48-1B3A28876679";
-        string attachmentStep = "B3287838-1DB8-493E-9C6D-5A0BDA21C99A";
-        string technicalStep = "F360681D-F055-49AB-A04B-6A1913548B3A";
+        const string startingProcessStep = "C4509023-33CD-454F-A427-62B2538E947C";
+        const string printStep = "6074BB55-EF09-4FFC-B633-D1902397AC2C";
+        const string nearByNumberStep = "0EA15672-4E18-4A85-94C5-BD96ECC1154D";
+        const string freeReservationStep = "17F57607-72D1-4155-8892-8C038A43029E";
+        const string micReservationStep = "5DEC9AFF-87D8-497A-AABF-0F702D5D8C13";
+        const string networkAdminStep = "8664DD40-00FC-43D5-A72D-6DC28A7F4FA4";
+        const string paymentStep = "37858CF1-30F2-4AEA-9F48-1B3A28876679";
+        const string attachmentStep = "B3287838-1DB8-493E-9C6D-5A0BDA21C99A";
+        const string technicalStep = "F360681D-F055-49AB-A04B-6A1913548B3A";
 
         public string GetNextStep(string id, string currentStepId)
         {
 
             string nextStepId = "";
-            switch (currentStepId.ToLower())
+            switch (currentStepId)
             {
-                case "c4509023-33cd-454f-a427-62b2538e947c": nextStepId = printStep; break;
-                case "6074bb55-ef09-4ffc-b633-d1902397ac2c": nextStepId = nearByNumberStep; break;
-                case "0ea15672-4e18-4a85-94c5-bd96ecc1154d": nextStepId = reservationStep; break;
-                case "17f57607-72d1-4155-8892-8c038a43029e": nextStepId = paymentStep; break;
-                case "37858cf1-30f2-4aea-9f48-1b3a28876679": nextStepId = attachmentStep; break;
-                case "b3287838-1db8-493e-9c6d-5a0bda21c99a": nextStepId = technicalStep; break;
-                    //case "17f57607-72d1-4155-8892-8c038a43029e": nextStepId = networkAdminStep; break;
-                    // case "a7fb4f5e-5d2c-4259-8be4-e6506c8e1dc3": nextStepId = GetFirstMic(id) != null ? micTeamStep : newMDFStep; break;
-                    //case "6bd597b3-54a4-4b51-b500-ffaeb7d2224b": nextStepId = GetNextMic(id) !=null ? micTeamStep : newMDFStep; break;
+                case startingProcessStep: nextStepId = nearByNumberStep; break;
+                case nearByNumberStep: nextStepId = freeReservationStep; break;
+                case freeReservationStep: nextStepId = technicalStep; break;
+                case micReservationStep: nextStepId = paymentStep; break;
+                case paymentStep: nextStepId = printStep; break;
+                case printStep: nextStepId = attachmentStep; break;
+                case attachmentStep: nextStepId = technicalStep; break;
             }
             return nextStepId;
         }

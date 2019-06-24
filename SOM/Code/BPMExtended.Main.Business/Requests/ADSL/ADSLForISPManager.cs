@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
@@ -21,6 +22,41 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region public
+
+        public bool ReservePortOnOtherISP(string port, string phoneNumber)
+        {
+            bool result;
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<bool>(String.Format("api/SOM.ST/Inventory/ReserveDSLAMPort?phoneNumber={0}&dslamPort={1}", phoneNumber, port));
+            }
+
+            return result;
+        }
+
+        public List<DSLAMPortInfo> GetISPDSLAMPorts(string switchId, string ISP)
+        {
+            List<DSLAMPortInfo> items;
+            using (SOMClient client = new SOMClient())
+            {
+                items = client.Get<List<DSLAMPortInfo>>(String.Format("api/SOM.ST/Inventory/GetISPDSLAMPorts?switchId={0}&ISP={1}", switchId, ISP));
+            }
+
+            return items;
+        }
+
+        public List<ISPInfo> GetISPs()
+        {
+            List<ISPInfo> items = new List<ISPInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                items = client.Get<List<ISPInfo>>(String.Format("api/SOM.ST/Inventory/GetISPs"));
+            }
+
+            return items;
+
+        }
+
         public void PostADSLForISPToOM(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table
@@ -30,11 +66,11 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StISPADSL");
             esq.AddColumn("StContractId");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StISPName");
+            esq.AddColumn("StISPId");
+            esq.AddColumn("StPort");
+            esq.AddColumn("StLinePathId");
+
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -44,9 +80,10 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractId");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var ipsName = entities[0].GetColumnValue("StISPName");
+                var ispId= entities[0].GetColumnValue("StISPId");
+                var port = entities[0].GetColumnValue("StPort");
+                var pathId = entities[0].GetColumnValue("StLinePathId");
 
                 SOMRequestInput<ADSLForISPRequestInput> somRequestInput = new SOMRequestInput<ADSLForISPRequestInput>
                 {
@@ -55,12 +92,10 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            //AccountId = null,
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
-                        }
+                        },
+                        LinePathId = pathId.ToString()
                     }
 
                 };

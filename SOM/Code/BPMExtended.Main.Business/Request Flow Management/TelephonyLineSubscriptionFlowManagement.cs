@@ -58,7 +58,7 @@ namespace BPMExtended.Main.Business
 
                     if (!isWaitingList && !isNetworkTeam) nextStepId = subscriptionAddressStep;
                     else if (isWaitingList) nextStepId = waitingListStep;
-                    else nextStepId = networkTeamStep;
+                    else nextStepId = technicalStep;
                     break;
                 
                 //waiting list

@@ -28,8 +28,8 @@ namespace BPMExtended.Main.Business
         const string attachmentsStep = "D8285B77-3B08-47BC-8729-E52A86991C9E";
 
         const string technicalStep = "45363147-CC59-4632-B09E-EB850D2FD25F";
-        const string completedStep = "CEBCB883-84AA-4183-9938-817E711EB2BF";
-        public string GetNextStep(string id, string currentStepId)
+        const string submitToOM = "42A25FDE-19EB-407A-8640-1831B5FCC470";
+        public string GetNextStep(string id, string currentStepId, bool isAdvantageous,string customerId)
         {
 
             string nextStepId = "";
@@ -37,24 +37,23 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = printStep; break;
                 case printStep: nextStepId = reasonStep; break;
-                case reasonStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = NBOfActiveContracts(id) == "1" ? billOnDemandStep : attachmentsStep; break;
+                case reasonStep: nextStepId = isAdvantageous? attachmentsStep : new ContractManager().GetTelephonyContracts(customerId).Count>1 ? paymentStep : billOnDemandStep; break;
+                case paymentStep: nextStepId = attachmentsStep; break;
                 case billOnDemandStep: nextStepId = attachmentsStep; break;
                 case attachmentsStep: nextStepId = technicalStep; break;
-                case technicalStep: nextStepId = completedStep; break;
             }
             return nextStepId;
         }
 
-        public string NBOfActiveContracts(string id)
-        {
+        //public string NBOfActiveContracts(string id)
+        //{
 
-            //TODO : Get the count of active contracts for this customer (customerId)
+        //    //TODO : Get the count of active contracts for this customer (customerId)
 
-            Random gen = new Random();
-            int prob = gen.Next(10);
-            return prob <= 6 ? "1" : "4";
-        }
+        //    Random gen = new Random();
+        //    int prob = gen.Next(10);
+        //    return prob <= 6 ? "1" : "4";
+        //}
 
     }
 }
