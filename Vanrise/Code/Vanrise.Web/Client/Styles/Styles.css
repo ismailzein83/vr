@@ -5610,9 +5610,16 @@ span.option-marketprice {
 .btn-breadcrumb .btn {
     padding: 3px 12px 3px 24px;
     background-color: #76c224;
-    color: #fff;
+    color: #fff;  
 }
-
+.btn-breadcrumb .btn > span {
+    max-width: 150px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    height: 14px;
+}
 
 .btn-breadcrumb .btn.level-4 {
     background-color: #7fd425;
