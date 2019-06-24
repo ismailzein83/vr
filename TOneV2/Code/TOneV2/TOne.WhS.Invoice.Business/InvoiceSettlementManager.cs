@@ -196,8 +196,10 @@ namespace TOne.WhS.Invoice.Business
                                 supplierInvoiceDetail.OriginalAmount = originalAmount;
                                 if (!supplierInvoiceDetail.HasRecurringCharge)
                                     supplierInvoiceDetail.HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0;
+								if (!supplierInvoiceDetail.HasAdjustment)
+									supplierInvoiceDetail.HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount > 0;
 
-                            }
+							}
                             else
                             {
                                 supplierInvoiceDetails.Add(new SupplierInvoiceDetail
@@ -220,8 +222,10 @@ namespace TOne.WhS.Invoice.Business
                                 OriginalAmount = originalAmount ,
                                 UseOriginalAmount= useOriginalAmount,
                                 IsLocked = invoiceDetail.Entity.LockDate.HasValue,
-                                HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0
-                                });
+                                HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0,
+								HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount > 0
+
+								});
                             }
                         }
                     }
@@ -285,7 +289,9 @@ namespace TOne.WhS.Invoice.Business
                                 customerInvoiceDetail.OriginalAmount = originalAmount;
                                 if (!customerInvoiceDetail.HasRecurringCharge)
                                     customerInvoiceDetail.HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0;
-                            }
+								if (!customerInvoiceDetail.HasAdjustment)
+									customerInvoiceDetail.HasAdjustment = currentInvoiceItemDetail.AdjustmentAmount > 0;
+							}
                             else
                             {
                                 customerInvoiceDetails.Add(new CustomerInvoiceDetail
@@ -308,9 +314,10 @@ namespace TOne.WhS.Invoice.Business
                                     IsLocked = invoiceDetail.Entity.LockDate.HasValue,
                                     OriginalAmount = originalAmount,
                                     UseOriginalAmount = useOriginalAmount,
-                                    HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0
+                                    HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0,
+									HasAdjustment= currentInvoiceItemDetail.AdjustmentAmount>0
 
-                                });
+								});
                             }
                         }
                     }
