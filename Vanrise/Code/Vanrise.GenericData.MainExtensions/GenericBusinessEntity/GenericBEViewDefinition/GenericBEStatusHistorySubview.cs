@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.MainExtensions
         {
             get { return "vr-genericdata-genericbe-statushistorysubview-runtime"; }
         }
-        public string MappingColumnName { get; set; }
+        public string MappingFieldName { get; set; }
         public override bool DoesUserHaveAccess(IGenericBEViewDefinitionCheckAccessContext context)
         {
             return base.DoesUserHaveAccess(context);

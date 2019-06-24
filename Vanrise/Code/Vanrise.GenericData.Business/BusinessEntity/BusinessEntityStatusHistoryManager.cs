@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Caching;
+using Vanrise.Common.Business;
+
 namespace Vanrise.GenericData.Business
 {
 	public struct BEDefinition
@@ -39,5 +42,39 @@ namespace Vanrise.GenericData.Business
 			IBusinessEntityStatusHistoryDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityStatusHistoryDataManager>();
 			return dataManager.GetLastBusinessEntityStatusHistory(businessEntityDefinitionId, businessEntityId, fieldName);
 		}
-	}
+        public Vanrise.Entities.IDataRetrievalResult<BusinessEntityStatusHistoryDetail> GetFilteredBusinessEntitiesStatusHistory(Vanrise.Entities.DataRetrievalInput<BusinessEntityStatusHistoryQuery> input)
+        {
+            IBusinessEntityStatusHistoryDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityStatusHistoryDataManager>();
+            IEnumerable<BusinessEntityStatusHistory> businessEntitiesStatusHistory = dataManager.GetFilteredBusinessEntitiesStatusHistory(input);
+
+            Func<BusinessEntityStatusHistory, bool> filterExpression = (item) =>
+            {
+                return true;
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, businessEntitiesStatusHistory.ToBigResult(input, filterExpression, BusinessEntityStatusHistoryDetailMapper));
+        }
+        
+        BusinessEntityStatusHistoryDetail BusinessEntityStatusHistoryDetailMapper(BusinessEntityStatusHistory businessEntityStatusHistory)
+        {
+            var statusDefinitionManager = new StatusDefinitionManager();
+
+            var businessEntityStatusHistoryDetail = new BusinessEntityStatusHistoryDetail
+            {
+                BusinessEntityStatusHistoryId = businessEntityStatusHistory.BusinessEntityStatusHistoryId,
+                FieldName = businessEntityStatusHistory.FieldName,
+                StatusName = statusDefinitionManager.GetStatusDefinitionName(businessEntityStatusHistory.StatusId),
+                StatusChangedDate = businessEntityStatusHistory.StatusChangedDate,
+                IsDeleted = businessEntityStatusHistory.IsDeleted,
+            };
+
+            if (businessEntityStatusHistory.PreviousStatusId.HasValue)
+                businessEntityStatusHistoryDetail.PreviousStatusName = statusDefinitionManager.GetStatusDefinitionName(businessEntityStatusHistory.PreviousStatusId.Value);
+
+            return businessEntityStatusHistoryDetail;
+        }
+    }
+
+ 
 }
+
+

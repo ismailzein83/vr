@@ -1,77 +1,77 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    StatusHistoryGenericBERuntimeViewDirective.$inject = ['UtilsService', 'VRNotificationService','VR_GenericData_GenericBEDefinitionAPIService'];
+    StatusHistoryGenericBERuntimeViewDirective.$inject = ['UtilsService', 'VRNotificationService','VR_GenericData_GenericBEDefinitionAPIService'];
 
-//    function StatusHistoryGenericBERuntimeViewDirective(UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService) {
-//        return {
-//            restrict: 'E',
-//            scope: {
-//                onReady: '=',
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var ctor = new StatusHistoryGenericBERuntimeViewCtor($scope, ctrl);
-//                ctor.initializeController();
-//            },
-//            controllerAs: 'ctrl',
-//            bindToController: true,
-//            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/GenericBEViewDefinition/Templates/StatusHistoryGenericBERuntimeViewTemplate.html'
-//        };
+    function StatusHistoryGenericBERuntimeViewDirective(UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new StatusHistoryGenericBERuntimeViewCtor($scope, ctrl);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/GenericBEViewDefinition/Templates/StatusHistoryGenericBERuntimeViewTemplate.html'
+        };
 
-//        function StatusHistoryGenericBERuntimeViewCtor($scope, ctrl) {
-//            this.initializeController = initializeController;
+        function StatusHistoryGenericBERuntimeViewCtor($scope, ctrl) {
+            this.initializeController = initializeController;
 
-//            var gridAPI;
+            var gridAPI;
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//                $scope.scopeModel.onGridReady = function (api) {
-//                    gridAPI = api;
-//                    defineAPI();
-//                };
-//            }
-//            function defineAPI() {
-//                var api = {};
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+                };
+            }
+            function defineAPI() {
+                var api = {};
 
-//                api.load = function (payload) {
+                api.load = function (payload) {
 
-//                    $scope.scopeModel.isGridLoading = true;
-//                    var gridPayload = {};
+                    $scope.scopeModel.isGridLoading = true;
+                    var gridPayload = {};
 
-//                    var businessEntityDefinitionId;
-//                    var businessEntityId;
-//                    var genericBEGridView;
-//                    var parentBEEntity;
-//                    var mappingFieldName;
+                    var businessEntityDefinitionId;
+                    var businessEntityId;
+                    var genericBEGridView;
+                    var parentBEEntity;
+                    var mappingFieldName;
 
-//                    if (payload != undefined) {
-//                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
-//                        genericBEGridView = payload.genericBEGridView; 
-//                        parentBEEntity = payload.parentBEEntity;
-//                        if (genericBEGridView != undefined && genericBEGridView.Settings != undefined && parentBEEntity != undefined && parentBEEntity.FieldValues != undefined) {
-//                            mappingFieldName = genericBEGridView.Settings.MappingFieldName;
-//                            businessEntityId = parentBEEntity.FieldValues[mappingFieldName].Value;
-//                        }
-//                    }
-//                    gridPayload.query = {
-//                        BusinessEntityDefinitionId: businessEntityDefinitionId,
-//                        BusinessEntityId: businessEntityId
-//                    };
-//                    return gridAPI.loadGrid(gridPayload).then(function () {
-//                        $scope.scopeModel.isGridLoading = false;
-//                    });
-//                };
+                    if (payload != undefined) {
+                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                        genericBEGridView = payload.genericBEGridView; 
+                        parentBEEntity = payload.parentBEEntity;
+                        if (genericBEGridView != undefined && genericBEGridView.Settings != undefined && parentBEEntity != undefined && parentBEEntity.FieldValues != undefined) {
+                            mappingFieldName = genericBEGridView.Settings.MappingFieldName;
+                            businessEntityId = parentBEEntity.FieldValues[mappingFieldName].Value;
+                        }
+                    }
+                    gridPayload.query = {
+                        BusinessEntityDefinitionId: businessEntityDefinitionId,
+                        BusinessEntityId: businessEntityId
+                    };
+                    return gridAPI.loadGrid(gridPayload).then(function () {
+                        $scope.scopeModel.isGridLoading = false;
+                    });
+                };
 
-//                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-//                    ctrl.onReady(api);
-//                }
-//            }
-//        }
-//    }   
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+        }
+    }   
 
-//    app.directive('vrGenericdataGenericbeStatushistorysubviewRuntime', StatusHistoryGenericBERuntimeViewDirective);
+    app.directive('vrGenericdataGenericbeStatushistorysubviewRuntime', StatusHistoryGenericBERuntimeViewDirective);
 
-//})(app);
+})(app);

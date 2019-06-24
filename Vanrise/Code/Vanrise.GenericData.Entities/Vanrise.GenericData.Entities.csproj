@@ -98,6 +98,8 @@
     <Compile Include="BusinessEntities\LKUPBEDefinitionSettings\LKUPBEExtendedSettingsConfig.cs" />
     <Compile Include="BusinessEntities\SelectorFilter\GenericBESelectorCondition.cs" />
     <Compile Include="BusinessEntities\SelectorFilter\GenericBESelectorConditionConfig.cs" />
+    <Compile Include="BusinessEntityStatusHistory\BusinessEntityStatusHistoryQuery.cs" />
+    <Compile Include="BusinessEntityStatusHistory\BusinessEntityStatusHistoryDetail.cs" />
     <Compile Include="BusinessEntityStatusHistory\BusinessEntityStatusHistory.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="GenericEditor\Runtime\GenericFieldsRuntimeRow.cs" />
     <Compile Include="GenericFinancialAccount.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionDetail.cs" />
+    <Compile Include="ListDataRecordType\ListDataRecordTypeGridViewColumnInfo.cs" />
     <Compile Include="SendEmailActionInput.cs" />
     <Compile Include="CompositeRecordCondition\Runtime\CompositeRecordCondition.cs" />
     <Compile Include="CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionGroup.cs" />

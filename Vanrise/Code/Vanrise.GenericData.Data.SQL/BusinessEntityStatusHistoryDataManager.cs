@@ -19,6 +19,11 @@ namespace Vanrise.GenericData.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public IEnumerable<BusinessEntityStatusHistory> GetFilteredBusinessEntitiesStatusHistory(Vanrise.Entities.DataRetrievalInput<BusinessEntityStatusHistoryQuery> input)
+        {
+            return GetItemsSP("genericdata.sp_BusinessEntityStatusHistory_GetFiltered", BusinessEntityStatusHistoryMapper, input.Query.BusinessEntityDefinitionId, input.Query.BusinessEntityId);
+        }
+
 
         public BusinessEntityStatusHistory GetLastBusinessEntityStatusHistory(Guid businessEntityDefinitionId, string businessEntityId, string fieldName)
         {

@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Data
     {
         bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId,string moreInfo,string previousMoreInfo);
         BusinessEntityStatusHistory GetLastBusinessEntityStatusHistory(Guid businessEntityDefinitionId, string businessEntityId, string fieldName);
+        IEnumerable<BusinessEntityStatusHistory> GetFilteredBusinessEntitiesStatusHistory(Vanrise.Entities.DataRetrievalInput<BusinessEntityStatusHistoryQuery> input);
+
     }
 }
