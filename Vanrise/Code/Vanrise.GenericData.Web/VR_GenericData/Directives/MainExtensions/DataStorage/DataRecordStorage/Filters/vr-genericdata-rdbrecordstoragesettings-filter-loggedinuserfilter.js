@@ -23,6 +23,7 @@ app.directive('vrGenericdataRdbrecordstoragesettingsFilterLoggedinuserfilter', [
 
             var requiredPermissionAPI;
             var requiredPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+            var requiredPermission;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -41,10 +42,11 @@ app.directive('vrGenericdataRdbrecordstoragesettingsFilterLoggedinuserfilter', [
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     var promises = [];
                     promises.push(loadRequiredPermission());
-                    if (payload != undefined) {
-                     
+                    if (payload != undefined && payload.filter != undefined) {
+                        requiredPermission = payload.filter.RequiredPermission;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -66,9 +68,9 @@ app.directive('vrGenericdataRdbrecordstoragesettingsFilterLoggedinuserfilter', [
                 requiredPermissionReadyDeferred.promise.then(function () {
                     var payload;
 
-                    if (dataRecordStorageEntity != undefined && dataRecordStorageEntity.Settings != undefined && dataRecordStorageEntity.Settings.RequiredPermission != null) {
+                    if (requiredPermission != null) {
                         payload = {
-                            data: payload.RequiredPermission
+                            data: requiredPermission
                         };
                     }
 
