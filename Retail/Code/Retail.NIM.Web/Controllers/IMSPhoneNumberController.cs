@@ -9,11 +9,15 @@ namespace Retail.NIM.Web.Controllers
     {
         IMSPhoneNumberManager manager = new IMSPhoneNumberManager();
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetFreeIMSPhoneNumbers")]
-        public GetFreeIMSPhoneNumbersOutput GetFreeIMSPhoneNumbers(GetFreeIMSPhoneNumbersInput input)
+        public GetFreeIMSPhoneNumbersOutput GetFreeIMSPhoneNumbers(string imsNumber, int? category)
         {
-            return manager.GetFreeIMSPhoneNumbers(input);
+            return manager.GetFreeIMSPhoneNumbers(new GetFreeIMSPhoneNumbersInput
+            {
+                IMSNumber = imsNumber,
+                Category = category
+            });
         }
 
         [HttpPost]
