@@ -56,10 +56,11 @@
 
             runtimeEditorReadyDeferred.promise.then(function () {
                 var runtimeEditorPayload = {
-                    selectedValues: parentFieldValues,
+                    parentFieldValues: parentFieldValues,
                     dataRecordTypeId: dataRecordTypeId,
                     definitionSettings: customActionSettings.Settings,
-                    runtimeEditor:customActionSettings.Settings != undefined ? customActionSettings.Settings.RuntimeEditor : undefined
+                    runtimeEditor:customActionSettings.Settings != undefined ? customActionSettings.Settings.RuntimeEditor : undefined,
+                    isEditMode:false
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, loadEditorRuntimeDirectivePromiseDeferred);
             });

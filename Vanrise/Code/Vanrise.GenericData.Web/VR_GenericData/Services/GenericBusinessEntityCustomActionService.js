@@ -67,30 +67,33 @@
             function buildActionsFromDictionary(actionsDictionary) {
                 if (actionsDictionary != undefined) {
                     for (var prop in actionsDictionary) {
-                        var actionArray = actionsDictionary[prop];
-                        if (actionArray != undefined) {
-                            var object = actionArray[0];
-                            if (actionArray.length > 1) {
-                                var menuActions = [];
-                                for (var i = 0; i < actionArray.length; i++) {
-                                    var actionItem = actionArray[i];
-                                    addMenuAction(actionItem);
-                                }
-                                function addMenuAction(actionItem) {
-                                    menuActions.push({
-                                        name: actionItem.customAction.Title,
-                                        clicked: function () {
-                                            return callActionMethod(actionItem.customAction);
-                                        },
-                                    });
-                                }
-                                addActionToList(object.buttonType, undefined, menuActions);
-                            } else {
-                                var clickFunc = function () {
-                                    return callActionMethod(object.customAction);
-                                };
-                                addActionToList(object.buttonType, clickFunc, undefined);
+                        prepareAction(prop);
+                    }
+                }
+                function prepareAction(prop) {
+                    var actionArray = actionsDictionary[prop];
+                    if (actionArray != undefined) {
+                        var object = actionArray[0];
+                        if (actionArray.length > 1) {
+                            var menuActions = [];
+                            for (var i = 0; i < actionArray.length; i++) {
+                                var actionItem = actionArray[i];
+                                addMenuAction(actionItem);
                             }
+                            function addMenuAction(actionItem) {
+                                menuActions.push({
+                                    name: actionItem.customAction.Title,
+                                    clicked: function () {
+                                        return callActionMethod(actionItem.customAction);
+                                    },
+                                });
+                            }
+                            addActionToList(object.buttonType, undefined, menuActions);
+                        } else {
+                            var clickFunc = function () {
+                                return callActionMethod(object.customAction);
+                            };
+                            addActionToList(object.buttonType, clickFunc, undefined);
                         }
                     }
                 }
