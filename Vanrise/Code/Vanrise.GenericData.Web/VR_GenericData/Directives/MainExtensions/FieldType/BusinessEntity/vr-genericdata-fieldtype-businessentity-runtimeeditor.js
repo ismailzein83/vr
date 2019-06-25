@@ -83,6 +83,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             var fieldName;
             var fieldValue;
             var businessEntityDefinitionId;
+            var beRuntimeSelectorFilter;
             var missingGroupSelectorUIControl;
             var genericContext;
             var isFirstLoad = true;
@@ -112,6 +113,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         fieldName = payload.fieldName;
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
+                        beRuntimeSelectorFilter = fieldType.BERuntimeSelectorFilter;
                         genericUIContext = payload.genericUIContext;
                         genericContext = payload.genericContext;
                         allFieldValuesByName = payload.allFieldValuesByName;
@@ -215,7 +217,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                     var payload = {
                                         businessEntityDefinitionId: businessEntityDefinitionId,
                                         fieldTitle: $scope.scopeModel.fieldTitle,
-                                        beRuntimeSelectorFilter: fieldType.BERuntimeSelectorFilter,
+                                        beRuntimeSelectorFilter: beRuntimeSelectorFilter,
                                         genericUIContext: genericUIContext,
                                         hasEmtyRequiredDependentField: hasEmtyRequiredDependentField,
                                         filter: data != undefined && data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : getFilter(),
@@ -534,6 +536,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     businessEntityDefinitionId: businessEntityDefinitionId,
                     selectedIds: data.isDependentFieldDeselected ? undefined : directiveAPI != undefined ? directiveAPI.getSelectedIds() : fieldValue,
                     filter: data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : undefined,
+                    beRuntimeSelectorFilter: beRuntimeSelectorFilter,
                     hasEmtyRequiredDependentField: data.hasEmtyRequiredDependentField,
                     isFromManagementScreen: isFromManagementScreen
                 };
