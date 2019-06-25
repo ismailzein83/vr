@@ -67,7 +67,7 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
                var newElement = '<div class="modal-dialog ' + classmodal  +' '+' '+ modalCssClass +'" ' + resClass + ' style="' + style + '" >'
                                   + '  <div class="modal-content" >'
                                     + '    <div class="modal-header vr-modal-header" ' + titleShowValue + '>'
-                                      + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'
+                                      + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal(true)"><span aria-hidden="true">&times;</span></button>'
                                         + '    <h5 class="modal-title" ng-bind="title"></h5>'
                                         + '</div>'
                                 + tElement.html()

@@ -19,12 +19,12 @@
             var onhideModal = function () {
 
             };
-            modalScope.modalContext.closeModal = function () {
+            modalScope.modalContext.closeModal = function (response) {
                 if (modalInstance) modalInstance.hide();
-                deferred.resolve();
+                deferred.resolve(response);
                 modalScope.$destroy();
             };
-
+               
             var sizeOptions = {
                 small: "vr-modal-sm",
                 medium: "vr-modal-md",
