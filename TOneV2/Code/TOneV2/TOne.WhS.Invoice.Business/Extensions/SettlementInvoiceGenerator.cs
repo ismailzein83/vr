@@ -136,6 +136,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     var customerInvoiceDetails = customerInvoice.Details as CustomerInvoiceDetails;
                     if (customerInvoiceDetails != null)
                     {
+                        if (customerInvoiceDetails.TimeZoneId.HasValue)
+                        {
+                            VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(customerInvoiceDetails.TimeZoneId.Value);
+                            if (timeZone != null)
+                            {
+                                customerInvoice.FromDate = customerInvoice.FromDate.Add(-timeZone.Settings.Offset);
+                                customerInvoice.ToDate = customerInvoice.ToDate.Add(-timeZone.Settings.Offset);
+                            }
+                        }
                         bool multipleCurrencies = false;
                         var invoiceItems = customerInvoiceItems.FindAllRecords(x => x.InvoiceId == customerInvoice.InvoiceId);
                         if (invoiceItems != null)
@@ -427,6 +436,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     var supplierInvoiceDetails = supplierInvoice.Details as SupplierInvoiceDetails;
                     if (supplierInvoiceDetails != null)
                     {
+                        if (supplierInvoiceDetails.TimeZoneId.HasValue)
+                        {
+                            VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(supplierInvoiceDetails.TimeZoneId.Value);
+                            if (timeZone != null)
+                            {
+                                supplierInvoice.FromDate = supplierInvoice.FromDate.Add(-timeZone.Settings.Offset);
+                                supplierInvoice.ToDate = supplierInvoice.ToDate.Add(-timeZone.Settings.Offset);
+                            }
+                        }
                         bool isOriginalAmountSetted = supplierInvoiceDetails.IsOriginalAmountSetted;
                         bool multipleCurrencies = false;
 
