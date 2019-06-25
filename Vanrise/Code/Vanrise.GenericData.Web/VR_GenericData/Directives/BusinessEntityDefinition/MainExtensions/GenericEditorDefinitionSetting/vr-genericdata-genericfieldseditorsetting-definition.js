@@ -142,7 +142,6 @@
 
             function getFields() {
                 var fields = [];
-
                 for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
                     var currentField = $scope.scopeModel.datasource[i];
                     fields.push({
@@ -153,6 +152,7 @@
                         ShowAsLabel: currentField.ShowAsLabel,
                         FieldViewSettings: currentField.FieldViewSettings,
                         TextResourceKey: currentField.TextResourceKey,
+                        DefaultFieldValue: currentField.DefaultFieldValue,
                     });
                 }
 

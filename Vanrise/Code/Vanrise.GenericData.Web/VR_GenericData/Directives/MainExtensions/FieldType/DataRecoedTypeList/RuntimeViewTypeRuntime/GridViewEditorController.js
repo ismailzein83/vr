@@ -62,7 +62,9 @@
                     selectedValues: fieldValues,
                     dataRecordTypeId: dataRecordTypeId,
                     definitionSettings: definitionSettings,
-                    parentFieldValues: fieldValues
+                    parentFieldValues: fieldValues,
+                    runtimeEditor: definitionSettings != undefined ? definitionSettings.RuntimeEditor : undefined,
+                    isEditMode: false
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
             });
@@ -85,7 +87,7 @@
 
             function setTitle() {
                 if (isEditMode)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(title, "Row in");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(title);
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor(title);
             }
@@ -99,12 +101,9 @@
 
         function buildDataRowFromScope() {
             var genericBusinessEntity = {};
-
-
             var fieldValuesObj = fieldValues != undefined ? fieldValues : {};
             runtimeEditorAPI.setData(fieldValuesObj);
             genericBusinessEntity.Entity = fieldValuesObj;
-
             return genericBusinessEntity;
         }
 

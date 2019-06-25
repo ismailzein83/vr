@@ -106,7 +106,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                         promises: []
                     };
                     if (payload.definitionSettings != undefined) {
-                        var definitionSettings = payload.definitionSettings
+                        var definitionSettings = payload.definitionSettings;
                         $scope.scopeModel.hideAddButton = definitionSettings.HideAddButton;
                         $scope.scopeModel.hideSection = definitionSettings.HideSection;
                         $scope.scopeModel.enableDraggableRow = definitionSettings.EnableDraggableRow;
@@ -128,7 +128,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                     var entity = dataRecordFields[i].Entity;
                                     if (checkIfFieldIsAvailable(entity)) {
                                         var name = entity.Name;
-                                     
+
                                         columnsInfo.push({
                                             Name: entity.Name,
                                             Title: entity.Title,
@@ -146,7 +146,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                             showAsLabel: entity.showAsLabel
                                         };
 
-                                    } 
+                                    }
                                 }
                             }
                             var fieldsValuesList = [];
@@ -226,7 +226,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                     return { promises: childPromises };
                                 }
                             };
-                        }
+                        };
                     }
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };

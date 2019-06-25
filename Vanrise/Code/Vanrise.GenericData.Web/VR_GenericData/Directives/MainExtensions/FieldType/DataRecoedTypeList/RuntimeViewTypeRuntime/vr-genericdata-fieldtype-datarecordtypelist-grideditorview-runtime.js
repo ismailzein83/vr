@@ -54,7 +54,6 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
-
                     dataRecordTypeId = payload.dataRecordTypeId;
                     definitionSettings = payload.definitionSettings != undefined ? payload.definitionSettings.Settings : undefined;
                     var fieldsValues = payload.fieldValue;
@@ -68,7 +67,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                             for (var i = 0; i < response.length; i++) {
                                 var column = response[i];
                                 column.Field = "Entity." + column.Field;
-                                $scope.scopeModel.columns.push(column);
+                                $scope.scopeModel.columns.push(column); 
+
                             }
                         }
                     });
