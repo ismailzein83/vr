@@ -126,6 +126,17 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                                 return field.Type;
                         }
                     };
+                    currentContext.getFields = function () {
+                        var dataFields = [];
+                        for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                            dataFields.push({
+                                FieldName: dataRecordTypeFields[i].Name,
+                                FieldTitle: dataRecordTypeFields[i].Title,
+                                Type: dataRecordTypeFields[i].Type
+                            });
+                        }
+                        return dataFields;
+                    };
                     currentContext.getFilteredFields = function () {
                         var data = [];
                         var filterData = currentContext.getRecordTypeFields();
