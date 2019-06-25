@@ -865,6 +865,31 @@ namespace Vanrise.GenericData.Business
             }
             return processMessage;
         }
+
+        public string GetFieldDescription(Guid businessEntityDefinitionId, string fieldName, object fieldValue)
+        {
+            var dataRecordFields = _genericBEDefinitionManager.GetDataRecordTypeFieldsByBEDefinitionId(businessEntityDefinitionId);
+
+            if (dataRecordFields == null)
+                return null;
+
+            var dataRecordField = dataRecordFields.GetRecord(fieldName);
+            if (dataRecordField == null)
+                return null;
+
+            return dataRecordField.Type.GetDescription(fieldValue);
+        }
+
+        public Object GetGenericBEObject(Guid businessEntityDefinitionId, Object genericBusinessEntityId)
+        {
+            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, true);
+            genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
+            var dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
+
+            var genericBe = GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
+            return new DataRecordObject(genericBEDefinitionSetting.DataRecordTypeId, genericBe.FieldValues).Object;
+        }
+
         private bool ParseExcel(long fileId, out string errorMessage, out List<ParsedGenericBERow> parsedExcel)
         {
             VRFileManager fileManager = new VRFileManager();
