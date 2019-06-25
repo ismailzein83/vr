@@ -7,12 +7,13 @@ using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
 {
-    public class GroupManager
+    public class GroupManager: BaseBusinessEntityManager
     {
         #region Public Methods
 
@@ -266,6 +267,10 @@ namespace Vanrise.Security.Business
             group.Settings.ThrowIfNull("group.Settings", groupId);
             return group.Settings.GetUserIds(null);
         }
+        public IEnumerable<Group>GetAllGroups ()
+        {
+            return GetCachedGroups().Values;
+        }
         #endregion
 
         #region Private Methods
@@ -338,6 +343,49 @@ namespace Vanrise.Security.Business
                 Group group = context.Object.CastWithValidate<Group>("context.Object");
                 return s_groupManager.GetGroupName(group.GroupId);
             }
+        }
+        #endregion
+
+        #region IBusinessEntityManager
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllGroups().Select(itm => itm as dynamic).ToList();
+        }
+
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetGroup(context.EntityId);
+        }
+
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var group = context.Entity as Group;
+            return group.GroupId;
+        }
+
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetGroupName(Convert.ToInt32(context.EntityId));
+        }
+
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
