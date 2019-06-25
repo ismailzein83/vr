@@ -67,7 +67,6 @@
     <Compile Include="IBPInstanceDataManager.cs" />
     <Compile Include="IBPDefinitionDataManager.cs" />
     <Compile Include="IBPInstancePersistenceDataManager.cs" />
-    <Compile Include="IBPTaskTypeDataManager.cs" />
     <Compile Include="IBPTaskDataManager.cs" />
     <Compile Include="IBPTrackingDataManager.cs" />
     <Compile Include="IBPBusinessRuleDefinitionDataManager.cs" />

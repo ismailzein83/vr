@@ -64,6 +64,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                             input.LessThanID = undefined;
                             input.NbOfRows = undefined;
                             myTaskSelected = query.MyTaskSelected;
+                            processInstanceId = query.BPInstanceID;
                             input.ProcessInstanceId = query.BPInstanceID;
                             input.BPTaskFilter = query.BPTaskFilter;
                             $scope.bpTasks.length = 0;
@@ -96,7 +97,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
 
                                 var statusTypeObj = UtilsService.getEnum(BPTaskStatusEnum, 'value', bpTask.Entity.Status);
 
-                                var removeTask = statusTypeObj.IsClosed || !bpTask.ShowOnGrid ;
+                                var removeTask = (processInstanceId == undefined) && (statusTypeObj.IsClosed || !bpTask.ShowOnGrid);
 
                                 for (var j = 0; j < $scope.bpTasks.length; j++) {
 

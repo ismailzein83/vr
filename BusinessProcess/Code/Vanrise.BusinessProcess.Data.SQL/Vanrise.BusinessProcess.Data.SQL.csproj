@@ -75,7 +75,6 @@
     <Compile Include="ProcessSynchronisationDataManager.cs" />
     <Compile Include="BPTimeSubscriptionDataManager.cs" />
     <Compile Include="BPInstancePersistenceDataManager.cs" />
-    <Compile Include="BPTaskTypeDataManager.cs" />
     <Compile Include="BPTaskDataManager.cs" />
     <Compile Include="BPEventDataManager.cs" />
     <Compile Include="BPInstanceDataManager.cs" />

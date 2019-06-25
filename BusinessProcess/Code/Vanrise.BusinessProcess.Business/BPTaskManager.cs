@@ -71,12 +71,12 @@ namespace Vanrise.BusinessProcess.Business
 
         public BPTaskUpdateOutput GetMyTasksUpdated(object lastUpdateHandle, int nbOfRows, BPTaskFilter bpTaskFilter)
         {
-            return GetUpdated(lastUpdateHandle, nbOfRows, null, ContextFactory.GetContext().GetLoggedInUserId(), bpTaskFilter, false);
+            return GetUpdated(lastUpdateHandle, nbOfRows, null, ContextFactory.GetContext().GetLoggedInUserId(), bpTaskFilter, false, BPTaskStatusAttribute.GetClosedStatuses());
         }
 
         public List<BPTaskDetail> GetMyTasksBeforeId(BPTaskBeforeIdInput input)
         {
-            return GetBeforeId(input.LessThanID, input.NbOfRows, null, ContextFactory.GetContext().GetLoggedInUserId(), input.BPTaskFilter, false);
+            return GetBeforeId(input.LessThanID, input.NbOfRows, null, ContextFactory.GetContext().GetLoggedInUserId(), input.BPTaskFilter, false, BPTaskStatusAttribute.GetClosedStatuses());
         }
 
         public BPTaskDefaultActionsState GetInitialBPTaskDefaultActionsState(long bpTaskId)
@@ -89,12 +89,12 @@ namespace Vanrise.BusinessProcess.Business
 
         public BPTaskUpdateOutput GetProcessTaskUpdated(object lastUpdateHandle, int nbOfRows, int processInstanceId)
         {
-            return GetUpdated(lastUpdateHandle, nbOfRows, processInstanceId, null, null, true);
+            return GetUpdated(lastUpdateHandle, nbOfRows, processInstanceId, null, null, true, null);
         }
 
         public List<BPTaskDetail> GetProcessTaskBeforeId(BPTaskBeforeIdInput input)
         {
-            return GetBeforeId(input.LessThanID, input.NbOfRows, input.ProcessInstanceId, null, null, true);
+            return GetBeforeId(input.LessThanID, input.NbOfRows, input.ProcessInstanceId, null, null, true, null);
         }
 
         public ExecuteBPTaskOutput ExecuteTask(ExecuteBPTaskInput input)
@@ -212,7 +212,7 @@ namespace Vanrise.BusinessProcess.Business
                 AutoOpenTask = taskType.Settings.AutoOpenTask,
                 IsAssignedToCurrentUser = bpTask.AssignedUsers != null && bpTask.AssignedUsers.Contains(loggedInUser),
                 ShowOnGrid = displayAssignedTasks || !bpTask.TakenBy.HasValue || bpTask.TakenBy.Value == loggedInUser,
-                TaskTypeName = taskType.Name
+                TaskTypeName = taskType.Title
             };
         }
         #endregion
@@ -267,13 +267,13 @@ namespace Vanrise.BusinessProcess.Business
             return visibility;
         }
 
-        private List<BPTaskDetail> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId, BPTaskFilter bPTaskFilter, bool displayAssignedTasks)
+        private List<BPTaskDetail> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId, BPTaskFilter bPTaskFilter, bool displayAssignedTasks, List<BPTaskStatus> excludedStatuses)
         {
             IBPTaskDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
             var securityContext = Vanrise.Security.Entities.ContextFactory.GetContext();
             int loggedUserId = securityContext.GetLoggedInUserId();
 
-            List<BPTask> bpTasks = dataManager.GetBeforeId(lessThanID, nbOfRows, processInstanceId, userId, BPTaskStatusAttribute.GetClosedStatuses(), bPTaskFilter);
+            List<BPTask> bpTasks = dataManager.GetBeforeId(lessThanID, nbOfRows, processInstanceId, userId, excludedStatuses, bPTaskFilter);
             List<BPTaskDetail> bpTaskDetails = new List<BPTaskDetail>();
             foreach (BPTask bpTask in bpTasks)
             {
@@ -282,7 +282,7 @@ namespace Vanrise.BusinessProcess.Business
             return bpTaskDetails;
         }
 
-        private BPTaskUpdateOutput GetUpdated(object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId, BPTaskFilter bPTaskFilter, bool displayAssignedTasks)
+        private BPTaskUpdateOutput GetUpdated(object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId, BPTaskFilter bPTaskFilter, bool displayAssignedTasks, List<BPTaskStatus> excludedStatuses)
         {
             BPTaskUpdateOutput bpTaskUpdateOutput = new BPTaskUpdateOutput();
             var securityContext = Vanrise.Security.Entities.ContextFactory.GetContext();
@@ -290,7 +290,7 @@ namespace Vanrise.BusinessProcess.Business
 
             IBPTaskDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
 
-            List<BPTask> bpTasks = dataManager.GetUpdated(ref lastUpdateHandle, nbOfRows, processInstanceId, userId, BPTaskStatusAttribute.GetClosedStatuses(), bPTaskFilter);
+            List<BPTask> bpTasks = dataManager.GetUpdated(ref lastUpdateHandle, nbOfRows, processInstanceId, userId, excludedStatuses, bPTaskFilter);
             List<BPTaskDetail> bpTaskDetails = new List<BPTaskDetail>();
             foreach (BPTask bpTask in bpTasks)
             {

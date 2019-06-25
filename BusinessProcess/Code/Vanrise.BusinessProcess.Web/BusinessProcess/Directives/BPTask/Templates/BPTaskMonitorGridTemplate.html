@@ -3,17 +3,17 @@
                  on-ready="onGridReady"
                  pagingtype="'PagingOnScroll'"
                  menuactions="gridMenuActions"
-                 idfield="Entity.BPTaskId">
-        <vr-datagridcolumn headertext="'ID'" field="'Entity.BPTaskId'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" type="'Text'" isclickable="true" onclicked="taskClicked" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Task Type'" field="'TaskTypeName'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Assigned To'" field="'Entity.AssignedUsersDescription'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Taken By'" field="'Entity.TakenByDescription'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Executed By'" field="'Entity.ExecutedByIdDescription'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" fixedwidth="'100'" getcolor="getStatusColor" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Created On'" field="'Entity.CreatedTime'" type="'LongDatetime'" disablesorting="true" fixedwidth="'120'"></vr-datagridcolumn>
+                 idfield="Entity.BPTaskId" normalcell>
+        <vr-datagridcolumn headertext="'ID'" field="'Entity.BPTaskId'" disablesorting="true" widthfactor="1"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" type="'Text'" isclickable="true" onclicked="taskClicked" widthfactor="2" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Task Type'" field="'TaskTypeName'" type="'Text'" widthfactor="2" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Assigned To'" field="'Entity.AssignedUsersDescription'" widthfactor="1" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Taken By'" field="'Entity.TakenByDescription'" type="'Text'" widthfactor="1" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Executed By'" field="'Entity.ExecutedByIdDescription'" type="'Text'" widthfactor="1" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" getcolor="getStatusColor" fixedwidth="'80'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Created On'" field="'Entity.CreatedTime'" type="'LongDatetime'" fixedwidth="'120'" disablesorting="true"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Last Status Update'" field="'Entity.LastUpdatedTime'" type="'LongDatetime'" fixedwidth="'120'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Decision'" field="'Entity.Decision'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Notes'" field="'Entity.Notes'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Decision'" field="'Entity.Decision'" type="'Text'" disablesorting="true" widthfactor="1"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Notes'" field="'Entity.Notes'" type="'Text'" disablesorting="true" widthfactor="2"></vr-datagridcolumn>
     </vr-datagrid>
 </div>

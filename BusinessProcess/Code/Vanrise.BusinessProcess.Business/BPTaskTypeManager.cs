@@ -92,6 +92,7 @@ namespace Vanrise.BusinessProcess.Business
                         {
                             BPTaskTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("BPTaskTypeId"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+                            Title = (string)genericBusinessEntity.FieldValues.GetRecord("Title"),
                             Settings = genericBusinessEntity.FieldValues.GetRecord("Settings") as BaseBPTaskTypeSettings,
                         };
                         var devProjectId = genericBusinessEntity.FieldValues.GetRecord("DevProjectId");

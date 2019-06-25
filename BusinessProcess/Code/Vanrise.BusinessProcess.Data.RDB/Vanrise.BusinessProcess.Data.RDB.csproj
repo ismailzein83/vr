@@ -68,7 +68,6 @@
     <Compile Include="BPInstanceDataManager.cs" />
     <Compile Include="BPInstancePersistenceDataManager.cs" />
     <Compile Include="BPTaskDataManager.cs" />
-    <Compile Include="BPTaskTypeDataManager.cs" />
     <Compile Include="BPTimeSubscriptionDataManager.cs" />
     <Compile Include="BPTrackingDataManager.cs" />
     <Compile Include="BPValidationMessageDataManager.cs" />
