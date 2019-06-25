@@ -12,6 +12,9 @@
     [BillingAccountID] BIGINT           NULL,
     [ActivationDate]   DATETIME         NULL,
     [SuspensionDate]   DATETIME         NULL,
+    [CustomFields]     NVARCHAR (MAX)   NULL,
     CONSTRAINT [PK__Contract__3214EC2707C12930] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

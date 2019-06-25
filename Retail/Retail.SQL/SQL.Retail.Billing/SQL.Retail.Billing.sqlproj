@@ -96,5 +96,11 @@
     <Build Include="RetailBilling\Tables\Customer.sql" />
     <Build Include="RetailBilling\Tables\Customer_Corporate.sql" />
     <Build Include="Security\RetailBilling.sql" />
+    <Build Include="RetailBilling\Tables\RatePlanDiscount.sql" />
+    <Build Include="RetailBilling\Tables\DonningRules.sql" />
+    <Build Include="RetailBilling\Tables\DonningExcludeCustomers.sql" />
+    <Build Include="RetailBilling\Tables\Deposit.sql" />
+    <Build Include="RetailBilling\Tables\Decree.sql" />
+    <Build Include="RetailBilling\Tables\CustomerMessage.sql" />
   </ItemGroup>
 </Project>
