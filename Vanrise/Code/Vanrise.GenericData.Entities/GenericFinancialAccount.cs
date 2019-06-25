@@ -15,6 +15,7 @@ namespace Vanrise.GenericData.Entities
         public DateTime? BED { get; set; }
         public DateTime? EED { get; set; }
         public int CurrencyId { get; set; }
+        public Dictionary<string,object> ExtraFields { get; set; }
     }
     public class GenericFinancialAccountConfiguration
     {

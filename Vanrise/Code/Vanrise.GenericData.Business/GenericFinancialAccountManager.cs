@@ -13,6 +13,8 @@ namespace Vanrise.GenericData.Business
     public class GenericFinancialAccountManager
     {
         GenericFinancialAccountConfiguration _configuration;
+
+        #region Public Methods
         public GenericFinancialAccountManager(GenericFinancialAccountConfiguration configuration)
         {
             configuration.ThrowIfNull("financialAccountMappingFieldsConfigration");
@@ -36,40 +38,68 @@ namespace Vanrise.GenericData.Business
             return entities.Select(item => GenericFinancialAccountMapper(item));
         }
 
+        public string GetExtraFieldValueDescription(string fieldName, object fieldValue)
+        {
+            return new GenericBusinessEntityManager().GetFieldDescription(_configuration.FinancialAccountBEDefinitionId, fieldName, fieldValue);
+        }
+
+        public object GetFinancialAccountObject(string accountId)
+        {
+            return new GenericBusinessEntityManager().GetGenericBEObject(_configuration.FinancialAccountBEDefinitionId, accountId);
+        }
+        #endregion
+
+        #region Private Methods
         private GenericFinancialAccount GenericFinancialAccountMapper(GenericBusinessEntity genericBusinessEntity)
         {
 
             GenericFinancialAccount genericFinancialAccount = new GenericFinancialAccount();
+            foreach (var fieldValue in genericBusinessEntity.FieldValues)
+            {
+                if (_configuration.BEDFieldName == fieldValue.Key)
+                {
+                    genericFinancialAccount.BED = (DateTime?)fieldValue.Value;
+                }
+                else
+                if (_configuration.EEDFieldName == fieldValue.Key)
+                {
+                    genericFinancialAccount.EED = (DateTime?)fieldValue.Value;
+                }
+                else
+                if (_configuration.AccountNameFieldName == fieldValue.Key)
+                {
+                    genericFinancialAccount.Name = fieldValue.Value as string;
+                }
+                else
+                if (_configuration.FinancialAccountIdFieldName == fieldValue.Key)
+                {
+                    genericFinancialAccount.FinancialAccountId = fieldValue.Value.ToString();
+                }
+                else
+                if (_configuration.CurrencyIdFieldName == fieldValue.Key)
+                {
+                    genericFinancialAccount.CurrencyId = (int)fieldValue.Value;
+                }
+                else
+                if (_configuration.StatusIdFieldName == fieldValue.Key)
+                {
+                    var statusDefinitionId = (Guid)fieldValue.Value;
+                    var statusDefinition = new StatusDefinitionManager().GetStatusDefinition(statusDefinitionId);
+                    statusDefinition.ThrowIfNull("statusDefinition", statusDefinitionId);
+                    statusDefinition.Settings.ThrowIfNull("statusDefinition.Settings", statusDefinitionId);
+                    genericFinancialAccount.Status = statusDefinition.Settings.IsActive ? VRAccountStatus.Active : VRAccountStatus.InActive;
+                }
+                else
+                {
+                    if (genericFinancialAccount.ExtraFields == null)
+                        genericFinancialAccount.ExtraFields = new Dictionary<string, object>();
 
-            if (_configuration.BEDFieldName != null)
-            {
-                genericFinancialAccount.BED = (DateTime?)genericBusinessEntity.FieldValues.GetRecord(_configuration.BEDFieldName);
-            }
-            if (_configuration.EEDFieldName != null)
-            {
-                genericFinancialAccount.EED = (DateTime?)genericBusinessEntity.FieldValues.GetRecord(_configuration.EEDFieldName);
-            }
-            if (_configuration.AccountNameFieldName != null)
-            {
-                genericFinancialAccount.Name = genericBusinessEntity.FieldValues.GetRecord(_configuration.AccountNameFieldName) as string;
-            }
-            if (_configuration.FinancialAccountIdFieldName != null)
-            {
-                genericFinancialAccount.FinancialAccountId = genericBusinessEntity.FieldValues.GetRecord(_configuration.FinancialAccountIdFieldName).ToString();
-            }
-            if (_configuration.CurrencyIdFieldName != null)
-            {
-                genericFinancialAccount.CurrencyId = (int)genericBusinessEntity.FieldValues.GetRecord(_configuration.CurrencyIdFieldName);
-            }
-            if (_configuration.StatusIdFieldName != null)
-            {
-                var statusDefinitionId = (Guid)genericBusinessEntity.FieldValues.GetRecord(_configuration.StatusIdFieldName);
-                var statusDefinition = new StatusDefinitionManager().GetStatusDefinition(statusDefinitionId);
-                statusDefinition.ThrowIfNull("statusDefinition", statusDefinitionId);
-                statusDefinition.Settings.ThrowIfNull("statusDefinition.Settings", statusDefinitionId);
-                genericFinancialAccount.Status = statusDefinition.Settings.IsActive ? VRAccountStatus.Active : VRAccountStatus.InActive;
+                    genericFinancialAccount.ExtraFields.Add(fieldValue.Key, fieldValue.Value);
+                }
             }
             return genericFinancialAccount;
         }
+
+        #endregion
     }
 }
