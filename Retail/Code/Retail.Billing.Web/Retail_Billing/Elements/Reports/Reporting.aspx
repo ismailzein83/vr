@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Reporting.aspx.cs" Inherits="Retail.Billing.Web.Retail_Billing.Elements.Reports.Reporting" %>

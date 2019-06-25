@@ -27,9 +27,13 @@ app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificati
 
         function BillingInvoiceSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var vatRuleDefinitionId;
 
             var genericInvoiceSettingsDirectiveAPI;
             var genericInvoiceSettingsDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var ruleDefinitionSelectorAPI;
+            var ruleDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -37,6 +41,11 @@ app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificati
                 $scope.scopeModel.onGenericInvoiceSettingsReady = function (api) {
                     genericInvoiceSettingsDirectiveAPI = api;
                     genericInvoiceSettingsDirectivePromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onRuleDefinitionSelectorReady = function (api) {
+                    ruleDefinitionSelectorAPI = api;
+                    ruleDefinitionSelectorReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -47,9 +56,15 @@ app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificati
 
                 api.load = function (payload) {
                     var promises = [];
-                    promises.push(getGenericInvoiceSettingsDirectiveLoadPromise());
+                    if (payload != undefined && payload.extendedSettingsEntity != undefined) {
+                        vatRuleDefinitionId = payload.extendedSettingsEntity.VatRuleDefinitionId;
+                    }
 
-                    function getGenericInvoiceSettingsDirectiveLoadPromise() {
+                    promises.push(loadGenericInvoiceSettingsDirective());
+
+                    promises.push(loadRuleDefinitionSelector());
+
+                    function loadGenericInvoiceSettingsDirective() {
                         var genericInvoiceSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                         genericInvoiceSettingsDirectivePromiseDeferred.promise.then(function () {
@@ -62,6 +77,19 @@ app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificati
                         return genericInvoiceSettingsDirectiveLoadDeferred.promise;
                     }
 
+                    function loadRuleDefinitionSelector() {
+                        var ruleDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        ruleDefinitionSelectorReadyDeferred.promise.then(function () {
+                            var ruleDefinitionPayload = {
+                                selectedIds: vatRuleDefinitionId
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(ruleDefinitionSelectorAPI, ruleDefinitionPayload, ruleDefinitionLoadDeferred);
+                        });
+                        return ruleDefinitionLoadDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -69,6 +97,7 @@ app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificati
                 api.getData = function () {
                     var obj = {
                         $type: "Retail.Billing.Business.BillingInvoiceSettings, Retail.Billing.Business",
+                        VatRuleDefinitionId: ruleDefinitionSelectorAPI.getSelectedIds()
                     };
 
                     genericInvoiceSettingsDirectiveAPI.setData(obj);
@@ -79,7 +108,6 @@ app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificati
                     ctrl.onReady(api);
             }
         }
-
         return directiveDefinitionObject;
     }
 ]);

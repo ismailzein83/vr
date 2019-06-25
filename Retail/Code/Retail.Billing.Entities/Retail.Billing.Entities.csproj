@@ -45,7 +45,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingInvoiceDetails.cs" />
+    <Compile Include="BillingInvoiceItem.cs" />
+    <Compile Include="BillingRatePlanService.cs" />
+    <Compile Include="BillingContractService.cs" />
+    <Compile Include="CustomerMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RetailBEChargeCalculateChargeContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{C08FD318-049C-49CE-8BC4-85BF296CBAB9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
