@@ -6,7 +6,6 @@
     [Site]                  BIGINT           NULL,
     [OMC]                   BIGINT           NULL,
     [Services]              BIGINT           NULL,
-    [LAC]                   NVARCHAR (MAX)   NULL,
     [ParentSwitch]          BIGINT           NULL,
     [TotalCapacity]         INT              NULL,
     [CurrentUtilization]    INT              NULL,
@@ -24,6 +23,8 @@
     [timestamp]             ROWVERSION       NULL,
     CONSTRAINT [PK__Switch__3214EC070CBAE877] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 
