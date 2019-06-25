@@ -297,6 +297,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (context.FieldValue == null)
                 return;
 
+            if(context.DataRecordFields[context.FieldName].Type.GetNonNullableRuntimeType() == typeof(Guid))
+            {
+                if (context.FieldValue.GetType() == typeof(string) && new Guid(context.FieldValue.ToString()) == Guid.Empty)
+                    return;
+            }
+
             Entities.GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntityManager().GetGenericBusinessEntity(context.FieldValue, this.BusinessEntityDefinitionId);
             genericBusinessEntity.ThrowIfNull("genericBusinessEntity", context.FieldValue as object);
 
