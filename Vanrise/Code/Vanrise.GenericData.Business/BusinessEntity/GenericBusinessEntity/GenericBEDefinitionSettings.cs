@@ -413,10 +413,15 @@ namespace Vanrise.GenericData.Business
 
     }
 
-    public class GenericBE360DegreeSettings{
+    public class GenericBE360DegreeSettings
+    {
         public bool Use360Degree { get; set; }
+        public GenericBE360DegreeViewSettings DirectiveSettings { get; set; }
     }
-
+    public class GenericBE360DegreeViewSettings
+    {
+        public VRGenericEditorDefinitionSetting EditorSettings { get; set; }
+    }
 
     #endregion
 

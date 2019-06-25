@@ -118,8 +118,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var additionalSettingsGridAPI;
             var additionalSettingsGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            //var threeHundredSixtyDegreesEditorDefinitionAPI;
-            //var threeHundredSixtyDegreesEditorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var threeHundredSixtyDegreesEditorDefinitionAPI;
+            var threeHundredSixtyDegreesEditorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -286,17 +286,17 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     securityReadyPromiseDeferred.resolve();
                 };
 
-                //$scope.scopeModel.on360DegreesEditorDefinitionDirectiveReady = function (api) {
-                //    threeHundredSixtyDegreesEditorDefinitionAPI = api;
-                //    threeHundredSixtyDegreesEditorDefinitionReadyPromiseDeferred.resolve();
-                //};
+                $scope.scopeModel.on360DegreesEditorDefinitionDirectiveReady = function (api) {
+                    threeHundredSixtyDegreesEditorDefinitionAPI = api;
+                    threeHundredSixtyDegreesEditorDefinitionReadyPromiseDeferred.resolve();
+                };
 
-                //$scope.scopeModel.onUse360DegreesValueChanged = function () {
-                //    var setThreeHundredSixtyDegreesEditorLoader = function (value) {
-                //        $scope.scopeModel.isLoadingThreeHundredSixtyDegreesEditorDirective = value;
-                //    };
-                //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, threeHundredSixtyDegreesEditorDefinitionAPI, { context: getContext(), }, setThreeHundredSixtyDegreesEditorLoader);
-                //};
+                $scope.scopeModel.onUse360DegreesValueChanged = function () {
+                    var setThreeHundredSixtyDegreesEditorLoader = function (value) {
+                        $scope.scopeModel.isLoadingThreeHundredSixtyDegreesEditorDirective = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, threeHundredSixtyDegreesEditorDefinitionAPI, { context: getContext(), }, setThreeHundredSixtyDegreesEditorLoader);
+                };
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
                     var selectedRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
                     dataRecordTypeFields.length = 0;
@@ -391,9 +391,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         DoNotLoadByDefault: $scope.scopeModel.doNotLoadByDefault,
                         ThreeSixtyDegreeSettings: {
                             Use360Degree: $scope.scopeModel.use360Degree,
-                            //DirectiveSettings: threeHundredSixtyDegreesEditorDefinitionAPI.getData()
+                            DirectiveSettings: {
+                                EditorSettings: threeHundredSixtyDegreesEditorDefinitionAPI.getData(),
+                            }
                         }
-                    };
+                    }
                 };
 
                 api.load = function (payload) {
@@ -401,7 +403,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     var genericBEAddedValues;
                     vrConnectionId = undefined;
                     dataRecordStorageId = undefined;
-                    var promises = [];
+                    var firstPromise = [];
                     if (payload != undefined) {
                         businessEntityDefinitionSettings = payload.businessEntityDefinitionSettings;
                         genericBEAddedValues = payload.additionalData;
@@ -422,44 +424,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         }
 
                     }
-                    promises.push(loadDataRecordTypeSelector());
-                    if (dataRecordStorageId != undefined) {
-                        promises.push(loadDataRecordStorageSelector());
-                    }
-                    promises.push(loadActionDefinitionGrid());
-                    promises.push(loadBulkActionDefinitionGrid());
-                    promises.push(loadCustomActionDefinitionGrid());
-                    //promises.push(load360DegreesEditorDefinition());
-                    promises.push(loadExtendedSettingsEditor());
-
-                    promises.push(loadColumnDefinitionGrid());
-                    promises.push(loadGridActionDefinitionGrid());
-                    promises.push(loadGridActionGroupDefinitionGrid());
-
-                    promises.push(loadViewDefinitionGrid());
-                    promises.push(loadEditorDefinitionDirective());
-                    promises.push(loadFilterDefinitionDirective());
-                    promises.push(loadModalWidthSelector());
-                    promises.push(loadOrderTypeSelector());
-                    promises.push(loadOrderDirectionSelector());
-                    promises.push(loadAfterSaveHandlerSettings());
-                    promises.push(loadBeforeInsertHandlerSettings());
-                    promises.push(loadBeforeGetFilteredHandlerSettings());
-                    promises.push(loadSecurityDirective());
-
-                    if (vrConnectionId != undefined) {
-                        promises.push(loadVRConnectionSelector());
-                        promises.push(loadGenericBEDefinitionRemoteSelector());
-                    }
 
                     if (businessEntityDefinitionSettings != undefined) {
-                        promises.push(loadDataRecordTitleFieldsSelector());
-                        promises.push(loadDataRecordTextResourceFieldSelector());
-                        promises.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
-                        promises.push(loadDataRecordRequiredParentFieldsSelector());
+                        firstPromise.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
                     }
 
-                    promises.push(loadAdditionalSettingsGrid());
 
                     function loadDataRecordTypeSelector() {
 
@@ -532,14 +501,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     }
 
 
-                    if (businessEntityDefinitionSettings != undefined) {
-                        var uploadedFieldsPayload = { DataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId };
-                        if (businessEntityDefinitionSettings.UploadFields != undefined)
-                            uploadedFieldsPayload.UploadFields = businessEntityDefinitionSettings.UploadFields;
-                        if (genericBEAddedValues != undefined)
-                            uploadedFieldsPayload.genericBEAddedValues = genericBEAddedValues;
-                        promises.push(loadUploadedFiledsGrid(uploadedFieldsPayload));
-                    }
+
 
                     function loadColumnDefinitionGrid() {
                         var loadColumnDefinitionGridPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -674,18 +636,18 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         return loadCustomActionDefinitionGridPromiseDeferred.promise;
                     }
 
-                    //function load360DegreesEditorDefinition() {
+                    function load360DegreesEditorDefinition() {
 
-                    //    var threeHundredSixtyDegreesEditorDefinitionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    //    threeHundredSixtyDegreesEditorDefinitionReadyPromiseDeferred.promise.then(function () {
-                    //        var editorPayload = {
-                    //            context: getContext(),
-                    //            settings: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.ThreeSixtyDegreeSettings && businessEntityDefinitionSettings.ThreeSixtyDegreeSettings.DirectiveSettings || undefined
-                    //        };
-                    //        VRUIUtilsService.callDirectiveLoad(threeHundredSixtyDegreesEditorDefinitionAPI, editorPayload, threeHundredSixtyDegreesEditorDefinitionLoadPromiseDeferred);
-                    //    });
-                    //    return threeHundredSixtyDegreesEditorDefinitionLoadPromiseDeferred.promise;
-                    //}
+                        var threeHundredSixtyDegreesEditorDefinitionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        threeHundredSixtyDegreesEditorDefinitionReadyPromiseDeferred.promise.then(function () {
+                            var editorPayload = {
+                                context: getContext(),
+                                settings: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.ThreeSixtyDegreeSettings != undefined && businessEntityDefinitionSettings.ThreeSixtyDegreeSettings.DirectiveSettings != undefined && businessEntityDefinitionSettings.ThreeSixtyDegreeSettings.DirectiveSettings.EditorSettings || undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(threeHundredSixtyDegreesEditorDefinitionAPI, editorPayload, threeHundredSixtyDegreesEditorDefinitionLoadPromiseDeferred);
+                        });
+                        return threeHundredSixtyDegreesEditorDefinitionLoadPromiseDeferred.promise;
+                    }
                     function loadOrderTypeSelector() {
                         var orderTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -778,7 +740,6 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     }
 
 
-
                     function loadGenericBEDefinitionRemoteSelector() {
                         var genericBEDefinitionRemoteSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         UtilsService.waitMultiplePromises([genericBEDefinitionRemoteSelectorReadyDeferred.promise, vrConnectionSelectedPromiseDeferred.promise]).then(function () {
@@ -794,7 +755,59 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         return genericBEDefinitionRemoteSelectorLoadDeferred.promise;
                     };
 
-                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                    return UtilsService.waitPromiseNode({
+                        promises: firstPromise,
+                        getChildNode: function () {
+                            var promises = [];
+
+                            promises.push(loadDataRecordTypeSelector());
+                            if (dataRecordStorageId != undefined) {
+                                promises.push(loadDataRecordStorageSelector());
+                            }
+                            promises.push(loadActionDefinitionGrid());
+                            promises.push(loadBulkActionDefinitionGrid());
+                            promises.push(loadCustomActionDefinitionGrid());
+                            promises.push(load360DegreesEditorDefinition());
+                            promises.push(loadExtendedSettingsEditor());
+
+                            promises.push(loadColumnDefinitionGrid());
+                            promises.push(loadGridActionDefinitionGrid());
+                            promises.push(loadGridActionGroupDefinitionGrid());
+
+                            promises.push(loadViewDefinitionGrid());
+                            promises.push(loadEditorDefinitionDirective());
+                            promises.push(loadFilterDefinitionDirective());
+                            promises.push(loadModalWidthSelector());
+                            promises.push(loadOrderTypeSelector());
+                            promises.push(loadOrderDirectionSelector());
+                            promises.push(loadAfterSaveHandlerSettings());
+                            promises.push(loadBeforeInsertHandlerSettings());
+                            promises.push(loadBeforeGetFilteredHandlerSettings());
+                            promises.push(loadSecurityDirective());
+
+                            if (vrConnectionId != undefined) {
+                                promises.push(loadVRConnectionSelector());
+                                promises.push(loadGenericBEDefinitionRemoteSelector());
+                            }
+
+                            if (businessEntityDefinitionSettings != undefined) {
+                                promises.push(loadDataRecordTitleFieldsSelector());
+                                promises.push(loadDataRecordTextResourceFieldSelector());
+                                promises.push(loadDataRecordRequiredParentFieldsSelector());
+                            }
+                            promises.push(loadAdditionalSettingsGrid());
+
+                            if (businessEntityDefinitionSettings != undefined) {
+                                var uploadedFieldsPayload = { DataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId };
+                                if (businessEntityDefinitionSettings.UploadFields != undefined)
+                                    uploadedFieldsPayload.UploadFields = businessEntityDefinitionSettings.UploadFields;
+                                if (genericBEAddedValues != undefined)
+                                    uploadedFieldsPayload.genericBEAddedValues = genericBEAddedValues;
+                                promises.push(loadUploadedFiledsGrid(uploadedFieldsPayload));
+                            }
+                            return { promises: promises };
+                        }
+                    }).then(function () {
                         recordTypeSelectedPromiseDeferred = undefined;
                         vrConnectionSelectedPromiseDeferred = undefined;
                         genericBEDefinitionTypeSelectedDeferred = undefined;
@@ -902,52 +915,57 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 }
                 else {
 
-                    var setDataRecordTypeTitleLoader = function (value) {
-                        $scope.scopeModel.isLoadingTitle = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTitleFieldsSelectorAPI, recordTypePayload, setDataRecordTypeTitleLoader);
-
-                    var setDataRecordTypeRequiredParentLoader = function (value) {
-                        $scope.scopeModel.isLoadingRequiredParent = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeRequiredParentFieldsSelectorAPI, recordTypePayload, setDataRecordTypeRequiredParentLoader);
-
-                    var setDataRecordTypeTextResourceFieldLoader = function (value) {
-                        $scope.scopeModel.isLoadingTextResourceField = value;
-                    };
-                    var textResourceFieldPayload = {
-                        filter: {
-                            Filters: [{ $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.TextResourceFieldFilter,Vanrise.GenericData.MainExtensions" }]
-                        },
-                        dataRecordTypeId: selectedRecordTypeId
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTextResourceFieldSelectorAPI, textResourceFieldPayload, setDataRecordTypeTextResourceFieldLoader);
-
-                    var setGridColumnLoader = function (value) {
-                        setTimeout(function () {
-                            $scope.scopeModel.isLoadingColumns = value;
-                            $scope.$apply();
-                        }, 1);
-                    };
-                    var columnDefnitionPayload = {
-                        context: getContext()
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, columnDefinitionGridAPI, columnDefnitionPayload, setGridColumnLoader);
-
-                    var setFilterLoader = function (value) {
-                        setTimeout(function () {
-                            $scope.scopeModel.isLoadingFilter = value;
-                            $scope.$apply();
-                        }, 1);
-                    };
-                    var filterPayload = {
-                        context: getContext()
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDefinitionAPI, filterPayload, setFilterLoader);
-
                     $scope.scopeModel.isLoadingEditor = true;
                     getDataRecordFieldsInfo(selectedRecordTypeId).then(function () {
                         $scope.scopeModel.isLoadingEditor = false;
+
+                        var setDataRecordTypeTitleLoader = function (value) {
+                            $scope.scopeModel.isLoadingTitle = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTitleFieldsSelectorAPI, recordTypePayload, setDataRecordTypeTitleLoader);
+
+                        var setDataRecordTypeRequiredParentLoader = function (value) {
+                            $scope.scopeModel.isLoadingRequiredParent = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeRequiredParentFieldsSelectorAPI, recordTypePayload, setDataRecordTypeRequiredParentLoader);
+
+                        var setDataRecordTypeTextResourceFieldLoader = function (value) {
+                            $scope.scopeModel.isLoadingTextResourceField = value;
+                        };
+                        var textResourceFieldPayload = {
+                            filter: {
+                                Filters: [{ $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.TextResourceFieldFilter,Vanrise.GenericData.MainExtensions" }]
+                            },
+                            dataRecordTypeId: selectedRecordTypeId
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTextResourceFieldSelectorAPI, textResourceFieldPayload, setDataRecordTypeTextResourceFieldLoader);
+
+                        var setGridColumnLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingColumns = value;
+                                $scope.$apply();
+                            }, 1);
+                        };
+                        var columnDefnitionPayload = {
+                            context: getContext()
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, columnDefinitionGridAPI, columnDefnitionPayload, setGridColumnLoader);
+
+                        var setFilterLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingFilter = value;
+                                $scope.$apply();
+                            }, 1);
+                        };
+                        var filterPayload = {
+                            context: getContext()
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDefinitionAPI, filterPayload, setFilterLoader);
+
+
+
+
+
                         var editorPayload = {
                             context: getContext()
                         };
@@ -955,63 +973,69 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             $scope.scopeModel.isLoadingEditor = value;
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, editorDefinitionAPI, editorPayload, setEditorLoader);
+
+
+
+
+
+                        var setBeforeInsertLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingBeforeInsert = value;
+                                $scope.$apply();
+                            }, 1);
+                        };
+                        var beforeInsertPayload = {
+                            context: getContext()
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, beforeInsertHandlerAPI, beforeInsertPayload, setBeforeInsertLoader);
+
+
+                        var setAfterSaveLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingAfterSave = value;
+                                $scope.$apply();
+                            }, 1);
+                        };
+                        var afterSavePayload = {
+                            context: getContext()
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, afterSaveHandlerAPI, afterSavePayload, setAfterSaveLoader);
+
+                        var setOrderTypeLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingOrderTypeSelector = value;
+                                $scope.$apply();
+                            });
+                        };
+
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, orderTypeSelectorAPI, { context: getContext() }, setOrderTypeLoader);
+
+                        var setBulkActionsLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingBulkActionsDirective = value;
+                                $scope.$apply();
+                            });
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bulkActionsDirectiveAPI, { context: getContext() }, setBulkActionsLoader);
+
+                        var setCustomActionsLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingCustomActionsDirective = value;
+                                $scope.$apply();
+                            });
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customActionsDirectiveAPI, { context: getContext() }, setCustomActionsLoader);
+
+                        var setThreeHundredSixtyDegreesEditorLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingThreeHundredSixtyDegreesEditorDirective = value;
+                                $scope.$apply();
+                            });
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, threeHundredSixtyDegreesEditorDefinitionAPI, { context: getContext() }, setThreeHundredSixtyDegreesEditorLoader);
+
                     });
 
-                    var setBeforeInsertLoader = function (value) {
-                        setTimeout(function () {
-                            $scope.scopeModel.isLoadingBeforeInsert = value;
-                            $scope.$apply();
-                        }, 1);
-                    };
-                    var beforeInsertPayload = {
-                        context: getContext()
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, beforeInsertHandlerAPI, beforeInsertPayload, setBeforeInsertLoader);
-
-
-                    var setAfterSaveLoader = function (value) {
-                        setTimeout(function () {
-                            $scope.scopeModel.isLoadingAfterSave = value;
-                            $scope.$apply();
-                        }, 1);
-                    };
-                    var afterSavePayload = {
-                        context: getContext()
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, afterSaveHandlerAPI, afterSavePayload, setAfterSaveLoader);
-
-                    var setOrderTypeLoader = function (value) {
-                        setTimeout(function () {
-                            $scope.scopeModel.isLoadingOrderTypeSelector = value;
-                            $scope.$apply();
-                        });
-                    };
-
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, orderTypeSelectorAPI, { context: getContext() }, setOrderTypeLoader);
-
-                    var setBulkActionsLoader = function (value) {
-                        setTimeout(function () {
-                            $scope.scopeModel.isLoadingBulkActionsDirective = value;
-                            $scope.$apply();
-                        });
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bulkActionsDirectiveAPI, { context: getContext() }, setBulkActionsLoader);
-
-                    var setCustomActionsLoader = function (value) {
-                        setTimeout(function () {
-                            $scope.scopeModel.isLoadingCustomActionsDirective = value;
-                            $scope.$apply();
-                        });
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customActionsDirectiveAPI, { context: getContext() }, setCustomActionsLoader);
-
-                //    var setThreeHundredSixtyDegreesEditorLoader = function (value) {
-                //        setTimeout(function () {
-                //            $scope.scopeModel.isLoadingThreeHundredSixtyDegreesEditorDirective = value;
-                //            $scope.$apply();
-                //        });
-                //    };
-                //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, threeHundredSixtyDegreesEditorDefinitionAPI, { context: getContext() }, setThreeHundredSixtyDegreesEditorLoader);
                 }
             }
 
@@ -1038,8 +1062,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     bulkActionsDirectiveAPI.load();
                 if (customActionsDirectiveAPI != undefined)
                     customActionsDirectiveAPI.load();
-            //    if (threeHundredSixtyDegreesEditorDefinitionAPI != undefined)
-            //        threeHundredSixtyDegreesEditorDefinitionAPI.load();
+                if (threeHundredSixtyDegreesEditorDefinitionAPI != undefined)
+                    threeHundredSixtyDegreesEditorDefinitionAPI.load();
             }
 
 

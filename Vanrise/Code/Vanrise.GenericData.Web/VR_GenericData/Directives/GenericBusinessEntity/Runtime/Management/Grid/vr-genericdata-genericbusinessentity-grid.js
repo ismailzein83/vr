@@ -145,11 +145,13 @@
                         threeSixtyDegreeSettings = payload.threeSixtyDegreeSettings; 
                         if (threeSixtyDegreeSettings != undefined) {
                             $scope.scopeModel.rowViewSettings.expandAsFullScreen = threeSixtyDegreeSettings.Use360Degree;
-                            //if (threeSixtyDegreeSettings.ViewSettings != undefined && threeSixtyDegreeSettings.ViewSettings.DirectiveSettings != undefined) {
-                            //    $scope.scopeModel.rowViewSettings.viewDirective = "vr-genericdata-genericbusinessentity-360degree-view";
-                            //    $scope.scopeModel.rowViewSettings.viewSettings = threeSixtyDegreeSettings.ViewSettings;
-                            //    $scope.scopeModel.rowViewSettings.viewSettings.BusinessEntityDefinitionId = businessEntityDefinitionId;
-                            //}
+                            if (threeSixtyDegreeSettings.DirectiveSettings != undefined && threeSixtyDegreeSettings.DirectiveSettings.EditorSettings != undefined) {
+                                $scope.scopeModel.rowViewSettings.viewDirective = "vr-genericdata-genericbusinessentity-360degree-view";
+                                $scope.scopeModel.rowViewSettings.directiveSettings = {
+                                    settings: threeSixtyDegreeSettings.DirectiveSettings,
+                                    businessEntityDefinitionId : businessEntityDefinitionId
+                                };
+                            }
 
                             var objectTypePromise = VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId).then(function (response) {
                                 $scope.scopeModel.rowViewSettings.objectType = response.Title;
