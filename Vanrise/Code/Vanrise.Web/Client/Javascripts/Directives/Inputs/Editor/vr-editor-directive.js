@@ -11,7 +11,8 @@
             scope: {
                 value: '=',
                 hint: '@',
-                placeholder:'@'
+                placeholder: '@',
+                label: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 $scope.loadEditor = false;
@@ -143,11 +144,18 @@
             template: function (element, attrs) {
                 var startTemplate = '<div id="rootDiv" style="position: relative;">';
                 var endTemplate = '</div>';
-
                 var labelTemplate = '';
+
                 var label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
-                if (label != undefined)
+                if (label != undefined && !label.startsWith("{{"))
+               
                     labelTemplate = '<vr-label>' + label + '</vr-label>';
+                else 
+                    labelTemplate = '<vr-label ng-if="ctrl.label">{{ctrl.label}}</vr-label>';
+
+                if (attrs.hidelabel != undefined)
+                    labelTemplate = '';
+
                     var rows = 3;
                     if (attrs.rows != undefined)
                         rows = attrs.rows;
@@ -174,6 +182,4 @@
     app.directive('vrEditor', vrEditor);
     
 })(app);
-
-
 

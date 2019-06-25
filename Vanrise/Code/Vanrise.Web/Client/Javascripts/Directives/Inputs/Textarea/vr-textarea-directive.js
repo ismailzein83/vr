@@ -14,7 +14,8 @@
 				trim: '=',
 				hint: '@',
 				placeholder: '@',
-				rows: '='
+                rows: '=',
+                label: '@'
 			},
 			controller: function ($scope, $element, $attrs) {
 				var ctrl = this;
@@ -178,13 +179,18 @@
 
 				var labelTemplate = '';
 				var label = "";
-				var trimExp = "";
+                var trimExp = "";
 
-				if (attrs.label != undefined)
-					label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                var label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
 
-				if (attrs.label != undefined)
-					labelTemplate = '<vr-label>' + label + '</vr-label>';
+                if (label != undefined && !label.startsWith("{{")) {
+                    labelTemplate = '<vr-label>' + label + '</vr-label>';
+                }
+                else
+                    labelTemplate = '<vr-label ng-if="ctrl.label">{{ctrl.label}}</vr-label>';
+
+                if (attrs.hidelabel != undefined)
+                    labelTemplate = '';
 
 				if (attrs.trim != undefined)
 					trimExp = 'ng-trim="{{ctrl.trim}}"';
