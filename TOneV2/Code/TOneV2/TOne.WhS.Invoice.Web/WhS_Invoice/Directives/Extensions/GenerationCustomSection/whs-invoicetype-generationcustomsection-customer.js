@@ -49,8 +49,15 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
 				$scope.scopeModel.adjustmentTypes = UtilsService.getArrayEnum(WhS_Invoice_AdjustmentTypeEnum);
 				$scope.scopeModel.onCommissionAdjustmentSelectionChanged = function (option) {
                     if (option != undefined) {
-                        onvaluechanged();
-						$scope.scopeModel.isPercentage = option.value == WhS_Invoice_AdjustmentTypeEnum.Percentage.value;
+                        $scope.scopeModel.isPercentage = option.value == WhS_Invoice_AdjustmentTypeEnum.Percentage.value;
+                        if (selectedTimeZoneReadyDeferred != undefined) {
+                            selectedTimeZoneReadyDeferred.promise.then(function () {
+                                onvaluechanged();
+                            });
+                        }
+                        else {
+                            onvaluechanged();
+                        }
 					}
 				};
 				$scope.scopeModel.selectedCommissionType = WhS_BE_CommisssionTypeEnum.Display;
