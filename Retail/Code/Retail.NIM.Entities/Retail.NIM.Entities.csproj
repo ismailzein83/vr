@@ -52,6 +52,9 @@
     <Compile Include="FDB\FDBPort.cs" />
     <Compile Include="CopperPath\CopperPath.cs" />
     <Compile Include="FreeFTTHPath\FreeFTTHPath.cs" />
+    <Compile Include="IMS\IMS.cs" />
+    <Compile Include="IMS\IMSPhoneNumber.cs" />
+    <Compile Include="PhoneNumberStatus.cs" />
     <Compile Include="PortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

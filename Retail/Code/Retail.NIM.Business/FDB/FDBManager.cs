@@ -59,17 +59,59 @@ namespace Retail.NIM.Business
 
             foreach (var genericBEPortIdentifier in genericBEPortIdentifierList)
             {
-                UpdateGenericBEPortStatus(genericBEPortIdentifier, genericBusinessEntityManager);
+                UpdateGenericBEPortStatus(genericBEPortIdentifier, PortStatus.TemporaryReserved);
             }
 
             return new ReserveFTTHPathOutput(freeFTTHPath);
+        }
+
+        public AddConnectionOutput AddConnection(AddConnectionInput input)
+        {
+            input.ThrowIfNull("AddConnectionInput");
+
+            Dictionary<ConnectionType, ConnectionBEDefinitionData> connectionBEDefinitionDataDict = GetConnectionBEDefinitionDataDict();
+            ConnectionBEDefinitionData connectionBEDefinitionData = connectionBEDefinitionDataDict.GetRecord(input.ConnectionType);
+
+            string port1Name, port2Name;
+
+            switch (input.ConnectionType)
+            {
+                case ConnectionType.IMSOLT: port1Name = "TID"; port2Name = "OLTHorizontalPort"; break;
+                case ConnectionType.OLTHorizontalVertical: port1Name = "OLTHorizontalPort"; port2Name = "OLTVerticalPort"; break;
+                case ConnectionType.OLTSplitter: port1Name = "OLTVerticalPort"; port2Name = "SplitterInPort"; break;
+                case ConnectionType.SplitterInOut: port1Name = "InPort"; port2Name = "OutPort"; break;
+                case ConnectionType.SplitterFDB: port1Name = "SplitterOutPort"; port2Name = "FDBPort"; break;
+                default: throw new NotSupportedException($"ConnectionType {input.ConnectionType} not supported.");
+            }
+
+            InsertGenericBEConnector(connectionBEDefinitionData.ConnectionDefinitionId, port1Name, input.Port1Id, port2Name, input.Port2Id);
+
+            if (connectionBEDefinitionData.Port1DefinitionId.HasValue)
+                UpdateGenericBEPortStatus(new GenericBEIdentifier(connectionBEDefinitionData.Port1DefinitionId.Value, input.Port1Id), PortStatus.Used);
+
+            if (connectionBEDefinitionData.Port2DefinitionId.HasValue)
+                UpdateGenericBEPortStatus(new GenericBEIdentifier(connectionBEDefinitionData.Port2DefinitionId.Value, input.Port2Id), PortStatus.Used);
+
+            return new AddConnectionOutput() { AddSucceeded = true };
         }
 
         #endregion
 
         #region Private Methods
 
-        private void UpdateGenericBEPortStatus(GenericBEIdentifier genericBEPortIdentifier, GenericBusinessEntityManager genericBusinessEntityManager)
+        private void InsertGenericBEConnector(Guid connectionDefinitionId, string port1Name, long port1Id, string port2Name, long port2Id)
+        {
+            GenericBusinessEntityToAdd genericBusinessEntityToAdd = new GenericBusinessEntityToAdd()
+            {
+                BusinessEntityDefinitionId = connectionDefinitionId,
+                FieldValues = new Dictionary<string, object>()
+            };
+            genericBusinessEntityToAdd.FieldValues.Add(port1Name, port1Id);
+            genericBusinessEntityToAdd.FieldValues.Add(port2Name, port2Id);
+            new GenericBusinessEntityManager().AddGenericBusinessEntity(genericBusinessEntityToAdd, null);
+        }
+
+        private void UpdateGenericBEPortStatus(GenericBEIdentifier genericBEPortIdentifier, Guid statusId)
         {
             GenericBusinessEntityToUpdate genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate()
             {
@@ -77,8 +119,30 @@ namespace Retail.NIM.Business
                 GenericBusinessEntityId = genericBEPortIdentifier.GenericBEId,
                 FieldValues = new Dictionary<string, object>()
             };
-            genericBusinessEntityToUpdate.FieldValues.Add("Status", PortStatus.TemporaryReserved);
-            genericBusinessEntityManager.UpdateGenericBusinessEntity(genericBusinessEntityToUpdate, null);
+            genericBusinessEntityToUpdate.FieldValues.Add("Status", statusId);
+            new GenericBusinessEntityManager().UpdateGenericBusinessEntity(genericBusinessEntityToUpdate, null);
+        }
+
+        private Dictionary<ConnectionType, ConnectionBEDefinitionData> GetConnectionBEDefinitionDataDict()
+        {
+            var connectionBEDefinitionData = new Dictionary<ConnectionType, ConnectionBEDefinitionData>();
+
+            var imsOLTConnectorData = new ConnectionBEDefinitionData(IMSOLTConnectorManager.s_beDefinitionId, IMSTIDManager.s_beDefinitionId, OLTHorizontalPortManager.s_beDefinitionId);
+            connectionBEDefinitionData.Add(ConnectionType.IMSOLT, imsOLTConnectorData);
+
+            var oltHorizontalVerticalConnectorData = new ConnectionBEDefinitionData(OLTHorizontalVerticalConnectorManager.s_beDefinitionId);
+            connectionBEDefinitionData.Add(ConnectionType.OLTHorizontalVertical, oltHorizontalVerticalConnectorData);
+
+            var oltSplitterConnectorData = new ConnectionBEDefinitionData(OLTSplitterConnectorManager.s_beDefinitionId, OLTVerticalPortManager.s_beDefinitionId, SplitterInPortManager.s_beDefinitionId);
+            connectionBEDefinitionData.Add(ConnectionType.OLTSplitter, oltSplitterConnectorData);
+
+            var splitterInOutConnectorData = new ConnectionBEDefinitionData(SplitterInOutConnectorManager.s_beDefinitionId);
+            connectionBEDefinitionData.Add(ConnectionType.SplitterInOut, splitterInOutConnectorData);
+
+            var splitterFDBConnectorData = new ConnectionBEDefinitionData(SplitterFDBConnectorManager.s_beDefinitionId, SplitterOutPortManager.s_beDefinitionId, FDBPortManager.s_beDefinitionId);
+            connectionBEDefinitionData.Add(ConnectionType.SplitterFDB, splitterFDBConnectorData);
+
+            return connectionBEDefinitionData;
         }
 
         private List<GenericBEIdentifier> BuildGenericBEPortIdentifierList(FreeFTTHPath freeFTTHPath)
@@ -311,6 +375,21 @@ namespace Retail.NIM.Business
         public DateTime CreatedTime { get; set; }
     }
 
+    public class AddConnectionInput
+    {
+        public ConnectionType ConnectionType { get; set; }
+
+        public long Port1Id { get; set; }
+
+        public long Port2Id { get; set; }
+    }
+    public class AddConnectionOutput
+    {
+        public bool AddSucceeded { get; set; }
+
+        public string ErrorMessage { get; set; }
+    }
+
     public class GenericBEIdentifier
     {
         public GenericBEIdentifier(Guid genericBEDefinitionId, object genericBEId)
@@ -322,5 +401,21 @@ namespace Retail.NIM.Business
         public Guid GenericBEDefinitionId { get; set; }
 
         public object GenericBEId { get; set; }
+    }
+
+    public class ConnectionBEDefinitionData
+    {
+        public ConnectionBEDefinitionData(Guid connectionDefinitionId, Guid? port1DefinitionId = null, Guid? port2DefinitionId = null)
+        {
+            ConnectionDefinitionId = connectionDefinitionId;
+            Port1DefinitionId = port1DefinitionId;
+            Port2DefinitionId = port2DefinitionId;
+        }
+
+        public Guid ConnectionDefinitionId { get; set; }
+
+        public Guid? Port1DefinitionId { get; set; }
+
+        public Guid? Port2DefinitionId { get; set; }
     }
 }

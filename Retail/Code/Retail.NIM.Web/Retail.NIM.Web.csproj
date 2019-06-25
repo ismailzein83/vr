@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\FDBController.cs" />
+    <Compile Include="Controllers\IMSPhoneNumberController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

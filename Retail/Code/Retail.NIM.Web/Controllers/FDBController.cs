@@ -22,5 +22,12 @@ namespace Retail.NIM.Web.Controller
         {
             return fdbManager.ReserveFTTHPath(input);
         }
+
+        [HttpPost]
+        [Route("AddConnection")]
+        public AddConnectionOutput AddConnection(AddConnectionInput input)
+        {
+            return fdbManager.AddConnection(input);
+        }
     }
 }
