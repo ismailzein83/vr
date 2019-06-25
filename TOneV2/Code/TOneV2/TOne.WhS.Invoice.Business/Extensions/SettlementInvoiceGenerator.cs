@@ -136,15 +136,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     var customerInvoiceDetails = customerInvoice.Details as CustomerInvoiceDetails;
                     if (customerInvoiceDetails != null)
                     {
-                        if (customerInvoiceDetails.TimeZoneId.HasValue)
-                        {
-                            VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(customerInvoiceDetails.TimeZoneId.Value);
-                            if (timeZone != null)
-                            {
-                                customerInvoice.FromDate = customerInvoice.FromDate.Add(-timeZone.Settings.Offset);
-                                customerInvoice.ToDate = customerInvoice.ToDate.Add(-timeZone.Settings.Offset);
-                            }
-                        }
                         bool multipleCurrencies = false;
                         var invoiceItems = customerInvoiceItems.FindAllRecords(x => x.InvoiceId == customerInvoice.InvoiceId);
                         if (invoiceItems != null)
@@ -171,6 +162,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         hasOriginalAmount = true;
                                         fromDate = customerInvoice.FromDate;
                                         toDate = customerInvoice.ToDate;
+                                        if (customerInvoiceDetails.TimeZoneId.HasValue)
+                                        {
+                                            VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(customerInvoiceDetails.TimeZoneId.Value);
+                                            if (timeZone != null)
+                                            {
+                                                fromDate = customerInvoice.FromDate.Add(-timeZone.Settings.Offset);
+                                                toDate = customerInvoice.ToDate.Add(-timeZone.Settings.Offset);
+                                            }
+                                        }
                                         if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
                                             month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
                                     }
@@ -436,15 +436,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     var supplierInvoiceDetails = supplierInvoice.Details as SupplierInvoiceDetails;
                     if (supplierInvoiceDetails != null)
                     {
-                        if (supplierInvoiceDetails.TimeZoneId.HasValue)
-                        {
-                            VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(supplierInvoiceDetails.TimeZoneId.Value);
-                            if (timeZone != null)
-                            {
-                                supplierInvoice.FromDate = supplierInvoice.FromDate.Add(-timeZone.Settings.Offset);
-                                supplierInvoice.ToDate = supplierInvoice.ToDate.Add(-timeZone.Settings.Offset);
-                            }
-                        }
                         bool isOriginalAmountSetted = supplierInvoiceDetails.IsOriginalAmountSetted;
                         bool multipleCurrencies = false;
 
@@ -471,9 +462,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                     if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && supplierInvoiceDetails.IncludeOriginalAmountInSettlement && (originalDataCurrrency.TrafficAmount.HasValue || originalDataCurrrency.SMSAmount.HasValue || originalDataCurrrency.DealAmount.HasValue || originalDataCurrrency.RecurringChargeAmount.HasValue))
                                     {
-                                        hasOriginalAmount = true;
                                         fromDate = supplierInvoice.FromDate;
                                         toDate = supplierInvoice.ToDate;
+                                        if (supplierInvoiceDetails.TimeZoneId.HasValue)
+                                        {
+                                            VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(supplierInvoiceDetails.TimeZoneId.Value);
+                                            if (timeZone != null)
+                                            {
+                                                fromDate = supplierInvoice.FromDate.Add(-timeZone.Settings.Offset);
+                                                toDate = supplierInvoice.ToDate.Add(-timeZone.Settings.Offset);
+                                            }
+                                        }
+                                        hasOriginalAmount = true;
+                                       
                                         if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
                                             month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
                                     }
