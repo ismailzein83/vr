@@ -29,6 +29,7 @@ app.directive('businessprocessVrWorkflowactivitySubprocess', ['UtilsService', 'V
 			var inArguments;
 			var outArguments;
 			var isNew;
+			var displayName;
 			var context;
 
 			this.initializeController = initializeController;
@@ -59,6 +60,7 @@ app.directive('businessprocessVrWorkflowactivitySubprocess', ['UtilsService', 'V
 							isNew = payload.Settings.IsNew;
 							inArguments = payload.Settings.InArguments;
 							outArguments = payload.Settings.OutArguments;
+							displayName = payload.Settings.DisplayName;
 						}
 
 						if (payload.SetMenuAction != undefined)
@@ -79,6 +81,7 @@ app.directive('businessprocessVrWorkflowactivitySubprocess', ['UtilsService', 'V
 							inArguments = updatedObject.InArguments;
 							outArguments = updatedObject.OutArguments;
 							isNew = false;
+							displayName = updatedObject.DisplayName;
 						};
 
 						BusinessProcess_VRWorkflowService.openSubProcessEditor(buildObjectFromScope(), onActivityUpdated, ctrl.remove, isNew, VRWorkflowId, context);
@@ -104,7 +107,8 @@ app.directive('businessprocessVrWorkflowactivitySubprocess', ['UtilsService', 'V
 					$type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowSubProcessActivity, Vanrise.BusinessProcess.MainExtensions",
 					VRWorkflowId: selectedVRWorkflowId,
 					InArguments: inArguments,
-					OutArguments: outArguments
+					OutArguments: outArguments,
+					DisplayName: displayName
 				};
 			}
 		}

@@ -27,6 +27,7 @@
 		var workflowId;
 		var isNew;
 		var context;
+		var displayName;
 		loadParameters();
 		defineScope();
 		load();
@@ -42,6 +43,7 @@
 					outArguments = parameters.obj.OutArguments;
 					workflowId = parameters.workflowId;
 					context = parameters.context;
+					displayName = parameters.obj.DisplayName;
 				}
 			}
 		}
@@ -114,6 +116,8 @@
 			$scope.scopeModel.saveActivity = function () {
 				return updateActivity();
 			};
+
+			$scope.scopeModel.displayName = displayName;
 		}
 
 		function load() {
@@ -219,7 +223,8 @@
 				VRWorkflowName: ($scope.scopeModel.selectedWorkflow != undefined) ? $scope.scopeModel.selectedWorkflow.Name : null,
 				VRWorkflowId: vrWorkflowSelectorAPI.getSelectedIds(),
 				InArguments: inArgumentsObject,
-				OutArguments: outArgumentsObject
+				OutArguments: outArgumentsObject,
+				DisplayName: $scope.scopeModel.displayName
 			};
 		}
 

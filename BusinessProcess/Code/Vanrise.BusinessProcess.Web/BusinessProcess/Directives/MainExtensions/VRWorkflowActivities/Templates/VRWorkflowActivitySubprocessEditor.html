@@ -4,6 +4,11 @@
 			<vr-row>
 				<businessprocess-vr-workflow-selector selectedvalues="scopeModel.selectedWorkflow" on-ready="scopeModel.onVRWorkflowSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon
 													  onselectionchanged="scopeModel.onVRWorkflowSelectionChanged"></businessprocess-vr-workflow-selector>
+				<vr-columns colnum="4">
+					<vr-textbox  value="scopeModel.displayName" label="Display Name" isrequired="true"></vr-textbox>
+				</vr-columns>
+			</vr-row>
+			<vr-row>
 				<vr-columns ng-if="scopeModel.hasInArguments" colnum="{{scopeModel.hasOutArguments?'4':'8'}}" medium-spacing>
 					<vr-section header="In Arguments">
 						<vr-datagrid datasource="scopeModel.inArguments" on-ready="scopeModel.onInArgumentsGridReady" hidegridmenu>
