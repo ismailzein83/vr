@@ -1,4 +1,4 @@
-﻿CREATE TABLE [RetailBilling].[DonningRules] (
+﻿CREATE TABLE [RetailBilling].[DunningRules] (
     [ID]                    BIGINT           IDENTITY (1, 1) NOT NULL,
     [CustomerId]            BIGINT           NULL,
     [CustomerCategoryId]    UNIQUEIDENTIFIER NULL,

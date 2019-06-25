@@ -1,4 +1,4 @@
-﻿CREATE TABLE [RetailBilling].[DonningExcludeCustomers] (
+﻿CREATE TABLE [RetailBilling].[DunningExcludeCustomers] (
     [ID]               BIGINT   IDENTITY (1, 1) NOT NULL,
     [FromDate]         DATETIME NULL,
     [ToDate]           DATETIME NULL,
