@@ -62,6 +62,9 @@ as (select * from (values
 ('82E04A93-5A3F-4C32-80A4-08E1DAFCF305','Array','Array','VR_GenericData_DataRecordFieldType'																	,'{"Editor":"vr-genericdata-fieldtype-array","RuntimeEditor":"vr-genericdata-fieldtype-array-runtimeeditor", "FilterEditor": "vr-genericdata-fieldtype-array-filtereditor"}'),
 ('414C5C8D-48AD-4343-ABDA-4CD34D570C53','Dictionary','Dictionary','VR_GenericData_DataRecordFieldType'															,'{"Editor":"vr-genericdata-fieldtype-dictionary","RuntimeEditor":"vr-genericdata-fieldtype-dictionary-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-dictionary-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-dictionary-rulefiltereditor"}'),
 
+('FD373089-5799-476E-880C-1F9541259A83','RecordFilterGroupSelectorCondition','Record Filter','VR_GenericData_GenericBESelectorConditionConfig'	,'{"Editor":"vr-genericdata-genericbusinessentity-recordfiltergroup-selectorcondition"}'),
+('D8FB248F-168E-484A-B421-6EA4FCF569D2','SelectorConditionGroup','Condition Group','VR_GenericData_GenericBESelectorConditionConfig'		    ,'{"Editor":"vr-genericdata-genericbusinessentity-conditiongroup-selectorcondition"}'),
+
 ('BBC57155-0412-4371-83E5-1917A8BEA468','VR_GenericData_VRObjectTypes_DataRecordType','Data Record','VR_Common_ObjectType'													,'{"Editor":"vr-genericdata-datarecordobjecttype", "PropertyEvaluatorExtensionType": "VR_GenericData_DataRecordObjectType_PropertyEvaluator"}'),
 ('F663BF74-99DB-4746-8CBC-E74198E1786C','VR_GenericData_VRObjectTypes_DataRecordField','Field','VR_GenericData_DataRecordObjectType_PropertyEvaluator'						,'{"Editor":"vr-genericdata-datarecordobjectfield"}'),
 ('FE0EE225-6893-410F-8095-1834DB99D7B7','VR_GenericData_VRObjectTypes_DataRecordFieldComparison','Field Comparison','VR_GenericData_DataRecordObjectType_PropertyEvaluator'	,'{"Editor":"vr-genericdata-datarecordobjectfieldcomparison"}'),
