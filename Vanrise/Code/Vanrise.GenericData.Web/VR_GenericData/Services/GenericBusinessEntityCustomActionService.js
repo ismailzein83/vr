@@ -28,10 +28,16 @@
                 ExecuteAction: function (payload) {
                     if (payload == undefined)
                         return;
+                    var parameters = {
+                        dataRecordTypeId: payload.dataRecordTypeId,
+                        parentFieldValues: payload.parentFieldValues,
+                        customAction: payload.customAction,
+                        businessEntityDefinitionId: payload.businessEntityDefinitionId
+                    };
                     var settings = {};
                     var modalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/CustomActions/Templates/BulkAddRuntimeEditor.html";
 
-                    VRModalService.showModal(modalPath, payload, settings);
+                    VRModalService.showModal(modalPath, parameters, settings);
                 }
             };
             registerCustomActionType(bulkAddCustomAction);

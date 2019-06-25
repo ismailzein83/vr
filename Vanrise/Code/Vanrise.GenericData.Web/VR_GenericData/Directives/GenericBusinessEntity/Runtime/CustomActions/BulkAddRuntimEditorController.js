@@ -25,12 +25,11 @@
                 customAction = parameters.customAction;
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
             }
-            customActionSettings = customAction.Settings != undefined ? customAction.Settings : {};
+            customActionSettings = customAction.Settings != undefined ? customAction.Settings : {}; 
         
         }
 
         function defineScope() {
-            $scope.scopeModel.runtimeEditor = (customActionSettings.Settings != undefined) ? customActionSettings.Settings.RuntimeEditor : undefined;
             $scope.scopeModel.execute = function () {
                 $scope.scopeModel.isLoading = true;
                
@@ -52,20 +51,19 @@
                 runtimeEditorReadyDeferred.resolve();
             };
         }
-
         function loadEditorRuntimeDirective() {
-            var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
+            var loadEditorRuntimeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
             runtimeEditorReadyDeferred.promise.then(function () {
-             
                 var runtimeEditorPayload = {
+                    selectedValues: parentFieldValues,
                     dataRecordTypeId: dataRecordTypeId,
                     definitionSettings: customActionSettings.Settings,
-                    parentFieldValues: parentFieldValues
+                    runtimeEditor:customActionSettings.Settings != undefined ? customActionSettings.Settings.RuntimeEditor : undefined
                 };
-                VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, loadEditorRuntimeDirectivePromiseDeferred);
             });
-
-            return runtimeEditorLoadDeferred.promise;
+            return loadEditorRuntimeDirectivePromiseDeferred.promise;
         }
 
         function load() {
