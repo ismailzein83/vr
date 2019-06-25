@@ -158,7 +158,10 @@
                                     promiseDeferred.resolve(true);
                                 }
                             };
-                            startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, context, editorSize);
+                            startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, context, editorSize).then(function (response) {
+                                if (response)
+                                    promiseDeferred.resolve();
+                            });
                         }).catch(function () {
                             promiseDeferred.reject();
                         });
