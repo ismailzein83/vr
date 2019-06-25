@@ -569,6 +569,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContractID");
             esq.AddColumn("StRequestType");
             esq.AddColumn("CreatedOn");
+            esq.AddColumn("StSequenceNumber");
             var createdbycol = esq.AddColumn("CreatedBy.Name");
 
             // var c = esq.AddColumn("StContact");
@@ -607,6 +608,7 @@ namespace BPMExtended.Main.Business
                         contractId = (string)entity.GetColumnValue("StContractID"),
                         CreatedOn = CreatedOn.ToString("dd/MM/yyyy"),
                         CreatedBy = entity.GetTypedColumnValue<string>(createdbycol.Name),
+                        SequenceNumber = (string)entity.GetColumnValue("StSequenceNumber"),
                         RequestTypeName = Utilities.GetEnumAttribute<OperationType, DescriptionAttribute>((OperationType)value).Description,
                         EntityName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)value).schemaName
                     });

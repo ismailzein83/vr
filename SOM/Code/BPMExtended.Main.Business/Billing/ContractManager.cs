@@ -688,7 +688,9 @@ namespace BPMExtended.Main.Business
                 RatePlanId = contract.RateplanId,
                 PathId = contract.LinePathId,
                 PhoneNumber = contract.PhoneNumber,
-                ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
+                ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId,
+                IsBlocked = contract.IsBlocked,
+                StatusChangeDate = contract.LastStatusChangeDate == null || contract.LastStatusChangeDate == DateTime.MinValue ? "" : contract.LastStatusChangeDate.ToString("dd/MM/yyyy hh:mm")
             };
         }
 

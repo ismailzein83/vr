@@ -377,10 +377,13 @@ namespace BPMExtended.Main.Business
             using (SOMClient client = new SOMClient())
             {
                 List<PromotionPackage> items = client.Get<List<PromotionPackage>>(String.Format("api/SOM.ST/Billing/ReadContractPromotions?ContractId={0}", contractId));
-                foreach (var item in items)
+                if (items != null)
                 {
-                    var detailItem = PromotionToDetailMapper(item);
-                    promotionsItems.Add(detailItem);
+                    foreach (var item in items)
+                    {
+                        var detailItem = PromotionToDetailMapper(item);
+                        promotionsItems.Add(detailItem);
+                    }
                 }
             }
             return promotionsItems;

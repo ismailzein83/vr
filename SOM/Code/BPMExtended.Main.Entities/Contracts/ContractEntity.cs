@@ -27,5 +27,8 @@ namespace BPMExtended.Main.Entities
         public string FreeUnit { get; set; }
 
         public string PathId { get; set; }
+        public string StatusChangeDate { get; set; }
+
+        public bool IsBlocked { get; set; }
     }
 }

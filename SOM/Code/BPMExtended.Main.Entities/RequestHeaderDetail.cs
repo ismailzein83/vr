@@ -23,5 +23,6 @@ namespace BPMExtended.Main.Entities
         public string EntityName { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedOn { get; set; }
+        public string SequenceNumber { get; set; }
     }
 }
