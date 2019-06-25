@@ -4684,6 +4684,15 @@
               "CreatedTime": "2019-03-25T10:36:11.667",
               "LastModifiedTime": "2019-04-08T14:00:39.487"
             }
+          },
+          {
+            "FieldValues": {
+              "ID": "253b191b-f9d9-4b21-84f2-3192a20019c8",
+              "Name": "Retail Billing Connection",
+              "Settings": "{\"$type\":\"Vanrise.Common.Business.VRInterAppRestConnection, Vanrise.Common.Business\",\"ConfigId\":\"5cd2aac3-1c74-401f-8010-8b9b5fd9c011\",\"BaseURL\":\"http://localhost:5556\",\"Username\":\"admin@vanrise.com\",\"Password\":\"1\"}",
+              "CreatedTime": "2019-06-13T22:06:02.997",
+              "LastModifiedTime": "2019-06-13T22:06:02.997"
+            }
           }
         ],
         "Columns": [
@@ -4720,7 +4729,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Name like '%Inventory%'",
+        "LastWhereCondition": "Name like '%retail%'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
