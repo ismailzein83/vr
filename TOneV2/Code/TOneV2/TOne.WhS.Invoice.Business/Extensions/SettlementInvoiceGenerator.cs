@@ -178,11 +178,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                     });
 
 
-                                    var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
+                                    SettlementInvoiceDetailByCurrency settlementInvoiceDetailByCurrency = null;
+                                    if (!hasOriginalAmount)
+                                    {
+                                        settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
+                                    }
+                                    else
+                                    {
+                                        settlementInvoiceDetailByCurrency = settlementInvoiceCurrency.FindRecord(x => x.InvoiceId == customerInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId);
+                                        if (settlementInvoiceDetailByCurrency == null)
+                                            settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
+                                    }
                                     settlementInvoiceDetailByCurrency.InvoiceId = customerInvoice.InvoiceId;
                                     settlementInvoiceDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
-                                    settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
-                                    settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
+                                    settlementInvoiceDetailByCurrency.TotalDuration += invoiceItemDetails.Duration;
+                                    settlementInvoiceDetailByCurrency.NumberOfCalls += invoiceItemDetails.NumberOfCalls;
 
                                     bool canAddSettlementInvoiceDetailByCurrency = false;
 
@@ -461,11 +471,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         };
                                     });
 
-                                    var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
+                                    SettlementInvoiceDetailByCurrency settlementInvoiceDetailByCurrency = null;
+                                    if (!hasOriginalAmount)
+                                    {
+                                        settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
+                                    }
+                                    else
+                                    {
+                                        settlementInvoiceDetailByCurrency = settlementInvoiceCurrency.FindRecord(x => x.InvoiceId == supplierInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId);
+                                        if (settlementInvoiceDetailByCurrency == null)
+                                            settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
+                                    }
                                     settlementInvoiceDetailByCurrency.InvoiceId = supplierInvoice.InvoiceId;
                                     settlementInvoiceDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
-                                    settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
-                                    settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
+                                    settlementInvoiceDetailByCurrency.TotalDuration += invoiceItemDetails.Duration;
+                                    settlementInvoiceDetailByCurrency.NumberOfCalls += invoiceItemDetails.NumberOfCalls;
 
                                     bool canAddSettlementInvoiceDetailByCurrency = false;
 
