@@ -333,10 +333,7 @@
 
 .vr-visualitem-whileactivity .visual-label-container {
     text-align: center;
-}
-
-.vr-visualitem-whileactivity .visual-entry-step {
-    text-align: center;
+    padding-bottom: 5px;
 }
 
 .vr-visualitem-whileactivity .visual-wrapper .visual-main-content {

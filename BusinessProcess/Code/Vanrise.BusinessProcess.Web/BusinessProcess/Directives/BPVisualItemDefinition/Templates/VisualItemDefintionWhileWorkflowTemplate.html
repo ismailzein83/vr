@@ -1,19 +1,13 @@
 ﻿<div class="vr-visualitem-whileactivity">
     <div class="visual-label-container">
-        <vr-label> While {{scopeModel.conditionDescription}}</vr-label>
-    </div>
-    <div class="visual-entry-step">
-        <div class="vr-visualitem-separatordesign" ng-if="scopeModel.childVisualItem.Settings.Editor!=undefined">
-            <div class="vr-visualitem-separatordesignline" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.classEventSeparatorCompleted}"></div>
-            <i class="vr-visualitem-separatordesigndown" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.classEventSeparatorCompleted}"></i>
-        </div>
+        <vr-label>{{scopeModel.conditionDescription}}</vr-label>
     </div>
     <div class="visual-wrapper">
         <div class="visual-main-content">
             <div class="visual-content">
-                <div class="visual-block">
+                <div class="visual-block" ng-class="{'visual-block-completed': scopeModel.classLoopCompleted}">
                     <div class="visual-top-eraser"></div>
-                    <i class="visual-retry-entry" style=""></i>
+                    <i class="visual-retry-entry" ></i>
                     <div class="visual-conter-container">
                         <div class="vr-visualitem-counterIcon">
                             <div class="counter-value">{{scopeModel.nbOfIteration}}</div>
@@ -29,7 +23,3 @@
         </div>
     </div>
 </div>
-
-
-
-
