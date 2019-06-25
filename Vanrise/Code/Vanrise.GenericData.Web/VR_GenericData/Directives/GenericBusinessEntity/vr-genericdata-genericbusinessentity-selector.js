@@ -93,7 +93,7 @@
                     var selectedIds;
                     var selectIfSingleItem;
                     var beRuntimeSelectorFilter;
-                    var isFromManagementScreen;
+                    var isFromFilterSection;
                     if (payload != undefined) {
                         ctrl.fieldTitle = payload.fieldTitle;
                         ctrl.isDisabled = payload.isDisabled;
@@ -101,7 +101,7 @@
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         filter = payload.filter;
                         beRuntimeSelectorFilter = payload.beRuntimeSelectorFilter;
-                        isFromManagementScreen = payload.isFromManagementScreen;
+                        isFromFilterSection = payload.isFromFilterSection;
 
                         selectedIds = payload.selectedIds;
                         selectIfSingleItem = payload.selectIfSingleItem;
@@ -112,7 +112,7 @@
                     }
 
                     if (beRuntimeSelectorFilter != undefined) {
-                        if (!isFromManagementScreen || !beRuntimeSelectorFilter.NotApplicableInSearch) {
+                        if (!isFromFilterSection || !beRuntimeSelectorFilter.NotApplicableInSearch) {
                             if (filter == undefined) {
                                 filter = {};
                             }
@@ -146,6 +146,13 @@
                                 }
                             }
                             else {
+                                if (selectedIds != undefined) {
+                                    if (isFirstLoad) {
+                                        if (filter == undefined)
+                                            filter = {};
+                                        filter.IncludedIds = !Array.isArray(selectedIds) ? [selectedIds] : selectedIds;
+                                    }
+                                }
                                 getGenericBusinessEntityInfo(selectedIds, selectIfSingleItem).then(function () {
                                     getGenericBusinessEntityInfoPromiseDeferred.resolve();
                                 });

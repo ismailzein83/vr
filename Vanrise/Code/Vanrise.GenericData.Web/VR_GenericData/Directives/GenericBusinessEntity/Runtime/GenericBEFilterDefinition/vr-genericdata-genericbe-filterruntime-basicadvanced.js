@@ -24,7 +24,7 @@
             this.initializeController = initializeController;
 
             var dataRecordTypeId;
-            var isFromManagementScreen;
+            var isFromFilterSection;
 
             function initializeController() {
 				$scope.scopeModel = {};
@@ -44,7 +44,7 @@
 
                     if (payload != undefined) {
                         dataRecordTypeId = payload.dataRecordTypeId;
-                        isFromManagementScreen = payload.isFromManagementScreen;
+                        isFromFilterSection = payload.isFromFilterSection;
 
                         var settings = payload.settings;
                         var filterValues = payload.filterValues;
@@ -93,7 +93,7 @@
                                 dataRecordTypeId: dataRecordTypeId,
                                 genericContext: genericContext,
                                 allFieldValuesByName: allFieldValuesByName,
-                                isFromManagementScreen: isFromManagementScreen
+                                isFromFilterSection: isFromFilterSection
                             };
                             VRUIUtilsService.callDirectiveLoad(filter.filterAPI, filterDirectivePayload, filterItem.loadPromisedeferred);
                         });

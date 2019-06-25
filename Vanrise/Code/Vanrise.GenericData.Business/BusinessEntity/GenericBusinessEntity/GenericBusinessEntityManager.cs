@@ -108,8 +108,31 @@ namespace Vanrise.GenericData.Business
                         recordFilterGroup.Filters.Add(convertedRecordFilter);
                     }
 
-                    if (filter.GenericBESelectorCondition != null)
-                        recordFilterGroup.Filters.Add(filter.GenericBESelectorCondition.GetFilterGroup(new GenericBESelectorConditionGetFilterGroupContext()));
+                    else
+                    {
+                        RecordFilterGroup recordFilterGroup2 = new RecordFilterGroup { Filters = new List<RecordFilter>(), LogicalOperator = RecordQueryLogicalOperator.Or };
+
+                        if (filter.GenericBESelectorCondition != null)
+                        {
+                            recordFilterGroup2.Filters.Add(filter.GenericBESelectorCondition.GetFilterGroup(new GenericBESelectorConditionGetFilterGroupContext()));
+
+                            if (filter.IncludedIds != null && filter.IncludedIds.Count != 0)
+                            {
+                                var objectListRecordFilter = new ObjectListRecordFilter()
+                                {
+                                    FieldName = idDataRecordField.Name,
+                                    Values = filter.IncludedIds,
+                                    CompareOperator = ListRecordFilterOperator.In
+                                };
+
+                                RecordFilter convertedRecordFilter = Helper.ConvertToRecordFilter(idDataRecordField.Name, idDataRecordField.Type, objectListRecordFilter);
+                                recordFilterGroup2.Filters.Add(convertedRecordFilter);
+                            }
+                        }
+
+                        if (recordFilterGroup2.Filters.Count > 0)
+                            recordFilterGroup.Filters.Add(recordFilterGroup2);
+                    }
 
                     if (filter.FieldFilters != null && filter.FieldFilters.Count > 0)
                     {
@@ -126,8 +149,8 @@ namespace Vanrise.GenericData.Business
                 }
 
                 List<GenericBusinessEntity> genericBusinessEntities = new List<GenericBusinessEntity>();
-
                 var storageRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId.Value, columns, recordFilterGroup.Filters.Count > 0 ? recordFilterGroup : null, mappedDataRecordFilters);
+
                 if (storageRecords != null && storageRecords.Count() > 0)
                 {
                     foreach (var storageRecord in storageRecords)

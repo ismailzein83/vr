@@ -25,7 +25,6 @@ app.directive("vrGenericdataGenericbeFilterruntimeRootcontainer", ["UtilsService
             var dataRecordTypeId;
             var filterValues;
             var allFieldValuesByFieldNames = {};
-            var isFromManagementScreen;
 
             var filterDirectiveAPI;
             var filterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -53,7 +52,6 @@ app.directive("vrGenericdataGenericbeFilterruntimeRootcontainer", ["UtilsService
                         dataRecordTypeId = payload.dataRecordTypeId;
                         filterValues = payload.filterValues;
                         $scope.scopeModel.filterRuntimeEditor = payload.filterRuntimeEditor;
-                        isFromManagementScreen = payload.isFromManagementScreen;
                     }
 
                     if ($scope.scopeModel.filterRuntimeEditor != undefined) {
@@ -80,7 +78,7 @@ app.directive("vrGenericdataGenericbeFilterruntimeRootcontainer", ["UtilsService
                                 filterValues: filterValues,
                                 allFieldValuesByName: allFieldValuesByName,
                                 genericContext: buildGenericContext(),
-                                isFromManagementScreen: isFromManagementScreen
+                                isFromFilterSection: true
                             };
                             VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
                         });

@@ -15,6 +15,8 @@ namespace Vanrise.GenericData.Entities
         public GenericBESelectorCondition GenericBESelectorCondition { get; set; }
 
         public List<Object> SelectedIds { get; set; }
+
+        public List<Object> IncludedIds { get; set; }
     }
 
     public interface IGenericBusinessEntityFilter

@@ -250,8 +250,7 @@
                     var filterRuntimeRootDirectivePayload = {
                         settings: genericBEDefinitionSettings.FilterDefinition.Settings,
                         dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
-                        filterRuntimeEditor: $scope.scopeModel.filterRuntimeEditor,
-                        isFromManagementScreen: true
+                        filterRuntimeEditor: $scope.scopeModel.filterRuntimeEditor
                     };
                     VRUIUtilsService.callDirectiveLoad(filterRuntimeRootDirectiveAPI, filterRuntimeRootDirectivePayload, filterRuntimeRootDirectiveLoadDeferred);
                 });

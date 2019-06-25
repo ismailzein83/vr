@@ -90,7 +90,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             var fieldValuesByName = {};
             var dependentFields = [];
             //var dataRecordTypeId;
-            var isFromManagementScreen;
+            var isFromFilterSection;
 
             function initializeController() {
                 //ctrl.showSelector = ($attrs.selectionmode == "dynamic");
@@ -119,7 +119,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         allFieldValuesByName = payload.allFieldValuesByName;
                         parentFieldValues = payload.parentFieldValues;
                         //dataRecordTypeId = payload.dataRecordTypeId;
-                        isFromManagementScreen = payload.isFromManagementScreen;
+                        isFromFilterSection = payload.isFromFilterSection;
                     }
 
                     businessEntityDefinitionId = fieldType.BusinessEntityDefinitionId;
@@ -221,7 +221,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                         genericUIContext: genericUIContext,
                                         hasEmtyRequiredDependentField: hasEmtyRequiredDependentField,
                                         filter: data != undefined && data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : getFilter(),
-                                        isFromManagementScreen: isFromManagementScreen 
+                                        isFromFilterSection: isFromFilterSection 
                                     };
 
                                     if (fieldValue != undefined) {
@@ -538,7 +538,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     filter: data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : undefined,
                     beRuntimeSelectorFilter: beRuntimeSelectorFilter,
                     hasEmtyRequiredDependentField: data.hasEmtyRequiredDependentField,
-                    isFromManagementScreen: isFromManagementScreen
+                    isFromFilterSection: isFromFilterSection
                 };
                 var setLoader = function (value) {
                     $scope.isLoading = value;

@@ -28,7 +28,7 @@
             var dataRecordTypeId;
             var dataRecordType;
             var fieldTypeConfigs;
-            var isFromManagementScreen;
+            var isFromFilterSection;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -45,7 +45,7 @@
                     if (payload != undefined) {
                         dataRecordTypeId = payload.dataRecordTypeId;
                         definitionSettings = payload.settings;
-                        isFromManagementScreen = payload.isFromManagementScreen;
+                        isFromFilterSection = payload.isFromFilterSection;
                         var allFieldValuesByName = payload.allFieldValuesByName;
                         var genericContext = payload.genericContext;
 
@@ -79,7 +79,7 @@
                                     genericContext: genericContext,
                                     allFieldValuesByName: allFieldValuesByName,
                                     //dataRecordTypeId: dataRecordTypeId
-                                    isFromManagementScreen: isFromManagementScreen
+                                    isFromFilterSection: isFromFilterSection
                                 };
                                 VRUIUtilsService.callDirectiveLoad(filter.directiveAPI, directivePayload, filter.directiveLoadDeferred);
                             };
