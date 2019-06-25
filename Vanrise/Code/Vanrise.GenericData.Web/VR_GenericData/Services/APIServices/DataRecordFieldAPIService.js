@@ -46,7 +46,12 @@
                     FieldValue: fieldValue
                 });
         }
-
+        function GetFieldTypeListDescription(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetFieldTypeListDescription"), input);
+        }
+        function GetListDataRecordTypeGridViewColumnAtts(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetListDataRecordTypeGridViewColumnAtts"), input);
+        }
         return ({
             GetDataRecordFieldsInfo: GetDataRecordFieldsInfo,
             GetDataRecordAttributes: GetDataRecordAttributes,
@@ -55,7 +60,9 @@
             TryResolveDifferences: TryResolveDifferences,
             GetFieldCustomObjectTypeSettingsConfig: GetFieldCustomObjectTypeSettingsConfig,
             GetListRecordRuntimeViewTypeConfigs: GetListRecordRuntimeViewTypeConfigs,
-            GetFieldTypeDescription: GetFieldTypeDescription
+            GetFieldTypeDescription: GetFieldTypeDescription,
+            GetFieldTypeListDescription: GetFieldTypeListDescription,
+            GetListDataRecordTypeGridViewColumnAtts: GetListDataRecordTypeGridViewColumnAtts
         });
 
     }

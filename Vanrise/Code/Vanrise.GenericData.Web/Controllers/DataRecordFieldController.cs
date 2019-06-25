@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
@@ -34,7 +35,14 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.GetDataRecordFieldsInfo(dataRecordTypeId, filter);
         }
-
+        [HttpPost]
+        [Route("GetListDataRecordTypeGridViewColumnAtts")]
+        public List<GenericBEDefinitionGridColumnAttribute> GetListDataRecordTypeGridViewColumnAtts(DataRecordTypeGridViewColumnsInput input)
+        {
+            DataRecordFieldManager manager = new DataRecordFieldManager();
+            return manager.GetListDataRecordTypeGridViewColumnAtts(input);
+        }
+ 
         [HttpGet]
         [Route("GetDataRecordAttributes")]
         public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(Guid dataRecordTypeId)
@@ -72,6 +80,14 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.GetFieldTypeDescription(input);
         }
+        [HttpPost]
+        [Route("GetFieldTypeListDescription")]
+        public List<Dictionary<string,string>> GetFieldTypeListDescription(ListFieldTypeDescriptionInput input)
+        {
+            DataRecordFieldManager manager = new DataRecordFieldManager();
+            return manager.GetFieldTypeListDescription(input);
+        }
+        
     }
     public class TryResolveDifferencesInput
     {

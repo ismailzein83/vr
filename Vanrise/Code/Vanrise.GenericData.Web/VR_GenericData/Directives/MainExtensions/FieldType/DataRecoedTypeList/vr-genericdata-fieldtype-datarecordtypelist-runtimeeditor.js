@@ -63,19 +63,21 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                         fieldTitle = payload.fieldTitle;
                         fieldName = payload.fieldName;
                         fieldViewSettings = payload.fieldViewSettings;
-                        $scope.scopeModel.runtimeEditor = fieldViewSettings != undefined ? fieldViewSettings.RuntimeEditor : undefined;
-                        var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(runtimeEditorLoadPromiseDeferred.promise);
+                        if (fieldViewSettings != undefined) {
+                            $scope.scopeModel.runtimeEditor = fieldViewSettings.RuntimeEditor;
+                            var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(runtimeEditorLoadPromiseDeferred.promise);
 
-                        runtimeEditorReadyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(runtimeEditorDirectiveAPI, {
-                                fieldTitle: fieldTitle,
-                                fieldValue: fieldValue,
-                                dataRecordTypeId: fieldType.DataRecordTypeId,
-                                definitionSettings: fieldViewSettings,
-                                fieldType: fieldType
-                            }, runtimeEditorLoadPromiseDeferred);
-                        });
+                            runtimeEditorReadyPromiseDeferred.promise.then(function () {
+                                VRUIUtilsService.callDirectiveLoad(runtimeEditorDirectiveAPI, {
+                                    fieldTitle: fieldTitle,
+                                    fieldValue: fieldValue,
+                                    dataRecordTypeId: fieldType.DataRecordTypeId,
+                                    definitionSettings: fieldViewSettings,
+                                    fieldType: fieldType
+                                }, runtimeEditorLoadPromiseDeferred);
+                            });
+                        }
                     }
 
                     return UtilsService.waitPromiseNode(rootPromiseNode);

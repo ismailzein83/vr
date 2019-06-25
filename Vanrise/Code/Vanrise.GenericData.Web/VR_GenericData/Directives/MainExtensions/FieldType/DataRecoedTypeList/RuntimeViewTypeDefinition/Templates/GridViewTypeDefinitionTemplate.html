@@ -2,11 +2,14 @@
     <vr-row>
         <vr-columns width="fullrow">
             <vr-row>
-                <vr-columns width="1/2row">
+                <vr-columns width="1/3row">
                     <vr-switch label="Hide Add Button" value="scopeModel.hideAddButton"></vr-switch>
                 </vr-columns>
-                <vr-columns width="1/2row">
+                <vr-columns width="1/3row">
                     <vr-switch label="Hide Section" value="scopeModel.hideSection"></vr-switch>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-switch label="Enable Draggable Row" value="scopeModel.enableDraggableRow"></vr-switch>
                 </vr-columns>
             </vr-row>
             <vr-row>
@@ -20,14 +23,22 @@
                 <vr-columns width="fullrow">
                     <vr-datagrid datasource="scopeModel.availableFields" norowhighlightonclick="true" maxheight="300px"
                                  on-ready="onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onRemoveField" hidegridmenu>
-                        <vr-datagridcolumn headertext="'Field Name'">
-                            <vr-label>{{dataItem.fieldName}}</vr-label>
+                        <vr-datagridcolumn headertext="'Field Name'" widthfactor="10">
+                            <vr-label>{{dataItem.entity.FieldName}}</vr-label>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Required'">
-                            <vr-switch value="dataItem.isRequired"></vr-switch>
+                        <vr-datagridcolumn headertext="'Width'" widthfactor="15">
+                            <span vr-loader="scopeModel.isColumnSettingDirectiveloading">
+                                <vr-common-gridcolumnwidth-editor on-ready="dataItem.onColumnSettingDirectiveReady" selector-col-num="6" textbox-col-num="6"></vr-common-gridcolumnwidth-editor>
+                            </span>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Disabled'">
-                            <vr-switch value="dataItem.isDisabled"></vr-switch>
+                        <vr-datagridcolumn headertext="'Required'" widthfactor="5">
+                            <vr-switch value="dataItem.entity.IsRequired"></vr-switch>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Disabled'" widthfactor="5">
+                            <vr-switch value="dataItem.entity.IsDisabled"></vr-switch>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Show as Label'" widthfactor="5">
+                            <vr-switch value="dataItem.entity.ShowAsLabel"></vr-switch>
                         </vr-datagridcolumn>
                 </vr-columns>
             </vr-row>

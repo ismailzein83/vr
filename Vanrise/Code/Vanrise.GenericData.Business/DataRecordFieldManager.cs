@@ -4,6 +4,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
 using System.Linq;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Business
 {
@@ -93,7 +94,41 @@ namespace Vanrise.GenericData.Business
 
             return dataRecordFields.Values.MapRecords(DataRecordFieldInfoMapper, filterExpression);
         }
+        public List<GenericBEDefinitionGridColumnAttribute> GetListDataRecordTypeGridViewColumnAtts(DataRecordTypeGridViewColumnsInput input)
+        {
+            List<GenericBEDefinitionGridColumnAttribute> columnsAttributes = null;
+            if (input != null && input.ColumnsInfo!=null && input.ColumnsInfo.Count > 0)
+            {
+                columnsAttributes = new List<GenericBEDefinitionGridColumnAttribute>();
 
+                foreach (var columnInfo in input.ColumnsInfo)
+                {
+                    var columnAttribute = new GenericBEDefinitionGridColumnAttribute
+                    {
+                        Name = columnInfo.Name,
+                        Attribute = new GridColumnAttribute
+                        {
+                            HeaderText = columnInfo.Title
+                        }
+                    };
+                    int? widthFactor = null;
+                    int? fixedWidth = null;
+
+                    if (columnInfo.GridColumnSettings != null)
+                    {
+                        widthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(columnInfo.GridColumnSettings);
+                        if (!widthFactor.HasValue)
+                            fixedWidth = columnInfo.GridColumnSettings.FixedWidth;
+                    }
+
+                    columnAttribute.Attribute.FixedWidth = fixedWidth;
+                    columnAttribute.Attribute.WidthFactor = widthFactor;
+
+                    columnsAttributes.Add(columnAttribute);
+                }
+            }
+            return columnsAttributes;
+        }
         public IEnumerable<DataRecordFieldFormulaConfig> GetDataRecordFieldFormulaExtensionConfigs()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
@@ -118,7 +153,36 @@ namespace Vanrise.GenericData.Business
                 return null;
             return input.FieldType.GetDescription(input.FieldValue);
         }
+        public List<Dictionary<string, string>> GetFieldTypeListDescription(ListFieldTypeDescriptionInput input)
+        {
+            List<Dictionary<string, string>> fieldsDescription = null;
 
+            if (input.FieldTypes != null && input.FieldsValues != null && input.FieldsValues.Count > 0)
+            {
+                fieldsDescription = new List<Dictionary<string, string>>();
+
+                foreach (var rowFieldsValues in input.FieldsValues)
+                {
+                    if (rowFieldsValues != null && rowFieldsValues.Count > 0)
+                    {
+                        var rowFieldsDescription = new Dictionary<string, string>();
+
+                        foreach (var fieldValue in rowFieldsValues)
+                        {
+                            if (fieldValue.Key != null)
+                            {
+                                var fieldType = input.FieldTypes.GetRecord(fieldValue.Key);
+
+                                if (fieldType != null)
+                                    rowFieldsDescription.Add(fieldValue.Key, fieldType.GetDescription(fieldValue.Value));
+                            }
+                        }
+                        fieldsDescription.Add(rowFieldsDescription);
+                    }
+                }
+            }
+            return fieldsDescription;
+        }
         #endregion
 
         #region Config
@@ -166,5 +230,10 @@ namespace Vanrise.GenericData.Business
     {
         public DataRecordFieldType FieldType { get; set; }
         public string FieldValue { get; set; }
+    }
+    public class ListFieldTypeDescriptionInput
+    {
+        public Dictionary<string, DataRecordFieldType> FieldTypes { get; set; }
+        public List<Dictionary<string,object>> FieldsValues { get; set; }
     }
 }

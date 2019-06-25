@@ -45,11 +45,20 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                 };
 
                 $scope.scopeModel.onSelectField = function (field) {
-                    $scope.scopeModel.availableFields.push({ fieldName: field.Name});
+                    var dataItem = {
+                        entity: { FieldName: field.Name},
+                    };
+
+                    dataItem.onColumnSettingDirectiveReady = function (api) {
+                        dataItem.columnSettingsDirectiveAPI = api;
+                        var setLoader = function (value) { $scope.scopeModel.isColumnSettingDirectiveloading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, undefined, setLoader);
+                    };
+                    $scope.scopeModel.availableFields.push(dataItem);
                 };
 
                 $scope.scopeModel.onDeSelectField = function (field) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.availableFields, field.Name, "fieldName");
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.availableFields, field.Name, "entity.FieldName");
                     if (index != -1) {
                         $scope.scopeModel.availableFields.splice(index, 1);
                     }
@@ -57,7 +66,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
 
                 $scope.scopeModel.onRemoveField = function (item) {
                     var index = $scope.scopeModel.availableFields.indexOf(item);
-                    var selectedFieldIndex = UtilsService.getItemIndexByVal($scope.scopeModel.selectedFields, item.fieldName, "Name");
+                    var selectedFieldIndex = UtilsService.getItemIndexByVal($scope.scopeModel.selectedFields, item.entity.FieldName, "Name");
 
                     if (index != -1) {
                         $scope.scopeModel.availableFields.splice(index, 1);
@@ -82,14 +91,15 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                     var recordTypeFields=[];
                     if (payload != undefined) {
                         var dataRecordTypeId = payload.dataRecordTypeId;
+                        var settings = payload.settings;
                         var fieldsPayload = {
                             dataRecordTypeId: dataRecordTypeId,
                         };
-                        if (payload.settings != undefined) {
-                            $scope.scopeModel.hideAddButton = payload.settings.HideAddButton;
-                            $scope.scopeModel.hideSection = payload.settings.HideSection;
-
-                            var availableFields = payload.settings.AvailableFields;
+                        if (settings != undefined) {
+                            $scope.scopeModel.hideAddButton = settings.HideAddButton;
+                            $scope.scopeModel.hideSection = settings.HideSection;
+                            $scope.scopeModel.enableDraggableRow = settings.EnableDraggableRow;
+                            var availableFields = settings.AvailableFields;
                             var selectedIds = [];
                             if (availableFields != undefined && availableFields.length > 0) {
                                 for (var i = 0; i < availableFields.length; i++) {
@@ -110,8 +120,25 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                            
                         }
                     }
+                    function prepareDataItem(genericBEFieldObject) {
 
+                        var dataItem = {
+                            entity: genericBEFieldObject.payload
+                        };
 
+                        dataItem.onColumnSettingDirectiveReady = function (api) {
+                            dataItem.columnSettingsDirectiveAPI = api;
+                            genericBEFieldObject.columnSettingsReadyPromiseDeferred.resolve();
+                        };
+
+                        genericBEFieldObject.columnSettingsReadyPromiseDeferred.promise.then(function () {
+                            var payload = {
+                                data: genericBEFieldObject.payload != undefined && genericBEFieldObject.payload.GridColumnSettings != undefined ? genericBEFieldObject.payload.GridColumnSettings : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(dataItem.columnSettingsDirectiveAPI, payload, genericBEFieldObject.columnSettingsLoadPromiseDeferred);
+                        });
+                        $scope.scopeModel.availableFields.push(dataItem);
+                    }
                     return UtilsService.waitPromiseNode({
                         promises: promises,
                         getChildNode: function () {
@@ -121,11 +148,13 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                                 if (recordTypeFields != undefined) {
                                     for (var i = 0; i < recordTypeFields.length; i++) {
                                         var selectedField = recordTypeFields[i];
-                                        $scope.scopeModel.availableFields.push({
-                                            fieldName: selectedField.FieldName,
-                                            isRequired: selectedField.IsRequired,
-                                            isDisabled: selectedField.IsDisabled,
-                                        });
+                                        var genericBEFieldObject = {
+                                            payload: selectedField,
+                                            columnSettingsReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            columnSettingsLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                        };
+                                        promises.push(genericBEFieldObject.columnSettingsLoadPromiseDeferred.promise);
+                                        prepareDataItem(genericBEFieldObject);
                                     }
                                 }
                             }
@@ -140,15 +169,18 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                     for (var i = 0; i < $scope.scopeModel.availableFields.length; i++) {
                         var selectedField = $scope.scopeModel.availableFields[i];
                         availableFields.push({
-                            FieldName: selectedField.fieldName,
-                            IsRequired: selectedField.isRequired,
-                            IsDisabled: selectedField.isDisabled,
+                            FieldName: selectedField.entity.FieldName,
+                            IsRequired: selectedField.entity.IsRequired,
+                            IsDisabled: selectedField.entity.IsDisabled,
+                            ShowAsLabel: selectedField.entity.ShowAsLabel,
+                            GridColumnSettings: selectedField.columnSettingsDirectiveAPI.getData()
                         });
                     }
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.GridViewListRecordRuntimeViewType, Vanrise.GenericData.MainExtensions",
                         HideAddButton: $scope.scopeModel.hideAddButton,
                         HideSection: $scope.scopeModel.hideSection,
+                        EnableDraggableRow: $scope.scopeModel.enableDraggableRow,
                         AvailableFields: availableFields
                     };
                 };
