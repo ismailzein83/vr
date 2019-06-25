@@ -120,7 +120,7 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                     retVal = $scope.scopeModel.value;
                 }
 
-                return retVal;
+                return retVal != undefined ? retVal : false;
             };
 
             api.setFieldValues = function (fieldValuesByNames) {
