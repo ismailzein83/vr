@@ -58,6 +58,9 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                     if (value != undefined) {
                         if (selectedTimeZoneReadyDeferred != undefined) {
                             selectedTimeZoneReadyDeferred.resolve();
+                            if (emptyTimeZonePromiseDeferred != undefined) {
+                                emptyTimeZonePromiseDeferred.resolve();
+                            }
                         }
                         else {
                             onvaluechanged();
