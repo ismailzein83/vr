@@ -237,12 +237,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"2f6e55d2-44b6-4bcb-b398-758fcb709e05\"}]}}",
-              "Rank": 4,
+              "Rank": 16,
               "ActionNames": null,
               "Content": null,
               "Audience": null,
               "CreatedTime": "2019-05-16T09:18:59.483",
-              "LastModifiedTime": "2019-05-28T10:42:56.313",
+              "LastModifiedTime": "2019-06-24T18:36:12.027",
               "IsDeleted": null
             }
           },
@@ -256,12 +256,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"0c36853f-e2dc-4391-913e-420a8d064641\"}]}}",
-              "Rank": null,
+              "Rank": 12,
               "ActionNames": null,
               "Content": null,
               "Audience": null,
               "CreatedTime": "2019-05-28T11:49:56.823",
-              "LastModifiedTime": "2019-05-28T11:49:56.823",
+              "LastModifiedTime": "2019-06-24T18:36:12.023",
               "IsDeleted": null
             }
           }
