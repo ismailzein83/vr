@@ -956,6 +956,7 @@
     <None Include="TOne.AccountManager.PostDeployment.sql" />
     <None Include="Common.Localization.PostDeployment.sql" />
     <None Include="Retail_NIMForFixedOperator.PostDeployment.sql" />
+    <None Include="Retail_RetailBilling.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
@@ -972,5 +973,6 @@
     <None Include="CommonEntities_PersonProfile.PostDeployment.sql" />
     <None Include="Retail_CRMForFixedOperator.PostDeployment.sql" />
     <None Include="VRJSON_PostScripts\Retail_NIMForFixedOperator.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\Retail_RetailBilling.PostDeployment.json" />
   </ItemGroup>
 </Project>
