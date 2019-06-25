@@ -1,27 +1,29 @@
-﻿
-<div class="vr-visualitem-condition">
-    <div style="margin:15px auto;text-align:center">
-        <vr-label>{{scopeModel.conditionDescription}}</vr-label>
+﻿<vr-row>
+    <div class="vr-visualitem-condition">
+        <div style="margin:15px auto;text-align:center">
+            <vr-label>{{scopeModel.conditionDescription}}</vr-label>
+        </div>
+        <div class="vr-visualitem-conditionlabel" ng-class="{'vr-visualitem-event-completed': scopeModel.trueConditionCompleted || scopeModel.falseConditionCompleted}">
+        </div>
+        <div class="vr-visualitem-beforecondition" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.trueConditionCompleted}">Yes</div>
+
+        <i class="vr-visualitem-downleft" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.trueConditionCompleted}"></i>
+
+        <div class="vr-visualitem-aftercondition" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.falseConditionCompleted}">No</div>
+
+        <i class="vr-visualitem-downright" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.falseConditionCompleted}"></i>
     </div>
-    <div class="vr-visualitem-conditionlabel" ng-class="{'vr-visualitem-event-completed': scopeModel.trueConditionCompleted || scopeModel.falseConditionCompleted}">
-    </div>
-    <div class="vr-visualitem-beforecondition" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.trueConditionCompleted}">Yes</div>
 
-    <i class="vr-visualitem-downleft" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.trueConditionCompleted}"></i>
+    <vr-columns width="1/2row">
+        <vr-directivewrapper directive="scopeModel.trueBranch.Settings.Editor" on-ready="scopeModel.onTrueBranchDirectiveReady" style="">
+        </vr-directivewrapper>
+    </vr-columns>
 
-    <div class="vr-visualitem-aftercondition" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.falseConditionCompleted}">No</div>
+    <vr-columns width="1/2row">
+        <vr-directivewrapper directive="scopeModel.falseBranch.Settings.Editor" on-ready="scopeModel.onFalseBranchDirectiveReady" style="">
+        </vr-directivewrapper>
+    </vr-columns>
+</vr-row>
 
-    <i class="vr-visualitem-downright" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.falseConditionCompleted}"></i>
-</div>
-
-<vr-columns width="1/2row">
-    <vr-directivewrapper directive="scopeModel.trueBranch.Settings.Editor" on-ready="scopeModel.onTrueBranchDirectiveReady" style="">
-    </vr-directivewrapper>
-</vr-columns>
-
-<vr-columns width="1/2row">
-    <vr-directivewrapper directive="scopeModel.falseBranch.Settings.Editor" on-ready="scopeModel.onFalseBranchDirectiveReady" style="">
-    </vr-directivewrapper>
-</vr-columns>
 
 

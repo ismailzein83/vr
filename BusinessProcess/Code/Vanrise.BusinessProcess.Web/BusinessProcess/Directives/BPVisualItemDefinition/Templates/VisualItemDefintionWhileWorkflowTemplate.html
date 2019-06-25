@@ -1,26 +1,35 @@
-﻿<div>
-    <div style="margin:15px auto;text-align:center">
+﻿<div class="vr-visualitem-whileactivity">
+    <div class="visual-label-container">
         <vr-label> While {{scopeModel.conditionDescription}}</vr-label>
     </div>
-    <div class="vr-visualitem-counterIcon">
-        <div class="counter-value">{{scopeModel.nbOfIteration}}</div>
+    <div class="visual-entry-step">
+        <div class="vr-visualitem-separatordesign" ng-if="scopeModel.childVisualItem.Settings.Editor!=undefined">
+            <div class="vr-visualitem-separatordesignline" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.classEventSeparatorCompleted}"></div>
+            <i class="vr-visualitem-separatordesigndown" ng-class="{'vr-visualitem-separatorcompleted': scopeModel.classEventSeparatorCompleted}"></i>
+        </div>
     </div>
-
-
-    <div class="vr-visualitem-separatordesign" ng-if="scopeModel.childVisualItem.Settings.Editor!=undefined">
-        <div class="vr-visualitem-separatordesignline" ng-class="{'vr-visualitem-separatorcompleted': childVisualItem.classEventCompleted}"></div>
-        <i class="vr-visualitem-separatordesigndown" ng-class="{'vr-visualitem-separatorcompleted': childVisualItem.classEventCompleted}"></i>
-    </div>
-
-    <div class="vr-visualitem-closeLoop-top"></div>
-
-    <vr-columns width="fullrow">
-        <vr-directivewrapper directive="scopeModel.childVisualItem.Settings.Editor" on-ready="scopeModel.onChildVisualItemReady">
-        </vr-directivewrapper>
-    </vr-columns>
-
-    <div class="vr-visualitem-closeLoop-buttom">
-        <div class="buttom-border"></div>
+    <div class="visual-wrapper">
+        <div class="visual-main-content">
+            <div class="visual-content">
+                <div class="visual-block">
+                    <div class="visual-top-eraser"></div>
+                    <i class="visual-retry-entry" style=""></i>
+                    <div class="visual-conter-container">
+                        <div class="vr-visualitem-counterIcon">
+                            <div class="counter-value">{{scopeModel.nbOfIteration}}</div>
+                        </div>
+                    </div>
+                    <span ng-if="scopeModel.childVisualItem.Settings.Editor != undefined">
+                        <vr-directivewrapper directive="scopeModel.childVisualItem.Settings.Editor" on-ready="scopeModel.onChildVisualItemReady"></vr-directivewrapper>
+                    </span>
+                    <div class="visual-retry-exit"></div>
+                    <div class="visual-bottom-eraser"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
+
 

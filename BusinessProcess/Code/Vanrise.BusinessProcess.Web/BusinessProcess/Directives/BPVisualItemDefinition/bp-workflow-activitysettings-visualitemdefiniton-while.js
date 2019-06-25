@@ -24,14 +24,12 @@
             this.initializeController = initializeController;
 
             var visualItemDefinition;
-
+            var directiveEditor;
             var childDirectiveAPI;
             var childDirectivePromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
-
-                $scope.scopeModel.nbOfIteration = 1;
 
                 $scope.scopeModel.onChildVisualItemReady = function (api) {
                     childDirectiveAPI = api;
@@ -43,9 +41,11 @@
 
             function defineAPI() {
                 var api = {};
-
+               
                 api.load = function (payload) {
                     var initialPromises = [];
+
+                    $scope.scopeModel.nbOfIteration = 0;
 
                     if (payload != undefined) {
                         visualItemDefinition = payload.visualItemDefinition;
@@ -57,8 +57,11 @@
                         promises: initialPromises,
                         getChildNode: function () {
                             var directivePromises = [];
-                            if ($scope.scopeModel.childVisualItem != undefined && $scope.scopeModel.childVisualItem.Settings != undefined && $scope.scopeModel.childVisualItem.Settings.Editor != undefined)
+                            if ($scope.scopeModel.childVisualItem != undefined && $scope.scopeModel.childVisualItem.Settings != undefined && $scope.scopeModel.childVisualItem.Settings.Editor != undefined) {
+                                directiveEditor = $scope.scopeModel.childVisualItem.Settings.Editor;
                                 directivePromises.push(loadChildBranchDirective());
+
+                            }
 
                             return {
                                 promises: directivePromises
@@ -70,44 +73,98 @@
                 };
 
                 api.tryApplyVisualEventToChilds = function (visualEvents) {
-                    var status = false;
-                    if (visualEvents != undefined && visualEvents.length >= 0) {
-                        var unsucceededVisualEvents = [];
+                    var eventsStatus = [];
 
+                    if (visualEvents != undefined && visualEvents.length > 0) {
+                        var hasNewIteration = false;
+                        var visualEventsItems = [];
                         for (var i = 0; i < visualEvents.length; i++) {
                             var visualEvent = visualEvents[i];
-
                             if (visualEvent.EventTypeId == VisualEventTypeEnum.NewIteration.value.toLowerCase()) {
+                                eventsStatus.push({
+                                    event: visualEvent,
+                                    isEventUsed: true,
+                                });
                                 $scope.scopeModel.nbOfIteration++;
+                                hasNewIteration = true;
+                                for (var j = i+1; j < visualEvents.length; j++) {
+                                    visualEventsItems.push(visualEvents[j]);
+                                }
+                                break;
                             }
-
-                            if (childDirectiveAPI != undefined && childDirectiveAPI.tryApplyVisualEvent != undefined) {
-                                if (visualItemDefinition != undefined && visualItemDefinition.Settings.ChildActivityId == visualEvent.ActivityId) {
-                                    if (childDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
-                                        $scope.scopeModel.trueConditionCompleted = true;
-                                        status = true;
+                        }
+                        if (hasNewIteration) {
+                            tryReloadDirective().then(function () {
+                                var unsucceededVisualEvents = [];
+                                for (var i = 0; i < visualEventsItems.length; i++) {
+                                    var visualEvent = visualEventsItems[i];
+                                    if (applyEvents(visualEvent, unsucceededVisualEvents, eventsStatus))
                                         continue;
-                                    }
                                 }
-                            }
-
-                            unsucceededVisualEvents.push(visualEvent);
-                        }
-
-                        if (unsucceededVisualEvents.length > 0) {
-                            if (childDirectiveAPI != undefined && childDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                if (childDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents)) {
-                                    $scope.scopeModel.trueConditionCompleted = true;
-                                    status = true;
-                                }
+                            });
+                        } else {
+                            var unsucceededVisualEvents = [];
+                            for (var i = 0; i < visualEvents.length; i++) {
+                                var visualEvent = visualEvents[i];
+                                if (applyEvents(visualEvent, unsucceededVisualEvents, eventsStatus))
+                                    continue;
                             }
                         }
+                     
                     }
-                    return status;
+                    return eventsStatus;
                 };
 
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
+                }
+            }
+
+            function tryReloadDirective() {
+                $scope.scopeModel.childVisualItem.Settings.Editor = undefined;
+                childDirectivePromiseReadyDeferred = UtilsService.createPromiseDeferred();
+                setTimeout(function () {
+                    $scope.scopeModel.childVisualItem.Settings.Editor = directiveEditor;
+                });
+                var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                childDirectivePromiseReadyDeferred.promise.then(function () {
+                    var payload = {
+                        visualItemDefinition: $scope.scopeModel.childVisualItem
+                    };
+                    VRUIUtilsService.callDirectiveLoad(childDirectiveAPI, payload, loadPromiseDeferred);
+                });
+                return loadPromiseDeferred.promise;
+            }
+
+            function applyEvents(visualEvent, unsucceededVisualEvents, eventsStatus) {
+                if (childDirectiveAPI != undefined && childDirectiveAPI.tryApplyVisualEvent != undefined) {
+                    if (visualItemDefinition != undefined && visualItemDefinition.Settings.ChildActivityId == visualEvent.ActivityId) {
+                        if (childDirectiveAPI.checkIfCompleted != undefined && !childDirectiveAPI.checkIfCompleted()) {
+                            var childDirectiveResult = childDirectiveAPI.tryApplyVisualEvent(visualEvent);
+                            if (childDirectiveResult != undefined && childDirectiveResult.isEventUsed) {
+                                $scope.scopeModel.loopConditionCompleted = true;
+                                eventsStatus.push({
+                                    event: visualEvent,
+                                    isEventUsed: childDirectiveResult.isEventUsed,
+                                });
+                                return true;
+                            }
+                        }
+                    }
+                }
+                unsucceededVisualEvents.push(visualEvent);
+
+                if (unsucceededVisualEvents.length > 0) {
+                    if (childDirectiveAPI != undefined && childDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
+                        var childDirectiveResult = childDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents);
+                        if (childDirectiveResult != undefined && childDirectiveResult.length > 0) {
+                            $scope.scopeModel.loopConditionCompleted = true;
+                            for (var i = 0; i < childDirectiveResult.length; i++) {
+                                eventsStatus.push(childDirectiveResult[i]);
+                            }
+                        }
+
+                    }
                 }
             }
 

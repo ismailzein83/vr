@@ -86,12 +86,6 @@
                             } else {
                                 for (var j = 0; j < visualEvents.length; j++) {
                                     var visualEvent = visualEvents[j];
-                                    //if (visualEvent.ActivityId == VisualEventTypeEnum.NewIteration.value.toLowerCase()) {
-                                    //    var reloadedObject = UtilsService.getItemByVal(childVisualItems, visualEvent.ActivityId, "ChildActivityId");
-                                    //    if (reloadedObject != undefined) {
-
-                                    //    }
-                                    //}
                                     if (visualEvent.ActivityId == childVisualItem.ChildActivityId) {
                                         if (childVisualItem.directiveAPI.checkIfCompleted != undefined && !childVisualItem.directiveAPI.checkIfCompleted()) {
                                             var childItemResult = childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent);

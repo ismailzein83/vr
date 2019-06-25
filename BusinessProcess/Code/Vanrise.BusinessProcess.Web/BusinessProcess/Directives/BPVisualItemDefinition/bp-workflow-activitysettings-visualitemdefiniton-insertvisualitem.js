@@ -34,6 +34,12 @@
                 });
 
                 $scope.scopeModel = {};
+                $scope.scopeModel.classEventStarted = false;
+                $scope.scopeModel.isHintStarted = false;
+                $scope.scopeModel.classEventCompleted = false;
+                $scope.scopeModel.classEventError = false;
+                $scope.scopeModel.classEventRetrying = false;
+                $scope.scopeModel.hint = "Not Started";
 
                 $scope.scopeModel.onInsertVisualEventActivityClick = function () {
                     if ($scope.scopeModel.isHintStarted) {
@@ -49,13 +55,6 @@
 
                 api.load = function (payload) {
                     var initialPromises = [];
-
-                    $scope.scopeModel.classEventStarted = false;
-                    $scope.scopeModel.isHintStarted = false;
-                    $scope.scopeModel.classEventCompleted = false;
-                    $scope.scopeModel.classEventError = false;
-                    $scope.scopeModel.classEventRetrying = false;
-                    $scope.scopeModel.hint = "Not Started";
 
                     if (payload != undefined) {
                         visualItemDefinition = payload.visualItemDefinition;
