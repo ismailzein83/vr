@@ -157,3 +157,6 @@ TelecomCRM.PostDeployment.sql
 CommonEntities_Address.PostDeployment.sql
 CommonEntities_PersonProfile.PostDeployment.sql
 Retail_CRMForFixedOperator.PostDeployment.sql
+
+RetailBilling
+Retail_RetailBilling.PostDeployment.sql
