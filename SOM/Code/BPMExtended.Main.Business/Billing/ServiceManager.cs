@@ -347,7 +347,28 @@ namespace BPMExtended.Main.Business
             return services;
         }
 
+        public string GetContractServiceStatusByEnumValue(string enumValue)
+        {
+            string contractStatusDescription = null;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StContractServicesstatus");
+
+            esq.AddColumn("StEnumValue");
+            esq.AddColumn("Description");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StEnumValue", enumValue);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                contractStatusDescription = entities[0].GetColumnValue("Description").ToString();
+            }
+
+            return contractStatusDescription;
+        }
 
         #endregion
 
@@ -403,8 +424,8 @@ namespace BPMExtended.Main.Business
             {
                 Id = customerContractService.Id,
                 Name = customerContractService.Name,
-                //Status = contractManager.GetContractStatusByEnumValue(customerContractService.Status.ToString()),
-                Status = customerContractService.Status,
+                Status = GetContractServiceStatusByEnumValue(customerContractService.Status.ToString()),
+                //Status = customerContractService.Status,
                 ActivateDate = customerContractService.ActivateDate,
             };
         }

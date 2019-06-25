@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using Newtonsoft.Json;
 using Terrasoft.Core;
@@ -30,9 +31,11 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             EntityCollection entities;
-            CRMCustomerInfo customerInfo;
+            Contact customerInfo;
 
-            customerInfo = new CRMCustomerManager().GetCRMCustomerInfo(contactId, accountId);
+            //TODO:check if contact or account
+
+            customerInfo = GetContact(contactId); 
 
             // check categories catalog
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
@@ -56,18 +59,21 @@ namespace BPMExtended.Main.Business
             else
             {
                 //check customer balance
+                using (SOMClient client = new SOMClient())
+                {
+                    decimal? balance = client.Get<decimal?>(String.Format("api/SOM.ST/Billing/GetCustomerBalance?CustomerId={0}", customerInfo.CustomerId));
 
-                //if (new BillingManager().GetCustomerBalance(info.CustomerId).Balance > 0)
-                if (new Random().Next(-10, 10) > 0)
-                {
-                    msgCode = Constant.VALIDATION_BALANCE_NOT_VALID;
-                    status = ResultStatus.Error;
-                }
-                else
-                {
-                    msgCode = Constant.VALIDATION_BALANCE_VALID;
-                    status = ResultStatus.Success;
-                }
+                    if (balance == 0 || balance == null)
+                    {
+                        msgCode = Constant.VALIDATION_BALANCE_VALID;
+                        status = ResultStatus.Success;                        
+                    }
+                    else
+                    {
+                        msgCode = Constant.VALIDATION_BALANCE_NOT_VALID;
+                        status = ResultStatus.Error;
+                    }
+                }               
 
             }
 

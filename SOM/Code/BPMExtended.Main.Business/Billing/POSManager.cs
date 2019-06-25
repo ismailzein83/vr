@@ -26,13 +26,13 @@ namespace BPMExtended.Main.Business
         }
         #endregion
 
-        public SubmitToPOSResponse SubmitToPOS(string requestId)
+        public SubmitToPOSResponse SubmitToPOS(string requestId , string fees)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SubmitToPOSResponse item=null;
             bool depositFlag;
-            string contractId=null,contactId, fees,deposits;
+            string contractId=null,contactId;
             Contact contact;
             EntityCollection entities;
             List<SaleService> services = new List<SaleService>();
@@ -55,9 +55,6 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager,  new CRMCustomerManager().GetEntityNameByRequestId(requestId));
             var stContact = esq.AddColumn("StContact.Id");
             esq.AddColumn("StDepositFlag");
-            esq.AddColumn("StOperationAddedFees");
-            esq.AddColumn("StOperationAddedDeposites");
-
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -67,11 +64,9 @@ namespace BPMExtended.Main.Business
             {
                 contactId = entities[0].GetTypedColumnValue<string>(stContact.Name).ToString();             
                 depositFlag = (bool)entities[0].GetColumnValue("StDepositFlag");
-                fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
-                deposits = entities[0].GetColumnValue("StOperationAddedDeposites").ToString();
                 contact = new CommonManager().GetContact(contactId);
 
-                if (fees != "" && fees != null)
+                if (fees != "" && fees != null && fees != "[]")
                 {
                     services = JsonConvert.DeserializeObject<List<SaleService>>(fees);
                 }

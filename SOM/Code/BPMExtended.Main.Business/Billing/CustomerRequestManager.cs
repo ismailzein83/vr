@@ -330,14 +330,17 @@ namespace BPMExtended.Main.Business
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
 
+           
+
             if (entities.Count > 0)
             {
                 int reqcode = 0;
                 int.TryParse(entities[0].GetTypedColumnValue<int>(requestTypeId.Name).ToString(), out reqcode);
+                TechnicalStepFieldNameAttribute technicalStepField = Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode);
                 SchemaName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)reqcode).schemaName;
                 CompletedStepId = Utilities.GetEnumAttribute<OperationType, CompletedStepIdAttribute>((OperationType)reqcode).CompletedStepId;
                 CompletedStep = Utilities.GetEnumAttribute<OperationType, CompletedStepAttribute>((OperationType)reqcode).CompletedStep;
-                TechnicalStep = Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode).fieldName;
+                TechnicalStep = technicalStepField==null?null: Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode).fieldName;
 
                 UpdateRequestStatus(requestId, SchemaName,CompletedStepId,CompletedStep, TechnicalStep);
             }
@@ -359,7 +362,7 @@ namespace BPMExtended.Main.Business
             {
                 recordEntity = collection[0];
                 recordEntity.SetColumnValue(CompletedStep, CompletedStepId);
-                recordEntity.SetColumnValue(TechnicalStep, Guid.Empty);
+                if(TechnicalStep != null) recordEntity.SetColumnValue(TechnicalStep, null);
             }
             recordEntity.Save();
         }

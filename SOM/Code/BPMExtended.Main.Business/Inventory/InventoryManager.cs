@@ -394,10 +394,11 @@ namespace BPMExtended.Main.Business
 
         public void CreateFullPath(string phoneNumber , string pathID)
         {
+            string phoneNumberId = phoneNumber.EndsWith(".0") ? phoneNumber.Substring(0, phoneNumber.Length - 2) : phoneNumber;
 
             using (SOMClient client = new SOMClient())
             {
-                client.Get<string>(String.Format("api/SOM.ST/Inventory/AddNodeToPath?phoneNumber={0}&pathID={1}", phoneNumber, pathID));
+                client.Get<string>(String.Format("api/SOM.ST/Inventory/AddNodeToPath?PhoneNumberId={0}&PathID={1}", phoneNumberId, pathID));
             }
 
         }
