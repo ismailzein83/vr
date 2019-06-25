@@ -66,6 +66,10 @@
     <Folder Include="Com_Address\" />
     <Folder Include="Com_Address\Tables\" />
     <Folder Include="Security\" />
+    <Folder Include="Com_CommonEntities\" />
+    <Folder Include="Com_CommonEntities\Tables\" />
+    <Folder Include="Com_BankEntities\" />
+    <Folder Include="Com_BankEntities\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Com_PersonProf\Tables\Salutation.sql" />
@@ -76,5 +80,11 @@
     <Build Include="Security\Com_PersonProf.sql" />
     <Build Include="Security\Com_Address.sql" />
     <Build Include="Com_Address\Tables\Street.sql" />
+    <Build Include="Com_CommonEntities\Tables\Calender.sql" />
+    <Build Include="Com_CommonEntities\Tables\NonWorkingDays.sql" />
+    <Build Include="Com_BankEntities\Tables\Branch.sql" />
+    <Build Include="Com_BankEntities\Tables\Bank.sql" />
+    <Build Include="Security\Com_CommonEntities.sql" />
+    <Build Include="Security\Com_BankEntities.sql" />
   </ItemGroup>
 </Project>
