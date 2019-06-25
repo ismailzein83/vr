@@ -18,6 +18,13 @@
             <vr-row>
                 <bp-vr-workflow-taskassignees on-ready="scopeModel.onTaskAssigneesSelectorReady" normal-col-num="3"></bp-vr-workflow-taskassignees>
                 <vr-columns colnum="3">
+                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
+                                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
+                                                                            label="Executed By"
+                                                                            value="scopeModel.executedBy">
+                    </businessprocess-vr-workflow-activity-expressionbuilder>
+                </vr-columns>
+                <vr-columns colnum="3">
                     <vr-switch value="scopeModel.enableVisualization" label="Enable Visualization"></vr-switch>
                 </vr-columns>
             </vr-row>

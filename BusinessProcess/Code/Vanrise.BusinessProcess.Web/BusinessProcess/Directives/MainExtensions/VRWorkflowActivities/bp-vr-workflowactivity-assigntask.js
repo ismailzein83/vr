@@ -26,6 +26,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
 
             var taskTypeId;
             var taskTitle;
+            var executedBy;
             var taskAssignees;
             var displayName;
             var inputItems = [];
@@ -56,6 +57,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                             isNew = payload.Settings.IsNew;
                             taskTypeId = payload.Settings.TaskTypeId;
                             taskTitle = payload.Settings.TaskTitle;
+                            executedBy = payload.Settings.ExecutedBy;
                             displayName = payload.Settings.DisplayName;
                             $scope.scopeModel.displayName = displayName;
                             taskAssignees = payload.Settings.TaskAssignees;
@@ -80,6 +82,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                             $scope.scopeModel.displayName = updatedObject.displayName;
                             taskTypeId = updatedObject.taskTypeId;
                             taskTitle = updatedObject.taskTitle;
+                            executedBy = updatedObject.executedBy;
                             taskAssignees = updatedObject.taskAssignees;
                             displayName = updatedObject.displayName;
                             inputItems = updatedObject.inputItems;
@@ -106,6 +109,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                     $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivity, Vanrise.BusinessProcess.MainExtensions",
                     TaskTypeId: taskTypeId,
                     TaskTitle: taskTitle,
+                    ExecutedBy: executedBy,
                     TaskAssignees: taskAssignees,
                     DisplayName: displayName,
                     InputItems: inputItems,

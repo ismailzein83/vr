@@ -32,6 +32,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public VRWorkflowTaskAssignees TaskAssignees { get; set; }
 
+        public VRWorkflowExpression ExecutedBy { get; set; }
+        
         public List<VRWorkflowAssignTaskActivityInputItem> InputItems { get; set; }
 
         public List<VRWorkflowAssignTaskActivityOutputItem> OutputItems { get; set; }
@@ -79,6 +81,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     public class #CLASSNAME#ExecutionContext : #BASEEXECUTIONCLASSNAME#
                     {
                         NativeActivityContext _activityContext;
+                        Vanrise.BusinessProcess.Entities.BPTask _task;
                         #TASKDATARECORDTYPERUNTIMETYPE# TaskData;
 
                         public #CLASSNAME#ExecutionContext(NativeActivityContext activityContext) 
@@ -90,6 +93,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             : base (activityContext)
                         {
                             _activityContext = activityContext;
+                            _task = task;
                             if(task != null)
                             {
                                 var genericTaskData = task.TaskData.CastWithValidate<Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskData>(""task.TaskData"", task.BPTaskId);
@@ -198,13 +202,19 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 nmSpaceCodeBuilder.Replace("#BUILDTASKDATA#", "");
             }
 
-            if (this.OutputItems != null && this.OutputItems.Count > 0)
+            if ((this.OutputItems != null && this.OutputItems.Count > 0)
+                || this.ExecutedBy != null)
             {
                 StringBuilder outputItemsBuilder = new StringBuilder();
                 foreach (var prm in this.OutputItems)
                 {
                     outputItemsBuilder.AppendLine($"{prm.To.GetCode(null)} = TaskData.{prm.FieldName};");
                 }
+
+                string executedByCode = this.ExecutedBy != null ? this.ExecutedBy.GetCode(null) : null;
+                if (!string.IsNullOrEmpty(executedByCode))
+                    outputItemsBuilder.AppendLine($"{executedByCode} = _task.ExecutedById.Value;");
+
                 nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDCODE#", outputItemsBuilder.ToString());
             }
             else

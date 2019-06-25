@@ -60,6 +60,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             return _activityContext.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
                         }
 
+                        public int GetProcessInitiatorId()
+                        {
+                            return _activityContext.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
+                        }
+
                         #VARIABLESPROPERTIES#
                     }
                 ");

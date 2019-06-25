@@ -8,6 +8,7 @@
 
         var taskTypeId;
         var taskTitle;
+        var executedBy;
         var displayName;
         var taskAssignees;
         var inputItems = [];
@@ -42,6 +43,7 @@
             if (parameters != undefined && parameters.obj != undefined) {
                 taskTypeId = parameters.obj.TaskTypeId;
                 taskTitle = parameters.obj.TaskTitle;
+                executedBy = parameters.obj.ExecutedBy;
                 displayName = parameters.obj.DisplayName;
                 taskAssignees = parameters.obj.TaskAssignees;
                 if (parameters.obj.InputItems != undefined) {
@@ -136,6 +138,7 @@
 
             function loadStaticData() {
                 $scope.scopeModel.taskTitle = taskTitle;
+                $scope.scopeModel.executedBy = executedBy;
                 $scope.scopeModel.displayName = displayName;
                 $scope.scopeModel.enableVisualization = enableVisualization;
             }
@@ -294,6 +297,7 @@
             var updatedObject = {
                 taskTypeId: $scope.scopeModel.selectedTaskType.BPTaskTypeId,
                 taskTitle: $scope.scopeModel.taskTitle,
+                executedBy: $scope.scopeModel.executedBy,
                 displayName: $scope.scopeModel.displayName,
                 taskAssignees: { Settings: taskAssigneeSettings},
                 inputItems: $scope.scopeModel.inputItems.length > 0 ? getInputColumns() : null,
