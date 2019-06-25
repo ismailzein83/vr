@@ -1479,11 +1479,11 @@
               "Name": "CRMFixedOper_TelephonyServicesSuspension",
               "DevProjectID": "c00d5580-520c-4a49-a872-21197337070c",
               "Title": "Telephony Services Suspension (CRMFixedOper)",
-              "Settings": "{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowSettings, Vanrise.BusinessProcess.Entities\",\"Arguments\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowArgumentCollection, Vanrise.BusinessProcess.Entities\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowArgument, Vanrise.BusinessProcess.Entities\",\"VRWorkflowArgumentId\":\"a21cabd4-265c-ddd5-76a7-fe98c28c0fa4\",\"Name\":\"CustomerId\",\"Type\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowGenericVariableType, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"a30953f6-d62e-4755-bdde-df87c0716864\",\"FieldType\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"2e16c3d4-837b-4433-b80e-7c02f6d71467\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-businessentity-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-businessentity-viewereditor\",\"OrderType\":1,\"BusinessEntityDefinitionId\":\"195bfce1-d5b5-46d1-a8c7-57987cd5e926\",\"IsNullable\":false,\"DependantFields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityTypeDependantField, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[]},\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false}},\"Direction\":0},{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowArgument, Vanrise.BusinessProcess.Entities\",\"VRWorkflowArgumentId\":\"3e4da257-a939-282b-e94c-2b151b73054c\",\"Name\":\"ContractId\",\"Type\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowGenericVariableType, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"a30953f6-d62e-4755-bdde-df87c0716864\",\"FieldType\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"2e16c3d4-837b-4433-b80e-7c02f6d71467\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-businessentity-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-businessentity-viewereditor\",\"OrderType\":1,\"BusinessEntityDefinitionId\":\"d0c82d9a-8b92-4b5f-b1c3-c5cd18a81ff3\",\"IsNullable\":false,\"DependantFields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityTypeDependantField, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[]},\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false}},\"Direction\":0}]},\"ClassMembers\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowClassMembers, Vanrise.BusinessProcess.Entities\"},\"RootActivity\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowActivity, Vanrise.BusinessProcess.Entities\",\"VRWorkflowActivityId\":\"f3c3b5cc-3da4-53fa-bbd2-bd58290a51bd\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowSequenceActivity, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"9292b3be-256f-400f-9bc6-a0423fa0b30f\",\"Editor\":\"businessprocess-vr-workflowactivity-sequence\",\"Title\":\"Sequence\",\"Activities\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowActivityCollection, Vanrise.BusinessProcess.Entities\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowActivity, Vanrise.BusinessProcess.Entities\",\"VRWorkflowActivityId\":\"5a25ded6-838a-2059-788a-e48fe57a9d8d\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivity, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"a9445f70-1188-4f39-8135-419954e88a8b\",\"Editor\":\"businessprocess-vr-workflowactivity-assigntask\",\"Title\":\"Human Activity\",\"TaskTypeId\":\"e1b5e203-95e6-4593-8d06-09afc8971c92\",\"TaskTitle\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"\\\"Select Service to Suspend\\\"\"},\"DisplayName\":\"Select Service to Suspend\",\"TaskAssignees\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowTaskAssignees, Vanrise.BusinessProcess.Entities\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflow_TaskAssignees.VRWorkflowProcessInitiatorTaskAssignees, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"d297a8b8-997d-4127-91fa-353238296940\"}},\"InputItems\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivityInputItem, Vanrise.BusinessProcess.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivityInputItem, Vanrise.BusinessProcess.MainExtensions\",\"FieldName\":\"Contract\",\"Value\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"ContractId\"}}]},\"OutputItems\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivityOutputItem, Vanrise.BusinessProcess.MainExtensions]], mscorlib\",\"$values\":[]},\"EnableVisualization\":true,\"IsDisabled\":false}}]},\"IsDisabled\":false}}}",
+              "Settings": "{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowSettings, Vanrise.BusinessProcess.Entities\",\"Arguments\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowArgumentCollection, Vanrise.BusinessProcess.Entities\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowArgument, Vanrise.BusinessProcess.Entities\",\"VRWorkflowArgumentId\":\"a21cabd4-265c-ddd5-76a7-fe98c28c0fa4\",\"Name\":\"CustomerId\",\"Type\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowGenericVariableType, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"a30953f6-d62e-4755-bdde-df87c0716864\",\"FieldType\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"2e16c3d4-837b-4433-b80e-7c02f6d71467\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-businessentity-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-businessentity-viewereditor\",\"OrderType\":1,\"BusinessEntityDefinitionId\":\"195bfce1-d5b5-46d1-a8c7-57987cd5e926\",\"IsNullable\":false,\"DependantFields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityTypeDependantField, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[]},\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false}},\"Direction\":0},{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowArgument, Vanrise.BusinessProcess.Entities\",\"VRWorkflowArgumentId\":\"3e4da257-a939-282b-e94c-2b151b73054c\",\"Name\":\"ContractId\",\"Type\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowGenericVariableType, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"a30953f6-d62e-4755-bdde-df87c0716864\",\"FieldType\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"2e16c3d4-837b-4433-b80e-7c02f6d71467\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-businessentity-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-businessentity-viewereditor\",\"OrderType\":1,\"BusinessEntityDefinitionId\":\"d0c82d9a-8b92-4b5f-b1c3-c5cd18a81ff3\",\"IsNullable\":false,\"DependantFields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityTypeDependantField, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[]},\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false}},\"Direction\":0}]},\"ClassMembers\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowClassMembers, Vanrise.BusinessProcess.Entities\"},\"RootActivity\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowActivity, Vanrise.BusinessProcess.Entities\",\"VRWorkflowActivityId\":\"f3c3b5cc-3da4-53fa-bbd2-bd58290a51bd\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowSequenceActivity, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"9292b3be-256f-400f-9bc6-a0423fa0b30f\",\"Editor\":\"businessprocess-vr-workflowactivity-sequence\",\"Title\":\"Sequence\",\"Activities\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowActivityCollection, Vanrise.BusinessProcess.Entities\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowActivity, Vanrise.BusinessProcess.Entities\",\"VRWorkflowActivityId\":\"5a25ded6-838a-2059-788a-e48fe57a9d8d\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivity, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"a9445f70-1188-4f39-8135-419954e88a8b\",\"Editor\":\"businessprocess-vr-workflowactivity-assigntask\",\"Title\":\"Human Activity\",\"TaskTypeId\":\"e1b5e203-95e6-4593-8d06-09afc8971c92\",\"TaskTitle\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"\\\"Select Service to Suspend\\\"\"},\"DisplayName\":\"Select Service to Suspend\",\"TaskAssignees\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowTaskAssignees, Vanrise.BusinessProcess.Entities\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflow_TaskAssignees.VRWorkflowProcessInitiatorTaskAssignees, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"d297a8b8-997d-4127-91fa-353238296940\"}},\"InputItems\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivityInputItem, Vanrise.BusinessProcess.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivityInputItem, Vanrise.BusinessProcess.MainExtensions\",\"FieldName\":\"Contract\",\"Value\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"ContractId\"}}]},\"OutputItems\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivityOutputItem, Vanrise.BusinessProcess.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignTaskActivityOutputItem, Vanrise.BusinessProcess.MainExtensions\",\"To\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"ServiceIdToSuspend\"},\"FieldName\":\"Service\"}]},\"EnableVisualization\":true,\"IsDisabled\":false}},{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowActivity, Vanrise.BusinessProcess.Entities\",\"VRWorkflowActivityId\":\"8ce7645e-073e-e260-c7b1-921dcb39f466\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowUpdateBEActivity, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"a3080724-ca0f-45fa-893e-513d9857efb4\",\"Editor\":\"businessprocess-vr-workflowactivity-updatebusinessentity\",\"Title\":\"Update Business Object\",\"EntityDefinitionId\":\"4e1ef574-732d-400a-b70d-5e5b58b879a8\",\"EntityId\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"ServiceIdToSuspend\"},\"DisplayName\":\"Set Service Suspended\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowUpdateGenericBEActivity, Vanrise.BusinessProcess.MainExtensions\",\"InputItems\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowUpdateGenericBEActivityInputItem, Vanrise.BusinessProcess.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowUpdateGenericBEActivityInputItem, Vanrise.BusinessProcess.MainExtensions\",\"FieldName\":\"Status\",\"Value\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"new Guid(\\\"a42aeb6b-4b2b-451e-8e39-e093eb316b60\\\")\"}}]}},\"IsDisabled\":false}},{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowActivity, Vanrise.BusinessProcess.Entities\",\"VRWorkflowActivityId\":\"c37a41ef-cfd0-91fc-3cb2-9cdbfd50d294\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAddBEActivity, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"14b247ce-109f-4493-8979-57ca3dd090c3\",\"Editor\":\"businessprocess-vr-workflowactivity-addbusinessentity\",\"Title\":\"Add Business Object\",\"EntityDefinitionId\":\"89686d96-ab40-4ee6-9c1e-4be82f0a4b91\",\"DisplayName\":\"Create Order\",\"Settings\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowAddGenericBEActivity, Vanrise.BusinessProcess.MainExtensions\",\"InputItems\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowAddGenericBEActivityInputItem, Vanrise.BusinessProcess.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowAddGenericBEActivityInputItem, Vanrise.BusinessProcess.MainExtensions\",\"FieldName\":\"Customer\",\"Value\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"CustomerId\"}},{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowAddGenericBEActivityInputItem, Vanrise.BusinessProcess.MainExtensions\",\"FieldName\":\"Contract\",\"Value\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"ContractId\"}},{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowAddGenericBEActivityInputItem, Vanrise.BusinessProcess.MainExtensions\",\"FieldName\":\"Type\",\"Value\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"new Guid(\\\"e989cb03-b073-4762-bffc-173937e91929\\\")\"}},{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowAddGenericBEActivityInputItem, Vanrise.BusinessProcess.MainExtensions\",\"FieldName\":\"Status\",\"Value\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"new Guid(\\\"64ea670f-dad7-4f35-9ad1-eaa2bcc4df01\\\")\"}},{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowAddGenericBEActivityInputItem, Vanrise.BusinessProcess.MainExtensions\",\"FieldName\":\"ProcessInstanceId\",\"Value\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities\",\"ConfigId\":\"46408cc8-8d65-4cac-b30a-1f625e6dc5ed\",\"CodeExpression\":\"GetProcessInstanceId()\"}}]}},\"IsDisabled\":false}}]},\"Variables\":{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowVariableCollection, Vanrise.BusinessProcess.Entities\",\"$values\":[{\"$type\":\"Vanrise.BusinessProcess.Entities.VRWorkflowVariable, Vanrise.BusinessProcess.Entities\",\"VRWorkflowVariableId\":\"c26e6fda-3521-a235-d063-8aa8c0459c03\",\"Name\":\"ServiceIdToSuspend\",\"Type\":{\"$type\":\"Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowGenericVariableType, Vanrise.BusinessProcess.MainExtensions\",\"ConfigId\":\"a30953f6-d62e-4755-bdde-df87c0716864\",\"FieldType\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"2e16c3d4-837b-4433-b80e-7c02f6d71467\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-businessentity-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-businessentity-viewereditor\",\"OrderType\":1,\"BusinessEntityDefinitionId\":\"4e1ef574-732d-400a-b70d-5e5b58b879a8\",\"IsNullable\":true,\"DependantFields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityTypeDependantField, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[]},\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false}}}]},\"IsDisabled\":false}}}",
               "CreatedTime": "2019-05-22T14:37:57.647",
               "CreatedBy": -1,
               "LastModifiedBy": -1,
-              "LastModifiedTime": "2019-05-27T15:35:43.817"
+              "LastModifiedTime": "2019-05-30T09:34:23.103"
             }
           },
           {
@@ -2898,6 +2898,280 @@
         "IsIdentity": false,
         "Variables": [],
         "LastWhereCondition": "Name like '%Inventory%'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRNamespace",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "2cb68564-4d8a-480f-9a36-c764bcef81b6",
+              "Name": "CRMFixedOper",
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-05-28T16:28:14.593"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRNamespaceItem",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "a82d2a66-9b81-4dcf-9004-81184fefe405",
+              "Name": "InventorySwitchAvailableNumbersBusinessObject",
+              "VRNamespaceId": "2cb68564-4d8a-480f-9a36-c764bcef81b6",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRNamespaceItemSettings, Vanrise.Entities\",\"Code\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.CustomCodeDynamicCodeSettings, Vanrise.Common.MainExtensions\",\"ConfigId\":\"bdd289df-573c-44a1-9a95-d0de2ed9dd71\",\"CustomCode\":\"public class InventorySwitchAvailableNumbersBusinessObject : Vanrise.GenericData.Business.BusinessObjectDataProviderExtendedSettings\\n        {\\n            public override Guid ConfigId => new Guid(\\\"96835DA1-5CB7-4887-B03A-C656C6F580C8\\\");\\n\\n            public override bool DoesSupportFilterOnAllFields => false;\\n\\n            public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)\\n            {\\n                int lineType = 1;\\n                List<int> categories = new List<int>{ 1,2,3,4 };\\nforeach(var categoryId in categories)\\n{\\n                List<SwitchAvailableNumber> availableNumbers = new InventoryProxy().GetSwitchAvailableNumbers(lineType, categoryId);\\n                foreach(var availableNumber in availableNumbers)\\n                {\\n                    Dictionary<string, dynamic> fieldValues = new Dictionary<string, dynamic>();\\n                    fieldValues.Add(\\\"ID\\\", availableNumber.PhoneNumber);\\n                    fieldValues.Add(\\\"PhoneNumber\\\", availableNumber.PhoneNumber);\\n                    fieldValues.Add(\\\"Category\\\", categoryId);\\n                    context.OnRecordLoaded(new DataRecordObject(new Guid(\\\"1f4af0ad-cbab-423b-a6e3-6e2620fe07b1\\\"), fieldValues), DateTime.Now);\\n                }\\n}\\n            }\\n        }\"}}",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-05-29T11:14:58.07",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-05-29T13:34:34.307"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d14bddaa-c845-4cf8-ba15-de74b7566b77",
+              "Name": "InventoryProxy",
+              "VRNamespaceId": "2cb68564-4d8a-480f-9a36-c764bcef81b6",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRNamespaceItemSettings, Vanrise.Entities\",\"Code\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyDynamicCodeSettings, Vanrise.Common.MainExtensions\",\"ConfigId\":\"5f14d26d-7b43-41be-9a3a-6ba0a7eb8316\",\"ConnectionId\":\"197e3981-75f0-4c4f-9912-9eacf176e10d\",\"ClassName\":\"InventoryProxy\",\"Methods\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyMethod, Vanrise.Common.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyMethod, Vanrise.Common.MainExtensions\",\"MethodName\":\"GetPhoneNumberTechnicalDetails\",\"MethodType\":0,\"MessageFormat\":0,\"ActionPath\":\"/Techdetails/Get\",\"ReturnType\":\"PhoneNumberTechnicalDetails\",\"Headers\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib\"},\"Parameters\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyParameter, Vanrise.Common.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyParameter, Vanrise.Common.MainExtensions\",\"ParameterName\":\"phoneNumber\",\"ParameterType\":\"string\",\"IncludeInHeader\":false,\"IncludeInBody\":false,\"IncludeInURL\":false}]},\"URLParameters\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib\",\"id\":\"phoneNumber\"},\"ResponseLogic\":\"var data = response.DeserializeResponse<List<TechnicalReservationDetail>>();\\nif (data != null && data.Count > 0)\\n {\\n                TechnicalReservationDetail detail = data[0];    \\nvar returnedResponse = new  PhoneNumberTechnicalDetails();          \\n                    returnedResponse.NearByCabinetName = detail.CABINET_NAME;\\n                    returnedResponse.NearByDPName = detail.DP_NAME;\\n                    returnedResponse.SwitchName = detail.SWITCH_NAME;\\n                    returnedResponse.SwitchOMC = detail.SWITCH_OMC;\\n                    returnedResponse.NearByDPPortId = (int)detail.DP_PORT_ID;\\n                    returnedResponse.NearByDPId = (int)detail.DP_ID;\\n                    returnedResponse.SwitchId = (int)detail.SWITCH_ID;\\n                    returnedResponse.NearByCabinetPrimaryPort = detail.PRIMARY_PORT;\\n                    returnedResponse.NearByCabinetSecondaryPort = detail.SECONDARY_PORT;\\n                    returnedResponse.DPPort = detail.DP_PORT;\\n                    returnedResponse.Cabinet = detail.CABINET_NAME;\\nreturn returnedResponse;\\n}\\nelse\\n{\\n return null;\\n}\",\"ClassMembers\":\"private class TechnicalReservationDetail\\n    {\\n        public string POHNE_NUMBER { get; set; }\\n        public string PATH_TYPE { get; set; }\\n        public decimal PHONE_ID { get; set; }\\n        public string SWITCH_NAME { get; set; }\\n        public string SWITCH_OMC { get; set; }\\n        public string SWITCH_TYPE { get; set; }\\n        public decimal DEV_ID { get; set; }\\n        public string MDF_NAME { get; set; }\\n        public string MDF_VERT { get; set; }\\n        public string MDF_PORT { get; set; }\\n        public string CABINET_NAME { get; set; }\\n        public string PRIMARY_PORT { get; set; }\\n        public string SECONDARY_PORT { get; set; }\\n        public string DP_NAME { get; set; }\\n        public string DP_PORT { get; set; }\\n        public decimal DP_PORT_ID { get; set; }\\n        public decimal DP_ID { get; set; }\\n        public string TRANSMITTER_NAME { get; set; }\\n        public string TRANSMITTER_MODULE { get; set; }\\n        public string TRANSMITTER_PORT { get; set; }\\n        public string RECEIVER_NAME { get; set; }\\n        public string RECEIVER_PORT { get; set; }\\n        public string EXIST_PSTN { get; set; }\\n        public string EXIST_ISDN { get; set; }\\n        public string EXIST_DID { get; set; }\\n        public decimal SWITCH_ID { get; set; }\\n        public string SWITCH_STATUS { get; set; }\\n        public string MDF_STATUS { get; set; }\\n        public string CABINET_STATUS { get; set; }\\n        public string DP_STATUS { get; set; }\\npublic decimal PATH_ID{ get; set; }\\npublic decimal MDF_ID{ get; set; }\\npublic decimal CABINET_ID{ get; set; }\\n    }\",\"NamespaceMembers\":\"public class PhoneNumberTechnicalDetails\\n{\\npublic string NearByCabinetName { get; set; }\\npublic string NearByDPName { get; set; }\\npublic string SwitchName { get; set; }\\n\\npublic string SwitchOMC { get; set; }\\npublic int NearByDPPortId { get; set; }\\npublic int NearByDPId { get; set; }\\npublic int SwitchId { get; set; }\\npublic string NearByCabinetPrimaryPort { get; set; }\\npublic string NearByCabinetSecondaryPort { get; set; }\\npublic string DPPort {get; set;}\\npublic string Cabinet {get;set;}\\n}\"},{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyMethod, Vanrise.Common.MainExtensions\",\"MethodName\":\"GetSwitchAvailableNumbers\",\"MethodType\":0,\"MessageFormat\":0,\"ActionPath\":\"/FreeNumbers/Get\",\"ReturnType\":\"List<SwitchAvailableNumber>\",\"Headers\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib\"},\"Parameters\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyParameter, Vanrise.Common.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyParameter, Vanrise.Common.MainExtensions\",\"ParameterName\":\"lineType\",\"ParameterType\":\"int\",\"IncludeInHeader\":false,\"IncludeInBody\":false,\"IncludeInURL\":false},{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.HttpProxyParameter, Vanrise.Common.MainExtensions\",\"ParameterName\":\"category\",\"ParameterType\":\"int\",\"IncludeInHeader\":false,\"IncludeInBody\":false,\"IncludeInURL\":false}]},\"URLParameters\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib\",\"switchId\":\"\\\"50.0\\\"\",\"category\":\"category == 1 ? \\\"Gold\\\" : category == 2 ? \\\"Normal\\\" : category == 3 ? \\\"Platinum\\\" : \\\"Silver\\\"\",\"type\":\"lineType == 1 ? \\\"PSTN\\\" : lineType == 2 ? \\\"ISDN\\\" : \\\"DID\\\"\",\"top\":\"100\"},\"ResponseLogic\":\"List<SwitchAvailableNumber> phoneNumbers = new List<SwitchAvailableNumber>();\\n               var data = response.DeserializeResponse<List<AktavaraPhoneNumber>>();\\n            return data == null ? null : data.MapRecords(c => new SwitchAvailableNumber\\n            {\\n                PhoneNumber = c.PHONE_NUMBER\\n            }).ToList();\",\"ClassMembers\":\"private class AktavaraPhoneNumber\\n    {\\n        public string OBJECT_ID { get; set; }\\n        public string PHONE_NUMBER { get; set; }\\n    }\",\"NamespaceMembers\":\"public class SwitchAvailableNumber\\n{\\npublic string PhoneNumber { get; set; }\\n}\"}]}}}",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-05-28T16:32:40.447",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-05-29T13:43:24.237"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "VRNamespaceId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDynamicAPIModule",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "cd3e6a3e-a093-41fb-8db8-222d34d5de73",
+              "Name": "CRMFixedOper",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-05-28T16:27:14.82",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-05-28T16:27:14.82"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDynamicAPI",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "1e13d480-b490-4256-bee6-2edac1a4b886",
+              "Name": "Inventory",
+              "ModuleId": "cd3e6a3e-a093-41fb-8db8-222d34d5de73",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRDynamicAPISettings, Vanrise.Entities\",\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPISecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}},\"Methods\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"GetPhoneNumberTechnicalDetails\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"2cb68564-4d8a-480f-9a36-c764bcef81b6\",\"ClassName\":\"InventoryProxy\",\"MethodName\":\"GetPhoneNumberTechnicalDetails\",\"MethodType\":1},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"GetSwitchAvailableNumbers\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"2cb68564-4d8a-480f-9a36-c764bcef81b6\",\"ClassName\":\"InventoryProxy\",\"MethodName\":\"GetSwitchAvailableNumbers\",\"MethodType\":1},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}}]}}",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-05-28T16:36:17.457",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-05-29T11:06:29.643"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ModuleId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
