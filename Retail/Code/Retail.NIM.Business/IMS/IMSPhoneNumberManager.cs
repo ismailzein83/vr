@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.NIM.Business
@@ -25,9 +26,34 @@ namespace Retail.NIM.Business
             return new GetFreeIMSPhoneNumbersOutput() { IMSPhoneNumbers = imsPhoneNumbers };
         }
 
+        public ReserveIMSPhoneNumberOutput ReserveIMSPhoneNumber(ReserveIMSPhoneNumberInput input)
+        {
+            UpdateGenericBEPhoneNumberStatus(input.IMSPhoneNumberId, PhoneNumberStatus.Reserved);
+            return new ReserveIMSPhoneNumberOutput() { OperationSucceeded = true };
+        }
+
+        public SetUsedIMSPhoneNumberOutput SetUsedIMSPhoneNumber(SetUsedIMSPhoneNumberInput input)
+        {
+            UpdateGenericBEPhoneNumberStatus(input.IMSPhoneNumberId, PhoneNumberStatus.Used);
+            return new SetUsedIMSPhoneNumberOutput() { OperationSucceeded = true };
+        }
+
         #endregion
 
         #region Private Methods
+
+        private void UpdateGenericBEPhoneNumberStatus(long imsPhoneNumberId, Guid statusId)
+        {
+            GenericBusinessEntityToUpdate genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate()
+            {
+                BusinessEntityDefinitionId = s_beDefinitionId,
+                GenericBusinessEntityId = imsPhoneNumberId,
+                FieldValues = new Dictionary<string, object>()
+            };
+            genericBusinessEntityToUpdate.FieldValues.Add("Status", statusId);
+            new GenericBusinessEntityManager().UpdateGenericBusinessEntity(genericBusinessEntityToUpdate, null);
+        }
+
 
         private List<IMSPhoneNumber> GetIMSPhoneNumbers(long imsId, Guid? statusId = null, int? category = null)
         {
@@ -101,5 +127,27 @@ namespace Retail.NIM.Business
     public class GetFreeIMSPhoneNumbersOutput
     {
         public List<IMSPhoneNumber> IMSPhoneNumbers { get; set; }
+    }
+
+    public class ReserveIMSPhoneNumberInput
+    {
+        public long IMSPhoneNumberId { get; set; }
+    }
+    public class ReserveIMSPhoneNumberOutput
+    {
+        public bool OperationSucceeded { get; set; }
+
+        public string ErrorMessage { get; set; }
+    }
+
+    public class SetUsedIMSPhoneNumberInput
+    {
+        public long IMSPhoneNumberId { get; set; }
+    }
+    public class SetUsedIMSPhoneNumberOutput
+    {
+        public bool OperationSucceeded { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 }

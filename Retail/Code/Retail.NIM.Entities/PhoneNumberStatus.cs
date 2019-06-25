@@ -8,7 +8,7 @@ namespace Retail.NIM.Entities
 {
     public class PhoneNumberStatus
     {
-        public static Guid Active = new Guid("1c67115b-2347-4f69-a04c-ab3e20a9b4cf");
+        public static Guid Used = new Guid("1c67115b-2347-4f69-a04c-ab3e20a9b4cf");
 
         public static Guid Error = new Guid("571844c1-83c2-4e51-9873-df08a736ea68");
 

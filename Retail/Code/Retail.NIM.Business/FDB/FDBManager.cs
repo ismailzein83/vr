@@ -92,7 +92,7 @@ namespace Retail.NIM.Business
             if (connectionBEDefinitionData.Port2DefinitionId.HasValue)
                 UpdateGenericBEPortStatus(new GenericBEIdentifier(connectionBEDefinitionData.Port2DefinitionId.Value, input.Port2Id), PortStatus.Used);
 
-            return new AddConnectionOutput() { AddSucceeded = true };
+            return new AddConnectionOutput() { OperationSucceeded = true };
         }
 
         #endregion
@@ -385,7 +385,7 @@ namespace Retail.NIM.Business
     }
     public class AddConnectionOutput
     {
-        public bool AddSucceeded { get; set; }
+        public bool OperationSucceeded { get; set; }
 
         public string ErrorMessage { get; set; }
     }

@@ -63,11 +63,6 @@ namespace Retail.NIM.Business
                         LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
                     };
 
-                    if(results.ContainsKey(copperPath.FullPhoneNumber))
-                    {
-                        string sss = "He;lllo";
-                    }
-
                     results.Add(copperPath.FullPhoneNumber, copperPath);
                 }
             }
