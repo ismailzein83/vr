@@ -35,7 +35,7 @@ namespace Retail.NIM.Business
                     {
                         FDBNumber = (string)genericBusinessEntity.FieldValues.GetRecord("FDBNumber"),
                         FDB = (long)genericBusinessEntity.FieldValues.GetRecord("FDB"),
-                        FDBPort = (long)genericBusinessEntity.FieldValues.GetRecord("FDB"),
+                        FDBPort = (long)genericBusinessEntity.FieldValues.GetRecord("FDBPort"),
                         Splitter = (long)genericBusinessEntity.FieldValues.GetRecord("Splitter"),
                         SplitterOutPort = (long)genericBusinessEntity.FieldValues.GetRecord("SplitterOutPort"),
                         SplitterInPort = (long)genericBusinessEntity.FieldValues.GetRecord("SplitterInPort"),
