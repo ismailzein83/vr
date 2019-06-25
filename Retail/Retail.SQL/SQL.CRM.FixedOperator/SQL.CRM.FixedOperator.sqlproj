@@ -91,5 +91,29 @@
     <Build Include="CRMFixedOper\Tables\OrderType.sql" />
     <Build Include="Security\CRMFixedOper.sql" />
     <Build Include="CRMFixedOper\Tables\InventoryPhoneNumberCategory.sql" />
+    <Build Include="CRMFixedOper\Tables\WorkOrderTypeAction.sql" />
+    <Build Include="CRMFixedOper\Tables\WorkOrderType.sql" />
+    <Build Include="CRMFixedOper\Tables\WorkOrderNote.sql" />
+    <Build Include="CRMFixedOper\Tables\WorkOrderGroup.sql" />
+    <Build Include="CRMFixedOper\Tables\WorkOrderCategory.sql" />
+    <Build Include="CRMFixedOper\Tables\WorkOrder.sql" />
+    <Build Include="CRMFixedOper\Tables\Vender.sql" />
+    <Build Include="CRMFixedOper\Tables\TicketType.sql" />
+    <Build Include="CRMFixedOper\Tables\TicketSubCategory.sql" />
+    <Build Include="CRMFixedOper\Tables\TicketCategory.sql" />
+    <Build Include="CRMFixedOper\Tables\Ticket.sql" />
+    <Build Include="CRMFixedOper\Tables\StockItemType.sql" />
+    <Build Include="CRMFixedOper\Tables\StockItemModel.sql" />
+    <Build Include="CRMFixedOper\Tables\StockItem.sql" />
+    <Build Include="CRMFixedOper\Tables\ServiceCatalog.sql" />
+    <Build Include="CRMFixedOper\Tables\RestrictedServiceGroup.sql" />
+    <Build Include="CRMFixedOper\Tables\POSUser.sql" />
+    <Build Include="CRMFixedOper\Tables\POS.sql" />
+    <Build Include="CRMFixedOper\Tables\CustomerType.sql" />
+    <Build Include="CRMFixedOper\Tables\CustomerSubCategory.sql" />
+    <Build Include="CRMFixedOper\Tables\CustomerBillingAccount.sql" />
+    <Build Include="CRMFixedOper\Tables\Color.sql" />
+    <Build Include="CRMFixedOper\Tables\Case.sql" />
+    <Build Include="CRMFixedOper\Tables\AccessTechnology.sql" />
   </ItemGroup>
 </Project>

@@ -6,7 +6,8 @@
     [PostalCode]         NVARCHAR (255) NULL,
     [WebSite]            NVARCHAR (255) NULL,
     [NbOfEmployees]      INT            NULL,
-    [Attachments]        NVARCHAR (MAX) NULL,
     CONSTRAINT [PK_CorporateCustomer] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

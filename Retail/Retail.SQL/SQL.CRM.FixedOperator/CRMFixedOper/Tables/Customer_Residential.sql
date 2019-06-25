@@ -7,6 +7,10 @@
     [BirthDate]     DATETIME       NULL,
     [NationalityID] INT            NULL,
     [CareerID]      INT            NULL,
+    [IDType]        INT            NULL,
+    [IDExpiryDate]  DATETIME       NULL,
     CONSTRAINT [PK__Resident__3214EC2703317E3D] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
