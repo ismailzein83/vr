@@ -76,7 +76,8 @@ app.directive('businessprocessVrWorkflowactivityWhile', ['UtilsService', 'VRUIUt
 	                    if (payload.Settings != undefined) {
 	                        $scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
 
-	                        $scope.scopeModel.condition = payload.Settings.Condition;
+							$scope.scopeModel.condition = payload.Settings.Condition;
+							$scope.scopeModel.conditionDescription = payload.Settings.ConditionDescription;
 	                        activity = payload.Settings.Activity;
 	                    }
 	                    if (payload.Context != undefined) {
@@ -124,7 +125,8 @@ app.directive('businessprocessVrWorkflowactivityWhile', ['UtilsService', 'VRUIUt
 	                return {
                         $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowWhileActivity, Vanrise.BusinessProcess.MainExtensions",
                         Condition: $scope.scopeModel.condition,
-                        Activity: workflowContainerAPI != undefined ? workflowContainerAPI.getData() : undefined,
+						Activity: workflowContainerAPI != undefined ? workflowContainerAPI.getData() : undefined,
+						ConditionDescription: $scope.scopeModel.conditionDescription
 	                };
 	            };
 

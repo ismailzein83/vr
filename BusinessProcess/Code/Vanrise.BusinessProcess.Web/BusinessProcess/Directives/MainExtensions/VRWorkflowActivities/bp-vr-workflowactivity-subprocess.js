@@ -61,22 +61,23 @@ app.directive('businessprocessVrWorkflowactivitySubprocess', ['UtilsService', 'V
 							inArguments = payload.Settings.InArguments;
 							outArguments = payload.Settings.OutArguments;
 							displayName = payload.Settings.DisplayName;
+							$scope.scopeModel.VRWorkflowName = displayName;
 						}
 
 						if (payload.SetMenuAction != undefined)
 							payload.SetMenuAction(editModeAction);
 					}
 
-					if (selectedVRWorkflowId != undefined)
-						//promises.push();
-						BusinessProcess_VRWorkflowAPIService.GetVRWorkflowName(selectedVRWorkflowId).
-							then(function (response) {
-								$scope.scopeModel.VRWorkflowName = response;
-							});
+					//if (selectedVRWorkflowId != undefined)
+					//	//promises.push();
+					//	BusinessProcess_VRWorkflowAPIService.GetVRWorkflowName(selectedVRWorkflowId).
+					//		then(function (response) {
+					//			$scope.scopeModel.VRWorkflowName = response;
+					//		});
 
 					function openActivityEditor() {
 						var onActivityUpdated = function (updatedObject) {
-							$scope.scopeModel.VRWorkflowName = updatedObject.VRWorkflowName;
+							$scope.scopeModel.VRWorkflowName = updatedObject.DisplayName;;
 							selectedVRWorkflowId = updatedObject.VRWorkflowId;
 							inArguments = updatedObject.InArguments;
 							outArguments = updatedObject.OutArguments;
