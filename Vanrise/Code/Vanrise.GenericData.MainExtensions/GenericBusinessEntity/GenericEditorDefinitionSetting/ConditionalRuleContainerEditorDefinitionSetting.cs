@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions
@@ -11,6 +13,22 @@ namespace Vanrise.GenericData.MainExtensions
 
         public VRGenericEditorDefinitionSetting EditorDefinitionSetting { get; set; }
 
+        public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
+        {
+            List<GridColumnAttribute> columnsAttributes = new List<GridColumnAttribute>();
+
+            if (EditorDefinitionSetting != null)
+            {
+                var attributes = EditorDefinitionSetting.GetGridColumnsAttributes(new GetGenericEditorColumnsInfoContext
+                {
+                    DataRecordTypeId = context.DataRecordTypeId
+                });
+
+                if (attributes != null && attributes.Count > 0)
+                    columnsAttributes.AddRange(attributes);
+            }
+            return columnsAttributes;
+        }
         public GenericEditorConditionalRule GenericEditorConditionalRule { get; set; }
     }
 

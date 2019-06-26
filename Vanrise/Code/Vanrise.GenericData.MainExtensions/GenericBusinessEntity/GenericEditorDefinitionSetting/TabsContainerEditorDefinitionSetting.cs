@@ -40,7 +40,13 @@ namespace Vanrise.GenericData.MainExtensions
                 {
                     if (tabContainer.TabSettings != null)
                     {
-                        columnsAttribute.AddRange(tabContainer.TabSettings.GetGridColumnsAttributes(context));
+                        var attributes = tabContainer.TabSettings.GetGridColumnsAttributes(new GetGenericEditorColumnsInfoContext
+                        {
+                            DataRecordTypeId = context.DataRecordTypeId
+                        });
+
+                        if (attributes != null && attributes.Count > 0)
+                            columnsAttribute.AddRange(attributes);
                     }
                 }
             }
