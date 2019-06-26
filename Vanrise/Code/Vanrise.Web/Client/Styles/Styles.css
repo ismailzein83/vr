@@ -2755,10 +2755,14 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     display: none;
 }
 
-.vr-datarow-breadcrumb {
+.wrapper-toogled .vr-datarow-breadcrumb {
     position: fixed;
     top: 93px;
     left: 230px;
+}
+.wrapper-normal .vr-datarow-breadcrumb {
+    padding-left: 15px;
+    left: unset;
 }
 .vr-datagrid-body .action-full-screen-icon, .vr-datagrid-body .exist-full-screen-icon {
     position: relative;
