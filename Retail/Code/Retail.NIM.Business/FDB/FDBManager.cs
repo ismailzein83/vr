@@ -53,14 +53,10 @@ namespace Retail.NIM.Business
             if (freeFTTHPath == null)
                 return null;
 
-            GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-
             List<GenericBEIdentifier> genericBEPortIdentifierList = BuildGenericBEPortIdentifierList(freeFTTHPath);
 
             foreach (var genericBEPortIdentifier in genericBEPortIdentifierList)
-            {
                 UpdateGenericBEPortStatus(genericBEPortIdentifier, PortStatus.TemporaryReserved);
-            }
 
             return new ReserveFTTHPathOutput(freeFTTHPath);
         }
@@ -76,10 +72,9 @@ namespace Retail.NIM.Business
 
             switch (input.ConnectionType)
             {
+                case ConnectionType.IMSPhoneNumberTID: port1Name = "PhoneNumber"; port2Name = "TID"; break;
                 case ConnectionType.IMSOLT: port1Name = "TID"; port2Name = "OLTHorizontalPort"; break;
-                case ConnectionType.OLTHorizontalVertical: port1Name = "OLTHorizontalPort"; port2Name = "OLTVerticalPort"; break;
-                case ConnectionType.OLTSplitter: port1Name = "OLTVerticalPort"; port2Name = "SplitterInPort"; break;
-                case ConnectionType.SplitterInOut: port1Name = "InPort"; port2Name = "OutPort"; break;
+                case ConnectionType.OLTSplitterLogical: port1Name = "OLTHorizontalPort"; port2Name = "SplitterOutPort"; break;
                 case ConnectionType.SplitterFDB: port1Name = "SplitterOutPort"; port2Name = "FDBPort"; break;
                 default: throw new NotSupportedException($"ConnectionType {input.ConnectionType} not supported.");
             }
@@ -127,17 +122,14 @@ namespace Retail.NIM.Business
         {
             var connectionBEDefinitionData = new Dictionary<ConnectionType, ConnectionBEDefinitionData>();
 
+            var imsPhoneNumberTIDConnectorData = new ConnectionBEDefinitionData(IMSPhoneNumberTIDConnectorManager.s_beDefinitionId, IMSPhoneNumberManager.s_beDefinitionId);
+            connectionBEDefinitionData.Add(ConnectionType.IMSPhoneNumberTID, imsPhoneNumberTIDConnectorData);
+
             var imsOLTConnectorData = new ConnectionBEDefinitionData(IMSOLTConnectorManager.s_beDefinitionId, IMSTIDManager.s_beDefinitionId, OLTHorizontalPortManager.s_beDefinitionId);
             connectionBEDefinitionData.Add(ConnectionType.IMSOLT, imsOLTConnectorData);
 
-            var oltHorizontalVerticalConnectorData = new ConnectionBEDefinitionData(OLTHorizontalVerticalConnectorManager.s_beDefinitionId);
-            connectionBEDefinitionData.Add(ConnectionType.OLTHorizontalVertical, oltHorizontalVerticalConnectorData);
-
-            var oltSplitterConnectorData = new ConnectionBEDefinitionData(OLTSplitterConnectorManager.s_beDefinitionId, OLTVerticalPortManager.s_beDefinitionId, SplitterInPortManager.s_beDefinitionId);
-            connectionBEDefinitionData.Add(ConnectionType.OLTSplitter, oltSplitterConnectorData);
-
-            var splitterInOutConnectorData = new ConnectionBEDefinitionData(SplitterInOutConnectorManager.s_beDefinitionId);
-            connectionBEDefinitionData.Add(ConnectionType.SplitterInOut, splitterInOutConnectorData);
+            var oltSplitterLogicalConnectorData = new ConnectionBEDefinitionData(OLTSplitterLogicalConnectorManager.s_beDefinitionId);
+            connectionBEDefinitionData.Add(ConnectionType.OLTSplitterLogical, oltSplitterLogicalConnectorData);
 
             var splitterFDBConnectorData = new ConnectionBEDefinitionData(SplitterFDBConnectorManager.s_beDefinitionId, SplitterOutPortManager.s_beDefinitionId, FDBPortManager.s_beDefinitionId);
             connectionBEDefinitionData.Add(ConnectionType.SplitterFDB, splitterFDBConnectorData);
@@ -148,12 +140,12 @@ namespace Retail.NIM.Business
         private List<GenericBEIdentifier> BuildGenericBEPortIdentifierList(FreeFTTHPath freeFTTHPath)
         {
             List<GenericBEIdentifier> genericBEIdentifierList = new List<GenericBEIdentifier>();
-            genericBEIdentifierList.Add(new GenericBEIdentifier(FDBPortManager.s_beDefinitionId, freeFTTHPath.FDBPort));
-            genericBEIdentifierList.Add(new GenericBEIdentifier(SplitterOutPortManager.s_beDefinitionId, freeFTTHPath.SplitterOutPort));
-            genericBEIdentifierList.Add(new GenericBEIdentifier(SplitterInPortManager.s_beDefinitionId, freeFTTHPath.SplitterInPort));
-            genericBEIdentifierList.Add(new GenericBEIdentifier(OLTVerticalPortManager.s_beDefinitionId, freeFTTHPath.OLTVerticalPort));
-            genericBEIdentifierList.Add(new GenericBEIdentifier(OLTHorizontalPortManager.s_beDefinitionId, freeFTTHPath.OLTHorizontalPort));
-            genericBEIdentifierList.Add(new GenericBEIdentifier(IMSTIDManager.s_beDefinitionId, freeFTTHPath.TID));
+            genericBEIdentifierList.Add(new GenericBEIdentifier(FDBPortManager.s_beDefinitionId, freeFTTHPath.FDBPortId));
+            genericBEIdentifierList.Add(new GenericBEIdentifier(SplitterOutPortManager.s_beDefinitionId, freeFTTHPath.SplitterOutPortId));
+            //genericBEIdentifierList.Add(new GenericBEIdentifier(SplitterInPortManager.s_beDefinitionId, freeFTTHPath.SplitterInPortId));
+            //genericBEIdentifierList.Add(new GenericBEIdentifier(OLTVerticalPortManager.s_beDefinitionId, freeFTTHPath.OLTVerticalPortId));
+            genericBEIdentifierList.Add(new GenericBEIdentifier(OLTHorizontalPortManager.s_beDefinitionId, freeFTTHPath.OLTHorizontalPortId));
+            genericBEIdentifierList.Add(new GenericBEIdentifier(IMSTIDManager.s_beDefinitionId, freeFTTHPath.IMSTIDId));
             return genericBEIdentifierList;
         }
 
@@ -336,43 +328,64 @@ namespace Retail.NIM.Business
     {
         public ReserveFTTHPathOutput(FreeFTTHPath freeFTTHPath)
         {
+            AreaId = freeFTTHPath.AreaId;
+            AreaName = freeFTTHPath.AreaName;
+            SiteId = freeFTTHPath.SiteId;
+            SiteName = freeFTTHPath.SiteName;
+            IMSId = freeFTTHPath.IMSId;
+            IMSName = freeFTTHPath.IMSName;
+            IMSNumber = freeFTTHPath.IMSNumber;
+            IMSCardId = freeFTTHPath.IMSCardId;
+            IMSCardName = freeFTTHPath.IMSCardName;
+            IMSSlotId = freeFTTHPath.IMSSlotId;
+            IMSSlotName = freeFTTHPath.IMSSlotName;
+            IMSTIDId = freeFTTHPath.IMSTIDId;
+            IMSTIDName = freeFTTHPath.IMSTIDName;
+            OLTId = freeFTTHPath.OLTId;
+            OLTName = freeFTTHPath.OLTName;
+            OLTHorizontalId = freeFTTHPath.OLTHorizontalId;
+            OLTHorizontalName = freeFTTHPath.OLTHorizontalName;
+            OLTHorizontalPortId = freeFTTHPath.OLTHorizontalPortId;
+            OLTHorizontalPortName = freeFTTHPath.OLTHorizontalPortName;
+            SplitterId = freeFTTHPath.SplitterId;
+            SplitterName = freeFTTHPath.SplitterName;
+            SplitterOutPortId = freeFTTHPath.SplitterOutPortId;
+            SplitterOutPortName = freeFTTHPath.SplitterOutPortName;
+            FDBId = freeFTTHPath.FDBId;
+            FDBName = freeFTTHPath.FDBName;
             FDBNumber = freeFTTHPath.FDBNumber;
-            FDB = freeFTTHPath.FDB;
-            FDBPort = freeFTTHPath.FDBPort;
-            Splitter = freeFTTHPath.Splitter;
-            SplitterOutPort = freeFTTHPath.SplitterOutPort;
-            SplitterInPort = freeFTTHPath.SplitterInPort;
-            OLT = freeFTTHPath.OLT;
-            OLTVerticalPort = freeFTTHPath.OLTVerticalPort;
-            OLTHorizontalPort = freeFTTHPath.OLTHorizontalPort;
-            IMS = freeFTTHPath.IMS;
-            TID = freeFTTHPath.TID;
-            CreatedTime = freeFTTHPath.CreatedTime;
+            FDBPortId = freeFTTHPath.FDBPortId;
+            FDBPortName = freeFTTHPath.FDBPortName;
         }
 
+        public long AreaId { get; set; }
+        public string AreaName { get; set; }
+        public long SiteId { get; set; }
+        public string SiteName { get; set; }
+        public long IMSId { get; set; }
+        public string IMSName { get; set; }
+        public string IMSNumber { get; set; }
+        public long IMSCardId { get; set; }
+        public string IMSCardName { get; set; }
+        public long IMSSlotId { get; set; }
+        public string IMSSlotName { get; set; }
+        public long IMSTIDId { get; set; }
+        public string IMSTIDName { get; set; }
+        public long OLTId { get; set; }
+        public string OLTName { get; set; }
+        public long OLTHorizontalId { get; set; }
+        public string OLTHorizontalName { get; set; }
+        public long OLTHorizontalPortId { get; set; }
+        public string OLTHorizontalPortName { get; set; }
+        public long SplitterId { get; set; }
+        public string SplitterName { get; set; }
+        public long SplitterOutPortId { get; set; }
+        public string SplitterOutPortName { get; set; }
+        public long FDBId { get; set; }
+        public string FDBName { get; set; }
         public string FDBNumber { get; set; }
-
-        public long FDB { get; set; }
-
-        public long FDBPort { get; set; }
-
-        public long Splitter { get; set; }
-
-        public long SplitterOutPort { get; set; }
-
-        public long SplitterInPort { get; set; }
-
-        public long OLT { get; set; }
-
-        public long OLTVerticalPort { get; set; }
-
-        public long OLTHorizontalPort { get; set; }
-
-        public long IMS { get; set; }
-
-        public long TID { get; set; }
-
-        public DateTime CreatedTime { get; set; }
+        public long FDBPortId { get; set; }
+        public string FDBPortName { get; set; }
     }
 
     public class AddConnectionInput

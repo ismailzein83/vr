@@ -292,6 +292,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Business", "Reta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Web", "Retail.NIM.Web\Retail.NIM.Web.csproj", "{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Data", "Retail.NIM.Data\Retail.NIM.Data.csproj", "{E5C2F336-297D-40DE-A5E9-2ECA18AD48A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Data.RDB", "Retail.NIM.Data.RDB\Retail.NIM.Data.RDB.csproj", "{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -808,6 +812,14 @@ Global
 		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5C2F336-297D-40DE-A5E9-2ECA18AD48A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5C2F336-297D-40DE-A5E9-2ECA18AD48A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5C2F336-297D-40DE-A5E9-2ECA18AD48A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5C2F336-297D-40DE-A5E9-2ECA18AD48A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -950,12 +962,14 @@ Global
 		{541DEBF8-B1CB-4608-B09E-F31099AD7DC5} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
 		{78A6CCE1-FB4E-4BF1-ACE9-B0B845128CFD} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
 		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
+		{E5C2F336-297D-40DE-A5E9-2ECA18AD48A1} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
+		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 120
+		SccNumberOfProjects = 122
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1435,5 +1449,13 @@ Global
 		SccProjectTopLevelParentUniqueName119 = Retail.sln
 		SccProjectName119 = Retail.NIM.Web
 		SccLocalPath119 = Retail.NIM.Web
+		SccProjectUniqueName120 = Retail.NIM.Data\\Retail.NIM.Data.csproj
+		SccProjectTopLevelParentUniqueName120 = Retail.sln
+		SccProjectName120 = Retail.NIM.Data
+		SccLocalPath120 = Retail.NIM.Data
+		SccProjectUniqueName121 = Retail.NIM.Data.RDB\\Retail.NIM.Data.RDB.csproj
+		SccProjectTopLevelParentUniqueName121 = Retail.sln
+		SccProjectName121 = Retail.NIM.Data.RDB
+		SccLocalPath121 = Retail.NIM.Data.RDB
 	EndGlobalSection
 EndGlobal

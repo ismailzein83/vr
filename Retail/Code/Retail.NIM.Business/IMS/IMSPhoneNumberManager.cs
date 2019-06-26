@@ -32,12 +32,6 @@ namespace Retail.NIM.Business
             return new ReserveIMSPhoneNumberOutput() { OperationSucceeded = true };
         }
 
-        public SetUsedIMSPhoneNumberOutput SetUsedIMSPhoneNumber(SetUsedIMSPhoneNumberInput input)
-        {
-            UpdateGenericBEPhoneNumberStatus(input.IMSPhoneNumberId, PhoneNumberStatus.Used);
-            return new SetUsedIMSPhoneNumberOutput() { OperationSucceeded = true };
-        }
-
         #endregion
 
         #region Private Methods
@@ -53,7 +47,6 @@ namespace Retail.NIM.Business
             genericBusinessEntityToUpdate.FieldValues.Add("Status", statusId);
             new GenericBusinessEntityManager().UpdateGenericBusinessEntity(genericBusinessEntityToUpdate, null);
         }
-
 
         private List<IMSPhoneNumber> GetIMSPhoneNumbers(long imsId, Guid? statusId = null, int? category = null)
         {

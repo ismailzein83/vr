@@ -8,5 +8,5 @@ namespace Retail.NIM.Entities
 {
     public enum NumberType { PhoneNumber = 1, DP = 2, FDB = 3 }
 
-    public enum ConnectionType { IMSOLT = 1, OLTHorizontalVertical = 2, OLTSplitter = 3, SplitterInOut = 4, SplitterFDB = 5 }
+    public enum ConnectionType { IMSPhoneNumberTID = 1, IMSOLT = 2, OLTSplitterLogical = 3, SplitterFDB = 4 }
 }

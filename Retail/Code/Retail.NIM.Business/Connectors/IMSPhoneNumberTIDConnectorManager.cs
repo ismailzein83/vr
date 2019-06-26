@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.NIM.Business
 {
-    public class OLTVerticalPortManager
+    public class IMSPhoneNumberTIDConnectorManager
     {
-        //public static Guid s_beDefinitionId = new Guid("dc7498ff-b9ff-4775-939b-637b004d65ce");
+        public static Guid s_beDefinitionId = new Guid("aa103708-2786-432c-b052-817dca8917b9");
     }
 }

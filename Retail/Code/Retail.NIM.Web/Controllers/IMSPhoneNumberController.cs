@@ -26,12 +26,5 @@ namespace Retail.NIM.Web.Controllers
         {
             return manager.ReserveIMSPhoneNumber(input);
         }
-
-        [HttpPost]
-        [Route("SetUsedIMSPhoneNumber")]
-        public SetUsedIMSPhoneNumberOutput SetUsedIMSPhoneNumber(SetUsedIMSPhoneNumberInput input)
-        {
-            return manager.SetUsedIMSPhoneNumber(input);
-        }
     }
 }

@@ -1114,6 +1114,14 @@
       <Project>{78a6cce1-fb4e-4bf1-ace9-b0b845128cfd}</Project>
       <Name>Retail.NIM.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.NIM.Data.RDB\Retail.NIM.Data.RDB.csproj">
+      <Project>{bde86caa-5682-4c81-b21d-552f89ddea7a}</Project>
+      <Name>Retail.NIM.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.NIM.Data\Retail.NIM.Data.csproj">
+      <Project>{e5c2f336-297d-40de-a5e9-2eca18ad48a1}</Project>
+      <Name>Retail.NIM.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.NIM.Entities\Retail.NIM.Entities.csproj">
       <Project>{541debf8-b1cb-4608-b09e-f31099ad7dc5}</Project>
       <Name>Retail.NIM.Entities</Name>

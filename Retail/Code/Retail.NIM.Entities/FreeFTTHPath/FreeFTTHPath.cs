@@ -4,28 +4,47 @@ namespace Retail.NIM.Entities
 {
     public class FreeFTTHPath
     {
-        public string FDBNumber { get; set; } 
+        public long AreaId { get; set; }
+        public string AreaName { get; set; }
+        public long SiteId { get; set; }
+        public string SiteName { get; set; }
 
-        public long FDB { get; set; }
+        //IMS
+        public long IMSId { get; set; }
+        public string IMSName { get; set; }
+        public string IMSNumber { get; set; }
+        public long IMSCardId { get; set; }
+        public string IMSCardName { get; set; }
+        public long IMSSlotId { get; set; }
+        public string IMSSlotName { get; set; }
+        public long IMSTIDId { get; set; }
+        public string IMSTIDName { get; set; }
 
-        public long FDBPort { get; set; }
+        //OLT
+        public long OLTId { get; set; }
+        public string OLTName { get; set; }
+        public long OLTHorizontalId { get; set; }
+        public string OLTHorizontalName { get; set; }
+        public long OLTHorizontalPortId { get; set; }
+        public string OLTHorizontalPortName { get; set; }
+        //public long OLTVerticalId { get; set; }
+        //public string OLTVerticalName { get; set; }
+        //public long OLTVerticalPortId { get; set; }
+        //public string OLTVerticalPortName { get; set; }
 
-        public long Splitter { get; set; }
+        //Splitter
+        public long SplitterId { get; set; }
+        public string SplitterName { get; set; }
+        //public long SplitterInPortId { get; set; }
+        //public string SplitterInPortName { get; set; }
+        public long SplitterOutPortId { get; set; }
+        public string SplitterOutPortName { get; set; }
 
-        public long SplitterOutPort { get; set; }
-
-        public long SplitterInPort { get; set; }
-
-        public long OLT { get; set; }
-
-        public long OLTVerticalPort { get; set; }
-
-        public long OLTHorizontalPort { get; set; }
-
-        public long IMS { get; set; }
-
-        public long TID { get; set; }
-
-        public DateTime CreatedTime { get; set; }
+        //FDB
+        public long FDBId { get; set; }
+        public string FDBName { get; set; }
+        public string FDBNumber { get; set; }
+        public long FDBPortId { get; set; }
+        public string FDBPortName { get; set; }
     }
 }
