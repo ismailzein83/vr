@@ -750,7 +750,7 @@
                   
                   when matched then
                  update set
-                 [ID]=s.[ID] ,[Name]=s.[Name] ,[Settings]=s.[Settings] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
+                 [ID]=s.[ID] ,[Name]=s.[Name] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
                  when not matched by target then
                  insert([ID],[Name],[Settings],[CreatedTime],[LastModifiedTime])
                  values(s.[ID], s.[Name], s.[Settings], s.[CreatedTime], s.[LastModifiedTime]);

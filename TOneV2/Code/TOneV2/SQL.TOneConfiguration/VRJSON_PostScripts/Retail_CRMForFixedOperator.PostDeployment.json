@@ -5164,7 +5164,7 @@
           {
             "ColumnName": "Settings",
             "IncludeInInsert": true,
-            "IncludeInUpdate": true,
+            "IncludeInUpdate": false,
             "IsIdentifier": false
           },
           {
