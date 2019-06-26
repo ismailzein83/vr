@@ -129,5 +129,7 @@
     <Build Include="NIM_PSTN\Tables\CabinetPrimarySide.sql" />
     <Build Include="NIM_PSTN\Tables\CabinetPrimarySecondaryConnector.sql" />
     <Build Include="NIM_PSTN\Tables\CabinetPrimaryPort.sql" />
+    <Build Include="NIM\Tables\PhoneNumberCategory.sql" />
+    <Build Include="NIM_PSTN\Tables\OLTSplitterLogicalConnector.sql" />
   </ItemGroup>
 </Project>

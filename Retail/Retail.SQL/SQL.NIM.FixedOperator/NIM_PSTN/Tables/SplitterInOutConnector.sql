@@ -7,6 +7,10 @@
     [LastModifiedBy]   INT        NULL,
     [LastModifiedTime] DATETIME   NULL,
     [timestamp]        ROWVERSION NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC)
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [IX_SplitterInOutConnector_InPort] UNIQUE NONCLUSTERED ([InPort] ASC),
+    CONSTRAINT [IX_SplitterInOutConnector_OutPort] UNIQUE NONCLUSTERED ([OutPort] ASC)
 );
+
+
 

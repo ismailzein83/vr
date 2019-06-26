@@ -7,6 +7,10 @@
     [LastModifiedBy]   INT        NULL,
     [LastModifiedTime] DATETIME   NULL,
     [timestamp]        ROWVERSION NULL,
-    CONSTRAINT [PK__OLT_SDF___3214EC0700DF2177] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK__OLT_SDF___3214EC0700DF2177] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [IX_OLTSplitterConnector_OLTPort] UNIQUE NONCLUSTERED ([OLTVerticalPort] ASC),
+    CONSTRAINT [IX_OLTSplitterConnector_SplitterPort] UNIQUE NONCLUSTERED ([SplitterInPort] ASC)
 );
+
+
 

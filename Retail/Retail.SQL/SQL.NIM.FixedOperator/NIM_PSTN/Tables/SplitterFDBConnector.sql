@@ -7,6 +7,10 @@
     [LastModifiedBy]   INT        NULL,
     [LastModifiedTime] DATETIME   NULL,
     [timestamp]        ROWVERSION NULL,
-    CONSTRAINT [PK_SplitterFDBConnector] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK_SplitterFDBConnector] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [IX_SplitterFDBConnector_FDBPort] UNIQUE NONCLUSTERED ([FDBPort] ASC),
+    CONSTRAINT [IX_SplitterFDBConnector_SplitterPort] UNIQUE NONCLUSTERED ([SplitterOutPort] ASC)
 );
+
+
 

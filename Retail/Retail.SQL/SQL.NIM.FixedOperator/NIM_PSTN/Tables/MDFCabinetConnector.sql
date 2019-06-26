@@ -7,6 +7,10 @@
     [LastModifiedBy]         INT        NULL,
     [LastModifiedTime]       DATETIME   NULL,
     [timestamp]              ROWVERSION NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC)
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [IX_MDFCabinetConnector_CabinetPort] UNIQUE NONCLUSTERED ([CabinetPrimarySidePort] ASC),
+    CONSTRAINT [IX_MDFCabinetConnector_VerticalPort] UNIQUE NONCLUSTERED ([MDFVerticalPort] ASC)
 );
+
+
 
