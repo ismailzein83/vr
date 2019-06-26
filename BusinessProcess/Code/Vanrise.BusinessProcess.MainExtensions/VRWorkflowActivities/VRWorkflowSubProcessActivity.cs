@@ -11,11 +11,6 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowSubProcessActivity : VRWorkflowActivitySettings
     {
-        public VRWorkflowSubProcessActivity()
-        {
-            this.DisplayName = "Connect the Verticals to the FDB";
-        }
-
         public override Guid ConfigId { get { return new Guid("173258F8-2AC9-4214-BCE2-D3DB6D902423"); } }
 
         public override string Editor { get { return "businessprocess-vr-workflowactivity-subprocess"; } }
@@ -49,6 +44,54 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                         #PROPERTIES#
                     }
+
+                    public class #CLASSNAME#_InsertStartedVisualEventActivity : BaseCodeActivity
+                    {
+                        protected override void VRExecute(IBaseCodeActivityContext context)
+                        {
+                            var executionContext = new #CLASSNAME#_InsertStartedVisualEventActivity_ExecutionContext(context.ActivityContext);
+                            executionContext.Execute();
+                        }
+                    }
+
+                    public class #CLASSNAME#_InsertStartedVisualEventActivity_ExecutionContext : #BASEEXECUTIONCLASSNAME#
+                    {
+                        ActivityContext _activityContext;
+                        public #CLASSNAME#_InsertStartedVisualEventActivity_ExecutionContext(ActivityContext activityContext) 
+                            : base (activityContext)
+                        {
+                            _activityContext = activityContext;
+                        }
+
+                        public void Execute()
+                        {
+                            #INSERTSTARTEDVISUALEVENTCODE#
+                        }
+                    }
+
+                    public class #CLASSNAME#_InsertCompletedVisualEventActivity : BaseCodeActivity
+                    {
+                        protected override void VRExecute(IBaseCodeActivityContext context)
+                        {
+                            var executionContext = new #CLASSNAME#_InsertCompletedVisualEventActivity_ExecutionContext(context.ActivityContext);
+                            executionContext.Execute();
+                        }
+                    }
+
+                    public class #CLASSNAME#_InsertCompletedVisualEventActivity_ExecutionContext : #BASEEXECUTIONCLASSNAME#
+                    {
+                        ActivityContext _activityContext;
+                        public #CLASSNAME#_InsertCompletedVisualEventActivity_ExecutionContext(ActivityContext activityContext) 
+                            : base (activityContext)
+                        {
+                            _activityContext = activityContext;
+                        }
+
+                        public void Execute()
+                        {
+                            #INSERTCOMPLETEDVISUALEVENTCODE#
+                        }
+                    }
                 }");
 
             string nmSpaceName = context.GenerateUniqueNamespace("SubProcess");
@@ -59,6 +102,26 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSNAME#", baseExecutionClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionClassCode);
             nmSpaceCodeBuilder.Replace("#CLASSNAME#", className);
+
+            var insertStartedVisualEventInput = new GenerateInsertVisualEventCodeInput
+            {
+                ActivityContextVariableName = "_activityContext",
+                ActivityId = context.VRWorkflowActivityId,
+                EventTitle = $@"""Sub Process '{this.DisplayName}' started""",
+                EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_STARTED
+            };
+            nmSpaceCodeBuilder.Replace("#INSERTSTARTEDVISUALEVENTCODE#",
+                context.GenerateInsertVisualEventCode(insertStartedVisualEventInput));
+
+            var insertCompletedVisualEventInput = new GenerateInsertVisualEventCodeInput
+            {
+                ActivityContextVariableName = "_activityContext",
+                ActivityId = context.VRWorkflowActivityId,
+                EventTitle = $@"""Sub Process '{this.DisplayName}' completed""",
+                EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_COMPLETED
+            };
+            nmSpaceCodeBuilder.Replace("#INSERTCOMPLETEDVISUALEVENTCODE#",
+                context.GenerateInsertVisualEventCode(insertCompletedVisualEventInput));
 
             StringBuilder propertiesBuilder = new StringBuilder();
             List<string> argumentsList = new List<string>();
@@ -123,7 +186,23 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             System.Activities.Activity activity = new Vanrise.BusinessProcess.Business.VRWorkflowManager().GetVRWorkflowActivity(VRWorkflowId);
             string activityType = CSharpCompiler.TypeToString(activity.GetType());
 
-            return string.Format("new {0}(){1}", activityType, argumentsList.Count > 0 ? string.Format("{0}{1}{2}", "{", string.Join<string>(",", argumentsList), "}") : string.Empty);
+            StringBuilder codeBuilder = new StringBuilder(@"new Sequence
+                                    {
+                                        Activities =
+                                        {
+                                            new #NAMESPACE#.#CLASSNAME#_InsertStartedVisualEventActivity(),
+                                            new #ACTIVITYTYPE#()#ARGUMENTS#,
+                                            new #NAMESPACE#.#CLASSNAME#_InsertCompletedVisualEventActivity()
+                                        }
+                                    }
+                            ");
+
+            codeBuilder.Replace("#NAMESPACE#", nmSpaceName);
+            codeBuilder.Replace("#CLASSNAME#", className);
+            codeBuilder.Replace("#ACTIVITYTYPE#", activityType);
+            codeBuilder.Replace("#ARGUMENTS#", argumentsList.Count > 0 ? string.Format("{0}{1}{2}", "{", string.Join<string>(",", argumentsList), "}") : string.Empty);
+
+            return codeBuilder.ToString();
         }
 
         public override BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
@@ -133,6 +212,28 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             if (context.SubProcessActivityName != null)
                 displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
             return vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
+
+            //VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(this.VRWorkflowId);
+            //string displayName = this.DisplayName;
+            //if (context.SubProcessActivityName != null)
+            //    displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
+            //var childVisualItemDefinition = vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
+            //if(childVisualItemDefinition != null)
+            //{
+            //    return new BPVisualItemDefinition
+            //    {
+            //        Settings = new BPSubProcessVisualItemDefinition
+            //        {
+            //            ChildActivityId = vrWorkflow.Settings.RootActivity.VRWorkflowActivityId,
+            //            ChildActivityVisualItemDefinition = childVisualItemDefinition
+            //        }
+            //    };
+            //}
+            //else
+            //{
+            //    return null;
+            //}
+
         }
 
         private class VRWorkflowActivityGetVisualItemDefinitionContext : IVRWorkflowActivityGetVisualItemDefinitionContext
@@ -148,5 +249,18 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             public string SubProcessActivityName => this._displayName;
         }
+
+
+    }
+
+    public class BPSubProcessVisualItemDefinition : BPVisualItemDefinitionSettings
+    {
+        public override Guid ConfigId { get { return new Guid("ECCDB81D-057C-493F-820B-80DCFECBBD93"); } }
+
+        public override string Editor { get { return "bp-workflow-activitysettings-visualitemdefiniton-subprocess"; } }
+        
+        public Guid ChildActivityId { get; set; }
+
+        public BPVisualItemDefinition ChildActivityVisualItemDefinition { get; set; }
     }
 }

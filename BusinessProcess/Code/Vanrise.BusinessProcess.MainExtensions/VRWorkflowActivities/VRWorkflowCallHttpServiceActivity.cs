@@ -365,11 +365,14 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         {
             if(this.EnableVisualization)
             {
+                string displayName = this.ServiceName;
+                if (context.SubProcessActivityName != null)
+                    displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
                 return new BPVisualItemDefinition
                 {
                     Settings = new BPCallHttpServiceVisualItemDefinitionSettings
                     {
-                        DisplayName = this.ServiceName
+                        DisplayName = displayName
                     }
                 };
             }
