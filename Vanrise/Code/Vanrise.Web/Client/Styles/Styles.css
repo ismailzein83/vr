@@ -5623,8 +5623,7 @@ span.option-marketprice {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    display: inline-block;
-    height: 14px;
+    display: block;
 }
 
 .btn-breadcrumb .btn.level-4 {
