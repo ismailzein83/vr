@@ -18,8 +18,8 @@ namespace Retail.Billing.Business
     public class CustomerMessagesDataSourceSettings : InvoiceDataSourceSettings
     {
         public override Guid ConfigId { get { return new Guid("128AA4A3-719F-4C60-8908-AA652ED612D7"); } }
-        Guid CustomerMessagesBeDefinitionId { get { return new Guid("41283ade-a5b1-403d-886d-724390812fe0"); } }
-        Guid CustomerBeDefinitionId { get { return new Guid("61017ff8-3e6d-48f4-83bc-a8b4733ab5ee"); } }
+        static Guid s_customerMessagesBeDefinitionId { get { return new Guid("41283ade-a5b1-403d-886d-724390812fe0"); } }
+        static Guid s_customerBeDefinitionId { get { return new Guid("61017ff8-3e6d-48f4-83bc-a8b4733ab5ee"); } }
         public CustomerMessagesType Type { get; set; }
 
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
@@ -45,7 +45,7 @@ namespace Retail.Billing.Business
 
             var customerId = financialAccount.ExtraFields.GetRecord("Customer");
 
-            var customerEntity = new GenericBusinessEntityManager().GetGenericBusinessEntity(customerId, CustomerBeDefinitionId);
+            var customerEntity = new GenericBusinessEntityManager().GetGenericBusinessEntity(customerId, s_customerBeDefinitionId);
             if (customerEntity == null || customerEntity.FieldValues == null || customerEntity.FieldValues.Count == 0)
                 return null;
 
@@ -111,7 +111,7 @@ namespace Retail.Billing.Business
 
         public List<GenericBusinessEntity> GetCustomerMessages(RecordFilterGroup filterGroup = null)
         {
-            return new GenericBusinessEntityManager().GetAllGenericBusinessEntities(CustomerMessagesBeDefinitionId, null, filterGroup);
+            return new GenericBusinessEntityManager().GetAllGenericBusinessEntities(s_customerMessagesBeDefinitionId, null, filterGroup);
         }
 
         #endregion

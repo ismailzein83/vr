@@ -17,6 +17,17 @@ namespace Retail.Billing.Business
 
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
+            switch (context.InfoType)
+            {
+                case "MailTemplate":
+                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                    objects.Add("Invoice", context.Invoice);
+
+                    GenericFinancialAccountManager financialAccountManager = new GenericFinancialAccountManager(this.Configuration);
+                    objects.Add("Account", financialAccountManager.GetFinancialAccountObject(context.Invoice.PartnerId));
+                    return objects;
+
+            }
             return null;
         }
 
