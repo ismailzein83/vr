@@ -99,7 +99,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var genericBEDefinitionTypeSelectedDeferred;
 
             var dataRecordStorageId;
-            var vrConnectionId;
+			var vrConnectionId;
 
             var orderTypeSelectorAPI;
             var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -403,7 +403,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     var genericBEAddedValues;
                     vrConnectionId = undefined;
                     dataRecordStorageId = undefined;
-                    var firstPromise = [];
+                    var firstPromises = [];
                     if (payload != undefined) {
                         businessEntityDefinitionSettings = payload.businessEntityDefinitionSettings;
                         genericBEAddedValues = payload.additionalData;
@@ -426,7 +426,9 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     }
 
                     if (businessEntityDefinitionSettings != undefined) {
-                        firstPromise.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
+						firstPromises.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
+						firstPromises.push(loadDataRecordTypeSelector());
+
                     }
 
 
@@ -756,11 +758,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     };
 
                     return UtilsService.waitPromiseNode({
-                        promises: firstPromise,
+                        promises: firstPromises,
                         getChildNode: function () {
                             var promises = [];
 
-                            promises.push(loadDataRecordTypeSelector());
                             if (dataRecordStorageId != undefined) {
                                 promises.push(loadDataRecordStorageSelector());
                             }
