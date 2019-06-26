@@ -30,9 +30,7 @@
                         <vr-sec-tenant-selector on-ready="onTenantSelectorReady" hideifnotneeded="hideTenantSelectorIfNotNeeded" isrequired="true" hideremoveicon customlabel="Tenant" localizedcustomlabel="VRRes.Tenant.VREnd"></vr-sec-tenant-selector>
                     </span>
                 </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-sec-group-selector on-ready="onGroupSelectorReady" ismultipleselection></vr-sec-group-selector>
-                </vr-columns>
+                <vr-sec-group-selector normal-col-num="6" on-ready="onGroupSelectorReady" ismultipleselection></vr-sec-group-selector>
                 <vr-columns width="fullrow" haschildcolumns>
                     <vr-columns width="1/2row">
                         <vr-fileupload tempfile="true" extension="images" value="scopemodel.userPhoto" label="User Photo"> </vr-fileupload>

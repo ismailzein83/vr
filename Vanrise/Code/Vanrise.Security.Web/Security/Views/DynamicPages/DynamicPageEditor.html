@@ -44,13 +44,13 @@
                                     </vr-treeview>
                                 </vr-section>
                             </vr-columns>
-                            <vr-columns width="1/3row">
+                            <vr-columns width="1/3row" haschildcolumns>
                                 <vr-section title="Audiences">
                                     <vr-row removeline>
-                                        <vr-sec-user-selector on-ready="scopeModal.onUserDirectiveReady" selectedvalues="scopeModal.selectedUsers" ismultipleselection></vr-sec-user-selector>
+                                        <vr-sec-user-selector  normal-col-num="6" on-ready="scopeModal.onUserDirectiveReady" selectedvalues="scopeModal.selectedUsers" ismultipleselection></vr-sec-user-selector>
                                     </vr-row>
                                     <vr-row width="fullrow">
-                                        <vr-sec-group-selector on-ready="scopeModal.onGroupDirectiveReady" selectedvalues="scopeModal.selectedGroups" ismultipleselection></vr-sec-group-selector>
+                                        <vr-sec-group-selector normal-col-num="6" on-ready="scopeModal.onGroupDirectiveReady" selectedvalues="scopeModal.selectedGroups" ismultipleselection></vr-sec-group-selector>
                                     </vr-row>
                                 </vr-section>
                             </vr-columns>

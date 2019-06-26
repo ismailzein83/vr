@@ -16,7 +16,8 @@
                 isrequired: '=',
                 onselectitem: '=',
                 ondeselectitem: '=',
-                isdisabled: '='
+                isdisabled: '=',
+                normalColNum: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -101,10 +102,10 @@
                 multipleselection = "ismultipleselection";
             }
 
-            return '<div>'
+            return '<vr-columns  colnum="{{ctrl.normalColNum}}">'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="GroupId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Group" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>';
+                + '</vr-columns>';
         }
 
         return directiveDefinitionObject;
