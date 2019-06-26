@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRButtonTypeEnum', 'BusinessProcess_TaskTypeActionService', 'BusinessProcess_BPTaskService', 'BusinessProcess_BPGenericTaskTypeActionAPIService', 'BPTaskStatusEnum'];
+    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRButtonTypeEnum', 'BusinessProcess_TaskTypeActionService', 'BusinessProcess_BPTaskService', 'BusinessProcess_BPGenericTaskTypeActionAPIService', 'BPTaskStatusEnum','VRDateTimeService'];
 
-    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VRButtonTypeEnum, BusinessProcess_TaskTypeActionService, BusinessProcess_BPTaskService, BusinessProcess_BPGenericTaskTypeActionAPIService, BPTaskStatusEnum) {
+    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VRButtonTypeEnum, BusinessProcess_TaskTypeActionService, BusinessProcess_BPTaskService, BusinessProcess_BPGenericTaskTypeActionAPIService, BPTaskStatusEnum, VRDateTimeService) {
 
         var bpTaskId;
         var bpTaskType;
@@ -30,12 +30,16 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.actions = [];
-
+            $scope.scopeModel.showActions = true;
+            $scope.scopeModel.showMessage = false;
+            $scope.scopeModel.showClose = false;
             $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
                 runtimeEditorAPI = api;
                 runtimeEditorReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal();
+            };
             $scope.scopeModel.take = function () {
                 var takeTaskResponse;
 
@@ -48,12 +52,17 @@
                     promises: [takeTask()],
                     getChildNode: function () {
                         return {
-                            promises: [load(true)],
+                            promises: [load(false)],
                             getChildNode: function () {
                                 if (takeTaskResponse != undefined) {
-                                    $scope.scopeModel.showTake = takeTaskResponse.ShowTake;
-                                    $scope.scopeModel.showRelease = takeTaskResponse.ShowRelease;
-                                    $scope.scopeModel.showAssign = takeTaskResponse.ShowAssign;
+                                    $scope.scopeModel.showTake = false;
+                                    $scope.scopeModel.showRelease = false;
+                                    $scope.scopeModel.showAssign = false;
+                                    $scope.scopeModel.showActions = false;
+                                    $scope.scopeModel.showMessage = true;
+                                    $scope.scopeModel.showClose = true;
+                                    var currentDateTime = dateFormat(VRDateTimeService.getCurrentDateWithoutMilliseconds());
+                                    $scope.scopeModel.message = "Task started at: " + currentDateTime +". You may now close the window.";
                                 }
                                 return {
                                     promises:[]
@@ -79,12 +88,10 @@
                     getChildNode: function () {
 
                         return {
-                            promises: [load(true)],
+                            promises: [load(false)],
                             getChildNode: function () {
                                 if (releaseTaskResponse != undefined) {
-                                    $scope.scopeModel.showTake = releaseTaskResponse.ShowTake;
-                                    $scope.scopeModel.showRelease = releaseTaskResponse.ShowRelease;
-                                    $scope.scopeModel.showAssign = releaseTaskResponse.ShowAssign;
+                                    $scope.modalContext.closeModal();
                                 }
                                 return {
                                     promises: []
@@ -237,25 +244,28 @@
         }
         function loadRuntimeEditor() {
             var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            runtimeEditorReadyPromiseDeferred.promise.then(function () {
-                runtimeEditorReadyPromiseDeferred = undefined;
-                var defaultValues = {};
-                if (fieldValues != undefined) {
-                    for (var key in fieldValues) {
-                        if (key != "$type" && !fieldValues[key].isHidden)
-                            defaultValues[key] = fieldValues[key].value;
+            if (runtimeEditorReadyPromiseDeferred != undefined) {
+                runtimeEditorReadyPromiseDeferred.promise.then(function () {
+                    runtimeEditorReadyPromiseDeferred = undefined;
+                    var defaultValues = {};
+                    if (fieldValues != undefined) {
+                        for (var key in fieldValues) {
+                            if (key != "$type" && !fieldValues[key].isHidden)
+                                defaultValues[key] = fieldValues[key].value;
+                        }
                     }
-                }
 
-                var runtimeEditorPayload = {
-                    selectedValues: defaultValues,
-                    dataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined,
-                    definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined,
-                    parentFieldValues: fieldValues,
-                    runtimeEditor: bpTaskType.Settings.EditorSettings != undefined ? bpTaskType.Settings.EditorSettings.RuntimeEditor : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadPromiseDeferred);
-            });
+                    var runtimeEditorPayload = {
+                        selectedValues: defaultValues,
+                        dataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined,
+                        definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined,
+                        parentFieldValues: fieldValues,
+                        runtimeEditor: bpTaskType.Settings.EditorSettings != undefined ? bpTaskType.Settings.EditorSettings.RuntimeEditor : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadPromiseDeferred);
+                });
+            }
+            else runtimeEditorLoadPromiseDeferred.resolve();
             return runtimeEditorLoadPromiseDeferred.promise;
         }
 

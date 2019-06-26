@@ -1,7 +1,12 @@
 ﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_BPGenericTaskTypeSettingsEditorController" resclass="resClass" vr-loader="scopeModel.isLoading">
     <vr-modalbody maxheight="'700px'">
         <vr-form name="formBPGenericTaskTypeSettings">
-            <vr-genericdata-genericeditor-rootcontainer on-ready="scopeModel.onEditorRuntimeDirectiveReady" ></vr-genericdata-genericeditor-rootcontainer>
+            <vr-genericdata-genericeditor-rootcontainer on-ready="scopeModel.onEditorRuntimeDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <label ng-if="scopeModel.showMessage" class="alert alert-warning" vr-alert>{{scopeModel.message}}</label>
+                </vr-columns>
+            </vr-row>
         </vr-form>
     </vr-modalbody>
     <div ng-if="scopeModel.showActionBar">
@@ -10,9 +15,10 @@
                 <span ng-if="scopeModel.includeTaskLock">
                     <vr-button type="Take" data-onclick="scopeModel.take" ng-if="scopeModel.showTake"></vr-button>
                     <vr-button type="Release" data-onclick="scopeModel.release" ng-if="scopeModel.showRelease"></vr-button>
-                    <vr-button type="Assign" data-onclick="scopeModel.assign"  ng-if="scopeModel.showAssign"></vr-button>
+                    <vr-button type="Assign" data-onclick="scopeModel.assign" ng-if="scopeModel.showAssign"></vr-button>
+                    <vr-button type="Close" data-onclick="scopeModel.close" ng-if="scopeModel.showClose"></vr-button>
                 </span>
-                <span ng-repeat="action in scopeModel.actions" ng-if="scopeModel.actions.length > 0">
+                <span ng-repeat="action in scopeModel.actions" ng-if="scopeModel.actions.length > 0 && scopeModel.showActions">
                     <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" menuactions="action.menuActions" formname="formBPGenericTaskTypeSettings"></vr-directivewrapper>
                 </span>
             </div>
