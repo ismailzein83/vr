@@ -69,11 +69,10 @@
                 UtilsService.setContextReadOnly($scope);
         }
         function defineScope() {
-
             $scope.scopeModel = {};
             $scope.scopeModel.priority = 1;
             $scope.scopeModel.disabelType = (isEditMode);
-            $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
+            $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum); 
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
             $scope.scopeModel.SwapDealTimeZone = UtilsService.getArrayEnum(WhS_Deal_SwapDealTimeZoneTypeEnum);
@@ -308,7 +307,6 @@
                 dealEntity.Settings.DealContract = undefined;
                 dealEntity.Settings.DealType = undefined;
                 dealEntity.Settings.CurrencyId = undefined;
-                dealEntity.Settings.Priority = undefined;
             });
         }
         function getSwapDeal() {
