@@ -75,5 +75,8 @@
     <Build Include="RA_OnNet\User Defined Types\OperatorDeclarationType.sql" />
     <Build Include="Security\RA_Retail.sql" />
     <Build Include="Security\RA_OnNet.sql" />
+    <Build Include="RA_Retail\Tables\TopUpDefinition.sql" />
+    <Build Include="RA_Retail\Tables\PrepaidTransactionType.sql" />
+    <Build Include="RA_Retail\Tables\PostpaidTransactionType.sql" />
   </ItemGroup>
 </Project>

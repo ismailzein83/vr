@@ -66,11 +66,39 @@
     <Folder Include="COMMON\" />
     <Folder Include="COMMON\Functions\" />
     <Folder Include="Security\" />
+    <Folder Include="RA_Retail_Transaction\" />
+    <Folder Include="RA_Retail_Transaction\Tables\" />
+    <Folder Include="RA_Retail_SMS\" />
+    <Folder Include="RA_Retail_SMS\Tables\" />
+    <Folder Include="RA_Retail_CDR\" />
+    <Folder Include="RA_Retail_CDR\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
     <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
     <Build Include="COMMON\Functions\getExchangeRates.sql" />
     <Build Include="Security\COMMON.sql" />
+    <Build Include="RA_Retail_Transaction\Tables\ProcessedRawBillingPrepaidTransaction.sql" />
+    <Build Include="RA_Retail_Transaction\Tables\ProcessedRawBillingPostpaidTransaction.sql" />
+    <Build Include="RA_Retail_Transaction\Tables\ProcessedBillingPrepaidTransaction.sql" />
+    <Build Include="RA_Retail_Transaction\Tables\ProcessedBillingPostpaidTransaction.sql" />
+    <Build Include="RA_Retail_SMS\Tables\PostpaidSMS_Main.sql" />
+    <Build Include="RA_Retail_SMS\Tables\SMS.sql" />
+    <Build Include="RA_Retail_SMS\Tables\ProcessedBillingPostpaidSMS.sql" />
+    <Build Include="RA_Retail_SMS\Tables\ProcessedBillingPrepaidSMS.sql" />
+    <Build Include="RA_Retail_SMS\Tables\ProcessedRawBillingSMS.sql" />
+    <Build Include="RA_Retail_SMS\Tables\PostpaidSMS_Failed.sql" />
+    <Build Include="RA_Retail_SMS\Tables\PostpaidSMS_Invalid.sql" />
+    <Build Include="RA_Retail_CDR\Tables\PostpaidCDR_Invalid.sql" />
+    <Build Include="RA_Retail_CDR\Tables\PostpaidCDR_Failed.sql" />
+    <Build Include="RA_Retail_CDR\Tables\PostpaidCDR_Main.sql" />
+    <Build Include="RA_Retail_CDR\Tables\ProcessedBillingPrepaidCDR.sql" />
+    <Build Include="RA_Retail_CDR\Tables\ProcessedBillingPostpaidCDR.sql" />
+    <Build Include="RA_Retail_CDR\Tables\ProcessedRawBillingCDR.sql" />
+    <Build Include="RA_Retail_CDR\Tables\CDR.sql" />
+    <Build Include="Security\RA_Retail_Transaction.sql" />
+    <Build Include="Security\RA_Retail_SMS.sql" />
+    <Build Include="Security\RA_Retail_CDR.sql" />
+    <Build Include="Security\RA_Retail.sql" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [RA_Retail_SMS]
+    AUTHORIZATION [dbo];
+

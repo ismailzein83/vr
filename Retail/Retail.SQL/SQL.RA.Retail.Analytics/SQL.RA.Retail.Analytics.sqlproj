@@ -69,6 +69,10 @@
     <Folder Include="COMMON\" />
     <Folder Include="COMMON\Functions\" />
     <Folder Include="Security\" />
+    <Folder Include="RA_Retail_TransactionAnalytics\" />
+    <Folder Include="RA_Retail_TransactionAnalytics\Tables\" />
+    <Folder Include="RA_Retail_SMSAnalytics\" />
+    <Folder Include="RA_Retail_SMSAnalytics\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
@@ -81,5 +85,16 @@
     <Build Include="COMMON\Functions\getExchangeRates.sql" />
     <Build Include="Security\RA_Retail_Analytics.sql" />
     <Build Include="Security\COMMON.sql" />
+    <Build Include="RA_Retail_Analytics\Tables\ProcessedPrepaidBillingStatsDaily.sql" />
+    <Build Include="RA_Retail_Analytics\Tables\ProcessedPostpaidBillingStatsDaily.sql" />
+    <Build Include="RA_Retail_Analytics\Tables\PostpaidBillingStatsDaily.sql" />
+    <Build Include="RA_Retail_TransactionAnalytics\Tables\ProcessedPostpaidTransactionBillingStatsDaily.sql" />
+    <Build Include="RA_Retail_TransactionAnalytics\Tables\ProcessedPrepaidTransactionBillingStatsDaily.sql" />
+    <Build Include="RA_Retail_SMSAnalytics\Tables\ProcessedPrepaidSMSBillingStatsDaily.sql" />
+    <Build Include="RA_Retail_SMSAnalytics\Tables\PostpaidSMSBillingStatsDaily.sql" />
+    <Build Include="RA_Retail_SMSAnalytics\Tables\ProcessedPostpaidSMSBillingStatsDaily.sql" />
+    <Build Include="Security\RA_Retail_TransactionAnalytics.sql" />
+    <Build Include="Security\RA_Retail_SMSAnalytics.sql" />
+    <Build Include="Security\RA_Retail_Analytic.sql" />
   </ItemGroup>
 </Project>
