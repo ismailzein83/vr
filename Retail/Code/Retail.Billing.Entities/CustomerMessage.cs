@@ -9,5 +9,9 @@ namespace Retail.Billing.Entities
     public class CustomerMessage
     {
         public string Message { get; set; }
+        public IEnumerable<CustomerMessage> GetCustomerMessagesRDLCSchema()
+        {
+            return null;
+        }
     }
 }

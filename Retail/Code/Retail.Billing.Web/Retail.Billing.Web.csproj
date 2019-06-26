@@ -151,6 +151,7 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_Billing\Constants\CustomerMessagesTypeEnum.js" />
     <Content Include="Retail_Billing\Constants\ModuleConfig.js" />
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\retail-billing-datasourcesettings-customermessages.js" />
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\Templates\CustomerMessagesTemplate.html" />
@@ -162,11 +163,6 @@
     <Content Include="Retail_Billing\Elements\Reports\BillingInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Retail_Billing\Elements\Reports\BillingInvoiceItemsReport.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

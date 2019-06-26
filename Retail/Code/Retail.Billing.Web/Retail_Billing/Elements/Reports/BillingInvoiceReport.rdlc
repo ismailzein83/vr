@@ -97,7 +97,7 @@
                             <TextRun>
                               <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy") + " to "+ CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
-                                <Color>#f34f4f</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -271,7 +271,7 @@
                             <TextRun>
                               <Value>=Fields!ServiceIDDescription.Value</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -303,7 +303,7 @@
                             <TextRun>
                               <Value>=FormatNumber(Fields!TotalAmount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -374,7 +374,7 @@
                             <TextRun>
                               <Value>=FormatNumber(Parameters!TotalAmount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -520,7 +520,7 @@
                             <TextRun>
                               <Value>=FormatNumber(Parameters!TaxAmount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -595,7 +595,7 @@
                             <TextRun>
                               <Value>=FormatNumber(Parameters!TotalAmountAfterTaxes.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -703,7 +703,7 @@
         <Top>9.77123cm</Top>
         <Left>0.94855cm</Left>
         <Height>4.2cm</Height>
-        <Width>11.62635cm</Width>
+        <Width>11.62634cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -808,7 +808,7 @@
                             <TextRun>
                               <Value>=Parameters!FinancialAccountId.Value</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -840,7 +840,7 @@
                             <TextRun>
                               <Value>=Parameters!FullName.Value</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -943,7 +943,7 @@
                             <TextRun>
                               <Value>=Parameters!InvoiceNb.Value</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -975,7 +975,7 @@
                             <TextRun>
                               <Value>=Parameters!Region.Value  + ", "+ Parameters!City.Value + ", "+ Parameters!Town.Value</Value>
                               <Style>
-                                <Color>#f34f4f</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1078,7 +1078,7 @@
                             <TextRun>
                               <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1110,7 +1110,7 @@
                             <TextRun>
                               <Value>=Parameters!Street.Value+ ", "+Parameters!Building.Value+ ", "+Parameters!FloorNumber.Value</Value>
                               <Style>
-                                <Color>#f34f4f</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1213,7 +1213,7 @@
                             <TextRun>
                               <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
-                                <Color>#e74040</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1245,7 +1245,7 @@
                             <TextRun>
                               <Value>=Parameters!AddressNotes.Value</Value>
                               <Style>
-                                <Color>#f34f4f</Color>
+                                <Color>#fe4e85</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1430,10 +1430,11 @@
             <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
+        <DataSetName>BillingInvoiceItemDetails</DataSetName>
         <Top>5.60599cm</Top>
         <Left>0.94859cm</Left>
         <Height>3cm</Height>
-        <Width>19.54212cm</Width>
+        <Width>19.54213cm</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -1441,11 +1442,11 @@
           </Border>
         </Style>
       </Tablix>
-      <Tablix Name="Tablix8">
+      <Tablix Name="Tablix2">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>19.54212cm</Width>
+              <Width>11.62634cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1454,7 +1455,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox150">
+                    <Textbox Name="Textbox151">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1489,6 +1490,76 @@
                 </TablixCell>
               </TablixCells>
             </TablixRow>
+            <TablixRow>
+              <Height>0.6cm</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox9">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox9</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+            <TablixRow>
+              <Height>0.6cm</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox2">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!Message.Value</Value>
+                              <Style>
+                                <Color>#fe4e85</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox2</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
@@ -1498,14 +1569,22 @@
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
-            <TablixMember />
+            <TablixMember>
+              <KeepWithGroup>After</KeepWithGroup>
+            </TablixMember>
+            <TablixMember>
+              <KeepWithGroup>After</KeepWithGroup>
+            </TablixMember>
+            <TablixMember>
+              <Group Name="Details" />
+            </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>BillingInvoiceItemDetails</DataSetName>
-        <Top>15.18391cm</Top>
-        <Left>0.94859cm</Left>
-        <Height>0.6cm</Height>
-        <Width>19.54212cm</Width>
+        <DataSetName>CustomerMessages</DataSetName>
+        <Top>14.6371cm</Top>
+        <Left>0.94855cm</Left>
+        <Height>1.8cm</Height>
+        <Width>11.62634cm</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -1514,13 +1593,13 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>16.87955cm</Height>
+    <Height>17.09856cm</Height>
     <Style />
   </Body>
-  <Width>20.60946cm</Width>
+  <Width>20.68884cm</Width>
   <Page>
     <PageFooter>
-      <Height>1.33879cm</Height>
+      <Height>1.55046cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -1594,8 +1673,33 @@
       </ConnectionProperties>
       <rd:DataSourceID>797f3b9f-2031-43d6-a4fe-70eeb6c7c2c6</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="CustomerMessages">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>797f3b9f-2031-43d6-a4fe-70eeb6c7c2c6</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
+    <DataSet Name="CustomerMessages">
+      <Query>
+        <DataSourceName>CustomerMessages</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Message">
+          <DataField>Message</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>Retail.Billing.Entities</rd:DataSetName>
+        <rd:TableName>CustomerMessage</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCustomerMessagesRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>Retail.Billing.Entities.CustomerMessage, Retail.Billing.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
     <DataSet Name="BillingInvoiceItemDetails">
       <Query>
         <DataSourceName>BillingInvoiceItemDetails</DataSourceName>
