@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connectors\ConnectorManager.cs" />
     <Compile Include="Connectors\IMSOLTConnectorManager.cs" />
     <Compile Include="Connectors\IMSPhoneNumberTIDConnectorManager.cs" />
     <Compile Include="Connectors\OLTHorizontalVerticalConnectorManager.cs" />
@@ -73,7 +74,7 @@
     <Compile Include="FDB\FDBManager.cs" />
     <Compile Include="FDB\FDBPortManager.cs" />
     <Compile Include="CopperPath\CopperPathManager.cs" />
-    <Compile Include="FreeFTTHPath\FreeFTTHPathManager.cs" />
+    <Compile Include="FTTHPath\FreeFTTHPathManager.cs" />
     <Compile Include="IMS\IMSManager.cs" />
     <Compile Include="IMS\IMSPhoneNumberManager.cs" />
     <Compile Include="IMS\IMSTIDManager.cs" />

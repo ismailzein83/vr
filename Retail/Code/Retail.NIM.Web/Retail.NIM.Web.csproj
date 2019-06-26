@@ -27,6 +27,7 @@
     <SccProvider>SAK</SccProvider>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -86,7 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ConnectorController.cs" />
     <Compile Include="Controllers\FDBController.cs" />
+    <Compile Include="Controllers\FreeFTTHPathController.cs" />
     <Compile Include="Controllers\IMSPhoneNumberController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

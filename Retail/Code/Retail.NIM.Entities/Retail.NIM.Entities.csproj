@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,7 +52,7 @@
     <Compile Include="FDB\FDB.cs" />
     <Compile Include="FDB\FDBPort.cs" />
     <Compile Include="CopperPath\CopperPath.cs" />
-    <Compile Include="FreeFTTHPath\FreeFTTHPath.cs" />
+    <Compile Include="FTTHPath\FreeFTTHPath.cs" />
     <Compile Include="IMS\IMS.cs" />
     <Compile Include="IMS\IMSPhoneNumber.cs" />
     <Compile Include="PhoneNumberStatus.cs" />
