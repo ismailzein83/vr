@@ -11,17 +11,17 @@ namespace Retail.NIM.Business
     {
         public static Guid s_beDefinitionId = new Guid("72726efd-3adf-40aa-8e39-d2affc047fef");
 
-        public CopperPath GetPathByFullPhoneNumber(string fullPhoneNumber)
+        public CopperPath GetCopperPathByFullPhoneNumber(string fullPhoneNumber)
         {
             Dictionary<string, CopperPath> copperPathsByFullPhoneNumber = this.GetCopperPathsByFullPhoneNumber();
             if (copperPathsByFullPhoneNumber == null || copperPathsByFullPhoneNumber.Count == 0)
                 return null;
 
-            CopperPath path;
-            if (!copperPathsByFullPhoneNumber.TryGetValue(fullPhoneNumber, out path))
+            CopperPath copperPath;
+            if (!copperPathsByFullPhoneNumber.TryGetValue(fullPhoneNumber, out copperPath))
                 return null;
 
-            return path;
+            return copperPath;
         }
 
         private Dictionary<string, CopperPath> GetCopperPathsByFullPhoneNumber()
@@ -62,11 +62,6 @@ namespace Retail.NIM.Business
                         LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
                         LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
                     };
-
-                    if(results.ContainsKey(copperPath.FullPhoneNumber))
-                    {
-                        string a = "Hello";
-                    }
 
                     results.Add(copperPath.FullPhoneNumber, copperPath);
                 }

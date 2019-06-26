@@ -75,6 +75,7 @@
     <Compile Include="FDB\FDBPortManager.cs" />
     <Compile Include="CopperPath\CopperPathManager.cs" />
     <Compile Include="FTTHPath\FreeFTTHPathManager.cs" />
+    <Compile Include="FTTHPath\FTTHPathManager.cs" />
     <Compile Include="IMS\IMSManager.cs" />
     <Compile Include="IMS\IMSPhoneNumberManager.cs" />
     <Compile Include="IMS\IMSTIDManager.cs" />

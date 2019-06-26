@@ -154,14 +154,20 @@ namespace Retail.NIM.Business
             if (string.IsNullOrEmpty(nearestPhoneNumber))
                 return null;
 
-            //try to get FDB from Fiber
-            //Not Implemented Yet
+            FTTHPath ftthPath = new FTTHPathManager().GetFTTHPathByFullPhoneNumber(nearestPhoneNumber);
+            if(ftthPath != null)
+            {
+                FDB fdb = GetFDB(ftthPath.FDB);
+                if (fdb != null)
+                    return fdb;
+            }
 
-            //try to get FDB from Copper
-            CopperPath copperPath = new CopperPathManager().GetPathByFullPhoneNumber(nearestPhoneNumber);
+            CopperPath copperPath = new CopperPathManager().GetCopperPathByFullPhoneNumber(nearestPhoneNumber);
             if (copperPath != null)
             {
                 DP dp = new DPManager().GetDPById(copperPath.DP);
+                dp.ThrowIfNull("dp", copperPath.DP);
+
                 FDB fdb = GetFDBByDP(dp);
                 if (fdb != null)
                     return fdb;
