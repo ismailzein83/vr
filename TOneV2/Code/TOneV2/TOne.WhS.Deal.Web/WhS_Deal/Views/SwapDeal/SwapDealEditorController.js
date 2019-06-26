@@ -333,7 +333,7 @@
             if (!isEditMode) {
                 setTimeout(function () {
                     if ($scope.scopeModel.carrierAccount != undefined)
-                        $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate($scope.scopeModel.beginDate);
+                        $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(UtilsService.createDateFromString($scope.scopeModel.beginDate));
                 });
             }
         }
@@ -460,10 +460,10 @@
             $scope.scopeModel.isLoading = true;
             var createDealFromAnalysis = false;
             return WhS_Deal_SwapDealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
+                createDealFromAnalysis = isCreateDealFromAnalysis && response != undefined && response.InsertedObject != undefined && response.InsertedObject.Entity != undefined;
                 if (VRNotificationService.notifyOnItemAdded('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealAdded != undefined)
                         $scope.onSwapDealAdded(response.InsertedObject);
-                    createDealFromAnalysis = isCreateDealFromAnalysis && response != undefined && response.InsertedObject != undefined && response.InsertedObject.Entity != undefined;
                     if (createDealFromAnalysis) {
                         WhS_Deal_SwapDealAnalysisAPIService.UpdateDealAnalysis(response.InsertedObject.Entity.DealId, genericBusinessEntityId)
                             .then(function () {
