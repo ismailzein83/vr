@@ -568,7 +568,13 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StStatus");
             esq.AddColumn("StContractID");
             esq.AddColumn("StRequestType");
-            esq.AddColumn("CreatedOn");
+            var createdoncol = esq.AddColumn("CreatedOn");
+            createdoncol.OrderPosition = 0;
+            createdoncol.OrderDirection = Terrasoft.Common.OrderDirection.Descending;
+
+            esq.AddColumn("StSequenceNumber");
+            var stagecol = esq.AddColumn("StStage.StName");
+            var wostagecol = esq.AddColumn("StWorkOrderStage.Name");
             esq.AddColumn("StSequenceNumber");
             var createdbycol = esq.AddColumn("CreatedBy.Name");
 
@@ -601,8 +607,8 @@ namespace BPMExtended.Main.Business
                     DateTime CreatedOn = entity.GetTypedColumnValue<DateTime>("CreatedOn");
                     requests.Add(new RequestHeaderDetail()
                     {
-                        step = (string)entity.GetColumnValue("StStep"),
-                        technicalStep = (string)entity.GetColumnValue("StTechnicalStep"),
+                        step = entity.GetTypedColumnValue<string>(stagecol.Name), //(string)entity.GetColumnValue("StStep"),
+                        technicalStep = entity.GetTypedColumnValue<string>(wostagecol.Name),//(string)entity.GetColumnValue("StTechnicalStep"),
                         RequestId = (Guid)entity.GetColumnValue("StRequestId"),
                         status = (string)entity.GetColumnValue("StStatusName"),
                         contractId = (string)entity.GetColumnValue("StContractID"),
@@ -619,8 +625,6 @@ namespace BPMExtended.Main.Business
 
             return requests;
         } 
-
-
         public string GetEntityNameByRequestId(string requestId)
         {
             EntitySchemaQuery esq;
