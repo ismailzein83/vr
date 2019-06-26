@@ -101,7 +101,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
 
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
 
-                    var show = (iAttrs.initiallyhidden != undefined) != undefined ? !$scope.$eval(iAttrs.initiallyhidden): true;
+                    var show = (iAttrs.initiallyhidden != undefined) != undefined ? !$scope.$eval(iAttrs.initiallyhidden) : true;
                     if (isMobile && (iAttrs.ishiddeninlistview != undefined)) {
                         show = !$scope.$eval(iAttrs.ishiddeninlistview);
                     }
@@ -109,7 +109,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     if (iAttrs.ngShow != undefined)
                         show = $scope.$eval(iAttrs.ngShow);
 
-                    if (col.type == "Number" && col.headerText.toUpperCase() === 'ID' && col.numberPrecision == "NoDecimal") {
+                    if (col.type == "Number" && (col.headerText.toUpperCase() === 'ID' || col.headerText.toUpperCase().includes("ID")) && col.numberPrecision == "NoDecimal") {
                         col.type = "Text";
                     }
 
