@@ -74,7 +74,7 @@ namespace BPMExtended.Main.Business
                 var somRequestInput = new SubmitToPOSInput()
                 {
                     ContractId = contractId,
-                    CustomerCode = contact.CustomerCode,
+                    CustomerCode = new CRMCustomerManager().GetCustomerInfo(contact.CustomerId).CustomerCode,
                     DepositFlag = depositFlag,
                     Services = services.Where(s=>s.UpFront==true).ToList()//filter the fees by upfront (just send the fees that have the UpFront == true)
                 };

@@ -59,7 +59,7 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
-            List<ServiceData> feesToRemove = new List<ServiceData>();
+            List<SaleService> feesToRemove = new List<SaleService>();
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangePhoneNumberRequest");
             esq.AddColumn("StContractId");
@@ -134,7 +134,7 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
-            List<ServiceData> feesToRemove = new List<ServiceData>();
+            List<SaleService> feesToRemove = new List<SaleService>();
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangePhoneNumberRequest");
             esq.AddColumn("StContractID");
@@ -171,7 +171,7 @@ namespace BPMExtended.Main.Business
                 //Get fees to remove if exist
                 if (isDeclassify && oldSubTypeClass != "Normal")
                 {
-                    feesToRemove = new CatalogManager().GetTelephonyPhoneCategoryFees(oldSubTypeClass);
+                    feesToRemove = new CatalogManager().GetTelephonyPhoneCategoryFees("AADF5555-146E-4FB3-BDEC-4477446BE12F");
                 }
 
 

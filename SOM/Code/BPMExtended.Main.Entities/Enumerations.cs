@@ -64,6 +64,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Subscription")]
         [EntitySchemaName("StLineSubscriptionRequest")]
+        [TechnicalStepFieldName("StTechnicalStepId")]
+        [TechnicalStepId("5AC289E9-1489-423E-B6E0-32479C2A127B")]
         [CompletedStep("StStepId")]
         [CompletedStepId("EBACDCBA-0DB9-4582-999B-6317DA0094A7")]
         TelephonyLineSubscription = 0,

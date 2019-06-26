@@ -125,7 +125,7 @@ namespace BPMExtended.Main.Business
 
             //var corePackageName = packages.Core;
 
-           var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, packagesIds,true);
+           var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, packagesIds);
             return coreServices;
         }
 
@@ -146,14 +146,13 @@ namespace BPMExtended.Main.Business
             var services = GetServicesDetailByRateplanAndPackages(ratePlanId, switchId, excludedPackages,isForeigner);
             return services;
         }
-        public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, List<string> packagesIds, bool onlyCoreServices)
+        public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, List<string> packagesIds)
         {
 
             var serviceInput = new ServiceInput()
             {
                 RatePlanId = rateplanId,
-                Packages = packagesIds,
-                OnlyCoreServices = onlyCoreServices
+                Packages = packagesIds
             };
             var servicesDetailItems = new List<ServiceDetail>();
             using (SOMClient client = new SOMClient())

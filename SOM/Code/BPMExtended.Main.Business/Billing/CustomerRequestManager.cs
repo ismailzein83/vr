@@ -204,27 +204,27 @@ namespace BPMExtended.Main.Business
                     recordEntity = collection[0];
                     recordEntity.SetColumnValue(TechnicalStepFieldName, WorkOrderType);
                     recordEntity.SetColumnValue(StepFieldName, TechnicalStepId);
-                    recordEntity.SetColumnValue("StWOrkOrderID", workOrderId);
+                    recordEntity.SetColumnValue("StWorkOrderID", workOrderId);
                     recordEntity.SetColumnValue("StIsWorkOrderCompleted", false);
                 }
                 recordEntity.Save();
 
                 //get stage id
-                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestStage");
-                esq.AddColumn("Id");
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequeststage");
+                var IdCol = esq.AddColumn("Id");
 
-                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStage.Id", TechnicalStepId);
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStageId", TechnicalStepId);
                 esq.Filters.Add(esqFirstFilter);
 
                 var items = esq.GetEntityCollection(BPM_UserConnection);
                 if (items.Count > 0)
                 {
-                     stageId = items[0].GetTypedColumnValue<Guid>("Id").ToString();
+                     stageId = items[0].GetTypedColumnValue<Guid>(IdCol.Name).ToString();
 
                 }
 
-                 //update request header table
-                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                //update request header table
+                UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
                  recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
                  recordEntity = recordSchema.CreateEntity(UserConnection);
 
@@ -237,7 +237,7 @@ namespace BPMExtended.Main.Business
                 {
                     recordEntity = collection[0];
                     recordEntity.SetColumnValue("StWorkOrderStageId", WorkOrderType);
-                    recordEntity.SetColumnValue("StSageId", stageId);
+                    recordEntity.SetColumnValue("StStageId", stageId);
                 }
                 recordEntity.Save();
 

@@ -10,6 +10,7 @@ namespace BPMExtended.Main.SOMAPI
     public class ChangeRatePlanRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public PaymentData PaymentData { get; set; }
         public string NewRatePlanId { get; set; }
 
     }

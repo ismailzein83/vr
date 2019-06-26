@@ -14,7 +14,7 @@ namespace BPMExtended.Main.SOMAPI
         public string NewDirectoryNumber { get; set; }
         public string OldRatePlanId { get; set; }
         public string NewRatePlanId { get; set; }
-        public List<ServiceData> FeesToRemove { get; set; }
+        public List<SaleService> FeesToRemove { get; set; }
     }
 
 }
