@@ -27,7 +27,6 @@
                 tiers = parametersObj.tiers;
                 context = parametersObj.context;
                 $scope.scopeModel.rateEvaluatorSelective = context.getRateEvaluatorSelective();
-                sendOrPay = parametersObj.sendOrPay;
             }
             isEditMode = (volumeCommitmentItemTierEntity != undefined);
         }
@@ -100,6 +99,7 @@
         }
 
         function load() {
+            sendOrPay = context.getSendOrPayValue();
             $scope.scopeModel.tiers = tiers != undefined ? filterRetroActiveDataSourceArray(tiers) : [];
             $scope.scopeModel.isLoading = true;
             loadAllControls();

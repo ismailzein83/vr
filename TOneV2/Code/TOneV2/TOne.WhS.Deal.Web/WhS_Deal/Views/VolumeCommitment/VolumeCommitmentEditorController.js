@@ -76,12 +76,7 @@
                     $scope.scopeModel.description = undefined;
             };
             $scope.scopeModel.onSendOrPayValueChanged = function () {
-                volumeCommitmenetItemsReadyDeferred.promise.then(function () {
-                    var payload = {
-                        context: getContext()
-                    };
-                    volumeCommitmenetItemsAPI.load(payload);
-                });
+               
             };
 
             $scope.scopeModel.onVolumeCommitmentTypeChanged = function () {
