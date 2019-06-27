@@ -422,12 +422,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"9c8fbcfd-b99b-4f99-a666-a463295cd32d\"}]}}",
-              "Rank": 8,
+              "Rank": 11,
               "ActionNames": null,
               "Audience": null,
               "Content": null,
               "CreatedTime": "2019-05-16T12:12:41.9",
-              "LastModifiedTime": "2019-06-24T22:15:39.533"
+              "LastModifiedTime": "2019-06-27T17:37:30.1"
             }
           },
           {
@@ -445,7 +445,7 @@
               "Audience": null,
               "Content": null,
               "CreatedTime": "2019-05-16T12:12:13.723",
-              "LastModifiedTime": "2019-06-24T22:15:39.537"
+              "LastModifiedTime": "2019-06-27T17:37:30.097"
             }
           },
           {
@@ -458,12 +458,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"470ac0e8-3d93-4ef4-988b-885c7163879b\"}]}}",
-              "Rank": 5,
+              "Rank": 12,
               "ActionNames": null,
               "Audience": null,
               "Content": null,
               "CreatedTime": "2019-05-29T14:16:38.207",
-              "LastModifiedTime": "2019-06-24T22:15:39.533"
+              "LastModifiedTime": "2019-06-27T17:37:30.1"
             }
           },
           {
@@ -476,12 +476,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"c4034139-7d7a-46a0-8913-71bef231bcc1\"}]}}",
-              "Rank": 7,
+              "Rank": 10,
               "ActionNames": null,
               "Audience": null,
               "Content": null,
               "CreatedTime": "2019-05-16T12:11:53.487",
-              "LastModifiedTime": "2019-06-24T22:15:39.533"
+              "LastModifiedTime": "2019-06-27T17:37:30.097"
             }
           }
         ],

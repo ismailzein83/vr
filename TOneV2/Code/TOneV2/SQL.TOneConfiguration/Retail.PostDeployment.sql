@@ -206,8 +206,10 @@ as (select * from (values
 ('CBD71991-9705-4FA6-8BDB-D2E437EA5C38','Voice',null,'F1474322-B883-4859-8439-70CD53ECD28B',null,5,0),
 ('42D32C43-67C4-41CD-8916-77BBDFCD811F','SMS',null,'F1474322-B883-4859-8439-70CD53ECD28B',null,10,0),
 
-('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',35,0)
+('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sales',null,null,'/images/menu-icons/Sale Area.png',35,0),
 
+('aa947fb8-caf1-4196-b278-89d8e2ce3e12','Services',null,null,'/images/menu-icons/Routing.png',36,0),
+('40ea6f5e-1d32-4f14-adfa-ee67a20574b9','Lookups',null,'aa947fb8-caf1-4196-b278-89d8e2ce3e12', null,2,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
