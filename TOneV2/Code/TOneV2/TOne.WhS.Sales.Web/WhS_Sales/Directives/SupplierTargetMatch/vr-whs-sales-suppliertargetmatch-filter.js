@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesSuppliertargetmatchFilter', ['WhS_Sales_MarginTypesEnum', 'UtilsService', 'VRUIUtilsService',
-	function (WhS_Sales_MarginTypesEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesSuppliertargetmatchFilter', ['WhS_Sales_MarginTypesEnum', 'UtilsService', 'VRUIUtilsService', 'VRValidationService','VRDateTimeService',
+	function (WhS_Sales_MarginTypesEnum, UtilsService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
 		var directiveDefinitionObject = {
 			restrict: 'E',
@@ -124,6 +124,20 @@ app.directive('vrWhsSalesSuppliertargetmatchFilter', ['WhS_Sales_MarginTypesEnum
 						$scope.scopeModel.isPercentage = option.value == WhS_Sales_MarginTypesEnum.Percentage.value ? true : false;
 					}
 
+				};
+				$scope.scopeModel.validateToDate = function () {
+					var result = VRValidationService.validateTimeRange($scope.scopeModel.from, $scope.scopeModel.to);
+					if (result != null)
+						return result;
+
+					//if ($scope.scopeModel.to != undefined && $scope.scopeModel.from != undefined && $scope.scopeModel.to.getTime() == $scope.scopeModel.from.getTime()) {
+					//	return 'From date should be less than To date';
+					//}
+					return null;
+				};
+
+				$scope.scopeModel.validateFromDate = function () {
+					return VRValidationService.validateTimeRange($scope.scopeModel.from, $scope.scopeModel.to);
 				};
 				defineAPI();
 
