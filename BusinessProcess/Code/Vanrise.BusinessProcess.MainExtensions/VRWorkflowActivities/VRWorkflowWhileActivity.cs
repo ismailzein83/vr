@@ -70,6 +70,30 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             #INSERTNEWITERATIONVISUALEVENTCODE#
                         }
                     }
+
+                    public class #CLASSNAME#_InsertCompletedVisualEventActivity : BaseCodeActivity
+                    {
+                        protected override void VRExecute(IBaseCodeActivityContext context)
+                        {
+                            var executionContext = new #CLASSNAME#_InsertCompletedVisualEventActivity_ExecutionContext(context.ActivityContext);
+                            executionContext.Execute();
+                        }
+                    }
+
+                    public class #CLASSNAME#_InsertCompletedVisualEventActivity_ExecutionContext : #BASEEXECUTIONCLASSNAME#
+                    {
+                        ActivityContext _activityContext;
+                        public #CLASSNAME#_InsertCompletedVisualEventActivity_ExecutionContext(ActivityContext activityContext) 
+                            : base (activityContext)
+                        {
+                            _activityContext = activityContext;
+                        }
+
+                        public void Execute()
+                        {
+                            #INSERTCOMPLETEDVISUALEVENTCODE#
+                        }
+                    }
                 }");
 
             string nmSpaceName = context.GenerateUniqueNamespace("whileActivity");
@@ -86,28 +110,45 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             {
                 ActivityContextVariableName = "_activityContext",
                 ActivityId = context.VRWorkflowActivityId,
-                EventTitle = @"""New Iteration""",
+                EventTitle = @"""While Activity New Iteration""",
                 EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_NEWITERATION
             };
             nmSpaceCodeBuilder.Replace("#INSERTNEWITERATIONVISUALEVENTCODE#",
                 context.GenerateInsertVisualEventCode(insertNewIterationVisualEventInput));
+
+            var insertCompletedVisualEventInput = new GenerateInsertVisualEventCodeInput
+            {
+                ActivityContextVariableName = "_activityContext",
+                ActivityId = context.VRWorkflowActivityId,
+                EventTitle = $@"""While Activity completed""",
+                EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_COMPLETED
+            };
+            nmSpaceCodeBuilder.Replace("#INSERTCOMPLETEDVISUALEVENTCODE#",
+                context.GenerateInsertVisualEventCode(insertCompletedVisualEventInput));
 
             context.AddFullNamespaceCode(nmSpaceCodeBuilder.ToString());
 
             StringBuilder codeBuilder = new StringBuilder();
 
             codeBuilder.Append(@"
-            new System.Activities.Statements.While((activityContext) => new #NAMESPACE#.#CLASSNAME#(activityContext).Evaluate())
-            {
-                Body = new Sequence
+                        new Sequence
                         {
                             Activities =
                             {
-                                new #NAMESPACE#.#CLASSNAME#_InsertNewIterationVisualEventActivity(),
-                                #ACTIVITYCODE#
+                                new System.Activities.Statements.While((activityContext) => new #NAMESPACE#.#CLASSNAME#(activityContext).Evaluate())
+                                {
+                                    Body = new Sequence
+                                            {
+                                                Activities =
+                                                {
+                                                    new #NAMESPACE#.#CLASSNAME#_InsertNewIterationVisualEventActivity(),
+                                                    #ACTIVITYCODE#
+                                                }
+                                            }
+                                },
+                                new #NAMESPACE#.#CLASSNAME#_InsertCompletedVisualEventActivity()
                             }
-                        }
-            }");
+                        }");
 
             codeBuilder.Replace("#NAMESPACE#", nmSpaceName);
             codeBuilder.Replace("#CLASSNAME#", className);
