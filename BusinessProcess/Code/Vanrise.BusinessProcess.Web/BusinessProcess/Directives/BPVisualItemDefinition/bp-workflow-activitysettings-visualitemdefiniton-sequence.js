@@ -53,7 +53,6 @@
                                 initialPromises.push(childVisualItem.loadPromiseDeferred.promise);
                                 loadChildDirective(childVisualItem);
                             }
-
                         }
                     }
 
@@ -70,73 +69,75 @@
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
+                api.reload = function () {
+                    if ($scope.scopeModel.childVisualItems != undefined) {
+                        for (var i = 0; i < $scope.scopeModel.childVisualItems.length; i++) {
+                            var childVisualItem = $scope.scopeModel.childVisualItems[i];
+                            if (childVisualItem.directiveAPI != undefined && childVisualItem.directiveAPI.reload != undefined) {
+                                childVisualItem.classEventCompleted = false;
+                                childVisualItem.directiveAPI.reload();
+                            }
+                        }
+                    }
+                };
+
                 api.tryApplyVisualEventToChilds = function (visualEvents) {
                     var eventsStatus = [];
 
                     if (visualEvents != undefined && visualEvents.length > 0) {
-                        var childVisualItemsWithSubChilds = [];
-                        var succeededVisualEvents = [];
-                        for (var i = 0; i < childVisualItems.length; i++) {
-                            var childVisualItem = childVisualItems[i];
-                            if (childVisualItem.directiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                childVisualItemsWithSubChilds.push({
-                                    childVisualItem: childVisualItem,
-                                    index: i
-                                });
-                            } else {
-                                for (var j = 0; j < visualEvents.length; j++) {
-                                    var visualEvent = visualEvents[j];
-                                    if (visualEvent.ActivityId == childVisualItem.ChildActivityId) {
-                                        if (childVisualItem.directiveAPI.checkIfCompleted != undefined && !childVisualItem.directiveAPI.checkIfCompleted()) {
-                                            var childItemResult = childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent);
+                        for (var i = 0; i < visualEvents.length; i++) {
+                            var visualEvent = visualEvents[i];
 
-                                            if (childItemResult != undefined && childItemResult.isEventUsed) {
-                                                if (i != 0)
-                                                    childVisualItems[i - 1].classEventCompleted = true;
-                                                eventsStatus.push({
-                                                    event: visualEvent,
-                                                    isEventUsed: childItemResult.isEventUsed,
-                                                });
+                            for (var j = 0; j < childVisualItems.length; j++) {
+                                var childVisualItem = childVisualItems[j];
+                                if (childVisualItem.directiveAPI.tryApplyVisualEvent != undefined) {
+                                    var eventItem = UtilsService.getItemByVal(eventsStatus, visualEvent.BPVisualEventId, "event.BPVisualEventId");
+                                    if (eventItem == undefined || !eventItem.isEventUsed) {
+                                        if (visualEvent.ActivityId == childVisualItem.ChildActivityId) {
+                                            if (childVisualItem.directiveAPI.checkIfCompleted != undefined && !childVisualItem.directiveAPI.checkIfCompleted()) {
+                                                var childItemResult = childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent);
+                                                if (childItemResult != undefined && childItemResult.isEventUsed) {
+                                                    if (j != 0) {
+                                                        var preItem = childVisualItems[j - 1];
+                                                        preItem.classEventCompleted = true;
+                                                        if (preItem.directiveAPI != undefined && preItem.directiveAPI.onAfterCompleted != undefined)
+                                                            preItem.directiveAPI.onAfterCompleted();
+                                                    }
+                                                    eventsStatus.push({
+                                                        event: visualEvent,
+                                                        isEventUsed: childItemResult.isEventUsed,
+                                                    });
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
-
-                        var unsucceededVisualEvents = getAvailableEvents(visualEvents, eventsStatus); 
-
-                        if (childVisualItemsWithSubChilds.length > 0) {
-                            for (var j = 0; j < childVisualItemsWithSubChilds.length; j++) {
-                                var childVisualItemsWithSubChild = childVisualItemsWithSubChilds[j];
-                                var childEventsResult = childVisualItemsWithSubChild.childVisualItem.directiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents);
-                                if (childEventsResult != undefined && childEventsResult.length > 0) {
-                                    for (var k = 0; k < childEventsResult.length; k++) {
-                                        eventsStatus.push(childEventsResult[k]);
+                                if (childVisualItem.directiveAPI.tryApplyVisualEventToChilds != undefined) {
+                                    var childEventsResult = childVisualItem.directiveAPI.tryApplyVisualEventToChilds([visualEvent]);
+                                    if (childEventsResult != undefined && childEventsResult.length > 0) {
+                                        if (j != 0) {
+                                            var preItem = childVisualItems[j - 1];
+                                            preItem.classEventCompleted = true;
+                                            if (preItem.directiveAPI != undefined && preItem.directiveAPI.onAfterCompleted != undefined)
+                                                preItem.directiveAPI.onAfterCompleted();
+                                        }
+                                        var shouldBreak = false;
+                                        for (var k = 0; k < childEventsResult.length; k++) {
+                                            var childEventsResultItem = childEventsResult[k];
+                                            eventsStatus.push(childEventsResultItem);
+                                            if (childEventsResultItem.isEventUsed)
+                                                shouldBreak = true;
+                                        }
+                                        if (shouldBreak)
+                                            break;
                                     }
-                                    unsucceededVisualEvents = getAvailableEvents(unsucceededVisualEvents, childEventsResult);
-                                    if (childVisualItemsWithSubChild.index != 0)
-                                        childVisualItems[childVisualItemsWithSubChild.index - 1].classEventCompleted = true;
                                 }
                             }
                         }
-                    }
+                    } 
                     return eventsStatus;
                 };
-
-                function getAvailableEvents(visualEvents, eventsStatus) {
-                    var unsucceededVisualEvents = [];
-                    if (visualEvents != undefined && eventsStatus != undefined) {
-                        for (var j = 0; j < visualEvents.length; j++) {
-                            var visualEvent = visualEvents[j];
-                            var eventItem = UtilsService.getItemByVal(eventsStatus, visualEvent.BPVisualEventId, "event.BPVisualEventId");
-                            if (eventItem == undefined || !eventItem.isEventUsed)
-                                unsucceededVisualEvents.push(visualEvent);
-                        }
-                    }
-                    
-                    return unsucceededVisualEvents;
-                }
 
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);

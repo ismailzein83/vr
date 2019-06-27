@@ -25,7 +25,7 @@
 
             var visualItemDefinition;
             var events = [];
-            var result = {};
+            var isCompleted = false;
 
             function initializeController() {
 
@@ -75,7 +75,20 @@
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
+                api.reload = function () {
+                    events = [];
+                    isCompleted = false;
+                    $scope.scopeModel.classEventStarted = false;
+                    $scope.scopeModel.isHintStarted = false;
+                    $scope.scopeModel.classEventCompleted = false;
+                    $scope.scopeModel.classEventError = false;
+                    $scope.scopeModel.classEventRetrying = false;
+                    $scope.scopeModel.hint = "Not Started";
+
+                };
+
                 api.tryApplyVisualEvent = function (visualItemEvent) {
+                    var result = {};
                     result.isEventUsed = false;
 
                     if (visualItemEvent != undefined) {
@@ -94,7 +107,7 @@
                             $scope.scopeModel.classEventCompleted = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Completed";
-                            result.isCompleted = true;
+                            isCompleted = true;
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Error.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
@@ -113,9 +126,15 @@
                     }
                     return result;
                 };
+
                 api.checkIfCompleted = function () {
-                    return result.isCompleted;
+                    return isCompleted;
                 };
+
+                api.onAfterCompleted = function () {
+
+                };
+
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }

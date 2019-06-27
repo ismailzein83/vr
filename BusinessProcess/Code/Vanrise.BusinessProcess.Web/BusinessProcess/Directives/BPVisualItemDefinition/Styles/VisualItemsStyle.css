@@ -76,6 +76,7 @@
     background-color: #7FDBFF;
     transform: rotate(45deg);
     margin: 0 auto;
+    margin-left: calc(50% - 22px);
 }
 
 .vr-visualitem-aftercondition {
@@ -90,7 +91,7 @@
 
 .vr-visualitem-beforecondition {
     text-align: right;
-    width: calc(25% - 30px);
+    width: calc(25% - 27px);
     margin-left: calc(25% - 5px);
     display: inline-block;
     border-top: 2px solid #d7e9f1;
@@ -144,7 +145,7 @@
 .vr-visualitem-separatordesignline {
     border-color: #d7e9f1 !important;
     height: 20px;
-    width: 16px;
+    width: 12px;
     border-left: 2px solid;
     display: block;
     float: right;
@@ -355,9 +356,16 @@
             border-right-color: transparent;
         }
 
-            .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-completed {
-                border: 2px solid #0acc19 !important;
-            }
+.vr-visualitem-while-block-completed {
+    border-top-color: #0acc19 !important;
+    border-bottom-color: #0acc19 !important;
+    border-left-color: #0acc19 !important;
+}
+
+.vr-visualitem-while-retry-entry-completed {
+    border-bottom-color: #0acc19 !important;
+    border-right-color: #0acc19 !important;
+}
 
             .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-top-eraser {
                 background-color: #fff;
@@ -366,7 +374,7 @@
                 left: 50%;
                 top: -24px;
                 display: inline-block;
-                height: 2px;
+                height: 5px;
             }
 
             .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-retry-entry {
@@ -406,7 +414,7 @@
                 left: 50%;
                 bottom: -12px;
                 display: inline-block;
-                height: 3px;
+                height: 5px;
             }
 
 @keyframes hideprograssbar {

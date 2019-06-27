@@ -78,11 +78,21 @@
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
+                api.reload = function () {
+                    $scope.scopeModel.trueConditionCompleted = false;
+                    $scope.scopeModel.falseConditionCompleted = false;
+
+                    if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.reload != undefined) {
+                        trueBranchDirectiveAPI.reload();
+                    }
+                    if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.reload != undefined) {
+                        falseBranchDirectiveAPI.reload();
+                    }
+                };
 
                 api.tryApplyVisualEventToChilds = function (visualEvents) {
                     var eventsStatus = [];
 
-                    var status = false;
                     if (visualEvents != undefined && visualEvents.length >= 0) {
                         var unsucceededVisualEvents = [];
 
@@ -114,7 +124,7 @@
                                             $scope.scopeModel.falseConditionCompleted = true;
                                             eventsStatus.push({
                                                 event: visualEvent,
-                                                isEventUsed: trueBranchResult.isEventUsed,
+                                                isEventUsed: falseBranchResult.isEventUsed,
                                             });
                                             continue;
                                         }
@@ -122,36 +132,48 @@
                                 }
                             }
 
-                            unsucceededVisualEvents.push(visualEvent);
-                        }
-                         
-                        if (unsucceededVisualEvents.length > 0) {
                             if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                var trueEventsResult = trueBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents);
+                                var trueEventsResult = trueBranchDirectiveAPI.tryApplyVisualEventToChilds([visualEvent]);
                                 if (trueEventsResult != undefined && trueEventsResult.length > 0) {
                                     $scope.scopeModel.trueConditionCompleted = true;
-                                    for (var i = 0; i < trueEventsResult.length; i++) {
-                                        eventsStatus.push(trueEventsResult[i]);
+                                    var shouldTrueContinue = true;
+                                    for (var k = 0; k < trueEventsResult.length; k++) {
+                                        var childTrueEventsResultItem = trueEventsResult[k];
+                                        eventsStatus.push(childTrueEventsResultItem);
+                                        if (childTrueEventsResultItem.isEventUsed)
+                                            shouldTrueContinue = true;
                                     }
+                                    if (shouldTrueContinue)
+                                        continue;
                                 }
-                               
+
                             }
 
                             if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                var falseEventsResult = falseBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents);
+                                var falseEventsResult = falseBranchDirectiveAPI.tryApplyVisualEventToChilds([visualEvent]);
                                 if (falseEventsResult != undefined && falseEventsResult.length > 0) {
                                     $scope.scopeModel.falseConditionCompleted = true;
-                                    for (var i = 0; i < falseEventsResult.length; i++) {
-                                        eventsStatus.push(falseEventsResult[i]);
+                                    var shouldFalseContinue = true;
+                                    for (var k = 0; k < falseEventsResult.length; k++) {
+                                        var childFalseEventsResultItem = falseEventsResult[k];
+                                        eventsStatus.push(childFalseEventsResultItem);
+
+                                        if (childFalseEventsResultItem.isEventUsed)
+                                            shouldFalseContinue = true;
                                     }
+                                    if (shouldFalseContinue)
+                                        continue;
                                 }
                             }
-
                         }
+                        
                     }
                     return eventsStatus;
                 };
 
+                api.onAfterCompleted = function () {
+
+                };
 
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
@@ -166,7 +188,7 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var payload = {
-                        visualItemDefinition: $scope.scopeModel.trueBranch
+                        visualItemDefinition: $scope.scopeModel.trueBranch,
                     };
                     VRUIUtilsService.callDirectiveLoad(trueBranchDirectiveAPI, payload, loadTrueBranchDirectiveDeferred);
                 });
@@ -181,7 +203,7 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var payload = {
-                        visualItemDefinition: $scope.scopeModel.falseBranch
+                        visualItemDefinition: $scope.scopeModel.falseBranch,
                     };
                     VRUIUtilsService.callDirectiveLoad(falseBranchDirectiveAPI, payload, loadFalseBranchDirectiveDeferred);
                 });
