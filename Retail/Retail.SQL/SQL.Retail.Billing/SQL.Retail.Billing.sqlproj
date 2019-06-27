@@ -102,8 +102,5 @@
     <Build Include="RetailBilling\Tables\CustomerMessage.sql" />
     <Build Include="RetailBilling\Tables\DunningRules.sql" />
     <Build Include="RetailBilling\Tables\DunningExcludeCustomers.sql" />
-    <Build Include="Security\VANRISE_wissam.ajamy.sql" />
-    <Build Include="Security\VANRISE_development.sql" />
-    <Build Include="Security\development.sql" />
   </ItemGroup>
 </Project>

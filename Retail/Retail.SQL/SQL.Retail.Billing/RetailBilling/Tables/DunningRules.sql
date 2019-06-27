@@ -3,13 +3,15 @@
     [CustomerId]            BIGINT           NULL,
     [CustomerCategoryId]    UNIQUEIDENTIFIER NULL,
     [CustomerSubCategoryId] UNIQUEIDENTIFIER NULL,
-    [ExcludeFromDonning]    BIT              NULL,
     [Actions]               NVARCHAR (MAX)   NULL,
     [CreatedTime]           DATETIME         NULL,
     [CreatedBy]             INT              NULL,
     [LastModifiedTime]      DATETIME         NULL,
     [LastModifiedBy]        INT              NULL,
     [CustomerTypeId]        UNIQUEIDENTIFIER NULL,
+    [ExcludeFromDunning]    BIT              NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
