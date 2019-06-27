@@ -39,8 +39,9 @@ app.directive("vrInvoiceGenericinvoiceaccountSelector", ["UtilsService", "VRNoti
                     genericFinancialAccountSelectorAPI = api;
                     genericFinancialAccountSelectorReadyPromiseDeferred.resolve();
                 };
-
-                defineAPI();
+                UtilsService.waitMultiplePromises([genericFinancialAccountSelectorReadyPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function reloadContextFunctions() {

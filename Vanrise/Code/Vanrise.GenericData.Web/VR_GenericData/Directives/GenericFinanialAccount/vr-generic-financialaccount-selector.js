@@ -39,7 +39,9 @@ app.directive("vrGenericFinancialaccountSelector", ["UtilsService", "VRUIUtilsSe
                     genericFinancialAccountSelectorApi = api;
                     genericFinancialAccountPromiseDeferred.resolve();
                 };
-                defineAPI();
+                UtilsService.waitMultiplePromises([genericFinancialAccountPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
