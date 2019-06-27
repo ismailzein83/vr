@@ -214,7 +214,7 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSubTypes");
             var IdCol = esq.AddColumn("Id");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StName", GetTechnicalDetails(phoneNumber).PhoneType.ToString());
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSubTypeIdentifier", GetTechnicalDetails(phoneNumber).PhoneType.ToString());
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
@@ -224,6 +224,37 @@ namespace BPMExtended.Main.Business
             }
 
             return subTypeId;
+        }
+
+
+        public SubType GetSubType(string phoneNumber)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            string subTypeId = null, subTypeIdentifier;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSubTypes");
+            var IdCol = esq.AddColumn("Id");
+            esq.AddColumn("StSubTypeIdentifier");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSubTypeIdentifier", GetTechnicalDetails(phoneNumber).PhoneType.ToString());
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                subTypeId = entities[0].GetTypedColumnValue<string>(IdCol.Name);
+                subTypeIdentifier = entities[0].GetTypedColumnValue<string>("StSubTypeIdentifier");
+
+                return new SubType()
+                {
+                    Id = subTypeId,
+                    Name = subTypeIdentifier
+                };
+            }
+
+            return null;
         }
 
 

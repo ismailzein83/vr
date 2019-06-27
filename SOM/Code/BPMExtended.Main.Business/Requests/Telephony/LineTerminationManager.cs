@@ -4,6 +4,7 @@ using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -32,6 +33,10 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StLinePathId");
+            esq.AddColumn("StHasADSL");
+            esq.AddColumn("StReason");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -42,6 +47,13 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathId = entities[0].GetColumnValue("StLinePathId");
+                bool hasADSL = (bool)entities[0].GetColumnValue("StHasADSL");
+                var reason = entities[0].GetColumnValue("StReason");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+
+                ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
 
                 SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
@@ -53,7 +65,15 @@ namespace BPMExtended.Main.Business
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                         },
-                        LinePathId=pathId.ToString()
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        LinePathId = pathId.ToString(),
+                        HasADSL = hasADSL,
+                        Reason = reason.ToString(),
+                        ADSLContract = entity == null?string.Empty: entity.ContractId
                     }
 
                 };
@@ -79,6 +99,10 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StLinePathId");
+            esq.AddColumn("StHasADSL");
+            esq.AddColumn("StReason");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -89,6 +113,13 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathId = entities[0].GetColumnValue("StLinePathId");
+                bool hasADSL = (bool)entities[0].GetColumnValue("StHasADSL");
+                var reason = entities[0].GetColumnValue("StReason");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+
+                ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
 
                 SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
@@ -100,7 +131,15 @@ namespace BPMExtended.Main.Business
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                         },
-                        LinePathId = pathId.ToString()
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        LinePathId = pathId.ToString(),
+                        HasADSL = hasADSL,
+                        Reason = reason.ToString(),
+                        ADSLContract = entity == null ? string.Empty : entity.ContractId
                     }
 
                 };

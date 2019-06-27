@@ -10,7 +10,11 @@ namespace BPMExtended.Main.SOMAPI
     public class LineTerminationRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public PaymentData PaymentData { get; set; }
         public string LinePathId { get; set; }
+        public bool HasADSL { get; set; }
+        public string ADSLContract { get; set; }
+        public string Reason { get; set; }
 
     }
 }
