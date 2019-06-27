@@ -476,25 +476,16 @@
     top: -9px;
     display: inline-block;
 }
-.rtl .wrapper-toogled .vr-datarow-breadcrumb {
+.rtl  .vr-datarow-breadcrumb {
 
     left: unset;
-    right: 230px;
+    right: 15px;
 }
 
-.rtl .wrapper-normal .vr-datarow-breadcrumb {
-    padding-left: unset;
-    padding-right: 15px;
-    left: unset;
-    right: unset;
-}
 .rtl .vr-grid-menu-h-circle {
     transform: rotate(180deg);
 }
-.rtl .vr-datarow-breadcrumb {    
-    left: unset;
-    right:230px;
-}
+
 .rtl .btn-breadcrumb .btn {
     float: right;
     padding: 3px 24px 3px 12px;

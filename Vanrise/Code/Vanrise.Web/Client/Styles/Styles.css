@@ -2659,6 +2659,10 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     overflow-y: auto;
     z-index: 10;
     overflow-x: hidden;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .vr-datagrid-body.row-full-screen .vr-detail-summary .grid-cell-value {
     width: 100%;
@@ -2755,16 +2759,11 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     display: none;
 }
 .vr-datarow-breadcrumb {
-    position: fixed;
-    top: 93px;
+    position: absolute;
+    left: 15px;
+    top: 5px;
 }
-.wrapper-toogled .vr-datarow-breadcrumb {  
-    left: 230px;
-}
-.wrapper-normal .vr-datarow-breadcrumb {
-    padding-left: 15px;
-    left: unset;
-}
+
 
 .vr-datagrid-body .action-full-screen-icon, .vr-datagrid-body .exist-full-screen-icon {
     position: relative;
