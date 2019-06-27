@@ -100,9 +100,10 @@
                                                     if (j != 0) {
                                                         var preItem = childVisualItems[j - 1];
                                                         preItem.classEventCompleted = true;
-                                                        if (preItem.directiveAPI != undefined && preItem.directiveAPI.onAfterCompleted != undefined)
-                                                            preItem.directiveAPI.onAfterCompleted();
+                                                        //if (preItem.directiveAPI != undefined && preItem.directiveAPI.onAfterCompleted != undefined)
+                                                        //    preItem.directiveAPI.onAfterCompleted();
                                                     }
+
                                                     eventsStatus.push({
                                                         event: visualEvent,
                                                         isEventUsed: childItemResult.isEventUsed,
@@ -119,9 +120,10 @@
                                         if (j != 0) {
                                             var preItem = childVisualItems[j - 1];
                                             preItem.classEventCompleted = true;
-                                            if (preItem.directiveAPI != undefined && preItem.directiveAPI.onAfterCompleted != undefined)
-                                                preItem.directiveAPI.onAfterCompleted();
+                                            //if (preItem.directiveAPI != undefined && preItem.directiveAPI.onAfterCompleted != undefined)
+                                            //    preItem.directiveAPI.onAfterCompleted();
                                         }
+                                    
                                         var shouldBreak = false;
                                         for (var k = 0; k < childEventsResult.length; k++) {
                                             var childEventsResultItem = childEventsResult[k];

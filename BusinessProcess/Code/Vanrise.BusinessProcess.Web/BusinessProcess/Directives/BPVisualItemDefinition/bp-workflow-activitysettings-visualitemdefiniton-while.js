@@ -43,7 +43,7 @@
 
             function defineAPI() {
                 var api = {};
-               
+
                 api.load = function (payload) {
                     var initialPromises = [];
 
@@ -85,20 +85,27 @@
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
                     var result = {
-                        isEventUsed : false
+                        isEventUsed: false
                     };
-                    if (visualItemEvent.EventTypeId == VisualEventTypeEnum.NewIteration.value.toLowerCase()) {
+
+                    if (visualItemEvent != undefined) {
                         result.isEventUsed = true;
-                        if ($scope.scopeModel.nbOfIteration > 0)
-                            tryReloadDirective();
-                        $scope.scopeModel.nbOfIteration++;
+
+                        if (visualItemEvent.EventTypeId == VisualEventTypeEnum.NewIteration.value.toLowerCase()) {
+
+                            if ($scope.scopeModel.nbOfIteration > 0)
+                                tryReloadDirective();
+                            $scope.scopeModel.nbOfIteration++;
+                        }
+                        if (visualItemEvent.EventTypeId == VisualEventTypeEnum.Completed.value.toLowerCase()) {
+                            isCompleted = true;
+                            $scope.scopeModel.classLoopCompleted = true;
+                        }
                     }
-                    if (visualItemEvent.EventTypeId == VisualEventTypeEnum.Completed.value.toLowerCase()) {
-                        isCompleted = true;
-                    }
+
                     return result;
                 };
-             
+
                 api.tryApplyVisualEventToChilds = function (visualEvents) {
                     var eventsStatus = [];
                     var unsucceededVisualEvents = [];
@@ -136,10 +143,10 @@
                                     }
                                 }
                             }
-                          
+
                         }
-                      
-                    } 
+
+                    }
                     return eventsStatus;
                 };
 
