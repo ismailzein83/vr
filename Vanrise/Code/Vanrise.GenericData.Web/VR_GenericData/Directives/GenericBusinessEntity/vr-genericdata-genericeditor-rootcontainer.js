@@ -93,7 +93,8 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                         var fieldValues = {};
                         for (var prop in parentFieldValues) {
-                            fieldValues[prop] = parentFieldValues[prop].value;
+                            if (parentFieldValues[prop] != undefined)
+                                fieldValues[prop] = parentFieldValues[prop].value;
                         }
 
                         var input = {

@@ -48,6 +48,10 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                     };
                     VR_GenericData_DataRecordTypeService.addListDataRecordTypeRow(dataRecordTypeId, definitionSettings, onRowAdded, $scope.scopeModel.fieldTitle);
                 };
+                $scope.scopeModel.onDeleteRow = function (dataItem) {
+                    var index = ctrl.datasource.indexOf(dataItem);
+                    ctrl.datasource.splice(index, 1);
+                };
                 defineMenuActions();
             }
 
