@@ -11,6 +11,9 @@
     [LastModifiedTime]  DATETIME       NULL,
     [LastModifiedBy]    INT            NULL,
     [timestamp]         ROWVERSION     NULL,
+    [InformationToShow] INT            NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

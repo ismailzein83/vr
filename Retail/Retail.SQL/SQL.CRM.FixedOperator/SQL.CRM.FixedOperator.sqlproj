@@ -115,5 +115,6 @@
     <Build Include="CRMFixedOper\Tables\Color.sql" />
     <Build Include="CRMFixedOper\Tables\Case.sql" />
     <Build Include="CRMFixedOper\Tables\AccessTechnology.sql" />
+    <Build Include="CRMFixedOper\Tables\EscalationLevel.sql" />
   </ItemGroup>
 </Project>

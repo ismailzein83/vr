@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [CRMFixedOper].[Ticket] (
     [ID]               BIGINT           IDENTITY (1, 1) NOT NULL,
-    [Case]             BIGINT           NULL,
+    [CaseId]           BIGINT           NULL,
     [TicketType]       INT              NULL,
     [ReferenceNumber]  NVARCHAR (255)   NULL,
     [Customer]         BIGINT           NULL,
@@ -19,17 +19,11 @@
     [CreatedBy]        INT              NULL,
     [LastModifiedTime] DATETIME         NULL,
     [LastModifiedBy]   INT              NULL,
-    [FloorNumber]      INT              NULL,
-    [FloorSide]        INT              NULL,
-    [Street]           NVARCHAR (255)   NULL,
-    [Building]         NVARCHAR (255)   NULL,
-    [BuildingSize]     INT              NULL,
-    [BlockNumber]      NVARCHAR (255)   NULL,
-    [Region]           INT              NULL,
-    [City]             INT              NULL,
-    [Town]             INT              NULL,
-    [FreeNotes]        NVARCHAR (255)   NULL,
     [Attachments]      NVARCHAR (MAX)   NULL,
+    [Area]             BIGINT           NULL,
+    [FreeNotes]        VARCHAR (255)    NULL,
     CONSTRAINT [PK__Ticket__3214EC2755F4C372] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
