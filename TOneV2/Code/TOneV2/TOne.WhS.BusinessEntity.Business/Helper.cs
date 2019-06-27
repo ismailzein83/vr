@@ -37,15 +37,17 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public static IEnumerable<int> GetRateTypeIds(int ownerId, long zoneId, DateTime? effectiveDate)
         {
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            var countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
             var rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
             var rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
-
             var genericRuleTarget = new Vanrise.GenericData.Entities.GenericRuleTarget
             {
                 TargetFieldValues = new Dictionary<string, object>
                 {
                     {"CustomerId", ownerId},
-                    {"SaleZoneId", zoneId}
+                    {"SaleZoneId", zoneId},
+                    { "Country",countryId}
                 }
             };
             if (effectiveDate.HasValue)
