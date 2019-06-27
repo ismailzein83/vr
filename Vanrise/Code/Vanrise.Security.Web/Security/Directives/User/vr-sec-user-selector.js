@@ -1,8 +1,8 @@
 ﻿'use strict';
 app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService', 'UtilsService', 'VRUIUtilsService',
-   
+
     function (VR_Sec_UserAPIService, VR_Sec_UserService, UtilsService, VRUIUtilsService) {
-       
+
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -24,8 +24,13 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 ctrl.datasource = [];
 
                 ctrl.selectedvalues;
-                if ($attrs.ismultipleselection != undefined)
+                ctrl.label = "User";
+
+                if ($attrs.ismultipleselection != undefined) {
                     ctrl.selectedvalues = [];
+                    ctrl.label = "Users";
+                    multipleselection = "ismultipleselection";
+                }
 
                 $scope.addNewUser = function () {
                     var onUserAdded = function (userObj) {
@@ -72,12 +77,6 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
 
             var multipleselection = "";
 
-            var label = "User";
-            if (attrs.ismultipleselection != undefined) {
-                label = "Users";
-                multipleselection = "ismultipleselection";
-            }
-
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
@@ -91,7 +90,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
 
             return '<vr-columns  colnum="{{ctrl.normalColNum}}">'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="UserId" isrequired="ctrl.isrequired" ' + hidelabel
-                + '  label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
+                + ' label="{{ctrl.label}}" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
                 + '</vr-columns>';
         }
 
@@ -116,6 +115,10 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                     if (payload != undefined) {
                         ctrl.filter = payload.filter;
                         selectedIds = payload.selectedIds;
+
+                        if (payload.fieldTitle != undefined) {
+                            ctrl.label = payload.fieldTitle;
+                        }
                     }
                     return VR_Sec_UserAPIService.GetUsersInfo(UtilsService.serializetoJson(ctrl.filter)).then(function (response) {
                         ctrl.datasource.length = 0;
