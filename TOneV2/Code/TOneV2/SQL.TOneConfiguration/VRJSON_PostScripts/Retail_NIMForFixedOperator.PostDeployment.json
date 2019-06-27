@@ -3399,6 +3399,88 @@
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
+    },
+    {
+      "ConnectionId": "2d00df62-a128-46e8-9523-552319a7f994",
+      "Schema": "NIM",
+      "TableName": "PhoneNumberCategory",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "Name": "Normal",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-25T20:19:16.643",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-25T20:19:16.643"
+            }
+          },
+          {
+            "FieldValues": {
+              "Name": "Silver",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-25T20:19:20.273",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-25T20:19:20.273"
+            }
+          },
+          {
+            "FieldValues": {
+              "Name": "Gold",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-25T20:19:23.83",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-25T20:19:23.83"
+            }
+          },
+          {
+            "FieldValues": {
+              "Name": "Platinum",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-25T20:19:29.24",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-25T20:19:29.24"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
     }
   ]
 }

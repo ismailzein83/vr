@@ -458,3 +458,34 @@ values(s.[ID], s.[Name], s.[DevProjectID], s.[Settings], s.[CreatedTime], s.[Las
 end
 ----------------------------------------------------------------------------------------------------
               
+
+--- [NIM].[PhoneNumberCategory]-------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+begin
+                 
+set nocount on;
+                 
+;with cte_data([Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+as (select* from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('Normal',-1,'2019-06-25 20:19:16.643',-1,'2019-06-25 20:19:16.643'),
+('Silver',-1,'2019-06-25 20:19:20.273',-1,'2019-06-25 20:19:20.273'),
+('Gold',-1,'2019-06-25 20:19:23.830',-1,'2019-06-25 20:19:23.830'),
+('Platinum',-1,'2019-06-25 20:19:29.240',-1,'2019-06-25 20:19:29.240')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime]))
+merge[NIM].[PhoneNumberCategory] as t
+using  cte_data as s
+on            1=1 and t.[Name]=s.[Name]
+                  
+when matched then
+update set
+[Name]=s.[Name] ,[CreatedBy]=s.[CreatedBy] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedBy]=s.[LastModifiedBy] ,[LastModifiedTime]=s.[LastModifiedTime] 
+when not matched by target then
+insert([Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+values(s.[Name], s.[CreatedBy], s.[CreatedTime], s.[LastModifiedBy], s.[LastModifiedTime]);
+                  
+----------------------------------------------------------------------------------------------------
+end
+----------------------------------------------------------------------------------------------------
+              
