@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_Interconnect_InvoiceType",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_Interconnect_InvoiceType) {
+app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 

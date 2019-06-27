@@ -61,7 +61,7 @@ namespace Retail.Billing.Business
                 {
                     FieldName = "Type",
                     CompareOperator = ListRecordFilterOperator.In,
-                    Values = new List<decimal>() { 1 }
+                    Values = new List<decimal>() { (int)CustomerMessagesType.Global }
                 });
             }
             else
