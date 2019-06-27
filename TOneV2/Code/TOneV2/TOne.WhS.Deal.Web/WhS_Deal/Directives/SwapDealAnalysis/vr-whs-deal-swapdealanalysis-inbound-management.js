@@ -25,6 +25,7 @@ app.directive('vrWhsDealSwapdealanalysisInboundManagement', ['WhS_Deal_SwapDealA
 
         var settings;
         var sellingNumberPlanId;
+        var lastGroupNumber = 0;
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -124,6 +125,8 @@ app.directive('vrWhsDealSwapdealanalysisInboundManagement', ['WhS_Deal_SwapDealA
         function addInbound() {
             var carrierAccountId = context.settingsAPI.getCarrierAccountId();
             var onInboundAdded = function (addedInbound) {
+                lastGroupNumber += 1;
+                addedInbound.ZoneGroupNumber = lastGroupNumber;
                 var obj = {
                     Entity: addedInbound
                 };
@@ -149,6 +152,7 @@ app.directive('vrWhsDealSwapdealanalysisInboundManagement', ['WhS_Deal_SwapDealA
                 var inboundSetting =
                 {
                     $type: "TOne.WhS.Deal.Entities.Inbound,TOne.WhS.Deal.Entities",
+                    ZoneGroupNumber: inbounObject.ZoneGroupNumber,
                     CountryId: inbounObject.CountryId,
                     CurrentRate: inbounObject.CurrentRate,
                     DailyVolume: inbounObject.DailyVolume,

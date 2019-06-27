@@ -13,6 +13,7 @@ namespace TOne.WhS.Deal.Entities
     }
     public class Inbound
     {
+        public int ZoneGroupNumber { get; set; }
         public int CountryId { get; set; }
         public string GroupName { get; set; }
         public decimal CurrentRate { get; set; }

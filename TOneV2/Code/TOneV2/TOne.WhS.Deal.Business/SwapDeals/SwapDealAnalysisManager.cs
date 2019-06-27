@@ -165,6 +165,7 @@ namespace TOne.WhS.Deal.Business
                 {
                     swapDealAnalysisSettings.Add(new SwapDealAnalysisInboundSettings
                     {
+                        ZoneGroupNumber= inbound.ZoneGroupNumber,
                         CountryId = inbound.CountryId,
                         DealRate = inbound.DealRate,
                         ItemCalculationMethod = inbound.ItemCalculationMethod,
@@ -180,16 +181,17 @@ namespace TOne.WhS.Deal.Business
             if (outbounds != null && outbounds.SwapDealAnalysisOutbounds != null && outbounds.SwapDealAnalysisOutbounds.Any())
             {
                 List<SwapDealAnalysisOutboundSettings> swapDealAnalysisSettings = new List<SwapDealAnalysisOutboundSettings>();
-                foreach (var inbound in outbounds.SwapDealAnalysisOutbounds)
+                foreach (var outbound in outbounds.SwapDealAnalysisOutbounds)
                 {
                     swapDealAnalysisSettings.Add(new SwapDealAnalysisOutboundSettings
                     {
-                        CountryId = inbound.CountryId,
-                        DealRate = inbound.DealRate,
-                        ItemCalculationMethod = inbound.ItemCalculationMethod,
-                        GroupName = inbound.GroupName,
-                        SupplierZoneIds = inbound.SupplierZoneIds,
-                        Volume = inbound.Volume,
+                        ZoneGroupNumber = outbound.ZoneGroupNumber,
+                        CountryId = outbound.CountryId,
+                        DealRate = outbound.DealRate,
+                        ItemCalculationMethod = outbound.ItemCalculationMethod,
+                        GroupName = outbound.GroupName,
+                        SupplierZoneIds = outbound.SupplierZoneIds,
+                        Volume = outbound.Volume,
                     });
                 }
                 analysisSettings.Outbounds = swapDealAnalysisSettings;

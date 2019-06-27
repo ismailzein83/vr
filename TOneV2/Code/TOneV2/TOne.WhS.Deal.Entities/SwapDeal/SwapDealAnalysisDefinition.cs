@@ -34,6 +34,7 @@ namespace TOne.WhS.Deal.Entities
 
     public class SwapDealAnalysisOutboundSettings
     {
+        public int ZoneGroupNumber { get; set; }
         public string GroupName { get; set; }
 
         public int CountryId { get; set; }
@@ -50,6 +51,7 @@ namespace TOne.WhS.Deal.Entities
 
     public class SwapDealAnalysisInboundSettings
     {
+        public int ZoneGroupNumber { get; set; }
         public string GroupName { get; set; }
 
         public int CountryId { get; set; }
