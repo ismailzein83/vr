@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions
@@ -61,4 +63,5 @@ namespace Vanrise.GenericData.MainExtensions
         public bool ShowTab { get; set; }
         public VRGenericEditorDefinitionSetting TabSettings { get; set; }
     }
+
 }

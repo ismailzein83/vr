@@ -29,8 +29,7 @@ namespace Vanrise.GenericData.Entities
 	public interface IGenericBETranslationContext
 	{
 		Guid LanguageId { get; }
-	}
-	public class GenericBETranslationContext : IGenericBETranslationContext {
-		public Guid LanguageId { get; set; }
-	}
+        DataRecordFieldType GetFieldType(string fieldName);
+        Guid DataRecordTypeId { get; set; }
+    }
 }

@@ -5,6 +5,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.MainExtensions
 {
@@ -14,6 +15,22 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override string RuntimeEditor { get { return "vr-genericdata-genericfieldseditorsetting-runtime"; } }
 
+        public override void ApplyTranslation(IGenericBETranslationContext context)
+        {
+            VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+
+            if (Fields != null)
+            {
+                foreach (var field in Fields)
+                {
+                    if (!String.IsNullOrEmpty(field.TextResourceKey))
+                    {
+                        field.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(field.TextResourceKey, field.FieldTitle, context.LanguageId);
+                    }
+                }
+            }
+
+        }
         public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
         {
             List<GridColumnAttribute> columnsInfo = new List<GridColumnAttribute>();

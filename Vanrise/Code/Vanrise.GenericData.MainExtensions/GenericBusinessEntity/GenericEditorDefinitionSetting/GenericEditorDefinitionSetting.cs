@@ -26,11 +26,11 @@ namespace Vanrise.GenericData.MainExtensions
                 {
                     if (row.Fields != null)
                     {
-                        foreach (var filed in row.Fields)
+                        foreach (var field in row.Fields)
                         {
-                            if (!String.IsNullOrEmpty(filed.TextResourceKey))
+                            if (!String.IsNullOrEmpty(field.TextResourceKey))
                             {
-                                filed.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(filed.TextResourceKey, filed.FieldTitle,context.LanguageId);
+                                field.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(field.TextResourceKey, field.FieldTitle,context.LanguageId);
                             }
                         }
                     }

@@ -388,7 +388,7 @@ namespace Vanrise.GenericData.Business
                 Guid? currentLanguageId = vrLocalizationManager.GetCurrentLanguageId();
                 if (currentLanguageId.HasValue)
                 {
-                    GenericBETranslationContext genericBETranslationContext = new GenericBETranslationContext { LanguageId = currentLanguageId.Value };
+                    GenericEditorTranslationContext genericBETranslationContext = new GenericEditorTranslationContext(genericBEDefinitionSettings.DataRecordTypeId, currentLanguageId.Value);
 
                     if (genericBEDefinitionSettingsCopy != null)
                     {

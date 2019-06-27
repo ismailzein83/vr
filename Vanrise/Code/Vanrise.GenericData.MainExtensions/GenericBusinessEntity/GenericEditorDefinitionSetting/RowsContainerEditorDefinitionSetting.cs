@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions
@@ -11,6 +12,22 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override string RuntimeEditor { get { return "vr-genericdata-rowscontainereditor-runtime"; } }
 
+        public override void ApplyTranslation(IGenericBETranslationContext context)
+        {
+            if (RowContainers != null && RowContainers.Count > 0)
+            {
+                foreach (var rowContainer in RowContainers)
+                {
+                    if (rowContainer != null && rowContainer.RowSettings != null && rowContainer.RowSettings.Count > 0)
+                    {
+                        foreach (var editorDefinition in rowContainer.RowSettings)
+                        {
+                            editorDefinition.ApplyTranslation(new GenericEditorTranslationContext(context.DataRecordTypeId,context.LanguageId));
+                        }
+                    }
+                }
+            }
+        }
         public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
         {
             List<GridColumnAttribute> columnsAttributes = new List<GridColumnAttribute>();
