@@ -9,6 +9,11 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					RA_Dispute.Dispute
 --------------------------------------------------------------------------------------
 */
+
+--delete useless views
+delete from [sec].[View] where [Id] in ('E68EFF9C-879E-4A6C-B412-8E225A966571'--'Charging Policies'
+										)
+
 --[common].[Setting]---------------------------201 to 300-------------------------------------------
 BEGIN
 set nocount on;
