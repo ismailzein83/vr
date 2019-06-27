@@ -73,6 +73,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Termination")]
         [EntitySchemaName("StLineTerminationRequest")]
+        [TechnicalStepFieldName("StTechnicalStepId")]
+        [TechnicalStepId("45363147-CC59-4632-B09E-EB850D2FD25F")]
         [CompletedStep("StStepId")]
         [CompletedStepId("CEBCB883-84AA-4183-9938-817E711EB2BF")]
         TelephonyLineTermination = 1,
