@@ -1,5 +1,6 @@
 ﻿Common
 Common.PostDeployment.sql
+Common.Localization.PostDeployment.sql
 Security.PostDeployment.sql
 BusinessProcess.PostDeployment.sql
 ExcelConversion.PostDeployment.sql
