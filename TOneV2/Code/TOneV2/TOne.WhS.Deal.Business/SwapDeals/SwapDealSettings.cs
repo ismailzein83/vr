@@ -156,9 +156,27 @@ namespace TOne.WhS.Deal.Business
                 }
             }
 
-            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, RealBED, RealEED);
+            var dealSaleZoneIds = validateBeforeSaveContext.DealSaleZoneIds;
+            var duplicateSaleZoneIds = GetDuplicatedItems(dealSaleZoneIds);
+            if (duplicateSaleZoneIds.Count() > 0)
+            {
+                validationResult = false;
+                var excludedSaleZoneNames = saleZoneManager.GetSaleZoneNames(duplicateSaleZoneIds);
+                validateBeforeSaveContext.ValidateMessages.Add($"The following sale zone(s) {string.Join(",", excludedSaleZoneNames)} exist in multiple tiers");
+            }
 
-            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, RealBED, RealEED);
+            var dealSupplierZoneIds = validateBeforeSaveContext.DealSupplierZoneIds;
+            var duplicateSupplierZoneIds = GetDuplicatedItems(dealSupplierZoneIds);
+            if (duplicateSupplierZoneIds.Count() > 0)
+            {
+                validationResult = false;
+                var excludedSaleZoneNames = supplierZoneManager.GetSupplierZoneNames(duplicateSupplierZoneIds);
+                validateBeforeSaveContext.ValidateMessages.Add($"The following supplier zone(s) {string.Join(",", excludedSaleZoneNames)} exist in multiple tiers");
+            }
+
+            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, dealSaleZoneIds, RealBED, RealEED);
+
+            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, dealSupplierZoneIds, RealBED, RealEED);
 
             if (excludedSaleZones.Count > 0)
             {
@@ -360,6 +378,20 @@ namespace TOne.WhS.Deal.Business
 
         #region Private Methods
 
+        private List<long> GetDuplicatedItems(List<long> sourceList)
+        {
+            var tocompareList = new List<long>();
+            var duplicatedItems = new List<long>();
+            foreach (var sourceItem in sourceList)
+            {
+                if (tocompareList.Contains(sourceItem))
+                {
+                    duplicatedItems.Add(sourceItem);
+                }
+                tocompareList.Add(sourceItem);
+            }
+            return duplicatedItems;
+        }
         private List<DealRoutingSupplierZoneGroup> BuildSupplierRoutingZoneGroups()
         {
             List<DealRoutingSupplierZoneGroup> supplierZoneGroups = new List<DealRoutingSupplierZoneGroup>();

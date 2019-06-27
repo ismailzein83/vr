@@ -101,7 +101,7 @@ namespace TOne.WhS.Deal.Business
                 CarrierAccountId = analysisSetting.CarrierAccountId,
                 BeginDate = analysisSetting.FromDate,
                 EEDToStore = analysisSetting.ToDate,
-                Status = DealStatus.Draft,
+                Status = DealStatus.Active,
                 SwapDealTimeZone = SwapDealTimeZone.Supplier
             };
 

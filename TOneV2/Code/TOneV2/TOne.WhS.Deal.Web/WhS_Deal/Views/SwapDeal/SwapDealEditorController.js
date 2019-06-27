@@ -72,7 +72,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.priority = 1;
             $scope.scopeModel.disabelType = (isEditMode);
-            $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum); 
+            $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
             $scope.scopeModel.SwapDealTimeZone = UtilsService.getArrayEnum(WhS_Deal_SwapDealTimeZoneTypeEnum);
@@ -458,7 +458,7 @@
             $scope.scopeModel.isLoading = true;
             var createDealFromAnalysis = false;
             return WhS_Deal_SwapDealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
-                createDealFromAnalysis = isCreateDealFromAnalysis && response != undefined && response.InsertedObject != undefined && response.InsertedObject.Entity != undefined;
+                createDealFromAnalysis = isCreateDealFromAnalysis && response != undefined;
                 if (VRNotificationService.notifyOnItemAdded('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealAdded != undefined)
                         $scope.onSwapDealAdded(response.InsertedObject);
