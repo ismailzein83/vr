@@ -25,6 +25,7 @@ app.directive("vrInvoiceGenericinvoiceaccountSelector", ["UtilsService", "VRNoti
         function GenericInvoiceAccount($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var businessEntityDefinitionId;
+            var context;
             var selectedIds;
 
             var genericFinancialAccountSelectorAPI;
@@ -42,12 +43,21 @@ app.directive("vrInvoiceGenericinvoiceaccountSelector", ["UtilsService", "VRNoti
                 defineAPI();
             }
 
+            function reloadContextFunctions() {
+                if (context != undefined) {
+                    if (context.reloadPregeneratorActions != undefined) {
+                        context.reloadPregeneratorActions();
+                    }
+                }
+            }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var promises = [];
                     if (payload != undefined) {
+                        context = payload.context;
                         selectedIds = payload.selectedIds;
 
                         if (payload.extendedSettings != undefined && payload.extendedSettings.Configuration != undefined) {
@@ -66,7 +76,7 @@ app.directive("vrInvoiceGenericinvoiceaccountSelector", ["UtilsService", "VRNoti
                         VRUIUtilsService.callDirectiveLoad(genericFinancialAccountSelectorAPI, genericFinancialAccountPayload, loadDataProviderSettingsPromiseDeferred);
                     });
                     promises.push(loadDataProviderSettingsPromiseDeferred.promise);
-
+                    reloadContextFunctions();
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
