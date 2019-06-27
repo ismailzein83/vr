@@ -238,53 +238,53 @@ end
 --[sec].[Module]------------------------------101 to 200------------------------------------------------------
 begin
 set nocount on;
-;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','Configuration'				,null,null,'/Client/Images/menu-icons/configuration.png',1,0),
+('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','Configuration'				,null,null,'/Client/Images/menu-icons/configuration.png',1,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Configurations"}'),
 
-('A28351BA-A5D7-4651-913C-6C9E09B92AC1','System',null				,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,1,0),
-('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','System Processes',null		,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,20,0),
-('AD9EEB65-70A3-4F57-B261-79F40D541E23','Business CRM'				,null,null,'/images/menu-icons/plug.png',22,1),
-('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition',null	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,65,0),
+('A28351BA-A5D7-4651-913C-6C9E09B92AC1','System',null				,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,1,0,null),
+('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','System Processes',null		,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,20,0,null),
+('AD9EEB65-70A3-4F57-B261-79F40D541E23','Business CRM'				,null,null,'/images/menu-icons/plug.png',22,1,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.BusinessCRM"}'),
+('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition',null	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,65,0,null),
 
-('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration',null,null,'/Client/Images/menu-icons/admin.png',5,0),
-('BAAF681E-AB1C-4A64-9A35-3F3951398881','System Settings',null		,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,1,0),
-('525B77DC-F097-4BF1-930A-034B9BBE1AC4','System Operations',null	,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,10,0),
-('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null				,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,15,0),
+('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration',null,null,'/Client/Images/menu-icons/admin.png',5,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Administration"}'),
+('BAAF681E-AB1C-4A64-9A35-3F3951398881','System Settings',null		,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,1,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.SystemSettings"}'),
+('525B77DC-F097-4BF1-930A-034B9BBE1AC4','System Operations',null	,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,10,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.SystemOperations"}'),
+('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null				,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,15,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.Security"}'),
 
-('1037157D-BBC9-4B28-B53F-908936CEC137','System Processes'			,null,null,'/Client/Images/menu-icons/SystemProcesses.png',10,null),
-('B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','Business Processes'		,null,'1037157D-BBC9-4B28-B53F-908936CEC137',null,20,0),
+('1037157D-BBC9-4B28-B53F-908936CEC137','System Processes'			,null,null,'/Client/Images/menu-icons/SystemProcesses.png',10,null,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.SystemProcesses"}'),
+('B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','Business Processes'		,null,'1037157D-BBC9-4B28-B53F-908936CEC137',null,20,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.BusinessProcesses"}'),
 
-('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities'			,null,null,'/Client/Images/menu-icons/Business Entities.png',15,0),
-('937F4A80-74FD-43BA-BCC1-F674445170BB','Business Partner'			,null,null,'/Client/Images/menu-icons/Business Entities.png',15,0),
-('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups'					,null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,10,1),
+('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities'			,null,null,'/Client/Images/menu-icons/Business Entities.png',15,0,null),
+('937F4A80-74FD-43BA-BCC1-F674445170BB','Business Partner'			,null,null,'/Client/Images/menu-icons/Business Entities.png',15,0,null),
+('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups'					,null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,10,1,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.Lookups"}'),
 
-('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing Management'		,null,null,'/Client/Images/menu-icons/billing.png',70,0),
+('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing Management'		,null,null,'/Client/Images/menu-icons/billing.png',70,0,null),
 
-('0AAA7D9E-EE0B-4AA6-8AA1-F03E2379D811','Voice'						,null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,5,0),
-('9ADD9AC2-D329-4834-BDEA-BA87C26C2A1D','SMS'						,null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,10,0),
+('0AAA7D9E-EE0B-4AA6-8AA1-F03E2379D811','Voice'						,null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,5,0,null),
+('9ADD9AC2-D329-4834-BDEA-BA87C26C2A1D','SMS'						,null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,10,0,null),
 
-('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'						,null,null,'/Client/Images/menu-icons/rules.png',75,0),
+('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'						,null,null,'/Client/Images/menu-icons/rules.png',75,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Rules"}'),
 
-('D2899D41-A6DB-4E5B-9C28-9FA69E74AAE2','Voice'						,null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,5,0),
-('75C29F78-49B1-4968-9C4A-6233461C6897','SMS'						,null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,10,0),
+('D2899D41-A6DB-4E5B-9C28-9FA69E74AAE2','Voice'						,null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,5,0,null),
+('75C29F78-49B1-4968-9C4A-6233461C6897','SMS'						,null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,10,0,null),
 
-('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'		,null,null,'/Client/Images/menu-icons/busines intel.png',95,1),
+('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'		,null,null,'/Client/Images/menu-icons/busines intel.png',95,1,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Reports"}'),
 
-('C33B407D-476E-4779-83F8-5F88CA1A4DF3','Voice'						,null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,5,0),
-('3B6E324F-4F1F-417A-AB60-963D4856B4CC','SMS'						,null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,10,0)
+('C33B407D-476E-4779-83F8-5F88CA1A4DF3','Voice'						,null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,5,0,null),
+('3B6E324F-4F1F-417A-AB60-963D4856B4CC','SMS'						,null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,10,0,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
+  )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings]))
 merge	[sec].[Module] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic] ,[Settings]=s.[Settings] 
 when not matched by target then
-	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
+	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
+	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic], s.[Settings]);
 --------------------------------------------------------------------------------------------------------------
 end
 
@@ -295,24 +295,34 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('604B2CB5-B839-4E51-8D13-3C1C84D05DEE','Countries','Countries','#/view/Common/Views/Country/CountryManagement'																,'89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/Country/GetFilteredCountries',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
-('A1CE55FE-6CF4-4F15-9BC2-8E1F8DF68561','Regions','Regions','#/view/Common/Views/Region/RegionManagement'																	,'89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/Region/GetFilteredRegions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',7),
-('25994374-CB99-475B-8047-3CDB7474A083','Cities','Cities','#/view/Common/Views/City/CityManagement'																			,'89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/City/GetFilteredCities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
-('9F691B87-4936-4C4C-A757-4B3E12F7E1D9','Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement'															,'89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/Currency/GetFilteredCurrencies',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
-('E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9','Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement'				,'89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
+('604b2cb5-b839-4e51-8d13-3c1c84d05dee','Countries','Countries','#/view/Common/Views/Country/CountryManagement','89254e36-5d91-4db1-970f-9bfef404679a','VRCommon/Country/GetFilteredCountries',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.Countries","ViewNameResourceKey":"Common.Countries"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',7),
+('a1ce55fe-6cf4-4f15-9bc2-8e1f8df68561','Regions','Regions','#/view/Common/Views/Region/RegionManagement','89254e36-5d91-4db1-970f-9bfef404679a','VRCommon/Region/GetFilteredRegions',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.Regions","ViewNameResourceKey":"Common.Regions"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',7),
+
+('25994374-cb99-475b-8047-3cdb7474a083','Cities','Cities','#/view/Common/Views/City/CityManagement','89254e36-5d91-4db1-970f-9bfef404679a','VRCommon/City/GetFilteredCities',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.Cities","ViewNameResourceKey":"Common.Cities"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',10),
+('9f691b87-4936-4c4c-a757-4b3e12f7e1d9','Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement','89254e36-5d91-4db1-970f-9bfef404679a','VRCommon/Currency/GetFilteredCurrencies',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.Currencies","ViewNameResourceKey":"Common.Currencies"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',15),
+('e5ca33d9-18ac-4ba1-8e8e-fb476ecaa9a9','Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement','89254e36-5d91-4db1-970f-9bfef404679a','VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.ExchangeRates","ViewNameResourceKey":"Common.ExchangeRates"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',20),
+
+
 ('0F111ADC-B7F6-46A4-81BC-72FFDEB305EB','Time Zone','Time Zone','#/view/Common/Views/VRTimeZone/VRTimeZoneManagement'														,'89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/TimeZone/GetFilteredVRTimeZones',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',25),
-('4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712','Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement'															,'89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/RateType/GetFilteredRateTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',30),
+('4d7bf410-e4c6-4d6f-b519-d6b5c2c2f712','Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement','89254e36-5d91-4db1-970f-9bfef404679a','VRCommon/RateType/GetFilteredRateTypes',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.RateTypes","ViewNameResourceKey":"Common.RateTypes"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',30),
+
+
 ('66DE2441-8A96-41E7-94EA-9F8AF38A3515','Style','Style Definitions','#/view/Common/Views/StyleDefinition/StyleDefinitionManagement'											,'A459D3D0-35AE-4B0E-B267-54436FDA729A','VRCommon/StyleDefinition/GetFilteredStyleDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',35),
-('C8272FEA-32E8-4C3B-949A-50090DB82981','Component Settings','Component Settings','#/view/Common/Views/Settings/SettingsManagement'											,'BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/Settings/GetFilteredSettings',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
-('40A3247C-375A-4FE3-8E5E-8370D086F8FA','Mail Templates','Mail Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement'										,'BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
+('c8272fea-32e8-4c3b-949a-50090db82981','Component Settings','Component Settings','#/view/Common/Views/Settings/SettingsManagement','baaf681e-ab1c-4a64-9a35-3f3951398881','VRCommon/Settings/GetFilteredSettings',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.ComponentSettings","ViewNameResourceKey":"Common.ComponentSettings"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',10),
+
+
+('40a3247c-375a-4fe3-8e5e-8370d086f8fa','Mail Templates','Mail Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement','baaf681e-ab1c-4a64-9a35-3f3951398881','VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.MailTemplates","ViewNameResourceKey":"Common.MailTemplates"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',20),
+
 ('026E0EEB-69B7-4E5D-B1BB-9D4FB59111B1','SMS Message Templates','SMS Message Templates','#/view/Common/Views/SMS/SMSMessageTemplateManagement'								,'BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',30),
-('A20E826F-FB18-4A40-ADAC-7D257399A1CA','Connections','Connections','#/view/Common/Views/VRConnection/VRConnectionManagement'												,'baaf681e-ab1c-4a64-9a35-3f3951398881','VRCommon/VRConnection/GetFilteredVRConnections',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',130),
+('a20e826f-fb18-4a40-adac-7d257399a1ca','Connections','Connections','#/view/Common/Views/VRConnection/VRConnectionManagement','baaf681e-ab1c-4a64-9a35-3f3951398881','VRCommon/VRConnection/GetFilteredVRConnections',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.Connection","ViewNameResourceKey":"Common.Connection"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',130),
+
 ('CFCF02C6-0C70-443D-A91E-B8D291F5263E','Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement'	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',30),
 ('33AC6A20-F8BE-4D6F-A659-F643DADE1065','Mail Message Types','Mail Message Types','#/view/Common/Views/VRMail/VRMailMessageTypeManagement'									,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRMailMessageType/GetFilteredMailMessageTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',35),
 ('8AC4B99E-01A0-41D1-AE54-09E679309086','Status Definitions','Status Definitions','#/view/Common/Views/StatusDefinition/StatusDefinitionManagement'							,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/StatusDefinition/GetFilteredStatusDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',23),
 ('52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD','Component Types','Component Types','#/view/Common/Views/VRComponentType/VRComponentTypeManagement'									,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRComponentType/GetFilteredVRComponentTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',24),
 ('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',26),
-('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
+('2d39b12d-8fbf-4d4e-b2a5-5e3fe57580df','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement','525b77dc-f097-4bf1-930a-034b9bbe1ac4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.LockedSessions","ViewNameResourceKey":"Common.LockedSessions"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',10),
+
 ('32495D59-E401-4AF0-81A3-829F9C442036','Custom Namespaces','Custom Namespaces','#/view/Common/Views/VRNamespace/VRNamespaceManagement'										,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRNamespace/GetFilteredVRNamespaces',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',19),
 ('AF4FF1BA-C026-4CC7-ADE2-B684453DBB8C','Dynamic API Module','Dynamic API Module','#/view/Common/Views/VRDynamicAPIModule/VRDynamicAPIModuleManagement'						,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
 ('B54D3FC5-97CD-4076-A25C-AC7AD809AE66','Dashboard Definition','Dashboard Definitions',null																					,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"6243ca7f-a14c-41be-be48-86322d835ca6"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',21),
