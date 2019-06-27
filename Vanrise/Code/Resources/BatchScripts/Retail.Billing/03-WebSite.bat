@@ -65,7 +65,7 @@ xcopy "C:\TFS\Retail\Code\Retail.Voice.Web\Retail_Voice" /S /E /R /y /v /i /z /Q
 xcopy "C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Client\Modules\Retail_SMS\"
 xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Client\Modules\Retail_Data\"
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
-xcopy "C:\TFS\Retail\Code\Retail.Cost.Web\Retail_Billing" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Client\Modules\Retail_Billing\"
+xcopy "C:\TFS\Retail\Code\Retail.Billing.Web\Retail_Billing" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Client\Modules\Retail_Billing\"
 xcopy "C:\Publish\Retail\bin\Retail.Billing*" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Bin\"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Bin\*.pdb"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Retail.Billing\%YYYYMMDD%\Bin\*.config"
