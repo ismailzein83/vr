@@ -870,9 +870,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                                     {
                                         parentRDBRegistrationInfo = null;
                                     }
-
-                                    HashSet<string> nullableFieldNames = _dataRecordStorageSettings.NullableFields != null ? new HashSet<string>(_dataRecordStorageSettings.NullableFields.Select(itm => itm.Name)) : new HashSet<string>();
-
+                                                                        
                                     if (_dataRecordStorageSettings.Filter != null)
                                         rdbTableDefinition.FilterDefinition = new RDBRecordStorageRDBTableFilterDefinition { DataRecordStorageId = _dataRecordStorage.DataRecordStorageId };
 
@@ -948,6 +946,15 @@ namespace Vanrise.GenericData.RDBDataStorage
                                     if (!String.IsNullOrEmpty(_dataRecordStorageSettings.LastModifiedTimeField))
                                         autoFilledFieldNames.Add(_dataRecordStorageSettings.LastModifiedTimeField);
 
+                                    var allSupportedFieldNames = ResolveAllSupportedFieldNames();
+                                    HashSet<string> nullableFieldNames = new HashSet<string>();
+
+                                    foreach(var fieldName in this.DataRecordFieldsByName.Keys)
+                                    {
+                                        if (!allSupportedFieldNames.Contains(fieldName))
+                                            nullableFieldNames.Add(fieldName);
+                                    }
+
                                     RDBSchemaManager.Current.RegisterDefaultTableDefinition(rdbTableName, rdbTableDefinition);
 
                                     RDBRegistrationInfo registrationInfo = new RDBRegistrationInfo
@@ -962,7 +969,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                                         UniqueFieldNames = uniqueFieldNames,
                                         NullableFieldNames = nullableFieldNames,
                                         ParentRDBRegistrationInfo = parentRDBRegistrationInfo,
-                                        AllSupportedFieldNames = ResolveAllSupportedFieldNames(),
+                                        AllSupportedFieldNames = allSupportedFieldNames,
                                         AutoFilledFieldNames = autoFilledFieldNames
                                     };
                                     return registrationInfo;
