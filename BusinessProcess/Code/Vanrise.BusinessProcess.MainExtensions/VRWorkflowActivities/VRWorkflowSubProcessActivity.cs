@@ -207,33 +207,32 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
         {
-            VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(this.VRWorkflowId);
-            string displayName = this.DisplayName;
-            if (context.SubProcessActivityName != null)
-                displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
-            return vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
-
             //VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(this.VRWorkflowId);
             //string displayName = this.DisplayName;
             //if (context.SubProcessActivityName != null)
             //    displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
-            //var childVisualItemDefinition = vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
-            //if(childVisualItemDefinition != null)
-            //{
-            //    return new BPVisualItemDefinition
-            //    {
-            //        Settings = new BPSubProcessVisualItemDefinition
-            //        {
-            //            ChildActivityId = vrWorkflow.Settings.RootActivity.VRWorkflowActivityId,
-            //            ChildActivityVisualItemDefinition = childVisualItemDefinition
-            //        }
-            //    };
-            //}
-            //else
-            //{
-            //    return null;
-            //}
+            //return vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
 
+            VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(this.VRWorkflowId);
+            string displayName = this.DisplayName;
+            if (context.SubProcessActivityName != null)
+                displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
+            var childVisualItemDefinition = vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
+            if (childVisualItemDefinition != null)
+            {
+                return new BPVisualItemDefinition
+                {
+                    Settings = new BPSubProcessVisualItemDefinition
+                    {
+                        ChildActivityId = vrWorkflow.Settings.RootActivity.VRWorkflowActivityId,
+                        ChildActivityVisualItemDefinition = childVisualItemDefinition
+                    }
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private class VRWorkflowActivityGetVisualItemDefinitionContext : IVRWorkflowActivityGetVisualItemDefinitionContext
