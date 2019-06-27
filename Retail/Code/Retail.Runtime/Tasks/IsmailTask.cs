@@ -25,14 +25,42 @@ using Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using Vanrise.GenericData.Business;
 
 namespace Retail.Runtime.Tasks
 {
     public class IsmailTask : ITask
     {
-      
+        //public class InventorySwitchAvailableNumbersBusinessObject : Vanrise.GenericData.Business.BusinessObjectDataProviderExtendedSettings
+        //{
+        //    public override Guid ConfigId => new Guid("96835DA1-5CB7-4887-B03A-C656C6F580C8");
+
+        //    public override bool DoesSupportFilterOnAllFields => true;
+
+        //    public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)
+        //    {
+        //        int lineType = 1;
+        //        int category = 2;
+        //        List<SwitchAvailableNumber> availableNumbers = new List<SwitchAvailableNumber>();
+        //        foreach(var availableNumber in availableNumbers)
+        //        {
+        //            Dictionary<string, dynamic> fieldValues = new Dictionary<string, dynamic>();
+        //            fieldValues.Add("ID", availableNumber.PhoneNumber);
+        //            fieldValues.Add("PhoneNumber", availableNumber.PhoneNumber);
+        //            context.OnRecordLoaded(new DataRecordObject(new Guid("1f4af0ad-cbab-423b-a6e3-6e2620fe07b1"), fieldValues), DateTime.Now);
+        //        }
+        //    }
+        //}
+
+        //public class SwitchAvailableNumber
+        //{
+        //    public string PhoneNumber { get; set; }
+        //}
         public void Execute()
         {
+            
+            //Type t = Type.GetType("CRMFixedOper.InventorySwitchAvailableNumbersBusinessObject");
+            //var obj = Activator.CreateInstance(t);
             //TestJSONConvertor();
             //TestBulkInsertRDB();
             //CallGetAnalyticRecords();
