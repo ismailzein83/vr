@@ -850,6 +850,7 @@
     <Build Include="genericdata\User Defined Types\VRNumberPrefixTypeType.sql" />
     <Build Include="genericdata\User Defined Types\VRNumberPrefixType.sql" />
     <Build Include="common\Tables\VRDevProject.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_UpdateAudiences.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
