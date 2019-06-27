@@ -92,23 +92,23 @@
                  
                  set nocount on;
                  
-                 ;with cte_data([ID],[Name],[DevProjectID],[Title],[Module],[Url],[Type],[Settings],[Rank],[ActionNames],[Content],[Audience],[CreatedTime],[LastModifiedTime],[IsDeleted])
+                 ;with cte_data([ID],[Name],[DevProjectID],[Title],[Module],[Url],[Type],[Settings],[Rank],[ActionNames],[Content],[Audience],[CreatedTime],[LastModifiedTime])
                   as (select* from (values
                  --//////////////////////////////////////////////////////////////////////////////////////////////////
-                       ('79236029-bb14-4aae-8347-5315539696c8','Salutations','ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b','Salutations','89254e36-5d91-4db1-970f-9bfef404679a',NULL,'b99b2b0a-9a80-49fc-b68f-c946e1628595','{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"2f6e55d2-44b6-4bcb-b398-758fcb709e05"}]}}',16,NULL,NULL,NULL,'2019-05-16 09:18:59.483','2019-06-24 18:36:12.027',NULL),
-('b6621a10-2665-41da-a0a8-cf6485fb3573','Careers','ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b','Careers','89254e36-5d91-4db1-970f-9bfef404679a',NULL,'b99b2b0a-9a80-49fc-b68f-c946e1628595','{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"0c36853f-e2dc-4391-913e-420a8d064641"}]}}',12,NULL,NULL,NULL,'2019-05-28 11:49:56.823','2019-06-24 18:36:12.023',NULL)
+                       ('79236029-bb14-4aae-8347-5315539696c8','Salutations','ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b','Salutations','89254e36-5d91-4db1-970f-9bfef404679a',NULL,'b99b2b0a-9a80-49fc-b68f-c946e1628595','{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"2f6e55d2-44b6-4bcb-b398-758fcb709e05"}]}}',16,NULL,NULL,NULL,'2019-05-16 09:18:59.483','2019-06-24 18:36:12.027'),
+('b6621a10-2665-41da-a0a8-cf6485fb3573','Careers','ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b','Careers','89254e36-5d91-4db1-970f-9bfef404679a',NULL,'b99b2b0a-9a80-49fc-b68f-c946e1628595','{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"0c36853f-e2dc-4391-913e-420a8d064641"}]}}',12,NULL,NULL,NULL,'2019-05-28 11:49:56.823','2019-06-24 18:36:12.023')
                  --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                )c([ID],[Name],[DevProjectID],[Title],[Module],[Url],[Type],[Settings],[Rank],[ActionNames],[Content],[Audience],[CreatedTime],[LastModifiedTime],[IsDeleted]))
+                )c([ID],[Name],[DevProjectID],[Title],[Module],[Url],[Type],[Settings],[Rank],[ActionNames],[Content],[Audience],[CreatedTime],[LastModifiedTime]))
                 merge[sec].[View] as t
                 using  cte_data as s
                 on            1=1 and t.[ID]=s.[ID]
                   
                   when matched then
                  update set
-                 [ID]=s.[ID] ,[Name]=s.[Name] ,[DevProjectID]=s.[DevProjectID] ,[Title]=s.[Title] ,[Module]=s.[Module] ,[Url]=s.[Url] ,[Type]=s.[Type] ,[Settings]=s.[Settings] ,[Rank]=s.[Rank] ,[ActionNames]=s.[ActionNames] ,[Content]=s.[Content] ,[Audience]=s.[Audience] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] ,[IsDeleted]=s.[IsDeleted] 
+                 [ID]=s.[ID] ,[Name]=s.[Name] ,[DevProjectID]=s.[DevProjectID] ,[Title]=s.[Title] ,[Module]=s.[Module] ,[Url]=s.[Url] ,[Type]=s.[Type] ,[Settings]=s.[Settings] ,[Rank]=s.[Rank] ,[ActionNames]=s.[ActionNames] ,[Content]=s.[Content] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
                  when not matched by target then
-                 insert([ID],[Name],[DevProjectID],[Title],[Module],[Url],[Type],[Settings],[Rank],[ActionNames],[Content],[Audience],[CreatedTime],[LastModifiedTime],[IsDeleted])
-                 values(s.[ID], s.[Name], s.[DevProjectID], s.[Title], s.[Module], s.[Url], s.[Type], s.[Settings], s.[Rank], s.[ActionNames], s.[Content], s.[Audience], s.[CreatedTime], s.[LastModifiedTime], s.[IsDeleted]);
+                 insert([ID],[Name],[DevProjectID],[Title],[Module],[Url],[Type],[Settings],[Rank],[ActionNames],[Content],[Audience],[CreatedTime],[LastModifiedTime])
+                 values(s.[ID], s.[Name], s.[DevProjectID], s.[Title], s.[Module], s.[Url], s.[Type], s.[Settings], s.[Rank], s.[ActionNames], s.[Content], s.[Audience], s.[CreatedTime], s.[LastModifiedTime]);
                   
             ----------------------------------------------------------------------------------------------------
               end

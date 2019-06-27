@@ -242,8 +242,7 @@
               "Content": null,
               "Audience": null,
               "CreatedTime": "2019-05-16T09:18:59.483",
-              "LastModifiedTime": "2019-06-24T18:36:12.027",
-              "IsDeleted": null
+              "LastModifiedTime": "2019-06-24T18:36:12.027"
             }
           },
           {
@@ -261,8 +260,7 @@
               "Content": null,
               "Audience": null,
               "CreatedTime": "2019-05-28T11:49:56.823",
-              "LastModifiedTime": "2019-06-24T18:36:12.023",
-              "IsDeleted": null
+              "LastModifiedTime": "2019-06-24T18:36:12.023"
             }
           }
         ],
@@ -336,7 +334,7 @@
           {
             "ColumnName": "Audience",
             "IncludeInInsert": true,
-            "IncludeInUpdate": true,
+            "IncludeInUpdate": false,
             "IsIdentifier": false
           },
           {
@@ -347,12 +345,6 @@
           },
           {
             "ColumnName": "LastModifiedTime",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "IsDeleted",
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": false
