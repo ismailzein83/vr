@@ -72,9 +72,6 @@ namespace Retail.Billing.Business
                     var addressNotes = financialAccount.ExtraFields.GetRecord("AddressNotes");
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AddressNotes, addressNotes != null ? addressNotes.ToString() : "", true);
 
-                    var fullName = financialAccount.ExtraFields.GetRecord("FullName");
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.FullName, fullName != null ? fullName.ToString() : "", true);
-
                     return rdlcReportParameters;
             }
             return null;
