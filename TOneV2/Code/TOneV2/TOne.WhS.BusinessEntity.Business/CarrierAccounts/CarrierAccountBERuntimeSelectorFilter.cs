@@ -13,7 +13,33 @@ namespace TOne.WhS.BusinessEntity.Business
         public DataTypeEnum DataType { get; set; }
         public bool IsExcluded(ICarrierAccountFilterContext context)
         {
-            throw new NotImplementedException();
+            ConfigManager configManager = new ConfigManager();
+
+            var carrierAccount = context.CarrierAccount;
+
+            bool getFilteredData = false;
+            if (this.DataType == DataTypeEnum.Traffic)
+                getFilteredData = configManager.GetTrafficCarrierAccountFiltering();
+            else if (this.DataType == DataTypeEnum.Billing)
+                getFilteredData = configManager.GetBillingCarrierAccountFiltering();
+
+            if (!getFilteredData)
+                return false;
+            else
+            {
+                AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
+                IEnumerable<AccountManagerAssignment> accountManagerAssignments;
+                bool result = accountManagerAssignmentManager.TryGetCurrentUserAccountManagerAssignments(out accountManagerAssignments);
+                if (accountManagerAssignments != null)
+                {
+                    foreach (var accountManagerAssignement in accountManagerAssignments)
+                    {
+                        if (accountManagerAssignement.CarrierAccountId == carrierAccount.CarrierAccountId)
+                            return false;
+                    }
+                }
+                return true;
+            }
         }
 
         public override bool IsMatched(IBERuntimeSelectorFilterSelectorFilterContext context)
@@ -26,7 +52,9 @@ namespace TOne.WhS.BusinessEntity.Business
             else if (this.DataType == DataTypeEnum.Billing)
                 getFilteredData = configManager.GetBillingCarrierAccountFiltering();
 
-            if (getFilteredData)
+            if (!getFilteredData)
+                return true;
+            else
             {
                 AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
                 IEnumerable<AccountManagerAssignment> accountManagerAssignments;
@@ -39,8 +67,8 @@ namespace TOne.WhS.BusinessEntity.Business
                             return true;
                     }
                 }
+                return false;
             }
-            return false;
         }
     }
 }

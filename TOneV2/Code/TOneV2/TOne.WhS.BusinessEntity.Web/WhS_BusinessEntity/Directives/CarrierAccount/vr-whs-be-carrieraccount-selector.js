@@ -133,11 +133,13 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                     selectorApi.clearDataSource();
 
                     var filter;
+                    var beRuntimeSelectorFilter;
                     var selectedIds;
                     var lockedIds;
 
                     if (payload != undefined) {
                         filter = payload.filter;
+                        beRuntimeSelectorFilter = payload.beRuntimeSelectorFilter;
                         selectedIds = payload.selectedIds;
                         lockedIds = payload.lockedIds;
                     }
@@ -167,6 +169,12 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
                     if (filter == undefined)
                         filter = {};
+
+                    if (filter.Filters == undefined)
+                        filter.Filters = [];
+
+                    if (beRuntimeSelectorFilter != undefined)
+                        filter.Filters.push(beRuntimeSelectorFilter);
 
                     if (filter.GetCustomers == undefined)
                         filter.GetCustomers = attrs.getcustomers != undefined;
