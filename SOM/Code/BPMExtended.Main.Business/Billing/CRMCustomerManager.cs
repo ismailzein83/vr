@@ -825,6 +825,23 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public string UpdateCustomerCategoryByBSCS(string id, string bscsId)
+        {
+            var result = "";
+            try
+            {
+                string entity = "Contact";
+                string Attribute = "StCustomerCategoryID";
+                string columncheck = "StCustomerId";
+                UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                var update = new Update(connection, entity).Set(Attribute, Column.Parameter(bscsId))
+                    .Where(columncheck).IsEqual(Column.Parameter(id));
+                update.Execute();
+            }
+            catch { }
+            return result;
+        }
+
         public void CustomerCreation(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber, string contactId, string accountId)
         {
 
