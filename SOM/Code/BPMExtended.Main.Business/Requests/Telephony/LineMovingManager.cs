@@ -37,6 +37,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StNewLinePathID");
             esq.AddColumn("StOldLinePathId");
+            esq.AddColumn("StIsNewSwitch");
+
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -49,6 +51,7 @@ namespace BPMExtended.Main.Business
                 var oldLinePathId = entities[0].GetColumnValue("StOldLinePathId");
                 var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var newSwitch = entities[0].GetColumnValue("StIsNewSwitch");
 
                 SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
                 {
@@ -62,7 +65,8 @@ namespace BPMExtended.Main.Business
                             CustomerId = customerId.ToString()
                         },
                         OldLinePathId= oldLinePathId.ToString(),
-                        NewLinePathId= newLinePathID.ToString()
+                        NewLinePathId= newLinePathID.ToString(),
+                        SameSwitch = !((bool)newSwitch)
                     }
 
                 };

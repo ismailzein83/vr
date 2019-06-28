@@ -38,6 +38,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StLinePathID");
             esq.AddColumn("StOldLinePathId");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -46,9 +48,10 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
-                var contactId = entities[0].GetColumnValue("StContactId");
                 var oldPathId = entities[0].GetColumnValue("StOldLinePathId");
                 var newPathId = entities[0].GetColumnValue("StLinePathID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<DeportedNumberRequestInput> somRequestInput = new SOMRequestInput<DeportedNumberRequestInput>
                 {
@@ -60,7 +63,12 @@ namespace BPMExtended.Main.Business
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                         },
-                        OldLinePath=oldPathId.ToString(),
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        OldLinePath =oldPathId.ToString(),
                         NewLinePath = newPathId.ToString()
                     }
 

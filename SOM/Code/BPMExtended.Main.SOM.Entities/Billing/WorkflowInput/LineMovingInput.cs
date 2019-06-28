@@ -12,5 +12,6 @@ namespace BPMExtended.Main.SOMAPI
         public CommonInputArgument CommonInputArgument { get; set; }
         public string OldLinePathId { get; set; }
         public string NewLinePathId { get; set; }
+        public bool SameSwitch { get; set; }
     }
 }

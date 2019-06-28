@@ -183,7 +183,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public ServiceInfo GetDepositServiceByPagesNumber(int pagesNumber) // MYA: To Be Tested 
+        public SaleService GetCallDetailServiceByPagesNumber(int pagesNumber) // MYA: To Be Tested 
         {
             string serviceId = null;
             string serviceName = null;
@@ -223,10 +223,11 @@ namespace BPMExtended.Main.Business
                 }
             }
 
-            return new ServiceInfo()
+            return new SaleService()
             {
-                ServiceId = serviceId,
-                Name = serviceName
+                Id = serviceId,
+                Name= serviceName,
+                UpFront=true
             };
 
         }

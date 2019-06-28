@@ -434,6 +434,18 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public string GetPhoneNumberId(string phoneNumber)
+        {
+            string phoneNumberId=null;
+
+            using (SOMClient client = new SOMClient())
+            {
+                phoneNumberId =  client.Get<string>(String.Format("api/SOM.ST/Inventory/GetPhoneNumberId?PhoneNumber={0}", phoneNumber));
+            }
+
+            return phoneNumberId;
+        }
+
         //public ADSLLinePath CheckADSL(string phoneNumber)
         //{
         //    ADSLLinePath item = null;

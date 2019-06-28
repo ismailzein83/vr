@@ -224,6 +224,11 @@ namespace BPMExtended.Main.Business
             return documentId;
         }
 
+        public void PostCallDetailsToOM(Guid requestId)
+        {
+
+        }
+
         #endregion
 
         #region Private

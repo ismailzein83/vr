@@ -361,6 +361,11 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("B1295B96-C7B3-40B3-9089-24A05E94FF41")]
         ServiceRemoval = 41,
 
+        [Description("Call Details")]
+        [EntitySchemaName("StCallDetailsRequest")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("0E6F81C9-5F92-4FDF-ABAB-5C39B18E49E9")]
+        CallDetails = 42,
     }
     public enum ContractStatus
     {
