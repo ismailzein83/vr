@@ -994,3 +994,23 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
+
+--[common].[Setting]--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('1D1B5AB7-5063-47FA-8DE9-12D9008EBE4A','Voice Technical','Retail_Voice_VoiceTechnicalSettings','General','{"Editor":"retail-voice-technicalsettings-editor"}','{"$type":"Retail.Voice.Entities.VoiceTechnicalSettings, Retail.Voice.Entities","AccountIdentification":{"$type":"Retail.Voice.MainExtensions.DIDAccountIdentification, Retail.Voice.MainExtensions","ConfigId":"1a73d2e9-1419-4b41-ad2b-6ab04930466b"},"InternationalIdentification":{"$type":"Retail.Voice.MainExtensions.RuleInternationalIdentification, Retail.Voice.MainExtensions","ConfigId":"d65ac3f8-3e92-4b48-ae0b-1f25c588916d","RuleDefinitionId":"f67a1a52-e16e-4b81-839f-d5a2e2d70317","InternationalNumberIdentification":0},"ImportCDRSettings":{"$type":"Retail.Voice.Entities.ImportCDRSettings, Retail.Voice.Entities"}}',1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
