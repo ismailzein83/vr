@@ -1,5 +1,4 @@
 ﻿using Retail.Billing.Entities;
-using Retail.BusinessEntity.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +15,6 @@ namespace Retail.Billing.Business
     public class BillingInvoiceGenerator : InvoiceGenerator
     {
         #region Constructors
-        Guid customerGenericBeDefinitionId = new Guid("61017ff8-3e6d-48f4-83bc-a8b4733ab5ee");
         GenericFinancialAccountConfiguration _financialAccountConfiguration;
         Guid? _invoiceTransactionTypeId;
         List<Guid> _usageTransactionTypeIds;
@@ -151,7 +149,6 @@ namespace Retail.Billing.Business
 
             var recordFilterGroup = new RecordFilterGroup()
             {
-                FieldName = "EffectiveBillingAccount",
                 Filters = new List<RecordFilter>() { objectListRecordFilter }
             };
 
@@ -160,6 +157,7 @@ namespace Retail.Billing.Business
             var billingContractServicesByContractServiceRatePlanCurrency = new Dictionary<ContractServiceRatePlanCurrency, BillingInvoiceItem>();
 
             if (billingContractServices.Any())
+            {
                 foreach (var bcsItem in billingContractServices)
                 {
                     ContractServiceRatePlanCurrency contractServiceRatePlanCurrency = new ContractServiceRatePlanCurrency
@@ -181,6 +179,7 @@ namespace Retail.Billing.Business
 
                     billingInvoiceItem = GroupBillingInvoiceItem(billingInvoiceItem, billingRatePlanService, fromDate, toDate, bcsItem.ActivationDate, bcsItem.SuspensionDate);
                 }
+            }
 
             GeneratedInvoiceItemSet billingInvoiceItemSet = new GeneratedInvoiceItemSet()
             {
@@ -306,7 +305,7 @@ namespace Retail.Billing.Business
 
             GenericRuleTarget ruleTarget = new GenericRuleTarget
             {
-                Objects = new Dictionary<string, dynamic> { { "Account", new GenericBusinessEntityManager().GetGenericBEObject(customerGenericBeDefinitionId, financialAccount.ExtraFields.GetRecord("Customer")) } },
+                Objects = new Dictionary<string, dynamic> { { "Account", new CustomerBeManager().GetCustomerObject(financialAccount.ExtraFields.GetRecord("Customer")) } },
                 EffectiveOn = issueDate
             };
             TaxRuleContext taxRuleContext = new TaxRuleContext

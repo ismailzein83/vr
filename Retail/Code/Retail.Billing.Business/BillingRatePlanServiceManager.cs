@@ -2,7 +2,6 @@
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;

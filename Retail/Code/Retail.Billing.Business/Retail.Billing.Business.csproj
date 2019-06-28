@@ -95,6 +95,8 @@
     <Compile Include="BillingInvoicePartnerSettings.cs" />
     <Compile Include="BillingInvoiceSettings.cs" />
     <Compile Include="BillingInvoiceGenerator.cs" />
+    <Compile Include="CustomerMessageManager.cs" />
+    <Compile Include="CustomerBeManager.cs" />
     <Compile Include="CustomerMessagesDataSourceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

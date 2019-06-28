@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.MainExtensions;
@@ -26,8 +23,8 @@ namespace Retail.Billing.Business
                     GenericFinancialAccountManager financialAccountManager = new GenericFinancialAccountManager(this.Configuration);
                     objects.Add("Account", financialAccountManager.GetFinancialAccountObject(context.Invoice.PartnerId));
                     return objects;
-
             }
+
             return null;
         }
 

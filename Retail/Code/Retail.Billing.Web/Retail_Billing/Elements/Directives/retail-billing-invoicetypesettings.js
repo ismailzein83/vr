@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRUIUtilsService",
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -22,7 +22,6 @@ app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificati
 
             },
             templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/Templates/BillingInvoiceTypeSettingsTemplate.html"
-
         };
 
         function BillingInvoiceSettings($scope, ctrl, $attrs) {
@@ -61,7 +60,6 @@ app.directive("retailBillingInvoicetypesettings", ["UtilsService", "VRNotificati
                     }
 
                     promises.push(loadGenericInvoiceSettingsDirective());
-
                     promises.push(loadRuleDefinitionSelector());
 
                     function loadGenericInvoiceSettingsDirective() {

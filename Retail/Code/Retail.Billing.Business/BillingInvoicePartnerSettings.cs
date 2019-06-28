@@ -48,29 +48,32 @@ namespace Retail.Billing.Business
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerName, financialAccount.Name, true);
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.FinancialAccountId, financialAccount.FinancialAccountId.PadLeft(8, '0'), true);
 
-                    var regionId = financialAccount.ExtraFields.GetRecord("Region");
-                    var regionDescription = regionId != null ? financialAccountManager.GetExtraFieldValueDescription("Region", regionId) : "";
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Region, regionDescription, true);
+                    if (financialAccount.ExtraFields != null)
+                    {
+                        var regionId = financialAccount.ExtraFields.GetRecord("Region");
+                        var regionDescription = regionId != null ? financialAccountManager.GetExtraFieldValueDescription("Region", regionId) : "";
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Region, regionDescription, true);
 
-                    var cityId = financialAccount.ExtraFields.GetRecord("City");
-                    var cityDescription = cityId != null ? financialAccountManager.GetExtraFieldValueDescription("City", cityId) : "";
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.City, cityDescription, true);
+                        var cityId = financialAccount.ExtraFields.GetRecord("City");
+                        var cityDescription = cityId != null ? financialAccountManager.GetExtraFieldValueDescription("City", cityId) : "";
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.City, cityDescription, true);
 
-                    var townId = financialAccount.ExtraFields.GetRecord("Town");
-                    var townDescription = townId != null ? financialAccountManager.GetExtraFieldValueDescription("Town", townId) : "";
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Town, townDescription, true);
+                        var townId = financialAccount.ExtraFields.GetRecord("Town");
+                        var townDescription = townId != null ? financialAccountManager.GetExtraFieldValueDescription("Town", townId) : "";
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Town, townDescription, true);
 
-                    var street = financialAccount.ExtraFields.GetRecord("Street");
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Street, street != null ? street.ToString() : "", true);
+                        var street = financialAccount.ExtraFields.GetRecord("Street");
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Street, street != null ? street.ToString() : "", true);
 
-                    var building = financialAccount.ExtraFields.GetRecord("Building");
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Building, building != null ? building.ToString() : "", true);
+                        var building = financialAccount.ExtraFields.GetRecord("Building");
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Building, building != null ? building.ToString() : "", true);
 
-                    var floorNumber = financialAccount.ExtraFields.GetRecord("FloorNumber");
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.FloorNumber, floorNumber != null ? floorNumber.ToString() : "", true);
+                        var floorNumber = financialAccount.ExtraFields.GetRecord("FloorNumber");
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.FloorNumber, floorNumber != null ? floorNumber.ToString() : "", true);
 
-                    var addressNotes = financialAccount.ExtraFields.GetRecord("AddressNotes");
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.AddressNotes, addressNotes != null ? addressNotes.ToString() : "", true);
+                        var addressNotes = financialAccount.ExtraFields.GetRecord("AddressNotes");
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.AddressNotes, addressNotes != null ? addressNotes.ToString() : "", true);
+                    }
 
                     return rdlcReportParameters;
             }

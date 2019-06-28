@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBillingDatasourcesettingsCustomermessages", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_Billing_CustomerMessagesTypeEnum",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_Billing_CustomerMessagesTypeEnum) {
+app.directive("retailBillingDatasourcesettingsCustomermessages", ["UtilsService", "Retail_Billing_CustomerMessagesTypeEnum",
+    function (UtilsService, Retail_Billing_CustomerMessagesTypeEnum) {
 
         var directiveDefinitionObject = {
 
