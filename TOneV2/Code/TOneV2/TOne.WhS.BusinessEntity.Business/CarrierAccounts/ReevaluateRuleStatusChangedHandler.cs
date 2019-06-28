@@ -58,12 +58,32 @@ namespace TOne.WhS.BusinessEntity.Business.EventHandler
                 {
                     GenericRuleQuery query = new GenericRuleQuery() { RuleDefinitionId = mappingRuleDefinitionId };//, SettingsFilterValue = settingFilter };
                     List<MappingRule> mappingRules = mappingRuleManager.GetApplicableFilteredRules(mappingRuleDefinitionId, query, true);
+					SwitchManager switchManager = new SwitchManager();
 
-                    if (mappingRules != null)
+					if (mappingRules != null)
                     {
                         foreach (MappingRule mappingRule in mappingRules)
                         {
-                            if (Convert.ToInt32(mappingRule.Settings.Value) == carrierAccount.CarrierAccountId)
+							bool canCloseMappingRules = true;
+							GenericRuleCriteriaFieldValues genericRuleCriteriaFieldValues;
+							genericRuleCriteriaFieldValues = mappingRule.Criteria.FieldsValues.GetRecord("Switch");
+							if (genericRuleCriteriaFieldValues != null)
+							{
+								var allSwitches = genericRuleCriteriaFieldValues.GetValues();
+								if (allSwitches != null && allSwitches.Count()==1)
+								{
+									foreach (var swtch in allSwitches)
+									{
+										var switchItem = switchManager.GetSwitch(Convert.ToInt32(swtch));
+										if (switchItem.Settings.RouteSynchronizer.DontCloseMappingRules)
+										{
+											canCloseMappingRules = false;
+										}
+									}
+								}
+							}
+
+							if (canCloseMappingRules && Convert.ToInt32(mappingRule.Settings.Value) == carrierAccount.CarrierAccountId)
                             {
                                 if (!mappingRule.EndEffectiveTime.HasValue || mappingRule.EndEffectiveTime.Value > now)
                                 {

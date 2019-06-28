@@ -48,7 +48,34 @@ namespace TOne.WhS.RouteSync.IVSwitch
             IVSwitchMasterDataManager masterDataManager = new IVSwitchMasterDataManager(MasterConnectionString);
             return masterDataManager.GetAccessListStatus(query, endPointStatusIds);
         }
-    }
+
+		public override List<RouteStatus> PrepareRouteStatus(string carrierId, List<int> routestatuses)
+		{
+			CarrierMapping carrierMapping;
+			List<string> accountIds = new List<string>();
+			List<string> groupIds = new List<string>();
+			if (!CarrierMappings.TryGetValue(carrierId, out carrierMapping)) return null;
+			foreach (var mapping in carrierMapping.CustomerMapping)
+			{
+				string[] parts = mapping.Split('_');
+				if (parts.Length > 2)
+				{
+					accountIds.Add(parts[0]);
+					groupIds.Add(parts[1]);
+				}
+			}
+			string accountIdsStr = null;
+			if (accountIds.Any())
+				accountIdsStr = string.Join(",", accountIds);
+			string groupIdsStr = null;
+			if (groupIds.Any())
+				groupIdsStr = string.Join(",", groupIds);
+			string query = string.Format("and account_id in( {0} ) AND  group_id in({1})", accountIdsStr, groupIdsStr);
+
+			IVSwitchMasterDataManager masterDataManager = new IVSwitchMasterDataManager(MasterConnectionString);
+			return masterDataManager.GetRouteStatus(query, routestatuses);
+		}
+	}
     public class CarrierMapping
     {
         public string CarrierId { get; set; }

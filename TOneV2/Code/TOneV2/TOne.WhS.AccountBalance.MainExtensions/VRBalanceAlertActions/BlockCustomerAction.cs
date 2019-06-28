@@ -15,96 +15,44 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
-    public class BlockCustomerAction : VRAction
-    {
-        CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
-        public override void Execute(IVRActionExecutionContext context)
-        {
-            VRBalanceAlertEventPayload eventPayload = context.EventPayload as VRBalanceAlertEventPayload;
-            eventPayload.ThrowIfNull("eventPayload", "");
-            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+	public class BlockCustomerAction : VRAction
+	{
+		CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+		public override void Execute(IVRActionExecutionContext context)
+		{
+			VRBalanceAlertEventPayload eventPayload = context.EventPayload as VRBalanceAlertEventPayload;
+			eventPayload.ThrowIfNull("eventPayload", "");
+			WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
 
-            WHSFinancialAccount financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(eventPayload.EntityId));
-            financialAccount.ThrowIfNull("financialAccount", eventPayload.EntityId);
+			WHSFinancialAccount financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(eventPayload.EntityId));
+			financialAccount.ThrowIfNull("financialAccount", eventPayload.EntityId);
 
-            SwitchManager switchManager = new SwitchManager();
-            var switches = switchManager.GetAllSwitches();
-            if (financialAccount.CarrierAccountId.HasValue)
-            {
-                var carrierAccount = _carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
-                BlockCustomer(carrierAccount, switches);
-            }
-            else
-            {
-                var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
-                if (carrierAccounts != null)
-                {
-                    foreach (var carrierAccount in carrierAccounts)
-                    {
-                        BlockCustomer(carrierAccount, switches);
-                    }
-                }
-            }
-        }
+			SwitchManager switchManager = new SwitchManager();
+			var switches = switchManager.GetAllSwitches();
+			if (financialAccount.CarrierAccountId.HasValue)
+			{
+				var carrierAccount = _carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
+				BlockCustomer(carrierAccount, switches);
+			}
+			else
+			{
+				var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
+				if (carrierAccounts != null)
+				{
+					foreach (var carrierAccount in carrierAccounts)
+					{
+						BlockCustomer(carrierAccount, switches);
+					}
+				}
+			}
+		}
 
-        private void BlockCustomer(CarrierAccount carrierAccount, List<Switch> switches)
-        {
-            if (carrierAccount.CustomerSettings.RoutingStatus != RoutingStatus.Blocked)
-            {
-                CustomerRoutingStatusState customerRoutingStatusState = new Entities.CustomerRoutingStatusState
-                {
-                    OriginalRoutingStatus = carrierAccount.CustomerSettings.RoutingStatus,
-                };
-                _carrierAccountManager.UpdateCustomerRoutingStatus(carrierAccount.CarrierAccountId, RoutingStatus.Blocked, false);
-                Dictionary<int, SwitchCustomerBlockingInfo> blockingInfoBySwitchId = BlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
-
-                customerRoutingStatusState.BlockingInfoBySwitchId = blockingInfoBySwitchId;
-
-                _carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccount.CarrierAccountId, customerRoutingStatusState);
-            }
-        }
-        private Dictionary<int, SwitchCustomerBlockingInfo> BlockCustomerOnSwitches(List<Switch> switches, int carrierAccountId)
-        {
-            Dictionary<int, SwitchCustomerBlockingInfo> blockingInfo = new Dictionary<int, SwitchCustomerBlockingInfo>();
-            if (switches != null)
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                StringBuilder errorStringBuilder = new StringBuilder();
-                foreach (var switchItem in switches)
-                {
-                    TryBlockCustomerContext context = new TryBlockCustomerContext
-                    {
-                        CustomerId = carrierAccountId.ToString(),
-                        SwitchName = switchItem.Name
-                    };
-                    try
-                    {
-                        switchItem.Settings.ThrowIfNull("switchItem.Settings", switchItem.SwitchId);
-                        switchItem.Settings.RouteSynchronizer.ThrowIfNull("switchItem.Settings.RouteSynchronizer", switchItem.SwitchId);
-
-                        if (switchItem.Settings.RouteSynchronizer.TryBlockCustomer(context))
-                        {
-                            blockingInfo.Add(switchItem.SwitchId,
-                                new SwitchCustomerBlockingInfo() { SwitchBlockingInfo = context.SwitchBlockingInfo });
-
-                            VRActionLogger.Current.LogObjectCustomAction(SwitchManager.SwitchLoggableEntity.Instance,
-                                "Block Customer ", false, switchItem,
-                                string.Format("Block Customer: {0}",
-                                    _carrierAccountManager.GetCarrierAccountName(carrierAccountId)));
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        string carrierAccountName = carrierAccountManager.GetCarrierAccountName(carrierAccountId);
-                        errorStringBuilder.AppendLine(string.Format("Couldn't Block Customer {0}.More Details: {1}",
-                            carrierAccountName, e.Message));
-
-                    }
-                }
-                if (errorStringBuilder.Length > 0)
-                    throw new VRBusinessException(errorStringBuilder.ToString());
-            }
-            return blockingInfo;
-        }
-    }
+		private void BlockCustomer(CarrierAccount carrierAccount, List<Switch> switches)
+		{
+			if (carrierAccount.CustomerSettings.RoutingStatus != RoutingStatus.Blocked)
+			{
+				_carrierAccountManager.UpdateAccountRoutingStatus(carrierAccount.CarrierAccountId, RoutingStatus.Blocked, false);
+			}
+		}
+	}
 }

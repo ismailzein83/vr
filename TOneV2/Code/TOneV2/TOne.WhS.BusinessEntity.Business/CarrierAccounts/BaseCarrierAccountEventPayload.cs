@@ -23,6 +23,9 @@ namespace TOne.WhS.BusinessEntity.Business.CarrierAccounts
     public class CarrierAccountStatusChangedEventPayload : BaseCarrierAccountEventPayload
     {
         public int CarrierAccountId { get; set; }
+		public bool IsCustomerRoutingStatusChanged { get; set; }
+		public bool IsSupplierRoutingStatusChanged { get; set; }
+		public bool IsCarrierAccountStatusChanged { get; set; }
 
         public const string S_EventType = "StatusChanged";
         public override string GetEventType()

@@ -18,6 +18,7 @@ namespace TOne.WhS.RouteSync.Entities
         {
 
         }
+		public virtual bool DontCloseMappingRules { get { return false; } }
 
         public abstract Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context);
 
