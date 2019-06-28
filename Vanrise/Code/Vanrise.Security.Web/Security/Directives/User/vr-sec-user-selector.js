@@ -20,7 +20,8 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
             },
             controller: function ($scope, $element, $attrs) {
 
-                var ctrl = this;
+				var ctrl = this;
+				var multipleselection;
                 ctrl.datasource = [];
 
                 ctrl.selectedvalues;
