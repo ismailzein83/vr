@@ -45,25 +45,24 @@ namespace Retail.BusinessEntity.Business
             {
                 foreach (var accountEventTime in context.AccountEventTimeList)
                 {
-                    RecordFilterGroup filterGroup = null;
-                    //var filterGroup = new RecordFilterGroup
-                    //{
-                    //    LogicalOperator = RecordQueryLogicalOperator.And,
-                    //    Filters = new List<RecordFilter>
-                    //    {
-                    //        new ObjectListRecordFilter{FieldName = AccountIDFieldName, CompareOperator= ListRecordFilterOperator.In, Values = new List<object>(){accountEventTime.AccountId } },
-                    //        new DateTimeRecordFilter{FieldName = BEDFieldName, CompareOperator = DateTimeRecordFilterOperator.LessOrEquals, Value = accountEventTime.EventTime},
-                    //        new RecordFilterGroup
-                    //        {
-                    //            LogicalOperator = RecordQueryLogicalOperator.Or,
-                    //            Filters = new List<RecordFilter>
-                    //            {
-                    //                new DateTimeRecordFilter{FieldName = EEDFieldName, CompareOperator = DateTimeRecordFilterOperator.Greater, Value = accountEventTime.EventTime },
-                    //                new EmptyRecordFilter{FieldName = EEDFieldName}
-                    //            }
-                    //        }
-                    //    }
-                    //};
+                    var filterGroup = new RecordFilterGroup
+                    {
+                        LogicalOperator = RecordQueryLogicalOperator.And,
+                        Filters = new List<RecordFilter>
+                        {
+                            new ObjectListRecordFilter{FieldName = AccountIDFieldName, CompareOperator= ListRecordFilterOperator.In, Values = new List<object>(){accountEventTime.AccountId } },
+                            new DateTimeRecordFilter{FieldName = BEDFieldName, CompareOperator = DateTimeRecordFilterOperator.LessOrEquals, Value = accountEventTime.EventTime},
+                            new RecordFilterGroup
+                            {
+                                LogicalOperator = RecordQueryLogicalOperator.Or,
+                                Filters = new List<RecordFilter>
+                                {
+                                    new DateTimeRecordFilter{FieldName = EEDFieldName, CompareOperator = DateTimeRecordFilterOperator.Greater, Value = accountEventTime.EventTime },
+                                    new EmptyRecordFilter{FieldName = EEDFieldName}
+                                }
+                            }
+                        }
+                    };
                     var packages = new List<RetailAccountPackage>();
                     var packageEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(this.BusinessEntityDefinitionID, null, filterGroup);
                     if (packageEntities != null)
