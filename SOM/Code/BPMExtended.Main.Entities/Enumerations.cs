@@ -301,8 +301,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Network Reset Password")]
         [EntitySchemaName("StNetworkResetPassword")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("9730D12A-23FB-45D9-AB4E-126B1028BE91")]
         NetworkResetPassword = 33,
 
 
