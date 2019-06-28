@@ -816,20 +816,6 @@ namespace TOne.WhS.BusinessEntity.Business
 			List<string> validationMessages;
 			updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
 			updateOperationOutput.UpdatedObject = null;
-			//var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
-			//if (carrierAccount.AccountType == CarrierAccountType.Customer)
-			//{
-			//	UpdateCustomerRoutingStatus(carrierAccount, carrierAccountToEdit);
-			//}
-			//else if(carrierAccount.AccountType == CarrierAccountType.Supplier)
-			//{
-			//	UpdateSupplierRoutingStatus(carrierAccount, carrierAccountToEdit);
-			//}
-			//else
-			//{
-			//	UpdateCustomerRoutingStatus(carrierAccount, carrierAccountToEdit);
-			//	UpdateSupplierRoutingStatus(carrierAccount, carrierAccountToEdit);
-			//}
 
 			if (TryUpdateCarrierAccount(carrierAccountToEdit, true, out validationMessages))
 			{
