@@ -934,3 +934,23 @@ when not matched by target then
 	insert([ID],[Name],[Description],[Settings])
 	values(s.[ID],s.[Name],s.[Description],s.[Settings]);
 set identity_insert [Retail].[Package] off;
+
+
+--[RA_Retail].[PrepaidTransactionType]--------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[IsCredit])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('3A26D47E-D2F4-42F3-817B-D1638D8E4290','TopUpCard',-1,-1,'2019-04-09 10:06:37.840',0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[IsCredit]))
+merge	[RA_Retail].[PrepaidTransactionType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy],[LastModifiedTime] = s.[LastModifiedTime],[IsCredit] = s.[IsCredit]
+when not matched by target then
+	insert([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[IsCredit])
+	values(s.[ID],s.[Name],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime],s.[IsCredit]);
