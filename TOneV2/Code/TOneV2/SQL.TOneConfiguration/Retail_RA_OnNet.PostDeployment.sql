@@ -954,3 +954,24 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[IsCredit])
 	values(s.[ID],s.[Name],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime],s.[IsCredit]);
+
+
+
+--[Retail_BE].[StatusDefinition]--------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[EntityType],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('052CDD86-2F0B-42F6-A1AD-3A01137C1826','New',1,'{"$type":"Retail.BusinessEntity.Entities.StatusDefinitionSettings, Retail.BusinessEntity.Entities","StyleDefinitionId":"1e644b07-528a-47b5-a40a-a9e8a0fc868a","HasInitialCharge":true,"HasRecurringCharge":true}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[EntityType],[Settings]))
+merge	[Retail_BE].[StatusDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[EntityType] = s.[EntityType],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[EntityType],[Settings])
+	values(s.[ID],s.[Name],s.[EntityType],s.[Settings]);
