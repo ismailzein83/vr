@@ -54,15 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockedAttemptDataManager.cs" />
-    <Compile Include="FailedBillingCDRDataManager.cs" />
-    <Compile Include="InvalidBillingCDRDataManager.cs" />
-    <Compile Include="MainBillingCDRDataManager.cs" />
-    <Compile Include="PartialPricedBillingCDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReleaseCodeDataManager.cs" />
-    <Compile Include="RepeatedNumberDataManager.cs" />
-    <Compile Include="VariationReportDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Analytics.Data\TOne.WhS.Analytics.Data.csproj">
