@@ -30,6 +30,8 @@
 
             var falseBranchDirectiveAPI;
             var falseBranchDirectivePromiseReadyDeferred = UtilsService.createPromiseDeferred();
+            var trueBranchUsed = false;
+            var falseBranchUsed = false;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -90,89 +92,46 @@
                     }
                 };
 
-                api.tryApplyVisualEventToChilds = function (visualEvents) {
-                    var eventsStatus = [];
-
-                    if (visualEvents != undefined && visualEvents.length >= 0) {
-                        var unsucceededVisualEvents = [];
-
-                        for (var i = 0; i < visualEvents.length; i++) {
-                            var visualEvent = visualEvents[i];
-
-                            if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
-                                if (visualItemDefinition != undefined && visualItemDefinition.Settings.TrueBranchActivityId == visualEvent.ActivityId) {
-                                    if (trueBranchDirectiveAPI.checkIfCompleted != undefined && !trueBranchDirectiveAPI.checkIfCompleted()) {
-                                        var trueBranchResult = trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent);
-                                        if (trueBranchResult != undefined && trueBranchResult.isEventUsed) {
-                                            $scope.scopeModel.trueConditionCompleted = true;
-                                            eventsStatus.push({
-                                                event: visualEvent,
-                                                isEventUsed: trueBranchResult.isEventUsed,
-                                            });
-                                            continue;
-                                        }
-                                    }
-                                  
-                                }
-                            }
-
-                            if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
-                                if (visualItemDefinition != undefined && visualItemDefinition.Settings.FalseBranchActivityId == visualEvent.ActivityId) {
-                                    if (falseBranchDirectiveAPI.checkIfCompleted != undefined && !falseBranchDirectiveAPI.checkIfCompleted()) {
-                                        var falseBranchResult = falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent);
-                                        if (falseBranchResult != undefined && falseBranchResult.isEventUsed) {
-                                            $scope.scopeModel.falseConditionCompleted = true;
-                                            eventsStatus.push({
-                                                event: visualEvent,
-                                                isEventUsed: falseBranchResult.isEventUsed,
-                                            });
-                                            continue;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                var trueEventsResult = trueBranchDirectiveAPI.tryApplyVisualEventToChilds([visualEvent]);
-                                if (trueEventsResult != undefined && trueEventsResult.length > 0) {
+                api.tryApplyVisualEventToChilds = function (visualEvent) {
+                    if (trueBranchUsed || !trueBranchUsed && !falseBranchUsed) {
+                        if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
+                            if (visualItemDefinition != undefined && visualItemDefinition.Settings.TrueBranchActivityId == visualEvent.ActivityId) {
+                                if (trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
                                     $scope.scopeModel.trueConditionCompleted = true;
-                                    var shouldTrueContinue = true;
-                                    for (var k = 0; k < trueEventsResult.length; k++) {
-                                        var childTrueEventsResultItem = trueEventsResult[k];
-                                        eventsStatus.push(childTrueEventsResultItem);
-                                        if (childTrueEventsResultItem.isEventUsed)
-                                            shouldTrueContinue = true;
-                                    }
-                                    if (shouldTrueContinue)
-                                        continue;
-                                }
-
-                            }
-
-                            if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                var falseEventsResult = falseBranchDirectiveAPI.tryApplyVisualEventToChilds([visualEvent]);
-                                if (falseEventsResult != undefined && falseEventsResult.length > 0) {
-                                    $scope.scopeModel.falseConditionCompleted = true;
-                                    var shouldFalseContinue = true;
-                                    for (var k = 0; k < falseEventsResult.length; k++) {
-                                        var childFalseEventsResultItem = falseEventsResult[k];
-                                        eventsStatus.push(childFalseEventsResultItem);
-
-                                        if (childFalseEventsResultItem.isEventUsed)
-                                            shouldFalseContinue = true;
-                                    }
-                                    if (shouldFalseContinue)
-                                        continue;
+                                    trueBranchUsed = true;
+                                    return true;
                                 }
                             }
                         }
-                        
+                        if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
+                            if (trueBranchDirectiveAPI.tryApplyVisualEventToChilds(visualEvent)) {
+                                $scope.scopeModel.trueConditionCompleted = true;
+                                trueBranchUsed = true;
+                                return true;
+                            }
+                        }
                     }
-                    return eventsStatus;
-                };
 
-                api.onAfterCompleted = function () {
+                    if (falseBranchUsed || !trueBranchUsed && !falseBranchUsed) {
+                        if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
+                            if (visualItemDefinition != undefined && visualItemDefinition.Settings.FalseBranchActivityId == visualEvent.ActivityId) {
+                                if (falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                    $scope.scopeModel.falseConditionCompleted = true;
+                                    falseBranchUsed = true;
+                                    return true;
+                                }
+                            }
+                        }
 
+                        if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
+                            if (falseBranchDirectiveAPI.tryApplyVisualEventToChilds(visualEvent)) {
+                                $scope.scopeModel.falseConditionCompleted = true;
+                                falseBranchUsed = true;
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
                 };
 
                 if (ctrl.onReady != null) {

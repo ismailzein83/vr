@@ -74,60 +74,32 @@
                 };
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
-                    var result = {
-                        isEventUsed:false
-                    };
+                    if (isCompleted)
+                        return false;
 
                     if (visualItemEvent != undefined) {
                         if (visualItemEvent.EventTypeId == VisualEventTypeEnum.Completed.value.toLowerCase()) {
                             isCompleted = true;
                         }
-                        result.isEventUsed = true;
                     }
-                    return result;
+                    return true;
                 };
 
-                api.tryApplyVisualEventToChilds = function (visualEvents) {
-                    var eventsStatus = [];
+                api.tryApplyVisualEventToChilds = function (visualEvent) {
+                    if (isCompleted)
+                        return false;
 
-                    if (visualEvents != undefined && visualEvents.length >= 0) {
-
-                        for (var i = 0; i < visualEvents.length; i++) {
-                            var visualEvent = visualEvents[i];
-
-                            if (subProcessDirectiveAPI != undefined && subProcessDirectiveAPI.tryApplyVisualEvent != undefined) {
-                                if (visualItemDefinition != undefined && visualItemDefinition.Settings.ChildActivityId == visualEvent.ActivityId) {
-                                    if (subProcessDirectiveAPI.checkIfCompleted != undefined && !subProcessDirectiveAPI.checkIfCompleted()) {
-                                        var subProcessResult = subProcessDirectiveAPI.tryApplyVisualEvent(visualEvent);
-                                        if (subProcessResult != undefined && subProcessResult.isEventUsed) {
-                                            eventsStatus.push({
-                                                event: visualEvent,
-                                                isEventUsed: subProcessResult.isEventUsed,
-                                            });
-                                            continue;
-                                        }
-                                    }
-
-                                }
-                            }
-
-                            if (subProcessDirectiveAPI != undefined && subProcessDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                var subProcessResult = subProcessDirectiveAPI.tryApplyVisualEventToChilds([visualEvent]);
-                                if (subProcessResult != undefined && subProcessResult.length > 0) {
-                                    var shouldContinue = false;
-                                    for (var k = 0; k < subProcessResult.length; k++) {
-                                        var childSubProcessEventsResultItem = subProcessResult[k];
-                                        eventsStatus.push(childSubProcessEventsResultItem);
-                                        if (childSubProcessEventsResultItem.isEventUsed)
-                                            shouldContinue = true;
-                                    }
-                                    if (shouldContinue)
-                                        continue;
-                                }
+                    if (subProcessDirectiveAPI != undefined && subProcessDirectiveAPI.tryApplyVisualEvent != undefined) {
+                        if (visualItemDefinition != undefined && visualItemDefinition.Settings.ChildActivityId == visualEvent.ActivityId) {
+                            if (subProcessDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                return true;
                             }
                         }
                     }
-                    return eventsStatus;
+                    if (subProcessDirectiveAPI.tryApplyVisualEventToChilds(visualEvent)) {
+                        return true;
+                    }
+                    return false;
                 };
 
                 api.onAfterCompleted = function () {

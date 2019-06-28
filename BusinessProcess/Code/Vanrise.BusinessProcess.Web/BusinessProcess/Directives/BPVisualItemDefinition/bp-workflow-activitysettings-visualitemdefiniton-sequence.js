@@ -81,64 +81,30 @@
                     }
                 };
 
-                api.tryApplyVisualEventToChilds = function (visualEvents) {
-                    var eventsStatus = [];
-
-                    if (visualEvents != undefined && visualEvents.length > 0) {
-                        for (var i = 0; i < visualEvents.length; i++) {
-                            var visualEvent = visualEvents[i];
-
-                            for (var j = 0; j < childVisualItems.length; j++) {
-                                var childVisualItem = childVisualItems[j];
-                                if (childVisualItem.directiveAPI.tryApplyVisualEvent != undefined) {
-                                    var eventItem = UtilsService.getItemByVal(eventsStatus, visualEvent.BPVisualEventId, "event.BPVisualEventId");
-                                    if (eventItem == undefined || !eventItem.isEventUsed) {
-                                        if (visualEvent.ActivityId == childVisualItem.ChildActivityId) {
-                                            if (childVisualItem.directiveAPI.checkIfCompleted != undefined && !childVisualItem.directiveAPI.checkIfCompleted()) {
-                                                var childItemResult = childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent);
-                                                if (childItemResult != undefined && childItemResult.isEventUsed) {
-                                                    if (j != 0) {
-                                                        var preItem = childVisualItems[j - 1];
-                                                        preItem.classEventCompleted = true;
-                                                        //if (preItem.directiveAPI != undefined && preItem.directiveAPI.onAfterCompleted != undefined)
-                                                        //    preItem.directiveAPI.onAfterCompleted();
-                                                    }
-
-                                                    eventsStatus.push({
-                                                        event: visualEvent,
-                                                        isEventUsed: childItemResult.isEventUsed,
-                                                    });
-                                                    break;
-                                                }
-                                            }
-                                        }
+                api.tryApplyVisualEventToChilds = function (visualEvent) {
+                    for (var j = 0; j < childVisualItems.length; j++) {
+                        var childVisualItem = childVisualItems[j];
+                        if (childVisualItem.directiveAPI.tryApplyVisualEvent != undefined) {
+                            if (visualEvent.ActivityId == childVisualItem.ChildActivityId) {
+                                if (childVisualItem.directiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                    if (j != 0) {
+                                        childVisualItems[j - 1].classEventCompleted = true;
                                     }
-                                }
-                                if (childVisualItem.directiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                    var childEventsResult = childVisualItem.directiveAPI.tryApplyVisualEventToChilds([visualEvent]);
-                                    if (childEventsResult != undefined && childEventsResult.length > 0) {
-                                        if (j != 0) {
-                                            var preItem = childVisualItems[j - 1];
-                                            preItem.classEventCompleted = true;
-                                            //if (preItem.directiveAPI != undefined && preItem.directiveAPI.onAfterCompleted != undefined)
-                                            //    preItem.directiveAPI.onAfterCompleted();
-                                        }
-                                    
-                                        var shouldBreak = false;
-                                        for (var k = 0; k < childEventsResult.length; k++) {
-                                            var childEventsResultItem = childEventsResult[k];
-                                            eventsStatus.push(childEventsResultItem);
-                                            if (childEventsResultItem.isEventUsed)
-                                                shouldBreak = true;
-                                        }
-                                        if (shouldBreak)
-                                            break;
-                                    }
+                                    return true;
                                 }
                             }
                         }
-                    } 
-                    return eventsStatus;
+
+                        if (childVisualItem.directiveAPI.tryApplyVisualEventToChilds != undefined) {
+                            if (childVisualItem.directiveAPI.tryApplyVisualEventToChilds(visualEvent)) {
+                                if (j != 0) {
+                                    childVisualItems[j - 1].classEventCompleted = true;
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
                 };
 
                 if (ctrl.onReady != null) {

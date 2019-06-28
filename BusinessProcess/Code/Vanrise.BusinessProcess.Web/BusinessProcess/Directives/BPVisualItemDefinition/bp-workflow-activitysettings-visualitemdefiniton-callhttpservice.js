@@ -90,11 +90,10 @@
                 };
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
-                    var result = {};
-                    result.isEventUsed = false;
+                    if (isCompleted)
+                        return false;
 
                     if (visualItemEvent != undefined) {
-
                         events.push(visualItemEvent);
                         var eventTypeId = visualItemEvent.EventTypeId;
 
@@ -130,17 +129,8 @@
                             $scope.scopeModel.retryCount = visualItemEvent.EventPayload.RetryCount + 1;
                             $scope.scopeModel.showRetryIcon = true;
                         }
-                        result.isEventUsed = true;
                     }
-                    return result;
-                };
-      
-                api.checkIfCompleted = function () {
-                    return isCompleted;
-                };
-
-                api.onAfterCompleted = function () {
-
+                    return true;
                 };
 
                 if (ctrl.onReady != null) {

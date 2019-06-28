@@ -145,12 +145,15 @@
             function manipulateDataToBeExecuted(visualEntity) {
                 if (visualEntity != undefined && visualEntity.ListBPVisualEventDetails != undefined && visualEntity.ListBPVisualEventDetails.length > 0) {
                     if (directiveAPI != undefined) {
-                        if (directiveAPI.tryApplyVisualEventToChilds != undefined) {
-                            directiveAPI.tryApplyVisualEventToChilds(visualEntity.ListBPVisualEventDetails);
-                        } else {
-                            if (visualEntity.ListBPVisualEventDetails.length == 1) {
-                                directiveAPI.tryApplyVisualEvent(visualEntity.ListBPVisualEventDetails[0]);
-                            }
+                        for (var i = 0; i < visualEntity.ListBPVisualEventDetails.length; i++) {
+                            var visualItem = visualEntity.ListBPVisualEventDetails[i];
+                            if (directiveAPI.tryApplyVisualEvent != undefined && directiveAPI.tryApplyVisualEvent(visualItem))
+                                continue;
+
+                            if (directiveAPI.tryApplyVisualEventToChilds != undefined)
+                                directiveAPI.tryApplyVisualEventToChilds(visualItem);
+
+
                         }
                         var lastItem = visualEntity.ListBPVisualEventDetails[visualEntity.ListBPVisualEventDetails.length -1 ];
                         input.GreaterThanID = lastItem.BPVisualEventId;

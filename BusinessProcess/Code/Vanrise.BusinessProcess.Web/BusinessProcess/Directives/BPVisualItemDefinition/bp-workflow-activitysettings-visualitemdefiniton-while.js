@@ -84,15 +84,11 @@
                 };
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
-                    var result = {
-                        isEventUsed: false
-                    };
+                    if (isCompleted)
+                        return false;
 
                     if (visualItemEvent != undefined) {
-                        result.isEventUsed = true;
-
                         if (visualItemEvent.EventTypeId == VisualEventTypeEnum.NewIteration.value.toLowerCase()) {
-
                             if ($scope.scopeModel.nbOfIteration > 0)
                                 tryReloadDirective();
                             $scope.scopeModel.nbOfIteration++;
@@ -102,60 +98,25 @@
                             $scope.scopeModel.classLoopCompleted = true;
                         }
                     }
+                    return true;
+                }; 
 
-                    return result;
-                };
+                api.tryApplyVisualEventToChilds = function (visualEvent) {
+                    if (isCompleted)
+                        return false;
 
-                api.tryApplyVisualEventToChilds = function (visualEvents) {
-                    var eventsStatus = [];
-                    var unsucceededVisualEvents = [];
-                    if (visualEvents != undefined && visualEvents.length > 0) {
-                        for (var i = 0; i < visualEvents.length; i++) {
-                            var visualEvent = visualEvents[i];
-                            if (childDirectiveAPI != undefined) {
-                                if (childDirectiveAPI.tryApplyVisualEvent != undefined) {
-                                    if (visualItemDefinition != undefined && visualItemDefinition.Settings.ChildActivityId == visualEvent.ActivityId) {
-                                        if (childDirectiveAPI.checkIfCompleted != undefined && !childDirectiveAPI.checkIfCompleted()) {
-                                            var childDirectiveResult = childDirectiveAPI.tryApplyVisualEvent(visualEvent);
-                                            if (childDirectiveResult != undefined && childDirectiveResult.isEventUsed) {
-                                                eventsStatus.push({
-                                                    event: visualEvent,
-                                                    isEventUsed: childDirectiveResult.isEventUsed,
-                                                });
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (childDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
-                                    var childDirectiveResult = childDirectiveAPI.tryApplyVisualEventToChilds([visualEvent]);
-                                    if (childDirectiveResult != undefined && childDirectiveResult.length > 0) {
-                                        var shouldContinue = false;
-                                        for (var k = 0; k < childDirectiveResult.length; k++) {
-                                            var childEventsResultItem = childDirectiveResult[k];
-                                            eventsStatus.push(childEventsResultItem);
-                                            if (childEventsResultItem.isEventUsed)
-                                                shouldContinue = true;
-                                        }
-                                        if (shouldContinue)
-                                            continue;
-                                    }
-                                }
+                    if (childDirectiveAPI != undefined) {
+                        if (childDirectiveAPI.tryApplyVisualEvent != undefined) {
+                            if (visualItemDefinition != undefined && visualItemDefinition.Settings.ChildActivityId == visualEvent.ActivityId) {
+                                if (childDirectiveAPI.tryApplyVisualEvent(visualEvent))
+                                    return true;
                             }
-
                         }
-
+                        if (childDirectiveAPI.tryApplyVisualEventToChilds != undefined && childDirectiveAPI.tryApplyVisualEventToChilds(visualEvent)) {
+                            return true;
+                        }
                     }
-                    return eventsStatus;
-                };
-
-                api.onAfterCompleted = function () {
-                    $scope.scopeModel.classLoopCompleted = true;
-                };
-
-                api.checkIfCompleted = function () {
-                    return isCompleted;
+                    return false;
                 };
 
                 if (ctrl.onReady != null) {
