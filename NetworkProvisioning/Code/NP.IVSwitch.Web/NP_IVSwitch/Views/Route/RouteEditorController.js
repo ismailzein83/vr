@@ -2,9 +2,9 @@
 
 	"use strict";
 
-	RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum', 'NP_IVSwitch_TransportModeEnum'];
+	RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_EndPointStateEnum', 'NP_IVSwitch_TransportModeEnum'];
 
-	function RouteEditorController($scope, npIvSwitchRouteApiService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TransportModeEnum) {
+	function RouteEditorController($scope, npIvSwitchRouteApiService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_EndPointStateEnum, NP_IVSwitch_TransportModeEnum) {
 
 		var isEditMode;
 		var isCloneMode;
@@ -185,12 +185,10 @@
 		}
 		function loadStaticData() {
 
-			$scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
+			$scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_EndPointStateEnum);
 			$scope.scopeModel.transportmode = UtilsService.getArrayEnum(NP_IVSwitch_TransportModeEnum);
 			if (routeEntity == undefined) {
-
 				$scope.scopeModel.currentstate = $scope.scopeModel.states[0];
-
 				return;
 			}
 			$scope.scopeModel.description = routeEntity.Description;

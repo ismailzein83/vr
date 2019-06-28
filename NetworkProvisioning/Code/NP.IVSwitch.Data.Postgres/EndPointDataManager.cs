@@ -245,7 +245,7 @@ namespace NP.IVSwitch.Data.Postgres
 		}
 		public bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId)
 		{
-			string query="";
+			string query = "";
 			string endPointIds = "(";
 			for (int index = 0; index < routeTableInput.EndPoints.Count; index++)
 			{
@@ -278,13 +278,11 @@ namespace NP.IVSwitch.Data.Postgres
 		}
 		public bool DeleteEndPoint(EndPoint endPoint)
 		{
-
 			var transactionOptions = new TransactionOptions
 			{
 				IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
 				Timeout = TransactionManager.DefaultTimeout
 			};
-
 			using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
 			{
 				String cmdDeleteACL = string.Format("delete from access_list where user_id={0}", endPoint.EndPointId);
@@ -304,7 +302,6 @@ namespace NP.IVSwitch.Data.Postgres
 			}
 			return true;
 		}
-
 		public bool DeleteAccount(EndPoint endPoint)
 		{
 			var transactionOptions = new TransactionOptions
@@ -327,10 +324,90 @@ namespace NP.IVSwitch.Data.Postgres
 		public bool SetRouteTableAsDeleted(int endPointId)
 		{
 			Guid guid = Guid.NewGuid();
-			String cmdUpdateRouteTableName = string.Format("update route_tables set route_table_name=CONCAT(route_table_name,'_deleted{0}') where route_table_id={1} ", guid,endPointId);
+			String cmdUpdateRouteTableName = string.Format("update route_tables set route_table_name=CONCAT(route_table_name,'_deleted{0}') where route_table_id={1} ", guid, endPointId);
 			int effectedRows = ExecuteNonQueryText(cmdUpdateRouteTableName, cmd => { });
 			return effectedRows > 0;
 		}
+		public bool BlockEndPoint(EndPoint endPoint)
+		{
+			int affectedACLRows = 0;
+			int affectedSIPRows = 0;
+			var transactionOptions = new TransactionOptions
+			{
+				IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+				Timeout = TransactionManager.DefaultTimeout
+			};
+			using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+			{
+				string cmdBlockACL = string.Format("update access_list set state_id={0} where user_id={1}", (int)State.Block, endPoint.EndPointId);
+				string cmdBlockUser = string.Format("update users set state_id={0} where user_id={1}", (int)State.Block, endPoint.EndPointId);
+				switch (endPoint.EndPointType)
+				{
+					case UserType.ACL:
+						affectedACLRows=ExecuteNonQueryText(cmdBlockACL, cmd => { });
+						affectedSIPRows = ExecuteNonQueryText(cmdBlockUser, cmd => { });
+						break;
+					case UserType.SIP:
+						affectedSIPRows=ExecuteNonQueryText(cmdBlockUser, cmd => { });
+						break;
+				}
+
+				transactionScope.Complete();
+			}
+			return (affectedACLRows>0 || affectedSIPRows>0);
+		}
+
+		public bool InActivateEndPoint(EndPoint endPoint)
+		{
+			var transactionOptions = new TransactionOptions
+			{
+				IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+				Timeout = TransactionManager.DefaultTimeout
+			};
+			using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+			{
+				string cmdInActivateACL = string.Format("update access_list set state_id={0} where user_id={1}", (int)State.InActive, endPoint.EndPointId);
+				string cmdInActivateUser = string.Format("update users set state_id={0} where user_id={1}", (int)State.InActive, endPoint.EndPointId);
+				switch (endPoint.EndPointType)
+				{
+					case UserType.ACL:
+						ExecuteNonQueryText(cmdInActivateACL, cmd => { });
+						ExecuteNonQueryText(cmdInActivateUser, cmd => { });
+						break;
+					case UserType.SIP:
+						ExecuteNonQueryText(cmdInActivateUser, cmd => { });
+						break;
+				}
+				transactionScope.Complete();
+			}
+			return true;
+		}
+		public bool ActivateEndPoint(EndPoint endPoint)
+		{
+			var transactionOptions = new TransactionOptions
+			{
+				IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+				Timeout = TransactionManager.DefaultTimeout
+			};
+			using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+			{
+				string cmdInActivateACL = string.Format("update access_list set state_id={0} where user_id={1}", (int)State.Active, endPoint.EndPointId);
+				string cmdInActivateUser = string.Format("update users set state_id={0} where user_id={1}", (int)State.Active, endPoint.EndPointId);
+				switch (endPoint.EndPointType)
+				{
+					case UserType.ACL:
+						ExecuteNonQueryText(cmdInActivateACL, cmd => { });
+						ExecuteNonQueryText(cmdInActivateUser, cmd => { });
+						break;
+					case UserType.SIP:
+						ExecuteNonQueryText(cmdInActivateUser, cmd => { });
+						break;
+				}
+				transactionScope.Complete();
+			}
+			return true;
+		}
+		
 		#endregion
 
 		#region private functions
@@ -549,7 +626,7 @@ namespace NP.IVSwitch.Data.Postgres
 				SipLogin = reader["sip_login"] as string,
 				SipPassword = reader["sip_password"] as string,
 				TechPrefix = reader["tech_prefix"] as string,
-				RouteTableBasedRule = (int)reader["trans_rule_id"]==-2
+				RouteTableBasedRule = (int)reader["trans_rule_id"] == -2
 			};
 			;
 			NpgsqlDataReader npgsqlreader = (NpgsqlDataReader)reader;

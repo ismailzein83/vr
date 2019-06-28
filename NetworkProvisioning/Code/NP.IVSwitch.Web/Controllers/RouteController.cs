@@ -71,6 +71,26 @@ namespace NP.IVSwitch.Web.Controllers
 			//return _manager.DeleteRoute(routeId);
 			throw new NotImplementedException();
 		}
+		[HttpGet]
+		[Route("BlockRoute")]
+		public Vanrise.Entities.UpdateOperationOutput<RouteDetail> BlockRoute(int routeId)
+		{
+			return _manager.BlockRoute(routeId);
+		}
+
+		[HttpGet]
+		[Route("InActivateRoute")]
+		public Vanrise.Entities.UpdateOperationOutput<RouteDetail> InActivateRoute(int routeId)
+		{
+			return _manager.InActivateRoute(routeId);
+		}
+		[HttpGet]
+		[Route("ActivateRoute")]
+		public Vanrise.Entities.UpdateOperationOutput<RouteDetail> ActivateRoute(int routeId)
+		{
+			return _manager.ActivateRoute(routeId);
+		}
+		
 
 	}
 }

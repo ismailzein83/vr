@@ -1,35 +1,47 @@
 ﻿
 (function (appControllers) {
 
-    "use strict";
+	"use strict";
 
 	EndPointService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'NP_IVSwitch_CarrierAccountTypeEnum', 'UtilsService', 'VRCommon_ObjectTrackingService','NP_IVSwitch_EndPointAPIService'];
 
 	function EndPointService(NPModalService, WhS_BE_CarrierAccountService, NP_IVSwitch_CarrierAccountTypeEnum, UtilsService, VRCommon_ObjectTrackingService, NP_IVSwitch_EndPointAPIService) {
-        var drillDownDefinitions = [];
-        function addEndPoint(CarrierAccountId, onEndPointAdded) {
-            var settings = {};
+		var drillDownDefinitions = [];
+		function addEndPoint(CarrierAccountId, onEndPointAdded) {
+			var settings = {};
 
-            var parameters = {
-                CarrierAccountId: CarrierAccountId,
-            };
+			var parameters = {
+				CarrierAccountId: CarrierAccountId,
+			};
 
-            settings.onScopeReady = function (modalScope) {
+			settings.onScopeReady = function (modalScope) {
 				modalScope.onEndPointAdded = onEndPointAdded;
-            };
-            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
-        }
-        function editEndPoint(EndPointId, onEndPointUpdated) {
-            var settings = {};
+			};
+			NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
+		}
+		function editEndPoint(EndPointId, onEndPointUpdated) {
+			var settings = {};
 
-            var parameters = {
-                EndPointId: EndPointId,
-            };
+			var parameters = {
+				EndPointId: EndPointId,
+			};
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onEndPointUpdated = onEndPointUpdated;
-            };
-            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
+			settings.onScopeReady = function (modalScope) {
+					modalScope.onEndPointUpdated = onEndPointUpdated;
+			};
+			NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
+		}
+		function viewEndPoint(EndPointId) {
+			var settings = {};
+
+			var parameters = {
+				EndPointId: EndPointId,
+			};
+
+			settings.onScopeReady = function (modalScope) {
+					UtilsService.setContextReadOnly(modalScope);
+			};
+			NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
 		}
 		function cloneEndPoint(CarrierAccountId, EndPointId, onEndPointAdded) {
 			var settings = {};
@@ -47,107 +59,108 @@
 		}
 
 
-        function registerDrillDownToCarrierAccount() {
-            var drillDownDefinition = {};
+		function registerDrillDownToCarrierAccount() {
+			var drillDownDefinition = {};
 
-            var CarrierAccountTypeArray = UtilsService.getArrayEnum(NP_IVSwitch_CarrierAccountTypeEnum);
+			var CarrierAccountTypeArray = UtilsService.getArrayEnum(NP_IVSwitch_CarrierAccountTypeEnum);
 
- 
-            drillDownDefinition.title = "EndPoints";
+
+			drillDownDefinition.title = "EndPoints";
 			drillDownDefinition.directive = "np-ivswitch-endpoint-grid";
 			drillDownDefinition.haspermission = NP_IVSwitch_EndPointAPIService.HasViewEndPointPermission;
-            drillDownDefinition.hideDrillDownFunction = function (carrierAccountItem) {
-                 return (carrierAccountItem.Entity.AccountType == NP_IVSwitch_CarrierAccountTypeEnum.Supplier.value);
+			drillDownDefinition.hideDrillDownFunction = function (carrierAccountItem) {
+				return (carrierAccountItem.Entity.AccountType == NP_IVSwitch_CarrierAccountTypeEnum.Supplier.value);
 
-             };
-            drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
-                carrierAccountItem.ivSwitchEndPointGridAPI = directiveAPI;
+			};
+			drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
+				carrierAccountItem.ivSwitchEndPointGridAPI = directiveAPI;
 
-                var payload = {
-                    CarrierAccountId: carrierAccountItem.Entity.CarrierAccountId
-                };
-                return carrierAccountItem.ivSwitchEndPointGridAPI.load(payload);
-            };
-          
-
-            WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
-
-        }
-
-        function viewHistoryEndPoint(context) {
-            var modalParameters = {
-                context: context
-            };
-            var modalSettings = {
-            };
-            modalSettings.onScopeReady = function (modalScope) {
-                UtilsService.setContextReadOnly(modalScope);
-            };
-            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', modalParameters, modalSettings);
-        };
-
-        function registerHistoryViewAction() {
-
-            var actionHistory = {
-                actionHistoryName: "NP_IVSwitch_EndPoint_ViewHistoryItem",
-                actionMethod: function (payload) {
-
-                    var context = {
-                        historyId: payload.historyId
-                    };
-
-                    viewHistoryEndPoint(context);
-                }
-            };
-            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
-        }
+				var payload = {
+					CarrierAccountId: carrierAccountItem.Entity.CarrierAccountId
+				};
+				return carrierAccountItem.ivSwitchEndPointGridAPI.load(payload);
+			};
 
 
-        function getEntityUniqueName() {
-            return "NP_IVSwitch_EndPoint";
-        }
+			WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
 
-        function registerObjectTrackingDrillDownToEndPoint() {
-            var drillDownDefinition = {};
+		}
 
-            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
-            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+		function viewHistoryEndPoint(context) {
+			var modalParameters = {
+				context: context
+			};
+			var modalSettings = {
+			};
+			modalSettings.onScopeReady = function (modalScope) {
+				UtilsService.setContextReadOnly(modalScope);
+			};
+			NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', modalParameters, modalSettings);
+		};
+
+		function registerHistoryViewAction() {
+
+			var actionHistory = {
+				actionHistoryName: "NP_IVSwitch_EndPoint_ViewHistoryItem",
+				actionMethod: function (payload) {
+
+					var context = {
+						historyId: payload.historyId
+					};
+
+					viewHistoryEndPoint(context);
+				}
+			};
+			VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+		}
 
 
-            drillDownDefinition.loadDirective = function (directiveAPI, endPointItem) {
+		function getEntityUniqueName() {
+			return "NP_IVSwitch_EndPoint";
+		}
 
-                endPointItem.objectTrackingGridAPI = directiveAPI;
-                var query = {
-                    ObjectId: endPointItem.Entity.EndPointId,
-                    EntityUniqueName: getEntityUniqueName(),
+		function registerObjectTrackingDrillDownToEndPoint() {
+			var drillDownDefinition = {};
 
-                };
-                return endPointItem.objectTrackingGridAPI.load(query);
-            };
+			drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+			drillDownDefinition.directive = "vr-common-objecttracking-grid";
 
 
-            addDrillDownDefinition(drillDownDefinition);
+			drillDownDefinition.loadDirective = function (directiveAPI, endPointItem) {
 
-        }
-        function addDrillDownDefinition(drillDownDefinition) {
-            drillDownDefinitions.push(drillDownDefinition);
-        }
+				endPointItem.objectTrackingGridAPI = directiveAPI;
+				var query = {
+					ObjectId: endPointItem.Entity.EndPointId,
+					EntityUniqueName: getEntityUniqueName(),
 
-        function getDrillDownDefinition() {
-            return drillDownDefinitions;
-        }
+				};
+				return endPointItem.objectTrackingGridAPI.load(query);
+			};
 
-        return {
-            addEndPoint: addEndPoint,
-            editEndPoint: editEndPoint,
-            registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount,
-            getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToEndPoint: registerObjectTrackingDrillDownToEndPoint,
+
+			addDrillDownDefinition(drillDownDefinition);
+
+		}
+		function addDrillDownDefinition(drillDownDefinition) {
+			drillDownDefinitions.push(drillDownDefinition);
+		}
+
+		function getDrillDownDefinition() {
+			return drillDownDefinitions;
+		}
+
+		return {
+			addEndPoint: addEndPoint,
+			editEndPoint: editEndPoint,
+			registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount,
+			getDrillDownDefinition: getDrillDownDefinition,
+			registerObjectTrackingDrillDownToEndPoint: registerObjectTrackingDrillDownToEndPoint,
 			registerHistoryViewAction: registerHistoryViewAction,
-			cloneEndPoint: cloneEndPoint
-        };
-    }
+			cloneEndPoint: cloneEndPoint,
+			viewEndPoint: viewEndPoint
+		};
+	}
 
-    appControllers.service('NP_IVSwitch_EndPointService', EndPointService);
+	appControllers.service('NP_IVSwitch_EndPointService', EndPointService);
 
 })(appControllers);

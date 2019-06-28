@@ -65,5 +65,25 @@ namespace NP.IVSwitch.Web.Controllers
 			throw new NotImplementedException();
 		}
 
+		[HttpGet]
+		[Route("BlockEndPoint")]
+		public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> BlockEndPoint(int endPointId)
+		{
+			return _manager.BlockEndPoint(endPointId);
+		}
+
+		[HttpGet]
+		[Route("InActivateEndPoint")] 
+		public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> InActivateEndPoint(int endPointId)
+		{
+			return _manager.InActivateEndPoint(endPointId);
+		}
+		[HttpGet]
+		[Route("ActivateEndPoint")] 
+		public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> ActivateEndPoint(int endPointId)
+		{
+			return _manager.ActivateEndPoint(endPointId);
+		}
+
 	}
 }

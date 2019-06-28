@@ -52,8 +52,23 @@
 			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'DeleteEndPoint'), {
 				endPointId: endPointId,
 			});
-		}
+		} 
 
+		function BlockEndPoint(endPointId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'BlockEndPoint'), {
+				endPointId: endPointId,
+			});
+		}
+		function InActivateEndPoint(endPointId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'InActivateEndPoint'), {
+				endPointId: endPointId,
+			}); 
+		}		
+		function ActivateEndPoint(endPointId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'ActivateEndPoint'), {
+				endPointId: endPointId,
+			}); 
+		}
 		function HasDeletePermisssion() {
 			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['DeleteEndPoint']));
 		}
@@ -70,6 +85,9 @@
             GetEndPointsInfo: GetEndPointsInfo,
 			GetEndPointHistoryDetailbyHistoryId: GetEndPointHistoryDetailbyHistoryId,
 			DeleteEndPoint: DeleteEndPoint,
+			BlockEndPoint: BlockEndPoint,
+			InActivateEndPoint: InActivateEndPoint,
+			ActivateEndPoint: ActivateEndPoint,
 			HasDeletePermisssion: HasDeletePermisssion,
 			HasViewEndPointPermission: HasViewEndPointPermission
         });

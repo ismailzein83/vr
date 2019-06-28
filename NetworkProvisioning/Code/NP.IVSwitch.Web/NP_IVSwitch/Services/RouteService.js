@@ -19,7 +19,7 @@
 				 modalScope.onRouteAdded = onRouteAdded;
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);
-        };
+        }
         function editRoute(RouteId, CarrierAccountId, onRouteUpdated) {
             var settings = {};
                       
@@ -30,10 +30,26 @@
 				IsClone: false
             };
 
-            settings.onScopeReady = function (modalScope) {
+			settings.onScopeReady = function (modalScope) {
                 modalScope.onRouteUpdated = onRouteUpdated;
             };
-            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);
+			NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);
+		}
+
+		function viewRoute(RouteId, CarrierAccountId) {
+			var settings = {};
+
+
+			var parameters = {
+				RouteId: RouteId,
+				CarrierAccountId: CarrierAccountId,
+				IsClone: false
+			};
+
+			settings.onScopeReady = function (modalScope) {
+					UtilsService.setContextReadOnly(modalScope);
+			};
+			NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);
 		}
 
 		function cloneRoute(RouteId, carrierAccountId, onRouteAdded) {
@@ -147,8 +163,8 @@
             registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount,
             registerObjectTrackingDrillDownToRoute: registerObjectTrackingDrillDownToRoute,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction
-
+			registerHistoryViewAction: registerHistoryViewAction,
+			viewRoute: viewRoute
         };
     }
 

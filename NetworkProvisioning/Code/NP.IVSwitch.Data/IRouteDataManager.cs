@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Data
 {
-    public interface IRouteDataManager : IDataManager
-    {
-        List<Route> GetRoutes();
-        bool Update(Route route);
-        int? Insert(Route route);
-        bool UpdateVendorUSer(Route route);
-        DateTime GetSwitchDateTime();
-        int GetGlobalTariffTableId();
+	public interface IRouteDataManager : IDataManager
+	{
+		List<Route> GetRoutes();
+		bool Update(Route route);
+		int? Insert(Route route);
+		bool UpdateVendorUSer(Route route);
+		DateTime GetSwitchDateTime();
+		int GetGlobalTariffTableId();
 		bool DeleteRoute(Route route);
+		bool BlockRoute(Route route);
+		bool InActivateRoute(Route route);
+		bool ActivateRoute(Route route);
+
 	}
 }

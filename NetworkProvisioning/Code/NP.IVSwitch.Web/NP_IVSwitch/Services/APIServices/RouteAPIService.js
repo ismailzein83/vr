@@ -55,6 +55,21 @@
 				routeId: routeId,
 			});
 		}
+		function BlockRoute(routeId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'BlockRoute'), {
+				routeId: routeId,
+			});
+		}
+		function InActivateRoute(routeId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'InActivateRoute'), {
+				routeId: routeId,
+			});
+		} 
+		function ActivateRoute(routeId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'ActivateRoute'), {
+				routeId: routeId,
+			});
+		} 
 		function HasDeleteRoutePermission() {
 			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['DeleteRoute']));
 		}
@@ -73,6 +88,9 @@
             GetRoutesInfo: GetRoutesInfo,
 			GetRouteHistoryDetailbyHistoryId: GetRouteHistoryDetailbyHistoryId,
 			DeleteRoute: DeleteRoute,
+			BlockRoute: BlockRoute,
+			InActivateRoute: InActivateRoute,
+			ActivateRoute: ActivateRoute,
 			HasDeleteRoutePermission: HasDeleteRoutePermission,
 			HasViewRoutePermission: HasViewRoutePermission
         });

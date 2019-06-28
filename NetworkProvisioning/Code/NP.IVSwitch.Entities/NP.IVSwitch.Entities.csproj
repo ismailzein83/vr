@@ -110,6 +110,7 @@
     <Compile Include="CustomerRoute\CustomerRoute.cs" />
     <Compile Include="CustomerRoute\CustomerRouteDetail.cs" />
     <Compile Include="CustomerRoute\CustomerRouteQuery.cs" />
+    <Compile Include="RouteEndPointHistoryInfo.cs" />
     <Compile Include="RouteTableRoute\RouteTableRouteDetails.cs" />
     <Compile Include="RouteTableRoute\RouteTableRoute.cs" />
     <Compile Include="RouteTableRoute\RouteTableRouteQuery.cs" />

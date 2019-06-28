@@ -8,17 +8,19 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Data
 {
-    public interface IEndPointDataManager : IDataManager
-    {
-        List<EndPoint> GetEndPoints();
-        bool Update(EndPoint endPoint);
-        bool Insert(EndPoint endPoint, int globalTariffTableId, List<EndPointInfo> userEndPointInfoList, List<EndPointInfo> aclEndPointInfoList, out int insertedId, string carrierAccountName);
-        List<AccessList> GetAccessList();
-        bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType routeTableViewType,UserType userType  );
-        bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId);
+	public interface IEndPointDataManager : IDataManager
+	{
+		List<EndPoint> GetEndPoints();
+		bool Update(EndPoint endPoint);
+		bool Insert(EndPoint endPoint, int globalTariffTableId, List<EndPointInfo> userEndPointInfoList, List<EndPointInfo> aclEndPointInfoList, out int insertedId, string carrierAccountName);
+		List<AccessList> GetAccessList();
+		bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType routeTableViewType, UserType userType);
+		bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId);
 		bool DeleteEndPoint(EndPoint endPoint);
 		bool DeleteAccount(EndPoint endPoint);
 		bool SetRouteTableAsDeleted(int endPointId);
-
+		bool BlockEndPoint(EndPoint endPoint);
+		bool InActivateEndPoint(EndPoint endPoint);
+		bool ActivateEndPoint(EndPoint endPoint);
 	}
 }

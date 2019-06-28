@@ -22,8 +22,13 @@ namespace NP.IVSwitch.Business
 {
 	public class EndPointManager : IEndPointManager
 	{
-		#region Public Methods
+		private static Guid s_businessEntityDefinitionId { get { return new Guid("fdd8a75c-5c6c-46d6-a00a-b99086a01194"); } }
+		private static Guid s_activeId { get { return new Guid("03aa4967-66ea-4992-b9c9-3f014eff79f2"); } }
+		private static Guid s_blockId { get { return new Guid("736137e5-6e5a-4722-ba79-aaef0cc5b07f"); } }
+		private static Guid s_inActiveId { get { return new Guid("b61884de-da86-4de6-8630-dd67a1146b78"); } }
+		BusinessEntityStatusHistoryManager _businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
 
+		#region Public Methods
 		public EndPoint GetEndPointHistoryDetailbyHistoryId(int endPointHistoryId)
 		{
 			VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
@@ -45,6 +50,25 @@ namespace NP.IVSwitch.Business
 			return GetEndPoint(endPointId, false);
 		}
 
+		public List<EndPoint> GetCarrierAccountEndPoints(int carrierAccountId)
+		{
+			List<EndPoint> carrierAccountEndPoints = new List<EndPoint>();
+			List<int> carrierAccountEndPointIds = new List<int>();
+			carrierAccountEndPointIds = GetCarrierAccountEndPointIds(carrierAccountId);
+			if (carrierAccountEndPointIds != null)
+			{
+				foreach (var endPointId in carrierAccountEndPointIds)
+				{
+					var endPoint = GetEndPoint(endPointId);
+					if (endPoint != null)
+					{
+						carrierAccountEndPoints.Add(endPoint);
+					}
+
+				}
+			}
+			return carrierAccountEndPoints;
+		}
 		public string GetEndPointDescription(EndPoint endPoint)
 		{
 			switch (endPoint.EndPointType)
@@ -259,14 +283,14 @@ namespace NP.IVSwitch.Business
 				}
 				if (hosts != null)
 				{
-						List<int> exceptedIds = new List<int>();
-						exceptedIds.Add(endPointItem.Entity.EndPointId);
-						if (helper.IsInSameSubnet(hosts.Values, endPointItem.Entity.Host, exceptedIds, out message))
-						{
-							updateOperationOutput.Message = message;
-							updateOperationOutput.ShowExactMessage = true;
-							return updateOperationOutput;
-						}
+					List<int> exceptedIds = new List<int>();
+					exceptedIds.Add(endPointItem.Entity.EndPointId);
+					if (helper.IsInSameSubnet(hosts.Values, endPointItem.Entity.Host, exceptedIds, out message))
+					{
+						updateOperationOutput.Message = message;
+						updateOperationOutput.ShowExactMessage = true;
+						return updateOperationOutput;
+					}
 				}
 
 
@@ -288,6 +312,13 @@ namespace NP.IVSwitch.Business
 			if (dataManager.Update(endPointItem.Entity))
 			{
 				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+				RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+				{
+					Source = SourceInfo.Manual
+				};
+				string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+				InsertEndPointStatusHistories(endPointItem.Entity.EndPointId, endPointItem.Entity.CurrentState, moreInfo);
+
 				VRActionLogger.Current.TrackAndLogObjectUpdated(EndPointLoggableEntity.Instance, endPointItem.Entity);
 				EndPoint updatedEndPoint = GetEndPoint(endPointItem.Entity.EndPointId);
 				updateOperationOutput.Result = UpdateOperationResult.Succeeded;
@@ -489,8 +520,87 @@ namespace NP.IVSwitch.Business
 			deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
 			return deleteOperationOutput;
 		}
+		public UpdateOperationOutput<EndPointDetail> BlockEndPoint(int endPointId)
+		{
+			var updateOperationOutput = new UpdateOperationOutput<EndPointDetail>
+			{
+				Result = UpdateOperationResult.Failed,
+				UpdatedObject = null
+			};
+			IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+			Helper.SetSwitchConfig(dataManager);
+			RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+			{
+				Source = SourceInfo.Manual
+			};
+			string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+			InsertEndPointStatusHistories(endPointId, State.Block, moreInfo);
+			EndPoint endPoint = GetEndPoint(endPointId);
+			if (dataManager.BlockEndPoint(endPoint))
+			{
+				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+				EndPoint updatedEndPoint = GetEndPoint(endPointId);
+				updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+				updateOperationOutput.UpdatedObject = EndPointDetailMapper(updatedEndPoint);
+			}
+			return updateOperationOutput;
+		}
 
-
+		public UpdateOperationOutput<EndPointDetail> InActivateEndPoint(int endPointId)
+		{
+			var updateOperationOutput = new UpdateOperationOutput<EndPointDetail>
+			{
+				Result = UpdateOperationResult.Failed,
+				UpdatedObject = null
+			};
+			IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+			Helper.SetSwitchConfig(dataManager);
+			EndPoint endPoint = GetEndPoint(endPointId);
+			RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+			{
+				Source = SourceInfo.Manual
+			};
+			string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+			InsertEndPointStatusHistories(endPointId, State.InActive, moreInfo);
+			if (dataManager.InActivateEndPoint(endPoint))
+			{
+				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+				EndPoint updatedEndPoint = GetEndPoint(endPointId);
+				updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+				updateOperationOutput.UpdatedObject = EndPointDetailMapper(updatedEndPoint);
+			};
+			return updateOperationOutput;
+		}
+		public UpdateOperationOutput<EndPointDetail> ActivateEndPoint(int endPointId)
+		{
+			var updateOperationOutput = new UpdateOperationOutput<EndPointDetail>
+			{
+				Result = UpdateOperationResult.Failed,
+				UpdatedObject = null
+			};
+			IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+			Helper.SetSwitchConfig(dataManager);
+			EndPoint endPoint = GetEndPoint(endPointId);
+			RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+			{
+				Source = SourceInfo.Manual
+			};
+			string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+			InsertEndPointStatusHistories(endPointId, State.Active, moreInfo);
+			if (dataManager.ActivateEndPoint(endPoint))
+			{
+				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+				EndPoint updatedEndPoint = GetEndPoint(endPointId);
+				updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+				updateOperationOutput.UpdatedObject = EndPointDetailMapper(updatedEndPoint);
+			};
+			return updateOperationOutput;
+		}
+		
+		public void SetCacheExpired()
+		{
+			Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+		}
 		#endregion
 
 		#region Private Classes
@@ -600,7 +710,7 @@ namespace NP.IVSwitch.Business
 					if (remainedEndPointsToAdd != null && remainedEndPointsToAdd.Count() > 0)
 					{
 						var selectedRemainedEndPoints = remainedEndPointsToAdd.Select(x => x.Entity);
-						if (selectedRemainedEndPoints!=null)
+						if (selectedRemainedEndPoints != null)
 						{
 							IpAddressHelper helper = new IpAddressHelper();
 							string message = "";
@@ -667,9 +777,17 @@ namespace NP.IVSwitch.Business
 
 					endPointToAdd.Entity.EndPointId = endPointId;
 					Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+					var insertedEndPoint = GetEndPoint(endPointId);
+					RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+					{
+						Source = SourceInfo.Manual
+					};
+					string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+
+					InsertEndPointStatusHistories(endPointId, insertedEndPoint.CurrentState, moreInfo);
 					VRActionLogger.Current.TrackAndLogObjectAdded(EndPointLoggableEntity.Instance, endPointToAdd.Entity);
 					insertOperationOutput.Result = InsertOperationResult.Succeeded;
-					insertOperationOutput.InsertedObject.Add(EndPointDetailMapper(GetEndPoint(endPointId)));
+					insertOperationOutput.InsertedObject.Add(EndPointDetailMapper(insertedEndPoint));
 					GenerateRule(endPointToAdd.CarrierAccountId, endPointId, carrierAccountName);
 				}
 			}
@@ -725,6 +843,7 @@ namespace NP.IVSwitch.Business
 						insertOperationOutput.Result = InsertOperationResult.SameExists;
 						return insertOperationOutput;
 					}
+
 					var accountManager = new AccountManager();
 					accountManager.UpdateChannelLimit(endPointToAdd.Entity.AccountId);
 					var endPointInfo = new EndPointInfo
@@ -738,9 +857,16 @@ namespace NP.IVSwitch.Business
 					carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(endPointToAdd.CarrierAccountId, endPointsExtendedSettings);
 					endPointToAdd.Entity.EndPointId = endPointId;
 					Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+					var insertedEndPoint = GetEndPoint(endPointId);
+					RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+					{
+						Source = SourceInfo.Manual
+					};
+					string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+					InsertEndPointStatusHistories(endPointId, insertedEndPoint.CurrentState, moreInfo);
 					VRActionLogger.Current.TrackAndLogObjectAdded(EndPointLoggableEntity.Instance, endPointToAdd.Entity);
 					insertOperationOutput.Result = InsertOperationResult.Succeeded;
-					insertOperationOutput.InsertedObject.Add(EndPointDetailMapper(GetEndPoint(endPointId)));
+					insertOperationOutput.InsertedObject.Add(EndPointDetailMapper(insertedEndPoint));
 					GenerateRule(endPointToAdd.CarrierAccountId, endPointId, carrierAccountName);
 				}
 			}
@@ -878,6 +1004,22 @@ namespace NP.IVSwitch.Business
 					return result;
 				});
 		}
+		private void InsertEndPointStatusHistories(int endPointId, State status, string moreInfo)
+		{
+			switch (status)
+			{
+				case State.Active:
+					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_activeId, moreInfo);
+					break;
+				case State.InActive:
+					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_inActiveId, moreInfo);
+					break;
+				case State.Block:
+					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_blockId, moreInfo);
+					break;
+			}
+		}
+
 
 		#endregion
 

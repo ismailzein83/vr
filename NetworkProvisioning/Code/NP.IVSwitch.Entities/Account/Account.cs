@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace NP.IVSwitch.Entities
 {
     public enum AccountType { Vendor = 1, Customer = 2}
-    public enum State { Active = 1, Dormant = 2 , Suspended = 3}
-
-    public class Account
+    public enum State { Active = 1, Dormant= 2,Block = 3,InActive = 4}
+	public enum Source { Manual = 0, Automatically = 1 };
+	public class Account
     {
         public int CarrierId { get; set; }
         public AccountType TypeId { get; set; }

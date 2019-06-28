@@ -10,13 +10,19 @@ using NP.IVSwitch.Data;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Business;
 
 namespace NP.IVSwitch.Business
 {
 	public class RouteManager : IRouteManager
 	{
-		#region Public Methods
+		private static Guid s_businessEntityDefinitionId { get { return new Guid("fdd8a75c-5c6c-46d6-a00a-b99086a01194"); } }
+		private static Guid s_activeId { get { return new Guid("03aa4967-66ea-4992-b9c9-3f014eff79f2"); } }
+		private static Guid s_blockId { get { return new Guid("736137e5-6e5a-4722-ba79-aaef0cc5b07f"); } }
+		private static Guid s_inActiveId { get { return new Guid("b61884de-da86-4de6-8630-dd67a1146b78"); } }
+		BusinessEntityStatusHistoryManager _businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
 
+		#region Public Methods
 		public Route GetRouteHistoryDetailbyHistoryId(int routeHistoryId)
 		{
 			VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
@@ -38,6 +44,23 @@ namespace NP.IVSwitch.Business
 			return GetRoute(routeId, false);
 		}
 
+		public List<Route> GetCarrierAccountRoutes(int carrierAccountId)
+		{
+			List<Route> carrierAccountRoutes = new List<Route>();
+			List<int> carrierAccountRouteIds = GetCarrierAccountRouteIds(carrierAccountId);
+			if (carrierAccountRouteIds != null)
+			{
+				foreach (var routeId in carrierAccountRouteIds)
+				{
+					var route = GetRoute(routeId);
+					if (route != null)
+					{
+						carrierAccountRoutes.Add(route);
+					}
+				}
+			}
+			return carrierAccountRoutes;
+		}
 		public string GetRouteDescription(Route route)
 		{
 			return route.Host;
@@ -209,7 +232,8 @@ namespace NP.IVSwitch.Business
 			};
 			int routeId;
 			string mssg;
-			if (!RoutesValidation(routeItems, out mssg)) {
+			if (!RoutesValidation(routeItems, out mssg))
+			{
 				insertOperationOutput.ShowExactMessage = true;
 				insertOperationOutput.Message = mssg;
 				return insertOperationOutput;
@@ -311,6 +335,12 @@ namespace NP.IVSwitch.Business
 			int? tempRouteId = dataManager.Insert(routeItem.Entity);
 			if (tempRouteId.HasValue)
 			{
+				RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+				{
+					Source = SourceInfo.Manual
+				};
+				string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+				InsertRouteStatusHistories(tempRouteId.Value, routeItem.Entity.CurrentState, moreInfo);
 				accountManager.UpdateChannelLimit(routeItem.Entity.AccountId);
 				routeId = tempRouteId.Value;
 				RouteInfo routeInfo = new RouteInfo
@@ -368,6 +398,12 @@ namespace NP.IVSwitch.Business
 					}
 					Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 					Route updatedRoute = GetRoute(routeItem.Entity.RouteId);
+					RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+					{
+						Source = SourceInfo.Manual
+					};
+					string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+					InsertRouteStatusHistories(updatedRoute.RouteId, updatedRoute.CurrentState, moreInfo);
 					VRActionLogger.Current.TrackAndLogObjectUpdated(RouteLoggableEntity.Instance, updatedRoute);
 					dataManager.UpdateVendorUSer(updatedRoute);
 					updateOperationOutput.Result = UpdateOperationResult.Succeeded;
@@ -464,12 +500,93 @@ namespace NP.IVSwitch.Business
 			return deleteOperationOutput;
 		}
 
+		public UpdateOperationOutput<RouteDetail> BlockRoute(int routeId)
+		{
+			var updateOperationOutput = new UpdateOperationOutput<RouteDetail>
+			{
+				Result = UpdateOperationResult.Failed,
+				UpdatedObject = null
+			};
+			IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+			Helper.SetSwitchConfig(dataManager);
 
+			Route route = GetRoute(routeId);
+			if (dataManager.BlockRoute(route))
+			{
+				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+				Route updatedRoute = GetRoute(routeId);
+				RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+				{
+					Source = SourceInfo.Manual
+				};
+				string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+				InsertRouteStatusHistories(routeId, State.Block, moreInfo);
+				updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+				updateOperationOutput.UpdatedObject = RouteDetailMapper(updatedRoute);
+			};
+			return updateOperationOutput;
+		}
+		public UpdateOperationOutput<RouteDetail> InActivateRoute(int routeId)
+		{
+			var updateOperationOutput = new UpdateOperationOutput<RouteDetail>
+			{
+				Result = UpdateOperationResult.Failed,
+				UpdatedObject = null
+			};
+			IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+			Helper.SetSwitchConfig(dataManager);
+			RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+			{
+				Source = SourceInfo.Manual
+			};
+			string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+			InsertRouteStatusHistories(routeId, State.InActive, moreInfo);
+			Route route = GetRoute(routeId);
+			if (dataManager.InActivateRoute(route))
+			{
+				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+				Route updatedRoute = GetRoute(routeId);
+				updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+				updateOperationOutput.UpdatedObject = RouteDetailMapper(updatedRoute);
+			};
+			return updateOperationOutput;
+		}
+
+		public UpdateOperationOutput<RouteDetail> ActivateRoute(int routeId)
+		{
+			var updateOperationOutput = new UpdateOperationOutput<RouteDetail>
+			{
+				Result = UpdateOperationResult.Failed,
+				UpdatedObject = null
+			};
+			IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+			Helper.SetSwitchConfig(dataManager);
+			RouteEndPointHistoryInfo routeEndPointHistoryInfo = new RouteEndPointHistoryInfo
+			{
+				Source = SourceInfo.Manual
+			};
+			string moreInfo = Vanrise.Common.Serializer.Serialize(routeEndPointHistoryInfo);
+			InsertRouteStatusHistories(routeId, State.Active, moreInfo);
+			Route route = GetRoute(routeId);
+			if (dataManager.ActivateRoute(route))
+			{
+				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+				Route updatedRoute = GetRoute(routeId);
+				updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+				updateOperationOutput.UpdatedObject = RouteDetailMapper(updatedRoute);
+			};
+			return updateOperationOutput;
+		}
 		public DateTime GetSwitchDateTime()
 		{
 			IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
 			Helper.SetSwitchConfig(dataManager);
 			return dataManager.GetSwitchDateTime();
+		}
+
+		public void SetCacheExpired()
+		{
+			Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 		}
 		#endregion
 		public bool IsCacheExpired(ref DateTime? lastCheckTime)
@@ -630,6 +747,21 @@ namespace NP.IVSwitch.Business
 				}
 			}
 			return true;
+		}
+		private void InsertRouteStatusHistories(int routeId, State status, string moreInfo)
+		{
+			switch (status)
+			{
+				case State.Active:
+					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeId.ToString(), "Status", s_activeId, moreInfo);
+					break;
+				case State.InActive:
+					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeId.ToString(), "Status", s_inActiveId, moreInfo);
+					break;
+				case State.Block:
+					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeId.ToString(), "Status", s_blockId, moreInfo);
+					break;
+			}
 		}
 
 
