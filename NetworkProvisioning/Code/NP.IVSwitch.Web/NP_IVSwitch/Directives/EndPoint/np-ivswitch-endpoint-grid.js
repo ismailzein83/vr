@@ -56,27 +56,26 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 				var cloneMenuAction = {
 					name: 'Clone',
 					clicked: cloneEndPoint,
-					haspermission: hasCloneEndPointPermisssion
+					haspermission: hasCloneEndPointPermission
 				};
 				var blockMenuAction = {
 					name: 'Block',
 					clicked: blockEndPoint,
-								//haspermission: hasCloneEndPointPermisssion
+					haspermission: hasBlockEndPointPermission
 				};
 				var inActiveMenuAction = {
 					name: 'InActivate',
 					clicked: inActivateEndPoint,
-					//haspermission: hasCloneEndPointPermisssion
+					haspermission: hasInActivateEndPointPermission
 				};
 				var vieweMenuAction = {
 					name: 'View',
 					clicked: viewEndPoint,
-					//haspermission: hasCloneEndPointPermisssion
 				};
 				var activeMenuAction = {
 					name: 'Activate',
 					clicked: activateEndPoint,
-					//haspermission: hasCloneEndPointPermisssion
+					haspermission: hasActivateEndPointPermission
 				};
 				$scope.scopeModel.menuActions = function (dataItem) {
 					var menuActions = [];
@@ -105,133 +104,145 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 					if (menuActions.length > 0) {
 						return menuActions;
 					}
-			};
-			$scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-				return NP_IVSwitch_EndPointAPIService.GetFilteredEndPoints(dataRetrievalInput).then(function (response) {
-					var EnumArray = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
-					if (response != undefined && response.Data != undefined) {
-						for (var i = 0; i < response.Data.length; i++) {
-							gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+				};
+				$scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+					return NP_IVSwitch_EndPointAPIService.GetFilteredEndPoints(dataRetrievalInput).then(function (response) {
+						var EnumArray = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
+						if (response != undefined && response.Data != undefined) {
+							for (var i = 0; i < response.Data.length; i++) {
+								gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+							}
 						}
-					}
-					onResponseReady(response);
-				}).catch(function (error) {
-					VRNotificationService.notifyExceptionWithClose(error, $scope);
-				});
-			};
+						onResponseReady(response);
+					}).catch(function (error) {
+						VRNotificationService.notifyExceptionWithClose(error, $scope);
+					});
+				};
 
-		}
+			}
 
-		function defineAPI() {
-			var api = {};
+			function defineAPI() {
+				var api = {};
 
-			api.load = function (query) {
-				carrierAccountId = query != undefined && query.CarrierAccountId != undefined ? query.CarrierAccountId : undefined;
-				var promises = [];
-				var isCarrierAccountActiveOrBlockPromise = WhS_BE_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId).then(function (response) {
-					$scope.scopeModel.isCarrierAccountBlockorInActive = false;
-					if (response != undefined) {
-						if (response.CarrierAccountSettings != undefined && response.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
-							$scope.scopeModel.isCarrierAccountBlockorInActive = true;
-						else
-							if (response.CustomerSettings != undefined && response.CustomerSettings.RoutingStatus == WhS_BE_RoutingStatusEnum.Blocked.value)
+				api.load = function (query) {
+					carrierAccountId = query != undefined && query.CarrierAccountId != undefined ? query.CarrierAccountId : undefined;
+					var promises = [];
+					var isCarrierAccountActiveOrBlockPromise = WhS_BE_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId).then(function (response) {
+						$scope.scopeModel.isCarrierAccountBlockorInActive = false;
+						if (response != undefined) {
+							if (response.CarrierAccountSettings != undefined && response.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
 								$scope.scopeModel.isCarrierAccountBlockorInActive = true;
-					}
-				});
-				promises.push(isCarrierAccountActiveOrBlockPromise);
-				promises.push(gridAPI.retrieveData(query));
-				return UtilsService.waitMultiplePromises(promises);
-
-			};
-
-			api.onEndPointAdded = function (addedEndPoint) {
-				gridDrillDownTabsObj.setDrillDownExtensionObject(addedEndPoint);
-				gridAPI.itemAdded(addedEndPoint);
-			};
-
-
-
-			if (ctrl.onReady != null)
-				ctrl.onReady(api);
-		}
-
-		function editEndPoint(EndPointItem) {
-			var onEndPointUpdated = function (updatedEndPoint) {
-				gridDrillDownTabsObj.setDrillDownExtensionObject(updatedEndPoint);
-				gridAPI.itemUpdated(updatedEndPoint);
-			};
-			NP_IVSwitch_EndPointService.editEndPoint(EndPointItem.Entity.EndPointId, onEndPointUpdated, false);
-		}
-
-		function cloneEndPoint(EndPointItem) {
-			var onEndPointAdded = function (addedEndPoint) {
-				gridDrillDownTabsObj.setDrillDownExtensionObject(addedEndPoint);
-				gridAPI.itemUpdated(addedEndPoint);
-			};
-			NP_IVSwitch_EndPointService.cloneEndPoint(carrierAccountId, EndPointItem.Entity.EndPointId, onEndPointAdded);
-		}
-
-		function deleteEndPoint(EndPointItem) {
-			VRNotificationService.showDeleteConfirmation().then(function (response) {
-				if (response) {
-					NP_IVSwitch_EndPointAPIService.DeleteEndPoint(EndPointItem.Entity.EndPointId).then(function (response) {
-						if (VRNotificationService.notifyOnItemDeleted("End Point", response, "Entity.Description")) {
-							gridAPI.itemDeleted(EndPointItem);
+							else
+								if (response.CustomerSettings != undefined && response.CustomerSettings.RoutingStatus == WhS_BE_RoutingStatusEnum.Blocked.value)
+									$scope.scopeModel.isCarrierAccountBlockorInActive = true;
 						}
 					});
-				}
-			});
-		}
+					promises.push(isCarrierAccountActiveOrBlockPromise);
+					promises.push(gridAPI.retrieveData(query));
+					return UtilsService.waitMultiplePromises(promises);
 
-		function blockEndPoint(endPointItem) {
-			VRNotificationService.showConfirmation().then(function (response) {
-				if (response) {
-					NP_IVSwitch_EndPointAPIService.BlockEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
-						gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
-						gridAPI.itemUpdated(response.UpdatedObject);
-					});
-				}
-			});
-		}
+				};
 
-		function inActivateEndPoint(endPointItem) {
-			VRNotificationService.showConfirmation().then(function (response) {
-				if (response) {
-					NP_IVSwitch_EndPointAPIService.InActivateEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
-						gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
-						gridAPI.itemUpdated(response.UpdatedObject);
-					});
-				}
-			});
-		}
-
-		function activateEndPoint(endPointItem) {
-			VRNotificationService.showConfirmation().then(function (response) {
-				if (response) {
-					NP_IVSwitch_EndPointAPIService.ActivateEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
-						gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
-						gridAPI.itemUpdated(response.UpdatedObject);
-					});
-				}
-			});
-		}
+				api.onEndPointAdded = function (addedEndPoint) {
+					gridDrillDownTabsObj.setDrillDownExtensionObject(addedEndPoint);
+					gridAPI.itemAdded(addedEndPoint);
+				};
 
 
-		function hasEditEndPointPermission() {
-			return NP_IVSwitch_EndPointAPIService.HasEditEndPointPermission();
-		}
 
-		function hasCloneEndPointPermisssion() {
-			return NP_IVSwitch_EndPointAPIService.HasAddEndPointPermission();
-		}
+				if (ctrl.onReady != null)
+					ctrl.onReady(api);
+			}
 
-		function hasDeletePermisssion() {
-			return NP_IVSwitch_EndPointAPIService.HasDeletePermisssion();
-		}
+			function editEndPoint(EndPointItem) {
+				var onEndPointUpdated = function (updatedEndPoint) {
+					gridDrillDownTabsObj.setDrillDownExtensionObject(updatedEndPoint);
+					gridAPI.itemUpdated(updatedEndPoint);
+				};
+				NP_IVSwitch_EndPointService.editEndPoint(EndPointItem.Entity.EndPointId, onEndPointUpdated, false);
+			}
 
-		function viewEndPoint(endPointItem) {
-			NP_IVSwitch_EndPointService.viewEndPoint(endPointItem.Entity.EndPointId);
+			function cloneEndPoint(EndPointItem) {
+				var onEndPointAdded = function (addedEndPoint) {
+					gridDrillDownTabsObj.setDrillDownExtensionObject(addedEndPoint);
+					gridAPI.itemUpdated(addedEndPoint);
+				};
+				NP_IVSwitch_EndPointService.cloneEndPoint(carrierAccountId, EndPointItem.Entity.EndPointId, onEndPointAdded);
+			}
+
+			function deleteEndPoint(EndPointItem) {
+				VRNotificationService.showDeleteConfirmation().then(function (response) {
+					if (response) {
+						NP_IVSwitch_EndPointAPIService.DeleteEndPoint(EndPointItem.Entity.EndPointId).then(function (response) {
+							if (VRNotificationService.notifyOnItemDeleted("End Point", response, "Entity.Description")) {
+								gridAPI.itemDeleted(EndPointItem);
+							}
+						});
+					}
+				});
+			}
+
+			function blockEndPoint(endPointItem) {
+				VRNotificationService.showConfirmation().then(function (response) {
+					if (response) {
+						NP_IVSwitch_EndPointAPIService.BlockEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
+							gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
+							gridAPI.itemUpdated(response.UpdatedObject);
+						});
+					}
+				});
+			}
+
+			function inActivateEndPoint(endPointItem) {
+				VRNotificationService.showConfirmation().then(function (response) {
+					if (response) {
+						NP_IVSwitch_EndPointAPIService.InActivateEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
+							gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
+							gridAPI.itemUpdated(response.UpdatedObject);
+						});
+					}
+				});
+			}
+
+			function activateEndPoint(endPointItem) {
+				VRNotificationService.showConfirmation().then(function (response) {
+					if (response) {
+						NP_IVSwitch_EndPointAPIService.ActivateEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
+							gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
+							gridAPI.itemUpdated(response.UpdatedObject);
+						});
+					}
+				});
+			}
+
+
+			function hasEditEndPointPermission() {
+				return NP_IVSwitch_EndPointAPIService.HasEditEndPointPermission();
+			}
+
+			function hasCloneEndPointPermission() {
+				return NP_IVSwitch_EndPointAPIService.HasAddEndPointPermission();
+			}
+
+			function hasBlockEndPointPermission() {
+				return NP_IVSwitch_EndPointAPIService.HasBlockEndPointPermission();
+			}
+
+			function hasActivateEndPointPermission() {
+				return NP_IVSwitch_EndPointAPIService.HasActivateEndPointPermission();
+			}
+
+			function hasInActivateEndPointPermission() {
+				return NP_IVSwitch_EndPointAPIService.HasInActivateEndPointPermission();
+			}
+
+			function hasDeletePermission() {
+				return NP_IVSwitch_EndPointAPIService.HasDeletePermission();
+			} 
+
+			function viewEndPoint(endPointItem) {
+				NP_IVSwitch_EndPointService.viewEndPoint(endPointItem.Entity.EndPointId);
+			}
 		}
-	}
 	}]);
 

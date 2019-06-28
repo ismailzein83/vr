@@ -60,16 +60,31 @@
 				routeId: routeId,
 			});
 		}
+
+		function HasBlockRoutePermission() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['BlockRoute']));
+		}
+
 		function InActivateRoute(routeId) {
 			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'InActivateRoute'), {
 				routeId: routeId,
 			});
 		} 
+
+		function HasInActivateRoutePermission() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['InActivateRoute']));
+		}
+
 		function ActivateRoute(routeId) {
 			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'ActivateRoute'), {
 				routeId: routeId,
 			});
 		} 
+
+		function HasActivateRoutePermission() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['ActivateRoute']));
+		}
+
 		function HasDeleteRoutePermission() {
 			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['DeleteRoute']));
 		}
@@ -92,7 +107,10 @@
 			InActivateRoute: InActivateRoute,
 			ActivateRoute: ActivateRoute,
 			HasDeleteRoutePermission: HasDeleteRoutePermission,
-			HasViewRoutePermission: HasViewRoutePermission
+			HasViewRoutePermission: HasViewRoutePermission,
+			HasActivateRoutePermission: HasActivateRoutePermission,
+			HasInActivateRoutePermission: HasInActivateRoutePermission,
+			HasBlockRoutePermission: HasBlockRoutePermission
         });
     }
 

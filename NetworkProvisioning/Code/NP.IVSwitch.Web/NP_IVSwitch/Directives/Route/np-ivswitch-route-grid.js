@@ -74,22 +74,21 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 				var blockMenuAction = {
 					name: 'Block',
 					clicked: blockRoute,
-					//haspermission: hasCloneEndPointPermisssion
+					haspermission: hasBlockRoutePermission
 				};
 				var inActiveMenuAction = {
 					name: 'InActivate',
 					clicked: inActivateRoute,
-					//haspermission: hasCloneEndPointPermisssion
+					haspermission: hasInActivateRoutePermission
 				};
 				var vieweMenuAction = {
 					name: 'View',
 					clicked: viewRoute,
-					//haspermission: hasCloneEndPointPermisssion
 				};
 				var activeMenuAction = {
 					name: 'Activate',
 					clicked: activateRoute,
-					//haspermission: hasCloneEndPointPermisssion
+					haspermission: hasAcivateRoutePermission
 				};
 				$scope.scopeModel.menuActions = function (dataItem) {
 					var menuActions = [];
@@ -217,6 +216,18 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 
 			function hasEditRoutePermission() {
 				return NP_IVSwitch_RouteAPIService.HasEditRoutePermission();
+			}
+
+			function hasInActivateRoutePermission() {
+				return NP_IVSwitch_RouteAPIService.HasInActivateRoutePermission();
+			}
+
+			function hasAcivateRoutePermission() {
+				return NP_IVSwitch_RouteAPIService.HasActivateRoutePermission();
+			}
+
+			function hasBlockRoutePermission() {
+				return NP_IVSwitch_RouteAPIService.HasBlockRoutePermission();
 			}
 
 			function hasCloneRoutePermission() {
