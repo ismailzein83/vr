@@ -231,6 +231,8 @@
     <Content Include="Security\Services\ViewService.js" />
     <Content Include="Security\Services\UserService.js" />
     <Content Include="Security\Services\WidgetService.js" />
+    <Content Include="Security\Views\Menu\ViewAudiencesEditor.html" />
+    <Content Include="Security\Views\Menu\ViewAudiencesEditorController.js" />
     <Content Include="Security\Views\MobileRenderedAsViewPopupController.js" />
     <Content Include="Security\Views\RegisteredApplicationLanding.html" />
     <Content Include="Security\Views\RegisteredApplicationLandingController.js" />

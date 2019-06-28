@@ -94,10 +94,38 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<ViewDetail> UpdateViewAudiences(Guid viewId, AudienceWrapper audience)
+        {
+            UpdateOperationOutput<ViewDetail> updateOperationOutput = new UpdateOperationOutput<ViewDetail>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            bool updateActionSucc = dataManager.UpdateViewAudiences(viewId, audience);
+            var view = GetView(viewId);
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(ViewLoggableEntity.Instance, view);
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = ViewDetailMapper(view);
+            }           
+
+            return updateOperationOutput;
+        }
+
         public View GetView(Guid viewId)
         {
             var allViews = GetCachedViews();
             return allViews.GetRecord(viewId);
+        }
+
+        public ViewAudiencesInfo GetViewAudiencesInfo(Guid viewId)
+        {
+            var view = GetView(viewId);
+            return ViewAudiencesInfoMapper(view);
         }
         public IEnumerable<ViewInfo> GetViewsInfo()
         {
@@ -314,6 +342,17 @@ namespace Vanrise.Security.Business
             return new ViewInfo() { 
                 ViewId = view.ViewId,
                 Name = view.Name
+            };
+
+        }
+
+        private ViewAudiencesInfo ViewAudiencesInfoMapper(View view)
+        {
+            return new ViewAudiencesInfo()
+            {
+                ViewId = view.ViewId,
+                Name = view.Name,
+                Audience = view.Audience
             };
 
         }

@@ -11,15 +11,10 @@
         var viewEntity;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var userDirectiveAPI;
-        var userReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var groupDirectiveAPI;
-        var groupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        
         var viewCommonPropertiesAPI;
         var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
-
+        
         var devProjectDirectiveApi;
         var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -53,18 +48,7 @@
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal();
             };
-
-            $scope.scopeModal.onUserDirectiveReady = function (api) {
-                userDirectiveAPI = api;
-                userReadyPromiseDeferred.resolve();
-            };
-
-            $scope.scopeModal.onGroupDirectiveReady = function (api) {
-                groupDirectiveAPI = api;
-
-                groupReadyPromiseDeferred.resolve();
-            };
-
+            
             $scope.scopeModal.onDevProjectSelectorReady = function (api) {
                 devProjectDirectiveApi = api;
                 devProjectPromiseReadyDeferred.resolve();
@@ -93,7 +77,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadUsers, loadGroups, loadViewCommonProperties, loadDevProjectSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,  loadViewCommonProperties, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -102,30 +86,7 @@
               });
         }
 
-        function loadUsers() {
-            var userLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            userReadyPromiseDeferred.promise.then(function () {
-                var directivePayload = {
-                    selectedIds: (viewEntity != undefined && viewEntity.Audience != null && viewEntity.Audience.Users != undefined) ? viewEntity.Audience.Users : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(userDirectiveAPI, directivePayload, userLoadPromiseDeferred);
-            });
-            return userLoadPromiseDeferred.promise;
-
-        }
-
-        function loadGroups() {
-            var groupLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            groupReadyPromiseDeferred.promise.then(function () {
-                var directivePayload = {
-                    selectedIds: (viewEntity != undefined && viewEntity.Audience != null && viewEntity.Audience.Groups != undefined) ? viewEntity.Audience.Groups : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(groupDirectiveAPI, directivePayload, groupLoadPromiseDeferred);
-            });
-            return groupLoadPromiseDeferred.promise;
-        }
+        
 
         function setTitle() {
             if ($scope.scopeModal.isEditMode && viewEntity != undefined)
@@ -170,10 +131,7 @@
 
         function buildViewObjFromScope() {
             var viewSettings = {};
-            var audiences = {
-                Users: userDirectiveAPI.getSelectedIds(),
-                Groups: groupDirectiveAPI.getSelectedIds()
-            };
+            
                 viewCommonPropertiesAPI.setCommonProperties(viewSettings);
             var viewObject = {
                 ViewId: viewId,
@@ -182,7 +140,6 @@
                 Url: viewEntity.Url,
                 ModuleId: viewEntity.ModuleId,
                 ActionNames: viewEntity.ActionNames,
-                Audience: audiences,
                 Type: viewEntity.Type,
                 ViewContent: viewEntity.ViewContent,
                 Rank: viewEntity.Rank,

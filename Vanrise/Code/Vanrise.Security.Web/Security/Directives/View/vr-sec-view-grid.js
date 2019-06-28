@@ -84,6 +84,10 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
                 name: "Edit",
                 clicked: editView,
                 haspermission: hasUpdateViewPermission // System Entities:Assign Permissions
+            }, {
+                name: "Update Audiences",
+                clicked: editViewAudiences,
+                haspermission: hasUpdateViewPermission 
             }];
         }
         function hasUpdateViewPermission() {
@@ -107,6 +111,15 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
             };
             VRModalService.showModal(viewType.Editor, modalParameters, modalSettings);
 
+        }
+
+        function editViewAudiences(viewObj) {
+
+            var onViewAudiencesUpdated = function (viewObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(viewObj);
+                gridAPI.itemUpdated(viewObj);
+            };
+            VR_Sec_ViewService.editViewAudiences(viewObj.Entity.ViewId, onViewAudiencesUpdated);
         }
     }
 

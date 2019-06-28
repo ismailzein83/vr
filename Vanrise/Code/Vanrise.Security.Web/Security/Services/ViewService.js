@@ -11,6 +11,7 @@
             updateDynamicPage: updateDynamicPage,
             deleteDynamicPage: deleteDynamicPage,
             editView: editView,
+            editViewAudiences: editViewAudiences,
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToView: registerObjectTrackingDrillDownToView
         });
@@ -69,6 +70,22 @@
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/Menu/ViewEditor.html', modalParameters, modalSettings);
+
+        }
+
+
+        function editViewAudiences(viewId, onViewAudiencesUpdated) {
+            var modalParameters = {
+                viewId: viewId
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onViewAudiencesUpdated = onViewAudiencesUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Security/Views/Menu/ViewAudiencesEditor.html', modalParameters, modalSettings);
 
         }
 

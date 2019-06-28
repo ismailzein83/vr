@@ -20,21 +20,6 @@
                         <vr-common-devproject-selector on-ready="scopeModal.onDevProjectSelectorReady" normal-col-num="6"></vr-common-devproject-selector>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Settings'" localizedheader="'VRRes.Settings.VREnd'">
-                    <vr-row>
-                        <vr-columns width="fullrow" haschildcolumns>
-                            <vr-section title="Audiences">
-                                <vr-row removeline>
-                                    <vr-sec-user-selector normal-col-num="6" on-ready="scopeModal.onUserDirectiveReady" selectedvalues="scopeModal.selectedUsers" ismultipleselection></vr-sec-user-selector>
-                                </vr-row>
-                                <vr-row width="fullrow">
-                                    <vr-sec-group-selector normal-col-num="6" on-ready="scopeModal.onGroupDirectiveReady" selectedvalues="scopeModal.selectedGroups" ismultipleselection></vr-sec-group-selector>
-                                </vr-row>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-
-                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

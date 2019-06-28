@@ -9,10 +9,12 @@
 
         return ({
             GetView: GetView,
+            GetViewAudiencesInfo: GetViewAudiencesInfo,
             GetViewsInfo: GetViewsInfo,
             GetFilteredDynamicPages: GetFilteredDynamicPages,
             AddView: AddView,
             UpdateView: UpdateView,
+            UpdateViewAudiences: UpdateViewAudiences,
             UpdateViewsRank: UpdateViewsRank,
             DeleteView: DeleteView,
             HasAddViewPermission: HasAddViewPermission,
@@ -27,11 +29,17 @@
                 ViewId: ViewId
             });
         }
+
+        function GetViewAudiencesInfo(ViewId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetViewAudiencesInfo'), {
+                ViewId: ViewId
+            });
+        }
+
         function GetViewsInfo() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetViewsInfo'));
         }
-        function GetFilteredViews(input)
-        {
+        function GetFilteredViews(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetFilteredViews'), input);
         }
         function GetFilteredDynamicPages(filter) {
@@ -39,11 +47,15 @@
         }
 
         function AddView(view) {
-                return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'AddView'), view);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'AddView'), view);
         }
 
         function UpdateView(view) {
-           return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateView'), view);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateView'), view);
+        }
+
+        function UpdateViewAudiences(viewAudiences) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateViewAudiences'), viewAudiences);
         }
 
         function UpdateViewsRank(updatedIds) {

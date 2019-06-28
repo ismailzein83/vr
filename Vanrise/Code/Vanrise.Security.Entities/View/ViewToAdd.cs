@@ -10,4 +10,16 @@ namespace Vanrise.Security.Entities
     {
         public string ViewTypeName { get; set; }
     }
+    public class UpdateViewAudiencesInput
+    {
+        public Guid ViewId { get; set; }
+        public AudienceWrapper Audience { get; set; }
+    }
+    public class ViewAudiencesInfo
+    {
+        public Guid ViewId { get; set; }
+        public string Name { get; set; }
+        public AudienceWrapper Audience { get; set; }
+    }
+
 }

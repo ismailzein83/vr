@@ -190,17 +190,7 @@ namespace Vanrise.Security.Data.RDB
                 updateQuery.Column(COL_DevProjectID).Null();
 
             updateQuery.Column(COL_Title).Value(view.Title);
-            if (view.Audience != null)
-            {
-                if ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0))
-                    updateQuery.Column(COL_Audience).Value(Common.Serializer.Serialize(view.Audience, true));
-                else
-                    updateQuery.Column(COL_Audience).Null();
-            }
-            else
-            {
-                updateQuery.Column(COL_Audience).Null();
-            }
+           
             if (view.ViewContent != null)
             {
                 if ((view.ViewContent.BodyContents != null && view.ViewContent.BodyContents.Count > 0) || (view.ViewContent.SummaryContents != null && view.ViewContent.SummaryContents.Count > 0))
@@ -227,6 +217,22 @@ namespace Vanrise.Security.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
             updateQuery.Column(COL_Rank).Value(rank);
             updateQuery.Column(COL_Module).Value(moduleId);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(viewId);
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public bool UpdateViewAudiences(Guid viewId, AudienceWrapper audience)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            if (audience != null)
+            {
+                if ((audience.Groups != null && audience.Groups.Count > 0) || (audience.Users != null && audience.Users.Count > 0))
+                    updateQuery.Column(COL_Audience).Value(Common.Serializer.Serialize(audience, true));
+                else
+                    updateQuery.Column(COL_Audience).Null();
+            }
             updateQuery.Where().EqualsCondition(COL_ID).Value(viewId);
             return queryContext.ExecuteNonQuery() > 0;
         }

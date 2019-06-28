@@ -12,6 +12,7 @@ namespace Vanrise.Security.Data
         List<View> GetViews();
         bool AddView(View view);
         bool UpdateView(View view);
+        bool UpdateViewAudiences(Guid viewId, AudienceWrapper audience);
         bool DeleteView(Guid viewId);
         bool UpdateViewRank(Guid viewId, Guid moduleId, int rank);
 

@@ -32,12 +32,26 @@ namespace Vanrise.Security.Web.Controllers
             return _manager.UpdateView(view);
         }
 
+        [HttpPost]
+        [Route("UpdateViewAudiences")]
+        public Vanrise.Entities.UpdateOperationOutput<ViewDetail> UpdateViewAudiences(UpdateViewAudiencesInput viewAudienceInput)
+        {
+            return _manager.UpdateViewAudiences(viewAudienceInput.ViewId,viewAudienceInput.Audience);
+        }
+
         [HttpGet]
         [Route("GetView")]
         public View GetView(Guid viewId)
         {
             return _manager.GetView(viewId);
         }
+
+        [HttpGet]
+        [Route("GetViewAudiencesInfo")]
+        public ViewAudiencesInfo GetViewAudiencesInfo(Guid viewId)
+        {
+            return _manager.GetViewAudiencesInfo(viewId);
+        }  
 
         [HttpGet]
         [Route("GetViewsInfo")]
@@ -73,7 +87,7 @@ namespace Vanrise.Security.Web.Controllers
         public object GetFilteredViews(Vanrise.Entities.DataRetrievalInput<ViewQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredViews(input), "Views");
-        }
+        }        
     }
-
+   
 }
