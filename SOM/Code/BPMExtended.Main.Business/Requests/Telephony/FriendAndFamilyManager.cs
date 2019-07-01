@@ -61,7 +61,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StFAFGridData");
             esq.AddColumn("StFAFGroupId");
-
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -74,7 +75,8 @@ namespace BPMExtended.Main.Business
                 var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var fafGroupId = entities[0].GetColumnValue("StFAFGroupId");
                 string fafNumbers = entities[0].GetColumnValue("StFAFGridData").ToString();
-
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<FAFManagementRequestInput> somRequestInput = new SOMRequestInput<FAFManagementRequestInput>
                 {
@@ -86,7 +88,12 @@ namespace BPMExtended.Main.Business
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                         },
-                        PhoneNumber= phoneNumber.ToString(),
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        PhoneNumber = phoneNumber.ToString(),
                         FAFGroupId= fafGroupId.ToString(),
                         FAFNumbers = JsonConvert.DeserializeObject<List<FAFNumber>>(fafNumbers)
                     }

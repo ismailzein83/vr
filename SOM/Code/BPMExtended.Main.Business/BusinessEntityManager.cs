@@ -107,8 +107,9 @@ namespace BPMExtended.Main.Business
         {
             var yearsList = new List<Year>();
             var currentYear = DateTime.Today.Year;
+            int yearsNumbers = new CatalogManager().GetCallDetailsYearsNumber();
 
-            for (int i = 0; i < 21; i++)
+            for (int i = 0; i < yearsNumbers; i++)
             {
                 var yearObj = new Year()
                 {

@@ -183,7 +183,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public SaleService GetCallDetailServiceByPagesNumber(int pagesNumber) // MYA: To Be Tested 
+        public SaleService GetCallDetailServiceByPagesNumber(int pagesNumber)
         {
             string serviceId = null;
             string serviceName = null;
@@ -230,6 +230,26 @@ namespace BPMExtended.Main.Business
                 UpFront=true
             };
 
+        }
+
+        public int GetCallDetailsYearsNumber()
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+
+            esq.AddColumn("StYearsNumbers");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "61FB364E-BA71-437F-9BD1-D9BF9F1AB07C");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {                
+                    return entities[0].GetTypedColumnValue<int>("StYearsNumbers");
+            }
+            return 0;
         }
 
         public List<DepositDocument> GetForeignerDeposits(string selectedServices)
