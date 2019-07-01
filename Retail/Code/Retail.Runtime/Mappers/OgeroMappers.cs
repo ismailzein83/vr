@@ -5,13 +5,13 @@ using Vanrise.Integration.Entities;
 
 namespace Retail.Runtime.Mappers
 {
-    public class OgeroMappers
+    public static class OgeroMappers
     {
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_SQL_Alcatel_Ogero(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             LogVerbose("Started");
-
             var cdrs = new List<dynamic>();
+
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("ICX_CDR");
 
@@ -37,7 +37,6 @@ namespace Retail.Runtime.Mappers
                 string outTrunk;
 
                 bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(reader, dsFieldNames, false, trunkValues, out cgpn, out cdpn, out inTrunk, out outTrunk);
-
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -48,7 +47,7 @@ namespace Retail.Runtime.Mappers
                         case "9d8f5ed6-5ad5-44b6-bac7-1806ebe8b2a5": cdr.Switch = 6; break;
                     }
 
-                    cdr.IDOnSwitch = Utils.GetReaderValue<long>(reader, "id");
+                    cdr.IDOnSwitch = Utils.GetReaderValue<long>(reader, "ID").ToString();
                     cdr.DataSource = dataSourceId;
 
                     DateTime attemptDatetime = Utils.GetReaderValue<DateTime>(reader, "AttemptDateTime");
@@ -70,6 +69,7 @@ namespace Retail.Runtime.Mappers
                     if (cdrs.Count == batchSize)
                         break;
                 }
+
                 importedData.LastImportedId = reader["id"];
             }
 
@@ -80,7 +80,7 @@ namespace Retail.Runtime.Mappers
                 Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
 
                 foreach (var cdr in cdrs)
-                    cdr.Id = startingId++;
+                    cdr.ID = startingId++;
 
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "ICX_CDR");
                 mappedBatches.Add("Distribute Raw CDRs Stage", batch);
@@ -100,9 +100,10 @@ namespace Retail.Runtime.Mappers
         {
             LogVerbose("Started");
             var cdrs = new List<dynamic>();
-            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
 
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("ICX_CDR");
+
             int batchSize = 50000;
 
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
@@ -127,7 +128,6 @@ namespace Retail.Runtime.Mappers
                 string outTrunk;
 
                 bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(reader, dsFieldNames, true, trunkValues, out cgpn, out cdpn, out inTrunk, out outTrunk);
-
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -156,6 +156,7 @@ namespace Retail.Runtime.Mappers
                     if (cdrs.Count == batchSize)
                         break;
                 }
+
                 importedData.LastImportedId = reader["ID"];
             }
 
@@ -164,6 +165,7 @@ namespace Retail.Runtime.Mappers
                 long startingId;
                 var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("ICX_CDR");
                 Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
+
                 foreach (var cdr in cdrs)
                     cdr.ID = startingId++;
 
@@ -185,6 +187,7 @@ namespace Retail.Runtime.Mappers
         {
             LogVerbose("Started");
             var cdrs = new List<dynamic>();
+
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("ICX_CDR");
 
@@ -212,7 +215,6 @@ namespace Retail.Runtime.Mappers
                 string outTrunk;
 
                 bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(reader, dsFieldNames, true, trunkValues, out cgpn, out cdpn, out inTrunk, out outTrunk);
-
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -241,6 +243,7 @@ namespace Retail.Runtime.Mappers
                     if (cdrs.Count == batchSize)
                         break;
                 }
+
                 importedData.LastImportedId = reader["ID"];
             }
 
@@ -271,6 +274,7 @@ namespace Retail.Runtime.Mappers
         {
             LogVerbose("Started");
             var cdrs = new List<dynamic>();
+
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("ICX_CDR");
 
@@ -354,6 +358,7 @@ namespace Retail.Runtime.Mappers
 
 
         #region Private Methods
+
         private static void LogVerbose(string Message)
         {
             Console.WriteLine(Message);

@@ -7,9 +7,9 @@ namespace Retail.Ogero.Business
 {
     public class InterconnectDataSourceManager
     {
-        static Guid s_mtcPrefixType = new Guid("");
-        static Guid s_alfaPrefixType = new Guid("");
-        static Guid s_ogeroPrefixType = new Guid("");
+        static Guid s_mtcPrefixType = new Guid("1056D52E-DA10-4A15-B3A7-F073792F7D2A");
+        static Guid s_alfaPrefixType = new Guid("C27E1884-0E6E-4B66-9C6C-B7CBE32F32CC");
+        static Guid s_ogeroPrefixType = new Guid("FF0F735C-3244-4D83-AFA4-8DDACD4DFE8D");
 
         static List<Guid> s_mobileOperatorNumberPrefixes = new List<Guid>() { s_mtcPrefixType, s_alfaPrefixType };
 
@@ -103,13 +103,16 @@ namespace Retail.Ogero.Business
 
         private static void RemovePrefix(ref string number, string prefix)
         {
+            if (string.IsNullOrEmpty(number))
+                return;
+
             if (number.StartsWith(prefix))
                 number = number.Substring(prefix.Length);
         }
 
         private static void AddPrefix(ref string number, string prefix, Guid? numberPrefix)
         {
-            if (!numberPrefix.HasValue)
+            if (string.IsNullOrEmpty(number) || !numberPrefix.HasValue)
                 return;
 
             if (number.Length > 6 && !number.StartsWith(prefix) &&
