@@ -137,6 +137,8 @@
     <Compile Include="VRReportGeneration\VRReportGenerationQuery.cs" />
     <Compile Include="VRReportGeneration\VRReportGeneration.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationDetail.cs" />
+    <Compile Include="VRScheduledReport\ReportTypeInfo.cs" />
+    <Compile Include="VRScheduledReport\ReportTypeFilter.cs" />
     <Compile Include="VRScheduledReport\VRReportTypeDefinition.cs" />
     <Compile Include="VRScheduledReport\VRScheduledReport.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\VRRestAPIAnalyticQueryInterceptorConfig.cs" />
