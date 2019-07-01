@@ -1,0 +1,19 @@
+﻿
+<vr-columns width="1/3row" haschildcolumns>
+    <vr-genericdata-genericbedefinition-selector on-ready="scopeModel.onBEDefinitionSelectorReady" onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChange"
+                                                 customlabel="BE Definition" isrequired="true" hideremoveicon>
+    </vr-genericdata-genericbedefinition-selector>
+</vr-columns>
+
+<vr-columns width="1/3row" vr-loader="scopeModel.isFieldNamesLoading">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onFieldNamesFieldSelectorReady" label="Field Names" hideremoveicon ismultipleselection>
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+
+<vr-columns width="fullrow">
+    <vr-section title="Record Filter" vr-loader="scopeModel.isfilterLoading" collapsible>
+        <vr-row>
+            <vr-genericdata-recordfilter on-ready="scopeModel.onFilterReady" normal-col-num="4"></vr-genericdata-recordfilter>
+        </vr-row>
+    </vr-section>
+</vr-columns>

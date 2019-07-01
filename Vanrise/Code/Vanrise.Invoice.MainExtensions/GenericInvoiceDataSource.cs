@@ -16,25 +16,24 @@ namespace Vanrise.Invoice.MainExtensions
 
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
-            //    GenericBusinessEntityManager genericBeManager = new GenericBusinessEntityManager();
-            //    GenericBusinessEntityDefinitionManager genericBeDefinitionManager = new GenericBusinessEntityDefinitionManager();
-            //    var genericBEDefinitionSetting = genericBeDefinitionManager.GetGenericBEDefinitionSettings(BusinessEntityDefinitionId, true);
-            //    genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", BusinessEntityDefinitionId);
+            GenericBusinessEntityManager genericBeManager = new GenericBusinessEntityManager();
+            GenericBusinessEntityDefinitionManager genericBeDefinitionManager = new GenericBusinessEntityDefinitionManager();
+            var genericBEDefinitionSetting = genericBeDefinitionManager.GetGenericBEDefinitionSettings(BusinessEntityDefinitionId, true);
+            genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", BusinessEntityDefinitionId);
 
-            //    var entities = genericBeManager.GetAllGenericBusinessEntities(BusinessEntityDefinitionId, FieldNames, FilterGroup);
+            var entities = genericBeManager.GetAllGenericBusinessEntities(BusinessEntityDefinitionId, FieldNames, FilterGroup);
 
-            //    if (entities == null)
-            //        return null;
+            if (entities == null)
+                return null;
 
-            //    List<dynamic> dataSourceItems = new List<dynamic>();
-            //    foreach (var entity in entities)
-            //    {
-            //        DataRecordObject item = new DataRecordObject(genericBEDefinitionSetting.DataRecordTypeId, entity.FieldValues);
-            //        dataSourceItems.Add(item.Object);
-            //    }
+            List<dynamic> dataSourceItems = new List<dynamic>();
+            foreach (var entity in entities)
+            {
+                DataRecordObject item = new DataRecordObject(genericBEDefinitionSetting.DataRecordTypeId, entity.FieldValues);
+                dataSourceItems.Add(item.Object);
+            }
 
-            //    return dataSourceItems;
-            return null;
+            return dataSourceItems;
         }
     }
 }
