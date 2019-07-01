@@ -423,12 +423,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             $scope.scopeModel.use360Degree = (businessEntityDefinitionSettings.ThreeSixtyDegreeSettings != undefined) ? businessEntityDefinitionSettings.ThreeSixtyDegreeSettings.Use360Degree : undefined;
                         }
 
-                    }
-
+					}
+					firstPromises.push(loadDataRecordTypeSelector());
                     if (businessEntityDefinitionSettings != undefined) {
 						firstPromises.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
-						firstPromises.push(loadDataRecordTypeSelector());
-
                     }
 
 
