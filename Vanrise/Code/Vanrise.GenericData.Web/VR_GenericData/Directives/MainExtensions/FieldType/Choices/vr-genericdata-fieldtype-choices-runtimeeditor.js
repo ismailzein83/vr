@@ -46,8 +46,13 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
 
             //var isRequired = (attrs.selectionmode == "single" && attrs.isrequired != undefined) ? 'isrequired="ctrl.isrequired"' : '';
 
+            var hidelabel = "";
+
+            if (attrs.hidelabel != undefined)
+                hidelabel = " hidelabel ";
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                '<vr-select datatextfield="Text" label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" onselectionchanged="ctrl.onChoiceSelectionChanged"'
+                '<vr-select datatextfield="Text" ' + hidelabel + ' label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" onselectionchanged="ctrl.onChoiceSelectionChanged"'
                 + multipleselection + ' isrequired="ctrl.isrequired"></vr-select>' +
                 '</vr-columns>';
         }
