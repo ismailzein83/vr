@@ -43,6 +43,7 @@ as (select * from (values
 ('6721BF29-D257-47D9-8D56-4EE10538BFDC','Items','Items','VR_Invoice_InvoiceType_RDLCDataSourceSettings'															,'{"Editor":"vr-invoicetype-datasourcesettings-rdlcitems"}'),
 ('65D64951-AD27-475C-81D2-FAC7816E6E4B','Invoice','Invoice','VR_Invoice_InvoiceType_RDLCDataSourceSettings'														,'{"Editor":"vr-invoicetype-datasourcesettings-invoice"}'),
 ('F41D670E-F079-4D38-A2B5-9B6394299EFA','Item Grouping','Item Grouping','VR_Invoice_InvoiceType_RDLCDataSourceSettings'											,'{"Editor":"vr-invoicetype-datasourcesettings-itemgrouping"}'),
+('5dc49b0f-4963-4917-a105-f95506559d32','Generic DataSource','Generic DataSource','VR_Invoice_InvoiceType_RDLCDataSourceSettings'								,'{"Editor":"vr-invoicetype-datasourcesettings-generic"}'),
 
 ('786EDDD6-1EC7-4C44-889C-E7246B51AED0','CustomField','Custom Field','VR_Invoice_InvoiceType_DLCParameterSettings'												,'{"Editor":"vr-invoicetype-openrdlcreport-parametersettings-customfield"}'),
 ('7A1A9991-EC84-4E92-B1D1-1C5140DF8FF4','Field','Field','VR_Invoice_InvoiceType_DLCParameterSettings'															,'{"Editor":"vr-invoicetype-openrdlcreport-parametersettings-field"}'),
