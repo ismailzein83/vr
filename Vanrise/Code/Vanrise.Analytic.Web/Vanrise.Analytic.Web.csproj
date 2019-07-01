@@ -81,6 +81,7 @@
     <Compile Include="Controllers\KPISettingsController.cs" />
     <Compile Include="Controllers\MeasureStyleRuleController.cs" />
     <Compile Include="Controllers\ReportGenerationCustomCodeController.cs" />
+    <Compile Include="Controllers\ReportTypeController.cs" />
     <Compile Include="Controllers\VRReportGenerationController.cs" />
     <Compile Include="Controllers\DataAnalysisDefinitionController.cs" />
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
@@ -384,6 +385,9 @@
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\PreviousPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-lastperiodfilter.js" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-previousperiodfilter.js" />
+    <Content Include="Analytic\Directives\ReportType\Templates\ReportTypeStaticEditorTemplate.html" />
+    <Content Include="Analytic\Directives\ReportType\vr-analytic-reporttype-selector.js" />
+    <Content Include="Analytic\Directives\ReportType\vr-analytic-reporttype-staticeditor.js" />
     <Content Include="Analytic\Directives\Runtime\Chart\Templates\AnalyticGauge.html" />
     <Content Include="Analytic\Directives\Runtime\Chart\vr-analytic-gauge-runtime.js" />
     <Content Include="Analytic\Directives\Settings\Templates\KPISettingsTemplate.html" />
@@ -461,6 +465,7 @@
     <Content Include="Analytic\Services\APIServices\KPISettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\MeasureStyleRuleAPIService.js" />
     <Content Include="Analytic\Services\APIServices\ReportGenerationCustomCodeAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\ReportTypeAPIService.js" />
     <Content Include="Analytic\Services\ReportGenerationCustomCodeService.js" />
     <Content Include="Analytic\Services\ReportTypeService.js" />
     <Content Include="Analytic\Services\VRReportGenerationActionService.js" />

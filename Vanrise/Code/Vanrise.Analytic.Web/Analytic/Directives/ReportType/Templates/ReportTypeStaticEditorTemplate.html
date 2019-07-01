@@ -1,0 +1,87 @@
+﻿<!--<vr-row>
+    <vr-tabs>
+        <vr-tab header="'Definition'">
+            <vr-row>
+                <vr-columns colnum="4">
+                    <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-analytic-reporttype-selector on-ready="scopeModel.onReportTypeInfoSelector"
+                                                 normal-col-num="4"
+                                                 isrequired="true"
+                                                 onselectionchanged="scopeModel.onReportTypeSelectorChanged"
+                                                 customlabel="Report Type"></vr-analytic-reporttype-selector>
+            </vr-row>
+            <vr-common-timeperiod normal-col-num="4" on-ready="scopeModel.onPeriodSelectorReady"></vr-common-timeperiod>
+        </vr-tab>
+
+        <vr-tab header="'Action'" tabobject="scopeModel.actionTab">
+            <vr-analytic-automatedreport-actiontype-selective on-ready="scopeModel.onActionTypeSelectiveReady"
+                                                              onselectionchanged="scopeModel.onActionTypeSelectorChanged"
+                                                              normal-col-num="4">
+            </vr-analytic-automatedreport-actiontype-selective>
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-select on-ready="scopeModel.onAttachementsSelectorReady"
+                               datasource="scopeModel.attachemnts"
+                               datatextfield="Name"
+                               datavaluefield="VRReportTypeAttachementId"
+                               isrequired="true"
+                               ismultipleselection="true"
+                               label="Attachements"
+                               onselectionchanged="scopeModel.onAttachementSelectorChanged"
+                               selectedvalues="scopeModel.selectedAttachements">
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+        </vr-tab>
+
+        <vr-tab header="'Handler'" tabobject="scopeModel.handlerTab" vr-loader="scopeModel.isHandlerTabLoading">
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onHandlerFieldNameSelectorReady"
+                                                                  label="Field Name"
+                                                                  isrequired="true"
+                                                                  ismultipleselection
+                                                                  hideremoveicon>
+                    </vr-genericdata-datarecordtypefields-selector>
+                </vr-columns>
+            </vr-row>
+            <vr-analytic-handlersettings-automatedreport on-ready="scopeModel.onHandlerSettingsAutomatedReportReady" normal-col-num="6"></vr-analytic-handlersettings-automatedreport>
+        </vr-tab>
+
+
+        <vr-tab header="'Filter'" tabobject="scopeModel.filterTab">
+            <span vr-loader="scopeModel.isFilterGridLoading">
+                <vr-columns width="fullrow">
+                    <vr-button type="Add" data-onclick="scopeModel.addFilterField" standalone"></vr-button>
+                </vr-columns>
+                <vr-columns width="fullrow">
+                    <vr-datagrid on-ready="scopeModel.onFilterFieldsGridReady"
+                                 datasource="scopeModel.filterFields"
+                                 ondeleterow="scopeModel.removeFilterFields"
+                                 hidegridmenu>
+                        <vr-datagridcolumn headertext="'Field Name'" widthfactor="6" disablesorting>
+                            <vr-select on-ready="dataItem.onFilterFieldNameReady"
+                                       datasource="dataItem.filterFieldNames"
+                                       datatextfield="filedName"
+                                       datavaluefield="filedName"
+                                       isrequired="true"
+                                       onselectionchanged="dataItem.onFilterFieldNameSelectorChanged"
+                                       selectedvalues="dataItem.selectedFilterFieldName">
+                            </vr-select>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Filed Value'" widthfactor="6" disablesorting>
+                            <span vr-loader="dataItem.isFieldTypeRumtimeDirectiveLoading">
+                                <vr-directivewrapper ng-if="dataItem.fieldTypeRuntimeDirective != undefined"
+                                                     directive="dataItem.fieldTypeRuntimeDirective"
+                                                     on-ready="dataItem.onFieldTypeRumtimeDirectiveReady"
+                                                     normal-col-num="6">
+                                </vr-directivewrapper>
+                            </span>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </span>
+        </vr-tab>
+    </vr-tabs>
+</vr-row>-->
