@@ -833,14 +833,45 @@ namespace BPMExtended.Main.Business
                 string entity = "Contact";
                 string Attribute = "StCustomerCategoryID";
                 string columncheck = "StCustomerId";
+
+                var customerName = GetCustomerCategoryNameById(bscsId);
                 UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
                 var update = new Update(connection, entity).Set(Attribute, Column.Parameter(bscsId))
                     .Where(columncheck).IsEqual(Column.Parameter(id));
                 update.Execute();
+
+                var update2 = new Update(connection, entity).Set("StCustomerCategoryName", Column.Parameter(customerName))
+                    .Where(columncheck).IsEqual(Column.Parameter(id));
+                update2.Execute();
             }
             catch { }
             return result;
         }
+
+        public string GetCustomerCategoryNameById(string customerCategoryId )
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+
+            string customerCategoryName = null;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
+
+            esq.AddColumn("StCustomerCategoryName");
+            esq.AddColumn("StCustomerCategoryID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryID", customerCategoryId);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                customerCategoryName = (string)entities[0].GetColumnValue("StCustomerCategoryName");
+            }
+            return customerCategoryName;
+        }
+
 
         public void CustomerCreation(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber, string contactId, string accountId)
         {
