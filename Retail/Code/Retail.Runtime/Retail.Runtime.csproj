@@ -671,6 +671,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mappers\DSMappers.cs" />
+    <Compile Include="Mappers\OgeroMappers.cs" />
     <Compile Include="Mappers\MultinetMappers.cs" />
     <Compile Include="Mappers\ZajilMappers.cs" />
     <Compile Include="Tasks\AliAtouiTask.cs" />
@@ -912,6 +913,10 @@
     <ProjectReference Include="..\Retail.MultiNet.MainExtensions\Retail.MultiNet.MainExtensions.csproj">
       <Project>{ddebca68-714f-4334-9b05-55476145dec8}</Project>
       <Name>Retail.MultiNet.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ogero.Business\Retail.Ogero.Business.csproj">
+      <Project>{6ef9b143-40da-4ef9-8f13-bfe72ba0c2fe}</Project>
+      <Name>Retail.Ogero.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.RA.Business\Retail.RA.Business.csproj">
       <Project>{87cd3228-cc6d-4dd7-8f3d-3f1f9b8567e9}</Project>

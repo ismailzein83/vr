@@ -296,6 +296,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Data", "Retail.N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Data.RDB", "Retail.NIM.Data.RDB\Retail.NIM.Data.RDB.csproj", "{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.Ogero", "Retail.Ogero", "{44D39FF5-7C02-4446-83F0-C86E5A561CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Ogero.Business", "Retail.Ogero.Business\Retail.Ogero.Business.csproj", "{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -820,6 +824,10 @@ Global
 		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -964,14 +972,16 @@ Global
 		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
 		{E5C2F336-297D-40DE-A5E9-2ECA18AD48A1} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
 		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
+		{44D39FF5-7C02-4446-83F0-C86E5A561CCE} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE} = {44D39FF5-7C02-4446-83F0-C86E5A561CCE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 122
+		SccNumberOfProjects = 123
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = Retail.sln
@@ -1457,5 +1467,9 @@ Global
 		SccProjectTopLevelParentUniqueName121 = Retail.sln
 		SccProjectName121 = Retail.NIM.Data.RDB
 		SccLocalPath121 = Retail.NIM.Data.RDB
+		SccProjectUniqueName122 = Retail.Ogero.Business\\Retail.Ogero.Business.csproj
+		SccProjectTopLevelParentUniqueName122 = Retail.sln
+		SccProjectName122 = Retail.Ogero.Business
+		SccLocalPath122 = Retail.Ogero.Business
 	EndGlobalSection
 EndGlobal

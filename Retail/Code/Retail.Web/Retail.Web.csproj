@@ -1130,6 +1130,10 @@
       <Project>{40cd9cfd-2361-4fc8-ba6c-225a8516f0e1}</Project>
       <Name>Retail.NIM.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Ogero.Business\Retail.Ogero.Business.csproj">
+      <Project>{6ef9b143-40da-4ef9-8f13-bfe72ba0c2fe}</Project>
+      <Name>Retail.Ogero.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.RA.Business\Retail.RA.Business.csproj">
       <Project>{87cd3228-cc6d-4dd7-8f3d-3f1f9b8567e9}</Project>
       <Name>Retail.RA.Business</Name>
