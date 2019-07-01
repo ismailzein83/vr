@@ -4,6 +4,7 @@ using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -36,12 +37,12 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
-        public List<FAFNumbersOutput> GetFAFNumbers(string contractId)
+        public FAFNumbersOutput GetFAFNumbers(string contractId)
         {
-            List<FAFNumbersOutput> result;
+            FAFNumbersOutput result;
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<List<FAFNumbersOutput>>(String.Format("api/SOM.ST/Billing/GetFAFNumbers?ContractId={0}", contractId));
+                result = client.Get<FAFNumbersOutput>(String.Format("api/SOM.ST/Billing/ReadFAFNumbers?ContractId={0}", contractId));
             }
 
             return result;
@@ -57,6 +58,9 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StFriendAndFamily");
             esq.AddColumn("StContractId");
             esq.AddColumn("StCustomerId");
+            esq.AddColumn("StPhoneNumber");
+            esq.AddColumn("StFAFGridData");
+            esq.AddColumn("StFAFGroupId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -67,6 +71,10 @@ namespace BPMExtended.Main.Business
             {
                 var contractId = entities[0].GetColumnValue("StContractId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
+                var fafGroupId = entities[0].GetColumnValue("StFAFGroupId");
+                string fafNumbers = entities[0].GetColumnValue("StFAFGridData").ToString();
+
 
                 SOMRequestInput<FAFManagementRequestInput> somRequestInput = new SOMRequestInput<FAFManagementRequestInput>
                 {
@@ -75,10 +83,12 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            // ContractId = contractId.ToString(),
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
-                        }
+                        },
+                        PhoneNumber= phoneNumber.ToString(),
+                        FAFGroupId= fafGroupId.ToString(),
+                        FAFNumbers = JsonConvert.DeserializeObject<List<FAFNumber>>(fafNumbers)
                     }
 
                 };

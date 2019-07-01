@@ -308,14 +308,7 @@ namespace BPMExtended.Main.Business
             }
             return billCycles;
         }
-        public bool ValidatePayment(string requestId , string depositId)
-        {
-            //TODO: check if user has paid
-            return true;
-        }
-
        
-
         public bool ValidatePaymentWithoutDeposit(string requestId)
         {
             //TODO: check if user has paid
@@ -670,7 +663,7 @@ namespace BPMExtended.Main.Business
         public string BillCycle { get; set; }
         public string Date { get; set; }
         public string PhoneNumber { get; set; }
-        public List<CallDetailsEntity> Items { get; set; }
+        public List<CallDetails> Items { get; set; }
     }
     public class CallDetailsEntity
     {

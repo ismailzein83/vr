@@ -35,7 +35,7 @@ namespace BPMExtended.Main.Business
         #region Public
         public CallDetailRequest GetCallDetails(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM, string phoneNumber, string customerName, string contactId)
         {
-
+            List<CallDetails> callDetailsEntityList = new List<CallDetails>();
             var businessEntityManager = new BusinessEntityManager();
             int monthVal = businessEntityManager.getMonthNumberByMonthName(month);
             int yearVal = Int32.Parse(year);
@@ -43,31 +43,10 @@ namespace BPMExtended.Main.Business
             DateTime beginDate = new DateTime(yearVal, monthVal, 1);
             DateTime endDate = monthVal != 12 ? new DateTime(yearVal, monthVal + 1, 1) : new DateTime(yearVal + 1, 1, 1);
 
-            //var callDetailsEntityListTest = new List<CallDetailsEntity>();
-            //using (SOMClient client = new SOMClient())
-            //{
-            //    var items = client.Get<List<CallDetails>>(String.Format("api/SOM.ST/Billing/GetCallDetails?ContractId={0}&BeginDate={1}&EndDate={2}&IsNational={3}&IsInternational={4}&isGSM={5} ", contractId, beginDate, endDate, isNational, isInternational, isGSM));
-            //    foreach (var item in items)
-            //    {
-            //        var CallDetailEntity = CallDetailsToEntityMapper(item);
-            //        callDetailsEntityListTest.Add(CallDetailEntity);
-            //    }
-            //}
-
-
-
-            List<CallDetailsEntity> callDetailsEntityList = new List<CallDetailsEntity>();
-            for (int i = 0; i < 100; i++)
+            using (SOMClient client = new SOMClient())
             {
-                CallDetailsEntity item = new CallDetailsEntity()
-                {
-                    Amount = i,
-                    Date = beginDate.AddDays(i),//.ToString(),
-                    Duration = i,
-                    Number = "0123456",
-                    Place = "Mazzeh"
-                };
-                callDetailsEntityList.Add(item);
+                callDetailsEntityList = client.Get<List<CallDetails>>(String.Format("api/SOM.ST/Billing/GetCallDetails?ContractId={0}&BeginDate={1}&EndDate={2}&IsNational={3}&IsInternational={4}&isGSM={5} ", contractId, beginDate, endDate, isNational, isInternational, isGSM));
+               
             }
 
             var crmManager = new CRMCustomerManager();
@@ -316,13 +295,13 @@ namespace BPMExtended.Main.Business
             bool isFirtsPage = true;
             for (int i = 0; i < request.Items.Count; i += numberOfRecords)
             {
-                List<CallDetailsEntity> smallList = new List<CallDetailsEntity>();
+                List<CallDetails> smallList = new List<CallDetails>();
                 smallList = request.Items.Skip(i).Take(numberOfRecords).ToList();
                 DrawPageRecords(smallList, isFirtsPage);
                 isFirtsPage = false;
             }
         }
-        private void DrawPageRecords(List<CallDetailsEntity> items, bool isFirstPage)
+        private void DrawPageRecords(List<CallDetails> items, bool isFirstPage)
         {
             // Create the item table
             MigraDoc.DocumentObjectModel.Tables.Table table1 = new MigraDoc.DocumentObjectModel.Tables.Table();
@@ -356,6 +335,9 @@ namespace BPMExtended.Main.Business
             column = table1.AddColumn("3cm");
             column.Format.Alignment = ParagraphAlignment.Center;
 
+            column = table1.AddColumn("3cm");
+            column.Format.Alignment = ParagraphAlignment.Center;
+
 
             Row row = table1.AddRow();
             row.HeadingFormat = true;
@@ -372,12 +354,12 @@ namespace BPMExtended.Main.Business
             row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[1].VerticalAlignment = VerticalAlignment.Bottom;
 
-            row.Cells[2].AddParagraph("Place");
+            row.Cells[2].AddParagraph("Calling Number");
             row.Cells[2].Format.Font.Bold = false;
             row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[2].VerticalAlignment = VerticalAlignment.Bottom;
 
-            row.Cells[3].AddParagraph("Number");
+            row.Cells[3].AddParagraph("Called Number");
             row.Cells[3].Format.Font.Bold = false;
             row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[3].VerticalAlignment = VerticalAlignment.Bottom;
@@ -387,11 +369,16 @@ namespace BPMExtended.Main.Business
             row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[4].VerticalAlignment = VerticalAlignment.Bottom;
 
+            row.Cells[5].AddParagraph("Duration Unit");
+            row.Cells[5].Format.Font.Bold = false;
+            row.Cells[5].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[5].VerticalAlignment = VerticalAlignment.Bottom;
+
             table1.SetEdge(0, 0, 5, 1, Edge.Box, MigraDoc.DocumentObjectModel.BorderStyle.Single, 0.75, Color.Empty);
 
 
             Paragraph paragraph3 = this.document.LastSection.AddParagraph();
-            foreach (CallDetailsEntity item in items)
+            foreach (CallDetails item in items)
             {
 
                 Row row1 = new Row();
@@ -404,21 +391,25 @@ namespace BPMExtended.Main.Business
                 row1.Cells[2].VerticalAlignment = VerticalAlignment.Center;
                 row1.Cells[3].VerticalAlignment = VerticalAlignment.Center;
                 row1.Cells[4].VerticalAlignment = VerticalAlignment.Center;
+                row1.Cells[5].VerticalAlignment = VerticalAlignment.Center;
 
                 paragraph3 = row1.Cells[0].AddParagraph();
-                paragraph3.AddText(item.Date.ToString());
+                paragraph3.AddText(item.CallDate.ToString());
 
                 paragraph3 = row1.Cells[1].AddParagraph();
                 paragraph3.AddText(item.Duration.ToString());
 
                 paragraph3 = row1.Cells[2].AddParagraph();
-                paragraph3.AddText(item.Place.ToString());
+                paragraph3.AddText(item.CallingNumber.ToString());
 
                 paragraph3 = row1.Cells[3].AddParagraph();
-                paragraph3.AddText(item.Number.ToString());
+                paragraph3.AddText(item.CalledNumber.ToString());
 
                 paragraph3 = row1.Cells[4].AddParagraph();
                 paragraph3.AddText(item.Amount.ToString());
+
+                paragraph3 = row1.Cells[5].AddParagraph();
+                paragraph3.AddText(item.DurationUnit.ToString());
 
                 table1.SetEdge(0, table1.Rows.Count - 1, 5, 1, Edge.Box, MigraDoc.DocumentObjectModel.BorderStyle.Single, 0.75);
             }
@@ -438,7 +429,7 @@ namespace BPMExtended.Main.Business
             paragraph.AddLineBreak();
             paragraph.AddText(request.Date);
 
-            foreach (CallDetailsEntity item in request.Items)
+            foreach (CallDetails item in request.Items)
             {
 
                 Row row1 = this.table.AddRow();
@@ -460,21 +451,27 @@ namespace BPMExtended.Main.Business
                 row1.Cells[4].VerticalAlignment = VerticalAlignment.Center;
                 row1.Cells[4].MergeDown = 1;
 
+                row1.Cells[5].VerticalAlignment = VerticalAlignment.Center;
+                row1.Cells[5].MergeDown = 1;
+
 
                 paragraph = row1.Cells[0].AddParagraph();
-                paragraph.AddText(item.Date.ToString());
+                paragraph.AddText(item.CallDate.ToString());
 
                 paragraph = row1.Cells[1].AddParagraph();
                 paragraph.AddText(item.Duration.ToString());
 
                 paragraph = row1.Cells[2].AddParagraph();
-                paragraph.AddText(item.Place.ToString());
+                paragraph.AddText(item.CallingNumber.ToString());
 
                 paragraph = row1.Cells[3].AddParagraph();
-                paragraph.AddText(item.Number.ToString());
+                paragraph.AddText(item.CalledNumber.ToString());
 
                 paragraph = row1.Cells[4].AddParagraph();
                 paragraph.AddText(item.Amount.ToString());
+
+                paragraph = row1.Cells[5].AddParagraph();
+                paragraph.AddText(item.DurationUnit.ToString());
 
                 this.table.SetEdge(0, this.table.Rows.Count - 2, 5, 1, Edge.Box, MigraDoc.DocumentObjectModel.BorderStyle.Single, 0.75);
             }
@@ -493,6 +490,7 @@ namespace BPMExtended.Main.Business
             row.Cells[0].Format.Alignment = ParagraphAlignment.Right;
             row.Cells[0].MergeRight = 3;
             row.Cells[4].AddParagraph((100).ToString("0.00") + " €");
+
 
         }
         #endregion

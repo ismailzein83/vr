@@ -89,5 +89,35 @@ namespace BPMExtended.Main.Business
             return item;
                     
         }
+
+        public bool ValidatePosPayment(string caseId, string requestId)
+        {
+            //TODO: check if user has paid
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            Contact contact;
+            bool item=false;
+            string contactId;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, new CRMCustomerManager().GetEntityNameByRequestId(requestId));
+            var stContact = esq.AddColumn("StContact.Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                contactId = entities[0].GetTypedColumnValue<string>(stContact.Name).ToString();
+                contact = new CommonManager().GetContact(contactId);
+
+                using (SOMClient client = new SOMClient())
+                {
+                    item = client.Get<bool>(String.Format("api/SOM.ST/Billing/ValidatePayment?CaseId={0}&CustomerCode={1}", caseId, new CRMCustomerManager().GetCustomerInfo(contact.CustomerId).CustomerCode));
+                }
+            }          
+            return item;
+        }
     }
 }
