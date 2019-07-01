@@ -173,6 +173,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         }
                                         if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
                                             month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
+                                        else
+                                            month = string.Format("{0}", fromDate.ToString("MMMM - yyyy"));
                                     }
                                     var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month), () =>
                                     {
@@ -477,6 +479,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                        
                                         if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
                                             month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
+                                        else
+                                            month = string.Format("{0}", fromDate.ToString("MMMM - yyyy"));
                                     }
                                     var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month), () =>
                                     {
