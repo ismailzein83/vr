@@ -52,6 +52,7 @@
 
                     if (payload != undefined) {
                         visualItemDefinition = payload.visualItemDefinition;
+                        $scope.scopeModel.conditionDescription = visualItemDefinition.Settings.Description;
                         $scope.scopeModel.childVisualItem = visualItemDefinition.Settings.ChildActivityVisualItemDefinition;
                     }
 
