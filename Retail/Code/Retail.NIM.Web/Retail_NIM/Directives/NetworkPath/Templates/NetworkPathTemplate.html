@@ -1,0 +1,28 @@
+﻿<link rel="stylesheet" type="text/css" href="/Client/Modules/Retail_NIM/Directives/NetworkPath/Styles/NetworkPathStyle.css" />
+<div class="vr-networkpath">
+    <div ng-repeat="item in ctrl.networkNodes" class="vr-networkpath-item">
+        <div class="vr-networkpath-node">
+            <div class="node-container">
+                <div class="node-port port-in">
+                    <span class="dot-circle"></span>
+                </div>
+                <div class="node-body">
+                    <span>{{item.Name}}</span>
+                </div>
+                <div class="vr-nodetype-container">
+                    <div class="node-type" ng-class="item.type || 'default'"></div>
+                </div>
+                <div class="node-port port-out">
+                    <span class="dot-circle"></span>
+                </div>
+            </div>
+        </div>
+        <div class="vr-networkpath-connector-wrapper ">
+            <div class="vr-networkpath-connector">
+                <div class="port-label node-out">{{ctrl.getOutConnecterPortNumber(item.Id)}}</div>
+                <div class="vr-networkpath-connector-line"></div>
+                <div class="port-label node-in">{{ctrl.getInConnecterPortNumber(item.Id)}}</div>
+            </div>
+        </div>
+    </div>
+</div>

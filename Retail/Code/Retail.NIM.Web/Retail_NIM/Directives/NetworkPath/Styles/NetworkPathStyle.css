@@ -1,0 +1,154 @@
+﻿.vr-networkpath {
+    display: flex;
+    overflow-x: auto;
+}
+
+.vr-networkpath-item {
+    display: inline-flex;
+    width: 350px;
+}
+
+    .vr-networkpath-item:last-child {
+        width: 150px;
+    }
+
+.vr-networkpath-node {
+    background-color: #9bd0ff;
+    width: 150px;
+    height: 130px;
+    border-radius: 15px;
+}
+
+.vr-networkpath-item:last-child .vr-networkpath-node {
+    width: 150px;
+}
+
+.vr-networkpath-node .node-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.vr-networkpath-node .node-body {
+    position: absolute;
+    border-radius: 5px;
+    z-index: 1;
+    padding: 5px 0px 0px 10px;
+    color: #274273;
+    font-weight: bold;
+    font-size: 12px;
+    height: 40px;
+    width: 100%;
+    border-bottom: 1px solid #fff;
+}
+
+.vr-networkpath-item:last-child .vr-networkpath-node {
+    width: 250px;
+}
+
+.vr-networkpath-item:first-child .node-port:first-child,
+.vr-networkpath-item:last-child .node-port:last-child,
+.vr-networkpath-item:last-child .vr-networkpath-connector-wrapper {
+    display: none
+}
+
+.vr-networkpath-node .node-port {
+    position: absolute;
+    top: 50%;
+    transform: translate(0%,-50%);
+    height: 10px;
+    width: 10px;
+    border: 1px solid #2eb150;
+    border-radius: 5px;
+    z-index: 1;
+    background-color: #fff;
+}
+
+    .vr-networkpath-node .node-port .dot-circle {
+        display: block;
+        border-radius: 5px;
+        border: 2px solid #000;
+        height: 3px;
+        width: 2px;
+        position: relative;
+        top: 2px;
+        left: 2px;
+    }
+
+    .vr-networkpath-node .node-port.port-in {
+        left: 10px;
+    }
+
+    .vr-networkpath-node .node-port.port-out {
+        right: 10px;
+    }
+
+.vr-networkpath-connector-wrapper {
+    position: relative;
+    width: 200px;
+    height: 100%;
+}
+
+.vr-networkpath-item:last-child .vr-networkpath-connector-wrapper {
+    display: none
+}
+
+.vr-networkpath-connector {
+    height: 10px;
+    width: calc(100% + 30px);
+    position: absolute;
+    margin-left: -15px;
+    margin-right: -15px;
+    top: 50%;
+    transform: translate(0%,-50%);
+    position: absolute;
+}
+
+.port-label {
+    top: calc(50% - 15px);
+    transform: translate(0%,-50%);
+    position: absolute;
+    padding: 0px 5px;
+    font-size: 11px;
+}
+
+    .port-label.node-out {
+        left: 15px;
+    }
+
+    .port-label.node-in {
+        right: 15px;
+    }
+
+.vr-networkpath-connector-line {
+    border-top: 2px solid #4d8a45;
+    margin-top: 4px;
+}
+
+
+.vr-nodetype-container {
+    position: relative;
+    width: 50px;
+    height: 75px;
+    overflow: hidden;
+    top: 15px;
+}
+
+.node-type {
+    width: 50px;
+    background: #4c964f;
+    position: absolute;
+}
+
+.splitter {
+    height: 50px;
+    top: 25px;
+    left: 40px;
+    transform: rotate(45deg);
+}
+
+.default {
+    height: 25px;
+    top: 38px;
+    left: 25px;
+}

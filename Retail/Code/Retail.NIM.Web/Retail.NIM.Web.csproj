@@ -83,6 +83,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_NIM\Directives\NetworkPath\retail-nim-networkpath-designer.js" />
+    <Content Include="Retail_NIM\Directives\NetworkPath\Templates\NetworkPathTemplate.html" />
+    <Content Include="Retail_NIM\Directives\NetworkPath\Styles\NetworkPathStyle.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -103,7 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Retail_NIM\Constant\" />
-    <Folder Include="Retail_NIM\Directives\" />
     <Folder Include="Retail_NIM\Services\" />
     <Folder Include="Retail_NIM\Views\" />
   </ItemGroup>
