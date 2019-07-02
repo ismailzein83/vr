@@ -64,7 +64,7 @@
                     $scope.scopeModel.isFilterSectionShow = !$scope.scopeModel.isFilterSectionShow;
                 };
                 $scope.search = function () {
-                    return gridDirectiveAPI.load(getGridFilter());
+                   return gridDirectiveAPI.load(getGridFilter());
                 };
 
                 $scope.addBusinessEntity = function () {
@@ -121,7 +121,7 @@
                                                 promises: promises3,
                                                 getChildNode: function () {
                                                     var promises4 = [];
-                                                    $scope.scopeModel.customActions = VR_GenericData_GenericBECustomActionService.buildCustomActions(genericBEDefinitionSettings, businessDefinitionId, fieldValues);
+                                                    $scope.scopeModel.customActions = VR_GenericData_GenericBECustomActionService.buildCustomActions(genericBEDefinitionSettings, businessDefinitionId, fieldValues, getContext());
                                                     promises4.push(loadGridDirective());
                                                     return {
                                                         promises: promises4
@@ -229,6 +229,8 @@
                     }
 
 
+
+
                     return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
                         $scope.scopeModel.showAddButton = showAddFromDefinitionSettings && showAddFromAccess;
                         $scope.scopeModel.showUploadButton = showUploadFromDefinitionSettings && showUploadFromAccess;
@@ -238,6 +240,42 @@
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
+            }
+
+            function getContext() {
+                return {
+                    trigerSearch: function (filterValues) {
+                        console.log(filterValues);
+                        var filters;
+                        if (filterValues != undefined) {
+                            if (filters == undefined)
+                                filters = [];
+                            for (var key in filterValues) {
+                                var filterValue = filterValues[key];
+                                filters.push({
+                                    FieldName: key,
+                                    FilterValues: [filterValue]
+                                });
+                            }
+                        }
+                        var gridPayload = {
+                            query: {
+                                FilterGroup: undefined,
+                                Filters: filters,
+                                fieldValues: fieldValues,
+                                OrderType: genericBEDefinitionSettings.OrderType,
+                                AdvancedOrderOptions: genericBEDefinitionSettings.AdvancedOrderOptions,
+                            },
+                            businessEntityDefinitionId: businessDefinitionId,
+                            threeSixtyDegreeSettings: genericBEDefinitionSettings.ThreeSixtyDegreeSettings,
+                            doNotLoadByDefault: genericBEDefinitionSettings.DoNotLoadByDefault
+                        };
+                        return gridDirectiveAPI.load(gridPayload);
+                    },
+                    expendRow: function () {
+                        console.log(gridDirectiveAPI);
+                    }
+                };
             }
 
             function getGridFilter() {

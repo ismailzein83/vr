@@ -42,7 +42,7 @@
             var gridAPIPromiseDeferred = UtilsService.createPromiseDeferred();
             var gridDrillDownTabsObj;
             var styleDefinitions = [];
-            function initializeController() {
+            function initializeController() { 
                 $scope.scopeModel = {};
                 $scope.scopeModel.showGrid = false;
                 $scope.scopeModel.columns = [];
@@ -292,6 +292,13 @@
                 api.finalizeBulkActionDraft = function () {
                     return bulkActionDraftInstance.finalizeBulkActionDraft();
                 };
+
+                api.expendRow = function (genericBEId) {
+                    var dataItem = UtilsService.getItemByVal($scope.scopeModel.businessEntities, genericBEId,  $scope.scopeModel.idFieldName);
+                    if (dataItem != undefined)
+                        return gridAPI.expandRow(dataItem);
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

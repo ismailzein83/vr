@@ -115,7 +115,7 @@
                 }
 
                 $scope.search = function () {
-                    return gridDirectiveAPI.load(getGridFilter());
+                   return gridDirectiveAPI.load(getGridFilter());
                 };
 
                 $scope.addBusinessEntity = function () {
@@ -164,7 +164,7 @@
                         promises: [loadBEDefinitionsSelectorAndSubsections()],
 
                         getChildNode: function () {
-                            $scope.scopeModel.customActions = VR_GenericData_GenericBECustomActionService.buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId);
+                            $scope.scopeModel.customActions = VR_GenericData_GenericBECustomActionService.buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId, getGridFilter());
                             return { promises: [] };
                         }
                     }).catch(function (error) {
@@ -371,6 +371,39 @@
 
                     $scope.scopeModel.enableBulkActions = value;
                 };
+
+                currentContext.trigerSearch = function (filterValues) {
+                    var filters;
+                    if (filterValues != undefined) {
+                        if (filters == undefined)
+                            filters = [];
+                        for (var key in filterValues) {
+                            var filterValue = filterValues[key];
+                            filters.push({
+                                FieldName: key,
+                                FilterValues: [filterValue]
+                            });
+                        }
+                    }
+                    var gridPayload = {
+                        query: {
+                            FilterGroup: undefined,
+                            Filters: filters,
+                            OrderType: genericBEDefinitionSettings.OrderType,
+                            AdvancedOrderOptions: genericBEDefinitionSettings.AdvancedOrderOptions
+                        },
+                        businessEntityDefinitionId: businessEntityDefinitionAPI.getSelectedIds(),
+                        context: getGridContext(),
+                        bulkActionId: bulkActionId,
+                        doNotLoadByDefault: genericBEDefinitionSettings.DoNotLoadByDefault,
+                        threeSixtyDegreeSettings: genericBEDefinitionSettings.ThreeSixtyDegreeSettings
+                    };
+                    return gridDirectiveAPI.load(gridPayload);
+                };
+                currentContext.expendRow = function (genericBEId) {
+                    return gridDirectiveAPI.expendRow(genericBEId);
+                };
+
                 return currentContext;
             }
         }

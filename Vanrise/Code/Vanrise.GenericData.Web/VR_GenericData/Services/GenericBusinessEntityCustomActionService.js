@@ -62,7 +62,7 @@
             };
             registerCustomActionType(bulkAddCustomAction);
         }
-        function buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId, parentFieldValues) {
+        function buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId, parentFieldValues,context) {
             customActions = [];
             if (genericBEDefinitionSettings != undefined && genericBEDefinitionSettings.CustomActions != undefined) {
                 var actions = genericBEDefinitionSettings.CustomActions;
@@ -81,7 +81,7 @@
                         });
                     }
                 }
-                buildActionsFromDictionary(actionsDictionary);
+                buildActionsFromDictionary(actionsDictionary);  
             }
             return customActions;
             function buildActionsFromDictionary(actionsDictionary) {
@@ -131,7 +131,8 @@
                     customAction: customAction,
                     businessEntityDefinitionId: businessEntityDefinitionId,
                     dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
-                    parentFieldValues: parentFieldValues
+                    parentFieldValues: parentFieldValues,
+                    context:context
                 };
                 var actionType = getCustomActionTypeIfExist(customAction.Settings.ActionTypeName);
                 if (actionType != undefined)
