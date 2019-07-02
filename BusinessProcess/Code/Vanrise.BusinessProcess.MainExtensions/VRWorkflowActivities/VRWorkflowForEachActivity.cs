@@ -25,6 +25,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public VRWorkflowActivity Activity { get; set; }
 
+        public string Description { get; set; }
+
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             //System.Activities.Statements.ForEach<string> foreachActivity = new System.Activities.Statements.ForEach<string>
@@ -205,6 +207,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     {
                         Settings = new BPForEachVisualItemDefinition
                         {
+                            Description = this.Description,
                             ChildActivityId = this.Activity.VRWorkflowActivityId,
                             ChildActivityVisualItemDefinition = childActivityVisualItem
                         }
@@ -228,7 +231,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public override Guid ConfigId { get { return new Guid("8D691741-D0B6-4CF9-8A33-998E0DCC0B0D"); } }
 
         public override string Editor { get { return "bp-workflow-activitysettings-visualitemdefiniton-foreach"; } }
-        
+
+        public string Description { get; set; }
+
         public Guid ChildActivityId { get; set; }
 
         public BPVisualItemDefinition ChildActivityVisualItemDefinition { get; set; }
