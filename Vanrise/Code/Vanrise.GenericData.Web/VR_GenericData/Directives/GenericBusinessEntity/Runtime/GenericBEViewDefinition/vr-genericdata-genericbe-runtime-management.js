@@ -386,7 +386,7 @@
                         return gridDirectiveAPI.load(gridPayload);
                     },
                     expendRow: function (genericBEId) {
-                        gridDirectiveAPI.expendRow(genericBEId);
+                      return  gridDirectiveAPI.expendRow(genericBEId);
                     }
                 };
             }
