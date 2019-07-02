@@ -20,7 +20,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             var ratePlanContext = context.GetExtension<IRatePlanContext>();
             ratePlanContext.ThrowIfNull("ratePlanContext");
 
-            if(ratePlanContext.OwnerType != BusinessEntity.Entities.SalePriceListOwnerType.Customer)
+            if (ratePlanContext.OwnerType != BusinessEntity.Entities.SalePriceListOwnerType.Customer)
             {
                 return true;
             }
@@ -41,35 +41,37 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 zone.ThrowIfNull("zone");
                 var lastCustomerRate = currentRateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, zone.ZoneId);
                 lastCustomerRate.ThrowIfNull("lastCustomerRate");
+                if (zone.NormalRateToChange != null)
+                {
+                    var thresholdContext = new ThresholdContext
+                    {
+                        CurrentRate = lastCustomerRate.Rate.Rate,
+                        NewRate = zone.NormalRateToChange.NormalRate,
+                        CurrentCurrencyId = zone.NormalRateToChange.CurrencyId.Value
+                    };
 
-                var thresholdContext = new ThresholdContext
-                {
-                    CurrentRate = lastCustomerRate.Rate.Rate,
-                    NewRate = zone.NormalRateToChange.NormalRate,
-                    CurrentCurrencyId = zone.NormalRateToChange.CurrencyId.Value
-                };
 
-               
-                var target = new Vanrise.GenericData.Entities.GenericRuleTarget
-                {
-                    TargetFieldValues = new Dictionary<string, object>
-                {
-                    {"SellingProduct", sellingProductId},
-                    {"Customer", ratePlanContext.OwnerId},
-                    {"SaleZone", zone.ZoneId}
-                }
-                };
-                target.EffectiveOn = zone.NormalRateToChange.BED;
-                new SellingRuleManager().ApplySellingRule(thresholdContext, ruleDefinitionId, target);
-                if(thresholdContext.ViolateRateRule)
-                {
-                    invalidZones.Add(zone.ZoneName);
+                    var target = new Vanrise.GenericData.Entities.GenericRuleTarget
+                    {
+                        TargetFieldValues = new Dictionary<string, object>
+                        {
+                            {"SellingProduct", sellingProductId},
+                            {"Customer", ratePlanContext.OwnerId},
+                            {"SaleZone", zone.ZoneId}
+                        }
+                    };
+                    target.EffectiveOn = zone.NormalRateToChange.BED;
+                    new SellingRuleManager().ApplySellingRule(thresholdContext, ruleDefinitionId, target);
+                    if (thresholdContext.ViolateRateRule)
+                    {
+                        invalidZones.Add(zone.ZoneName);
+                    }
                 }
             }
 
             if (invalidZones.Count > 0)
             {
-                context.Message = string.Format("Zone (s) with new rate(s) less than selling rule threshold are : '{0}'",string.Join(",", invalidZones));
+                context.Message = string.Format("Zone (s) with new rate(s) that violates selling rule are : '{0}'", string.Join(",", invalidZones));
                 return false;
             }
 
