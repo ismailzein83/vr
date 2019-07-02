@@ -188,11 +188,26 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.GetGenericBESelectorConditionConfigs();
         }
 
+        [HttpPost]
+        [Route("GetAllGenericBusinessEntities")]
+        public List<GenericBusinessEntity> GetAllGenericBusinessEntities(GetAllGenericBusinessEntitiesInput input)
+        {
+            input.ThrowIfNull("input");
+            return _manager.GetAllGenericBusinessEntities(input.BusinessEntityDefinitionId, input.ColumnsNeeded, input.FilterGroup);
+        }
+
         public class GetDependentFieldValuesInput
         {
             public Guid DataRecordTypeId { get; set; }
 
             public Dictionary<string, object> FieldValues { get; set; }
+        }
+
+        public class GetAllGenericBusinessEntitiesInput
+        {
+            public Guid BusinessEntityDefinitionId { get; set; }
+            public List<string> ColumnsNeeded { get; set; }
+            public RecordFilterGroup FilterGroup { get; set; }
         }
 
     }
