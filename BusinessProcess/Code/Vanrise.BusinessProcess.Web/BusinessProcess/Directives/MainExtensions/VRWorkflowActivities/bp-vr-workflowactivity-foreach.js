@@ -27,7 +27,9 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 			var workflowContainerAPI;
 			var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			var iterationVariableType;
+            var iterationVariableType;
+            var description;
+            var runInParallel;
 
 			var context = {};
 			var isNew;
@@ -110,7 +112,9 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 							$scope.scopeModel.List = payload.Settings.List;
 							$scope.scopeModel.IterationVariableName = payload.Settings.IterationVariableName;
 							iterationVariableType = payload.Settings.IterationVariableType;
-							activity = payload.Settings.Activity;
+                            activity = payload.Settings.Activity;
+                            description = payload.Settings.Description;
+                            runInParallel = payload.Settings.RunInParallel;
 						}
 						if (payload.Context != null) {
 							$scope.scopeModel.context = payload.Context;
@@ -134,6 +138,8 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 							$scope.scopeModel.IterationVariableName = foreachObj.IterationVariableName;
 							iterationVariableType = foreachObj.IterationVariableType;
 							activity = foreachObj.Activity;
+                            description = foreachObj.Description;
+                            runInParallel = foreachObj.RunInParallel;
 							promises.push(loadWorkflowContainer());
 							UtilsService.waitMultiplePromises(promises);
 						};
@@ -197,7 +203,9 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 					List: $scope.scopeModel.List,
 					IterationVariableName: $scope.scopeModel.IterationVariableName,
 					IterationVariableType: iterationVariableType,
-					Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null
+                    Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null,
+                    Description: description,
+                    RunInParallel: runInParallel
 				};
 			}
 		}

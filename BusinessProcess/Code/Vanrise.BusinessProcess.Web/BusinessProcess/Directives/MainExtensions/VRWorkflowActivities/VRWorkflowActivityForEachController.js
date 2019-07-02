@@ -13,7 +13,9 @@
 		var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 		var dragdropsetting;
-		var list;
+        var list;
+        var conditionDescription;
+        var runInParallel;
 		var iterationVariableName;
 		var iterationVariableType;
 		var activity;
@@ -34,7 +36,9 @@
 				isNew = parameters.isNew;
 				getChildContext = parameters.getChildContext;
 				if (parameters.foreachObj != undefined) {
-					list = parameters.foreachObj.List;
+                    list = parameters.foreachObj.List;
+                    conditionDescription = parameters.foreachObj.Description;
+                    runInParallel = parameters.foreachObj.RunInParallel;
 					iterationVariableName = parameters.foreachObj.IterationVariableName;
 					iterationVariableType = parameters.foreachObj.IterationVariableType;
 					activity = parameters.foreachObj.Activity;
@@ -100,7 +104,9 @@
 
 			function loadStaticData() {
 				$scope.scopeModel.dragdropsetting = dragdropsetting;
-				$scope.scopeModel.list = list;
+                $scope.scopeModel.list = list;
+                $scope.scopeModel.conditionDescription = conditionDescription;
+                $scope.scopeModel.runInParallel = runInParallel;
 				$scope.scopeModel.iterationVariableName = iterationVariableName;
 				$scope.scopeModel.context = context;
 			}
@@ -209,7 +215,9 @@
 				List: $scope.scopeModel.list,
 				IterationVariableName: $scope.scopeModel.iterationVariableName,
 				IterationVariableType: iterationVariableTypeSelectorAPI.getData(),
-				Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null
+                Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null,
+                Description: $scope.scopeModel.conditionDescription,
+                RunInParallel: $scope.scopeModel.runInParallel
 			};
 
 			if ($scope.onActivityUpdated != undefined) {

@@ -3,11 +3,17 @@
 		<vr-form name="formEditForEach" vr-loader="scopeModel.isLoading">
 			<vr-tabs>
 				<vr-tab header="'Definition'">
-					<vr-row>
-						<vr-columns width="1/3row">
-							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="List" isrequired="true" value="scopeModel.list"></businessprocess-vr-workflow-activity-expressionbuilder>
-						</vr-columns>
-					</vr-row>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="List" isrequired="true" value="scopeModel.list"></businessprocess-vr-workflow-activity-expressionbuilder>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModel.conditionDescription" label="Condition Description"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.runInParallel" label="Run in Parallel"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
 					<vr-section header="Iteration Variable Name">
 						<vr-row>
 							<vr-columns width="1/4row">
