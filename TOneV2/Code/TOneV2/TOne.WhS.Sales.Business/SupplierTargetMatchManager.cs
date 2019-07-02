@@ -76,10 +76,18 @@ namespace TOne.WhS.Sales.Business
                                     SupplierAnalyticDetail = supplierAnalyticDetail
                                 };
                                 List<SupplierTargetMatchAnalyticItem> supplierTargetMatchAnalyticItems = new List<SupplierTargetMatchAnalyticItem>();
-                                for (var i = 0; i < supplierAnalyticDetail.Count && i < input.Query.NumberOfOptions; i++)
-                                {
-                                    supplierTargetMatchAnalyticItems.Add(supplierAnalyticDetail.ElementAt(i).Value);
-                                }
+								foreach (var rpDetail in rpRouteDetail.RouteOptionsDetails)
+								{ SupplierTargetMatchAnalyticItem linkedrpRouteToZoneAnalytic;
+									if (supplierAnalyticDetail.TryGetValue(rpDetail.SupplierId, out linkedrpRouteToZoneAnalytic))
+									{
+										for (var i = 0; i < supplierAnalyticDetail.Count && i < input.Query.NumberOfOptions; i++)
+										{
+											supplierTargetMatchAnalyticItems.Add(supplierAnalyticDetail.ElementAt(i).Value);
+										}
+										break;
+									}
+								}
+
                                 if (supplierTargetMatchAnalyticItems.Count > 0)
                                 {
                                     targetMatch.Volume = supplierTargetMatchAnalyticItems.Max(x => x.Duration);
