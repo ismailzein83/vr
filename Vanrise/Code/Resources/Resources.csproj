@@ -104,6 +104,9 @@
     <Content Include="BatchScripts\Common\TOneSource\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Common\TOneSource\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Common\TOneSource\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Interconnect.Ogero\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Interconnect.Ogero\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Interconnect.Ogero\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\runtime-list-of-excluded-files.txt" />
@@ -445,6 +448,15 @@
     <None Include="BatchScripts\Component-ISP\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\Component-ISP\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Component-ISP\All.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\01-Runtime.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\03-WebSite.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\05-CompressFiles.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\Interconnect.Ogero\All.bat" />
     <None Include="BatchScripts\ISP\01-Runtime.bat" />
     <None Include="BatchScripts\ISP\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\ISP\03-WebSite.bat" />
