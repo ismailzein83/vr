@@ -114,6 +114,7 @@
     <Compile Include="CDRCorrelation\CDRCorrelationProcessState.cs" />
     <Compile Include="DataRecordTypes\DataRecordFieldTypeInfo.cs" />
     <Compile Include="GenericBusinessEntityCustomActions\RangeGenericEditorProcessInput.cs" />
+    <Compile Include="GenericBusinessEntity\GetDescriptionByIdsDicValueOutput.cs" />
     <Compile Include="GenericBusinessEntity\RangeGenericEditorDefinitionSettings.cs" />
     <Compile Include="GenericEditor\Runtime\GenericFieldsRuntimeRow.cs" />
     <Compile Include="GenericFinancialAccount.cs" />
