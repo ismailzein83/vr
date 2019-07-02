@@ -195,19 +195,19 @@ when not matched by target then
 --[genericdata].[VRNumberPrefixType]----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([Id],[Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+;with cte_data([Id],[Name])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('F15D3281-6555-4487-BF8F-7014A7B96797','On Net',-1,'2019-05-13 10:58:50.120',-1,'2019-05-13 10:58:50.120')
+('F15D3281-6555-4487-BF8F-7014A7B96797','On-net')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime]))
+)c([Id],[Name]))
 merge	[genericdata].[VRNumberPrefixType] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[CreatedBy] = s.[CreatedBy],[CreatedTime] = s.[CreatedTime],[LastModifiedBy] = s.[LastModifiedBy],[LastModifiedTime] = s.[LastModifiedTime]
+--when matched then
+--	update set
+--	[Name] = s.[Name]
 when not matched by target then
-	insert([Id],[Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
-	values(s.[Id],s.[Name],s.[CreatedBy],s.[CreatedTime],s.[LastModifiedBy],s.[LastModifiedTime]);
+	insert([Id],[Name])
+	values(s.[Id],s.[Name]);
 
