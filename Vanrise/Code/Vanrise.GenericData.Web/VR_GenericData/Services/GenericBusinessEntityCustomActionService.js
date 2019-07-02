@@ -21,7 +21,27 @@
         function registerCustomActionType(actionType) {
             customActionTypes.push(actionType);
         }
+        function registeNewOrExistingCustomAction() {
+            var bulkAddCustomAction = {
+                ActionTypeName: "NewOrExistingCustomAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+                    var parameters = {
+                        dataRecordTypeId: payload.dataRecordTypeId,
+                        parentFieldValues: payload.parentFieldValues,
+                        customAction: payload.customAction,
+                        businessEntityDefinitionId: payload.businessEntityDefinitionId
+                    };
+                    var settings = {};
 
+                    var modalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/CustomActions/Templates/NewOrExistingRuntimeEditor.html";
+
+                    VRModalService.showModal(modalPath, parameters, settings);
+                }
+            };
+            registerCustomActionType(bulkAddCustomAction);
+        }
         function registerBulkAddCustomAction() {
             var bulkAddCustomAction = {
                 ActionTypeName: "BulkAddCustomAction",
@@ -113,7 +133,7 @@
                     dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
                     parentFieldValues: parentFieldValues
                 };
-                var actionType =getCustomActionTypeIfExist(customAction.Settings.ActionTypeName);
+                var actionType = getCustomActionTypeIfExist(customAction.Settings.ActionTypeName);
                 if (actionType != undefined)
                     return actionType.ExecuteAction(payload);
             }
@@ -122,7 +142,8 @@
             getCustomActionTypeIfExist: getCustomActionTypeIfExist,
             registerCustomActionType: registerCustomActionType,
             registerBulkAddCustomAction: registerBulkAddCustomAction,
-            buildCustomActions: buildCustomActions
+            buildCustomActions: buildCustomActions,
+            registeNewOrExistingCustomAction: registeNewOrExistingCustomAction
         });
     };
 
