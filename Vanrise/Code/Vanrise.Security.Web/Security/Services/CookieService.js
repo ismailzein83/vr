@@ -18,7 +18,6 @@ function ($cookies, VRNotificationService) {
     }
 
     function getAccessCookie() {
-        console.log("getAccessCookieName Sec_CookieService // " + getAccessCookieName());
         return $cookies.get(getAccessCookieName());
     }
 

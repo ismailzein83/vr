@@ -39,7 +39,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             });
 
             $rootScope.setCookieName = function (cookieName) {
-                console.log("Index.cshtml // " + cookieName);
                 if (cookieName != undefined && cookieName != '')
                     SecurityService.setAccessCookieName(cookieName);
 
@@ -818,8 +817,6 @@ app.controller('loginCtrl', ["$scope", "SecurityService", "$rootScope", "VRLocal
     $scope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
             SecurityService.setAccessCookieName(cookieName);
-
-        console.log("cookieName loginCtrl // " + cookieName);
 
     };
     $scope.setLocalizationEnabled = function (isLocalizationEnabled) {
