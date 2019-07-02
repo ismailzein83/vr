@@ -61,5 +61,4 @@ namespace Vanrise.GenericData.MainExtensions
         public int ColNum { get; set; }
         public VRGenericEditorDefinitionSetting SectionSettings { get; set; }
     }
-
 }

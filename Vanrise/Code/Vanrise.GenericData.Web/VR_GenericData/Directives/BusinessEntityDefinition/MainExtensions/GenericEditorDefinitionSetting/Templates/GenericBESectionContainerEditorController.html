@@ -1,0 +1,34 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBESectionContainerEditorController" vr-loader="scopeModal.isLoading" width="'40%'">
+	<vr-modalbody>
+		<vr-form validationcontext="sectionEditor">
+			<vr-tabs>
+				<vr-tab header="'Definition'">
+					<vr-row>
+						<vr-columns width="1/2row">
+							<vr-textbox value="scopeModel.sectionTitle" label="Title" isrequired></vr-textbox>
+						</vr-columns>
+						<vr-columns width="1/2row">
+							<vr-textbox type="number" value="scopeModel.colNum" label="Columns Number" minvalue="1" maxvalue ="12" isrequired="true"></vr-textbox>
+						</vr-columns>
+					</vr-row>
+					<vr-row>
+						<vr-columns width="1/2row" haschildcolumns>
+							<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady"></vr-common-vrlocalizationtextresource-selector>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+				<vr-tab header="'Settings'">
+					<vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-genericbe-editordefinition-settings>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" validationcontext="sectionEditor" data-onclick="scopeModel.saveSectionDefinition"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+</div>
