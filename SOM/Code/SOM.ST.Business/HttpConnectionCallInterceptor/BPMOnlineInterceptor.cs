@@ -28,22 +28,22 @@ namespace SOM.ST.Business
             var userEmail = user.Email;
             var somDevMode_BPMConfiguration = ConfigurationManager.AppSettings["SOMDevMode_BPMConfiguration"];
 
-            if (String.IsNullOrEmpty(somDevMode_BPMConfiguration))
-                throw new NullReferenceException("SOMDevMode_BPMConfiguration");
-
-            var bpmConfigurations = somDevMode_BPMConfiguration.Split('|');
-            foreach (var item in bpmConfigurations)
-            {
-                var items = item.Split(';');
-                if (item.Length > 0)
+            if (!String.IsNullOrEmpty(somDevMode_BPMConfiguration))
+             {
+                var bpmConfigurations = somDevMode_BPMConfiguration.Split('|');
+                foreach (var item in bpmConfigurations)
                 {
-                    if (items[0] == userEmail)
+                    var items = item.Split(';');
+                    if (item.Length > 0)
                     {
-                        if (string.IsNullOrEmpty(items[1]))
-                            throw new NullReferenceException(string.Format("User '{0}' does not have email in AppSettings", user.Name));
-                        context.Connection.BaseURL = items[1];
-                        context.Client.BaseAddress = new Uri(items[1]);
-                        break;
+                        if (items[0] == userEmail)
+                        {
+                            if (string.IsNullOrEmpty(items[1]))
+                                throw new NullReferenceException(string.Format("User '{0}' does not have email in AppSettings", user.Name));
+                            context.Connection.BaseURL = items[1];
+                            context.Client.BaseAddress = new Uri(items[1]);
+                            break;
+                        }
                     }
                 }
             }
