@@ -144,6 +144,7 @@
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RangeGenericEditorDefinition.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RowsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\SectionsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\TabsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericFieldsEditorDefinitionSetting.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\BusinessEntityValues.cs" />
