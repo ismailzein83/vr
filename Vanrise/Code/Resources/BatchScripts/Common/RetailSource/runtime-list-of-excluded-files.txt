@@ -13,5 +13,6 @@
 \RecordAnalysis.
 \Retail.NIM.
 \Retail.Billing.
+\Retail.Ogero.
 .aspx\
 .cs\
