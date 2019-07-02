@@ -20,8 +20,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
             },
             controller: function ($scope, $element, $attrs) {
 
-				var ctrl = this;
-				var multipleselection;
+                var ctrl = this;
                 ctrl.datasource = [];
 
                 ctrl.selectedvalues;
@@ -30,8 +29,10 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 if ($attrs.ismultipleselection != undefined) {
                     ctrl.selectedvalues = [];
                     ctrl.label = "Users";
-                    multipleselection = "ismultipleselection";
                 }
+
+                if ($attrs.customlabel != undefined)
+                    ctrl.label = $attrs.customlabel;
 
                 $scope.addNewUser = function () {
                     var onUserAdded = function (userObj) {
@@ -78,8 +79,9 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
 
             var multipleselection = "";
 
-            if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
+            if (attrs.ismultipleselection != undefined) {
+                multipleselection = "ismultipleselection";
+            }
 
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
