@@ -22,9 +22,9 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case startingProcess: nextStepId = update; break;
-                case update: nextStepId = payment; break;
-                case payment: nextStepId = technicalStep; break;
-                case technicalStep: nextStepId = submitToOM; break;
+                case update: nextStepId = submitToOM; break;
+               // case payment: nextStepId = technicalStep; break;
+                //case technicalStep: nextStepId = submitToOM; break;
                 case submitToOM: nextStepId = endProcess; break;
             }
             return nextStepId;
