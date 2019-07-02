@@ -114,6 +114,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkActionRuntimeSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEConditions\GenericFilterGroupCondition.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBECustomAction\GenericBENewOrExistingCustomAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBECustomAction\GenericBEBulkAddCustomAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\ChildEntityFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\IsEmptyFilterDefinitonSettings.cs" />
