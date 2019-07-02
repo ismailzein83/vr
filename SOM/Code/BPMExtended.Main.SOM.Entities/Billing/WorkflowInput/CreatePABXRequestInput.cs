@@ -10,6 +10,7 @@ namespace BPMExtended.Main.SOMAPI
     public class CreatePABXRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public PaymentData PaymentData { get; set; }
         public SubmitPabxInput SubmitPabxInput { get; set; }
 
     }

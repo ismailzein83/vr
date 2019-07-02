@@ -117,6 +117,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("New Pabx Operation")]
         [EntitySchemaName("StPabx")]
+        [TechnicalStepFieldName("StTechnicalStepId")]
+        [TechnicalStepId("4AD46645-AD4A-4F53-83DC-EB38831867FA")]
         [CompletedStep("StStepId")]
         [CompletedStepId("1386C350-017D-400B-855C-04FC427868BF")]
         NewPabxOperation = 7,

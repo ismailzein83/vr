@@ -162,6 +162,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -176,6 +178,8 @@ namespace BPMExtended.Main.Business
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var parameterNumber = entities[0].GetColumnValue("StParameterNumber");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
                 ServiceParameterValue pilotParameter = JsonConvert.DeserializeObject<ServiceParameterValue>(entities[0].GetColumnValue("StPilotContractParameter").ToString()); ;
                 List<PabxContractInput> selectedSecondaryContracts = JsonConvert.DeserializeObject<List<PabxContractInput>>(entities[0].GetColumnValue("StSelectedSecondaryContracts").ToString());
 
@@ -186,7 +190,13 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            RequestId = requestId.ToString()
+                            RequestId = requestId.ToString(),
+                            ContractId = contractId.ToString()
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
                         },
                         SubmitPabxInput = new SubmitPabxInput()
                         {
@@ -239,6 +249,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -253,6 +265,8 @@ namespace BPMExtended.Main.Business
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var parameterNumber = entities[0].GetColumnValue("StParameterNumber");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
                 ServiceParameterValue pilotParameter = JsonConvert.DeserializeObject<ServiceParameterValue>(entities[0].GetColumnValue("StPilotContractParameter").ToString()); ;
                 List<PabxContractInput> selectedSecondaryContracts = JsonConvert.DeserializeObject<List<PabxContractInput>>(entities[0].GetColumnValue("StSelectedSecondaryContracts").ToString());
 
@@ -264,7 +278,13 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            RequestId = requestId.ToString()
+                            RequestId = requestId.ToString(),
+                            ContractId = contractId.ToString()
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
                         },
                         SubmitPabxInput = new SubmitPabxInput()
                         {
