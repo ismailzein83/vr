@@ -23,12 +23,12 @@ namespace BPMExtended.Main.Business
 
         #region public
 
-        public bool ReservePortOnOtherISP(string port, string phoneNumber)
+        public bool ReservePortOnOtherISP(string port, string phoneNumber, string ISP)
         {
             bool result;
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<bool>(String.Format("api/SOM.ST/Inventory/ReserveDSLAMPort?phoneNumber={0}&dslamPort={1}", phoneNumber, port));
+                result = client.Get<bool>(String.Format("api/SOM.ST/Inventory/ReserveADSLPort?phoneNumber={0}&dslamPort={1}&ISP={2}", phoneNumber, port, ISP));
             }
 
             return result;
@@ -39,7 +39,7 @@ namespace BPMExtended.Main.Business
             List<DSLAMPortInfo> items;
             using (SOMClient client = new SOMClient())
             {
-                items = client.Get<List<DSLAMPortInfo>>(String.Format("api/SOM.ST/Inventory/GetISPDSLAMPorts?switchId={0}&ISP={1}", switchId, ISP));
+                items = client.Get<List<DSLAMPortInfo>>(String.Format("api/SOM.ST/Inventory/GetDSLAMPorts?switchId={0}", switchId));
             }
 
             return items;
