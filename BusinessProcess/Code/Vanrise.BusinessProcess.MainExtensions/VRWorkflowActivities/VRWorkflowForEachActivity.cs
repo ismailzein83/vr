@@ -27,6 +27,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public string Description { get; set; }
 
+        public bool RunInParallel { get; set; }
+
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             //System.Activities.Statements.ForEach<string> foreachActivity = new System.Activities.Statements.ForEach<string>
