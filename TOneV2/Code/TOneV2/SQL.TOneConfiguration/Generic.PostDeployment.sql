@@ -147,7 +147,8 @@ as (select * from (values
 ('177D3C5C-4A3D-4B3E-B63C-60B1021C0C40','IsEmpty_Filter','Empty Filter','VR_GenericData_GenericBEFilterDefinitionSettings','{"Editor":"vr-genericdata-genericbe-filterdefinition-isemptyfilter"}'),
 ('080E340A-32FC-454A-A681-6FF5281A31E2','Fixed_Values','Fixed Values','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"vr-genericdata-genericbe-beforeinserthandler-fixedvalues"}'),
 ('A4C1333D-886B-4C94-BEFF-E1A32ADD69BE','GenericEditorSubView','Generic Editor Sub View','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-genericeditorsubview-definition"}'),
-('8ef5476f-37eb-436f-8558-e3181ab78c82','Download File','Download File','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-downloadfileaction-definition"}')
+('8ef5476f-37eb-436f-8558-e3181ab78c82','Download File','Download File','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-downloadfileaction-definition"}'),
+('AE78708F-DFD0-49E7-8B60-909AC4D8ABD2','NewOrExisting_Custom_Action','Open New Or Existing','VR_GenericData_GenericBECustomActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-neworexisting-customaction-definition"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
