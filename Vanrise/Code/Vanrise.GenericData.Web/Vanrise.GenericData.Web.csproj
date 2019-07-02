@@ -332,7 +332,9 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\vr-genericdata-genericbe-bulkactionsettings-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\vr-genericdata-genericbe-bulkactions-management.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\Templates\GenericBEBulkActionsManagementTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\Templates\NewOrExistingGenericBEDefinitionCustomActionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\Templates\BulkAddGenericBEDefinitionCustomActionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\vr-genericdata-genericbe-neworexisting-customaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\vr-genericdata-genericbe-bulkadd-customaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\ChildEntityFilterDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\IsEmptyFilterDefinitonTemplate.html" />
@@ -347,7 +349,9 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-statushistorysubview-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\Templates\FixedValuesHandlerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\vr-genericdata-genericbe-beforeinserthandler-fixedvalues.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\CustomActions\NewOrExistingRuntimEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\CustomActions\BulkAddRuntimEditorController.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\CustomActions\Templates\NewOrExistingRuntimeEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\CustomActions\Templates\BulkAddRuntimeEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\ChildEntityFilterRuntimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\IsEmptyFilterRuntimeTemplate.html" />

@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_NewOrExistingRuntimeEditorController" width="'70%'">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-textbox value="firstName" type="text" label="First Name" />
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox value="middleName" type="text" label="Middle Name" />
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox value="lastName" type="text" label="Last Name" />
+        </vr-columns>
+    </vr-row>
+
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.hasBEentity"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

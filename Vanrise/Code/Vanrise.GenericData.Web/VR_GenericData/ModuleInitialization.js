@@ -15,5 +15,6 @@
         VR_GenericData_GenericEditorConditionalRuleContainerService.registerFieldValueConditionalRuleAction();
         VR_GenericData_GenericBECustomActionService.registerBulkAddCustomAction();
         VR_GenericData_GenericBEActionService.registerDownloadFileGenericBEAction();
+        VR_GenericData_GenericBECustomActionService.registeNewOrExistingCustomAction();
     }]);
  
