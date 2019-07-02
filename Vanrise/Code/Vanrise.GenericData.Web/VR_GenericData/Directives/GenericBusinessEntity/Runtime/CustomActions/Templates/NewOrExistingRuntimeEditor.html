@@ -1,20 +1,34 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_NewOrExistingRuntimeEditorController" width="'70%'">
-    <vr-row>
-        <vr-columns width="1/3row">
-            <vr-textbox value="firstName" type="text" label="First Name" />
-        </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-textbox value="middleName" type="text" label="Middle Name" />
-        </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-textbox value="lastName" type="text" label="Last Name" />
-        </vr-columns>
-    </vr-row>
-
+    <vr-modalbody>
+        <vr-form validationcontext="bulkAddEditorGroup">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="firstName" type="text" label="First Name" isrequired />
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="middleName" type="text" label="Middle Name" isrequired />
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="lastName" type="text" label="Last Name" isrequired />
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="motherName" type="text" label="Mother Name" isrequired />
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="birthPlace" type="text" label="Birth Place" isrequired />
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-datetimepicker type="dateTime" value="birthDate" label="Birth Date" isrequired ></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="scopeModel.hasBEentity"></vr-button>
+                <vr-button type="Next" validationcontext="bulkAddEditorGroup" data-onclick="scopeModel.getBEentity"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
