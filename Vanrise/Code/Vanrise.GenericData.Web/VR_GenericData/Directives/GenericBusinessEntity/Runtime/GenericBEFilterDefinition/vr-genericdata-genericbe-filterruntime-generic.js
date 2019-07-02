@@ -20,7 +20,6 @@
             templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/GenericBEFilterDefinition/Templates/GenericFilterRuntimeTemplate.html"
         };
 
-
         function GenericFilterRuntimeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
@@ -46,23 +45,26 @@
                         dataRecordTypeId = payload.dataRecordTypeId;
                         definitionSettings = payload.settings;
                         isFromFilterSection = payload.isFromFilterSection;
+                        var searchManagementFunc = payload.searchManagementFunc;
                         var allFieldValuesByName = payload.allFieldValuesByName;
                         var genericContext = payload.genericContext;
 
-                        var promise = UtilsService.createPromiseDeferred();
-                        promises.push(promise.promise);
+                        var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadPromiseDeferred.promise);
 
                         UtilsService.waitMultipleAsyncOperations([loadDataRecordType, loadDataRecordTypeFieldConfigs]).then(function () {
-                            var fieldType = UtilsService.getItemByVal(dataRecordType.Fields, definitionSettings.FieldName, 'Name');
                             var filterEditor;
-                            var fieldTypeConfig;
+
+                            var fieldType = UtilsService.getItemByVal(dataRecordType.Fields, definitionSettings.FieldName, 'Name');
                             if (fieldType != undefined) {
-                                fieldTypeConfig = UtilsService.getItemByVal(fieldTypeConfigs, fieldType.Type.ConfigId, 'ExtensionConfigurationId');
+                                var fieldTypeConfig = UtilsService.getItemByVal(fieldTypeConfigs, fieldType.Type.ConfigId, 'ExtensionConfigurationId');
+                                if (fieldTypeConfig != undefined) {
+                                    filterEditor = fieldTypeConfig.FilterEditor;
+                                }
                             }
-                            if (fieldTypeConfig != undefined) {
-                                filterEditor = fieldTypeConfig.FilterEditor;
-                            }
-                            if (filterEditor == null) return;
+
+                            if (filterEditor == null)
+                                return;
 
                             var filter = {};
                             filter.fieldName = definitionSettings.FieldName;
@@ -79,22 +81,23 @@
                                     genericContext: genericContext,
                                     allFieldValuesByName: allFieldValuesByName,
                                     //dataRecordTypeId: dataRecordTypeId
-                                    isFromFilterSection: isFromFilterSection
+                                    isFromFilterSection: isFromFilterSection,
+                                    triggerSearch: definitionSettings.TriggerSearch,
+                                    searchManagementFunc: searchManagementFunc
                                 };
                                 VRUIUtilsService.callDirectiveLoad(filter.directiveAPI, directivePayload, filter.directiveLoadDeferred);
                             };
                             filter.directiveLoadDeferred.promise.then(function () {
-                                promise.resolve();
+                                loadPromiseDeferred.resolve();
                             }).catch(function (error) {
-                                promise.reject(error);
+                                loadPromiseDeferred.reject(error);
                             });
 
                             $scope.scopeModel.filter = filter;
 
                         }).catch(function (error) {
-                            promise.reject(error);
+                            loadPromiseDeferred.reject(error);
                         });
-                        
                     }
 
                     function loadDataRecordType() {
@@ -131,6 +134,7 @@
 
                     if (finalArray == undefined || finalArray.length == 0)
                         return;
+
                     return {
                         Filters: [{
                             FieldName: $scope.scopeModel.filter.fieldName,
@@ -163,5 +167,4 @@
     }
 
     app.directive('vrGenericdataGenericbeFilterruntimeGeneric', GenericFilterRuntimeSettingsDirective);
-
 })(app);

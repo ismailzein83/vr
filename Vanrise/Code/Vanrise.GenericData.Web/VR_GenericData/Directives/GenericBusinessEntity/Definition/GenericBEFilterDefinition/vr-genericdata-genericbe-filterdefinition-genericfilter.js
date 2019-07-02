@@ -21,6 +21,7 @@
         };
 
         function GenericFilterCtor($scope, ctrl) {
+            this.initializeController = initializeController;
 
             var context;
             var settings;
@@ -38,7 +39,6 @@
             var fieldTypeRuntimeDirectiveAPI;
             var fieldTypeRuntimeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -95,38 +95,20 @@
 
                 defineAPI();
             };
+
             function defineAPI() {
                 var api = {};
-                api.getData = function () {
-                    var filterValues;
-                    if (fieldTypeRuntimeDirectiveAPI != undefined) {
-                        filterValues = fieldTypeRuntimeDirectiveAPI.getValuesAsArray();
-                    }
-                    var finalArray = [];
-                    if (filterValues != undefined) {
-                        for (var i = 0; i < filterValues.length; i++) {
-                            var filterValue = filterValues[i];
-                            if (filterValue != undefined) {
-                                finalArray.push(filterValue);
-                            }
-                        }
-                    }
-                    return {
-                        $type: "Vanrise.GenericData.MainExtensions.GenericFilterDefinitionSettings, Vanrise.GenericData.MainExtensions",
-                        FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
-                        FieldTitle: $scope.scopeModel.fieldTitle,
-                        IsRequired: $scope.scopeModel.isRequired,
-                        TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues(),
-                        DefaultFieldValues: (finalArray != undefined && finalArray.length != 0) ? finalArray : undefined
-                    };
-                };
 
                 api.load = function (payload) {
                     var initialPromises = [];
 
-                    if (payload != undefined) {
+                    if (payload != undefined) { 
                         context = payload.context;
                         settings = payload.settings;
+
+                        if (settings != undefined) {
+                            $scope.scopeModel.triggerSearch = settings.TriggerSearch;
+                        }
                     }
 
                     function loadDataRecordTitleFieldsSelector() {
@@ -229,6 +211,34 @@
                     });
                 };
 
+                api.getData = function () {
+
+                    var filterValues;
+                    if (fieldTypeRuntimeDirectiveAPI != undefined) {
+                        filterValues = fieldTypeRuntimeDirectiveAPI.getValuesAsArray();
+                    }
+
+                    var finalArray = [];
+                    if (filterValues != undefined) {
+                        for (var i = 0; i < filterValues.length; i++) {
+                            var filterValue = filterValues[i];
+                            if (filterValue != undefined) {
+                                finalArray.push(filterValue);
+                            }
+                        }
+                    }
+
+                    return {
+                        $type: "Vanrise.GenericData.MainExtensions.GenericFilterDefinitionSettings, Vanrise.GenericData.MainExtensions",
+                        FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
+                        FieldTitle: $scope.scopeModel.fieldTitle,
+                        IsRequired: $scope.scopeModel.isRequired,
+                        TriggerSearch: $scope.scopeModel.triggerSearch,
+                        TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues(),
+                        DefaultFieldValues: (finalArray != undefined && finalArray.length != 0) ? finalArray : undefined
+                    };
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
@@ -238,5 +248,6 @@
             }
         }
     }
+
     app.directive('vrGenericdataGenericbeFilterdefinitionGenericfilter', FilterDefinitionGenericFilterDirective);
 })(app);

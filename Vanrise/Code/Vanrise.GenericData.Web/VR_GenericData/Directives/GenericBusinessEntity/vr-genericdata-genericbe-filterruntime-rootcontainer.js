@@ -24,6 +24,7 @@ app.directive("vrGenericdataGenericbeFilterruntimeRootcontainer", ["UtilsService
             var settings;
             var dataRecordTypeId;
             var filterValues;
+            var searchManagementFunc;
             var allFieldValuesByFieldNames = {};
 
             var filterDirectiveAPI;
@@ -51,6 +52,7 @@ app.directive("vrGenericdataGenericbeFilterruntimeRootcontainer", ["UtilsService
                         settings = payload.settings;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         filterValues = payload.filterValues;
+                        searchManagementFunc = payload.searchManagementFunc;
                         $scope.scopeModel.filterRuntimeEditor = payload.filterRuntimeEditor;
                     }
 
@@ -78,7 +80,8 @@ app.directive("vrGenericdataGenericbeFilterruntimeRootcontainer", ["UtilsService
                                 filterValues: filterValues,
                                 allFieldValuesByName: allFieldValuesByName,
                                 genericContext: buildGenericContext(),
-                                isFromFilterSection: true
+                                isFromFilterSection: true,
+                                searchManagementFunc: searchManagementFunc
                             };
                             VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
                         });

@@ -23,22 +23,12 @@
         function GenericBERuntimeManagementCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var filterRuntimeRootDirectiveAPI;
-            var filterRuntimeRootDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
             var viewId;
             var bulkActionId;
             var bulkAction;
 
             var businessEntityDefinitionId;
             var genericBEDefinitionSettings;
-
-            var businessEntityDefinitionAPI;
-            var businessEntityDefinitionReadyDeferred = UtilsService.createPromiseDeferred();
-            var businessEntityDefinitionSelectedDeferred;
-
-            var gridDirectiveAPI;
-            var gridDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             var runtimeManagement;
             var context;
@@ -49,6 +39,17 @@
             var showAddFromDefinitionSettings = true;
             var showUploadFromDefinitionSettings = true;
 
+            var filterRuntimeRootDirectiveAPI;
+            var filterRuntimeRootDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var businessEntityDefinitionAPI;
+            var businessEntityDefinitionReadyDeferred = UtilsService.createPromiseDeferred();
+            var businessEntityDefinitionSelectedDeferred;
+
+            var gridDirectiveAPI;
+            var gridDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.showAddButton = false;
@@ -57,13 +58,6 @@
                 $scope.scopeModel.customActions = [];
                 $scope.scopeModel.showActionButtons = false;
                 $scope.scopeModel.showMenuActions = false;
-                $scope.scopeModel.deselectAllClicked = function () {
-                    gridDirectiveAPI.deselectAllBusinessEntities();
-                };
-                $scope.scopeModel.selectAllClicked = function () {
-                    gridDirectiveAPI.selectAllBusinessEntities();
-                };
-
                 $scope.scopeModel.addBulkActions = [];
 
                 $scope.scopeModel.onFilterRuntimeRootDirectiveReady = function (api) {
@@ -80,6 +74,7 @@
                     businessEntityDefinitionAPI = api;
                     businessEntityDefinitionReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.onBusinessEntityDefinitionSelectionChange = function () {
                     if (businessEntityDefinitionAPI != undefined) {
                         if (businessEntityDefinitionAPI.getSelectedIds() != undefined) {
@@ -107,12 +102,13 @@
                     }
                 };
 
-                function checkDoesUserHaveAddAccess(definitionId) {
-                    return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId).then(function (response) {
-                        showAddFromAccess = response;
-                        showUploadFromAccess = response;
-                    });
-                }
+                $scope.scopeModel.selectAllClicked = function () {
+                    gridDirectiveAPI.selectAllBusinessEntities();
+                };
+
+                $scope.scopeModel.deselectAllClicked = function () {
+                    gridDirectiveAPI.deselectAllBusinessEntities();
+                };
 
                 $scope.search = function () {
                    return gridDirectiveAPI.load(getGridFilter());
@@ -142,6 +138,13 @@
                 UtilsService.waitMultiplePromises([businessEntityDefinitionReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
+
+                function checkDoesUserHaveAddAccess(definitionId) {
+                    return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId).then(function (response) {
+                        showAddFromAccess = response;
+                        showUploadFromAccess = response;
+                    });
+                }
             }
 
             function defineAPI() {
@@ -250,7 +253,8 @@
                     var filterRuntimeRootDirectivePayload = {
                         settings: genericBEDefinitionSettings.FilterDefinition.Settings,
                         dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
-                        filterRuntimeEditor: $scope.scopeModel.filterRuntimeEditor
+                        filterRuntimeEditor: $scope.scopeModel.filterRuntimeEditor,
+                        searchManagementFunc: $scope.search
                     };
                     VRUIUtilsService.callDirectiveLoad(filterRuntimeRootDirectiveAPI, filterRuntimeRootDirectivePayload, filterRuntimeRootDirectiveLoadDeferred);
                 });
@@ -263,7 +267,6 @@
                     gridDirectiveAPI.load(getGridFilter());
                 });
             }
-
 
             function getGridFilter() {
                 var filterData = filterRuntimeRootDirectiveAPI != undefined ? filterRuntimeRootDirectiveAPI.getData() : undefined;
@@ -413,5 +416,4 @@
     }
 
     app.directive('vrGenericdataGenericbeRuntimeManagement', GenericBERuntimeManagementDirective);
-
 })(app);

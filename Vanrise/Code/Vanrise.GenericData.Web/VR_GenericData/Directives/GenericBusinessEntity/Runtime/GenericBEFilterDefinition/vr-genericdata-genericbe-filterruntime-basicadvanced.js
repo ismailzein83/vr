@@ -42,14 +42,20 @@
 
                     var promises = [];
 
+                    var settings;
+                    var filterValues;
+                    var genericContext;
+                    var allFieldValuesByName;
+                    var searchManagementFunc;
+
                     if (payload != undefined) {
                         dataRecordTypeId = payload.dataRecordTypeId;
                         isFromFilterSection = payload.isFromFilterSection;
-
-                        var settings = payload.settings;
-                        var filterValues = payload.filterValues;
-                        var genericContext = payload.genericContext;
-                        var allFieldValuesByName = payload.allFieldValuesByName;
+                        settings = payload.settings;
+                        filterValues = payload.filterValues;
+                        genericContext = payload.genericContext;
+                        allFieldValuesByName = payload.allFieldValuesByName;
+                        searchManagementFunc = payload.searchManagementFunc;
 
                         if (settings != undefined && settings.Filters != undefined && settings.Filters.length > 0) {
                             var firstFilterShowInBasic = settings.Filters[0].ShowInBasic;
@@ -93,7 +99,8 @@
                                 dataRecordTypeId: dataRecordTypeId,
                                 genericContext: genericContext,
                                 allFieldValuesByName: allFieldValuesByName,
-                                isFromFilterSection: isFromFilterSection
+                                isFromFilterSection: isFromFilterSection,
+                                searchManagementFunc: searchManagementFunc
                             };
                             VRUIUtilsService.callDirectiveLoad(filter.filterAPI, filterDirectivePayload, filterItem.loadPromisedeferred);
                         });

@@ -41,22 +41,30 @@
 
             function getDirectiveAPI() {
                 var api = {};
+
                 api.load = function (payload) {
-                    if (payload.fieldType != undefined)
+
+                    if (payload.fieldType != undefined) {
                         payload.fieldType.TextType = undefined;
+                    }
+
                     if (payload.fieldValue != undefined && Array.isArray(payload.fieldValue)) {
                         payload.fieldValue = payload.fieldValue[0];
                     }
+
                     return directiveAPI.load(payload);
                 };
+
+                api.getData = function () {
+                    return directiveAPI.getData();
+                };
+
                 api.getValuesAsArray = function () {
                     var values = [];
                     values.push(directiveAPI.getData());
                     return values;
                 };
-                api.getData = function () {
-                    return directiveAPI.getData();
-                };
+
                 return api;
             }
         }
@@ -67,5 +75,4 @@
     }
 
     app.directive('vrGenericdataFieldtypeTextFiltereditor', TextFieldTypeFilterEditorDirective);
-
 })(app);
