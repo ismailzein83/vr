@@ -27,7 +27,7 @@
             var filterRuntimeRootDirectiveAPI;
             var filterRuntimeRootDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var gridDirectiveAPI;
+            var gridDirectiveAPI; 
             var gridDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             var businessDefinitionId;
@@ -245,7 +245,6 @@
             function getContext() {
                 return {
                     trigerSearch: function (filterValues) {
-                        console.log(filterValues);
                         var filters;
                         if (filterValues != undefined) {
                             if (filters == undefined)
@@ -272,8 +271,8 @@
                         };
                         return gridDirectiveAPI.load(gridPayload);
                     },
-                    expendRow: function () {
-                        console.log(gridDirectiveAPI);
+                    expendRow: function (genericBEId) {
+                        gridDirectiveAPI.expendRow(genericBEId);
                     }
                 };
             }
