@@ -1,10 +1,7 @@
 ﻿body {
 }
 
-.vr-left-tooltip-text .tooltip-inner {
-    text-align: left !important;
-}
-
+/*Events  colors and animation*/
 @-webkit-keyframes vr-visualitem-block-blinker {
     from {
         opacity: 1;
@@ -66,10 +63,21 @@
         cursor: pointer !important;
     }
 
-.vr-visualitem-event-condition {
+/*Main block class*/
+.vr-visualitem-activityblock {
+    border-radius: 10px;
+    height: 75px;
+    width: 125px;
+    text-align: center;
     margin: 0 auto;
+    background-color: #d7e9f1;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: relative;
 }
 
+/*If Else design activity*/
 .vr-visualitem-conditionlabel {
     height: 50px;
     width: 50px;
@@ -124,19 +132,7 @@
     -webkit-transform: rotate(45deg);
 }
 
-.vr-visualitem-activityblock {
-    border-radius: 10px;
-    height: 75px;
-    width: 125px;
-    text-align: center;
-    margin: 0 auto;
-    background-color: #d7e9f1;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    position: relative;
-}
-
+/*Arrow for next block*/
 .vr-visualitem-separatordesign {
     margin-right: calc(50% - 15px);
     margin-top: 10px;
@@ -169,6 +165,7 @@
     font-weight: bold;
 }
 
+/*Icons for blocks*/
 .vr-visualitem-rightimg {
     width: 20px;
     margin: 3px;
@@ -185,11 +182,16 @@
     right: 30px;
 }
 
+/*Tooltip*/
 .vr-visualitem-hintstarted {
     cursor: pointer;
 }
 
+.vr-left-tooltip-text .tooltip-inner {
+    text-align: left !important;
+}
 
+/*Retry Icon for Call HTTP*/
 .vr-visualitem-retrycontainer {
     position: absolute;
     top: 5px;
@@ -311,112 +313,6 @@
     visibility: hidden;
 }
 
-
-.vr-visualitem-counterIcon {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 1px solid;
-    display: inline-block;
-    position: relative;
-}
-
-
-    .vr-visualitem-counterIcon .counter-value {
-        border-radius: 50%;
-        background: transparent;
-        font-size: 14px;
-        color: black;
-        line-height: 17px;
-        text-align: center;
-    }
-
-
-.vr-visualitem-whileactivity .visual-label-container {
-    text-align: center;
-    padding-bottom: 5px;
-}
-
-.vr-visualitem-whileactivity .visual-wrapper .visual-main-content {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-}
-
-    .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content {
-        display: inline-flex;
-        width: 100%;
-    }
-
-        .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block {
-            border: 2px solid #d7e9f1;
-            margin: 5px 10px;
-            padding: 5px;
-            width: 100%;
-            border-right-color: transparent;
-        }
-
-.vr-visualitem-while-block-completed {
-    border-top-color: #0acc19 !important;
-    border-bottom-color: #0acc19 !important;
-    border-left-color: #0acc19 !important;
-}
-
-.vr-visualitem-while-retry-entry-completed {
-    border-bottom-color: #0acc19 !important;
-    border-right-color: #0acc19 !important;
-}
-
-            .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-top-eraser {
-                background-color: #fff;
-                width: calc(50% + 5px);
-                position: relative;
-                left: 50%;
-                top: -24px;
-                display: inline-block;
-                height: 5px;
-            }
-
-            .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-retry-entry {
-                position: relative;
-                display: inline-block;
-                border: 2px solid #d7e9f1;
-                border-top: none;
-                border-left: none;
-                padding: 4px;
-                -webkit-transform: rotate(-45deg);
-                top: -20px;
-                left: -16px;
-            }
-
-            .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-conter-container {
-                position: relative;
-                display: inline-block;
-                padding: 4px;
-                top: -20px;
-                left: -100px;
-                background-color: #fff;
-            }
-
-            .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-retry-exit {
-                position: relative;
-                display: inline-block;
-                border-left: 2px solid #d7e9f1;
-                bottom: -10px;
-                left: calc(50% + 3px);
-                height: 20px;
-            }
-
-            .vr-visualitem-whileactivity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-bottom-eraser {
-                background-color: #fff;
-                width: calc(50% + 5px);
-                position: relative;
-                left: 50%;
-                bottom: -12px;
-                display: inline-block;
-                height: 5px;
-            }
-
 @keyframes hideprograssbar {
     to {
         visibility: hidden;
@@ -477,3 +373,204 @@
         margin-bottom: 20px;
     }
 }
+
+/*Counter Icon for New Iteration*/
+.vr-visualitem-counterIcon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid;
+    display: inline-block;
+    position: relative;
+}
+
+
+    .vr-visualitem-counterIcon .counter-value {
+        border-radius: 50%;
+        background: transparent;
+        font-size: 14px;
+        color: black;
+        line-height: 17px;
+        text-align: center;
+    }
+
+/*Generic activities*/
+.vr-visualitem {
+}
+
+    .vr-visualitem .visual-label-container {
+        text-align: center;
+        padding-bottom: 5px;
+    }
+
+    .vr-visualitem .visual-wrapper .visual-main-content {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+
+        .vr-visualitem .visual-wrapper .visual-main-content .visual-content {
+            display: inline-flex;
+            width: 100%;
+        }
+
+            .vr-visualitem .visual-wrapper .visual-main-content .visual-content .visual-block {
+                border: 2px solid #d7e9f1;
+                margin: 5px 10px;
+                padding: 5px;
+                width: 100%;
+                border-right-color: transparent;
+            }
+
+.vr-visualitem-block-completed {
+    border-top-color: #0acc19 !important;
+    border-bottom-color: #0acc19 !important;
+    border-left-color: #0acc19 !important;
+}
+
+.vr-visualitem-retry-entry-completed {
+    border-bottom-color: #0acc19 !important;
+    border-right-color: #0acc19 !important;
+}
+
+.vr-visualitem .visual-wrapper .visual-main-content .visual-content .visual-block .visual-top-eraser {
+    background-color: #fff;
+    width: calc(50% + 5px);
+    position: relative;
+    left: 50%;
+    top: -24px;
+    display: inline-block;
+    height: 5px;
+}
+
+.vr-visualitem .visual-wrapper .visual-main-content .visual-content .visual-block .visual-retry-entry {
+    position: relative;
+    display: inline-block;
+    border: 2px solid #d7e9f1;
+    border-top: none;
+    border-left: none;
+    padding: 4px;
+    -webkit-transform: rotate(-45deg);
+    top: -20px;
+    left: -16px;
+}
+
+.vr-visualitem .visual-wrapper .visual-main-content .visual-content .visual-block .visual-conter-container {
+    position: relative;
+    display: inline-block;
+    padding: 4px;
+    top: -20px;
+    left: -100px;
+    background-color: #fff;
+}
+
+.vr-visualitem .visual-wrapper .visual-main-content .visual-content .visual-block .visual-retry-exit {
+    position: relative;
+    display: inline-block;
+    border-left: 2px solid #d7e9f1;
+    bottom: -10px;
+    left: calc(50% + 3px);
+    height: 20px;
+}
+
+.vr-visualitem .visual-wrapper .visual-main-content .visual-content .visual-block .visual-bottom-eraser {
+    background-color: #fff;
+    width: calc(50% + 5px);
+    position: relative;
+    left: 50%;
+    bottom: -12px;
+    display: inline-block;
+    height: 5px;
+}
+
+/*While Activity*/
+.vr-while-activity {
+}
+
+/*For Each Activity*/
+.vr-foreach-activity {
+}
+
+/*If Else Activity*/
+
+/*.vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block {
+    border-color: transparent;
+}
+
+    .vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-condition-block {
+        position: relative;
+        display: inline-block;
+        border: 4px solid #d7e9f1;
+        -webkit-transform: rotate(-45deg);
+        height: 50px;
+        width: 50px;
+        background-color: #d7e9f1;
+        left: calc(50% - 20px);
+        top: 9px;
+    }
+
+    .vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-conditions {
+        width: 100%;
+        /*border-top: 2px solid #d7e9f1;*/
+        /*border-bottom: 2px solid #d7e9f1;*/
+       /* margin-top: -23px;
+    }
+
+
+        .vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-conditions .true-visual-block {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .vr-visualitem.vr-ifelse-activity width:100%;.visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-conditions .false-visual-block {
+            margin-top: 10px;
+            width:100%;
+        }*/
+
+
+        /*.vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-conditions .visual-top-left-eraser {
+            width: calc(50% + 5px);
+            background-color: blue;
+            position: relative;
+            top: -13px;
+            display: inline-block;
+            height: 5px;
+        }
+
+        .vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-conditions .visual-top-left-entry {
+            position: relative;
+            display: inline-block;
+            border-left: 2px solid #d7e9f1;
+            top: 20px;
+            left: calc(25% + 5px);
+            height: 20px;
+        }
+
+        .vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-conditions .visual-top-right-eraser {
+            width: calc(50% + 5px);
+            background-color: blue;
+            position: relative;
+            left: 50%;
+            top: -13px;
+            display: inline-block;
+            height: 5px;
+        }
+
+        .vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-conditions .visual-bottom-left-eraser {
+            width: calc(50% + 5px);
+            background-color: red;
+            position: relative;
+            bottom: -8px;
+            display: inline-block;
+            height: 5px;
+        }
+
+        .vr-visualitem.vr-ifelse-activity .visual-wrapper .visual-main-content .visual-content .visual-block .visual-block-conditions .visual-bottom-right-eraser {
+            width: calc(50% + 5px);
+            background-color: red;
+            position: relative;
+            left: 50%;
+            bottom: -8px;
+            display: inline-block;
+            height: 5px;
+        }*/

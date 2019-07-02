@@ -1,13 +1,10 @@
-﻿<!--<div class="vr-visualitem-foreachactivity">
-    <div class="visual-label-container">
-        <vr-label>{{scopeModel.conditionDescription}}</vr-label>
-    </div>
+﻿<div class="vr-visualitem vr-foreach-activity">
     <div class="visual-wrapper">
         <div class="visual-main-content">
             <div class="visual-content">
-                <div class="visual-block" ng-class="{'vr-visualitem-foreach-block-completed': scopeModel.classLoopCompleted}">
+                <div class="visual-block" ng-class="{'vr-visualitem-block-completed': scopeModel.classLoopCompleted}">
                     <div class="visual-top-eraser"></div>
-                    <i class="visual-retry-entry" ng-class="{'vr-visualitem-foreach-retry-entry-completed': scopeModel.classLoopCompleted}"></i>
+                    <i class="visual-retry-entry" ng-class="{'vr-visualitem-retry-entry-completed': scopeModel.classLoopCompleted}"></i>
                     <div class="visual-conter-container">
                         <div class="vr-visualitem-counterIcon">
                             <div class="counter-value">{{scopeModel.nbOfIteration}}</div>
@@ -16,10 +13,10 @@
                     <span ng-if="scopeModel.childVisualItem.Settings.Editor != undefined">
                         <vr-directivewrapper directive="scopeModel.childVisualItem.Settings.Editor" on-ready="scopeModel.onChildVisualItemReady"></vr-directivewrapper>
                     </span>
-                    <div class="visual-retry-exit" ng-class="{'vr-visualitem-foreach-block-completed': scopeModel.classLoopCompleted}"></div>
+                    <div class="visual-retry-exit" ng-class="{'vr-visualitem-block-completed': scopeModel.classLoopCompleted}"></div>
                     <div class="visual-bottom-eraser"></div>
                 </div>
             </div>
         </div>
     </div>
-</div>-->
+</div>
