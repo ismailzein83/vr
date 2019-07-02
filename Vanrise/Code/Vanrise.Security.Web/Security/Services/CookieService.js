@@ -18,6 +18,7 @@ function ($cookies, VRNotificationService) {
     }
 
     function getAccessCookie() {
+        console.log("getAccessCookieName Sec_CookieService // " + getAccessCookieName());
         return $cookies.get(getAccessCookieName());
     }
 
@@ -52,7 +53,7 @@ function ($cookies, VRNotificationService) {
     }
 
     function deleteAccessCookie() {
-        $cookies.remove(getAccessCookieName());
+        $cookies.remove(getAccessCookieName());        
     }
 
     return ({
