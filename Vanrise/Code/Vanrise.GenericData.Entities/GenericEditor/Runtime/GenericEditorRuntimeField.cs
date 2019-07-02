@@ -11,5 +11,6 @@ namespace Vanrise.GenericData.Entities
         public bool IsRequired { get; set; }
         public bool IsDisabled { get; set; }
         public bool ShowAsLabel { get; set; }
+        public int? FieldWidth { get; set; }
     }
 }

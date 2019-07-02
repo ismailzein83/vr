@@ -53,6 +53,11 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             var field = payload.fields[i];
                             field.readyPromiseDeferred = UtilsService.createPromiseDeferred();
                             field.loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            if (field.FieldWidth != undefined) {
+                                field.columnNum = field.FieldWidth;
+                            }
+                            else
+                                field.columnNum = 4;
                             if (field.ShowAsLabel) {
                                 promises.push(getFieldTypeDescription(field));
                             }
@@ -107,9 +112,9 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 };
 
                 if (ctrl.onReady != null)
-                    ctrl.onReady(api);
+                    ctrl.onReady(api); 
             }
-
+               
             function prepareFieldObject(field) {
                 if (currentContext != undefined && field.FieldType != undefined)
                     field.runTimeEditor = currentContext.getRuntimeEditor(field.FieldType.ConfigId);
@@ -170,7 +175,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                     field.valueAsString = response;
                 });
             }
-        }
+        }  
 
         return directiveDefinitionObject;
     }

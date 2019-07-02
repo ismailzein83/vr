@@ -325,6 +325,7 @@ namespace Vanrise.GenericData.Business
                     runtimeField.IsRequired = field.IsRequired;
                     runtimeField.IsDisabled = field.IsDisabled;
                     runtimeField.ShowAsLabel = field.ShowAsLabel;
+                    runtimeField.FieldWidth = field.FieldWidth;
                     runtimeRow.Fields.Add(runtimeField);
                 }
             }
@@ -347,6 +348,7 @@ namespace Vanrise.GenericData.Business
                 runtimeField.IsRequired = field.IsRequired;
                 runtimeField.IsDisabled = field.IsDisabled;
                 runtimeField.ShowAsLabel = field.ShowAsLabel;
+                runtimeField.FieldWidth = field.FieldWidth;
                 genericEditorRuntimeFields.Add(runtimeField);
             }
 

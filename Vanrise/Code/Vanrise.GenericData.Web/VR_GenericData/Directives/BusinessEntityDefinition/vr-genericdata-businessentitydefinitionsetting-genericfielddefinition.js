@@ -54,6 +54,8 @@
                 + '          <vr-columns width="1/3row">'
                 + '              <vr-label>Field Name: {{ dataItem.fieldPath }}</vr-label>'
                 + '          </vr-columns>'
+                + '      </vr-row>'
+                + '      <vr-row removeline>'
                 + '          <vr-columns width="1/3row">'
                 + '              <vr-textbox value="dataItem.fieldTitle" label="Field Title" isrequired="true"></vr-textbox>'
                 + '          </vr-columns>'
@@ -64,20 +66,25 @@
                 + '                                   normal-col-num="4">'
                 + '             </vr-directivewrapper>'
                 + '	        </span>'
+                + '          <vr-columns colnum = "4">'
+                + '              <vr-textbox value="dataItem.fieldWidth" label="Field Width" type="number" decimalprecision="0" minvalue="1" maxvalue="12"></vr-textbox>'
+                + '          </vr-columns>'
                 + '      </vr-row>'
                 + '      <vr-row removeline>'
-                + '          <vr-columns width="1/3row">'
-                + '              <vr-switch value="dataItem.isRequired" label="Required"></vr-switch>'
-                + '          </vr-columns>'
-                + '          <vr-columns width="1/3row">'
-                + '              <vr-switch value="dataItem.isDisabled" label="Disabled"></vr-switch>'
-                + '          </vr-columns>'
-                + '          <vr-columns width="1/3row">'
-                + '              <vr-switch value="dataItem.showAsLabel" label="Show as Label"></vr-switch>'
-                + '          </vr-columns>'
                 + '         <span vr-loader="dataItem.isLocalizationTextResourceSelectorLoading">'
-                + '              <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onLocalizationTextResourceDirectiveReady" normal-col-num="6"></vr-common - vrlocalizationtextresource - selector > '
+                + '              <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onLocalizationTextResourceDirectiveReady" normal-col-num="4"></vr-common - vrlocalizationtextresource - selector > '
                 + '         </span>'
+                +'           <vr-columns colnum="8" haschildcolumns>'
+                + '              <vr-columns colnum="4">'
+                + '                  <vr-switch value="dataItem.isRequired" label="Required"></vr-switch>'
+                + '              </vr-columns>'
+                + '              <vr-columns colnum="4">'
+                + '                  <vr-switch value="dataItem.isDisabled" label="Disabled"></vr-switch>'
+                + '              </vr-columns>'
+                + '              <vr-columns colnum="4">'
+                + '                 <vr-switch value="dataItem.showAsLabel" label="Show as Label"></vr-switch>'
+                + '             </vr-columns>'
+                + '          </vr-columns>'
                 + '      </vr-row>'
                 + '          <span vr-loader="scopeModel.isRuntimeViewSettingsEditorDirectiveLoading" ng-if="dataItem.runtimeViewSettingEditor !=undefined">'
                 + '              <vr-directivewrapper  directive="dataItem.runtimeViewSettingEditor" '
@@ -265,6 +272,7 @@
                                 isRequired: selectedField.IsRequired,
                                 isDisabled: selectedField.IsDisabled,
                                 showAsLabel: selectedField.ShowAsLabel,
+                                fieldWidth: selectedField.FieldWidth,
                                 directiveAPI: undefined,
                                 localizationResourceSelectorDirectiveReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 localizationResourceSelectorLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
@@ -360,6 +368,7 @@
                             IsRequired: selectedField.isRequired,
                             IsDisabled: selectedField.isDisabled,
                             ShowAsLabel: selectedField.showAsLabel,
+                            FieldWidth: selectedField.fieldWidth,
                             FieldViewSettings: selectedField.directiveAPI != undefined ? selectedField.directiveAPI.getData() : undefined,
                             TextResourceKey: selectedField.localizationTextResourceSelectorAPI.getSelectedValues(),
                             DefaultFieldValue: selectedField.fieldTypeRuntimeDirectiveAPI != undefined ? selectedField.fieldTypeRuntimeDirectiveAPI.getData() : undefined
