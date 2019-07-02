@@ -102,12 +102,14 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSNAME#", baseExecutionClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionClassCode);
             nmSpaceCodeBuilder.Replace("#CLASSNAME#", className);
+            var vrWorkflow = new VRWorkflowManager().GetVRWorkflow(this.VRWorkflowId);
+            string displayName = string.IsNullOrEmpty(this.DisplayName) ? vrWorkflow.Name : this.DisplayName;
 
             var insertStartedVisualEventInput = new GenerateInsertVisualEventCodeInput
             {
                 ActivityContextVariableName = "_activityContext",
                 ActivityId = context.VRWorkflowActivityId,
-                EventTitle = $@"""Sub Process '{this.DisplayName}' started""",
+                EventTitle = $@"""Sub Process '{displayName}' started""",
                 EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_STARTED
             };
             nmSpaceCodeBuilder.Replace("#INSERTSTARTEDVISUALEVENTCODE#",
@@ -117,7 +119,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             {
                 ActivityContextVariableName = "_activityContext",
                 ActivityId = context.VRWorkflowActivityId,
-                EventTitle = $@"""Sub Process '{this.DisplayName}' completed""",
+                EventTitle = $@"""Sub Process '{displayName}' completed""",
                 EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_COMPLETED
             };
             nmSpaceCodeBuilder.Replace("#INSERTCOMPLETEDVISUALEVENTCODE#",
@@ -126,7 +128,6 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             StringBuilder propertiesBuilder = new StringBuilder();
             List<string> argumentsList = new List<string>();
 
-            VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(this.VRWorkflowId);
 
             if (vrWorkflow.Settings.Arguments != null && vrWorkflow.Settings.Arguments.Any())
             {
@@ -214,7 +215,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             //return vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
 
             VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(this.VRWorkflowId);
-            string displayName = this.DisplayName;
+            string displayName = string.IsNullOrEmpty(this.DisplayName) ? vrWorkflow.Name : this.DisplayName;
             if (context.SubProcessActivityName != null)
                 displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
             var childVisualItemDefinition = vrWorkflow?.Settings?.RootActivity?.Settings?.GetVisualItemDefinition(new VRWorkflowActivityGetVisualItemDefinitionContext(context, displayName));
