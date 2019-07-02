@@ -8,3 +8,4 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO Interconnect.Ogero WebSite
 
 xcopy "C:\Publish\Retail\bin\Retail.Ogero*" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\Interconnect.Ogero\%YYYYMMDD%\Bin\"
+del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\Interconnect.Ogero\%YYYYMMDD%\Bin\*.pdb"
