@@ -62,7 +62,8 @@
                                     $scope.scopeModel.showMessage = true;
                                     $scope.scopeModel.showClose = true;
                                     var currentDateTime = dateFormat(VRDateTimeService.getCurrentDateWithoutMilliseconds());
-                                    $scope.scopeModel.message = "Task started at: " + currentDateTime +". You may now close the window.";
+                                    $scope.scopeModel.message = "Task started at: " + currentDateTime + ". You may now close the window.";
+                                    $scope.modalContext.closeModal();
                                 }
                                 return {
                                     promises:[]
