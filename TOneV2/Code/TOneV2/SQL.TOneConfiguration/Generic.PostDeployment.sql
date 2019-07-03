@@ -93,6 +93,7 @@ as (select * from (values
 ('6d005236-ece6-43a1-b8ea-281bc0e7643e','Generic_Filter','Generic Filter','VR_GenericData_GenericBEFilterDefinitionSettings','{"Editor":"vr-genericdata-genericbe-filterdefinition-genericfilter"}'),	
 ('3c9143c3-0361-4d29-8d94-7c7c87f36b0e','Group_Filter','Group Filter','VR_GenericData_GenericBEFilterDefinitionSettings','{"Editor":"vr-genericdata-genericbe-filterdefinition-filtergroup"}'),
 ('8082ffc6-6781-4501-aa31-02493d74cb8f','Basic_Advance','Basic Advance','VR_GenericData_GenericBEFilterDefinitionSettings','{"Editor":"vr-genericdata-genericbe-filterdefinition-basicadvanced"}'),
+('F26CFFAE-1816-4CFC-9E62-6AD4330A1CBA','ChildEntity_Filter','Child Entity Filter','VR_GenericData_GenericBEFilterDefinitionSettings','{"Editor":"vr-genericdata-genericbe-filterdefinition-childentityfilter"}'),
 
 ('8D9FB17A-9DF2-4A59-95B1-2F3402A1EAD3','Call_Rest_API','Call Rest API','VR_GenericData_GenericBEEditorDefinitionSettings','{"Editor":"vr-genericdata-callrestapieditorsetting-definition","ValidContainers":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.ContainerType, Vanrise.GenericData.Entities]], mscorlib","$values":[2]}}'),
 ('F290120F-E657-439F-9897-3D1AB8C6E107','Generic_Fields','Generic Fields','VR_GenericData_GenericBEEditorDefinitionSettings','{"Editor":"vr-genericdata-genericfieldseditorsetting-definition","ValidContainers":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.ContainerType, Vanrise.GenericData.Entities]], mscorlib","$values":[2]}}'),
