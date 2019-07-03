@@ -2859,6 +2859,9 @@
         <Height>0.6cm</Height>
         <Width>7.75854cm</Width>
         <ZIndex>12</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((CountRows("FullInvoiceAmountByCurrency") &gt; 0),False,True)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3164,6 +3167,9 @@
         <Height>0.6cm</Height>
         <Width>11.14971cm</Width>
         <ZIndex>15</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((CountRows("FullInvoiceAmountByCurrency") &gt; 0),False,True)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
