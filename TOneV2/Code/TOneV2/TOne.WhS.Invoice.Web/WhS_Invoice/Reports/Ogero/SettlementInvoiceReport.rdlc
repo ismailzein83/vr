@@ -3075,6 +3075,9 @@
             <DataSetName>ItemsDetails</DataSetName>
             <Height>0.5in</Height>
             <Width>7.74312in</Width>
+            <Visibility>
+              <Hidden>=IIf((CountRows("ItemsDetails") &gt; 0),False,True)</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3627,7 +3630,7 @@
         <Top>12.10835cm</Top>
         <Left>0.3686cm</Left>
         <Height>0.64938cm</Height>
-        <Width>9.58601cm</Width>
+        <Width>9.58602cm</Width>
         <ZIndex>12</ZIndex>
         <Visibility>
           <Hidden>=IIf((CountRows("CarrierSummary") &gt; 0 or CountRows("SystemSummary") &gt; 0 ),False,True)</Hidden>

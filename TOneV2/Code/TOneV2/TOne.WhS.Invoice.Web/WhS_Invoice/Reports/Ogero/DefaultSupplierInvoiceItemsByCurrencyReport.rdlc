@@ -1225,6 +1225,9 @@
         <Left>0.06258in</Left>
         <Height>0.94119in</Height>
         <Width>7.82064in</Width>
+        <Visibility>
+          <Hidden>=IIf((CountRows("SupplierInvoiceItemDetails") &gt; 0),False,True)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
