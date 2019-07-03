@@ -53,7 +53,7 @@
                                     if (criteriaGroup.fields != undefined && criteriaGroup.fields.length > 0) {
                                         var field = UtilsService.getItemByVal(criteriaGroup.fields, selectedField.FieldName, 'FieldName');
                                         if (field != null) {
-                                            for (var k = 0; k < criteriaGroup.fields.length ; k++) {
+                                            for (var k = 0; k < criteriaGroup.fields.length; k++) {
                                                 var criteriaGroupField = criteriaGroup.fields[k];
                                                 if (criteriaGroupField.runtimeEditor != undefined) {
                                                     loadRuntimeEditor(criteriaGroupField);
@@ -79,7 +79,7 @@
                         VRUIUtilsService.callDirectiveLoad(criteriaGroupField.runtimeEditor.directiveAPI, payload, criteriaGroupField.runtimeEditor.loadPromiseDeferred);
                     });
                 }
-           
+
                 defineAPI();
             }
 
@@ -92,18 +92,14 @@
                         for (var i = 0; i < $scope.criteria.length; i++) {
                             var item = $scope.criteria[i];
                             if (item.groupId != undefined) {
-                                if (item.fields != undefined && item.fields.length>0) {
-                                    for (var j = 0; j < item.fields.length; j++) {
-                                        var fieldGroup = item.fields[j];
-                                        var fieldGroupData = fieldGroup.runtimeEditor.directiveAPI.getData();
-                                        if (fieldGroupData != undefined) {
-                                            if (genericRuleCriteria == undefined) {
-                                                genericRuleCriteria = {};
-                                                genericRuleCriteria.FieldsValues = {};
-                                            }
-                                            genericRuleCriteria.FieldsValues[fieldGroup.FieldName] = fieldGroupData;
-
+                                if (item.selectedField != undefined) {
+                                    var fieldGroupData = item.selectedField.runtimeEditor.directiveAPI.getData();
+                                    if (fieldGroupData != undefined) {
+                                        if (genericRuleCriteria == undefined) {
+                                            genericRuleCriteria = {};
+                                            genericRuleCriteria.FieldsValues = {};
                                         }
+                                        genericRuleCriteria.FieldsValues[item.selectedField.FieldName] = fieldGroupData;
                                     }
                                 }
                             }
@@ -170,7 +166,7 @@
                             }
                         }
                     });
-                    
+
                     genericUIObj = VR_GenericData_GenericUIService.createGenericUIObj(payload.criteriaDefinitionFields);
                     $scope.criteriaDefinitionFields = payload.criteriaDefinitionFields;
                     var promises = [];
@@ -209,7 +205,7 @@
                                     fieldValue: (criteriaFieldsValues != undefined) ?
                                         criteriaFieldsValues[field.FieldName] :
                                         (criteriaPredefinedData != undefined ?
-                                        criteriaPredefinedData[field.FieldName] : undefined),
+                                            criteriaPredefinedData[field.FieldName] : undefined),
                                     genericUIContext: field.genericUIContext
                                 };
                                 VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
@@ -228,7 +224,7 @@
                     promises.push(loadFieldTypeConfigPromise);
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
-                            genericUIObj.loadingFinish();
+                        genericUIObj.loadingFinish();
                     });
                 };
 
