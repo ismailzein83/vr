@@ -686,46 +686,6 @@
           </Border>
         </Style>
       </Tablix>
-      <Textbox Name="Textbox26">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Total Recurring Charges </Value>
-                <Style>
-                  <FontFamily>Verdana</FontFamily>
-                  <FontSize>8pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                  <Color>#4e479c</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Right</TextAlign>
-            </Style>
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>4.54754cm</Top>
-        <Left>12.63862cm</Left>
-        <Height>0.23622in</Height>
-        <Width>2.35429in</Width>
-        <ZIndex>5</ZIndex>
-        <Visibility>
-          <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
-        </Visibility>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Rectangle Name="Rectangle2">
         <ReportItems>
           <Subreport Name="CustomerRecurringChargeInvoiceReport">
@@ -816,7 +776,7 @@
         <Left>0.37362cm</Left>
         <Height>0.39689cm</Height>
         <Width>18.90825cm</Width>
-        <ZIndex>6</ZIndex>
+        <ZIndex>5</ZIndex>
         <Visibility>
           <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -849,7 +809,7 @@
         <Left>0.3853cm</Left>
         <Height>0.65292cm</Height>
         <Width>18.89658cm</Width>
-        <ZIndex>7</ZIndex>
+        <ZIndex>6</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1648,7 +1608,7 @@
         <Left>0.1425in</Left>
         <Height>1.5833in</Height>
         <Width>4.88965in</Width>
-        <ZIndex>8</ZIndex>
+        <ZIndex>7</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1678,7 +1638,7 @@
         <Left>0.36195cm</Left>
         <Height>0.25in</Height>
         <Width>2.35429in</Width>
-        <ZIndex>9</ZIndex>
+        <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1695,7 +1655,7 @@
         <Left>0.36195cm</Left>
         <Height>0.01042in</Height>
         <Width>4.88965in</Width>
-        <ZIndex>10</ZIndex>
+        <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2590,7 +2550,7 @@
         <Left>0.1425in</Left>
         <Height>0.91825in</Height>
         <Width>7.44419in</Width>
-        <ZIndex>11</ZIndex>
+        <ZIndex>10</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2780,7 +2740,7 @@
         <Left>0.36195cm</Left>
         <Height>0.6cm</Height>
         <Width>18.90825cm</Width>
-        <ZIndex>12</ZIndex>
+        <ZIndex>11</ZIndex>
         <Visibility>
           <Hidden>=IIF(Parameters!Adjustment.Value&lt;&gt;0,false,true)</Hidden>
         </Visibility>
@@ -2898,7 +2858,7 @@
         <Left>11.51165cm</Left>
         <Height>0.6cm</Height>
         <Width>7.75854cm</Width>
-        <ZIndex>13</ZIndex>
+        <ZIndex>12</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2981,7 +2941,7 @@
         <Left>0.1425in</Left>
         <Height>0.24467in</Height>
         <Width>7.44879in</Width>
-        <ZIndex>14</ZIndex>
+        <ZIndex>13</ZIndex>
         <Visibility>
           <Hidden>=IIf((CountRows("InvoiceItemsByCurrency") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -3092,7 +3052,7 @@
         <Left>0.36195cm</Left>
         <Height>0.6cm</Height>
         <Width>11.14971cm</Width>
-        <ZIndex>15</ZIndex>
+        <ZIndex>14</ZIndex>
         <Visibility>
           <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -3203,7 +3163,7 @@
         <Left>0.36195cm</Left>
         <Height>0.6cm</Height>
         <Width>11.14971cm</Width>
-        <ZIndex>16</ZIndex>
+        <ZIndex>15</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
