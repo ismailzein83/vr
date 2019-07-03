@@ -13,9 +13,10 @@ namespace Vanrise.GenericData.Entities
         public RangeGenericEditorDefinitionSettings Settings { get; set; }
         public Dictionary<string, object> FieldValues { get; set; }
     }
-    public class RangeGenericEditorProcessMessage
+    public class RangeGenericEditorProcessOutput
     {
-        public int NumberOfSucceededOperations { get; set; }
-        public int NumberOfFailedOperations { get; set; }
+        public int NumberOfSuccessfulInsertions { get; set; }
+        public int NumberOfFailedInsertions { get; set; }
+        public long FileId { get; set; }
     }
 }

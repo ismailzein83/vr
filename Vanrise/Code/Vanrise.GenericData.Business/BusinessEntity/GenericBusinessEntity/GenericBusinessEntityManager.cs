@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.Caching;
 using Vanrise.Common;
@@ -24,12 +25,15 @@ namespace Vanrise.GenericData.Business
         DataRecordStorageManager _dataRecordStorageManager;
         SecurityManager s_securityManager;
         VRConnectionManager _connectionManager;
+        BusinessEntityDefinitionManager _businessEntityDefinitionManager;
+
         public GenericBusinessEntityManager()
         {
             _genericBEDefinitionManager = new GenericBusinessEntityDefinitionManager();
             _dataRecordStorageManager = new DataRecordStorageManager();
             s_securityManager = new SecurityManager();
             _connectionManager = new VRConnectionManager();
+            _businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
         }
         #endregion
 
@@ -856,38 +860,110 @@ namespace Vanrise.GenericData.Business
             return new ExecuteGenericBEBulkActionProcessOutput { Succeed = true, ProcessInstanceId = result.ProcessInstanceId };
         }
 
-        public RangeGenericEditorProcessMessage ExecuteRangeGenericEditorProcess(RangeGenericEditorProcessInput input)
+        public RangeGenericEditorProcessOutput ExecuteRangeGenericEditorProcess(RangeGenericEditorProcessInput input)
         {
             input.Settings.ThrowIfNull("input.Settings");
             input.RangeFieldName.ThrowIfNull("input.RangeFieldName");
-
             var rangeValues = input.Settings.GetRangeValues();
-            RangeGenericEditorProcessMessage processMessage = null;
+
+            var excelFile = new VRExcelFile();
+            var excelSheet = excelFile.CreateSheet();
+            var businessEntityDefinitionTitle = _businessEntityDefinitionManager.GetBusinessEntityDefinitionName(input.BusinessEntityDefinitionId);
+            excelSheet.SheetName = string.Format("{0} Result", businessEntityDefinitionTitle);
+            var excelTable = excelSheet.CreateTable(1, 0);
+            var headerRow = excelTable.CreateHeaderRow();
+            headerRow.CreateStyle();
+
+            RangeGenericEditorProcessOutput result = null;
+
             if (rangeValues != null && rangeValues.Count > 0)
             {
-                processMessage = new RangeGenericEditorProcessMessage();
+                GenericBusinessEntityDefinitionManager genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
+                Dictionary<string, string> fieldsDescription = new Dictionary<string, string>();
+                result = new RangeGenericEditorProcessOutput();
+
+                var dataRecordType = genericBusinessEntityDefinitionManager.GetGenericBEDataRecordType(input.BusinessEntityDefinitionId);
+
+                var headerCellStyle = new VRExcelTableRowCellStyle { FontColor = "Red", FontSize = 11 };
+
+                if (input.FieldValues != null && input.FieldValues.Count > 0 && dataRecordType != null && dataRecordType.Fields != null && dataRecordType.Fields.Count > 0)
+                {
+                    foreach (var fieldValue in input.FieldValues)
+                    {
+                        foreach (var field in dataRecordType.Fields)
+                        {
+                            if (field.Name == fieldValue.Key)
+                            {
+                                fieldsDescription.Add(field.Name, field.Type.GetDescription(fieldValue.Value));
+                                CreateCell(field.Title, headerRow, headerCellStyle);
+                            }
+                        }
+                    }
+                }
+
+                CreateCell(input.RangeFieldName, headerRow, headerCellStyle);
+                CreateCell("Result", headerRow, headerCellStyle);
+                CreateCell("Error Message", headerRow, headerCellStyle);
+                var failedCellStyle = new VRExcelTableRowCellStyle { FontColor = "Red" };
+                var succeededCellStyle = new VRExcelTableRowCellStyle { FontColor = "Green" };
 
                 foreach (var value in rangeValues)
                 {
-                    Dictionary<string, object> fieldValues = new Dictionary<string, object>();
+                    var fieldValues = new Dictionary<string, object>();
+                    var row = excelTable.CreateDataRow();
+
                     if (input.FieldValues != null)
+                    {
                         fieldValues = input.FieldValues.VRDeepCopy();
 
+                        foreach (var fieldValue in fieldValues)
+                        {
+                            var fieldDescription = fieldsDescription.GetRecord(fieldValue.Key);
+                            fieldDescription = Regex.Replace(fieldDescription, "<(.|\n)*?>", string.Empty);
+                            CreateCell(fieldDescription, row, null);
+                        }
+                    }
                     fieldValues.Add(input.RangeFieldName, value);
+
+                    CreateCell(value, row, null);
+
                     var addGenericBusinessEntityResult = AddGenericBusinessEntity(new GenericBusinessEntityToAdd
                     {
                         FieldValues = fieldValues,
                         BusinessEntityDefinitionId = input.BusinessEntityDefinitionId
                     });
 
-                    if (addGenericBusinessEntityResult.Result != InsertOperationResult.Succeeded)
-                        processMessage.NumberOfFailedOperations++;
-                    else
-                        processMessage.NumberOfSucceededOperations++;
+                    switch (addGenericBusinessEntityResult.Result)
+                    {
+                        case InsertOperationResult.Succeeded:
+                            CreateCell("Succeeded", row, succeededCellStyle);
+                            result.NumberOfSuccessfulInsertions++;
+                            break;
+                        case InsertOperationResult.SameExists:
+                            CreateCell("Same Exists", row, failedCellStyle);
+                            result.NumberOfFailedInsertions++;
+                            break;
+                        case InsertOperationResult.Failed:
+                            CreateCell("Failed", row, failedCellStyle);
+                            result.NumberOfFailedInsertions++;
+                            break;
+                    }
                 }
             }
-            return processMessage;
+
+            var file = excelFile.GenerateExcelFile();
+            var fileManager = new VRFileManager();
+            var fileId = fileManager.AddFile(new VRFile
+            {
+                Name = string.Format("{0} Result.xlsx", businessEntityDefinitionTitle),
+                Content = file
+            });
+
+            result.FileId = fileId;
+
+            return result;
         }
+
 
         public string GetFieldDescription(Guid businessEntityDefinitionId, string fieldName, object fieldValue)
         {
@@ -912,7 +988,17 @@ namespace Vanrise.GenericData.Business
             var genericBe = GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
             return new DataRecordObject(genericBEDefinitionSetting.DataRecordTypeId, genericBe.FieldValues).Object;
         }
-
+        private void CreateCell(object cellValue, VRExcelTableRow row, VRExcelTableRowCellStyle cellStyle)
+        {
+            var cell = row.CreateCell();
+            cell.SetValue(cellValue);
+            if (cellStyle != null)
+            {
+                var style = cell.CreateStyle();
+                style.FontColor = cellStyle.FontColor;
+                style.FontSize = cellStyle.FontSize;
+            }
+        }
         private bool ParseExcel(long fileId, out string errorMessage, out List<ParsedGenericBERow> parsedExcel)
         {
             VRFileManager fileManager = new VRFileManager();

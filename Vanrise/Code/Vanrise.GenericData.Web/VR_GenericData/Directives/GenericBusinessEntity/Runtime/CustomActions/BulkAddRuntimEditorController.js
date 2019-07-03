@@ -1,18 +1,21 @@
 ﻿(function (appControllers) {
     "use strict";
-    bulkAddRuntimEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','VR_GenericData_GenericBusinessEntityAPIService'];
+    bulkAddRuntimEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBusinessEntityAPIService','FileAPIService'];
 
-    function bulkAddRuntimEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService) {
+    function bulkAddRuntimEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService, FileAPIService) {
 
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
         $scope.scopeModel = {};
+        $scope.scopeModel.showOutput = false;
 
         var dataRecordTypeId;
         var parentFieldValues;
         var customAction;
         var customActionSettings;
         var businessEntityDefinitionId;
+        var fileId;
+        var executionResult;
         loadParameters();
         defineScope();
         load();
@@ -32,13 +35,25 @@
         function defineScope() {
             $scope.scopeModel.execute = function () {
                 $scope.scopeModel.isLoading = true;
-               
+
                 VR_GenericData_GenericBusinessEntityAPIService.ExecuteRangeGenericEditorProcess(buildExecuteProcessInputFromScope()).then(function (response) {
+                    if (response != undefined) {
+                        executionResult = response;
+                        fileId = executionResult.FileId;
+                        $scope.scopeModel.numberOfSuccessfulInsertions = executionResult.NumberOfSuccessfulInsertions;
+                        $scope.scopeModel.numberOfFailedInsertions = executionResult.NumberOfFailedInsertions;
+                    }
+                    $scope.scopeModel.showDownloadButton = true;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    }).finally(function () {
-                        $scope.scopeModel.isLoading = false;
-                        $scope.modalContext.closeModal();
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            };
+
+            $scope.scopeModel.downloadFile = function () {
+                FileAPIService.DownloadFile(fileId).then(function (response) {
+                    UtilsService.downloadFile(response.data, response.headers);
                 });
             };
 
