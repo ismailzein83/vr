@@ -66,6 +66,29 @@ namespace Vanrise.GenericData.Entities
 
         public abstract string GetDescription(Object value);
 
+        public virtual Dictionary<Object, string> GetDescriptionByIds(IGetDescriptionByIdsContext getDescriptionByIdsContext)
+        {
+            getDescriptionByIdsContext.ThrowIfNull("getDescriptionByIdsContext");
+            var values = getDescriptionByIdsContext.values;
+
+            if (values == null)
+                return null;
+
+            var descriptions = new Dictionary<Object, string>();
+            var i = 0;
+            foreach (var value in values)
+            {
+                descriptions.Add(++i, GetDescription(value));
+            }
+
+            return descriptions;
+        }
+
+        public virtual bool ShouldCollectFieldValues()
+        {
+            return false;
+        }
+
         public abstract bool IsMatched(Object fieldValue, Object filterValue);
 
         public abstract bool IsMatched(Object fieldValue, RecordFilter recordFilter);
@@ -163,7 +186,8 @@ namespace Vanrise.GenericData.Entities
         public virtual void SetDependentFieldValues(ISetDependentFieldValuesContext context)
         {
         }
-        public virtual bool TryGetStyleDefinitionId(IDataRecordFieldStyleDefinitionContext context) {
+        public virtual bool TryGetStyleDefinitionId(IDataRecordFieldStyleDefinitionContext context)
+        {
             return false;
         }
     }
@@ -172,7 +196,7 @@ namespace Vanrise.GenericData.Entities
         object FieldValue { get; }
         Guid StyleDefinitionId { set; }
     }
-    public  class DataRecordFieldStyleDefinitionContext : IDataRecordFieldStyleDefinitionContext
+    public class DataRecordFieldStyleDefinitionContext : IDataRecordFieldStyleDefinitionContext
     {
         public object FieldValue { get; set; }
         public Guid StyleDefinitionId { get; set; }
@@ -314,5 +338,15 @@ namespace Vanrise.GenericData.Entities
         public Dictionary<string, DataRecordField> DataRecordFields { get; set; }
 
         public Dictionary<string, object> DependentFieldValues { get; set; }
+    }
+
+    public class GetDescriptionByIdsContext : IGetDescriptionByIdsContext
+    {
+        public List<object> values { get; set; }
+    }
+
+    public interface IGetDescriptionByIdsContext
+    {
+        List<object> values { get; }
     }
 }
