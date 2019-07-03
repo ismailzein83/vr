@@ -91,7 +91,7 @@ merge	[sec].[View] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
-	update set
+	update set [IsDeleted]=1,
 	[DevProjectID] = s.[DevProjectID],[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
