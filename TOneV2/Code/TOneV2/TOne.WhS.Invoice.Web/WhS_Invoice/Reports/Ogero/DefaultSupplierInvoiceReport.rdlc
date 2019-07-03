@@ -2286,10 +2286,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>5.96824cm</Width>
+              <Width>5.9506cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.7566cm</Width>
+              <Width>4.73896cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2382,7 +2382,7 @@
         <Top>11.66359cm</Top>
         <Left>0.36565cm</Left>
         <Height>0.6cm</Height>
-        <Width>10.72484cm</Width>
+        <Width>10.68955cm</Width>
         <ZIndex>13</ZIndex>
         <Visibility>
           <Hidden>=IIf((CountRows("FullInvoiceAmountByCurrency") &gt; 0),False,True)</Hidden>
