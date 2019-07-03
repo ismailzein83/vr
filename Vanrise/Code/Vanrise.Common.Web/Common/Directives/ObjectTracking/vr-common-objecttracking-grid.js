@@ -30,7 +30,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
         var viewHistoryAction;
         var uniqueName;
         var vrLoggableEntitySettings;
-
+        var context;
         var gridDrillDownTabsObj;
         var drillDownDefinitions = [];
 
@@ -60,6 +60,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                     var directiveAPI = {};
                     directiveAPI.load = function (query) {
                         var rootPromiseNode = {};
+                        context = query.context;
                         if (actionHistoryName == null) {
                             uniqueName = query.EntityUniqueName;
                             rootPromiseNode.promises = [getVRLoggableEntitySettings()];
@@ -170,11 +171,18 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
         }
         function viewHistory(dataItem) {
+
             var payload = {
-                historyId: dataItem.Entity.VRObjectTrackingId
+                historyId: dataItem.Entity.VRObjectTrackingId,
+                context: getContext()
             };
+
             if (viewHistoryAction != undefined)
                 viewHistoryAction.actionMethod(payload);
+        }
+        function getContext() {
+            var currentContext = context;
+            return currentContext;
         }
     }
 

@@ -66,7 +66,12 @@
             function buildGridPayload(loadPayload) {
                 return {
                     ObjectId: genericBusinessEntityId,
-                    EntityUniqueName: VR_GenericData_GenericBusinessEntityService.getEntityUniqueName(businessEntityDefinitionId)
+                    EntityUniqueName: VR_GenericData_GenericBusinessEntityService.getEntityUniqueName(businessEntityDefinitionId),
+                    context: {
+                        getBusinessEntityDefinitionId: function () {
+                            return businessEntityDefinitionId;
+                        }
+                    }
                 };
             }
         }
