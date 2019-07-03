@@ -11,6 +11,7 @@ namespace Retail.NIM.Data.RDB
 
         public const string AreaTableAlias = "area";
         public const string SiteTableAlias = "site";
+        public const string VendorTableAlias = "vendor";
         public const string FDBTableAlias = "fdb";
         public const string FDBPortTableAlias = "fdbPort";
         public const string SplitterTableAlias = "splitter";
@@ -47,6 +48,8 @@ namespace Retail.NIM.Data.RDB
 
         public const string OLTIdColAlias = "OLTId";
         public const string OLTNameColAlias = "OLTName";
+        public const string OLTVendorIdColAlias = "OLTVendorId";
+        public const string OLTVendorNameColAlias = "OLTVendorName";
         public const string OLTHorizontalIdColAlias = "OLTHorizontalId";
         public const string OLTHorizontalNameColAlias = "OLTHorizontalName";
         public const string OLTHorizontalPortIdColAlias = "OLTHorizontalPortId";
@@ -92,6 +95,7 @@ namespace Retail.NIM.Data.RDB
             //new SplitterInPortDataManager().AddJoinSplitterInPortBySplitter(joinContext, RDBJoinType.Inner, SplitterInPortTableAlias, SplitterTableAlias, SplitterDataManager.COL_Id, false);
 
             new OLTDataManager().AddJoinOLTById(joinContext, RDBJoinType.Inner, OLTTableAlias, SplitterTableAlias, SplitterDataManager.COL_OLT, false);
+            new VendorDataManager().AddJoinVendorById(joinContext, RDBJoinType.Inner, VendorTableAlias, OLTTableAlias, OLTDataManager.COL_Vendor, false);
             //new OLTVerticalDataManager().AddJoinOLTVerticalByOLT(joinContext, RDBJoinType.Inner, OLTVerticalTableAlias, OLTTableAlias, OLTDataManager.COL_Id, false);
             //new OLTVerticalPortDataManager().AddJoinOLTVerticalPortByOLTVertical(joinContext, RDBJoinType.Inner, OLTVerticalPortTableAlias, OLTVerticalTableAlias, OLTVerticalDataManager.COL_Id, false);
             new OLTHorizontalDataManager().AddJoinOLTHorizontalByOLT(joinContext, RDBJoinType.Inner, OLTHorizontalTableAlias, OLTTableAlias, OLTDataManager.COL_Id, false);
@@ -119,6 +123,8 @@ namespace Retail.NIM.Data.RDB
 
             selectQuery.SelectColumns().Column(OLTTableAlias, OLTDataManager.COL_Id, OLTIdColAlias);
             selectQuery.SelectColumns().Column(OLTTableAlias, OLTDataManager.COL_Name, OLTNameColAlias);
+            selectQuery.SelectColumns().Column(OLTTableAlias, OLTDataManager.COL_Vendor, OLTVendorIdColAlias);
+            selectQuery.SelectColumns().Column(VendorTableAlias, VendorDataManager.COL_Name, OLTVendorNameColAlias);
             selectQuery.SelectColumns().Column(OLTHorizontalTableAlias, OLTHorizontalDataManager.COL_Id, OLTHorizontalIdColAlias);
             selectQuery.SelectColumns().Column(OLTHorizontalTableAlias, OLTHorizontalDataManager.COL_Name, OLTHorizontalNameColAlias);
             selectQuery.SelectColumns().Column(OLTHorizontalPortTableAlias, OLTHorizontalPortDataManager.COL_Id, OLTHorizontalPortIdColAlias);
@@ -170,43 +176,45 @@ namespace Retail.NIM.Data.RDB
         {
             FreeFTTHPath freeFTTHPath = new FreeFTTHPath
             {
-                AreaId = reader.GetInt(AreaIdColAlias),
+                AreaId = reader.GetLong(AreaIdColAlias),
                 AreaName = reader.GetString(AreaNameColAlias),
-                SiteId = reader.GetInt(SiteIdColAlias),
+                SiteId = reader.GetLong(SiteIdColAlias),
                 SiteName = reader.GetString(SiteNameColAlias),
 
-                IMSId = reader.GetInt(IMSIdColAlias),
+                IMSId = reader.GetLong(IMSIdColAlias),
                 IMSName = reader.GetString(IMSNameColAlias),
                 IMSNumber = reader.GetString(IMSNumberColAlias),
-                IMSCardId = reader.GetInt(IMSCardIdColAlias),
+                IMSCardId = reader.GetLong(IMSCardIdColAlias),
                 IMSCardName = reader.GetString(IMSCardNameColAlias),
-                IMSSlotId = reader.GetInt(IMSSlotIdColAlias),
+                IMSSlotId = reader.GetLong(IMSSlotIdColAlias),
                 IMSSlotName = reader.GetString(IMSSlotNameColAlias),
-                IMSTIDId = reader.GetInt(IMSTIDIdColAlias),
+                IMSTIDId = reader.GetLong(IMSTIDIdColAlias),
                 IMSTIDName = reader.GetString(IMSTIDNameColAlias),
 
-                OLTId = reader.GetInt(OLTIdColAlias),
+                OLTId = reader.GetLong(OLTIdColAlias),
                 OLTName = reader.GetString(OLTNameColAlias),
-                OLTHorizontalId = reader.GetInt(OLTHorizontalIdColAlias),
+                OLTVendorId = reader.GetLong(OLTVendorIdColAlias),
+                OLTVendorName = reader.GetString(OLTVendorNameColAlias),
+                OLTHorizontalId = reader.GetLong(OLTHorizontalIdColAlias),
                 OLTHorizontalName = reader.GetString(OLTHorizontalNameColAlias),
-                OLTHorizontalPortId = reader.GetInt(OLTHorizontalPortIdColAlias),
+                OLTHorizontalPortId = reader.GetLong(OLTHorizontalPortIdColAlias),
                 OLTHorizontalPortName = reader.GetString(OLTHorizontalPortNameColAlias),
-                //OLTVerticalId = reader.GetInt(OLTVerticalIdColAlias),
+                //OLTVerticalId = reader.GetLong(OLTVerticalIdColAlias),
                 //OLTVerticalName = reader.GetString(OLTVerticalNameColAlias),
-                //OLTVerticalPortId = reader.GetInt(OLTVerticalPortIdColAlias),
+                //OLTVerticalPortId = reader.GetLong(OLTVerticalPortIdColAlias),
                 //OLTVerticalPortName = reader.GetString(OLTVerticalPortNameColAlias),
 
-                SplitterId = reader.GetInt(SplitterIdColAlias),
+                SplitterId = reader.GetLong(SplitterIdColAlias),
                 SplitterName = reader.GetString(SplitterNameColAlias),
-                //SplitterInPortId = reader.GetInt(SplitterInPortIdColAlias),
+                //SplitterInPortId = reader.GetLong(SplitterInPortIdColAlias),
                 //SplitterInPortName = reader.GetString(SplitterInPortNameColAlias),
-                SplitterOutPortId = reader.GetInt(SplitterOutPortIdColAlias),
+                SplitterOutPortId = reader.GetLong(SplitterOutPortIdColAlias),
                 SplitterOutPortName = reader.GetString(SplitterOutPortNameColAlias),
 
-                FDBId = reader.GetInt(FDBIdColAlias),
+                FDBId = reader.GetLong(FDBIdColAlias),
                 FDBName = reader.GetString(FDBNameColAlias),
                 FDBNumber = reader.GetString(FDBNumberColAlias),
-                FDBPortId = reader.GetInt(FDBPortIdColAlias),
+                FDBPortId = reader.GetLong(FDBPortIdColAlias),
                 FDBPortName = reader.GetString(FDBPortNameColAlias)
             };
 

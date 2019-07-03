@@ -349,6 +349,8 @@ namespace Retail.NIM.Business
             IMSTIDName = freeFTTHPath.IMSTIDName;
             OLTId = freeFTTHPath.OLTId;
             OLTName = freeFTTHPath.OLTName;
+            OLTVendorId = freeFTTHPath.OLTVendorId;
+            OLTVendorName = freeFTTHPath.OLTVendorName;
             OLTHorizontalId = freeFTTHPath.OLTHorizontalId;
             OLTHorizontalName = freeFTTHPath.OLTHorizontalName;
             OLTHorizontalPortId = freeFTTHPath.OLTHorizontalPortId;
@@ -368,6 +370,8 @@ namespace Retail.NIM.Business
         public string AreaName { get; set; }
         public long SiteId { get; set; }
         public string SiteName { get; set; }
+
+        //IMS
         public long IMSId { get; set; }
         public string IMSName { get; set; }
         public string IMSNumber { get; set; }
@@ -377,16 +381,24 @@ namespace Retail.NIM.Business
         public string IMSSlotName { get; set; }
         public long IMSTIDId { get; set; }
         public string IMSTIDName { get; set; }
+
+        //OLT
         public long OLTId { get; set; }
         public string OLTName { get; set; }
+        public long OLTVendorId  { get; set; }
+        public string OLTVendorName { get; set; } 
         public long OLTHorizontalId { get; set; }
         public string OLTHorizontalName { get; set; }
         public long OLTHorizontalPortId { get; set; }
         public string OLTHorizontalPortName { get; set; }
+
+        //Splitter
         public long SplitterId { get; set; }
         public string SplitterName { get; set; }
         public long SplitterOutPortId { get; set; }
         public string SplitterOutPortName { get; set; }
+
+        //FDB
         public long FDBId { get; set; }
         public string FDBName { get; set; }
         public string FDBNumber { get; set; }

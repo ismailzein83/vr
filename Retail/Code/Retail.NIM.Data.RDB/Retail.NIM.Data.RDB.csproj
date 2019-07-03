@@ -70,6 +70,7 @@
     <Compile Include="SplitterDataManager.cs" />
     <Compile Include="SplitterInPortDataManager.cs" />
     <Compile Include="SplitterOutPortDataManager.cs" />
+    <Compile Include="VendorDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.NIM.Data\Retail.NIM.Data.csproj">

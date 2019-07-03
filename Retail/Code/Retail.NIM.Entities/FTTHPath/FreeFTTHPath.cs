@@ -23,6 +23,8 @@ namespace Retail.NIM.Entities
         //OLT
         public long OLTId { get; set; }
         public string OLTName { get; set; }
+        public long OLTVendorId { get; set; }
+        public string OLTVendorName { get; set; } 
         public long OLTHorizontalId { get; set; }
         public string OLTHorizontalName { get; set; }
         public long OLTHorizontalPortId { get; set; }
