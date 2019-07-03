@@ -50,7 +50,7 @@
             var selectorAPI;
 
             function initializeController() {
-
+                ctrl.hideViewInfo = false;
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
@@ -109,6 +109,8 @@
 
                         var getGenericBERuntimeInfoPromise = getGenericBusinessEntityRuntimeInfo();
                         promises.push(getGenericBERuntimeInfoPromise);
+
+                        promises.push(getGenericBEDefinitionSettings());
                     }
 
                     if (beRuntimeSelectorFilter != undefined) {
@@ -119,7 +121,7 @@
                             filter.GenericBESelectorCondition = beRuntimeSelectorFilter.GenericBESelectorCondition;
                         }
                     }
-
+                     
                     if (!hasEmtyRequiredDependentField) {
                         var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(getGenericBusinessEntityInfoPromiseDeferred.promise);
@@ -252,6 +254,15 @@
 
                 return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter), searchValue);
             }
+
+            function getGenericBEDefinitionSettings() {
+                return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEDefinitionSettings(businessEntityDefinitionId).then(function (response) {
+                    if (response != undefined) {
+                       var genericBEDefinitionSettings = response;
+                        ctrl.hideViewInfo = genericBEDefinitionSettings.HideViewInfo;
+                    }
+                });
+            }
         }
 
         function getDirectiveTemplate(attrs) {
@@ -282,6 +293,8 @@
             if (attrs.usefullcolumn != undefined)
                 haschildcolumns = "haschildcolumns";
 
+            var onviewclicked = "onviewclicked='ctrl.hideViewInfo ? undefined : onViewIconClicked'";
+
             //var requiredParentTemplate = '<span ng-if="parentSelector != undefined && parentSelector.parentDirective != undefined">'
             //    + '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + '>'
             //    + '<vr-directivewrapper directive="parentSelector.parentDirective" normal-col-num="{{scopeModel.calculatedColNum}}"  on-ready="parentSelector.onParentDirectiveReady" '
@@ -305,7 +318,7 @@
                 + ' isrequired="ctrl.isrequired"  '
                 + ' ' + hideremoveicon
                 + ' ' + addCliked
-                + ' onviewclicked="onViewIconClicked"'
+                + ' ' + onviewclicked
                 + ' limitcharactercount="ctrl.limitcharactercount">'
                 + '</vr-select></span></vr-columns>';
         }

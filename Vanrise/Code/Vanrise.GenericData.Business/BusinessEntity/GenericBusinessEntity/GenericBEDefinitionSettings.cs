@@ -30,6 +30,7 @@ namespace Vanrise.GenericData.Business
         public string SelectorSingularTitle { get; set; }
         public string SelectorPluralTitle { get; set; }
         public bool DoNotLoadByDefault { get; set; }
+        public bool HideViewInfo { get; set; }
 
         //public string FieldPath { get; set; }
         public ModalWidthEnum EditorSize { get; set; }
