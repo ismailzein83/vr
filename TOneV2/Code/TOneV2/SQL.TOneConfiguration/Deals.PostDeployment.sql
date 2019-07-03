@@ -581,3 +581,23 @@ when not matched by target then
 	values(s.[Name],s.[RuleTypeId],s.[UserId],s.[Settings],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime],s.[IsDisabled]);
 --set identity_insert [VRNotification].[VRAlertRule] off;
 
+--[logging].[LoggableEntity]------------------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([ID],[UniqueName],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('8B507C04-FF4E-4A9E-ADDD-EE95F4A76F0C','VR_GenericData_GenericBusinessEntity_c4ec0507-29d3-48ed-ad54-6ee092cb7957','  {"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ChangeInfoDefinition":{"$type":"Vanrise.GenericData.Business.GenericFieldsActionAuditChangeInfoDefinition, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"c4ec0507-29d3-48ed-ad54-6ee092cb7957","RuntimeEditor":"vr-genericdata-genericfields-actionauditchange-runtime"},"ViewHistoryItemClientActionName":"VR_GenericData_GenericBusinessEntity_ViewHistoryItem"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[UniqueName],[Settings]))
+merge	[logging].[LoggableEntity] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[UniqueName],[Settings])
+	values(s.[ID],s.[UniqueName],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+END
