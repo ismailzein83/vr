@@ -51,13 +51,9 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
 
                         for (var i = 0; i < payload.fields.length; i++) {
                             var field = payload.fields[i];
+                            field.columnNum = field.FieldWidth != undefined ? field.FieldWidth : 4;
                             field.readyPromiseDeferred = UtilsService.createPromiseDeferred();
                             field.loadPromiseDeferred = UtilsService.createPromiseDeferred();
-                            if (field.FieldWidth != undefined) {
-                                field.columnNum = field.FieldWidth;
-                            }
-                            else
-                                field.columnNum = 4;
                             if (field.ShowAsLabel) {
                                 promises.push(getFieldTypeDescription(field));
                             }
