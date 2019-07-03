@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text;
+using Vanrise.Common;
 using TOne.WhS.Deal.Entities;
 using Vanrise.GenericData.Entities;
 
@@ -11,19 +11,25 @@ namespace TOne.WhS.Deal.Business
 
         public override bool AreEqual(object newValue, object oldValue)
         {
-            return true;
+            var newValueObject = newValue as SwapDealAnalysisOutbound;
+            var oldValueObject = oldValue as SwapDealAnalysisOutbound;
+
+            string newValueSerializedObject = Serializer.Serialize(newValueObject);
+            string oldValueSerializedObject = Serializer.Serialize(oldValueObject);
+
+            return newValueSerializedObject.Equals(oldValueSerializedObject);
         }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            var valueObject = context.FieldValue as SwapDealAnalysisOutbound;
+            //var valueObject = context.FieldValue as SwapDealAnalysisOutbound;
 
-            if (valueObject != null)
-            {
-                StringBuilder description = new StringBuilder();
-                return description.ToString();
-            }
-            return null;
+            //if (valueObject != null)
+            //{
+            //    StringBuilder description = new StringBuilder();
+            //    return description.ToString();
+            //}
+            return "Outbounds";
         }
 
         public override Type GetNonNullableRuntimeType()
