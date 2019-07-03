@@ -284,7 +284,7 @@
 
                 if (filterData != undefined) {
                     if (filterData.RecordFilter != undefined) {
-                        if (filterData.RecordFilter.$type.indexOf("RecordFilterGroup") < 0) {
+                        if (filterData.RecordFilter.$type.indexOf("RecordFilterGroup") != -1) {
                             filterGroup = filterData.RecordFilter;
                         } else {
                             filterGroup = {

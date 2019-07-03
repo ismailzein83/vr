@@ -31,6 +31,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
             var genericContext;
             var triggerSearch;
             var searchManagementFunc;
+            var childEntityFilterContext;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -77,6 +78,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
             }
 
             function defineScopeForSingleMode() {
+
                 $scope.scopeModel.onFieldBlur = function () {
                     if (oldValue == $scope.scopeModel.value)
                         return;
@@ -88,6 +90,13 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
                     if (genericContext != undefined && genericContext.notifyFieldValueChanged != undefined && typeof (genericContext.notifyFieldValueChanged) == "function") {
                         var changedField = { fieldName: fieldName, fieldValues: valueAsArray };
                         genericContext.notifyFieldValueChanged(changedField);
+                    }
+
+                    if (childEntityFilterContext != undefined && childEntityFilterContext.loadParentFilterFieldValues != undefined) {
+                        $scope.scopeModel.isSingleDirectiveLoading = true;
+                        childEntityFilterContext.loadParentFilterFieldValues().then(function () {
+                            $scope.scopeModel.isSingleDirectiveLoading = false;
+                        });
                     }
                 };
 
@@ -122,6 +131,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
                         genericContext = payload.genericContext;
                         triggerSearch = payload.triggerSearch;
                         searchManagementFunc = payload.searchManagementFunc;
+                        childEntityFilterContext = payload.childEntityFilterContext;
                         $scope.scopeModel.label = payload.fieldTitle;
 
                         if (fieldType != undefined) {
@@ -228,14 +238,14 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
 
                 if (attrs.hidelabel != undefined)
                     hidelabel = " hidelabel ";
-                 
+
                 return '<vr-columns ng-if="scopeModel.isRichText" colnum="{{runtimeEditorCtrl.normalColNum}}">'
                     + ' <vr-editor ' + hidelabel + ' label="{{scopeModel.label}}" value="scopeModel.value" isrequired="runtimeEditorCtrl.isrequired"></vr-editor>'
                     + '</vr-columns>'
                     + '<vr-columns ng-if="scopeModel.isMultipleText" colnum="{{runtimeEditorCtrl.normalColNum*2}}">'
                     + '<vr-textarea ' + hidelabel + ' value="scopeModel.value" label="{{scopeModel.label}}" rows="4" isrequired ="runtimeEditorCtrl.isrequired" ></vr-textarea>'
                     + '</vr-columns>'
-                    + '<vr-columns ng-if="scopeModel.isSingleText" colnum="{{runtimeEditorCtrl.normalColNum}}">'
+                    + '<vr-columns ng-if="scopeModel.isSingleText" vr-loader="scopeModel.isSingleDirectiveLoading" colnum="{{runtimeEditorCtrl.normalColNum}}">'
                     + '<vr-textbox ' + hidelabel + ' type="text" label="{{scopeModel.label}}" hint="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" '
                     + ' onvaluechanged="scopeModel.onValueChanged" customvalidate = "scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired"></vr-textbox> '
                     + '</vr-columns>';

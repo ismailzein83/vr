@@ -111,7 +111,7 @@
                 };
 
                 $scope.search = function () {
-                   return gridDirectiveAPI.load(getGridFilter());
+                    return gridDirectiveAPI.load(getGridFilter());
                 };
 
                 $scope.addBusinessEntity = function () {
@@ -275,7 +275,7 @@
 
                 if (filterData != undefined) {
                     if (filterData.RecordFilter != undefined) {
-                        if (filterData.RecordFilter.$type.indexOf("RecordFilterGroup") < 0) {
+                        if (filterData.RecordFilter.$type.indexOf("RecordFilterGroup") != -1) {
                             filterGroup = filterData.RecordFilter;
                         } else {
                             filterGroup = {
@@ -310,6 +310,7 @@
                     doNotLoadByDefault: genericBEDefinitionSettings.DoNotLoadByDefault,
                     threeSixtyDegreeSettings: genericBEDefinitionSettings.ThreeSixtyDegreeSettings
                 };
+
                 return gridPayload;
             }
 
@@ -389,7 +390,7 @@
                         return gridDirectiveAPI.load(gridPayload);
                     },
                     expendRow: function (genericBEId) {
-                      return  gridDirectiveAPI.expendRow(genericBEId);
+                        return gridDirectiveAPI.expendRow(genericBEId);
                     }
                 };
             }

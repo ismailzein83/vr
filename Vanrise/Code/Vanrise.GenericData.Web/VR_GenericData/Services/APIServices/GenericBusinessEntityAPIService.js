@@ -121,6 +121,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBESelectorConditionConfigs"));
         }
 
+        function GetAllGenericBusinessEntities(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetAllGenericBusinessEntities'), input);
+        }
+
         return {
             GetGenericBETitleFieldValue: GetGenericBETitleFieldValue,
             GetFilteredGenericBusinessEntities: GetFilteredGenericBusinessEntities,
@@ -141,7 +145,8 @@
             GetDependentFieldValues: GetDependentFieldValues,
             GetGenericEditorColumnsInfo: GetGenericEditorColumnsInfo,
             ExecuteRangeGenericEditorProcess: ExecuteRangeGenericEditorProcess,
-            GetGenericBESelectorConditionConfigs: GetGenericBESelectorConditionConfigs
+            GetGenericBESelectorConditionConfigs: GetGenericBESelectorConditionConfigs,
+            GetAllGenericBusinessEntities: GetAllGenericBusinessEntities
         };
     }
 
