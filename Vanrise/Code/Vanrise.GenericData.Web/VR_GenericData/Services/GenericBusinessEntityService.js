@@ -42,12 +42,13 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
 
-        function viewGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues) {
+        function viewGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues, historyId) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
                 genericBusinessEntityId: genericBusinessEntityId,
                 fieldValues: fieldValues,
-                isReadOnly: true
+                isReadOnly: true,
+                historyId: historyId
             };
 
             var settings = {
@@ -59,6 +60,22 @@
             };
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
+
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "VR_GenericData_GenericBusinessEntity_ViewHistoryItem",
+                actionMethod: function (payload) {
+                    var businessEntityDefinitionId;
+                    if (payload.context != undefined) {
+                        businessEntityDefinitionId = payload.context.getBusinessEntityDefinitionId();
+                    }
+                    viewGenericBusinessEntity(businessEntityDefinitionId, undefined, undefined, undefined, payload.historyId);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
         function uploadGenericBusinessEntity(businessEntityDefinitionId, editorSize) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
@@ -241,7 +258,8 @@
             openErrorMessageEditor: openErrorMessageEditor,
             tryUpdateAllFieldValuesByFieldName: tryUpdateAllFieldValuesByFieldName,
             tryUpdateAllFieldValuesByFieldNames: tryUpdateAllFieldValuesByFieldNames,
-            viewGenericBusinessEntity: viewGenericBusinessEntity
+            viewGenericBusinessEntity: viewGenericBusinessEntity,
+            registerHistoryViewAction: registerHistoryViewAction
             //registerObjectTrackingDrillDownToGenericBusinessEntity: registerObjectTrackingDrillDownToGenericBusinessEntity
             //getDrillDownDefinition: getDrillDownDefinition
         });

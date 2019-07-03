@@ -75,7 +75,7 @@ namespace Vanrise.Common.Business
             if (vrActionAuditChangeInfoResolveChangeInfoContext.NothingChanged)
                 return;
               
-            TrackAndLogObjectAction(loggableEntity, "Update", oldObjectValue, null, vrActionAuditChangeInfoResolveChangeInfoContext.ChangeSummary, false, vrActionAuditChangeInfo);
+            TrackAndLogObjectAction(loggableEntity, "Update", oldObjectValue, null, vrActionAuditChangeInfoResolveChangeInfoContext.ChangeSummary, true, vrActionAuditChangeInfo);
         
         }
 

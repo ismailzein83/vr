@@ -24,7 +24,7 @@
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var errorEntity;
-
+        var historyId;
         $scope.scopeModel = {};
 
         loadParameters();
@@ -39,6 +39,7 @@
                 genericBusinessEntityId = parameters.genericBusinessEntityId;
                 fieldValues = parameters.fieldValues;
                 isReadOnly = parameters.isReadOnly;
+                historyId = parameters.historyId;
             }
             $scope.scopeModel.isEditMode = (genericBusinessEntityId != undefined);
         }
@@ -81,7 +82,8 @@
                         genericBusinessEntityId: genericBusinessEntityId,
                         fieldValues: fieldValues,
                         context: getContext(),
-                        isReadOnly: isReadOnly
+                        isReadOnly: isReadOnly,
+                        historyId: historyId
                     };
                     VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
                 });
