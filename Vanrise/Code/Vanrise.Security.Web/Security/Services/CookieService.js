@@ -52,7 +52,7 @@ function ($cookies, VRNotificationService) {
     }
 
     function deleteAccessCookie() {
-        $cookies.remove(getAccessCookieName());        
+        $cookies.remove(getAccessCookieName(), { path: '/', domain: location.hostname, expires: '', secure: false });
     }
 
     return ({
