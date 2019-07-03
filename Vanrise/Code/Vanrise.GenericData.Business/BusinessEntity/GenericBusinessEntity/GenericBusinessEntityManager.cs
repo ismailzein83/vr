@@ -1278,7 +1278,12 @@ namespace Vanrise.GenericData.Business
         {
             return GetGenericBusinessEntityName(genericBusinessEntityId, businessEntityDefinitionId);
         }
-
+        public Dictionary<string,GridColumnAttribute> GetGenericEditorColumnsInfo(Guid dataRecordTypeId, ListRecordRuntimeViewType listRecordViewType)
+        {
+            if (listRecordViewType == null)
+                return null;
+            return listRecordViewType.GetGenericEditorColumnsInfo(new ListRecordRuntimeViewTypeColumnsInfoContext { DataRecordTypeId = dataRecordTypeId });
+        }
         public Dictionary<string, object> GetDependentFieldValues(Guid dataRecordTypeId, Dictionary<string, object> fieldValues)
         {
             Dictionary<string, object> dependentFieldValues = new Dictionary<string, object>(fieldValues);

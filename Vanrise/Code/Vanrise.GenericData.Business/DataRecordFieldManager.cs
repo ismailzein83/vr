@@ -153,6 +153,25 @@ namespace Vanrise.GenericData.Business
                 return null;
             return input.FieldType.GetDescription(input.FieldValue);
         }
+
+        //public DataRecordFieldTypeInfo GetFieldTypeDescription(FieldTypeDescriptionInput input)
+        //{
+
+        //    if (input.FieldType == null)
+        //        return null;
+
+        //    var fieldTypeInfo = new DataRecordFieldTypeInfo()
+        //    {
+        //        FieldDescription = input.FieldType.GetDescription(input.FieldValue),
+        //    };
+
+        //    var context = new DataRecordFieldStyleDefinitionContext { FieldValue = input.FieldValue };
+
+        //    input.FieldType.TryGetStyleDefinitionId(context);
+        //    fieldTypeInfo.StyleDefinitionId = context.StyleDefinitionId;
+
+        //    return fieldTypeInfo;
+        //}
         public List<Dictionary<string, string>> GetFieldTypeListDescription(ListFieldTypeDescriptionInput input)
         {
             List<Dictionary<string, string>> fieldsDescription = null;
@@ -178,6 +197,35 @@ namespace Vanrise.GenericData.Business
                             }
                         }
                         fieldsDescription.Add(rowFieldsDescription);
+                    }
+                }
+            }
+            return fieldsDescription;
+        }
+        public List<Dictionary<string,string>> GetFieldsDescription(FieldsDescriptionInput input)
+        {
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            var fields = dataRecordTypeManager.GetDataRecordTypeFields(input.DataRecordTypeId);
+            List<Dictionary<string, string>> fieldsDescription = null;
+
+            if (fields!=null && fields.Count > 0 && input.FieldsValues!=null && input.FieldsValues.Count>0)
+            {
+                fieldsDescription = new List<Dictionary<string, string>>();
+                foreach(var rowValues in input.FieldsValues)
+                {
+                    Dictionary<string, string> fieldsDescriptionRow;
+                    if(rowValues!=null && rowValues.Count > 0)
+                    {
+                        fieldsDescriptionRow = new Dictionary<string, string>();
+                        foreach (var fieldValue in rowValues)
+                        {
+                            DataRecordField field;
+                            if (fields.TryGetValue(fieldValue.Key, out field))
+                            {
+                                fieldsDescriptionRow.Add(fieldValue.Key, field.Type.GetDescription(fieldValue.Value));
+                            }
+                        }
+                        fieldsDescription.Add(fieldsDescriptionRow);
                     }
                 }
             }
@@ -235,5 +283,10 @@ namespace Vanrise.GenericData.Business
     {
         public Dictionary<string, DataRecordFieldType> FieldTypes { get; set; }
         public List<Dictionary<string,object>> FieldsValues { get; set; }
+    }
+    public class FieldsDescriptionInput
+    {
+        public Guid DataRecordTypeId { get; set; }
+        public List<Dictionary<string, object>> FieldsValues { get; set; }
     }
 }

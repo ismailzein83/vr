@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public List<VRSectionContainer> SectionContainers { get; set; }
 
-        public override void ApplyTranslation(IGenericBETranslationContext context)
+        public override void ApplyTranslation(IGenericEditorTranslationContext context)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
             if (SectionContainers != null)
@@ -30,9 +30,9 @@ namespace Vanrise.GenericData.MainExtensions
             }
         }
 
-        public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
+        public override Dictionary<string,GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
         {
-            List<GridColumnAttribute> columnsAttribute = new List<GridColumnAttribute>();
+            Dictionary<string, GridColumnAttribute> columnsAttribute = new Dictionary<string, GridColumnAttribute>();
 
             if (SectionContainers != null && SectionContainers.Count > 0)
             {
@@ -44,9 +44,14 @@ namespace Vanrise.GenericData.MainExtensions
                         {
                             DataRecordTypeId = context.DataRecordTypeId
                         });
-
-                        if (attributes != null && attributes.Count > 0)
-                            columnsAttribute.AddRange(attributes);
+                        if (attributes != null)
+                        {
+                            foreach (var attribute in attributes)
+                            {
+                                if (!columnsAttribute.ContainsKey(attribute.Key))
+                                    columnsAttribute.Add(attribute.Key, attribute.Value);
+                            }
+                        }
                     }
                 }
             }

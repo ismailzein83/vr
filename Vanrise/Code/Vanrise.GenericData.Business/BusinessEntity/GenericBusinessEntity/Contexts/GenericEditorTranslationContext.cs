@@ -7,7 +7,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 namespace Vanrise.GenericData.Business
 {
-    public class GenericEditorTranslationContext : IGenericBETranslationContext
+    public class GenericEditorTranslationContext : IGenericEditorTranslationContext
     {
         public Guid LanguageId { get; set; }
         public Guid DataRecordTypeId { get; set; }

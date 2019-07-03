@@ -35,7 +35,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
             ctrl.datasource = [];
             $scope.scopeModel.columns = [];
             var dataRecordTypeId;
-            var definitionSettings;
+            var editorSettings;
             var gridAPI;
             function initializeController() {
                 $scope.scopeModel.onGridReady = function (api) {
@@ -44,9 +44,11 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                 };
                 $scope.scopeModel.onDataRecordTypeRowAdded = function () {
                     var onRowAdded = function (row) {
-                        ctrl.datasource.push(row);
+                        VR_GenericData_DataRecordFieldAPIService.GetFieldsDescription({ DataRecordTypeId: dataRecordTypeId, FieldsValues: row.Entity }).then(function (response) {
+                            ctrl.datasource.push({ Entity: row.Entity, FieldsDescription: response != undefined && response.length > 0 ? response[0] : undefined });
+                        });
                     };
-                    VR_GenericData_DataRecordTypeService.addListDataRecordTypeRow(dataRecordTypeId, definitionSettings, onRowAdded, $scope.scopeModel.fieldTitle);
+                    VR_GenericData_DataRecordTypeService.addListDataRecordTypeRow(dataRecordTypeId, editorSettings, onRowAdded, $scope.scopeModel.fieldTitle);
                 };
                 $scope.scopeModel.onDeleteRow = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
@@ -57,45 +59,71 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
 
             function defineAPI() {
                 var api = {};
+                var fieldsDescription;
                 api.load = function (payload) {
                     dataRecordTypeId = payload.dataRecordTypeId;
-                    definitionSettings = payload.definitionSettings != undefined ? payload.definitionSettings.Settings : undefined;
-                    var fieldsValues = payload.fieldValue;
+
+                    var definitionSettings = payload.definitionSettings;
+                    editorSettings = definitionSettings != undefined ? definitionSettings.Settings : undefined;
+                    $scope.scopeModel.hideSection = definitionSettings.HideSection;
+                    var fieldsValues = [];
+
+                    var fields = payload.fieldValue;
+
                     $scope.scopeModel.fieldTitle = payload.fieldTitle;
                     var input = {
-                        GenericEditorDefinitionSetting: definitionSettings,
-                        DataRecordTypeId: dataRecordTypeId
+                        ListRecordViewType: definitionSettings,
+                        DataRecordTypeId: dataRecordTypeId,
                     };
-                    var getColumnsInfoPromise = VR_GenericData_GenericBusinessEntityAPIService.GetGenericEditorColumnsInfo(input).then(function (response) {
-                        if (response != undefined && response.length > 0) {
-                            for (var i = 0; i < response.length; i++) {
-                                var column = response[i];
-                                column.Field = "Entity." + column.Field;
-                                $scope.scopeModel.columns.push(column); 
+                    if (fields != undefined && fields.length > 0) {
+                        for (var i = 0; i < fields.length > 0; i++) {
+                            var field = fields[i];
+                            var rowFieldsValues = {};
 
+                            for (var prop in field) {
+                                if (prop != '$type' && prop != 'QueueItemId')
+                                    rowFieldsValues[prop] = field[prop];
+                            }
+                            fieldsValues.push(rowFieldsValues);
+                        }
+                    }
+                    var getColumnsInfoPromise = VR_GenericData_GenericBusinessEntityAPIService.GetGenericEditorColumnsInfo(input).then(function (response) {
+                        if (response != undefined) {
+                            for (var col in response) {
+                                if (col != '$type') {
+                                    var column = response[col];
+                                    column.Field = "Entity." + column.Field;
+                                    $scope.scopeModel.columns.push(column);
+                                }
                             }
                         }
                     });
-                    var rootPromiseNode = {
-                        promises: [getColumnsInfoPromise],
-                        getChildNode: function () {
-                            if (fieldsValues != undefined) {
-                                for (var i = 0; i < fieldsValues.length; i++) {
-                                    ctrl.datasource.push({ Entity: fieldsValues[i] });
-                                } 
+                    var getFieldsDescriptionPromise = VR_GenericData_DataRecordFieldAPIService.GetFieldsDescription({ DataRecordTypeId: dataRecordTypeId, FieldsValues: fieldsValues }).then(function (response) {
+                        fieldsDescription = response;
+                        if (fieldsDescription != undefined && fieldsDescription.length > 0) {
+
+                            for (var i = 0; i < fieldsDescription.length; i++) {
+                                ctrl.datasource.push({ Entity: fieldsValues[i], FieldsDescription: fieldsDescription[i] });
                             }
-                            return { promises: [] };
                         }
+                    });
+
+
+                    var rootPromiseNode = {
+                        promises: [getColumnsInfoPromise, getFieldsDescriptionPromise]
                     };
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
 
-                    var returnedData = []; 
-                    for (var i = 0; i < ctrl.datasource.length; i++) {
-                        returnedData.push(ctrl.datasource[i].Entity);
-                    } 
+                    var returnedData = [];
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            returnedData.push(ctrl.datasource[i].Entity);
+                        }
+                    }
+
                     return returnedData;
                 };
 
@@ -117,11 +145,12 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
             }
 
             function editRow(row) {
+
                 var onRowUpdated = function (updatedRow) {
                     var index = ctrl.datasource.indexOf(row);
                     ctrl.datasource[index] = updatedRow;
                 };
-                VR_GenericData_DataRecordTypeService.editListDataRecordTypeRow(row, dataRecordTypeId, definitionSettings, onRowUpdated, $scope.scopeModel.fieldTitle);
+                VR_GenericData_DataRecordTypeService.editListDataRecordTypeRow(row, dataRecordTypeId, editorSettings, onRowUpdated, $scope.scopeModel.fieldTitle);
             }
             this.initializeController = initializeController;
         }

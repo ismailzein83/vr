@@ -14,27 +14,23 @@ namespace Vanrise.GenericData.MainExtensions
 
         public VRGenericEditorDefinitionSetting EditorDefinitionSetting { get; set; }
 
-        public override void ApplyTranslation(IGenericBETranslationContext context)
+        public override void ApplyTranslation(IGenericEditorTranslationContext context)
         {
             if (EditorDefinitionSetting != null)
                 EditorDefinitionSetting.ApplyTranslation(new GenericEditorTranslationContext(context.DataRecordTypeId, context.LanguageId));
         }
 
-        public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
+        public override Dictionary<string,GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
         {
-            List<GridColumnAttribute> columnsAttributes = new List<GridColumnAttribute>();
-
             if (EditorDefinitionSetting != null)
             {
-                var attributes = EditorDefinitionSetting.GetGridColumnsAttributes(new GetGenericEditorColumnsInfoContext
+                return EditorDefinitionSetting.GetGridColumnsAttributes(new GetGenericEditorColumnsInfoContext
                 {
                     DataRecordTypeId = context.DataRecordTypeId
                 });
 
-                if (attributes != null && attributes.Count > 0)
-                    columnsAttributes.AddRange(attributes);
             }
-            return columnsAttributes;
+            return null;
         }
         public GenericEditorConditionalRule GenericEditorConditionalRule { get; set; }
     }

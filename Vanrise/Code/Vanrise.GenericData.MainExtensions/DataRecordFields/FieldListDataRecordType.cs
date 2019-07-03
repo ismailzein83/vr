@@ -56,7 +56,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return _nonNullableRuntimeType;
         }
-
+        public override void ApplyTranslation(IDataRecordFieldTypeTranslationContext context)
+        {
+            var runtimeViewType = context.FieldViewSettings as ListRecordRuntimeViewType;
+            if (runtimeViewType != null)
+            {
+                runtimeViewType.ApplyTranslation(new ListRecordRuntimeViewTypeTranslationContext { DataRecordTypeId=DataRecordTypeId,LanguageId=context.LanguageId });
+            }
+        }
         public override Type GetRuntimeType()
         {
             return GetNonNullableRuntimeType();
@@ -116,15 +123,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
     }
 
-    public abstract class ListRecordRuntimeViewType
-    {
-        public abstract Guid ConfigId { get; }
-        public abstract string RuntimeEditor { get; }
-    }
-
     public class GridViewListRecordRuntimeViewType : ListRecordRuntimeViewType
     {
-        public override Guid ConfigId =>  new Guid("661E02F1-7A44-4D56-A73F-7912EF3017B1");
+        public override Guid ConfigId => new Guid("661E02F1-7A44-4D56-A73F-7912EF3017B1");
         public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-gridview-runtime";
         public bool HideAddButton { get; set; }
         public bool HideSection { get; set; }
@@ -144,6 +145,27 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override Guid ConfigId => new Guid("03925E9D-6A0F-4D4F-A4A4-36F5757D71EB");
         public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-grideditorview-runtime";
         public VRGenericEditorDefinitionSetting Settings { get; set; }
+        public List<string> AvailableColumns { get; set; }
+        public bool HideSection { get; set; }
+        public override void ApplyTranslation(IListRecordRuntimeViewTypeTranslationContext context)
+        {
+            if (Settings != null)
+                Settings.ApplyTranslation(new GenericEditorTranslationContext(context.DataRecordTypeId, context.LanguageId));
+        }
+        public override Dictionary<string, GridColumnAttribute> GetGenericEditorColumnsInfo(IListRecordRuntimeViewTypeColumnsInfoContext context)
+        {
+            var columnsInfo = Settings.GetGridColumnsAttributes(new GetGenericEditorColumnsInfoContext { DataRecordTypeId = context.DataRecordTypeId });
+            if (columnsInfo == null || AvailableColumns == null || AvailableColumns.Count == 0)
+                return columnsInfo;
+            Dictionary<string, GridColumnAttribute> availableColumnsInfo = new Dictionary<string, GridColumnAttribute>();
+
+            foreach (var columnInfo in columnsInfo)
+            {
+                if (AvailableColumns.Contains(columnInfo.Key))
+                    availableColumnsInfo.Add(columnInfo.Key, columnInfo.Value);
+            }
+            return availableColumnsInfo;
+        }
     }
     public class FieldViewListRecordRuntimeViewType : ListRecordRuntimeViewType
     {
@@ -151,4 +173,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-fieldview-runtime";
         public DataRecordField RecordField { get; set; }
     }
+   
+    public class ListRecordRuntimeViewTypeTranslationContext : IListRecordRuntimeViewTypeTranslationContext
+    {
+        public Guid LanguageId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
+    }
 }
+

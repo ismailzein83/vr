@@ -38,6 +38,10 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
             var settings;
             var dataRecordTypeId;
             var dataRecordTypeFields = [];
+            var availableColumns = [];
+
+            var dataRecordTypeFieldsSelectorAPI;
+            var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
 
@@ -45,6 +49,12 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                     editorDefinitionAPI = api;
                     editorDefinitionReadyPromiseDeferred.resolve();
                 };
+
+                $scope.scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady = function (api) {
+                    dataRecordTypeFieldsSelectorAPI = api;
+                    dataRecordTypeFieldsSelectorReadyPromiseDeferred.resolve();
+                };
+
                 defineAPI();
 
             }
@@ -53,12 +63,27 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                 var loadEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                 editorDefinitionReadyPromiseDeferred.promise.then(function () {
                     var editorPayload = {
-                        settings: settings,
+                        settings: settings != undefined ? settings.Settings : undefined,
                         context: getContext()
                     };
                     VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, editorPayload, loadEditorDefinitionDirectivePromiseDeferred);
                 });
                 return loadEditorDefinitionDirectivePromiseDeferred.promise;
+            }
+
+            function loadFieldsSelector(dataRecordTypeId, availableColumns) {
+                var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
+                    var dataRecordTypeFieldsSelectorPayload = {
+                        dataRecordTypeId: dataRecordTypeId
+                    };
+                    if (availableColumns != undefined) {
+                        dataRecordTypeFieldsSelectorPayload.selectedIds = availableColumns;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
+
+                });
+                return dataRecordTypeFieldsSelectorLoadDeferred.promise;
             }
 
             function getDataRecordFieldsInfo(dataRecordTypeId) {
@@ -76,26 +101,41 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                 var api = {};
 
                 api.load = function (payload) {
-                    settings = payload.settings;
-                    if (settings != undefined)
-                        settings = settings.Settings;
-                        dataRecordTypeId = payload.dataRecordTypeId; 
-                    var rootPromiseNode = {
-                        promises: [getDataRecordFieldsInfo(dataRecordTypeId)]
-                    };
-                   
-                    rootPromiseNode.getChildNode = function () {
-             
-                        return { promises: [loadEditorDefinitionDirective()] };
-                    };
+                    var promises = [];
+
+                    var rootPromiseNode = {promises:[]};
+                    if (payload != undefined) {
+                        settings = payload.settings;
+                        if (settings != undefined) {
+                            $scope.scopeModel.hideSection = settings.HideSection;
+                            availableColumns = settings.AvailableColumns;
+                        }
+                     
+                        dataRecordTypeId = payload.dataRecordTypeId;
+                        promises.push(getDataRecordFieldsInfo(dataRecordTypeId));
+
+                        rootPromiseNode.promises = promises;
+
+                        rootPromiseNode.getChildNode = function () {
+                            return { promises: [loadEditorDefinitionDirective(), loadFieldsSelector(dataRecordTypeId, availableColumns)] };
+                        };
+                    }
 
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
+                    var selectedColumns = [];
+                    if ($scope.scopeModel.selectedFields != undefined && $scope.scopeModel.selectedFields.length > 0) {
+                        for (var i = 0; i < $scope.scopeModel.selectedFields.length; i++) {
+                            selectedColumns.push($scope.scopeModel.selectedFields[i].Name);
+                        }
+                    }
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.GridEditorViewListRecordRuntimeViewType, Vanrise.GenericData.MainExtensions",
-                        Settings: editorDefinitionAPI.getData()
+                        Settings: editorDefinitionAPI.getData(),
+                        HideSection: $scope.scopeModel.hideSection,
+                        AvailableColumns: selectedColumns
                     };
                 };
 

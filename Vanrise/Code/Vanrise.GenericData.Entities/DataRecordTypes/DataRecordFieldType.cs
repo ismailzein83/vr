@@ -37,6 +37,7 @@ namespace Vanrise.GenericData.Entities
         {
             return newValue == oldValue;
         }
+        public virtual void ApplyTranslation(IDataRecordFieldTypeTranslationContext context) { }
 
         public virtual bool TryResolveDifferences(IDataRecordFieldTypeTryResolveDifferencesContext context)
         {
@@ -190,6 +191,15 @@ namespace Vanrise.GenericData.Entities
         {
             return false;
         }
+    }
+    public interface IDataRecordFieldTypeTranslationContext : IGenericBETranslationContext
+    {
+        Object FieldViewSettings { get; }
+    }
+    public class DataRecordFieldTypeTranslationContext : IDataRecordFieldTypeTranslationContext
+    {
+        public Guid LanguageId { get; set; }
+        public Object FieldViewSettings { get; set; }
     }
     public interface IDataRecordFieldStyleDefinitionContext
     {

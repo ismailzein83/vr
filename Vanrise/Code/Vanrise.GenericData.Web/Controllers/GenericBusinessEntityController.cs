@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.Web.Controllers
                 return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredGenericBusinessEntities(input), _manager.GenericBusinessEntityDefinitionTitle(input.Query.BusinessEntityDefinitionId));
         }
-
+         
         [HttpGet]
         [Route("GetGenericBusinessEntityEditorRuntime")]
         public GenericBusinessEntityRuntimeEditor GetGenericBusinessEntityEditorRuntime(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId, int? historyId = null)
@@ -160,10 +160,9 @@ namespace Vanrise.GenericData.Web.Controllers
         }
         [HttpPost]
         [Route("GetGenericEditorColumnsInfo")]
-        public List<GridColumnAttribute> GetGenericEditorColumnsInfo(GetGenericEditorColumnsInfoInput input)
+        public Dictionary<string,GridColumnAttribute> GetGenericEditorColumnsInfo(GetGenericEditorColumnsInfoInput input)
         {
-            GetGenericEditorColumnsInfoContext getGenericEditorColumnsInfoContext = new GetGenericEditorColumnsInfoContext { DataRecordTypeId = input.DataRecordTypeId };
-            return input.GenericEditorDefinitionSetting.GetGridColumnsAttributes(getGenericEditorColumnsInfoContext);
+            return _manager.GetGenericEditorColumnsInfo(input.DataRecordTypeId, input.ListRecordViewType);
         }
 
 
@@ -209,6 +208,6 @@ namespace Vanrise.GenericData.Web.Controllers
             public List<string> ColumnsNeeded { get; set; }
             public RecordFilterGroup FilterGroup { get; set; }
         }
-
+       
     }
 }

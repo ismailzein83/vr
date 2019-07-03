@@ -52,6 +52,9 @@
         function GetListDataRecordTypeGridViewColumnAtts(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetListDataRecordTypeGridViewColumnAtts"), input);
         }
+        function GetFieldsDescription(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetFieldsDescription"), input);
+        }
         return ({
             GetDataRecordFieldsInfo: GetDataRecordFieldsInfo,
             GetDataRecordAttributes: GetDataRecordAttributes,
@@ -62,7 +65,8 @@
             GetListRecordRuntimeViewTypeConfigs: GetListRecordRuntimeViewTypeConfigs,
             GetFieldTypeDescription: GetFieldTypeDescription,
             GetFieldTypeListDescription: GetFieldTypeListDescription,
-            GetListDataRecordTypeGridViewColumnAtts: GetListDataRecordTypeGridViewColumnAtts
+            GetListDataRecordTypeGridViewColumnAtts: GetListDataRecordTypeGridViewColumnAtts,
+            GetFieldsDescription: GetFieldsDescription
         });
 
     }

@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class GetGenericEditorColumnsInfoInput
     {
-        public VRGenericEditorDefinitionSetting GenericEditorDefinitionSetting { get; set; }
+        public ListRecordRuntimeViewType ListRecordViewType { get; set; }
         public Guid DataRecordTypeId { get; set; }
     }
 }

@@ -73,6 +73,13 @@ namespace Vanrise.GenericData.Web.Controllers
             return manager.GetFieldCustomObjectTypeSettingsConfig();
         }
 
+        //[HttpPost]
+        //[Route("GetFieldTypeDescription")]
+        //public DataRecordFieldTypeInfo GetFieldTypeDescription(FieldTypeDescriptionInput input)
+        //{
+        //    DataRecordFieldManager manager = new DataRecordFieldManager();
+        //    return manager.GetFieldTypeDescription(input);
+        //}
         [HttpPost]
         [Route("GetFieldTypeDescription")]
         public string GetFieldTypeDescription(FieldTypeDescriptionInput input)
@@ -87,8 +94,16 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.GetFieldTypeListDescription(input);
         }
-        
+        [HttpPost]
+        [Route("GetFieldsDescription")]
+        public List<Dictionary<string, string>> GetFieldsDescription(FieldsDescriptionInput input)
+        {
+            DataRecordFieldManager manager = new DataRecordFieldManager();
+            return manager.GetFieldsDescription(input);
+        }
+
     }
+   
     public class TryResolveDifferencesInput
     {
         public string LoggableEntityUniqueName { get; set; }

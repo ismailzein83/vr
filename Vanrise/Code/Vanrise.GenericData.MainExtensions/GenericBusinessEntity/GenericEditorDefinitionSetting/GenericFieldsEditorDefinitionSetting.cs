@@ -6,6 +6,8 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using static Vanrise.GenericData.Entities.DataRecordFieldType;
 
 namespace Vanrise.GenericData.MainExtensions
 {
@@ -15,7 +17,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override string RuntimeEditor { get { return "vr-genericdata-genericfieldseditorsetting-runtime"; } }
 
-        public override void ApplyTranslation(IGenericBETranslationContext context)
+        public override void ApplyTranslation(IGenericEditorTranslationContext context)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
 
@@ -26,14 +28,18 @@ namespace Vanrise.GenericData.MainExtensions
                     if (!String.IsNullOrEmpty(field.TextResourceKey))
                     {
                         field.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(field.TextResourceKey, field.FieldTitle, context.LanguageId);
+
+                        var fieldType = context.GetFieldType(field.FieldPath);
+                        if (fieldType != null)
+                            fieldType.ApplyTranslation(new DataRecordFieldTypeTranslationContext { LanguageId = context.LanguageId,FieldViewSettings=field.FieldViewSettings });
                     }
                 }
             }
 
         }
-        public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
+        public override Dictionary<string,GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
         {
-            List<GridColumnAttribute> columnsInfo = new List<GridColumnAttribute>();
+            Dictionary<string, GridColumnAttribute> columnsInfo = new Dictionary<string, GridColumnAttribute>();
 
             Dictionary<string, GenericEditorField> fields = new Dictionary<string, GenericEditorField>();
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
@@ -48,14 +54,13 @@ namespace Vanrise.GenericData.MainExtensions
             if (fields != null && fields.Count > 0)
             {
                 var dataRecordAttributes = dataRecordTypeManager.GetDataRecordAttributes(context.DataRecordTypeId, fields.Keys.ToList());
-
                 foreach (var att in dataRecordAttributes)
                 {
                     var field = fields.GetRecord(att.Name);
                     var columnAttribute = att.Attribute;
                     columnAttribute.Field = field.FieldPath;
                     columnAttribute.HeaderText = field.FieldTitle;
-                    columnsInfo.Add(att.Attribute);
+                    columnsInfo.Add(att.Name,att.Attribute);
                 }
             }
             return columnsInfo;

@@ -11,11 +11,11 @@ namespace Vanrise.GenericData.Entities
     {
         public abstract Guid ConfigId { get; }
         public virtual string RuntimeEditor { get; set; }
-        public virtual List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
+        public virtual Dictionary<string,GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
         {
             return null;
         }
-        public virtual void ApplyTranslation(IGenericBETranslationContext context) { }
+        public virtual void ApplyTranslation(IGenericEditorTranslationContext context) { }
 	
     }
     public interface IGetGenericEditorColumnsInfoContext
@@ -29,6 +29,10 @@ namespace Vanrise.GenericData.Entities
 	public interface IGenericBETranslationContext
 	{
 		Guid LanguageId { get; }
+       
+    }
+    public interface IGenericEditorTranslationContext: IGenericBETranslationContext
+    {
         DataRecordFieldType GetFieldType(string fieldName);
         Guid DataRecordTypeId { get; set; }
     }

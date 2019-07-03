@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override string RuntimeEditor { get { return "vr-genericdata-rowscontainereditor-runtime"; } }
 
-        public override void ApplyTranslation(IGenericBETranslationContext context)
+        public override void ApplyTranslation(IGenericEditorTranslationContext context)
         {
             if (RowContainers != null && RowContainers.Count > 0)
             {
@@ -28,9 +28,9 @@ namespace Vanrise.GenericData.MainExtensions
                 }
             }
         }
-        public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
+        public override Dictionary<string,GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
         {
-            List<GridColumnAttribute> columnsAttributes = new List<GridColumnAttribute>();
+            Dictionary<string, GridColumnAttribute> columnsAttributes = new Dictionary<string, GridColumnAttribute>();
 
             if (RowContainers!=null && RowContainers.Count > 0)
             {
@@ -44,8 +44,14 @@ namespace Vanrise.GenericData.MainExtensions
                             {
                                 DataRecordTypeId = context.DataRecordTypeId
                             });
-                            if (attributes != null && attributes.Count > 0)
-                                columnsAttributes.AddRange(attributes);
+                            if(attributes != null)
+                            {
+                                foreach(var attribute in attributes)
+                                {
+                                    if(!columnsAttributes.ContainsKey(attribute.Key))
+                                      columnsAttributes.Add(attribute.Key, attribute.Value);
+                                }
+                            }
                         }
                     }
                 }

@@ -1,5 +1,5 @@
 ﻿<vr-columns width="fullrow">
-        <vr-section title={{scopeModel.fieldTitle}}>
+        <vr-section ng-if="!scopeModel.hideSection" title={{scopeModel.fieldTitle}}>
             <vr-button type="Add" data-onclick="scopeModel.onDataRecordTypeRowAdded" standalone></vr-button>
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
                             on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu >
@@ -7,6 +7,18 @@
                 </vr-datagridcolumn>
             </vr-datagrid>
         </vr-section>
+        <span ng-if="scopeModel.hideSection">
+            <vr-row>
+                <vr-column width="fullrow">
+                    <vr-button type="Add" data-onclick="scopeModel.onDataRecordTypeRowAdded" standalone></vr-button>
+                </vr-column>
+            </vr-row>
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                         on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
+                <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column">
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </span>
 </vr-columns>
 
    

@@ -1,1 +1,10 @@
-﻿<vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-genericbe-editordefinition-settings>
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-datarecordtypefields-selector label="Available Columns" on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady"
+                                                      selectedvalues="scopeModel.selectedFields" ismultipleselection hideselectedvaluessection></vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-switch label="Hide Section" value="scopeModel.hideSection"></vr-switch>
+    </vr-columns>
+</vr-row>
+<vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-genericbe-editordefinition-settings>
