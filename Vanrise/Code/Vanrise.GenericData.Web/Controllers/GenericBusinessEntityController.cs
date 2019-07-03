@@ -176,7 +176,7 @@ namespace Vanrise.GenericData.Web.Controllers
         }
         [HttpPost]
         [Route("ExecuteRangeGenericEditorProcess")]
-        public RangeGenericEditorProcessMessage ExecuteRangeGenericEditorProcess(RangeGenericEditorProcessInput input)
+        public RangeGenericEditorProcessOutput ExecuteRangeGenericEditorProcess(RangeGenericEditorProcessInput input)
         {
             return _manager.ExecuteRangeGenericEditorProcess(input);
         }
