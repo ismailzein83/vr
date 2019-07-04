@@ -194,33 +194,34 @@
             var actionType = {
                 ActionTypeName: "StartBPProcessCustomAction",
                 ExecuteAction: function (payload) {
-                //    if (payload == undefined)
-                //        return;
+                    //    if (payload == undefined)
+                    //        return;
 
-                //    var promiseDeferred = UtilsService.createPromiseDeferred();
-                //    var dataRecordTypeId = payload.dataRecordTypeId;
-                //    var businessEntityDefinitionId = payload.businessEntityDefinitionId;
-                //    var parentFieldValues = payload.parentFieldValues;
-                //    if (payload.customAction != undefined && payload.customAction.Settings != undefined) {
-                //        var customActionSettings = payload.customAction.Settings;
-                //        BusinessProcess_BPDefinitionAPIService.GetBPDefintion(customActionSettings.BPDefinitionId).then(function (response) {
-                //            var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", response.Configuration.EditorSize);
-                //            var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
-                //            var context = payload.context;
-                //            context.onBPInstanceViewerClosed = function () {
-                //                promiseDeferred.resolve(true);
-                //            };
-                //            startBPProcessCustomAction(dataRecordTypeId, businessEntityDefinitionId, customActionSettings, parentFieldValues, context, editorSize).then(function (response) {
-                //                if (response)
-                //                    promiseDeferred.resolve();
-                //            });
-                //        }).catch(function () {
-                //            promiseDeferred.reject();
-                //        });
-                //    }
-                //    return promiseDeferred.promise;
-                //}
-           };
+                    //    var promiseDeferred = UtilsService.createPromiseDeferred();
+                    //    var dataRecordTypeId = payload.dataRecordTypeId;
+                    //    var businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                    //    var parentFieldValues = payload.parentFieldValues;
+                    //    if (payload.customAction != undefined && payload.customAction.Settings != undefined) {
+                    //        var customActionSettings = payload.customAction.Settings;
+                    //        BusinessProcess_BPDefinitionAPIService.GetBPDefintion(customActionSettings.BPDefinitionId).then(function (response) {
+                    //            var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", response.Configuration.EditorSize);
+                    //            var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
+                    //            var context = payload.context;
+                    //            context.onBPInstanceViewerClosed = function () {
+                    //                promiseDeferred.resolve(true);
+                    //            };
+                    //            startBPProcessCustomAction(dataRecordTypeId, businessEntityDefinitionId, customActionSettings, parentFieldValues, context, editorSize).then(function (response) {
+                    //                if (response)
+                    //                    promiseDeferred.resolve();
+                    //            });
+                    //        }).catch(function () {
+                    //            promiseDeferred.reject();
+                    //        });
+                    //    }
+                    //    return promiseDeferred.promise;
+                    //}
+                }
+            };
             VR_GenericData_GenericBECustomActionService.registerCustomActionType(actionType);
         }
 
