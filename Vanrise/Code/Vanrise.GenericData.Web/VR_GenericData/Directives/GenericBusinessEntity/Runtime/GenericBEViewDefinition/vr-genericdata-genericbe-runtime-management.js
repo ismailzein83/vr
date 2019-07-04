@@ -370,7 +370,7 @@
                                 var filterValue = filterValues[key];
                                 filters.push({
                                     FieldName: key,
-                                    FilterValues: [filterValue]
+                                    FilterValues: filterValue
                                 });
                             }
                         }

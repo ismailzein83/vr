@@ -29,44 +29,68 @@
                 $scope.scopeModel.isLoading = true;
 
                 var filter = buildFilter();
-                $scope.modalContext.closeModal();
                 var promiseDeferred = UtilsService.createPromiseDeferred();
-
-                 VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter))
+                var message;
+                VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter))
                     .then(function (response) {
                         if (response != undefined && response.length != 0) {
-                            var firstEntityId = response[0].GenericBusinessEntityId;
-                            var idFieldValue =
-                            {
-                                ID: firstEntityId
-                            };
-                            context.trigerSearch(idFieldValue).then(function () {
-                                context.expendRow(firstEntityId);
-                                promiseDeferred.resolve();
-                            }).catch(function (error) {
-                                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                                promiseDeferred.reject();
-                            }).finally(function () {
+                            message = "A customer with same name exist. Do you want to open the existing customer?";
+                            var filter = {};
+                            if (response.length == 1) {
+                                var firstEntityId = response[0].GenericBusinessEntityId;
+                                filter.ID = [firstEntityId];
+                            }
+                            else {
+                                message = response.length + " customers with same name exist. Do you want to select from the existing customers?";
+                                var ids = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    var entityId = response[i].GenericBusinessEntityId;
+                                    ids.push(entityId);
+                                }
+                                filter.ID = ids;
+
+                            }
+                            context.trigerSearch(filter);
+
+                            VRNotificationService.showConfirmation(message).then(function (confirmed) {
                                 $scope.scopeModel.isLoading = false;
+                                if (confirmed) {
+                                    if (response.length == 1) {
+                                        var firstEntityId = response[0].GenericBusinessEntityId;
+                                        context.expendRow(firstEntityId);
+                                    }
+                                    else {
+                                        promiseDeferred.resolve();
+                                    }
+                                    $scope.modalContext.closeModal();
+                                }
+                                else {
+                                    promiseDeferred.resolve();
+                                    $scope.modalContext.closeModal();
+                                    showAdd();
+                                }
                             });
                         }
                         else {
-                            var fieldValues = buildFieldValues();
+                            $scope.modalContext.closeModal();
                             promiseDeferred.resolve();
-                            VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(context.onGenericBEAdded, businessEntityDefinitionId, "large", fieldValues);
+                            showAdd();
                         }
                     }).catch(function (error) {
                         $scope.scopeModel.isLoading = false;
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                         promiseDeferred.reject();
                     });
-                return promiseDeferred;
+                return promiseDeferred.promise;
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
-
+        function showAdd() {
+            var fieldValues = buildFieldValues();
+            VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(context.onGenericBEAdded, businessEntityDefinitionId, "large", fieldValues);
+        }
         function load() {
             $scope.title = "Add";
         }
@@ -81,15 +105,6 @@
                 },
                 LastName: {
                     value: $scope.lastName
-                },
-                MotherName: {
-                    value: $scope.motherName
-                },
-                BirthPlace: {
-                    value: $scope.birthPlace
-                },
-                BirthDate: {
-                    value: $scope.birthDate
                 }
             };
             return fieldValues;
