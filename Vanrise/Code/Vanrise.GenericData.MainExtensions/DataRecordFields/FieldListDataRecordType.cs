@@ -179,6 +179,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public Guid LanguageId { get; set; }
         public Guid DataRecordTypeId { get; set; }
     }
+
     public class GridGenericEditorViewListRecordRuntimeViewType : ListRecordRuntimeViewType
     {
         public override Guid ConfigId => new Guid("CCB477B6-B20F-4FCE-A8AD-27BD12EE60ED");
@@ -200,7 +201,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     public class GridGenericEditorDrillDownSettings
     {
         public  bool EnableDrillDown { get; set; }
-        public bool AutoExpend { get; set; }
+        public bool AutoExpand { get; set; }
         public VRGenericEditorDefinitionSetting DrillDownSettings { get; set; }
     }
 }
