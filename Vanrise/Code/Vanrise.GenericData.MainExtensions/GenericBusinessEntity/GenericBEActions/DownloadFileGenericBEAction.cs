@@ -17,5 +17,6 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEActi
 
         public override string ActionKind { get { return "DownloadFile"; } }
         public string FileIdFieldName { get; set; }
+        public bool OpenNewWindow { get; set; }
     }
 }

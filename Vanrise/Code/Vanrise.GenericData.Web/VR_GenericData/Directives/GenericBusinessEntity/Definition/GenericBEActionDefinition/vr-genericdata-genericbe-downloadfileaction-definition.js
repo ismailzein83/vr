@@ -47,7 +47,7 @@
                     var promises = [];
                     promises.push(loadDataRecordFieldsSelector());
 
-
+                    $scope.scopeModel.openNewWindow = payload != undefined && payload.settings != undefined ? payload.settings.OpenNewWindow : undefined;
                     function loadDataRecordFieldsSelector() {
                         var loadDataRecordTypeFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
@@ -70,7 +70,8 @@
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEActions.DownloadFileGenericBEAction, Vanrise.GenericData.MainExtensions",
-                        FileIdFieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds()
+                        FileIdFieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
+                        OpenNewWindow: $scope.scopeModel.openNewWindow
                     };
                 };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

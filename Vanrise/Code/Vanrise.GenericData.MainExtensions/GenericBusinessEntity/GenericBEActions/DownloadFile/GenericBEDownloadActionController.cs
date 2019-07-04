@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Vanrise.GenericData.Business;
+using Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEActions;
 using Vanrise.Web.Base;
 
 namespace Vanrise.GenericData.MainExtensions
@@ -18,11 +19,14 @@ namespace Vanrise.GenericData.MainExtensions
         [Route("DownloadGenericBEFile")]
         public Object DownloadGenericBEFile(DownloadGenericBEFileInput input)
         {
-            var file = _manager.DownloadGenericBEFile(input.GenericBusinessEntityId, input.BusinessEntityDefinitionId, input.GenericBEAction);
+            var file = _manager.DownloadGenericBEFile(input.GenericBusinessEntityId, input.BusinessEntityDefinitionId, input.GenericBEAction,input.IsRemoteCall);
             if (input.IsRemoteCall)
             {
                 return file;
             }
+            if (input.GenericBEAction.OpenNewWindow)
+                return file.FilePath;
+
             return GetExcelResponse(file.Content, file.FileName);
         }
     }
@@ -30,7 +34,7 @@ namespace Vanrise.GenericData.MainExtensions
     public class DownloadGenericBEFileInput
     {
         public Object GenericBusinessEntityId { get; set; }
-        public GenericBEAction GenericBEAction { get; set; }
+        public DownloadFileGenericBEAction GenericBEAction { get; set; }
         public Guid BusinessEntityDefinitionId { get; set; }
         public bool IsRemoteCall { get; set; }
     }
@@ -38,5 +42,6 @@ namespace Vanrise.GenericData.MainExtensions
     {
         public byte[] Content { get; set; }
         public string FileName { get; set; }
+        public string FilePath { get; set; }
     }
 }

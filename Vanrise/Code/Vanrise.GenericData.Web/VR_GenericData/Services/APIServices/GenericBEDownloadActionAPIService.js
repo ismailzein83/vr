@@ -7,12 +7,14 @@
     function GenericBEDownloadActionAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         var controllerName = 'GenericBEDownloadAction';
 
-        function DownloadGenericBEFile(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DownloadGenericBEFile'), input,
-                {
+        function DownloadGenericBEFile(input, returnNormalResponse) {
+            var responseParameters;
+            if (!returnNormalResponse)
+                responseParameters = {
                     returnAllResponseParameters: true,
                     responseTypeAsBufferArray: true
-                });
+                };
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DownloadGenericBEFile'), input, responseParameters);
         }
         return {
             DownloadGenericBEFile: DownloadGenericBEFile

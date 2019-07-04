@@ -243,11 +243,15 @@
                         return;
                     var downloadFileInput = {
                         GenericBusinessEntityId: payload.genericBusinessEntityId,
-                        GenericBEAction: payload.genericBEAction,
-                        BusinessEntityDefinitionId: payload.businessEntityDefinitionId
+                        GenericBEAction: payload.genericBEAction.Settings,
+                        BusinessEntityDefinitionId: payload.businessEntityDefinitionId,
                     };
-                    VR_GenericData_GenericBEDownloadActionAPIService.DownloadGenericBEFile(downloadFileInput).then(function (response) {
-                        UtilsService.downloadFile(response.data, response.headers);
+                    return VR_GenericData_GenericBEDownloadActionAPIService.DownloadGenericBEFile(downloadFileInput, payload.genericBEAction.Settings.OpenNewWindow).then(function (response) {
+                       
+                        if (!payload.genericBEAction.Settings.OpenNewWindow)
+                            UtilsService.downloadFile(response.data, response.headers);
+                        else
+                            window.open(response, '_blank', '');
                     });
                 }
             };
