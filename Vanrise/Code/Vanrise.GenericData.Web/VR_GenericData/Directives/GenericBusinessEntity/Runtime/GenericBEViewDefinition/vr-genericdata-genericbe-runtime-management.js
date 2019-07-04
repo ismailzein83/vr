@@ -167,7 +167,7 @@
                         promises: [loadBEDefinitionsSelectorAndSubsections()],
 
                         getChildNode: function () {
-                            $scope.scopeModel.customActions = VR_GenericData_GenericBECustomActionService.buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId, getContext());
+                            $scope.scopeModel.customActions = VR_GenericData_GenericBECustomActionService.buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId, undefined, getContext());
                             return { promises: [] };
                         }
                     }).catch(function (error) {
@@ -391,6 +391,13 @@
                     },
                     expendRow: function (genericBEId) {
                         return gridDirectiveAPI.expendRow(genericBEId);
+                    },
+                    onGenericBEAdded: function (addedGenericBE, errorEntity) {
+                        if (errorEntity != undefined && errorEntity.message != undefined) {
+                            VR_GenericData_GenericBusinessEntityService.openErrorMessageEditor(errorEntity);
+                        }
+                        if (gridDirectiveAPI != undefined)
+                            gridDirectiveAPI.onGenericBEAdded(addedGenericBE);
                     }
                 };
             }

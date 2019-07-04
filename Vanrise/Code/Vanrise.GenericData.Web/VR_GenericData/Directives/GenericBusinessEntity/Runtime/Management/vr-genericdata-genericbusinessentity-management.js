@@ -273,6 +273,13 @@
                     },
                     expendRow: function (genericBEId) {
                        return gridDirectiveAPI.expendRow(genericBEId);
+                    },
+                    onGenericBEAdded : function (addedGenericBE, errorEntity) {
+                        if (errorEntity != undefined && errorEntity.message != undefined) {
+                            VR_GenericData_GenericBusinessEntityService.openErrorMessageEditor(errorEntity);
+                        }
+                        if (gridDirectiveAPI != undefined)
+                            gridDirectiveAPI.onGenericBEAdded(addedGenericBE);
                     }
                 };
             }

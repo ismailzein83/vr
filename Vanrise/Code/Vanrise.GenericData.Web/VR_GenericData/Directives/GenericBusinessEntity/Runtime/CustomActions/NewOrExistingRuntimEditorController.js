@@ -9,7 +9,7 @@
         var customAction;
         var businessEntityDefinitionId;
         var parentFieldValues;
-
+        var context;
         loadParameters();
         defineScope();
         load();
@@ -19,6 +19,7 @@
             if (parameters != undefined && parameters != null) {
                 parentFieldValues = parameters.parentFieldValues;
                 customAction = parameters.customAction;
+                context = parameters.context;
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
             }
         }
@@ -39,8 +40,8 @@
                             {
                                 ID: firstEntityId
                             };
-                            parentFieldValues.trigerSearch(idFieldValue).then(function () {
-                                parentFieldValues.expendRow(firstEntityId);
+                            context.trigerSearch(idFieldValue).then(function () {
+                                context.expendRow(firstEntityId);
                                 promiseDeferred.resolve();
                             }).catch(function (error) {
                                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -52,8 +53,7 @@
                         else {
                             var fieldValues = buildFieldValues();
                             promiseDeferred.resolve();
-                            //var onGenericBusinessEntityAdded = function () { };
-                            VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(undefined, businessEntityDefinitionId, "large", fieldValues);
+                            VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(context.onGenericBEAdded, businessEntityDefinitionId, "large", fieldValues);
                         }
                     }).catch(function (error) {
                         $scope.scopeModel.isLoading = false;

@@ -31,7 +31,8 @@
                         dataRecordTypeId: payload.dataRecordTypeId,
                         parentFieldValues: payload.parentFieldValues,
                         customAction: payload.customAction,
-                        businessEntityDefinitionId: payload.businessEntityDefinitionId
+                        businessEntityDefinitionId: payload.businessEntityDefinitionId,
+                        context: payload.context
                     };
                     var settings = {};
 
@@ -62,7 +63,7 @@
             };
             registerCustomActionType(bulkAddCustomAction);
         }
-        function buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId, parentFieldValues,context) {
+        function buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId, parentFieldValues, context) {
             customActions = [];
             if (genericBEDefinitionSettings != undefined && genericBEDefinitionSettings.CustomActions != undefined) {
                 var actions = genericBEDefinitionSettings.CustomActions;
