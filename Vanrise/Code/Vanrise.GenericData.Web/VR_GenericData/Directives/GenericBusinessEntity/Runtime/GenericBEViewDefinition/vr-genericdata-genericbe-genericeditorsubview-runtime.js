@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericEditorSubViewRuntimeDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    GenericEditorSubViewRuntimeDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService','VR_GenericData_GenericBusinessEntityAPIService'];
 
-    function GenericEditorSubViewRuntimeDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function GenericEditorSubViewRuntimeDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -29,7 +29,7 @@
             var parentBEEntity;
             var genericEditorDefinitionSetting;
             var genericBEDefinitionSettings;
-
+            var genericBusinessEntity;
             var editorRuntimeDirectiveAPI;
             var editorRuntimeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -63,7 +63,8 @@
                     $scope.scopeModel.isEditorDirectiveLoading = true;
                     if (businessEntityDefinitionId != undefined)
                         initialPromises.push(loadBusinessEntityDefinitionSettings());
-
+                    if (genericBusinessEntityId != undefined)
+                        initialPromises.push(loadGenericBusinessEntity());
                     var rootPromiseNode = {
                         promises: initialPromises,
                         getChildNode: function () {
@@ -93,22 +94,18 @@
                         genericBEDefinitionSettings = response;
                 });
             }
-
+            function loadGenericBusinessEntity() {
+                return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+                    if (response != undefined)
+                        genericBusinessEntity = response;
+                });
+            }
             function loadEditorRuntimeDirective() {
                 var loadEditorRuntimeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                 editorRuntimeDirectiveReadyPromiseDeferred.promise.then(function () {
-                    var defaultValues = {};
-
-                    if (parentBEEntity != undefined && parentBEEntity.FieldValues != undefined) {
-                        var fieldValues = parentBEEntity.FieldValues;
-                        for (var key in fieldValues) {
-                            if (key != "$type" && !fieldValues[key].isHidden)
-                                defaultValues[key] = fieldValues[key].Value;
-                        }
-                    }
-
+                   
                     var runtimeEditorPayload = {
-                        selectedValues: defaultValues,
+                        selectedValues: genericBusinessEntity != undefined ? genericBusinessEntity.FieldValues : undefined,
                         dataRecordTypeId: genericBEDefinitionSettings != undefined ? genericBEDefinitionSettings.DataRecordTypeId : undefined,
                         definitionSettings: genericEditorDefinitionSetting,
                         runtimeEditor: genericEditorDefinitionSetting != undefined ? genericEditorDefinitionSetting.RuntimeEditor : undefined
