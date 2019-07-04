@@ -851,6 +851,14 @@
     <Build Include="genericdata\User Defined Types\VRNumberPrefixType.sql" />
     <Build Include="common\Tables\VRDevProject.sql" />
     <Build Include="sec\Stored Procedures\sp_View_UpdateAudiences.sql" />
+    <Build Include="genericdata\Tables\BusinessEntityHistoryStack.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityStatusHistory_GetFiltered.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityHistoryStack_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityHistoryStack_GetLast.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityHistoryStack_GetFiltered.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityHistoryStack_Delete.sql" />
+    <Build Include="common\Stored Procedures\sp_VRDevProject_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetFilteredRecentFiles.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

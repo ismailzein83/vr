@@ -6,8 +6,8 @@
 CREATE PROCEDURE [genericdata].[sp_BusinessEntityDefinition_Insert]
 	-- Add the parameters for the stored procedure here
 	@ID uniqueidentifier,
-	@Name nvarchar(50),
-	@Title nvarchar(50),
+	@Name nvarchar(900),
+	@Title nvarchar(1000),
 	@DevProjectId uniqueidentifier,
 	@Settings nvarchar(max)
 

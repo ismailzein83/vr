@@ -5,8 +5,8 @@
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_BusinessEntityDefinition_Update] 
 	@ID uniqueidentifier ,
-	@Name nvarchar(50),
-	@Title  nvarchar(50),
+	@Name nvarchar(900),
+	@Title  nvarchar(1000),
 	@DevProjectId uniqueidentifier,
 	@Settings nvarchar(max)
 	
