@@ -33,7 +33,7 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = payment; break;
                // case resetStep: nextStepId = payment; break;
-                case payment: nextStepId = technicalStep; break;
+                case payment: nextStepId = submitToOM; break;
                 //case payment: nextStepId = submitToOM; break;
                 //case submitToOM: nextStepId = completedStep; break;
             }
