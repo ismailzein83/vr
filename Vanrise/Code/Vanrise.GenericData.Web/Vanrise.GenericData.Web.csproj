@@ -373,10 +373,12 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\Templates\GenericBusinessEntity360DegreeViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\vr-genericdata-genericbusinessentity-360degree-view.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBEFilterRuntimeRootContainerEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityApprovalGrid.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntitySelectorCondition.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntitySelectorFilter.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityRootContainerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbe-filterruntime-rootcontainer.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-approvalgrid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-selectorcondition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-selectorfilter.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericeditor-rootcontainer.js" />
