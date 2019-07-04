@@ -94,13 +94,14 @@
                     if (definitionSettings != undefined) {
                         $scope.scopeModel.buttonType = UtilsService.getEnumDescription(VRButtonTypeEnum, definitionSettings.VRButtonType);
                         $scope.scopeModel.callOnLoad = definitionSettings.CallOnLoad;
+                        $scope.scopeModel.callOnValueChanged = definitionSettings.CallOnValueChanged;
                         apiAction = definitionSettings.APIAction;
                         httpMethodType = definitionSettings.HTTPMethodType;
                         inputItems = definitionSettings.InputItems;
                         outputItems = definitionSettings.OutputItems;
                     }
 
-                    if ($scope.scopeModel.callOnLoad) {
+                    if ($scope.scopeModel.callOnLoad || $scope.scopeModel.callOnValueChanged) {
                         callAPIAction();
                     }
 
@@ -112,6 +113,9 @@
                 };
 
                 api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                    if ($scope.scopeModel.callOnValueChanged) {
+                        callAPIAction();
+                    }
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -124,6 +128,9 @@
 
                 var getFieldValuesPromise = genericContext.getFieldValuesPromise();
                 getFieldValuesPromise.then(function (currentFieldValues) {
+
+                    var requiredInputs = [];
+
                     var inputFields;
                     if (inputItems != undefined) {
                         inputFields = {};
@@ -131,27 +138,36 @@
                             var input = inputItems[i];
                             if (input.FieldName in currentFieldValues)
                                 inputFields[input.PropertyName] = currentFieldValues[input.FieldName];
+
+                            if (input.IsRequired && currentFieldValues[input.FieldName] == undefined) {
+                                requiredInputs.push(input.PropertyName);
+                            }
                         }
                     }
 
-                    switch (httpMethodType) {
-                        case VR_GenericData_CallRestAPIHTTPMethodEnum.Get.value: {
-                            BaseAPIService.get(apiAction, inputFields).then(function (response) {
-                                genericContext.setFieldValues(getOutputFields(response, currentFieldValues)).then(function () {
-                                    callAPIActionDeferred.resolve();
+                    if (requiredInputs.length == 0) {
+                        switch (httpMethodType) {
+                            case VR_GenericData_CallRestAPIHTTPMethodEnum.Get.value: {
+                                BaseAPIService.get(apiAction, inputFields).then(function (response) {
+                                    genericContext.setFieldValues(getOutputFields(response, currentFieldValues)).then(function () {
+                                        callAPIActionDeferred.resolve();
+                                    });
                                 });
-                            });
-                            break;
-                        }
+                                break;
+                            }
 
-                        case VR_GenericData_CallRestAPIHTTPMethodEnum.Post.value: {
-                            BaseAPIService.post(apiAction, inputFields).then(function (response) {
-                                genericContext.setFieldValues(getOutputFields(response, currentFieldValues)).then(function () {
-                                    callAPIActionDeferred.resolve();
+                            case VR_GenericData_CallRestAPIHTTPMethodEnum.Post.value: {
+                                BaseAPIService.post(apiAction, inputFields).then(function (response) {
+                                    genericContext.setFieldValues(getOutputFields(response, currentFieldValues)).then(function () {
+                                        callAPIActionDeferred.resolve();
+                                    });
                                 });
-                            });
-                            break;
+                                break;
+                            }
                         }
+                    }
+                    else {
+                        callAPIActionDeferred.resolve();
                     }
                 });
 

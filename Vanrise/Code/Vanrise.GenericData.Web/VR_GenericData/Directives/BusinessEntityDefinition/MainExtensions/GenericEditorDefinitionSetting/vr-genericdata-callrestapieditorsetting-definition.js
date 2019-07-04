@@ -39,6 +39,10 @@
                     $scope.scopeModel.selectedButton = undefined;
                 };
 
+                $scope.scopeModel.onCallOnValueChanged = function () {
+                    $scope.scopeModel.selectedButton = undefined;
+                };
+
                 $scope.scopeModel.onButtonTypesSelectorReady = function (api) {
                     buttonTypesSelectorAPI = api;
                     buttonTypesSelectorReadyPromiseDeferred.resolve();
@@ -112,6 +116,7 @@
                     var context;
 
                     var callOnLoad;
+                    var callOnValueChanged;
                     var buttonType;
                     var apiAction;
                     var httpMethodType;
@@ -124,6 +129,7 @@
                         var settings = payload.settings;
                         if (settings != undefined) {
                             callOnLoad = settings.CallOnLoad;
+                            callOnValueChanged = settings.CallOnValueChanged;
                             buttonType = settings.VRButtonType;
                             apiAction = settings.APIAction;
                             httpMethodType = settings.HTTPMethodType;
@@ -147,6 +153,7 @@
                     function loadStaticFields() {
                         $scope.scopeModel.apiAction = apiAction;
                         $scope.scopeModel.callOnLoad = callOnLoad;
+                        $scope.scopeModel.callOnValueChanged = callOnValueChanged;
                     }
 
                     function loadHTTPMethodSelector() {
@@ -204,6 +211,7 @@
                     var definitionData = {
                         $type: "Vanrise.GenericData.MainExtensions.CallRestAPIEditorDefinitionSetting, Vanrise.GenericData.MainExtensions",
                         CallOnLoad: $scope.scopeModel.callOnLoad,
+                        CallOnValueChanged: $scope.scopeModel.callOnValueChanged,
                         VRButtonType: buttonTypesSelectorAPI.getSelectedIds(),
                         APIAction: $scope.scopeModel.apiAction,
                         HTTPMethodType: ctrl.selectedvalues != undefined ? ctrl.selectedvalues.value : undefined,

@@ -10,10 +10,13 @@
     <vr-columns colnum="1">
         <vr-switch value="scopeModel.callOnLoad" onvaluechanged="scopeModel.onCallOnLoadChanged" label="Call On Load"></vr-switch>
     </vr-columns>
+    <vr-columns colnum="2">
+        <vr-switch value="scopeModel.callOnValueChanged" onvaluechanged="scopeModel.onCallOnValueChanged" label="Call On Value Changed"></vr-switch>
+    </vr-columns>
     <vr-columns colnum="3">
-        <span ng-show="!scopeModel.callOnLoad">
+        <span ng-show="!scopeModel.callOnLoad && !scopeModel.callOnValueChanged">
             <vr-buttontype-selector on-ready="scopeModel.onButtonTypesSelectorReady"
-                                    selectedvalues="scopeModel.selectedButton" isrequired="!scopeModel.callOnLoad"
+                                    selectedvalues="scopeModel.selectedButton" isrequired="!scopeModel.callOnLoad && !scopeModel.callOnValueChanged"
                                     vr-loader="scopeModel.onButtonTypesSelectorLoading" hideremoveicon>
             </vr-buttontype-selector>
         </span>

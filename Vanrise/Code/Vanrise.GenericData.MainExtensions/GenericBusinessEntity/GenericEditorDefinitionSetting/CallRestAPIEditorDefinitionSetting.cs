@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.MainExtensions
 
         public bool CallOnLoad { get; set; }
 
+        public bool CallOnValueChanged { get; set; }
+
         public VRButtonType VRButtonType { get; set; }
 
         public string APIAction { get; set; }
