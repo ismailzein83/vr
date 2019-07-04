@@ -86,7 +86,7 @@ namespace Vanrise.Data.RDB
         {
             if (isExpressionAFixedText)
             {
-                StringBuilder builder = new StringBuilder("'");
+                StringBuilder builder = new StringBuilder("N'");
                 if (endWith)
                     builder.Append('%');
                 builder.Append(expression);
@@ -98,6 +98,7 @@ namespace Vanrise.Data.RDB
             else
             {
                 List<string> parts = new List<string>();
+                parts.Add("N''");
                 if (endWith)
                     parts.Add("'%'");
                 parts.Add(expression);
@@ -127,7 +128,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public enum RDBConditionGroupOperator {  AND = 0, OR = 1}
+    public enum RDBConditionGroupOperator { AND = 0, OR = 1 }
     internal class RDBConditionGroup : BaseRDBCondition
     {
         public RDBConditionGroup(RDBConditionGroupOperator groupOperator)
@@ -137,7 +138,7 @@ namespace Vanrise.Data.RDB
         }
 
         public RDBConditionGroupOperator Operator { get; private set; }
-        
+
         public List<BaseRDBCondition> Conditions { get; private set; }
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
@@ -150,7 +151,7 @@ namespace Vanrise.Data.RDB
                 if (validConditionsAsStrings.Count == 1)
                     return validConditionsAsStrings[0];
                 else
-                return string.Concat(" (", string.Join(string.Concat(" ", this.Operator.ToString(), " "), validConditionsAsStrings), ") ");
+                    return string.Concat(" (", string.Join(string.Concat(" ", this.Operator.ToString(), " "), validConditionsAsStrings), ") ");
             }
             else
             {

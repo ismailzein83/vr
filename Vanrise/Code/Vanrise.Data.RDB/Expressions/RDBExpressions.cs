@@ -61,7 +61,7 @@ namespace Vanrise.Data.RDB
         {
             if (context.QueryBuilderContext.DontGenerateParameters)
             {
-                return string.Concat("'", (this.Value != null ? this.Value.Replace("'", "''") : string.Empty), "'");
+                return string.Concat("N'", (this.Value != null ? this.Value.Replace("'", "''") : string.Empty), "'");
             }
             else
             {
