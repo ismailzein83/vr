@@ -179,5 +179,29 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public Guid LanguageId { get; set; }
         public Guid DataRecordTypeId { get; set; }
     }
+    public class GridGenericEditorViewListRecordRuntimeViewType : ListRecordRuntimeViewType
+    {
+        public override Guid ConfigId => new Guid("CCB477B6-B20F-4FCE-A8AD-27BD12EE60ED");
+        public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-gridgenericeditorview-runtime";
+        public bool HideAddButton { get; set; }
+        public bool HideSection { get; set; }
+        public bool EnableDraggableRow { get; set; }
+        public List<GridGenericEditorField> Fields { get; set; }
+        public GridGenericEditorDrillDownSettings DrillDownSettings { get; set; }
+    }
+    public class GridGenericEditorField
+    {
+        public Guid GridGenericEditorFieldId { get; set; }
+        public string HeaderText { get; set; }
+        public string Title { get; set; }
+        public VRGenericEditorDefinitionSetting Settings { get; set; }
+        public GridColumnSettings GridColumnSettings { get; set; }
+    }
+    public class GridGenericEditorDrillDownSettings
+    {
+        public  bool EnableDrillDown { get; set; }
+        public bool AutoExpend { get; set; }
+        public VRGenericEditorDefinitionSetting DrillDownSettings { get; set; }
+    }
 }
 
