@@ -48,6 +48,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Data" />
@@ -155,6 +159,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <!--<Compile Include="BusinessProcess\Reports\OpenRDLCReport.aspx.cs">
+      <DependentUpon>OpenRDLCReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BusinessProcess\Reports\OpenRDLCReport.aspx.designer.cs">
+      <DependentUpon>OpenRDLCReport.aspx</DependentUpon>
+    </Compile>-->
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BPBusinessRuleSetEffectiveActionController.cs" />
     <Compile Include="Controllers\BPDefinitionArgumentStateController.cs" />
@@ -302,6 +313,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityAssignTaskController.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-manualexeceditor.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowManualExecEditorTemplate.html" />
+    <!--<Content Include="BusinessProcess\Reports\OpenRDLCReport.aspx" />-->
     <Content Include="BusinessProcess\Services\APIServices\BPGenericTaskTypeActionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPVisualEventAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\DynamicBusinessProcessAPIService.js" />
@@ -481,6 +493,9 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <!--<ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>-->
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
