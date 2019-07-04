@@ -9,6 +9,10 @@
         var taskTypeId;
         var taskTitle;
         var executedBy;
+        var taskId;
+        var onTaskCreated;
+        var onTaskTaken;
+        var onTaskReleased;
         var displayName;
         var taskAssignees;
         var inputItems = [];
@@ -44,6 +48,10 @@
                 taskTypeId = parameters.obj.TaskTypeId;
                 taskTitle = parameters.obj.TaskTitle;
                 executedBy = parameters.obj.ExecutedBy;
+                taskId = parameters.obj.TaskId;
+                onTaskCreated = parameters.obj.OnTaskCreated;
+                onTaskTaken = parameters.obj.OnTaskTaken;
+                onTaskReleased = parameters.obj.OnTaskReleased;
                 displayName = parameters.obj.DisplayName;
                 taskAssignees = parameters.obj.TaskAssignees;
                 if (parameters.obj.InputItems != undefined) {
@@ -139,6 +147,10 @@
             function loadStaticData() {
                 $scope.scopeModel.taskTitle = taskTitle;
                 $scope.scopeModel.executedBy = executedBy;
+                $scope.scopeModel.taskId = taskId;
+                $scope.scopeModel.onTaskCreated = onTaskCreated;
+                $scope.scopeModel.onTaskTaken = onTaskTaken;
+                $scope.scopeModel.onTaskReleased = onTaskReleased;
                 $scope.scopeModel.displayName = displayName;
                 $scope.scopeModel.enableVisualization = enableVisualization;
             }
@@ -170,7 +182,7 @@
                         getParentVariables: context.getParentVariables,
                         isVRWorkflowActivityDisabled: $scope.scopeModel.isVRWorkflowActivityDisabled
                     };
-               
+
                     VRUIUtilsService.callDirectiveLoad(taskAssigneesAPI, taskAssigneesPayload, taskAssigneesLoadDeferred);
                 });
                 return taskAssigneesLoadDeferred.promise;
@@ -298,8 +310,12 @@
                 taskTypeId: $scope.scopeModel.selectedTaskType.BPTaskTypeId,
                 taskTitle: $scope.scopeModel.taskTitle,
                 executedBy: $scope.scopeModel.executedBy,
+                taskId: $scope.scopeModel.taskId,
+                onTaskCreated: $scope.scopeModel.onTaskCreated,
+                onTaskTaken: $scope.scopeModel.onTaskTaken,
+                onTaskReleased: $scope.scopeModel.onTaskReleased,
                 displayName: $scope.scopeModel.displayName,
-                taskAssignees: { Settings: taskAssigneeSettings},
+                taskAssignees: { Settings: taskAssigneeSettings },
                 inputItems: $scope.scopeModel.inputItems.length > 0 ? getInputColumns() : null,
                 outputItems: $scope.scopeModel.outputItems.length > 0 ? getOutputColumns() : null,
                 enableVisualization: $scope.scopeModel.enableVisualization

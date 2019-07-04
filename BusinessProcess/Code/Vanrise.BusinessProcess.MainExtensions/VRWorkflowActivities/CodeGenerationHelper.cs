@@ -15,6 +15,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public static Guid VISUALEVENTTYPE_ERROR = new Guid("F3A80E84-87F1-4073-9D9F-78C394AA0495");
         public static Guid VISUALEVENTTYPE_RETRYING = new Guid("AD5A31E5-2890-4EF5-9339-61F86B536CFE");
         public static Guid VISUALEVENTTYPE_NEWITERATION = new Guid("668BED1A-5CED-4A38-B63E-9DCDEF194F07");
+        public static Guid VISUALEVENTTYPE_TAKEN = new Guid("90BB8330-F62D-4484-8B3B-0A5E4C8AB7BD");
+        public static Guid VISUALEVENTTYPE_OVERDUE = new Guid("A6C2142E-0203-4A14-9847-07796E17E888");
+        public static Guid VISUALEVENTTYPE_RELEASED = new Guid("250E2AAD-59D7-43A6-BDEE-BAD20381ACA0");
 
         public static string GenerateBaseExecutionClass(IVRWorkflowActivityGenerateWFActivityCodeContext context, string className)
         {

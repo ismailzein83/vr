@@ -65,14 +65,30 @@ namespace Vanrise.BusinessProcess.WFActivities
 
         private void OnTaskCompleted(NativeActivityContext context, Bookmark bookmark, object value)
         {
-            ExecuteBPTaskInput executeBPTaskInput = value as ExecuteBPTaskInput;
-            if (executeBPTaskInput == null)
-                throw new ArgumentNullException("ExecuteBPTaskInput");
-            BPTask task;
-            BPTaskManager bpTaskManager = new BPTaskManager();
-            bpTaskManager.SetTaskCompleted(executeBPTaskInput, out task);
-            context.SetValue(this.ExecutedTask, task);
-            context.SetValue(this.TaskExecutionInformation, executeBPTaskInput.ExecutionInformation as T);
+            ReleaseBPTaskInput releaseBPTaskInput = value as ReleaseBPTaskInput;
+            if (releaseBPTaskInput != null)
+            {
+                context.CreateBookmark(bookmark.Name, OnTaskCompleted);
+            }
+            else
+            {
+                TakeBPTaskInput takeBPTaskInput = value as TakeBPTaskInput;
+                if (takeBPTaskInput != null)
+                {
+                    context.CreateBookmark(bookmark.Name, OnTaskCompleted);
+                }
+                else
+                {
+                    ExecuteBPTaskInput executeBPTaskInput = value as ExecuteBPTaskInput;
+                    if (executeBPTaskInput == null)
+                        throw new ArgumentNullException("ExecuteBPTaskInput");
+                    BPTask task;
+                    BPTaskManager bpTaskManager = new BPTaskManager();
+                    bpTaskManager.SetTaskCompleted(executeBPTaskInput, out task);
+                    context.SetValue(this.ExecutedTask, task);
+                    context.SetValue(this.TaskExecutionInformation, executeBPTaskInput.ExecutionInformation as T);
+                }
+            }
         }
     }
 }

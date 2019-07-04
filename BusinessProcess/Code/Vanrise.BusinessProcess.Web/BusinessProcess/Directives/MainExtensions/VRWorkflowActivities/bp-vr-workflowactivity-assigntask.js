@@ -27,6 +27,10 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
             var taskTypeId;
             var taskTitle;
             var executedBy;
+            var taskId;
+            var onTaskCreated;
+            var onTaskTaken;
+            var onTaskReleased;
             var taskAssignees;
             var displayName;
             var inputItems = [];
@@ -58,6 +62,10 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                             taskTypeId = payload.Settings.TaskTypeId;
                             taskTitle = payload.Settings.TaskTitle;
                             executedBy = payload.Settings.ExecutedBy;
+                            taskId = payload.Settings.TaskId;
+                            onTaskCreated = payload.Settings.OnTaskCreated;
+                            onTaskTaken = payload.Settings.OnTaskTaken;
+                            onTaskReleased = payload.Settings.OnTaskReleased;
                             displayName = payload.Settings.DisplayName;
                             $scope.scopeModel.displayName = displayName;
                             taskAssignees = payload.Settings.TaskAssignees;
@@ -83,6 +91,10 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                             taskTypeId = updatedObject.taskTypeId;
                             taskTitle = updatedObject.taskTitle;
                             executedBy = updatedObject.executedBy;
+                            taskId = updatedObject.taskId;
+                            onTaskCreated = updatedObject.onTaskCreated;
+                            onTaskTaken = updatedObject.onTaskTaken;
+                            onTaskReleased = updatedObject.onTaskReleased;
                             taskAssignees = updatedObject.taskAssignees;
                             displayName = updatedObject.displayName;
                             inputItems = updatedObject.inputItems;
@@ -110,6 +122,10 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                     TaskTypeId: taskTypeId,
                     TaskTitle: taskTitle,
                     ExecutedBy: executedBy,
+                    TaskId: taskId,
+                    OnTaskCreated: onTaskCreated,
+                    OnTaskTaken: onTaskTaken,
+                    OnTaskReleased: onTaskReleased,
                     TaskAssignees: taskAssignees,
                     DisplayName: displayName,
                     InputItems: inputItems,

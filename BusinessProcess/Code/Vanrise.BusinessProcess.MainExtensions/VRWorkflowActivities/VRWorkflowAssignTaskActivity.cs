@@ -33,10 +33,25 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public VRWorkflowTaskAssignees TaskAssignees { get; set; }
 
         public VRWorkflowExpression ExecutedBy { get; set; }
-        
+
         public List<VRWorkflowAssignTaskActivityInputItem> InputItems { get; set; }
 
         public List<VRWorkflowAssignTaskActivityOutputItem> OutputItems { get; set; }
+
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression OnTaskCreated { get; set; }
+
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression OnTaskTaken { get; set; }
+
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression OnTaskReleased { get; set; }
+
+        //[Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        //public VRWorkflowExpression OnTaskOverdue { get; set; }
+
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression TaskId { get; set; }
 
         public bool EnableVisualization { get; set; }
 
@@ -56,15 +71,39 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                         private void OnTaskCompleted(NativeActivityContext context, Bookmark bookmark, object value)
                         {
-                            Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput executeBPTaskInput = value as Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput;
-                            if (executeBPTaskInput == null)
-                                throw new ArgumentNullException(""ExecuteBPTaskInput"");
-                            Vanrise.BusinessProcess.Entities.BPTask task;
                             Vanrise.BusinessProcess.Business.BPTaskManager bpTaskManager = new Vanrise.BusinessProcess.Business.BPTaskManager();
-                            bpTaskManager.SetTaskCompleted(executeBPTaskInput, out task);
+                            Vanrise.BusinessProcess.Entities.BPTask task;
 
-                            var executionContext = new #CLASSNAME#ExecutionContext(context, task);
-                            executionContext.OnTaskCompleted();
+                            Vanrise.BusinessProcess.Entities.ReleaseBPTaskInput releaseBPTaskInput = value as Vanrise.BusinessProcess.Entities.ReleaseBPTaskInput;
+                            if (releaseBPTaskInput != null)
+                            {
+                                task = bpTaskManager.GetTask(releaseBPTaskInput.TaskId);
+                                var executionContext = new #CLASSNAME#ExecutionContext(context, task);
+                                executionContext.OnTaskReleased();
+                                context.CreateBookmark(bookmark.Name, OnTaskCompleted);
+                            }
+                            else
+                            {
+                                Vanrise.BusinessProcess.Entities.TakeBPTaskInput takeBPTaskInput = value as Vanrise.BusinessProcess.Entities.TakeBPTaskInput;
+                                if (takeBPTaskInput != null)
+                                {
+                                    task = bpTaskManager.GetTask(takeBPTaskInput.TaskId);
+                                    var executionContext = new #CLASSNAME#ExecutionContext(context, task);
+                                    executionContext.OnTaskTaken();
+                                    context.CreateBookmark(bookmark.Name, OnTaskCompleted);
+                                }
+                                else
+                                {
+                                    Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput executeBPTaskInput = value as Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput;
+                                    if (executeBPTaskInput == null)
+                                        throw new ArgumentNullException(""ExecuteBPTaskInput"");
+
+                                    bpTaskManager.SetTaskCompleted(executeBPTaskInput, out task);
+
+                                    var executionContext = new #CLASSNAME#ExecutionContext(context, task);
+                                    executionContext.OnTaskCompleted();
+                                }
+                            }
                         }
 
                         protected override bool CanInduceIdle
@@ -81,6 +120,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     public class #CLASSNAME#ExecutionContext : #BASEEXECUTIONCLASSNAME#
                     {
                         NativeActivityContext _activityContext;
+                        Vanrise.BusinessProcess.Entities.BPTask Task { get { return _task; } }
                         Vanrise.BusinessProcess.Entities.BPTask _task;
                         #TASKDATARECORDTYPERUNTIMETYPE# TaskData;
 
@@ -133,9 +173,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             var createTaskOutput = bpTaskManager.CreateTask(createBPTaskInput);
                             if (createTaskOutput != null && createTaskOutput.Result == Vanrise.BusinessProcess.Entities.CreateBPTaskResult.Succeeded)
                             {
+                                OnTaskCreated(createTaskOutput.TaskId);
                                 _activityContext.CreateBookmark(createTaskOutput.WFBookmarkName, OnTaskCompleted);
-                                WriteInformation(""'#TASKTITLE#' started"");
-                                #TASKSTARTEDVISUALEVENT#
+
                             }
                             else
                             {
@@ -163,10 +203,31 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             return #TASKTITLECODE#;
                         }
 
+                        public void OnTaskCreated(long taskId)
+                        {
+                            #TASKSTARTEDCODE#
+                            WriteInformation(""'#TASKTITLE#' started"");
+                            #TASKSTARTEDVISUALEVENT#
+                        }
+
+                        public void OnTaskReleased()
+                        {
+                            #TASKRELEASEDCODE#
+                            WriteInformation(""'#TASKTITLE#' Released"");
+                            #TASKRELEASEDVISUALEVENT#
+                        }
+
+                        public void OnTaskTaken()
+                        {
+                            #TASKTAKENCODE#
+                            WriteInformation(""'#TASKTITLE#' Taken"");
+                            #TASKTAKENVISUALEVENT#
+                        }
+
                         public void OnTaskCompleted()
                         {
                             #TASKCOMPLETEDCODE#
-                            WriteInformation(""'#TASKTITLE#' completed"");
+                            WriteInformation(""'#TASKTITLE#' Completed"");
                             #TASKCOMPLETEDVISUALEVENT#
                         }
                     }
@@ -203,7 +264,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             }
 
             if ((this.OutputItems != null && this.OutputItems.Count > 0)
-                || this.ExecutedBy != null)
+                || this.ExecutedBy != null || this.TaskId != null)
             {
                 StringBuilder outputItemsBuilder = new StringBuilder();
                 foreach (var prm in this.OutputItems)
@@ -214,6 +275,10 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 string executedByCode = this.ExecutedBy != null ? this.ExecutedBy.GetCode(null) : null;
                 if (!string.IsNullOrEmpty(executedByCode))
                     outputItemsBuilder.AppendLine($"{executedByCode} = _task.ExecutedById.Value;");
+
+                string taskIdCode = this.TaskId != null ? this.TaskId.GetCode(null) : null;
+                if (!string.IsNullOrEmpty(taskIdCode))
+                    outputItemsBuilder.AppendLine($"{taskIdCode} = _task.BPTaskId;");
 
                 nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDCODE#", outputItemsBuilder.ToString());
             }
@@ -229,7 +294,38 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             string taskAssigneesCode = this.TaskAssignees.Settings.GetAssigneesCode();
             nmSpaceCodeBuilder.Replace("#TASKASSIGNEES#", taskAssigneesCode);
 
-            if(this.EnableVisualization)
+
+            if (this.OnTaskReleased != null)
+            {
+                string taskReleasedCode = this.OnTaskReleased.GetCode(null);
+                nmSpaceCodeBuilder.Replace("#TASKRELEASEDCODE#", !string.IsNullOrEmpty(taskReleasedCode) ? taskReleasedCode : "");
+            }
+            else
+            {
+                nmSpaceCodeBuilder.Replace("#TASKRELEASEDCODE#", "");
+            }
+
+            if (this.OnTaskTaken != null)
+            {
+                string taskTakenCode = this.OnTaskTaken.GetCode(null);
+                nmSpaceCodeBuilder.Replace("#TASKTAKENCODE#", !string.IsNullOrEmpty(taskTakenCode) ? taskTakenCode : "");
+            }
+            else
+            {
+                nmSpaceCodeBuilder.Replace("#TASKTAKENCODE#", "");
+            }
+
+            if (this.OnTaskCreated != null)
+            {
+                string taskCreatedCode = this.OnTaskCreated.GetCode(null);
+                nmSpaceCodeBuilder.Replace("#TASKSTARTEDCODE#", !string.IsNullOrEmpty(taskCreatedCode) ? taskCreatedCode : "");
+            }
+            else
+            {
+                nmSpaceCodeBuilder.Replace("#TASKSTARTEDCODE#", "");
+            }
+
+            if (this.EnableVisualization)
             {
                 var startedVisualEventInput = new GenerateInsertVisualEventCodeInput
                 {
@@ -240,7 +336,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     EventPayloadCode = @"
                         new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BPHumanTaskStartedVisualEventPayload
                         {
-                            TaskId = createTaskOutput.TaskId
+                            TaskId = taskId
                         }"
                 };
                 nmSpaceCodeBuilder.Replace("#TASKSTARTEDVISUALEVENT#",
@@ -255,11 +351,33 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 };
                 nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDVISUALEVENT#",
                     context.GenerateInsertVisualEventCode(completedVisualEventInput));
+
+                var releasedVisualEventInput = new GenerateInsertVisualEventCodeInput
+                {
+                    ActivityContextVariableName = "_activityContext",
+                    ActivityId = context.VRWorkflowActivityId,
+                    EventTitle = $@"""Task '{this.DisplayName}' released""",
+                    EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_RELEASED
+                };
+                nmSpaceCodeBuilder.Replace("#TASKRELEASEDVISUALEVENT#",
+                    context.GenerateInsertVisualEventCode(releasedVisualEventInput));
+
+                var takenVisualEventInput = new GenerateInsertVisualEventCodeInput
+                {
+                    ActivityContextVariableName = "_activityContext",
+                    ActivityId = context.VRWorkflowActivityId,
+                    EventTitle = $@"""Task '{this.DisplayName}' taken""",
+                    EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_TAKEN
+                };
+                nmSpaceCodeBuilder.Replace("#TASKTAKENVISUALEVENT#",
+                    context.GenerateInsertVisualEventCode(takenVisualEventInput));
             }
             else
             {
                 nmSpaceCodeBuilder.Replace("#TASKSTARTEDVISUALEVENT#", "");
                 nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDVISUALEVENT#", "");
+                nmSpaceCodeBuilder.Replace("#TASKRELEASEDVISUALEVENT#", "");
+                nmSpaceCodeBuilder.Replace("#TASKTAKENVISUALEVENT#", "");
             }
 
             string baseExecutionContextClassName = "AssignTaskActivity_BaseExecutionContext";
@@ -279,13 +397,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
         {
-            if(this.EnableVisualization)
+            if (this.EnableVisualization)
             {
                 string displayName = this.DisplayName;
                 if (context.SubProcessActivityName != null)
                     displayName = displayName.Replace("[SubProcessActivityName]", context.SubProcessActivityName);
                 return new BPVisualItemDefinition
-                {                    
+                {
                     Settings = new BPHumanTaskVisualItemDefinitionSettings { TaskName = displayName }
                 };
             }
@@ -311,7 +429,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public string FieldName { get; set; }
     }
-    
+
     public class BPHumanTaskVisualItemDefinitionSettings : BPVisualItemDefinitionSettings
     {
         public override Guid ConfigId { get { return new Guid("BA33DC7B-1357-47B5-A256-0044ED93EEAE"); } }

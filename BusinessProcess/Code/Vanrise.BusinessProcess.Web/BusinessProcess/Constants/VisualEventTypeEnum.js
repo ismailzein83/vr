@@ -5,5 +5,6 @@
     Retrying: { value: "ad5a31e5-2890-4ef5-9339-61f86b536cfe", description: "Retrying" },
     Taken: { value: "90BB8330-F62D-4484-8B3B-0A5E4C8AB7BD", description: "Taken" },
     Overdue: { value: "A6C2142E-0203-4A14-9847-07796E17E888", description: "Overdue" },
-    NewIteration: { value: "668BED1A-5CED-4A38-B63E-9DCDEF194F07", description: "NewIteration" }
+    NewIteration: { value: "668BED1A-5CED-4A38-B63E-9DCDEF194F07", description: "NewIteration" },
+    Released: { value: "250E2AAD-59D7-43A6-BDEE-BAD20381ACA0", description: "Released" }
 });

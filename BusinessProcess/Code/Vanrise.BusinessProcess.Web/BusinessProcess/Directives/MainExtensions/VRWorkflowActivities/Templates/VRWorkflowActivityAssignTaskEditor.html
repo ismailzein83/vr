@@ -25,7 +25,26 @@
                     </businessprocess-vr-workflow-activity-expressionbuilder>
                 </vr-columns>
                 <vr-columns colnum="3">
+                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
+                                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
+                                                                            label="Task Id"
+                                                                            value="scopeModel.taskId">
+                    </businessprocess-vr-workflow-activity-expressionbuilder>
+                </vr-columns>
+                <vr-columns colnum="3">
                     <vr-switch value="scopeModel.enableVisualization" label="Enable Visualization"></vr-switch>
+                </vr-columns>
+            </vr-row>
+
+            <vr-row>
+                <vr-columns colnum="4">
+                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="On Task Created" value="scopeModel.onTaskCreated" nb-of-rows="4"></businessprocess-vr-workflow-activity-expressionbuilder>
+                </vr-columns>
+                <vr-columns colnum="4">
+                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="On Task Taken" value="scopeModel.onTaskTaken" nb-of-rows="4"></businessprocess-vr-workflow-activity-expressionbuilder>
+                </vr-columns>
+                <vr-columns colnum="4">
+                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="On Task Released" value="scopeModel.onTaskReleased" nb-of-rows="4"></businessprocess-vr-workflow-activity-expressionbuilder>
                 </vr-columns>
             </vr-row>
 

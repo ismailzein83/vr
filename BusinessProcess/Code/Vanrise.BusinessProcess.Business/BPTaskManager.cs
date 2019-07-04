@@ -185,7 +185,13 @@ namespace Vanrise.BusinessProcess.Business
 
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
             if (taskDataManager.ReleaseTask(taskId))
+            {
+                ReleaseBPTaskInput input = new ReleaseBPTaskInput() { TaskId = taskId };
+                IBPEventDataManager eventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
+                eventDataManager.InsertEvent(task.ProcessInstanceId, BPTask.GetTaskWFBookmark(task.BPTaskId), input);
+
                 return EvaluateBPTaskDefaultActionsState(task.AssignedUsers, null);
+            }
 
             task = GetTask(taskId);//to get the latest value of task
             return EvaluateBPTaskDefaultActionsState(task.AssignedUsers, task.TakenBy);
@@ -233,7 +239,13 @@ namespace Vanrise.BusinessProcess.Business
 
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
             if (taskDataManager.AssignTask(taskId, userId))
+            {
+                TakeBPTaskInput input = new TakeBPTaskInput() { TaskId = taskId, TakenBy = userId };
+                IBPEventDataManager eventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
+                eventDataManager.InsertEvent(task.ProcessInstanceId, BPTask.GetTaskWFBookmark(task.BPTaskId), input);
+
                 return EvaluateBPTaskDefaultActionsState(task.AssignedUsers, userId);
+            }
 
             task = GetTask(taskId);//to get the latest value of task
             return EvaluateBPTaskDefaultActionsState(task.AssignedUsers, task.TakenBy);

@@ -19,4 +19,16 @@ namespace Vanrise.BusinessProcess.Entities
         public string Decision { get; set; }
         public BPTaskData TaskData { get; set; }
     }
+
+    public class ReleaseBPTaskInput
+    {
+        public long TaskId { get; set; }
+    }
+
+    public class TakeBPTaskInput
+    {
+        public long TaskId { get; set; }
+
+        public int TakenBy { get; set; }
+    }
 }
