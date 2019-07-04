@@ -44,43 +44,47 @@ namespace BPMExtended.Main.Business
                 items = client.Get<List<TelephonyContractInfo>>(String.Format("api/SOM.ST/Billing/GetValidPabxPhoneNumbers?ContractId={0}&PABXServiceId={1}&CustomerId={2}", contractId, pabxServiceId,customerId));
             }
 
-            //Get telephony operations ids Id from general settings catalog
-            telephonyOperationsIds = new CatalogManager().GetTelephonyOperations();
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
-            esq.AddColumn("Id");
-            esq.AddColumn("StContractID");
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", items.Select(p=>p.Id).ToArray());
-            esqFirstFilter2 = esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "StRequestType", telephonyOperationsIds.ToArray());
-            //TODO: filter on cancelled requests
-
-            esq.Filters.Add(esqFirstFilter);
-            esq.Filters.Add(esqFirstFilter2);
-
-            entities = esq.GetEntityCollection(BPM_UserConnection);
-
-              var secondaryContracts = from r in entities.AsEnumerable()
-                                       group r by new
-                                        {
-                                           groupByContractID = r.GetColumnValue("StContractID").ToString()
-                                        }
-                                        into g
-                                        select new
-                                          {
-                                            contractId = g.Key.groupByContractID
-                                          };
-
-
-            foreach (var secondaryContractId in secondaryContracts)
+            if(items.Count > 0)
             {
 
-                filteredItems.Add(new TelephonyContractInfo()
-                {
-                    Id= secondaryContractId.contractId,
-                    PhoneNumber = items.Where(e=>e.Id == secondaryContractId.contractId).Select(e=>e.PhoneNumber).First()
-                });
+                //Get telephony operations ids Id from general settings catalog
+                telephonyOperationsIds = new CatalogManager().GetTelephonyOperations();
 
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+                esq.AddColumn("Id");
+                esq.AddColumn("StContractID");
+
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", items.Select(p=>p.Id).ToArray());
+                esqFirstFilter2 = esq.CreateFilterWithParameters(FilterComparisonType.NotEqual, "StRequestType", telephonyOperationsIds.ToArray());
+                //TODO: filter on cancelled requests
+
+                esq.Filters.Add(esqFirstFilter);
+                esq.Filters.Add(esqFirstFilter2);
+
+                entities = esq.GetEntityCollection(BPM_UserConnection);
+
+                  var secondaryContracts = from r in entities.AsEnumerable()
+                                           group r by new
+                                            {
+                                               groupByContractID = r.GetColumnValue("StContractID").ToString()
+                                            }
+                                            into g
+                                            select new
+                                              {
+                                                contractId = g.Key.groupByContractID
+                                              };
+
+
+                foreach (var secondaryContractId in secondaryContracts)
+                {
+
+                    filteredItems.Add(new TelephonyContractInfo()
+                    {
+                        Id= secondaryContractId.contractId,
+                        PhoneNumber = items.Where(e=>e.Id == secondaryContractId.contractId).Select(e=>e.PhoneNumber).First()
+                    });
+
+                }
             }
 
             return filteredItems;

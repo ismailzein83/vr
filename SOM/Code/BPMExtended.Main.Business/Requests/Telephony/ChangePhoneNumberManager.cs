@@ -107,7 +107,7 @@ namespace BPMExtended.Main.Business
                         OldDirectoryNumber = oldDirectoryNumber.ToString(),
                         NewDirectoryNumber = newDirectoryNumber.ToString(),
                         OldRatePlanId = oldRatePlanId.ToString(),
-                        NewRatePlanId = oldRatePlanId.ToString(),//newRatePlanId.ToString(),
+                        NewRatePlanId = newRatePlanId.ToString(),
                         FeesToRemove = feesToRemove,
                         CommonInputArgument = new CommonInputArgument()
                         {
