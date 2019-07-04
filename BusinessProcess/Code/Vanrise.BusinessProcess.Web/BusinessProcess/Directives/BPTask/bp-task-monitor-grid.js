@@ -27,7 +27,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
 
         function BPTaskGrid($scope, ctrl) {
 
-            var lastUpdateHandle, lessThanID, nbOfRows, processInstanceId, userId;
+            var lastUpdateHandle, lessThanID, nbOfRows, processInstanceId, userId, context;
             var myTaskSelected;
             var input = {
                 LastUpdateHandle: lastUpdateHandle,
@@ -49,6 +49,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
             function initializeController() {
                 $scope.bpTasks = [];
                 var isGettingDataFirstTime = true;
+                var isCallingSearchFirstTime = true;
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -58,6 +59,8 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                     function getDirectiveAPI() {
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
+                            context = query.context;
+
                             $scope.isLoading = true;
                             gridAPI.clearDataAndContinuePaging();
                             input.LastUpdateHandle = undefined;
@@ -69,6 +72,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                             input.BPTaskFilter = query.BPTaskFilter;
                             $scope.bpTasks.length = 0;
                             isGettingDataFirstTime = true;
+                            isCallingSearchFirstTime = true;
                             minId = undefined;
                             createTimer();
                         };
@@ -84,6 +88,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
 
                     function manipulateDataUpdated(response) {
                         var autoTask;
+                        var openWarningModel;
                         var itemAddedOrUpdatedInThisCall = false;
                         if (response != undefined) {
                             for (var i = 0; i < response.ListBPTaskDetails.length; i++) {
@@ -92,10 +97,13 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                                 if (!isGettingDataFirstTime && bpTask.Entity.BPTaskId < minId) {
                                     continue;
                                 }
+                                var statusTypeObj = UtilsService.getEnum(BPTaskStatusEnum, 'value', bpTask.Entity.Status);
 
+                                if (processInstanceId != undefined && !isCallingSearchFirstTime && (minId == undefined || bpTask.Entity.BPTaskId > minId) && !bpTask.IsAssignedToCurrentUser && !statusTypeObj.IsClosed) {
+                                    openWarningModel = true;
+                                }
                                 var findBPTask = false;
 
-                                var statusTypeObj = UtilsService.getEnum(BPTaskStatusEnum, 'value', bpTask.Entity.Status);
 
                                 var removeTask = (processInstanceId == undefined) && (statusTypeObj.IsClosed || !bpTask.ShowOnGrid);
 
@@ -124,6 +132,10 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                                 }
                             }
 
+                            if (openWarningModel && context != undefined && context.openWarningModal != undefined && typeof (context.openWarningModal) == "function") {
+                                context.openWarningModal();
+                            };
+                            
                             if (itemAddedOrUpdatedInThisCall) {
                                 if ($scope.bpTasks.length > 0) {
                                     $scope.bpTasks.sort(function (a, b) {
@@ -139,6 +151,8 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                             }
 
                         }
+
+                        isCallingSearchFirstTime = false;
                         input.LastUpdateHandle = response.LastUpdateHandle;
 
                         if (ctrl.enableAutoOpenTask && autoTask != undefined)

@@ -36,6 +36,9 @@
                                 <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.onCompileClick()">Compile</a>
                             </vr-columns>
                         </span>
+                        <vr-columns width="fullrow">
+                            <vr-textarea value="scopeModel.warningMessage"  label="Warning Message" rows="2" ></vr-textarea>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Manual Editor'" ng-if="scopeModel.selectedVRWorkflow!=undefined">

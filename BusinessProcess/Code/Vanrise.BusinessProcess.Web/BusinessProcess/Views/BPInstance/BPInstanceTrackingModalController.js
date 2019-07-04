@@ -46,6 +46,8 @@
         var visualItemDefinitonDirectiveAPI;
         var visualItemDefinitionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var warningMessage = "The request is sent to other members. Do you want to close the request window?";
+
         loadParameters();
         defineScope();
         load();
@@ -283,6 +285,8 @@
                 $scope.scopeModel.process.HasChildProcesses = configuration.HasChildProcesses;
                 $scope.scopeModel.process.HasBusinessRules = configuration.HasBusinessRules;
                 $scope.scopeModel.workflowId = response.Entity.VRWorkflowId;
+                if (configuration.WarningMessage != undefined && configuration.WarningMessage.length > 0)
+                    warningMessage = configuration.WarningMessage;
 
                 if ($scope.scopeModel.workflowId) {
                     $scope.scopeModel.visualProgressTab.showTab = true;
@@ -367,6 +371,15 @@
         function getFilterObject() {
             filter = {
                 BPInstanceID: bpInstanceID,
+                context: {
+                    openWarningModal: function () {
+                        VRNotificationService.showConfirmation(warningMessage).then(function (confirmed) {
+                            if (confirmed) {
+                                $scope.modalContext.closeModal();
+                            };
+                        });
+                    }
+                }
             };
             return filter;
         }

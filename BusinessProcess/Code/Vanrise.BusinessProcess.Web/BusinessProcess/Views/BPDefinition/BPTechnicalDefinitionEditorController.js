@@ -325,15 +325,16 @@
                 $scope.scopeModel.title = businessProcessDefinitionEntity.Title;
                 $scope.scopeModel.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
                 $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
+                $scope.scopeModel.warningMessage = businessProcessDefinitionEntity.Configuration.WarningMessage;
                 $scope.scopeModel.processTitle = businessProcessDefinitionEntity.Configuration.ProcessTitle;
-                $scope.scopeModel.manualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings &&  businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable || false;
-                $scope.scopeModel.scheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings &&  businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable || false;
+                $scope.scopeModel.manualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings && businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable || false;
+                $scope.scopeModel.scheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable || false;
                 $scope.scopeModel.sameAsManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.SameAsManualEditor || false;
             }
             function loadVRWorkflowSelector() {
                 if (!$scope.scopeModel.loadVRWorklowSelector)
                     return;
-               
+
                 var vrWorkflowLoadDeferred = UtilsService.createPromiseDeferred();
 
                 vrWorkflowSelectorReadyDeferred.promise.then(function () {
@@ -399,7 +400,7 @@
             }
             function loadScheduleTaskRequiredPermission() {
                 var scheduleTaskPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-               
+
                 scheduleTaskPermissionReadyDeferred.promise.then(function () {
                     var payload;
 
@@ -586,11 +587,15 @@
             obj.VRWorkflowId = $scope.scopeModel.loadVRWorklowSelector ? vrWorkflowSelectorAPI.getSelectedIds() : null;
             obj.DevProjectId = devProjectDirectiveApi.getSelectedIds();
             obj.Configuration.ProcessTitle = $scope.scopeModel.loadVRWorklowSelector ? $scope.scopeModel.processTitle : null;
-            obj.Configuration.EditorSize = modalWidthSelectorAPI.getSelectedIds();
+            obj.Configuration.EditorSize = modalWidthSelectorAPI != undefined ? modalWidthSelectorAPI.getSelectedIds() : null;
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
             obj.Configuration.BPInstanceInsertHandler = bpInstanceInsertHandlerSettingsAPI.getData();
-            obj.Configuration.ManualExecEditor = $scope.scopeModel.manualEditorDefinition ? undefined :"bp-vr-workflow-manualexeceditor";
+
+            if (obj.VRWorkflowId != undefined)
+                obj.Configuration.ManualExecEditor = $scope.scopeModel.manualEditorDefinition ? undefined : "bp-vr-workflow-manualexeceditor";
+
+            obj.Configuration.WarningMessage = $scope.scopeModel.warningMessage;
             obj.Configuration.Security = {
                 View: viewPermissionAPI.getData(),
                 StartNewInstance: startNewInstancePermissionAPI.getData(),

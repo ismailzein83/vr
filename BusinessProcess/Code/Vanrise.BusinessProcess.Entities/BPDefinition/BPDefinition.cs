@@ -40,6 +40,7 @@ namespace Vanrise.BusinessProcess.Entities
         public bool IsPersistable { get; set; }
         public bool HasChildProcesses { get; set; }
         public bool HasBusinessRules { get; set; }
+        public string WarningMessage { get; set; }
         public bool NotVisibleInManagementScreen { get; set; }
         public BPDefinitionExtendedSettings ExtendedSettings { get; set; }
         public BPDefinitionSecurity Security { get; set; }
