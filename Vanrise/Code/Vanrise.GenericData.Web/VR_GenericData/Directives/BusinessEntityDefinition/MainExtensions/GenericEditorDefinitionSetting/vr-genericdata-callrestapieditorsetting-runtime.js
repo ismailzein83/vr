@@ -30,6 +30,8 @@
             var inputItems = [];
             var outputItems = [];
 
+            var directiveId = UtilsService.guid();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.isButtonDisabled = true;
@@ -126,6 +128,8 @@
             function callAPIAction() {
                 var callAPIActionDeferred = UtilsService.createPromiseDeferred();
 
+                genericContext.setLoader(directiveId,true);
+
                 var getFieldValuesPromise = genericContext.getFieldValuesPromise();
                 getFieldValuesPromise.then(function (currentFieldValues) {
 
@@ -187,6 +191,10 @@
 
                     return undefined;
                 }
+
+                callAPIActionDeferred.promise.then(function () {
+                    genericContext.setLoader(directiveId, true);
+                });
 
                 return callAPIActionDeferred.promise;
             }

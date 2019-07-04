@@ -24,12 +24,14 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
             var selectedValues;
             var dataRecordTypeId;
             var allFieldValuesByFieldNames = {};
+            var globalLoaderRegisteredDirectives = [];
 
             var runtimeEditorAPI;
             var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var allRootContainerChildDirectivesLoadDeferred = UtilsService.createPromiseDeferred();
             var isEditMode;
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -168,6 +170,8 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
             }
 
             function buildGenericContext() {
+
+
                 var context = {
                     notifyFieldValueChanged: function (changedField) { //changedField = {fieldName: 'name', fieldValues: ['value1', 'value2', ...] }
                         var fieldName = changedField.fieldName;
@@ -214,7 +218,25 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                         return getFieldValuesPromiseDeferred.promise;
                     },
+                    setLoader: function ( id, value) {
+                        if (value) {
+                            $scope.scopeModel.isRootContainerLoading = true;
+                            if (globalLoaderRegisteredDirectives.indexOf(id) == -1)
+                                globalLoaderRegisteredDirectives.push(id);
+                        }
+                        else {
+                            var index = globalLoaderRegisteredDirectives.indexOf(id);
+                            globalLoaderRegisteredDirectives.splice(index, 1);
+                        }
 
+                        //loaderDirectivesArray
+                        //rootContainerLoaderArray
+                        //globalLoaderRegisteredDirectives
+
+                        console.log(globalLoaderRegisteredDirectives);
+
+                        $scope.scopeModel.isRootContainerLoading = (globalLoaderRegisteredDirectives.length != 0);
+                    },
                     setFieldValues: function (fieldValuesByNameDict) { //fieldValuesByNamesDict = {'fieldName' :'value1', .... }
                         if (fieldValuesByNameDict == undefined)
                             return UtilsService.waitMultiplePromises([]);
@@ -263,7 +285,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                         };
 
                         return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
-                            $scope.scopeModel.isRootContainerLoading = false;
+                            $scope.scopeModel.isRootContainerLoading = (globalLoaderRegisteredDirectives.length != 0);
                         });
                     },
                     isAddMode: function () {
