@@ -164,7 +164,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         {
                             Activities =
                             {
-                                new System.Activities.Statements.ForEach<#ITERATIONVARIABLERUNTIMETYPE#>
+                                new System.Activities.Statements.#PARALLEL#ForEach<#ITERATIONVARIABLERUNTIMETYPE#>
                                 {
                                     Values =  new System.Activities.InArgument<IEnumerable<#ITERATIONVARIABLERUNTIMETYPE#>>((activityContext) => new #NAMESPACE#.#CLASSNAME#(activityContext).List),
                                     Body = new System.Activities.ActivityAction<#ITERATIONVARIABLERUNTIMETYPE#>
@@ -185,6 +185,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         }
 
             ");
+
+            if (this.RunInParallel)
+                codeBuilder.Replace("#PARALLEL#", "Parallel");
+            else
+                codeBuilder.Replace("#PARALLEL#", "");
 
             codeBuilder.Replace("#NAMESPACE#", nmSpaceName);
             codeBuilder.Replace("#CLASSNAME#", className);
