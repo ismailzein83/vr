@@ -99,6 +99,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                             $scope.scopeModel.hideAddButton = settings.HideAddButton;
                             $scope.scopeModel.hideSection = settings.HideSection;
                             $scope.scopeModel.enableDraggableRow = settings.EnableDraggableRow;
+                            $scope.scopeModel.hideRemoveIcon = settings.HideRemoveIcon;
                             var availableFields = settings.AvailableFields;
                             var selectedIds = [];
                             if (availableFields != undefined && availableFields.length > 0) {
@@ -181,6 +182,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                         HideAddButton: $scope.scopeModel.hideAddButton,
                         HideSection: $scope.scopeModel.hideSection,
                         EnableDraggableRow: $scope.scopeModel.enableDraggableRow,
+                        HideRemoveIcon: $scope.scopeModel.hideRemoveIcon,
                         AvailableFields: availableFields
                     };
                 };

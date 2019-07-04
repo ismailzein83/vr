@@ -129,6 +129,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-gridview-runtime";
         public bool HideAddButton { get; set; }
         public bool HideSection { get; set; }
+        public bool HideRemoveIcon { get; set; }
         public bool EnableDraggableRow { get; set; }
         public List<GridViewListAvailableFields> AvailableFields { get; set; }
     }
@@ -147,6 +148,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public VRGenericEditorDefinitionSetting Settings { get; set; }
         public List<string> AvailableColumns { get; set; }
         public bool HideSection { get; set; }
+        public bool HideRemoveIcon { get; set; }
         public override void ApplyTranslation(IListRecordRuntimeViewTypeTranslationContext context)
         {
             if (Settings != null)

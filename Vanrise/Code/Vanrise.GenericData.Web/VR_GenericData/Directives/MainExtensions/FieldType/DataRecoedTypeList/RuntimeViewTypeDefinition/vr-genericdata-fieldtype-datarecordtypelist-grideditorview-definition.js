@@ -108,6 +108,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                         settings = payload.settings;
                         if (settings != undefined) {
                             $scope.scopeModel.hideSection = settings.HideSection;
+                            $scope.scopeModel.hideRemoveIcon = settings.HideRemoveIcon;
                             availableColumns = settings.AvailableColumns;
                         }
                      
@@ -135,6 +136,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.GridEditorViewListRecordRuntimeViewType, Vanrise.GenericData.MainExtensions",
                         Settings: editorDefinitionAPI.getData(),
                         HideSection: $scope.scopeModel.hideSection,
+                        HideRemoveIcon: $scope.scopeModel.hideRemoveIcon,
                         AvailableColumns: selectedColumns
                     };
                 };

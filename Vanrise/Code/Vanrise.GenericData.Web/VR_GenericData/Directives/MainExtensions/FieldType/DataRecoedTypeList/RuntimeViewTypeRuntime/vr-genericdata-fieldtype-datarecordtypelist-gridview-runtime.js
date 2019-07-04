@@ -58,7 +58,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                 };
             }
             function prepareAddedField(field, dataRow) {
-             
+
                 var entity = {
                     runtimeEditor: field.fieldType.RuntimeEditor,
                     directiveAPI: undefined,
@@ -114,7 +114,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                         $scope.scopeModel.hideSection = definitionSettings.HideSection;
                         $scope.scopeModel.enableDraggableRow = definitionSettings.EnableDraggableRow;
                         availableFields = definitionSettings.AvailableFields;
-
+                        $scope.scopeModel.deleteFunction = definitionSettings.HideRemoveIcon ? undefined : $scope.scopeModel.onDeleteRow;
                     }
                     if (dataRecordTypeId != undefined) {
                         var dataRecordFields;
