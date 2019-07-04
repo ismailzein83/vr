@@ -18,19 +18,35 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericEditor
     {
         public long FromNumber { get; set; }
         public long ToNumber { get; set; }
+        public string Prefix { get; set; }
+        public string Suffix { get; set; }
         public override List<object> GetRangeValues()
         {
             if (FromNumber > ToNumber)
                 return null;
             if (FromNumber == ToNumber)
-                return new List<object> { FromNumber };
+            {
+                return new List<object> { GetEvaluatedNumber(FromNumber.ToString())  };
+            }
 
             List<Object> numbers = new List<object>();
             for (var i = FromNumber; i <= ToNumber; i++)
             {
-                numbers.Add(i);
+                numbers.Add(GetEvaluatedNumber(i.ToString()));
             }
             return numbers;
+        }
+
+        private string GetEvaluatedNumber(string number)
+        {
+
+            if (Prefix != null)
+                number = $"{Prefix}{number}";
+
+            if (Suffix != null)
+                number = $"{number}{Suffix}";
+
+            return number;
         }
     }
 }

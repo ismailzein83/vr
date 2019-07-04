@@ -44,6 +44,8 @@ app.directive("vrGenericdataNumberrangeeditorRuntime", ["UtilsService", "VRUIUti
                         if (payload.settings != undefined) {
                             $scope.scopeModel.fromNumber = payload.settings.FromNumber;
                             $scope.scopeModel.toNumber = payload.settings.ToNumber;
+                            $scope.scopeModel.prefix = payload.settings.Prefix;
+                            $scope.scopeModel.suffix = payload.settings.Suffix;
                         }
                         
                     }
@@ -59,7 +61,9 @@ app.directive("vrGenericdataNumberrangeeditorRuntime", ["UtilsService", "VRUIUti
                     dicData[rangeVariableName] = {
                         $type: "Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericEditorDefinitionSetting.NumberRangeGenericEditorDefinitionSettings,Vanrise.GenericData.MainExtensions",
                         FromNumber: $scope.scopeModel.fromNumber,
-                        ToNumber: $scope.scopeModel.toNumber
+                        ToNumber: $scope.scopeModel.toNumber,
+                        Prefix: $scope.scopeModel.prefix,
+                        Suffix: $scope.scopeModel.suffix
                     }
                 };
 
