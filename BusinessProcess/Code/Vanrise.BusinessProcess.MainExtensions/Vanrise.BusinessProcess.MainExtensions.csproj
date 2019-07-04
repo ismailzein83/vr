@@ -95,6 +95,7 @@
     <Compile Include="BPTaskTypes\BPGenericTaskTypeAction\BPGenericTaskTypeActionController.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeAction\BPGenericTaskTypeActionManager.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeAction\ExecuteBPGenericTaskTypeAction.cs" />
+    <Compile Include="BPTaskTypes\BPGenericTaskTypeAction\OpenRDLCReportBPGenericTaskTypeAction.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeSettings.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeSettingsFilter.cs" />
     <Compile Include="Constants.cs" />
