@@ -44,8 +44,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                 };
                 $scope.scopeModel.onDataRecordTypeRowAdded = function () {
                     var onRowAdded = function (row) {
-                        VR_GenericData_DataRecordFieldAPIService.GetFieldsDescription({ DataRecordTypeId: dataRecordTypeId, FieldsValues: row.Entity }).then(function (response) {
-                            ctrl.datasource.push({ Entity: row.Entity, FieldsDescription: response != undefined && response.length > 0 ? response[0] : undefined });
+                        VR_GenericData_DataRecordFieldAPIService.GetFieldsDescription({ DataRecordTypeId: dataRecordTypeId, FieldsValues: [row.Entity] }).then(function (response) {
+                            ctrl.datasource.push({ Values: row.Entity, Entity: response != undefined && response.length > 0 ? response[0] : undefined });
                         });
                     };
                     VR_GenericData_DataRecordTypeService.addListDataRecordTypeRow(dataRecordTypeId, editorSettings, onRowAdded, $scope.scopeModel.fieldTitle);
@@ -85,7 +85,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                                     rowFieldsValues[prop] = field[prop];
                             }
                             fieldsValues.push(rowFieldsValues);
-                        }
+                        } 
                     }
                     var getColumnsInfoPromise = VR_GenericData_GenericBusinessEntityAPIService.GetGenericEditorColumnsInfo(input).then(function (response) {
                         if (response != undefined) {
@@ -103,7 +103,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                         if (fieldsDescription != undefined && fieldsDescription.length > 0) {
 
                             for (var i = 0; i < fieldsDescription.length; i++) {
-                                ctrl.datasource.push({ Entity: fieldsValues[i], FieldsDescription: fieldsDescription[i] });
+                                ctrl.datasource.push({ Values: fieldsValues[i], Entity: fieldsDescription[i] });
                             }
                         }
                     });
@@ -120,7 +120,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                     var returnedData = [];
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
-                            returnedData.push(ctrl.datasource[i].Entity);
+                            returnedData.push(ctrl.datasource[i].Values);
                         }
                     }
 

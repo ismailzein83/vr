@@ -30,7 +30,7 @@
             }
             if (dataRow != undefined) {
                 isEditMode = true;
-                fieldValues = dataRow.Entity;
+                fieldValues = dataRow.Values;
             }
         }
 
