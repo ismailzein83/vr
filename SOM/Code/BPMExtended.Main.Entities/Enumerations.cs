@@ -302,9 +302,11 @@ namespace BPMExtended.Main.Entities
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Network Reset Password")]
-        [EntitySchemaName("StNetworkResetPassword")]
+        [EntitySchemaName("StNetwrokResetKeyword")]
         [CompletedStep("StStepId")]
         [CompletedStepId("9730D12A-23FB-45D9-AB4E-126B1028BE91")]
+        [TechnicalStepFieldName("StResetKeywordTechnicalStepId")]
+        [TechnicalStepId("D3D55306-886B-4087-8DEC-8249D28EF7CB")]
         NetworkResetPassword = 33,
 
 
