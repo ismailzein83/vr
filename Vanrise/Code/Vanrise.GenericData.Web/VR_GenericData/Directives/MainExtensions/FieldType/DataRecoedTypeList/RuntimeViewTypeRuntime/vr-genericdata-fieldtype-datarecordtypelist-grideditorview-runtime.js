@@ -148,7 +148,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
 
                 var onRowUpdated = function (updatedRow) {
                     var index = ctrl.datasource.indexOf(row);
-                    ctrl.datasource[index] = updatedRow;
+                    VR_GenericData_DataRecordFieldAPIService.GetFieldsDescription({ DataRecordTypeId: dataRecordTypeId, FieldsValues: [updatedRow.Entity] }).then(function (response) {
+                        ctrl.datasource[index] = ({ Values: updatedRow.Entity, Entity: response != undefined && response.length > 0 ? response[0] : undefined });
+                    });
                 };
                 VR_GenericData_DataRecordTypeService.editListDataRecordTypeRow(row, dataRecordTypeId, editorSettings, onRowUpdated, $scope.scopeModel.fieldTitle);
             }
