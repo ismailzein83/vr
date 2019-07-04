@@ -44,6 +44,7 @@ app.directive('vrWhsBeAccountmanagerSettingsEditor', ['UtilsService', 'VRUIUtils
                         $scope.scopeModel.productRouteRestricted = carrierAccountFiltering.ProductRoute;
                         $scope.scopeModel.trafficRestricted = carrierAccountFiltering.Traffic;
                         $scope.scopeModel.billingRestricted = carrierAccountFiltering.Billing;
+                        $scope.scopeModel.displaySupplierAmountsRestricted = carrierAccountFiltering.DisplaySupplierAmounts;
                     }
                 };
                 api.getData = function () {
@@ -52,7 +53,8 @@ app.directive('vrWhsBeAccountmanagerSettingsEditor', ['UtilsService', 'VRUIUtils
                         CustomerRoute: $scope.scopeModel.customerRouteRestricted,
                         ProductRoute: $scope.scopeModel.productRouteRestricted,
                         Traffic: $scope.scopeModel.trafficRestricted,
-                        Billing: $scope.scopeModel.billingRestricted
+                        Billing: $scope.scopeModel.billingRestricted,
+                        DisplaySupplierAmounts: $scope.scopeModel.displaySupplierAmountsRestricted
                     };
                     var obj = {
                         $type: "TOne.WhS.BusinessEntity.Entities.AccountManagerSettings,TOne.WhS.BusinessEntity.Entities",

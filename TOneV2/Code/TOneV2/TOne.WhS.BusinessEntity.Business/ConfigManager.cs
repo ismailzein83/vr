@@ -560,6 +560,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return accountManagerSettings.CarrierAccountFiltering.Billing;
         }
 
+        public bool GetDisplaySupplierAmountsCarrierAccountFiltering()
+        {
+            AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
+            accountManagerSettings.ThrowIfNull("accountManagerSettings");
+            return accountManagerSettings.CarrierAccountFiltering.DisplaySupplierAmounts;
+        }
+
         public bool GetGenerateTrafficStatsByCode()
         {
             CDRImportConfiguration cdrImportConfiguration = GetCDRImportConfiguration();
