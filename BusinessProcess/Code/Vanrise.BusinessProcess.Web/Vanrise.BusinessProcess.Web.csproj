@@ -266,6 +266,8 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\BPGenericTaskTypeActionFilterCondition\bp-generictasktypeactionfiltercondition-istaken.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\BPGenericTaskTypeActionFilterCondition\Templates\FilterGroupFilterCondition.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\BPGenericTaskTypeActionFilterCondition\Templates\IsTakenFilterCondition.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\GenericBECustomActionSettings\Templates\StartBPProcessCustomActionTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\GenericBECustomActionSettings\bp-genericbe-startbpprocess-customaction.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-processinitiator-taskassignees.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-specificgroups-taskassignees.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-specificusers-taskassignees.js" />
