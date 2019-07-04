@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailNimNetworkpathDesigner", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("retailNimNetworkpathDesigner", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_NIM_NodeType",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_NIM_NodeType) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -45,12 +45,22 @@ app.directive("retailNimNetworkpathDesigner", ["UtilsService", "VRNotificationSe
                     ctrl.networkNodes.length = 0;
                     ctrl.networkConnectors.length = 0;
 
-                    if (payload) {
-                        if (payload.networkNodes != undefined)
-                            ctrl.networkNodes = payload.networkNodes;
+                    var networkNodes;
 
-                        if (payload.networkConnectors != undefined)
+                    if (payload) {
+                        networkNodes = payload.networkNodes;
+
+                        if (payload.networkConnectors != undefined) {
                             ctrl.networkConnectors = payload.networkConnectors;
+                        }
+                    }
+
+                    if (networkNodes != undefined) {
+                        for (var index = 0; index < networkNodes.length; index++) {
+                            var currentNetworkNode = networkNodes[index];
+                            extendNetworkNode(currentNetworkNode);
+                            ctrl.networkNodes.push(currentNetworkNode);
+                        }
                     }
 
                     var promises = [];
@@ -59,6 +69,11 @@ app.directive("retailNimNetworkpathDesigner", ["UtilsService", "VRNotificationSe
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function extendNetworkNode(networkNode) {
+                var nodeType = UtilsService.getEnum(Retail_NIM_NodeType, "value", networkNode.Type);
+                networkNode.ImageName = nodeType.imageName;
             }
         }
 

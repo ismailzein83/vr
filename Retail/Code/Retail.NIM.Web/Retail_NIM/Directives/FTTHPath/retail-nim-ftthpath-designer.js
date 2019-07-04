@@ -1,13 +1,13 @@
 ﻿"use strict";
 
-app.directive("retailNimFtthpathDesigner", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("retailNimFtthpathDesigner", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_NIM_NodeType",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_NIM_NodeType) {
 
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
                 onReady: "="
-            },
+            }, 
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var ctor = new FTTHPathDesigner($scope, ctrl, $attrs);
@@ -81,16 +81,16 @@ app.directive("retailNimFtthpathDesigner", ["UtilsService", "VRNotificationServi
 
                 var networkNodes = [];
 
-                var ims = { Id: buildNodeId("IMS", selectedValues.IMS), Name: selectedValues.IMSName, Type: "default" };
+                var ims = { Id: buildNodeId("IMS", selectedValues.IMS), Name: selectedValues.IMSName, Type: Retail_NIM_NodeType.IMS.value };
                 networkNodes.push(ims);
 
-                var olt = { Id: buildNodeId("OLT", selectedValues.OLT), Name: selectedValues.OLTName, Type: "default" };
+                var olt = { Id: buildNodeId("OLT", selectedValues.OLT), Name: selectedValues.OLTName, Type: Retail_NIM_NodeType.OLT.value };
                 networkNodes.push(olt);
 
-                var splitter = { Id: buildNodeId("Splitter", selectedValues.Splitter), Name: selectedValues.SplitterName, Type: "splitter" };
+                var splitter = { Id: buildNodeId("Splitter", selectedValues.Splitter), Name: selectedValues.SplitterName, Type: Retail_NIM_NodeType.Splitter.value };
                 networkNodes.push(splitter);
 
-                var fdb = { Id: buildNodeId("FDB", selectedValues.FDB), Name: selectedValues.FDBName, Type: "default" };
+                var fdb = { Id: buildNodeId("FDB", selectedValues.FDB), Name: selectedValues.FDBName, Type: Retail_NIM_NodeType.FDB.value };
                 networkNodes.push(fdb);
 
                 return networkNodes;

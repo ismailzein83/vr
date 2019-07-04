@@ -83,6 +83,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_NIM\Constant\NodeType.js" />
     <Content Include="Retail_NIM\Directives\FTTHPath\retail-nim-ftthpath-designer.js" />
     <Content Include="Retail_NIM\Directives\FTTHPath\Templates\FTTHPathTemplate.html" />
     <Content Include="Retail_NIM\Directives\NetworkPath\retail-nim-networkpath-designer.js" />
@@ -107,7 +108,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Retail_NIM\Constant\" />
     <Folder Include="Retail_NIM\Services\" />
     <Folder Include="Retail_NIM\Views\" />
   </ItemGroup>
