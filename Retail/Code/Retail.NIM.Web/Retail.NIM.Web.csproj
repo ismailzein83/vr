@@ -83,6 +83,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_NIM\Directives\FTTHPath\retail-nim-ftthpath-designer.js" />
+    <Content Include="Retail_NIM\Directives\FTTHPath\Templates\FTTHPathTemplate.html" />
     <Content Include="Retail_NIM\Directives\NetworkPath\retail-nim-networkpath-designer.js" />
     <Content Include="Retail_NIM\Directives\NetworkPath\Templates\NetworkPathTemplate.html" />
     <Content Include="Retail_NIM\Directives\NetworkPath\Styles\NetworkPathStyle.css" />

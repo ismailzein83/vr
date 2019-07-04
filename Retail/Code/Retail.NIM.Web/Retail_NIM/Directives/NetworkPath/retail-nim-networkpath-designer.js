@@ -4,45 +4,37 @@ app.directive("retailNimNetworkpathDesigner", ["UtilsService", "VRNotificationSe
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
-
             restrict: "E",
-            scope:
-            {
+            scope: {
                 onReady: "=",
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
-                var ctor = new NetworkpathDesigner($scope, ctrl, $attrs);
+                var ctor = new NetworkPathDesigner($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Retail_NIM/Directives/NetworkPath/Templates/NetworkPathTemplate.html"
-
         };
 
-        function NetworkpathDesigner($scope, ctrl, $attrs) {
-            ctrl.networkNodes = [];
-            ctrl.networkConnecters = [];
+        function NetworkPathDesigner($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            $scope.scopeModel = {};
-                      
-
-            ctrl.getOutConnecterPortNumber = function (nodeId) {
-                var connection = UtilsService.getItemByVal(ctrl.networkConnecters, nodeId, 'SourceNodeId');
-                return connection && connection.SourcePortNumber;
-            };
-
-            ctrl.getInConnecterPortNumber = function (nodeId) {
-                var connection = UtilsService.getItemByVal(ctrl.networkConnecters, nodeId, 'SourceNodeId');
-                return connection && connection.DestinationPortNumber;
-            };
-
-            
 
             function initializeController() {
-                $scope.scopeModel = {};
+                ctrl.networkNodes = [];
+                ctrl.networkConnectors = [];
+
+                ctrl.getInConnectorPortNumber = function (nodeId) {
+                    var connection = UtilsService.getItemByVal(ctrl.networkConnectors, nodeId, 'SourceNodeId');
+                    return connection && connection.DestinationPortNumber ? connection.DestinationPortNumber : undefined;
+                };
+
+                ctrl.getOutConnectorPortNumber = function (nodeId) {
+                    var connection = UtilsService.getItemByVal(ctrl.networkConnectors, nodeId, 'SourceNodeId');
+                    return connection && connection.SourcePortNumber ? connection.SourcePortNumber : undefined;
+                };
+
                 defineAPI();
             }
 
@@ -50,23 +42,26 @@ app.directive("retailNimNetworkpathDesigner", ["UtilsService", "VRNotificationSe
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
-                    ctrl.networkNodes.length = 0 ;
-                    ctrl.networkConnecters.length = 0;
-                    if (payload) {
-                        ctrl.networkNodes = payload.networkNodes || [];
-                        ctrl.networkConnecters = payload.networkConnecters || [];
-                    }                   
-                    return UtilsService.waitMultiplePromises(promises);
+                    ctrl.networkNodes.length = 0;
+                    ctrl.networkConnectors.length = 0;
 
+                    if (payload) {
+                        if (payload.networkNodes != undefined)
+                            ctrl.networkNodes = payload.networkNodes;
+
+                        if (payload.networkConnectors != undefined)
+                            ctrl.networkConnectors = payload.networkConnectors;
+                    }
+
+                    var promises = [];
+                    return UtilsService.waitMultiplePromises(promises);
                 };
-               
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
         }
 
         return directiveDefinitionObject;
-
     }
 ]);
