@@ -2752,35 +2752,28 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     border-right: unset !important;
 }
 
-.vr-datagrid-body .exist-full-screen-icon {
-    position: relative;
-    left: calc(100% - 100px);
-    display: block;
-    display: none;
+.vr-row-action-container {
+    position: absolute;
+    right: 10px;
+    width: 50%;
+    display: flex;
+    flex-direction: row-reverse;
 }
 .vr-datarow-breadcrumb {
     position: absolute;
     left: 15px;
-    top: 5px;
-}
-
-
-.vr-datagrid-body .action-full-screen-icon, .vr-datagrid-body .exist-full-screen-icon {
-    position: relative;
-    display: none;
-    width: 73px;
-    margin-top: 5px;
-}
-
-.vr-datagrid-body .exist-full-screen-icon {
-    left: calc(100% - 90px);
 }
 
 .vr-datagrid-body .action-full-screen-icon {
-    left: calc(100% - 260px);
+    display: none;
 }
 
-.vr-datagrid-body.row-full-screen .exist-full-screen-icon, .vr-datagrid-body .action-full-screen-icon {
+.vr-datagrid-body .action-full-screen-icon{    
+    display: none;
+    padding:0px 5px;
+}
+
+.vr-datagrid-body.row-full-screen .action-full-screen-icon {
     display: inline-block;
 }
 

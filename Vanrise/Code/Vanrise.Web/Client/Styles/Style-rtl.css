@@ -460,10 +460,13 @@
     margin-left:unset;
     margin-right:15px;
 }
+.rtl .expanded-row-action.dropdown-menu {
+   left:unset;
+}
 
-.rtl .vr-datagrid-body .action-full-screen-icon {
-    right: calc(100% - 260px);
-    left: unset;
+.rtl .vr-row-action-container {
+    right: unset;
+    left: 10px;
 }
 .rtl .vr-datagrid-body .exist-full-screen-icon {
     left: unset;

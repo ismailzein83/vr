@@ -1776,7 +1776,22 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 
 	            ctrl.menuActionClicked = function (action, dataItem) {
-	                action.clicked(dataItem, gridApi);
+	                var promise = action.clicked(dataItem, gridApi);
+	                action.isSubmitting = true;
+	                if (promise != undefined && promise != null) {
+	                    promise.finally(function () {
+	                        action.isSubmitting = false;
+	                    });
+	                }
+	                else {
+	                    var dummypromise = UtilsService.createPromiseDeferred();
+	                    setTimeout(function () {
+	                        dummypromise.resolve();
+	                    }, 10);
+	                    dummypromise.promise.finally(function () {
+	                        action.isSubmitting = false;
+	                    });
+	                }
 	            };
 	        }
 
