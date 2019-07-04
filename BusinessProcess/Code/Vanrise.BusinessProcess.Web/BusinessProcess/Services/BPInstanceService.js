@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBEActionService', 'BusinessProcess_BPDefinitionAPIService', 'VRCommon_ModalWidthEnum'];
+    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBEActionService', 'BusinessProcess_BPDefinitionAPIService', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBECustomActionService'];
 
-    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEActionService, BusinessProcess_BPDefinitionAPIService, VRCommon_ModalWidthEnum) {
+    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEActionService, BusinessProcess_BPDefinitionAPIService, VRCommon_ModalWidthEnum, VR_GenericData_GenericBECustomActionService) {
         function getStatusColor(status) {
 
             if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.New.color;
@@ -190,6 +190,15 @@
            return VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPProcess/Templates/StartBPProcessEditor.html', parameters, settings);
         }
 
+        function registerStartBPProcessCustomAction() {
+            var actionType = {
+                ActionTypeName: "StartBPProcessCustomAction",
+                ExecuteAction: function (payload) {
+                }
+            };
+            VR_GenericData_GenericBECustomActionService.registerCustomActionType(actionType);
+        }
+
 
         return ({
             getStatusColor: getStatusColor,
@@ -198,7 +207,8 @@
             registerDrillDownToSchdeulerTask: registerDrillDownToSchdeulerTask,
             displayRunningInstancesIfExist: displayRunningInstancesIfExist,
             registerOpenBPInstanceViewerAction: registerOpenBPInstanceViewerAction,
-            registerStartBPProcessAction: registerStartBPProcessAction
+            registerStartBPProcessAction: registerStartBPProcessAction,
+            registerStartBPProcessCustomAction: registerStartBPProcessCustomAction
         });
     }
 
