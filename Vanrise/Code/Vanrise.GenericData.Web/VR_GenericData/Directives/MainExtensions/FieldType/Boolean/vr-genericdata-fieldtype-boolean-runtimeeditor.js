@@ -32,8 +32,8 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
 
         function initializeController() {
 
-            $scope.scopeModel.value =  false;
-            
+            $scope.scopeModel.value = false;
+
             if (ctrl.selectionmode != 'single') {
                 defineScopeForMultiModes();
             }
@@ -153,7 +153,7 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                 }
             }
             else {
-                $scope.scopeModel.value = fieldValue;
+                $scope.scopeModel.value = (fieldValue == undefined || !Array.isArray(fieldValue)) ? fieldValue : fieldValue[0];
             }
         }
     }
@@ -165,17 +165,17 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
         }
         else {
             return '<vr-columns colnum="{{ctrl.normalColNum * 4}}">'
-                    + '<vr-row>'
-                        + getSingleSelectionModeTemplate()
-                        + '<vr-columns withemptyline>'
-                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
-                        + '</vr-columns>'
-                    + '</vr-row>'
-                    + '<vr-row>'
-                        + '<vr-columns colnum="{{ctrl.normalColNum * 2}}">'
-                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
-                        + '</vr-columns>'
-                    + '</vr-row>'
+                + '<vr-row>'
+                + getSingleSelectionModeTemplate()
+                + '<vr-columns withemptyline>'
+                + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
+                + '</vr-columns>'
+                + '</vr-row>'
+                + '<vr-row>'
+                + '<vr-columns colnum="{{ctrl.normalColNum * 2}}">'
+                + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
+                + '</vr-columns>'
+                + '</vr-row>'
                 + '</vr-columns>';
         }
 
