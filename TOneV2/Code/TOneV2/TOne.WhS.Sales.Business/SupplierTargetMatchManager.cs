@@ -80,11 +80,12 @@ namespace TOne.WhS.Sales.Business
 								{ SupplierTargetMatchAnalyticItem linkedrpRouteToZoneAnalytic;
 									if (supplierAnalyticDetail.TryGetValue(rpDetail.SupplierId, out linkedrpRouteToZoneAnalytic))
 									{
-										for (var i = 0; i < supplierAnalyticDetail.Count && i < input.Query.NumberOfOptions; i++)
-										{
-											supplierTargetMatchAnalyticItems.Add(supplierAnalyticDetail.ElementAt(i).Value);
-										}
-										break;
+										//for (var i = 0; i < supplierAnalyticDetail.Count && i < input.Query.NumberOfOptions; i++)
+										//{
+										//	supplierTargetMatchAnalyticItems.Add(supplierAnalyticDetail.ElementAt(i).Value);
+										//}
+										//break;
+										supplierTargetMatchAnalyticItems.Add(linkedrpRouteToZoneAnalytic);
 									}
 								}
 
