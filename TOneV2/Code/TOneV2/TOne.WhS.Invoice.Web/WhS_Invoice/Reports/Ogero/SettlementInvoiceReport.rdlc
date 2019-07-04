@@ -159,9 +159,6 @@
         <Height>0.48622in</Height>
         <Width>1.9968in</Width>
         <ZIndex>1</ZIndex>
-        <Visibility>
-          <Hidden>=IIf(CountRows("CarrierSummary") &gt; 0,False,True)</Hidden>
-        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -282,9 +279,6 @@
         <Height>0.48622in</Height>
         <Width>1.9598in</Width>
         <ZIndex>2</ZIndex>
-        <Visibility>
-          <Hidden>=IIf(CountRows("SystemSummary") &gt; 0 ,False,True)</Hidden>
-        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
