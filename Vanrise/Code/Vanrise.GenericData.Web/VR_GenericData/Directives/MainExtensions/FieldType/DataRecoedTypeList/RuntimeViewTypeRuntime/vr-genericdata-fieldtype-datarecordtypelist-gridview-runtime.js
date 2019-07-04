@@ -58,7 +58,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                 };
             }
             function prepareAddedField(field, dataRow) {
-
+             
                 var entity = {
                     runtimeEditor: field.fieldType.RuntimeEditor,
                     directiveAPI: undefined,
@@ -101,6 +101,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                     var fieldsDescription;
                     var dataRecordTypeId = payload.dataRecordTypeId;
                     var fieldsValues = payload.fieldValue;
+                    $scope.scopeModel.colNum = payload.fieldWidth != undefined ? payload.fieldWidth : 12;
                     $scope.scopeModel.fieldTitle = payload.fieldTitle;
                     var rootPromiseNode = {
                         promises: []

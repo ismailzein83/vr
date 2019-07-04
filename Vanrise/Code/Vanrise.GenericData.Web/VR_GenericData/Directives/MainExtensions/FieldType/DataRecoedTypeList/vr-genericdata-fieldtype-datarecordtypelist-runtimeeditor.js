@@ -28,6 +28,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
             var fieldType;
             var fieldTitle;
             var fieldName;
+            var fieldWidth;
             var fieldViewSettings;
 
             var runtimeEditorDirectiveAPI;
@@ -62,6 +63,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                         fieldValue = payload.fieldValue;
                         fieldTitle = payload.fieldTitle;
                         fieldName = payload.fieldName;
+                        fieldWidth = payload.fieldWidth;
                         fieldViewSettings = payload.fieldViewSettings;
                         if (fieldViewSettings != undefined) {
                             $scope.scopeModel.runtimeEditor = fieldViewSettings.RuntimeEditor;
@@ -74,7 +76,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                                     fieldValue: fieldValue,
                                     dataRecordTypeId: fieldType.DataRecordTypeId,
                                     definitionSettings: fieldViewSettings,
-                                    fieldType: fieldType
+                                    fieldType: fieldType,
+                                    fieldWidth: fieldWidth
                                 }, runtimeEditorLoadPromiseDeferred);
                             });
                         }

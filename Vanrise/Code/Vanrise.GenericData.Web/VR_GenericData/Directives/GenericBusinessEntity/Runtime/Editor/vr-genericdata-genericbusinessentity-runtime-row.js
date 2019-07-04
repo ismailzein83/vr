@@ -39,7 +39,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 var api = {};
 
                 api.load = function (payload) {
-
+                     
                     if (payload.fields != undefined) {
                         currentContext = payload.context;
                         genericContext = payload.genericContext;
@@ -138,6 +138,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             fieldTitle: field.FieldTitle,
                             fieldType: field.FieldType,
                             fieldValue: fieldValue,
+                            fieldWidth: field.FieldWidth, 
                             fieldViewSettings: field.FieldViewSettings,
                             TextResourceKey: field.TextResourceKey,
                             showAsLabel: field.ShowAsLabel,

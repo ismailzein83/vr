@@ -1,4 +1,4 @@
-﻿<vr-columns width="fullrow">
+﻿<vr-columns colnum="{{scopeModel.colNum}}">
         <vr-section ng-if="!scopeModel.hideSection" title={{scopeModel.fieldTitle}}>
             <vr-button type="Add" data-onclick="scopeModel.onDataRecordTypeRowAdded" standalone></vr-button>
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"

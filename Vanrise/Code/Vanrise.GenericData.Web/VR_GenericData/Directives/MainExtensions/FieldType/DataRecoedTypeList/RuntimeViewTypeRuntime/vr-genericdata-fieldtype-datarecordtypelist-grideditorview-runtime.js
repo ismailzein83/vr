@@ -62,6 +62,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                 var fieldsDescription;
                 api.load = function (payload) {
                     dataRecordTypeId = payload.dataRecordTypeId;
+                    $scope.scopeModel.colNum = payload.fieldWidth != undefined ? payload.fieldWidth : 12;
 
                     var definitionSettings = payload.definitionSettings;
                     editorSettings = definitionSettings != undefined ? definitionSettings.Settings : undefined;
