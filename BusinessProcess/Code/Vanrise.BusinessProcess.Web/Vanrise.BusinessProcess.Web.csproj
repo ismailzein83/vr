@@ -322,7 +322,9 @@
     <Content Include="BusinessProcess\Services\BPVisualItemDefintionService.js" />
     <Content Include="BusinessProcess\Views\BPGenericTaskType\BPGenericTaskTypeActionEditorController.js" />
     <Content Include="BusinessProcess\Views\BPGenericTaskType\Templates\BPGenericTaskTypeActionEditorTemplate.html" />
+    <Content Include="BusinessProcess\Views\BPProcess\StartBPProcessCustomActionEditorController.js" />
     <Content Include="BusinessProcess\Views\BPProcess\StartBPProcessEditorController.js" />
+    <Content Include="BusinessProcess\Views\BPProcess\Templates\StartBPProcessCustomActionEditor.html" />
     <Content Include="BusinessProcess\Views\BPProcess\Templates\StartBPProcessEditor.html" />
     <Content Include="BusinessProcess\Views\BPTask\BPGenericTaskTypeSettingsEditor.html" />
     <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskTypeStaticEditorTemplate.html" />
