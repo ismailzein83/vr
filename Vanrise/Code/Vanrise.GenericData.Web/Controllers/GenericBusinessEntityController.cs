@@ -202,12 +202,5 @@ namespace Vanrise.GenericData.Web.Controllers
             public Dictionary<string, object> FieldValues { get; set; }
         }
 
-        public class GetAllGenericBusinessEntitiesInput
-        {
-            public Guid BusinessEntityDefinitionId { get; set; }
-            public List<string> ColumnsNeeded { get; set; }
-            public RecordFilterGroup FilterGroup { get; set; }
-        }
-       
     }
 }

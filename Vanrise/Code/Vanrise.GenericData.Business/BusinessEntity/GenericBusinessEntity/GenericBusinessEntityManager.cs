@@ -302,33 +302,43 @@ namespace Vanrise.GenericData.Business
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);
             genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
-            if (!genericBEDefinitionSetting.DataRecordStorageId.HasValue)
+            if (genericBEDefinitionSetting.DataRecordStorageId.HasValue)
             {
-                throw new NullReferenceException("genericBEDefinitionSetting.DataRecordStorageId");
-            }
-            var dataRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId.Value, columnsNeeded, filterGroup);
-            List<GenericBusinessEntity> results = new List<GenericBusinessEntity>();
+                var dataRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId.Value, columnsNeeded, filterGroup);
+                List<GenericBusinessEntity> results = new List<GenericBusinessEntity>();
 
-            if (dataRecords != null)
-            {
-                foreach (var storageRecord in dataRecords)
+                if (dataRecords != null)
                 {
-                    GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntity();
-                    if (storageRecord.FieldValues != null)
+                    foreach (var storageRecord in dataRecords)
                     {
-                        genericBusinessEntity.FieldValues = new Dictionary<string, object>();
-
-                        foreach (var fieldValue in storageRecord.FieldValues)
+                        GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntity();
+                        if (storageRecord.FieldValues != null)
                         {
-                            genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value);
+                            genericBusinessEntity.FieldValues = new Dictionary<string, object>();
+
+                            foreach (var fieldValue in storageRecord.FieldValues)
+                            {
+                                genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value);
+                            }
                         }
+                        results.Add(genericBusinessEntity);
                     }
-                    results.Add(genericBusinessEntity);
                 }
+
+                return results;
             }
-
-            return results;
-
+            else
+            {
+                var vrConnection = _connectionManager.GetVRConnection<VRInterAppRestConnection>(genericBEDefinitionSetting.VRConnectionId.Value);
+                VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+                var input = new GetAllGenericBusinessEntitiesInput
+                {
+                    BusinessEntityDefinitionId = genericBEDefinitionSetting.RemoteGenericBEDefinitionId.Value,
+                    ColumnsNeeded = columnsNeeded,
+                    FilterGroup = filterGroup
+                };
+                return connectionSettings.Post<GetAllGenericBusinessEntitiesInput, List<GenericBusinessEntity>>("/api/VR_GenericData/GenericBusinessEntity/GetAllGenericBusinessEntities", input, true);
+            }
         }
 
         public IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(DataRetrievalInput<GenericBusinessEntityQuery> input)
@@ -1852,4 +1862,13 @@ namespace Vanrise.GenericData.Business
         public string DefinitionTitle { get; set; }
         public string TitleFieldName { get; set; }
     }
+
+
+    public class GetAllGenericBusinessEntitiesInput
+    {
+        public Guid BusinessEntityDefinitionId { get; set; }
+        public List<string> ColumnsNeeded { get; set; }
+        public RecordFilterGroup FilterGroup { get; set; }
+    }
+
 }

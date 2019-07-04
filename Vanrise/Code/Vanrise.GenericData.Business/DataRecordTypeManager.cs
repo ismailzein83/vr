@@ -658,7 +658,7 @@ namespace Vanrise.GenericData.Business
             classDefinitionBuilder.Replace("#RECORDTYPEID#", dataRecordType.DataRecordTypeId.ToString());
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
-            string className = "DataRecord";
+            string className = $"DataRecord_{dataRecordType.Name.Replace(" ", "_").Replace("-","_")}";
             classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
             classDefinitionBuilder.Replace("#CLASSNAME#", className);
             fullTypeName = String.Format("{0}.{1}", classNamespace, className);
