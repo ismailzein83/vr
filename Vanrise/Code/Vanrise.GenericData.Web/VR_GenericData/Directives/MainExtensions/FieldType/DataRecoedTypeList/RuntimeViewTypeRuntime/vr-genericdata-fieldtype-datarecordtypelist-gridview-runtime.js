@@ -98,6 +98,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                 var api = {};
                 api.load = function (payload) {
                     $scope.scopeModel.columns.length = 0;
+                    ctrl.datasource.length = 0;
+
                     var fieldsDescription;
                     var dataRecordTypeId = payload.dataRecordTypeId;
                     var fieldsValues = payload.fieldValue;
@@ -190,7 +192,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                                     runtimeFieldReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                                     runtimeFieldLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                                 };
-                                                childPromises2.push(genericBEFieldObject.runtimeFieldLoadPromiseDeferred.promise);
+                                                if (!genericBEFieldObject.fieldInfo.showAsLabel) {
+                                                    childPromises2.push(genericBEFieldObject.runtimeFieldLoadPromiseDeferred.promise);
+                                                }
                                                 prepareEditedField(genericBEFieldObject, dataRow);
                                             }
                                             ctrl.datasource.push({ Entity: dataRow });
@@ -224,7 +228,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                         }
 
                                     }
-                                    return { promises: childPromises };
+                                    return { promises: childPromises2 };
                                 }
                             };
                         };
