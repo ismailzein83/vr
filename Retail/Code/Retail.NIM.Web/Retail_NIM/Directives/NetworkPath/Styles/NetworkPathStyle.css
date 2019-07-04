@@ -30,9 +30,7 @@
 }
 
 .vr-networkpath-node .node-body {
-    position: absolute;
     border-radius: 5px;
-    z-index: 1;
     padding: 5px 0px 0px 10px;
     color: #274273;
     font-weight: bold;
@@ -125,30 +123,12 @@
     margin-top: 4px;
 }
 
-
-.vr-nodetype-container {
-    position: relative;
-    width: 50px;
-    height: 75px;
-    overflow: hidden;
-    top: 15px;
-}
-
 .node-type {
-    width: 50px;
-    background: #4c964f;
-    position: absolute;
+    text-align: center;
+    padding: 10px 5px;
 }
 
-.splitter {
-    height: 50px;
-    top: 25px;
-    left: 40px;
-    transform: rotate(45deg);
-}
-
-.default {
-    height: 25px;
-    top: 38px;
-    left: 25px;
-}
+    .node-type img {
+        height: 40px;
+        width: 40px;
+    }

@@ -10,7 +10,9 @@
                     <span>{{item.Name}}</span>
                 </div>
                 <div class="vr-nodetype-container">
-                    <div class="node-type" ng-class="item.Type || 'default'"></div>
+                    <div class="node-type">
+                        <img src="/Client/Images/mini-icons/{{item.Type}}.png" />
+                    </div>
                 </div>
                 <div class="node-port port-out">
                     <span class="dot-circle"></span>
