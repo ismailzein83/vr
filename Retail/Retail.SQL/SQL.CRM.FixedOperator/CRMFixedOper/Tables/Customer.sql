@@ -34,8 +34,11 @@
     [FloorSide]               INT              NULL,
     [BuildingSize]            INT              NULL,
     [BlockNumber]             NVARCHAR (255)   NULL,
+    [StatusReason]            INT              NULL,
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

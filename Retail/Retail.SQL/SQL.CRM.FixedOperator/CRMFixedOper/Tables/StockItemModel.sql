@@ -14,6 +14,9 @@
     [LastModifiedTime] DATETIME         NULL,
     [LastModifiedBy]   INT              NULL,
     [ModelCode]        NVARCHAR (255)   NULL,
+    [timestamp]        ROWVERSION       NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

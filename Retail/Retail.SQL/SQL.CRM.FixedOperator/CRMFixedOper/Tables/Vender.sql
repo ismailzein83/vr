@@ -4,6 +4,9 @@
     [CreatedTime]      DATETIME         NULL,
     [CreatedBy]        INT              NULL,
     [LastModifiedTime] DATETIME         NULL,
-    [LastModifiedBy]   INT              NULL
+    [LastModifiedBy]   INT              NULL,
+    [timestamp]        ROWVERSION       NULL
 );
+
+
 

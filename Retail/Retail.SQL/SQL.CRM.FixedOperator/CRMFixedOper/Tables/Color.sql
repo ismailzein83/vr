@@ -5,6 +5,9 @@
     [CreatedBy]        INT              NULL,
     [LastModifiedTime] DATETIME         NULL,
     [LastModifiedBy]   INT              NULL,
+    [timestamp]        ROWVERSION       NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
