@@ -112,13 +112,17 @@
                 };
 
                 ctrl.getFieldColor = function (dataItem, colDef) {
-                    var name = colDef.name;
-
-                    var fieldValue = dataItem.FieldValues[name];
-                    if (fieldValue != undefined) {
-                        var style = UtilsService.getItemByVal(styleDefinitions, fieldValue.StyleDefinitionId, 'StyleDefinitionId');
-                        if (style != undefined)
-                            return style.StyleDefinitionSettings.StyleFormatingSettings;
+                    var field = colDef.field;
+                    if (field != undefined) {
+                        var fieldArr = field.split(".");
+                        if (fieldArr != undefined && fieldArr.length == 3) {
+                            var fieldValue = dataItem.FieldValues[fieldArr[1]];
+                            if (fieldValue != undefined) {
+                                var style = UtilsService.getItemByVal(styleDefinitions, fieldValue.StyleDefinitionId, 'StyleDefinitionId');
+                                if (style != undefined)
+                                    return style.StyleDefinitionSettings.StyleFormatingSettings;
+                            }
+                        }
                     }
                 };
                 defineAPI();
