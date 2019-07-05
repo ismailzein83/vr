@@ -116,6 +116,15 @@
                 carrierAccountTypeSelectorReadyDeferred.resolve();
             };
 
+			$scope.scopeModel.onActivationStatusSelectorChanged = function (option) {
+				if (option != undefined) {
+					if (option.value == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
+						$scope.scopeModel.isInActiveCarrierAccount = true;
+					else
+						$scope.scopeModel.isInActiveCarrierAccount = false;
+				}
+			};
+
             $scope.scopeModel.onCarrierAccountTypeChanged = function () {
 
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
