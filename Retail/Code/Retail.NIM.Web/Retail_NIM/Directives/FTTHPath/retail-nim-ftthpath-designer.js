@@ -104,17 +104,17 @@ app.directive("retailNimFtthpathDesigner", ["UtilsService", "VRNotificationServi
 
                 var imsOLTConnector = {
                     SourceNodeId: buildNodeId("IMS", selectedValues.IMS),
-                    SourcePortNumber: selectedValues.IMSTID,
+                    SourcePortNumber: selectedValues.IMSTIDName,
                     DestinationNodeId: buildNodeId("OLT", selectedValues.OLT),
-                    DestinationPortNumber: selectedValues.OLTHorizontalPort
+                    DestinationPortNumber: selectedValues.OLTHorizontalPortName
                 };
                 connectorNodes.push(imsOLTConnector);
 
                 var splitterFDBConnector = {
                     SourceNodeId: buildNodeId("Splitter", selectedValues.Splitter),
-                    SourcePortNumber: selectedValues.SplitterOutPort,
+                    SourcePortNumber: selectedValues.SplitterOutPortName,
                     DestinationNodeId: buildNodeId("FDB", selectedValues.FDB),
-                    DestinationPortNumber: selectedValues.FDBPort
+                    DestinationPortNumber: selectedValues.FDBPortName
                 };
                 connectorNodes.push(splitterFDBConnector);
 
