@@ -484,7 +484,7 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[InvoiceTypeId] = s.[InvoiceTypeId],[Name] = s.[Name],[IsDefault] = s.[IsDefault],[Details] = s.[Details],[IsDeleted] = s.[IsDeleted]
+	[InvoiceTypeId] = s.[InvoiceTypeId],[Name] = s.[Name],[IsDefault] = s.[IsDefault],[Details] = s.[Details]
 when not matched by target then
 	insert([ID],[InvoiceTypeId],[Name],[IsDefault],[Details],[IsDeleted])
 	values(s.[ID],s.[InvoiceTypeId],s.[Name],s.[IsDefault],s.[Details],s.[IsDeleted]);
