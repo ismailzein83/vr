@@ -27,7 +27,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
 
         function BPTaskGrid($scope, ctrl) {
 
-            var lastUpdateHandle, lessThanID, nbOfRows, processInstanceId, userId, context;
+            var lastUpdateHandle, lessThanID, nbOfRows, processInstanceId, userId, context, myAssignedPendingTasks = 0, isWarned = false;
             var myTaskSelected;
             var input = {
                 LastUpdateHandle: lastUpdateHandle,
@@ -93,11 +93,21 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                         if (response != undefined) {
                             for (var i = 0; i < response.ListBPTaskDetails.length; i++) {
                                 var bpTask = response.ListBPTaskDetails[i];
+                                var statusTypeObj = UtilsService.getEnum(BPTaskStatusEnum, 'value', bpTask.Entity.Status);
+
+                                if (bpTask.IsAssignedToCurrentUser)
+                                    if (!statusTypeObj.IsClosed) {
+                                        myAssignedPendingTasks++;
+                                    }
+                                    else {
+                                        myAssignedPendingTasks--;
+                                        if (myAssignedPendingTasks == 0)
+                                            isWarned = false;
+                                    }
 
                                 if (!isGettingDataFirstTime && bpTask.Entity.BPTaskId < minId) {
                                     continue;
                                 }
-                                var statusTypeObj = UtilsService.getEnum(BPTaskStatusEnum, 'value', bpTask.Entity.Status);
 
                                 if (processInstanceId != undefined && !isCallingSearchFirstTime && (minId == undefined || bpTask.Entity.BPTaskId > minId) && !bpTask.IsAssignedToCurrentUser && !statusTypeObj.IsClosed) {
                                     openWarningModel = true;
@@ -132,10 +142,14 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                                 }
                             }
 
-                            if (openWarningModel && context != undefined && context.openWarningModal != undefined && typeof (context.openWarningModal) == "function") {
-                                context.openWarningModal();
+                            if (openWarningModel && !isWarned && myAssignedPendingTasks == 0 && context != undefined && context.openWarningModal != undefined && typeof (context.openWarningModal) == "function") {
+                                {
+                                    isWarned = true;
+                                    context.openWarningModal();
+                                }
+
                             };
-                            
+
                             if (itemAddedOrUpdatedInThisCall) {
                                 if ($scope.bpTasks.length > 0) {
                                     $scope.bpTasks.sort(function (a, b) {
