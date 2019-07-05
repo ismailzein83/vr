@@ -201,6 +201,9 @@
     <Content Include="Client\Images\mini-icons\cases-complaints.png" />
     <Content Include="Client\Images\mini-icons\connector.png" />
     <Content Include="Client\Images\mini-icons\contracts.png" />
+    <Content Include="Client\Images\mini-icons\DiagramSize\ims.png" />
+    <Content Include="Client\Images\mini-icons\DiagramSize\olt.png" />
+    <Content Include="Client\Images\mini-icons\DiagramSize\splitter.png" />
     <Content Include="Client\Images\mini-icons\dp.png" />
     <Content Include="Client\Images\mini-icons\dslam.png" />
     <Content Include="Client\Images\mini-icons\fdb.png" />
@@ -213,6 +216,7 @@
     <Content Include="Client\Images\mini-icons\mdf vertical.png" />
     <Content Include="Client\Images\mini-icons\mdf.png" />
     <Content Include="Client\Images\mini-icons\msan.png" />
+    <Content Include="Client\Images\mini-icons\DiagramSize\fdb.png" />
     <Content Include="Client\Images\mini-icons\olt horizontal.png" />
     <Content Include="Client\Images\mini-icons\olt vertical.png" />
     <Content Include="Client\Images\mini-icons\olt.png" />
