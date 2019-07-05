@@ -193,7 +193,7 @@
                 }
 
                 callAPIActionDeferred.promise.then(function () {
-                    genericContext.setLoader(directiveId, true);
+                    genericContext.setLoader(directiveId, false);
                 });
 
                 return callAPIActionDeferred.promise;
