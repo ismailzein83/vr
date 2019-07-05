@@ -30,7 +30,7 @@
 }
 
 .vr-networkpath-node .node-body {
-    border-radius: 5px;
+    border-radius: 0px 5px 0px 0px;
     padding: 5px 0px 0px 10px;
     color: #274273;
     font-weight: bold;
@@ -125,7 +125,7 @@
 
 .node-type {
     text-align: center;
-    padding: 10px 5px;
+    padding: 0px 5px;
 }
 
     .node-type img {
