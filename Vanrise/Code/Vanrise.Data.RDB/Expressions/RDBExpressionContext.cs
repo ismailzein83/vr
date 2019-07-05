@@ -207,6 +207,11 @@ namespace Vanrise.Data.RDB
             return new RDBExpressionContext(_queryBuilderContext, (expression) => Expression(new RDBConvertDecimalExpression { Expression = expression }), _tableAlias);
         }
 
+        public RDBExpressionContext ConvertNumberToString(int? numberPrecision = null)
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => Expression(new RDBConvertNumberToStringExpression { Expression = expression, NumberPrecision= numberPrecision }), _tableAlias);
+        }
+
         #region Aggregates
 
         public void Count(string alias)

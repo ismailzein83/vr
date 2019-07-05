@@ -473,6 +473,25 @@ namespace Vanrise.Data.RDB
             return string.Concat("CONVERT(DECIMAL(38, 8), ", this.Expression.ToDBQuery(context), ")");
         }
     }
+
+
+    internal class RDBConvertNumberToStringExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression Expression { get; set; }
+        public int? NumberPrecision { get; set; }
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            if(NumberPrecision.HasValue)
+            {
+                return $"CAST(Convert(decimal(20,{ NumberPrecision.Value }),{this.Expression.ToDBQuery(context)}) as nvarchar)";
+            }
+            else
+            {
+                return $"CAST({this.Expression.ToDBQuery(context)} as nvarchar)";
+            }
+        }
+    }
+
     //internal class RDBParameterExpression : BaseRDBExpression
     //{
     //    public string ParameterName { get; set; }

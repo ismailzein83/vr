@@ -164,8 +164,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridgenericeditorviewDefi
                         DrillDownSettings: {
                             EnableDrillDown: $scope.scopeModel.enableDrillDown,
                             AutoExpand: $scope.scopeModel.autoExpand,
-                            DrillDownSettings: editorDefinitionAPI.getData()
-                        }
+                            DrillDownSettings: $scope.scopeModel.enableDrillDown ? editorDefinitionAPI.getData() : undefined
+                        }    
                     };
                 };
 
