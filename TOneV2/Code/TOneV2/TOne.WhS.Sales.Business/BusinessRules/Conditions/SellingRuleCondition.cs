@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 
@@ -25,6 +26,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 return true;
             }
             var allDataByZone = context.Target as AllDataByZone;
+            int ownerId = ratePlanContext.OwnerId;
 
             if (allDataByZone.DataByZoneList == null || allDataByZone.DataByZoneList.Count() == 0)
                 return true;
@@ -34,13 +36,24 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             var sellingProductId = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetSellingProductId(ratePlanContext.OwnerId);
 
             var currentRateLocator = ratePlanContext.LastRateLocator;
+            var lastRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadLastRoutingProduct());
 
 
             foreach (var zone in allDataByZone.DataByZoneList)
             {
-                zone.ThrowIfNull("zone");
                 var lastCustomerRate = currentRateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, zone.ZoneId);
                 lastCustomerRate.ThrowIfNull("lastCustomerRate");
+                int routingProductId = 0;
+
+                if (zone.SaleZoneRoutingProductToAdd != null)
+                {
+                    routingProductId = zone.SaleZoneRoutingProductToAdd.ZoneRoutingProductId;
+                }
+                else
+                {
+                    var routingProduct = lastRoutingProductLocator.GetCustomerZoneRoutingProduct(ownerId, sellingProductId, zone.ZoneId);
+                    routingProductId = routingProduct.RoutingProductId;
+                }
                 if (zone.NormalRateToChange != null)
                 {
                     var thresholdContext = new ThresholdContext
@@ -57,7 +70,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                         {
                             {"SellingProduct", sellingProductId},
                             {"Customer", ratePlanContext.OwnerId},
-                            {"SaleZone", zone.ZoneId}
+                            {"SaleZone", zone.ZoneId},
+                            {"RoutingProduct",routingProductId }
                         }
                     };
                     target.EffectiveOn = zone.NormalRateToChange.BED;

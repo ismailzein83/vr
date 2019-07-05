@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsSalesSellingrulesettingsThresholdFixed', ['$compile', 'VRUIUtilsService','UtilsService',
+app.directive('vrWhsSalesSellingrulesettingsThresholdFixed', ['$compile', 'VRUIUtilsService', 'UtilsService',
     function ($compile, VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
@@ -35,7 +35,25 @@ app.directive('vrWhsSalesSellingrulesettingsThresholdFixed', ['$compile', 'VRUIU
                     currencyDirectiveAPI = api;
                     currencyDirectiveReadyPromiseDeferred.resolve();
                 };
+            }
+            function loadCurrency(currencyId) {
+                var promises = [];
+                var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                var currencyPayload;
 
+                if (currencyId > 0) {
+                    currencyPayload = { selectedIds: currencyId };
+                }
+                else {
+                    currencyPayload = { selectSystemCurrency: true };
+                }
+
+                currencyDirectiveReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred);
+
+                });
+                promises.push(loadCurrencySelectorPromiseDeferred.promise);
+                return UtilsService.waitMultiplePromises(promises);
             }
             function defineAPI() {
                 var api = {};
@@ -50,27 +68,12 @@ app.directive('vrWhsSalesSellingrulesettingsThresholdFixed', ['$compile', 'VRUIU
                 };
 
                 api.load = function (payload) {
+                    var currencyId;
                     if (payload != undefined && payload.threshold != undefined) {
-
-                        var promises = [];
                         ctrl.rate = payload.threshold.Rate;
-
-                        var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                        var currencyPayload;
-
-                        if (payload.threshold.CurrencyId > 0) {
-                            currencyPayload = { selectedIds: payload.threshold.CurrencyId };
-                        }
-                        else {
-                            currencyPayload = { selectSystemCurrency: true };
-                        }
-
-                        currencyDirectiveReadyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred);
-
-                        });
-                        promises.push(loadCurrencySelectorPromiseDeferred.promise);
+                        currencyId = payload.threshold.CurrencyId;
                     }
+                    return loadCurrency(currencyId);
                 };
 
                 if (ctrl.onReady != null)

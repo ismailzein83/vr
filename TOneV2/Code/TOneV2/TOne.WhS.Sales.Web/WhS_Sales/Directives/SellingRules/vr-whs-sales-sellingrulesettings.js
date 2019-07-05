@@ -30,6 +30,7 @@
             var thresholdDirectiveAPI;
             var thresholdDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+
             function initializeController() {
                 $scope.thresholdTemplateDataSource = [];
                 $scope.thresholdSelectedTemplate;
@@ -39,8 +40,8 @@
                     var setLoader = function (value) { $scope.isLoadingDirective = false };
                     if (thresholdDirectiveAPI != undefined)
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, thresholdDirectiveAPI, undefined, setLoader, thresholdDirectiveReadyDeferred);
-                };
 
+                };
                 defineAPI();
             }
 
@@ -60,16 +61,37 @@
                     var loadThresholdTemplatesPromise = loadThresholdTemplates();
                     promises.push(loadThresholdTemplatesPromise);
 
-                    if ($scope.thresholdSelectedTemplate != undefined) {
-                        var loadDirectivePromise = loadDirective();
-                        promises.push(loadDirectivePromise);
-                    }
+                    var loadDirectivePromise = UtilsService.createPromiseDeferred();
+                    promises.push(loadDirectivePromise.promise);
 
                     loadThresholdTemplatesPromise.then(function () {
                         if (settings != undefined && settings.Threshold != undefined) {
                             $scope.thresholdSelectedTemplate = UtilsService.getItemByVal($scope.thresholdTemplateDataSource, settings.Threshold.ConfigId, 'ExtensionConfigurationId');
+                            loadDirective().then(function () { loadDirectivePromise.resolve(); });
+                        }
+                        else {
+                            loadDirectivePromise.resolve();
+                            thresholdDirectiveReadyDeferred = undefined;
                         }
                     });
+
+                    function loadDirective() {
+                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                        thresholdDirectiveReadyDeferred.promise.then(function () {
+                            thresholdDirectiveReadyDeferred = undefined;
+                            var directivePayload = undefined;
+                            if (settings != undefined) {
+                                directivePayload =
+                                    {
+                                        threshold: settings.Threshold
+
+                                    };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(thresholdDirectiveAPI, directivePayload, directiveLoadDeferred);
+                        });
+                        return directiveLoadDeferred.promise;
+                    }
+
                     function loadThresholdTemplates() {
                         return WhS_Sales_SellingRuleAPIService.GetSellingRuleThresholdTemplates().then(function (response) {
                             if (response != null) {
@@ -79,24 +101,6 @@
                             }
                         });
                     }
-
-                    function loadDirective() {
-                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                        thresholdDirectiveReadyDeferred.promise.then(function () {
-                            thresholdDirectiveReadyDeferred = undefined;
-                            var directivePayload = undefined;
-                            if (settings != undefined)
-                                directivePayload =
-                                    {
-                                        threshold: settings.Threshold
-
-                                    };
-                            VRUIUtilsService.callDirectiveLoad(thresholdDirectiveAPI, directivePayload, directiveLoadDeferred);
-                        });
-
-                        return directiveLoadDeferred.promise;
-                    }
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
