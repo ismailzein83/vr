@@ -116,13 +116,14 @@
     <div class="vr-scroll-pager-info"> Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
 </div>
 <div id="rowTemplate">
-    <div style="height:25px" ng-show="dataItem.fullScreenMode">
+    <div class="row-header-container" ng-show="dataItem.fullScreenMode">
         <div ng-show="dataItem.fullScreenMode" class="vr-datarow-breadcrumb">
             <div class="btn-group btn-breadcrumb">
-                <span class="btn btn-default" style=" cursor: default; font-size:13px"><i class="glyphicon"></i></span>
+                <span class="btn btn-default start-arrow"  ><i class="glyphicon"></i></span>
                 <span class="btn btn-default level-{{ 5 + (($index + 1) - $parent.ctrl.parentNames.length )}}" index="{{$index}}" len="{{$parent.ctrl.parentNames.length}}" style=" cursor: default; font-size:13px" title="{{p.objectTypeName}}" ng-repeat="p in $parent.ctrl.parentNames">
                     <span>{{p.objectTypeName}}</span>
                 </span>
+                <span class="btn btn-default" style=" cursor: default; font-size:13px;display:none"><i class="glyphicon"></i></span>
             </div>
         </div>
         <div class="vr-row-action-container">
@@ -174,7 +175,7 @@
                 <div ng-show="!dataItem.fullScreenMode" ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
                 <div ng-if="$parent.ctrl.expandAsfullScreen" class="row" ng-show="dataItem.fullScreenMode" style="width: calc(100% + 25px);">
                     <div ng-if="!$parent.ctrl.viewDirective" class="col-lg-12 vr-detail-summary">
-                        <div class="col-lg-4 col-md-6 parent-col-container" ng-repeat="colDef in ctrl.columnDefs">
+                        <div class="col-lg-4 col-md-6 parent-col-container row-col-item" ng-repeat="colDef in ctrl.columnDefs">
                             <div class="col-lg-6 col-md-6">
                                 <label class="control-label vr-control-label grid-cell-label">{{colDef.name}}: </label>
                             </div>

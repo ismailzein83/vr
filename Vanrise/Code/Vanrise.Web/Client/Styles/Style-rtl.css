@@ -479,10 +479,14 @@
     top: -9px;
     display: inline-block;
 }
+
+.rtl .row-header-container {
+    margin: 0px 15px 0px 5px;
+}
 .rtl  .vr-datarow-breadcrumb {
 
     left: unset;
-    right: 15px;
+    right: 20px;
 }
 
 .rtl .vr-grid-menu-h-circle {
@@ -494,97 +498,38 @@
     padding: 3px 24px 3px 12px;
 }
 
-
-.rtl .btn-breadcrumb .btn:first-child {
-    padding: 3px 10px 3px 6px;
-}
-
-.rtl .btn-breadcrumb .btn:last-child {
-    padding: 3px 24px 3px 18px;
-}
-
-.rtl .btn-breadcrumb .btn:not(:last-child):before {  
-    border-left:unset;
-    border-right: 10px solid rgb(173, 173, 173); 
+.rtl .btn-breadcrumb .btn:before {
+    border-right: 13px solid #f4f5f3;
+    border-left: unset;    
     margin-left: unset;
     margin-right: 1px;
-    left:unset;
-    right:100%;
+    right: 100%;
 }
 
-
-.rtl .btn-breadcrumb .btn:not(:last-child):after {   
+.rtl .btn-breadcrumb .btn:after {
     border-left: unset;
-    border-right: 10px solid white;
-    left:unset;
-    right:100%;
-    
+    border-right: 10px solid #65a3c7;
+    left: unset;
+    right: 100%;
 }
 
-.rtl .btn-breadcrumb .btn:not(:last-child):after {
+
+.rtl .btn-breadcrumb .btn.start-arrow {
+       
+    left: unset;
+    right: -1px;
+}
+
+.rtl .btn-breadcrumb .btn:first-child:after {
     border-left: unset;
-    border-right: 13px solid #fff;
+    border-right: 10px solid #98d0f1;
 }
 
-.rtl .btn-breadcrumb .btn.btn-default:not(:last-child):before {
+.rtl .btn-breadcrumb .btn:last-child {    
     border-left: unset;
-    border-right: 13px solid #709449;
+    border-right: none;
 }
-
-/** Default button **/
-.rtl .btn-breadcrumb .btn.btn-default:not(:last-child):after {
-    border-left: unset;
-    border-right: 10px solid #76c224;
-}
-
-.rtl .btn-breadcrumb .btn.btn-default:not(:last-child):before {
-    border-left: unset;
-    border-right: 13px solid #709449;
-}
-
-
-
-.rtl .btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
-    border-left: unset;
-    border-right: 10px solid #adadad;
-}
-
-
-.rtl .btn-breadcrumb .btn:not(:last-child):after {
-    border-left:unset;
-    border-right: 10px solid #76c224;
-}
-
-.rtl .btn-breadcrumb .btn.level-4:after {
-    border-left: unset;
-    border-right: 10px solid #7fd425;
-}
-
-.rtl .btn-breadcrumb .btn.level-4:not(:last-child):after {
-    border-left: unset;
-    border-right: 10px solid #7fd425;
-}
-
-
-.rtl .btn-breadcrumb .btn.level-3:after {
-    border-left: unset;
-    border-right: 10px solid #a5e460;
-}
-
-.rtl .btn-breadcrumb .btn.level-3:not(:last-child):after {
-    border-left: unset;
-    border-right: 10px solid #a5e460;
-}
-
-.rtl .btn-breadcrumb .btn.level-2:after {
-    border-left: unset;
-    border-right: 10px solid #aae26d;
-}
-
-.rtl .btn-breadcrumb .btn.level-2:not(:last-child):after {
-    border-left: unset;
-    border-right: 10px solid #aae26d;
-}
+  
 
 .rtl .vr-grid-menu-h-dote {
     display: inline-block;

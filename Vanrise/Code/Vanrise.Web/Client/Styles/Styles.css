@@ -1730,7 +1730,7 @@ loader .outer-loader {
     .vr-tabs-expander.previous > ul {
         margin: 0px;
         margin-top: -3px;
-        display:none;
+        display: none;
     }
 
     .vr-tabs-expander.previous > ul {
@@ -2502,9 +2502,9 @@ vr-section[notopspace] > .panel-vr {
     top: calc(50% - 6px);
     left: 4px;
 }
-.grid-expand-collapse-icon.vr-fullscreen:hover {
-    transform: scale(1.2,1.2);
-}
+    .grid-expand-collapse-icon.vr-fullscreen:hover {
+        transform: scale(1.2,1.2);
+    }
 .vr-remove-row {
     top: 50%;
     position: absolute;
@@ -2652,37 +2652,40 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     border-bottom: 1px solid #fff;
 }
 
-.vr-datagrid-body.row-full-screen {
-    position: fixed;
-    top: 88px;
-    height: calc(100% - 100px);
-    overflow-y: auto;
-    z-index: 10;
-    overflow-x: hidden;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.vr-datagrid-body.row-full-screen .vr-detail-summary .grid-cell-value {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: bold;
-    color: #0f21e6;
-}
+    .vr-datagrid-body.row-full-screen {
+        position: fixed;
+        top: 88px;
+        height: calc(100% - 100px);
+        overflow-y: auto;
+        z-index: 10;
+        overflow-x: hidden;
+        -webkit-transition: all 0.5s ease;
+        -moz-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        transition: all 0.5s ease;
+    }
+        .vr-datagrid-body.row-full-screen .vr-detail-summary .row-col-item{
+            min-height:21px;
+        }
+        .vr-datagrid-body.row-full-screen .vr-detail-summary .grid-cell-value {
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: bold;
+            color: #0f21e6;
+        }
 
-.vr-datagrid-body.row-full-screen .row-main-content.expanded {
-    border-right: none !important;
-    border-left: none !important;
-    background-color: unset !important;
-    font-weight: normal !important;
-}
+        .vr-datagrid-body.row-full-screen .row-main-content.expanded {
+            border-right: none !important;
+            border-left: none !important;
+            background-color: unset !important;
+            font-weight: normal !important;
+        }
 
-.vr-datagrid-body.row-full-screen .row-main-content.expanded:hover {
-    background-color: unset !important;
-}
+            .vr-datagrid-body.row-full-screen .row-main-content.expanded:hover {
+                background-color: unset !important;
+            }
 
 .vr-datagrid[alternative-color] .vr-datagrid-body > div.expanded:first-of-type:hover {
     background-color: unset !important;
@@ -2692,9 +2695,9 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     border-right: none !important;
 }
 
-.vr-datagrid-body.row-full-screen .row-main-content.expanded .vr-datagrid-cell-container > div.vr-datagrid-cell {
-    display: block !important;
-}
+    .vr-datagrid-body.row-full-screen .row-main-content.expanded .vr-datagrid-cell-container > div.vr-datagrid-cell {
+        display: block !important;
+    }
 
 .vr-datagrid-body.row-full-screen .row-main-content.expanded .vr-datagrid-datacells-click {
     background-color: unset !important;
@@ -2752,25 +2755,47 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     border-right: unset !important;
 }
 
+.row-header-container {
+    height: 35px;
+    padding: 4px 15px 10px 15px;
+    border: 1px solid #ddd;
+    margin: 0px 5px 0px 15px;
+    background-color: #98d0f1;
+}
+
+
+.flat .row-header-container vr-button[inline-btn] button, .flat .inline-btn button {
+    background-color: #65a3c7 !important;
+    color: #fff !important;
+}
+
+.flat .row-header-container vr-button[inline-btn] button, .flat .inline-btn button:hover {
+    background-color: #5b95b7 !important;
+    transform: scale(1.03);
+    text-shadow: 0.1px 0 0 currentColor;
+}
+
+
 .vr-row-action-container {
     position: absolute;
-    right: 10px;
+    right: 5px;
     width: 50%;
     display: flex;
     flex-direction: row-reverse;
 }
+
 .vr-datarow-breadcrumb {
     position: absolute;
-    left: 15px;
+    left: 20px;
 }
 
 .vr-datagrid-body .action-full-screen-icon {
     display: none;
 }
 
-.vr-datagrid-body .action-full-screen-icon{    
+.vr-datagrid-body .action-full-screen-icon {
     display: none;
-    padding:0px 5px;
+    padding: 0px 5px;
 }
 
 .vr-datagrid-body.row-full-screen .action-full-screen-icon {
@@ -2879,6 +2904,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 .vr-visible {
     visibility: visible;
 }
+
 .divDisabled vr-validator > div {
     pointer-events: none;
     opacity: 0.8 !important;
@@ -5572,44 +5598,74 @@ span.option-marketprice {
     -webkit-animation-timing-function: ease-in;
     -webkit-animation-direction: alternate;
 }
-.btn-breadcrumb .btn:not(:last-child):after {
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 13px solid transparent;
-    border-bottom: 13px solid transparent;
-    border-left: 10px solid white;
-    position: absolute;
-    top: 50%;
-    margin-top: -13px;
-    left: 100%;
-    z-index: 3;
+
+.btn-breadcrumb .btn {
+    padding: 3px 12px 3px 24px;
+    background-color: #65a3c7;
+    color: #fff;
+    border-color: #fff;
 }
 
-.btn-breadcrumb .btn:not(:last-child):before {
+.btn-breadcrumb .btn:hover, .btn-breadcrumb .btn:active {
+    background-color: #65a3c7 !important;
+    border-color: #fff;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff;
+}
+
+.btn-breadcrumb .btn:before {
     content: " ";
     display: block;
     width: 0;
     height: 0;
-    border-top: 13px solid transparent;
-    border-bottom: 13px solid transparent;
-    border-left: 13px solid #709449;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 13px solid #f4f5f3;
     position: absolute;
     top: 50%;
-    margin-top: -13px;
+    margin-top: -12px;
     margin-left: 1px;
     left: 100%;
     z-index: 3;
 }
 
-/** The Spacing **/
-
-.btn-breadcrumb .btn {
-    padding: 3px 12px 3px 24px;
-    background-color: #76c224;
-    color: #fff;  
+.btn-breadcrumb .btn:after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 10px solid #65a3c7;
+    position: absolute;
+    top: 50%;
+    margin-top: -12px;
+    left: 100%;
+    z-index: 3;
 }
+
+
+.btn-breadcrumb .btn.start-arrow {
+    padding: 3px 0px 3px 0px;
+    background-color: #98d0f1;
+    cursor: default;
+    font-size: 13px;
+    border: none;
+    position: relative;
+    left: -1px;
+}
+
+.btn-breadcrumb .btn:first-child:after {
+    border-left: 10px solid #98d0f1;
+}
+
+
+.btn-breadcrumb .btn:last-child {
+    border-left: 1px solid transparent;
+    padding: 0px 0px 3px 0px;
+    border-left: none;
+}   
 .btn-breadcrumb .btn > span {
     max-width: 150px;
     white-space: nowrap;
@@ -5618,69 +5674,7 @@ span.option-marketprice {
     display: block;
 }
 
-.btn-breadcrumb .btn.level-4 {
-    background-color: #7fd425;
-}
-.btn-breadcrumb .btn.level-4:after {
-    border-left: 10px solid #7fd425;
-}
-.btn-breadcrumb .btn.level-4:not(:last-child):after {
-    border-left: 10px solid #7fd425;
-}
-.btn-breadcrumb .btn.level-4:hover {
-    background-color: #7fd425 !important;
-}
 
-.btn-breadcrumb .btn.level-3 {
-    background-color: #a5e460;
-}
-
-.btn-breadcrumb .btn.level-3:after {
-    border-left: 10px solid #a5e460;
-}
-
-.btn-breadcrumb .btn.level-3:not(:last-child):after {
-    border-left: 10px solid #a5e460;
-}
-.btn-breadcrumb .btn.level-3:hover {
-    background-color: #a5e460 !important;
-}
-
-
-.btn-breadcrumb .btn.level-2 {
-    background-color: #aae26d;
-}
-
-.btn-breadcrumb .btn.level-2:after {
-    border-left: 10px solid #aae26d;
-}
-
-.btn-breadcrumb .btn.level-2:not(:last-child):after {
-    border-left: 10px solid #aae26d;
-}
-
-.btn-breadcrumb .btn.level-2:hover {
-    background-color: #aae26d !important;
-}
-
-
-.btn-breadcrumb .btn:first-child {
-    padding: 3px 6px 3px 10px;
-    background-color: #76c224;
-}
-
-.btn-breadcrumb .btn:hover {
-    background-color: #76c224 !important;
-}
-
-
-.btn-breadcrumb .btn:last-child {
-    padding: 3px 18px 3px 24px;
-}
-
-.btn-breadcrumb .btn:not(:last-child):after {
-    border-left: 10px solid #76c224;
-}
 
 /*end vr-progress*/
 @media print {
