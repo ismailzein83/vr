@@ -173,6 +173,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             var createTaskOutput = bpTaskManager.CreateTask(createBPTaskInput);
                             if (createTaskOutput != null && createTaskOutput.Result == Vanrise.BusinessProcess.Entities.CreateBPTaskResult.Succeeded)
                             {
+                                _task = new Vanrise.BusinessProcess.Business.BPTaskManager().GetTask(createTaskOutput.TaskId);
                                 OnTaskCreated(createTaskOutput.TaskId);
                                 _activityContext.CreateBookmark(createTaskOutput.WFBookmarkName, OnTaskCompleted);
 
