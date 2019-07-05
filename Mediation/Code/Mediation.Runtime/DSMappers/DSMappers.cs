@@ -1768,17 +1768,16 @@ namespace Mediation.Runtime
 
                         foreach (var record in parsedBatch.Records)
                         {
-                            if (record.CallingPartyNumber.Length > 10 && record.CalledPartyNumber.Length > 10)
-                            {
-                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.CallingPartyNumber);
-                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.CalledPartyNumber);
+                            string callingPartyNumber = record.CallingPartyNumber;
+                            string calledPartyNumber = record.CalledPartyNumber;
 
-                                bool isMobileStationRoamingNumberOnNet;
-                                if (string.IsNullOrEmpty(record.MobileStationRoamingNumber))
-                                {
-                                    isMobileStationRoamingNumberOnNet = true;
-                                }
-                                else
+                            if (!string.IsNullOrEmpty(callingPartyNumber) && !string.IsNullOrEmpty(calledPartyNumber) && callingPartyNumber.Length > 10 && calledPartyNumber.Length > 10)
+                            {
+                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
+                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
+
+                                bool isMobileStationRoamingNumberOnNet = true;
+                                if (!string.IsNullOrEmpty(record.MobileStationRoamingNumber))
                                 {
                                     Guid? mobileStationRoamingNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.MobileStationRoamingNumber);
                                     isMobileStationRoamingNumberOnNet = mobileStationRoamingNumberType.HasValue;
@@ -1801,14 +1800,13 @@ namespace Mediation.Runtime
 
                         foreach (var record in parsedBatch.Records)
                         {
-                            if (record.CallingPartyNumber.Length > 10 && record.CalledPartyNumber.Length > 10)
+                            string callingPartyNumber = !string.IsNullOrEmpty(record.CallingPartyNumber) ? record.CallingPartyNumber : record.OriginatingAddress;
+                            string calledPartyNumber = !string.IsNullOrEmpty(record.CalledPartyNumber) ? record.CalledPartyNumber : record.DestinationAddress;
+
+                            if (!string.IsNullOrEmpty(callingPartyNumber) && !string.IsNullOrEmpty(calledPartyNumber) && callingPartyNumber.Length > 10 && calledPartyNumber.Length > 10)
                             {
-                                string callingPartyNumber = !string.IsNullOrEmpty(record.CallingPartyNumber) ? record.CallingPartyNumber : record.OriginatingAddress;
                                 Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
-
-                                string calledPartyNumber = !string.IsNullOrEmpty(record.CalledPartyNumber) ? record.CalledPartyNumber : record.DestinationAddress;
                                 Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
-
                                 if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue)
                                     continue;
                             }
@@ -2008,17 +2006,16 @@ namespace Mediation.Runtime
 
                         foreach (var record in parsedBatch.Records)
                         {
-                            if (record.CallingPartyNumber.Length > 10 && record.CalledPartyNumber.Length > 10)
-                            {
-                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.CallingPartyNumber);
-                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.CalledPartyNumber);
+                            string callingPartyNumber = record.CallingPartyNumber;
+                            string calledPartyNumber = record.CalledPartyNumber;
 
-                                bool isMobileStationRoamingNumberOnNet;
+                            if (!string.IsNullOrEmpty(callingPartyNumber) && !string.IsNullOrEmpty(calledPartyNumber) && callingPartyNumber.Length > 10 && calledPartyNumber.Length > 10)
+                            {
+                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
+                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
+
+                                bool isMobileStationRoamingNumberOnNet = true;
                                 if (string.IsNullOrEmpty(record.MobileStationRoamingNumber))
-                                {
-                                    isMobileStationRoamingNumberOnNet = true;
-                                }
-                                else
                                 {
                                     Guid? mobileStationRoamingNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.MobileStationRoamingNumber);
                                     isMobileStationRoamingNumberOnNet = mobileStationRoamingNumberType.HasValue;
@@ -2041,14 +2038,13 @@ namespace Mediation.Runtime
 
                         foreach (var record in parsedBatch.Records)
                         {
-                            if (record.CallingPartyNumber.Length > 10 && record.CalledPartyNumber.Length > 10)
+                            string callingPartyNumber = !string.IsNullOrEmpty(record.CallingPartyNumber) ? record.CallingPartyNumber : record.OriginatingAddress;
+                            string calledPartyNumber = !string.IsNullOrEmpty(record.CalledPartyNumber) ? record.CalledPartyNumber : record.DestinationAddress;
+
+                            if (!string.IsNullOrEmpty(callingPartyNumber) && !string.IsNullOrEmpty(calledPartyNumber) && callingPartyNumber.Length > 10 && calledPartyNumber.Length > 10)
                             {
-                                string callingPartyNumber = !string.IsNullOrEmpty(record.CallingPartyNumber) ? record.CallingPartyNumber : record.OriginatingAddress;
                                 Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
-
-                                string calledPartyNumber = !string.IsNullOrEmpty(record.CalledPartyNumber) ? record.CalledPartyNumber : record.DestinationAddress;
                                 Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
-
                                 if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue)
                                     continue;
                             }
