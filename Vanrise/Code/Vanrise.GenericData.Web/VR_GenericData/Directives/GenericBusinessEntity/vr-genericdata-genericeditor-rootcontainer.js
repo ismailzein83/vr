@@ -229,12 +229,6 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                             globalLoaderRegisteredDirectives.splice(index, 1);
                         }
 
-                        //loaderDirectivesArray
-                        //rootContainerLoaderArray
-                        //globalLoaderRegisteredDirectives
-
-                        console.log(globalLoaderRegisteredDirectives);
-
                         $scope.scopeModel.isRootContainerLoading = (globalLoaderRegisteredDirectives.length != 0);
                     },
                     setFieldValues: function (fieldValuesByNameDict) { //fieldValuesByNamesDict = {'fieldName' :'value1', .... }
