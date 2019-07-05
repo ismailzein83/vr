@@ -293,7 +293,7 @@ namespace Vanrise.Common.Business
                 classDefinition.AppendLine(GenerateDummyNamespace(uniqueNamespaceName));
 
             CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(classDefinition.ToString(), out compilationOutput, true))
+            if (!CSharpCompiler.TryCompileClass($"CustomNamespace_{Guid.NewGuid()}", classDefinition.ToString(), out compilationOutput, true))
             {
                 StringBuilder errorsBuilder = new StringBuilder();
                 if (compilationOutput.ErrorMessages != null)
