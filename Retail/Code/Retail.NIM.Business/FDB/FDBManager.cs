@@ -18,7 +18,7 @@ namespace Retail.NIM.Business
         {
             input.ThrowIfNull("GetFDBReservationInfoInput");
 
-            FDB fdb;
+            FDB fdb = null;
 
             switch (input.NumberType)
             {
@@ -28,7 +28,8 @@ namespace Retail.NIM.Business
 
                 case NumberType.DP:
                     DP dp = new DPManager().GetDPByNumber(input.Number);
-                    fdb = GetFDBByDP(dp);
+                    if (dp != null)
+                        fdb = GetFDBByDP(dp);
                     break;
 
                 case NumberType.FDB:
