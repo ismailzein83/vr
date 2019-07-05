@@ -27,7 +27,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
 
         function BPTaskGrid($scope, ctrl) {
 
-            var lastUpdateHandle, lessThanID, nbOfRows, processInstanceId, userId, context, myAssignedPendingTasks = 0, isWarned = false;
+            var lastUpdateHandle, lessThanID, nbOfRows, processInstanceId, userId, context, myAssignedPendingTasks = [], isWarned = false;
             var myTaskSelected;
             var input = {
                 LastUpdateHandle: lastUpdateHandle,
@@ -95,15 +95,19 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                                 var bpTask = response.ListBPTaskDetails[i];
                                 var statusTypeObj = UtilsService.getEnum(BPTaskStatusEnum, 'value', bpTask.Entity.Status);
 
-                                if (bpTask.IsAssignedToCurrentUser)
-                                    if (!statusTypeObj.IsClosed) {
-                                        myAssignedPendingTasks++;
-                                    }
-                                    else {
-                                        myAssignedPendingTasks--;
-                                        if (myAssignedPendingTasks == 0)
+                                if (bpTask.IsAssignedToCurrentUser) {
+                                    var index = myAssignedPendingTasks.indexOf(bpTask.Entity.BPTaskId);
+                                    if (statusTypeObj.IsClosed) {
+                                        if (index > -1)
+                                            myAssignedPendingTasks.splice(index, 1);
+                                        if (myAssignedPendingTasks.length == 0)
                                             isWarned = false;
                                     }
+                                    else {
+                                        if (index < 0)
+                                            myAssignedPendingTasks.push(bpTask.Entity.BPTaskId);
+                                    }
+                                }
 
                                 if (!isGettingDataFirstTime && bpTask.Entity.BPTaskId < minId) {
                                     continue;
@@ -142,7 +146,7 @@ app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProc
                                 }
                             }
 
-                            if (openWarningModel && !isWarned && myAssignedPendingTasks == 0 && context != undefined && context.openWarningModal != undefined && typeof (context.openWarningModal) == "function") {
+                            if (openWarningModel && !isWarned && myAssignedPendingTasks.length == 0 && context != undefined && context.openWarningModal != undefined && typeof (context.openWarningModal) == "function") {
                                 {
                                     isWarned = true;
                                     context.openWarningModal();
