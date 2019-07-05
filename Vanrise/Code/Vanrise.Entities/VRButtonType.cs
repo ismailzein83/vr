@@ -63,6 +63,7 @@ namespace Vanrise.Entities
         Run = 52,
         CalculateRate = 53,
         Skip = 54,
-        SaveAndNew = 56
+        SaveAndNew = 56,
+        Print = 57
     }
 }

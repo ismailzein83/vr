@@ -503,6 +503,12 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
 					localizedText: "VRRes.Common.SaveAndNew.VREnd",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
+            case "Print":
+                return {
+                    text: "Print",
+                    localizedText: "VRRes.Common.Print.VREnd",
+                    class: "glyphicon glyphicon-print"
+                };
         }
     }
 }]);
