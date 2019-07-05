@@ -929,7 +929,10 @@ namespace Vanrise.GenericData.Business
                         foreach (var fieldValue in fieldValues)
                         {
                             var fieldDescription = fieldsDescription.GetRecord(fieldValue.Key);
-                            fieldDescription = Regex.Replace(fieldDescription, "<(.|\n)*?>", string.Empty);
+                            if(fieldDescription != null)
+                            {
+                                fieldDescription = Regex.Replace(fieldDescription, "<(.|\n)*?>", string.Empty);
+                            }
                             CreateCell(fieldDescription, row, null);
                         }
                     }
