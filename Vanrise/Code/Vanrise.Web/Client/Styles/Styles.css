@@ -2673,9 +2673,11 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
             text-overflow: ellipsis;
             white-space: nowrap;
             font-weight: bold;
-            color: #0f21e6;
+            color: #0177b5;
         }
-
+        .vr-datagrid-body.row-full-screen .vr-detail-summary .grid-cell-label {          
+            font-weight: 550;
+        }
         .vr-datagrid-body.row-full-screen .row-main-content.expanded {
             border-right: none !important;
             border-left: none !important;
