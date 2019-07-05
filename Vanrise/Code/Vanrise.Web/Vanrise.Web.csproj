@@ -195,6 +195,8 @@
     <Content Include="Client\Images\mini-icons\area.png" />
     <Content Include="Client\Images\mini-icons\billing.png" />
     <Content Include="Client\Images\mini-icons\board.png" />
+    <Content Include="Client\Images\mini-icons\cabinet primary.png" />
+    <Content Include="Client\Images\mini-icons\cabinet secondary.png" />
     <Content Include="Client\Images\mini-icons\cabinet.png" />
     <Content Include="Client\Images\mini-icons\cases-complaints.png" />
     <Content Include="Client\Images\mini-icons\connector.png" />
