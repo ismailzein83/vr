@@ -1,13 +1,16 @@
 ﻿
-<!--<vr-row>
-    <vr-columns width="1/3row">
+<vr-row>
+    <vr-columns width="1/4row">
         <vr-switch label="Hide Add Button" value="scopeModel.hideAddButton"></vr-switch>
     </vr-columns>
-    <vr-columns width="1/3row">
+    <vr-columns width="1/4row">
         <vr-switch label="Hide Section" value="scopeModel.hideSection"></vr-switch>
     </vr-columns>
-    <vr-columns width="1/3row">
+    <vr-columns width="1/4row">
         <vr-switch label="Enable Draggable Row" value="scopeModel.enableDraggableRow"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-switch label="Hide Remove Icon" value="scopeModel.hideRemoveIcon"></vr-switch>
     </vr-columns>
 </vr-row>
 <vr-row>
@@ -28,16 +31,18 @@
                 <vr-columns width="1/3row">
                     <vr-switch label="Enable Drill Down" value="scopeModel.enableDrillDown" onvaluechanged="scopeModel.onEnableDrillDownValueChanged"></vr-switch>
                 </vr-columns>
-            </vr-row>
-            <span ng-show="scopeModel.enableDrillDown" vr-loader="scopeModel.isLoadingDrillDownGenericEditorDirective">
-                <vr-row>
+                <span ng-if="scopeModel.enableDrillDown">
                     <vr-columns width="1/3row">
                         <vr-switch label="Auto Expand" value="scopeModel.autoExpand"></vr-switch>
                     </vr-columns>
-                    <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="6" showremoveicon></vr-genericdata-genericbe-editordefinition-settings>
+                </span>
+            </vr-row>
+            <span ng-if="scopeModel.enableDrillDown" vr-loader="scopeModel.isLoadingDrillDownGenericEditorDirective">
+                <vr-row>
+                    <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady"  normal-col-num="6" showremoveicon></vr-genericdata-genericbe-editordefinition-settings>
                 </vr-row>
             </span>
 
         </vr-section>
     </vr-columns>
-</vr-row>-->
+</vr-row>

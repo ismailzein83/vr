@@ -1,34 +1,36 @@
-﻿<!--<vr-columns colnum="{{scopeModel.colNum}}" haschildcolumns>
+﻿<vr-columns colnum="{{scopeModel.colNum}}">
     <vr-section ng-if="!scopeModel.hideSection" title={{scopeModel.fieldTitle}}>
         <vr-button ng-if="!scopeModel.hideAddButton" type="Add" data-onclick="scopeModel.addRecord" standalone></vr-button>
         <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                     on-ready="scopeModel.onGridReady" enabledraggablerow="scopeModel.enableDraggableRow" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
+                     on-ready="scopeModel.onGridReady" enabledraggablerow="scopeModel.enableDraggableRow" showexpand="scopeModel.showExpandIcon" ondeleterow="scopeModel.deleteFunction" hidegridmenu>
             <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="{{column.Attribute}}" columnindex="$index">
-                <span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
+                <span vr-loader="dataItem.Entity[colDef.columnIndex].isRuntimeEditorDirectiveloading">
                     <vr-genericdata-genericeditor-rootcontainer on-ready="dataItem.Entity[colDef.columnIndex].onRunTimeEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
                 </span>
             </vr-datagridcolumn>
-            <vr-datagridexpandablerow ng-if="scopeModel.enableDrillDown">
-                <vr-genericdata-genericeditor-rootcontainer on-ready="dataItem.onRunTimeEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
+            <vr-datagridexpandablerow  ng-show="scopeModel.enableDrillDown">
+                <span vr-loader="dataItem.isRuntimeEditorDirectiveloading">
+                    <vr-genericdata-genericeditor-rootcontainer on-ready="dataItem.onRunTimeEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
+                    </span>
             </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-section>
     <span ng-if="scopeModel.hideSection">
-        <vr-columns width="fullrow">
             <vr-button ng-if="!scopeModel.hideAddButton" type="Add" data-onclick="scopeModel.addRecord" standalone></vr-button>
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                         on-ready="scopeModel.onGridReady" enabledraggablerow="scopeModel.enableDraggableRow" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
+                         on-ready="scopeModel.onGridReady" enabledraggablerow="scopeModel.enableDraggableRow" showexpand="scopeModel.showExpandIcon" ondeleterow="scopeModel.deleteFunction" hidegridmenu>
                 <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="{{column.Attribute}}" columnindex="$index">
-                    <span ng-if="!dataItem.Entity[colDef.columnIndex].showAsLabel" vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
+                    <span ng-if="!dataItem.Entity[colDef.columnIndex].showAsLabel" vr-loader="dataItem.Entity[colDef.columnIndex].isRuntimeEditorDirectiveloading">
                         <vr-genericdata-genericeditor-rootcontainer on-ready="dataItem.Entity[colDef.columnIndex].onRunTimeEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
                     </span>
                 </vr-datagridcolumn>
+                <vr-datagridexpandablerow ng-show="scopeModel.enableDrillDown">
+                    <span vr-loader="dataItem.isRuntimeEditorDirectiveloading">
+                        <vr-genericdata-genericeditor-rootcontainer on-ready="dataItem.onRunTimeEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
+                    </span>
+                </vr-datagridexpandablerow>
             </vr-datagrid>
-            <vr-datagridexpandablerow ng-if="scopeModel.enableDrillDown">
-            <vr-genericdata-genericeditor-rootcontainer on-ready="scopeModel.onRunTimeEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
-            </vr-datagridexpandablerow>
-        </vr-columns>
     </span>
-</vr-columns>-->
+</vr-columns>
 
 

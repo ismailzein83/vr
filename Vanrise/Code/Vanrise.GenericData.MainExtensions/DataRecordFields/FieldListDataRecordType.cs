@@ -189,6 +189,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public bool HideAddButton { get; set; }
         public bool HideSection { get; set; }
         public bool EnableDraggableRow { get; set; }
+        public bool HideRemoveIcon { get; set; }
         public List<GridGenericEditorField> Fields { get; set; }
         public GridGenericEditorDrillDownSettings DrillDownSettings { get; set; }
     }
