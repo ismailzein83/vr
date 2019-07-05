@@ -7,7 +7,8 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
             restrict: "E",
             scope: {
                 onReady: "=",
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -26,7 +27,7 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
 
         function getBeSaleZoneTemplate(attrs) {
 
-            return '<vr-np-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>' +
+            return '<vr-np-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" ismultipleselection>' +
                    '</vr-np-salezone-selector>';
         }
 
