@@ -103,7 +103,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         mailMessageTemplateSettingsPayload = payload.data.MailMessageTemplateSettings;
                         passwordSettingsPayload = payload.data.PasswordSettings;
                         securityProviderSettings = payload.data.SecurityProviderSettings;
-                        var securityProviderId = payload.data.SecurityProviderSettings.
+                        var securityProviderId = payload.data.SecurityProviderSettings;
                         apiSettingsPayload = payload.data.APISettings;
                         mailMessageTemplateSettingsPayload.SendEmailNewUser = payload.data.SendEmailNewUser;
                         mailMessageTemplateSettingsPayload.SendEmailOnResetPasswordByAdmin = payload.data.SendEmailOnResetPasswordByAdmin;
