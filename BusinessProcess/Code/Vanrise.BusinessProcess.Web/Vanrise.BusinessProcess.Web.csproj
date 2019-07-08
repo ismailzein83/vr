@@ -503,6 +503,11 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BusinessProcess\Reports\OpenRDLCReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <!--<ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>-->
