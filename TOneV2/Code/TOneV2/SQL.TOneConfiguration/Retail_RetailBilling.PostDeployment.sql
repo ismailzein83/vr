@@ -732,7 +732,8 @@
                  ;with cte_data([ID],[Name],[DevProjectID],[Settings],[MeasureStyles],[PermanentFilter],[CreatedTime],[LastModifiedTime])
                   as (select* from (values
                  --//////////////////////////////////////////////////////////////////////////////////////////////////
-                       ('1a22ab99-64ad-4bd9-b3f7-e2b942ad948d','RetailBilling_Contract','{"$type":"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities","ConnectionStringName":"RetailBillingConnString","TableName":"[RetailBilling].[Contract]","TimeColumnName":"CreatedTime","RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"DataProvider":{"$type":"Vanrise.Analytic.Data.RDB.RDBAnalyticDataProvider, Vanrise.Analytic.Data.RDB","ConfigId":"2e88b323-de47-4c6b-8ad5-cc941bb3611e","Table":{"$type":"Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable, Vanrise.GenericData.RDBDataStorage","ConfigId":"6623b11a-333d-487c-8906-b07f1784f944","RecordStorageId":"8c80acd1-6f0b-4569-8590-080daf8477ee"}}}',NULL,'39fd306b-90f9-48aa-8ca4-848bfc74eca6','2019-07-08 10:40:46.060',NULL,'2019-07-05 18:40:09.600')
+                       ('7c002931-b0a1-419b-8dde-e078345d1a96','RetailBilling_ContractService','39fd306b-90f9-48aa-8ca4-848bfc74eca6','{"$type":"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities","ConnectionStringName":"RetailBillingConnString","TableName":"[RetailBilling].[ContractService]","TimeColumnName":"CreatedTime","RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"DataProvider":{"$type":"Vanrise.Analytic.Data.RDB.RDBAnalyticDataProvider, Vanrise.Analytic.Data.RDB","ConfigId":"2e88b323-de47-4c6b-8ad5-cc941bb3611e","Table":{"$type":"Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable, Vanrise.GenericData.RDBDataStorage","ConfigId":"6623b11a-333d-487c-8906-b07f1784f944","RecordStorageId":"fa37a26c-940b-42ca-8042-58b2fcebd022"}}}',NULL,NULL,'2019-07-08 15:07:20.460','2019-07-08 15:21:52.440'),
+('1a22ab99-64ad-4bd9-b3f7-e2b942ad948d','RetailBilling_Contract','39fd306b-90f9-48aa-8ca4-848bfc74eca6','{"$type":"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities","ConnectionStringName":"RetailBillingConnString","TableName":"[RetailBilling].[Contract]","TimeColumnName":"CreatedTime","RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"DataProvider":{"$type":"Vanrise.Analytic.Data.RDB.RDBAnalyticDataProvider, Vanrise.Analytic.Data.RDB","ConfigId":"2e88b323-de47-4c6b-8ad5-cc941bb3611e","Table":{"$type":"Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable, Vanrise.GenericData.RDBDataStorage","ConfigId":"6623b11a-333d-487c-8906-b07f1784f944","RecordStorageId":"8c80acd1-6f0b-4569-8590-080daf8477ee"}}}',NULL,NULL,'2019-07-05 18:40:09.600','2019-07-08 10:40:46.060')
                  --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                 )c([ID],[Name],[DevProjectID],[Settings],[MeasureStyles],[PermanentFilter],[CreatedTime],[LastModifiedTime]))
                 merge[Analytic].[AnalyticTable] as t
@@ -782,6 +783,146 @@
                  when not matched by target then
                  insert([ID],[TableId],[ItemType],[Name],[Title],[Config],[CreatedTime],[LastModifiedTime])
                  values(s.[ID], s.[TableId], s.[ItemType], s.[Name], s.[Title], s.[Config], s.[CreatedTime], s.[LastModifiedTime]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              
+
+                 --- [RetailBilling].[ContractType]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Name],[TechnicalServiceType],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('35f15523-9e72-4f3a-ab58-033e6ceb78c3','Telephony',1,-1,'2019-06-12 15:02:44.010',-1,'2019-07-02 20:02:55.140'),
+('d06f78ac-ed76-466f-b265-1b1a9539bd58','VPN',2,-1,'2019-06-13 14:21:04.313',-1,'2019-06-13 14:21:04.313'),
+('894327d6-58db-41ac-8c94-4dd3acc415d5','International Internet Capacity E1',2,-1,'2019-06-13 14:14:49.707',-1,'2019-06-13 14:14:49.707'),
+('f10ee921-b970-41cc-875b-cd07f323178b','Broadband Internet',2,-1,'2019-06-12 15:02:47.957',-1,'2019-06-12 15:06:52.380')
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Name],[TechnicalServiceType],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime]))
+                merge[RetailBilling].[ContractType] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [ID]=s.[ID] ,[Name]=s.[Name] ,[TechnicalServiceType]=s.[TechnicalServiceType] ,[CreatedBy]=s.[CreatedBy] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedBy]=s.[LastModifiedBy] ,[LastModifiedTime]=s.[LastModifiedTime] 
+                 when not matched by target then
+                 insert([ID],[Name],[TechnicalServiceType],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+                 values(s.[ID], s.[Name], s.[TechnicalServiceType], s.[CreatedBy], s.[CreatedTime], s.[LastModifiedBy], s.[LastModifiedTime]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              
+
+                 --- [RetailBilling].[Service]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Name],[ContractTypeID],[DecreeId],[ServiceCode],[ServiceDescription],[Translation],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('1f9bd862-07a4-41a7-8395-02e00fad3123','STM-64 10 Gbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-64 10 Gbps',NULL,NULL,-1,'2019-07-02 10:46:03.093',-1,'2019-07-02 10:46:03.093'),
+('78247ca7-6d72-428a-9abc-066a0c477000','Copper 8 dedicated unlimited','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:38:12.260',-1,'2019-06-13 15:32:45.010'),
+('602b98c6-6350-4043-86e8-087ed8e9cc28','VPN Contract Activation','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'test',NULL,NULL,-1,'2019-07-02 19:40:52.430',-1,'2019-07-02 19:40:52.430'),
+('9aff0c00-62ac-43c0-ba44-09d1d9919d11','STM-16 2488 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-16 2488 Mbps',NULL,NULL,-1,'2019-07-02 10:45:39.920',-1,'2019-07-02 10:45:39.920'),
+('7ac78524-bfd0-424a-9383-119e50b25af9','Call Forwarding','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:54:47.317',-1,'2019-06-12 15:54:47.317'),
+('a5484f5d-faf9-40c6-8ece-1e82d7c8f00b','STM-1 200 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-1 200 Mbps',NULL,NULL,-1,'2019-07-02 10:28:25.660',-1,'2019-07-02 10:28:25.660'),
+('4bd55be9-d6f0-49cb-bb71-1ed7e81ffa4b','Call Barring','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:55:48.720',-1,'2019-06-12 15:55:48.720'),
+('ef4a04e6-b177-44ff-87a6-269fbf8f488e','STM-4 900 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-4 900 Mbps',NULL,NULL,-1,'2019-07-02 10:39:32.917',-1,'2019-07-02 10:39:32.917'),
+('70900c2f-c14a-438d-9fda-3d189dc5383e','STM-1 155 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-1 155 Mbps',NULL,NULL,-1,'2019-07-02 10:28:07.983',-1,'2019-07-02 10:28:07.983'),
+('8c661eee-5929-4fbf-9347-4412e4e9a396','CLIR','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:55:38.320',-1,'2019-06-12 15:55:38.320'),
+('a878d6c4-7156-4a9e-ae12-44e4c060b430','Call Waiting','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:54:08.220',-1,'2019-06-12 15:54:08.220'),
+('f9a99a28-3e5a-4a3f-88d3-474fc2a8d5f8','Copper 6 dedicated unlimited','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:38:05.330',-1,'2019-06-13 15:36:11.447'),
+('a148b00f-15c0-4006-bf42-49159e318f68','International Calls','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:53:51.480',-1,'2019-06-12 15:53:51.480'),
+('79c8077e-d601-4cd2-ade1-496a1618a9e6','Copper Voice','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-17 17:33:47.123',-1,'2019-06-20 14:46:19.240'),
+('0bf682c5-993e-4f64-a8a5-4e298ab0e2e2','E1 100 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'E1 100 Mbps',NULL,NULL,-1,'2019-07-02 10:27:53.157',-1,'2019-07-02 10:27:53.157'),
+('8d4e7832-e3d8-48b7-9e7e-52639e547fc9','Copper up to 2 unlimited','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:33:48.393',-1,'2019-06-13 15:39:19.517'),
+('3dff8807-f26f-4010-8059-5f1d1a4d8c1b','Copper 4 dedicated unlimited','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:37:01.163',-1,'2019-06-13 15:37:35.820'),
+('47292a90-c15b-47cf-93d9-606ecd25a764','STM-4 800 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-4 800 Mbps',NULL,NULL,-1,'2019-07-02 10:39:03.267',-1,'2019-07-02 10:39:03.267'),
+('44407720-d706-4d9c-97cd-62e8645350c8','Fix to Mobile Calls','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:53:34.363',-1,'2019-06-12 15:53:34.363'),
+('9e362c41-f034-4759-bccc-635d194f5faa','Copper open speed 50GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:35:35.220',-1,'2019-06-13 15:39:03.920'),
+('900f9e8a-da4b-4b8e-8e8a-653fb292c334','STM-1 600 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-1 600 Mbps',NULL,NULL,-1,'2019-07-02 10:29:12.083',-1,'2019-07-02 10:29:12.083'),
+('d6d853ab-84ae-48c4-acf0-6971950c3e84','LTE Voice','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-17 17:33:51.427',-1,'2019-06-20 14:46:28.530'),
+('67e55889-ff1e-4344-94ab-699efa56ef0e','STM-1 500 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-1 500 Mbps',NULL,NULL,-1,'2019-07-02 10:28:57.047',-1,'2019-07-02 10:28:57.047'),
+('d5329495-ab7c-4901-ba0d-6ab332854121','Voice Monthly Charge','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:48:50.647',-1,'2019-06-12 15:48:50.647'),
+('b314f6c1-a3de-4d04-8fd8-721b9a030f52','Fiber Optic 50 1000GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:39:35.833',-1,'2019-06-13 15:38:35.333'),
+('e489f5da-a6c1-48a9-a830-74003cebc194','Copper open speed 100GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:35:42.833',-1,'2019-06-13 15:34:34.840'),
+('ac4396ec-1e7b-4937-a455-7795cd6d4c5a','STM-1 300 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-1 300 Mbps',NULL,NULL,-1,'2019-07-02 10:28:34.773',-1,'2019-07-02 10:28:34.773'),
+('e8fe1984-1f2e-47e2-9b72-7a247995a23b','E1 50 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'E1 50 Mbps',NULL,NULL,-1,'2019-07-02 10:27:42.903',-1,'2019-07-02 10:27:42.903'),
+('d874f1ac-8695-443f-ac72-7b155e9fcfd5','Copper HDSL 100GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:41:49.783',-1,'2019-06-13 15:38:19.033'),
+('c6d56c71-b72e-4dec-bb79-7e5c5fb36d49','Fiber Optic 50 500GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:39:20.387',-1,'2019-06-13 15:38:06.430'),
+('d74b3d54-0ee5-420c-815a-8448fae5d4eb','Line Hunting (PABX)','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 16:15:08.400',-1,'2019-06-12 16:15:08.400'),
+('b57cb42a-46c7-43ca-86b1-8694dce8679e','STM-1 400 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-1 400 Mbps',NULL,NULL,-1,'2019-07-02 10:28:46.990',-1,'2019-07-02 10:28:46.990'),
+('2e86fa95-a511-4d5e-a94b-873214f95ec6','Copper 2 dedicated unlimited','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:36:53.913',-1,'2019-06-13 15:39:29.780'),
+('64096a15-d61c-4b04-b9c0-8ad369c01fe1','E1 2 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'E1 2 Mbps',NULL,NULL,-1,'2019-07-02 10:27:28.910',-1,'2019-07-02 10:27:28.910'),
+('94838a36-98e7-4fa9-867b-983a055b65b4','Fiber Voice','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-17 17:33:41.043',-1,'2019-06-20 14:46:07.030'),
+('9ed6bae5-6c3b-4dac-b8ba-994f219e65d2','Copper open speed 200GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:36:10.823',-1,'2019-06-13 15:36:27.503'),
+('a12dc734-f8e6-428e-a972-9ae722181316','Fix to Fix Calls','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:53:24.377',-1,'2019-06-12 15:53:24.377'),
+('9b28dfff-5def-4248-a707-a72ecc5e47a6','Hot line','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:56:31.083',-1,'2019-06-12 15:56:31.083'),
+('07197487-d19b-4aeb-8906-ae14a22d1fcd','STM-4 1000 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-4 1000 Mbps',NULL,NULL,-1,'2019-07-02 10:45:21.300',-1,'2019-07-02 10:45:21.300'),
+('0e242fae-1ee2-4c83-a545-bc8f717b452b','Copper 10 dedicated unlimited','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:38:24.600',-1,'2019-06-13 15:36:46.927'),
+('f073a740-84ca-4050-b57a-bd12f7419d76','CLIP','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:53:59.313',-1,'2019-06-12 15:53:59.313'),
+('7075b3e6-4ca3-4926-a3b7-cae8234f4e64','Copper up to 4 unlimited','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:34:04.010',-1,'2019-06-13 15:34:27.280'),
+('a107b1e9-a374-4d68-a6f7-cb58d33f0916','Fiber Optic 50 300GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:39:00.147',-1,'2019-06-13 15:32:36.143'),
+('d69ec101-664a-42b1-9d27-d36c31fdb65f','Copper up to 4 - 40GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:34:21.103',-1,'2019-06-13 15:35:50.320'),
+('f64e3a96-3faf-4ca6-bcba-db36561b34bd','Fiber Optic 50 700GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:39:25.580',-1,'2019-06-13 15:37:19.007'),
+('2ccb1c30-d566-4cb4-8cf5-db7b97a637fc','3-Party Calling','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:56:18.650',-1,'2019-06-12 15:56:18.650'),
+('baa75660-1e05-48a6-910d-ddde0b5ce36a','STM-4 700 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-4 700 Mbps',NULL,NULL,-1,'2019-07-02 10:30:03.653',-1,'2019-07-02 10:30:03.653'),
+('8b036873-6ea3-43bd-a89a-edeaf61c4f9a','Copper open speed 150GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:35:51.767',-1,'2019-06-13 15:34:47.143'),
+('355ded36-468c-4623-a593-f6701d2c5d14','Abbreviated Dialing','35f15523-9e72-4f3a-ab58-033e6ceb78c3',NULL,NULL,NULL,NULL,-1,'2019-06-12 15:56:04.057',-1,'2019-06-12 15:56:04.057'),
+('2a6cf163-0cb5-4303-b182-f71f95437ab5','Fiber Optic 50 400GB','f10ee921-b970-41cc-875b-cd07f323178b',NULL,NULL,NULL,NULL,-1,'2019-06-13 11:39:09.030',-1,'2019-06-13 15:32:29.367'),
+('adaf959a-7233-4cc6-b106-f888dbb71cbf','STM-4 622 Mbps','d06f78ac-ed76-466f-b265-1b1a9539bd58',1,'STM-4 622 Mbps',NULL,NULL,-1,'2019-07-02 10:29:27.270',-1,'2019-07-02 10:29:27.270')
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Name],[ContractTypeID],[DecreeId],[ServiceCode],[ServiceDescription],[Translation],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime]))
+                merge[RetailBilling].[Service] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [ID]=s.[ID] ,[Name]=s.[Name] ,[ContractTypeID]=s.[ContractTypeID] ,[DecreeId]=s.[DecreeId] ,[ServiceCode]=s.[ServiceCode] ,[ServiceDescription]=s.[ServiceDescription] ,[Translation]=s.[Translation] ,[CreatedBy]=s.[CreatedBy] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedBy]=s.[LastModifiedBy] ,[LastModifiedTime]=s.[LastModifiedTime] 
+                 when not matched by target then
+                 insert([ID],[Name],[ContractTypeID],[DecreeId],[ServiceCode],[ServiceDescription],[Translation],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+                 values(s.[ID], s.[Name], s.[ContractTypeID], s.[DecreeId], s.[ServiceCode], s.[ServiceDescription], s.[Translation], s.[CreatedBy], s.[CreatedTime], s.[LastModifiedBy], s.[LastModifiedTime]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              
+
+                 --- [RetailBilling].[CDRType]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('15289f93-b66e-4ba1-ba7b-929d5fba7591','Land Line',NULL,NULL,-1,'2019-07-04 18:22:30.910'),
+('43f30a31-a2e5-44a5-b958-c3b249f9acc1','Mobile',-1,'2019-07-03 17:53:34.243',-1,'2019-07-03 17:53:34.243'),
+('93eee1d9-7e2d-4087-a257-d4f9589b6625','Individual',-1,'2019-07-03 17:53:45.203',-1,'2019-07-03 17:53:45.203'),
+('3ad08ba2-abfa-45f8-99ff-266964453770','Digital',-1,'2019-07-03 17:53:55.703',-1,'2019-07-03 17:53:55.703')
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime]))
+                merge[RetailBilling].[CDRType] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [ID]=s.[ID] ,[Name]=s.[Name] ,[CreatedBy]=s.[CreatedBy] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedBy]=s.[LastModifiedBy] ,[LastModifiedTime]=s.[LastModifiedTime] 
+                 when not matched by target then
+                 insert([ID],[Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
+                 values(s.[ID], s.[Name], s.[CreatedBy], s.[CreatedTime], s.[LastModifiedBy], s.[LastModifiedTime]);
                   
             ----------------------------------------------------------------------------------------------------
               end

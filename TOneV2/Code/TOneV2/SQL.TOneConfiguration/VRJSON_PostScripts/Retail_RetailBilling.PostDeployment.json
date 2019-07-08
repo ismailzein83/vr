@@ -3741,14 +3741,26 @@
         "DataRows": [
           {
             "FieldValues": {
+              "ID": "7c002931-b0a1-419b-8dde-e078345d1a96",
+              "Name": "RetailBilling_ContractService",
+              "DevProjectID": "39fd306b-90f9-48aa-8ca4-848bfc74eca6",
+              "Settings": "{\"$type\":\"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities\",\"ConnectionStringName\":\"RetailBillingConnString\",\"TableName\":\"[RetailBilling].[ContractService]\",\"TimeColumnName\":\"CreatedTime\",\"RequiredPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}},\"DataProvider\":{\"$type\":\"Vanrise.Analytic.Data.RDB.RDBAnalyticDataProvider, Vanrise.Analytic.Data.RDB\",\"ConfigId\":\"2e88b323-de47-4c6b-8ad5-cc941bb3611e\",\"Table\":{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable, Vanrise.GenericData.RDBDataStorage\",\"ConfigId\":\"6623b11a-333d-487c-8906-b07f1784f944\",\"RecordStorageId\":\"fa37a26c-940b-42ca-8042-58b2fcebd022\"}}}",
+              "MeasureStyles": null,
+              "PermanentFilter": null,
+              "CreatedTime": "2019-07-08T15:07:20.46",
+              "LastModifiedTime": "2019-07-08T15:21:52.44"
+            }
+          },
+          {
+            "FieldValues": {
               "ID": "1a22ab99-64ad-4bd9-b3f7-e2b942ad948d",
               "Name": "RetailBilling_Contract",
+              "DevProjectID": "39fd306b-90f9-48aa-8ca4-848bfc74eca6",
               "Settings": "{\"$type\":\"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities\",\"ConnectionStringName\":\"RetailBillingConnString\",\"TableName\":\"[RetailBilling].[Contract]\",\"TimeColumnName\":\"CreatedTime\",\"RequiredPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}},\"DataProvider\":{\"$type\":\"Vanrise.Analytic.Data.RDB.RDBAnalyticDataProvider, Vanrise.Analytic.Data.RDB\",\"ConfigId\":\"2e88b323-de47-4c6b-8ad5-cc941bb3611e\",\"Table\":{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable, Vanrise.GenericData.RDBDataStorage\",\"ConfigId\":\"6623b11a-333d-487c-8906-b07f1784f944\",\"RecordStorageId\":\"8c80acd1-6f0b-4569-8590-080daf8477ee\"}}}",
               "MeasureStyles": null,
-              "DevProjectID": "39fd306b-90f9-48aa-8ca4-848bfc74eca6",
-              "LastModifiedTime": "2019-07-08T10:40:46.06",
               "PermanentFilter": null,
-              "CreatedTime": "2019-07-05T18:40:09.6"
+              "CreatedTime": "2019-07-05T18:40:09.6",
+              "LastModifiedTime": "2019-07-08T10:40:46.06"
             }
           }
         ],
@@ -3991,6 +4003,1047 @@
         "Variables": [],
         "LastWhereCondition": "at.DevProjectId = '39FD306B-90F9-48AA-8CA4-848BFC74ECA6'",
         "LastJoinStatement": "JOIN [Analytic].[AnalyticTable] at on MainTable.TableId = at.Id",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "6238a187-0e63-4f48-a001-21acc78941c2",
+      "Schema": "RetailBilling",
+      "TableName": "ContractType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "Name": "Telephony",
+              "TechnicalServiceType": 1,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:02:44.01",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T20:02:55.14"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "Name": "VPN",
+              "TechnicalServiceType": 2,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T14:21:04.313",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T14:21:04.313"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "894327d6-58db-41ac-8c94-4dd3acc415d5",
+              "Name": "International Internet Capacity E1",
+              "TechnicalServiceType": 2,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T14:14:49.707",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T14:14:49.707"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "Name": "Broadband Internet",
+              "TechnicalServiceType": 2,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:02:47.957",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:06:52.38"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "TechnicalServiceType",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "6238a187-0e63-4f48-a001-21acc78941c2",
+      "Schema": "RetailBilling",
+      "TableName": "Service",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "1f9bd862-07a4-41a7-8395-02e00fad3123",
+              "Name": "STM-64 10 Gbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-64 10 Gbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:46:03.093",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:46:03.093"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "78247ca7-6d72-428a-9abc-066a0c477000",
+              "Name": "Copper 8 dedicated unlimited",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:38:12.26",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:32:45.01"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "602b98c6-6350-4043-86e8-087ed8e9cc28",
+              "Name": "VPN Contract Activation",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "test",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T19:40:52.43",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T19:40:52.43"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "9aff0c00-62ac-43c0-ba44-09d1d9919d11",
+              "Name": "STM-16 2488 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-16 2488 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:45:39.92",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:45:39.92"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "7ac78524-bfd0-424a-9383-119e50b25af9",
+              "Name": "Call Forwarding",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:54:47.317",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:54:47.317"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a5484f5d-faf9-40c6-8ece-1e82d7c8f00b",
+              "Name": "STM-1 200 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-1 200 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:28:25.66",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:28:25.66"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "4bd55be9-d6f0-49cb-bb71-1ed7e81ffa4b",
+              "Name": "Call Barring",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:55:48.72",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:55:48.72"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "ef4a04e6-b177-44ff-87a6-269fbf8f488e",
+              "Name": "STM-4 900 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-4 900 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:39:32.917",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:39:32.917"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "70900c2f-c14a-438d-9fda-3d189dc5383e",
+              "Name": "STM-1 155 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-1 155 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:28:07.983",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:28:07.983"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "8c661eee-5929-4fbf-9347-4412e4e9a396",
+              "Name": "CLIR",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:55:38.32",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:55:38.32"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a878d6c4-7156-4a9e-ae12-44e4c060b430",
+              "Name": "Call Waiting",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:54:08.22",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:54:08.22"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "f9a99a28-3e5a-4a3f-88d3-474fc2a8d5f8",
+              "Name": "Copper 6 dedicated unlimited",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:38:05.33",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:36:11.447"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a148b00f-15c0-4006-bf42-49159e318f68",
+              "Name": "International Calls",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:53:51.48",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:53:51.48"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "79c8077e-d601-4cd2-ade1-496a1618a9e6",
+              "Name": "Copper Voice",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-17T17:33:47.123",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-20T14:46:19.24"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "0bf682c5-993e-4f64-a8a5-4e298ab0e2e2",
+              "Name": "E1 100 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "E1 100 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:27:53.157",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:27:53.157"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "8d4e7832-e3d8-48b7-9e7e-52639e547fc9",
+              "Name": "Copper up to 2 unlimited",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:33:48.393",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:39:19.517"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "3dff8807-f26f-4010-8059-5f1d1a4d8c1b",
+              "Name": "Copper 4 dedicated unlimited",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:37:01.163",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:37:35.82"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "47292a90-c15b-47cf-93d9-606ecd25a764",
+              "Name": "STM-4 800 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-4 800 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:39:03.267",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:39:03.267"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "44407720-d706-4d9c-97cd-62e8645350c8",
+              "Name": "Fix to Mobile Calls",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:53:34.363",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:53:34.363"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "9e362c41-f034-4759-bccc-635d194f5faa",
+              "Name": "Copper open speed 50GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:35:35.22",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:39:03.92"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "900f9e8a-da4b-4b8e-8e8a-653fb292c334",
+              "Name": "STM-1 600 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-1 600 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:29:12.083",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:29:12.083"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d6d853ab-84ae-48c4-acf0-6971950c3e84",
+              "Name": "LTE Voice",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-17T17:33:51.427",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-20T14:46:28.53"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "67e55889-ff1e-4344-94ab-699efa56ef0e",
+              "Name": "STM-1 500 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-1 500 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:28:57.047",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:28:57.047"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d5329495-ab7c-4901-ba0d-6ab332854121",
+              "Name": "Voice Monthly Charge",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:48:50.647",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:48:50.647"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "b314f6c1-a3de-4d04-8fd8-721b9a030f52",
+              "Name": "Fiber Optic 50 1000GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:39:35.833",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:38:35.333"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "e489f5da-a6c1-48a9-a830-74003cebc194",
+              "Name": "Copper open speed 100GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:35:42.833",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:34:34.84"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "ac4396ec-1e7b-4937-a455-7795cd6d4c5a",
+              "Name": "STM-1 300 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-1 300 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:28:34.773",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:28:34.773"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "e8fe1984-1f2e-47e2-9b72-7a247995a23b",
+              "Name": "E1 50 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "E1 50 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:27:42.903",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:27:42.903"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d874f1ac-8695-443f-ac72-7b155e9fcfd5",
+              "Name": "Copper HDSL 100GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:41:49.783",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:38:19.033"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "c6d56c71-b72e-4dec-bb79-7e5c5fb36d49",
+              "Name": "Fiber Optic 50 500GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:39:20.387",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:38:06.43"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d74b3d54-0ee5-420c-815a-8448fae5d4eb",
+              "Name": "Line Hunting (PABX)",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T16:15:08.4",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T16:15:08.4"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "b57cb42a-46c7-43ca-86b1-8694dce8679e",
+              "Name": "STM-1 400 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-1 400 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:28:46.99",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:28:46.99"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "2e86fa95-a511-4d5e-a94b-873214f95ec6",
+              "Name": "Copper 2 dedicated unlimited",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:36:53.913",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:39:29.78"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "64096a15-d61c-4b04-b9c0-8ad369c01fe1",
+              "Name": "E1 2 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "E1 2 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:27:28.91",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:27:28.91"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "94838a36-98e7-4fa9-867b-983a055b65b4",
+              "Name": "Fiber Voice",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-17T17:33:41.043",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-20T14:46:07.03"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "9ed6bae5-6c3b-4dac-b8ba-994f219e65d2",
+              "Name": "Copper open speed 200GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:36:10.823",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:36:27.503"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a12dc734-f8e6-428e-a972-9ae722181316",
+              "Name": "Fix to Fix Calls",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:53:24.377",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:53:24.377"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "9b28dfff-5def-4248-a707-a72ecc5e47a6",
+              "Name": "Hot line",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:56:31.083",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:56:31.083"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "07197487-d19b-4aeb-8906-ae14a22d1fcd",
+              "Name": "STM-4 1000 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-4 1000 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:45:21.3",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:45:21.3"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "0e242fae-1ee2-4c83-a545-bc8f717b452b",
+              "Name": "Copper 10 dedicated unlimited",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:38:24.6",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:36:46.927"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "f073a740-84ca-4050-b57a-bd12f7419d76",
+              "Name": "CLIP",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:53:59.313",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:53:59.313"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "7075b3e6-4ca3-4926-a3b7-cae8234f4e64",
+              "Name": "Copper up to 4 unlimited",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:34:04.01",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:34:27.28"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a107b1e9-a374-4d68-a6f7-cb58d33f0916",
+              "Name": "Fiber Optic 50 300GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:39:00.147",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:32:36.143"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d69ec101-664a-42b1-9d27-d36c31fdb65f",
+              "Name": "Copper up to 4 - 40GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:34:21.103",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:35:50.32"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "f64e3a96-3faf-4ca6-bcba-db36561b34bd",
+              "Name": "Fiber Optic 50 700GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:39:25.58",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:37:19.007"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "2ccb1c30-d566-4cb4-8cf5-db7b97a637fc",
+              "Name": "3-Party Calling",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:56:18.65",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:56:18.65"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "baa75660-1e05-48a6-910d-ddde0b5ce36a",
+              "Name": "STM-4 700 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-4 700 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:30:03.653",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:30:03.653"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "8b036873-6ea3-43bd-a89a-edeaf61c4f9a",
+              "Name": "Copper open speed 150GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:35:51.767",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:34:47.143"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "355ded36-468c-4623-a593-f6701d2c5d14",
+              "Name": "Abbreviated Dialing",
+              "ContractTypeID": "35f15523-9e72-4f3a-ab58-033e6ceb78c3",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-12T15:56:04.057",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-12T15:56:04.057"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "2a6cf163-0cb5-4303-b182-f71f95437ab5",
+              "Name": "Fiber Optic 50 400GB",
+              "ContractTypeID": "f10ee921-b970-41cc-875b-cd07f323178b",
+              "DecreeId": null,
+              "ServiceCode": null,
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-06-13T11:39:09.03",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-06-13T15:32:29.367"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "adaf959a-7233-4cc6-b106-f888dbb71cbf",
+              "Name": "STM-4 622 Mbps",
+              "ContractTypeID": "d06f78ac-ed76-466f-b265-1b1a9539bd58",
+              "DecreeId": 1,
+              "ServiceCode": "STM-4 622 Mbps",
+              "ServiceDescription": null,
+              "Translation": null,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-02T10:29:27.27",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-02T10:29:27.27"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ContractTypeID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DecreeId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ServiceCode",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ServiceDescription",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Translation",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "6238a187-0e63-4f48-a001-21acc78941c2",
+      "Schema": "RetailBilling",
+      "TableName": "CDRType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "15289f93-b66e-4ba1-ba7b-929d5fba7591",
+              "Name": "Land Line",
+              "CreatedBy": null,
+              "CreatedTime": null,
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-04T18:22:30.91"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "43f30a31-a2e5-44a5-b958-c3b249f9acc1",
+              "Name": "Mobile",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-03T17:53:34.243",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-03T17:53:34.243"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "93eee1d9-7e2d-4087-a257-d4f9589b6625",
+              "Name": "Individual",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-03T17:53:45.203",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-03T17:53:45.203"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "3ad08ba2-abfa-45f8-99ff-266964453770",
+              "Name": "Digital",
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-03T17:53:55.703",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-03T17:53:55.703"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
