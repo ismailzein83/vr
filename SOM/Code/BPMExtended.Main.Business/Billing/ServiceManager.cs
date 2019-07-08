@@ -369,6 +369,30 @@ namespace BPMExtended.Main.Business
             return contractStatusDescription;
         }
 
+        public bool IsCPTServiceContracted(string contractId)
+        {
+            bool isServiceContracted = false;
+            string cptServiceId = new CatalogManager().GetCPTServiceId();
+
+            using (SOMClient client = new SOMClient())
+            {
+                isServiceContracted = client.Get<bool>(String.Format("api/SOM.ST/Billing/IsServiceContracted?ContractId={0}&ServiceId={1}", contractId, cptServiceId));
+            }
+            return isServiceContracted;
+        }
+
+        public bool IsPABXServiceContracted(string contractId)
+        {
+            bool isServiceContracted = false;
+            string pabxServiceId = new CatalogManager().GetPABXServiceId();
+
+            using (SOMClient client = new SOMClient())
+            {
+                isServiceContracted = client.Get<bool>(String.Format("api/SOM.ST/Billing/IsServiceContracted?ContractId={0}&ServiceId={1}", contractId, pabxServiceId));
+            }
+            return isServiceContracted;
+        }
+
         #endregion
 
 
