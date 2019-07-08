@@ -61,11 +61,11 @@
               "ID": "d010bd55-9bea-441d-96d7-06b1bc079ebe",
               "Name": "Com_Address_BaseAddressFloor",
               "DevProjectID": "e18d9b6a-10b6-44da-8d09-834a285eb960",
-              "Fields": "{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"FloorNumber\",\"Title\":\"Floor Number\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"75aef329-27bd-4108-b617-f5cc05ff2aa3\",\"ViewerEditor\":\"vr-genericdata-fieldtype-number-viewereditor\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-number-runtimeeditor\",\"DataPrecision\":0,\"DataType\":1,\"IsNullable\":true,\"CanRoundValue\":true,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"OrderType\":0,\"StoreValueSerialized\":false},\"IsInheritedFromExtraField\":false},{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"FloorSide\",\"Title\":\"Floor Side\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"eabc41a9-e332-4120-ac85-f0b7e53c0d0d\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-choices-runtimeeditor\",\"Choices\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":1,\"Text\":\"East\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":2,\"Text\":\"West\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":3,\"Text\":\"North\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":4,\"Text\":\"South\"}]},\"IsNullable\":true,\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false}]}",
+              "Fields": "{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"FloorNumber\",\"Title\":\"Floor Number\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"75aef329-27bd-4108-b617-f5cc05ff2aa3\",\"ViewerEditor\":\"vr-genericdata-fieldtype-number-viewereditor\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-number-runtimeeditor\",\"DataPrecision\":0,\"DataType\":1,\"IsNullable\":true,\"CanRoundValue\":true,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"OrderType\":0,\"StoreValueSerialized\":false},\"IsInheritedFromExtraField\":false},{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"FloorSide\",\"Title\":\"Floor Side\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"eabc41a9-e332-4120-ac85-f0b7e53c0d0d\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-choices-runtimeeditor\",\"Choices\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":1,\"Text\":\"East\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":2,\"Text\":\"West\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":3,\"Text\":\"North\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":4,\"Text\":\"South\"}]},\"ChoiceDefinitionId\":\"a7895c8f-37df-4d97-8283-ad3893790477\",\"IsNullable\":true,\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false}]}",
               "ExtraFieldsEvaluator": "{\"$type\":\"Vanrise.GenericData.MainExtensions.ParentDataRecordTypeExtraFields, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"043e058a-0e0e-40e2-82ab-fe04c896e615\",\"DataRecordTypeId\":\"2206a0a8-bc25-42f9-b810-ac1d4a68ae6f\"}",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.DataRecordTypeSettings, Vanrise.GenericData.Entities\"}",
               "CreatedTime": "2019-06-21T18:45:55.48",
-              "LastModifiedTime": "2019-06-21T18:45:55.48"
+              "LastModifiedTime": "2019-07-03T21:54:31.64"
             }
           },
           {
@@ -109,11 +109,11 @@
               "ID": "2206a0a8-bc25-42f9-b810-ac1d4a68ae6f",
               "Name": "Com_Address_BaseAddressBuilding",
               "DevProjectID": "e18d9b6a-10b6-44da-8d09-834a285eb960",
-              "Fields": "{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"Street\",\"Title\":\"Street\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"3f29315e-b542-43b8-9618-7de216cd9653\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-text-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-text-viewereditor\",\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false},{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"Building\",\"Title\":\"Building\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"3f29315e-b542-43b8-9618-7de216cd9653\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-text-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-text-viewereditor\",\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false},{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"BuildingSize\",\"Title\":\"Building Size\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"eabc41a9-e332-4120-ac85-f0b7e53c0d0d\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-choices-runtimeeditor\",\"Choices\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":1,\"Text\":\"1 Floor\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":2,\"Text\":\"2 - 5 Floors\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":3,\"Text\":\"5 - 10 Floors\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":4,\"Text\":\"More than 10 Floors\"}]},\"IsNullable\":true,\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false},{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"BlockNumber\",\"Title\":\"Block Number\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"3f29315e-b542-43b8-9618-7de216cd9653\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-text-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-text-viewereditor\",\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false}]}",
+              "Fields": "{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"Street\",\"Title\":\"Street\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"3f29315e-b542-43b8-9618-7de216cd9653\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-text-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-text-viewereditor\",\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false},{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"Building\",\"Title\":\"Building\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"3f29315e-b542-43b8-9618-7de216cd9653\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-text-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-text-viewereditor\",\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false},{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"BuildingSize\",\"Title\":\"Building Size\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"eabc41a9-e332-4120-ac85-f0b7e53c0d0d\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-choices-runtimeeditor\",\"Choices\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":1,\"Text\":\"1 Floor\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":2,\"Text\":\"2 - 5 Floors\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":3,\"Text\":\"5 - 10 Floors\"},{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.Choice, Vanrise.GenericData.MainExtensions\",\"Value\":4,\"Text\":\"More than 10 Floors\"}]},\"ChoiceDefinitionId\":\"870aa7d8-0654-441d-b678-ff8b5e048eed\",\"IsNullable\":true,\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false},{\"$type\":\"Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities\",\"Name\":\"BlockNumber\",\"Title\":\"Block Number\",\"Type\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"3f29315e-b542-43b8-9618-7de216cd9653\",\"RuntimeEditor\":\"vr-genericdata-fieldtype-text-runtimeeditor\",\"ViewerEditor\":\"vr-genericdata-fieldtype-text-viewereditor\",\"OrderType\":1,\"DetailViewerEditor\":\"vr-genericdata-datarecordfield-defaultdetailviewer\",\"StoreValueSerialized\":false,\"CanRoundValue\":false},\"IsInheritedFromExtraField\":false}]}",
               "ExtraFieldsEvaluator": "{\"$type\":\"Vanrise.GenericData.MainExtensions.ParentDataRecordTypeExtraFields, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"043e058a-0e0e-40e2-82ab-fe04c896e615\",\"DataRecordTypeId\":\"75ebc88b-d89a-4d34-a96e-9386d64fcffd\"}",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.DataRecordTypeSettings, Vanrise.GenericData.Entities\"}",
               "CreatedTime": "2019-06-21T18:43:35.27",
-              "LastModifiedTime": "2019-06-23T13:45:31.953"
+              "LastModifiedTime": "2019-07-03T21:53:34.91"
             }
           },
           {
@@ -422,12 +422,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"9c8fbcfd-b99b-4f99-a666-a463295cd32d\"}]}}",
-              "Rank": 11,
+              "Rank": 17,
               "ActionNames": null,
               "Audience": null,
               "Content": null,
               "CreatedTime": "2019-05-16T12:12:41.9",
-              "LastModifiedTime": "2019-06-27T17:37:30.1"
+              "LastModifiedTime": "2019-07-04T14:30:44.9"
             }
           },
           {
@@ -440,12 +440,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"c416fb51-57af-4106-8152-aca17a691222\"}]}}",
-              "Rank": 9,
+              "Rank": 13,
               "ActionNames": null,
               "Audience": null,
               "Content": null,
               "CreatedTime": "2019-05-16T12:12:13.723",
-              "LastModifiedTime": "2019-06-27T17:37:30.097"
+              "LastModifiedTime": "2019-07-04T14:30:44.897"
             }
           },
           {
@@ -458,12 +458,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"470ac0e8-3d93-4ef4-988b-885c7163879b\"}]}}",
-              "Rank": 12,
+              "Rank": 18,
               "ActionNames": null,
               "Audience": null,
               "Content": null,
               "CreatedTime": "2019-05-29T14:16:38.207",
-              "LastModifiedTime": "2019-06-27T17:37:30.1"
+              "LastModifiedTime": "2019-07-04T14:30:44.9"
             }
           },
           {
@@ -476,12 +476,12 @@
               "Url": null,
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"c4034139-7d7a-46a0-8913-71bef231bcc1\"}]}}",
-              "Rank": 10,
+              "Rank": 15,
               "ActionNames": null,
               "Audience": null,
               "Content": null,
               "CreatedTime": "2019-05-16T12:11:53.487",
-              "LastModifiedTime": "2019-06-27T17:37:30.097"
+              "LastModifiedTime": "2019-07-04T14:30:44.9"
             }
           }
         ],
@@ -554,6 +554,79 @@
           },
           {
             "ColumnName": "Content",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = 'e18d9b6a-10b6-44da-8d09-834a285eb960'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "genericdata",
+      "TableName": "DataRecordFieldChoice",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "a7895c8f-37df-4d97-8283-ad3893790477",
+              "Name": "Com_Address_FloorSide",
+              "DevProjectID": "e18d9b6a-10b6-44da-8d09-834a285eb960",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.DataRecordFieldChoiceSettings, Vanrise.GenericData.Entities\",\"Choices\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities\",\"Value\":1,\"Text\":\"East\"},{\"$type\":\"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities\",\"Value\":2,\"Text\":\"West\"},{\"$type\":\"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities\",\"Value\":3,\"Text\":\"North\"},{\"$type\":\"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities\",\"Value\":4,\"Text\":\"South\"}]}}",
+              "CreatedTime": "2019-07-03T21:54:18.83",
+              "LastModifiedTime": "2019-07-03T21:54:18.83"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "870aa7d8-0654-441d-b678-ff8b5e048eed",
+              "Name": "Com_Address_BuildingSize",
+              "DevProjectID": "e18d9b6a-10b6-44da-8d09-834a285eb960",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.DataRecordFieldChoiceSettings, Vanrise.GenericData.Entities\",\"Choices\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities\",\"Value\":1,\"Text\":\"1 Floor\"},{\"$type\":\"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities\",\"Value\":2,\"Text\":\"2 - 5 Floors\"},{\"$type\":\"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities\",\"Value\":3,\"Text\":\"5 - 10 Floors\"},{\"$type\":\"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities\",\"Value\":4,\"Text\":\"More than 10 Floors\"}]}}",
+              "CreatedTime": "2019-07-03T21:53:23.45",
+              "LastModifiedTime": "2019-07-03T21:53:23.45"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": false
