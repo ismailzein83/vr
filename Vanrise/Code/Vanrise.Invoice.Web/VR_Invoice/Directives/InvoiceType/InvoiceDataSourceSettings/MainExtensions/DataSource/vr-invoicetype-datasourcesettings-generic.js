@@ -244,7 +244,7 @@ app.directive("vrInvoicetypeDatasourcesettingsGeneric", ["UtilsService", "VRNoti
 
                 currentContext.getFields = function () {
                     return dataRecordTypeFields;
-                }
+                };
 
                 return currentContext;
             };
