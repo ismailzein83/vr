@@ -75,14 +75,17 @@
                 + '              <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onLocalizationTextResourceDirectiveReady" normal-col-num="4"></vr-common - vrlocalizationtextresource - selector > '
                 + '         </span>'
                 +'           <vr-columns colnum="8" haschildcolumns>'
-                + '              <vr-columns colnum="4">'
+                + '              <vr-columns colnum="3">'
                 + '                  <vr-switch value="dataItem.isRequired" label="Required"></vr-switch>'
                 + '              </vr-columns>'
-                + '              <vr-columns colnum="4">'
+                + '              <vr-columns colnum="3">'
                 + '                  <vr-switch value="dataItem.isDisabled" label="Disabled"></vr-switch>'
                 + '              </vr-columns>'
-                + '              <vr-columns colnum="4">'
+                + '              <vr-columns colnum="3">'
                 + '                 <vr-switch value="dataItem.showAsLabel" label="Show as Label"></vr-switch>'
+                + '             </vr-columns>'
+                + '              <vr-columns colnum="3">'
+                + '                 <vr-switch value="dataItem.hideLabel" label="Hide Label"></vr-switch>'
                 + '             </vr-columns>'
                 + '          </vr-columns>'
                 + '      </vr-row>'
@@ -272,6 +275,7 @@
                                 isRequired: selectedField.IsRequired,
                                 isDisabled: selectedField.IsDisabled,
                                 showAsLabel: selectedField.ShowAsLabel,
+                                hideLabel: selectedField.HideLabel,
                                 fieldWidth: selectedField.FieldWidth,
                                 directiveAPI: undefined,
                                 localizationResourceSelectorDirectiveReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
@@ -368,6 +372,7 @@
                             IsRequired: selectedField.isRequired,
                             IsDisabled: selectedField.isDisabled,
                             ShowAsLabel: selectedField.showAsLabel,
+                            HideLabel: selectedField.hideLabel,
                             FieldWidth: selectedField.fieldWidth,
                             FieldViewSettings: selectedField.directiveAPI != undefined ? selectedField.directiveAPI.getData() : undefined,
                             TextResourceKey: selectedField.localizationTextResourceSelectorAPI.getSelectedValues(),

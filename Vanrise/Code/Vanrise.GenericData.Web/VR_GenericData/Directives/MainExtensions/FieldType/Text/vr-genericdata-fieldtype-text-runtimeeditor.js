@@ -235,10 +235,11 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
 
             function getSingleSelectionModeTemplate() {
                 var hidelabel = "";
-
-                if (attrs.hidelabel != undefined)
-                    hidelabel = " hidelabel ";
-
+                if (attrs.hidelabel != undefined) {
+                    var hideLabelValue = attrs.hidelabel;
+                    if (hideLabelValue != "false")
+                        hidelabel = " hidelabel ";
+                }
                 return '<vr-columns ng-if="scopeModel.isRichText" colnum="{{runtimeEditorCtrl.normalColNum}}">'
                     + ' <vr-editor ' + hidelabel + ' label="{{scopeModel.label}}" value="scopeModel.value" isrequired="runtimeEditorCtrl.isrequired"></vr-editor>'
                     + '</vr-columns>'

@@ -326,6 +326,7 @@ namespace Vanrise.GenericData.Business
                     runtimeField.IsDisabled = field.IsDisabled;
                     runtimeField.ShowAsLabel = field.ShowAsLabel;
                     runtimeField.FieldWidth = field.FieldWidth;
+                    runtimeField.HideLabel = field.HideLabel;
                     runtimeRow.Fields.Add(runtimeField);
                 }
             }
@@ -349,6 +350,7 @@ namespace Vanrise.GenericData.Business
                 runtimeField.IsDisabled = field.IsDisabled;
                 runtimeField.ShowAsLabel = field.ShowAsLabel;
                 runtimeField.FieldWidth = field.FieldWidth;
+                runtimeField.HideLabel = field.HideLabel;
                 genericEditorRuntimeFields.Add(runtimeField);
             }
 

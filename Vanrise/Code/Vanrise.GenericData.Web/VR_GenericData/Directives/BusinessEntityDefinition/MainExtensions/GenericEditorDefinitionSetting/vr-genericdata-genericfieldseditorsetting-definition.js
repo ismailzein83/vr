@@ -150,6 +150,7 @@
                         IsRequired: currentField.IsRequired,
                         IsDisabled: currentField.IsDisabled,
                         ShowAsLabel: currentField.ShowAsLabel,
+                        HideLabel: currentField.HideLabel,
                         FieldWidth: currentField.FieldWidth,
                         FieldViewSettings: currentField.FieldViewSettings,
                         TextResourceKey: currentField.TextResourceKey,

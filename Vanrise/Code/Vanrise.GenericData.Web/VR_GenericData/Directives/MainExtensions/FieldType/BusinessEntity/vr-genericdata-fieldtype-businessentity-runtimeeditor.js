@@ -55,9 +55,11 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             }
 
             var hidelabel = "";
-
-            if (attrs.hidelabel != undefined)
-                hidelabel = " hidelabel ";
+            if (attrs.hidelabel != undefined) {
+                var hideLabelValue = attrs.hidelabel;
+                if (hideLabelValue != "false")
+                    hidelabel = " hidelabel ";
+            }
 
             if (attrs.selectionmode == "dynamic") {
                 return '<span vr-loader="isLoading">'
@@ -229,9 +231,9 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                     }
 
                                     if (parentFieldValues != undefined && fieldName in parentFieldValues) {
-                                        payload.isDisabled = parentFieldValues[fieldName].isDisabled;
+                                        payload.isDisabled = parentFieldValues[fieldName] != undefined ? parentFieldValues[fieldName].isDisabled:undefined;
                                         if (fieldValue == undefined) {
-                                            fieldValue = parentFieldValues[fieldName].value;
+                                            fieldValue = parentFieldValues[fieldName] != undefined ? parentFieldValues[fieldName].value : undefined;
                                             payload.hasEmtyRequiredDependentField = false;
                                             payload.selectedIds = fieldValue;
                                         }

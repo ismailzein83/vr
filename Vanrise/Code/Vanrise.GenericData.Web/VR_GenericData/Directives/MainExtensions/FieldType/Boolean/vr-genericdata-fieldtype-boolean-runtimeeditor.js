@@ -182,8 +182,13 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
         function getSingleSelectionModeTemplate() {
 
             var labelTemplate = '<vr-label ng-if="scopeModel.label != undefined ">{{scopeModel.label}}</vr-label>';
-            if (attrs.hidelabel != undefined)
-                labelTemplate = " ";
+            if (attrs.hidelabel != undefined) {
+                var hideLabelValue = attrs.hidelabel;
+                if (hideLabelValue != "false")
+                    labelTemplate = " ";
+            }
+
+         
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
                 + labelTemplate

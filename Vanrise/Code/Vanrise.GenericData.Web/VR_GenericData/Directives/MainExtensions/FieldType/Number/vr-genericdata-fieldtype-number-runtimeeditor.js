@@ -225,9 +225,11 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
             function getSingleSelectionModeTemplate() {
 
                 var hidelabel = "";
-
-                if (attrs.hidelabel != undefined)
-                    hidelabel = " hidelabel ";
+                if (attrs.hidelabel != undefined) {
+                    var hideLabelValue = attrs.hidelabel;
+                    if (hideLabelValue != "false")
+                        hidelabel = " hidelabel ";
+                }
 
                 return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
                     + '<vr-textbox ' + hidelabel +'  type="number" label="{{scopeModel.label}}" value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" '

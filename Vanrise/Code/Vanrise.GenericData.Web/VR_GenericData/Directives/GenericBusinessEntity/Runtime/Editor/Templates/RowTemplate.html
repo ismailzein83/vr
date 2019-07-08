@@ -1,18 +1,19 @@
 ﻿<span ng-repeat="field in ctrl.fields">
     <span vr-disabled="field.IsDisabled" ng-if="!field.ShowAsLabel">
-        <vr-directivewrapper directive="field.runTimeEditor" enableadd on-ready="field.onFieldDirectiveReady" selectionmode="single" normal-col-num="{{field.columnNum}}" isrequired="field.IsRequired"></vr-directivewrapper>
+        <vr-directivewrapper directive="field.runTimeEditor" enableadd on-ready="field.onFieldDirectiveReady" selectionmode="single" normal-col-num="{{field.columnNum}}" hidelabel={{field.hideLabel}} isrequired="field.IsRequired"></vr-directivewrapper>
     </span>
-    <vr-columns colnum=" {{field.columnNum}}" ng-if="field.ShowAsLabel">
+    <vr-columns colnum="{{field.columnNum}}" ng-if="field.ShowAsLabel">
         <div style="display:flex;width:100%;">
-            <div style="display:inline-flex;width:50%">
+            <div style="display:inline-flex;width:50%" ng-if="!field.HideLabel">
                 <vr-label> {{field.FieldTitle}}</vr-label>
             </div>
-            <div style="width:30px;text-align:center">
+            <div style="width:30px;text-align:center" ng-if="!field.HideLabel">
                 <vr-label> : </vr-label>
             </div>
             <div style="display:inline-flex;width:50%">
-                <vr-label breakline isvalue> {{field.valueAsString}} </vr-label>
+                <!--colorobject="ctrl.getFieldColor(field)"-->
+                <vr-label breakline isvalue color="{{ctrl.getFieldColor(field)}}"> {{field.valueAsString}} </vr-label>
             </div>
         </div>
     </vr-columns>
-</span>  
+</span>

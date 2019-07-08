@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
+app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VRCommon_StyleDefinitionAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, VRCommon_StyleDefinitionAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -27,19 +27,38 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
             var genericContext;
             var allFieldValuesByName;
             var parentFieldValues;
+          //  var styleDefinitions = [];
+
             //var dataRecordTypeId;
 
             function initializeController() {
                 ctrl.fields = [];
 
+                //ctrl.getFieldColor = function (field) {
+                //    if (field != undefined) {
+                //        var style = UtilsService.getItemByVal(styleDefinitions, field.styleDefinitionId, 'StyleDefinitionId');
+                //        if (style != undefined && style.StyleDefinitionSettings != undefined && style.StyleDefinitionSettings.StyleFormatingSettings != undefined) {
+                //            return style.StyleDefinitionSettings.StyleFormatingSettings.ClassName;
+                //        }
+                //    }
+                //};
                 defineAPI();
             }
 
+            //function loadStyleDefinitions() {
+            //    return VRCommon_StyleDefinitionAPIService.GetAllStyleDefinitions().then(function (response) {
+            //        if (response) {
+            //            for (var i = 0; i < response.length; i++) {
+            //                styleDefinitions.push(response[i]);
+            //            }
+            //        }
+            //    });
+            //}
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                     
+
                     if (payload.fields != undefined) {
                         currentContext = payload.context;
                         genericContext = payload.genericContext;
@@ -62,6 +81,9 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             }
                             prepareFieldObject(field);
                         }
+
+                        //var styleDefinitionsLoadPromise = loadStyleDefinitions();
+                        //promises.push(styleDefinitionsLoadPromise);
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -108,9 +130,9 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 };
 
                 if (ctrl.onReady != null)
-                    ctrl.onReady(api); 
+                    ctrl.onReady(api);
             }
-               
+
             function prepareFieldObject(field) {
                 if (currentContext != undefined && field.FieldType != undefined)
                     field.runTimeEditor = currentContext.getRuntimeEditor(field.FieldType.ConfigId);
@@ -159,9 +181,10 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                         }
                     });
                 }
-
-
-                
+                if (field.HideLabel)
+                    field.hideLabel = "true";
+                else
+                    field.hideLabel = "false";
 
                 ctrl.fields.push(field);
             }
@@ -170,9 +193,11 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 var fieldValue = currentContext != undefined ? currentContext.getFieldPathValue(field.FieldPath) : undefined;
                 return VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription(field.FieldType, fieldValue).then(function (response) {
                     field.valueAsString = response;
+                    // field.valueAsString = response.FieldDescription;
+                   // field.styleDefinitionId = response.StyleDefinitionId;
                 });
             }
-        }  
+        }
 
         return directiveDefinitionObject;
     }
