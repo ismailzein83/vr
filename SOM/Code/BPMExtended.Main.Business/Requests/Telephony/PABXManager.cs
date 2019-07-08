@@ -320,6 +320,15 @@ namespace BPMExtended.Main.Business
             }
         }
 
+        public bool IsSecondaryPABXContract(string contractId)
+        {
+            bool isSecondaryPABXContract = false;
+            using (SOMClient client = new SOMClient())
+            {
+                isSecondaryPABXContract = client.Get<bool>(String.Format("api/SOM.ST/Billing/IsSecondaryPABXContract?ContractId={0}", contractId));
+            }
+            return isSecondaryPABXContract;
+        }
 
         #endregion
 
