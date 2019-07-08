@@ -52,8 +52,11 @@
     [BillingAddressNotes]     NVARCHAR (MAX)   NULL,
     [SocialMediaAddresses]    NVARCHAR (MAX)   NULL,
     [DunningStatus]           UNIQUEIDENTIFIER NULL,
+    [InvoiceSettingID]        UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
