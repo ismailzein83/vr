@@ -5,12 +5,15 @@
     [Region]           INT            NULL,
     [City]             INT            NULL,
     [Town]             INT            NULL,
+    [Vendor]           BIGINT         NULL,
+    [IMS]              BIGINT         NULL,
     [CreatedBy]        INT            NULL,
     [CreatedTime]      DATETIME       NULL,
     [LastModifiedBy]   INT            NULL,
     [LastModifiedTime] DATETIME       NULL,
     [timestamp]        ROWVERSION     NULL,
-    [IMS]              BIGINT         NULL,
     CONSTRAINT [PK__OLT__3214EC0740058253] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
