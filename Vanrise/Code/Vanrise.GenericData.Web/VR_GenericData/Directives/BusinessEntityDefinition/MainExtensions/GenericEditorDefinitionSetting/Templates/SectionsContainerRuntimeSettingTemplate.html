@@ -1,7 +1,9 @@
-﻿<span ng-repeat="sectionContainer in scopeModel.sectionContainers">
-    <vr-columns colnum="{{sectionContainer.colNum}}">
-        <vr-section header="{{sectionContainer.sectionTitle}}" collapsible>
-            <vr-directivewrapper directive="sectionContainer.runtimeEditor" on-ready="sectionContainer.onEditorRuntimeDirectiveReady"></vr-directivewrapper>
-        </vr-section>
-    </vr-columns>
-</span>
+﻿<vr-row>
+    <span ng-repeat="sectionContainer in scopeModel.sectionContainers">
+        <vr-columns colnum="{{sectionContainer.colNum}}">
+            <vr-section header="{{sectionContainer.sectionTitle}}" collapsible>
+                <vr-directivewrapper directive="sectionContainer.runtimeEditor" on-ready="sectionContainer.onEditorRuntimeDirectiveReady"></vr-directivewrapper>
+            </vr-section>
+        </vr-columns>
+    </span>
+</vr-row>

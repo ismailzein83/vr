@@ -143,6 +143,7 @@
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ListEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RangeGenericEditorDefinition.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RowsContainerEditorDefinitionSetting.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RowSectionsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\SectionsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\TabsContainerEditorDefinitionSetting.cs" />

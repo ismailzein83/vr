@@ -1,0 +1,12 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="ctrl.addSectionContainer" standalone vr-disabled="ctrl.disableAddSectionContainer()"></vr-button>
+        <vr-validator validate="ctrl.isValid()">
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeSectionContainer" hidegridmenu>
+                <vr-datagridcolumn headertext="'Title'" field="'SectionTitle'" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Columns Number'" field="'ColNum'" disablesorting></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>
