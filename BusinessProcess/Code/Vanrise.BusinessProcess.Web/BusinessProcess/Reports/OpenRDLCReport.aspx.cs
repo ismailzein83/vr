@@ -43,8 +43,8 @@ namespace Vanrise.BusinessProcess.Web.BusinessProcess.Reports
 				var customerField= paymentReceiptDataRecordType.GetRecord("Customer");
 				var customerDescription = customerField.Type.GetDescription(openRDLCInput.Customerid);
 
-				var ReceivedByField = paymentReceiptDataRecordType.GetRecord("ReceivedBy");
-				var ReceivedByDescription = customerField.Type.GetDescription(openRDLCInput.ReceivedBy);
+				var receivedByField = paymentReceiptDataRecordType.GetRecord("ReceivedBy");
+				var receivedByDescription = receivedByField.Type.GetDescription(openRDLCInput.ReceivedBy);
 
 				var currencyField = paymentReceiptDataRecordType.GetRecord("Currency");
 				var currencyFieldDescription = currencyField.Type.GetDescription(openRDLCInput.CurrencyId);
@@ -71,7 +71,7 @@ namespace Vanrise.BusinessProcess.Web.BusinessProcess.Reports
 				RDLCReportParameters.Add(new ReportParameter("CurrencySymbol", currencyFieldDescription, true));
 				RDLCReportParameters.Add(new ReportParameter("Amount", openRDLCInput.Amount.ToString(), true));
 				RDLCReportParameters.Add(new ReportParameter("CustomerName", customerDescription, true));
-				RDLCReportParameters.Add(new ReportParameter("ReceivedBy", ReceivedByDescription, true));
+				RDLCReportParameters.Add(new ReportParameter("ReceivedBy", receivedByDescription, true));
 				RDLCReportParameters.Add(new ReportParameter("CheckNumber", openRDLCInput.CheckNumber, true));
 
 
