@@ -40,6 +40,10 @@
     border-bottom: 1px solid #fff;
 }
 
+.vr-networkpath-node .node-body ,nodepath-name{
+    white-space:normal;
+}
+
 .vr-networkpath-item:last-child .vr-networkpath-node {
     width: 250px;
 }
@@ -125,7 +129,7 @@
 
 .node-type {
     text-align: center;
-    padding: 0px 5px;
+    padding: 5px;
 }
 
     .node-type img {
