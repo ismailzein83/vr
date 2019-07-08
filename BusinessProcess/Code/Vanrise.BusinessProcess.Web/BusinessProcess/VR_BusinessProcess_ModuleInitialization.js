@@ -10,5 +10,6 @@
         BusinessProcess_BPInstanceService.registerOpenBPInstanceViewerAction();
         BusinessProcess_TaskTypeActionService.registerExecuteAction();
         BusinessProcess_BPInstanceService.registerStartBPProcessAction();
-        BusinessProcess_BPInstanceService.registerStartBPProcessCustomAction();
+		BusinessProcess_BPInstanceService.registerStartBPProcessCustomAction();
+		BusinessProcess_TaskTypeActionService.registerOpenRDLCReportAction();
     }]);

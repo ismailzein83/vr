@@ -101,6 +101,7 @@
     <Compile Include="BPVisualization\BPVisualEventDetailUpdateInput.cs" />
     <Compile Include="BPVisualization\BPVisuaIEventDetailUpdateOutput.cs" />
     <Compile Include="ExecuteBPTaskOutput.cs" />
+    <Compile Include="OpenRDLCReportVRTempPayload.cs" />
     <Compile Include="ProcessSynchronisation\StructuredProcessSynchronisation.cs" />
     <Compile Include="ProcessSynchronisation\ProcessSynchronisationQuery.cs" />
     <Compile Include="ProcessSynchronisation\ProcessSynchronisationDetail.cs" />
