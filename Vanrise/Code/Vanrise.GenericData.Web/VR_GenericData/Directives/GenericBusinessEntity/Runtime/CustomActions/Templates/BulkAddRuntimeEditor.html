@@ -18,7 +18,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="DownloadFile" ng-if="scopeModel.showDownloadButton" data-onclick="scopeModel.downloadFile"></vr-button>
-                <vr-button type="Execute" validationcontext="bulkAddEditorGroup" data-onclick="scopeModel.execute"></vr-button>
+                <vr-button type="Execute" validationcontext="bulkAddEditorGroup" data-onclick="scopeModel.execute" vr-disabled="scopeModel.showDownloadButton"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

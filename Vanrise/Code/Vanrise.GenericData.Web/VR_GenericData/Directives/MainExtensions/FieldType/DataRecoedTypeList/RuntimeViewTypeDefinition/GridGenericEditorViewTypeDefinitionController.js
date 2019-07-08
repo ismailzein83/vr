@@ -14,7 +14,7 @@
 
         $scope.scopeModel = {};
 
-        var dataRow;
+        var genericField;
         var context;
         loadParameters();
         defineScope();
@@ -24,20 +24,20 @@
             var parameters = VRNavigationService.getParameters($scope); 
             if (parameters != undefined && parameters != null) {
                 context = parameters.context;
-                dataRow = parameters.dataRow;
+                genericField = parameters.dataRow;
             }
-            if (dataRow != undefined) {
+            if (genericField != undefined) {
                 isEditMode = true;
             }
         }
 
         function defineScope() {
-            $scope.scopeModel.saveDataRow = function () {
+            $scope.scopeModel.saveGenericField = function () {
 
                 if (isEditMode)
-                    return updateDataRow();
+                    return updateGenericField();
                 else
-                    return insertDataRow();
+                    return insertGenericField();
             };
 
             $scope.scopeModel.close = function () {
@@ -58,7 +58,7 @@
             var loadEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
             editorDefinitionReadyPromiseDeferred.promise.then(function () {
                 var editorPayload = {
-                    settings: dataRow != undefined ? dataRow.Settings : undefined,
+                    settings: genericField != undefined ? genericField.Settings : undefined,
                     context: context
                 };
                 VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, editorPayload, loadEditorDefinitionDirectivePromiseDeferred);
@@ -70,7 +70,7 @@
             var columnSettingDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             columnSettingDirectivePromiseReadyDeferred.promise.then(function () {
                 var columnSettingEditorPayload = {
-                    data: dataRow != undefined ? dataRow.GridColumnSettings : undefined
+                    data: genericField != undefined ? genericField.GridColumnSettings : undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(columnSettingDirectiveAPI, columnSettingEditorPayload, columnSettingDirectiveLoadPromiseDeferred);
             });
@@ -91,13 +91,13 @@
 
             function setTitle() {
                 if (isEditMode)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor("",dataRow.Title);
+                    $scope.title = UtilsService.buildTitleForUpdateEditor("Field Info", genericField.Title);
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("");
+                    $scope.title = UtilsService.buildTitleForAddEditor("Field Info");
             }
-            if (dataRow) {
-                $scope.scopeModel.headerText =  dataRow.HeaderText;
-                $scope.scopeModel.title = dataRow.Title;
+            if (genericField) {
+                $scope.scopeModel.headerText = genericField.HeaderText;
+                $scope.scopeModel.title = genericField.Title;
             }
            
             return UtilsService.waitMultipleAsyncOperations([loadEditorDefinitionDirective,loadColumnSettingDirective, setTitle]).catch(function (error) {
@@ -107,9 +107,9 @@
             });
         }
 
-        function buildDataRowFromScope() {
+        function buildGenericFieldFromScope() {
             return {
-                GridGenericEditorFieldId: dataRow != undefined ? dataRow.GridGenericEditorFieldId: UtilsService.guid(),
+                GridGenericEditorFieldId: genericField != undefined ? genericField.GridGenericEditorFieldId: UtilsService.guid(),
                 HeaderText: $scope.scopeModel.headerText,
                 Title: $scope.scopeModel.title,
                 Settings: editorDefinitionAPI.getData(),
@@ -117,25 +117,25 @@
             };
         }
 
-        function insertDataRow() {
+        function insertGenericField() {
             $scope.scopeModel.isLoading = true;
             if ($scope.onRowAdded != undefined) {
-                $scope.onRowAdded(buildDataRowFromScope());
+                $scope.onRowAdded(buildGenericFieldFromScope());
             }
             $scope.modalContext.closeModal();
             $scope.scopeModel.isLoading = true;
         }
 
-        function updateDataRow() {
+        function updateGenericField() {
             $scope.scopeModel.isLoading = true;
             if ($scope.onRowUpdated != undefined) {
-                $scope.onRowUpdated(buildDataRowFromScope());
+                $scope.onRowUpdated(buildGenericFieldFromScope());
             }
             $scope.modalContext.closeModal();
             $scope.scopeModel.isLoading = true;
 
         }
-
+        
     }
     appControllers.controller('VR_GenericData_GridGenericEditorViewTypeDefinitionController', gridViewEditorController);
 })(appControllers);
