@@ -5,7 +5,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUI
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired:"="
             },
             controller: function ($scope, $element, $attrs) {
 
