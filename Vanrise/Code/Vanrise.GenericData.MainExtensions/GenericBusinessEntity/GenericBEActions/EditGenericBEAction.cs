@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.MainExtensions
         public override string ActionTypeName { get { return "EditGenericBEAction"; } }
 
 		public override string ActionKind { get  { return "Edit"; } }
-
+        public bool OnlyView { get; set; }
 		public override bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
         {
             return new GenericBusinessEntityManager().DoesUserHaveEditAccess(context.UserId, context.BusinessEntityDefinitionId);

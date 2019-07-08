@@ -10,7 +10,6 @@
         var actionTypes = [];
 
         function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridActionGroups, genericBEGridViews, idFieldType, fieldValues) {
-
             genericBusinessEntity.menuActions = [];
 
             if (genericBusinessEntity.AvailableGridActionIds != undefined) {
@@ -161,7 +160,12 @@
                             if (onItemUpdated != undefined)
                                 onItemUpdated(updatedGenericBE);
                         };
-                        VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues);
+                        if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
+                            if (payload.genericBEAction.Settings.OnlyView)
+                                VR_GenericData_GenericBusinessEntityService.viewGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues);
+                            else
+                                VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues);
+                        }
                     });
                 }
             };

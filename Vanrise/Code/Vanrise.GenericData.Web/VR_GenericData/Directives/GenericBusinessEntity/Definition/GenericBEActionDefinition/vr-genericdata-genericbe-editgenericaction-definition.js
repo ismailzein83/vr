@@ -33,13 +33,17 @@
 				api.load = function (payload) {
 					var context = payload.context;
 					if (context != undefined && context.showSecurityGridCallBack != undefined && typeof (context.showSecurityGridCallBack) == 'function')
-						context.showSecurityGridCallBack(false);
+                        context.showSecurityGridCallBack(false);
+                    var settings = payload.settings;
+                    if (settings != undefined)
+                        $scope.scopeModel.onlyView = settings.OnlyView;
                 };
 
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.MainExtensions.EditGenericBEAction, Vanrise.GenericData.MainExtensions"
+                        $type: "Vanrise.GenericData.MainExtensions.EditGenericBEAction, Vanrise.GenericData.MainExtensions",
+                        OnlyView: $scope.scopeModel.onlyView
                     };
                 };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
