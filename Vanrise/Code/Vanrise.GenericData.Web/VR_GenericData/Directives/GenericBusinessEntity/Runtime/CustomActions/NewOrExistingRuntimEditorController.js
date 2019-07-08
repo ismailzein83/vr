@@ -4,12 +4,18 @@
 
     function NewOrExistingRuntimEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBusinessEntityService) {
 
+        var runtimeEditorAPI;
+        var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
         $scope.scopeModel = {};
 
         var customAction;
         var businessEntityDefinitionId;
         var parentFieldValues;
         var context;
+        var dataRecordTypeId;
+        var customActionSettings;
+
         loadParameters();
         defineScope();
         load();
@@ -17,18 +23,28 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
+                dataRecordTypeId = parameters.dataRecordTypeId;
                 parentFieldValues = parameters.parentFieldValues;
                 customAction = parameters.customAction;
                 context = parameters.context;
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
             }
+            customActionSettings = customAction.Settings != undefined ? customAction.Settings : {};
         }
 
         function defineScope() {
+
+            $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
+                runtimeEditorAPI = api;
+                runtimeEditorReadyDeferred.resolve();
+            };
             $scope.scopeModel.getBEentity = function () {
+                var fieldValues = {};
+                runtimeEditorAPI.setData(fieldValues);
+
                 $scope.scopeModel.isLoading = true;
 
-                var filter = buildFilter();
+                var filter = buildFilter(fieldValues);
                 var promiseDeferred = UtilsService.createPromiseDeferred();
                 var message;
                 VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter))
@@ -67,14 +83,14 @@
                                 else {
                                     promiseDeferred.resolve();
                                     $scope.modalContext.closeModal();
-                                    showAdd();
+                                    showAdd(fieldValues);
                                 }
                             });
                         }
                         else {
                             $scope.modalContext.closeModal();
                             promiseDeferred.resolve();
-                            showAdd();
+                            showAdd(fieldValues);
                         }
                     }).catch(function (error) {
                         $scope.scopeModel.isLoading = false;
@@ -87,48 +103,64 @@
                 $scope.modalContext.closeModal();
             };
         }
-        function showAdd() {
-            var fieldValues = buildFieldValues();
+
+        function loadEditorRuntimeDirective() {
+            var loadEditorRuntimeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            runtimeEditorReadyDeferred.promise.then(function () {
+                var runtimeEditorPayload = {
+                    parentFieldValues: parentFieldValues,
+                    dataRecordTypeId: dataRecordTypeId,
+                    definitionSettings: customActionSettings.EditorDefinitionSetting,
+                    runtimeEditor: customActionSettings.EditorDefinitionSetting != undefined ? customActionSettings.EditorDefinitionSetting.RuntimeEditor : undefined,
+                    isEditMode: false
+                };
+                VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, loadEditorRuntimeDirectivePromiseDeferred);
+            });
+            return loadEditorRuntimeDirectivePromiseDeferred.promise;
+        }
+        function showAdd(runntimeEditorFieldValues) {
+            var fieldValues = buildFieldValues(runntimeEditorFieldValues);
             VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(context.onGenericBEAdded, businessEntityDefinitionId, "large", fieldValues);
         }
         function load() {
+            $scope.scopeModel.isLoading = true;
+            loadAllControls();
+        }
+        function loadAllControls() {
             $scope.title = "Add";
+            return UtilsService.waitPromiseNode({ promises: [loadEditorRuntimeDirective()] }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
-        function buildFieldValues() {
-            var fieldValues =
-            {
-                FirstName: {
-                    value: $scope.firstName
-                },
-                MiddleName: {
-                    value: $scope.middleName
-                },
-                LastName: {
-                    value: $scope.lastName
-                }
-            };
-            return fieldValues;
+        function buildFieldValues(runntimeEditorFieldValues) {
+
+            var fieldValue = {};
+            var keys = Object.keys(runntimeEditorFieldValues);
+
+            for (var i = 0; i < keys.length; i++) {
+                var key = keys[i];
+                fieldValue[key] = {};
+                fieldValue[key].value = runntimeEditorFieldValues[key];
+            }
+            return fieldValue;
         }
-        function buildFilter() {
+
+        function buildFilter(runntimeEditorFieldValues) {
+
             var filters = [];
-            var firstNameFilter =
-            {
-                FieldName: "FirstName",
-                FilterValues: [$scope.firstName]
-            };
-            filters.push(firstNameFilter);
-            var lastNameFilter =
-            {
-                FieldName: "LastName",
-                FilterValues: [$scope.lastName]
-            };
-            filters.push(lastNameFilter);
-            var middleNameFilter =
-            {
-                FieldName: "MiddleName",
-                FilterValues: [$scope.middleName]
-            };
-            filters.push(middleNameFilter);
+            var keys = Object.keys(runntimeEditorFieldValues);
+            for (var i = 0; i < keys.length; i++) {
+                var key = keys[i];
+                var object =
+                {
+                    FieldName: key,
+                    FilterValues: [runntimeEditorFieldValues[key]]
+                };
+                filters.push(object);
+            }
             var filter =
             {
                 FieldFilters: filters

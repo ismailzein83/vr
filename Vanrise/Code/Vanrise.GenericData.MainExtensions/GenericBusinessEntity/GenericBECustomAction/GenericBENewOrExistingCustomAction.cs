@@ -8,5 +8,7 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBECust
     {
         public override Guid ConfigId => new Guid("AE78708F-DFD0-49E7-8B60-909AC4D8ABD2");
         public override string ActionTypeName => "NewOrExistingCustomAction";
+        public VRGenericEditorDefinitionSetting EditorDefinitionSetting { get; set; }
+
     }
 }
