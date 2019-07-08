@@ -27,9 +27,16 @@
             var editorDefinitionSettingDirectiveAPI;
             var editorDefinitionSettingDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var modalWidthSelectorAPI;
+            var modalWidthReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.onModalWidthSelectorReady = function (api) {
+                    modalWidthSelectorAPI = api;
+                    modalWidthReadyPromiseDeferred.resolve();
+                };
 
                 $scope.scopeModel.onGenericBEFieldEditorDefinitionDirectiveReady = function (api) {
                     editorDefinitionSettingDirectiveAPI = api;
@@ -60,9 +67,7 @@
                         promises: promises
                     };
 
-                    var editorDefinitionSettingDirectiveLoadedPromise = loadFieldEditorDefinition();
-                    promises.push(editorDefinitionSettingDirectiveLoadedPromise);
-
+                    promises.push(loadFieldEditorDefinition());
                     function loadFieldEditorDefinition() {
                         var editorDefinitionSettingDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -78,13 +83,27 @@
                         return editorDefinitionSettingDirectiveLoadPromiseDeferred.promise;
                     }
 
+                    promises.push(loadModalWidthSelector());
+                    function loadModalWidthSelector() {
+                        var loadModalWidthSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        modalWidthReadyPromiseDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                selectedIds: settings != undefined && settings.EditorSize != undefined ? settings.EditorSize : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(modalWidthSelectorAPI, selectorPayload, loadModalWidthSelectorPromiseDeferred);
+                        });
+
+                        return loadModalWidthSelectorPromiseDeferred.promise;
+                    }
+
                     return UtilsService.waitPromiseNode(rootNodePromises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBECustomAction.GenericBENewOrExistingCustomAction, Vanrise.GenericData.MainExtensions",
-                          EditorDefinitionSetting: editorDefinitionSettingDirectiveAPI.getData()
+                        EditorDefinitionSetting: editorDefinitionSettingDirectiveAPI.getData(),
+                        EditorSize: modalWidthSelectorAPI.getSelectedIds()
                     };
                 };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

@@ -35,7 +35,10 @@
                         context: payload.context
                     };
                     var settings = {};
-
+                    if (payload.customAction.Settings != undefined) {
+                        var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", payload.customAction.Settings.EditorSize);
+                        settings.size = editorEnum.modalAttr;
+                    }
                     var modalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/CustomActions/Templates/NewOrExistingRuntimeEditor.html";
 
                     VRModalService.showModal(modalPath, parameters, settings);
@@ -82,7 +85,7 @@
                         });
                     }
                 }
-                buildActionsFromDictionary(actionsDictionary);  
+                buildActionsFromDictionary(actionsDictionary);
             }
             return customActions;
             function buildActionsFromDictionary(actionsDictionary) {
@@ -133,7 +136,7 @@
                     businessEntityDefinitionId: businessEntityDefinitionId,
                     dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
                     parentFieldValues: parentFieldValues,
-                    context:context
+                    context: context
                 };
                 var actionType = getCustomActionTypeIfExist(customAction.Settings.ActionTypeName);
                 if (actionType != undefined)
