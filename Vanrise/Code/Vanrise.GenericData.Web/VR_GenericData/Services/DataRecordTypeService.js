@@ -100,8 +100,6 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DataRecoedTypeList/RuntimeViewTypeDefinition/Templates/GridGenericEditorViewTypeTemplate.html', modalParameters, modalSettings);
         }
-        func
-
 
         function addDataRecordTypeFieldFilter(fields, filterObj, onDataRecordFieldTypeFilterAdded) {
             var modalParameters = {
