@@ -1,16 +1,16 @@
 ﻿<vr-row ng-show="scopeModel.showBasicAdvancedTabs" removeline>
 	<vr-columns width="fullrow">
 		<vr-choices-filter ng-if="scopeModel.isLocalizationEnabled" selectedindex="selectedFilternIndex">
-			<vr-choice-filter isselected="basicSelected">VRRes.Common.Basic.VREnd</vr-choice-filter>
-			<vr-choice-filter isselected="advancedSelected">VRRes.Common.Advanced.VREnd</vr-choice-filter>
+			<vr-choice-filter isselected="scopeModel.basicSelected">VRRes.Common.Basic.VREnd</vr-choice-filter>
+			<vr-choice-filter isselected="scopeModel.advancedSelected">VRRes.Common.Advanced.VREnd</vr-choice-filter>
 		</vr-choices-filter>
 		<vr-choices-filter ng-if="!scopeModel.isLocalizationEnabled" selectedindex="selectedFilternIndex">
-			<vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
-			<vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+			<vr-choice-filter isselected="scopeModel.basicSelected">Basic</vr-choice-filter>
+			<vr-choice-filter isselected="scopeModel.advancedSelected">Advanced</vr-choice-filter>
 		</vr-choices-filter>
 	</vr-columns>
 </vr-row>
 
 <span ng-repeat="filter in scopeModel.filters">
-    <vr-directivewrapper directive="filter.editor" on-ready="filter.onFilterReady" normal-col-num="2" ng-show=" !scopeModel.showBasicAdvancedTabs || filter.showInBasic || advancedSelected"></vr-directivewrapper>
+    <vr-directivewrapper directive="filter.editor" on-ready="filter.onFilterReady" normal-col-num="2" ng-show=" !scopeModel.showBasicAdvancedTabs || filter.showInBasic || scopeModel.advancedSelected"></vr-directivewrapper>
 </span>
