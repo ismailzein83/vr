@@ -61,7 +61,7 @@ app.directive("retailNimFtthpathDesigner", ["UtilsService", "VRNotificationServi
                             var networkPathDesignerDirectivePayload = {
                                 networkNodes: buildNetworkNodes(selectedValues),
                                 networkConnectors: buildConnetorNodes(selectedValues)
-                            }
+                            };
                             VRUIUtilsService.callDirectiveLoad(networkPathDesignerDirectiveAPI, networkPathDesignerDirectivePayload, networkPathDesignerDirectiveLoadDeferred);
                         });
 
