@@ -1023,6 +1023,13 @@ namespace Mediation.Runtime
             {
                 Tuple<object, List<int>> cdr = duplicatedISDN;
                 (cdr.Item1 as dynamic).ChargeableDuration *= cdr.Item2[0];
+                if (cdr.Item2[0] > 1)
+                {
+                    var cdrItem = (cdr.Item1 as dynamic);
+                    if (cdrItem.ExtraFields == null)
+                        cdrItem.ExtraFields = new Dictionary<string, string>();
+                    cdrItem.ExtraFields.Add("ISDN", "true");
+                }
                 cdrs.Add(cdr.Item1);
             }
 
