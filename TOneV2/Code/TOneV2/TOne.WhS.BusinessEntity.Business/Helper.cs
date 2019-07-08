@@ -4,11 +4,13 @@ using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public static class Helper
     {
+        public static Guid _rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
         public static DateTimeRange GetDateTimeRangeWithOffset(DateTime effectiveDate)
         {
             DateTime effectiveDateWithNoTime = effectiveDate.Date;
@@ -21,9 +23,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public static IEnumerable<int> GetRateTypeIds(int ownerId, DateTime? effectiveDate)
         {
             var rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
-            var rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
 
-            var genericRuleTarget = new Vanrise.GenericData.Entities.GenericRuleTarget
+            var genericRuleTarget = new GenericRuleTarget
             {
                 TargetFieldValues = new Dictionary<string, object>
                 {
@@ -33,15 +34,13 @@ namespace TOne.WhS.BusinessEntity.Business
             if (effectiveDate.HasValue)
                 genericRuleTarget.EffectiveOn = effectiveDate;
 
-            return rateTypeRuleManager.GetRateTypes(rateTypeRuleDefinitionId, genericRuleTarget);
+            return rateTypeRuleManager.GetRateTypes(_rateTypeRuleDefinitionId, genericRuleTarget);
         }
-        public static IEnumerable<int> GetRateTypeIds(int ownerId, long zoneId, DateTime? effectiveDate)
+        public static GenericRuleTarget PrepareRuleContext(int ownerId, long zoneId, DateTime? effectiveDate)
         {
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             var countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
-            var rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
-            var rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
-            var genericRuleTarget = new Vanrise.GenericData.Entities.GenericRuleTarget
+            var genericRuleTarget = new GenericRuleTarget
             {
                 TargetFieldValues = new Dictionary<string, object>
                 {
@@ -53,7 +52,13 @@ namespace TOne.WhS.BusinessEntity.Business
             if (effectiveDate.HasValue)
                 genericRuleTarget.EffectiveOn = effectiveDate;
 
-            return rateTypeRuleManager.GetRateTypes(rateTypeRuleDefinitionId, genericRuleTarget);
+            return genericRuleTarget;
+        }
+        public static IEnumerable<int> GetRateTypeIds(int ownerId, long zoneId, DateTime? effectiveDate)
+        {
+            GenericRuleTarget genericRuleTarget = PrepareRuleContext(ownerId, zoneId, effectiveDate);
+            var rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
+            return rateTypeRuleManager.GetRateTypes(_rateTypeRuleDefinitionId, genericRuleTarget);
         }
         public static void StructureBusinessEntitiesByDate<T>(List<T> businessEntityList, DateTime fromDate, DateTime toDate, Action<IEnumerable<T>, DateTime, DateTime> onBusinessEntityMatching) where T : IBusinessEntity
         {

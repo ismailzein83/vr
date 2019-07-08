@@ -6,6 +6,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Pricing;
 
 namespace TOne.WhS.Sales.Business
@@ -78,20 +79,8 @@ namespace TOne.WhS.Sales.Business
 		}
 		private RateTypeRule GetMatchRule(int customerId, long zoneId, DateTime effectiveDate)
 		{
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            var countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
-            var ruleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
-			var target = new Vanrise.GenericData.Entities.GenericRuleTarget
-			{
-				TargetFieldValues = new Dictionary<string, object>
-				{
-					{"CustomerId", customerId},
-					{"SaleZoneId", zoneId},
-                    {"Country", countryId}
-				}
-			};
-			target.EffectiveOn = effectiveDate;
-			return new RateTypeRuleManager().GetMatchRule(ruleDefinitionId, target);
+            GenericRuleTarget target = Helper.PrepareRuleContext(customerId, zoneId, effectiveDate);
+			return new RateTypeRuleManager().GetMatchRule(Helper._rateTypeRuleDefinitionId, target);
 		}
 	}
 }
