@@ -468,7 +468,9 @@
                                                         </Style>
                                                       </TextRun>
                                                     </TextRuns>
-                                                    <Style />
+                                                    <Style>
+                                                      <TextAlign>Right</TextAlign>
+                                                    </Style>
                                                   </Paragraph>
                                                 </Paragraphs>
                                                 <rd:DefaultName>Textbox2</rd:DefaultName>
@@ -1522,7 +1524,7 @@
                                   <DataSetName>DefaultDataSet</DataSetName>
                                   <Top>1.5796in</Top>
                                   <Left>0.61458in</Left>
-                                  <Height>1.33196in</Height>
+                                  <Height>1.33195in</Height>
                                   <Width>4.7538in</Width>
                                   <ZIndex>5</ZIndex>
                                   <Style>
@@ -1617,7 +1619,7 @@
             <DataSetName>DefaultDataSet</DataSetName>
             <Top>0.03812cm</Top>
             <Left>0.07551cm</Left>
-            <Height>9.09827cm</Height>
+            <Height>9.09826cm</Height>
             <Width>16.4161cm</Width>
             <Style>
               <Border>
