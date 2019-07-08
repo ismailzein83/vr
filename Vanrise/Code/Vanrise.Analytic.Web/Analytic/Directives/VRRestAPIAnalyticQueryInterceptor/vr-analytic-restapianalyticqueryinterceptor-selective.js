@@ -12,7 +12,7 @@
                 normalColNum: '@',
                 label: '@',
                 customvalidate: '=',
-                isrequired: '@'
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;

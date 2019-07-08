@@ -26,10 +26,15 @@ namespace Vanrise.Analytic.Business
 
             input.Query.TableId = vrRestAPIAnalyticDataProvider.RemoteAnalyticTableId;
 
-            var vrRestAPIAnalyticQueryInterceptor =
-                vrRestAPIAnalyticDataProvider.VRRestAPIAnalyticQueryInterceptor.CastWithValidate<VRRestAPIAnalyticQueryInterceptor>("vrRestAPIAnalyticDataProvider.VRRestAPIAnalyticQueryInterceptor");
+            var interceptor = vrRestAPIAnalyticDataProvider.VRRestAPIAnalyticQueryInterceptor;
 
-            vrRestAPIAnalyticQueryInterceptor.PrepareQuery(new VRRestAPIAnalyticQueryInterceptorContext() { VRConnectionId = vrRestAPIAnalyticDataProvider.VRConnectionId, Query = input.Query });
+            if (interceptor != null)
+            {
+                var vrRestAPIAnalyticQueryInterceptor =
+                  interceptor.CastWithValidate<VRRestAPIAnalyticQueryInterceptor>("vrRestAPIAnalyticDataProvider.VRRestAPIAnalyticQueryInterceptor");
+
+                vrRestAPIAnalyticQueryInterceptor.PrepareQuery(new VRRestAPIAnalyticQueryInterceptorContext() { VRConnectionId = vrRestAPIAnalyticDataProvider.VRConnectionId, Query = input.Query });
+            }
 
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(vrRestAPIAnalyticDataProvider.VRConnectionId);
