@@ -1,12 +1,11 @@
-﻿CREATE TABLE [CRMFixedOper].[Vender] (
-    [ID]               UNIQUEIDENTIFIER NULL,
+﻿CREATE TABLE [CRMFixedOper].[StockItemModelSpeedUnit] (
+    [ID]               UNIQUEIDENTIFIER NOT NULL,
     [Name]             NVARCHAR (255)   NULL,
     [CreatedTime]      DATETIME         NULL,
     [CreatedBy]        INT              NULL,
     [LastModifiedTime] DATETIME         NULL,
     [LastModifiedBy]   INT              NULL,
-    [timestamp]        ROWVERSION       NULL
+    [timestamp]        ROWVERSION       NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
 );
-
-
 

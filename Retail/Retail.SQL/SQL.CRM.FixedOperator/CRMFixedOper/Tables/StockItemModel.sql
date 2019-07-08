@@ -15,8 +15,14 @@
     [LastModifiedBy]   INT              NULL,
     [ModelCode]        NVARCHAR (255)   NULL,
     [timestamp]        ROWVERSION       NULL,
+    [NumberOfPorts]    INT              NULL,
+    [SupportWIFI]      BIT              NULL,
+    [SpeedId]          UNIQUEIDENTIFIER NULL,
+    [ConnectionTypeId] UNIQUEIDENTIFIER NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

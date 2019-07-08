@@ -16,7 +16,7 @@
     [Street]                  NVARCHAR (255)   NULL,
     [Building]                NVARCHAR (255)   NULL,
     [FloorNumber]             INT              NULL,
-    [AddressNotes]            NVARCHAR (255)   NULL,
+    [AddressNotes]            NVARCHAR (MAX)   NULL,
     [PhoneNumber]             NVARCHAR (255)   NULL,
     [MobileNumber]            NVARCHAR (255)   NULL,
     [Email]                   NVARCHAR (255)   NULL,
@@ -35,8 +35,27 @@
     [BuildingSize]            INT              NULL,
     [BlockNumber]             NVARCHAR (255)   NULL,
     [StatusReason]            INT              NULL,
+    [PhoneNumbers]            NVARCHAR (MAX)   NULL,
+    [Emails]                  NVARCHAR (MAX)   NULL,
+    [ContactName]             NVARCHAR (255)   NULL,
+    [ContactNumber]           NVARCHAR (255)   NULL,
+    [DifferentBillingAddress] BIT              NULL,
+    [BillingRegionID]         INT              NULL,
+    [BillingCityID]           INT              NULL,
+    [BillingTownID]           INT              NULL,
+    [BillingStreet]           NVARCHAR (255)   NULL,
+    [BillingBuilding]         NVARCHAR (255)   NULL,
+    [BillingBuildingSize]     INT              NULL,
+    [BillingBlockNumber]      NVARCHAR (255)   NULL,
+    [BillingFloorNumber]      INT              NULL,
+    [BillingFloorSide]        INT              NULL,
+    [BillingAddressNotes]     NVARCHAR (MAX)   NULL,
+    [SocialMediaAddresses]    NVARCHAR (MAX)   NULL,
+    [DunningStatus]           UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

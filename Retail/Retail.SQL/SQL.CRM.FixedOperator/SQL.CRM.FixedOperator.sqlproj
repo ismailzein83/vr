@@ -97,7 +97,6 @@
     <Build Include="CRMFixedOper\Tables\WorkOrderGroup.sql" />
     <Build Include="CRMFixedOper\Tables\WorkOrderCategory.sql" />
     <Build Include="CRMFixedOper\Tables\WorkOrder.sql" />
-    <Build Include="CRMFixedOper\Tables\Vender.sql" />
     <Build Include="CRMFixedOper\Tables\TicketType.sql" />
     <Build Include="CRMFixedOper\Tables\TicketSubCategory.sql" />
     <Build Include="CRMFixedOper\Tables\TicketCategory.sql" />
@@ -116,5 +115,13 @@
     <Build Include="CRMFixedOper\Tables\Case.sql" />
     <Build Include="CRMFixedOper\Tables\AccessTechnology.sql" />
     <Build Include="CRMFixedOper\Tables\EscalationLevel.sql" />
+    <Build Include="CRMFixedOper\Tables\VPNLegType.sql" />
+    <Build Include="CRMFixedOper\Tables\StockItemVendor.sql" />
+    <Build Include="CRMFixedOper\Tables\StockItemModelSpeedUnit.sql" />
+    <Build Include="CRMFixedOper\Tables\StockItemModelSpeed.sql" />
+    <Build Include="CRMFixedOper\Tables\StockItemModelConnectionType.sql" />
+    <Build Include="CRMFixedOper\Tables\Payment.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_VPNSubscription.sql" />
+    <Build Include="CRMFixedOper\Tables\Group.sql" />
   </ItemGroup>
 </Project>
