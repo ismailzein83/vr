@@ -26,6 +26,9 @@
     [CreatedBy]             INT              NULL,
     [LastModifiedTime]      DATETIME         NULL,
     [LastModifiedBy]        INT              NULL,
+    [DunningStatus]         UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK__Customer__3214EC277A672E12] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

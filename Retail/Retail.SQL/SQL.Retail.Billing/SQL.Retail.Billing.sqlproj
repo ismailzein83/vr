@@ -102,5 +102,8 @@
     <Build Include="RetailBilling\Tables\CustomerMessage.sql" />
     <Build Include="RetailBilling\Tables\DunningRules.sql" />
     <Build Include="RetailBilling\Tables\DunningExcludeCustomers.sql" />
+    <Build Include="RetailBilling\Tables\Instalment.sql" />
+    <Build Include="RetailBilling\Tables\CDRType.sql" />
+    <Build Include="RetailBilling\Tables\CDR.sql" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,9 @@
     [LastModifiedTime] DATETIME         NULL,
     [LastModifiedBy]   INT              NULL,
     [SuspensionDate]   DATETIME         NULL,
+    [StatusReason]     INT              NULL,
     CONSTRAINT [PK__Contract__3214EC270B91BA14] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
