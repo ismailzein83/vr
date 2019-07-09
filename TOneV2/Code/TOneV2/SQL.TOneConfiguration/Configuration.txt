@@ -161,3 +161,4 @@ Retail_CRMForFixedOperator.PostDeployment.sql
 
 RetailBilling
 Retail_RetailBilling.PostDeployment.sql
+Retail_RetailBilling_common.PostDeployment.sql
