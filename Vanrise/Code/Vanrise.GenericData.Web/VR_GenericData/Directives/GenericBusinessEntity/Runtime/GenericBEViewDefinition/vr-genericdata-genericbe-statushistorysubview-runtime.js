@@ -45,20 +45,21 @@
                     var businessEntityId;
                     var genericBEGridView;
                     var parentBEEntity;
-                    var mappingFieldName;
+					var statusMappingFiled;
 
-                    if (payload != undefined) {
+					if (payload != undefined) {
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
-                        genericBEGridView = payload.genericBEGridView; 
+						genericBEGridView = payload.genericBEGridView; 
+						businessEntityId = payload.genericBusinessEntityId;
                         parentBEEntity = payload.parentBEEntity;
                         if (genericBEGridView != undefined && genericBEGridView.Settings != undefined && parentBEEntity != undefined && parentBEEntity.FieldValues != undefined) {
-                            mappingFieldName = genericBEGridView.Settings.MappingFieldName;
-                            businessEntityId = parentBEEntity.FieldValues[mappingFieldName].Value;
+							statusMappingFiled = genericBEGridView.Settings.StatusMappingFiled;
                         }
                     }
                     gridPayload.query = {
                         BusinessEntityDefinitionId: businessEntityDefinitionId,
-                        BusinessEntityId: businessEntityId
+						BusinessEntityId: businessEntityId,
+						FieldName: statusMappingFiled
                     };
                     return gridAPI.loadGrid(gridPayload).then(function () {
                         $scope.scopeModel.isGridLoading = false;

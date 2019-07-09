@@ -49,7 +49,7 @@
                         }
                         if (payload.parameterEntity != undefined) {
                             parameterEntity = payload.parameterEntity;
-                            mappingFieldPayload.selectedIds = parameterEntity != undefined ? parameterEntity.MappingFieldName : undefined;
+							mappingFieldPayload.selectedIds = parameterEntity != undefined ? parameterEntity.StatusMappingFiled : undefined;
                         }
                     }
                     var loadMappingFieldSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -66,7 +66,7 @@
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.GenericBEStatusHistorySubview, Vanrise.GenericData.MainExtensions",
-                        MappingFieldName: mappingFieldSelectorAPI.getSelectedIds()
+						StatusMappingFiled: mappingFieldSelectorAPI.getSelectedIds()
                     };
                 };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
