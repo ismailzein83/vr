@@ -39,7 +39,6 @@
                 $scope.scopeModel.classEventRetrying = false;
                 $scope.scopeModel.classEventOverdue = false;
                 $scope.scopeModel.isHintStarted = false;
-                $scope.scopeModel.hint = "Not Started";
                 $scope.scopeModel.eventCreatedTime = "N/A";
                 $scope.scopeModel.eventStartedTime = "N/A";
                 $scope.scopeModel.eventOverdueTime = "N/A";
@@ -88,7 +87,6 @@
                     $scope.scopeModel.classEventRetrying = false;
                     $scope.scopeModel.classEventOverdue = false;
                     $scope.scopeModel.isHintStarted = false;
-                    $scope.scopeModel.hint = "Not Started";
                     $scope.scopeModel.eventCreatedTime = "N/A";
                     $scope.scopeModel.eventStartedTime = "N/A";
                     $scope.scopeModel.eventOverdueTime = "N/A";
@@ -105,18 +103,19 @@
                         if (eventTypeId == VisualEventTypeEnum.Started.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = true;
                             $scope.scopeModel.isHintStarted = true;
-                            $scope.scopeModel.hint = "Started";
                             $scope.scopeModel.eventCreatedTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Taken.value.toLowerCase()) {
                             $scope.scopeModel.eventStartedTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
+                        }
+                        else if (eventTypeId == VisualEventTypeEnum.Released.value.toLowerCase()) {
+                            $scope.scopeModel.eventStartedTime = "N/A";
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Completed.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
                             $scope.scopeModel.classEventOverdue = false;
                             $scope.scopeModel.classEventCompleted = true;
                             $scope.scopeModel.isHintStarted = true;
-                            $scope.scopeModel.hint = "Completed";
                             isCompleted = true;
                             $scope.scopeModel.eventCompletedTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
                         }
@@ -131,13 +130,11 @@
                             $scope.scopeModel.classEventOverdue = false;
                             $scope.scopeModel.classEventError = true;
                             $scope.scopeModel.isHintStarted = true;
-                            $scope.scopeModel.hint = "Error";
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Retrying.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
                             $scope.scopeModel.classEventRetrying = true;
                             $scope.scopeModel.isHintStarted = true;
-                            $scope.scopeModel.hint = "Retrying";
                         }
                     }
                     return true;

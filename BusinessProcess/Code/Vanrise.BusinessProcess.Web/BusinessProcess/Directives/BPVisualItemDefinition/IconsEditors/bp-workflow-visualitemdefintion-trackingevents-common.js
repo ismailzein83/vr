@@ -76,11 +76,7 @@
                 gridPromiseReadyDeffered.promise.then(function () {
                     for (var i = 0; i < events.length; i++) {
                         var event = events[i];
-                        var existingEvent = UtilsService.getItemByVal($scope.scopeModel.bpEventsInstanceTracking, event.Title, 'Title');
-                        if (existingEvent == undefined) {
-                            event.EventType = UtilsService.getEnumDescription(VisualEventTypeEnum, event.EventTypeId);
-                            $scope.scopeModel.bpEventsInstanceTracking.push(event);
-                        }
+                        $scope.scopeModel.bpEventsInstanceTracking.push(event);
                     }
                     $scope.scopeModel.bpEventsInstanceTracking.sort(function (a, b) {
                         return b.BPVisualEventId - a.BPVisualEventId;
