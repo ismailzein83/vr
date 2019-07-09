@@ -1,11 +1,10 @@
 ﻿<vr-columns width="normal">
+	<vr-label>{{scopeModel.selectorTitle}}</vr-label>
 	<vr-select datasource="scopeModel.filters"
 			   hideremoveicon
 			   datatextfield="Title"
+   			   isrequired="{{scopeModel.isRequired}}"
 			   datavaluefield="Title"
-			   label="Type"
-			   localizedlabel="VRRes.Common.SelectorType.VREnd"
-			   isrequired="{{scopeModel.isRequired}}"
 			   selectedvalues="scopeModel.selectedFilter">
 	</vr-select>
 </vr-columns>

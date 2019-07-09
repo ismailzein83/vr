@@ -16,13 +16,18 @@ namespace Vanrise.GenericData.MainExtensions
         public override string RuntimeEditor { get { return "vr-genericdata-genericbe-filterruntime-isempty"; }  }
         public bool IsRequired { get; set; }
         public string FieldName { get; set; }
+		public string FieldTitle { get; set; }
+		public string TextResourceKey { get; set; }
         public IsEmptyFilterDefinitonSettingsField AllField { get; set; }
         public IsEmptyFilterDefinitonSettingsField NullField { get; set; }
         public IsEmptyFilterDefinitonSettingsField NotNullField { get; set; }
 		public override void ApplyTranslation(IGenericBETranslationContext context)
 		{
 			VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
-			
+			if (!String.IsNullOrEmpty(TextResourceKey))
+			{
+				FieldTitle= vrLocalizationManager.GetTranslatedTextResourceValue(TextResourceKey, FieldTitle, context.LanguageId);
+			}
 			if (AllField != null)
 			{
 				if (!String.IsNullOrEmpty(AllField.Resourcekey))

@@ -1,14 +1,21 @@
 ﻿<vr-row>
-    <vr-columns colnum="3">
-        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
-                                                      isrequired="true"
-                                                      label="Field Name"
-                                                      hideremoveicon>
-        </vr-genericdata-datarecordtypefields-selector>
-    </vr-columns>
-    <vr-columns colnum="1">
-        <vr-switch label="Is Required" value="scopeModel.isRequired"></vr-switch>
-    </vr-columns>
+	<vr-columns colnum="3">
+		<vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
+													  isrequired="true"
+													  label="Field Name"
+													  hideremoveicon>
+		</vr-genericdata-datarecordtypefields-selector>
+	</vr-columns>
+	<vr-columns colnum="3">
+		<vr-textbox value="scopeModel.fieldTitle" type="text" label="Field Title" isrequired="true"></vr-textbox>
+	</vr-columns>
+	<vr-columns colnum="3">
+		<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady"></vr-common-vrlocalizationtextresource-selector>
+	</vr-columns>
+	
+	<vr-columns colnum="1">
+		<vr-switch label="Is Required" value="scopeModel.isRequired" ></vr-switch>
+	</vr-columns>
 </vr-row>
 
 <vr-row removeline vr-loader="scopeModel.isGridLoading">

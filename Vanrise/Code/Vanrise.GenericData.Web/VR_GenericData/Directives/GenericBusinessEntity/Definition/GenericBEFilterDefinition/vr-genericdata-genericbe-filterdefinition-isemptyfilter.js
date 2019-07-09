@@ -31,8 +31,10 @@
             var fieldGridReadyDeferred = UtilsService.createPromiseDeferred();
 
             var fieldSelectorAPI;
-            var fieldSelectoReadyDeferred = UtilsService.createPromiseDeferred();
+			var fieldSelectoReadyDeferred = UtilsService.createPromiseDeferred();
 
+			var textResourceSelectorAPI;
+			var textResourceSelectorDeferredReady = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.fields = [];
@@ -42,28 +44,32 @@
                     fieldGridAPI = api;
                     fieldGridReadyDeferred.resolve();
                     defineAPI();
-                };
+				};
 
+				$scope.scopeModel.onTextResourceSelectorReady = function (api) {
+					textResourceSelectorAPI = api;
+					textResourceSelectorDeferredReady.resolve();
+				};
                 $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
                     fieldSelectorAPI = api;
                     fieldSelectoReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.validateGrid = function () {
-                    if ($scope.scopeModel.fields.length > 0 && checkDuplicateDefaultField())
-                        return "One row only can be selected as default";
+				$scope.scopeModel.validateGrid = function () {
+					if ($scope.scopeModel.fields.length > 0 && checkDuplicateDefaultField())
+						return "One row only can be selected as default";
 
-                    if ($scope.scopeModel.fields.length > 0 && checkRemoveFromSelector())
-                        return "At least one row must be included";
+					if ($scope.scopeModel.fields.length > 0 && checkRemoveFromSelector())
+						return "At least one row must be included";
 
-                    return null;
-                }
+					return null;
+				};
             }
 
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+				api.load = function (payload) {
                     fieldGridAPI.clearDataSource();
                     var initialPromises = [];
                
@@ -72,11 +78,13 @@
                         settings = payload.settings;
 
                         if (settings != undefined) {
-                            $scope.scopeModel.isRequired = settings.IsRequired;
+							$scope.scopeModel.isRequired = settings.IsRequired;
+							$scope.scopeModel.fieldTitle = settings.FieldTitle;
                         }
                     }
 
-                    initialPromises.push(loadFieldsSelector());
+					initialPromises.push(loadFieldsSelector());
+					initialPromises.push(loadLocalizationTextResourceSelector());
 
                     var rootPromiseNode = {
                         promises: initialPromises,
@@ -134,7 +142,9 @@
                         FieldName: fieldSelectorAPI.getSelectedIds(),
                         AllField: getFieldObj($scope.scopeModel.fields[0]),
                         NullField: getFieldObj($scope.scopeModel.fields[1]),
-                        NotNullField: getFieldObj($scope.scopeModel.fields[2])
+						NotNullField: getFieldObj($scope.scopeModel.fields[2]),
+						FieldTitle: $scope.scopeModel.fieldTitle,
+						TextResourceKey: textResourceSelectorAPI.getSelectedValues()
                     };
                 };
 
@@ -146,7 +156,7 @@
             function loadFieldsSelector() {
                 var fieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                fieldSelectoReadyDeferred.promise.then(function () {
+				fieldSelectoReadyDeferred.promise.then(function () {
                     var dataRecordTypeFieldSelectorPayload = {
                         dataRecordTypeId: context.getDataRecordTypeId(),
                         selectedIds: settings != undefined ? settings.FieldName : undefined
@@ -154,7 +164,19 @@
                     VRUIUtilsService.callDirectiveLoad(fieldSelectorAPI, dataRecordTypeFieldSelectorPayload, fieldSelectorLoadDeferred);
                 });
                 return fieldSelectorLoadDeferred.promise;
-            }
+			}
+
+			function loadLocalizationTextResourceSelector() {
+				var loadSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+				textResourceSelectorDeferredReady.promise.then(function () {
+					var directivePayload = {
+						selectedValue: (settings != undefined) ? settings.TextResourceKey : undefined
+					};
+					VRUIUtilsService.callDirectiveLoad(textResourceSelectorAPI, directivePayload, loadSelectorPromiseDeferred);
+				});
+				return loadSelectorPromiseDeferred.promise;
+			}
+
 
             function addItemToGrid(dataItem) {
                 var payload = dataItem.payload;

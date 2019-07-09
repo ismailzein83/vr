@@ -25,10 +25,12 @@
             this.initializeController = initializeController;
 
             var definitionSettings;
-            var fieldName;
+			var fieldName;
+
 
             function initializeController() {
-                $scope.scopeModel = {};
+				$scope.scopeModel = {};
+
                 $scope.scopeModel.filters = [];
                 defineAPI();
             }
@@ -40,11 +42,10 @@
 
                     if (payload != undefined) {
                         definitionSettings = payload.settings;
-
                         if (definitionSettings != undefined) {
                             fieldName = definitionSettings.FieldName;
                             $scope.scopeModel.isRequired = definitionSettings.IsRequired;
-
+							$scope.scopeModel.selectorTitle = definitionSettings.FieldTitle;
                             if (!definitionSettings.AllField.RemoveFromSelector)
                                 $scope.scopeModel.filters.push(definitionSettings.AllField);
 
