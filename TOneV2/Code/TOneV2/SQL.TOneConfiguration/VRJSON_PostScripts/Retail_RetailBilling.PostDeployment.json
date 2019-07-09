@@ -5119,6 +5119,107 @@
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "VR_AccountBalance",
+      "TableName": "BillingTransactionType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.DeleteGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "IdentifierColumn": {
+          "ColumnName": "ID"
+        },
+        "KeyValues": [
+          "'30d01682-86af-4d42-b2bf-0d00d0168b41'",
+          "'d243adcd-d02a-4eb6-8b0d-206358391c18'",
+          "'dbea500e-c85a-4f4a-bb4c-2f6e8cb02f7b'",
+          "'7b2bcdf9-70cb-4ee3-8eb7-763bc44ccdd6'",
+          "'2a236ab8-1899-4de4-9bf4-a688c6a1f213'",
+          "'56cd572c-3815-4dfb-b1ed-ab8a550d5862'",
+          "'3a9a321f-754f-40ae-a8f8-e06f299607f4'",
+          "'4d0055d3-57ad-41a1-80f2-e70e45c58c74'",
+          "'2876bfbb-1f34-4cd2-92b8-e74b54e1041d'",
+          "'9d4a06c5-cad0-4d18-8a70-b45272a5b54f'",
+          "'acd5923a-8057-4c21-9e7b-ebc76b9ce1df'",
+          "'2769efa8-f87a-4c8d-823b-f59748f30589'",
+          "'007869d9-6dc2-4f56-88a4-18c8c442e49e'",
+          "'e544addf-9b84-4360-bc96-1cfeca4634bd'"
+        ],
+        "ConfigId": "411f4a51-1b9a-4221-9f16-1a05c1877eb2"
+      },
+      "Title": "Delete"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "VR_AccountBalance",
+      "TableName": "BillingTransactionType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "594607ad-7d49-4d5f-ad44-bbb9a1be3861",
+              "IsCredit": false,
+              "CreatedTime": "2017-06-13T13:43:20.51",
+              "LastModifiedTime": "2018-12-24T14:56:02.01",
+              "Name": "Refund",
+              "Settings": "{\"ManualAdditionDisabled\":true}"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "7aa01e02-be6c-4fb5-a775-e886452176c7",
+              "IsCredit": true,
+              "CreatedTime": "2017-06-13T13:43:20.51",
+              "LastModifiedTime": "2018-12-24T14:56:02.01",
+              "Name": "Adjustment",
+              "Settings": "{\"ManualAdditionDisabled\":true}"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "IsCredit",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
     }
   ]
 }

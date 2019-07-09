@@ -934,3 +934,37 @@
               end
             ----------------------------------------------------------------------------------------------------
               
+
+                 --- [VR_AccountBalance].[BillingTransactionType]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 delete from[VR_AccountBalance].[BillingTransactionType] where ID IN ('30d01682-86af-4d42-b2bf-0d00d0168b41','d243adcd-d02a-4eb6-8b0d-206358391c18','dbea500e-c85a-4f4a-bb4c-2f6e8cb02f7b','7b2bcdf9-70cb-4ee3-8eb7-763bc44ccdd6','2a236ab8-1899-4de4-9bf4-a688c6a1f213','56cd572c-3815-4dfb-b1ed-ab8a550d5862','3a9a321f-754f-40ae-a8f8-e06f299607f4','4d0055d3-57ad-41a1-80f2-e70e45c58c74','2876bfbb-1f34-4cd2-92b8-e74b54e1041d','9d4a06c5-cad0-4d18-8a70-b45272a5b54f','acd5923a-8057-4c21-9e7b-ebc76b9ce1df','2769efa8-f87a-4c8d-823b-f59748f30589','007869d9-6dc2-4f56-88a4-18c8c442e49e','e544addf-9b84-4360-bc96-1cfeca4634bd')
+              
+
+                 --- [VR_AccountBalance].[BillingTransactionType]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[IsCredit],[CreatedTime],[LastModifiedTime],[Name],[Settings])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('594607ad-7d49-4d5f-ad44-bbb9a1be3861','False','2017-06-13 13:43:20.510','2018-12-24 14:56:02.010','Refund','{"ManualAdditionDisabled":true}'),
+('7aa01e02-be6c-4fb5-a775-e886452176c7','True','2017-06-13 13:43:20.510','2018-12-24 14:56:02.010','Adjustment','{"ManualAdditionDisabled":true}')
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[IsCredit],[CreatedTime],[LastModifiedTime],[Name],[Settings]))
+                merge[VR_AccountBalance].[BillingTransactionType] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [ID]=s.[ID] ,[IsCredit]=s.[IsCredit] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] ,[Name]=s.[Name] ,[Settings]=s.[Settings] 
+                 when not matched by target then
+                 insert([ID],[IsCredit],[CreatedTime],[LastModifiedTime],[Name],[Settings])
+                 values(s.[ID], s.[IsCredit], s.[CreatedTime], s.[LastModifiedTime], s.[Name], s.[Settings]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              
