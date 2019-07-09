@@ -2,7 +2,7 @@
     <vr-columns width="fullrow">
         <vr-button type="Add" data-onclick="scopeModel.addField" standalone></vr-button>
         <vr-validator validate="scopeModel.isValid()">
-            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActions" maxheight="300px"
+            <vr-datagrid datasource="scopeModel.datasource" ondeleterow = "scopeModel.deleteFunction" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActions" maxheight="300px"
                          on-ready="scopeModel.onGridReady" enabledraggablerow="true" hidegridmenu>
                 <vr-datagridcolumn headertext="'Field Name'" field="'FieldPath'" widthfactor="5" disablesorting></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Field Title'" field="'FieldTitle'" widthfactor="5" disablesorting></vr-datagridcolumn>
@@ -13,4 +13,4 @@
             </vr-datagrid>
         </vr-validator>
     </vr-columns>
-</vr-row>
+</vr-row>  

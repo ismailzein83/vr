@@ -35,6 +35,15 @@
                     };
                     VR_GenericData_GenericBEDefinitionService.addGenericBEField(onBEFieldAdded, context, getFilteredFields());
                 };
+                $scope.scopeModel.deleteFunction = function (fieldObj) {
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            var index = $scope.scopeModel.datasource.indexOf(fieldObj);
+                            if (index != -1)
+                                $scope.scopeModel.datasource.splice(index, 1);
+                        }
+                    });
+                };
 
                 $scope.scopeModel.isValid = function () {
                     if ($scope.scopeModel.datasource == undefined || $scope.scopeModel.datasource.length == 0)
@@ -71,7 +80,7 @@
                         if (settings != undefined) {
                             fields = settings.Fields;
                         }
-                    }
+                    }  
 
                     if (fields != undefined && fields.length > 0) {
                         for (var i = 0; i < fields.length; i++) {
@@ -94,19 +103,10 @@
             }
 
             function defineMenuActions() {
-                var defaultMenuActions = [
-                    {
-                        name: "Edit",
-                        clicked: editField
-                    },
-                    {
-                        name: "Delete",
-                        clicked: deleteField
-                    }];
-
-                $scope.scopeModel.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
+                $scope.scopeModel.gridMenuActions = [{
+                    name: "Edit",
+                    clicked: editField
+                }];
             }
 
             function editField(fieldEntityObj) {
