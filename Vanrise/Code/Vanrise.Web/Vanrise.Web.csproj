@@ -211,6 +211,7 @@
     <Content Include="Client\Images\mini-icons\ims slot.png" />
     <Content Include="Client\Images\mini-icons\ims tid.png" />
     <Content Include="Client\Images\mini-icons\ims.png" />
+    <Content Include="Client\Images\mini-icons\installments.png" />
     <Content Include="Client\Images\mini-icons\invoices.png" />
     <Content Include="Client\Images\mini-icons\mdf horizontal.png" />
     <Content Include="Client\Images\mini-icons\mdf vertical.png" />
@@ -225,6 +226,8 @@
     <Content Include="Client\Images\mini-icons\path.png" />
     <Content Include="Client\Images\mini-icons\phone number.png" />
     <Content Include="Client\Images\mini-icons\port.png" />
+    <Content Include="Client\Images\mini-icons\pos payments.png" />
+    <Content Include="Client\Images\mini-icons\profile.png" />
     <Content Include="Client\Images\mini-icons\site.png" />
     <Content Include="Client\Images\mini-icons\splitter.png" />
     <Content Include="Client\Images\mini-icons\switch card.png" />
