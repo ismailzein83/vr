@@ -307,25 +307,35 @@
                         var buttonType = UtilsService.getEnum(VRButtonTypeEnum, "value", taskTypeAction.ButtonType);
 
                         if (actionsDictionary[buttonType.value] == undefined) {
-                            actionsDictionary[buttonType.value] = [];
+                            actionsDictionary[buttonType.value] = {
+                                actions: [],
+                                isUsed: false
+                            };
                         }
-                        actionsDictionary[buttonType.value].push({
+                        actionsDictionary[buttonType.value].actions.push({
                             buttonType: buttonType,
                             taskTypeAction: taskTypeAction,
                         });
                     }
-                    for (var prop in actionsDictionary) {
-                        if (actionsDictionary[prop].length > 1) {
-                            for (var i = 0; i < actionsDictionary[prop].length; i++) {
-                                if (menuActions == undefined)
-                                    menuActions = [];
-                                var object = actionsDictionary[prop][i];
-                                addMenuActions(object.taskTypeAction);
+                    for (var i = 0; i < actions.length; i++) {
+                        var action = actions[i];
+
+                        var dicItem = actionsDictionary[action.ButtonType];
+                        if (dicItem != undefined && !dicItem.isUsed) {
+
+                            if (dicItem.actions.length > 1) {
+                                for (var j = 0; j < dicItem.actions.length; j++) {
+                                    if (menuActions == undefined)
+                                        menuActions = [];
+                                    var object = dicItem.actions[j];
+                                    addMenuActions(object.taskTypeAction);
+                                }
+                                addActionToList(object.buttonType, undefined, menuActions);
+                            } else {
+                                var object = dicItem.actions[0];
+                                addActionToList(object.buttonType, getClickFunction(object.taskTypeAction), undefined);
                             }
-                            addActionToList(object.buttonType, undefined, menuActions);
-                        } else {
-                            var object = actionsDictionary[prop][0];
-                            addActionToList(object.buttonType, getClickFunction(object.taskTypeAction), undefined);
+                            dicItem.isUsed = true;
                         }
                     }
                 }
