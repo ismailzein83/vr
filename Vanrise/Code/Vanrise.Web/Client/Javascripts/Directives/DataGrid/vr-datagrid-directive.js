@@ -84,6 +84,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                ctrl.pagerReadyPromiseDefferred.resolve();
 	            };
 
+	            ctrl.closeAtributesText = VRLocalizationService.getResourceValue("VRRes.Common.Close.VREnd", "Close");
 
 	            ctrl.layoutOption = UISettingsService.getGridLayoutOptions();
 	            if (ctrl.alternativecolor != undefined)
