@@ -14,6 +14,11 @@
     [ServiceAvailability]            INT              NULL,
     [SelectedByDefault]              BIT              NULL,
     [RequiredOption]                 INT              NULL,
+    [SpeedType]                      INT              NULL,
+    [Speed]                          INT              NULL,
+    [PackageLimit]                   INT              NULL,
     CONSTRAINT [PK_ServiceCatalog] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
