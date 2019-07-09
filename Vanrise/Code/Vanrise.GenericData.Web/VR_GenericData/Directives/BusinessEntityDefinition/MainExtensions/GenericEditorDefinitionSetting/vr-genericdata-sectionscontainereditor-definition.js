@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService", "VR_GenericData_GenericBEDefinitionService",
-    function (UtilsService, VR_GenericData_GenericBEDefinitionService) {
+app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService", "VR_GenericData_GenericBEDefinitionService", "VRNotificationService",
+    function (UtilsService, VR_GenericData_GenericBEDefinitionService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -60,8 +60,12 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                 };
 
                 ctrl.removeSectionContainer = function (dataItem) {
-                    var index = ctrl.datasource.indexOf(dataItem);
-                    ctrl.datasource.splice(index, 1);
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            var index = ctrl.datasource.indexOf(dataItem);
+                            ctrl.datasource.splice(index, 1);
+                        }
+                    });
                 };
 
                 defineMenuActions();
@@ -115,14 +119,10 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
             }
 
             function defineMenuActions() {
-                var defaultMenuActions = [{
+                $scope.gridMenuActions = [{
                     name: "Edit",
                     clicked: editSectionContainer
                 }];
-
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
             }
 
             function editSectionContainer(sectionObj) {

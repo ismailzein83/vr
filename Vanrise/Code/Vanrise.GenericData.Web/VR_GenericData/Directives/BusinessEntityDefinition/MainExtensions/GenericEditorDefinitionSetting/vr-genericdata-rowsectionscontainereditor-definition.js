@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsService", "VR_GenericData_GenericBEDefinitionService",
-    function (UtilsService, VR_GenericData_GenericBEDefinitionService) {
+app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsService", "VR_GenericData_GenericBEDefinitionService", "VRNotificationService",
+    function (UtilsService, VR_GenericData_GenericBEDefinitionService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -60,8 +60,12 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
                 };
 
                 ctrl.removeSectionContainer = function (dataItem) {
-                    var index = ctrl.datasource.indexOf(dataItem);
-                    ctrl.datasource.splice(index, 1);
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            var index = ctrl.datasource.indexOf(dataItem);
+                            ctrl.datasource.splice(index, 1);
+                        }
+                    });
                 };
 
                 defineMenuActions();
@@ -115,14 +119,11 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
             }
 
             function defineMenuActions() {
-                var defaultMenuActions = [{
-                    name: "Edit",
-                    clicked: editSectionContainer
-                }];
-
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
+                $scope.gridMenuActions = [
+                    {
+                        name: "Edit",
+                        clicked: editSectionContainer
+                    }];
             }
 
             function editSectionContainer(sectionObj) {
@@ -157,10 +158,10 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
             }
 
             function checkDuplicateName() {
-                for (var i = 0; i < ctrl.datasource.length; i++) {
+                for (var i = 0; i < ctrl.datasource.length -1; i++) {
                     var currentItem = ctrl.datasource[i];
-                    for (var j = 0; j < ctrl.datasource.length; j++) {
-                        if (i != j && ctrl.datasource[j].SectionTitle == currentItem.SectionTitle)
+                    for (var j = i + 1; j < ctrl.datasource.length; j++) {
+                        if (ctrl.datasource[j].SectionTitle == currentItem.SectionTitle)
                             return true;
                     }
                 }

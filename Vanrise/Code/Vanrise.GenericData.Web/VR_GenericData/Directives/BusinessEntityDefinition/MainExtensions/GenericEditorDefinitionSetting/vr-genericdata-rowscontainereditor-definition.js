@@ -38,6 +38,16 @@
                     VR_GenericData_GenericBEDefinitionService.addGenericBERowContainer(onRowContainerAdded, getContext());
                 };
 
+                $scope.scopeModel.deleteFunction = function (rowContainerObj) {
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            var index = $scope.scopeModel.datasource.indexOf(rowContainerObj);
+                            if (index != -1)
+                                $scope.scopeModel.datasource.splice(index, 1);
+                        }
+                    });
+                };
+
                 $scope.scopeModel.disableAddRowContainer = function () {
                     if (context == undefined)
                         return true;
@@ -107,29 +117,11 @@
             }
 
             function defineMenuActions() {
-                var defaultMenuActions = [
+                $scope.scopeModel.gridMenuActions = [
                     {
                         name: "Edit",
                         clicked: editRowContainer
-                    },
-                    {
-                        name: "Delete",
-                        clicked: deleteRowContainer
                     }];
-
-                $scope.scopeModel.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
-
-            function deleteRowContainer(rowContainerObj) {
-                VRNotificationService.showConfirmation().then(function (response) {
-                    if (response) {
-                        var index = $scope.scopeModel.datasource.indexOf(rowContainerObj);
-                        if (index != -1)
-                            $scope.scopeModel.datasource.splice(index, 1);
-                    }
-                });
             }
 
             function editRowContainer(rowContainerEntityObj) {
