@@ -1542,7 +1542,7 @@
                                         <Paragraph>
                                           <TextRuns>
                                             <TextRun>
-                                              <Value>= "Stamp "+FormatNumber(1000,0) + " LBP"</Value>
+                                              <Value>= "Stamp"+System.Environment.NewLine+FormatNumber(1000,0) + " LBP"</Value>
                                               <Style />
                                             </TextRun>
                                           </TextRuns>
@@ -1552,8 +1552,8 @@
                                         </Paragraph>
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox56</rd:DefaultName>
-                                      <Top>0.45291cm</Top>
-                                      <Left>0cm</Left>
+                                      <Top>0.42116cm</Top>
+                                      <Left>0.03528cm</Left>
                                       <Height>0.6cm</Height>
                                       <Width>2.38306cm</Width>
                                       <Style>
@@ -1571,7 +1571,7 @@
                                   <Top>6.50741cm</Top>
                                   <Left>13.77679cm</Left>
                                   <Height>1.44723cm</Height>
-                                  <Width>2.38306cm</Width>
+                                  <Width>2.41834cm</Width>
                                   <ZIndex>6</ZIndex>
                                   <Style>
                                     <Border>
