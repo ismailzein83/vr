@@ -3,8 +3,8 @@
              pagingtype="'PagingOnScroll'"
              on-ready="onGridReady"
              menuactions="gridMenuActions"
-             idfield="Entity.GroupId">
-
+             idfield="Entity.GroupId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" localizedheadertext="'VRRes.ID.VREnd'" field="'Entity.GroupId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" localizedheadertext="'VRRes.Name.VREnd'" field="'Entity.Name'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" localizedheadertext="'VRRes.Description.VREnd'" field="'Entity.Description'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>

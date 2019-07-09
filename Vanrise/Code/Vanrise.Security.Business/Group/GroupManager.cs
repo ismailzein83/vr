@@ -27,9 +27,12 @@ namespace Vanrise.Security.Business
 
                 return true;
             };
-
+            var resultProcessingHandler = new ResultProcessingHandler<GroupDetail>()
+            {
+                ExportExcelHandler = new GroupDetailExportExcelHandler()
+            };
             VRActionLogger.Current.LogGetFilteredAction(GroupLoggableEntity.Instance, input);
-            return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, GroupDetailMapper));
+            return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, GroupDetailMapper), resultProcessingHandler);
         }
 
         public IEnumerable<GroupInfo> GetGroupInfo(GroupFilter filter)
@@ -344,6 +347,43 @@ namespace Vanrise.Security.Business
                 return s_groupManager.GetGroupName(group.GroupId);
             }
         }
+
+        private class GroupDetailExportExcelHandler : ExcelExportHandler<GroupDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<GroupDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Groups",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name", Width = 40 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Description", Width = 120 });                
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.GroupId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Description });
+                           
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+
+
         #endregion
 
         #region IBusinessEntityManager
