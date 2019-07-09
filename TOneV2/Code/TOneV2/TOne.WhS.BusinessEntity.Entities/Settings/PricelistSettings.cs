@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -20,4 +15,10 @@ namespace TOne.WhS.BusinessEntity.Entities
         public IncludeClosedEntitiesEnum? IncludeClosedEntities { get; set; }
         public string SubjectCode { get; set; }
     }
+    public class PurchasePricelistSettings
+    {
+        public Guid? DefaultSupplierPLMailTemplateId { get; set; }
+        public SendEmail SendEmail { get; set; }
+    }
+    public enum SendEmail { Yes = 0, No = 1 }
 }
