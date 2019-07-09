@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RowsContainerEditorDefinitionDirective.$inject = ['VRNotificationService', 'VR_GenericData_GenericBEDefinitionService'];
+    RowsContainerEditorDefinitionDirective.$inject = ['VRNotificationService', 'VR_GenericData_GenericBEDefinitionService', 'UtilsService'];
 
-    function RowsContainerEditorDefinitionDirective(VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
+    function RowsContainerEditorDefinitionDirective(VRNotificationService, VR_GenericData_GenericBEDefinitionService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -144,7 +144,8 @@
             function getRowContainerEntity(rowContainerEntityObj) {
                 var rowContainerEntity = [];
                 for (var i = 0; i < rowContainerEntityObj.length; i++) {
-                    rowContainerEntity.push(rowContainerEntityObj[i]);
+                    var obj = UtilsService.cloneObject(rowContainerEntityObj[i], true);
+                    rowContainerEntity.push(obj);
                 }
 
                 return rowContainerEntity;
