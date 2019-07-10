@@ -108,18 +108,6 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
                 };
                 ctrl.datasource.push(dataItem);
             }
-            function loadDataRecordTypeFieldsSelector(selectedColumns) {
-                var loadDataRecordTypeFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
-                    var typeFieldsPayload = {
-                        dataRecordTypeId: context != undefined ? context.getDataRecordTypeId():undefined,
-                        selectedIds: selectedColumns
-                    };
-
-                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, typeFieldsPayload, loadDataRecordTypeFieldsSelectorPromiseDeferred);
-                });
-                return loadDataRecordTypeFieldsSelectorPromiseDeferred.promise;
-            }
 
             function prepareDataItem(columnObject) {
 
@@ -175,17 +163,32 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
 
                 api.load = function (payload) {
                     var rootPromiseNode;
+                    var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
                         dataRecordTypeFields = context.getRecordTypeFields();
                         api.clearDataSource();
                         var selectedIds = [];
-                        for (var i = 0; i < payload.columnDefinitions.length; i++) {
-                            selectedIds.push(payload.columnDefinitions[i].FieldName);
+                        if (payload.columnDefinitions != undefined && payload.columnDefinitions.length > 0) {
+                            for (var i = 0; i < payload.columnDefinitions.length; i++) {
+                                selectedIds.push(payload.columnDefinitions[i].FieldName);
+                            }
                         }
+                        if (context != undefined && context.getDataRecordTypeId() != undefined) {
+                            var loadDataRecordTypeFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                            dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
+                                var typeFieldsPayload = {
+                                    dataRecordTypeId:context.getDataRecordTypeId(),
+                                    selectedIds: selectedIds
+                                };
 
+                                VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, typeFieldsPayload, loadDataRecordTypeFieldsSelectorPromiseDeferred);
+                            });
+                            promises.push(loadDataRecordTypeFieldsSelectorPromiseDeferred.promise);
+
+                        }
                          rootPromiseNode = {
-                             promises: [loadDataRecordTypeFieldsSelector(selectedIds)],
+                             promises: promises,
                             getChildNode: function () {
                                 var childPromises = [];
                                 if (payload.columnDefinitions != undefined) {
