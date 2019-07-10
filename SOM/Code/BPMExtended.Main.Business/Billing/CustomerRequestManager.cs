@@ -346,6 +346,32 @@ namespace BPMExtended.Main.Business
             }
             return "";
         }
+
+        public string CancelRequestHeader(string requestId)
+        {
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId));
+            var collection = eSQ.GetEntityCollection(UserConnection);
+
+            if (collection.Count > 0)
+            {
+                if (collection.Count > 0)
+                {
+                    recordEntity = collection[0];
+                    recordEntity.SetColumnValue("StStatusId", "87486F6C-FD2B-498D-8E4A-90935299058E");
+                }
+                recordEntity.Save();
+            }
+            return "";
+        }
+
+
         private void UpdateRequestStatus(string requestId, string SchemaName, string CompletedStepId,string CompletedStep, string TechnicalStep)
         {
             //TODO : Update gshdsl object

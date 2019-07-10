@@ -84,6 +84,13 @@ namespace BPMExtended.Main.Business
             };
 
         }
+        public string AbortRequest(string requestId)
+        {
+            var customerRequestManager = new CustomerRequestManager();
+            customerRequestManager.SetRequestCompleted(requestId);
+            customerRequestManager.CancelRequestHeader(requestId);
+            return "";
+        }
 
         public int GetNumberOfAttachments(string schemaName , string requestId)
         {
