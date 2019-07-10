@@ -152,7 +152,13 @@ as (select * from (values
 ('080E340A-32FC-454A-A681-6FF5281A31E2','Fixed_Values','Fixed Values','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"vr-genericdata-genericbe-beforeinserthandler-fixedvalues"}'),
 ('A4C1333D-886B-4C94-BEFF-E1A32ADD69BE','GenericEditorSubView','Generic Editor Sub View','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-genericeditorsubview-definition"}'),
 ('8ef5476f-37eb-436f-8558-e3181ab78c82','Download File','Download File','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-downloadfileaction-definition"}'),
-('AE78708F-DFD0-49E7-8B60-909AC4D8ABD2','NewOrExisting_Custom_Action','Open New Or Existing','VR_GenericData_GenericBECustomActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-neworexisting-customaction-definition"}')
+('AE78708F-DFD0-49E7-8B60-909AC4D8ABD2','NewOrExisting_Custom_Action','Open New Or Existing','VR_GenericData_GenericBECustomActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-neworexisting-customaction-definition"}'),
+('82D729D1-A0B3-4C6C-BC35-A361947E78FD','Add_Range_Custom_Action','Bulk Add','VR_GenericData_GenericBECustomActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-bulkadd-customaction-definition"}'),
+('6568F466-C2FF-4FF4-AA1D-3862BEB2EBC5','Number_Range','Number Range','VR_GenericData_GenericBEEditorDefinitionSettings','{"Editor":"vr-genericdata-numberrangeeditor-definition","ValidContainers":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.ContainerType, Vanrise.GenericData.Entities]], mscorlib","$values":[0,1,3]}}'),
+('03F03D74-D44B-45BC-A2D3-79512D5D2C53','GenericBE_StatusHistory_Subview','Business Entity Status History','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-statushistorysubview-definition"}'),
+('CCB477B6-B20F-4FCE-A8AD-27BD12EE60ED','Grid_GenericEditor_View','Grid Generic Editor View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-gridgenericeditorview-definition"}'),
+('A0E3AC54-E002-495D-8F74-A49CF02FA099','GenericSendEmailAction','Generic Send Email Action','VR_Notification_VRActionDefinition','{"Editor":"vr-genericdata-datarecord-vractiondefinition-extendedsettings-genericsendemail"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t

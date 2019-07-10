@@ -15,7 +15,9 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('EE2C731E-A5F7-481E-B350-7771C8A0F3BC','TOne Account Balance','TOne Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'		,'{"Editor":"whs-accountbalance-notificationtype-settings"}')
+('EE2C731E-A5F7-481E-B350-7771C8A0F3BC','TOne Account Balance','TOne Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'		,'{"Editor":"whs-accountbalance-notificationtype-settings"}'),
+('B49238AC-54E2-4F3F-8C91-C864B7389566','VR_Notification_GenericFinancialAccountBalanceType_Settings','Financial Account Balance Notification','VR_AccountBalance_NotificationTypeExtendedSettingsConfig','{"Editor" : "vr-accountbalance-financialaccountbalancenotificationtype"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
