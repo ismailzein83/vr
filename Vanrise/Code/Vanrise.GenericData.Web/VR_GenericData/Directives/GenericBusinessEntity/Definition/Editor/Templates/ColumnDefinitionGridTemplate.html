@@ -10,7 +10,7 @@
 <vr-row>
     <vr-columns width="fullrow">
         <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="200px"
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="400px"
                          on-ready="onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeField" hidegridmenu>
                 <vr-datagridcolumn headertext="'Name'" disablesorting widthfactor="6">
                     <vr-label>{{dataItem.entity.FieldName}}</vr-label>
