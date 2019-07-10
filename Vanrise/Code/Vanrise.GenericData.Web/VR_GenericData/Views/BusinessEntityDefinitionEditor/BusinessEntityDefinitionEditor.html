@@ -4,24 +4,20 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/4row">
                             <vr-textbox value="scopeModel.businessEntityName" isrequired="true" label="Name" customvalidate="scopeModel.validate()"></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/4row">
                             <vr-textbox value="scopeModel.businessEntityTitle" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>
                         </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-common-devproject-selector on-ready="scopeModel.onDevProjectSelectorReady" normal-col-num="4"></vr-common-devproject-selector>
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/4row">
                             <vr-textbox label="Null Display Text" value="scopeModel.nullDisplayText"></vr-textbox>
                         </vr-columns>
+                        <vr-common-iconpath-selective on-ready="scopeModel.onIconPathSelectiveReady" normal-col-num="3"></vr-common-iconpath-selective>
                     </vr-row>
                     <vr-row removeline>
-                        <vr-common-iconpath-selective on-ready="scopeModel.onIconPathSelectiveReady" normal-col-num="4"></vr-common-iconpath-selective>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="1/3row">
+                        <vr-common-devproject-selector on-ready="scopeModel.onDevProjectSelectorReady" normal-col-num="3"></vr-common-devproject-selector>
+                        <vr-columns width="1/4row">
                             <vr-select datasource="scopeModel.bEDefinitionSettingConfigs" selectedvalues="scopeModel.selectedSetingsTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
                             </vr-select>
                         </vr-columns>
