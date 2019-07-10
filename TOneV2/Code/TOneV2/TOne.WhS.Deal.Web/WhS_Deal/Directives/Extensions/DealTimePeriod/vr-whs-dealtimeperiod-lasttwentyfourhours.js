@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsDealtimeperiodWeekly", ['UtilsService',
+app.directive("vrWhsDealtimeperiodLasttwentyfourhours", ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -15,7 +15,7 @@ app.directive("vrWhsDealtimeperiodWeekly", ['UtilsService',
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_Deal/Directives/Extensions/DealTimePeriod/Templates/WeeklyTimePeriodTemplate.html'
+            templateUrl: '/Client/Modules/WhS_Deal/Directives/Extensions/DealTimePeriod/Templates/LastTwentyFourHoursTimePeriodTemplate.html'
         };
 
         function BusinessObject($scope, ctrl, $attrs) {
@@ -35,7 +35,7 @@ app.directive("vrWhsDealtimeperiodWeekly", ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Deal.MainExtensions.DealTimePeriod.WeeklyTimePeriod, TOne.WhS.Deal.MainExtensions"
+                        $type: "TOne.WhS.Deal.MainExtensions.DealTimePeriod.LastTwentyFourHoursTimePeriod, TOne.WhS.Deal.MainExtensions"
                     };
                 };
 

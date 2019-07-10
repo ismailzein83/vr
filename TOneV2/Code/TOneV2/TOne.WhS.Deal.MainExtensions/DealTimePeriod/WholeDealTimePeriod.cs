@@ -6,7 +6,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.MainExtensions.DealTimePeriod
 {
-    public class OverallDealsTimePeriod : TOne.WhS.Deal.Entities.DealTimePeriod
+    public class WholeDealTimePeriod : TOne.WhS.Deal.Entities.DealTimePeriod
     {
         public override Guid ConfigId => new Guid("CED02013-65C0-49B9-97A7-7F557FF945BA");
 
