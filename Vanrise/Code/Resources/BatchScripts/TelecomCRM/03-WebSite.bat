@@ -11,6 +11,7 @@ xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.TelecomCRM.exclud" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Web.config*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Images\menu-icons\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\figure-icons" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Images\figure-icons\"
 ::by default load flat theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-TelecomCRM-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Images\logoonheader.png*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-TelecomCRM-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Images\login.png*"
