@@ -303,6 +303,7 @@ as (select * from (values
 ('0B08F2E1-6518-46FF-B669-0256CF9BB7D4','Retail_BE_Subscriber','Subscriber'							,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit","Provision","Block","Unblock"]'),
 ('A2DE8C67-B8AE-4520-BB48-448EE98B7251','Retail_BE_Dealer','Dealer'									,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit"]'),
 ('0E89CCF7-9240-4D1B-8A01-F91957ECA321','Retail_BE_Operator','Operator'								,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit"]'),
+('542DAEA8-3C74-4AE5-86EC-D251CF6C7D15','Retail_BE_ISP','ISP'										,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit"]'),
 
 ('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C','Retail_BE_Product','Product'								,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
 ('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Package'								,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
