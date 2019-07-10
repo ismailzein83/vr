@@ -30,6 +30,7 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
             var context;
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var dataRecordTypeFields = [];
             this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
@@ -67,12 +68,11 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
                     ctrl.datasource.length = 0;
                 };
                 $scope.scopeModel.selectAllFields = function () {
-                    $scope.scopeModel.isLoading = true;
-                    var fields = context != undefined ? context.getRecordTypeFields() : undefined;
-                    for (var i = 0; i < fields.length; i++) {
-                        var field = fields[i];
-
+                    $scope.scopeModel.isLoading = true; 
+                    for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                        var field = dataRecordTypeFields[i];
                         if (ctrl.datasource.length == 0) {
+                            $scope.scopeModel.selectedFields.push(field);
                             addDataRecordFieldToColumns(field);
                         }
                         else if (ctrl.datasource.findIndex(x => x.entity.FieldName === field.Name) == -1) {
@@ -82,7 +82,14 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
                     }
                     $scope.scopeModel.isLoading = false;
                 };
-
+                $scope.scopeModel.showAddAllFields = function () {
+                    if (ctrl.datasource.length == 0)
+                        return true;
+                    else if (dataRecordTypeFields != undefined && ctrl.datasource.length < dataRecordTypeFields.length)
+                        return true;
+                    else
+                        return false;
+                };
                 defineAPI();
             }
             function addDataRecordFieldToColumns(item) {
@@ -170,6 +177,7 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
                     var rootPromiseNode;
                     if (payload != undefined) {
                         context = payload.context;
+                        dataRecordTypeFields = context.getRecordTypeFields();
                         api.clearDataSource();
                         var selectedIds = [];
                         for (var i = 0; i < payload.columnDefinitions.length; i++) {
