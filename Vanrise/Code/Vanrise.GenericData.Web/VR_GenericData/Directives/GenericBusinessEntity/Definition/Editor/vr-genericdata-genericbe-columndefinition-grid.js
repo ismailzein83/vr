@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
-    function (UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
+app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VRUIUtilsService","VRLocalizationService",
+    function (UtilsService, VRUIUtilsService, VRLocalizationService) {
 
         var directiveDefinitionObject = {
 
@@ -27,41 +27,123 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
 
         function ColumnDefinitionGrid($scope, ctrl, $attrs) {
 
-            var gridAPI;
             var context;
-
+            var dataRecordTypeFieldsSelectorAPI;
+            var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
+                $scope.scopeModel = {};
                 ctrl.isValid = function () {
                     if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
                         return "You Should add at least one column.";
-                    if (ctrl.datasource.length > 0 && checkDuplicateName())
-                        return "Name in each should be unique.";
 
                      return null;
                 };
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
 
-                ctrl.addGridColumn = function () {
-                    var onGridColumnAdded = function (addedItem) {
-                        ctrl.datasource.push(addedItem);
-                    };
+                $scope.scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady = function (api) {
+                    dataRecordTypeFieldsSelectorAPI = api;
+                    dataRecordTypeFieldsSelectorReadyPromiseDeferred.resolve();
+                };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEColumnDefinition(onGridColumnAdded, getContext());
+                $scope.scopeModel.onFieldSelected = function (item) {
+                    addDataRecordFieldToColumns(item);
                 };
-                ctrl.disableAddGridColumn = function () {
-                    if (context == undefined) return true;
-                    return context.getDataRecordTypeId() == undefined;
-                };
-                ctrl.removeColumn = function (dataItem) {
-                    var index = ctrl.datasource.indexOf(dataItem);
+
+                $scope.scopeModel.onFieldDeselected = function (item) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, item.Name, "entity.FieldName");
                     ctrl.datasource.splice(index, 1);
                 };
 
+                $scope.scopeModel.removeField = function (dataItem) {
+                    var index = ctrl.datasource.indexOf(dataItem);
+                    var selectedFieldIndex = UtilsService.getItemIndexByVal($scope.scopeModel.selectedFields, dataItem.entity.FieldName, "Name");
+                    $scope.scopeModel.selectedFields.splice(selectedFieldIndex, 1);
+                    ctrl.datasource.splice(index, 1);
+                };
 
+                $scope.scopeModel.deselectAllFields = function () {
+                    ctrl.datasource.length = 0;
+                };
+                $scope.scopeModel.selectAllFields = function () {
+                    $scope.scopeModel.isLoading = true;
+                    var fields = context != undefined ? context.getRecordTypeFields() : undefined;
+                    for (var i = 0; i < fields.length; i++) {
+                        var field = fields[i];
 
-                defineMenuActions();
+                        if (ctrl.datasource.length == 0) {
+                            addDataRecordFieldToColumns(field);
+                        }
+                        else if (ctrl.datasource.findIndex(x => x.entity.FieldName === field.Name) == -1) {
+                            $scope.scopeModel.selectedFields.push(field);
+                            addDataRecordFieldToColumns(field);
+                        }
+                    }
+                    $scope.scopeModel.isLoading = false;
+                };
+
                 defineAPI();
+            }
+            function addDataRecordFieldToColumns(item) {
+                var dataItem = {
+                    entity: { FieldName: item.Name, FieldTitle: item.Title },
+                };
+                dataItem.onColumnSettingDirectiveReady = function (api) {
+                    dataItem.columnSettingsDirectiveAPI = api;
+                    var setLoader = function (value) { dataItem.isColumnSettingDirectiveloading = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.columnSettingsDirectiveAPI, undefined, setLoader);
+                };
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    var setLoader = function (value) { dataItem.isFieldTextResourceSelectorLoading = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
+                };
+                ctrl.datasource.push(dataItem);
+            }
+            function loadDataRecordTypeFieldsSelector(selectedColumns) {
+                var loadDataRecordTypeFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
+                    var typeFieldsPayload = {
+                        dataRecordTypeId: context != undefined ? context.getDataRecordTypeId():undefined,
+                        selectedIds: selectedColumns
+                    };
+
+                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, typeFieldsPayload, loadDataRecordTypeFieldsSelectorPromiseDeferred);
+                });
+                return loadDataRecordTypeFieldsSelectorPromiseDeferred.promise;
+            }
+
+            function prepareDataItem(columnObject) {
+
+                var dataItem = {
+                    entity: {
+                        FieldName: columnObject.payload.FieldName,
+                        FieldTitle: columnObject.payload.FieldTitle
+                    },
+                    oldTextResourceKey: columnObject.payload.TextResourceKey
+                }; 
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    columnObject.textResourceReadyPromiseDeferred.resolve();
+                };
+                dataItem.onColumnSettingDirectiveReady = function (api) {
+                    dataItem.columnSettingsDirectiveAPI = api;
+                    columnObject.columnSettingsReadyPromiseDeferred.resolve();
+                };
+
+                columnObject.textResourceReadyPromiseDeferred.promise.then(function () {
+                    var textResourcePayload = { selectedValue: columnObject.payload.TextResourceKey };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, columnObject.textResourceLoadPromiseDeferred);
+                });
+
+                columnObject.columnSettingsReadyPromiseDeferred.promise.then(function () {
+                    var payload = {
+                        data: columnObject.payload != undefined ? columnObject.payload.GridColumnSettings : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.columnSettingsDirectiveAPI, payload, columnObject.columnSettingsLoadPromiseDeferred);
+                });
+                ctrl.datasource.push(dataItem);
             }
 
             function defineAPI() {
@@ -74,10 +156,10 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
                             columns.push({
-                                FieldName: currentItem.FieldName,
-                                FieldTitle: currentItem.FieldTitle,
-								GridColumnSettings: currentItem.GridColumnSettings,
-								TextResourceKey: currentItem.TextResourceKey
+                                FieldName: currentItem.entity.FieldName,
+                                FieldTitle: currentItem.entity.FieldTitle,
+                                GridColumnSettings: currentItem.columnSettingsDirectiveAPI != undefined ? currentItem.columnSettingsDirectiveAPI.getData() : undefined,
+                                TextResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : currentItem.oldTextResourceKey
                             });
                         }
                     }
@@ -85,16 +167,41 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
                 };
 
                 api.load = function (payload) {
+                    var rootPromiseNode;
                     if (payload != undefined) {
                         context = payload.context;
                         api.clearDataSource();
-                        if (payload.columnDefinitions != undefined) {
-                            for (var i = 0; i < payload.columnDefinitions.length; i++) {
-                                var item = payload.columnDefinitions[i];
-                                ctrl.datasource.push(item);
+                        var selectedIds = [];
+                        for (var i = 0; i < payload.columnDefinitions.length; i++) {
+                            selectedIds.push(payload.columnDefinitions[i].FieldName);
+                        }
+
+                         rootPromiseNode = {
+                             promises: [loadDataRecordTypeFieldsSelector(selectedIds)],
+                            getChildNode: function () {
+                                var childPromises = [];
+                                if (payload.columnDefinitions != undefined) {
+                                    for (var i = 0; i < payload.columnDefinitions.length; i++) {
+                                        var item = payload.columnDefinitions[i];
+
+                                        var columnObject = {
+                                            payload: item,
+                                            textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            columnSettingsReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            columnSettingsLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                        };
+                                        if ($scope.scopeModel.isLocalizationEnabled)
+                                            childPromises.push(columnObject.textResourceLoadPromiseDeferred.promise);
+                                        childPromises.push(columnObject.columnSettingsLoadPromiseDeferred.promise);
+                                        prepareDataItem(columnObject);
+                                    }
+                                }
+                                return { promises: childPromises };
                             }
                         }
                     }
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
 
@@ -108,40 +215,9 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
 
 
 
-            function defineMenuActions() {
-                var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editColumn,
-                }];
 
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
 
-            function editColumn(columnObj) {
-                var onGridColumnUpdated = function (column) {
-                    var index = ctrl.datasource.indexOf(columnObj);
-                    ctrl.datasource[index] = column;
-                };
 
-                VR_GenericData_GenericBEDefinitionService.editGenericBEColumnDefinition(onGridColumnUpdated, columnObj, getContext());
-            }
-            function getContext() {
-                return context;
-            }
-
-            function checkDuplicateName() {
-                for (var i = 0; i < ctrl.datasource.length; i++) {
-                    var currentItem = ctrl.datasource[i];
-                    for (var j = 0; j < ctrl.datasource.length; j++) {
-                        if (i != j && ctrl.datasource[j].FieldName == currentItem.FieldName)
-                            return true;
-                    }
-                }
-                return false;
-            }
         }
 
         return directiveDefinitionObject;

@@ -51,7 +51,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
 
                     dataItem.onColumnSettingDirectiveReady = function (api) {
                         dataItem.columnSettingsDirectiveAPI = api;
-                        var setLoader = function (value) { $scope.scopeModel.isColumnSettingDirectiveloading = value; };
+                        var setLoader = function (value) { dataItem.isColumnSettingDirectiveloading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, undefined, setLoader);
                     };
                     $scope.scopeModel.availableFields.push(dataItem);

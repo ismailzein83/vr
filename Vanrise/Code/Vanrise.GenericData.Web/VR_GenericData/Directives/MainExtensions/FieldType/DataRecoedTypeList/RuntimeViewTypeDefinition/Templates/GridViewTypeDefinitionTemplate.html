@@ -30,7 +30,7 @@
                             <vr-label>{{dataItem.entity.FieldName}}</vr-label>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="15">
-                            <span vr-loader="scopeModel.isColumnSettingDirectiveloading">
+                            <span vr-loader="dataItem.isColumnSettingDirectiveloading">
                                 <vr-common-gridcolumnwidth-editor on-ready="dataItem.onColumnSettingDirectiveReady" selector-col-num="6" textbox-col-num="6"></vr-common-gridcolumnwidth-editor>
                             </span>
                         </vr-datagridcolumn>

@@ -43,7 +43,6 @@
             <vr-textbox label="Plural Title" value="scopeModel.selectorPluralTitle">
         </vr-columns>
     </vr-row>
-    <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="3"></vr-genericdata-genericbe-extendedsettings>
     <vr-row>
         <vr-columns colnum="2">
             <vr-switch value="scopeModel.hideAddButton" label="Hide Add Button"></vr-switch>
@@ -72,38 +71,58 @@
             <vr-genericdata-genericbe-uploaddefinition-grid on-ready="scopeModel.uploadedFiledsGridReady" ng-show="scopeModel.showUploadButton" isrequired="scopeModel.showUploadButton"></vr-genericdata-genericbe-uploaddefinition-grid>
         </vr-columns>
     </vr-row>
+    <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="3"></vr-genericdata-genericbe-extendedsettings>
 </vr-tab>
 
-<vr-tab header="'Action Definition'">
+<vr-tab header="'Actions Definition'">
     <vr-row>
-        <vr-columns width="fullrow">
-            <vr-genericdata-genericbe-actiondefinition-grid on-ready="scopeModel.onGenericBEActionDefinitionDirectiveReady"></vr-genericdata-genericbe-actiondefinition-grid>
+        <vr-columns width="1/3row">
+            <vr-section title="Actions">
+                <vr-genericdata-genericbe-actiondefinition-grid on-ready="scopeModel.onGenericBEActionDefinitionDirectiveReady"></vr-genericdata-genericbe-actiondefinition-grid>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-section title="Bulk Actions">
+                <vr-span vr-loader="scopeModel.isLoadingBulkActionsDirective">
+                    <vr-genericdata-genericbe-bulkactions-management on-ready="scopeModel.onGenericBEBulkActionsDirectiveReady"></vr-genericdata-genericbe-bulkactions-management>
+                </vr-span>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-section title="Custom Actions">
+                <vr-span vr-loader="scopeModel.isLoadingCustomActionsDirective">
+                    <vr-genericdata-genericbe-customactiondefinition-grid on-ready="scopeModel.onGenericBECustomActionsDirectiveReady"></vr-genericdata-genericbe-customactiondefinition-grid>
+                </vr-span>
+            </vr-section>
         </vr-columns>
     </vr-row>
 </vr-tab>
 
 <vr-tab header="'Grid Definition'">
     <vr-row>
-        <vr-columns width="1/3row">
-            <vr-section header="Columns Definition" collapsible vr-loader="scopeModel.isLoadingColumns">
+        <vr-columns width="1/2row">
+            <vr-section header="Grid Columns" collapsible vr-loader="scopeModel.isLoadingColumns">
                 <vr-genericdata-genericbe-columndefinition-grid on-ready="scopeModel.onGenericBEColumnDefinitionGridReady"></vr-genericdata-genericbe-columndefinition-grid>
             </vr-section>
         </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-section header="Grid Actions" collapsible>
-                <vr-genericdata-genericbe-gridactiondefinition-grid on-ready="scopeModel.onGenericBEGridActionDefinitionDirectiveReady"></vr-genericdata-genericbe-gridactiondefinition-grid>
-            </vr-section>
-        </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-section header="Grid Actions Group" collapsible>
-                <vr-genericdata-genericbe-gridactiongroupdefinition-grid on-ready="scopeModel.onGenericBEGridActionGroupDefinitionDirectiveReady"></vr-genericdata-genericbe-gridactiongroupdefinition-grid>
-            </vr-section>
-        </vr-columns>
-        <vr-columns width="fullrow">
+        <vr-columns width="1/2row">
             <vr-section header="Grid Views" collapsible>
                 <vr-genericdata-genericbe-viewdefinition-grid on-ready="scopeModel.onGenericBEViewDefinitionGridReady"></vr-genericdata-genericbe-viewdefinition-grid>
             </vr-section>
         </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-section header="Grid Actions" collapsible>
+                <vr-genericdata-genericbe-gridactiondefinition-grid on-ready="scopeModel.onGenericBEGridActionDefinitionDirectiveReady"></vr-genericdata-genericbe-gridactiondefinition-grid>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-section header="Grid Actions Group" collapsible>
+                <vr-genericdata-genericbe-gridactiongroupdefinition-grid on-ready="scopeModel.onGenericBEGridActionGroupDefinitionDirectiveReady"></vr-genericdata-genericbe-gridactiongroupdefinition-grid>
+            </vr-section>
+        </vr-columns>
+
     </vr-row>
 </vr-tab>
 
@@ -132,16 +151,7 @@
         </vr-columns>
     </vr-row>
 </vr-tab>
-<vr-tab header="'Bulk Actions'">
-    <vr-span vr-loader="scopeModel.isLoadingBulkActionsDirective">
-        <vr-genericdata-genericbe-bulkactions-management on-ready="scopeModel.onGenericBEBulkActionsDirectiveReady"></vr-genericdata-genericbe-bulkactions-management>
-    </vr-span>
-</vr-tab>
-<vr-tab header="'Custom Actions'">
-    <vr-span vr-loader="scopeModel.isLoadingCustomActionsDirective">
-        <vr-genericdata-genericbe-customactiondefinition-grid on-ready="scopeModel.onGenericBECustomActionsDirectiveReady"></vr-genericdata-genericbe-customactiondefinition-grid>
-    </vr-span>
-</vr-tab>
+
 <vr-tab header="'Additional Settings'">
     <vr-genericdata-genericbe-additionalsettings-grid on-ready="scopeModel.onAdditionalSettingsGridReady"></vr-genericdata-genericbe-additionalsettings-grid>
 </vr-tab>

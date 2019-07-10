@@ -1,8 +1,15 @@
 ﻿<vr-button type="Add" data-onclick="ctrl.addGridActionGroup" standalone></vr-button>
 
 <vr-validator validate="ctrl.isValid()">
-    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="100px"
                  on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeGridActionGroup" hidegridmenu>
-        <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Title'" disablesorting widthfactor="6">
+            <vr-textbox value="dataItem.entity.Title" isrequired></vr-textbox>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true">
+            <vr-span vr-loader="dataItem.isTextResourceSelectorLoading">
+                <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+            </vr-span>
+        </vr-datagridcolumn>
     </vr-datagrid>
 </vr-validator>

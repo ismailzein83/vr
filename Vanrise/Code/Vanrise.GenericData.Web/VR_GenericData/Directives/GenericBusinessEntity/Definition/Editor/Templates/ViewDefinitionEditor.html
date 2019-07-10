@@ -1,20 +1,20 @@
-﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEViewDefintionController" vr-loader="scopeModel.isLoading" width="'40%'">
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEViewDefintionController" vr-loader="scopeModel.isLoading" width="'80%'">
     <vr-modalbody >
         <vr-form validationcontext="viewEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
 					<vr-row>
-						<vr-columns width="1/2row">
+						<vr-columns width="1/4row">
 							<vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
 						</vr-columns>
-						<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="6"></vr-common-vrlocalizationtextresource-selector>
+						<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="3"></vr-common-vrlocalizationtextresource-selector>
 					</vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">
-                    <vr-genericdata-genericbe-viewdefinition-settings on-ready="scopeModel.onViewDefinitionSettingDirectiveReady" normal-col-num="6"></vr-genericdata-genericbe-viewdefinition-settings>
+                    <vr-genericdata-genericbe-viewdefinition-settings on-ready="scopeModel.onViewDefinitionSettingDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-viewdefinition-settings>
                 </vr-tab>
                 <vr-tab header="'Condition'">
-                    <vr-genericdata-genericbe-gridviewcondition on-ready="scopeModel.onViewDefinitionConditionDirectiveReady" normal-col-num="6"></vr-genericdata-genericbe-gridviewcondition>
+                    <vr-genericdata-genericbe-gridviewcondition on-ready="scopeModel.onViewDefinitionConditionDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-gridviewcondition>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
@@ -22,6 +22,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
+                <vr-button type="SaveAndNew" formname="viewEditor" ng-if="!scopeModel.isEditMode" data-onclick="scopeModel.saveAndNew"></vr-button>
                 <vr-button type="Save" validationcontext="viewEditor" data-onclick="scopeModel.saveViewDefinition"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>

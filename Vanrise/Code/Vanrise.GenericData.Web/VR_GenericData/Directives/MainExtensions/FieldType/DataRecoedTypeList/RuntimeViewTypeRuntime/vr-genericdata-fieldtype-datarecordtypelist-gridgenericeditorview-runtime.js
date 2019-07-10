@@ -140,6 +140,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridgenericeditorviewRunt
                             $scope.scopeModel.autoExpand = definitionSettings.DrillDownSettings.AutoExpand; 
                         }
                         fields = definitionSettings.Fields;
+                        gridAPI.refreshGridAttributes();
                     }
                     var columnsPayload = [];
                     columnsInfo = [];

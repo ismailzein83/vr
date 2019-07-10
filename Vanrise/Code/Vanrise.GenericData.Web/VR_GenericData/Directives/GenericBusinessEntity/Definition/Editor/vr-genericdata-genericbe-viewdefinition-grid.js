@@ -28,19 +28,18 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
             function initializeController() {
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
-                    //if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
-                    //    return "You should add at least one column.";
-                    //if (ctrl.datasource.length > 0 && checkDuplicateName())
-                    //    return "Name in each should be unique.";
-
+                   
                      return null;
                 };
 
                 ctrl.addGridView = function () {
-                    var onGridViewAdded = function (addedItem) {
+                    var onGridViewAdded = function (addedItem, reopen) {
                         ctrl.datasource.push(addedItem);
+                        if (reopen) {
+                            VR_GenericData_GenericBEDefinitionService.addGenericBEViewDefinition(onGridViewAdded, context);
+                        }
                     };
-
+                    
                     VR_GenericData_GenericBEDefinitionService.addGenericBEViewDefinition(onGridViewAdded, context);
                 };
                 
@@ -118,16 +117,6 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
                 VR_GenericData_GenericBEDefinitionService.editGenericBEViewDefinition(onGridViewUpdated, viewObj,context);
             }
 
-            function checkDuplicateName() {
-                for (var i = 0; i < ctrl.datasource.length; i++) {
-                    var currentItem = ctrl.datasource[i];
-                    for (var j = 0; j < ctrl.datasource.length; j++) {
-                        if (i != j && ctrl.datasource[j].Name == currentItem.Name)
-                            return true;
-                    }
-                }
-                return false;
-            }
         }
 
         return directiveDefinitionObject;

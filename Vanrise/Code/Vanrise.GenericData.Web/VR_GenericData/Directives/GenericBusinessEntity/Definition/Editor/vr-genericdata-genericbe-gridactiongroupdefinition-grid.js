@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
-    function (UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
+app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsService", "VRUIUtilsService","VRLocalizationService",
+    function (UtilsService, VRUIUtilsService,  VRLocalizationService) {
 
         var directiveDefinitionObject = {
 
@@ -29,19 +29,26 @@ app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsServ
             this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
+                $scope.scopeModel = {};
                 ctrl.isValid = function () {
                     if (ctrl.datasource.length > 0 && checkDuplicateName())
                         return "Title in each action should be unique.";
 
                     return null;
                 };
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
 
                 ctrl.addGridActionGroup = function () {
-                    var onGridActionGroupAdded = function (addedItem) {
-                        ctrl.datasource.push({ Entity: addedItem });
+                    var dataItem = {
+                        entity: { GenericBEGridActionGroupId: UtilsService.guid()}
                     };
-
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEGridActionGroupDefinition(onGridActionGroupAdded, getContext());
+                
+                    dataItem.onTextResourceSelectorReady = function (api) {
+                        dataItem.textResourceSeletorAPI = api;
+                        var setLoader = function (value) { dataItem.isFieldTextResourceSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
+                    };
+                    ctrl.datasource.push(dataItem);
                 };
 
                 ctrl.removeGridActionGroup = function (dataItem) {
@@ -49,15 +56,37 @@ app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsServ
                     ctrl.datasource.splice(index, 1);
                 };
 
-                defineMenuActions();
-
                 defineAPI();
+            }
+            function prepareDataItem(groupActionObject) {
+
+                var dataItem = {
+                    entity: {
+                        Title: groupActionObject.payload.Title,
+                        GenericBEGridActionGroupId: groupActionObject.payload.GenericBEGridActionGroupId
+                    },
+
+                    oldTextResourceKey: groupActionObject.payload.TextResourceKey
+                };
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    groupActionObject.textResourceReadyPromiseDeferred.resolve();
+                };
+               
+
+                groupActionObject.textResourceReadyPromiseDeferred.promise.then(function () {
+                    var textResourcePayload = { selectedValue: groupActionObject.payload.TextResourceKey };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, groupActionObject.textResourceLoadPromiseDeferred);
+                });
+
+                ctrl.datasource.push(dataItem);
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
                     if (payload != undefined) {
 
                         context = payload.context;
@@ -65,10 +94,18 @@ app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsServ
                         if (payload.genericBEGridActionGroups != undefined) {
                             for (var i = 0; i < payload.genericBEGridActionGroups.length; i++) {
                                 var item = payload.genericBEGridActionGroups[i];
-                                ctrl.datasource.push({ Entity: item });
+                                var groupActionObject = {
+                                    payload: item,
+                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                };
+                                if ($scope.scopeModel.isLocalizationEnabled)
+                                    promises.push(groupActionObject.textResourceLoadPromiseDeferred.promise);
+                                prepareDataItem(groupActionObject);
                             }
                         }
                     }
+                    return UtilsService.waitPromiseNode({ promises: promises });
                 };
 
                 api.getData = function () {
@@ -77,7 +114,11 @@ app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsServ
                         gridActionGroups = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            gridActionGroups.push(currentItem.Entity);
+                            gridActionGroups.push({
+                                GenericBEGridActionGroupId: currentItem.entity.GenericBEGridActionGroupId,
+                                Title: currentItem.entity.Title,
+                                TextResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : currentItem.oldTextResourceKey
+                            });
                         }
                     }
                     return gridActionGroups;
@@ -91,40 +132,11 @@ app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsServ
                     ctrl.onReady(api);
             }
 
-
-
-            function defineMenuActions() {
-                var defaultMenuActions = [
-                    {
-                        name: "Edit",
-                        clicked: editGridActionGroup
-                    }];
-
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
-
-            function editGridActionGroup(gridActionGroupObj) {
-                var onGridActionGroupUpdated = function (gridActionGroup) {
-                    var index = ctrl.datasource.indexOf(gridActionGroupObj);
-                    ctrl.datasource[index] = { Entity: gridActionGroup };
-                };
-                VR_GenericData_GenericBEDefinitionService.editGenericBEGridActionGroupDefinition(onGridActionGroupUpdated, gridActionGroupObj.Entity, getContext());
-            }
-
-            function getContext() {
-                var currentContext = context;
-                if (currentContext == undefined)
-                    currentContext = {};
-                return currentContext;
-            }
-
             function checkDuplicateName() {
                 for (var i = 0; i < ctrl.datasource.length; i++) {
-                    var currentItem = ctrl.datasource[i].Entity;
+                    var currentItem = ctrl.datasource[i].entity; 
                     for (var j = i + 1; j < ctrl.datasource.length; j++) {
-                        if (ctrl.datasource[j].Entity.Title == currentItem.Title)
+                        if (ctrl.datasource[j].entity.Title == currentItem.Title)
                             return true;
                     }
                 }

@@ -115,6 +115,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                         $scope.scopeModel.enableDraggableRow = definitionSettings.EnableDraggableRow;
                         availableFields = definitionSettings.AvailableFields;
                         $scope.scopeModel.deleteFunction = definitionSettings.HideRemoveIcon ? undefined : $scope.scopeModel.onDeleteRow;
+                        gridAPI.refreshGridAttributes();
                     }
                     if (dataRecordTypeId != undefined) {
                         var dataRecordFields;

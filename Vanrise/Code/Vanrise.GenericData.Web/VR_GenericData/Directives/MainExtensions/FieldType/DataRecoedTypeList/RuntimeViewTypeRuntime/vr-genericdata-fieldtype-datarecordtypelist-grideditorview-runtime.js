@@ -67,6 +67,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                     var definitionSettings = payload.definitionSettings;
                     editorSettings = definitionSettings != undefined ? definitionSettings.Settings : undefined;
                     $scope.scopeModel.hideSection = definitionSettings.HideSection;
+                    $scope.scopeModel.deleteFunction = definitionSettings != undefined && definitionSettings.HideRemoveIcon ? undefined : $scope.scopeModel.onDeleteRow;
+                    gridAPI.refreshGridAttributes();
+
                     var fieldsValues = [];
 
                     var fields = payload.fieldValue;

@@ -9,9 +9,7 @@
         var isEditMode;
         var viewDefinition;
         var context;
-
-        var dataRecordTypeFieldsSelectorAPI;
-        var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var saveAndNew = false;
 
         var viewSettingsDirectiveAPI;
         var viewSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -61,7 +59,10 @@
                     return insert();
                 }
             };
-
+            $scope.scopeModel.saveAndNew = function () {
+                saveAndNew = true;
+                return $scope.scopeModel.saveViewDefinition();
+            };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -148,7 +149,7 @@
         function insert() {
             var viewDefinition = buildViewDefinitionFromScope();
             if ($scope.onGenericBEViewDefinitionAdded != undefined) {
-                $scope.onGenericBEViewDefinitionAdded(viewDefinition);
+                $scope.onGenericBEViewDefinitionAdded(viewDefinition, saveAndNew);
             }
             $scope.modalContext.closeModal();
         }
