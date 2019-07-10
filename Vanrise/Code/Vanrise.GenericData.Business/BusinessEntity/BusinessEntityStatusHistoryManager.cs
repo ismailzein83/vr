@@ -8,6 +8,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Caching;
 using Vanrise.Common.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.GenericData.Business
 {
@@ -24,6 +25,8 @@ namespace Vanrise.GenericData.Business
 		{
 
 			var lastStatusHistory = GetLastBusinessEntityStatusHistory(businessEntityDefinitionId, businessEntityId, fieldName);
+			int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+
 			Guid? previousStatus = null;
 			string previousMoreInfo = null;
 			if (lastStatusHistory != null)
@@ -34,7 +37,7 @@ namespace Vanrise.GenericData.Business
 				previousMoreInfo = lastStatusHistory.MoreInfo;
 			}
 			IBusinessEntityStatusHistoryDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityStatusHistoryDataManager>();
-			return dataManager.Insert(businessEntityDefinitionId, businessEntityId, fieldName, statusId, previousStatus, moreInfo, previousMoreInfo);
+			return dataManager.Insert(businessEntityDefinitionId, businessEntityId, fieldName, statusId, previousStatus, moreInfo, previousMoreInfo, loggedInUserId);
 
 		}
 		public BusinessEntityStatusHistory GetLastBusinessEntityStatusHistory(Guid businessEntityDefinitionId, string businessEntityId, string fieldName)
@@ -58,14 +61,18 @@ namespace Vanrise.GenericData.Business
         {
             var statusDefinitionManager = new StatusDefinitionManager();
 
-            var businessEntityStatusHistoryDetail = new BusinessEntityStatusHistoryDetail
-            {
-                BusinessEntityStatusHistoryId = businessEntityStatusHistory.BusinessEntityStatusHistoryId,
-                FieldName = businessEntityStatusHistory.FieldName,
-                StatusName = statusDefinitionManager.GetStatusDefinitionName(businessEntityStatusHistory.StatusId),
-                StatusChangedDate = businessEntityStatusHistory.StatusChangedDate,
-                IsDeleted = businessEntityStatusHistory.IsDeleted,
-            };
+			var businessEntityStatusHistoryDetail = new BusinessEntityStatusHistoryDetail
+			{
+				BusinessEntityStatusHistoryId = businessEntityStatusHistory.BusinessEntityStatusHistoryId,
+				FieldName = businessEntityStatusHistory.FieldName,
+				StatusName = statusDefinitionManager.GetStatusDefinitionName(businessEntityStatusHistory.StatusId),
+				StatusChangedDate = businessEntityStatusHistory.StatusChangedDate,
+				IsDeleted = businessEntityStatusHistory.IsDeleted,
+				StyleDefinitionId = statusDefinitionManager.GetStyleDefinitionId(businessEntityStatusHistory.StatusId),
+				PreviousStyleDefinitionId= businessEntityStatusHistory.PreviousStatusId.HasValue?statusDefinitionManager.GetStyleDefinitionId(businessEntityStatusHistory.PreviousStatusId.Value):default(Guid?),
+				CreatedBy= businessEntityStatusHistory.CreatedBy,
+				CreatedByDescription = businessEntityStatusHistory.CreatedBy.HasValue? BEManagerFactory.GetManager<IUserManager>().GetUserName(businessEntityStatusHistory.CreatedBy.Value):null
+			};
 
             if (businessEntityStatusHistory.PreviousStatusId.HasValue)
                 businessEntityStatusHistoryDetail.PreviousStatusName = statusDefinitionManager.GetStatusDefinitionName(businessEntityStatusHistory.PreviousStatusId.Value);

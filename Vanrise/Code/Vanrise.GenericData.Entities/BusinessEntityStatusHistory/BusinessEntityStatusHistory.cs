@@ -18,5 +18,6 @@ namespace Vanrise.GenericData.Entities
         public bool IsDeleted { get; set; }
 		public string MoreInfo { get; set; }
 		public string PreviousMoreInfo { get; set; }
+		public int? CreatedBy { get; set; }
     }
 }

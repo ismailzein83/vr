@@ -13,15 +13,15 @@ namespace Vanrise.GenericData.Data.SQL
     {
         public BusinessEntityStatusHistoryDataManager() : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey")) { }
 
-        public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId,string moreInfo,string previousMoreInfo)
+        public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId,string moreInfo,string previousMoreInfo,int userId)
         {
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityStatusHistory_Insert", businessEntityDefinitionId, businessEntityId.ToString(), fieldName, statusId,previousStatusId, moreInfo, previousMoreInfo);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityStatusHistory_Insert", businessEntityDefinitionId, businessEntityId.ToString(), fieldName, statusId,previousStatusId, moreInfo, previousMoreInfo,userId);
             return (recordesEffected > 0);
         }
 
         public IEnumerable<BusinessEntityStatusHistory> GetFilteredBusinessEntitiesStatusHistory(Vanrise.Entities.DataRetrievalInput<BusinessEntityStatusHistoryQuery> input)
         {
-            return GetItemsSP("genericdata.sp_BusinessEntityStatusHistory_GetFiltered", BusinessEntityStatusHistoryMapper, input.Query.BusinessEntityDefinitionId, input.Query.BusinessEntityId);
+            return GetItemsSP("genericdata.sp_BusinessEntityStatusHistory_GetFiltered", BusinessEntityStatusHistoryMapper, input.Query.BusinessEntityDefinitionId, input.Query.BusinessEntityId,input.Query.FieldName);
         }
 
 
@@ -43,7 +43,9 @@ namespace Vanrise.GenericData.Data.SQL
                 BusinessEntityDefinitionId = GetReaderValue<Guid>(reader, "BusinessEntityDefinitionId"),
                 BusinessEntityId = reader["BusinessEntityId"] as string,
 				MoreInfo=reader["MoreInfo"] as string,
-				PreviousMoreInfo = reader["PreviousMoreInfo"] as string
+				PreviousMoreInfo = reader["PreviousMoreInfo"] as string,
+				CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+
 			};
         }
     }
