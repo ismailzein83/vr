@@ -1,19 +1,19 @@
-﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBECustomActionDefintionController" vr-loader="scopeModel.isLoading" width="'45%'">
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBECustomActionDefintionController" vr-loader="scopeModel.isLoading" width="'80%'">
     <vr-modalbody>
         <vr-form validationcontext="customActionEditor">
 			<vr-tabs>
 				<vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/4row">
                             <vr-textbox value="scopeModel.title" label="Title" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/4row">
                             <vr-buttontype-selector on-ready="scopeModel.onButtonTypeDirectiveReady" isrequired="true"></vr-buttontype-selector>
                         </vr-columns>
                     </vr-row>
 				</vr-tab>
 				<vr-tab header="'Settings'">
-					<vr-genericdata-genericbe-customactiondefinition-settings on-ready="scopeModel.onCustomActionSettingDirectiveReady" normal-col-num="6" isrequired="true"></vr-genericdata-genericbe-customactiondefinition-settings>
+					<vr-genericdata-genericbe-customactiondefinition-settings on-ready="scopeModel.onCustomActionSettingDirectiveReady" normal-col-num="3" isrequired="true"></vr-genericdata-genericbe-customactiondefinition-settings>
 				</vr-tab>
 		
 			</vr-tabs>
