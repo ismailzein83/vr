@@ -1079,6 +1079,118 @@ namespace TOne.WhS.Sales.Business
 
             return result;
         }
+        public ImportedDataValidationResult ValidateTargetMatchImportedData(TargetMatchImportedDataInput input)
+        {
+            var allowRateZero = new BusinessEntity.Business.ConfigManager().GetSaleAreaAllowRateZero();
+            Dictionary<long, DateTime> customerZoneEffectiveDatesByZoneId = new Dictionary<long, DateTime>();
+            List<long> zoneIds = new List<long>();
+            IEnumerable<string> worksheetHeaders;
+            IEnumerable<ImportedRow> importedRows = GetImportedRows(input.FileId, input.HeaderRowExists, out worksheetHeaders);
+            var result = new ImportedDataValidationResult();
+            var validator = new ImportedRowValidator();
+            DateTime minDate = DateTime.MaxValue;
+
+            if (importedRows == null || importedRows.Count() == 0)
+            {
+                result.FileIsEmpty = true;
+                return result;
+            }
+
+            Dictionary<string, SaleZone> saleZonesByName = GetSaleZonesEffectiveAfterByName(SalePriceListOwnerType.Customer, input.OwnerId, DateTime.Today);
+            Dictionary<string, ZoneChanges> zoneDraftsByZoneName = GetZoneDraftsByZoneName(SalePriceListOwnerType.Customer, input.OwnerId);
+
+            var countryBEDsByCountry = new Dictionary<int, DateTime>();
+            IEnumerable<int> closedCountryIds = new List<int>();
+
+            countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, true);
+            closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, null, DateTime.Today);
+
+
+            // Validate the data of the entire file
+            var importedFileValidationContext = new ImportedFileValidationContext()
+            {
+                ImportedRows = importedRows,
+                SaleZonesByZoneName = saleZonesByName
+            };
+
+            validator.ValidateImportedFile(importedFileValidationContext);
+
+            if (importedFileValidationContext.InvalidImportedRows != null)
+            {
+                foreach (InvalidImportedRow invalidImportedRow in importedFileValidationContext.InvalidImportedRows)
+                    result.InvalidDataByRowIndex.Add(invalidImportedRow.RowIndex, invalidImportedRow);
+            }
+
+            var additionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
+            // Validate the data of each zone
+            for (int i = 0; i < importedRows.Count(); i++)
+            {
+                ImportedRow importedRow = importedRows.ElementAt(i);
+                string zoneName = (importedRow.Zone != null) ? BulkActionUtilities.GetZoneNameKey(importedRow.Zone) : null;
+
+                if (zoneName != null && importedFileValidationContext.InvalidImportedRows.FindRecord(x => BulkActionUtilities.GetZoneNameKey(x.ImportedRow.Zone) == zoneName) != null)
+                    continue;
+                var existingZone = saleZonesByName.GetRecord(zoneName);
+                var context = new IsImportedRowValidContext()
+                {
+                    OwnerId = input.OwnerId,
+                    ImportedRow = importedRow,
+                    ExistingZone = existingZone,
+                    ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
+                    CountryBEDsByCountry = countryBEDsByCountry,
+                    ClosedCountryIds = closedCountryIds,
+                    AllowRateZero = allowRateZero,
+                    AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId
+                };
+
+
+                if (validator.IsTargetMatchImportedRowValid(context))
+                {
+                    var validDataImportedRow = new ImportedRow()
+                    {
+                        Zone = importedRow.Zone,
+                        Rate = importedRow.Rate,
+                        EffectiveDate = DateTime.Now.ToString(),
+                        Status = context.Status,
+                        OtherRates = (context.Status == ImportedRowStatus.OnlyNormalRateValid) ? null : importedRow.OtherRates,
+                    };
+                    DateTime effectiveDateAsDateTime;
+                    DateTime.TryParse(DateTime.Now.ToString(), out effectiveDateAsDateTime);
+                    if (effectiveDateAsDateTime < minDate)
+                        minDate = effectiveDateAsDateTime;
+                    customerZoneEffectiveDatesByZoneId.Add(existingZone.SaleZoneId, effectiveDateAsDateTime);
+                    zoneIds.Add(existingZone.SaleZoneId);
+                    result.ValidDataByZoneId.Add(context.ExistingZone.SaleZoneId, validDataImportedRow);
+                    result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
+
+                    // In case of OnlyImportedRateValid Imported Row will be added to Invalid data to notify user about the other rate error;
+
+                }
+                else
+                {
+                    if (context.ExistingZone != null)
+                    {
+                        result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
+                    }
+                    result.InvalidDataByRowIndex.Add(i, new InvalidImportedRow()
+                    {
+                        RowIndex = i,
+                        ImportedRow = importedRow,
+                        ZoneId = (context.ExistingZone != null) ? (long?)context.ExistingZone.SaleZoneId : null,
+                        ErrorMessage = context.ErrorMessage,
+                        Status = context.Status
+                    });
+                }
+
+            }
+            if (result.ValidDataByZoneId != null)
+                ValidateRates(input.OwnerId, SalePriceListOwnerType.Customer, zoneIds, minDate, customerZoneEffectiveDatesByZoneId, result.ValidDataByZoneId, saleZonesByName);
+
+            if (additionalCountryBEDsByCountryId != null && additionalCountryBEDsByCountryId.Count > 0)
+                result.AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId;
+
+            return result;
+        }
 
         private IEnumerable<ZoneItem> BuildZoneItems(RatePlanZoneCreationInput input)
         {

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionValidationresultuppliertargetmatchimport', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter) {
+app.directive('vrWhsSalesBulkactionValidationresultSuppliertargetmatchimport', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', 'LabelColorsEnum', function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter,LabelColorsEnum) {
     return {
         restrict: "E",
         scope: {
@@ -20,13 +20,21 @@ app.directive('vrWhsSalesBulkactionValidationresultuppliertargetmatchimport', ['
     function TargetMatchValidationResult($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
-
+        var pageSize = 10;
+        var invalidImportedRows;
       
 
         function initializeController() {
             $scope.scopeModel = {};
+            $scope.scopeModel.invalidImportedRows = [];
 
-            defineAPI();
+            $scope.scopeModel.onGridReady = function (api) {
+                defineAPI();
+            };
+
+            $scope.scopeModel.loadMoreGridData = function () {
+                loadMoreGridData($scope.scopeModel.invalidImportedRows, invalidImportedRows);
+            };
         }
         function defineAPI() {
 
@@ -34,15 +42,38 @@ app.directive('vrWhsSalesBulkactionValidationresultuppliertargetmatchimport', ['
 
             api.load = function (payload) {
 
-                return UtilsService.waitMultiplePromises();
+                var bulkActionValidationResult;
+
+                if (payload != undefined) {
+                    bulkActionValidationResult = payload.bulkActionValidationResult;
+                }
+
+                if (bulkActionValidationResult != undefined) {
+                    invalidImportedRows = bulkActionValidationResult.InvalidImportedRows;
+                    $scope.scopeModel.errorMessage = bulkActionValidationResult.ErrorMessage;
+                    $scope.scopeModel.errorMessageColor = LabelColorsEnum.DangerFont.color;
+                }
+
+                loadMoreGridData($scope.scopeModel.invalidImportedRows, invalidImportedRows);
             };
 
             api.getData = function () {
-              
+                return null;
             };
 
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
+            }
+        }
+        function loadMoreGridData(gridArray, sourceArray) {
+            if (sourceArray == undefined)
+                return;
+            if (gridArray.length < sourceArray.length) {
+                for (var i = 0; i < sourceArray.length && i < pageSize; i++) {
+                    gridArray.push({
+                        Entity: sourceArray[i]
+                    });
+                }
             }
         }
 

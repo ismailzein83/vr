@@ -14,6 +14,7 @@ namespace TOne.WhS.Sales.Business
         #region Fields / Constructors
 
         private IEnumerable<IImportedRowValidator> _validators;
+        private IEnumerable<IImportedRowValidator> _taregtMatchValidators;
         private IEnumerable<int> _allRateTypeIds;
 
         public ImportedRowValidator()
@@ -25,6 +26,13 @@ namespace TOne.WhS.Sales.Business
                         new RateValidator(),
                         new EffectiveDateValidator(),
                         new RoutingProductValidator()
+                  };
+            _taregtMatchValidators = new List<IImportedRowValidator>()
+                  {
+                    new CountryValidator(),
+                        new ZoneValidator(),
+                        new RateValidator(),
+                        new EffectiveTargetMatchDateValidator()
                   };
             var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
             _allRateTypeIds = rateTypeManager.GetAllRateTypes().Select(item => item.RateTypeId);
@@ -129,6 +137,43 @@ namespace TOne.WhS.Sales.Business
                     context.Status = ImportedRowStatus.OnlyNormalRateValid;
                     context.ErrorMessage = string.Join(" ; ", errorMessages);
                 }
+                return true;
+            }
+            else
+            {
+                context.Status = ImportedRowStatus.Invalid;
+                if (errorMessages.Count > 0)
+                    context.ErrorMessage = string.Join(" ; ", errorMessages);
+                return false;
+            }
+        }
+        public bool IsTargetMatchImportedRowValid(IIsImportedRowValidContext context)
+        {
+            bool isValid = true;
+            var errorMessages = new List<string>();
+            var isValidContext = new IsValidContext()
+            {
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                AllRateTypeIds = _allRateTypeIds,
+                ImportedRow = context.ImportedRow,
+                ZoneDraft = context.ZoneDraft,
+                ExistingZone = context.ExistingZone,
+                CountryBEDsByCountry = context.CountryBEDsByCountry,
+                ClosedCountryIds = context.ClosedCountryIds,
+                AllowRateZero = context.AllowRateZero,
+            };
+            foreach (IImportedRowValidator validator in _taregtMatchValidators)
+            {
+                if (!validator.IsValid(isValidContext))
+                {
+                    if (isValidContext.ErrorMessage != null)
+                        errorMessages.Add(isValidContext.ErrorMessage);
+                    isValid = false;
+                }
+            }
+            if (isValid)
+            {
                 return true;
             }
             else
@@ -344,6 +389,48 @@ namespace TOne.WhS.Sales.Business
                         return false;
                     }
                 }
+            }
+
+            context.ErrorMessage = null;
+            return true;
+        }
+    }
+
+    public class EffectiveTargetMatchDateValidator : IImportedRowValidator
+    {
+        public bool IsValid(IIsValidContext context)
+        {
+            string effectiveDate = DateTime.Now.ToString();
+            CountryManager countryManager = new CountryManager();
+
+            // Convert ImportedRow.EffectiveDate to a string in a format that the grid's date column expects
+            //  context.ImportedRow.EffectiveDate = effectiveDateAsDateTime.ToString("yyyy-MM-ddTHH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+
+            if (context.ExistingZone != null)
+            {
+                if (context.ExistingZone.BED > DateTime.Now)
+                {
+                    context.ErrorMessage = string.Format("Effective date is smaller than the Zone's BED '{0}'", UtilitiesManager.GetDateTimeAsString(context.ExistingZone.BED));
+                    return false;
+                }
+
+                if (context.ExistingZone.EED.HasValue)
+                {
+                    context.ErrorMessage = string.Format("Zone '{0}' will be closed on '{1}'. Cannot define new Rates for pending closed Zones", context.ExistingZone.Name, UtilitiesManager.GetDateTimeAsString(context.ExistingZone.EED.Value));
+                    return false;
+                }
+
+
+                DateTime countryBED;
+                context.CountryBEDsByCountry.TryGetValue(context.ExistingZone.CountryId, out countryBED);
+                var countryName = countryManager.GetCountryName(context.ExistingZone.CountryId);
+
+                 if (countryBED > DateTime.Now)
+                {
+                    context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is greater than the effective date '{2}'", countryName, UtilitiesManager.GetDateTimeAsString(countryBED), UtilitiesManager.GetDateTimeAsString(DateTime.Now));
+                    return false;
+                }
+
             }
 
             context.ErrorMessage = null;
