@@ -133,7 +133,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 $scope.scopeModel.showUploadButton;
 
                 $scope.scopeModel.genericBEDefinitionTypes = UtilsService.getArrayEnum(VR_GenericData_GenericBEDefinitionTypeEnum);
-
+                $scope.scopeModel.selectedGenericBEDefinitionType = VR_GenericData_GenericBEDefinitionTypeEnum.RecordStorage;
                 $scope.scopeModel.onDataRecordTypeSelectorDirectiveReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
                     dataRecordTypeSelectorReadyPromiseDeferred.resolve();

@@ -1,7 +1,10 @@
-﻿<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
-    <vr-genericdata-datarecordtypefields-selector label="Uploaded Fields" on-ready="scopeModel.onDataRecordTypeUploadedFieldsSelectorDirectiveReady" ismultipleselection isrequired="uploadDefGridCtrl.isrequired" onselectitem="scopeModel.onSelectUploadFieldItem" ondeselectitem="scopeModel.onDeselectUploadFieldItem" ondeselectallitems="scopeModel.onDeselecAlltUploadFieldItems"></vr-genericdata-datarecordtypefields-selector>
-</vr-columns>
-<vr-columns width="1/2row" withemptyline>
+﻿<vr-row>
+    <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingTitle">
+        <vr-genericdata-datarecordtypefields-selector label="Uploaded Fields" on-ready="scopeModel.onDataRecordTypeUploadedFieldsSelectorDirectiveReady" ismultipleselection hideselectedvaluessection isrequired="uploadDefGridCtrl.isrequired" onselectitem="scopeModel.onSelectUploadFieldItem" ondeselectitem="scopeModel.onDeselectUploadFieldItem" ondeselectallitems="scopeModel.onDeselecAlltUploadFieldItems"></vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow" >
         <vr-datagrid datasource="scopeModel.uploadedFields"
                      on-ready="onGridReady"
                      dataretrievalfunction="dataRetrievalFunction"
@@ -10,7 +13,6 @@
                      maxheight="150px"
                      idfield="Entity.BusinessEntityDefinitionId"
                      hidegridmenu>
-
             <vr-datagridcolumn headertext=" 'Title Field' " field="'TitleField'" type=" 'Text' ">
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Is Required'" field="'IsRequired'">
@@ -22,4 +24,5 @@
                 </span>
             </vr-datagridcolumn>
         </vr-datagrid>
-</vr-columns>
+    </vr-columns>
+</vr-row>

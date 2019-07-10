@@ -57,6 +57,13 @@
                 directiveAPI.load = function (payload) {
                     selectorAPI.clearDataSource();
                     ctrl.datasource = UtilsService.getArrayEnum(VRCommon_ModalWidthEnum);
+                   
+                    if (attrs.ismultipleselection != undefined && attrs.ismultipleselection != null) {
+                        ctrl.selectedvalues = [VRCommon_ModalWidthEnum.Medium];
+
+                    } else {
+                        ctrl.selectedvalues = VRCommon_ModalWidthEnum.Medium;
+                    }
 
                     var selectedIds;
 
