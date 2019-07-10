@@ -24,9 +24,6 @@
             }
         };
         function getTamplate(attrs) {
-            var label = "";
-            if (attrs.label != undefined)
-                label = "label='" + attrs.label + "'";
             return '';
         }
 
@@ -52,7 +49,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "TOne.WhS.BusinessEntity.Entities.CompanyDefinitionPricelistSettings, TOne.WhS.BusinessEntity.Entities"
+                        $type: "TOne.WhS.BusinessEntity.Entities.CompanyDefinitionPurchasePricelistSettings, TOne.WhS.BusinessEntity.Entities"
                     };
                     return data;
                 }
@@ -60,6 +57,6 @@
         }
     }
 
-    app.directive('whsBeCompanypricelistsettingsDefinition', companyDefinitionPricelistSettingsDirective);
+    app.directive('whsBeCompanypurchasepricelistsettingsDefinition', companyDefinitionPricelistSettingsDirective);
 
 })(app);

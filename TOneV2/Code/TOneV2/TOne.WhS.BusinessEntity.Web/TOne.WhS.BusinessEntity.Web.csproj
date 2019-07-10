@@ -232,6 +232,7 @@
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PortalCarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\PurchaseSendEmailEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SupplierPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CustomerTicketDetailsFieldPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ExclusiveSessionTargetIdPrefixEnum.js" />
@@ -388,9 +389,13 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-salecode-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-suppliercodegridview-runtime.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-salecodegridview-runtime.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyDefinitionPurchasePricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyDefinitionPricelistSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyPurchasePricelistSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\whs-be-companypurchasepricelistsettings-definition.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\whs-be-companypricelistsettings-definition.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyPricelistSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\whs-be-companypurchasepricelistsettings-runtime.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\whs-be-companypricelistsettings-runtime.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
@@ -521,6 +526,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\BETechnicalNumberPlanSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\CodeChangeTypeSettingsGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\InternalAutoImportTemplateSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PurchasePricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricingSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\RateChangeTypeSettingsGridTemplate.html" />
@@ -531,6 +537,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-autoimport-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-autoimporttemplatesettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-internalautoimporttemplatesettings-editor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-purchase-pricelistsettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelisttype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-codechangetypesettings-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelistsettings-editor.js" />

@@ -508,13 +508,42 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			return configManager.MergePricelistSettings(companyPricelistSettings, carrierAccount.CustomerSettings.PricelistSettings);
 		}
-		public PricelistSettings GetCompanyPricelistSettingsByCustomerId(int carrierAccountId)
+        public PurchasePricelistSettings GetSupplierPricelistSettings(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            var configManager = new ConfigManager();
+            var companyPricelistSettings = GetCompanyPricelistSettingsBySupplierId(carrierAccountId);
+
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+            carrierAccount.SupplierSettings.ThrowIfNull("carrierAccount.SupplierSettings", carrierAccountId);
+
+            return configManager.MergePurchasePricelistSettings(companyPricelistSettings, carrierAccount.SupplierSettings.PricelistSettings);
+        }
+        public PurchasePricelistSettings GetCompanyPricelistSettingsBySupplierId(int carrierAccountId)
+        {
+            var companySetting = GetCompanySetting(carrierAccountId);
+            return GetCompanyPurchasePricelistSettings(companySetting);
+
+        }
+        public PricelistSettings GetCompanyPricelistSettingsByCustomerId(int carrierAccountId)
 		{
 			var companySetting = GetCompanySetting(carrierAccountId);
 			return GetCompanyPricelistSettings(companySetting);
 
 		}
-		public PricelistSettings GetCompanyPricelistSettings(CompanySetting companySetting)
+        public PurchasePricelistSettings GetCompanyPurchasePricelistSettings(CompanySetting companySetting)
+        {
+            var configManager = new ConfigManager();
+
+            Vanrise.Common.Business.ConfigManager vanriseCommonBusinessConfigManager = new Vanrise.Common.Business.ConfigManager();
+            CompanyPurchasePricelistSettings companyPricelistSettingsObj = vanriseCommonBusinessConfigManager.GetCompanyExtendedSettings<CompanyPurchasePricelistSettings>(companySetting);
+            PurchasePricelistSettings companyPricelistSettings = (companyPricelistSettingsObj != null) 
+                ? companyPricelistSettingsObj.PricelistSettings 
+                : default(PurchasePricelistSettings);
+
+            return configManager.MergePurchasePricelistSettings(configManager.GetPurchaseAreaPricelistSettings(), companyPricelistSettings);
+        }
+        public PricelistSettings GetCompanyPricelistSettings(CompanySetting companySetting)
 		{
 			var configManager = new ConfigManager();
 

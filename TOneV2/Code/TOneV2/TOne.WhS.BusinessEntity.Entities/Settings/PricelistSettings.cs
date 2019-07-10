@@ -18,7 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class PurchasePricelistSettings
     {
         public Guid? DefaultSupplierPLMailTemplateId { get; set; }
-        public SendEmail SendEmail { get; set; }
+        public bool? SendEmail { get; set; }
     }
-    public enum SendEmail { Yes = 0, No = 1 }
 }

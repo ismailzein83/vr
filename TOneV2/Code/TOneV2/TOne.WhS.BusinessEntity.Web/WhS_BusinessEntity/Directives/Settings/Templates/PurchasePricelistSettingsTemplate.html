@@ -1,0 +1,20 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select datatextfield="description"
+                   datavaluefield="value"
+                   label="Send Email After Manual Import"
+                   datasource="ctrl.sendEmailOption"
+                   ng-if="ctrl.showSendEmailSelector"
+                    isrequired="ctrl.isSendEmailRequired"
+                   selectedvalues="ctrl.selecteSendEmailOption">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-common-mailmessagetemplate-selector on-ready="ctrl.onPriceListEmailTemplateSelectorReady"
+                                                ng-if="ctrl.showMailTemplateSelector"
+                                                customlabel="Supplier PriceList Email Template"
+                                                isrequired="ctrl.isPricelistTemplateRequired"
+                                                showaddbutton>
+        </vr-common-mailmessagetemplate-selector>
+    </vr-columns>
+</vr-row>

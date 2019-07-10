@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_CurrencyAPIService', 'VRNotificationService',
-    function (UtilsService, VRUIUtilsService, VRCommon_CurrencyAPIService, VRNotificationService) {
+app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_CurrencyAPIService', 'VRNotificationService', 'WhS_BE_PurchaseSettingsContextEnum',
+    function (UtilsService, VRUIUtilsService, VRCommon_CurrencyAPIService, VRNotificationService, WhS_BE_PurchaseSettingsContextEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -19,6 +19,10 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
         function PurchaseAreaSettings(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
+
+            var priceListSettingsEditorAPI;
+            var priceListSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var data;
 
             $scope.hintTextForIncrease = "(1 - OldRate / NewRate)*100 should be less than the specified percentage";
@@ -27,6 +31,11 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
 
             function initializeController() {
+
+                ctrl.onPriceListSettingsEditorReady = function (api) {
+                    priceListSettingsEditorAPI = api;
+                    priceListSettingsEditorReadyDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -39,7 +48,6 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                         data = payload.data;
                     }
 
-                    var promises = [];
                     load();
 
                     function load() {
@@ -47,14 +55,21 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     }
 
                     function loadAllControls() {
-                        return UtilsService.waitMultipleAsyncOperations([loadStaticData, getSystemCurrency])
-                            .catch(function (error) {
-                                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                            })
-                            .finally(function () {
-                            });
-                    }
 
+                        var promises = [];
+
+                        var loadStaticDataPromise = loadStaticData();
+                        promises.push(loadStaticDataPromise);
+
+                        var currencyPromise = getSystemCurrency();
+                        promises.push(currencyPromise);
+
+                        if (data != undefined) {
+                            var loadPriceListSettingsPromise = loadPriceListSettings(data.PricelistSettings);
+                            promises.push(loadPriceListSettingsPromise);
+                        }
+                        return UtilsService.waitMultiplePromises(promises);
+                    }
                 };
 
                 api.getData = function () {
@@ -68,6 +83,7 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                         AcceptableDecreasedRate: ctrl.acceptableDecreasedRate,
                         AcceptableZoneClosingPercentage: ctrl.acceptableZoneClosingPercentage,
                         CodeGroupVerfifcation: ctrl.codeGroupVerification,
+                        PricelistSettings: priceListSettingsEditorAPI.getData(),
                         AllowRateZero: ctrl.allowRateZero
                     };
                 };
@@ -88,6 +104,18 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                 ctrl.acceptableZoneClosingPercentage = data.AcceptableZoneClosingPercentage;
                 ctrl.codeGroupVerification = data.CodeGroupVerfifcation;
                 ctrl.allowRateZero = data.AllowRateZero;
+            }
+
+            function loadPriceListSettings(data) {
+                var priceListSettingsEditorLoadDeferred = UtilsService.createPromiseDeferred();
+                priceListSettingsEditorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        data: data,
+                        directiveContext: WhS_BE_PurchaseSettingsContextEnum.System.value
+                    };
+                    VRUIUtilsService.callDirectiveLoad(priceListSettingsEditorAPI, payload, priceListSettingsEditorLoadDeferred);
+                });
+                return priceListSettingsEditorLoadDeferred.promise;
             }
 
             function getSystemCurrency() {

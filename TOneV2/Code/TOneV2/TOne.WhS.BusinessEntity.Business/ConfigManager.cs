@@ -249,7 +249,11 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.PricelistSettings;
         }
-
+        public PurchasePricelistSettings GetPurchaseAreaPricelistSettings()
+        {
+            PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+            return purchaseAreaSettings.PricelistSettings;
+        }
         public string GetFaultTicketsCustomerSerialNumberPattern()
         {
             FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
@@ -399,6 +403,25 @@ namespace TOne.WhS.BusinessEntity.Business
 
             result.CodeChangeTypeDescriptions = MergeCodeChangeTypeDescriptions(pricelistSettingsParent.CodeChangeTypeDescriptions, pricelistSettingsChild.CodeChangeTypeDescriptions);
             result.RateChangeTypeDescriptions = MergeRateChangeTypeDescriptions(pricelistSettingsParent.RateChangeTypeDescriptions, pricelistSettingsChild.RateChangeTypeDescriptions);
+
+            return result;
+        }
+        public PurchasePricelistSettings MergePurchasePricelistSettings(PurchasePricelistSettings pricelistSettingsParent, PurchasePricelistSettings pricelistSettingsChild)
+        {
+            PurchasePricelistSettings result = new PurchasePricelistSettings
+            {
+                DefaultSupplierPLMailTemplateId = pricelistSettingsParent.DefaultSupplierPLMailTemplateId,
+                SendEmail = pricelistSettingsParent.SendEmail
+            };
+
+            if (pricelistSettingsChild == null)
+                return result;
+
+            if (pricelistSettingsChild.DefaultSupplierPLMailTemplateId.HasValue)
+                result.DefaultSupplierPLMailTemplateId = pricelistSettingsChild.DefaultSupplierPLMailTemplateId;
+
+            if (pricelistSettingsChild.SendEmail.HasValue)
+                result.SendEmail = pricelistSettingsChild.SendEmail;
 
             return result;
         }

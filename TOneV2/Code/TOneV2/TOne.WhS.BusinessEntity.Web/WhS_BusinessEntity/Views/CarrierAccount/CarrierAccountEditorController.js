@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum', 'WhS_BE_SaleAreaSettingsContextEnum', 'VRDateTimeService', 'WhS_BE_ToneModuleService'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum', 'WhS_BE_SaleAreaSettingsContextEnum', 'VRDateTimeService', 'WhS_BE_ToneModuleService', 'WhS_BE_PurchaseSendEmailEnum','WhS_BE_PurchaseSettingsContextEnum'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService, WhS_BE_RoutingStatusEnum, WhS_BE_SaleAreaSettingsContextEnum, VRDateTimeService, WhS_BE_ToneModuleService) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService, WhS_BE_RoutingStatusEnum, WhS_BE_SaleAreaSettingsContextEnum, VRDateTimeService, WhS_BE_ToneModuleService, WhS_BE_PurchaseSendEmailEnum, WhS_BE_PurchaseSettingsContextEnum) {
 
         // Definition
         var carrierProfileSelectorAPI;
@@ -46,6 +46,9 @@
 
         var priceListSettingsEditorAPI;
         var priceListSettingsEditorReadyDeferred;
+
+        var purchasePriceListSettingsEditorAPI;
+        var purchasePriceListSettingsEditorReadyDeferred;
 
         var pricingSettingsEditorAPI;
         var pricingSettingsEditorReadyDeferred;
@@ -116,14 +119,14 @@
                 carrierAccountTypeSelectorReadyDeferred.resolve();
             };
 
-			$scope.scopeModel.onActivationStatusSelectorChanged = function (option) {
-				if (option != undefined) {
-					if (option.value == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
-						$scope.scopeModel.isInActiveCarrierAccount = true;
-					else
-						$scope.scopeModel.isInActiveCarrierAccount = false;
-				}
-			};
+            $scope.scopeModel.onActivationStatusSelectorChanged = function (option) {
+                if (option != undefined) {
+                    if (option.value == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
+                        $scope.scopeModel.isInActiveCarrierAccount = true;
+                    else
+                        $scope.scopeModel.isInActiveCarrierAccount = false;
+                }
+            };
 
             $scope.scopeModel.onCarrierAccountTypeChanged = function () {
 
@@ -264,6 +267,14 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceListSettingsEditorAPI, priceListSettingsPayload, setLoader, priceListSettingsEditorReadyDeferred);
             };
 
+            $scope.scopeModel.onPurchasePricelistSettingsEditorReady = function (api) {
+                purchasePriceListSettingsEditorAPI = api;
+                var priceListSettingsPayload = {
+                    directiveContext: WhS_BE_PurchaseSettingsContextEnum.Supplier.value
+                };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingPurchasePriceListSettingsEditor = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, purchasePriceListSettingsEditorAPI, priceListSettingsPayload, setLoader, purchasePriceListSettingsEditorReadyDeferred);
+            };
             $scope.scopeModel.onCustomerSMSServiceTypeSelectorReady = function (api) {
                 customerSmsServiceTypeSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerSMSServiceTypeSelector = value; };
@@ -486,6 +497,7 @@
                     supplierRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     supplierSmsServiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     supplierBankDetailsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    purchasePriceListSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
                 }
             }
 
@@ -646,7 +658,7 @@
 
             var loadPriceListSettingsPromise = loadPriceListSettings();
             promises.push(loadPriceListSettingsPromise);
-
+            
             var loadPricingSettingsPromise = loadPricingSettings();
             promises.push(loadPricingSettingsPromise);
 
@@ -741,7 +753,20 @@
             });
             return priceListSettingsEditorLoadDeferred.promise;
         }
-
+        function loadPurchasePriceListSettings() {
+            var purchasePriceListSettingsEditorLoadDeferred = UtilsService.createPromiseDeferred();
+            purchasePriceListSettingsEditorReadyDeferred.promise.then(function () {
+                priceListSettingsEditorReadyDeferred = undefined;
+                var priceListSettingsPayload = {
+                    directiveContext: WhS_BE_PurchaseSettingsContextEnum.Supplier.value
+                };
+                if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined) {
+                    priceListSettingsPayload.data = carrierAccountEntity.SupplierSettings.PricelistSettings;
+                }
+                VRUIUtilsService.callDirectiveLoad(purchasePriceListSettingsEditorAPI, priceListSettingsPayload, purchasePriceListSettingsEditorLoadDeferred);
+            });
+            return purchasePriceListSettingsEditorReadyDeferred.promise;
+        }
         function loadPricingSettings() {
             var pricingSettingsEditorLoadDeferred = UtilsService.createPromiseDeferred();
             pricingSettingsEditorReadyDeferred.promise.then(function () {
@@ -773,7 +798,7 @@
         }
 
         function loadSupplierSettingsTab() {
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadBPBusinessRuleSetSelector, loadSupplierSMSServiceType, loadSupplierBankDetails]);
+            return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadBPBusinessRuleSetSelector, loadSupplierSMSServiceType, loadSupplierBankDetails, loadPurchasePriceListSettings]);
         }
         function loadSupplierTimeZoneSelector() {
             var supplierTimeZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -976,6 +1001,7 @@
                         SubjectCode: $scope.scopeModel.automaticPriceListSubjectCode,
                         AttachmentCode: $scope.scopeModel.automaticPriceListAttachmentCode,
                     },
+                    PricelistSettings: purchasePriceListSettingsEditorAPI != undefined ? purchasePriceListSettingsEditorAPI.getData() : undefined,
                     SMSServiceTypes: $scope.scopeModel.showSMSServiceType && supplierSmsServiceTypeSelectorAPI != undefined ? getSelectedSMSServiceTypes(supplierSmsServiceTypeSelectorAPI.getSelectedIds()) : undefined,
                     SupplierBankDetails: supplierBankDetailsEditorAPI != undefined ? supplierBankDetailsEditorAPI.getData() : undefined
                 },
@@ -996,7 +1022,6 @@
                 obj.SellingNumberPlanId = sellingNumberPlanSelectorAPI != undefined ? sellingNumberPlanSelectorAPI.getSelectedIds() : null;
                 obj.AccountType = $scope.scopeModel.selectedCarrierAccountType.value;
             }
-
             return obj;
         }
 
