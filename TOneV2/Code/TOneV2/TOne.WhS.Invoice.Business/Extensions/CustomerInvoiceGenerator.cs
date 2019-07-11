@@ -43,7 +43,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			int currencyId = _financialAccountManager.GetFinancialAccountCurrencyId(financialAccount);
 
 			IEnumerable<VRTaxItemDetail> taxItemDetails = _financialAccountManager.GetFinancialAccountTaxItemDetails(financialAccount);
-			List<RecurringChargeItem> evaluatedCustomerRecurringCharges = _customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, context.IssueDate);
+			List<RecurringChargeItem> evaluatedCustomerRecurringCharges = _customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, context.FromDate, context.ToDate, context.IssueDate);
 
 			bool isVoiceEnabled = _tOneModuleManager.IsVoiceModuleEnabled();
 			bool canGenerateVoiceInvoice = false;
@@ -117,7 +117,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 if (invoiceBySaleCurrency == null)
                     invoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
-                AddAdjustmentToCustomerCurrency(invoiceBySaleCurrency, currencyId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Adjustment.Value);
+                AddAdjustmentToCustomerCurrency(invoiceBySaleCurrency, currencyId, context.FromDate, context.ToDate, resolvedPayload.Adjustment.Value);
             }
 
             #region BuildCustomerInvoiceDetails

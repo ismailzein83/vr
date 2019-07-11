@@ -162,15 +162,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         hasOriginalAmount = true;
                                         fromDate = customerInvoice.FromDate;
                                         toDate = customerInvoice.ToDate;
-                                        if (customerInvoiceDetails.TimeZoneId.HasValue)
-                                        {
-                                            VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(customerInvoiceDetails.TimeZoneId.Value);
-                                            if (timeZone != null)
-                                            {
-                                                fromDate = customerInvoice.FromDate.Add(-timeZone.Settings.Offset);
-                                                toDate = customerInvoice.ToDate.Add(-timeZone.Settings.Offset);
-                                            }
-                                        }
                                         if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
                                             month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
                                         else
@@ -466,17 +457,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                     {
                                         fromDate = supplierInvoice.FromDate;
                                         toDate = supplierInvoice.ToDate;
-                                        if (supplierInvoiceDetails.TimeZoneId.HasValue)
-                                        {
-                                            VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(supplierInvoiceDetails.TimeZoneId.Value);
-                                            if (timeZone != null)
-                                            {
-                                                fromDate = supplierInvoice.FromDate.Add(-timeZone.Settings.Offset);
-                                                toDate = supplierInvoice.ToDate.Add(-timeZone.Settings.Offset);
-                                            }
-                                        }
                                         hasOriginalAmount = true;
-                                       
                                         if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
                                             month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
                                         else

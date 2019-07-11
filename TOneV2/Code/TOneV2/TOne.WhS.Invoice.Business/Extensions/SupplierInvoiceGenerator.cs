@@ -97,7 +97,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			}
 
 			SupplierRecurringChargeManager supplierRecurringChargeManager = new SupplierRecurringChargeManager();
-			List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, context.IssueDate);
+			List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, context.FromDate, context.ToDate, context.IssueDate);
 
 			if ((voiceItemSetNames == null || voiceItemSetNames.Count == 0) && (smsItemSetNames == null || smsItemSetNames.Count == 0) && (evaluatedSupplierRecurringCharges == null || evaluatedSupplierRecurringCharges.Count == 0) && (dealItemSetNames == null || dealItemSetNames.Count == 0))
 			{
@@ -110,7 +110,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 if (invoiceByCostCurrency == null)
                     invoiceByCostCurrency = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
-                AddAdjustmentToSupplierCurrency(invoiceByCostCurrency, currencyId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Adjustment.Value);
+                AddAdjustmentToSupplierCurrency(invoiceByCostCurrency, currencyId, context.FromDate, context.ToDate, resolvedPayload.Adjustment.Value);
             }
 
 
