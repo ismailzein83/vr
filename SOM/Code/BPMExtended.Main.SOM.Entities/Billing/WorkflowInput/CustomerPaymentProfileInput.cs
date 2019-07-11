@@ -11,7 +11,10 @@ namespace BPMExtended.Main.SOMAPI
     {
         public string AccountNumber { get; set; }
         public string BankCode { get; set; }
+        public string BankName { get; set; }
+        public string IBAN { get; set; }
         public string PaymentMethodId { get; set; }
+        public string PaymentMethodName { get; set; }
         public CommonInputArgument CommonInputArgument { get; set; }
     }
 

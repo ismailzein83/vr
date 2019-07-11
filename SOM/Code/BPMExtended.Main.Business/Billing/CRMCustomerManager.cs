@@ -810,10 +810,13 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StStUpdatePaymentArrangement");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdatePaymentArrangement");
             esq.AddColumn("StPaymentMethodID");
             esq.AddColumn("StBankID");
+            esq.AddColumn("StBankName");
             esq.AddColumn("StBankAccountID");
+            esq.AddColumn("StPaymentMethodName");
+            esq.AddColumn("StIBAN");
             esq.AddColumn("StCustomerId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -825,6 +828,9 @@ namespace BPMExtended.Main.Business
                 var paymentMethodId = entities[0].GetColumnValue("StPaymentMethodID");
                 var bankCode = entities[0].GetColumnValue("StBankID");
                 var accountNumber = entities[0].GetColumnValue("StBankAccountID");
+                var paymentMethodName = entities[0].GetColumnValue("StPaymentMethodName");
+                var iban = entities[0].GetColumnValue("StIBAN");
+                var bankName = entities[0].GetColumnValue("StBankName");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
 
                 SOMRequestInput<CustomerPaymentProfileInput> somRequestInput = new SOMRequestInput<CustomerPaymentProfileInput>
@@ -834,6 +840,9 @@ namespace BPMExtended.Main.Business
                         AccountNumber = accountNumber.ToString(),
                         PaymentMethodId = paymentMethodId.ToString(),
                         BankCode = bankCode.ToString(),
+                        PaymentMethodName= paymentMethodName.ToString(),
+                        IBAN = iban.ToString(),
+                        BankName= bankName.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             CustomerId = customerId.ToString(),
