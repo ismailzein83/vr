@@ -10,6 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 --[genericdata].[DataRecordFieldChoice]-----------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B64E70D3-1E0F-42BA-A35A-CD193BE75E31','DealStatus','{"$type":"Vanrise.GenericData.Entities.DataRecordFieldChoiceSettings, Vanrise.GenericData.Entities","Choices":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":0,"Text":"Active"},{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":1,"Text":"Inactive"},{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":2,"Text":"Draft"}]}}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[genericdata].[DataRecordFieldChoice] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);
+
 --[bp].BPBusinessRuleDefinition----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -32,6 +33,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[BPDefintionId],[Settings],[Rank])
 	values(s.[ID],s.[Name],s.[BPDefintionId],s.[Settings],s.[Rank]);
+
 
 --[bp].BPBusinessRuleAction------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([Settings],[BusinessRuleDefinitionId])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','00EA83F1-40B4-487A-9CC6-F7FAFAD6C042'),('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','9AA80FB6-20B9-4299-A61E-1E4A7E61982F'),('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','7EA8C033-EB76-41FA-B5A2-9F29C46B6C0B'),('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','9A33FB94-4E54-4C1F-B105-050E4DFE2252'),('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','6085251D-4AD4-4903-A332-55189097DE48')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Settings],[BusinessRuleDefinitionId]))merge	[bp].[BPBusinessRuleAction] as tusing	cte_data as son		1=1 and t.[BusinessRuleDefinitionId] = s.[BusinessRuleDefinitionId]when matched then	update set	[Settings] = s.[Settings],[BusinessRuleDefinitionId] = s.[BusinessRuleDefinitionId]when not matched by target then	insert([Settings],[BusinessRuleDefinitionId])	values(s.[Settings],s.[BusinessRuleDefinitionId]);
 
@@ -62,7 +64,11 @@ as (select * from (values
 ('FFA8B9E5-66E5-4D63-888D-83B45D9137FF','Deal_Analysis_Outbound','Deal Analysis Outbound','VR_GenericData_FieldCustomObjectTypeSettings'									,'{"Editor":"vr-whs-deal-swapdealanalysis-outbound-customobjectsettings"}'),
 ('E30E4332-DB9F-414D-B58A-8F06E07D0D41','Deal_Analysis_Inbound','Deal Analysis Inbound','VR_GenericData_FieldCustomObjectTypeSettings'										,'{"Editor":"vr-whs-deal-swapdealanalysis-inbound-customobjectsettings"}'),
 ('81F94D80-11CD-41C9-9DF0-6373EBFBFC00','Deal_Analysis_Result','Deal Analysis Result','VR_GenericData_FieldCustomObjectTypeSettings'										,'{"Editor":"vr-whs-deal-swapdealanalysis-result-customobjectsettings"}'),
-('8493394D-6B95-4870-92D3-AF81169BC8D4','ViewSwapDeal_DealAnalysis_Generic','View Swap Deal','VR_GenericData_GenericBEActionDefinitionSettings'								,'{"Editor":"vr-whs-deal-viewswapdealaction-definition"}')
+('8493394D-6B95-4870-92D3-AF81169BC8D4','ViewSwapDeal_DealAnalysis_Generic','View Swap Deal','VR_GenericData_GenericBEActionDefinitionSettings'								,'{"Editor":"vr-whs-deal-viewswapdealaction-definition"}'),
+
+('3C5CCF5B-224E-4502-AFA4-2F18A8E39660','Last 7 Days','Last 7 Days','WhS_Deal_DealTimePeriodConfig'																			,'{"Editor":"vr-whs-dealtimeperiod-lastsevendays"}'),
+('215017D3-256F-4AFD-AF99-4266DD4D0AC4','Last 24 Hours','Last 24 Hours','WhS_Deal_DealTimePeriodConfig'																		,'{"Editor":"vr-whs-dealtimeperiod-lasttwentyfourhours"}'),
+('CED02013-65C0-49B9-97A7-7F557FF945BA','Whole Deal Period','Whole Deal Period','WhS_Deal_DealTimePeriodConfig'																,'{"Editor":"vr-whs-dealtimeperiod-wholedeal"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
@@ -74,6 +80,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Title],[ConfigType],[Settings])
 	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+
 
 --[sec].[Module]------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -94,6 +101,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
 	values(s.[ID],s.[Name],s.[Url],s.[DefaultViewId],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[Settings]);
+
 
 --[sec].[View]--------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -119,6 +127,7 @@ when not matched by target then
 	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
 
+
 --[sec].[BusinessEntityModule]----------1501 to 1600------------------------------------------------
 BEGIN
 set nocount on;
@@ -139,6 +148,7 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[ParentId],s.[BreakInheritance]);
 ----------------------------------------------------------------------------------------------------
 END
+
 
 Delete from [sec].[BusinessEntity] WHERE ID = '25F1648E-B081-4EA3-B372-7CD43422E118'
 --[sec].[BusinessEntity]----------------4501 to 4800------------------------------------------------
@@ -196,27 +206,6 @@ END
 
 
 --[common].[setting]--------------------------------------------------------------------------------
-BEGIN
-set nocount on;
-;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('45FAB109-7E51-462E-9F13-562604E29790','Deal Technical','WhS_Deal_DealTechnicalSettings','Business Entities','{"Editor":"vr-whs-deal-technicalsettings-editor"}','{"$type":"TOne.WhS.Deal.Entities.DealTechnicalSettingData, TOne.WhS.Deal.Entities","ReprocessDefinitionId":"3b76e3b2-4f31-4d59-8e9d-018ac09a3905","ChunkTime":4,"IntervalOffsetInMinutes":30}',1)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
-merge	[common].[setting] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
-when not matched by target then
-	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
-----------------------------------------------------------------------------------------------------
-END
-
---[common].[setting]--------------------------------------------------------------------------------
 DELETE FROM [common].[setting] WHERE ID IN ('74A4DCC0-5095-4AF4-827D-40054098A0D4')
 
 BEGIN
@@ -224,6 +213,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
+('45FAB109-7E51-462E-9F13-562604E29790','Deal Technical','WhS_Deal_DealTechnicalSettings','Business Entities','{"Editor":"vr-whs-deal-technicalsettings-editor"}','{"$type":"TOne.WhS.Deal.Entities.DealTechnicalSettingData, TOne.WhS.Deal.Entities","ReprocessDefinitionId":"3b76e3b2-4f31-4d59-8e9d-018ac09a3905","ChunkTime":4,"IntervalOffsetInMinutes":30}',1),
 ('8A71FE78-AF3D-40DB-BA46-B37DF712601A','Swap Deal','WhS_Deal_SwapDealSettings','Business Entities','{"Editor":"vr-whs-deal-swapdeal-settings-editor"}','{"$type":"TOne.WhS.Deal.Entities.Settings.SwapDealSettingData, TOne.WhS.Deal.Entities","DefaultCalculationMethodId":"a46e761a-665f-c515-728b-8fbc536da9ff","DefaultInboundRateCalcMethodId":"631a698b-e39e-79de-00a4-1812fa7758f5","InboundCalculationMethods":{"$type":"System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[TOne.WhS.Deal.Entities.SwapDealAnalysisInboundRateCalcMethod, TOne.WhS.Deal.Entities]], mscorlib","631a698b-e39e-79de-00a4-1812fa7758f5":{"$type":"TOne.WhS.Deal.MainExtensions.SwapDealAnalysisInboundRateSuppliers, TOne.WhS.Deal.MainExtensions","ConfigId":"96b9eb7e-d08b-4ccb-ac0d-7fe112ef41d8","ItemEditor":"vr-whs-deal-swapdealanalysis-ratecalcmethod-inbound-suppliers-itemeditor","CalculationMethodId":"631a698b-e39e-79de-00a4-1812fa7758f5","Title":"Suppliers"},"248259ff-f865-53b1-6080-75124cead9f2":{"$type":"TOne.WhS.Deal.MainExtensions.SwapDealAnalysisInboundRateFixed, TOne.WhS.Deal.MainExtensions","ConfigId":"76f467c2-e440-4b11-a42c-59f69fddbcb7","ItemEditor":"vr-whs-deal-swapdealanalysis-ratecalcmethod-inbound-fixed-itemeditor","CalculationMethodId":"248259ff-f865-53b1-6080-75124cead9f2","Title":"Fixed"}},"OutboundCalculationMethods":{"$type":"System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[TOne.WhS.Deal.Entities.SwapDealAnalysisOutboundRateCalcMethod, TOne.WhS.Deal.Entities]], mscorlib","3856e40a-b8a8-84f2-7788-4728a4eb8396":{"$type":"TOne.WhS.Deal.MainExtensions.SwapDealAnalysisOutboundRateFixed, TOne.WhS.Deal.MainExtensions","ConfigId":"ea1454a9-0fa0-4b16-93e8-76533bd504f3","ItemEditor":"vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-fixed-itemeditor","CalculationMethodId":"3856e40a-b8a8-84f2-7788-4728a4eb8396","Title":"User Defined"},"a5e39e2d-8583-cbe4-329a-cca00742abac":{"$type":"TOne.WhS.Deal.MainExtensions.SwapDealAnalysisOutboundRateSuppliers, TOne.WhS.Deal.MainExtensions","ConfigId":"2bba4c50-ce06-4f61-9731-d31ce687cabf","ItemEditor":"vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-suppliers-itemeditor","CalculationMethodId":"a5e39e2d-8583-cbe4-329a-cca00742abac","Title":"Based on other Suppliers'' Cost Rates"},"a46e761a-665f-c515-728b-8fbc536da9ff":{"$type":"TOne.WhS.Deal.MainExtensions.SwapDealAnalysisOutboundRateCustomers, TOne.WhS.Deal.MainExtensions","ConfigId":"91ec1aca-5d9b-418d-a327-8ee699ce192f","ItemEditor":"vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-customers-itemeditor","CalculationMethodId":"a46e761a-665f-c515-728b-8fbc536da9ff","Title":"Based on Customers'' Sale Rates"}},"GracePeriod":7}',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
@@ -291,6 +281,7 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
+
 --[reprocess].[ReprocessDefinition]---------------------- 1 to 100----------------------------------
 begin
 set nocount on;
@@ -311,6 +302,7 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 end
+
 
 --[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -355,6 +347,7 @@ when not matched by target then
 	insert([ID],[Name],[ParentID],[Fields],[ExtraFieldsEvaluator],[Settings])
 	values(s.[ID],s.[Name],s.[ParentID],s.[Fields],s.[ExtraFieldsEvaluator],s.[Settings]);
 
+
 --[genericdata].[DataRecordStorage]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -376,24 +369,27 @@ when not matched by target then
 	insert([ID],[Name],[DataRecordTypeID],[DataStoreID],[Settings],[State])
 	values(s.[ID],s.[Name],s.[DataRecordTypeID],s.[DataStoreID],s.[Settings],s.[State]);
 
+
 --[Analytic].[AnalyticTable]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[Settings])
+;with cte_data([ID],[DevProjectID],[Name],[Settings],[MeasureStyles],[PermanentFilter])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('6C5CF184-443D-48ED-9235-58F13F5483ED','Swap Deal','{"$type":"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities","ConnectionString":"dummy","TableName":"dummy","TimeColumnName":"dummy","DataRecordTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["6cf5f7ad-5123-45d2-b47f-eca613d454f7"]},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"ab794846-853c-4402-a8e4-6f5c3a75f5f2","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"DataProvider":{"$type":"Vanrise.Analytic.Business.MemoryAnalyticDataProvider, Vanrise.Analytic.Business","ConfigId":"4f72f80c-3928-460f-aaf5-cc18a78c8265","DataManager":{"$type":"TOne.WhS.Deal.Business.SwapDealMemoryAnalyticDataManager, TOne.WhS.Deal.Business"}}}')
+('6C5CF184-443D-48ED-9235-58F13F5483ED',null,'Swap Deal','{"$type":"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities","ConnectionString":"dummy","TableName":"dummy","TimeColumnName":"dummy","DataRecordTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["6cf5f7ad-5123-45d2-b47f-eca613d454f7"]},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"ab794846-853c-4402-a8e4-6f5c3a75f5f2","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"DataProvider":{"$type":"Vanrise.Analytic.Business.MemoryAnalyticDataProvider, Vanrise.Analytic.Business","ConfigId":"4f72f80c-3928-460f-aaf5-cc18a78c8265","DataManager":{"$type":"TOne.WhS.Deal.Business.SwapDealMemoryAnalyticDataManager, TOne.WhS.Deal.Business"}}}',null,null),
+('5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',null,'Deal','{"$type":"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities","ConnectionString":"dummy","TableName":"dummy","TimeColumnName":"dummy","DataRecordTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["6cf5f7ad-5123-45d2-b47f-eca613d454f7"]},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"DataProvider":{"$type":"Vanrise.Analytic.Business.MemoryAnalyticDataProvider, Vanrise.Analytic.Business","ConfigId":"4f72f80c-3928-460f-aaf5-cc18a78c8265","DataManager":{"$type":"TOne.WhS.Deal.Business.DealMemoryAnalyticDataManager, TOne.WhS.Deal.Business"}}}',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
-merge	[Analytic].[AnalyticTable] as t
+)c([ID],[DevProjectID],[Name],[Settings],[MeasureStyles],[PermanentFilter]))
+merge	[analytic].[analytictable] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
+	[DevProjectID] = s.[DevProjectID],[Name] = s.[Name],[Settings] = s.[Settings],[MeasureStyles] = s.[MeasureStyles],[PermanentFilter] = s.[PermanentFilter]
 when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
+	insert([ID],[DevProjectID],[Name],[Settings],[MeasureStyles],[PermanentFilter])
+	values(s.[ID],s.[DevProjectID],s.[Name],s.[Settings],s.[MeasureStyles],s.[PermanentFilter]);
+
 
 --[Analytic].[AnalyticReport]-----------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -413,6 +409,7 @@ when matched then
 when not matched by target then
 	insert([ID],[UserID],[Name],[AccessType],[Settings])
 	values(s.[ID],s.[UserID],s.[Name],s.[AccessType],s.[Settings]);
+
 
 --[Analytic].[AnalyticItemConfig]--------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -451,7 +448,17 @@ as (select * from (values
 ('35FC6B09-FEF1-4581-961B-B81DB4957FBA','6C5CF184-443D-48ED-9235-58F13F5483ED',2,'CostDurationCompletion','Cost Duration Completion','{"$type":"Vanrise.Analytic.Entities.AnalyticMeasureConfig, Vanrise.Analytic.Entities","GetValueMethod":"var reachedDuration = context.GetAggregateValue(\"CostDuration\");\nint nbOfDays = context.GetDistinctDimensionValues(\"Day\").Count;\nvar estimatedDuration = context.GetDistinctDimensionValues(\"DailyEstimatedVolume\") .Sum(itm => (Decimal)itm) * nbOfDays;\nreturn (reachedDuration / estimatedDuration) * 100;","DependentAggregateNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["CostDuration"]},"DependentDimensions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["DailyEstimatedVolume","Day"]},"FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions","ConfigId":"75aef329-27bd-4108-b617-f5cc05ff2aa3","ViewerEditor":"vr-genericdata-fieldtype-number-viewereditor","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","DataPrecision":0,"DataType":0,"IsNullable":false,"CanRoundValue":true,"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","OrderType":0,"StoreValueSerialized":false},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}}'),
 ('E9CEF53A-9957-43A7-8016-3727E828FFE9','6C5CF184-443D-48ED-9235-58F13F5483ED',2,'SaleAmountCompletion','Sale Amount Completion','{"$type":"Vanrise.Analytic.Entities.AnalyticMeasureConfig, Vanrise.Analytic.Entities","GetValueMethod":"var reachedAmount = context.GetAggregateValue(\"SaleNetNotNull\");\nint nbOfDays = context.GetDistinctDimensionValues(\"Day\").Count;\nvar estimatedAmount = context.GetDistinctDimensionValues(\"DailyEstimatedAmount\") .Sum(itm => (Decimal)itm) * nbOfDays;\nreturn (reachedAmount / estimatedAmount ) * 100;","DependentAggregateNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["SaleNetNotNull"]},"DependentDimensions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["Day","DailyEstimatedAmount"]},"FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions","ConfigId":"75aef329-27bd-4108-b617-f5cc05ff2aa3","ViewerEditor":"vr-genericdata-fieldtype-number-viewereditor","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","DataPrecision":0,"DataType":0,"IsNullable":false,"CanRoundValue":true,"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","OrderType":0,"StoreValueSerialized":false},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}}'),
 ('DC7886BC-36AB-4CE7-94CD-2852C24F1992','6C5CF184-443D-48ED-9235-58F13F5483ED',2,'SaleDurationCompletion','Sale Duration Completion','{"$type":"Vanrise.Analytic.Entities.AnalyticMeasureConfig, Vanrise.Analytic.Entities","GetValueMethod":"var reachedDuration = context.GetAggregateValue(\"SaleDuration\");\nint nbOfDays = context.GetDistinctDimensionValues(\"Day\").Count;\nvar estimatedDuration = context.GetDistinctDimensionValues(\"DailyEstimatedVolume\") .Sum(itm => (Decimal)itm) * nbOfDays;\n\nreturn (reachedDuration / estimatedDuration) * 100;","DependentAggregateNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["SaleDuration"]},"DependentDimensions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["DailyEstimatedVolume","Day"]},"FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions","ConfigId":"75aef329-27bd-4108-b617-f5cc05ff2aa3","ViewerEditor":"vr-genericdata-fieldtype-number-viewereditor","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","DataPrecision":0,"DataType":0,"IsNullable":false,"CanRoundValue":true,"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","OrderType":0,"StoreValueSerialized":false},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}}'),
-('6D740E56-8C2C-40C6-BD89-053A8A67AF16','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'SaleNetNotNull','SaleNetNotNull','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"SaleNetNotNull","AggregateType":2}'),('609BB1D5-1C20-413D-8A63-6ADC009F2864','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'SaleDuration','SaleDuration','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"SaleDuration","AggregateType":2}'),('56AF7F42-40B6-4BFB-A0CE-85FC32D00C12','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'SaleAmount','SaleAmount','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"SaleNet","AggregateType":2}'),('4121A081-1215-43D6-8588-8B367DAC8A42','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'CostDuration','CostDuration','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CostDuration","AggregateType":2}'),('5701A749-1CC0-4D8E-8517-C0A53A237EBC','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'CostAmount','CostAmount','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CostNet","AggregateType":2}'),('2C46F70C-7FFD-4E5C-A66F-C21DA624FD92','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'CostNetNotNull','CostNetNotNull','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CostNetNotNull","AggregateType":2}')
+('6D740E56-8C2C-40C6-BD89-053A8A67AF16','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'SaleNetNotNull','SaleNetNotNull','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"SaleNetNotNull","AggregateType":2}'),('609BB1D5-1C20-413D-8A63-6ADC009F2864','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'SaleDuration','SaleDuration','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"SaleDuration","AggregateType":2}'),('56AF7F42-40B6-4BFB-A0CE-85FC32D00C12','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'SaleAmount','SaleAmount','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"SaleNet","AggregateType":2}'),('4121A081-1215-43D6-8588-8B367DAC8A42','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'CostDuration','CostDuration','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CostDuration","AggregateType":2}'),('5701A749-1CC0-4D8E-8517-C0A53A237EBC','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'CostAmount','CostAmount','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CostNet","AggregateType":2}'),('2C46F70C-7FFD-4E5C-A66F-C21DA624FD92','6C5CF184-443D-48ED-9235-58F13F5483ED',4,'CostNetNotNull','CostNetNotNull','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CostNetNotNull","AggregateType":2}'),
+
+('9F008DD6-3CB4-4563-AF5E-1B20DC2F9708','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',2,'ZoneProfit','Zone Profit','{"$type":"Vanrise.Analytic.Entities.AnalyticMeasureConfig, Vanrise.Analytic.Entities","GetValueMethod":"return context.GetAggregateValue(\"ZoneProfit\");","DependentAggregateNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["ZoneProfit"]},"FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions","ConfigId":"75aef329-27bd-4108-b617-f5cc05ff2aa3","ViewerEditor":"vr-genericdata-fieldtype-number-viewereditor","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","DataPrecision":0,"DataType":0,"IsNullable":false,"CanRoundValue":true,"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","OrderType":0,"StoreValueSerialized":false},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"HideDescriptionInLegend":false,"MeasureUnit":0}'),
+('0CB8D542-86EF-4CB0-9792-30EB24A8907D','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',1,'SaleZone','Sale Zone','{"$type":"Vanrise.Analytic.Entities.AnalyticDimensionConfig, Vanrise.Analytic.Entities","SQLExpression":"SaleZone","FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions","ConfigId":"2e16c3d4-837b-4433-b80e-7c02f6d71467","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","ViewerEditor":"vr-genericdata-fieldtype-businessentity-viewereditor","OrderType":1,"BusinessEntityDefinitionId":"900d0e5d-0fa7-428e-a83b-cd64e16f7415","IsNullable":false,"DependantFields":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityTypeDependantField, Vanrise.GenericData.MainExtensions]], mscorlib","$values":[]},"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","StoreValueSerialized":false,"CanRoundValue":false},"DimensionFieldMappings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.DimensionFieldMapping, Vanrise.Analytic.Entities]], mscorlib","$values":[{"$type":"Vanrise.Analytic.Entities.DimensionFieldMapping, Vanrise.Analytic.Entities","DataRecordTypeId":"6cf5f7ad-5123-45d2-b47f-eca613d454f7"}]},"IsTechnical":false}'),
+('992C597D-E539-4D75-88C9-37325C3AF062','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',4,'Priority','Priority','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"Priority","AggregateType":4}'),
+('FFB27317-9FF8-42E1-95F4-5B8A1A59C33A','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',2,'Priority','Priority','{"$type":"Vanrise.Analytic.Entities.AnalyticMeasureConfig, Vanrise.Analytic.Entities","GetValueMethod":"return context.GetAggregateValue(\"Priority\");","DependentAggregateNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["Priority"]},"FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions","ConfigId":"75aef329-27bd-4108-b617-f5cc05ff2aa3","ViewerEditor":"vr-genericdata-fieldtype-number-viewereditor","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","DataPrecision":0,"DataType":1,"IsNullable":false,"CanRoundValue":true,"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","OrderType":0,"StoreValueSerialized":false},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"HideDescriptionInLegend":false,"MeasureUnit":0}'),
+('17B2FB67-6ACA-47DF-9E45-6D5051F0411D','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',2,'CompletionPercentage','Completion Percentage','{"$type":"Vanrise.Analytic.Entities.AnalyticMeasureConfig, Vanrise.Analytic.Entities","GetValueMethod":"return context.GetAggregateValue(\"CompletionPercentage\");","DependentAggregateNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["CompletionPercentage"]},"FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions","ConfigId":"75aef329-27bd-4108-b617-f5cc05ff2aa3","ViewerEditor":"vr-genericdata-fieldtype-number-viewereditor","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","DataPrecision":0,"DataType":0,"IsNullable":true,"CanRoundValue":true,"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","OrderType":0,"StoreValueSerialized":false},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"HideDescriptionInLegend":false,"MeasureUnit":0}'),
+('F9454F2D-17C2-4EBC-89AB-7C375194908A','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',1,'SupplierZone','Supplier Zone','{"$type":"Vanrise.Analytic.Entities.AnalyticDimensionConfig, Vanrise.Analytic.Entities","SQLExpression":"SupplierZone","FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions","ConfigId":"2e16c3d4-837b-4433-b80e-7c02f6d71467","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","ViewerEditor":"vr-genericdata-fieldtype-businessentity-viewereditor","OrderType":1,"BusinessEntityDefinitionId":"ad86042c-0b49-4379-966a-dc0d39adba6d","IsNullable":false,"DependantFields":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityTypeDependantField, Vanrise.GenericData.MainExtensions]], mscorlib","$values":[]},"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","StoreValueSerialized":false,"CanRoundValue":false},"DimensionFieldMappings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.DimensionFieldMapping, Vanrise.Analytic.Entities]], mscorlib","$values":[{"$type":"Vanrise.Analytic.Entities.DimensionFieldMapping, Vanrise.Analytic.Entities","DataRecordTypeId":"6cf5f7ad-5123-45d2-b47f-eca613d454f7"}]},"IsTechnical":false}'),
+('06316A0B-C133-4EE3-BCCD-B34EA3881A32','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',4,'CompletionPercentage','CompletionPercentage','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CompletionPercentage","AggregateType":2}'),
+('3BA0C7CF-7A10-4147-9225-E5B682D77368','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',4,'ZoneProfit','Zone Profit','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"ZoneProfit","AggregateType":2}'),
+('5BF0AC10-D0E2-475F-A4D4-F52721464AAC','5C01631F-CD4F-4D19-A1B5-66967AE1B5BB',1,'Supplier','Supplier','{"$type":"Vanrise.Analytic.Entities.AnalyticDimensionConfig, Vanrise.Analytic.Entities","SQLExpression":"Supplier","FieldType":{"$type":"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions","ConfigId":"2e16c3d4-837b-4433-b80e-7c02f6d71467","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","ViewerEditor":"vr-genericdata-fieldtype-businessentity-viewereditor","OrderType":1,"BusinessEntityDefinitionId":"8c286bcd-5766-487a-8b32-5d167ec342c0","IsNullable":false,"DependantFields":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityTypeDependantField, Vanrise.GenericData.MainExtensions]], mscorlib","$values":[]},"DetailViewerEditor":"vr-genericdata-datarecordfield-defaultdetailviewer","StoreValueSerialized":false,"CanRoundValue":false},"DimensionFieldMappings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.DimensionFieldMapping, Vanrise.Analytic.Entities]], mscorlib","$values":[{"$type":"Vanrise.Analytic.Entities.DimensionFieldMapping, Vanrise.Analytic.Entities","DataRecordTypeId":"6cf5f7ad-5123-45d2-b47f-eca613d454f7"}]},"IsTechnical":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[TableId],[ItemType],[Name],[Title],[Config]))
 merge	[Analytic].[AnalyticItemConfig] as t
@@ -463,6 +470,7 @@ when matched then
 when not matched by target then
 	insert([ID],[TableId],[ItemType],[Name],[Title],[Config])
 	values(s.[ID],s.[TableId],s.[ItemType],s.[Name],s.[Title],s.[Config]);
+
 
 --[Analytic].[DataAnalysisDefinition]---------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -483,6 +491,7 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 
+
 --[Analytic].[DataAnalysisItemDefinition]-----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -501,6 +510,7 @@ when matched then
 when not matched by target then
 	insert([ID],[DataAnalysisDefinitionID],[Name],[Settings])
 	values(s.[ID],s.[DataAnalysisDefinitionID],s.[Name],s.[Settings]);
+
 
 --[VRNotification].[VRAlertRuleType]----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -522,6 +532,7 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 
+
 --[common].[VRObjectTypeDefinition]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -539,6 +550,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
 
 --[common].[MailMessageType]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -558,6 +570,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
 
 --[VRNotification].[VRAlertRule]--------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -580,6 +593,7 @@ when not matched by target then
 	insert([Name],[RuleTypeId],[UserId],[Settings],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[IsDisabled])
 	values(s.[Name],s.[RuleTypeId],s.[UserId],s.[Settings],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime],s.[IsDisabled]);
 --set identity_insert [VRNotification].[VRAlertRule] off;
+
 
 --[logging].[LoggableEntity]------------------------------------------------------------------------
 BEGIN
