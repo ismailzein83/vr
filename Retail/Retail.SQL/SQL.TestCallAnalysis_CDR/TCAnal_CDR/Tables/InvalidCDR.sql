@@ -2,7 +2,7 @@
     [ID]                BIGINT           NOT NULL,
     [DataSourceId]      UNIQUEIDENTIFIER NULL,
     [AttemptDateTime]   DATETIME         NULL,
-    [ClientId]          BIGINT           NULL,
+    [ClientId]          NVARCHAR (40)    NULL,
     [CallingNumber]     NVARCHAR (255)   NULL,
     [CalledNumber]      NVARCHAR (255)   NULL,
     [OriginatedZoneId]  BIGINT           NULL,
@@ -16,4 +16,6 @@
     [CreatedTime]       DATETIME         NULL,
     CONSTRAINT [PK__InvalidC__3214EC275629CD9C] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

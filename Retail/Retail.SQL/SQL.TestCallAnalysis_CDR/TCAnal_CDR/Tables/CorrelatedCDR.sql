@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [TCAnal_CDR].[CorrelatedCDR] (
     [ID]                         BIGINT          NOT NULL,
     [AttemptDateTime]            DATETIME        NULL,
-    [ClientId]                   BIGINT          NULL,
+    [ClientId]                   NVARCHAR (40)   NULL,
     [GeneratedCallingNumber]     VARCHAR (40)    NULL,
     [ReceivedCallingNumber]      VARCHAR (40)    NULL,
     [CaseId]                     BIGINT          NULL,
@@ -22,6 +22,8 @@
     [OrigReceivedCallingNumber]  NVARCHAR (255)  NULL,
     [timestamp]                  ROWVERSION      NULL
 );
+
+
 
 
 

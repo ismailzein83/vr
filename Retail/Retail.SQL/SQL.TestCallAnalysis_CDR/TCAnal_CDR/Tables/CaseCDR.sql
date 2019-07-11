@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [TCAnal_CDR].[CaseCDR] (
     [ID]               BIGINT           NOT NULL,
-    [ClientId]         BIGINT           NULL,
+    [ClientId]         NVARCHAR (50)    NULL,
     [CallingNumber]    NVARCHAR (40)    NULL,
     [FirstAttempt]     DATETIME         NULL,
     [LastAttempt]      DATETIME         NULL,
@@ -13,6 +13,8 @@
     [LastModifiedBy]   INT              NULL,
     [timestamp]        ROWVERSION       NULL
 );
+
+
 
 
 
