@@ -76,6 +76,7 @@
     <Compile Include="File\VRRemoteFileInfo.cs" />
     <Compile Include="VRConnection\VRHttpConnectionCallInterceptorConfig.cs" />
     <Compile Include="VRDashboardDefinition\VRDashboardDefinitionFilter.cs" />
+    <Compile Include="VRDynamicCode\VRDynamicCode.cs" />
     <Compile Include="VRThemeExtended.cs" />
     <Compile Include="VRIconPath.cs" />
     <Compile Include="ProcessState.cs" />

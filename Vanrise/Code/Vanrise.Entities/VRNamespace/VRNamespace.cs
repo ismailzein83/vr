@@ -13,6 +13,7 @@ namespace Vanrise.Entities
     {
         public List<VRDynamicCode> Codes { get; set; }
     }
+
     public class VRDynamicCodeConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VRCommon_DynamicCode";

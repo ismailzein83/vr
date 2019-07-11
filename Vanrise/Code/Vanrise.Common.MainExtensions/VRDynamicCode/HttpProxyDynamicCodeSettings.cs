@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.MainExtensions.VRDynamicCode
@@ -15,15 +12,18 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
         public string ClassName { get; set; }
         public List<HttpProxyMethod> Methods { get; set; }
         public string NamespaceMembers { get; set; }
+
         public override string Generate(IVRDynamicCodeSettingsContext context)
         {
             StringBuilder methodsBuilder = new StringBuilder();
             StringBuilder namespaceMembersBuilder = new StringBuilder();
             StringBuilder classMembersBuilder = new StringBuilder();
+
             if (NamespaceMembers != null)
             {
                 namespaceMembersBuilder.Append(NamespaceMembers);
             }
+
             if (Methods!=null && Methods.Count > 0)
             {
                 foreach(var method in Methods)
@@ -47,6 +47,7 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
                     }
                 }
             }
+
             context.NamespaceMembers = namespaceMembersBuilder.ToString();
             StringBuilder classBuilder = new StringBuilder(@"
                 public class #CLASSNAME#
@@ -56,12 +57,14 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
                     #METHODS#
                 }
             ");
+
             classBuilder.Replace("#CLASSNAME#", ClassName);
             classBuilder.Replace("#METHODS#", methodsBuilder.ToString());
             classBuilder.Replace("#CLASSMEMBERS#", classMembersBuilder.ToString());
             return classBuilder.ToString();
         }
     }
+
     public class HttpProxyMethod
     {
         public string MethodName { get; set; }
@@ -76,6 +79,7 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
         public string ResponseLogic { get; set; }
         public string ClassMembers { get; set; }
         public string NamespaceMembers { get; set; }
+
         public string Generate(IHttpProxyMethodContext context, out string classMembers, out string namespaceMembers)
         {
             StringBuilder methodParametersBuilder = new StringBuilder();
@@ -157,8 +161,8 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
                 #BUILDBODYMETHOD#
 
                 #BUILDRESPONSEHANDLER#
-
             ");
+
             functionBuilder.Replace("#METHODNAME#", MethodName);
             functionBuilder.Replace("#PARAMETERS#", methodParametersBuilder.ToString());
             var connectionId = string.Format("new Guid(\"{0}\")", context.ConnectionId.ToString());
@@ -283,10 +287,12 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
     {
         Guid ConnectionId { get; }
     }
+
     public class HttpProxyMethodContext : IHttpProxyMethodContext
     {
         public Guid ConnectionId { get; set; }
     }
+
     public class HttpProxyParameter
     {
         public string ParameterName { get; set; }
