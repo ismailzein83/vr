@@ -1010,7 +1010,6 @@ namespace Vanrise.GenericData.Business
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, true);
             genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
-            var dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
 
             var genericBe = GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
             return new DataRecordObject(genericBEDefinitionSetting.DataRecordTypeId, genericBe.FieldValues).Object;
