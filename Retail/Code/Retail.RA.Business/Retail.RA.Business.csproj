@@ -117,6 +117,7 @@
     <Compile Include="TaxRules\Postpaid\PostpaidTaxRuleDefinitionSettings.cs" />
     <Compile Include="TaxRules\Postpaid\PostpaidTaxRuleManager.cs" />
     <Compile Include="TaxRules\Postpaid\PostpaidTaxRuleSettings.cs" />
+    <Compile Include="TaxRules\Prepaid\PrepaidTaxMappingStep.cs" />
     <Compile Include="TaxRules\Prepaid\PrepaidTaxRule.cs" />
     <Compile Include="TaxRules\Prepaid\PrepaidTaxRuleContext.cs" />
     <Compile Include="TaxRules\Prepaid\PrepaidTaxRuleDefinitionSettings.cs" />
