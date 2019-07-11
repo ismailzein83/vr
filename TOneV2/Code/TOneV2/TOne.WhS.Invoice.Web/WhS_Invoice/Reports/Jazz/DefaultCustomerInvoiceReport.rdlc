@@ -310,7 +310,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="CPP Revenue Receivable from "+Parameters!Name.Value+" ("+ CDate(Parameters!FromDate.Value).ToString("dd/MMMM/yyyy") &amp; "  to  " &amp; CDate(Parameters!ToDate.Value).ToString("dd/MMMM/yyyy")+")"</Value>
+                              <Value>="CPP Revenue Receivable from "+Parameters!CarrierCompanyName.Value+" ("+ CDate(Parameters!FromDate.Value).ToString("dd/MMMM/yyyy") &amp; "  to  " &amp; CDate(Parameters!ToDate.Value).ToString("dd/MMMM/yyyy")+")"</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
