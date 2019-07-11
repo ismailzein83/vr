@@ -803,6 +803,54 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void UpdatePaymentArrangement(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StStUpdatePaymentArrangement");
+            esq.AddColumn("StPaymentMethodID");
+            esq.AddColumn("StBankID");
+            esq.AddColumn("StBankAccountID");
+            esq.AddColumn("StCustomerId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var paymentMethodId = entities[0].GetColumnValue("StPaymentMethodID");
+                var bankCode = entities[0].GetColumnValue("StBankID");
+                var accountNumber = entities[0].GetColumnValue("StBankAccountID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<CustomerPaymentProfileInput> somRequestInput = new SOMRequestInput<CustomerPaymentProfileInput>
+                {
+                    InputArguments = new CustomerPaymentProfileInput
+                    {
+                        AccountNumber = accountNumber.ToString(),
+                        PaymentMethodId = paymentMethodId.ToString(),
+                        BankCode = bankCode.ToString(),
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            CustomerId = customerId.ToString(),
+                            RequestId = requestId.ToString()
+                        }
+                    }
+
+                };
+
+                using (var client = new SOMClient())
+                {
+                    client.Post<SOMRequestInput<CustomerPaymentProfileInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerPaymentProfile/StartProcess", somRequestInput);
+                }
+            }
+
+        }
+
         public void UpdateCustomerCategory(string customerCategoryId, string customerId, string requestId)
         {
                 SOMRequestInput<CustomerCategoryInput> somRequestInput = new SOMRequestInput<CustomerCategoryInput>

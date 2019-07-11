@@ -33,7 +33,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyContractTakeOver");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             var newCustomer =  esq.AddColumn("StTargetContact.StCustomerId");
             esq.AddColumn("StNewUserName");
@@ -52,7 +52,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var newCustomerId = entities[0].GetTypedColumnValue<string>(newCustomer.Name);
                 var newUserName = entities[0].GetColumnValue("StNewUserName");
@@ -128,7 +128,7 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyContractTakeOver");
             esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -137,7 +137,7 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var customerId = entities[0].GetColumnValue("StCustomerId");
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
 
                 //get number of contracts
                 List<TelephonyContractDetail> telephonyContracts = new ContractManager().GetTelephonyContracts(customerId.ToString());

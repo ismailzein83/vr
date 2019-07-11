@@ -28,8 +28,7 @@ namespace BPMExtended.Main.Business
         const string paymentStep = "90ED9157-3D6E-41F8-BCA4-41845BF6BBDD";
         const string adslCredentialStep = "0ED21643-2A5C-4CB2-8320-64B67D30D516";
         const string attachmentStep = "14D4D15B-4F29-4E44-8F9C-BCB1059DE003";
-        //  const string pdnTeamStep = "CE8774B8-154B-485F-970B-8FAE05BB1902";
-        // const string mdfTeamStep = "CD2A5018-23B0-4F36-942C-E450FDBBD4F0";
+        const string submitToOMStep = "022B65D1-CF77-440B-A097-F87212AFF146";
         const string technicalStep = "DF7AC0B3-F53D-4104-A260-2509A3E08769";
         const string completedStep = "A826F4E8-9352-46FB-814E-8B0B52655659";
         public string GetNextStep(string id, string currentStepId)
@@ -47,7 +46,7 @@ namespace BPMExtended.Main.Business
                 case printStep: nextStepId = new ContractTakeOverManager().checkBillOnDemand(id) ?billOnDemandStep:new ContractTakeOverManager().hasADSLContract(id)? adslCredentialStep : paymentStep; break;
                 case billOnDemandStep: nextStepId = new ContractTakeOverManager().hasADSLContract(id)? adslCredentialStep : paymentStep; break;
                 case adslCredentialStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = technicalStep; break; 
+                case paymentStep: nextStepId = submitToOMStep; break; 
                      
                      
 

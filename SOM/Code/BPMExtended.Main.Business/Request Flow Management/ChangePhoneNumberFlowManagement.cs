@@ -17,6 +17,7 @@ namespace BPMExtended.Main.Business
         const string paymentStep = "AD9AE38B-740D-4122-88A3-BFCCD5DBF288";
         //const string validatePaymentStep = "3207851A-4BA6-463C-9D38-77D8B8C60F11";
         const string attachmentStep = "CBA12E12-AEE8-4053-877A-88234A877FE1";
+        const string submitToOMStep = "04034AE2-4078-4722-A223-B400C13F89A3";
         const string technicalStep = "2B8B0E7C-9925-4ABE-A9E7-145E96F77982";
 
         public string GetNextStep(string id, string currentStepId)
@@ -30,7 +31,7 @@ namespace BPMExtended.Main.Business
                 case changeRatePlanStep: nextStepId = printStep; break;
                 case printStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = technicalStep; break;
+                case paymentStep: nextStepId = submitToOMStep; break;
 
             }
             return nextStepId;

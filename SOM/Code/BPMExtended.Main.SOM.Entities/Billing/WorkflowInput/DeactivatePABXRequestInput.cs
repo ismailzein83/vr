@@ -10,6 +10,9 @@ namespace BPMExtended.Main.SOMAPI
     public class DeactivatePABXRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public PaymentData PaymentData { get; set; }
+        public string LinePathId { get; set; }
+        public List<PabxService> PabxServices { get; set; }
 
     }
 }

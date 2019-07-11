@@ -65,7 +65,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StISPADSL");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StISPName");
             esq.AddColumn("StISPId");
             esq.AddColumn("StPort");
@@ -79,7 +79,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var ipsName = entities[0].GetColumnValue("StISPName");
                 var ispId= entities[0].GetColumnValue("StISPId");
                 var port = entities[0].GetColumnValue("StPort");

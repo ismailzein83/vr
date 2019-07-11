@@ -370,6 +370,13 @@ namespace BPMExtended.Main.Entities
         [CompletedStep("StStepId")]
         [CompletedStepId("0E6F81C9-5F92-4FDF-ABAB-5C39B18E49E9")]
         CallDetails = 42,
+
+        [Description("Update Payment Arrangement")]
+        [EntitySchemaName("StUpdatePaymentArrangement")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("0BAD833F-CFC0-4C9D-8446-C2F956CCAC3A")]
+        UpdatePaymentArrangement = 43,
+
     }
     public enum ContractStatus
     {

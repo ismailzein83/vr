@@ -62,7 +62,7 @@ namespace BPMExtended.Main.Business
             List<SaleService> feesToRemove = new List<SaleService>();
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangePhoneNumberRequest");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StRatePlanId");
@@ -82,7 +82,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var oldDirectoryNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var oldRatePlanId = entities[0].GetColumnValue("StRatePlanId");
                 var newRatePlanId = entities[0].GetColumnValue("StNewRatePlanId");

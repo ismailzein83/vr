@@ -31,7 +31,7 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCpt");
             esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerID");
+            esq.AddColumn("StCustomerId");
             esq.AddColumn("StCptId");
             esq.AddColumn("StPhoneNumber");
 
@@ -45,7 +45,7 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var cptId = entities[0].GetColumnValue("StCptId");
                 var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
-                var customerId = entities[0].GetColumnValue("StCustomerID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
 
                 SOMRequestInput<ActivateCptRequestInput> somRequestInput = new SOMRequestInput<ActivateCptRequestInput>
                 {
@@ -83,7 +83,7 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCpt");
             esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerID");
+            esq.AddColumn("StCustomerId");
             esq.AddColumn("StCptId");
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StCptNumber");
@@ -99,7 +99,7 @@ namespace BPMExtended.Main.Business
                 var cptId = entities[0].GetColumnValue("StCptId");
                 var cptNumber = entities[0].GetColumnValue("StCptNumber");
                 var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
-                var customerId = entities[0].GetColumnValue("StCustomerID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
 
                 SOMRequestInput<ActivateCptRequestInput> somRequestInput = new SOMRequestInput<ActivateCptRequestInput>
                 {

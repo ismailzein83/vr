@@ -56,7 +56,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StFriendAndFamily");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StFAFGridData");
@@ -70,7 +70,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var fafGroupId = entities[0].GetColumnValue("StFAFGroupId");

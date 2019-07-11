@@ -45,7 +45,7 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceAdditionRequest");
             esq.AddColumn("StPathId");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StRatePlanId");
 
 
@@ -56,7 +56,7 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var pathId = entities[0].GetColumnValue("StPathId");
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
 
                 var somRequestInput = new ContractAvailableServicesInput()
@@ -98,7 +98,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceAdditionRequest");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StPathId");
             esq.AddColumn("StServices");
@@ -114,7 +114,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathId = entities[0].GetColumnValue("StPathId");
                 //string contractAdditionalServices = entities[0].GetColumnValue("StServices").ToString();

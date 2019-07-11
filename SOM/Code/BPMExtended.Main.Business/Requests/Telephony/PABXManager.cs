@@ -138,7 +138,7 @@ namespace BPMExtended.Main.Business
                 {
                     recordEntity = collection[0];
                     recordEntity.SetColumnValue("StTechnicalStepId", "9BDB150C-919D-4147-9F20-62BF7F40FB5E");
-                    recordEntity.SetColumnValue("StWOrkOrderID", workOrderId);
+                    recordEntity.SetColumnValue("StWorkOrderID", workOrderId);
                     recordEntity.SetColumnValue("StIsWorkOrderCompleted", false);
                 }
                 recordEntity.Save();
@@ -156,7 +156,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StPabx");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StPilotContractParameter");
             esq.AddColumn("StParameterNumber");
             esq.AddColumn("StPhoneNumber");
@@ -176,7 +176,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
@@ -243,7 +243,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StPabx");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StPilotContractParameter");
             esq.AddColumn("StParameterNumber");
             esq.AddColumn("StPhoneNumber");
@@ -263,7 +263,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
@@ -329,7 +329,7 @@ namespace BPMExtended.Main.Business
             }
             return isSecondaryPABXContract;
         }
-
+         
         #endregion
 
 
