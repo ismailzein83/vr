@@ -55,9 +55,9 @@
 			$scope.scopeModel.onCountrySelectionChanged = function ()
 			{
 				$scope.scopeModel.selectedSupplierZones.length = 0;
-				var countryId = countrySelectorAPI.getSelectedIds();
+				var countryIds = countrySelectorAPI.getSelectedIds();
 
-				if (countryId == undefined)
+				if (countryIds == undefined)
 					return;
 
 				if (countrySelectedDeferred != undefined) {
@@ -68,7 +68,7 @@
 				// Reload vr-whs-be-supplierzone-selector to reset its filter
 				$scope.scopeModel.isLoading = true;
 
-				loadSupplierZoneSelector(countryId).catch(function (error) {
+				loadSupplierZoneSelector(countryIds).catch(function (error) {
 					VRNotificationService.notifyException(error, $scope);
 				}).finally(function () {
 					$scope.scopeModel.isLoading = false;
@@ -100,7 +100,7 @@
 				var input = {
 					OutboundItemRateCalcMethod: directiveAPI.getData(),
 					SupplierId: supplierId,
-					CountryId: countrySelectorAPI.getSelectedIds(),
+					CountryIds: countrySelectorAPI.getSelectedIds(),
 					SupplierZoneIds: supplierZoneSelectorAPI.getSelectedIds()
 				};
 
@@ -189,7 +189,7 @@
 			countrySelectorReadyDeferred.promise.then(function () {
 				var countrySelectorPayload;
 				if (outboundEntity != undefined) {
-					countrySelectorPayload = { selectedIds: outboundEntity.CountryId };
+					countrySelectorPayload = { selectedIds: outboundEntity.CountryIds };
 				}
 				VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countrySelectorPayload, countrySelectorLoadDeferred);
 			});
@@ -198,17 +198,17 @@
 		}
 		function loadSupplierZoneSelectorOnPageLoad()
 		{
-			var countryId;
+			var countryIds;
 			var selectedIds;
 
 			if (outboundEntity != undefined) {
-				countryId = outboundEntity.CountryId;
+				countryIds = outboundEntity.CountryIds;
 				selectedIds = outboundEntity.SupplierZoneIds;
 			}
 
-			return loadSupplierZoneSelector(countryId, selectedIds);
+			return loadSupplierZoneSelector(countryIds, selectedIds);
 		}
-		function loadSupplierZoneSelector(countryId, selectedIds)
+		function loadSupplierZoneSelector(countryIds, selectedIds)
 		{
 			var supplierZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -219,7 +219,7 @@
 					selectedIds: selectedIds
 				};
 				supplierZoneSelectorPayload.filter = {
-					CountryIds: [countryId]
+					CountryIds: countryIds
 				};
 				VRUIUtilsService.callDirectiveLoad(supplierZoneSelectorAPI, supplierZoneSelectorPayload, supplierZoneSelectorLoadDeferred);
 			});
@@ -266,7 +266,7 @@
 		function buildOutboundObjFromScope() {
 			var obj = {
                 GroupName: $scope.scopeModel.groupName,
-				CountryId: countrySelectorAPI.getSelectedIds(),
+				CountryIds: countrySelectorAPI.getSelectedIds(),
 				SupplierZoneIds: supplierZoneSelectorAPI.getSelectedIds(),
 				Volume: $scope.scopeModel.volume,
 				DealRate: $scope.scopeModel.dealRate,

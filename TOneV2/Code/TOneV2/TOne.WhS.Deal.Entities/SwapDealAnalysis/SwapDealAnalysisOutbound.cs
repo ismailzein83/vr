@@ -14,7 +14,7 @@ namespace TOne.WhS.Deal.Entities
     public class Outbound
     {
         public int ZoneGroupNumber { get; set; }
-        public int CountryId { get; set; }
+        public List<int> CountryIds { get; set; }
         public decimal CurrentRate { get; set; }
         public int DailyVolume { get; set; }
         public int Volume { get; set; }

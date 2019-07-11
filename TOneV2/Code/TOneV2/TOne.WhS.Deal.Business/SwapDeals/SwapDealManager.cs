@@ -111,7 +111,7 @@ namespace TOne.WhS.Deal.Business
                 var swapDealInbound = new SwapDealInbound
                 {
                     ZoneGroupNumber = analysisInbound.ZoneGroupNumber,
-                    CountryIds = new List<int> { analysisInbound.CountryId },
+                    CountryIds =analysisInbound.CountryIds,
                     Name = analysisInbound.GroupName,
                     Rate = analysisInbound.DealRate,
                     Volume = analysisInbound.Volume,
@@ -137,7 +137,7 @@ namespace TOne.WhS.Deal.Business
                 var swapDealOutbound = new SwapDealOutbound
                 {
                     ZoneGroupNumber = analysisOutbound.ZoneGroupNumber,
-                    CountryIds = new List<int> { analysisOutbound.CountryId },
+                    CountryIds =  analysisOutbound.CountryIds,
                     Name = analysisOutbound.GroupName,
                     SubstituteRateType = SubstituteRateType.NormalRate,
                     Rate = analysisOutbound.DealRate,

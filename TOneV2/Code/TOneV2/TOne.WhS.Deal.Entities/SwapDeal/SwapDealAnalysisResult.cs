@@ -39,7 +39,7 @@ namespace TOne.WhS.Deal.Entities
         public Guid CalculationMethodId { get; set; }
         public SwapDealAnalysisInboundItemRateCalcMethod ItemCalculationMethod { get; set; }
         public List<long> SaleZoneIds { get; set; }
-        public int CountryId { get; set; }
+        public List<int> CountryIds { get; set; }
     }
 
     public class SwapDealAnalysisResultOutbound
@@ -55,7 +55,7 @@ namespace TOne.WhS.Deal.Entities
         public Guid CalculationMethodId { get; set; }
         public SwapDealAnalysisOutboundItemRateCalcMethod ItemCalculationMethod { get; set; }
         public List<long> SupplierZoneIds { get; set; }
-        public int CountryId { get; set; }
+        public List<int> CountryIds { get; set; }
     }
     public class AnalysisResultCustomObject
     {

@@ -299,7 +299,7 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                         var inbound =
                         {
                             GroupName: inboundManagementData.$values[i].GroupName,
-                            CountryId: inboundManagementData.$values[i].CountryId,
+                            CountryIds: inboundManagementData.$values[i].CountryIds,
                             SaleZoneIds: inboundManagementData.$values[i].SaleZoneIds,
                             Volume: inboundManagementData.$values[i].Volume,
                             DealRate: inboundManagementData.$values[i].DealRate,
@@ -316,7 +316,7 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                         var outbound =
                         {
                             GroupName: outboundManagementData.$values[j].GroupName,
-                            CountryId: outboundManagementData.$values[j].CountryId,
+                            CountryIds: outboundManagementData.$values[j].CountryIds,
                             SupplierZoneIds: outboundManagementData.$values[j].SupplierZoneIds,
                             Volume: outboundManagementData.$values[j].Volume,
                             DealRate: outboundManagementData.$values[j].DealRate,

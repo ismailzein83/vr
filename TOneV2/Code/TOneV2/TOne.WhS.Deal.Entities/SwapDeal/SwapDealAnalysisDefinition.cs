@@ -37,7 +37,7 @@ namespace TOne.WhS.Deal.Entities
         public int ZoneGroupNumber { get; set; }
         public string GroupName { get; set; }
 
-        public int CountryId { get; set; }
+        public List<int> CountryIds { get; set; }
 
         public List<long> SupplierZoneIds { get; set; }
 
@@ -54,7 +54,7 @@ namespace TOne.WhS.Deal.Entities
         public int ZoneGroupNumber { get; set; }
         public string GroupName { get; set; }
 
-        public int CountryId { get; set; }
+        public List<int> CountryIds { get; set; }
 
         public List<long> SaleZoneIds { get; set; }
 

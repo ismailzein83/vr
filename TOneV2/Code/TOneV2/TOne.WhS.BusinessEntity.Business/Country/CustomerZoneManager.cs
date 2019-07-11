@@ -99,6 +99,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<int> GetCustomerIdsByCountryId(IEnumerable<int> customerIds, int countryId)
         {
+            return GetCustomerIdsByCountryIds(customerIds, new List<int> { countryId });
+        }
+        public IEnumerable<int> GetCustomerIdsByCountryIds(IEnumerable<int> customerIds, List<int> countryIds)
+        {
             if (customerIds == null)
                 return null;
             Func<int, bool> filterFunc = (customerId) =>
@@ -106,7 +110,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 CustomerZones customerZones = GetCustomerZones(customerId, DateTime.Now, false);
                 if (customerZones == null || customerZones.Countries == null)
                     return false;
-                if (!customerZones.Countries.Any(x => x.CountryId == countryId))
+                if (!customerZones.Countries.Any(x => countryIds.Contains(x.CountryId)))
                     return false;
                 return true;
             };

@@ -12,7 +12,7 @@ namespace TOne.WhS.Deal.Entities
 
 		public int CustomerId { get; set; }
 
-		public int CountryId { get; set; }
+		public List<int> CountryIds { get; set; }
 
 		public IEnumerable<long> SaleZoneIds { get; set; }
 	}

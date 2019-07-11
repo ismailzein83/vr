@@ -14,7 +14,7 @@ namespace TOne.WhS.Deal.Entities
     {
         int CustomerId { get; set; }
 
-        int CountryId { get; set; }
+        List<int> CountryIds { get; set; }
 
         IEnumerable<long> SaleZoneIds { get; set; }
     }

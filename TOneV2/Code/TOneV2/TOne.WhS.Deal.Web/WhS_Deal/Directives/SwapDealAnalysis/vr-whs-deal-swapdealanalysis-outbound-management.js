@@ -84,7 +84,7 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
                             ItemCalculationMethod: outbound.ItemCalculationMethod,
                             CalculationMethodId: outbound.CalculationMethodId,
                             SupplierZoneIds: outbound.SupplierZoneIds,
-                            CountryId: outbound.CountryId
+                            CountryIds: outbound.CountryIds
                         };
                         $scope.scopeModel.outbounds.push({ Entity: entity });
                     }
@@ -146,7 +146,7 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
                 {
                     $type: "TOne.WhS.Deal.Entities.Outbound,TOne.WhS.Deal.Entities",
                     ZoneGroupNumber: outbounObject.ZoneGroupNumber,
-                    CountryId: outbounObject.CountryId,
+                    CountryIds: outbounObject.CountryIds,
                     CurrentRate: outbounObject.CurrentRate,
                     DailyVolume: outbounObject.DailyVolume,
                     Volume: outbounObject.Volume,

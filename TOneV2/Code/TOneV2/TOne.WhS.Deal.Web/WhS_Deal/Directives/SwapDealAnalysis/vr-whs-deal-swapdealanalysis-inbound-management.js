@@ -81,7 +81,7 @@ app.directive('vrWhsDealSwapdealanalysisInboundManagement', ['WhS_Deal_SwapDealA
                             RateProfit: inbound.RateProfit,
                             Profit: inbound.Profit,
                             Revenue: inbound.Revenue,
-                            CountryId: inbound.CountryId,
+                            CountryIds: inbound.CountryIds,
                             ItemCalculationMethod: inbound.ItemCalculationMethod,
                             CalculationMethodId: inbound.CalculationMethodId,
                             SaleZoneIds: inbound.SaleZoneIds
@@ -153,7 +153,7 @@ app.directive('vrWhsDealSwapdealanalysisInboundManagement', ['WhS_Deal_SwapDealA
                 {
                     $type: "TOne.WhS.Deal.Entities.Inbound,TOne.WhS.Deal.Entities",
                     ZoneGroupNumber: inbounObject.ZoneGroupNumber,
-                    CountryId: inbounObject.CountryId,
+                    CountryIds: inbounObject.CountryIds,
                     CurrentRate: inbounObject.CurrentRate,
                     DailyVolume: inbounObject.DailyVolume,
                     Volume: inbounObject.Volume,

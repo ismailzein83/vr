@@ -71,7 +71,7 @@ namespace TOne.WhS.Deal.Business
             var context = new SwapDealAnalysisInboundRateCalcMethodContext()
             {
                 CustomerId = input.CustomerId,
-                CountryId = input.CountryId,
+                CountryIds = input.CountryIds,
                 SaleZoneIds = input.SaleZoneIds
             };
 
@@ -88,7 +88,7 @@ namespace TOne.WhS.Deal.Business
             {
                 SupplierId = input.SupplierId,
                 SupplierZoneIds = input.SupplierZoneIds,
-                CountryId = input.CountryId
+                CountryIds = input.CountryIds
             };
 
             decimal? calculatedRate = input.OutboundItemRateCalcMethod.Execute(context);
@@ -166,7 +166,7 @@ namespace TOne.WhS.Deal.Business
                     swapDealAnalysisSettings.Add(new SwapDealAnalysisInboundSettings
                     {
                         ZoneGroupNumber= inbound.ZoneGroupNumber,
-                        CountryId = inbound.CountryId,
+                        CountryIds = inbound.CountryIds,
                         DealRate = inbound.DealRate,
                         ItemCalculationMethod = inbound.ItemCalculationMethod,
                         GroupName = inbound.GroupName,
@@ -186,7 +186,7 @@ namespace TOne.WhS.Deal.Business
                     swapDealAnalysisSettings.Add(new SwapDealAnalysisOutboundSettings
                     {
                         ZoneGroupNumber = outbound.ZoneGroupNumber,
-                        CountryId = outbound.CountryId,
+                        CountryIds = outbound.CountryIds,
                         DealRate = outbound.DealRate,
                         ItemCalculationMethod = outbound.ItemCalculationMethod,
                         GroupName = outbound.GroupName,
@@ -218,7 +218,7 @@ namespace TOne.WhS.Deal.Business
                     DealRate = inboundSettings.DealRate,
                     ItemCalculationMethod = inboundSettings.ItemCalculationMethod,
                     SaleZoneIds = inboundSettings.SaleZoneIds,
-                    CountryId = inboundSettings.CountryId,
+                    CountryIds = inboundSettings.CountryIds,
                     CalculationMethodId = inboundSettings.CalculationMethodId
                 };
 
@@ -229,7 +229,7 @@ namespace TOne.WhS.Deal.Business
                 var context = new SwapDealAnalysisInboundRateCalcMethodContext()
                 {
                     CustomerId = carrierAccountId,
-                    CountryId = inboundSettings.CountryId,
+                    CountryIds = inboundSettings.CountryIds,
                     SaleZoneIds = inboundSettings.SaleZoneIds
                 };
                 inboundResult.CurrentRate = inboundSettings.ItemCalculationMethod.Execute(context);
@@ -272,7 +272,7 @@ namespace TOne.WhS.Deal.Business
                     DealRate = outboundSettings.DealRate,
                     ItemCalculationMethod = outboundSettings.ItemCalculationMethod,
                     SupplierZoneIds = outboundSettings.SupplierZoneIds,
-                    CountryId = outboundSettings.CountryId,
+                    CountryIds = outboundSettings.CountryIds,
                     CalculationMethodId = outboundSettings.CalculationMethodId
                 };
 
@@ -283,7 +283,7 @@ namespace TOne.WhS.Deal.Business
                 var context = new SwapDealAnalysisOutboundRateCalcMethodContext()
                 {
                     SupplierId = carrierAccountId,
-                    CountryId = outboundSettings.CountryId,
+                    CountryIds = outboundSettings.CountryIds,
                     SupplierZoneIds = outboundSettings.SupplierZoneIds
                 };
                 outboundResult.CurrentRate = outboundSettings.ItemCalculationMethod.Execute(context);

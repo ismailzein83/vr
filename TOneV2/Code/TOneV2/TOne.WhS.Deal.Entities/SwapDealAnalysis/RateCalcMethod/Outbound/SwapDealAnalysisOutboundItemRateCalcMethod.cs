@@ -17,7 +17,7 @@ namespace TOne.WhS.Deal.Entities
 	{
 		int SupplierId { get; }
 
-		int CountryId { get; set; }
+        List<int> CountryIds { get; set; }
 
 		List<long> SupplierZoneIds { get; }
 	}

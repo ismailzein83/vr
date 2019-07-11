@@ -29,7 +29,7 @@ namespace TOne.WhS.Deal.MainExtensions
 				return null;
 
 			ZonesBySellingNumberPlan data = GetZonesBySellingNumberPlan(codeSaleZoneMatches);
-			IEnumerable<CarrierAccount> customers = GetCustomersByCountryId(context.CountryId);
+			IEnumerable<CarrierAccount> customers = GetCustomersByCountryIds(context.CountryIds);
 
 			var rates = new List<decimal>();
 			var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
@@ -82,7 +82,7 @@ namespace TOne.WhS.Deal.MainExtensions
 			return zonesBySellingNumberPlan;
 		}
 
-		private IEnumerable<CarrierAccount> GetCustomersByCountryId(int countryId)
+		private IEnumerable<CarrierAccount> GetCustomersByCountryIds(List<int> countryIds)
 		{
 			var carrierAccountManager = new CarrierAccountManager();
 			IEnumerable<CarrierAccount> allCustomers = carrierAccountManager.GetAllCustomers();
@@ -109,7 +109,7 @@ namespace TOne.WhS.Deal.MainExtensions
 				throw new NullReferenceException("customerIds");
 
 			var customerZoneManager = new CustomerZoneManager();
-			IEnumerable<int> customerIdsByCountryId = customerZoneManager.GetCustomerIdsByCountryId(customerIds, countryId);
+			IEnumerable<int> customerIdsByCountryId = customerZoneManager.GetCustomerIdsByCountryIds(customerIds, countryIds);
 
 			if (customerIdsByCountryId == null)
 				throw new NullReferenceException("customerIdsByCountryId");

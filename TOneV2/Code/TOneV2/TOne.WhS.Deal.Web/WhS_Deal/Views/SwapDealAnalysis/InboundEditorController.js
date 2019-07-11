@@ -57,9 +57,9 @@
 
                 $scope.scopeModel.selectedSaleZones.length = 0;
 
-                var countryId = countrySelectorAPI.getSelectedIds();
+                var countryIds = countrySelectorAPI.getSelectedIds();
 
-                if (countryId == undefined)
+                if (countryIds == undefined)
                     return;
 
                 if (countrySelectedDeferred != undefined) {
@@ -70,7 +70,7 @@
                 // Reload vr-whs-be-salezone-selector to reset its filter
                 $scope.scopeModel.isLoading = true;
 
-                loadSaleZoneSelector(countryId).catch(function (error) {
+                loadSaleZoneSelector(countryIds).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -201,17 +201,17 @@
             return countrySelectorLoadDeferred.promise;
         }
         function loadSaleZoneSelectorOnPageLoad() {
-            var countryId;
+            var countryIds;
             var selectedIds;
 
             if (inboundEntity != undefined) {
-                countryId = inboundEntity.CountryId;
+                countryIds = inboundEntity.CountryIds;
                 selectedIds = inboundEntity.SaleZoneIds;
             }
 
-            return loadSaleZoneSelector(countryId, selectedIds);
+            return loadSaleZoneSelector(countryIds, selectedIds);
         }
-        function loadSaleZoneSelector(countryId, selectedIds) {
+        function loadSaleZoneSelector(countryIds, selectedIds) {
             var saleZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             saleZoneSelectorReadyDeferred.promise.then(function () {
@@ -221,7 +221,7 @@
                     selectedIds: selectedIds
                 };
                 saleZoneSelectorPayload.filter = {
-                    CountryIds: [countryId]
+                    CountryIds: countryIds
                 };
                 VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, saleZoneSelectorPayload, saleZoneSelectorLoadDeferred);
             });
@@ -268,7 +268,7 @@
         function buildInboundObjFromScope() {
             var obj = {
                 GroupName: $scope.scopeModel.groupName,
-                CountryId: countrySelectorAPI.getSelectedIds(),
+                CountryIds: countrySelectorAPI.getSelectedIds(),
                 SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
                 Volume: $scope.scopeModel.volume,
                 DealRate: $scope.scopeModel.dealRate,
