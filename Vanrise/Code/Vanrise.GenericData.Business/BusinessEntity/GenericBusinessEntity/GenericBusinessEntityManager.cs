@@ -414,12 +414,26 @@ namespace Vanrise.GenericData.Business
 
                 if (input.DataRetrievalResultType == DataRetrievalResultType.Excel)
                 {
-                    var storageRecords1 = storageRecordsResult as ExcelResult<DataRecordDetail>;
-                    return new ExcelResult<GenericBusinessEntityDetail>
+                    var excelResult = storageRecordsResult as ExcelResult<DataRecordDetail>;
+                    if (excelResult != null)
                     {
-                        ExcelFileContent = storageRecords1.ExcelFileContent,
-                        ExcelFileStream = storageRecords1.ExcelFileStream
-                    };
+                        return new ExcelResult<GenericBusinessEntityDetail>
+                        {
+                            ExcelFileContent = excelResult.ExcelFileContent,
+                            ExcelFileStream = excelResult.ExcelFileStream
+                        };
+                    }
+
+                    var remoteExcelResult = storageRecordsResult as RemoteExcelResult<DataRecordDetail>;
+                    if (remoteExcelResult != null)
+                    {
+                        return new RemoteExcelResult<GenericBusinessEntityDetail>
+                        {
+                           Data = remoteExcelResult.Data
+                        };
+                    }
+
+                    throw new NotSupportedException($"Invalid Excel Type Result {storageRecordsResult.GetType()}");
                 }
 
                 var storageRecords = storageRecordsResult as BigResult<DataRecordDetail>;
@@ -929,7 +943,7 @@ namespace Vanrise.GenericData.Business
                         foreach (var fieldValue in fieldValues)
                         {
                             var fieldDescription = fieldsDescription.GetRecord(fieldValue.Key);
-                            if(fieldDescription != null)
+                            if (fieldDescription != null)
                             {
                                 fieldDescription = Regex.Replace(fieldDescription, "<(.|\n)*?>", string.Empty);
                             }
@@ -1291,7 +1305,7 @@ namespace Vanrise.GenericData.Business
         {
             return GetGenericBusinessEntityName(genericBusinessEntityId, businessEntityDefinitionId);
         }
-        public Dictionary<string,GridColumnAttribute> GetGenericEditorColumnsInfo(Guid dataRecordTypeId, ListRecordRuntimeViewType listRecordViewType)
+        public Dictionary<string, GridColumnAttribute> GetGenericEditorColumnsInfo(Guid dataRecordTypeId, ListRecordRuntimeViewType listRecordViewType)
         {
             if (listRecordViewType == null)
                 return null;
