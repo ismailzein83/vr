@@ -119,5 +119,6 @@
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_GetByDealId.sql" />
     <Build Include="TOneWhS_Analytics\Tables\TrafficStats15MinByCode.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\TrafficStats15MinByCodeType.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealProgress_GetByDealId.sql" />
   </ItemGroup>
 </Project>

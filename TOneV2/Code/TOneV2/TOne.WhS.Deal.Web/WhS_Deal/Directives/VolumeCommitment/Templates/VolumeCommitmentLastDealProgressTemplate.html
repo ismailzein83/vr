@@ -1,10 +1,10 @@
 ﻿<vr-section title="Sale" ng-if="ctrl.saleDataSource.length > 0">
     <vr-row>
-        <vr-datagrid datasource="ctrl.saleDataSource" norowhighlightonclick="true"  maxheight="300px"
+        <vr-datagrid datasource="ctrl.saleDataSource" norowhighlightonclick="true" maxheight="300px"
                      on-ready="onSaleGridReady" hidegridmenu>
-            <vr-datagridcolumn headertext="'Group'" field="'GroupName'"  disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Reached'" field="'Reached'"  disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Last Tier Reached'" field="'LastTierReached'"  disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Group'" field="'GroupName'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Reached Volume'" field="'Reached'" type="'Number'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Reached Tier'" field="'LastTierReached'" disablesorting></vr-datagridcolumn>
         </vr-datagrid>
     </vr-row>
 </vr-section>
@@ -12,9 +12,9 @@
     <vr-row>
         <vr-datagrid datasource="ctrl.costDataSource" norowhighlightonclick="true" maxheight="300px"
                      on-ready="onCostGridReady" hidegridmenu>
-            <vr-datagridcolumn headertext="'Group'" field="'GroupName'"  disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Reached'" field="'Reached'"  disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Last Tier Reached'" field="'LastTierReached'"  disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Group'" field="'GroupName'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Reached Volume'" field="'Reached'" type="'Number'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Reached Tier'" field="'LastTierReached'" disablesorting></vr-datagridcolumn>
         </vr-datagrid>
     </vr-row>
 </vr-section>

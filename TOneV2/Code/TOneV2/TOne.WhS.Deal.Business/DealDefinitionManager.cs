@@ -224,15 +224,16 @@ namespace TOne.WhS.Deal.Business
         }
         public List<SwapDealProgressDetail> GetLastSwapDealProgress(int dealId)
         {
-            List<SwapDealProgressDetail> swapDealProgressDetails = new List<SwapDealProgressDetail>();
-            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
-            var dealDefinition = dealDefinitionManager.GetDealDefinition(dealId);
+            var swapDealProgressDetails = new List<SwapDealProgressDetail>();
+            var dealDefinitionManager = new DealDefinitionManager();
+
+            DealDefinition dealDefinition = dealDefinitionManager.GetDealDefinition(dealId);
             SwapDealSettings swapDealSettings = dealDefinition.Settings as SwapDealSettings;
             swapDealSettings.ThrowIfNull("swapDealSettings");
 
             foreach (var inbound in swapDealSettings.Inbounds)
             {
-                swapDealProgressDetails.Add(new SwapDealProgressDetail()
+                swapDealProgressDetails.Add(new SwapDealProgressDetail
                 {
                     ZoneGroupNumber = inbound.ZoneGroupNumber,
                     GroupName = inbound.Name,
@@ -243,7 +244,7 @@ namespace TOne.WhS.Deal.Business
             }
             foreach (var outbound in swapDealSettings.Outbounds)
             {
-                swapDealProgressDetails.Add(new SwapDealProgressDetail()
+                swapDealProgressDetails.Add(new SwapDealProgressDetail
                 {
                     ZoneGroupNumber = outbound.ZoneGroupNumber,
                     GroupName = outbound.Name,
@@ -253,19 +254,17 @@ namespace TOne.WhS.Deal.Business
                 });
             }
 
-            DealProgressManager dealProgressManager = new DealProgressManager();
-            var dealProgress = dealProgressManager.GetDealProgessesByDealId(dealId);
+            var dealProgressManager = new DealProgressManager();
+            var dealProgresses = dealProgressManager.GetDealProgessesByDealId(dealId);
 
-            if (dealProgress == null)
+            if (dealProgresses == null)
                 return swapDealProgressDetails;
 
-
-            foreach (var progress in dealProgress)
+            foreach (var progress in dealProgresses)
             {
-
                 decimal reachedProgress = progress.ReachedDurationInSeconds.HasValue ? progress.ReachedDurationInSeconds.Value : 0;
 
-                //In case the TargetDurationInSeconds has not a value (null) that means dal is in extra rate phase so target is completed
+                //In case the TargetDurationInSeconds has not a value (null) that means deal is in extra rate phase so target is completed
                 decimal percentageCompleted = progress.TargetDurationInSeconds.HasValue ? (reachedProgress * 100) / progress.TargetDurationInSeconds.Value : 100;
 
                 var swapDealProgressDetail = swapDealProgressDetails.Find(x => x.ZoneGroupNumber == progress.ZoneGroupNb);
@@ -278,13 +277,14 @@ namespace TOne.WhS.Deal.Business
 
         public List<VolumeCommitmentProgressDetail> GetLastVolumeCommitmentProgress(int dealId)
         {
-            List<VolumeCommitmentProgressDetail> volumeCommitmentProgressDetails = new List<VolumeCommitmentProgressDetail>();
-            DealProgressManager dealProgressManager = new DealProgressManager();
-            var dealProgress = dealProgressManager.GetDealProgessesByDealId(dealId);
-            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
-            var dealDefinition = dealDefinitionManager.GetDealDefinition(dealId);
+            var volumeCommitmentProgressDetails = new List<VolumeCommitmentProgressDetail>();
+            var dealProgressManager = new DealProgressManager();
+            var dealDefinitionManager = new DealDefinitionManager();
+
+            DealDefinition dealDefinition = dealDefinitionManager.GetDealDefinition(dealId);
             VolCommitmentDealSettings volCommitmentSettings = dealDefinition.Settings as VolCommitmentDealSettings;
             volCommitmentSettings.ThrowIfNull("volCommitmentSettings");
+
             foreach (var volumeItem in volCommitmentSettings.Items)
             {
                 volumeCommitmentProgressDetails.Add(new VolumeCommitmentProgressDetail()
@@ -293,17 +293,16 @@ namespace TOne.WhS.Deal.Business
                     GroupName = volumeItem.Name,
                     Reached = 0,
                     LastTierReached = 1,
-                    IsSale = volCommitmentSettings.DealType == VolCommitmentDealType.Buy
+                    IsSale = volCommitmentSettings.DealType == VolCommitmentDealType.Sell
                 });
             }
 
-            if (dealProgress == null)
+            List<DealProgress> dealProgresses = dealProgressManager.GetDealProgessesByDealId(dealId);
+            if (dealProgresses == null)
                 return volumeCommitmentProgressDetails;
 
-
-            foreach (var progress in dealProgress)
+            foreach (var progress in dealProgresses)
             {
-
                 decimal reachedProgress = progress.ReachedDurationInSeconds.HasValue ? progress.ReachedDurationInSeconds.Value : 0;
                 var volCommitmentProgressDetail = volumeCommitmentProgressDetails.Find(x => x.ZoneGroupNumber == progress.ZoneGroupNb);
                 volCommitmentProgressDetail.ThrowIfNull("swapDealProgressDetail");
