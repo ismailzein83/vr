@@ -153,8 +153,8 @@ namespace TOne.WhS.Deal.Business
             var analysisSettings = new SwapDealAnalysisSettings
             {
                 CarrierAccountId = (int)fieldValues.GetRecord("CarrierId"),
-                FromDate = (DateTime)fieldValues.GetRecord("DealBED"),
-                ToDate = (DateTime)fieldValues.GetRecord("DealEED"),
+                FromDate = (DateTime)fieldValues.GetRecord("FromDate"),
+                ToDate = (DateTime)fieldValues.GetRecord("ToDate"),
                 SwapDealId = (int?)fieldValues.GetRecord("SwapDealId")
             };
             var inbounds = fieldValues.GetRecord("Inbounds").CastWithValidate<SwapDealAnalysisInbound>("Inbounds", analysisDefinition.SwapDealAnalysisDefinitionId);

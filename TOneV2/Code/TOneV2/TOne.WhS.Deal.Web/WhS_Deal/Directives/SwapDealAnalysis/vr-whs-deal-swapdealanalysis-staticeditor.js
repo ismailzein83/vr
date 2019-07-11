@@ -158,8 +158,8 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                             settings = {};
                             settings.CarrierAccountId = selectedValues.CarrierId;
                             settings.Name = selectedValues.Name;
-                            settings.FromDate = selectedValues.DealBED;
-                            settings.ToDate = selectedValues.DealEED;
+                            settings.FromDate = selectedValues.FromDate;
+                            settings.ToDate = selectedValues.ToDate;
                             inbounds = selectedValues.Inbounds.SwapDealAnalysisInbounds;
                             outbounds = selectedValues.Outbounds.SwapDealAnalysisOutbounds;
                             analysisResult = selectedValues.AnalysisResult;
@@ -173,8 +173,8 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                     if (settingsData != undefined) {
                         swapDealAnalysisObject.Name = settingsData.Name;
                         swapDealAnalysisObject.CarrierId = settingsData.CarrierAccountId;
-                        swapDealAnalysisObject.DealBED = settingsData.FromDate;
-                        swapDealAnalysisObject.DealEED = settingsData.ToDate;
+                        swapDealAnalysisObject.FromDate = settingsData.FromDate;
+                        swapDealAnalysisObject.ToDate = settingsData.ToDate;
                         swapDealAnalysisObject.Inbounds =
                             {
                                 $type: "TOne.WhS.Deal.Entities.SwapDealAnalysisInbound,TOne.WhS.Deal.Entities",
