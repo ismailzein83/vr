@@ -3,11 +3,11 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
 
-                <vr-columns width="1/4row">
+                <vr-columns width="normal">
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
 
-                <vr-columns width="1/4row">
+                <vr-columns width="normal">
                     <vr-select datasource="scopeModel.bEDefinitionSettingConfigs"
                                selectedvalues="scopeModel.selectedSettingsTypeConfig"
                                datavaluefield="ExtensionConfigurationId"
@@ -17,7 +17,7 @@
                                hideremoveicon>
                     </vr-select>
                 </vr-columns>
-                <vr-common-devproject-selector on-ready="onDevProjectSelectorReady" normal-col-num="3" ismultipleselection></vr-common-devproject-selector>
+                <vr-common-devproject-selector on-ready="onDevProjectSelectorReady" normal-col-num="2" ismultipleselection></vr-common-devproject-selector>
             </vr-row>
         </div>
         <vr-row removeline>

@@ -45,7 +45,7 @@
                     <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingRequiredParent">
                         <vr-genericdata-datarecordtypefields-selector label="Required Parent Field" on-ready="scopeModel.onDataRecordTypeRequiredParentFieldsDirectiveReady"></vr-genericdata-datarecordtypefields-selector>
                     </vr-columns>
-                    
+
                     <vr-columns width="1/3row">
                         <vr-textbox label="Singular Title" value="scopeModel.selectorSingularTitle">
                     </vr-columns>
@@ -54,7 +54,7 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
-                   
+
                     <vr-columns width="1/3row">
                         <vr-common-modalwidth-selector hideremoveicon on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>
                     </vr-columns>
@@ -74,6 +74,10 @@
                 </vr-row>
                 <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="4"></vr-genericdata-genericbe-extendedsettings>
             </vr-section>
+            <vr-section header="Additional Settings">
+                <vr-genericdata-genericbe-additionalsettings-grid on-ready="scopeModel.onAdditionalSettingsGridReady"></vr-genericdata-genericbe-additionalsettings-grid>
+            </vr-section>
+
         </vr-columns>
         <vr-columns width="1/4row">
             <vr-section header="Upload Settings">
@@ -177,9 +181,6 @@
     </vr-row>
 </vr-tab>
 
-<vr-tab header="'Additional Settings'">
-    <vr-genericdata-genericbe-additionalsettings-grid on-ready="scopeModel.onAdditionalSettingsGridReady"></vr-genericdata-genericbe-additionalsettings-grid>
-</vr-tab>
 <vr-tab header="'Order Type'">
     <vr-row>
         <vr-genericdata-genericbe-orderdirection-selective on-ready="scopeModel.onOrderDirectionSelectorReady" normal-col-num="4"></vr-genericdata-genericbe-orderdirection-selective>
