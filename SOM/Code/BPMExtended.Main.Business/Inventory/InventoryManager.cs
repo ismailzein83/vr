@@ -1036,6 +1036,35 @@ namespace BPMExtended.Main.Business
             return item;
         }
 
+        public List<SiteInfo> GetAllSites()
+        {
+            List<SiteInfo> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<SiteInfo>>(String.Format("api/SOM.ST/Inventory/GetAllSites"));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new SiteInfo
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+        }
+
+        public List<SiteSwitchInfo> GetSiteSwitches(string siteId)
+        {
+            List<SiteSwitchInfo> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<SiteSwitchInfo>>(String.Format("api/SOM.ST/Inventory/GetSiteSwitches?SiteId={0}", siteId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new SiteSwitchInfo
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+        }
 
     }
 }

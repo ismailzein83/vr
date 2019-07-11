@@ -54,6 +54,42 @@ namespace BPMExtended.Main.Business
             }
             return servicesInfoItems;
         }
+        public List<ServiceInfo> GetServicesInfoForCatalog(string catalogId, string catalogName, string sourceSchemaName)
+        {
+            List<string> Servicesids = new List<string>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, sourceSchemaName);
+            var SId = esq.AddColumn("StServiceID");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, catalogName, catalogId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach (var item in entities)
+                {
+                    Servicesids.Add(item.GetTypedColumnValue<string>(SId.Name));
+                }
+            }
+
+
+            var ServiceDetailItems = new List<ServiceInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<ServiceDefinition> items = client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetServicesDefinition"));
+                foreach (var item in items)
+                {
+                    var serviceInfoItem = ServiceDefinitionToInfoMapper(item);
+                    ServiceDetailItems.Add(serviceInfoItem);
+                }
+            }
+
+            var services = new List<ServiceInfo>();
+            services = ServiceDetailItems.Where(p => !Servicesids.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
+            return services;
+        }
+
         public List<ServiceHistoryRecordDetail> GetServiceHistory(string contractId, string serviceId)
         {
             var serviceHistoryItems = new List<ServiceHistoryRecordDetail>();
