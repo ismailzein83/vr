@@ -1779,6 +1779,60 @@ namespace Vanrise.GenericData.Business
             return compatibleFields.Count > 0 ? compatibleFields : null;
         }
 
+        //public override bool ShouldCollectFieldValues(Guid businessEntityDefinitionId)
+        //{
+        //    var genericBEDefinitionSettings = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+        //    var dataRecordStorageId = genericBEDefinitionSettings.DataRecordStorageId;
+
+        //    if (!dataRecordStorageId.HasValue)
+        //        return false;
+
+        //    var dataRecordStorage = new DataRecordStorageManager().GetDataRecordStorage(dataRecordStorageId.Value);
+        //    dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId.Value);
+        //    dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings", dataRecordStorageId.Value);
+
+        //    return !dataRecordStorage.Settings.EnableUseCaching;
+        //}
+
+        //public override Dictionary<object, string> GetDescriptionByIds(IGetDescriptionByIdsContext getDescriptionByIdsContext, Guid businessEntityDefinitionId)
+        //{
+        //    var values = getDescriptionByIdsContext.values;
+
+        //    if (values == null)
+        //        return null;
+
+        //    GenericBusinessEntityDefinitionManager genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
+
+        //    var idFieldTypeName = genericBusinessEntityDefinitionManager.GetIdFieldTypeForGenericBE(businessEntityDefinitionId);
+
+        //    var idFieldName = idFieldTypeName.Name;
+        //    var fieldTitle = genericBusinessEntityDefinitionManager.GetGenericBEDefinitionTitleFieldName(businessEntityDefinitionId);
+        //    List<string> columns = new List<string> { idFieldName, fieldTitle };
+
+        //    RecordFilterGroup recordFilterGroup = new RecordFilterGroup { Filters = new List<RecordFilter>(), LogicalOperator = RecordQueryLogicalOperator.And };
+        //    var objectListRecordFilter = new ObjectListRecordFilter()
+        //    {
+        //        FieldName = idFieldName,
+        //        Values = values,
+        //        CompareOperator = ListRecordFilterOperator.In
+        //    };
+        //    RecordFilter convertedRecordFilter = Helper.ConvertToRecordFilter(idFieldName, idFieldTypeName.Type, objectListRecordFilter);
+        //    recordFilterGroup.Filters.Add(convertedRecordFilter);
+
+        //    var dataRecordStorageId = genericBusinessEntityDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
+        //    var dataRecords = new DataRecordStorageManager().GetAllDataRecords(dataRecordStorageId, columns, recordFilterGroup, null);
+
+        //    Dictionary<object, string> descriptionByIds = new Dictionary<object, string>();
+
+        //    foreach (var dataRecord in dataRecords)
+        //    {
+        //        var fieldValues = dataRecord.FieldValues;
+        //        descriptionByIds.Add(fieldValues.GetRecord(idFieldName), fieldValues.GetRecord(fieldTitle).ToString());
+        //    }
+
+        //    return descriptionByIds;
+        //}
+
         #endregion
 
         #region security
