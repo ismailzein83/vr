@@ -182,7 +182,6 @@ delete from [sec].[View] where [Id] in ('921D4669-64B1-4889-838C-D39F971EB7E6',-
 'e68eff9c-879e-4a6c-b412-8e225a966571',--Charging Policies
 '9f5b379c-1576-4078-9999-3218b329feac',--Packages
 'adbb44fe-5470-413c-a5f6-8ae8c585fa31',--Report Generation
-'40a3247c-375a-4fe3-8e5e-8370d086f8fa',--Mail Templates
 '026e0eeb-69b7-4e5d-b1bb-9d4fb59111b1',--SMS Message Templates
 '4d7bf410-e4c6-4d6f-b519-d6b5c2c2f712',--Rate Type
 'a20e826f-fb18-4a40-adac-7d257399a1ca'--connection
