@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_GenericData_ExtensibleBEItemService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_ExtensibleBEItemService) {
+app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "VRUIUtilsService",
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -23,39 +23,56 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
         };
         function GenericEditorDefinitionSetting($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
-            var sectionDirectiveApi;
-            var sectionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-
+            ctrl.datasource = [];
+            var gridAPI;
             var context;
             var rows;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onSectionDirectiveReady = function (api) {
-                    sectionDirectiveApi = api;
-                    sectionDirectivePromiseDeferred.resolve();
+
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+
                 };
-                defineAPI();
+                $scope.scopeModel.addRow = function () {
+                    var dataItem = {
+                        entity: { fieldsNumber:0}
+                    };
+                    dataItem.onGenericFieldsDirectiveReady = function (api) {
+                        dataItem.genericFieldsDirectiveAPI = api;
+                        var setLoader = function (value) { dataItem.isGenericFieldsDirectiveLoading = value; };
+                        var payload = {
+                            context: getContext(),
+                            setFieldsNumber: function (fieldsNumber) {
+                                dataItem.entity.fieldsNumber = fieldsNumber;
+                            }
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.genericFieldsDirectiveAPI, payload, setLoader);
+                    };
+                  
+                    gridAPI.expandRow(dataItem);
+
+                    ctrl.datasource.push(dataItem);
+                };
+
+                $scope.scopeModel.removeRow = function (dataItem) {
+                    var index = ctrl.datasource.indexOf(dataItem);
+                    ctrl.datasource.splice(index, 1);
+                };
+
+                $scope.scopeModel.isValid = function () {
+                    if (ctrl.datasource.length == 0)
+                        return "You Should add at least one row.";
+                    return null;
+                };
             }
 
             function defineAPI() {
                 var api = {};
 
-                ctrl.addRowSection = function () {
-                    var onRowAdded = function (rowObj) {
-                        sectionDirectiveApi.onAddRow(rowObj);
-                    };
-                    VR_GenericData_ExtensibleBEItemService.addRow(onRowAdded,context, getFilteredFields());
-                };
-
-                ctrl.isValid = function () {
-                    if (sectionDirectiveApi == undefined) return null;
-                    if (sectionDirectiveApi.getData().Rows.length == 0)
-                        return "You Should add at least one row.";
-                    return null;
-                };
-
                 api.load = function (payload) {
+                    ctrl.datasource = [];
                     if (payload != undefined) {
                         context = payload.context;
                         if (payload.settings != undefined)
@@ -63,92 +80,88 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                     }
                     var promises = [];
 
-                    promises.push(loadBusinessEntityDefinitionSelector());
-
-                    function loadBusinessEntityDefinitionSelector() {
-                        var sectionDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        sectionDirectivePromiseDeferred.promise.then(function () {
-                            var payloadSelector = {
-                                rows: payload != undefined && payload.settings != undefined ? payload.settings.Rows : undefined,
-                                context: getContext()
+                    if (rows != undefined && rows.length > 0) {
+                        for (var j = 0; j < rows.length; j++) {
+                            var row = rows[j];
+                            var rowObject = {
+                                payload: row,
+                                genericFieldsDirectiveReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                genericFieldsDirectiveLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
                             };
-                            VRUIUtilsService.callDirectiveLoad(sectionDirectiveApi, payloadSelector, sectionDirectiveLoadDeferred);
-                        });
-                        return sectionDirectiveLoadDeferred.promise;
-                    }
+                            promises.push(rowObject.genericFieldsDirectiveLoadPromiseDeferred.promise);
+                            prepareRow(rowObject);
 
-                    return UtilsService.waitMultiplePromises(promises);
+                        }
+                    } 
+                    return UtilsService.waitPromiseNode({ promises: promises });
                 };
-
-                function getContext() {
-                    var currentContext = context;
-                    if (currentContext == undefined)
-                        currentContext = {};
-
-                    currentContext.getFilteredFields = function () {
-                        var data = [];
-                        var filterData = context.getRecordTypeFields();
-                        for (var i = 0; i < filterData.length; i++) {
-                            data.push({ FieldPath: filterData[i].Name, FieldTitle: filterData[i].Title });
-                        }
-                        return data;
+                function prepareRow(rowObject) {
+                    var dataItem = {
+                        entity: { fieldsNumber: rowObject.payload.Fields != undefined ? rowObject.payload.Fields.length : 0 }
                     };
-                    return currentContext;
-                }
 
-                function getFilteredFields(exceptedFields) {
-                    var filteredFields = [];
-                    if (context != undefined) {
-                        var allFields = context.getRecordTypeFields();
-                        for (var i = 0; i < allFields.length; i++) {
-                            var field = allFields[i];
-                            filteredFields.push({ FieldPath: field.Name, FieldTitle: field.Title });
-                        }
-                    }
-                    return filteredFields;
-                }
+                    dataItem.onGenericFieldsDirectiveReady = function (api) {
+                        dataItem.genericFieldsDirectiveAPI = api;
+                        rowObject.genericFieldsDirectiveReadyPromiseDeferred.resolve();
+                    };
 
-                function filterSections(filteredFields, exceptedFields) {
+                    rowObject.genericFieldsDirectiveReadyPromiseDeferred.promise.then(function () {
 
-                    if (sectionDirectiveApi != undefined) {
-                        var section = sectionDirectiveApi.getData();
-                        filterRows(section.Rows, filteredFields, exceptedFields);
-                    } else if (rows != undefined) {
-                        filterRows(rows, filteredFields, exceptedFields);
-                    }
-                }
+                        var rowPayload = {
+                            fields: rowObject.payload.Fields,
+                            context: getContext(),
+                            setFieldsNumber: function (fieldsNumber) {
+                                dataItem.entity.fieldsNumber = fieldsNumber;
+                            }
+                        };
+                        VRUIUtilsService.callDirectiveLoad(dataItem.genericFieldsDirectiveAPI, rowPayload, rowObject.genericFieldsDirectiveLoadPromiseDeferred);
+                    });
+                    gridAPI.expandRow(dataItem);
 
-                function filterRows(rows, filteredFields, exceptedFields) {
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        filterFields(row.Fields, filteredFields, exceptedFields);
-                    }
-                }
-
-                function filterFields(fields, filteredFields, exceptedFields) {
-                    for (var i = 0; i < fields.length; i++) {
-                        var field = fields[i];
-                        if (exceptedFields == undefined || UtilsService.getItemIndexByVal(exceptedFields, field.FieldPath, 'FieldPath') == -1) {
-                            var index = UtilsService.getItemIndexByVal(filteredFields, field.FieldPath, 'FieldPath');
-                            if (index != -1)
-                                filteredFields.splice(index, 1);
-                        }
-                    }
+                    ctrl.datasource.push(dataItem);
 
                 }
-
                 api.getData = function () {
-                    var data = sectionDirectiveApi.getData();
+
+                    var rows = [];
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var row = ctrl.datasource[i];
+                            if (row.genericFieldsDirectiveAPI != undefined) {
+                                var data = row.genericFieldsDirectiveAPI.getData();
+                                if (data != undefined) {
+                                    rows.push({ Fields: data });
+                                }
+                            }
+                        }
+                    }
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.GenericEditorDefinitionSetting, Vanrise.GenericData.MainExtensions",
-                        Rows: data != undefined ? data.Rows : undefined
+                        Rows: rows
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+
+                currentContext.getFilteredFields = function () {
+                    var data = [];
+                    var filterData = context.getRecordTypeFields();
+                    for (var i = 0; i < filterData.length; i++) {
+                        data.push({ FieldPath: filterData[i].Name, FieldTitle: filterData[i].Title });
+                    }
+                    return data;
+                };
+           
+                return currentContext;
+            }
+
         }
 
         return directiveDefinitionObject;
