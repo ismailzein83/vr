@@ -10,8 +10,11 @@
     [CreatedTime]                DATETIME         CONSTRAINT [DF_BusinessEntityStatusHistory_CreatedTime] DEFAULT (getdate()) NULL,
     [MoreInfo]                   NVARCHAR (MAX)   NULL,
     [PreviousMoreInfo]           NVARCHAR (MAX)   NULL,
+    [CreatedBy]                  INT              NULL,
     CONSTRAINT [PK_BusinessEntityStatusHistory] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

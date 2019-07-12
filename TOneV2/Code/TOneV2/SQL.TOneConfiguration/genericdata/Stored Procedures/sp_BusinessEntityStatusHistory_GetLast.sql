@@ -5,7 +5,7 @@
 AS
 BEGIN
 	
-	SELECT TOP 1 ID ,BusinessEntityDefinitionId, BusinessEntityId,FieldName, StatusId, PreviousStatusID, StatusChangedDate, IsDeleted,MoreInfo,PreviousMoreInfo
+	SELECT TOP 1 ID ,BusinessEntityDefinitionId, BusinessEntityId,FieldName, StatusId, PreviousStatusID, StatusChangedDate, IsDeleted,MoreInfo,PreviousMoreInfo,CreatedBy
 	FROM  [genericdata].[BusinessEntityStatusHistory] 
 	WHERE ISNULL(IsDeleted,0) = 0 
 	AND   BusinessEntityDefinitionId = @BusinessEntityDefinitionId
