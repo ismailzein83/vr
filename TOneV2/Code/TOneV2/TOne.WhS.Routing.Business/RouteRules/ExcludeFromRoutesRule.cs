@@ -16,7 +16,10 @@ namespace TOne.WhS.Routing.Business
 
         public override bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context)
         {
-            throw new NotImplementedException();
+            if (context.SupplierIds == null || context.SupplierIds.Count == 0)
+                return true;
+
+            return false;
         }
 
         public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
