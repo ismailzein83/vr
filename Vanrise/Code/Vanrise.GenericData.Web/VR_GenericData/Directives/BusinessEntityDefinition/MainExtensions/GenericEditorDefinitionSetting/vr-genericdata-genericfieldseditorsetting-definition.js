@@ -59,8 +59,8 @@
                         promises.push(genericFieldsDirectiveLoadPromiseDeferred.promise);
 
                         return UtilsService.waitPromiseNode({ promises: promises });
-                    };
-                }
+                    }
+                };
 
                 api.getData = function () {
                     return {
