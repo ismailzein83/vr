@@ -145,6 +145,102 @@ namespace Retail.Runtime
             return result;
         }
 
+        public static Vanrise.Integration.Entities.MappingOutput ImportCDRs_SFTP(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        {
+            LogVerbose("Started");
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var cdrs = new List<dynamic>();
+            var dataRecords = new List<dynamic>();
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("RetailBilling_CDR");
+            Type dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("RetailBilling_Data");
+
+            System.IO.StreamReader sr = ImportedData.StreamReader;
+
+            while (!sr.EndOfStream)
+            {
+                string currentLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(currentLine))
+                    continue;
+
+                string modifiedCurrentLine = currentLine.ToUpper();
+
+                if (!modifiedCurrentLine.Contains("SESSION_TERMINATE"))
+                    continue;
+
+                bool shouldTakeCDR = false;
+                bool isVoice = false;
+
+                if (modifiedCurrentLine.Contains("SECONDS"))
+                {
+                    shouldTakeCDR = true;
+                    isVoice = true;
+                }
+
+                if (!shouldTakeCDR && modifiedCurrentLine.Contains("TOTALOCTETS"))
+                {
+                    shouldTakeCDR = true;
+                }
+
+                if (!shouldTakeCDR)
+                    continue;
+
+
+                string[] receivedData = currentLine.Split(new char[] { '"' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] rowData = receivedData[1].Split(';');
+
+                if (isVoice)
+                {
+                    dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+
+                    cdr.ResourceName = rowData[9];
+                    cdr.OtherPartyNumber = rowData[10];//txt
+                    cdr.AttemptDateTime = DateTime.ParseExact(rowData[1], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+                    if (!string.IsNullOrEmpty(rowData[14]))
+                        cdr.Duration = decimal.Parse(rowData[14]);
+
+                    if (!string.IsNullOrEmpty(rowData[15]))
+                        cdr.Amount = decimal.Parse(rowData[15]);
+
+                    cdrs.Add(cdr);
+                }
+                else
+                {
+                    dynamic dataRecord = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
+
+                    dataRecord.ResourceName = rowData[9];
+                    dataRecord.AttemptDateTime = DateTime.ParseExact(rowData[1], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+                    if (!string.IsNullOrEmpty(rowData[14]))
+                        dataRecord.Duration = decimal.Parse(rowData[14]);
+
+                    if (!string.IsNullOrEmpty(rowData[15]))
+                        dataRecord.Amount = decimal.Parse(rowData[15]);
+
+                    dataRecords.Add(dataRecord);
+                }
+            }
+
+
+            if (cdrs.Count > 0 )
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of CDRs", "RetailBilling_CDR");
+                mappedBatches.Add("CDR Transformation Stage", batch);
+            }
+
+            if (dataRecords.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Data", "RetailBilling_Data");
+                mappedBatches.Add("Data Transformation Stage", batch);
+            }
+
+            MappingOutput result = new MappingOutput();
+            result.Result = MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
 
         private static void LogVerbose(string Message)
         {
