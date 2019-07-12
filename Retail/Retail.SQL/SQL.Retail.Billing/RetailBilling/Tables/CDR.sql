@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [RetailBilling].[CDR] (
-    [Id]               BIGINT           NULL,
+    [Id]               BIGINT           IDENTITY (1, 1) NOT NULL,
+    [ResourceName]     NVARCHAR (255)   NULL,
     [Contract]         BIGINT           NULL,
     [Direction]        INT              NULL,
     [OtherPartyNumber] VARCHAR (50)     NULL,
@@ -9,4 +10,11 @@
     [Amount]           DECIMAL (22, 6)  NULL,
     [Type]             UNIQUEIDENTIFIER NULL
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RetailBilling_CDR_AttemptDateTime]
+    ON [RetailBilling].[CDR]([AttemptDateTime] ASC);
 

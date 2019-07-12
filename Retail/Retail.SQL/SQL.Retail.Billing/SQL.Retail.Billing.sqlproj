@@ -105,5 +105,7 @@
     <Build Include="RetailBilling\Tables\Instalment.sql" />
     <Build Include="RetailBilling\Tables\CDRType.sql" />
     <Build Include="RetailBilling\Tables\CDR.sql" />
+    <Build Include="RetailBilling\Tables\Data.sql" />
+    <Build Include="RetailBilling\Tables\Bundle.sql" />
   </ItemGroup>
 </Project>
