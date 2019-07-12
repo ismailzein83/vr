@@ -59,7 +59,8 @@
     <add key="VRLocalizationDBConnStringKey"                    value="ConfigurationDBConnString"/>
     <add key="CommonEntitiesConnStringKey"                      value="ConfigurationDBConnString"/>
     <add key="CRM_FixedOperatorConnStringKey"                   value="ConfigurationDBConnString"/>
-    
+
+    <add key="OCS_Integration" value="true"/>
   </appSettings>
 
   <system.web>
