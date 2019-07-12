@@ -150,7 +150,7 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
                    #BUILDURLPARAMETERS#
                 
                    object result=null;
-                   connectionSettings.TrySendRequest(#ACTIONPATH#, Vanrise.Entities.VRHttpMethod.#HTTPMETHOD#,Vanrise.Entities.VRHttpMessageFormat.#MESSAGEFORMAT#,urlParameters,headers,#BODY#, (response)=>{
+                   connectionSettings.TrySendRequest($#ACTIONPATH#, Vanrise.Entities.VRHttpMethod.#HTTPMETHOD#,Vanrise.Entities.VRHttpMessageFormat.#MESSAGEFORMAT#,urlParameters,headers,#BODY#, (response)=>{
                     
                    #RESULTVALUE#
 
