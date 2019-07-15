@@ -8,7 +8,11 @@ Post-Deployment Script Template
  Example:      :setvar TableName MyTable							
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
-*/ 
+*/
+UPDATE	[common].[File] 
+SET		Settings = REPLACE(Settings, 'TOne.BusinessEntity.Business', 'TOne.WhS.BusinessEntity.Business') 
+WHERE	Settings LIKE '%TOne.BusinessEntity.Business.PriceListFileSettings%'
+
 --[BI].[SchemaConfiguration]------------------------------------------------------------------------
 begin 
 set nocount on;
