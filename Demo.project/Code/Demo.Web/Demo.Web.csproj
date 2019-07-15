@@ -324,6 +324,30 @@
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.NumberingPlan.BP.Activities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
