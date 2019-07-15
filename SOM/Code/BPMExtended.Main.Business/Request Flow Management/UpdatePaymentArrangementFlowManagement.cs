@@ -20,6 +20,7 @@ namespace BPMExtended.Main.Business
             {
                 case startingProcess: nextStepId = update; break;
                 case update: nextStepId = submitToOM; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
         }
