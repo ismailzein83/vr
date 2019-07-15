@@ -1,298 +1,305 @@
 ﻿(function (appControllers) {
 
-	"use strict";
+    "use strict";
 
-	SubprocessEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService'];
+    SubprocessEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService'];
 
-	function SubprocessEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService) {
+    function SubprocessEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService) {
 
 
-		var vrWorkflowSelectorAPI;
-		var vrWorkflowSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-		var vrWorkflowSelectorSelectionChangedDeferred;
+        var vrWorkflowSelectorAPI;
+        var vrWorkflowSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var vrWorkflowSelectorSelectionChangedDeferred;
 
-		var inArgumentsGridAPI;
-		var inArgumentsGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var inArgumentsGridAPI;
+        var inArgumentsGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var outArgumentsGridAPI;
-		var outArgumentsGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var outArgumentsGridAPI;
+        var outArgumentsGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var selectedVRWrkflow;
+        var selectedVRWrkflow;
 
-		var loadSelectedVRWorkflowPromise;
+        var loadSelectedVRWorkflowPromise;
 
-		var selectedVRWorkflowId;
-		var inArguments;
-		var outArguments;
-		var workflowId;
-		var isNew;
-		var context;
-		var displayName;
-		loadParameters();
-		defineScope();
-		load();
+        var selectedVRWorkflowId;
+        var inArguments;
+        var outArguments;
+        var workflowId;
+        var isNew;
+        var context;
+        var displayName;
+        loadParameters();
+        defineScope();
+        load();
 
-		function loadParameters() {
-			var parameters = VRNavigationService.getParameters($scope);
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
 
-			if (parameters != undefined) {
-				isNew = parameters.isNew;
-				if (parameters.obj != undefined) {
-					selectedVRWorkflowId = parameters.obj.VRWorkflowId;
-					inArguments = parameters.obj.InArguments;
-					outArguments = parameters.obj.OutArguments;
-					workflowId = parameters.workflowId;
-					context = parameters.context;
-					displayName = parameters.obj.DisplayName;
-				}
-			}
-		}
+            if (parameters != undefined) {
+                isNew = parameters.isNew;
+                if (parameters.obj != undefined) {
+                    selectedVRWorkflowId = parameters.obj.VRWorkflowId;
+                    inArguments = parameters.obj.InArguments;
+                    outArguments = parameters.obj.OutArguments;
+                    workflowId = parameters.workflowId;
+                    context = parameters.context;
+                    displayName = parameters.obj.DisplayName;
+                }
+            }
+        }
 
-		function defineScope() {
-			$scope.scopeModel = {};
-			$scope.scopeModel.context = context;
-			$scope.scopeModel.hasInArguments = false;
-			$scope.scopeModel.hasOutArguments = false;
-			$scope.scopeModel.inArguments = [];
-			$scope.scopeModel.outArguments = [];
+        function defineScope() {
+            $scope.scopeModel = {};
+            $scope.scopeModel.context = context;
+            $scope.scopeModel.hasInArguments = false;
+            $scope.scopeModel.hasOutArguments = false;
+            $scope.scopeModel.inArguments = [];
+            $scope.scopeModel.outArguments = [];
 
-			$scope.scopeModel.onVRWorkflowSelectorReady = function (api) {
-				vrWorkflowSelectorAPI = api;
-				vrWorkflowSelectorReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onVRWorkflowSelectorReady = function (api) {
+                vrWorkflowSelectorAPI = api;
+                vrWorkflowSelectorReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onInArgumentsGridReady = function (api) {
-				inArgumentsGridAPI = api;
-				inArgumentsGridReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onInArgumentsGridReady = function (api) {
+                inArgumentsGridAPI = api;
+                inArgumentsGridReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onOutArgumentsGridReady = function (api) {
-				outArgumentsGridAPI = api;
-				outArgumentsGridReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onOutArgumentsGridReady = function (api) {
+                outArgumentsGridAPI = api;
+                outArgumentsGridReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onVRWorkflowSelectionChanged = function (selectedItem) {
-				if (selectedItem == undefined)
-					return;
-				else {
-					if (vrWorkflowSelectorSelectionChangedDeferred != undefined) {
-						vrWorkflowSelectorSelectionChangedDeferred.resolve();
-					}
-					else {
-						$scope.scopeModel.isLoading = true;
-						var rootPromiseNode = {
-							promises: [loadVRWorkflow(selectedItem.VRWorkflowId)],
-							getChildNode: function () {
-								var gridPromises = [];
-								if ($scope.scopeModel.hasInArguments)
-									gridPromises.push(loadInArgumentsGrid());
+            $scope.scopeModel.onVRWorkflowSelectionChanged = function (selectedItem) {
+                if (selectedItem == undefined)
+                    return;
+                else {
+                    if (vrWorkflowSelectorSelectionChangedDeferred != undefined) {
+                        vrWorkflowSelectorSelectionChangedDeferred.resolve();
+                    }
+                    else {
+                        $scope.scopeModel.isLoading = true;
+                        var rootPromiseNode = {
+                            promises: [loadVRWorkflow(selectedItem.VRWorkflowId)],
+                            getChildNode: function () {
+                                var gridPromises = [];
+                                if ($scope.scopeModel.hasInArguments)
+                                    gridPromises.push(loadInArgumentsGrid());
 
-								if ($scope.scopeModel.hasOutArguments)
-									gridPromises.push(loadOutArgumentsGrid());
+                                if ($scope.scopeModel.hasOutArguments)
+                                    gridPromises.push(loadOutArgumentsGrid());
 
-								return {
-									promises: gridPromises
-								};
-							}
-						};
-						UtilsService.waitPromiseNode(rootPromiseNode).then(function () { $scope.scopeModel.isLoading = false; });
-					}
-				}
-			};
+                                return {
+                                    promises: gridPromises
+                                };
+                            }
+                        };
+                        UtilsService.waitPromiseNode(rootPromiseNode).then(function () { $scope.scopeModel.isLoading = false; });
+                    }
+                }
+            };
 
-			$scope.scopeModel.close = function () {
-				if ($scope.remove != undefined && isNew == true) {
-					$scope.remove();
-				}
-				$scope.modalContext.closeModal();
-			};
+            $scope.scopeModel.close = function () {
+                if ($scope.remove != undefined && isNew == true) {
+                    $scope.remove();
+                }
+                $scope.modalContext.closeModal();
+            };
 
-			$scope.modalContext.onModalHide = function () {
-				if ($scope.remove != undefined && isNew == true) {
-					$scope.remove();
-				}
-			};
+            $scope.modalContext.onModalHide = function () {
+                if ($scope.remove != undefined && isNew == true) {
+                    $scope.remove();
+                }
+            };
 
-			$scope.scopeModel.saveActivity = function () {
-				return updateActivity();
-			};
+            $scope.scopeModel.saveActivity = function () {
+                return updateActivity();
+            };
 
-			$scope.scopeModel.displayName = displayName;
-		}
+            $scope.scopeModel.displayName = displayName;
+        }
 
-		function load() {
-			$scope.scopeModel.isLoading = true;
-			loadAllControls();
-		}
+        function load() {
+            $scope.scopeModel.isLoading = true;
+            loadAllControls();
+        }
 
-		function loadAllControls() {
+        function loadAllControls() {
 
-			function setTitle() {
-				$scope.title = "Edit Sub Process";
-			}
+            function setTitle() {
+                $scope.title = "Edit Sub Process";
+            }
 
-			function loadVRWorkflowInfo() {
-				var promises = [];
-				if (selectedVRWorkflowId != undefined) {
-					vrWorkflowSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+            function loadVRWorkflowInfo() {
+                var promises = [];
 
-					var rootPromiseNode = {
-						promises: [loadVRWorkflow(selectedVRWorkflowId)],
-						getChildNode: function () {
-							var gridPromises = [];
-							if ($scope.scopeModel.hasInArguments)
-								gridPromises.push(loadInArgumentsGrid(inArguments));
+                var loadVRWorkflowSelectorPromise = loadVRWorkflowSelector();
+                promises.push(loadVRWorkflowSelectorPromise);
 
-							if ($scope.scopeModel.hasOutArguments)
-								gridPromises.push(loadOutArgumentsGrid(outArguments));
+                if (selectedVRWorkflowId != undefined) {
+                    vrWorkflowSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
-							return {
-								promises: gridPromises
-							};
-						}
-					};
-					promises.push(UtilsService.waitPromiseNode(rootPromiseNode));
-				}
-				var loadVRWorkflowSelectorPromise = loadVRWorkflowSelector();
-				promises.push(loadVRWorkflowSelectorPromise);
-				return UtilsService.waitMultiplePromises(promises);
-			}
+                    var rootPromiseNode = {
+                        promises: [vrWorkflowSelectorSelectionChangedDeferred.promise],
+                        getChildNode: function () {
+                            return {
+                                promises: [loadVRWorkflow(selectedVRWorkflowId)],
+                                getChildNode: function () {
+                                    var gridPromises = [];
+                                    if ($scope.scopeModel.hasInArguments)
+                                        gridPromises.push(loadInArgumentsGrid(inArguments));
 
-			return UtilsService.waitMultipleAsyncOperations([setTitle, loadVRWorkflowInfo]).then(function () {
-			}).catch(function (error) {
-				VRNotificationService.notifyExceptionWithClose(error, $scope);
-			}).finally(function () {
-				vrWorkflowSelectorSelectionChangedDeferred = undefined;
-				$scope.scopeModel.isLoading = false;
-			});
-		}
+                                    if ($scope.scopeModel.hasOutArguments)
+                                        gridPromises.push(loadOutArgumentsGrid(outArguments));
 
-		function loadVRWorkflowSelector() {
-			var vrWorkflowSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                                    return {
+                                        promises: gridPromises
+                                    };
+                                }
+                            };
+                        }
+                    };
+                    promises.push(UtilsService.waitPromiseNode(rootPromiseNode));
+                }
+                return UtilsService.waitMultiplePromises(promises);
+            }
 
-			vrWorkflowSelectorReadyDeferred.promise.then(function () {
-				var vrWorkflowSelectorPayload = {};
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadVRWorkflowInfo]).then(function () {
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                vrWorkflowSelectorSelectionChangedDeferred = undefined;
+                $scope.scopeModel.isLoading = false;
+            });
+        }
 
-				if (selectedVRWorkflowId != undefined)
-					vrWorkflowSelectorPayload.selectedIds = selectedVRWorkflowId;
+        function loadVRWorkflowSelector() {
+            var vrWorkflowSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-				if (workflowId != undefined)
-					vrWorkflowSelectorPayload.filter = { ExcludedIds: [workflowId] };
+            vrWorkflowSelectorReadyDeferred.promise.then(function () {
+                var vrWorkflowSelectorPayload = {};
 
-				VRUIUtilsService.callDirectiveLoad(vrWorkflowSelectorAPI, vrWorkflowSelectorPayload, vrWorkflowSelectorLoadDeferred);
-			});
+                if (selectedVRWorkflowId != undefined)
+                    vrWorkflowSelectorPayload.selectedIds = selectedVRWorkflowId;
 
-			return vrWorkflowSelectorLoadDeferred.promise;
-		}
+                if (workflowId != undefined)
+                    vrWorkflowSelectorPayload.filter = { ExcludedIds: [workflowId] };
 
-		function updateActivity() {
-			$scope.scopeModel.isLoading = true;
-			var updatedObject = buildObjFromScope();
-			if ($scope.onActivityUpdated != undefined) {
-				$scope.onActivityUpdated(updatedObject);
-			}
-			$scope.scopeModel.isLoading = false;
-			isNew = false;
-			$scope.modalContext.closeModal();
-		}
+                VRUIUtilsService.callDirectiveLoad(vrWorkflowSelectorAPI, vrWorkflowSelectorPayload, vrWorkflowSelectorLoadDeferred);
+            });
 
-		function buildObjFromScope() {
-			var inArgumentsObject;
-			if ($scope.scopeModel.hasInArguments) {
-				inArgumentsObject = {};
-				for (var x = 0; x < $scope.scopeModel.inArguments.length; x++) {
-					var currentInArgument = $scope.scopeModel.inArguments[x];
-					if (currentInArgument.value != undefined) {
-						inArgumentsObject[currentInArgument.name] = currentInArgument.value;
-					}
-				}
-			}
+            return vrWorkflowSelectorLoadDeferred.promise;
+        }
 
-			var outArgumentsObject;
-			if ($scope.scopeModel.hasOutArguments) {
-				outArgumentsObject = {};
-				for (var x = 0; x < $scope.scopeModel.outArguments.length; x++) {
-					var currentOutArgument = $scope.scopeModel.outArguments[x];
-					if (currentOutArgument.value != undefined) {
-						outArgumentsObject[currentOutArgument.name] = currentOutArgument.value;
-					}
-				}
-			}
+        function updateActivity() {
+            $scope.scopeModel.isLoading = true;
+            var updatedObject = buildObjFromScope();
+            if ($scope.onActivityUpdated != undefined) {
+                $scope.onActivityUpdated(updatedObject);
+            }
+            $scope.scopeModel.isLoading = false;
+            isNew = false;
+            $scope.modalContext.closeModal();
+        }
 
-			return {
-				VRWorkflowName: ($scope.scopeModel.selectedWorkflow != undefined) ? $scope.scopeModel.selectedWorkflow.Name : null,
-				VRWorkflowId: vrWorkflowSelectorAPI.getSelectedIds(),
-				InArguments: inArgumentsObject,
-				OutArguments: outArgumentsObject,
-				DisplayName: $scope.scopeModel.displayName
-			};
-		}
+        function buildObjFromScope() {
+            var inArgumentsObject;
+            if ($scope.scopeModel.hasInArguments) {
+                inArgumentsObject = {};
+                for (var x = 0; x < $scope.scopeModel.inArguments.length; x++) {
+                    var currentInArgument = $scope.scopeModel.inArguments[x];
+                    if (currentInArgument.value != undefined) {
+                        inArgumentsObject[currentInArgument.name] = currentInArgument.value;
+                    }
+                }
+            }
 
-		function loadVRWorkflow(vrWorkflowId) {
-			$scope.scopeModel.hasInArguments = false;
-			$scope.scopeModel.hasOutArguments = false;
+            var outArgumentsObject;
+            if ($scope.scopeModel.hasOutArguments) {
+                outArgumentsObject = {};
+                for (var x = 0; x < $scope.scopeModel.outArguments.length; x++) {
+                    var currentOutArgument = $scope.scopeModel.outArguments[x];
+                    if (currentOutArgument.value != undefined) {
+                        outArgumentsObject[currentOutArgument.name] = currentOutArgument.value;
+                    }
+                }
+            }
 
-			return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowEditorRuntime(vrWorkflowId).then(function (response) {
-				selectedVRWrkflow = response.Entity;
-				if (selectedVRWrkflow != undefined && selectedVRWrkflow.Settings != undefined && selectedVRWrkflow.Settings.Arguments != undefined) {
-					for (var i = 0; i < selectedVRWrkflow.Settings.Arguments.length; i++) {
-						var currentArgumentDefinition = selectedVRWrkflow.Settings.Arguments[i];
-						switch (currentArgumentDefinition.Direction) {
-							case 0: $scope.scopeModel.hasInArguments = true; break;
-							case 1: $scope.scopeModel.hasOutArguments = true; break;
-							case 2: $scope.scopeModel.hasInArguments = true; $scope.scopeModel.hasOutArguments = true; break;
-						}
+            return {
+                VRWorkflowName: ($scope.scopeModel.selectedWorkflow != undefined) ? $scope.scopeModel.selectedWorkflow.Name : null,
+                VRWorkflowId: vrWorkflowSelectorAPI.getSelectedIds(),
+                InArguments: inArgumentsObject,
+                OutArguments: outArgumentsObject,
+                DisplayName: $scope.scopeModel.displayName
+            };
+        }
 
-					}
-				}
-			});
-		}
+        function loadVRWorkflow(vrWorkflowId) {
+            $scope.scopeModel.hasInArguments = false;
+            $scope.scopeModel.hasOutArguments = false;
 
-		function loadInArgumentsGrid(selectedArguments) {
-			$scope.scopeModel.inArguments = [];
-			var inArgumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
-			inArgumentsGridReadyDeferred.promise.then(function () {
-				if (selectedVRWrkflow != undefined && selectedVRWrkflow.Settings != undefined && selectedVRWrkflow.Settings.Arguments != undefined) {
-					for (var i = 0; i < selectedVRWrkflow.Settings.Arguments.length; i++) {
-						var currentArgumentDefinition = selectedVRWrkflow.Settings.Arguments[i];
-						if (currentArgumentDefinition.Direction != 1) {
-							var argValue = tryGetArgumentValue(selectedArguments, currentArgumentDefinition.Name);
-							$scope.scopeModel.inArguments.push({ name: currentArgumentDefinition.Name, value: argValue });
-						}
-					}
-				}
-				inArgumentsGridLoadDeferred.resolve();
-			});
+            return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowEditorRuntime(vrWorkflowId).then(function (response) {
+                selectedVRWrkflow = response.Entity;
+                if (selectedVRWrkflow != undefined && selectedVRWrkflow.Settings != undefined && selectedVRWrkflow.Settings.Arguments != undefined) {
+                    for (var i = 0; i < selectedVRWrkflow.Settings.Arguments.length; i++) {
+                        var currentArgumentDefinition = selectedVRWrkflow.Settings.Arguments[i];
+                        switch (currentArgumentDefinition.Direction) {
+                            case 0: $scope.scopeModel.hasInArguments = true; break;
+                            case 1: $scope.scopeModel.hasOutArguments = true; break;
+                            case 2: $scope.scopeModel.hasInArguments = true; $scope.scopeModel.hasOutArguments = true; break;
+                        }
 
-			return inArgumentsGridLoadDeferred.promise;
-		}
+                    }
+                }
+            });
+        }
 
-		function tryGetArgumentValue(selectedArguments, argumentName) {
-			if (selectedArguments == undefined)
-				return;
+        function loadInArgumentsGrid(selectedArguments) {
+            $scope.scopeModel.inArguments = [];
+            var inArgumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
+            inArgumentsGridReadyDeferred.promise.then(function () {
+                if (selectedVRWrkflow != undefined && selectedVRWrkflow.Settings != undefined && selectedVRWrkflow.Settings.Arguments != undefined) {
+                    for (var i = 0; i < selectedVRWrkflow.Settings.Arguments.length; i++) {
+                        var currentArgumentDefinition = selectedVRWrkflow.Settings.Arguments[i];
+                        if (currentArgumentDefinition.Direction != 1) {
+                            var argValue = tryGetArgumentValue(selectedArguments, currentArgumentDefinition.Name);
+                            $scope.scopeModel.inArguments.push({ name: currentArgumentDefinition.Name, value: argValue });
+                        }
+                    }
+                }
+                inArgumentsGridLoadDeferred.resolve();
+            });
 
-			return selectedArguments[argumentName];
-		}
+            return inArgumentsGridLoadDeferred.promise;
+        }
 
-		function loadOutArgumentsGrid(selectedArguments) {
-			$scope.scopeModel.outArguments = [];
-			var outArgumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
-			outArgumentsGridReadyDeferred.promise.then(function () {
-				if (selectedVRWrkflow != undefined && selectedVRWrkflow.Settings != undefined && selectedVRWrkflow.Settings.Arguments != undefined) {
-					for (var i = 0; i < selectedVRWrkflow.Settings.Arguments.length; i++) {
-						var currentArgumentDefinition = selectedVRWrkflow.Settings.Arguments[i];
-						if (currentArgumentDefinition.Direction != 0) {
-							var argValue = tryGetArgumentValue(selectedArguments, currentArgumentDefinition.Name);
-							$scope.scopeModel.outArguments.push({ name: currentArgumentDefinition.Name, value: argValue });
-						}
-					}
-				}
-				outArgumentsGridLoadDeferred.resolve();
-			});
+        function tryGetArgumentValue(selectedArguments, argumentName) {
+            if (selectedArguments == undefined)
+                return;
 
-			return outArgumentsGridLoadDeferred.promise;
-		}
-	}
+            return selectedArguments[argumentName];
+        }
 
-	appControllers.controller('BusinessProcess_VR_WorkflowActivitySubprocessController', SubprocessEditorController);
+        function loadOutArgumentsGrid(selectedArguments) {
+            $scope.scopeModel.outArguments = [];
+            var outArgumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
+            outArgumentsGridReadyDeferred.promise.then(function () {
+                if (selectedVRWrkflow != undefined && selectedVRWrkflow.Settings != undefined && selectedVRWrkflow.Settings.Arguments != undefined) {
+                    for (var i = 0; i < selectedVRWrkflow.Settings.Arguments.length; i++) {
+                        var currentArgumentDefinition = selectedVRWrkflow.Settings.Arguments[i];
+                        if (currentArgumentDefinition.Direction != 0) {
+                            var argValue = tryGetArgumentValue(selectedArguments, currentArgumentDefinition.Name);
+                            $scope.scopeModel.outArguments.push({ name: currentArgumentDefinition.Name, value: argValue });
+                        }
+                    }
+                }
+                outArgumentsGridLoadDeferred.resolve();
+            });
+
+            return outArgumentsGridLoadDeferred.promise;
+        }
+    }
+
+    appControllers.controller('BusinessProcess_VR_WorkflowActivitySubprocessController', SubprocessEditorController);
 })(appControllers);
