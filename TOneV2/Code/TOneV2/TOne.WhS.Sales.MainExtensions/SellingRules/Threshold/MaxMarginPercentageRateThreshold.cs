@@ -11,7 +11,7 @@ namespace TOne.WhS.Sales.MainExtensions
         public override void Execute(ISellingRuleContext context)
         {
             decimal ratePercentageValue = (context.CurrentRate * Percentage) / 100;
-            decimal calculatedRate = context.CurrentRate - ratePercentageValue;
+            decimal calculatedRate = context.CurrentRate + ratePercentageValue;
 
             context.ViolateRateRule = context.NewRate > calculatedRate;
         }
