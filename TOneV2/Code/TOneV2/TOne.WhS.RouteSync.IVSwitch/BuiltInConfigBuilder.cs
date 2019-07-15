@@ -20,7 +20,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         private Dictionary<int, AccessListTable> GetCustomersGroupedByUser()
         {
             Dictionary<int, AccessListTable> customerDictionary = new Dictionary<int, AccessListTable>();
-            List<AccessListTable> customersLst = MasterDataManager.GetAccessListTables();
+            List<AccessListTable> customersLst = MasterDataManager.GetAccessListTables(new List<int> { (int)State.Active, (int)State.Dormant });
             foreach (var customer in customersLst)
             {
                 if (!customerDictionary.ContainsKey(customer.UserId))

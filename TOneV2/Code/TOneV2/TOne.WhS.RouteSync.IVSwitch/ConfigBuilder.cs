@@ -24,7 +24,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         private Dictionary<string, AccessListTable> GetCustomers()
         {
             var customerByMapping = new Dictionary<string, AccessListTable>();
-            List<AccessListTable> customersLst = MasterDataManager.GetAccessListTables();
+            List<AccessListTable> customersLst = MasterDataManager.GetAccessListTables(new List<int> { (int)State.Active, (int)State.Dormant });
             foreach (var customer in customersLst)
             {
                 string key = string.Format("{0}_{1}", customer.AccountId, customer.GroupId);
