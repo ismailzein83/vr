@@ -26,8 +26,8 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
         };
 
         function getBeSaleZoneTemplate(attrs) {
-
-            return '<vr-np-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" ismultipleselection>' +
+            var ismultipleselection = attrs.ismultipleselection != undefined ? "ismultipleselection" : "";
+            return '<vr-np-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" ' + ismultipleselection+'>' +
                    '</vr-np-salezone-selector>';
         }
 

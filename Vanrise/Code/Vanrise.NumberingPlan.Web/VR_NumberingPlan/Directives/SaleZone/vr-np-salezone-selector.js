@@ -172,7 +172,7 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                         saleZoneSelectorCtrl.isSellingNumberPlanVisible = false;
                         if (selectedIds != undefined) {
                             var input = {
-                                SaleZoneIds: selectedIds,
+                                SaleZoneIds: attrs.ismultipleselection != undefined ? selectedIds: [selectedIds],
                                 SellingNumberPlanId: payload.sellingNumberPlanId
                             };
                             return GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input);
