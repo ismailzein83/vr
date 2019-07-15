@@ -207,6 +207,9 @@
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.DevTools.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DevTools.Business.dll</HintPath>
     </Reference>
@@ -236,6 +239,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
     </Reference>
@@ -256,6 +262,9 @@
     <Reference Include="Vanrise.GenericData.Notification.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.RDBDataStorage">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.RDBDataStorage.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.SQLDataStorage">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.SQLDataStorage.dll</HintPath>
