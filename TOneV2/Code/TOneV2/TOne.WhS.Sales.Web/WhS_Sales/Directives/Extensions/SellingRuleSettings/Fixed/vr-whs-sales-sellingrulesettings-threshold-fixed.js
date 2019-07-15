@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsSalesSellingrulesettingsThresholdFixed', ['$compile', 'VRUIUtilsService', 'UtilsService',
-    function ($compile, VRUIUtilsService, UtilsService) {
+app.directive('vrWhsSalesSellingrulesettingsThresholdFixed', ['$compile', 'VRUIUtilsService', 'UtilsService', 'UISettingsService',
+    function ($compile, VRUIUtilsService, UtilsService, UISettingsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -35,6 +35,7 @@ app.directive('vrWhsSalesSellingrulesettingsThresholdFixed', ['$compile', 'VRUIU
                     currencyDirectiveAPI = api;
                     currencyDirectiveReadyPromiseDeferred.resolve();
                 };
+                $scope.decimalPrecision = UISettingsService.getLongPrecision();
             }
             function loadCurrency(currencyId) {
                 var promises = [];

@@ -33,15 +33,15 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             var ruleDefinitionId = new Guid("3D638C43-0191-464C-9E6E-CAAA5A2E2FDC");
 
-            var sellingProductId = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetSellingProductId(ratePlanContext.OwnerId);
+            var sellingProductId = new CarrierAccountManager().GetSellingProductId(ratePlanContext.OwnerId);
 
-            var currentRateLocator = ratePlanContext.LastRateLocator;
+            var lastRateLocator = ratePlanContext.LastRateLocator;
             var lastRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadLastRoutingProduct());
 
 
             foreach (var zone in allDataByZone.DataByZoneList)
             {
-                var lastCustomerRate = currentRateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, zone.ZoneId);
+                var lastCustomerRate = lastRateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, zone.ZoneId);
                 lastCustomerRate.ThrowIfNull("lastCustomerRate");
                 int routingProductId = 0;
 
