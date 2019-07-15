@@ -749,56 +749,53 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        public void UpdateCustomerAddress(string city,string firstName,string lastName,string addressSeq,string customerId, string contactId, string accountId, string requestId)
+        public void UpdateCustomerData(Guid requestId)
         {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
 
-            SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdateCustomerAddress");
+            esq.AddColumn("StFirstName");
+            esq.AddColumn("StLastName");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StAddressID");
+            var cityId = esq.AddColumn("StCity.Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
             {
-                InputArguments = new CustomerAddressInput
+                var city = entities[0].GetTypedColumnValue<Guid>(cityId.Name);
+                var lastName = entities[0].GetColumnValue("StFirstName");
+                var firstName = entities[0].GetColumnValue("StLastName");
+                var addressId = entities[0].GetColumnValue("StAddressID");  
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
                 {
-                    City = "aaaa",
-                    FirstName = firstName,
-                    LastName = lastName,
-                    AddressSeq = addressSeq,
-                    CommonInputArgument = new CommonInputArgument()
+                    InputArguments = new CustomerAddressInput
                     {
-                        ContactId = contactId,
-                        CustomerId = customerId,
-                        RequestId = requestId
+                        City = city.ToString(),
+                        FirstName = firstName.ToString(),
+                        LastName = lastName.ToString(),
+                        AddressSeq = addressId.ToString(),
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            CustomerId = customerId.ToString(),
+                            RequestId = requestId.ToString()
+                        }
                     }
-                }
-            };
 
-            using (var client = new SOMClient())
-            {
-                client.Post<SOMRequestInput<CustomerAddressInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
-            }
+                };
 
-        }
-
-        public void UpdateCustomerPaymentProfile(string paymentMethodId, string bankCode, string customerId, string accountNumber, string contactId, string accountId, string requestId)
-        {
-
-            SOMRequestInput<CustomerPaymentProfileInput> somRequestInput = new SOMRequestInput<CustomerPaymentProfileInput>
-            {
-                InputArguments = new CustomerPaymentProfileInput
+                using (var client = new SOMClient())
                 {
-                    AccountNumber = accountNumber,
-                    PaymentMethodId = paymentMethodId,
-                    BankCode = bankCode,
-                    CommonInputArgument = new CommonInputArgument()
-                    {
-                        ContactId = contactId,
-                        CustomerId = customerId,
-                        RequestId = requestId
-                    }
+                    client.Post<SOMRequestInput<CustomerAddressInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
                 }
-
-            };
-
-            using (var client = new SOMClient())
-            {
-                client.Post<SOMRequestInput<CustomerPaymentProfileInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerPaymentProfile/StartProcess", somRequestInput);
             }
 
         }
@@ -828,7 +825,6 @@ namespace BPMExtended.Main.Business
                 var paymentMethodId = entities[0].GetColumnValue("StPaymentMethodID");
                 var bankCode = entities[0].GetColumnValue("StBankID");
                 var accountNumber = entities[0].GetColumnValue("StBankAccountID");
-                var paymentMethodName = entities[0].GetColumnValue("StPaymentMethodName");
                 var iban = entities[0].GetColumnValue("StIBAN");
                 var bankName = entities[0].GetColumnValue("StBankName");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
@@ -840,7 +836,6 @@ namespace BPMExtended.Main.Business
                         AccountNumber = accountNumber.ToString(),
                         PaymentMethodId = paymentMethodId.ToString(),
                         BankCode = bankCode.ToString(),
-                        PaymentMethodName= paymentMethodName.ToString(),
                         IBAN = iban.ToString(),
                         BankName= bankName.ToString(),
                         CommonInputArgument = new CommonInputArgument()

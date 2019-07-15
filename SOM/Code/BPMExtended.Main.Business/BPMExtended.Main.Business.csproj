@@ -111,6 +111,7 @@
     <Compile Include="Request Flow Management\OtherChargesFlowManagement.cs" />
     <Compile Include="Request Flow Management\ServiceRemovalFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateContractAddressFlowManagement.cs" />
+    <Compile Include="Request Flow Management\UpdateCustomerFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdatePaymentArrangementFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateRatePlanFlowManagement.cs" />
     <Compile Include="Requests\Administrative\AdministrativeComplaintManager.cs" />
