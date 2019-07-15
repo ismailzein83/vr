@@ -158,7 +158,7 @@
 <vr-tab header="'Editor Definition'">
     <vr-row>
         <vr-columns width="fullrow" haschildcolumns>
-            <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="4"></vr-genericdata-genericbe-editordefinition-settings>
+            <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
         </vr-columns>
     </vr-row>
 </vr-tab>
@@ -169,24 +169,24 @@
         </vr-columns>
     </vr-row>
     <span ng-show="scopeModel.use360Degree" vr-loader="scopeModel.isLoadingThreeHundredSixtyDegreesEditorDirective">
-        <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.on360DegreesEditorDefinitionDirectiveReady" normal-col-num="6" isnotrequired showremoveicon="true"></vr-genericdata-genericbe-editordefinition-settings>
+        <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.on360DegreesEditorDefinitionDirectiveReady" normal-col-num="3" isnotrequired showremoveicon="true"></vr-genericdata-genericbe-editordefinition-settings>
     </span>
 </vr-tab>
 
 <vr-tab header="'Filter Definition'">
     <vr-row vr-loader="scopeModel.isLoadingFilter">
         <vr-columns width="fullrow" haschildcolumns>
-            <vr-genericdata-genericbe-filterdefinition-settings on-ready="scopeModel.onGenericBEFilterDefinitionDirectiveReady" normal-col-num="4"></vr-genericdata-genericbe-filterdefinition-settings>
+            <vr-genericdata-genericbe-filterdefinition-settings on-ready="scopeModel.onGenericBEFilterDefinitionDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-filterdefinition-settings>
         </vr-columns>
     </vr-row>
 </vr-tab>
 
 <vr-tab header="'Order Type'">
     <vr-row>
-        <vr-genericdata-genericbe-orderdirection-selective on-ready="scopeModel.onOrderDirectionSelectorReady" normal-col-num="4"></vr-genericdata-genericbe-orderdirection-selective>
+        <vr-genericdata-genericbe-orderdirection-selective on-ready="scopeModel.onOrderDirectionSelectorReady" normal-col-num="3"></vr-genericdata-genericbe-orderdirection-selective>
     </vr-row>
     <span vr-loader="scopeModel.isLoadingOrderTypeSelector">
-        <vr-genericdata-genericbe-ordertype-selective on-ready="scopeModel.onOrderTypeSelectorReady" normal-col-num="4"></vr-genericdata-genericbe-ordertype-selective>
+        <vr-genericdata-genericbe-ordertype-selective on-ready="scopeModel.onOrderTypeSelectorReady" normal-col-num="3"></vr-genericdata-genericbe-ordertype-selective>
     </span>
 </vr-tab>
 
@@ -194,17 +194,17 @@
     <vr-row>
         <vr-columns width="fullrow">
             <vr-section header="Before Insert Handler" collapsible vr-loader="scopeModel.isLoadingBeforeInsert">
-                <vr-genericdata-genericbe-beforeinserthandler-settings on-ready="scopeModel.onGenericBEBeforeInsertHandlerSettingsReady" normal-col-num="4"></vr-genericdata-genericbe-beforeinserthandler-settings>
+                <vr-genericdata-genericbe-beforeinserthandler-settings on-ready="scopeModel.onGenericBEBeforeInsertHandlerSettingsReady" normal-col-num="3"></vr-genericdata-genericbe-beforeinserthandler-settings>
             </vr-section>
         </vr-columns>
         <vr-columns width="fullrow">
             <vr-section header="After Save Handler" collapsible vr-loader="scopeModel.isLoadingAfterSave">
-                <vr-genericdata-genericbe-aftersavehandler-settings on-ready="scopeModel.onGenericBEAfterSaveHandlerSettingsReady" normal-col-num="4"></vr-genericdata-genericbe-aftersavehandler-settings>
+                <vr-genericdata-genericbe-aftersavehandler-settings on-ready="scopeModel.onGenericBEAfterSaveHandlerSettingsReady" normal-col-num="3"></vr-genericdata-genericbe-aftersavehandler-settings>
             </vr-section>
         </vr-columns>
         <vr-columns width="fullrow">
             <vr-section header="Before Get Filtered Handler" collapsible vr-loader="scopeModel.isLoadingBeforeGetFiltered">
-                <vr-genericdata-genericbe-beforegetfilteredhandler-settings on-ready="scopeModel.onGenericBEBeforeGetFilteredHandlerSettingsReady" normal-col-num="4"></vr-genericdata-genericbe-beforegetfilteredhandler-settings>
+                <vr-genericdata-genericbe-beforegetfilteredhandler-settings on-ready="scopeModel.onGenericBEBeforeGetFilteredHandlerSettingsReady" normal-col-num="3"></vr-genericdata-genericbe-beforegetfilteredhandler-settings>
             </vr-section>
         </vr-columns>
     </vr-row>
