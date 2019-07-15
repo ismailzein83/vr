@@ -23,5 +23,9 @@ namespace Vanrise.GenericData.MainExtensions
         {
             return base.DoesUserHaveAccess(context);
         }
+        public override string IconPath
+        {
+            get { return "/Client/Images/mini-icons/tracking-history.png"; }
+        }
     }
 }
