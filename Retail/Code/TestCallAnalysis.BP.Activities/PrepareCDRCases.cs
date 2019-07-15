@@ -109,7 +109,6 @@ namespace TestCallAnalysis.BP.Activities
                                         {
                                             existingNullCaseEntity.NumberOfCDRs++;
                                             existingNullCaseEntity.LastAttempt = tcanalCaseCDR.LastAttempt;
-                                            prepareCDRCasesOutput.CasesToUpdate.Add(existingNullCaseEntity);
                                         }
                                         else
                                         {
@@ -136,28 +135,37 @@ namespace TestCallAnalysis.BP.Activities
                                         }
                                         else
                                         {
-                                            if (record.ReceivedCallingNumberType.HasValue && record.ReceivedCallingNumberType != ReceivedCallingNumberType.International)
-                                            {
-                                                tcanalCaseCDR.StatusId = fraudStatusId;
-                                                GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
+                                            if (record.ReceivedCallingNumberType == ReceivedCallingNumberType.International)
+                                                continue;
 
-                                                continue;
-                                            }
-                                            else if (!record.ReceivedCallingNumberType.HasValue)
+                                            else 
                                             {
-                                                tcanalCaseCDR.StatusId = suspectStatusId;
-                                                GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
-                                                continue;
-                                            }
-                                            else if (record.GeneratedCalledNumber == null && record.GeneratedCallingNumber == null)
-                                            {
-                                                tcanalCaseCDR.StatusId = suspectStatusId;
-                                                GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
-                                                continue;
+                                                if (record.GeneratedCalledNumber == null && record.GeneratedCallingNumber == null)
+                                                {
+                                                    tcanalCaseCDR.StatusId = suspectStatusId;
+                                                    GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
+                                                    continue;
+                                                }
+
+                                                if (!record.ReceivedCallingNumberType.HasValue)
+                                                {
+                                                    tcanalCaseCDR.StatusId = suspectStatusId;
+                                                    GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
+                                                    continue;
+                                                }
+                                                else 
+                                                {
+                                                    tcanalCaseCDR.StatusId = fraudStatusId;
+                                                    GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
+                                                    continue;
+                                                }
                                             }
                                         }
                                     }
                                 }
+
+                                if (existingNullCaseEntity != null)
+                                    prepareCDRCasesOutput.CasesToUpdate.Add(existingNullCaseEntity);
 
                                 var numberOfInsertedItems = casesToInsert.Count;
                                 if (nullCaseEntity != null)
@@ -218,6 +226,7 @@ namespace TestCallAnalysis.BP.Activities
             }
             else
             {
+                tcanalCaseCDR.NumberOfCDRs++;
                 casesToUpdate.Add(tcanalCaseCDR.CallingNumber, tcanalCaseCDR);
             }
         }

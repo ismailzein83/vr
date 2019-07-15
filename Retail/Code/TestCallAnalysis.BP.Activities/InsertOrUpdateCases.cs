@@ -74,7 +74,7 @@ namespace TestCallAnalysis.BP.Activities
                     }
                 } while (!ShouldStop(handle) && hasItem);
             });
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert case CDRs is done.");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert/Update case CDRs is done.");
         }
     }
 }
