@@ -21,6 +21,7 @@ namespace BPMExtended.Main.Business
                 case welcome: nextStepId = complaint; break;
                 case complaint: nextStepId = technicalStep; break;
                 case technicalStep: nextStepId = completed; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
         }

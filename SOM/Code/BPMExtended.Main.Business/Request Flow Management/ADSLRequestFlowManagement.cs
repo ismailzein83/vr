@@ -55,7 +55,8 @@ namespace BPMExtended.Main.Business
                 case printConfigurationStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = TechnicalStep; break;
                 case TechnicalStep: nextStepId = completedStep; break;
-              
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
+
             }
             return nextStepId;
         }

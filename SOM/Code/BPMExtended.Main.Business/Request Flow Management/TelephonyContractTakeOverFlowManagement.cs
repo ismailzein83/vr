@@ -46,10 +46,8 @@ namespace BPMExtended.Main.Business
                 case printStep: nextStepId = new ContractTakeOverManager().checkBillOnDemand(id) ?billOnDemandStep:new ContractTakeOverManager().hasADSLContract(id)? adslCredentialStep : paymentStep; break;
                 case billOnDemandStep: nextStepId = new ContractTakeOverManager().hasADSLContract(id)? adslCredentialStep : paymentStep; break;
                 case adslCredentialStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = submitToOMStep; break; 
-                     
-                     
-
+                case paymentStep: nextStepId = submitToOMStep; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
         }

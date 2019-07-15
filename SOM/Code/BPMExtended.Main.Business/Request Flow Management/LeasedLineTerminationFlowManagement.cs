@@ -53,18 +53,19 @@ namespace BPMExtended.Main.Business
                 case reasonStep: nextStepId = NBOfActiveContracts(id) == "1" ? billOnDemandStep : attachmentStep; break;
                 case billOnDemandStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = technicalStep; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
 
 
-                //case billOnDemandStep: nextStepId = site1FiberTeamStep; break;
-                //case site1FiberTeamStep: nextStepId = site1MDFTeamStep; break;
-                //case site1MDFTeamStep: nextStepId = site1CabinetTeamStep; break;
-                //case site1CabinetTeamStep: nextStepId = site1DPTeamStep; break;
-                //case site1DPTeamStep: nextStepId = GetFirstMic(id) != null ? micStep : site2MDFTeamStep; break;
-                //case micStep: nextStepId = GetNextMic(id) != null ? micStep:site2FiberTeamStep; break;
-                //case site2FiberTeamStep: nextStepId = site2MDFTeamStep; break;
-                //case site2MDFTeamStep: nextStepId = site2CabinetTeamStep; break;
-                //case site2CabinetTeamStep: nextStepId = site2DPTeamStep; break;
-                //case site2DPTeamStep: nextStepId = completedStep; break;
+                    //case billOnDemandStep: nextStepId = site1FiberTeamStep; break;
+                    //case site1FiberTeamStep: nextStepId = site1MDFTeamStep; break;
+                    //case site1MDFTeamStep: nextStepId = site1CabinetTeamStep; break;
+                    //case site1CabinetTeamStep: nextStepId = site1DPTeamStep; break;
+                    //case site1DPTeamStep: nextStepId = GetFirstMic(id) != null ? micStep : site2MDFTeamStep; break;
+                    //case micStep: nextStepId = GetNextMic(id) != null ? micStep:site2FiberTeamStep; break;
+                    //case site2FiberTeamStep: nextStepId = site2MDFTeamStep; break;
+                    //case site2MDFTeamStep: nextStepId = site2CabinetTeamStep; break;
+                    //case site2CabinetTeamStep: nextStepId = site2DPTeamStep; break;
+                    //case site2DPTeamStep: nextStepId = completedStep; break;
             }
             return nextStepId;
         }

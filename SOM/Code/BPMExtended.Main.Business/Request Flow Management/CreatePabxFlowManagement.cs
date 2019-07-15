@@ -40,7 +40,8 @@ namespace BPMExtended.Main.Business
                 case printStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = submittedtoOM; break;
-                    // case paymentStep: nextStepId = technicalStep; break;
+                // case paymentStep: nextStepId = technicalStep; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
         }

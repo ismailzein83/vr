@@ -73,6 +73,7 @@ namespace BPMExtended.Main.Business
                 case credentialsStep: nextStepId = printCredentialsStep; break;
                 case printCredentialsStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = technicalStep; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
 
             }
             return nextStepId;

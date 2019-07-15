@@ -34,6 +34,7 @@ namespace BPMExtended.Main.Business
                 case address: nextStepId = isAdvantageous ? attachment : payment; break;
                 case payment: nextStepId = attachment; break;
                 case attachment: nextStepId = technical; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
         }

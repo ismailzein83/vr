@@ -35,6 +35,7 @@ namespace BPMExtended.Main.Business
                 case updateRatePlanStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = submitToOMStep; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
         }

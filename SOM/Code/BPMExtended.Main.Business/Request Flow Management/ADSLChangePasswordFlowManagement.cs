@@ -21,6 +21,7 @@ namespace BPMExtended.Main.Business
                 case welcomeStep: nextStepId = newPasswordStep; break;
                 case newPasswordStep: nextStepId = printStep; break;
                 case printStep: nextStepId = completedStep; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
         }

@@ -55,17 +55,18 @@ namespace BPMExtended.Main.Business
                 case paymentMethod: nextStepId = isMicrowave ? paymentMethod : print; break;
                 case print: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = technicalStep; break;
+                default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
 
-                //case print: nextStepId = site1MDFCabling; break;
-                //case site1MDFCabling: nextStepId = site1CabinetTeam; break;
-                //case site1CabinetTeam: nextStepId = site1DPTeam; break;
-                //case site1DPTeam: nextStepId = mic; break;
-                //case mic: nextStepId = site2MDFCabling; break;
-                //case site2MDFCabling: nextStepId = site2CabinetTeam; break;
-                //case site2CabinetTeam: nextStepId = site2DPTeam; break;
-                //case site2DPTeam: nextStepId = fiberTeam; break;
-                //case fiberTeam: nextStepId = microwaveTeam; break;
-                //case microwaveTeam: nextStepId = Completed; break;
+                    //case print: nextStepId = site1MDFCabling; break;
+                    //case site1MDFCabling: nextStepId = site1CabinetTeam; break;
+                    //case site1CabinetTeam: nextStepId = site1DPTeam; break;
+                    //case site1DPTeam: nextStepId = mic; break;
+                    //case mic: nextStepId = site2MDFCabling; break;
+                    //case site2MDFCabling: nextStepId = site2CabinetTeam; break;
+                    //case site2CabinetTeam: nextStepId = site2DPTeam; break;
+                    //case site2DPTeam: nextStepId = fiberTeam; break;
+                    //case fiberTeam: nextStepId = microwaveTeam; break;
+                    //case microwaveTeam: nextStepId = Completed; break;
             }
             return nextStepId;
         }
