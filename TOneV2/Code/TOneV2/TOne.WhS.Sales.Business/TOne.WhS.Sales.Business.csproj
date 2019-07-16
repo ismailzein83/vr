@@ -205,7 +205,6 @@
     <Compile Include="TQI\TQIManager.cs" />
     <Compile Include="TQI\TQIMethodContext.cs" />
     <Compile Include="UtilitiesManager.cs" />
-    <Compile Include="VRExcelFile.cs" />
     <Compile Include="ZoneItem\ZoneRateManager.cs" />
     <Compile Include="ZoneItem\ZoneRouteOptionManager.cs" />
     <Compile Include="ZoneItem\ZoneRPManager.cs" />
