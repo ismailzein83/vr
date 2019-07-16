@@ -1096,15 +1096,23 @@ namespace TOne.WhS.Sales.Business
                 return result;
             }
 
+            #region Rodi
+            List<SaleZone> saleZones = new List<SaleZone>();
+
+            Dictionary<int, DateTime> additionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
+            /*var additionalSaleZones = GetBulkActionAdditionalSaleZones(input.BulkAction, SalePriceListOwnerType.Customer, input.OwnerId, out additionalCountryBEDsByCountryId);
+            if (additionalSaleZones != null)
+                saleZones.AddRange(additionalSaleZones);
+                */
+            // Get the sale zones
+            IEnumerable<SaleZone> ownerSaleZones = GetSaleZones(SalePriceListOwnerType.Customer, input.OwnerId, DateTime.Now, true);
+            if (ownerSaleZones != null)
+                saleZones.AddRange(ownerSaleZones);
+            #endregion
+
+
             Dictionary<string, SaleZone> saleZonesByName = GetSaleZonesEffectiveAfterByName(SalePriceListOwnerType.Customer, input.OwnerId, DateTime.Today);
             Dictionary<string, ZoneChanges> zoneDraftsByZoneName = GetZoneDraftsByZoneName(SalePriceListOwnerType.Customer, input.OwnerId);
-
-            var countryBEDsByCountry = new Dictionary<int, DateTime>();
-            IEnumerable<int> closedCountryIds = new List<int>();
-
-            countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, true);
-            closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, null, DateTime.Today);
-
 
             // Validate the data of the entire file
             var importedFileValidationContext = new ImportedFileValidationContext()
@@ -1121,8 +1129,65 @@ namespace TOne.WhS.Sales.Business
                     result.InvalidDataByRowIndex.Add(invalidImportedRow.RowIndex, invalidImportedRow);
             }
 
-            var additionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
             // Validate the data of each zone
+            int normalPrecisionValue, longPrecisionValue;
+            SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
+
+            #region set draft data
+            Changes draft;
+            IEnumerable<int> newCountryIds;
+            IEnumerable<int> changedCountryIds;
+            Dictionary<long, ZoneChanges> zoneDraftsByZoneId;
+            SetDraftVariables(SalePriceListOwnerType.Customer, input.OwnerId, out draft, out zoneDraftsByZoneId, out newCountryIds, out changedCountryIds);
+            #endregion
+
+            IEnumerable<int> closedCountryIds = new List<int>();
+            closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, draft, DateTime.Today);
+
+            #region prepare rate manager
+            int sellingProductId;
+            Dictionary<int, DateTime> countryBEDsByCountryId;
+            ISaleRateReader currentRateReader = GetCurrentRateReader(SalePriceListOwnerType.Customer, input.OwnerId, saleZones, DateTime.Now, out sellingProductId, out countryBEDsByCountryId, additionalCountryBEDsByCountryId);
+            var rateLocator = new SaleEntityZoneRateLocator(currentRateReader);
+            var rateManager = new ZoneRateManager(SalePriceListOwnerType.Customer, input.OwnerId, sellingProductId, DateTime.Now, draft, input.CurrencyId, longPrecisionValue, rateLocator);
+            #endregion
+
+            #region prepare routing product manager
+            Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
+            SaleEntityRoutingProductReadByRateBED zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { input.OwnerId }, zoneEffectiveDatesByZoneId);
+            SaleEntityZoneRoutingProductLocator zoneRPLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReader);
+            var routingProductManager = new ZoneRPManager(SalePriceListOwnerType.Customer, input.OwnerId, draft, zoneRPLocator, zoneRoutingProductReader);
+            #endregion
+
+            var saleRateManager = new SaleRateManager();
+
+            var setContextZoneItemsInput = new ContextZoneItemInput()
+            {
+                OwnerType = SalePriceListOwnerType.Customer,
+                OwnerId = input.OwnerId,
+                SaleZones = saleZones,
+                Draft = draft,
+                ZoneDraftsByZoneId = zoneDraftsByZoneId,
+                SellingProductId = sellingProductId,
+                NewCountryIds = newCountryIds,
+                ChangedCountryIds = closedCountryIds,
+                EffectiveOn = DateTime.Today,
+                CountryBEDsByCountryId = countryBEDsByCountryId,
+                RoutingDatabaseId = input.RoutingDatabaseId,
+                PolicyConfigId = input.PolicyConfigId,
+                NumberOfOptions = input.NumberOfOptions,
+                CostCalculationMethods = input.CostCalculationMethods.ToList(),
+                CurrencyId = input.CurrencyId,
+                LongPrecisionValue = longPrecisionValue,
+                NormalPrecisionValue = normalPrecisionValue,
+                RateManager = rateManager,
+                RoutingProductManager = routingProductManager,
+                SaleRateManager = saleRateManager
+            };
+
+            Dictionary<long, ZoneItem> zoneItemsByZoneId = null;
+            SetContextZoneItems(ref zoneItemsByZoneId, setContextZoneItemsInput);
+
             for (int i = 0; i < importedRows.Count(); i++)
             {
                 ImportedRow importedRow = importedRows.ElementAt(i);
@@ -1130,17 +1195,31 @@ namespace TOne.WhS.Sales.Business
 
                 if (zoneName != null && importedFileValidationContext.InvalidImportedRows.FindRecord(x => BulkActionUtilities.GetZoneNameKey(x.ImportedRow.Zone) == zoneName) != null)
                     continue;
+
+                ZoneItem zoneItem = null;
                 var existingZone = saleZonesByName.GetRecord(zoneName);
-                var context = new IsImportedRowValidContext()
+                //if (existingZone == null)
+                //throw new DataIntegrityValidationException(string.Format("No existing zone item found with name '{0}'.", zoneName));
+                if (existingZone != null)
+                {
+                    zoneItem = zoneItemsByZoneId.GetRecord(existingZone.SaleZoneId);
+                    //if (zoneItem == null)
+                    //throw new DataIntegrityValidationException(string.Format("No zone item found with id '{0}'.", existingZone.SaleZoneId));
+                }
+
+                var context = new IsImportedTargetMatchRowValidContext()
                 {
                     OwnerId = input.OwnerId,
                     ImportedRow = importedRow,
                     ExistingZone = existingZone,
                     ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
-                    CountryBEDsByCountry = countryBEDsByCountry,
+                    CountryBEDsByCountry = countryBEDsByCountryId,
                     ClosedCountryIds = closedCountryIds,
                     AllowRateZero = allowRateZero,
-                    AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId
+                    AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId,
+                    CostCalculationMethods = input.CostCalculationMethods,
+                    RateCalculationMethod = input.RateCalculationMethod,
+                    ZoneItem = zoneItem
                 };
 
 
@@ -1151,8 +1230,7 @@ namespace TOne.WhS.Sales.Business
                         Zone = importedRow.Zone,
                         Rate = importedRow.Rate,
                         EffectiveDate = DateTime.Now.ToString(),
-                        Status = context.Status,
-                        OtherRates = (context.Status == ImportedRowStatus.OnlyNormalRateValid) ? null : importedRow.OtherRates,
+                        Status = context.Status
                     };
                     DateTime effectiveDateAsDateTime;
                     DateTime.TryParse(DateTime.Now.ToString(), out effectiveDateAsDateTime);

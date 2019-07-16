@@ -182,10 +182,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Sales\Constants\PurchaseSettingsContextEnum.js" />
-    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\Templates\SupplierTargetMatchImportActionTypeTemplate.html" />
-    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-importsuppliertargetmatch.js" />
-    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\Template\SupplierTargetMatchImportValidationResultTemplate.html" />
-    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\vr-whs-sales-bulkaction-validationresult-suppliertargetmatchimport.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\Templates\CustomerTargetMatchImportActionTypeTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-importcustomertargetmatch.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\Template\CustomerTargetMatchImportValidationResultTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\vr-whs-sales-bulkaction-validationresult-customertargetmatchimport.js" />
     <Content Include="WhS_Sales\Views\NoteEditor.html" />
     <Content Include="WhS_Sales\Constants\CountrySelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\CustomerSelectionTypeEnum.js" />

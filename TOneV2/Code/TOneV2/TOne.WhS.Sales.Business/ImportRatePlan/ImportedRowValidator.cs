@@ -32,6 +32,7 @@ namespace TOne.WhS.Sales.Business
                     new CountryValidator(),
                         new ZoneValidator(),
                         new RateValidator(),
+                        new TargetMatchRateValidator(),
                         new EffectiveTargetMatchDateValidator()
                   };
             var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
@@ -147,11 +148,11 @@ namespace TOne.WhS.Sales.Business
                 return false;
             }
         }
-        public bool IsTargetMatchImportedRowValid(IIsImportedRowValidContext context)
+        public bool IsTargetMatchImportedRowValid(IIsImportedTargetMatchRowValidContext context)
         {
             bool isValid = true;
             var errorMessages = new List<string>();
-            var isValidContext = new IsValidContext()
+            var isValidContext = new IsTargetMatchValidContext(context.CostCalculationMethods)
             {
                 OwnerType = context.OwnerType,
                 OwnerId = context.OwnerId,
@@ -162,6 +163,8 @@ namespace TOne.WhS.Sales.Business
                 CountryBEDsByCountry = context.CountryBEDsByCountry,
                 ClosedCountryIds = context.ClosedCountryIds,
                 AllowRateZero = context.AllowRateZero,
+                RateCalculationMethod = context.RateCalculationMethod,
+                ZoneItem = context.ZoneItem
             };
             foreach (IImportedRowValidator validator in _taregtMatchValidators)
             {
@@ -323,6 +326,29 @@ namespace TOne.WhS.Sales.Business
         }
     }
 
+    public class TargetMatchRateValidator : IImportedRowValidator
+    {
+        public bool IsValid(IIsValidContext context)
+        {
+            decimal zoneRate;
+            if (decimal.TryParse(context.ImportedRow.Rate, out zoneRate) && context.ZoneItem != null)
+            {
+
+                var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = context.ZoneItem };
+                context.RateCalculationMethod.CalculateRate(rateCalculationContext);
+                if (rateCalculationContext.Rate.HasValue && rateCalculationContext.Rate.Value > zoneRate)
+                {
+                    context.ErrorMessage = "Less than expected rate";
+                    return false;
+                }
+                context.ErrorMessage = null;
+                return true;
+            }
+            context.ErrorMessage = null;
+            return false;
+        }
+    }
+
     public class EffectiveDateValidator : IImportedRowValidator
     {
         public bool IsValid(IIsValidContext context)
@@ -425,7 +451,7 @@ namespace TOne.WhS.Sales.Business
                 context.CountryBEDsByCountry.TryGetValue(context.ExistingZone.CountryId, out countryBED);
                 var countryName = countryManager.GetCountryName(context.ExistingZone.CountryId);
 
-                 if (countryBED > DateTime.Now)
+                if (countryBED > DateTime.Now)
                 {
                     context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is greater than the effective date '{2}'", countryName, UtilitiesManager.GetDateTimeAsString(countryBED), UtilitiesManager.GetDateTimeAsString(DateTime.Now));
                     return false;

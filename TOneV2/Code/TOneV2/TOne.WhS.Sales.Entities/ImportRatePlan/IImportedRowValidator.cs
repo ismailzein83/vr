@@ -37,5 +37,11 @@ namespace TOne.WhS.Sales.Entities
 		Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
 
         bool AllowRateZero { get; }
+
+        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+
+        RateCalculationMethod RateCalculationMethod { get; set; }
+
+        ZoneItem ZoneItem { get; set; }
     }
 }

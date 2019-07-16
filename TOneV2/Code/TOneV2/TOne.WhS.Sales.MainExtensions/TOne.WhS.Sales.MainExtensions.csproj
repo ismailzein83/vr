@@ -79,7 +79,7 @@
     <Compile Include="BulkActions\ActionTypes\DefaultRoutingProductBulkActionType.cs" />
     <Compile Include="BulkActions\ActionTypes\EEDBulkActionType.cs" />
     <Compile Include="BulkActions\ActionTypes\ImportBulkAction.cs" />
-    <Compile Include="BulkActions\ActionTypes\ImportSupplierTargetMatch.cs" />
+    <Compile Include="BulkActions\ActionTypes\ImportCustomerTargetMatch.cs" />
     <Compile Include="BulkActions\ActionTypes\RateBulkAction.cs" />
     <Compile Include="BulkActions\ActionTypes\RoutingProductBulkActionType.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\AllApplicableZones.cs" />

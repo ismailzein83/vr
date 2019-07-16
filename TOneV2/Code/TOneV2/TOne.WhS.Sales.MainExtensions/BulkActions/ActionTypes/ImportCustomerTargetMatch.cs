@@ -10,11 +10,11 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
-    public class ImportSupplierTargetMatch : BulkActionType
+    public class ImportCustomerTargetMatch : BulkActionType
     {
         private ImportBulkActionValidationCacheManager _cacheManager;
 
-        public ImportSupplierTargetMatch()
+        public ImportCustomerTargetMatch()
         {
             _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<ImportBulkActionValidationCacheManager>();
         }
@@ -25,6 +25,17 @@ namespace TOne.WhS.Sales.MainExtensions
         }
         public long FileId { get; set; }
         public RateCalculationMethod RateCalculationMethod { get; set; }
+
+        public IEnumerable<CostCalculationMethod> CostCalculationMethods { get; set; }
+
+        public int RoutingDatabaseId { get; set; }
+
+        public Guid PolicyConfigId { get; set; }
+
+        public int? NumberOfOptions { get; set; }
+
+        public int CurrencyId { get; set; }
+
         public bool HeaderRowExists { get; set; }
 
         public int OwnerId { get; set; }
@@ -72,9 +83,9 @@ namespace TOne.WhS.Sales.MainExtensions
         public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
         {
             IEnumerable<DraftRateToChange> zoneDraftNewRates = (context.ZoneDraft != null) ? context.ZoneDraft.NewRates : null;
-           
+
             context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate);
-          
+
         }
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
         {
@@ -95,7 +106,13 @@ namespace TOne.WhS.Sales.MainExtensions
                 {
                     FileId = FileId,
                     HeaderRowExists = HeaderRowExists,
-                    OwnerId = OwnerId
+                    OwnerId = OwnerId,
+                    CostCalculationMethods = CostCalculationMethods,
+                    RateCalculationMethod = RateCalculationMethod,
+                    RoutingDatabaseId = RoutingDatabaseId,
+                    PolicyConfigId = PolicyConfigId,
+                    NumberOfOptions = NumberOfOptions,
+                    CurrencyId = CurrencyId
                 });
             });
         }
@@ -128,7 +145,7 @@ namespace TOne.WhS.Sales.MainExtensions
             {
                 newRates.Add(newNormalRate);
             }
-            
+
             return newRates;
         }
     }

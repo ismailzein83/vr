@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeImportsuppliertargetmatch', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', function (WhS_Sales_RatePlanAPIService, WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum) {
+app.directive('vrWhsSalesBulkactionTypeImportcustomertargetmatch', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', function (WhS_Sales_RatePlanAPIService, WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum) {
     return {
         restrict: "E",
         scope: {
@@ -15,7 +15,7 @@ app.directive('vrWhsSalesBulkactionTypeImportsuppliertargetmatch', ['WhS_Sales_R
         },
         controllerAs: "rateBulkActionTypeCtrl",
         bindToController: true,
-        templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ActionTypes/Templates/SupplierTargetMatchImportActionTypeTemplate.html'
+        templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ActionTypes/Templates/CustomerTargetMatchImportActionTypeTemplate.html'
     };
 
     function TargetMatchBulkActionType($scope, targetMatchBulkActionTypeCtrl, $attrs) {
@@ -98,11 +98,16 @@ app.directive('vrWhsSalesBulkactionTypeImportsuppliertargetmatch', ['WhS_Sales_R
             };
 
             api.getData = function () {
-                var data = {
-                    $type: 'TOne.WhS.Sales.MainExtensions.ImportSupplierTargetMatch, TOne.WhS.Sales.MainExtensions',
+                var data = {     
+                    $type: 'TOne.WhS.Sales.MainExtensions.ImportCustomerTargetMatch, TOne.WhS.Sales.MainExtensions',
                     HeaderRowExists: $scope.scopeModel.headerRowExists,
-                    CacheObjectName: cacheObjectName,
+                    CacheObjectName: cacheObjectName,                                     
                     RateCalculationMethod: (directiveAPI != undefined) ? directiveAPI.getData() : null,
+                    CostCalculationMethods: bulkActionContext != undefined ? bulkActionContext.costCalculationMethods : null,
+                    PolicyConfigId: bulkActionContext.policyConfigId,
+                    RoutingDatabaseId: bulkActionContext.routingDatabaseId,
+                    NumberOfOptions: bulkActionContext.numberOfOptions,
+                    CurrencyId : bulkActionContext.currencyId
                 };
                 if ($scope.scopeModel.file != undefined) {
                     data.FileId = $scope.scopeModel.file.fileId;

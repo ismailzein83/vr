@@ -355,6 +355,10 @@
             bulkActionContext.ownerSellingNumberPlanId = ownerSellingNumberPlanId;
             bulkActionContext.longPrecision = longPrecision;
             bulkActionContext.allowRateZero = allowRateZero;
+            bulkActionContext.routingDatabaseId = routingDatabaseId;
+            bulkActionContext.policyConfigId = policyConfigId;
+            bulkActionContext.numberOfOptions = numberOfOptions;
+            bulkActionContext.currencyId = currencyId;
             if (gridQuery != undefined)
                 bulkActionContext.costCalculationMethods = gridQuery.CostCalculationMethods;
             bulkActionContext.getSelectedBulkAction = function () {

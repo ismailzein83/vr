@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionValidationresultSuppliertargetmatchimport', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', 'LabelColorsEnum', function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter,LabelColorsEnum) {
+app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', 'LabelColorsEnum', function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter,LabelColorsEnum) {
     return {
         restrict: "E",
         scope: {
@@ -14,7 +14,7 @@ app.directive('vrWhsSalesBulkactionValidationresultSuppliertargetmatchimport', [
         },
         controllerAs: "rateValidationResultCtrl",
         bindToController: true,
-        templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ValidationResult/Template/SupplierTargetMatchImportValidationResultTemplate.html'
+        templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ValidationResult/Template/CustomerTargetMatchImportValidationResultTemplate.html'
     };
 
     function TargetMatchValidationResult($scope, ctrl, $attrs) {
