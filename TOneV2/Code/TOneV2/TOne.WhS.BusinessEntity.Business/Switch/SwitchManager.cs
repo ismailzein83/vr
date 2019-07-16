@@ -205,14 +205,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private Dictionary<SwitchCDPN, CDPNIdentification> GetCachedMappingSwitchCDPNs(int switchId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetMappingSwitchCDPNs",
+            string cacheName = string.Concat("GetMappingSwitchCDPNs_", switchId);
+
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
-                    ConfigManager configManager = new ConfigManager();
                     Switch currentSwitch = this.GetSwitch(switchId);
                     if (currentSwitch == null)
                         throw new NullReferenceException(string.Format("currentSwitch for ID: {0}", switchId));
 
+                    ConfigManager configManager = new ConfigManager();
                     SwitchCDRMappingConfiguration switchCDRMappingConfiguration = currentSwitch.Settings != null ? currentSwitch.Settings.SwitchCDRMappingConfiguration : null;
 
                     Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = new Dictionary<SwitchCDPN, CDPNIdentification>();
