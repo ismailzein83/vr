@@ -73,6 +73,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Excel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
@@ -149,6 +153,7 @@
     <Compile Include="Country\BulkActionApplicableToCountryFilter.cs" />
     <Compile Include="Country\RPCountrySoldToCustomerFilter.cs" />
     <Compile Include="Country\CountryWithDefaultRateManager.cs" />
+    <Compile Include="CustomerTargetMatchManager.cs" />
     <Compile Include="DefaultItemManager.cs" />
     <Compile Include="ExcludedItemsManager.cs" />
     <Compile Include="ImportRatePlan\ImportBulkActionValidationCacheManager.cs" />
@@ -200,6 +205,7 @@
     <Compile Include="TQI\TQIManager.cs" />
     <Compile Include="TQI\TQIMethodContext.cs" />
     <Compile Include="UtilitiesManager.cs" />
+    <Compile Include="VRExcelFile.cs" />
     <Compile Include="ZoneItem\ZoneRateManager.cs" />
     <Compile Include="ZoneItem\ZoneRouteOptionManager.cs" />
     <Compile Include="ZoneItem\ZoneRPManager.cs" />

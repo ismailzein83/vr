@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CountryWithDefaultRateController.cs" />
+    <Compile Include="Controllers\CustomerTargetMatchController.cs" />
     <Compile Include="Controllers\ExcludedItemsController.cs" />
     <Compile Include="Controllers\PricingTemplateController.cs" />
     <Compile Include="Controllers\SellingRuleController.cs" />
@@ -186,6 +187,7 @@
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-importcustomertargetmatch.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\Template\CustomerTargetMatchImportValidationResultTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\vr-whs-sales-bulkaction-validationresult-customertargetmatchimport.js" />
+    <Content Include="WhS_Sales\Services\APIServices\CustomerTargetMatchAPIService.js" />
     <Content Include="WhS_Sales\Views\NoteEditor.html" />
     <Content Include="WhS_Sales\Constants\CountrySelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\CustomerSelectionTypeEnum.js" />
