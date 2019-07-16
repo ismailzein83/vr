@@ -92,6 +92,25 @@ namespace CP.WhS.Business
                   return clientAccountsInfo == null ? null : clientAccountsInfo.ToDictionary(acc => acc.AccountId, acc => acc);
               });
         }
+        private Dictionary<string, ClientAccountInfo> GetCachedClientWhSAccountsInfoByName(int userId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedClientWhSAccountsInfoByName_{0}", userId),
+              () =>
+              {
+                  Dictionary<string, ClientAccountInfo> carriersByName = new Dictionary<string, ClientAccountInfo>();
+                     var carrierAccountsDic = GetCachedClientWhSAccountsInfo(userId);
+                  if(carrierAccountsDic != null)
+                  {
+                      foreach(var item in carrierAccountsDic)
+                      {
+                          if (!carriersByName.ContainsKey(item.Value.Name))
+                              carriersByName.Add(item.Value.Name, item.Value);
+                      }
+                  }
+                  return carriersByName;
+              });
+        }
+
         private WhSCarrierAccountsBEDefinition GetWhSCarrierAccountsBEDefinition(Guid businessEntityDefinitionId)
         {
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
@@ -136,6 +155,18 @@ namespace CP.WhS.Business
         public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
+        }
+
+
+        public override void GetIdByDescription(IBusinessEntityGetIdByDescriptionContext context)
+        {
+            if (context.FieldDescription == null)
+                return;
+            var userId = SecurityContext.Current.GetLoggedInUserId();
+            var carrierAccountInfo =  GetCachedClientWhSAccountsInfoByName(userId).GetRecord(context.FieldDescription as string);
+            if (carrierAccountInfo == null)
+                return;
+            context.FieldValue = carrierAccountInfo.AccountId;
         }
         #endregion
     }

@@ -300,8 +300,93 @@
     <Reference Include="Vanrise.GenericData.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.DBBaseReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBBaseReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.MySQLReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.MySQLReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.PostgresReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.PostgresReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.SFTPReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SFTPReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Mappers">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Mappers.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Data">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Data.RDB">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Data.SQL">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Extensions">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Web">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Rules.Data.RDB">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.RDB.dll</HintPath>
