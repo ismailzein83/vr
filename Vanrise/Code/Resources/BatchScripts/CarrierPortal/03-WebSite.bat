@@ -52,3 +52,5 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\CarrierPortal\%YYYYMMDD%\Client\Modules\VR_Rules\"
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\CarrierPortal\%YYYYMMDD%\Bin\*.pdb"
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\CarrierPortal\%YYYYMMDD%\Bin\*.config"
+xcopy "C:\TFS\Retail\Code\Output\Retail.BusinessEntity.APIEntities.dll" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\CarrierPortal\%YYYYMMDD%\Bin\"
+xcopy "C:\TFS\Retail\Code\Output\Retail.BusinessEntity.Entities.dll" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\CarrierPortal\%YYYYMMDD%\Bin\"
