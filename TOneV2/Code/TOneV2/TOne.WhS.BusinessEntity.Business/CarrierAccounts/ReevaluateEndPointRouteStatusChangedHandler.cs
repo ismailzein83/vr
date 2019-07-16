@@ -46,67 +46,36 @@ namespace TOne.WhS.BusinessEntity.Business.EventHandler
 						var carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
 						switchItem.Settings.ThrowIfNull("switchItem.Settings", switchItem.SwitchId);
 						switchItem.Settings.RouteSynchronizer.ThrowIfNull("switchItem.Settings.RouteSynchronizer", switchItem.SwitchId);
-						if (eventPayload.IsCarrierAccountStatusChanged)
+
+
+						if (eventPayload.IsCarrierAccountStatusChanged && (eventPayload.IsCustomerRoutingStatusChanged || eventPayload.IsSupplierRoutingStatusChanged))
 						{
-							if (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active)
-							{
-								TryReactivateContext context = new TryReactivateContext
-								{
-									CarrierAccountId = carrierAccountId.ToString()
-								};
-								switchItem.Settings.RouteSynchronizer.TryReactivate(context);
-							}
 							if (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
 							{
-								TryDeactivateContext context = new TryDeactivateContext
-								{
-									CarrierAccountId = carrierAccountId.ToString()
-								};
-								switchItem.Settings.RouteSynchronizer.TryDeactivate(context);
+								UpdateRoutingStatus(eventPayload, carrierAccount, carrierAccountId,switchItem);
+								DeActivateCarrier(carrierAccountId, switchItem);
+							}
+							else
+							{
+								ActivateCarrier(carrierAccountId, switchItem);
+								UpdateRoutingStatus(eventPayload, carrierAccount, carrierAccountId, switchItem);
 							}
 						}
-
-						if (eventPayload.IsCustomerRoutingStatusChanged)
+						else
 						{
-							if (carrierAccount.CustomerSettings.RoutingStatus == RoutingStatus.Blocked)
-							{
-								TryBlockCustomerContext context = new TryBlockCustomerContext
-								{
-									CustomerId = carrierAccountId.ToString(),
-									SwitchName = switchItem.Name
-								};
-								switchItem.Settings.RouteSynchronizer.TryBlockCustomer(context);
-							}
+							UpdateRoutingStatus(eventPayload, carrierAccount, carrierAccountId, switchItem);
 
-							if (carrierAccount.CustomerSettings.RoutingStatus == RoutingStatus.Enabled)
+							if (eventPayload.IsCarrierAccountStatusChanged)
 							{
-								TryUnBlockCustomerContext context = new TryUnBlockCustomerContext
+								if (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active)
 								{
-									CustomerId = carrierAccountId.ToString(),
-								};
-								switchItem.Settings.RouteSynchronizer.TryUnBlockCustomer(context);
-							}
-						}
+									ActivateCarrier(carrierAccountId, switchItem);
+								}
 
-						if (eventPayload.IsSupplierRoutingStatusChanged)
-						{
-
-							if (carrierAccount.SupplierSettings.RoutingStatus == RoutingStatus.Blocked)
-							{
-								TryBlockSupplierContext context = new TryBlockSupplierContext
+								if (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
 								{
-									SupplierId = carrierAccountId.ToString(),
-									SwitchName = switchItem.Name
-								};
-								switchItem.Settings.RouteSynchronizer.TryBlockSupplier(context);
-							}
-							if (carrierAccount.SupplierSettings.RoutingStatus == RoutingStatus.Enabled)
-							{
-								TryUnBlockSupplierContext context = new TryUnBlockSupplierContext
-								{
-									SupplierId = carrierAccountId.ToString(),
-								};
-								switchItem.Settings.RouteSynchronizer.TryUnBlockSupplier(context);
+									DeActivateCarrier(carrierAccountId, switchItem);
+								}
 							}
 						}
 					}
@@ -122,5 +91,82 @@ namespace TOne.WhS.BusinessEntity.Business.EventHandler
 			}
 		}
 
+		private void BlockCustomer(int carrierAccountId, Switch switchItem)
+		{
+			TryBlockCustomerContext context = new TryBlockCustomerContext
+			{
+				CustomerId = carrierAccountId.ToString(),
+				SwitchName = switchItem.Name
+			};
+			switchItem.Settings.RouteSynchronizer.TryBlockCustomer(context);
+		}
+		private void UnBlockCustomer(int carrierAccountId,Switch switchItem)
+		{
+			TryUnBlockCustomerContext context = new TryUnBlockCustomerContext
+			{
+				CustomerId = carrierAccountId.ToString(),
+			};
+			switchItem.Settings.RouteSynchronizer.TryUnBlockCustomer(context);
+		}
+		private void BlockSupplier(int carrierAccountId, Switch switchItem)
+		{
+			TryBlockSupplierContext context = new TryBlockSupplierContext
+			{
+				SupplierId = carrierAccountId.ToString(),
+				SwitchName = switchItem.Name
+			};
+			switchItem.Settings.RouteSynchronizer.TryBlockSupplier(context);
+		}
+		private void UnBlockSupplier(int carrierAccountId, Switch switchItem)
+		{
+			TryUnBlockSupplierContext context = new TryUnBlockSupplierContext
+			{
+				SupplierId = carrierAccountId.ToString(),
+			};
+			switchItem.Settings.RouteSynchronizer.TryUnBlockSupplier(context);
+		}
+		private void ActivateCarrier(int carrierAccountId, Switch switchItem)
+		{
+			TryReactivateContext context = new TryReactivateContext
+			{
+				CarrierAccountId = carrierAccountId.ToString()
+			};
+			switchItem.Settings.RouteSynchronizer.TryReactivate(context);
+		}
+		private void DeActivateCarrier(int carrierAccountId, Switch switchItem)
+		{
+			TryDeactivateContext context = new TryDeactivateContext
+			{
+				CarrierAccountId = carrierAccountId.ToString()
+			};
+			switchItem.Settings.RouteSynchronizer.TryDeactivate(context);
+		}
+		private void UpdateRoutingStatus(CarrierAccountStatusChangedEventPayload eventPayload, CarrierAccount carrierAccount,int carrierAccountId,Switch switchItem) {
+			if (eventPayload.IsCustomerRoutingStatusChanged)
+			{
+				if (carrierAccount.CustomerSettings.RoutingStatus == RoutingStatus.Blocked)
+				{
+					BlockCustomer(carrierAccountId, switchItem);
+				}
+
+				if (carrierAccount.CustomerSettings.RoutingStatus == RoutingStatus.Enabled)
+				{
+					UnBlockCustomer(carrierAccountId, switchItem);
+				}
+			}
+			if (eventPayload.IsSupplierRoutingStatusChanged)
+			{
+
+				if (carrierAccount.SupplierSettings.RoutingStatus == RoutingStatus.Blocked)
+				{
+					BlockSupplier(carrierAccountId, switchItem);
+				}
+
+				if (carrierAccount.SupplierSettings.RoutingStatus == RoutingStatus.Enabled)
+				{
+					UnBlockSupplier(carrierAccountId, switchItem);
+				}
+			}
+		}
 	}
 }

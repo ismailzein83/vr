@@ -24,6 +24,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
 		private Guid s_blockId { get { return new Guid("736137e5-6e5a-4722-ba79-aaef0cc5b07f"); } }
 		private Guid s_inActiveId { get { return new Guid("b61884de-da86-4de6-8630-dd67a1146b78"); } }
 		BusinessEntityStatusHistoryManager _businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
+		BusinessEntityHistoryStackManager _businessEntityHistoryStackManager = new BusinessEntityHistoryStackManager();
+
 		#endregion
 		public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
 		{
@@ -142,10 +144,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
 			{
 				foreach (var endPointId in endPointIds)
 				{
-					var lastBEStatusHistory = _businessEntityStatusHistoryManager.GetLastBusinessEntityStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status");
+					var lastBEStatusHistory = _businessEntityHistoryStackManager.GetLastBusinessEntityHistoryStack(s_businessEntityDefinitionId, endPointId.ToString(), "Status");
 					RouteEndPointHistoryInfo routeEndPointHistoryInfo = Vanrise.Common.Serializer.Deserialize<RouteEndPointHistoryInfo>(lastBEStatusHistory.MoreInfo);
 					if (routeEndPointHistoryInfo.Source == SourceInfo.Automatically)
 					{
+						_businessEntityHistoryStackManager.DeleteHistoryStack(lastBEStatusHistory.BusinessEntityHistoryStackId);
 						Guid statusId = lastBEStatusHistory.PreviousStatusId.HasValue ? lastBEStatusHistory.PreviousStatusId.Value : lastBEStatusHistory.StatusId;
 
 						State state = State.InActive;
@@ -225,10 +228,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
 			{
 				foreach (var routeId in routeIds)
 				{
-					var lastBEStatusHistory = _businessEntityStatusHistoryManager.GetLastBusinessEntityStatusHistory(s_businessEntityDefinitionId, routeId.ToString(), "Status");
+					var lastBEStatusHistory = _businessEntityHistoryStackManager.GetLastBusinessEntityHistoryStack(s_businessEntityDefinitionId, routeId.ToString(), "Status");
 					RouteEndPointHistoryInfo routeEndPointHistoryInfo = Vanrise.Common.Serializer.Deserialize<RouteEndPointHistoryInfo>(lastBEStatusHistory.MoreInfo);
 					if (routeEndPointHistoryInfo.Source == SourceInfo.Automatically)
 					{
+						_businessEntityHistoryStackManager.DeleteHistoryStack(lastBEStatusHistory.BusinessEntityHistoryStackId);
 						Guid statusId = lastBEStatusHistory.PreviousStatusId.HasValue ? lastBEStatusHistory.PreviousStatusId.Value : lastBEStatusHistory.StatusId;
 
 						State state = State.InActive;
@@ -331,10 +335,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
 				{
 					foreach (var endPointId in endPointIds)
 					{
-						var lastBEStatusHistory = _businessEntityStatusHistoryManager.GetLastBusinessEntityStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status");
+						var lastBEStatusHistory = _businessEntityHistoryStackManager.GetLastBusinessEntityHistoryStack(s_businessEntityDefinitionId, endPointId.ToString(), "Status");
 						RouteEndPointHistoryInfo routeEndPointHistoryInfo = Vanrise.Common.Serializer.Deserialize<RouteEndPointHistoryInfo>(lastBEStatusHistory.MoreInfo);
 						if (routeEndPointHistoryInfo.Source == SourceInfo.Automatically)
 						{
+							_businessEntityHistoryStackManager.DeleteHistoryStack(lastBEStatusHistory.BusinessEntityHistoryStackId);
 							Guid statusId = lastBEStatusHistory.PreviousStatusId.HasValue ? lastBEStatusHistory.PreviousStatusId.Value : lastBEStatusHistory.StatusId;
 
 							State state = State.InActive;
@@ -356,10 +361,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
 				{
 					foreach (var routeId in routeIds)
 					{
-						var lastBEStatusHistory = _businessEntityStatusHistoryManager.GetLastBusinessEntityStatusHistory(s_businessEntityDefinitionId, routeId.ToString(), "Status");
+						var lastBEStatusHistory = _businessEntityHistoryStackManager.GetLastBusinessEntityHistoryStack(s_businessEntityDefinitionId, routeId.ToString(), "Status");
 						RouteEndPointHistoryInfo routeEndPointHistoryInfo = Vanrise.Common.Serializer.Deserialize<RouteEndPointHistoryInfo>(lastBEStatusHistory.MoreInfo);
 						if (routeEndPointHistoryInfo.Source == SourceInfo.Automatically)
 						{
+							_businessEntityHistoryStackManager.DeleteHistoryStack(lastBEStatusHistory.BusinessEntityHistoryStackId);
 							Guid statusId = lastBEStatusHistory.PreviousStatusId.HasValue ? lastBEStatusHistory.PreviousStatusId.Value : lastBEStatusHistory.StatusId;
 
 							State state = State.InActive;
@@ -619,16 +625,17 @@ namespace TOne.WhS.RouteSync.IVSwitch
 			{
 				foreach (var endPointStatus in endPointStatuses)
 				{
+					var lastBEStatusHistory = _businessEntityStatusHistoryManager.GetLastBusinessEntityStatusHistory(s_businessEntityDefinitionId, endPointStatus.EndPointId.ToString(), "Status");
 					switch (endPointStatus.Status)
 					{
 						case State.Active:
-							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointStatus.EndPointId.ToString(), "Status", s_activeId, moreInfo);
+							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointStatus.EndPointId.ToString(), "Status", s_activeId, lastBEStatusHistory.PreviousMoreInfo);
 							break;
 						case State.InActive:
-							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointStatus.EndPointId.ToString(), "Status", s_inActiveId, moreInfo);
+							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointStatus.EndPointId.ToString(), "Status", s_inActiveId, lastBEStatusHistory.PreviousMoreInfo);
 							break;
 						case State.Block:
-							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointStatus.EndPointId.ToString(), "Status", s_blockId, moreInfo);
+							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointStatus.EndPointId.ToString(), "Status", s_blockId, lastBEStatusHistory.PreviousMoreInfo);
 							break;
 					}
 				}
@@ -637,16 +644,17 @@ namespace TOne.WhS.RouteSync.IVSwitch
 			{
 				foreach (var routeStatus in routeStatuses)
 				{
+					var lastBEStatusHistory = _businessEntityStatusHistoryManager.GetLastBusinessEntityStatusHistory(s_businessEntityDefinitionId, routeStatus.RouteId.ToString(), "Status");
 					switch (routeStatus.Status)
 					{
 						case State.Active:
-							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeStatus.RouteId.ToString(), "Status", s_activeId, moreInfo);
+							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeStatus.RouteId.ToString(), "Status", s_activeId, lastBEStatusHistory.PreviousMoreInfo);
 							break;
 						case State.InActive:
-							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeStatus.RouteId.ToString(), "Status", s_inActiveId, moreInfo);
+							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeStatus.RouteId.ToString(), "Status", s_inActiveId, lastBEStatusHistory.PreviousMoreInfo);
 							break;
 						case State.Block:
-							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeStatus.RouteId.ToString(), "Status", s_blockId, moreInfo);
+							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeStatus.RouteId.ToString(), "Status", s_blockId, lastBEStatusHistory.PreviousMoreInfo);
 							break;
 					}
 				}
@@ -661,14 +669,13 @@ namespace TOne.WhS.RouteSync.IVSwitch
 				{
 					switch (currentState)
 					{
-						case State.Active:
-							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_activeId, moreInfo);
-							break;
 						case State.InActive:
 							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_inActiveId, moreInfo);
+							_businessEntityHistoryStackManager.InsertHistoryStack(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_inActiveId, moreInfo);
 							break;
 						case State.Block:
 							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_blockId, moreInfo);
+							_businessEntityHistoryStackManager.InsertHistoryStack(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_blockId, moreInfo);
 							break;
 					}
 				}
@@ -679,14 +686,13 @@ namespace TOne.WhS.RouteSync.IVSwitch
 				{
 					switch (currentState)
 					{
-						case State.Active:
-							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeId.ToString(), "Status", s_activeId, moreInfo);
-							break;
 						case State.InActive:
 							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeId.ToString(), "Status", s_inActiveId, moreInfo);
+							_businessEntityHistoryStackManager.InsertHistoryStack(s_businessEntityDefinitionId, routeId.ToString(), "Status", s_inActiveId, moreInfo);
 							break;
 						case State.Block:
 							_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, routeId.ToString(), "Status", s_blockId, moreInfo);
+							_businessEntityHistoryStackManager.InsertHistoryStack(s_businessEntityDefinitionId, routeId.ToString(), "Status", s_blockId, moreInfo);
 							break;
 					}
 				}
@@ -695,8 +701,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
 
 		private void ReactivateEndPointRoutesStatusHistories(List<EndPointStatus> endPointStatuses, List<RouteStatus> routeStatuses)
 		{
-			IRouteManager routeManager = NPManagerFactory.GetManager<IRouteManager>();
-			IEndPointManager endPointManager = NPManagerFactory.GetManager<IEndPointManager>();
 			if (endPointStatuses != null)
 			{
 				foreach (var endPointStatus in endPointStatuses)
