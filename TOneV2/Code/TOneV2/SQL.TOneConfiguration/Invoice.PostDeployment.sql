@@ -158,7 +158,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('E24A36DA-C72E-49B4-AFC6-885DDA003E1A','Invoice Types','Invoice Types','#/view/VR_Invoice/Views/InvoiceTypeManagement'					,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Invoice/InvoiceType/GetFilteredInvoiceTypes',null,null,null												,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',40),
-('85868106-9188-4aa7-9191-321be53f32b0','Invoice Settings','Invoice Settings','#/view/VR_Invoice/Views/InvocieSettingManagement','baaf681e-ab1c-4a64-9a35-3f3951398881',NULL,NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Invoice.InvoiceSettings","ViewNameResourceKey":"Invoice.InvoiceSettings"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',35)
+('85868106-9188-4aa7-9191-321be53f32b0','Invoice Settings','Invoice Settings','#/view/VR_Invoice/Views/InvocieSettingManagement','baaf681e-ab1c-4a64-9a35-3f3951398881',NULL,NULL,NULL,'{"$type":"Vanrise.Invoice.Entities.InvoiceSettingsViewSettings, Vanrise.Invoice.Entities","ViewTitleResourceKey":"Invoice.InvoiceSettings","ViewNameResourceKey":"Invoice.InvoiceSettings"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',35)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
