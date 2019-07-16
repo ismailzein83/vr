@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
-
+using Vanrise.Security.Business;
+using Vanrise.Common;
 namespace Vanrise.GenericData.Business
 {
     public class VRRestAPIBusinessEntityManager : BaseBusinessEntityManager
@@ -73,7 +74,25 @@ namespace Vanrise.GenericData.Business
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
             return vrConnection.Settings as VRInterAppRestConnection;
         }
+        private Dictionary<string, BusinessEntityInfo> GetCachedBusinessEntitiesInfoByName(Guid businessEntityDefinitionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBusinessEntitiesInfoByName", businessEntityDefinitionId,
+               () =>
+               {
+                   Dictionary<string, BusinessEntityInfo> results = new Dictionary<string, BusinessEntityInfo>();
 
+                   var businessEntities = GetCachedBusinessEntitiesInfo(businessEntityDefinitionId);
+                   if(businessEntities != null)
+                   {
+                       foreach(var item in businessEntities)
+                       {
+                           if(!results.ContainsKey(item.Value.Description))
+                           results.Add(item.Value.Description, item.Value);
+                       }
+                   }
+                   return results;
+               });
+        }
         #endregion
 
         #region Private Classes
@@ -130,7 +149,16 @@ namespace Vanrise.GenericData.Business
         {
             throw new NotImplementedException();
         }
-
+        public override void GetIdByDescription(IBusinessEntityGetIdByDescriptionContext context)
+        {
+            if (context.FieldDescription == null)
+                return;
+            var userId = SecurityContext.Current.GetLoggedInUserId();
+            var businessEntity = GetCachedBusinessEntitiesInfoByName(context.BusinessEntityDefinitionId).GetRecord(context.FieldDescription as string);
+            if (businessEntity == null)
+                return;
+            context.FieldValue = businessEntity.BusinessEntityId;
+        }
         public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
