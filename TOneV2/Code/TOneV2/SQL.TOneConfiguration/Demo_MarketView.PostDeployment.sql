@@ -86,6 +86,32 @@
               end
             ----------------------------------------------------------------------------------------------------
               
+			               --- [sec].[Module]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('5e09551d-2c7e-4694-9b69-b03f4620c35c','/Client/Images/menu-icons/busines intel.png',NULL,'False','2019-07-16 18:30:42.313','Traffic Exchange',NULL,2,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',NULL)
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url]))
+                merge[sec].[Module] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [ID]=s.[ID] ,[Icon]=s.[Icon] ,[DefaultViewId]=s.[DefaultViewId] ,[AllowDynamic]=s.[AllowDynamic] ,[LastModifiedTime]=s.[LastModifiedTime] ,[Name]=s.[Name] ,[ParentId]=s.[ParentId] ,[Rank]=s.[Rank] ,[RenderedAsView]=s.[RenderedAsView] ,[Settings]=s.[Settings] ,[Url]=s.[Url] 
+                 when not matched by target then
+                 insert([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url])
+                 values(s.[ID], s.[Icon], s.[DefaultViewId], s.[AllowDynamic], s.[LastModifiedTime], s.[Name], s.[ParentId], s.[Rank], s.[RenderedAsView], s.[Settings], s.[Url]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
 
                  --- [sec].[View]-------------------------------------------------------------------
                  -----------------------------------------------------------------------------------------------
@@ -173,30 +199,5 @@
             ----------------------------------------------------------------------------------------------------
               
 
-                 --- [sec].[Module]-------------------------------------------------------------------
-                 -----------------------------------------------------------------------------------------------
-                 begin
-                 
-                 set nocount on;
-                 
-                 ;with cte_data([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url])
-                  as (select* from (values
-                 --//////////////////////////////////////////////////////////////////////////////////////////////////
-                       ('5e09551d-2c7e-4694-9b69-b03f4620c35c','/Client/Images/menu-icons/busines intel.png',NULL,'False','2019-07-16 18:30:42.313','Traffic Exchange',NULL,2,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',NULL)
-                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                )c([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url]))
-                merge[sec].[Module] as t
-                using  cte_data as s
-                on            1=1 and t.[ID]=s.[ID]
-                  
-                  when matched then
-                 update set
-                 [ID]=s.[ID] ,[Icon]=s.[Icon] ,[DefaultViewId]=s.[DefaultViewId] ,[AllowDynamic]=s.[AllowDynamic] ,[LastModifiedTime]=s.[LastModifiedTime] ,[Name]=s.[Name] ,[ParentId]=s.[ParentId] ,[Rank]=s.[Rank] ,[RenderedAsView]=s.[RenderedAsView] ,[Settings]=s.[Settings] ,[Url]=s.[Url] 
-                 when not matched by target then
-                 insert([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url])
-                 values(s.[ID], s.[Icon], s.[DefaultViewId], s.[AllowDynamic], s.[LastModifiedTime], s.[Name], s.[ParentId], s.[Rank], s.[RenderedAsView], s.[Settings], s.[Url]);
-                  
-            ----------------------------------------------------------------------------------------------------
-              end
-            ----------------------------------------------------------------------------------------------------
+    
               
