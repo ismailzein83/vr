@@ -214,7 +214,7 @@ namespace Retail.Runtime
                     dataRecord.AttemptDateTime = DateTime.ParseExact(rowData[1], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
                     if (!string.IsNullOrEmpty(rowData[14]))
-                        dataRecord.Duration = decimal.Parse(rowData[14]);
+                        dataRecord.Volume = decimal.Parse(rowData[14]);
 
                     if (!string.IsNullOrEmpty(rowData[15]))
                         dataRecord.Amount = decimal.Parse(rowData[15]);
@@ -232,7 +232,7 @@ namespace Retail.Runtime
 
             if (dataRecords.Count > 0)
             {
-                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Data", "RetailBilling_Data");
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(dataRecords, "#RECORDSCOUNT# of Data", "RetailBilling_Data");
                 mappedBatches.Add("Data Transformation Stage", batch);
             }
 
