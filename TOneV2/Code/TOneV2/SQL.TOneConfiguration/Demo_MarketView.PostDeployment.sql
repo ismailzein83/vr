@@ -96,9 +96,9 @@
                  ;with cte_data([ID],[DevProjectID],[Content],[Audience],[ActionNames],[CreatedTime],[IsDeleted],[LastModifiedTime],[Module],[Name],[Rank],[Settings],[Title],[Type],[Url])
                   as (select* from (values
                  --//////////////////////////////////////////////////////////////////////////////////////////////////
-                       ('0c407fba-7240-4d4c-81af-69e38b59f309','49d27520-a11d-419f-b984-0667816817e8',NULL,NULL,NULL,'2019-07-15 14:33:38.050',NULL,'2019-07-15 14:39:15.903','89254e36-5d91-4db1-970f-9bfef404679a','Market Intelligence',9,NULL,'Market Intelligence','372ed3cb-4b7b-4464-9abf-59cd7b08bd23','#/view/CP_WhS/Elements/MarketView/Views/MarketViewManagement'),
-('4b482e96-f71a-46e9-9367-79c60913f31f','49d27520-a11d-419f-b984-0667816817e8',NULL,NULL,NULL,'2019-07-15 13:30:53.240',NULL,'2019-07-15 13:30:53.240','89254e36-5d91-4db1-970f-9bfef404679a','Bids',NULL,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"0dd77d50-c46b-4bf4-a1d6-be090f91a1df"}]}}','Bids','b99b2b0a-9a80-49fc-b68f-c946e1628595',NULL),
-('8606c421-61b0-41cd-a2a6-a102f155dfc6','49d27520-a11d-419f-b984-0667816817e8',NULL,NULL,NULL,'2019-07-15 13:31:07.357',NULL,'2019-07-15 13:31:07.357','89254e36-5d91-4db1-970f-9bfef404679a','Asks',NULL,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"fe9167c7-a7fb-47e4-bc45-843403e96968"}]}}','Asks','b99b2b0a-9a80-49fc-b68f-c946e1628595',NULL)
+                       ('0c407fba-7240-4d4c-81af-69e38b59f309','49d27520-a11d-419f-b984-0667816817e8',NULL,NULL,NULL,'2019-07-15 14:33:38.050',NULL,'2019-07-16 18:30:42.320','5e09551d-2c7e-4694-9b69-b03f4620c35c','Market Intelligence',2,NULL,'Market Intelligence','372ed3cb-4b7b-4464-9abf-59cd7b08bd23','#/view/CP_WhS/Elements/MarketView/Views/MarketViewManagement'),
+('4b482e96-f71a-46e9-9367-79c60913f31f','49d27520-a11d-419f-b984-0667816817e8',NULL,NULL,NULL,'2019-07-15 13:30:53.240',NULL,'2019-07-16 18:30:42.320','5e09551d-2c7e-4694-9b69-b03f4620c35c','Bids',3,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"0dd77d50-c46b-4bf4-a1d6-be090f91a1df"}]}}','Bids','b99b2b0a-9a80-49fc-b68f-c946e1628595',NULL),
+('8606c421-61b0-41cd-a2a6-a102f155dfc6','49d27520-a11d-419f-b984-0667816817e8',NULL,NULL,NULL,'2019-07-15 13:31:07.357',NULL,'2019-07-16 18:30:42.320','5e09551d-2c7e-4694-9b69-b03f4620c35c','Asks',4,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"fe9167c7-a7fb-47e4-bc45-843403e96968"}]}}','Asks','b99b2b0a-9a80-49fc-b68f-c946e1628595',NULL)
                  --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                 )c([ID],[DevProjectID],[Content],[Audience],[ActionNames],[CreatedTime],[IsDeleted],[LastModifiedTime],[Module],[Name],[Rank],[Settings],[Title],[Type],[Url]))
                 merge[sec].[View] as t
@@ -167,6 +167,34 @@
                  when not matched by target then
                  insert([ID],[LastModifiedTime],[CreatedTime],[ConfigType],[Name],[Settings],[Title])
                  values(s.[ID], s.[LastModifiedTime], s.[CreatedTime], s.[ConfigType], s.[Name], s.[Settings], s.[Title]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              
+
+                 --- [sec].[Module]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('5e09551d-2c7e-4694-9b69-b03f4620c35c','/Client/Images/menu-icons/busines intel.png',NULL,'False','2019-07-16 18:30:42.313','Traffic Exchange',NULL,2,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',NULL)
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url]))
+                merge[sec].[Module] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [ID]=s.[ID] ,[Icon]=s.[Icon] ,[DefaultViewId]=s.[DefaultViewId] ,[AllowDynamic]=s.[AllowDynamic] ,[LastModifiedTime]=s.[LastModifiedTime] ,[Name]=s.[Name] ,[ParentId]=s.[ParentId] ,[Rank]=s.[Rank] ,[RenderedAsView]=s.[RenderedAsView] ,[Settings]=s.[Settings] ,[Url]=s.[Url] 
+                 when not matched by target then
+                 insert([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url])
+                 values(s.[ID], s.[Icon], s.[DefaultViewId], s.[AllowDynamic], s.[LastModifiedTime], s.[Name], s.[ParentId], s.[Rank], s.[RenderedAsView], s.[Settings], s.[Url]);
                   
             ----------------------------------------------------------------------------------------------------
               end

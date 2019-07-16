@@ -282,10 +282,10 @@
               "ActionNames": null,
               "CreatedTime": "2019-07-15T14:33:38.05",
               "IsDeleted": null,
-              "LastModifiedTime": "2019-07-15T14:39:15.903",
-              "Module": "89254e36-5d91-4db1-970f-9bfef404679a",
+              "LastModifiedTime": "2019-07-16T18:30:42.32",
+              "Module": "5e09551d-2c7e-4694-9b69-b03f4620c35c",
               "Name": "Market Intelligence",
-              "Rank": 9,
+              "Rank": 2,
               "Settings": null,
               "Title": "Market Intelligence",
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
@@ -301,10 +301,10 @@
               "ActionNames": null,
               "CreatedTime": "2019-07-15T13:30:53.24",
               "IsDeleted": null,
-              "LastModifiedTime": "2019-07-15T13:30:53.24",
-              "Module": "89254e36-5d91-4db1-970f-9bfef404679a",
+              "LastModifiedTime": "2019-07-16T18:30:42.32",
+              "Module": "5e09551d-2c7e-4694-9b69-b03f4620c35c",
               "Name": "Bids",
-              "Rank": null,
+              "Rank": 3,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"0dd77d50-c46b-4bf4-a1d6-be090f91a1df\"}]}}",
               "Title": "Bids",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
@@ -320,10 +320,10 @@
               "ActionNames": null,
               "CreatedTime": "2019-07-15T13:31:07.357",
               "IsDeleted": null,
-              "LastModifiedTime": "2019-07-15T13:31:07.357",
-              "Module": "89254e36-5d91-4db1-970f-9bfef404679a",
+              "LastModifiedTime": "2019-07-16T18:30:42.32",
+              "Module": "5e09551d-2c7e-4694-9b69-b03f4620c35c",
               "Name": "Asks",
-              "Rank": null,
+              "Rank": 4,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"fe9167c7-a7fb-47e4-bc45-843403e96968\"}]}}",
               "Title": "Asks",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
@@ -550,6 +550,103 @@
           },
           {
             "ColumnName": "Title",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "8b7b060d-0b93-4408-a8ba-e9148d84c758",
+      "Schema": "sec",
+      "TableName": "Module",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "5e09551d-2c7e-4694-9b69-b03f4620c35c",
+              "Icon": "/Client/Images/menu-icons/busines intel.png",
+              "DefaultViewId": null,
+              "AllowDynamic": false,
+              "LastModifiedTime": "2019-07-16T18:30:42.313",
+              "Name": "Traffic Exchange",
+              "ParentId": null,
+              "Rank": 2,
+              "RenderedAsView": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\"}",
+              "Url": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Icon",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DefaultViewId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "AllowDynamic",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ParentId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Rank",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "RenderedAsView",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Url",
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": false
