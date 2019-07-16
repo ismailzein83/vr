@@ -117,20 +117,20 @@ namespace NP.IVSwitch.Data.Postgres
 		public bool BlockRoute(Route route)
 		{
 			string cmdBlockRoute = string.Format("update routes set state_id={0} where route_id={1}", (int)State.Block, route.RouteId);
-			ExecuteNonQueryText(cmdBlockRoute, cmd => { });
-			return true;
+			var effectedrows=ExecuteNonQueryText(cmdBlockRoute, cmd => { });
+			return effectedrows>0;
 		}
 		public bool InActivateRoute(Route route)
 		{
 			string cmdInActivateRoute = string.Format("update routes set state_id={0} where route_id={1}", (int)State.InActive, route.RouteId);
-			ExecuteNonQueryText(cmdInActivateRoute, cmd => { });
-			return true;
+			var effectedRows=ExecuteNonQueryText(cmdInActivateRoute, cmd => { });
+			return effectedRows>0;
 		}
 		public bool ActivateRoute(Route route)
 		{
 			string cmdInActivateRoute = string.Format("update routes set state_id={0} where route_id={1}", (int)State.Active, route.RouteId);
-			ExecuteNonQueryText(cmdInActivateRoute, cmd => { });
-			return true;
+			var effectedRows=ExecuteNonQueryText(cmdInActivateRoute, cmd => { });
+			return effectedRows>0;
 		}
 
 		#endregion

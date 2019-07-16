@@ -18,6 +18,7 @@ using Vanrise.Common.Business;
 using Vanrise.Caching;
 using NP.IVSwitch.Entities.RouteTable;
 
+
 namespace NP.IVSwitch.Business
 {
 	public class EndPointManager : IEndPointManager
@@ -27,6 +28,8 @@ namespace NP.IVSwitch.Business
 		private static Guid s_blockId { get { return new Guid("736137e5-6e5a-4722-ba79-aaef0cc5b07f"); } }
 		private static Guid s_inActiveId { get { return new Guid("b61884de-da86-4de6-8630-dd67a1146b78"); } }
 		BusinessEntityStatusHistoryManager _businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
+		BusinessEntityHistoryStackManager _businessEntityHistoryStackManager = new BusinessEntityHistoryStackManager();
+
 
 		#region Public Methods
 		public EndPoint GetEndPointHistoryDetailbyHistoryId(int endPointHistoryId)
@@ -1010,12 +1013,15 @@ namespace NP.IVSwitch.Business
 			{
 				case State.Active:
 					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_activeId, moreInfo);
+					_businessEntityHistoryStackManager.InsertHistoryStack(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_activeId, moreInfo);
 					break;
 				case State.InActive:
 					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_inActiveId, moreInfo);
+					_businessEntityHistoryStackManager.InsertHistoryStack(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_inActiveId, moreInfo);
 					break;
 				case State.Block:
 					_businessEntityStatusHistoryManager.InsertStatusHistory(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_blockId, moreInfo);
+					_businessEntityHistoryStackManager.InsertHistoryStack(s_businessEntityDefinitionId, endPointId.ToString(), "Status", s_blockId, moreInfo);
 					break;
 			}
 		}

@@ -22,6 +22,7 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 			var gridAPI;
 			var gridDrillDownTabsObj;
 			var carrierAccountId;
+			var isInActiveCarrierAccount;
 
 			function initializeController() {
 				$scope.scopeModel = {};
@@ -92,28 +93,33 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 				};
 				$scope.scopeModel.menuActions = function (dataItem) {
 					var menuActions = [];
-					if (dataItem != undefined && dataItem.Entity != undefined) {
-						if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Active.value) {
-							menuActions.push(editMenuAction);
-							menuActions.push(cloneMenuAction);
-							menuActions.push(blockMenuAction);
-							menuActions.push(inActiveMenuAction);
-						}
-						else
-							if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Inactive.value) {
-								menuActions.push(vieweMenuAction);
-								menuActions.push(activeMenuAction);
-							}
-							else if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Blocked.value) {
-								menuActions.push(vieweMenuAction);
-								menuActions.push(activeMenuAction);
-								menuActions.push(inActiveMenuAction);
-							}
-							else {
-								menuActions.push(activeMenuAction);
+					if (isInActiveCarrierAccount) {
+						menuActions.push(vieweMenuAction);
+					}
+					else {
+						if (dataItem != undefined && dataItem.Entity != undefined) {
+							if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Active.value) {
 								menuActions.push(editMenuAction);
 								menuActions.push(cloneMenuAction);
+								menuActions.push(blockMenuAction);
+								menuActions.push(inActiveMenuAction);
 							}
+							else
+								if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Inactive.value) {
+									menuActions.push(vieweMenuAction);
+									menuActions.push(activeMenuAction);
+								}
+								else if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Blocked.value) {
+									menuActions.push(vieweMenuAction);
+									menuActions.push(activeMenuAction);
+									menuActions.push(inActiveMenuAction);
+								}
+								else {
+									menuActions.push(activeMenuAction);
+									menuActions.push(editMenuAction);
+									menuActions.push(cloneMenuAction);
+								}
+						}
 					}
 					if (menuActions.length > 0) {
 						return menuActions;
@@ -131,7 +137,10 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 						$scope.scopeModel.isCarrierAccountBlockorInActive = false;
 						if (response != undefined) {
 							if (response.CarrierAccountSettings != undefined && response.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
+							{
+								isInActiveCarrierAccount = true;
 								$scope.scopeModel.isCarrierAccountBlockorInActive = true;
+							}
 							else
 								if (response.CustomerSettings != undefined && response.SupplierSettings.RoutingStatus == WhS_BE_RoutingStatusEnum.Blocked.value)
 									$scope.scopeModel.isCarrierAccountBlockorInActive = true;

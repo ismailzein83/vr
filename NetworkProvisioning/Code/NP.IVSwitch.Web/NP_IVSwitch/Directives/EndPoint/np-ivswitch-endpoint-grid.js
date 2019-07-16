@@ -24,6 +24,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 			var gridAPI;
 			var gridDrillDownTabsObj;
 			var carrierAccountId;
+			var isInActiveCarrierAccount;
 			function initializeController() {
 				$scope.scopeModel = {};
 				$scope.scopeModel.endPoint = [];
@@ -79,26 +80,31 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 				};
 				$scope.scopeModel.menuActions = function (dataItem) {
 					var menuActions = [];
-					if (dataItem != undefined && dataItem.Entity != undefined) {
-						if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Active.value) {
-							menuActions.push(editMenuAction);
-							menuActions.push(cloneMenuAction);
-							menuActions.push(blockMenuAction);
-							menuActions.push(inActiveMenuAction);
-						}
-						else if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Inactive.value) {
-							menuActions.push(vieweMenuAction);
-							menuActions.push(activeMenuAction);
-						}
-						else if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Blocked.value) {
-							menuActions.push(vieweMenuAction);
-							menuActions.push(activeMenuAction);
-							menuActions.push(inActiveMenuAction);
-						}
-						else {
-							menuActions.push(activeMenuAction);
-							menuActions.push(editMenuAction);
-							menuActions.push(cloneMenuAction);
+					if (isInActiveCarrierAccount) {
+						menuActions.push(vieweMenuAction);
+					}
+					else {
+						if (dataItem != undefined && dataItem.Entity != undefined) {
+							if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Active.value) {
+								menuActions.push(editMenuAction);
+								menuActions.push(cloneMenuAction);
+								menuActions.push(blockMenuAction);
+								menuActions.push(inActiveMenuAction);
+							}
+							else if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Inactive.value) {
+								menuActions.push(vieweMenuAction);
+								menuActions.push(activeMenuAction);
+							}
+							else if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Blocked.value) {
+								menuActions.push(vieweMenuAction);
+								menuActions.push(activeMenuAction);
+								menuActions.push(inActiveMenuAction);
+							}
+							else {
+								menuActions.push(activeMenuAction);
+								menuActions.push(editMenuAction);
+								menuActions.push(cloneMenuAction);
+							}
 						}
 					}
 					if (menuActions.length > 0) {
@@ -131,7 +137,10 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 						$scope.scopeModel.isCarrierAccountBlockorInActive = false;
 						if (response != undefined) {
 							if (response.CarrierAccountSettings != undefined && response.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
+							{
+								isInActiveCarrierAccount=true
 								$scope.scopeModel.isCarrierAccountBlockorInActive = true;
+							}
 							else
 								if (response.CustomerSettings != undefined && response.CustomerSettings.RoutingStatus == WhS_BE_RoutingStatusEnum.Blocked.value)
 									$scope.scopeModel.isCarrierAccountBlockorInActive = true;
@@ -159,7 +168,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 					gridDrillDownTabsObj.setDrillDownExtensionObject(updatedEndPoint);
 					gridAPI.itemUpdated(updatedEndPoint);
 				};
-				NP_IVSwitch_EndPointService.editEndPoint(EndPointItem.Entity.EndPointId, onEndPointUpdated, false);
+				NP_IVSwitch_EndPointService.editEndPoint(EndPointItem.Entity.EndPointId, onEndPointUpdated);
 			}
 
 			function cloneEndPoint(EndPointItem) {
@@ -186,8 +195,11 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 				VRNotificationService.showConfirmation().then(function (response) {
 					if (response) {
 						NP_IVSwitch_EndPointAPIService.BlockEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
-							gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
-							gridAPI.itemUpdated(response.UpdatedObject);
+							if (VRNotificationService.notifyOnItemUpdated('End Point', response, "Entity.Description")) {
+								gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
+								gridAPI.itemUpdated(response.UpdatedObject);
+							}
+
 						});
 					}
 				});
@@ -197,8 +209,10 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 				VRNotificationService.showConfirmation().then(function (response) {
 					if (response) {
 						NP_IVSwitch_EndPointAPIService.InActivateEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
-							gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
-							gridAPI.itemUpdated(response.UpdatedObject);
+							if (VRNotificationService.notifyOnItemUpdated('End Point', response, "Entity.Description")) {
+								gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
+								gridAPI.itemUpdated(response.UpdatedObject);
+							}
 						});
 					}
 				});
@@ -208,8 +222,10 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 				VRNotificationService.showConfirmation().then(function (response) {
 					if (response) {
 						NP_IVSwitch_EndPointAPIService.ActivateEndPoint(endPointItem.Entity.EndPointId).then(function (response) {
-							gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
-							gridAPI.itemUpdated(response.UpdatedObject);
+							if (VRNotificationService.notifyOnItemUpdated('End Point', response, "Entity.Description")) {
+								gridDrillDownTabsObj.setDrillDownExtensionObject(response.UpdatedObject);
+								gridAPI.itemUpdated(response.UpdatedObject);
+							}
 						});
 					}
 				});
@@ -238,7 +254,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 
 			function hasDeletePermission() {
 				return NP_IVSwitch_EndPointAPIService.HasDeletePermission();
-			} 
+			}
 
 			function viewEndPoint(endPointItem) {
 				NP_IVSwitch_EndPointService.viewEndPoint(endPointItem.Entity.EndPointId);
