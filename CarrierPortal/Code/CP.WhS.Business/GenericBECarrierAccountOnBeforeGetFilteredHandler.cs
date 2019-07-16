@@ -24,28 +24,54 @@ namespace CP.WhS.Business
 
         public override void PrepareQuery(IGenericBEOnBeforeGetFilteredHandlerPrepareQueryContext context)
         {
-            //if(context != null && context.Query!= null)
-            //{
-            //    int userId = SecurityContext.Current.GetLoggedInUserId();
-            //    WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
-            //    var accountsInfo = whSCarrierAccountBEManager.GetCachedClientWhSAccountsInfo(userId);
-            //    accountsInfo.ThrowIfNull("accountInfo", userId);
+            context.ThrowIfNull("context");
+            context.Query.ThrowIfNull("context.Query");
 
-            //    List<object> accountIds = new List<object>();
-            //    foreach(var accountInfo in accountsInfo)
-            //    {
-            //        accountIds.Add(accountInfo.Value.AccountId);
-            //    }
-               
-            //    if (context.Query.Filters == null)
-            //        context.Query.Filters = new List<GenericBusinessEntityFilter>();
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
+            var accountsInfo = whSCarrierAccountBEManager.GetCachedClientWhSAccountsInfo(userId);
+            accountsInfo.ThrowIfNull("accountInfo", userId);
 
-            //    context.Query.Filters.Add(new GenericBusinessEntityFilter()
-            //    {
-            //        FieldName = this.FieldName,
-            //        FilterValues = accountIds
-            //    });
-            //}
+            List<object> accountIds = new List<object>();
+            foreach (var accountInfo in accountsInfo)
+            {
+                accountIds.Add(accountInfo.Value.AccountId);
+            }
+
+            bool hasAccountFilter = false;
+            if (context.Query.Filters != null)
+            {
+                foreach(var filter in context.Query.Filters)
+                {
+                    if(filter.FieldName == FieldName)
+                    {
+                        if(filter.FilterValues != null)
+                        {
+                            foreach(var filterValue in filter.FilterValues)
+                            {
+                                if(filterValue != null )
+                                {
+                                    if (!accountIds.Contains(Convert.ToInt32(filterValue.ToString())))
+                                        throw new NotSupportedException($"accountId not valid { filterValue }");
+                                    hasAccountFilter = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+           if(!hasAccountFilter)
+            {
+                if (context.Query.Filters == null)
+                    context.Query.Filters = new List<GenericBusinessEntityFilter>();
+
+                context.Query.Filters.Add(new GenericBusinessEntityFilter()
+                {
+                    FieldName = this.FieldName,
+                    FilterValues = accountIds
+                });
+            }
         }
     }
 }

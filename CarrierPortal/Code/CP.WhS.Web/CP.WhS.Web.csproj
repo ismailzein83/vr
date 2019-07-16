@@ -186,6 +186,8 @@
     <Content Include="CP_WhS\Elements\BlockedAttempts\Views\BlockedAttemptsManagementController.js" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\cp-whs-carrieraccounts-selector.js" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\cp-whs-carrieraccountsbedefinition-editor.js" />
+    <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\MainExtensions\cp-carrieraccount-onbeforegetfilteredhandler.js" />
+    <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\MainExtensions\Templates\CarrierAccountOnBeforeGetFilteredHandler.html" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\Templates\WhSCarrierAccountsBEDefinitionTemplate.html" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Services\APIServices\CarrierAccountsAPIService.js" />
     <Content Include="CP_WhS\Elements\CustomerCodes\Directives\cp-whs-customercode-grid.js" />

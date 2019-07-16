@@ -61,21 +61,7 @@ namespace CP.WhS.Business
             return carrierAccount.Name;
         }
 
-        #endregion
-
-        #region Private Classes
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            protected override bool IsTimeExpirable
-            {
-                get { return true; }
-            }
-        }
-
-        #endregion
-
-        #region Private Methods
-        private Dictionary<int, ClientAccountInfo> GetCachedClientWhSAccountsInfo(int userId)
+        public Dictionary<int, ClientAccountInfo> GetCachedClientWhSAccountsInfo(int userId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedClientWhSAccountsInfo_{0}", userId),
               () =>
@@ -92,6 +78,21 @@ namespace CP.WhS.Business
                   return clientAccountsInfo == null ? null : clientAccountsInfo.ToDictionary(acc => acc.AccountId, acc => acc);
               });
         }
+
+        #endregion
+
+        #region Private Classes
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            protected override bool IsTimeExpirable
+            {
+                get { return true; }
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
         private Dictionary<string, ClientAccountInfo> GetCachedClientWhSAccountsInfoByName(int userId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedClientWhSAccountsInfoByName_{0}", userId),
