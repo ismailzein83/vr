@@ -131,8 +131,10 @@
 
         function buildViewObjFromScope() {
             var viewSettings = {};
+            if (viewEntity != undefined && viewEntity.Settings != undefined)
+                viewSettings = viewEntity.Settings;
             
-                viewCommonPropertiesAPI.setCommonProperties(viewSettings);
+             viewCommonPropertiesAPI.setCommonProperties(viewSettings);
             var viewObject = {
                 ViewId: viewId,
                 Name: $scope.scopeModal.name,
