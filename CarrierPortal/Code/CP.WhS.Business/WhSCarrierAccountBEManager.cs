@@ -58,6 +58,8 @@ namespace CP.WhS.Business
         public string GetCarrierAccountName(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccountInfo(carrierAccountId);
+            if (carrierAccount == null)
+                return null;
             return carrierAccount.Name;
         }
 

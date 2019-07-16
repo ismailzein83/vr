@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BIDsASKsController.cs" />
     <Compile Include="Controllers\CustomerCodeController.cs" />
     <Compile Include="Controllers\SupplierCodeController.cs" />
     <Compile Include="Controllers\CustomerOtherRateController.cs" />
@@ -204,6 +205,9 @@
     <Content Include="CP_WhS\Elements\CustomerRates\Services\APIServices\CustomerOtherRateAPIService.js" />
     <Content Include="CP_WhS\Elements\CustomerRates\Views\CustomerRatesManagement.html" />
     <Content Include="CP_WhS\Elements\CustomerRates\Views\CustomerRatesManagementController.js" />
+    <Content Include="CP_WhS\Elements\MarketView\Services\APIServices\BIDsASKsAPIService.js" />
+    <Content Include="CP_WhS\Elements\MarketView\Views\MarketViewManagement.html" />
+    <Content Include="CP_WhS\Elements\MarketView\Views\MarketViewManagementController.js" />
     <Content Include="CP_WhS\Elements\SupplierRates\Directives\cp-whs-supplierotherrate-grid.js" />
     <Content Include="CP_WhS\Elements\SupplierRates\Directives\Templates\SupplierOtherRateGridTemplate.html" />
     <Content Include="CP_WhS\Elements\SupplierRates\Services\APIServices\CP_WhS_SupplierOtherRateAPIService.js" />
@@ -255,7 +259,9 @@
     <Content Include="CP_WhS\Images\Zone.png" />
     <Content Include="CP_WhS\Services\TOneAccountService.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CP_WhS\Elements\MarketView\Directives\Templates\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

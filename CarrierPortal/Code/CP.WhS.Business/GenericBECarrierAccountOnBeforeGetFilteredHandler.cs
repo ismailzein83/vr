@@ -45,11 +45,11 @@ namespace CP.WhS.Business
                 {
                     if(filter.FieldName == FieldName)
                     {
-                        if(filter.FilterValues != null)
+                        if (filter.FilterValues != null)
                         {
-                            foreach(var filterValue in filter.FilterValues)
+                            foreach (var filterValue in filter.FilterValues)
                             {
-                                if(filterValue != null )
+                                if (filterValue != null)
                                 {
                                     if (!accountIds.Contains(Convert.ToInt32(filterValue.ToString())))
                                         throw new NotSupportedException($"accountId not valid { filterValue }");
@@ -60,8 +60,9 @@ namespace CP.WhS.Business
                     }
                 }
             }
-
-           if(!hasAccountFilter)
+            if (CheckIfFieldNameExist(context.Query.FilterGroup))
+                hasAccountFilter = true;
+           if (!hasAccountFilter)
             {
                 if (context.Query.Filters == null)
                     context.Query.Filters = new List<GenericBusinessEntityFilter>();
@@ -73,5 +74,28 @@ namespace CP.WhS.Business
                 });
             }
         }
+
+
+        private bool CheckIfFieldNameExist(RecordFilterGroup filterGroup)
+        {
+            if(filterGroup == null)
+                return false;
+            if (filterGroup.FieldName == FieldName)
+                return true;
+            if (filterGroup.Filters == null)
+                return false;
+
+            foreach (var filter in filterGroup.Filters)
+            {
+                if (filter.FieldName == FieldName)
+                    return true;
+
+                if (filter is RecordFilterGroup)
+                    if (CheckIfFieldNameExist(filter as RecordFilterGroup))
+                        return true;
+            }
+            return false;
+        }
+        
     }
 }
