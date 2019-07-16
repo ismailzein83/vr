@@ -7,7 +7,6 @@
   <appSettings>
     <appSettings>
       <add key="Web_ExtendedModulesNames" value="" /><!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
-      <add key="DemoProject_DBConnStringKey"						value="ConfigurationDBConnString"/>
     </appSettings>
   </appSettings>
 </configuration>
