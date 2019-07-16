@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASKs\ASKsQuery.cs" />
+    <Compile Include="BIDs\BIDsQuery.cs" />
     <Compile Include="Branch\Branch.cs" />
     <Compile Include="Branch\BranchDetail.cs" />
     <Compile Include="Branch\BranchQuery.cs" />

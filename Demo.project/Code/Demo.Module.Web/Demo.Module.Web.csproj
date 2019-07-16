@@ -88,6 +88,9 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Web.Base">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
     </Reference>
@@ -282,6 +285,7 @@
     <Content Include="Demo_Module\Elements\Master\Views\MasterEditorController.js" />
     <Content Include="Demo_Module\Elements\Master\Views\MasterManagement.html" />
     <Content Include="Demo_Module\Elements\Master\Views\MasterManagementController.js" />
+    <Content Include="Demo_Module\Services\APIServices\OldEntities\BIDsASKsAPIService.js" />
     <Content Include="Demo_Module\Services\OldEntities\AdvancedGridService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\PageRunTimeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\PageDefinitionAPIService.js" />
@@ -294,6 +298,8 @@
     <Content Include="Demo_Module\Services\OldEntities\PageDefinitionService.js" />
     <Content Include="Demo_Module\Services\OldEntities\MemberService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
+    <Content Include="Demo_Module\Views\MarketViewManagementController.js" />
+    <Content Include="Demo_Module\Views\MarketViewManagement.html" />
     <Content Include="Demo_Module\Views\AdvancedGridEditor.html" />
     <Content Include="Demo_Module\Views\AdvancedGridEditorController.js" />
     <Content Include="Demo_Module\Views\PageDefinitionSubviewEditor.html" />
@@ -313,6 +319,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BranchController.cs" />
+    <Compile Include="Controllers\BIDsASKsController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
@@ -363,7 +370,9 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Demo_Module\Directives\BIDsASKs\" />
+  </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>

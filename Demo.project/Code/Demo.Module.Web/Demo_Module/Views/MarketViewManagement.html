@@ -1,0 +1,56 @@
+﻿<vr-panel ng-controller="Demo_Module_MarketViewManagementController" vr-loader="scopeModel.isLoading">
+    <vr-form name="formFilter">
+        <vr-row>
+            <vr-np-salezone-masterplan-selector on-ready="scopeModel.onSaleZoneMarketPlanDirectiveReady" normal-col-num="2" isrequired="true"></vr-np-salezone-masterplan-selector>
+            <vr-columns width="normal">
+                <vr-genericdata-fieldtype-boolean-filtereditor on-ready="scopeModel.onBIDsBooleanFilterEditorReady"></vr-genericdata-fieldtype-boolean-filtereditor>
+            </vr-columns>
+            <vr-columns width="normal">
+                <vr-genericdata-fieldtype-boolean-filtereditor on-ready="scopeModel.onASKsBooleanFilterEditorReady"></vr-genericdata-fieldtype-boolean-filtereditor>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-section header="BIDs" collapsible>
+                        <vr-datagrid datasource="scopeModel.bids"
+                                     on-ready="scopeModel.onBIDsGridReady"
+                                     dataretrievalfunction="scopeModel.bidsDataRetrievalFunction"
+                                     pagingtype="'PagingOnScroll'"
+                                     idfield="ID">
+                            <vr-datagridcolumn headertext="'ID'" field="'FieldValues.ID.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Destination'" field="'FieldValues.Destination.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Rate'" field="'FieldValues.Rate.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'ASR'" field="'FieldValues.ASR.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'ACD'" field="'FieldValues.ACD.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'CLI/NCLI'" field="'FieldValues.CLIORNCLI.Description'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-section header="ASKs" collapsible>
+                        <vr-datagrid datasource="scopeModel.asks"
+                                     on-ready="scopeModel.onASKsGridReady"
+                                     dataretrievalfunction="scopeModel.asksDataRetrievalFunction"
+                                     pagingtype="'PagingOnScroll'"
+                                     idfield="ID">
+                            <vr-datagridcolumn headertext="'ID'" field="'FieldValues.ID.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Destination'" field="'FieldValues.Destination.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Selling Rate'" field="'FieldValues.SellingRate.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'ASR'" field="'FieldValues.ASR.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'ACD'" field="'FieldValues.ACD.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'CLI/NCLI'" field="'FieldValues.CLIORNCLI.Description'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-form>
+</vr-panel>
