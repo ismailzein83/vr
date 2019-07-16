@@ -99,6 +99,8 @@ CarrierPortal.SupplierPricelist.PostDeployment.sql
 CP_WHS
 CarrierPortal.TOnePortal.PostDeployment.sql
 
+Demo_MarketView.PostDeployment.sql
+
 Mediation
 Mediation_WHS.Common.PostDeployment.sql
 Mediation_Mobile.Common.PostDeployment.sql
