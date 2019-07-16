@@ -83,6 +83,7 @@
     <Compile Include="CustomerOtherRateManager.cs" />
     <Compile Include="CustomerRateHistoryManager.cs" />
     <Compile Include="CustomerRateManager.cs" />
+    <Compile Include="GenericBECarrierAccountOnBeforeGetFilteredHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReleaseCodeStatisticsManager.cs" />
     <Compile Include="RepeatedNumbersManager.cs" />
