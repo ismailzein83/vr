@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.GenericData.Entities.BusinessEntityHistoryStack
+namespace Vanrise.GenericData.Entities
 {
 	public class BusinessEntityHistoryStackQuery
 	{

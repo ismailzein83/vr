@@ -98,9 +98,9 @@
     <Compile Include="BusinessEntities\LKUPBEDefinitionSettings\LKUPBEExtendedSettingsConfig.cs" />
     <Compile Include="BusinessEntities\SelectorFilter\GenericBESelectorCondition.cs" />
     <Compile Include="BusinessEntities\SelectorFilter\GenericBESelectorConditionConfig.cs" />
-    <Compile Include="BusinessEntityHistoryStack\BusinessEntityHistoryStack.cs" />
-    <Compile Include="BusinessEntityHistoryStack\BusinessEntityHistoryStackDetail.cs" />
-    <Compile Include="BusinessEntityHistoryStack\BusinessEntityHistoryStackQuery.cs" />
+    <Compile Include="BusinessEntityHistoryStackEntity\BusinessEntityHistoryStack.cs" />
+    <Compile Include="BusinessEntityHistoryStackEntity\BusinessEntityHistoryStackDetail.cs" />
+    <Compile Include="BusinessEntityHistoryStackEntity\BusinessEntityHistoryStackQuery.cs" />
     <Compile Include="BusinessEntityStatusHistory\BusinessEntityStatusHistoryQuery.cs" />
     <Compile Include="BusinessEntityStatusHistory\BusinessEntityStatusHistoryDetail.cs" />
     <Compile Include="BusinessEntityStatusHistory\BusinessEntityStatusHistory.cs" />
