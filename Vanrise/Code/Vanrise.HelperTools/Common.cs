@@ -34,10 +34,20 @@ namespace Vanrise.HelperTools
         public static string CheckPathLengthOutputPath { get { return ConfigurationManager.AppSettings["checkPathLengthOutputPath"]; } }
         public static string CheckPathLengthSourcePath { get { return ConfigurationManager.AppSettings["checkPathLengthSourcePath"]; } }
         public static int MaxPathLength { get { return int.Parse(ConfigurationManager.AppSettings["maxPathLength"]); } }
-
+        
         public static List<string> GetDBs(string projectName)
         {
             return ConfigurationManager.AppSettings[projectName].ToString().Split('#').ToList();
+        }
+
+        public static List<string> GetDBs_Schemas(string projectName, string dbName)
+        {
+            List<string> lst = new List<string>();
+            if (ConfigurationManager.AppSettings[projectName + "_" + dbName + "_Schemas"] != null)
+            {
+                lst.AddRange(ConfigurationManager.AppSettings[projectName + "_" + dbName + "_Schemas"].ToString().Split('#').ToList());
+            }
+            return lst;
         }
 
         #region CompressJS, GRPJS and GRPJSOverridden
@@ -284,7 +294,7 @@ namespace Vanrise.HelperTools
             var retailFiles = Directory.GetFiles(binFullPath, "Retail*Entities.dll");
             var mediationFiles = Directory.GetFiles(binFullPath, "Mediation*Entities.dll");
             var sOMFiles = Directory.GetFiles(binFullPath, "SOM*Entities.dll");
-            var inspktFiles = Directory.GetFiles(binFullPath, "RecordAnalysis*Entities.dll"); 
+            var inspktFiles = Directory.GetFiles(binFullPath, "RecordAnalysis*Entities.dll");
             var testCallAnalysisFiles = Directory.GetFiles(binFullPath, "TestCallAnalysis*Entities.dll");
 
 
@@ -471,12 +481,33 @@ when not matched by target then
                 }
             }
 
-            foreach (string script in transferScript)
+            List<string> lst = Common.GetDBs_Schemas(projectName, item);
+            if (lst.Count > 0)
             {
-                if (!script.Contains("CREATE USER") && !script.Contains("sys.sp_addrolemember"))
+                foreach (string schema in lst)
                 {
-                    sb.AppendLine(script);
-                    sb.AppendLine("GO");
+                    foreach (string script in transferScript)
+                    {
+                        if (!script.Contains("CREATE USER") && !script.Contains("sys.sp_addrolemember"))
+                        {
+                            if (script.Contains(schema))
+                            {
+                                sb.AppendLine(script);
+                                sb.AppendLine("GO");
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (string script in transferScript)
+                {
+                    if (!script.Contains("CREATE USER") && !script.Contains("sys.sp_addrolemember"))
+                    {
+                        sb.AppendLine(script);
+                        sb.AppendLine("GO");
+                    }
                 }
             }
 
@@ -509,7 +540,7 @@ when not matched by target then
             if (projectName == "Retail.Billing")
             {
                 sb = sb.Replace(mainItem, "StandardRetail_Billing");
-            }            
+            }
 
             if (projectName == "ISP" || projectName == "Component-ISP")
             {
@@ -524,7 +555,7 @@ when not matched by target then
             if (projectName == "TOne.SMS")
             {
                 sb = sb.Replace(mainItem, "StandardTOneSMSStructure");
-            }            
+            }
 
             if (!Directory.Exists(sqlFilesOutputPath))
             {
