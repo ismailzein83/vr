@@ -93,14 +93,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                     ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
                     RecordFilter targetFieldRecordFilter = Vanrise.GenericData.Business.Helper.ConvertToRecordFilter(this.TargetFieldName, targetDataRecordFieldType, targetFieldObjectListRecordFilter);
 
-                    DataRecordFieldType mappedFieldBEFieldType;
-                    GetFieldType(context, kvp.Value.MappingFieldName, out mappedFieldBEFieldType);
-                    StringRecordFilter mappedFieldStringRecordFilter = BuildStringRecordFilter(stringRecordFilter.CompareOperator, stringRecordFilter.Value);
-                    RecordFilter mappedFieldRecordFilter = ConvertToRecordFilter(kvp.Value.MappingFieldName, mappedFieldBEFieldType, mappedFieldStringRecordFilter);
+                    StringRecordFilter mappedStringRecordFilter = new StringRecordFilter()
+                    {
+                        FieldName = kvp.Value.MappingFieldName,
+                        CompareOperator = stringRecordFilter.CompareOperator,
+                        Value = stringRecordFilter.Value,
+                    };
 
                     RecordFilterGroup currentRecordFilterGroup = new RecordFilterGroup();
                     currentRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
-                    currentRecordFilterGroup.Filters = new List<RecordFilter>() { targetFieldRecordFilter, mappedFieldRecordFilter };
+                    currentRecordFilterGroup.Filters = new List<RecordFilter>() { targetFieldRecordFilter, mappedStringRecordFilter };
 
                     recordFilterGroup.Filters.Add(currentRecordFilterGroup);
                 }
@@ -170,28 +172,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 
         private ObjectListRecordFilter BuildObjectListRecordFilter(ListRecordFilterOperator listRecordFilterOperator, List<object> values)
         {
-            return new ObjectListRecordFilter()
-            {
-                CompareOperator = listRecordFilterOperator,
-                Values = values
-            };
-        }
-
-        private StringRecordFilter BuildStringRecordFilter(StringRecordFilterOperator stringRecordFilterOperator, string value)
-        {
-            return new StringRecordFilter()
-            {
-                CompareOperator = stringRecordFilterOperator,
-                Value = value
-            };
-        }
-
-        private RecordFilter ConvertToRecordFilter(string fieldName, DataRecordFieldType dataRecordFieldType, StringRecordFilter stringRecordFilter)
-        {
-            var recordFilter = dataRecordFieldType.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = fieldName, FilterValues = new List<object>() { stringRecordFilter.Value }, StrictEqual = true });
-            if (recordFilter is StringRecordFilter)
-                ((StringRecordFilter)recordFilter).CompareOperator = stringRecordFilter.CompareOperator;
-            return recordFilter;
+            return new ObjectListRecordFilter() { CompareOperator = listRecordFilterOperator, Values = values };
         }
     }
 
