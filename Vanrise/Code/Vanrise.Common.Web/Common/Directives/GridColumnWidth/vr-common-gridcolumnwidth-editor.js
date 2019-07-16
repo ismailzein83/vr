@@ -125,23 +125,23 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                 usedingridcell = "usedingridcell";
             }
 
-            return '<vr-common-gridwidthfactor-selector ' + usedingridcell + '  normal-col-num="{{selectorColNum}}" on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
+            return '<vr-common-gridwidthfactor-selector ' + usedingridcell + '  normal-col-num="{{selectorColNum}}"  on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
                    + hidelabel
                    + ' ></vr-common-gridwidthfactor-selector>'
-                   + '<vr-columns colnum="{{textboxColNum}}" ' + withchild + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue" >'
-                   + '<vr-textbox type="number" '
+                + '<vr-columns colnum="{{textboxColNum}}"' + withchild + hidelabel + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue">'
+                + '<vr-textbox type="number"  placeholder="Fixed Width Value"  '
                     + fixedLabel +
                    '  value="scopeModel.fixedWidth" decimalprecision="0" isrequired="scopeModel.widthOption.value == scopeModel.fixedWidthValue "></vr-textbox>'
                    + '</vr-columns>'
-                    + '<vr-columns colnum="{{hintColNum}}" ' + withchild + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue && showHint " >'
+                + '<vr-columns colnum="{{hintColNum}}"  ' + withchild + hidelabel + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue && showHint " >'
                         + '<vr-hint value="Fixed Width"></vr-hint>'
                    + '</vr-columns>'
-                     + '<vr-columns colnum="{{textboxColNum}}" ' + withchild + '>'
+                + '<vr-columns colnum="{{textboxColNum}}"' + withchild + hidelabel+ '>'
                    + '<vr-textbox type="number" '
                     + listViewLabel +
-                   'value="scopeModel.listViewWidth" decimalprecision="0"></vr-textbox>'
+                   'value="scopeModel.listViewWidth" placeholder="List Width Value" decimalprecision="0"></vr-textbox>'
                    + '</vr-columns>'
-                   + '<vr-columns colnum="{{hintColNum}}" ' + withchild + ' ng-show="showHint">'
+                + '<vr-columns colnum="{{hintColNum}}"' + withchild + hidelabel+ ' ng-show="showHint">'
                         + '<vr-hint value="List View Width"></vr-hint>'
                    + '</vr-columns>' ;
         }

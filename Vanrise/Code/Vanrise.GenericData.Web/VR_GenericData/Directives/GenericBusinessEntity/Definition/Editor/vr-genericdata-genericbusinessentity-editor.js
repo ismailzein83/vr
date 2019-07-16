@@ -25,6 +25,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             this.initializeController = initializeController;
 
             var dataRecordTypeFields = [];
+            var dataRecordTypeId;
 
             var dataRecordTypeSelectorAPI;
             var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -60,7 +61,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 
             var actionDefinitionGridAPI;
             var actionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        
             var gridActionDefinitionGridAPI;
             var gridActionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -298,13 +299,13 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, threeHundredSixtyDegreesEditorDefinitionAPI, { context: getContext(), }, setThreeHundredSixtyDegreesEditorLoader);
                 };
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
-                    var selectedRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
-                    if (selectedRecordTypeId != undefined) {
-                        reloadReleatedDirectives(selectedRecordTypeId);
+                     dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+                    if (dataRecordTypeId != undefined) {
+                        reloadReleatedDirectives(dataRecordTypeId);
                         if (typefieldsSelectorDefered != undefined) {
                             typefieldsSelectorDefered.resolve();
                         } else {
-                            loadUploadedFiledsGrid({ DataRecordTypeId: selectedRecordTypeId });
+                            loadUploadedFiledsGrid({ DataRecordTypeId: dataRecordTypeId });
                         }
                     }
                     else {
@@ -326,7 +327,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             else {
                                 $scope.scopeModel.selectedDataRecordStorage = undefined;
                                 dataRecordStorageId = undefined;
-                                loadDataRecordStorageSelector();
+                                if (dataRecordTypeId != undefined)
+                                    loadDataRecordStorageSelector(dataRecordTypeId);
                             }
                         }
                     }
@@ -753,9 +755,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         getChildNode: function () {
                             var promises = [];
 
-                            if (dataRecordStorageId != undefined) {
-                                promises.push(loadDataRecordStorageSelector());
-                            }
+                           
                             promises.push(loadActionDefinitionGrid());
                             promises.push(loadBulkActionDefinitionGrid());
                             promises.push(loadCustomActionDefinitionGrid());
@@ -796,6 +796,9 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                                 if (genericBEAddedValues != undefined)
                                     uploadedFieldsPayload.genericBEAddedValues = genericBEAddedValues;
                                 promises.push(loadUploadedFiledsGrid(uploadedFieldsPayload));
+                                if (dataRecordStorageId != undefined && businessEntityDefinitionSettings.DataRecordTypeId != undefined) {
+                                    promises.push(loadDataRecordStorageSelector(businessEntityDefinitionSettings.DataRecordTypeId));
+                                }
                             }
                             return { promises: promises };
                         }
@@ -883,13 +886,15 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 return vrConnectionSelectorLoadPromiseDeferred.promise;
             };
 
-            function loadDataRecordStorageSelector() {
+            function loadDataRecordStorageSelector(selectedRecordTypeId) {
                 var loadDataRecordStorageSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 dataRecordStorageSelectorReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload = {
                             selectedIds: dataRecordStorageId,
-                            showaddbutton: true
+                            DataRecordTypeId: selectedRecordTypeId,
+                            showaddbutton: true,
+                            selectFirstItem:true
                         };
                         VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, directivePayload, loadDataRecordStorageSelectorPromiseDeferred);
                     });
@@ -914,6 +919,15 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             $scope.scopeModel.isLoadingTitle = value;
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTitleFieldsSelectorAPI, recordTypePayload, setDataRecordTypeTitleLoader);
+                       
+
+                        var setDataRecordStorageLoader = function (value) {
+                            $scope.scopeModel.isLoadingDataRecordStorage = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordStorageSelectorAPI, {
+                            DataRecordTypeId: selectedRecordTypeId,
+                            selectFirstItem: true
+                        }, setDataRecordStorageLoader);
 
                         var setDataRecordTypeRequiredParentLoader = function (value) {
                             $scope.scopeModel.isLoadingRequiredParent = value;
@@ -1033,6 +1047,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             function resetReleatedDirectives() {
                 if (dataRecordTypeTitleFieldsSelectorAPI != undefined)
                     dataRecordTypeTitleFieldsSelectorAPI.clearDataSource();
+                if (dataRecordStorageSelectorAPI != undefined)
+                    dataRecordStorageSelectorAPI.clearDataSource();
                 if (dataRecordTypeRequiredParentFieldsSelectorAPI != undefined)
                     dataRecordTypeRequiredParentFieldsSelectorAPI.clearDataSource();
                 if (dataRecordTypeTextResourceFieldSelectorAPI != undefined)

@@ -155,7 +155,7 @@
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{customActionDefinitionCtrl.normalColNum}}" isrequired="customActionDefinitionCtrl.isrequired" customvalidate="customActionDefinitionCtrl.customvalidate">'
+                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{customActionDefinitionCtrl.normalColNum/2}}" isrequired="customActionDefinitionCtrl.isrequired" customvalidate="customActionDefinitionCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }

@@ -51,6 +51,12 @@ app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsServ
                     ctrl.datasource.push(dataItem);
                 };
 
+
+                  ctrl.disableAddGridActionGroup=function () {
+                    if (context == undefined) return true;
+                    return context.getDataRecordTypeId() == undefined;
+                };
+
                 ctrl.removeGridActionGroup = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);

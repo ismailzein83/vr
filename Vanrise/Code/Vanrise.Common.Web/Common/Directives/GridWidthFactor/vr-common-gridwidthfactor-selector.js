@@ -106,7 +106,7 @@
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + colAttributes + ' >'
                 + '<span vr-disabled="ctrl.isdisabled"><vr-select on-ready="ctrl.onSelectorReady"'
-                    + ' datasource="ctrl.datasource"'
+                + ' datasource="ctrl.datasource"  placeholder="Width"'
 
                     + ' selectedvalues="ctrl.selectedvalues"'
                     + ' onselectionchanged="ctrl.onselectionchanged"'

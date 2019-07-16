@@ -1,11 +1,33 @@
-﻿<vr-row>
+﻿<vr-row removeline>
     <vr-columns width="fullrow">
-        <vr-button type="Add" data-onclick="ctrl.addSectionContainer" standalone vr-disabled="ctrl.disableAddSectionContainer()"></vr-button>
-        <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeSectionContainer" hidegridmenu>
-                <vr-datagridcolumn headertext="'Title'" field="'SectionTitle'" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Columns Number'" field="'ColNum'" disablesorting></vr-datagridcolumn>
+        <vr-button type="Add" data-onclick="scopeModel.addSectionContainer" standalone></vr-button>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-validator validate="scopeModel.isValid()">
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
+                         on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeSectionContainer" hidegridmenu>
+                <vr-datagridcolumn headertext="'Title'" disablesorting widthfactor="4">
+                    <vr-textbox value="dataItem.entity.SectionTitle" isrequired></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Columns Number'" disablesorting widthfactor="4">
+                    <vr-textbox value="dataItem.entity.ColNum" type="number"  minvalue="1" maxvalue ="12" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true" columnindex="'3'">
+                    <vr-span vr-loader="dataItem.isTextResourceSelectorLoading">
+                        <vr-row removeline>
+                            <vr-row removeline>
+                                <vr-row removeline>
+                                    <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                                </vr-row>
+                            </vr-row>
+                        </vr-row>
+                    </vr-span>
+                </vr-datagridcolumn>
+                <vr-datagridexpandablerow>
+                    <span vr-loader="dataItem.isEditorDirectiveLoading">
+                        <vr-genericdata-genericbe-editordefinition-settings on-ready="dataItem.onEditorDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
+                    </span>
+                </vr-datagridexpandablerow>
             </vr-datagrid>
         </vr-validator>
     </vr-columns>

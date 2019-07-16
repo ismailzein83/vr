@@ -69,6 +69,7 @@
                 api.load = function (payload) {
                     var selectedIds;
                     var filter = null;
+                    var selectFirstItem;
                     if (payload != undefined) {
                         filter = {};
                         filter.DataRecordTypeId = payload.DataRecordTypeId;
@@ -76,6 +77,8 @@
                         if (payload.showaddbutton)
                             ctrl.onAddDataStorageRecord = onAddDataStorageRecord;
                         selectedIds = payload.selectedIds;
+                        selectFirstItem = payload.selectFirstItem != undefined && payload.selectFirstItem == true;
+
                     };
 
                     return VR_GenericData_DataRecordStorageAPIService.GetDataRecordsStorageInfo(UtilsService.serializetoJson(filter)).then(function (response) {
@@ -88,6 +91,10 @@
 
                             if (selectedIds) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'DataRecordStorageId', attrs, ctrl);
+                            }
+                            else if (selectFirstItem == true && ctrl.datasource[0] != undefined && ctrl.datasource.length==1) {
+                                var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].DataRecordStorageId] : ctrl.datasource[0].DataRecordStorageId;
+                                VRUIUtilsService.setSelectedValues(defaultValue, 'DataRecordStorageId', attrs, ctrl);
                             }
                         }
                     });

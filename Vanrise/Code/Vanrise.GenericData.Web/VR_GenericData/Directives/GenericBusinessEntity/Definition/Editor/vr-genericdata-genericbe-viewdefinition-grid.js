@@ -42,7 +42,10 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
                     
                     VR_GenericData_GenericBEDefinitionService.addGenericBEViewDefinition(onGridViewAdded, context);
                 };
-                
+                  ctrl.disableAddGridView = function () {
+                    if (context == undefined) return true;
+                    return context.getDataRecordTypeId() == undefined;
+                };
                 ctrl.removeView = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);

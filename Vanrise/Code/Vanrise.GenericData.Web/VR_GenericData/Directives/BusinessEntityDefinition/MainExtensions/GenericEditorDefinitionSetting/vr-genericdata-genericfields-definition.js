@@ -80,8 +80,28 @@
                         return "You Should add at least one Field.";
                     return null;
                 };
-
-
+                $scope.scopeModel.showCollapseButton = function () {
+                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                        if ($scope.scopeModel.datasource[i].isRowExpanded)
+                        return true;
+                    }
+                    return false
+                };
+                $scope.scopeModel.showExpandButton = function () {
+                    if ($scope.scopeModel.datasource.length == 0)
+                        return false;
+                    return !$scope.scopeModel.showCollapseButton();
+                };
+                $scope.scopeModel.collapseRows = function () {
+                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                        gridAPI.collapseRow($scope.scopeModel.datasource[i]);
+                    }
+                };
+                $scope.scopeModel.expandRows = function () {
+                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                        gridAPI.expandRow($scope.scopeModel.datasource[i]);
+                    }
+                };
             }
             function prepareAddedField(item) {
 
@@ -125,7 +145,8 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldTypeRuntimeDirectiveAPI, directivePayload, setLoader);
                 };
-                gridAPI.expandRow(dataItem);
+                gridAPI.expandRow(dataItem); 
+
                 $scope.scopeModel.datasource.push(dataItem);
 
                 if (setFieldsNumber != undefined)
@@ -184,12 +205,9 @@
                                             payload: field,
                                             textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                             textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                            fieldTypeRuntimeReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                            fieldTypeRuntimeLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                         };
                                         if ($scope.scopeModel.isLocalizationEnabled)
                                             childPromises.push(fieldObject.textResourceLoadPromiseDeferred.promise);
-                                        childPromises.push(fieldObject.fieldTypeRuntimeLoadPromiseDeferred.promise);
                                         prepareDataItem(fieldObject, childPromises);
                                     }
                                 }
@@ -210,7 +228,7 @@
                 }
             }
 
-            function prepareDataItem(field, promises) {
+            function prepareDataItem(field) {
                 var payload = field.payload;
 
                 var fieldType = context.getFieldType(payload.FieldPath);
@@ -250,32 +268,26 @@
                 if (fieldType.RuntimeViewSettingEditor)
                     dataItem.onRuntimeViewSettingsEditorDirectiveReady = function (api) {
                         dataItem.directiveAPI = api;
-                        field.fieldSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                        VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, {
+                        var setLoader = function (value) { dataItem.isRuntimeViewSettingsEditorDirectiveLoading = value; };
+                        var runtimeViewSettingEditorPayload = {
                             configId: payload.FieldViewSettings != undefined ? payload.FieldViewSettings.ConfigId : undefined,
                             context: context,
                             settings: payload.FieldViewSettings,
                             dataRecordTypeId: fieldType.DataRecordTypeId
-                        }, field.fieldSettingsLoadPromiseDeferred);
-                        promises.push(field.fieldSettingsLoadPromiseDeferred.promise);
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, runtimeViewSettingEditorPayload, setLoader);
                     };
 
                 dataItem.onFieldTypeRumtimeDirectiveReady = function (api) {
                     dataItem.fieldTypeRuntimeDirectiveAPI = api;
-                    field.fieldTypeRuntimeReadyPromiseDeferred.resolve();
-                };
-
-                field.fieldTypeRuntimeReadyPromiseDeferred.promise.then(function () {
+                    var setLoader = function (value) { dataItem.isFieldTypeRumtimeDirectiveLoading = value; };
                     var directivePayload = {
                         fieldTitle: "Default Value",
                         fieldType: fieldType,
                         fieldName: payload.FieldPath,
                         fieldValue: payload.DefaultFieldValue
                     };
-                    VRUIUtilsService.callDirectiveLoad(dataItem.fieldTypeRuntimeDirectiveAPI, directivePayload, field.fieldTypeRuntimeLoadPromiseDeferred);
-                });
-
-                gridAPI.expandRow(dataItem);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldTypeRuntimeDirectiveAPI, directivePayload, setLoader);                };
 
                 $scope.scopeModel.datasource.push(dataItem);
             }

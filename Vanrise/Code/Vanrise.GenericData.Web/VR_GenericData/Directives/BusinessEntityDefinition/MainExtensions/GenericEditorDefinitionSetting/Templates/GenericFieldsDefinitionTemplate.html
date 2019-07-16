@@ -8,9 +8,15 @@
     </vr-columns>
 </vr-row>
 <vr-row>
+    <vr-columns width="normal" ng-if="scopeModel.showCollapseButton()">
+        <a href="" class="link" ng-click="scopeModel.collapseRows()">Collapse All</a>
+    </vr-columns>
+    <vr-columns width="normal" ng-if="scopeModel.showExpandButton()">
+        <a href="" class="link" ng-click="scopeModel.expandRows()">Expand All</a>
+    </vr-columns>
     <vr-columns width="fullrow">
         <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="700px"
                          on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeField" hidegridmenu>
                 <vr-datagridcolumn headertext="'Field Name'" disablesorting widthfactor="6">
                     <vr-label>{{dataItem.entity.FieldPath}}</vr-label>
@@ -21,9 +27,15 @@
                 <vr-datagridcolumn headertext="'Field Width'" disablesorting widthfactor="4">
                     <vr-textbox value="dataItem.entity.FieldWidth" type="number"></vr-textbox>
                 </vr-datagridcolumn>
-                <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true">
+                <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true" columnindex="'3'">
                     <vr-span vr-loader="dataItem.isTextResourceSelectorLoading">
-                        <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                        <vr-row removeline>
+                            <vr-row removeline>
+                                <vr-row removeline>
+                                    <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                                </vr-row>
+                            </vr-row>
+                        </vr-row>
                     </vr-span>
                 </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Required'" disablesorting widthfactor="4">

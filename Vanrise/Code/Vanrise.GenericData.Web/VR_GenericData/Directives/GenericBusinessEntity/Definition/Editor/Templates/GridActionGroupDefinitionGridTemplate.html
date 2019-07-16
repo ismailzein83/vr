@@ -1,4 +1,4 @@
-﻿<vr-button type="Add" data-onclick="ctrl.addGridActionGroup" standalone></vr-button>
+﻿<vr-button type="Add" data-onclick="ctrl.addGridActionGroup" standalone vr-disabled="ctrl.disableAddGridActionGroup()"></vr-button>
 
 <vr-validator validate="ctrl.isValid()">
     <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="100px"

@@ -4,6 +4,18 @@
             <vr-section header="Main Settings">
                 <vr-row>
                     <vr-columns width="1/3row">
+                        <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" label="Data Record Type" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType" showaddbutton></vr-genericdata-datarecordtype-selector>
+                    </vr-columns>
+                    <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingTitle">
+                        <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+                    <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingTextResourceField">
+                        <vr-genericdata-datarecordtypefields-selector label="Text Resource Field" on-ready="scopeModel.onDataRecordTypeTextResourceFieldSelectorDirectiveReady"></vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="1/3row">
                         <vr-select datasource="scopeModel.genericBEDefinitionTypes"
                                    datavaluefield="value"
                                    datatextfield="description"
@@ -28,18 +40,6 @@
                     <vr-columns width="1/3row" ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==0">
                         <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorDirectiveReady" selectedvalues="scopeModel.selectedDataRecordStorage" isrequired="true"></vr-genericdata-datarecordstorage-selector>
                     </vr-columns>
-                </vr-row>
-                <vr-row>
-                    <vr-columns width="1/3row">
-                        <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" label="Data Record Type" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType" showaddbutton></vr-genericdata-datarecordtype-selector>
-                    </vr-columns>
-                    <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingTitle">
-                        <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
-                    </vr-columns>
-                    <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingTextResourceField">
-                        <vr-genericdata-datarecordtypefields-selector label="Text Resource Field" on-ready="scopeModel.onDataRecordTypeTextResourceFieldSelectorDirectiveReady"></vr-genericdata-datarecordtypefields-selector>
-                    </vr-columns>
-
                 </vr-row>
                 <vr-row>
                     <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingRequiredParent">
@@ -119,12 +119,12 @@
 
 <vr-tab header="'Grid Definition'">
     <vr-row>
-        <vr-columns width="1/2row">
+        <vr-columns width="2/3row">
             <vr-section header="Grid Columns" collapsible vr-loader="scopeModel.isLoadingColumns">
                 <vr-genericdata-genericbe-columndefinition-grid on-ready="scopeModel.onGenericBEColumnDefinitionGridReady"></vr-genericdata-genericbe-columndefinition-grid>
             </vr-section>
         </vr-columns>
-        <vr-columns width="1/2row">
+        <vr-columns width="1/3row">
             <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-section header="Grid Views" collapsible>

@@ -2,19 +2,19 @@
     <vr-columns colnum="12">
         <vr-section header="Field Definition">
             <vr-row>
-                <vr-columns width="1/3row">
+                <vr-columns width="1/4row">
                     <vr-textbox value="scopeModel.fieldTitle" label="Title" isrequired></vr-textbox>
                 </vr-columns>
-                <vr-columns width="1/3row">
+                <vr-columns width="1/4row">
                     <vr-switch value="scopeModel.isRequired" label="Required"></vr-switch>
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-genericdata-fieldtype-selective on-ready="scopeModel.onFieldTypeDirectiveReady" normal-col-num="4"></vr-genericdata-fieldtype-selective>
+                <vr-genericdata-fieldtype-selective on-ready="scopeModel.onFieldTypeDirectiveReady" normal-col-num="3"></vr-genericdata-fieldtype-selective>
             </vr-row>
             <vr-row>
                 <span vr-loader="scopeModel.isLocalizationTextResourceSelectorLoading">
-                    <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="6">
+                    <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="3">
                     </vr-common-vrlocalizationtextresource-selector>
                 </span>
             </vr-row>
@@ -25,31 +25,31 @@
     <vr-columns colnum="12">
         <vr-section header="Child Business Entity">
             <vr-row>
-                <vr-columns width="1/2row">
+                <vr-columns width="1/4row">
                     <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onChildBusinessEntityDefinitionSelectorReady" customlabel="Business Entity Definition"
                                                                       isrequired="true" onselectionchanged="scopeModel.onChildBusinessEntityDefinitionSelectionChanged">
                     </vr-genericdata-businessentitydefinition-selector>
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-columns vr-loader="scopeModel.isChildInputFieldsSelectorLoading" width="1/2row">
+                <vr-columns vr-loader="scopeModel.isChildInputFieldsSelectorLoading" width="1/4row">
                     <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onChildInputFieldsSelectorDirectiveReady"
                                                                   onselectionchanged="scopeModel.onChildInputFieldsSelectionChanged" isrequired="true" label="Input Field">
                     </vr-genericdata-datarecordtypefields-selector>
                 </vr-columns>
-                <vr-columns ng-if="scopeModel.childFieldTypeRuntimeDirective != undefined" vr-loader="scopeModel.isChildFieldTypeRumtimeDirectiveLoading" width="1/2row" haschildcolumns>
+                <vr-columns ng-if="scopeModel.childFieldTypeRuntimeDirective != undefined" vr-loader="scopeModel.isChildFieldTypeRumtimeDirectiveLoading" width="1/4row" haschildcolumns>
                     <vr-directivewrapper directive="scopeModel.childFieldTypeRuntimeDirective"
-                                         on-ready="scopeModel.onChildFieldTypeRumtimeDirectiveReady" normal-col-num="6">
+                                         on-ready="scopeModel.onChildFieldTypeRumtimeDirectiveReady" normal-col-num="3">
                     </vr-directivewrapper>
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-columns width="1/2row" vr-loader="scopeModel.isChildOutputFieldsSelectorLoading">
+                <vr-columns width="1/4row" vr-loader="scopeModel.isChildOutputFieldsSelectorLoading">
                     <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onChildOutputFieldsSelectorReady"
                                                                   isrequired="true" label="Output Field">
                     </vr-genericdata-datarecordtypefields-selector>
                 </vr-columns>
-                <vr-columns width="1/2row">
+                <vr-columns width="1/4row">
                     <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onParentMappedFieldsSelectorReady"
                                                                   isrequired="true" label="Parent Mapped Field">
                     </vr-genericdata-datarecordtypefields-selector>

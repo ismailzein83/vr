@@ -1,16 +1,17 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/4row">
         <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" onselectionchanged="scopeModel.onDataRecordTypeFieldsSelectionChanged" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
     </vr-columns>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/4row">
         <vr-textbox value="scopeModel.fieldTitle" label="Title" isrequired="true"></vr-textbox>
     </vr-columns>
+    <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="3"></vr-common-vrlocalizationtextresource-selector>
 </vr-row>
 <vr-row>
     <span vr-loader="scopeModel.isFieldTypeRumtimeDirectiveLoading" ng-if="scopeModel.fieldTypeRuntimeDirective != undefined">
         <vr-directivewrapper directive="scopeModel.fieldTypeRuntimeDirective"
                              on-ready="scopeModel.onFieldTypeRumtimeDirectiveReady"
-                             normal-col-num="6">
+                             normal-col-num="3">
         </vr-directivewrapper>
     </span>
     <vr-columns width="1/4row">
@@ -19,5 +20,4 @@
     <vr-columns width="1/4row">
         <vr-switch value="scopeModel.triggerSearch" label="Trigger Search"></vr-switch>
     </vr-columns>
-    <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="6"></vr-common-vrlocalizationtextresource-selector>
 </vr-row>

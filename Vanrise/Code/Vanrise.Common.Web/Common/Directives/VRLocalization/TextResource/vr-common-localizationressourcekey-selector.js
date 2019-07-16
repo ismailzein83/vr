@@ -9,7 +9,8 @@ app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationServic
                 selectedValue: '=',
                 customlabel: '@',
                 normalColNum: '@',
-                isrequired:"="
+                isrequired:"=",
+                hidelabel: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -32,7 +33,11 @@ app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationServic
             var colnum = 12;
             if (attrs.normalColNum != undefined)
                 colnum = attrs.normalColNum;
-            return '<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" ng-if="scopeModel.isLocalizationEnabled" normal-col-num="' + colnum + '" selectedvalues="scopeModel.selectedResourceKey" isrequired="ctrl.isrequired" customlabel="' + label + '"></vr-common-vrlocalizationtextresource-selector>';
+
+            var hidelabel = "";
+			if (attrs.hidelabel != undefined)
+				hidelabel = " hidelabel ";
+            return '<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" ng-if="scopeModel.isLocalizationEnabled" normal-col-num="' + colnum + '" selectedvalues="scopeModel.selectedResourceKey" isrequired="ctrl.isrequired" customlabel="' + label + '"' + hidelabel + '"></vr-common-vrlocalizationtextresource-selector>';
 
         }
         function VrLocalizationressourcekeySelector($scope, ctrl, $attrs) {

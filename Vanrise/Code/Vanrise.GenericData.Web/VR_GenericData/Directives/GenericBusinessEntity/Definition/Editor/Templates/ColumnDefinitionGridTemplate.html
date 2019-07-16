@@ -1,5 +1,5 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/3row">
         <vr-genericdata-datarecordtypefields-selector selectedvalues="scopeModel.selectedFields" label="Fields"
                                                       onselectitem="scopeModel.onFieldSelected" ondeselectitem="scopeModel.onFieldDeselected" ondeselectallitems="scopeModel.deselectAllFields"
                                                       hideselectedvaluessection="true" on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" ismultipleselection isrequired="true"
@@ -18,12 +18,12 @@
                 <vr-datagridcolumn headertext="'Title'" disablesorting widthfactor="6">
                     <vr-textbox value="dataItem.entity.FieldTitle" isrequired></vr-textbox>
                 </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Width'" widthfactor="12">
+                <vr-datagridcolumn headertext="'Width'" widthfactor="18">
                     <span vr-loader="dataItem.isColumnSettingDirectiveloading">
-                        <vr-common-gridcolumnwidth-editor on-ready="dataItem.onColumnSettingDirectiveReady" selector-col-num="6" textbox-col-num="6"></vr-common-gridcolumnwidth-editor>
+                        <vr-common-gridcolumnwidth-editor on-ready="dataItem.onColumnSettingDirectiveReady" hidelabel  selector-col-num="4" textbox-col-num="4"></vr-common-gridcolumnwidth-editor>
                     </span>
                 </vr-datagridcolumn>
-                <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true">
+                <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true" columnindex="'2'">
                     <vr-span vr-loader="dataItem.isTextResourceSelectorLoading">
                         <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
                     </vr-span>

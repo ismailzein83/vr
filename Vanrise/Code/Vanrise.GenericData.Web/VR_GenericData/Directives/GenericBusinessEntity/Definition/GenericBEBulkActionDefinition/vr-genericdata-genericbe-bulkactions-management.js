@@ -38,7 +38,10 @@ app.directive("vrGenericdataGenericbeBulkactionsManagement", ["UtilsService", "V
                     };
                     VR_GenericData_GenericBEDefinitionService.addGenericBEBulkActionDefinition(genericBEDefinitionId, onGenericBEBulkActionAdded, context);
                 };
-
+                ctrl.disableAddBulkAction = function () {
+                    if (context == undefined) return true;
+                    return context.getDataRecordTypeId() == undefined;
+                };
                 ctrl.removeGenericBEBulkAction = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);

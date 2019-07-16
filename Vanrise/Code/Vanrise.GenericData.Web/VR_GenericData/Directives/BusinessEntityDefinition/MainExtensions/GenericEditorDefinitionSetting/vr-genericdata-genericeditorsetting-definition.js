@@ -85,12 +85,8 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                             var row = rows[j];
                             var rowObject = {
                                 payload: row,
-                                genericFieldsDirectiveReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                genericFieldsDirectiveLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
                             };
-                            promises.push(rowObject.genericFieldsDirectiveLoadPromiseDeferred.promise);
                             prepareRow(rowObject);
-
                         }
                     } 
                     return UtilsService.waitPromiseNode({ promises: promises });
@@ -102,10 +98,7 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
 
                     dataItem.onGenericFieldsDirectiveReady = function (api) {
                         dataItem.genericFieldsDirectiveAPI = api;
-                        rowObject.genericFieldsDirectiveReadyPromiseDeferred.resolve();
-                    };
-
-                    rowObject.genericFieldsDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var setLoader = function (value) { dataItem.isGenericFieldsDirectiveLoading = value; };
 
                         var rowPayload = {
                             fields: rowObject.payload.Fields,
@@ -114,12 +107,9 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                                 dataItem.entity.fieldsNumber = fieldsNumber;
                             }
                         };
-                        VRUIUtilsService.callDirectiveLoad(dataItem.genericFieldsDirectiveAPI, rowPayload, rowObject.genericFieldsDirectiveLoadPromiseDeferred);
-                    });
-                    gridAPI.expandRow(dataItem);
-
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.genericFieldsDirectiveAPI, rowPayload, setLoader);
+                    };
                     ctrl.datasource.push(dataItem);
-
                 }
                 api.getData = function () {
 
