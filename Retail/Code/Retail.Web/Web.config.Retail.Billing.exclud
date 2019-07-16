@@ -77,6 +77,8 @@
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
     <add key="ExposedConnectionStringNames" value=""/>
+
+    <add key="RetailBillingConnStringKey" value="RetailBillingConnString"/>
   </appSettings>
 
   <system.web>
