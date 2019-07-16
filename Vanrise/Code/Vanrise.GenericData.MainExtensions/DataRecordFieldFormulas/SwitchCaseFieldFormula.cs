@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
-using Vanrise.GenericData.MainExtensions.DataRecordFields;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 {
@@ -66,10 +63,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                     ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
                     RecordFilter targetFieldRecordFilter = Vanrise.GenericData.Business.Helper.ConvertToRecordFilter(this.TargetFieldName, targetDataRecordFieldType, targetFieldObjectListRecordFilter);
 
-                    DataRecordFieldType mappedFieldBEFieldType;
-                    GetFieldType(context, kvp.Value.MappingFieldName, out mappedFieldBEFieldType);
                     ObjectListRecordFilter mappedFieldObjectListRecordFilter = BuildObjectListRecordFilter(objectListFilter.CompareOperator, objectListFilter.Values);
-                    RecordFilter mappedFieldRecordFilter = Vanrise.GenericData.Business.Helper.ConvertToRecordFilter(kvp.Value.MappingFieldName, mappedFieldBEFieldType, mappedFieldObjectListRecordFilter);
+                    RecordFilter mappedFieldRecordFilter = Vanrise.GenericData.Business.Helper.ConvertToRecordFilter(kvp.Value.MappingFieldName, context.FieldType, mappedFieldObjectListRecordFilter);
 
                     RecordFilterGroup currentRecordFilterGroup = new RecordFilterGroup();
                     currentRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
