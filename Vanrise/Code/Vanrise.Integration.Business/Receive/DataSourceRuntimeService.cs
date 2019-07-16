@@ -159,6 +159,7 @@ namespace Vanrise.Integration.Business
                     importedBatchProcessingOutput = new ImportedBatchProcessingOutput();
                     importedBatchProcessingOutput.MappingOutput = mappingOutput;
 
+                    importedBatchEntry.BatchDescription = data.Description;
                     importedBatchEntry.Result = mappingOutput.Result;
                     importedBatchEntry.MapperMessage = mappingOutput.Message;
 
