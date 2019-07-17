@@ -304,45 +304,6 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public PaymentMethod CheckCSO(string sysUserId)
-        {
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysAdminUnit");
-            esq.AddColumn("Id");
-            var cashierColumn = esq.AddColumn("Contact.StUserCSO.StCashier");
-
-            //var csoidcol = esq.AddColumn("StCSO.Id");
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", sysUserId);
-            esq.Filters.Add(esqFirstFilter);
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-
-            if (entities.Count > 0)
-            {
-                bool isCashier = entities[0].GetTypedColumnValue<bool>(cashierColumn.Name);
-
-                if (isCashier)
-                    return new PaymentMethod()
-                    {
-                        Id = "E78BC2E8-119B-475B-AFB1-962B11842597",
-                        Name = "Cash"
-                    };
-
-                else
-                    return new PaymentMethod()
-                    {
-                        Id = "E9F030F4-BF08-4E99-96C2-86C92134FC0F",
-                        Name = "Invoice"
-                    };
-
-            }
-
-            return null;
-        }
         public OutputResult ValidateRequest(string contactId, string accountId)
         {
             bool isSkip = false;
@@ -497,6 +458,45 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public PaymentMethod CheckCSO(string sysUserId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysAdminUnit");
+            esq.AddColumn("Id");
+            var cashierColumn = esq.AddColumn("Contact.StUserCSO.StCashier");
+
+            //var csoidcol = esq.AddColumn("StCSO.Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", sysUserId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                bool isCashier = entities[0].GetTypedColumnValue<bool>(cashierColumn.Name);
+
+                if (isCashier)
+                    return new PaymentMethod()
+                    {
+                        Id = "E78BC2E8-119B-475B-AFB1-962B11842597",
+                        Name = "Cash"
+                    };
+
+                else
+                    return new PaymentMethod()
+                    {
+                        Id = "E9F030F4-BF08-4E99-96C2-86C92134FC0F",
+                        Name = "Invoice"
+                    };
+
+            }
+
+            return null;
+        }
         public bool IsCommercial(string sysUserId)
         {
             bool isCommercial = false;
@@ -504,11 +504,11 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
 
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysUserInRole");
-            esq.AddColumn("SysUser");
-            var commercialColumn = esq.AddColumn("SysUser.Contact.StCSO.StCommercial");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysAdminUnit");
+            esq.AddColumn("Id");
+            var commercialColumn = esq.AddColumn("Contact.StUserCSO.StCommercial");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "SysUser", sysUserId);
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", sysUserId);
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
@@ -1061,6 +1061,7 @@ namespace BPMExtended.Main.Business
                 {
                     var contractServiceItem = ServiceDetailToContractServiceMapper(item);
                     contractServices.Add(contractServiceItem);
+
                 }
 
 
@@ -1081,6 +1082,12 @@ namespace BPMExtended.Main.Business
                 {
                     depositServices = new CatalogManager().GetForeignerDeposits(optionalServices);
                 }
+
+               /* depositServices = (from item in listOfOptionalServices
+                                   where item.HasDeposit
+                                   select new DepositDocument() { Id = item.Id }).ToList();*/
+
+
                 //call api
                 SOMRequestInput<TelephonyContractOnHoldInput> somRequestInput = new SOMRequestInput<TelephonyContractOnHoldInput>
                 {

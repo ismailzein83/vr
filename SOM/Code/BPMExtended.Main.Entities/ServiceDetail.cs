@@ -13,27 +13,12 @@ namespace BPMExtended.Main.Entities
         public string PackageId { get; set; }
         public bool NeedsProvisioning { get; set; }
         public bool IsNetwork { get; set; }
+        public bool HasDeposit { get; set; }
         public bool IsServiceResource { get; set; }
-
-
-        //public string ServiceResource { get; set; }
-
-        //public string ServiceId { get; set; }
-
-
-        //public string Name { get; set; }
-
-        //public string Description { get; set; }
-
-        //public bool IsCore { get; set; }
-
-        //public string PackageName { get; set; }
-
-        //public decimal SubscriptionFee { get; set; }
-
-        //public decimal AccessFee { get; set; }
-
-        //public List<ServiceParameterDetail> ServiceParams { get; set; }
+        public decimal SubscriptionFee { get; set; }
+        public decimal AccessFee { get; set; }
+        public bool CanDiscount { get; set; }
+        public bool HasDiscount { get; set; }
     }
 
     public class ServiceInfo

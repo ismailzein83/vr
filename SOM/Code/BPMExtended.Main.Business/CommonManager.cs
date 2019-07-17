@@ -185,7 +185,7 @@ namespace BPMExtended.Main.Business
             return null;
         }
 
-        public void UpdateDepositDocumentId(string requestId,string depositDocumentId)
+        public void UpdateDepositDocumentId(string requestId, List<DepositDocument> depositDocumentId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -209,11 +209,7 @@ namespace BPMExtended.Main.Business
                     listOfDeposites = JsonConvert.DeserializeObject<List<DepositDocument>>(deposites);
                 }
 
-                listOfDeposites.Add(new DepositDocument()
-                    {
-                        Id = depositDocumentId
-                    }
-                );
+                listOfDeposites.Concat(depositDocumentId);
 
 
                 //update deposites
