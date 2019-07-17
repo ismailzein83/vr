@@ -224,21 +224,6 @@ namespace Vanrise.GenericData.FileDataStorage
             }
         }
 
-        private long InsertFileMetadataRecord(FileRecordStoragePreparedConfig preparedConfig, FileRecordStorageBatchInfo batch, string parentFolderRelativePath)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(preparedConfig.MetadataRDBTableQuerySource);
-            insertQuery.AddSelectGeneratedId();
-            insertQuery.Column(COL_RuntimeNodeID).Value(Vanrise.Runtime.RuntimeHost.Current.RuntimeNodeId);
-            insertQuery.Column(COL_ParentFolderRelativePath).Value(parentFolderRelativePath);
-            insertQuery.Column(COL_FromTime).Value(batch.FromTime);
-            insertQuery.Column(COL_ToTime).Value(batch.ToTime);
-            insertQuery.Column(COL_IsReady).Value(false);
-            var fileMetadataId = queryContext.ExecuteScalar().LongValue;
-            return fileMetadataId;
-        }
-
         public List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context)
         {
             throw new NotImplementedException();
@@ -350,6 +335,11 @@ namespace Vanrise.GenericData.FileDataStorage
         private static void AddFileMetadataReadyCondition(RDBConditionContext where)
         {
             where.EqualsCondition(COL_IsReady).Value(true);
+        }
+
+        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
+        {
+            throw new NotImplementedException();
         }
 
         public List<DataRecord> GetAllDataRecords(List<string> columns)
@@ -473,6 +463,11 @@ namespace Vanrise.GenericData.FileDataStorage
 
             maxId = maxId_local;
             return minDate;
+        }
+
+        public DateTime? GetMinDateTimeWithMaxIdByFilter(RecordFilterGroup filterGroup, out long? maxId)
+        {
+            throw new NotImplementedException();
         }
 
         public long? GetMaxId(out DateTime? maxDate, out DateTime? minDate)
@@ -1046,14 +1041,19 @@ namespace Vanrise.GenericData.FileDataStorage
             }
         }
 
-        public DateTime? GetMinDateTimeWithMaxIdByFilter(RecordFilterGroup filterGroup, out long? maxId)
+        private long InsertFileMetadataRecord(FileRecordStoragePreparedConfig preparedConfig, FileRecordStorageBatchInfo batch, string parentFolderRelativePath)
         {
-            throw new NotImplementedException();
-        }
-
-        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
-        {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(preparedConfig.MetadataRDBTableQuerySource);
+            insertQuery.AddSelectGeneratedId();
+            insertQuery.Column(COL_RuntimeNodeID).Value(Vanrise.Runtime.RuntimeHost.Current.RuntimeNodeId);
+            insertQuery.Column(COL_ParentFolderRelativePath).Value(parentFolderRelativePath);
+            insertQuery.Column(COL_FromTime).Value(batch.FromTime);
+            insertQuery.Column(COL_ToTime).Value(batch.ToTime);
+            insertQuery.Column(COL_IsReady).Value(false);
+            var fileMetadataId = queryContext.ExecuteScalar().LongValue;
+            return fileMetadataId;
         }
 
         #endregion

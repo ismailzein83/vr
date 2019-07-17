@@ -15,6 +15,8 @@ namespace Vanrise.GenericData.SQLDataStorage
 {
     public class SQLRecordStorageDataManager : BaseSQLDataManager, IDataRecordDataManager, ISummaryRecordDataManager
     {
+        #region Fields\Ctor
+
         SQLDataStoreSettings _dataStoreSettings;
         SQLDataRecordStorageSettings _dataRecordStorageSettings;
         DataRecordStorage _dataRecordStorage;
@@ -71,7 +73,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 return _dynamicManager;
             }
         }
-
+         
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage, SQLTempStorageInformation sqlTempStorageInformation)
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
@@ -87,21 +89,9 @@ namespace Vanrise.GenericData.SQLDataStorage
             this._summaryTransformationDefinition = summaryTransformationDefinition;
         }
 
-        protected override string GetConnectionString()
-        {
-            _dataStoreSettings.ThrowIfNull("_dataStoreSettings");
+        #endregion
 
-            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionString))
-                return _dataStoreSettings.ConnectionString;
-
-            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionStringName))
-                return Utilities.GetConnectionStringByName(_dataStoreSettings.ConnectionStringName); 
-
-            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionStringAppSettingName))
-                return Utilities.GetConnectionStringByAppSettingName(_dataStoreSettings.ConnectionStringAppSettingName);
-
-            throw new Exception("ConnectionString or ConnectionStringName or ConnectionStringAppSettingName should be defined");
-        }
+        #region IDataRecordDataManager
 
         public object InitialiazeStreamForDBApply()
         {
@@ -154,181 +144,6 @@ namespace Vanrise.GenericData.SQLDataStorage
         public void ApplyStreamToDB(object stream)
         {
             base.InsertBulkToTable(stream as BaseBulkInsertInfo);
-        }
-
-        public void CreateSQLRecordStorageTable()
-        {
-            ExecuteNonQueryText(GetRecordStorageCreateTableQuery(this._dataRecordStorageSettings.TableName, false), null);
-        }
-
-        internal SQLTempStorageInformation CreateTempSQLRecordStorageTable(long processId)
-        {
-            string tableName = string.Format("{0}_Temp_{1}", _dataRecordStorageSettings.TableName, processId);
-            ExecuteNonQueryText(GetRecordStorageCreateTableQuery(tableName, true), null);
-
-            return new SQLTempStorageInformation()
-            {
-                Schema = _dataRecordStorageSettings.TableSchema != null ? _dataRecordStorageSettings.TableSchema : "dbo",
-                TableName = tableName
-            };
-        }
-
-        public void AlterSQLRecordStorageTable(SQLDataRecordStorageSettings existingDataRecordSettings)
-        {
-            string query = GetRecordStorageAlterTableQuery(existingDataRecordSettings);
-            if (query != null)
-                ExecuteNonQueryText(query, null);
-        }
-
-        public void FillDataRecordStorageFromTempStorage(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
-        {
-            _sqlTempStorageInformation.ThrowIfNull("_sqlTempStorageInformation");
-
-            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            int parameterIndex = 0;
-
-            string recordFilterResult = string.Empty;
-            if (recordFilterGroup != null)
-            {
-                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
-                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(recordFilterGroup, ref parameterIndex, parameterValues);
-                recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" AND {0} ", recordFilter) : string.Empty;
-            }
-
-            StringBuilder queryBuilder = new StringBuilder
-            (
-                @"IF OBJECT_ID('#destinationTableName#', N'U') IS NOT NULL and OBJECT_ID('#sourceTableName#', N'U') IS NOT NULL
-                        Begin
-	                        Begin Try
-		                        Begin Transaction
-			                        Delete from #destinationTableName#
-			                        Where #dateTimeColumn# >= @FromTime and #dateTimeColumn# < @ToTime #RecordFilterResult#
-
-			                        Insert into #destinationTableName# (#columns#)
-			                        Select #columns# from #sourceTableName# WITH(NOLOCK) 
-			                        Where #dateTimeColumn# >= @FromTime and #dateTimeColumn# < @ToTime #RecordFilterResult#
-		                        Commit Transaction
-	                        End Try
-	                        Begin CATCH
-		                        declare @ErrorMessage nvarchar(max), @ErrorSeverity int, @ErrorState int;
-                                select @ErrorMessage = ERROR_MESSAGE() + ' Line ' + cast(ERROR_LINE() as nvarchar(5)), @ErrorSeverity = ERROR_SEVERITY(), @ErrorState = ERROR_STATE();
-                                rollback Transaction;
-                                raiserror (@ErrorMessage, @ErrorSeverity, @ErrorState);
-	                        End CATCH
-                        End"
-            );
-
-            string columns = string.Join(",", _dataRecordStorageSettings.Columns.Select(itm => itm.ColumnName));
-
-            string destinationTableName = GetTableNameWithSchema();
-            string sourceTableName = _sqlTempStorageInformation.TableNameWithSchema;
-            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
-            string fromParam = string.Format("'{0}'", from.ToString());
-            string toParam = string.Format("'{0}'", to.ToString());
-
-            queryBuilder.Replace("#destinationTableName#", destinationTableName);
-            queryBuilder.Replace("#sourceTableName#", _sqlTempStorageInformation.TableNameWithSchema);
-            queryBuilder.Replace("#columns#", columns);
-            queryBuilder.Replace("#dateTimeColumn#", dateTimeColumn.ToString());
-            queryBuilder.Replace("#RecordFilterResult#", recordFilterResult);
-
-            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
-            {
-                cmd.CommandTimeout = 0;
-                cmd.Parameters.Add(new SqlParameter("@FromTime", from));
-                cmd.Parameters.Add(new SqlParameter("@ToTime", to));
-                foreach (var prm in parameterValues)
-                {
-                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
-                }
-            });
-        }
-
-        public int GetStorageRowCount()
-        {
-            StringBuilder queryBuilder = new StringBuilder
-            (
-                @"IF OBJECT_ID('#tableNameWithSchema#', N'U') IS NOT NULL 
-                                Begin
-                                    SELECT CAST(p.rows AS int)
-                                    FROM sys.tables AS tbl
-                                    INNER JOIN sys.indexes AS idx ON idx.object_id = tbl.object_id and idx.index_id < 2
-                                    INNER JOIN sys.partitions AS p ON p.object_id = CAST(tbl.object_id AS int) and p.index_id = idx.index_id
-                                    WHERE ((tbl.name=N'#tableName#' AND SCHEMA_NAME(tbl.schema_id)=N'#schema#'))
-                                End"
-            );
-
-            string tableNameWithSchema, schema, tableName;
-
-            if (_sqlTempStorageInformation != null && _sqlTempStorageInformation.TableNameWithSchema != null)
-            {
-                tableNameWithSchema = _sqlTempStorageInformation.TableNameWithSchema;
-                schema = _sqlTempStorageInformation.Schema;
-                tableName = _sqlTempStorageInformation.TableName;
-            }
-            else
-            {
-                tableNameWithSchema = GetTableNameWithSchema();
-                schema = (_dataRecordStorageSettings.TableSchema != null) ? _dataRecordStorageSettings.TableSchema : "dbo";
-                tableName = _dataRecordStorageSettings.TableName;
-            }
-
-            queryBuilder.Replace("#tableNameWithSchema#", tableNameWithSchema);
-            queryBuilder.Replace("#schema#", schema);
-            queryBuilder.Replace("#tableName#", tableName);
-
-            return (int)ExecuteScalarText(queryBuilder.ToString(), null);
-        }
-
-        public void DropStorage()
-        {
-            StringBuilder queryBuilder = new StringBuilder
-            (
-                @"IF OBJECT_ID('#tableNameWithSchema#', N'U') IS NOT NULL 
-                                Begin
-                                    Drop Table #tableNameWithSchema#
-                                End"
-            );
-
-            string tableNameWithSchema = null;
-            if (_sqlTempStorageInformation != null)
-                tableNameWithSchema = _sqlTempStorageInformation.TableNameWithSchema;
-            else
-                tableNameWithSchema = GetTableNameWithSchema();
-
-            queryBuilder.Replace("#tableNameWithSchema#", tableNameWithSchema);
-
-            ExecuteNonQueryText(queryBuilder.ToString(), null);
-        }
-
-        public IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart)
-        {
-            var recortTypeManager = new DataRecordTypeManager();
-            var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
-            if (recordRuntimeType == null)
-                throw new NullReferenceException(String.Format("recordRuntimeType '{0}'", _dataRecordStorage.DataRecordTypeId));
-            StringBuilder queryBuilder = new StringBuilder(@"SELECT #COLUMNS# FROM #TABLE# WHERE #BATCHSTARTCOLUMN# = @BatchStart");
-
-            var batchStartColumnMapping = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == _summaryTransformationDefinition.SummaryBatchStartFieldName);
-            if (batchStartColumnMapping == null)
-                throw new NullReferenceException(String.Format("batchStartColumnMapping '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
-            if (batchStartColumnMapping.ColumnName == null)
-                throw new NullReferenceException(String.Format("batchStartColumnMapping.ColumnName '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
-
-            queryBuilder.Replace("#COLUMNS#", this.DynamicManager.ColumnNamesCommaDelimited);
-            queryBuilder.Replace("#TABLE#", GetTableNameWithSchema());
-            queryBuilder.Replace("#BATCHSTARTCOLUMN#", batchStartColumnMapping.ColumnName);
-            return GetItemsText(queryBuilder.ToString(),
-                (reader) =>
-                {
-                    dynamic item = Activator.CreateInstance(recordRuntimeType) as dynamic;
-                    this.DynamicManager.FillDataRecordFromReader(item, reader);
-                    return item;
-                },
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart));
-                });
         }
 
         public List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context)
@@ -403,6 +218,16 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
+        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
+        {
+            Columns = GetColumnNamesFromFieldNames(fieldNames);
+            string query = BuildGetByIdQuery();
+            return GetItemText(query, DataRecordMapper, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@IdFieldValue", dataRecordId));
+            });
+        }
+
         public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
             var recortTypeManager = new DataRecordTypeManager();
@@ -464,16 +289,6 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                 foreach (var prm in parameterValues)
                     cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
-            });
-        }
-
-        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
-        {
-            Columns = GetColumnNamesFromFieldNames(fieldNames);
-            string query = BuildGetByIdQuery();
-            return GetItemText(query, DataRecordMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@IdFieldValue", dataRecordId));
             });
         }
 
@@ -730,7 +545,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             List<string> queryFilters = new List<string>();
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
             int parameterIndex = 0;
-           
+
             if (filterGroup != null)
             {
                 Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
@@ -738,7 +553,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                 if (!string.IsNullOrEmpty(recordFilter))
                     queryFilters.Add(recordFilter);
-   
+
             }
             string query = $"SELECT MAX ({idFieldName}) AS MaxId, MIN({datetimeFieldName}) AS MinDate,  from {tableName} WITH (NOLOCK)";
             if (queryFilters.Count > 0)
@@ -794,6 +609,206 @@ namespace Vanrise.GenericData.SQLDataStorage
             return maxIdFromReader;
         }
 
+        #endregion
+
+        #region ISummaryRecordDataManager
+
+        public IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart)
+        {
+            var recortTypeManager = new DataRecordTypeManager();
+            var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
+            if (recordRuntimeType == null)
+                throw new NullReferenceException(String.Format("recordRuntimeType '{0}'", _dataRecordStorage.DataRecordTypeId));
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT #COLUMNS# FROM #TABLE# WHERE #BATCHSTARTCOLUMN# = @BatchStart");
+
+            var batchStartColumnMapping = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == _summaryTransformationDefinition.SummaryBatchStartFieldName);
+            if (batchStartColumnMapping == null)
+                throw new NullReferenceException(String.Format("batchStartColumnMapping '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
+            if (batchStartColumnMapping.ColumnName == null)
+                throw new NullReferenceException(String.Format("batchStartColumnMapping.ColumnName '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
+
+            queryBuilder.Replace("#COLUMNS#", this.DynamicManager.ColumnNamesCommaDelimited);
+            queryBuilder.Replace("#TABLE#", GetTableNameWithSchema());
+            queryBuilder.Replace("#BATCHSTARTCOLUMN#", batchStartColumnMapping.ColumnName);
+            return GetItemsText(queryBuilder.ToString(),
+                (reader) =>
+                {
+                    dynamic item = Activator.CreateInstance(recordRuntimeType) as dynamic;
+                    this.DynamicManager.FillDataRecordFromReader(item, reader);
+                    return item;
+                },
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart));
+                });
+        }
+
+        #endregion
+
+        #region Public/Internal/Protected Methods
+
+        public void CreateSQLRecordStorageTable()
+        {
+            ExecuteNonQueryText(GetRecordStorageCreateTableQuery(this._dataRecordStorageSettings.TableName, false), null);
+        }
+
+        public void AlterSQLRecordStorageTable(SQLDataRecordStorageSettings existingDataRecordSettings)
+        {
+            string query = GetRecordStorageAlterTableQuery(existingDataRecordSettings);
+            if (query != null)
+                ExecuteNonQueryText(query, null);
+        }
+
+        public void FillDataRecordStorageFromTempStorage(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
+        {
+            _sqlTempStorageInformation.ThrowIfNull("_sqlTempStorageInformation");
+
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            int parameterIndex = 0;
+
+            string recordFilterResult = string.Empty;
+            if (recordFilterGroup != null)
+            {
+                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
+                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(recordFilterGroup, ref parameterIndex, parameterValues);
+                recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" AND {0} ", recordFilter) : string.Empty;
+            }
+
+            StringBuilder queryBuilder = new StringBuilder
+            (
+                @"IF OBJECT_ID('#destinationTableName#', N'U') IS NOT NULL and OBJECT_ID('#sourceTableName#', N'U') IS NOT NULL
+                        Begin
+	                        Begin Try
+		                        Begin Transaction
+			                        Delete from #destinationTableName#
+			                        Where #dateTimeColumn# >= @FromTime and #dateTimeColumn# < @ToTime #RecordFilterResult#
+
+			                        Insert into #destinationTableName# (#columns#)
+			                        Select #columns# from #sourceTableName# WITH(NOLOCK) 
+			                        Where #dateTimeColumn# >= @FromTime and #dateTimeColumn# < @ToTime #RecordFilterResult#
+		                        Commit Transaction
+	                        End Try
+	                        Begin CATCH
+		                        declare @ErrorMessage nvarchar(max), @ErrorSeverity int, @ErrorState int;
+                                select @ErrorMessage = ERROR_MESSAGE() + ' Line ' + cast(ERROR_LINE() as nvarchar(5)), @ErrorSeverity = ERROR_SEVERITY(), @ErrorState = ERROR_STATE();
+                                rollback Transaction;
+                                raiserror (@ErrorMessage, @ErrorSeverity, @ErrorState);
+	                        End CATCH
+                        End"
+            );
+
+            string columns = string.Join(",", _dataRecordStorageSettings.Columns.Select(itm => itm.ColumnName));
+
+            string destinationTableName = GetTableNameWithSchema();
+            string sourceTableName = _sqlTempStorageInformation.TableNameWithSchema;
+            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
+            string fromParam = string.Format("'{0}'", from.ToString());
+            string toParam = string.Format("'{0}'", to.ToString());
+
+            queryBuilder.Replace("#destinationTableName#", destinationTableName);
+            queryBuilder.Replace("#sourceTableName#", _sqlTempStorageInformation.TableNameWithSchema);
+            queryBuilder.Replace("#columns#", columns);
+            queryBuilder.Replace("#dateTimeColumn#", dateTimeColumn.ToString());
+            queryBuilder.Replace("#RecordFilterResult#", recordFilterResult);
+
+            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
+            {
+                cmd.CommandTimeout = 0;
+                cmd.Parameters.Add(new SqlParameter("@FromTime", from));
+                cmd.Parameters.Add(new SqlParameter("@ToTime", to));
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                }
+            });
+        }
+
+        public int GetStorageRowCount()
+        {
+            StringBuilder queryBuilder = new StringBuilder
+            (
+                @"IF OBJECT_ID('#tableNameWithSchema#', N'U') IS NOT NULL 
+                                Begin
+                                    SELECT CAST(p.rows AS int)
+                                    FROM sys.tables AS tbl
+                                    INNER JOIN sys.indexes AS idx ON idx.object_id = tbl.object_id and idx.index_id < 2
+                                    INNER JOIN sys.partitions AS p ON p.object_id = CAST(tbl.object_id AS int) and p.index_id = idx.index_id
+                                    WHERE ((tbl.name=N'#tableName#' AND SCHEMA_NAME(tbl.schema_id)=N'#schema#'))
+                                End"
+            );
+
+            string tableNameWithSchema, schema, tableName;
+
+            if (_sqlTempStorageInformation != null && _sqlTempStorageInformation.TableNameWithSchema != null)
+            {
+                tableNameWithSchema = _sqlTempStorageInformation.TableNameWithSchema;
+                schema = _sqlTempStorageInformation.Schema;
+                tableName = _sqlTempStorageInformation.TableName;
+            }
+            else
+            {
+                tableNameWithSchema = GetTableNameWithSchema();
+                schema = (_dataRecordStorageSettings.TableSchema != null) ? _dataRecordStorageSettings.TableSchema : "dbo";
+                tableName = _dataRecordStorageSettings.TableName;
+            }
+
+            queryBuilder.Replace("#tableNameWithSchema#", tableNameWithSchema);
+            queryBuilder.Replace("#schema#", schema);
+            queryBuilder.Replace("#tableName#", tableName);
+
+            return (int)ExecuteScalarText(queryBuilder.ToString(), null);
+        }
+
+        public void DropStorage()
+        {
+            StringBuilder queryBuilder = new StringBuilder
+            (
+                @"IF OBJECT_ID('#tableNameWithSchema#', N'U') IS NOT NULL 
+                                Begin
+                                    Drop Table #tableNameWithSchema#
+                                End"
+            );
+
+            string tableNameWithSchema = null;
+            if (_sqlTempStorageInformation != null)
+                tableNameWithSchema = _sqlTempStorageInformation.TableNameWithSchema;
+            else
+                tableNameWithSchema = GetTableNameWithSchema();
+
+            queryBuilder.Replace("#tableNameWithSchema#", tableNameWithSchema);
+
+            ExecuteNonQueryText(queryBuilder.ToString(), null);
+        }
+
+        internal SQLTempStorageInformation CreateTempSQLRecordStorageTable(long processId)
+        {
+            string tableName = string.Format("{0}_Temp_{1}", _dataRecordStorageSettings.TableName, processId);
+            ExecuteNonQueryText(GetRecordStorageCreateTableQuery(tableName, true), null);
+
+            return new SQLTempStorageInformation()
+            {
+                Schema = _dataRecordStorageSettings.TableSchema != null ? _dataRecordStorageSettings.TableSchema : "dbo",
+                TableName = tableName
+            };
+        }
+
+        protected override string GetConnectionString()
+        {
+            _dataStoreSettings.ThrowIfNull("_dataStoreSettings");
+
+            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionString))
+                return _dataStoreSettings.ConnectionString;
+
+            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionStringName))
+                return Utilities.GetConnectionStringByName(_dataStoreSettings.ConnectionStringName);
+
+            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionStringAppSettingName))
+                return Utilities.GetConnectionStringByAppSettingName(_dataStoreSettings.ConnectionStringAppSettingName);
+
+            throw new Exception("ConnectionString or ConnectionStringName or ConnectionStringAppSettingName should be defined");
+        }
+
+        #endregion
 
         #region Private Methods
 
@@ -1183,6 +1198,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                                                                     tableName));
             return str.ToString();
         }
+
         private string BuildGetByIdQuery()
         {
             string tableName = GetTableNameWithSchema();
@@ -1355,8 +1371,6 @@ namespace Vanrise.GenericData.SQLDataStorage
             datatable.EndLoadData();
             return datatable;
         }
-
-       
 
         #endregion
     }

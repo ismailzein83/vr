@@ -9,10 +9,13 @@ namespace Vanrise.GenericData.Entities
 
         List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context);
 
+        DataRecord GetDataRecord(Object dataRecordId, List<string> fieldNames);
+
         void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false);
 
-        DataRecord GetDataRecord(Object dataRecordId, List<string> fieldNames);
         List<DataRecord> GetAllDataRecords(List<string> columns);
+
+        //List<DataRecord> GetAllDataRecords(List<string> columns, RecordFilterGroup recordFilterGroup);
 
         bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId);
 

@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.Business
 {
     public class BusinessObjectDataRecordDataManager : GenericData.Entities.IDataRecordDataManager
     {
+        #region Fields/Ctor
+
         static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
         static RecordFilterManager s_recordFilterManager = new RecordFilterManager();
 
@@ -22,63 +24,37 @@ namespace Vanrise.GenericData.Business
             _dataRecordStorage = dataRecordStorage;
         }
 
+        #endregion
+
+        #region Public Methods
+
         public List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context)
         {
             return GetFilteredDataRecords(context.FromTime, context.ToTime, context.FilterGroup, context.FieldNames, context.LimitResult, context.Direction);
         }
 
-        private List<DataRecord> GetFilteredDataRecords(DateTime? fromTime,DateTime? toTime , RecordFilterGroup filterGroup, 
-            List<string> fieldNames ,int? limitResult, OrderDirection? direction)
+        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
         {
-            List<DataRecord> dataRecords = new List<DataRecord>();
-            var loadContext = new BusinessObjectDataProviderLoadRecordsContext
+            var dataRecordType = s_dataRecordTypeManager.GetDataRecordType(_dataRecordStorage.DataRecordTypeId);
+            dataRecordType.ThrowIfNull("dataRecordType", _dataRecordStorage.DataRecordTypeId);
+            dataRecordType.Settings.ThrowIfNull("dataRecordType.Settings", _dataRecordStorage.DataRecordTypeId);
+            dataRecordType.Settings.IdField.ThrowIfNull("dataRecordType.Settings.IdField", _dataRecordStorage.DataRecordTypeId);
+            var idField = s_dataRecordTypeManager.GetDataRecordField(_dataRecordStorage.DataRecordTypeId, dataRecordType.Settings.IdField);
+            idField.ThrowIfNull("idField", _dataRecordStorage.DataRecordTypeId);
+            var idRecordFilter = idField.Type.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext
             {
-                FromTime = fromTime,
-                ToTime = toTime,
-                FilterGroup = filterGroup,
-                Fields = fieldNames,
-                LimitResult = limitResult,
-                OrderDirection = direction
-            };
-            bool doesSupportFilterOnAllFields = _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.DoesSupportFilterOnAllFields;
-            int loadedRecords = 0;
-            loadContext.OnRecordLoadedAction = (dataRecordObject, recordTime) =>
+                FieldName = dataRecordType.Settings.IdField,
+                FilterValues = new List<object> { dataRecordId },
+                StrictEqual = true
+            });
+            idRecordFilter.ThrowIfNull("recordFilter", _dataRecordStorage.DataRecordTypeId);
+            var idFilterGroup = new RecordFilterGroup
             {
-                bool shouldAddRecord = false;
-                if (doesSupportFilterOnAllFields)
-                {
-                    shouldAddRecord = true;
-                }
-                else
-                {
-                    if (filterGroup == null || s_recordFilterManager.IsFilterGroupMatch(filterGroup, new DataRecordFilterGenericFieldMatchContext(dataRecordObject)))
-                    {
-                        shouldAddRecord = true;
-                    }
-                }
-                if (shouldAddRecord)
-                {
-                    var dataRecord = new DataRecord { RecordTime = recordTime, FieldValues = new Dictionary<string, object>() };
-                    if (fieldNames != null)
-                    {
-                        foreach (var fieldName in fieldNames)
-                        {
-                            dataRecord.FieldValues.Add(fieldName, dataRecordObject.GetFieldValue(fieldName));
-                        }
-                    }
-                    dataRecords.Add(dataRecord);
-                    loadedRecords++;
-                    if (loadedRecords >= limitResult)
-                        loadContext.StopLoadingRecords();
-                }
+                LogicalOperator = RecordQueryLogicalOperator.And,
+                Filters = new List<RecordFilter> { idRecordFilter }
             };
-            _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
-            return dataRecords;
-        }
-
-        public bool Delete(List<object> recordFieldIds)
-        {
-            throw new NotImplementedException();
+            var records = GetFilteredDataRecords(null, null, idFilterGroup, fieldNames, null, null);
+            return records != null && records.Count > 0 ? records[0] : null;
         }
 
         public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup filterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
@@ -133,6 +109,11 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
+        public bool Delete(List<object> recordFieldIds)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
         {
             throw new NotImplementedException();
@@ -150,10 +131,10 @@ namespace Vanrise.GenericData.Business
 
         public bool AreDataRecordsUpdated(ref object updateHandle)
         {
-            if(updateHandle is DateTime)
+            if (updateHandle is DateTime)
             {
                 DateTime lastUpdateHandle = (DateTime)updateHandle;
-                if((DateTime.Now - lastUpdateHandle).TotalMinutes > 5)
+                if ((DateTime.Now - lastUpdateHandle).TotalMinutes > 5)
                 {
                     updateHandle = DateTime.Now;
                     return true;
@@ -198,7 +179,7 @@ namespace Vanrise.GenericData.Business
         public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, out long? maxId)
         {
             throw new NotImplementedException();
-        } 
+        }
 
         public long? GetMaxId(out DateTime? maxDate, out DateTime? minDate)
         {
@@ -210,29 +191,59 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
-        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
+        #endregion
+
+        #region Private Methods
+
+        private List<DataRecord> GetFilteredDataRecords(DateTime? fromTime, DateTime? toTime, RecordFilterGroup filterGroup, List<string> fieldNames, int? limitResult, OrderDirection? direction)
         {
-            var dataRecordType = s_dataRecordTypeManager.GetDataRecordType(_dataRecordStorage.DataRecordTypeId);
-            dataRecordType.ThrowIfNull("dataRecordType", _dataRecordStorage.DataRecordTypeId);
-            dataRecordType.Settings.ThrowIfNull("dataRecordType.Settings", _dataRecordStorage.DataRecordTypeId);
-            dataRecordType.Settings.IdField.ThrowIfNull("dataRecordType.Settings.IdField", _dataRecordStorage.DataRecordTypeId);
-            var idField = s_dataRecordTypeManager.GetDataRecordField(_dataRecordStorage.DataRecordTypeId, dataRecordType.Settings.IdField);
-            idField.ThrowIfNull("idField", _dataRecordStorage.DataRecordTypeId);
-            var idRecordFilter = idField.Type.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext
+            List<DataRecord> dataRecords = new List<DataRecord>();
+            var loadContext = new BusinessObjectDataProviderLoadRecordsContext
             {
-                FieldName = dataRecordType.Settings.IdField,
-                FilterValues = new List<object> { dataRecordId },
-                StrictEqual = true
-            });
-            idRecordFilter.ThrowIfNull("recordFilter", _dataRecordStorage.DataRecordTypeId);
-            var idFilterGroup = new RecordFilterGroup
-            {
-                LogicalOperator = RecordQueryLogicalOperator.And,
-                Filters = new List<RecordFilter> { idRecordFilter }
+                FromTime = fromTime,
+                ToTime = toTime,
+                FilterGroup = filterGroup,
+                Fields = fieldNames,
+                LimitResult = limitResult,
+                OrderDirection = direction
             };
-            var records = GetFilteredDataRecords(null, null, idFilterGroup, fieldNames, null, null);
-            return records != null && records.Count > 0 ? records[0] : null;
+            bool doesSupportFilterOnAllFields = _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.DoesSupportFilterOnAllFields;
+            int loadedRecords = 0;
+            loadContext.OnRecordLoadedAction = (dataRecordObject, recordTime) =>
+            {
+                bool shouldAddRecord = false;
+                if (doesSupportFilterOnAllFields)
+                {
+                    shouldAddRecord = true;
+                }
+                else
+                {
+                    if (filterGroup == null || s_recordFilterManager.IsFilterGroupMatch(filterGroup, new DataRecordFilterGenericFieldMatchContext(dataRecordObject)))
+                    {
+                        shouldAddRecord = true;
+                    }
+                }
+                if (shouldAddRecord)
+                {
+                    var dataRecord = new DataRecord { RecordTime = recordTime, FieldValues = new Dictionary<string, object>() };
+                    if (fieldNames != null)
+                    {
+                        foreach (var fieldName in fieldNames)
+                        {
+                            dataRecord.FieldValues.Add(fieldName, dataRecordObject.GetFieldValue(fieldName));
+                        }
+                    }
+                    dataRecords.Add(dataRecord);
+                    loadedRecords++;
+                    if (loadedRecords >= limitResult)
+                        loadContext.StopLoadingRecords();
+                }
+            };
+            _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
+            return dataRecords;
         }
+
+        #endregion
 
         #region Private Classes
 
