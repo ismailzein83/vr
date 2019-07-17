@@ -571,6 +571,26 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public Dictionary<string,string> GetDiscountServicesByServiceId() // To be Tested
+        {
+            var discountServices = new Dictionary<string, string>();
+            EntitySchemaQuery esq;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServicesDiscount");
+            esq.AddColumn("StServiceId");
+            esq.AddColumn("StDiscountId");
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach (var item in entities)
+                {
+                    discountServices.Add(item.GetTypedColumnValue<string>("StServiceId"), item.GetTypedColumnValue<string>("StDiscountId"));
+                }
+            }
+            return discountServices;
+        }
+
         #endregion
     }
 
