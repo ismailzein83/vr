@@ -85,6 +85,7 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                         TabTitle: tabObject.payload.TabTitle,
                         ShowTab: tabObject.payload.ShowTab,
                     },
+                    oldSettings: tabObject.payload.TabSettings,
                     oldTextResourceKey: tabObject.payload.TextResourceKey
                 };
 
@@ -123,7 +124,7 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                             tabs.push({
                                 TabTitle: currentItem.entity.TabTitle,
                                 ShowTab: currentItem.entity.ShowTab,
-                                TabSettings: currentItem.editorDirectiveAPI != undefined ? currentItem.editorDirectiveAPI.getData() : undefined,
+                                TabSettings: currentItem.editorDirectiveAPI != undefined ? currentItem.editorDirectiveAPI.getData() : currentItem.oldSettings,
                                 TextResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : currentItem.oldTextResourceKey
                             });
                         }

@@ -245,7 +245,10 @@
                         FieldWidth: payload.FieldWidth,
                         runtimeViewSettingEditor: fieldType.RuntimeViewSettingEditor,
                     },
-                    oldTextResourceKey: payload.TextResourceKey
+                    oldTextResourceKey: payload.TextResourceKey,
+                    oldRuntimeViewSettings: payload.FieldViewSettings,
+                    oldFieldTypeRumtimeSettings: payload.DefaultFieldValue
+
                 };
                 if (dataRecordFieldType != undefined) {
                     dataItem.fieldTypeRuntimeDirective = dataRecordFieldType.RuntimeEditor;
@@ -307,9 +310,9 @@
                         HideLabel: fieldEntity.HideLabel,
                         ReadOnly: fieldEntity.ReadOnly,
                         FieldWidth: fieldEntity.FieldWidth,
-                        FieldViewSettings: currentField.directiveAPI != undefined ? currentField.directiveAPI.getData() : undefined,
+                        FieldViewSettings: currentField.directiveAPI != undefined ? currentField.directiveAPI.getData() : currentField.oldRuntimeViewSettings,
                         TextResourceKey: currentField.textResourceSeletorAPI != undefined ? currentField.textResourceSeletorAPI.getSelectedValues() : currentField.oldTextResourceKey,
-                        DefaultFieldValue: currentField.fieldTypeRuntimeDirectiveAPI != undefined ? currentField.fieldTypeRuntimeDirectiveAPI.getData() : undefined,
+                        DefaultFieldValue: currentField.fieldTypeRuntimeDirectiveAPI != undefined ? currentField.fieldTypeRuntimeDirectiveAPI.getData() : currentField.oldFieldTypeRumtimeSettings,
                     });
                 }
                 return fields;

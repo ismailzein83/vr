@@ -96,6 +96,7 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                         SectionTitle: sectionObject.payload.SectionTitle,
                         ColNum: sectionObject.payload.ColNum,
                     },
+                    oldSettings: sectionObject.payload.SectionSettings,
                     oldTextResourceKey: sectionObject.payload.TextResourceKey
                 };
 
@@ -158,7 +159,7 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                             sections.push({
                                 SectionTitle: currentItem.entity.SectionTitle,
                                 ColNum: currentItem.entity.ColNum,
-                                SectionSettings: currentItem.editorDirectiveAPI != undefined ? currentItem.editorDirectiveAPI.getData() : undefined,
+                                SectionSettings: currentItem.editorDirectiveAPI != undefined ? currentItem.editorDirectiveAPI.getData() : currentItem.oldSettings,
                                 TextResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : currentItem.oldTextResourceKey
                             });
                         }

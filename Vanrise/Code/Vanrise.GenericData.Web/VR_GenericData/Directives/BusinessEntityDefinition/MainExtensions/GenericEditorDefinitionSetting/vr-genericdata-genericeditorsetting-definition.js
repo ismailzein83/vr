@@ -93,7 +93,8 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                 };
                 function prepareRow(rowObject) {
                     var dataItem = {
-                        entity: { fieldsNumber: rowObject.payload.Fields != undefined ? rowObject.payload.Fields.length : 0 }
+                        entity: { fieldsNumber: rowObject.payload.Fields != undefined ? rowObject.payload.Fields.length : 0 },
+                        oldData: rowObject.payload.Fields
                     };
 
                     dataItem.onGenericFieldsDirectiveReady = function (api) {
@@ -123,6 +124,8 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                                     rows.push({ Fields: data });
                                 }
                             }
+                            else if (row.oldData != undefined)
+                                rows.push({ Fields: row.oldData });
                         }
                     }
                     return {
