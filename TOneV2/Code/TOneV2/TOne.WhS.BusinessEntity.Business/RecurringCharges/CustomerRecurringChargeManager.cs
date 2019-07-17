@@ -63,7 +63,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var period in context.Periods)
                     {
-                        evaluatedRecurringCharges.Add(new RecurringChargeItem
+						string recurringChargeMonth;
+						if(period.From.Month==period.To.Month)
+							recurringChargeMonth = period.RecurringChargeDate.ToString("MMMM - yyyy");
+						else
+							recurringChargeMonth= string.Format("{0} / {1}", period.From.ToString("MMMM - yyyy"), period.To.ToString("MMMM - yyyy"));
+
+						evaluatedRecurringCharges.Add(new RecurringChargeItem
                         {
                             Name = customerRecurringChargeTypeManager.GetCustomerRecurringChargeTypeName(effectiveCustomerRecurringCharge.RecurringChargeTypeId),
                             Amount = effectiveCustomerRecurringCharge.Amount,
@@ -73,7 +79,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             RecurringChargeId = effectiveCustomerRecurringCharge.ID,
                             AmountAfterTaxes = effectiveCustomerRecurringCharge.Amount,
                             DueDate = effectiveCustomerRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveCustomerRecurringCharge.DuePeriod.Value) : issueDate,
-                            RecurringChargeMonth = period.RecurringChargeDate.ToString("MMMM - yyyy"),
+                            RecurringChargeMonth = recurringChargeMonth,
                             RecurringChargeDate = period.RecurringChargeDate
                         });
                     }
