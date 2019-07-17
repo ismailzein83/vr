@@ -9,5 +9,5 @@ ECHO CarrierPortal.TOne DataBase First Deployment Scripts
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Analytic.PostDeployment.sql" /y /v /z /i /Q /R					"\\192.168.110.185\Fixes\WebSite\CP.TOne\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\CarrierPortal.TOnePortal.PostDeployment.sql" /y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\CP.TOne\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Demo_MarketView.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\CP.TOne\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Demo_MarketView.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\CP.TOne\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\CP.TOne\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
