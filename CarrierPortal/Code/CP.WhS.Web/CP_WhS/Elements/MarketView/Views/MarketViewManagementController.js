@@ -89,7 +89,7 @@
             var bidsBooleanFilterDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             bidsBooleanFilterDirectiveReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(bidsBooleanFilterDirectiveAPI, { fieldTitle: "CLI/NCLI (BIDs)" }, bidsBooleanFilterDirectiveLoadPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(bidsBooleanFilterDirectiveAPI, { fieldTitle: "CLI Status (BIDs)" }, bidsBooleanFilterDirectiveLoadPromiseDeferred);
             });
 
             return bidsBooleanFilterDirectiveLoadPromiseDeferred.promise;
@@ -99,7 +99,7 @@
             var asksBooleanFilterDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             asksBooleanFilterDirectiveReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(asksBooleanFilterDirectiveAPI, { fieldTitle: "CLI/NCLI (ASKs)" }, asksBooleanFilterDirectiveLoadPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(asksBooleanFilterDirectiveAPI, { fieldTitle: "CLI Status (ASKs)" }, asksBooleanFilterDirectiveLoadPromiseDeferred);
             });
 
             return asksBooleanFilterDirectiveLoadPromiseDeferred.promise;

@@ -29,7 +29,10 @@
                             <vr-datagridcolumn headertext="'Rate'" field="'FieldValues.Rate.Description'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'ASR'" field="'FieldValues.ASR.Description'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'ACD'" field="'FieldValues.ACD.Description'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'CLI/NCLI'" field="'FieldValues.CLIORNCLI.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'CLI Status'">
+                                <vr-label ng-if="dataItem.FieldValues.CLIORNCLI.Description=='False'" =">NON CLI</vr-label>
+                                <vr-label ng-if="dataItem.FieldValues.CLIORNCLI.Description=='True'">CLI</vr-label>
+                            </vr-datagridcolumn>                   
                             <vr-datagridcolumn headertext="'Attempts'" field="'FieldValues.Attempts.Description'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Duration'" field="'FieldValues.Duration.Description'"></vr-datagridcolumn>
 
@@ -47,8 +50,10 @@
                             <vr-datagridcolumn headertext="'Selling Rate'" field="'FieldValues.SellingRate.Description'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'ASR'" field="'FieldValues.ASR.Description'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'ACD'" field="'FieldValues.ACD.Description'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'CLI/NCLI'" field="'FieldValues.CLIORNCLI.Description'"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Attempts'" field="'FieldValues.Attempts.Description'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'CLI Status'">
+                                <vr-label ng-if="dataItem.FieldValues.CLIORNCLI.Description=='False'" =">NON CLI</vr-label>
+                                <vr-label ng-if="dataItem.FieldValues.CLIORNCLI.Description=='True'">CLI</vr-label>
+                            </vr-datagridcolumn>                            <vr-datagridcolumn headertext="'Attempts'" field="'FieldValues.Attempts.Description'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Duration'" field="'FieldValues.Duration.Description'"></vr-datagridcolumn>
 
                         </vr-datagrid>
