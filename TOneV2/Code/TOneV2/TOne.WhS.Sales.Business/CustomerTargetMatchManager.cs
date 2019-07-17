@@ -18,7 +18,7 @@ namespace TOne.WhS.Sales.Business
         }
         private byte[] GetCustomerZoneSheetBytes(IEnumerable<SaleZone> saleZones)
         {
-            var excelFile = new Vanrise.Common.Excel.VRExcelFile();
+            var excelFile = new VRExcelFile();
             var excelSheet = excelFile.CreateSheet();
 
             var excelTable = excelSheet.CreateTable(1, 0);
@@ -26,10 +26,9 @@ namespace TOne.WhS.Sales.Business
             var headerRow = excelTable.CreateHeaderRow();
             headerRow.CreateStyle();
 
-            var headerCellStyle = new VRExcelTableRowCellStyle { FontColor = "Red", FontSize = 11 };
-            CreateCell("Zone", headerRow, headerCellStyle);
-            CreateCell("Rate", headerRow, headerCellStyle);
-            CreateCell("Volume", headerRow, headerCellStyle);
+            CreateHeaderCell("Zone", headerRow);
+            CreateHeaderCell("Rate", headerRow);
+            CreateHeaderCell("Volume", headerRow);
 
             foreach (var zone in saleZones)
             {
@@ -50,6 +49,19 @@ namespace TOne.WhS.Sales.Business
                 style.FontColor = cellStyle.FontColor;
                 style.FontSize = cellStyle.FontSize;
             }
+        }
+        private void CreateHeaderCell(object cellValue, VRExcelTableRow row)
+        {
+            var cell = row.CreateCell();
+            var headerCellStyle = cell.CreateStyle();
+
+            headerCellStyle.FontColor = "Black";
+            headerCellStyle.FontSize = 12;
+            headerCellStyle.IsBold = true;
+            headerCellStyle.VerticalAlignment = VRExcelContainerVerticalAlignment.Bottom;
+            headerCellStyle.HorizontalAlignment = VRExcelContainerHorizontalAlignment.Center;
+
+            cell.SetValue(cellValue);
         }
     }
 
