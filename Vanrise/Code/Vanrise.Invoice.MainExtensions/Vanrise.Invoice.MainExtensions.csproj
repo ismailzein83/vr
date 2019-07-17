@@ -126,6 +126,7 @@
     <Compile Include="VRConcatenatedPart\ItemSetNameParts\ConstantConatenatedPartSettings.cs" />
     <Compile Include="VRConcatenatedPart\ItemSetNameParts\CurrentItemSetNameConcatenatedPart.cs" />
     <Compile Include="VRConcatenatedPart\ItemSetNameParts\InvoiceItemFieldValueConcatenatedPart.cs" />
+    <Compile Include="VRConcatenatedPart\SerialNumberParts\CompanySettingSerialNumberPart.cs" />
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceDateSerialNumberPart.cs" />
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceFieldSerialNumberPart.cs" />
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceCounterSerialNumberPart.cs" />
