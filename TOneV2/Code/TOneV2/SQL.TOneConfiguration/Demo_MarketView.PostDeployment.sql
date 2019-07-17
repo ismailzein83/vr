@@ -95,7 +95,7 @@
                  ;with cte_data([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url])
                   as (select* from (values
                  --//////////////////////////////////////////////////////////////////////////////////////////////////
-                       ('5e09551d-2c7e-4694-9b69-b03f4620c35c','/Client/Images/menu-icons/busines intel.png',NULL,'False','2019-07-16 18:30:42.313','Traffic Exchange',NULL,2,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',NULL)
+                       ('5e09551d-2c7e-4694-9b69-b03f4620c35c','/Client/Images/menu-icons/busines intel.png',NULL,'False','2019-07-16 18:30:42.313','Traffic Exchange',NULL,30,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',NULL)
                  --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                 )c([ID],[Icon],[DefaultViewId],[AllowDynamic],[LastModifiedTime],[Name],[ParentId],[Rank],[RenderedAsView],[Settings],[Url]))
                 merge[sec].[Module] as t
