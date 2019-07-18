@@ -31,7 +31,8 @@ namespace TOne.WhS.Sales.Entities
 
         string ErrorMessage { set; }
 
-		Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+        Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+        int LongPrecision { get; set; }
     }
 
     public interface IIsImportedTargetMatchRowValidContext
@@ -64,6 +65,8 @@ namespace TOne.WhS.Sales.Entities
 
         IEnumerable<CostCalculationMethod> CostCalculationMethods { get; set; }
 
-       ZoneItem ZoneItem { get; set; }
+        ZoneItem ZoneItem { get; set; }
+
+        int LongPrecision { get; set; }
     }
 }

@@ -110,7 +110,8 @@ namespace TOne.WhS.Sales.Business
                 ClosedCountryIds = context.ClosedCountryIds,
                 DateTimeFormat = context.DateTimeFormat,
                 AllowRateZero = context.AllowRateZero,
-                AdditionalCountryBEDsByCountryId = context.AdditionalCountryBEDsByCountryId
+                AdditionalCountryBEDsByCountryId = context.AdditionalCountryBEDsByCountryId,
+                LongPrecision = context.LongPrecision
             };
             foreach (IImportedRowValidator validator in _validators)
             {
@@ -164,7 +165,8 @@ namespace TOne.WhS.Sales.Business
                 ClosedCountryIds = context.ClosedCountryIds,
                 AllowRateZero = context.AllowRateZero,
                 RateCalculationMethod = context.RateCalculationMethod,
-                ZoneItem = context.ZoneItem
+                ZoneItem = context.ZoneItem,
+                LongPrecision = context.LongPrecision
             };
             foreach (IImportedRowValidator validator in _taregtMatchValidators)
             {
@@ -217,7 +219,7 @@ namespace TOne.WhS.Sales.Business
                     //isValid = false;
                     errorMessages.Add(string.Format("{0} Rules (Under Rules-Sale-RateType) is not configured for this customer's zone.", otherRate.TypeName));
                 }
-                else if (!BulkActionUtilities.ValidateRateValue(otherRate.Value, out errorMessage, context.AllowRateZero))
+                else if (!BulkActionUtilities.ValidateRateValue(otherRate.Value, out errorMessage, context.AllowRateZero, context.LongPrecision))
                 {
                     isValid = false;
                     errorMessages.Add(string.Join(" ", otherRate.TypeName, errorMessage));
@@ -319,7 +321,7 @@ namespace TOne.WhS.Sales.Business
             string rateValue = context.ImportedRow.Rate;
 
             string errorMessage;
-            if (!string.IsNullOrEmpty(rateValue) && !BulkActionUtilities.ValidateRateValue(rateValue, out errorMessage, context.AllowRateZero))
+            if (!string.IsNullOrEmpty(rateValue) && !BulkActionUtilities.ValidateRateValue(rateValue, out errorMessage, context.AllowRateZero, context.LongPrecision))
             {
                 context.ErrorMessage = errorMessage;
                 return false;
@@ -337,6 +339,7 @@ namespace TOne.WhS.Sales.Business
             decimal zoneRate;
             if (decimal.TryParse(context.ImportedRow.Rate, out zoneRate) && context.ZoneItem != null)
             {
+                zoneRate = decimal.Round(zoneRate, context.LongPrecision);
                 if (context.AllowRateZero && zoneRate >= 0 || !context.AllowRateZero && zoneRate > 0)
                 {
                     var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = context.ZoneItem };

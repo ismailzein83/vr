@@ -29,6 +29,7 @@ namespace TOne.WhS.Sales.Business
         public string ErrorMessage { get; set; }
 
         public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+        public int LongPrecision { get; set; }
     }
 
     public class IsValidContext : IIsValidContext
@@ -66,6 +67,7 @@ namespace TOne.WhS.Sales.Business
         {
             throw new NotImplementedException();
         }
+        public int LongPrecision { get; set; }
     }
 
 
@@ -86,6 +88,7 @@ namespace TOne.WhS.Sales.Business
         public string ErrorMessage { get; set; }
         public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
         public RateCalculationMethod RateCalculationMethod { get; set; }
+        public int LongPrecision { get; set; }
     }
 
     public class IsTargetMatchValidContext : IIsValidContext
@@ -129,6 +132,8 @@ namespace TOne.WhS.Sales.Business
         public RateCalculationMethod RateCalculationMethod { get; set; }
 
         public bool InvalidDueExpectedRateViolation { get; set; }
+
+        public int LongPrecision { get; set; }
     }
 
 }

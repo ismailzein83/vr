@@ -45,5 +45,6 @@ namespace TOne.WhS.Sales.Entities
         ZoneItem ZoneItem { get; set; }
 
         bool InvalidDueExpectedRateViolation {get; set;}
+        int LongPrecision { get; set; }
     }
 }

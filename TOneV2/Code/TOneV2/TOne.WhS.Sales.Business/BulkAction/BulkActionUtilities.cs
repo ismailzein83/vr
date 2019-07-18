@@ -39,7 +39,7 @@ namespace TOne.WhS.Sales.Business
             return (importedZoneName != null) ? importedZoneName.Trim().ToLower() : null;
         }
 
-        public static bool ValidateRateValue(string rate, out string errorMessage, bool allowRateZero)
+        public static bool ValidateRateValue(string rate, out string errorMessage, bool allowRateZero, int longPrecision)
         {
             decimal rateAsDecimal;
             if (!decimal.TryParse(rate, out rateAsDecimal))
@@ -47,7 +47,7 @@ namespace TOne.WhS.Sales.Business
                 errorMessage = "Rate is an invalid number.";
                 return false;
             }
-
+            rateAsDecimal = decimal.Round(rateAsDecimal, longPrecision); ;
             if (rateAsDecimal == 0 && !allowRateZero)
             {
                 errorMessage = "Rate is zero.";

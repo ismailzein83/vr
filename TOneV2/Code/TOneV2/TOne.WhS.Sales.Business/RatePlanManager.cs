@@ -995,6 +995,7 @@ namespace TOne.WhS.Sales.Business
             }
 
             var additionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
+            var longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetNormalPrecisionValue();
             // Validate the data of each zone
             for (int i = 0; i < importedRows.Count(); i++)
             {
@@ -1015,7 +1016,8 @@ namespace TOne.WhS.Sales.Business
                     ClosedCountryIds = closedCountryIds,
                     DateTimeFormat = input.DateTimeFormat,
                     AllowRateZero = allowRateZero,
-                    AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId
+                    AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId,
+                    LongPrecision = longPrecision
                 };
 
 
@@ -1104,7 +1106,7 @@ namespace TOne.WhS.Sales.Business
             IEnumerable<SaleZone> ownerSaleZones = GetSaleZones(SalePriceListOwnerType.Customer, input.OwnerId, DateTime.Now, true);
             if (ownerSaleZones != null)
                 saleZones.AddRange(ownerSaleZones);
-            
+
             var saleZonesByName = new Dictionary<string, SaleZone>();
             foreach (var salezone in ownerSaleZones)
             {
@@ -1220,7 +1222,8 @@ namespace TOne.WhS.Sales.Business
                     AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId,
                     CostCalculationMethods = input.CostCalculationMethods,
                     RateCalculationMethod = input.RateCalculationMethod,
-                    ZoneItem = zoneItem
+                    ZoneItem = zoneItem,
+                    LongPrecision = longPrecisionValue
                 };
 
 

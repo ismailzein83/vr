@@ -49,6 +49,15 @@ app.directive('vrWhsSalesBulkactionTypeImportcustomertargetmatch', ['WhS_Sales_R
                         WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
                     }
                 };
+
+                $scope.scopeModel.onSwitchValueChanged = function () {
+                    cacheObjectName = UtilsService.guid();
+                };
+
+                $scope.scopeModel.onRateCalculationMethodChanged = function () {
+                    cacheObjectName = UtilsService.guid();
+                };
+
                 $scope.scopeModel.onRateCalculationMethodSelectorReady = function (api) {
                     rateCalculationMethodSelectorAPI = api;
                     rateCalculationMethodSelectorReadyDeferred.resolve();
