@@ -39,20 +39,14 @@
                 removeLine = "removeline";
             }
 
-            var required = "isrequired";
-            if (attrs.isnotrequired != undefined)
-                required = "";
-
             return '<vr-row><vr-columns colnum="{{normalColNum}}">'
                   + '<vr-select on-ready="scopeModel.onSelectorReady"'
                 + 'datasource="scopeModel.runtimeViewTypesConfigs"'
                 + 'selectedvalues="scopeModel.selectedFieldTypeConfig"'
                   + 'datavaluefield="ExtensionConfigurationId"'
-                  + 'datatextfield="Title"'
+                  + 'datatextfield="Title" isrequired="ctrl.isrequired()"'
                   + label
                   + ' text="None"'
-                  + ' ' + required
-                  + ' hideremoveicon>'
            + '</vr-select>'
                 + '</vr-columns></vr-row>'
         + ' <span  ng-if="scopeModel.selectedFieldTypeConfig != undefined" vr-loader="scopeModel.isLoadingDirective">'
@@ -101,6 +95,7 @@
 
                     if (payload != undefined) {
                         configId = payload.configId;
+                        ctrl.isrequired = payload.isEditorRequired;
                         directivePayload = payload;
                     }
             

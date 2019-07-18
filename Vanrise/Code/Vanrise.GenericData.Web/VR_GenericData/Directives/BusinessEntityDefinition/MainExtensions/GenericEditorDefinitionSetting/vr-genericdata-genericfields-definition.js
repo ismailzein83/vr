@@ -130,7 +130,13 @@
                     dataItem.onRuntimeViewSettingsEditorDirectiveReady = function (api) {
                         dataItem.directiveAPI = api;
                         var setLoader = function (value) { dataItem.isRuntimeViewSettingsEditorDirectiveLoading = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, { context: context, dataRecordTypeId: fieldType.DataRecordTypeId }, setLoader);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, {
+                            context: context,
+                            dataRecordTypeId: fieldType.DataRecordTypeId,
+                            isEditorRequired: function () {
+                                return !dataItem.entity.ShowAsLabel;
+                            }
+                        }, setLoader);
                     };
                 }
 
@@ -276,7 +282,10 @@
                             configId: payload.FieldViewSettings != undefined ? payload.FieldViewSettings.ConfigId : undefined,
                             context: context,
                             settings: payload.FieldViewSettings,
-                            dataRecordTypeId: fieldType.DataRecordTypeId
+                            dataRecordTypeId: fieldType.DataRecordTypeId,
+                            isEditorRequired: function () {
+                                return !dataItem.entity.ShowAsLabel;
+                            }
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, runtimeViewSettingEditorPayload, setLoader);
                     };

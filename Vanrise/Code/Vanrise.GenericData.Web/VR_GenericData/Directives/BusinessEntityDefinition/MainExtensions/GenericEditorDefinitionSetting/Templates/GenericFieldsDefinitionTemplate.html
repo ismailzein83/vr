@@ -16,7 +16,7 @@
     </vr-columns>
     <vr-columns width="fullrow">
         <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="700px"
+            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" 
                          on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeField" hidegridmenu>
                 <vr-datagridcolumn headertext="'Field Name'" disablesorting widthfactor="6">
                     <vr-label>{{dataItem.entity.FieldPath}}</vr-label>
@@ -59,7 +59,7 @@
                         <vr-directivewrapper directive="dataItem.fieldTypeRuntimeDirective" on-ready="dataItem.onFieldTypeRumtimeDirectiveReady" selectionmode="single" normal-col-num="3"></vr-directivewrapper>
                     </span>
                     <span vr-loader="dataItem.isRuntimeViewSettingsEditorDirectiveLoading" ng-if="dataItem.entity.runtimeViewSettingEditor !=undefined">
-                        <vr-directivewrapper directive="dataItem.entity.runtimeViewSettingEditor" selectionmode=single isrequired="true" normal-col-num="6" on-ready="dataItem.onRuntimeViewSettingsEditorDirectiveReady"></vr-directivewrapper>
+                        <vr-directivewrapper directive="dataItem.entity.runtimeViewSettingEditor" selectionmode=single  normal-col-num="3" on-ready="dataItem.onRuntimeViewSettingsEditorDirectiveReady"></vr-directivewrapper>
                     </span>
                 </vr-datagridexpandablerow>
             </vr-datagrid>
