@@ -992,7 +992,7 @@
                                     for (var i = 0; i < selectedvalues.length; i++) {
                                         ctrl.ondeselectitem(selectedvalues[i]);
                                     }
-                                }                                
+                                }
                             }
 
                         };
@@ -1097,6 +1097,9 @@
                                 return;
                             if (ctrl.getObjectDisabledSelect(item) == true && !ctrl.isMultiple())
                                 return;
+                            if (!ctrl.isMultiple() && ctrl.selectedvalues && item[ctrl.datavaluefield] === ctrl.selectedvalues[ctrl.datavaluefield]) 
+                                return;
+
                             var onBeforeSelectionChanged = $scope.$parent.$eval(iAttrs.onbeforeselectionchanged);
                             if (onBeforeSelectionChanged != undefined && typeof (onBeforeSelectionChanged) == 'function') {
                                 var onBeforeSelectionChangedPromise = onBeforeSelectionChanged();
@@ -1108,15 +1111,15 @@
                                             return;
                                     }).catch(function () {
                                         return;
-                                    });
+                                });
                                 }
                                 else {
                                     selectItem(e, item);
-                                }
+                            }
                             }
                             else
                                 selectItem(e, item, removeselection);
-                        };
+                    };
 
 
 
@@ -1125,7 +1128,7 @@
 
                             if (ctrl.isMultiple()) {
                                 return ctrl.selectedvalues.length;
-                            }
+                        }
 
                             return ctrl.selectedvalues;
 
@@ -1134,20 +1137,20 @@
                                 var item = ctrl.onselectionchanged(ctrl.selectedvalues, ctrl.getdatasource());
                                 if (item !== undefined) {
                                     selectItem(null, item);
-                                }
                             }
-                        });
+                        }
+                    });
                         var classCollectionWatch = $scope.$watchCollection('ctrl.selectedvalues', function (newValue, oldValue) {
                             ctrl.labelclass = "vr-select-watermark";
                             if (!ctrl.isMultiple() && newValue != undefined) {
                                 ctrl.labelclass = "";
                                 return;
-                            }
+                        }
                             if (ctrl.isMultiple() && newValue.length > 0) {
                                 ctrl.labelclass = "";
                                 return;
-                            }
-                        });
+                        }
+                    });
                         ctrl.search = function () {
                             ctrl.setdatasource([]);
                             if (!ctrl.isRemoteLoad()) return;
@@ -1159,32 +1162,32 @@
                                         ctrl.setdatasource(items);
                                     }).finally(function () {
                                         ctrl.showloading = false;
-                                    });
-                                }
-
+                                });
                             }
 
-                        };
-                    }
-                };
-            },
-            templateUrl: function (element, attrs) {
+                        }
+
+                    };
+                }
+            };
+        },
+                templateUrl: function (element, attrs) {
                 var temp = selectService.dTemplate;
                 if (attrs.lookandfeeltype != undefined && attrs.lookandfeeltype == "toolbox")
                     temp = selectService.toolboxSelectTemplate;
                 return temp;
-            }
-        };
+        }
+    };
 
         return directiveDefinitionObject;
 
-    }
+}
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope', 'VRLocalizationService', 'VRModalService', 'MobileService'];
+    vrSelectDirective.$inject =['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope', 'VRLocalizationService', 'VRModalService', 'MobileService'];
 
     app.directive('vrSelect', vrSelectDirective);
 
-})(app);
+}) (app);
 
 
 
