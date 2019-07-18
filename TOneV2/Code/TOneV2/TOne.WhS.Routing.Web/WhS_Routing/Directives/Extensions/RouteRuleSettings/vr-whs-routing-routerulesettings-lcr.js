@@ -55,6 +55,10 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                     $scope.scopeModel.fixedSuppliers.splice(index, 1);
                 };
 
+                $scope.scopeModel.onDeselectAllSuppliers = function () {
+                    $scope.scopeModel.fixedSuppliers.length = 0;
+                };
+                
                 $scope.scopeModel.onDeleteRow = function (deletedItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedSuppliers, deletedItem.CarrierAccountId, 'CarrierAccountId');
                     $scope.scopeModel.selectedSuppliers.splice(index, 1);
