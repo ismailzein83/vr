@@ -65,7 +65,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                     fieldName: field.fieldName,
                     isRequired: field.isRequired,
                     isDisabled: field.isDisabled,
-                    showAsLabel: field.showAsLabel
+                    showAsLabel: field.showAsLabel,
+                    readOnly :field.readOnly
                 };
                 entity.onRunTimeEditorDirectiveReady = function (api) {
                     entity.directiveAPI = api;
