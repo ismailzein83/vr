@@ -988,6 +988,11 @@
                                 if (ctrl.ondeselectallitems && typeof (ctrl.ondeselectallitems) == 'function') {
                                     ctrl.ondeselectallitems(selectedvalues);
                                 }
+                                if (ctrl.ondeselectitem && typeof (ctrl.ondeselectitem) == 'function') {
+                                    for (var i = 0; i < selectedvalues.length; i++) {
+                                        ctrl.ondeselectitem(selectedvalues[i]);
+                                    }
+                                }                                
                             }
 
                         };
