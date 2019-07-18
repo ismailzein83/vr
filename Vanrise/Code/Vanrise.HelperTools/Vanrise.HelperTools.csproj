@@ -183,6 +183,26 @@
       <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
       <Name>Vanrise.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DevTools.Business\Vanrise.DevTools.Business.csproj">
+      <Project>{b92a7351-49ef-4da9-ab76-0ffdde313ec7}</Project>
+      <Name>Vanrise.DevTools.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DevTools.Data.SQL\Vanrise.DevTools.Data.SQL.csproj">
+      <Project>{0cdf0624-ff25-42df-8e86-af2f7feebf96}</Project>
+      <Name>Vanrise.DevTools.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DevTools.Data\Vanrise.DevTools.Data.csproj">
+      <Project>{3867914c-8972-4bad-a1e8-46ca59f75b08}</Project>
+      <Name>Vanrise.DevTools.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DevTools.Entities\Vanrise.DevTools.Entities.csproj">
+      <Project>{30df9a71-05b6-4199-ae6b-68db57864909}</Project>
+      <Name>Vanrise.DevTools.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DevTools.MainExtensions\Vanrise.DevTools.MainExtensions.csproj">
+      <Project>{a6361bd6-bdb9-4a21-beaf-f429d41c723f}</Project>
+      <Name>Vanrise.DevTools.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>

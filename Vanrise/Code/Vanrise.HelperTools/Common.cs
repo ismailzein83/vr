@@ -16,6 +16,8 @@ using System.Reflection;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.DevTools.Business;
+using Vanrise.DevTools.Entities;
 
 namespace Vanrise.HelperTools
 {
@@ -34,7 +36,7 @@ namespace Vanrise.HelperTools
         public static string CheckPathLengthOutputPath { get { return ConfigurationManager.AppSettings["checkPathLengthOutputPath"]; } }
         public static string CheckPathLengthSourcePath { get { return ConfigurationManager.AppSettings["checkPathLengthSourcePath"]; } }
         public static int MaxPathLength { get { return int.Parse(ConfigurationManager.AppSettings["maxPathLength"]); } }
-        
+
         public static List<string> GetDBs(string projectName)
         {
             return ConfigurationManager.AppSettings[projectName].ToString().Split('#').ToList();
@@ -230,7 +232,7 @@ namespace Vanrise.HelperTools
                 //create file if not exist in order to create root output file
                 if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql")))
                 {
-                    string[] allFiles = Directory.GetFiles(directory, "*.sql", SearchOption.AllDirectories); ;
+                    string[] allFiles = Directory.GetFiles(directory, "**.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".sql") || s.EndsWith(".json")).ToArray();
 
                     if (File.Exists(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt")))
                     {
@@ -257,8 +259,17 @@ namespace Vanrise.HelperTools
                         }
                         if (File.Exists(string.Format("{0}{1}", addDicrectory, file)))
                         {
+                            //convert .json to .sql then do append content
+                            var content = File.ReadAllText(string.Format("{0}{1}", addDicrectory, file));
+                            if (Path.GetExtension(string.Format("{0}{1}", addDicrectory, file)) == ".json")
+                            {
+                                var tables = Serializer.Deserialize<GeneratedScriptItemTables>(content);
+                                Vanrise.DevTools.Business.VRGeneratedScriptColumnsManager scriptManager = new DevTools.Business.VRGeneratedScriptColumnsManager();
+                                content = scriptManager.GenerateQueries(new DevTools.Entities.GeneratedScriptItem { Type = DevTools.Entities.GeneratedScriptType.SQL, Tables = tables });
+                            }
+
                             fileContent.AppendLine(string.Format("-----------------------FILE {0}-----------------------------------------------", file));
-                            fileContent.Append(File.ReadAllText(string.Format("{0}{1}", addDicrectory, file)));
+                            fileContent.Append(content);
                             fileContent.AppendLine();
 
                             //rename or remove file
