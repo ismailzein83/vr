@@ -86,6 +86,7 @@
     <Compile Include="BulkActions\ApplicationZoneFilters\AllDealZones.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\AllExeptApplicableZones.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\SpecificApplicableZones.cs" />
+    <Compile Include="BulkActions\CorrectedData\CustomerTargetMatchBulkActionCorrectedData.cs" />
     <Compile Include="BulkActions\CorrectedData\RateBulkActionCorrectedData.cs" />
     <Compile Include="BulkActions\ValidationResult\ImportBulkActionValidationResult.cs" />
     <Compile Include="BulkActions\ValidationResult\RateBulkActionValidationResult.cs" />

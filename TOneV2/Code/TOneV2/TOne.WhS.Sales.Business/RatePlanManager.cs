@@ -1096,22 +1096,23 @@ namespace TOne.WhS.Sales.Business
                 return result;
             }
 
-            #region Rodi
+            #region GetSaleZones
             List<SaleZone> saleZones = new List<SaleZone>();
 
             Dictionary<int, DateTime> additionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
-            /*var additionalSaleZones = GetBulkActionAdditionalSaleZones(input.BulkAction, SalePriceListOwnerType.Customer, input.OwnerId, out additionalCountryBEDsByCountryId);
-            if (additionalSaleZones != null)
-                saleZones.AddRange(additionalSaleZones);
-                */
             // Get the sale zones
             IEnumerable<SaleZone> ownerSaleZones = GetSaleZones(SalePriceListOwnerType.Customer, input.OwnerId, DateTime.Now, true);
             if (ownerSaleZones != null)
                 saleZones.AddRange(ownerSaleZones);
+            
+            var saleZonesByName = new Dictionary<string, SaleZone>();
+            foreach (var salezone in ownerSaleZones)
+            {
+                if (salezone.Name != null && !saleZonesByName.ContainsKey(salezone.Name))
+                    saleZonesByName.Add(salezone.Name.ToLower(), salezone);
+            }
             #endregion
 
-
-            Dictionary<string, SaleZone> saleZonesByName = GetSaleZonesEffectiveAfterByName(SalePriceListOwnerType.Customer, input.OwnerId, DateTime.Today);
             Dictionary<string, ZoneChanges> zoneDraftsByZoneName = GetZoneDraftsByZoneName(SalePriceListOwnerType.Customer, input.OwnerId);
 
             // Validate the data of the entire file

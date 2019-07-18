@@ -1,81 +1,124 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', 'LabelColorsEnum', function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter,LabelColorsEnum) {
-    return {
-        restrict: "E",
-        scope: {
-            onReady: "=",
-            normalColNum: '@'
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var targetMatchValidationResult = new TargetMatchValidationResult($scope, ctrl, $attrs);
-            targetMatchValidationResult.initializeController();
-        },
-        controllerAs: "rateValidationResultCtrl",
-        bindToController: true,
-        templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ValidationResult/Template/CustomerTargetMatchImportValidationResultTemplate.html'
-    };
+app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', 'LabelColorsEnum', 'WhS_Sales_ImportedRowStatus',
+    function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter, LabelColorsEnum, WhS_Sales_ImportedRowStatus) {
+        return {
+            restrict: "E",
+            scope: {
+                onReady: "=",
+                normalColNum: '@'
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var targetMatchValidationResult = new TargetMatchValidationResult($scope, ctrl, $attrs);
+                targetMatchValidationResult.initializeController();
+            },
+            controllerAs: "rateValidationResultCtrl",
+            bindToController: true,
+            templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ValidationResult/Template/CustomerTargetMatchImportValidationResultTemplate.html'
+        };
 
-    function TargetMatchValidationResult($scope, ctrl, $attrs) {
+        function TargetMatchValidationResult($scope, ctrl, $attrs) {
 
-        this.initializeController = initializeController;
-        var pageSize = 10;
-        var invalidImportedRows;
-      
+            this.initializeController = initializeController;
+            var pageSize = 10;
+            var invalidImportedRows;
 
-        function initializeController() {
-            $scope.scopeModel = {};
-            $scope.scopeModel.invalidImportedRows = [];
 
-            $scope.scopeModel.onGridReady = function (api) {
-                defineAPI();
-            };
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.hasIncludableZones = false;
+                $scope.scopeModel.invalidImportedRows = [];
 
-            $scope.scopeModel.loadMoreGridData = function () {
-                loadMoreGridData($scope.scopeModel.invalidImportedRows, invalidImportedRows);
-            };
-        }
-        function defineAPI() {
+                $scope.scopeModel.onGridReady = function (api) {
+                    defineAPI();
+                };
 
-            var api = {};
+                $scope.scopeModel.loadMoreGridData = function () {
+                    loadMoreGridData($scope.scopeModel.invalidImportedRows, invalidImportedRows);
+                };
 
-            api.load = function (payload) {
-
-                var bulkActionValidationResult;
-
-                if (payload != undefined) {
-                    bulkActionValidationResult = payload.bulkActionValidationResult;
-                }
-
-                if (bulkActionValidationResult != undefined) {
-                    invalidImportedRows = bulkActionValidationResult.InvalidImportedRows;
-                    $scope.scopeModel.errorMessage = bulkActionValidationResult.ErrorMessage;
-                    $scope.scopeModel.errorMessageColor = LabelColorsEnum.DangerFont.color;
-                }
-
-                loadMoreGridData($scope.scopeModel.invalidImportedRows, invalidImportedRows);
-            };
-
-            api.getData = function () {
-                return null;
-            };
-
-            if (ctrl.onReady != null) {
-                ctrl.onReady(api);
+                $scope.scopeModel.toggleAllIncludableZonesSelection = function (value) {
+                    if (invalidImportedRows == undefined)
+                        return;
+                    for (var i = 0; i < invalidImportedRows.length && i < invalidImportedRows.length; i++) {
+                        if (invalidImportedRows[i].CanBeIncluded)
+                            invalidImportedRows[i].Include = value;
+                    }
+                };
             }
-        }
-        function loadMoreGridData(gridArray, sourceArray) {
-            if (sourceArray == undefined)
-                return;
-            if (gridArray.length < sourceArray.length) {
-                for (var i = 0; i < sourceArray.length && i < pageSize; i++) {
-                    gridArray.push({
-                        Entity: sourceArray[i]
-                    });
+            function defineAPI() {
+
+                var api = {};
+
+                api.load = function (payload) {
+
+                    var bulkActionValidationResult;
+
+                    if (payload != undefined) {
+                        bulkActionValidationResult = payload.bulkActionValidationResult;
+                    }
+
+                    if (bulkActionValidationResult != undefined) {
+                        invalidImportedRows = bulkActionValidationResult.InvalidImportedRows;
+                        $scope.scopeModel.errorMessage = bulkActionValidationResult.ErrorMessage;
+                        $scope.scopeModel.errorMessageColor = LabelColorsEnum.DangerFont.color;
+                    }
+                    checkIfThereIsIncludableZones();
+                    loadMoreGridData($scope.scopeModel.invalidImportedRows, invalidImportedRows);
+                };
+
+                api.getData = function () {
+
+                    return {
+                        $type: 'TOne.WhS.Sales.MainExtensions.CustomerTargetMatchBulkActionCorrectedData, TOne.WhS.Sales.MainExtensions',
+                        IncludedZones: getIncludedZoneRates()
+                    };
+                };
+
+                if (ctrl.onReady != null) {
+                    ctrl.onReady(api);
                 }
             }
-        }
+            function loadMoreGridData(gridArray, sourceArray) {
+                if (sourceArray == undefined)
+                    return;
+                if (gridArray.length < sourceArray.length) {
+                    for (var i = 0; i < sourceArray.length && i < pageSize; i++) {
+                        sourceArray[i].CanBeIncluded = sourceArray[i].Status == WhS_Sales_ImportedRowStatus.InvalidDueExpectedRateViolation.value;
+                        gridArray.push({
+                            Entity: sourceArray[i]
+                        });
+                    }
+                }
+            }
 
-    }
-}]);
+            function checkIfThereIsIncludableZones() {
+                if (invalidImportedRows == undefined)
+                    return false;
+                for (var i = 0; i < invalidImportedRows.length; i++) {
+                    if (invalidImportedRows[i].Status == WhS_Sales_ImportedRowStatus.InvalidDueExpectedRateViolation.value) {
+                        $scope.scopeModel.hasIncludableZones = true;
+                        break;
+                    }
+                }
+            }
+
+            function getIncludedZoneRates() {
+                var includedZones = [];
+                for (var i = 0; i < invalidImportedRows.length; i++) {
+                    var element = invalidImportedRows[i];
+                    console.log(element);
+                    if (element.Include) {
+                        includedZones.push({
+                            ZoneId: element.ZoneId,
+                            ZoneName: element.ImportedRow.Zone,
+                            Rate: element.ImportedRow.Rate
+                        });
+                    }
+                }
+                return includedZones;
+            }
+
+        }
+    }]);

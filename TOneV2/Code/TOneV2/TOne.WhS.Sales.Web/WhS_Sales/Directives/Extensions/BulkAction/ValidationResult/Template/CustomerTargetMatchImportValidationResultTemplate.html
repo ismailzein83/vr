@@ -2,6 +2,8 @@
     <vr-row>
         <vr-label color={{scopeModel.errorMessageColor}} ng-if="scopeModel.errorMessage">{{scopeModel.errorMessage}}</vr-label>
     </vr-row>
+    <a href="" ng-click="scopeModel.toggleAllIncludableZonesSelection(true)" ng-enable="scopeModel.hasIncludableZones">Include All Zones</a>   /    
+    <a href="" ng-click="scopeModel.toggleAllIncludableZonesSelection(false)" ng-enable="scopeModel.hasIncludableZones">Exclude All Zones</a>
     <vr-datagrid on-ready="scopeModel.onGridReady"
                  datasource="scopeModel.invalidImportedRows"
                  loadmoredata="scopeModel.loadMoreGridData"
@@ -10,8 +12,8 @@
                  maxheight="300px"
                  hidegridmenu
                  ng-if="!scopeModel.errorMessage">
-        <vr-datagridcolumn widthfactor="5" columnindex="0" invisibleheader headertext="" disablesorting="true" ng-if="!hideSelectedColumn" fixedwidth="'30'">
-            <vr-check value="dataItem.isSelected"></vr-check>
+        <vr-datagridcolumn headertext="'Include'" widthfactor="10" columnindex="0" invisibleheader disablesorting="true" ng-if="!hideSelectedColumn" fixedwidth="'30'">
+            <vr-check ng-if="dataItem.Entity.CanBeIncluded" value="dataItem.Entity.Include"></vr-check>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Row Index'" field="'Entity.RowIndex'" type="'Text'" disablesorting></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Zone'" field="'Entity.ImportedRow.Zone'" type="'Text'" disablesorting></vr-datagridcolumn>

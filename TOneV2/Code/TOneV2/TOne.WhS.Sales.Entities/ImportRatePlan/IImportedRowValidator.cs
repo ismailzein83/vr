@@ -17,7 +17,7 @@ namespace TOne.WhS.Sales.Entities
         SalePriceListOwnerType OwnerType { get; }
 
         int OwnerId { get; }
-        
+
         IEnumerable<int> AllRateTypeIds { get; }
 
         ImportedRow ImportedRow { get; }
@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.Entities
 
         string ErrorMessage { set; }
 
-		Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+        Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
 
         bool AllowRateZero { get; }
 
@@ -43,5 +43,7 @@ namespace TOne.WhS.Sales.Entities
         RateCalculationMethod RateCalculationMethod { get; set; }
 
         ZoneItem ZoneItem { get; set; }
+
+        bool InvalidDueExpectedRateViolation {get; set;}
     }
 }

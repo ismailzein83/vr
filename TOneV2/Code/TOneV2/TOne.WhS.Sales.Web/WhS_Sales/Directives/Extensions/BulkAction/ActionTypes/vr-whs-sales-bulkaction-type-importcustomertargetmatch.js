@@ -123,7 +123,6 @@ app.directive('vrWhsSalesBulkactionTypeImportcustomertargetmatch', ['WhS_Sales_R
                     if (bulkActionContext != undefined) {
                         data.OwnerId = bulkActionContext.ownerId;
                     }
-                    console.log(data);
                     return data;
                 };
 

@@ -19,6 +19,7 @@ namespace TOne.WhS.Sales.Entities
 	{
 		Valid = 0,
 		Invalid = 1,
-        OnlyNormalRateValid = 2
+        OnlyNormalRateValid = 2,
+        InvalidDueExpectedRateViolation = 3
 	}
 }

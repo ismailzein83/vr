@@ -91,6 +91,38 @@ namespace TOne.WhS.Sales.MainExtensions
         {
             context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate);
         }
+        public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
+        {
+            var correctedData = context.CorrectedData.CastWithValidate<CustomerTargetMatchBulkActionCorrectedData>("CustomerTargetMatchBulkActionCorrectedData");
+            correctedData.IncludedZones.ThrowIfNull("CustomerTargetMatchBulkActionCorrectedData.IncludedZones");
+
+            foreach (var includedZone in correctedData.IncludedZones)
+            {
+                ZoneChanges zoneDraft = context.GetZoneDraft(includedZone.ZoneId);
+                AddNewNormalRate(zoneDraft, includedZone.Rate, DateTime.Today);
+            }
+        }
+
+        private void AddNewNormalRate(ZoneChanges zoneDraft, decimal rate, DateTime effectiveDate)
+        {
+            var newRates = new List<DraftRateToChange>();
+
+            IEnumerable<DraftRateToChange> newOtherRates = zoneDraft.NewRates?.FindAllRecords(x => x.RateTypeId.HasValue);
+            if (newOtherRates != null && newOtherRates.Count() > 0)
+                newRates.AddRange(newOtherRates);
+
+            var newNormalRate = new DraftRateToChange()
+            {
+                ZoneId = zoneDraft.ZoneId,
+                RateTypeId = null,
+                Rate = rate,
+                BED = effectiveDate
+            };
+
+            newRates.Add(newNormalRate);
+            zoneDraft.NewRates = newRates;
+        }
+
         public override Dictionary<int, DateTime> PreApplyBulkActionToZoneItem()
         {
             ImportedDataValidationResult cachedValidationData = GetOrCreateObject();

@@ -60,6 +60,8 @@ namespace TOne.WhS.Sales.Business
         public RateCalculationMethod RateCalculationMethod { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public ZoneItem ZoneItem { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public bool InvalidDueExpectedRateViolation { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId)
         {
             throw new NotImplementedException();
@@ -125,6 +127,8 @@ namespace TOne.WhS.Sales.Business
         public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
 
         public RateCalculationMethod RateCalculationMethod { get; set; }
+
+        public bool InvalidDueExpectedRateViolation { get; set; }
     }
 
 }

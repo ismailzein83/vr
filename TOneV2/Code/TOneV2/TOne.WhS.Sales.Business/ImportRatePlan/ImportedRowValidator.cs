@@ -181,7 +181,11 @@ namespace TOne.WhS.Sales.Business
             }
             else
             {
-                context.Status = ImportedRowStatus.Invalid;
+                if (isValidContext.InvalidDueExpectedRateViolation)
+                    context.Status = ImportedRowStatus.InvalidDueExpectedRateViolation;
+
+                else context.Status = ImportedRowStatus.Invalid;
+
                 if (errorMessages.Count > 0)
                     context.ErrorMessage = string.Join(" ; ", errorMessages);
                 return false;
@@ -333,16 +337,19 @@ namespace TOne.WhS.Sales.Business
             decimal zoneRate;
             if (decimal.TryParse(context.ImportedRow.Rate, out zoneRate) && context.ZoneItem != null)
             {
-
-                var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = context.ZoneItem };
-                context.RateCalculationMethod.CalculateRate(rateCalculationContext);
-                if (rateCalculationContext.Rate.HasValue && rateCalculationContext.Rate.Value > zoneRate)
+                if (context.AllowRateZero && zoneRate >= 0 || !context.AllowRateZero && zoneRate > 0)
                 {
-                    context.ErrorMessage = "Less than expected rate";
-                    return false;
+                    var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = context.ZoneItem };
+                    context.RateCalculationMethod.CalculateRate(rateCalculationContext);
+                    if (rateCalculationContext.Rate.HasValue && rateCalculationContext.Rate.Value > zoneRate)
+                    {
+                        context.ErrorMessage = "Less than expected rate";
+                        context.InvalidDueExpectedRateViolation = true;
+                        return false;
+                    }
+                    context.ErrorMessage = null;
+                    return true;
                 }
-                context.ErrorMessage = null;
-                return true;
             }
             context.ErrorMessage = null;
             return false;
