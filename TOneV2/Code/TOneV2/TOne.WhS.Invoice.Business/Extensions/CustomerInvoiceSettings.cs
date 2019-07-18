@@ -41,8 +41,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.Invoice.PartnerId));
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-            
-            switch(context.InfoType)
+
+            switch (context.InfoType)
             {
                 case "MailTemplate":
                     {
@@ -100,8 +100,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         }
                         else
                         {
-                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                             bankDetails = carrierAccountManager.GetBankDetails(financialAccount.CarrierAccountId.Value);
+                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                            bankDetails = carrierAccountManager.GetBankDetails(financialAccount.CarrierAccountId.Value);
                         }
                         return bankDetails;
                         #endregion
@@ -113,6 +113,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         context.Invoice.ThrowIfNull("context.Invoice");
                         return invoiceManager.GetRDLCReportPath(financialAccount.CarrierProfileId, context.Invoice.InvoiceTypeId, financialAccount.CarrierAccountId);
                         #endregion
+                    }
+                case "CompanySetting":
+                    {
+                        CompanySetting companySetting;
+                        if (financialAccount.CarrierProfileId.HasValue)
+                        {
+                            companySetting = carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
+                        }
+                        else
+                        {
+                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                            companySetting = carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
+                        }
+                        return companySetting;
                     }
             }
             return null;

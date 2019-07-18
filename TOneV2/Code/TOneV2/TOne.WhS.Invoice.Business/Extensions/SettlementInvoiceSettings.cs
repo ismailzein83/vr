@@ -95,6 +95,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         return invoiceManager.GetRDLCReportPath(financialAccount.CarrierProfileId, context.Invoice.InvoiceTypeId, financialAccount.CarrierAccountId);
                         #endregion
                     }
+                case "CompanySetting":
+                    {
+                        CompanySetting companySetting;
+                        if (financialAccount.CarrierProfileId.HasValue)
+                        {
+                            companySetting = carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
+                        }
+                        else
+                        {
+                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                            companySetting = carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
+                        }
+                        return companySetting;
+                    }
             }
             return null;
         }
