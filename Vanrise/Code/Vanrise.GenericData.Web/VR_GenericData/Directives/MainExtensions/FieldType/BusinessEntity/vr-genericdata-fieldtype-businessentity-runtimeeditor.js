@@ -428,7 +428,9 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
                     return setFieldValuesPromiseDeferred.promise;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }

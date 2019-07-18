@@ -136,6 +136,9 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                     $scope.scopeModel.value = undefined;
                 }
             };
+            api.setOnlyViewMode = function () {
+                UtilsService.setContextReadOnly($scope);
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -119,7 +119,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewRuntime', ['VRUI
                   
                     return returnedData;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }

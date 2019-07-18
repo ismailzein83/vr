@@ -134,7 +134,9 @@ app.directive('vrGenericdataFieldtypeGuidRuntimeeditor', ['UtilsService', functi
 
                 return retVal;
             };
-
+            api.setOnlyViewMode = function () {
+                UtilsService.setContextReadOnly($scope);
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

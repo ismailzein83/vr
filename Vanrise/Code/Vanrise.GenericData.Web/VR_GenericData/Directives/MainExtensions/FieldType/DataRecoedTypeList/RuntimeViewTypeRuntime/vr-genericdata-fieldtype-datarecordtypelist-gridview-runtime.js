@@ -88,6 +88,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                     entity.isDisabled = item.IsDisabled;
                     entity.isRequired = item.IsRequired;
                     entity.showAsLabel = item.ShowAsLabel;
+                    entity.readOnly = item.ReadOnly;
                     entity.gridColumnSettings = item.GridColumnSettings;
                     return true;
                 }
@@ -103,6 +104,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                     var fieldsDescription;
                     var dataRecordTypeId = payload.dataRecordTypeId;
                     var fieldsValues = payload.fieldValue;
+                    var readOnly = payload.readOnly;
+
                     $scope.scopeModel.colNum = payload.fieldWidth != undefined ? payload.fieldWidth : 12;
                     $scope.scopeModel.fieldTitle = payload.fieldTitle;
                     var rootPromiseNode = {
@@ -114,7 +117,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                         $scope.scopeModel.hideSection = definitionSettings.HideSection;
                         $scope.scopeModel.enableDraggableRow = definitionSettings.EnableDraggableRow;
                         availableFields = definitionSettings.AvailableFields;
-                        $scope.scopeModel.deleteFunction = definitionSettings.HideRemoveIcon ? undefined : $scope.scopeModel.onDeleteRow;
+                        $scope.scopeModel.deleteFunction = definitionSettings.HideRemoveIcon || readOnly ? undefined : $scope.scopeModel.onDeleteRow;
                         gridAPI.refreshGridAttributes();
                     }
                     if (dataRecordTypeId != undefined) {
@@ -147,7 +150,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                             fieldName: entity.Name,
                                             isRequired: entity.isRequired,
                                             isDisabled: entity.isDisabled,
-                                            showAsLabel: entity.showAsLabel
+                                            showAsLabel: entity.showAsLabel,
+                                            readOnly: entity.readOnly
                                         };
 
                                     }
@@ -208,10 +212,13 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                                 fieldLabel: genericBEFieldObject.fieldLabel,
                                                 isRequired: genericBEFieldObject.fieldInfo.isRequired,
                                                 isDisabled: genericBEFieldObject.fieldInfo.isDisabled,
-                                                showAsLabel: genericBEFieldObject.fieldInfo.showAsLabel
+                                                showAsLabel: genericBEFieldObject.fieldInfo.showAsLabel,
+                                                readOnly: genericBEFieldObject.fieldInfo.readOnly
                                             };
                                             entity.onRunTimeEditorDirectiveReady = function (api) {
                                                 entity.directiveAPI = api;
+                                                if (genericBEFieldObject.fieldInfo.readOnly && api.setOnlyViewMode != undefined && typeof (api.setOnlyViewMode) == "function")
+                                                    api.setOnlyViewMode();
                                                 genericBEFieldObject.runtimeFieldReadyPromiseDeferred.resolve();
                                             };
 
@@ -251,7 +258,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                     }
                     return returnedData;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }

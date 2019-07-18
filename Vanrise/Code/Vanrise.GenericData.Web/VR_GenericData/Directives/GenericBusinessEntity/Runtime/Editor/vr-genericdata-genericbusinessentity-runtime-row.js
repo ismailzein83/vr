@@ -135,10 +135,12 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
 
             function prepareFieldObject(field) {
                 if (currentContext != undefined && field.FieldType != undefined)
-                    field.runTimeEditor = currentContext.getRuntimeEditor(field.FieldType.ConfigId);
+                    field.runTimeEditor = currentContext.getRuntimeEditor(field.FieldType.ConfigId); 
 
                 field.onFieldDirectiveReady = function (api) {
                     field.fieldAPI = api;
+                    if (field.ReadOnly && api.setOnlyViewMode != undefined && typeof (api.setOnlyViewMode) == "function")
+                        api.setOnlyViewMode();
                     field.readyPromiseDeferred.resolve();
                 };
 
@@ -162,6 +164,8 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             fieldValue: fieldValue,
                             fieldWidth: field.FieldWidth, 
                             fieldViewSettings: field.FieldViewSettings,
+                            isDisabled: field.IsDisabled,
+                            readOnly: field.ReadOnly,
                             TextResourceKey: field.TextResourceKey,
                             showAsLabel: field.ShowAsLabel,
                             genericContext: genericContext,
@@ -180,7 +184,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             });
                         }
                     });
-                }
+                } 
                 if (field.HideLabel)
                     field.hideLabel = "true";
                 else

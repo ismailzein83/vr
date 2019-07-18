@@ -37,6 +37,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
             var dataRecordTypeId;
             var editorSettings;
             var gridAPI;
+            var readOnly;
             function initializeController() {
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -63,11 +64,12 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                 api.load = function (payload) {
                     dataRecordTypeId = payload.dataRecordTypeId;
                     $scope.scopeModel.colNum = payload.fieldWidth != undefined ? payload.fieldWidth : 12;
-
+                    readOnly = payload.readOnly;
                     var definitionSettings = payload.definitionSettings;
                     editorSettings = definitionSettings != undefined ? definitionSettings.Settings : undefined;
                     $scope.scopeModel.hideSection = definitionSettings.HideSection;
-                    $scope.scopeModel.deleteFunction = definitionSettings != undefined && definitionSettings.HideRemoveIcon ? undefined : $scope.scopeModel.onDeleteRow;
+                    $scope.scopeModel.deleteFunction = (definitionSettings != undefined && definitionSettings.HideRemoveIcon) || readOnly ? undefined : $scope.scopeModel.onDeleteRow;
+
                     gridAPI.refreshGridAttributes();
 
                     var fieldsValues = [];
@@ -130,7 +132,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
 
                     return returnedData;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
@@ -156,7 +160,10 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                         ctrl.datasource[index] = ({ Values: updatedRow.Entity, Entity: response != undefined && response.length > 0 ? response[0] : undefined });
                     });
                 };
-                VR_GenericData_DataRecordTypeService.editListDataRecordTypeRow(row, dataRecordTypeId, editorSettings, onRowUpdated, $scope.scopeModel.fieldTitle);
+                if (readOnly)
+                    VR_GenericData_DataRecordTypeService.viewListDataRecordTypeRow(row, dataRecordTypeId, editorSettings, onRowUpdated, $scope.scopeModel.fieldTitle);
+                else
+                    VR_GenericData_DataRecordTypeService.editListDataRecordTypeRow(row, dataRecordTypeId, editorSettings, onRowUpdated, $scope.scopeModel.fieldTitle);
             }
             this.initializeController = initializeController;
         }

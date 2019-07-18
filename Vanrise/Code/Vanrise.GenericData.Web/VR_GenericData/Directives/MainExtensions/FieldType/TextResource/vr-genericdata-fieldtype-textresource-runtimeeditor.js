@@ -70,6 +70,10 @@ app.directive('vrGenericdataFieldtypeTextresourceRuntimeeditor', ['UtilsService'
                 if (payload != undefined) {
                  
                     fieldValue = payload.fieldValue;
+                    if (payload.readOnly) {
+                        $scope.scopeModel.onDeleteRow = undefined;
+                        gridAPI.refreshGridAttributes();
+                    }
                 }
                 if (fieldValue != undefined && fieldValue.TranslatedValues) {
                     var translatedValues = fieldValue.TranslatedValues;
@@ -128,7 +132,9 @@ app.directive('vrGenericdataFieldtypeTextresourceRuntimeeditor', ['UtilsService'
                     TranslatedValues:retVal
                 };
             };
-
+            api.setOnlyViewMode = function () {
+                UtilsService.setContextReadOnly($scope);
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

@@ -13,5 +13,6 @@ namespace Vanrise.GenericData.Entities
         public bool ShowAsLabel { get; set; }
         public int? FieldWidth { get; set; }
         public bool HideLabel { get; set; }
+        public bool ReadOnly { get; set; }
     }
 }

@@ -121,6 +121,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridgenericeditorviewRunt
                     $scope.scopeModel.fieldTitle = payload.fieldTitle;
                      dataRecordTypeId = payload.dataRecordTypeId;
                     var fieldsValues = payload.fieldValue;
+                    var readOnly = payload.readOnly;
                     var rootPromiseNode = {
                         promises: []
                     };
@@ -132,7 +133,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridgenericeditorviewRunt
                         $scope.scopeModel.hideSection = definitionSettings.HideSection;
                         $scope.scopeModel.enableDraggableRow = definitionSettings.EnableDraggableRow;
 
-                        $scope.scopeModel.deleteFunction = definitionSettings.HideRemoveIcon ? undefined : $scope.scopeModel.onDeleteRow;
+                        $scope.scopeModel.deleteFunction = definitionSettings.HideRemoveIcon || readOnly? undefined : $scope.scopeModel.onDeleteRow;
 
                         if (definitionSettings.DrillDownSettings != undefined) {
                             $scope.scopeModel.enableDrillDown = definitionSettings.DrillDownSettings.EnableDrillDown;
@@ -296,7 +297,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridgenericeditorviewRunt
                     } 
                     return returnedData;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }

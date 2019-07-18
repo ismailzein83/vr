@@ -84,7 +84,9 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
             api.getData = function () {
                 return directiveAPI.getData();
             };
-
+            api.setOnlyViewMode = function () {
+                UtilsService.setContextReadOnly($scope);
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

@@ -185,7 +185,9 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
 
                     setFieldValue(ctrl, fieldValue);
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

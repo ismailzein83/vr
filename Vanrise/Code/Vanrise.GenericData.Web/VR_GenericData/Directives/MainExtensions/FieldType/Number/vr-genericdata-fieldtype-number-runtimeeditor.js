@@ -137,7 +137,9 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
 
                     return retVal;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 api.setLabel = function (value) {
                     $scope.scopeModel.label = value;
                 };

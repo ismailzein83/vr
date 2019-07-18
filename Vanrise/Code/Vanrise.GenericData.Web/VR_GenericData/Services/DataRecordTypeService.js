@@ -14,6 +14,7 @@
             getDrillDownDefinition: getDrillDownDefinition,
             addListDataRecordTypeRow: addListDataRecordTypeRow,
             editListDataRecordTypeRow: editListDataRecordTypeRow,
+            viewListDataRecordTypeRow: viewListDataRecordTypeRow,
             addListDataRecordTypeGridGenericEditorViewRow: addListDataRecordTypeGridGenericEditorViewRow,
             editListDataRecordTypeGridGenericEditorViewRow: editListDataRecordTypeGridGenericEditorViewRow
         });
@@ -72,7 +73,23 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DataRecoedTypeList/RuntimeViewTypeRuntime/Templates/GridViewEditorTemplate.html', modalParameters, modalSettings);
         }
+        function viewListDataRecordTypeRow(dataRow, dataRecordTypeId, definitionSettings, onRowUpdated, title) {
+            var modalParameters = {
+                dataRecordTypeId: dataRecordTypeId,
+                definitionSettings: definitionSettings,
+                dataRow: dataRow,
+                isReadOnly: true,
+                title: title
+            };
 
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onRowUpdated = onRowUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DataRecoedTypeList/RuntimeViewTypeRuntime/Templates/GridViewEditorTemplate.html', modalParameters, modalSettings);
+        }
         function addListDataRecordTypeGridGenericEditorViewRow(context, onRowAdded) {
             var modalParameters = {
                 context: context,

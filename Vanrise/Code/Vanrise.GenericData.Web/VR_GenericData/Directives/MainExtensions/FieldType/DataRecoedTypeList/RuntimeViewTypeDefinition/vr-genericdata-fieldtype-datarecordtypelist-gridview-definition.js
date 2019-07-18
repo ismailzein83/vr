@@ -174,6 +174,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                             IsRequired: selectedField.entity.IsRequired,
                             IsDisabled: selectedField.entity.IsDisabled,
                             ShowAsLabel: selectedField.entity.ShowAsLabel,
+                            ReadOnly: selectedField.entity.ReadOnly,
                             GridColumnSettings: selectedField.columnSettingsDirectiveAPI.getData()
                         });
                     }

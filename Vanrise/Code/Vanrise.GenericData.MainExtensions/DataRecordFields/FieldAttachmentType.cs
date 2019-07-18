@@ -155,7 +155,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string RuntimeEditor
         {
-            get { return null; }
+            get { return "vr-genericdata-fieldtype-attachment-runtimeeditor"; }
         }
 
         public override string GetRuntimeTypeDescription()

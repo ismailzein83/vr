@@ -28,6 +28,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             $scope.scopeModel = {};
             $scope.scopeModel.attachementFieldTypes = [];
+            var gridAPI;
             $scope.scopeModel.addNewAttachementFieldType = function () {
                 var attachementFieldType =
                     {
@@ -43,6 +44,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 $scope.scopeModel.attachementFieldTypes.splice(index, 1);
             };
             $scope.onGridReady = function (api) {
+                gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveAPI());
                 }
@@ -63,6 +65,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                                     };
                                     $scope.scopeModel.attachementFieldTypes.push(attachementFieldType);
                                 }
+                            }
+                            if (payload.readOnly) {
+                                $scope.removerow = undefined;
+                                gridAPI.refreshGridAttributes();
                             }
                         }
                         return UtilsService.waitMultiplePromises(promises);

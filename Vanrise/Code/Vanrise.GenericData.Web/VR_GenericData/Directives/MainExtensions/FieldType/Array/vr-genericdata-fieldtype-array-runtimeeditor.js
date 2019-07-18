@@ -119,7 +119,9 @@
 
                     return retVal;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 if (ctrl.onReady != undefined) {
                     ctrl.onReady(api);
                 }

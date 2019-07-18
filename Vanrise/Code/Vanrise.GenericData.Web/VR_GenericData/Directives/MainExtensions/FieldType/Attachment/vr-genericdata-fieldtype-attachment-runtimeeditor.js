@@ -53,8 +53,10 @@ app.directive('vrGenericdataFieldtypeAttachmentRuntimeeditor', ['UtilsService', 
                     if (payload != undefined) {
                         fieldName = payload.fieldName;
                         payloadVariable = {
-                            attachementFieldTypes: payload.fieldValue
+                            attachementFieldTypes: payload.fieldValue,
+                            readOnly: payload.readOnly
                         };
+                    
                     }
 
                     promises.push(directiveReadyAPI.loadGrid(payloadVariable));
@@ -85,7 +87,9 @@ app.directive('vrGenericdataFieldtypeAttachmentRuntimeeditor', ['UtilsService', 
 
                     return setFieldValuesDeferred.promise;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

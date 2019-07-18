@@ -10,6 +10,7 @@
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
         var title;
+        var isReadOnly;
         $scope.scopeModel = {};
 
         var dataRecordTypeId;
@@ -27,11 +28,14 @@
                 definitionSettings = parameters.definitionSettings;
                 dataRow = parameters.dataRow;
                 title = parameters.title;
+                isReadOnly = parameters.isReadOnly;
             }
             if (dataRow != undefined) {
                 isEditMode = true;
                 fieldValues = dataRow.Values;
             }
+            if (isReadOnly)
+                UtilsService.setContextReadOnly($scope);
         }
 
         function defineScope() {
@@ -64,6 +68,7 @@
                     definitionSettings: definitionSettings,
                     parentFieldValues: fieldValues,
                     runtimeEditor: definitionSettings != undefined ? definitionSettings.RuntimeEditor : undefined,
+                    isReadOnly: isReadOnly,
                     isEditMode: false
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);

@@ -327,6 +327,7 @@ namespace Vanrise.GenericData.Business
                     runtimeField.ShowAsLabel = field.ShowAsLabel;
                     runtimeField.FieldWidth = field.FieldWidth;
                     runtimeField.HideLabel = field.HideLabel;
+                    runtimeField.ReadOnly = field.ReadOnly;
                     runtimeRow.Fields.Add(runtimeField);
                 }
             }

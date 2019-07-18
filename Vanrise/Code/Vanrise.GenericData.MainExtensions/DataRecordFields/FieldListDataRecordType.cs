@@ -139,6 +139,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public bool IsRequired { get; set; }
         public bool IsDisabled { get; set; }
         public bool ShowAsLabel { get; set; }
+        public bool ReadOnly { get; set; }
         public GridColumnSettings GridColumnSettings { get; set; }
     }
     public class GridEditorViewListRecordRuntimeViewType : ListRecordRuntimeViewType

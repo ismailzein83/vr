@@ -65,6 +65,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                         fieldName = payload.fieldName;
                         fieldWidth = payload.fieldWidth;
                         fieldViewSettings = payload.fieldViewSettings;
+                        var readOnly = payload.readOnly;
                         if (fieldViewSettings != undefined) {
                             $scope.scopeModel.runtimeEditor = fieldViewSettings.RuntimeEditor;
                             var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -77,6 +78,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                                     dataRecordTypeId: fieldType.DataRecordTypeId,
                                     definitionSettings: fieldViewSettings,
                                     fieldType: fieldType,
+                                    readOnly: readOnly,
                                     fieldWidth: fieldWidth
                                 }, runtimeEditorLoadPromiseDeferred);
                             });
@@ -88,6 +90,11 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                 };
                 api.getData = function () {
                     return runtimeEditorDirectiveAPI != undefined ? runtimeEditorDirectiveAPI.getData() : undefined;
+                };
+                api.setOnlyViewMode = function () {
+                    runtimeEditorReadyPromiseDeferred.promise.then(function () {
+                        runtimeEditorDirectiveAPI.setOnlyViewMode();
+                    });
                 };
 
                 api.setFieldValues = function (fieldValuesByNames) {

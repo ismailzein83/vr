@@ -142,7 +142,9 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                 api.setLabel = function (value) {
                     $scope.scopeModel.label = value;
                 };
-
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
                 api.setFieldValues = function (fieldValuesByNames) {
                     if (fieldValuesByNames == undefined || !(fieldName in fieldValuesByNames))
                         return;
