@@ -130,7 +130,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (stringRecordFilter == null)
                 throw new NullReferenceException("stringRecordFilter");
 
-            string valueAsString = fieldValue as string;
+            string valueAsString = fieldValue.ToString();
             if (valueAsString == null)
                 throw new NullReferenceException("valueAsString");
 
