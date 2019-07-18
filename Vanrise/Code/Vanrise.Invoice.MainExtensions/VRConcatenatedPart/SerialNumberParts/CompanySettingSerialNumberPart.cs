@@ -23,10 +23,13 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
                 if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.ExtendedSettings != null)
                 {
                     var info = invoiceType.Settings.ExtendedSettings.GetInfo(new InvoiceTypeExtendedSettingsInfoContext { InfoType = InfoType, Invoice = context.Invoice });
-                    var companySetting = (CompanySetting)info;
+                    if (info != null)
+                    {
+                        var companySetting = (CompanySetting)info;
 
-                    if (companySetting != null)
-                        return companySetting.CompanyName;
+                        if (companySetting != null)
+                            return companySetting.CompanyName;
+                    }
                 }
             }
             return null;

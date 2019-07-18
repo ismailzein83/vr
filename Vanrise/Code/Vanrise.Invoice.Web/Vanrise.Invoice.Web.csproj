@@ -376,6 +376,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceItemGrouping\vr-invoice-itemgrouping-aggregates.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceItemGrouping\vr-invoice-itemgrouping-dimensions.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceItemGrouping\vr-invoice-itemgroupings.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceCompanySettingSerialNumberPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\vr-invoicetype-serialnumber-companysetting.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceDateSerialNumberPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceFieldSerialNumberPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceCounterSerialNumberPartTemplate.html" />
