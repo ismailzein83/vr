@@ -22,7 +22,8 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 			var gridAPI;
 			var gridDrillDownTabsObj;
 			var carrierAccountId;
-			var isInActiveCarrierAccount;
+			var isCarrierAccountInActive;
+			var isCarrierAccountBlock;
 
 			function initializeController() {
 				$scope.scopeModel = {};
@@ -93,7 +94,7 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 				};
 				$scope.scopeModel.menuActions = function (dataItem) {
 					var menuActions = [];
-					if (isInActiveCarrierAccount) {
+					if (isCarrierAccountInActive) {
 						menuActions.push(vieweMenuAction);
 					}
 					else {
@@ -107,12 +108,14 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 							else
 								if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Inactive.value) {
 									menuActions.push(vieweMenuAction);
-									menuActions.push(activeMenuAction);
+									if (!isCarrierAccountInActive)
+										menuActions.push(activeMenuAction);
 								}
 								else if (dataItem.Entity.CurrentState == NP_IVSwitch_EndPointStateEnum.Blocked.value) {
 									menuActions.push(vieweMenuAction);
-									menuActions.push(activeMenuAction);
 									menuActions.push(inActiveMenuAction);
+									if (!isCarrierAccountBlock)
+										menuActions.push(activeMenuAction);
 								}
 								else {
 									menuActions.push(activeMenuAction);
@@ -136,14 +139,15 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 					var isCarrierAccountActiveOrBlockPromise = WhS_BE_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId).then(function (response) {
 						$scope.scopeModel.isCarrierAccountBlockorInActive = false;
 						if (response != undefined) {
-							if (response.CarrierAccountSettings != undefined && response.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
-							{
-								isInActiveCarrierAccount = true;
+							if (response.CarrierAccountSettings != undefined && response.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value) {
+								isCarrierAccountInActive = true;
 								$scope.scopeModel.isCarrierAccountBlockorInActive = true;
 							}
 							else
-								if (response.CustomerSettings != undefined && response.SupplierSettings.RoutingStatus == WhS_BE_RoutingStatusEnum.Blocked.value)
+								if (response.CustomerSettings != undefined && response.SupplierSettings.RoutingStatus == WhS_BE_RoutingStatusEnum.Blocked.value) {
 									$scope.scopeModel.isCarrierAccountBlockorInActive = true;
+									isCarrierAccountBlock = true;
+								}
 						}
 					});
 					promises.push(isCarrierAccountActiveOrBlockPromise);
