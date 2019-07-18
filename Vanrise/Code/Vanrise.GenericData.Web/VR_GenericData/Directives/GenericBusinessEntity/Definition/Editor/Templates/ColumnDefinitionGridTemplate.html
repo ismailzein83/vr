@@ -20,7 +20,7 @@
                 </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Width'" widthfactor="18">
                     <span vr-loader="dataItem.isColumnSettingDirectiveloading">
-                        <vr-common-gridcolumnwidth-editor on-ready="dataItem.onColumnSettingDirectiveReady" hidelabel  selector-col-num="4" textbox-col-num="4"></vr-common-gridcolumnwidth-editor>
+                        <vr-common-gridcolumnwidth-editor on-ready="dataItem.onColumnSettingDirectiveReady" showplaceholder hidelabel  selector-col-num="4" textbox-col-num="4"></vr-common-gridcolumnwidth-editor>
                     </span>
                 </vr-datagridcolumn>
                 <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true" columnindex="'2'">

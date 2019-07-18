@@ -8,8 +8,8 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
             scope: {
                 onReady: '=',
                 selectorColNum: '@',
-                textboxColNum: '@'
-
+                textboxColNum: '@',
+                showplaceholder: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;              
@@ -124,12 +124,19 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                 withchild = "haschildcolumns";
                 usedingridcell = "usedingridcell";
             }
-
-            return '<vr-common-gridwidthfactor-selector ' + usedingridcell + '  normal-col-num="{{selectorColNum}}"  on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
+            var showplaceholder;
+            var fixedWidthPlaceHolder;
+            var listViewWidthPlaceHolder;
+            if (attrs.showplaceholder != undefined) {
+                showplaceholder = "showplaceholder";
+                fixedWidthPlaceHolder = 'placeholder="Fixed Width Value"';
+                listViewWidthPlaceHolder = 'placeholder="List Width Value"';
+            }
+            return '<vr-common-gridwidthfactor-selector ' + usedingridcell + '  normal-col-num="{{selectorColNum}}"' + showplaceholder+'  on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
                    + hidelabel
                    + ' ></vr-common-gridwidthfactor-selector>'
                 + '<vr-columns colnum="{{textboxColNum}}"' + withchild + hidelabel + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue">'
-                + '<vr-textbox type="number"  placeholder="Fixed Width Value"  '
+                + '<vr-textbox type="number" ' + fixedWidthPlaceHolder+"'"
                     + fixedLabel +
                    '  value="scopeModel.fixedWidth" decimalprecision="0" isrequired="scopeModel.widthOption.value == scopeModel.fixedWidthValue "></vr-textbox>'
                    + '</vr-columns>'
@@ -138,8 +145,8 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                    + '</vr-columns>'
                 + '<vr-columns colnum="{{textboxColNum}}"' + withchild + hidelabel+ '>'
                    + '<vr-textbox type="number" '
-                    + listViewLabel +
-                   'value="scopeModel.listViewWidth" placeholder="List Width Value" decimalprecision="0"></vr-textbox>'
+                + listViewLabel +
+                'value="scopeModel.listViewWidth" ' + listViewWidthPlaceHolder+' decimalprecision = "0" ></vr - textbox > '
                    + '</vr-columns>'
                 + '<vr-columns colnum="{{hintColNum}}"' + withchild + hidelabel+ ' ng-show="showHint">'
                         + '<vr-hint value="List View Width"></vr-hint>'

@@ -19,6 +19,7 @@
                 isrequired: '=',
                 hideremoveicon: '@',
                 normalColNum: '@',
+                showplaceholder: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -102,11 +103,14 @@
             var colAttributes = "";
             if (attrs.usedingridcell != undefined)
                 colAttributes = "haschildcolumns right-medium-spacing ";
+            var placeholder;
+            if (attrs.showplaceholder != undefined)
+                placeholder ="placeholder='Width'";
             var hideremoveicon = (attrs.hideremoveicon != undefined && attrs.hideremoveicon != null) ? 'hideremoveicon' : null;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + colAttributes + ' >'
                 + '<span vr-disabled="ctrl.isdisabled"><vr-select on-ready="ctrl.onSelectorReady"'
-                + ' datasource="ctrl.datasource"  placeholder="Width"'
+                + ' datasource="ctrl.datasource" ' + placeholder + "'"
 
                     + ' selectedvalues="ctrl.selectedvalues"'
                     + ' onselectionchanged="ctrl.onselectionchanged"'
