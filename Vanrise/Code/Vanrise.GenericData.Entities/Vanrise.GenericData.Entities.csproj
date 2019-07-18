@@ -120,6 +120,7 @@
     <Compile Include="GenericBusinessEntityCustomActions\RangeGenericEditorProcessInput.cs" />
     <Compile Include="GenericBusinessEntity\GetDescriptionByIdsDicValueOutput.cs" />
     <Compile Include="GenericBusinessEntity\RangeGenericEditorDefinitionSettings.cs" />
+    <Compile Include="GenericEditorDefinitionSetting\ExecuteActionTypeEditorDefinitionSetting.cs" />
     <Compile Include="GenericEditor\Runtime\GenericFieldsRuntimeRow.cs" />
     <Compile Include="GenericFinancialAccount.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionDetail.cs" />
