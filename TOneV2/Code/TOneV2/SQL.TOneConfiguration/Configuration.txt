@@ -98,8 +98,7 @@ CarrierPortal.SupplierPricelist.PostDeployment.sql
 
 CP_WHS
 CarrierPortal.TOnePortal.PostDeployment.sql
-
-Demo_MarketView.PostDeployment.sql
+Demo_MarketView.PostDeployment.json
 
 Mediation
 Mediation_WHS.Common.PostDeployment.sql
@@ -136,7 +135,7 @@ Retail_ISP.PostDeployment.sql
 
 NetworkRental
 Retail_NetworkRental.PostDeployment.sql
-Retail_NetworkRental_OrdersAndContracts.PostDeployment.sql
+Retail_NetworkRental.PostDeployment_OrdersAndContracts.json
 
 Voucher
 Voucher.PostDeployment.sql
@@ -153,14 +152,16 @@ ProbesAnalytics.PostDeployment.sql
 
 NetworkInventory
 NetworkInventory.PostDeployment.sql
-Retail_NIMForFixedOperator.PostDeployment.sql
+Retail_NIMForFixedOperator.PostDeployment.json
 
 TelecomCRM
 TelecomCRM.PostDeployment.sql
-CommonEntities_Address.PostDeployment.sql
-CommonEntities_PersonProfile.PostDeployment.sql
-Retail_CRMForFixedOperator.PostDeployment.sql
+CommonEntities_CommonEntities.PostDeployment.json
+CommonEntities_BankEntities.PostDeployment.json
+CommonEntities_Address.PostDeployment.json
+CommonEntities_PersonProfile.PostDeployment.json
+Retail_CRMForFixedOperator.PostDeployment.json
 
 RetailBilling
-Retail_RetailBilling.PostDeployment.sql
 Retail_RetailBilling_common.PostDeployment.sql
+Retail_RetailBilling.PostDeployment.json
