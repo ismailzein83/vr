@@ -1,17 +1,21 @@
-﻿<vr-row>
+﻿<vr-row >
     <vr-columns width="fullrow">
-        <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddFilter()"></vr-button>
-
-        <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
-                <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Show In Basic'" field="'ShowInBasic'" disablesorting>
-                    <span ng-if="dataItem.ShowInBasic == true "><vr-icon icontype="'true'"></vr-icon></span>
+        <vr-button type="Add" data-onclick="scopeModel.addFilter" standalone  vr-disabled="scopeModel.disableAddFilter()"></vr-button>
+        <vr-validator validate="scopeModel.isValid()">
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
+                         on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeFilter" hidegridmenu>
+                <vr-datagridcolumn headertext="'Name'" disablesorting widthfactor="4">
+                    <vr-textbox value="dataItem.entity.Name" isrequired></vr-textbox>
                 </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Show In Basic'" disablesorting widthfactor="4">
+                    <vr-switch value="dataItem.entity.ShowInBasic"></vr-switch>
+                </vr-datagridcolumn>
+                <vr-datagridexpandablerow>
+                    <span vr-loader="dataItem.isFilterDefinitionDirectiveLoading">
+                        <vr-genericdata-genericbe-filterdefinition-settings on-ready="dataItem.onFilterDefinitionDirectiveReady" normal-col-num="3" isrequired="true"></vr-genericdata-genericbe-filterdefinition-settings>
+                    </span>
+                </vr-datagridexpandablerow>
             </vr-datagrid>
         </vr-validator>
     </vr-columns>
 </vr-row>
-
-

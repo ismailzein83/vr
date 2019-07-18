@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FilterDefinitionBasicAdvancedDirective.$inject = ['UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionService'];
+    FilterDefinitionBasicAdvancedDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function FilterDefinitionBasicAdvancedDirective(UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
+    function FilterDefinitionBasicAdvancedDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -26,7 +26,9 @@
             var context;
 
             this.initializeController = initializeController;
+
             function initializeController() {
+                $scope.scopeModel = {};
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
                     if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
@@ -36,27 +38,37 @@
 
                     return null;
                 };
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
 
-                ctrl.addFilter = function () {
-                    var onFilterAdded = function (addedItem) {
-                        ctrl.datasource.push(addedItem);
+                };
+                $scope.scopeModel.addFilter = function () {
+
+                    var dataItem = {
+                        entity: {
+                            BasicAdvancedFilterItemId: UtilsService.guid()
+                        }
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEBasicAdvanceFilter(onFilterAdded, getContext());
+                    dataItem.onFilterDefinitionDirectiveReady = function (api) {
+                        dataItem.filterDefinitionDirectiveAPI = api;
+                        var setLoader = function (value) { dataItem.isFilterDefinitionDirectiveLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.filterDefinitionDirectiveAPI, { context: context }, setLoader);
+                    };
+                    gridAPI.expandRow(dataItem);
+
+                    ctrl.datasource.push(dataItem);
                 };
-                ctrl.disableAddGridColumn = function () {
+                $scope.scopeModel.disableAddGridColumn = function () {
                     if (context == undefined) return true;
                     return context.getDataRecordTypeId() == undefined;
                 };
-                ctrl.removeFilter = function (dataItem) {
+                $scope.scopeModel.removeFilter = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
 
-
-
-                defineMenuActions();
-                defineAPI();
             }
 
             function defineAPI() {
@@ -69,10 +81,10 @@
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
                             filters.push({
-                                BasicAdvancedFilterItemId:currentItem.BasicAdvancedFilterItemId,
-                                Name: currentItem.Name,
-                                ShowInBasic: currentItem.ShowInBasic,
-                                FilterSettings: currentItem.FilterSettings
+                                BasicAdvancedFilterItemId:currentItem.entity.BasicAdvancedFilterItemId,
+                                Name: currentItem.entity.Name,
+                                ShowInBasic: currentItem.entity.ShowInBasic,
+                                FilterSettings: currentItem.filterDefinitionDirectiveAPI != undefined ? currentItem.filterDefinitionDirectiveAPI.getData() : currentItem.oldSettings
                             });
                         }
                     }
@@ -83,19 +95,22 @@
                 };
 
                 api.load = function (payload) {
+                    var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
                         api.clearDataSource();
                         if (payload.settings != undefined && payload.settings.Filters != undefined) {
                             var dataFilters = payload.settings.Filters;
                             for (var i = 0; i < dataFilters.length; i++) {
-                                var item = dataFilters[i];
-                                ctrl.datasource.push(item);
+                                var filterobject = {
+                                    payload: dataFilters[i],
+                                };
+                                prepareFilter(filterobject);
                             }
                         }
                     }
+                    return UtilsService.waitPromiseNode({ promises: promises });
                 };
-
 
                 api.clearDataSource = function () {
                     ctrl.datasource.length = 0;
@@ -104,38 +119,35 @@
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-
-
-            function defineMenuActions() {
-                var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editFilter,
-                }];
-
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
-
-            function editFilter(filterObj) {
-                var onFilterUpdated = function (filter) {
-                    var index = ctrl.datasource.indexOf(filterObj);
-                    ctrl.datasource[index] = filter;
+            function prepareFilter(filterObject) {
+                var dataItem = {
+                    entity: {
+                        BasicAdvancedFilterItemId: filterObject.payload.BasicAdvancedFilterItemId,
+                        Name: filterObject.payload.Name,
+                        ShowInBasic: filterObject.payload.ShowInBasic
+                    },
+                    oldSettings: filterObject.payload.FilterSettings
                 };
 
-                VR_GenericData_GenericBEDefinitionService.editGenericBEBasicAdvanceFilter(onFilterUpdated, filterObj, getContext());
+                dataItem.onFilterDefinitionDirectiveReady = function (api) {
+                    dataItem.filterDefinitionDirectiveAPI = api;
+                    var filterPayload = {
+                        settings: filterObject.payload.FilterSettings,
+                        context: context
+                    };
+                    var setLoader = function (value) { dataItem.isFilterDefinitionDirectiveLoading = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.filterDefinitionDirectiveAPI, filterPayload, setLoader);
+                };
+
+                ctrl.datasource.push(dataItem);
             }
-            function getContext() {
-                return context;
-            }
+
 
             function checkDuplicateName() {
                 for (var i = 0; i < ctrl.datasource.length; i++) {
                     var currentItem = ctrl.datasource[i];
                     for (var j = 0; j < ctrl.datasource.length; j++) {
-                        if (i != j && ctrl.datasource[j].Name == currentItem.Name)
+                        if (i != j && ctrl.datasource[j].entity.Name == currentItem.entity.Name)
                             return true;
                     }
                 }

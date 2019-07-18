@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RowsContainerEditorDefinitionDirective.$inject = ['VRNotificationService', 'VR_GenericData_GenericBEDefinitionService', 'UtilsService'];
+    RowsContainerEditorDefinitionDirective.$inject = ['VRNotificationService', 'VRUIUtilsService', 'UtilsService'];
 
-    function RowsContainerEditorDefinitionDirective(VRNotificationService, VR_GenericData_GenericBEDefinitionService, UtilsService) {
+    function RowsContainerEditorDefinitionDirective(VRNotificationService, VRUIUtilsService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,17 +25,37 @@
             this.initializeController = initializeController;
 
             var context;
-
+            var gridAPI;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.datasource = [];
 
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+
+                };
                 $scope.scopeModel.addRowContainer = function () {
-                    var onRowContainerAdded = function (addedItem) {
-                        $scope.scopeModel.datasource.push(addedItem);
+                    var dataItem = {
+                        entity: {
+                            numberOfFields:'0 Field Types'
+                        }
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBERowContainer(onRowContainerAdded, getContext());
+                    dataItem.onRowContainerFieldsDirectiveReady = function (api) {
+                        dataItem.rowContainerFieldsDirectiveAPI = api;
+                        var setLoader = function (value) { dataItem.isRowContainerFieldsDirectiveLoading = value; };
+                        var payload = {
+                            context: getContext(),
+                            setFieldsNumber: function (fieldsNumber) {
+                                dataItem.entity.numberOfFields = fieldsNumber + ' Field Types';
+                            }
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.rowContainerFieldsDirectiveAPI, payload, setLoader);
+                    };
+                    gridAPI.expandRow(dataItem);
+
+                    $scope.scopeModel.datasource.push(dataItem);
                 };
 
                 $scope.scopeModel.deleteFunction = function (rowContainerObj) {
@@ -62,9 +82,6 @@
                     return null;
                 };
 
-                defineAPI();
-
-                defineMenuActions();
             }
 
             function defineAPI() {
@@ -72,37 +89,30 @@
 
                 api.load = function (payload) {
                     var settings;
-
+                    var promises = [];
                     if (payload != undefined) {
                         settings = payload.settings;
                         context = payload.context;
                     }
 
                     if (settings != undefined) {
-                        loadRowContainerDataSource();
-                    }
-
-                    function loadRowContainerDataSource() {
                         var rowContainers = settings.RowContainers;
                         for (var i = 0; i < rowContainers.length; i++) {
 
                             var rowSettings = rowContainers[i].RowSettings;
+                            var rowObject = { payload: rowSettings };
 
-                            var rowFields = [];
-                            for (var j = 0; j < rowSettings.length; j++) {
-                                rowFields.push(rowSettings[j]);
-                            }
-
-                            rowFields.numberOfFields = rowFields.length + ' Field Types';
-                            $scope.scopeModel.datasource.push(rowFields);
+                            prepareRow(rowObject);
                         }
                     }
+                    return UtilsService.waitPromiseNode({ promises: promises });
                 };
 
                 api.getData = function () {
                     var rowContainers = [];
                     for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                        rowContainers.push({ RowSettings: getRowContainerEntity($scope.scopeModel.datasource[i]) });
+                        var row = $scope.scopeModel.datasource[i];
+                        rowContainers.push({ RowSettings: row.rowContainerFieldsDirectiveAPI != undefined ? row.rowContainerFieldsDirectiveAPI.getData() : row.oldRowSettings });
                     }
 
                     return {
@@ -115,32 +125,28 @@
                     ctrl.onReady(api);
                 }
             }
-
-            function defineMenuActions() {
-                $scope.scopeModel.gridMenuActions = [
-                    {
-                        name: "Edit",
-                        clicked: editRowContainer
-                    }];
-            }
-
-            function editRowContainer(rowContainerEntityObj) {
-                var onRowContainerUpdated = function (rowContainer) {
-                    var index = $scope.scopeModel.datasource.indexOf(rowContainerEntityObj);
-                    $scope.scopeModel.datasource[index] = rowContainer;
+            function prepareRow(rowObject) {
+                var dataItem = {
+                    entity: {
+                        numberOfFields: rowObject.payload != undefined ? rowObject.payload.length + ' Field Types' : '0 Field Types'
+                    },
+                    oldRowSettings: rowObject.payload
                 };
 
-                VR_GenericData_GenericBEDefinitionService.editGenericBERowContainer(onRowContainerUpdated, getRowContainerEntity(rowContainerEntityObj), getContext());
-            }
+                dataItem.onRowContainerFieldsDirectiveReady = function (api) {
+                    dataItem.rowContainerFieldsDirectiveAPI = api;
+                    var setLoader = function (value) { dataItem.isRowContainerFieldsDirectiveLoading = value; };
+                    var payload = {
+                        context: getContext(),
+                        fields: rowObject.payload,
+                        setFieldsNumber: function (fieldsNumber) {
+                            dataItem.entity.numberOfFields = fieldsNumber + ' Field Types';
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.rowContainerFieldsDirectiveAPI, payload, setLoader);
+                };
 
-            function getRowContainerEntity(rowContainerEntityObj) {
-                var rowContainerEntity = [];
-                for (var i = 0; i < rowContainerEntityObj.length; i++) {
-                    var obj = UtilsService.cloneObject(rowContainerEntityObj[i], true);
-                    rowContainerEntity.push(obj);
-                }
-
-                return rowContainerEntity;
+                $scope.scopeModel.datasource.push(dataItem);
             }
 
             function getContext() {

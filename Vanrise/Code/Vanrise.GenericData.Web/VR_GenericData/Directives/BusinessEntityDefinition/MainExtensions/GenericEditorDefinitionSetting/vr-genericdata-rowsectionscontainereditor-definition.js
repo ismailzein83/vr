@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsService", "VR_GenericData_GenericBEDefinitionService", "VRNotificationService",
-    function (UtilsService, VR_GenericData_GenericBEDefinitionService, VRNotificationService) {
+app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsService", "VRUIUtilsService", "VRLocalizationService",
+    function (UtilsService, VRUIUtilsService, VRLocalizationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -22,11 +22,12 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
             this.initializeController = initializeController;
 
             var context;
-
+            var gridAPI;
             function initializeController() {
+                $scope.scopeModel = {};
                 ctrl.datasource = [];
 
-                ctrl.isValid = function () {
+                $scope.scopeModel.isValid = function () {
                     if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
                         return "You Should add at least one section.";
 
@@ -36,15 +37,44 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
                     return null;
                 };
 
-                ctrl.addSectionContainer = function () {
-                    var onSectionContainerAdded = function (addedItem) {
-                        ctrl.datasource.push(addedItem);
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
+
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+
+                };
+                $scope.scopeModel.addSectionContainer = function () {
+                    var dataItem = {
+                        entity: {}
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBESectionContainer(onSectionContainerAdded, getContext());
+                    dataItem.onTextResourceSelectorReady = function (api) {
+                        dataItem.textResourceSeletorAPI = api;
+                        var setLoader = function (value) { dataItem.isFieldTextResourceSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
+                    };
+
+                    dataItem.onEditorDirectiveReady = function (api) {
+                        dataItem.editorDirectiveAPI = api;
+                        var setLoader = function (value) { dataItem.isEditorDirectiveLoading = value; };
+                        var payload = {
+                            context: getContext(),
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.editorDirectiveAPI, payload, setLoader);
+                    };
+
+                    gridAPI.expandRow(dataItem);
+
+                    ctrl.datasource.push(dataItem);
                 };
 
-                ctrl.disableAddSectionContainer = function () {
+                $scope.scopeModel.removeSectionContainer = function (dataItem) {
+                    var index = ctrl.datasource.indexOf(dataItem);
+                    ctrl.datasource.splice(index, 1);
+                };
+
+                $scope.scopeModel.disableAddSectionContainer = function () {
                     if (context == undefined)
                         return true;
 
@@ -59,23 +89,45 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
                     return false;
                 };
 
-                ctrl.removeSectionContainer = function (dataItem) {
-                    VRNotificationService.showConfirmation().then(function (response) {
-                        if (response) {
-                            var index = ctrl.datasource.indexOf(dataItem);
-                            ctrl.datasource.splice(index, 1);
-                        }
-                    });
+            }
+            function prepareSection(sectionObject) {
+                var dataItem = {
+                    entity: {
+                        SectionTitle: sectionObject.payload.SectionTitle,
+                        ColNum: sectionObject.payload.ColNum,
+                    },
+                    oldTextResourceKey: sectionObject.payload.TextResourceKey,
+                    oldSettings: sectionObject.payload.SectionSettings
                 };
 
-                defineMenuActions();
-                defineAPI();
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    sectionObject.textResourceReadyPromiseDeferred.resolve();
+                };
+
+                sectionObject.textResourceReadyPromiseDeferred.promise.then(function () {
+                    var textResourcePayload = { selectedValue: sectionObject.payload.TextResourceKey };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, sectionObject.textResourceLoadPromiseDeferred);
+                });
+
+                dataItem.onEditorDirectiveReady = function (api) {
+                    dataItem.editorDirectiveAPI = api;
+                    var setLoader = function (value) { dataItem.isEditorDirectiveLoading = value; };
+
+                    var sectionPayload = {
+                        settings: sectionObject.payload.SectionSettings,
+                        context: getContext(),
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.editorDirectiveAPI, sectionPayload, setLoader);
+                };
+                ctrl.datasource.push(dataItem);
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
                     if (payload != undefined) {
                         api.clearDataSource();
                         context = payload.context;
@@ -83,10 +135,19 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
                             var sectionContainers = payload.settings.RowSectionContainers;
                             for (var i = 0; i < sectionContainers.length; i++) {
                                 var item = sectionContainers[i];
-                                ctrl.datasource.push(item);
+
+                                var sectionObject = {
+                                    payload: item,
+                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                };
+                                if ($scope.scopeModel.isLocalizationEnabled)
+                                    promises.push(sectionObject.textResourceLoadPromiseDeferred.promise);
+                                prepareSection(sectionObject);
                             }
                         }
                     }
+                    return UtilsService.waitPromiseNode({ promises: promises });
                 };
 
                 api.getData = function () {
@@ -96,10 +157,10 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
                             sections.push({
-                                SectionTitle: currentItem.SectionTitle,
-                                ColNum: currentItem.ColNum,
-                                SectionSettings: currentItem.SectionSettings,
-                                TextResourceKey: currentItem.TextResourceKey
+                                SectionTitle: currentItem.entity.SectionTitle,
+                                ColNum: currentItem.entity.ColNum,
+                                SectionSettings: currentItem.editorDirectiveAPI != undefined ? currentItem.editorDirectiveAPI.getData() : currentItem.oldSettings,
+                                TextResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : currentItem.oldTextResourceKey
                             });
                         }
                     }
@@ -116,23 +177,6 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
-
-            function defineMenuActions() {
-                $scope.gridMenuActions = [
-                    {
-                        name: "Edit",
-                        clicked: editSectionContainer
-                    }];
-            }
-
-            function editSectionContainer(sectionObj) {
-                var obj = UtilsService.cloneObject(sectionObj);
-                var onSectionContainerUpdated = function (section) {
-                    var index = ctrl.datasource.indexOf(sectionObj);
-                    ctrl.datasource[index] = section;
-                };
-                VR_GenericData_GenericBEDefinitionService.editGenericBESectionContainer(onSectionContainerUpdated, obj, getContext());
             }
 
             function getContext() {
@@ -158,10 +202,10 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
             }
 
             function checkDuplicateName() {
-                for (var i = 0; i < ctrl.datasource.length -1; i++) {
+                for (var i = 0; i < ctrl.datasource.length; i++) {
                     var currentItem = ctrl.datasource[i];
-                    for (var j = i + 1; j < ctrl.datasource.length; j++) {
-                        if (ctrl.datasource[j].SectionTitle == currentItem.SectionTitle)
+                    for (var j = 0; j < ctrl.datasource.length; j++) {
+                        if (i != j && ctrl.datasource[j].entity.SectionTitle == currentItem.entity.SectionTitle)
                             return true;
                     }
                 }

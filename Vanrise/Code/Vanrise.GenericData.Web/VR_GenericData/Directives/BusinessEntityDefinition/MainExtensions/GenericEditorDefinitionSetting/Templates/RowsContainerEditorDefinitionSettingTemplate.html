@@ -4,7 +4,14 @@
         <vr-validator validate="scopeModel.isValid()">
             <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" ondeleterow="scopeModel.deleteFunction" menuactions="scopeModel.gridMenuActions" maxheight="300px"
                          on-ready="scopeModel.onGridReady" enabledraggablerow="true" hidegridmenu>
-                <vr-datagridcolumn headertext="'Number Of Field Types'" field="'numberOfFields'" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Number Of Field Types'" disablesorting>
+                    <vr-label>{{dataItem.entity.numberOfFields}}</vr-label>
+                </vr-datagridcolumn>
+                <vr-datagridexpandablerow>
+                    <span vr-loader="dataItem.isRowContainerFieldsDirectiveLoading">
+                        <vr-genericdata-rowscontainereditor-fields-definition on-ready="dataItem.onRowContainerFieldsDirectiveReady" normal-col-num="3"></vr-genericdata-rowscontainereditor-fields-definition>
+                    </span>
+                </vr-datagridexpandablerow>
             </vr-datagrid>
         </vr-validator>
     </vr-columns>
