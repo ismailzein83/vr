@@ -10,7 +10,7 @@
         var tabModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBETabContainerEditorController.html";
         var sectionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBESectionContainerEditorController.html";
         var rowContainerModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBERowContainerEditor.html";
-        var BEFieldModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBEGenericFieldEditor.html";
+        //var BEFieldModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBEGenericFieldEditor.html";
         var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
         var actionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
         var customActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/CustomActionDefinitionEditor.html";
@@ -53,8 +53,8 @@
             editGenericBEAdditionalSetting: editGenericBEAdditionalSetting,
             addGenericBERowContainer: addGenericBERowContainer,
             editGenericBERowContainer: editGenericBERowContainer,
-            addGenericBEField: addGenericBEField,
-            editGenericBEField: editGenericBEField
+            //addGenericBEField: addGenericBEField,
+            //editGenericBEField: editGenericBEField
         });
 
         //function addGenericBEColumnDefinition(onGenericBEColumnDefinitionAdded, context) {
@@ -474,35 +474,35 @@
             VRModalService.showModal(rowContainerModalPath, parameters, settings);
         }
 
-        function addGenericBEField(onBEFieldAdded, context, recordTypeFields) {
-            var parameters = {
-                context: context,
-                recordTypeFields: recordTypeFields
-            };
+        //function addGenericBEField(onBEFieldAdded, context, recordTypeFields) {
+        //    var parameters = {
+        //        context: context,
+        //        recordTypeFields: recordTypeFields
+        //    };
 
-            var settings = {};
+        //    var settings = {};
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onBEFieldAdded = onBEFieldAdded;
-            };
+        //    settings.onScopeReady = function (modalScope) {
+        //        modalScope.onBEFieldAdded = onBEFieldAdded;
+        //    };
 
-            VRModalService.showModal(BEFieldModalPath, parameters, settings);
-        }
+        //    VRModalService.showModal(BEFieldModalPath, parameters, settings);
+        //}
 
-        function editGenericBEField(onBEFieldUpdated, context, recordTypeFields, fieldEntity) {
-            var parameters = {
-                recordTypeFields: recordTypeFields,
-                context: context, 
-                fieldEntity: fieldEntity
-            };
+        //function editGenericBEField(onBEFieldUpdated, context, recordTypeFields, fieldEntity) {
+        //    var parameters = {
+        //        recordTypeFields: recordTypeFields,
+        //        context: context, 
+        //        fieldEntity: fieldEntity
+        //    };
 
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onBEFieldUpdated = onBEFieldUpdated;
-            };
+        //    var settings = {};
+        //    settings.onScopeReady = function (modalScope) {
+        //        modalScope.onBEFieldUpdated = onBEFieldUpdated;
+        //    };
 
-            VRModalService.showModal(BEFieldModalPath, parameters, settings);
-        }
+        //    VRModalService.showModal(BEFieldModalPath, parameters, settings);
+        //}
     };
 
     app.service('VR_GenericData_GenericBEDefinitionService', GenericBEDefinitionService);
