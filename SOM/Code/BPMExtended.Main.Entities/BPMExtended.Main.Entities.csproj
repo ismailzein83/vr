@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
+    <Compile Include="AddressData.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="CreditDebitNotesDetail.cs" />
     <Compile Include="CreditDebitNotes.cs" />

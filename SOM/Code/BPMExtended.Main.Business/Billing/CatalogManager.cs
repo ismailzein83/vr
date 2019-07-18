@@ -516,6 +516,31 @@ namespace BPMExtended.Main.Business
             return null;
         }
 
+        public SaleService GetVPNServiceFee()
+        {
+            string serviceId;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("StVPNServiceFeeId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "1FFF1557-AF95-458D-ACE6-EF3E5B1FDA48");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                serviceId = entities[0].GetTypedColumnValue<string>("StVPNServiceFeeId");
+
+                return new SaleService()
+                {
+                    Id = serviceId,
+                    UpFront = false
+                };              
+            }
+            return null;
+        }
+
         public List<SaleService> GetADSLFeesForLineTermination()
         {
             List<SaleService> fees = new List<SaleService>();
@@ -545,6 +570,35 @@ namespace BPMExtended.Main.Business
 
             return fees;
 
+        }
+
+        public List<SaleService> GetVPNDivisionServices()
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDivisionServices");
+            var Id = esq.AddColumn("StServiceID");
+            esq.AddColumn("StServiceName");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StDivision", "DBBFA17A-51B6-49A9-BA90-F22B949CBD5E");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach (var item in entities)
+                {
+                    fees.Add(new SaleService()
+                    {
+
+                        Id = item.GetTypedColumnValue<string>(Id.Name),
+                        Name = item.GetTypedColumnValue<string>("StServiceName"),
+                        UpFront = false
+                    });
+                }
+            }
+            return fees;
         }
 
         public string GetDivisionByRatePlanId(string ratePlanId)

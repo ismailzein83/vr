@@ -377,6 +377,12 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("0BAD833F-CFC0-4C9D-8446-C2F956CCAC3A")]
         UpdatePaymentArrangement = 43,
 
+        [Description("Last Mile Change")]
+        [EntitySchemaName("StLastMileChange")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("BDFC6820-9932-4FE1-A628-D3537EFF100E")]
+        LastMileChange = 44,
+
     }
     public enum ContractStatus
     {

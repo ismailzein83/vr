@@ -128,6 +128,7 @@
     <Compile Include="Requests\GSHDSL\GSHDSLSubscriptionManager.cs" />
     <Compile Include="Requests\GSHDSL\GSHDSLTerminationManager.cs" />
     <Compile Include="Requests\Leased Line\ChangeLeasedLineSpeedManager.cs" />
+    <Compile Include="Requests\Leased Line\LastMileChangeManager.cs" />
     <Compile Include="Requests\Leased Line\LeasedLineComplaintManager.cs" />
     <Compile Include="Requests\Leased Line\LeasedLineSubscriptionManager.cs" />
     <Compile Include="Requests\Leased Line\LeasedLineTerminationManager.cs" />
