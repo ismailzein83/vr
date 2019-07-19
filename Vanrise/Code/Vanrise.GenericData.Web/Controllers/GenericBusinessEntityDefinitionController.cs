@@ -193,21 +193,10 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
-        [Route("MyAPICall")]
-        public MyAPICallOutput MyAPICall()
+        [Route("GetExecuteActionTypeEditorDefinitionSettingsConfigs")]
+        public IEnumerable<ExecuteActionTypeEditorDefinitionSettingsConfig> GetExecuteActionTypeEditorDefinitionSettingsConfigs()
         {
-            return new MyAPICallOutput()
-            {
-                myName = "Ali",
-                myInt = 15
-            };
-        }
-
-        public class MyAPICallOutput
-        {
-            public string myName { get; set; }
-
-            public int myInt { get; set; }
+            return _manager.GetExecuteActionTypeEditorDefinitionSettingsConfigs();
         }
 
     }

@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-switch value="scopeModel.callOnValueChanged" onvaluechanged="scopeModel.onCallOnValueChanged" label="Call On Value Changed"></vr-switch>
+    </vr-columns>
+    <vr-columns ng-show="scopeModel.callOnValueChanged" width="1/2row">
+        <vr-select on-ready="scopeModel.onDataRecordFieldsSelectorReady"
+                   datasource="scopeModel.dataRecordFields"
+                   selectedvalues="scopeModel.selectedFields"
+                   label="On Fields Changed"
+                   datatextfield="FieldTitle"
+                   datavaluefield="FieldName"
+                   entityName="Field Name" isrequired="true" ismultipleselection>
+        </vr-select>
+    </vr-columns>
+</vr-row>

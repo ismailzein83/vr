@@ -96,8 +96,11 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetDataRecordTypeFieldsListByBEDefinitionId'), { beDefinitionId: beDefinitionId });
         }
 
-        return ({
+        function GetExecuteActionTypeEditorDefinitionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetExecuteActionTypeEditorDefinitionSettingsConfigs"));
+        }
 
+        return ({
             GetGenericBEDefinitionSettings: GetGenericBEDefinitionSettings,
             GetGenericBEGridDefinition: GetGenericBEGridDefinition,
             GetGenericBEGridColumnAttributes: GetGenericBEGridColumnAttributes,
@@ -123,7 +126,8 @@
             GetGenericBEGridConditionConfigs: GetGenericBEGridConditionConfigs,
             GetGenericBEAdditionalSettingsConfigs: GetGenericBEAdditionalSettingsConfigs,
             GetGenericBECustomActionDefinitionSettingsConfigs: GetGenericBECustomActionDefinitionSettingsConfigs,
-            GetDataRecordTypeFieldsListByBEDefinitionId: GetDataRecordTypeFieldsListByBEDefinitionId
+            GetDataRecordTypeFieldsListByBEDefinitionId: GetDataRecordTypeFieldsListByBEDefinitionId,
+            GetExecuteActionTypeEditorDefinitionSettingsConfigs: GetExecuteActionTypeEditorDefinitionSettingsConfigs
         });
     }
     appControllers.service("VR_GenericData_GenericBEDefinitionAPIService", genericBusinessEntityDefinitionAPIService);

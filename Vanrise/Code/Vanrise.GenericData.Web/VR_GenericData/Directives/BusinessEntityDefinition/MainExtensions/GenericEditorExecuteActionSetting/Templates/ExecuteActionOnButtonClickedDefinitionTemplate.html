@@ -1,0 +1,11 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-switch value="scopeModel.callOnButtonClicked" onvaluechanged="scopeModel.onCallOnButtonClickedChanged" label="Call On Button Clicked"></vr-switch>
+    </vr-columns>
+    <vr-columns ng-show="scopeModel.callOnButtonClicked" width="1/2row">
+            <vr-buttontype-selector on-ready="scopeModel.onButtonTypesSelectorReady"
+                                    selectedvalues="scopeModel.selectedButton" isrequired="scopeModel.callOnButtonClicked"
+                                    hideremoveicon>
+            </vr-buttontype-selector>
+    </vr-columns>
+</vr-row>
