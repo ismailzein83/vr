@@ -4218,6 +4218,17 @@
           },
           {
             "FieldValues": {
+              "ID": "00dbe279-cde3-482f-a7c3-5db3f0d42a51",
+              "Name": "Wholesale Connectivity",
+              "TechnicalServiceType": 2,
+              "CreatedBy": -1,
+              "CreatedTime": "2019-07-19T13:29:55.727",
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-07-19T13:29:55.727"
+            }
+          },
+          {
+            "FieldValues": {
               "ID": "f10ee921-b970-41cc-875b-cd07f323178b",
               "Name": "Broadband Internet",
               "TechnicalServiceType": 2,
