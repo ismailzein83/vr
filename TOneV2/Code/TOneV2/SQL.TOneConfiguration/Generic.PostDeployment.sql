@@ -157,8 +157,10 @@ as (select * from (values
 ('6568F466-C2FF-4FF4-AA1D-3862BEB2EBC5','Number_Range','Number Range','VR_GenericData_GenericBEEditorDefinitionSettings','{"Editor":"vr-genericdata-numberrangeeditor-definition","ValidContainers":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.ContainerType, Vanrise.GenericData.Entities]], mscorlib","$values":[0,1,3]}}'),
 ('03F03D74-D44B-45BC-A2D3-79512D5D2C53','GenericBE_StatusHistory_Subview','Business Entity Status History','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-statushistorysubview-definition"}'),
 ('CCB477B6-B20F-4FCE-A8AD-27BD12EE60ED','Grid_GenericEditor_View','Grid Generic Editor View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-gridgenericeditorview-definition"}'),
-('A0E3AC54-E002-495D-8F74-A49CF02FA099','GenericSendEmailAction','Generic Send Email Action','VR_Notification_VRActionDefinition','{"Editor":"vr-genericdata-datarecord-vractiondefinition-extendedsettings-genericsendemail"}')
-
+('A0E3AC54-E002-495D-8F74-A49CF02FA099','GenericSendEmailAction','Generic Send Email Action','VR_Notification_VRActionDefinition','{"Editor":"vr-genericdata-datarecord-vractiondefinition-extendedsettings-genericsendemail"}'),
+('58946185-98C0-46B3-B0F8-C1068FFFE58D','Generic Account Inv To Acc Relation','Generic Account Inv To Acc Relation','VR_InvToAccBalanceRelation_RelationDefinitionExtendedSettings','{"Editor":"vr-invtoaccbalancerelation-extendedsettings-genericaccount"}'),
+('9B248C32-B9A6-4B87-9D0A-8CF7FD6FB11E','Generic Financial Account Balance','Generic Financial Account Balance','VR_AccountBalance_AccountTypeExtendedSettingsConfig','{"Editor":"vr-accountbalance-generic-financialaccountbalance-settings"}'),
+('1535DBF0-01E9-4E8B-9566-A278F357CC80','Billing Invoice','Billing Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig','{"Editor":"retail-billing-invoicetypesettings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
