@@ -73,7 +73,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 return _dynamicManager;
             }
         }
-
+         
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage, SQLTempStorageInformation sqlTempStorageInformation)
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
@@ -228,16 +228,15 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
-        public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady,
-            string orderColumnName = null, bool isOrderAscending = false)
+        public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
             var recortTypeManager = new DataRecordTypeManager();
             var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
             if (recordRuntimeType == null)
                 throw new NullReferenceException(String.Format("recordRuntimeType '{0}'", _dataRecordStorage.DataRecordTypeId));
 
-            string tableName = GetTableNameWithSchema();
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
+            string tableName = GetTableNameWithSchema();
 
             StringBuilder sb_Query = new StringBuilder(string.Format(@"Select * From {0} WITH (NOLOCK)", tableName));
 
@@ -293,35 +292,12 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
-        public List<DataRecord> GetAllDataRecords(List<string> columns, RecordFilterGroup recordFilterGroup)
+        public List<DataRecord> GetAllDataRecords(List<string> columns)
         {
             Columns = GetColumnNamesFromFieldNames(columns);
-            StringBuilder sb_Query = new StringBuilder(BuildGetAllQuery());
-
-            List<string> queryFilters = new List<string>();
-
-            int parameterIndex = 0;
-            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            if (recordFilterGroup != null)
+            string query = BuildGetAllQuery();
+            return GetItemsText(query, DataRecordMapper, (cmd) =>
             {
-                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
-                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(recordFilterGroup, ref parameterIndex, parameterValues);
-
-                if (!string.IsNullOrEmpty(recordFilter))
-                    queryFilters.Add(recordFilter);
-            }
-
-            if (queryFilters.Count > 0)
-                sb_Query.Append(string.Format(" Where {0} ", string.Join(" And ", queryFilters)));
-
-            sb_Query.Append(" OPTION (RECOMPILE) ");
-
-            return GetItemsText(sb_Query.ToString(), DataRecordMapper, (cmd) =>
-            {
-                cmd.CommandTimeout = 0;
-
-                foreach (var prm in parameterValues)
-                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
             });
         }
 
@@ -1217,7 +1193,9 @@ namespace Vanrise.GenericData.SQLDataStorage
         private string BuildGetAllQuery()
         {
             string tableName = GetTableNameWithSchema();
-            StringBuilder str = new StringBuilder(string.Format(@" select {0} from {1} WITH (NOLOCK) ", string.Join<string>(",", Columns), tableName));
+            StringBuilder str = new StringBuilder(string.Format(@"  select {0} from {1} WITH (NOLOCK) ",
+                                                                     string.Join<string>(",", Columns),
+                                                                    tableName));
             return str.ToString();
         }
 
