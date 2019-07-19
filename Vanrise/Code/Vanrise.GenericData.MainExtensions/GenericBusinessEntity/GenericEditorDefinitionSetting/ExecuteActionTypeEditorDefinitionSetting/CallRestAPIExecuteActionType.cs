@@ -8,11 +8,11 @@ using Vanrise.GenericData.Entities;
 namespace Vanrise.GenericData.MainExtensions
 {
     public enum HTTPMethodType { Get = 0, Post = 1 }
-    public class CallRestAPIAction : ExecuteActionTypeEditorDefinitionSetting
+    public class CallRestAPIExecuteActionType : ExecuteActionTypeEditorDefinitionSetting
     {
         public override Guid ConfigId { get { return new Guid("0EADD56F-4415-465C-BC26-C2C9B7960817"); } }
 
-        public override string ActionRuntimeEditor { get { return "vr-genericdata-executeactioneditorsetting-runtime-callrestapiaction"; } }
+        public override string ActionRuntimeEditor { get { return "vr-genericdata-executeactioneditorsetting-actionruntime-callrestapiaction"; } }
 
         public string APIAction { get; set; }
 
@@ -22,13 +22,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public List<RestAPIOutputItem> OutputItems { get; set; }
     }
-
-    public class ConsoleDotLogAction : ExecuteActionTypeEditorDefinitionSetting
-    {
-        public override Guid ConfigId { get { return new Guid("253450EF-0F39-42AE-98D5-05B45894942D"); } }
-
-        public override string ActionRuntimeEditor { get { return "vr-genericdata-executeactioneditorsetting-runtime-consoledotlogaction"; } }
-    }
+    
 
     public abstract class BaseRestAPIItem
     {
@@ -44,5 +38,12 @@ namespace Vanrise.GenericData.MainExtensions
 
     public class RestAPIOutputItem : BaseRestAPIItem
     {
+    }
+
+    public class ConsoleDotLogAction : ExecuteActionTypeEditorDefinitionSetting
+    {
+        public override Guid ConfigId { get { return new Guid("253450EF-0F39-42AE-98D5-05B45894942D"); } }
+
+        public override string ActionRuntimeEditor { get { return "vr-genericdata-executeactioneditorsetting-runtime-consoledotlogaction"; } }
     }
 }
