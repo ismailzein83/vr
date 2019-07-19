@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum', 
+app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum',
     function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum) {
 
         var directiveDefinitionObject = {
@@ -24,7 +24,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
         function customerRouteGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var hidemenuactions = $attrs.hidemenuactions != undefined;
+            var hideexecuteactions = $attrs.hideexecuteactions != undefined;
             var isDatabaseTypeCurrent;
 
             var gridAPI;
@@ -149,54 +149,62 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
 
             function defineMenuActions() {
                 $scope.gridMenuActions = function (dataItem) {
-                    if (!hidemenuactions && $scope.hasViewRatesPermission) {
+                    if ($scope.hasViewRatesPermission) {
                         var menu = [];
-                        if (dataItem.CanEditMatchingRule) {
-                            menu.push({
-                                name: "Edit Matching Rule",
-                                clicked: editLinkedRouteRule,
-                                haspermission: hasUpdateRulePermission
-                            });
+                        if (!hideexecuteactions) {
+                            if (dataItem.CanEditMatchingRule) {
+                                menu.push({
+                                    name: "Edit Matching Rule",
+                                    clicked: editLinkedRouteRule,
+                                    haspermission: hasUpdateRulePermission
+                                });
+                            }
+                            else {
+                                menu.push({
+                                    name: "Matching Rule",
+                                    clicked: viewRouteRuleEditor
+                                });
+                            }
+
+                            if (dataItem.CanAddRuleByCode || dataItem.LinkedRouteRuleIds == undefined || dataItem.LinkedRouteRuleIds.length == 0) {
+                                menu.push({
+                                    name: "Add Rule By Code",
+                                    clicked: addRouteRuleByCode,
+                                    haspermission: hasAddRulePermission
+                                });
+                            }
+
+                            if (dataItem.CanAddRuleByZone) {
+                                menu.push({
+                                    name: "Add Rule By Zone",
+                                    clicked: addRouteRuleByZone,
+                                    haspermission: hasAddRulePermission
+                                });
+                            }
+
+                            if (dataItem.CanAddRuleByCountry) {
+                                menu.push({
+                                    name: "Add Rule By Country",
+                                    clicked: addRouteRuleByCountry,
+                                    haspermission: hasAddRulePermission
+                                });
+                            }
+
+                            if (dataItem.LinkedRouteRuleIds != undefined && dataItem.LinkedRouteRuleIds.length > 1) {
+                                menu.push({
+                                    name: "Linked Rules",
+                                    clicked: viewLinkedRouteRules
+                                });
+                            }
                         }
                         else {
                             menu.push({
                                 name: "Matching Rule",
-                                clicked: viewRouteRuleEditor,
+                                clicked: viewRouteRuleEditor
                             });
-                        }
-
-                        if (dataItem.CanAddRuleByCode || dataItem.LinkedRouteRuleIds == undefined || dataItem.LinkedRouteRuleIds.length == 0) {
-                            menu.push({
-                                name: "Add Rule By Code",
-                                clicked: addRouteRuleByCode,
-                                haspermission: hasAddRulePermission
-                            });
-                        }
-
-                        if (dataItem.CanAddRuleByZone) {
-                            menu.push({
-                                name: "Add Rule By Zone",
-                                clicked: addRouteRuleByZone,
-                                haspermission: hasAddRulePermission
-                            });
-                        }
-
-                        if (dataItem.CanAddRuleByCountry) {
-                            menu.push({
-                                name: "Add Rule By Country",
-                                clicked: addRouteRuleByCountry,
-                                haspermission: hasAddRulePermission
-                            });
-                        }
-
-                        if (dataItem.LinkedRouteRuleIds != undefined && dataItem.LinkedRouteRuleIds.length > 1) {
-                            menu.push({
-                                name: "Linked Rules",
-                                clicked: viewLinkedRouteRules
-                            });
-                        }
-                    }
-                    return menu;
+                        };
+                        return menu;
+                    };
                 };
             }
 
@@ -306,7 +314,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                 drillDownDefinition.loadDirective = function (directiveAPI, customerRoute) {
                     var payload = {
                         customerRoute: customerRoute,
-                        hidemenuactions: hidemenuactions,
+                        hideexecuteactions: hideexecuteactions,
                         hasViewRatesPermission: $scope.hasViewRatesPermission,
                         context: buildContext()
                     };

@@ -68,6 +68,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private ModifiedCustomerRoutesPreview ModifiedCustomerRoutesPreviewMapper(IDataReader reader)
         {
+            string saleZoneServiceIds = (reader["SaleZoneServiceIds"] as string);
+
             return new ModifiedCustomerRoutesPreview()
             {
                 Id = (int)reader["Id"],
@@ -80,6 +82,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 IsBlocked = (bool)reader["IsBlocked"],
                 OrigExecutedRuleId = GetReaderValue<int?>(reader, "OrigExecutedRuleId"),
                 ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
+                Rate = GetReaderValue<decimal?>(reader, "Rate"),
+                SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 RouteOptions = reader["RouteOptions"] != DBNull.Value ? Helper.DeserializeOptions(reader["RouteOptions"] as string) : null,
                 OrigRouteOptions = reader["OrigRouteOptions"] != DBNull.Value ? Helper.DeserializeOptions(reader["OrigRouteOptions"] as string) : null,
                 SupplierIds = reader["SupplierIds"] as string
@@ -114,6 +118,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                    ,mcr.[Code]
                                                                    ,mcr.[SaleZoneId]
                                                                    ,sz.Name as SaleZoneName
+                                                                   ,czd.EffectiveRateValue as Rate
+                                                                   ,czd.SaleZoneServiceIds
                                                                    ,mcr.[OrigIsBlocked]
                                                                    ,mcr.[IsBlocked]
                                                                    ,mcr.[OrigExecutedRuleId]
@@ -124,7 +130,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                    ,mcr.[IsApproved]
                                                                    FROM [dbo].[ModifiedCustomerRoute_Preview] mcr with(nolock)
                                                                    JOIN [dbo].[SaleZone] as sz ON mcr.SaleZoneId = sz.ID 
-                                                                   JOIN [dbo].[CarrierAccount] as ca ON mcr.CustomerID = ca.ID";
+                                                                   JOIN [dbo].[CarrierAccount] as ca ON mcr.CustomerID = ca.ID
+                                                                   JOIN [dbo].[CustomerZoneDetail] as czd ON czd.SaleZoneId = mcr.SaleZoneID and czd.CustomerId = mcr.CustomerID";
 
         #endregion
     }

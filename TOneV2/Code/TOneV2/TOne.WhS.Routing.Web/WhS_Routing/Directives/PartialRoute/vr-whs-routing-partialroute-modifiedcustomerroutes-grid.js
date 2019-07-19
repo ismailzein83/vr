@@ -81,6 +81,7 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
                     hasViewRatesPermission = response;
                     $scope.showGrid = true;
                 });
+                defineMenuActions();
             }
 
             function defineAPI() {
@@ -130,6 +131,22 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
+            }
+
+            function defineMenuActions() {
+                $scope.gridMenuActions = function (dataItem) {
+                    var menu = [];
+                    menu.push({
+                        name: "Matching Rule",
+                        clicked: viewRouteRuleEditor
+                    });
+                    return menu;
+                };
+            }
+
+            function viewRouteRuleEditor(dataItem) {
+                var customerRouteData = { code: dataItem.Code, SaleZoneServiceIds: dataItem.SaleZoneServiceIds, Rate: dataItem.Rate, CustomerId: dataItem.CustomerId };
+                WhS_Routing_RouteRuleService.viewRouteRule(dataItem.ExecutedRuleId, customerRouteData);
             }
         }
 

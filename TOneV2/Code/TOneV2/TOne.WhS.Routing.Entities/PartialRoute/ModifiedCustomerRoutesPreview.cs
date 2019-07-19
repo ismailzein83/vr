@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Entities
         public bool IsBlocked { get; set; }
         public int? OrigExecutedRuleId { get; set; }
         public int? ExecutedRuleId { get; set; }
+        public HashSet<int> SaleZoneServiceIds { get; set; }
+        public Decimal? Rate { get; set; }
         public List<RouteOption> OrigRouteOptions { get; set; }
         public List<RouteOption> RouteOptions { get; set; }
         public string SupplierIds { get; set; }

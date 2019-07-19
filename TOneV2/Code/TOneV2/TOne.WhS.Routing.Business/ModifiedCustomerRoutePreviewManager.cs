@@ -40,9 +40,13 @@ namespace TOne.WhS.Routing.Business
             return new ModifiedCustomerRoutesPreviewDetail()
             {
                 Id = route.Id,
+                CustomerId = route.CustomerId,
                 CustomerName = route.CustomerName,
                 SaleZoneName = route.SaleZoneName,
                 Code = route.Code,
+                ExecutedRuleId = route.ExecutedRuleId,
+                SaleZoneServiceIds = route.SaleZoneServiceIds,
+                Rate = route.Rate,
                 IsBlocked = route.IsBlocked,
                 OrigRouteOptionDetails = GetRouteOptionDetails(route.OrigRouteOptions),
                 RouteOptionDetails = GetRouteOptionDetails(route.RouteOptions)

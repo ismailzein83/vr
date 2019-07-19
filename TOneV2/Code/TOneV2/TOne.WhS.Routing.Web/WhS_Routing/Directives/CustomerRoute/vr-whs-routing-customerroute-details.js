@@ -29,7 +29,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
             this.initializeController = initializeController;
 
             var customerRoute;
-            var hidemenuactions;
+            var hideexecuteactions;
             var hasViewRatesPermission;
 
             var gridAPI;
@@ -37,7 +37,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
             function initializeController() {
                 $scope.routeOptionDetails = [];
-               
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -51,10 +51,10 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
                 api.load = function (payload) {
                     var promises = [];
-                    
+
                     if (payload != undefined) {
                         customerRoute = payload.customerRoute;
-                        hidemenuactions = payload.hidemenuactions;
+                        hideexecuteactions = payload.hideexecuteactions;
                         hasViewRatesPermission = payload.hasViewRatesPermission;
                         context = payload.context;
                     }
@@ -88,7 +88,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
             function defineMenuActions() {
                 $scope.getMenuActions = function (dataItem) {
-                    if (!hidemenuactions && hasViewRatesPermission) {
+                    if (hasViewRatesPermission) {
                         var menuActions = [];
 
                         if (dataItem.ExecutedRuleId) {
@@ -98,29 +98,30 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                             });
                         }
 
-                        if (dataItem.LinkedRouteOptionRuleIds != null && dataItem.LinkedRouteOptionRuleIds.length > 0) {
-                            if (dataItem.LinkedRouteOptionRuleIds.length == 1) {
-                                menuActions.push({
-                                    name: "Edit Rule",
-                                    clicked: editLinkedRouteOptionRule,
-                                    haspermission: hasUpdateRulePermission
-                                });
+                        if (!hideexecuteactions) {
+                            if (dataItem.LinkedRouteOptionRuleIds != null && dataItem.LinkedRouteOptionRuleIds.length > 0) {
+                                if (dataItem.LinkedRouteOptionRuleIds.length == 1) {
+                                    menuActions.push({
+                                        name: "Edit Rule",
+                                        clicked: editLinkedRouteOptionRule,
+                                        haspermission: hasUpdateRulePermission
+                                    });
+                                }
+                                else {
+                                    menuActions.push({
+                                        name: "Linked Rules",
+                                        clicked: viewLinkedRouteOptionRules
+                                    });
+                                }
                             }
                             else {
                                 menuActions.push({
-                                    name: "Linked Rules",
-                                    clicked: viewLinkedRouteOptionRules
+                                    name: "Add Rule",
+                                    clicked: addRouteOptionRuleEditor,
+                                    haspermission: hasAddRulePermission
                                 });
                             }
                         }
-                        else {
-                            menuActions.push({
-                                name: "Add Rule",
-                                clicked: addRouteOptionRuleEditor,
-                                haspermission: hasAddRulePermission
-                            });
-                        }
-
                         return menuActions;
                     }
                 };
