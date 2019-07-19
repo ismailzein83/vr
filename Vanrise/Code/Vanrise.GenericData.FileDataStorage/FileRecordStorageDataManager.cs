@@ -342,7 +342,7 @@ namespace Vanrise.GenericData.FileDataStorage
             throw new NotImplementedException();
         }
 
-        public List<DataRecord> GetAllDataRecords(List<string> columns)
+        public List<DataRecord> GetAllDataRecords(List<string> columns, RecordFilterGroup recordFilterGroup)
         {
             throw new NotImplementedException();
         }

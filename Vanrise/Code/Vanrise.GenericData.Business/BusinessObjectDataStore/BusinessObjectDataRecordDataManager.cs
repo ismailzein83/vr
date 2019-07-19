@@ -84,9 +84,9 @@ namespace Vanrise.GenericData.Business
             _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
         }
 
-        public List<DataRecord> GetAllDataRecords(List<string> columns)
+        public List<DataRecord> GetAllDataRecords(List<string> columns, RecordFilterGroup recordFilterGroup)
         {
-            return GetFilteredDataRecords(null, null, null, columns, null, null);
+            return GetFilteredDataRecords(null, null, recordFilterGroup, columns, null, null);
         }
 
         public bool Insert(Dictionary<string, object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId)

@@ -25,11 +25,17 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
+                ctrl.datasource = [];
+
+                ctrl.label = $attrs.ismultipleselection != undefined ? "Deals" : "Deal";
+
+                console.log($attrs);
+                console.log(ctrl.label);
+
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                ctrl.datasource = [];
                 var ctor = new directiveCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
@@ -69,6 +75,9 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                 api.load = function (payload) {
                     ctrl.datasource.length = 0;
                     ctrl.selectedvalues.length = 0;
+                    //ctrl.label = $attrs.ismultipleselection != undefined ? "Deals" : "Deal";
+
+                    //console.log(payload);
 
                     var filter;
                     var selectedIds;
@@ -76,6 +85,10 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
+
+                        //if (payload.fieldTitle != undefined) {
+                        //    ctrl.label = payload.fieldTitle;
+                        //}
                     }
 
                     if (filter == undefined)
@@ -132,8 +145,11 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
 
             var label = "";
             if (attrs.hidelabel == undefined) {
-                label = (attrs.ismultipleselection != undefined) ? 'label = "Deals"' : 'label = "Deal"';
+                label = 'label="{{ctrl.label}}"';
+                //label = (attrs.ismultipleselection != undefined) ? 'label = "Deals"' : 'label = "Deal"';
             }
+
+            console.log(label);
 
             var customlabel = '';
             if (attrs.customlabel != undefined)
@@ -163,10 +179,15 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
             if (attrs.includeviewhandler != undefined)
                 onviewclicked = "onviewclicked='onViewIconClicked'";
 
-            return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + ' ' + haschildcolumns + '  > <vr-select on-ready="scopeModel.onSelectorReady" hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' datadisabledselectfield="inactiveDeal" selectedvalues="ctrl.selectedvalues" ondeselectitem = "ctrl.ondeselectitem" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId" ' 
-                + 'entityname="Deal" ' + label + ' ' + customlabel + ' ' + hideremoveicon + ' datatooltipfield="additionalInfo"' +
-                ' datastylefield="colorStyle" ' + '></vr-select> </vr-columns>';
+            var text = '<vr-columns colnum="{{ctrl.normalColNum}}" ' + disabled + ' ' + haschildcolumns + '><vr-select on-ready="scopeModel.onSelectorReady" hasviewpermission="ctrl.hasviewpremission" '
+                + onviewclicked + ' ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" '
+                + hideselectedvaluessection + ' datadisabledselectfield="inactiveDeal" selectedvalues="ctrl.selectedvalues" '
+                + ' ondeselectitem="ctrl.ondeselectitem" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId" '
+                + ' entityname="Deal" ' + label + ' ' + customlabel + ' ' + hideremoveicon + ' datatooltipfield="additionalInfo" datastylefield="colorStyle"></vr-select></vr-columns>';
 
+            console.log(text);
+
+            return text;
         }
 
         return directiveDefinitionObject;
