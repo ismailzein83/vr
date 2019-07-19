@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
-using TOne.WhS.Jazz.Business;
-using Vanrise.Entities;
 
-namespace TOne.WhS.Jazz.Business
+namespace TOne.WhS.BusinessEntity.MainExtensions
 {
     public class SupplierFaultTicketBeforeInsertHandler : GenericBEOnBeforeInsertHandler
     {
@@ -21,7 +16,7 @@ namespace TOne.WhS.Jazz.Business
 
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
-
+            context.GenericBusinessEntity.ThrowIfNull("context.BusinessEntityDefinitionId");
             context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
 
