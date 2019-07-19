@@ -375,6 +375,12 @@ namespace Vanrise.GenericData.Business
             return extensionConfiguration.GetExtensionConfigurations<GenericBEAdditionalSettingsConfig>(GenericBEAdditionalSettingsConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<ExecuteActionTypeEditorDefinitionSettingsConfig> GetExecuteActionTypeEditorDefinitionSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<ExecuteActionTypeEditorDefinitionSettingsConfig>(ExecuteActionTypeEditorDefinitionSettingsConfig.EXTENSION_TYPE);
+        }
+
         #endregion
 
         #region Private Methods
