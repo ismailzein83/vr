@@ -93,20 +93,6 @@
                           <ReportItems>
                             <Rectangle Name="Rectangle3">
                               <ReportItems>
-                                <Image Name="Image6">
-                                  <Source>Embedded</Source>
-                                  <Value>oger</Value>
-                                  <Sizing>FitProportional</Sizing>
-                                  <Top>0.08691in</Top>
-                                  <Left>0.125in</Left>
-                                  <Height>0.71363in</Height>
-                                  <Width>0.80721in</Width>
-                                  <Style>
-                                    <Border>
-                                      <Style>None</Style>
-                                    </Border>
-                                  </Style>
-                                </Image>
                                 <Tablix Name="Tablix1">
                                   <TablixBody>
                                     <TablixColumns>
@@ -210,7 +196,6 @@
                                   <Left>0.125in</Left>
                                   <Height>0.25in</Height>
                                   <Width>4.3343in</Width>
-                                  <ZIndex>1</ZIndex>
                                   <Style>
                                     <Border>
                                       <Style>None</Style>
@@ -320,7 +305,7 @@
                                   <Left>3.85687in</Left>
                                   <Height>0.23622in</Height>
                                   <Width>2.43368in</Width>
-                                  <ZIndex>2</ZIndex>
+                                  <ZIndex>1</ZIndex>
                                   <Style>
                                     <Border>
                                       <Style>None</Style>
@@ -432,7 +417,7 @@
                                   <Left>1.60813in</Left>
                                   <Height>0.25in</Height>
                                   <Width>4.68242in</Width>
-                                  <ZIndex>3</ZIndex>
+                                  <ZIndex>2</ZIndex>
                                   <Style>
                                     <Border>
                                       <Style>None</Style>
@@ -538,7 +523,7 @@
                                   <Left>11.50301cm</Left>
                                   <Height>0.635cm</Height>
                                   <Width>4.475cm</Width>
-                                  <ZIndex>4</ZIndex>
+                                  <ZIndex>3</ZIndex>
                                   <Style>
                                     <Border>
                                       <Style>None</Style>
@@ -1526,7 +1511,7 @@
                                   <Left>0.61458in</Left>
                                   <Height>1.33195in</Height>
                                   <Width>4.7538in</Width>
-                                  <ZIndex>5</ZIndex>
+                                  <ZIndex>4</ZIndex>
                                   <Style>
                                     <Border>
                                       <Style>None</Style>
@@ -1572,7 +1557,7 @@
                                   <Left>13.77679cm</Left>
                                   <Height>1.44723cm</Height>
                                   <Width>2.41834cm</Width>
-                                  <ZIndex>6</ZIndex>
+                                  <ZIndex>5</ZIndex>
                                   <Style>
                                     <Border>
                                       <Style>Solid</Style>
