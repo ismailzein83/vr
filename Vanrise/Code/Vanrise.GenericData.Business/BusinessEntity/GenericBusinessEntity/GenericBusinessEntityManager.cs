@@ -1715,7 +1715,7 @@ namespace Vanrise.GenericData.Business
 
         public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
-            throw new NotImplementedException();
+            return GetGenericBusinessEntity(context.EntityId, context.EntityDefinition.BusinessEntityDefinitionId);
         }
 
         public override dynamic GetEntityId(IBusinessEntityIdContext context)
