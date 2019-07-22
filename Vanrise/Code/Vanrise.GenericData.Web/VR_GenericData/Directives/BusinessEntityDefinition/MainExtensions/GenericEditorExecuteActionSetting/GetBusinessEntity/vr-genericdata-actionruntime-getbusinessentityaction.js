@@ -17,7 +17,7 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorExecuteActionSetting/GetBusinessEntity/Templates/GetBusinessEntityExecuteActionRuntimeTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorExecuteActionSetting/GetBusinessEntity/Templates/GetBusinessEntityExecuteActionRuntime.html'
         };
 
         function CallRestAPIEditorRuntimeCtor($scope, ctrl) {

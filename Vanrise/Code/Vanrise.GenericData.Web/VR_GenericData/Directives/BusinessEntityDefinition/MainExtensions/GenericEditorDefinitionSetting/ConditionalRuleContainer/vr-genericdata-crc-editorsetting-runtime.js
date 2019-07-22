@@ -15,7 +15,7 @@ app.directive("vrGenericdataConditionalrulecontainereditorsettingRuntime", ["Uti
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/ConditionalRuleContainer/Templates/ConditionalRuleContainerRuntimeSettingTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/ConditionalRuleContainer/Templates/CRC_RuntimeSettingTemplate.html"
         };
 
         function GenericEditorConditionalRuleRuntimeSetting($scope, ctrl, $attrs) {

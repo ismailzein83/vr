@@ -17,7 +17,7 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/ConditionalRuleContainer/Templates/ConditionalRuleContainerDefinitionSettingTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/ConditionalRuleContainer/Templates/CRC_DefinitionSettingTemplate.html'
         };
 
         function ConditionalRuleContainerDefinitionCtor($scope, ctrl) {
