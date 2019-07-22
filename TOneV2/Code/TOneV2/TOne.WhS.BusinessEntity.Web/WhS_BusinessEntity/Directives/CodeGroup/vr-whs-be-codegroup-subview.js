@@ -43,7 +43,7 @@ app.directive("vrWhsBeCodegroupSubview", ["UtilsService", "WhS_BE_CodeGroupServi
                         }
                     };
                     WhS_BE_CodeGroupService.addCodeGroup(onCodeGroupAdded, countryItem.Entity.CountryId);
-                }
+                };
                 defineAPI();
             }
 
