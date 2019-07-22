@@ -21,6 +21,7 @@
         var conditionGroupPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBESaveCondition/MainExtensions/Templates/GenericBEConditionGroupEditor.html";
         var partDefinitionPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnBeforeInsertHandler/Templates/SerialNumberPartDefinitionEditor.html";
         var additionalSettingPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/AdditionalSettingEditor.html";
+        var beforeInsertHandlerPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnBeforeInsertHandler/MainExtensions/Templates/BeforeInsertHandlerDefinitionEditor.html";
 
         return ({
             //addGenericBEColumnDefinition: addGenericBEColumnDefinition,
@@ -53,6 +54,8 @@
             editGenericBEAdditionalSetting: editGenericBEAdditionalSetting,
             addGenericBERowContainer: addGenericBERowContainer,
             editGenericBERowContainer: editGenericBERowContainer,
+            addGenericBEBeforeInsertHandler: addGenericBEBeforeInsertHandler,
+            editGenericBEBeforeInsertHandler: editGenericBEBeforeInsertHandler
             //addGenericBEField: addGenericBEField,
             //editGenericBEField: editGenericBEField
         });
@@ -473,7 +476,32 @@
             };
             VRModalService.showModal(rowContainerModalPath, parameters, settings);
         }
+        function addGenericBEBeforeInsertHandler(onGenericBEBeforeInsertHandlerAdded, context) {
+            var parameters = {
+                context: context
+            };
 
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEBeforeInsertHandlerAdded = onGenericBEBeforeInsertHandlerAdded;
+            };
+
+            VRModalService.showModal(beforeInsertHandlerPath, parameters, settings);
+        }
+
+        function editGenericBEBeforeInsertHandler(onGenericBEBeforeInsertHandlerUpdated, handlerEntity, context) {
+            var parameters = {
+                entity: handlerEntity,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEBeforeInsertHandlerUpdated = onGenericBEBeforeInsertHandlerUpdated;
+            };
+            VRModalService.showModal(beforeInsertHandlerPath, parameters, settings);
+        }
         //function addGenericBEField(onBEFieldAdded, context, recordTypeFields) {
         //    var parameters = {
         //        context: context,

@@ -40,10 +40,15 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBe
                             }
                         };
                         handler.Settings.Execute(handlerContext);
+
                         if (handlerContext.OutputResult.Messages != null && handlerContext.OutputResult.Messages.Count > 0)
                             context.OutputResult.Messages.AddRange(handlerContext.OutputResult.Messages);
+
                         if (!handlerContext.OutputResult.Result)
+                        {
                             context.OutputResult.Result = false;
+                            break;
+                        }
                     }
                 }
             }
