@@ -42,7 +42,6 @@ app.directive('vrGenericdataRdbrecordstoragesettingsFilterLoggedinuserfilter', [
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var promises = [];
                     promises.push(loadRequiredPermission());
                     if (payload != undefined && payload.filter != undefined) {
