@@ -4,15 +4,14 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 
-namespace TOne.WhS.BusinessEntity.MainExtensions
+namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SupplierFaultTicketBeforeInsertHandler : GenericBEOnBeforeInsertHandler
+    public class CustomerFaultTicketBeforeInsertHandler : GenericBEOnBeforeInsertHandler
     {
         public override Guid ConfigId
         {
-            get { return new Guid("562B655A-3D2A-4CD7-85AA-BABFF12D5F5E"); }
+            get { return new Guid("23FA8A42-8E96-4F26-96BB-DAB1E50B9534"); }
         }
-
 
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
@@ -20,9 +19,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-            var entities = genericBusinessEntityManager.GetAllGenericBusinessEntities(context.BusinessEntityDefinitionId, new List<string> { "SaleZoneId", "SupplierId", "StatusId" }, new RecordFilterGroup
+            var entities = genericBusinessEntityManager.GetAllGenericBusinessEntities(context.BusinessEntityDefinitionId, new List<string> { "SaleZoneId", "CustomerId", "StatusId" }, new RecordFilterGroup
             {
-
+                LogicalOperator = RecordQueryLogicalOperator.And,
                 Filters = new List<RecordFilter>
                 {
                     new ObjectListRecordFilter
@@ -32,23 +31,23 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     },
                     new ObjectListRecordFilter
                     {
-                        FieldName ="SupplierId",
-                        Values =new List<object>{(int)context.GenericBusinessEntity.FieldValues.GetRecord("SupplierId") }
-                    },
+                        FieldName ="CustomerId",
+                        Values =new List<object>{(int)context.GenericBusinessEntity.FieldValues.GetRecord("CustomerId") }
+                    }
+                    ,
                     new ObjectListRecordFilter
                     {
+                        CompareOperator = ListRecordFilterOperator.NotIn,
                         FieldName ="StatusId",
-                        Values =new List<object>{"7EB94106-43F1-43EB-8952-8F0B585FD7E5", "05A87955-DC2A-4E22-A879-6BEA3C31690E" }
+                        Values =new List<object> { new Guid("f299eb6d-b50c-4338-812f-142d4d8515ca") }
                     }
                 }
             });
 
             if (entities != null && entities.Count > 0)
             {
-                {
-                    context.OutputResult.Result = false;
-                    context.OutputResult.Messages.Add("Same Supplier And SaleZone Already Exists In Another Fault Ticket");
-                }
+                context.OutputResult.Result = false;
+                context.OutputResult.Messages.Add("Same Customer And SaleZone Already Exist In Another Fault Ticket");
             }
         }
 

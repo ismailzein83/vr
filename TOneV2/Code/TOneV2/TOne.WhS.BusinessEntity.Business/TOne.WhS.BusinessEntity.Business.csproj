@@ -184,6 +184,8 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\CarrierAccountMemoryAnalyticDataManager.cs" />
     <Compile Include="FaultTicketManager.cs" />
+    <Compile Include="FaultTickets\CustomerFaultTicketBeforeInsertHandler.cs" />
+    <Compile Include="FaultTickets\SupplierFaultTicketBeforeInsertHandler.cs" />
     <Compile Include="FaultTickets\SupplierFaultTicketCustomObjectTypeSettings.cs" />
     <Compile Include="FaultTickets\FaultTicketStatusDefinitionFilter.cs" />
     <Compile Include="FaultTickets\SupplierFaultTicketsSettings.cs" />
