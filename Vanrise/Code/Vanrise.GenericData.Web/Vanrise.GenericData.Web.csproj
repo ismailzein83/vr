@@ -312,11 +312,13 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\BERestAPIOutputItemGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\BERestAPIInputItemGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\BEDependantFieldGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\FieldTypeGenericEditorDesign.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-compatiblefields-selector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-restapiitem-output-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-restapiitem-input-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-dependantfield-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinitionsetting-genericfielddefinition.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-fieldtype-genericdesigneditor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityStatusHistory\Templates\BusinessEntityStatusHistoryGrid.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityStatusHistory\vr-genericdata-be-statushistory-grid.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\Templates\CDRCorrelationDefinitionSettings.html" />
@@ -344,11 +346,13 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbjoinsettings-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\CustomActionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\AdditionalSettingEditorController.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\FieldTypeGenericDesignEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\GridActionGroupDefintionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\CustomActionDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\CustomActionDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\AdditionalSettingEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\AdditionalSettingsGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\FieldTypeGenericDesignEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-customactiondefinition-settings.js" />
