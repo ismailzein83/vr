@@ -390,6 +390,10 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\Templates\GenericEditorSubViewViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-genericeditorsubview-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-statushistorysubview-definition.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\BeforeInsertHandlerDefinitionEditorController.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\Templates\BeforeInsertHandlerDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\Templates\ListHandlersBeforeInsertHandlerTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\vr-genericdata-genericbe-beforeinserthandler-listhandlers.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\Templates\FixedValuesHandlerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\vr-genericdata-genericbe-beforeinserthandler-fixedvalues.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\CustomActions\NewOrExistingRuntimEditorController.js" />
