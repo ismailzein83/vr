@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -28,7 +29,16 @@ namespace Vanrise.BusinessProcess.Entities
             return this.CodeExpression;
         }
     }
-
+    public class VRWorkflowFieldTypeExpression : VRWorkflowExpression
+    {
+        public override Guid ConfigId => new Guid("1BD963E6-1069-48FC-A64E-79D671E21B89");
+        public DataRecordFieldType FieldType { get; set; }
+        public Object Value { get; set; }
+        public override string GetCode(IVRWorkflowExpressionGetCodeContext context)
+        {
+            return null;
+        }
+    }
     public class VRWorkflowExpressionJsonConverter : Newtonsoft.Json.JsonConverter
     {
         public override bool CanConvert(Type objectType)
