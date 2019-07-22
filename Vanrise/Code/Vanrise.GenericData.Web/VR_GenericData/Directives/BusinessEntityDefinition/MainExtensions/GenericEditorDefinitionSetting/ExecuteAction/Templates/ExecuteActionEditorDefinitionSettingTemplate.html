@@ -1,0 +1,24 @@
+﻿<vr-tabs>
+    <vr-tab header="'Definition'">
+        <vr-columns width="1/3row" haschildcolumns>
+            <vr-section title="Call On Load" collapsible>
+                <vr-genericdata-executeactioneditorsetting-definition-onload on-ready="scopeModel.onCallOnLoadChangedSectionReady"></vr-genericdata-executeactioneditorsetting-definition-onload>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/3row" haschildcolumns>
+            <vr-section title="Call On Value Changed" collapsible>
+                <vr-genericdata-executeactioneditorsetting-definition-onvaluechanged on-ready="scopeModel.onCallOnValueChangedSectionReady"></vr-genericdata-executeactioneditorsetting-definition-onvaluechanged>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/3row" haschildcolumns>
+            <vr-section title="Call On Button Clicked" collapsible>
+                <vr-genericdata-executeactioneditorsetting-definition-onbuttonclicked on-ready="scopeModel.onCallOnButtonClickedChangedSectionReady"></vr-genericdata-executeactioneditorsetting-definition-onbuttonclicked>
+            </vr-section>
+        </vr-columns>
+    </vr-tab>
+    <vr-tab header="'Settings'">
+        <vr-columns width="fullrow" haschildcolumns>
+            <vr-genericdata-executeactioneditorsetting-actiondefinition on-ready="scopeModel.onExecuteActionTypeDirectiveReady" normal-col-num="4"></vr-genericdata-executeactioneditorsetting-actiondefinition>
+        </vr-columns>
+    </vr-tab>
+</vr-tabs>
