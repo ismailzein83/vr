@@ -35,15 +35,15 @@ app.directive("vrCommonRegionSubview", ["UtilsService","VRCommon_RegionService",
                 regionGridAPI = api;
                 regionGridReadyPromiseDeferred.resolve();
             };
-            $scope.scopeModel.addRegion= function () {
-               
+            $scope.scopeModel.addRegion = function () {
+
                 var onRegionAdded = function (regionObj) {
                     if (regionGridAPI != undefined) {
                         regionGridAPI.onRegionAdded(regionObj);
                     }
                 };
                 VRCommon_RegionService.addRegion(onRegionAdded, countryItem.Entity.CountryId);
-            }
+            };
             defineAPI();
         }
 
