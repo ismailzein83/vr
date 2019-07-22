@@ -42,7 +42,7 @@
                 parameters.CountryId = countryId;
             }
 
-            if (countryId != undefined) {
+            if (regionId != undefined) {
                 parameters.RegionId = regionId;
             }
 
@@ -106,30 +106,20 @@
 
             drillDownDefinition.title = "Cities";
 
-            drillDownDefinition.directive = "vr-common-city-grid";
-            drillDownDefinition.parentMenuActions = [{
-                name: "New City",
-                clicked: function (countryItem) {
-                    if (drillDownDefinition.setTabSelected != undefined)
-                        drillDownDefinition.setTabSelected(countryItem);
-
-                    var onCityAdded = function (cityObj) {
-                        if (countryItem.cityGridAPI != undefined) {
-                            countryItem.cityGridAPI.onCityAdded(cityObj);
-                        }
-                    };
-                    addCity(onCityAdded, countryItem.Entity.CountryId);
-                },
-                haspermission: hasNewCityPermission
-            }];
+            drillDownDefinition.directive = "vr-common-city-subview";
+           
 
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
                 countryItem.cityGridAPI = directiveAPI;
-                var query = {
-                    CountryIds: [countryItem.Entity.CountryId],
+
+                var payload = {
+                    query: {
+                        CountryIds: [countryItem.Entity.CountryId]
+                    },
+                    countryItem: countryItem
                 };
 
-                return countryItem.cityGridAPI.loadGrid(query);
+                return countryItem.cityGridAPI.load(payload);
             };
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
@@ -140,31 +130,20 @@
 
             drillDownDefinition.title = "Cities";
 
-            drillDownDefinition.directive = "vr-common-city-grid";
-            drillDownDefinition.parentMenuActions = [{
-                name: "New City",
-                clicked: function (regionItem) {
-                    if (drillDownDefinition.setTabSelected != undefined)
-                        drillDownDefinition.setTabSelected(regionItem);
-
-                    var onCityAdded = function (cityObj) {
-                        if (regionItem.cityGridAPI != undefined) {
-                            regionItem.cityGridAPI.onCityAdded(cityObj);
-                        }
-                    };
-                    addCity(onCityAdded, regionItem.Entity.CountryId, regionItem.Entity.RegionId);
-                },
-                haspermission: hasNewCityPermission
-            }];
+            drillDownDefinition.directive = "vr-common-city-subview";
 
             drillDownDefinition.loadDirective = function (directiveAPI, regionItem) {
+            
                 regionItem.cityGridAPI = directiveAPI;
-                var query = {
-                    CountryIds: [regionItem.Entity.CountryId],
-                    RegionIds: [regionItem.Entity.RegionId]
-                };
+                var payload = {
 
-                return regionItem.cityGridAPI.loadGrid(query);
+                    query : {
+                        CountryIds: [regionItem.Entity.CountryId],
+                        RegionIds: [regionItem.Entity.RegionId]
+                    },
+                    regionItem: regionItem
+                };
+                return regionItem.cityGridAPI.load(payload);
             };
 
             VRCommon_RegionService.addDrillDownDefinition(drillDownDefinition);

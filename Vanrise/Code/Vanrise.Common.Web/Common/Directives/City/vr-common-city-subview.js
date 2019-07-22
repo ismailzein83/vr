@@ -1,80 +1,80 @@
-﻿//"use strict";
+﻿"use strict";
 
-//app.directive("vrCommonCitySubview", ["UtilsService","VRCommon_CityService",
-//    function (UtilsService, VRCommon_CityService) {
+app.directive("vrCommonCitySubview", ["UtilsService", "VRCommon_CityService",
+    function (UtilsService, VRCommon_CityService) {
 
-//    var directiveDefinitionObject = {
+        var directiveDefinitionObject = {
 
-//        restrict: "E",
-//        scope: {
-//            onReady: "="
-//        },
-//        controller: function ($scope, $element, $attrs) {
-//            var ctrl = this;
-//            var cityGrid = CityGrid($scope, ctrl, $attrs);
-//            cityGrid.initializeController();
-//        },
-//        controllerAs: "ctrl",
-//        bindToController: true,
-//        compile: function (element, attrs) {
+            restrict: "E",
+            scope: {
+                onReady: "="
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var cityGrid = CityGrid($scope, ctrl, $attrs);
+                cityGrid.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            compile: function (element, attrs) {
 
-//        },
-//        templateUrl: "/Client/Modules/Common/Directives/City/Templates/CitySubviewTemplate.html"
+            },
+            templateUrl: "/Client/Modules/Common/Directives/City/Templates/CitySubviewTemplate.html"
 
-//    };
+        };
 
-//        function CityGrid($scope, ctrl, $attrs) {
+        function CityGrid($scope, ctrl, $attrs) {
 
-//        var cityGridAPI;
-//        var cityGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-//        var countryItem;
-//        return { initializeController: initializeController };
-//        function initializeController() {
-//            $scope.scopeModel = {};
-//            $scope.scopeModel.onCityGridDirectiveReady = function (api) {
-//                cityGridAPI = api;
-//                cityGridReadyPromiseDeferred.resolve();
-//            };
-//            $scope.scopeModel.addCity= function () {
-               
-//                var onCityAdded = function (cityObj) {
-//                    if (cityGridAPI != undefined) {
-//                        cityGridAPI.onCityAdded(cityObj);
-//                    }
-//                };
-//                VRCommon_CityService.addCity(onCityAdded, countryItem.Entity.CountryId);
-//            }
-//            defineAPI();
-//        }
+            var cityGridAPI;
+            var cityGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var parentItem;
+            return { initializeController: initializeController };
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.onCityGridDirectiveReady = function (api) {
+                    cityGridAPI = api;
+                    cityGridReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.addCity = function () {
 
-//        function defineAPI() {
+                    var onCityAdded = function (cityObj) {
+                        if (cityGridAPI != undefined) {
+                            cityGridAPI.onCityAdded(cityObj);
+                        }
+                    };
+                    VRCommon_CityService.addCity(onCityAdded, parentItem.Entity.CountryId, parentItem.Entity.RegionId);
+                };
+                defineAPI();
+            }
 
-//            var api = {};
+            function defineAPI() {
 
-//            api.load = function (payload) {
-//                var promises = [];
-//                if (payload != undefined) {
-//                    countryItem = payload.countryItem;
-//                    var loadPromiseDeferred = UtilsService.createPromiseDeferred();
-//                    promises.push(loadPromiseDeferred.promise);
-//                    cityGridReadyPromiseDeferred.promise.then(function () {
-//                        cityGridAPI.loadGrid(payload.query).then(function () {
-//                            loadPromiseDeferred.resolve();
-//                        });
-//                    });
-//                }
-//                var rootPromiseNode = { promises: promises };
-//                return UtilsService.waitPromiseNode(rootPromiseNode);
-//            };
+                var api = {};
 
-       
-//            if (ctrl.onReady != null)
-//                ctrl.onReady(api);
-//            return api;
-//        }
+                api.load = function (payload) {
+                    var promises = [];
+                    if (payload != undefined) {
+                        parentItem = payload.countryItem != undefined ? payload.countryItem : payload.regionItem;
+                        var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadPromiseDeferred.promise);
+                        cityGridReadyPromiseDeferred.promise.then(function () {
+                            cityGridAPI.loadGrid(payload.query).then(function () {
+                                loadPromiseDeferred.resolve();
+                            });
+                        });
+                    }
+                    var rootPromiseNode = { promises: promises };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
+                };
 
-//    }
 
-//    return directiveDefinitionObject;
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+                return api;
+            }
 
-//}]);
+        }
+
+        return directiveDefinitionObject;
+
+    }]);
