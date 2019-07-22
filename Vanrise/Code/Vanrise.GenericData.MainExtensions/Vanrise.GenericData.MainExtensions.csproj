@@ -141,6 +141,7 @@
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\CallRestAPIEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ConditionalRuleContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ExecuteActionTypeEditorDefinitionSetting\CallRestAPIExecuteActionType.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ExecuteActionTypeEditorDefinitionSetting\GetBusinessEntityExecuteActionType.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorContainerRules\GenericEditorFieldValueContainerRule.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ListEditorDefinitionSetting.cs" />
