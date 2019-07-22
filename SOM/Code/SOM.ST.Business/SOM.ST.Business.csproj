@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="HttpConnectionCallInterceptor\BPMOnlineInterceptor.cs" />
     <Compile Include="HttpConnectionCallInterceptor\BSCSOnlineInterceptor.cs" />
+    <Compile Include="HttpConnectionCallInterceptor\EDAOnlineInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
