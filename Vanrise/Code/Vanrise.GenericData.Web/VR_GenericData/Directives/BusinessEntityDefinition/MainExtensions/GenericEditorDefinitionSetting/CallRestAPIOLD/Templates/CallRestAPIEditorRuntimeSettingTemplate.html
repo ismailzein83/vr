@@ -1,0 +1,9 @@
+﻿<vr-columns ng-if="!scopeModel.callOnValueChanged && !scopeModel.callOnLoad && scopeModel.buttonType" ng-init="buttonM='vr-button'" colnum="1" withemptyline>
+    <vr-validator validate="scopeModel.isInputValid()">
+        <span title="{{scopeModel.buttonTitle}}">
+            <vr-directivewrapper directive="buttonM" type="{{scopeModel.buttonType}}"
+                                 data-onclick="scopeModel.callApi" vr-disabled="scopeModel.isButtonDisabled" standalone>
+            </vr-directivewrapper>
+        </span>
+    </vr-validator>
+</vr-columns>

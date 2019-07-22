@@ -1,0 +1,8 @@
+﻿<vr-tabs>
+    <span  ng-repeat="tabContainer in scopeModel.tabContainers">
+        <vr-tab ng-if="tabContainer.showTab" header="tabContainer.tabTitle">
+            <vr-directivewrapper directive="tabContainer.runtimeEditor" on-ready="tabContainer.onEditorRuntimeDirectiveReady"></vr-directivewrapper>
+        </vr-tab>
+        <vr-directivewrapper ng-if="!tabContainer.showTab" directive="tabContainer.runtimeEditor" on-ready="tabContainer.onEditorRuntimeDirectiveReady"></vr-directivewrapper>
+    </span>
+</vr-tabs>

@@ -1,0 +1,7 @@
+﻿<span ng-repeat="rowContainer in scopeModel.rowContainers">
+    <vr-row>
+        <span ng-repeat="rowSetting in rowContainer.rowSettings">
+            <vr-directivewrapper directive="rowSetting.runtimeEditor" on-ready="rowSetting.onEditorRuntimeDirectiveReady"></vr-directivewrapper>
+        </span>
+    </vr-row>
+</span>
