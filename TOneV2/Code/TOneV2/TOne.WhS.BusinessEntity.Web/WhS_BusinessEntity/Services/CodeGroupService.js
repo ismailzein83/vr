@@ -51,34 +51,18 @@
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Code Groups";
-            drillDownDefinition.directive = "vr-whs-be-codegroup-grid";
-            drillDownDefinition.parentMenuActions = [{
-                name: "New Code Group",
-                clicked: function (countryItem) {
-                    if (drillDownDefinition.setTabSelected != undefined)
-                        drillDownDefinition.setTabSelected(countryItem);
-                    var query = {
-                        CountriesIds: [countryItem.Entity.CountryId]
-                    };
-                    var onCodeGroupAdded = function (codeGroupObj) {
-                        if (countryItem.codeGroupGridAPI != undefined) {
-                            countryItem.codeGroupGridAPI.onCodeGroupAdded(codeGroupObj);
-                        }
-                    };
-                    addCodeGroup(onCodeGroupAdded, countryItem.Entity.CountryId);
-                },
-                haspermission: function () {
-                    return WhS_BE_CodeGroupAPIService.HasAddCodeGroupPermission();
-                }
-
-            }];
+            drillDownDefinition.directive = "vr-whs-be-codegroup-subview";
+            
 
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
                 countryItem.codeGroupGridAPI = directiveAPI;
-                var query = {
-                    CountriesIds: [countryItem.Entity.CountryId],
+                var payload = {
+                    query: {
+                        CountriesIds: [countryItem.Entity.CountryId]
+                    },
+                    countryItem: countryItem
                 };
-                return countryItem.codeGroupGridAPI.loadGrid(query);
+                return countryItem.codeGroupGridAPI.load(payload);
             };
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
