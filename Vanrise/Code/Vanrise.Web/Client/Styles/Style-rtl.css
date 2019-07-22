@@ -795,14 +795,14 @@
 /*end  vr-datalist*/
 
 /*start  vr-tabs*/
-.rtl vr-tab-header-link .tab-remove-icon{
+.rtl vr-tab-header-link .tab-remove-icon,.rtl vr-tab-header-link .edit {
     right: unset;
-    left:7px;
+    left: 6px;
 }
 
-.rtl vr-tabs .tab-validation-sign{
-    right: unset;
-    left: calc(100% + 11px);
+.rtl vr-tabs .tab-validation-sign {
+    right: 1px;
+    left: unset;
 }
 .rtl .tab-vertical-content {  
     padding-left: unset;

@@ -7,11 +7,19 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
         scope: {
             onReady: '=',
             onselectionchanged: '&',
-            hidepaginationcontrols: '='
-
+            hidepaginationcontrols: '=',
+            settings: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+            ctrl.pageSize = 5;
+            if (ctrl.settings != undefined) {
+                ctrl.pageSize = ctrl.settings.pagesize || ctrl.pageSize;
+                ctrl.datasource = ctrl.settings.datasource != undefined ? ctrl.settings.datasource : undefined;
+                ctrl.oneditclicked = ctrl.settings.oneditclicked != undefined ? ctrl.settings.oneditclicked : undefined;
+                ctrl.sortable = ctrl.settings.sortable != undefined ? ctrl.settings.sortable : false;
+                ctrl.datatitlefield = ctrl.settings.datatitlefield != undefined ? ctrl.settings.datatitlefield : undefined;
+            }
             ctrl.selectedTabIndex = 0;
             ctrl.tabs = [];
             var isLock = false;
@@ -38,9 +46,9 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                     tempTabs.push(tab);
                 }
             };
-            ctrl.pageSize = 5;
+
             ctrl.tabsCountStart = ctrl.selectedTabIndex;
-            ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;         
+            ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
 
             ctrl.isBackwardPaginationVisible = function () {
                 return (ctrl.tabsCountLimit > ctrl.pageSize && ctrl.tabs.length > ctrl.pageSize) || (ctrl.tabs.length < ctrl.tabsCountLimit && ctrl.tabsCountStart > 0);
@@ -86,11 +94,30 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 }
                 return items.slice().reverse();
             };
+
+            ctrl.headerSortableListener = {
+                handle: '.handeldrag',
+                onSort: function (/**Event*/evt) {
+                    for (var i = 0 ; i < ctrl.tabs.length ; i++) {
+                        var newindex = i;
+                        ctrl.tabs[i].orderedIndex = newindex;
+                    }
+                    if (ctrl.datasource && ctrl.datasource.length)
+                        for (var i = 0 ; i < ctrl.datasource.length ; i++) {
+                            ctrl.datasource[i] = ctrl.tabs[i].data;
+                        }
+                }
+            };
             ctrl.hideTab = function ($index) {
                 if (ctrl.hidepaginationcontrols != undefined) return false;
                 return ($index >= ctrl.tabsCountLimit || $index < ctrl.tabsCountStart) && !($index == 0 && ctrl.tabs.length == 1);
 
             };
+            ctrl.editClick = function (tab) {
+                if (ctrl.oneditclicked != undefined && typeof ctrl.oneditclicked == 'function')
+                    ctrl.oneditclicked(tab.data);
+            };
+
             ctrl.removeTab = function (tab) {
                 var index = ctrl.tabs.indexOf(tab);
                 ctrl.tabs.splice(index, 1);
@@ -112,7 +139,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                         ctrl.selectedTabIndex = 0;
                     }
                     else if (tab.onremove != undefined) {
-                        if (tab.isSelected == false) {
+                        if (tab.isSelected == false || tab.isSelected == undefined) {
                             return;
                         }
                         if (ctrl.tabs[index] != undefined) {
@@ -124,9 +151,14 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                         }
                         if (ctrl.tabs.length == index && ctrl.tabs[index - 1] != undefined) {
                             ctrl.tabs[index - 1].isSelected = true;
-                            ctrl.selectedTabIndex = index - 1;
-                            ctrl.tabsCountStart = index - 1;
-                            ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
+                            if (ctrl.tabs.length > ctrl.pageSize) {
+                                ctrl.selectedTabIndex = index - 1;
+                                ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
+                            }
+                            else {
+                                ctrl.tabsCountStart = 0;
+                                ctrl.tabsCountLimit = ctrl.pageSize;
+                            }
                             return;
                         }
                         if (ctrl.tabs[0] != undefined) {
@@ -149,18 +181,27 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                         ctrl.tabs[ctrl.tabs.length - 1].isSelected = true;
                 }
             };
-            ctrl.setTabSelectedIndex = function (index) {
+            ctrl.setTabSelectedIndex = function (index, tab) {
+
                 ctrl.tabsCountStart = index;
                 ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
                 ctrl.selectedTabIndex = ctrl.tabsCountStart;
+                setTimeout(function () {
+                    if (tab) tab.isSelected = true;
+                    $scope.$apply();
+                }, 1);
                 ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
                 $($element).find(".vr-tabs-expander").find(".dropdown-menu").css({ display: "none" });
             };
 
-            ctrl.setlastTabSelectedIndex = function (index) {
+            ctrl.setlastTabSelectedIndex = function (index, tab) {
                 ctrl.tabsCountLimit = index + 1;
                 ctrl.tabsCountStart = ctrl.tabsCountLimit - ctrl.pageSize;
                 ctrl.selectedTabIndex = index;
+                setTimeout(function () {
+                    if (tab) tab.isSelected = true;
+                    $scope.$apply();
+                }, 1);
                 ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
                 $($element).find(".vr-tabs-expander").find(".dropdown-menu").css({ display: "none" });
             };

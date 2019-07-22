@@ -47,6 +47,7 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizatio
             var haspermission = iAttrs.haspermission != undefined && typeof ($scope.$parent.$eval(iAttrs.haspermission) == 'function') ? $scope.$parent.$eval(iAttrs.haspermission) : undefined;
             tab.haspermission = haspermission;
             tabsCtrl.addTab(tab);
+            ctrl.datatitlefield = tabsCtrl.datatitlefield;
 
             ctrl.getMinHeight = function () {
                 return tabsCtrl.getMinHeight(ctrl);

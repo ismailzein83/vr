@@ -3040,6 +3040,10 @@ vr-switch[class*="divDisabled"] .switch {
         margin-right: -5px;
     }
 
+        
+    .vr-tabs[vertical] .sortable-container vr-tab-header-link {
+        display: block;
+    }
     .vr-tabs label {
         padding: 1px 9px;
         border: 1px solid #DDD;
@@ -3070,14 +3074,29 @@ vr-switch[class*="divDisabled"] .switch {
     padding-left: 15px;
 }
 
-.vr-tabs label > span {
+.vr-tabs label > span.vr-header-label {
     text-overflow: ellipsis;
     display: inline-block;
     width: 100%;
     vertical-align: middle;
     overflow: hidden;
 }
+.vr-tabs label > span.vr-header-label:focus {
+    padding:2px;
+}
 
+.vr-tabs label > span.vr-header-label.with-tab-control {        
+    width: calc(100% - 15px);
+}
+.vr-tabs label > span.vr-header-label.with-tab-control.icon-space {
+    width: calc(100% - 25px);
+}
+.vr-tabs label > span.vr-header-label.required-header {
+    outline: #de6965 auto 0.5px
+}
+.vr-tabs label > span.vr-header-label.required-header:focus {
+    outline: #D44A47 auto 0.5px;
+}
 .vr-datagrid .vr-tabs label {
     padding: 0px 7px;
 }
@@ -3854,19 +3873,45 @@ vr-tab vr-columns[tabs="true"] > div[class^="col"] {
 }
 
 vr-tab-header-link .tab-remove-icon {
-    width: 10px;
     cursor: default;
     position: absolute;
-    right: 7px;
-    top: 7px;
+    right: 9px;
+    top: 6px;
     z-index: 1;
+    font-size:11px;
+}
+vr-tab-header-link .tab-remove-icon.share-space {  
+    top: 12px;
+}
+vr-tab-header-link .handeldrag {
+    position: absolute;
+    z-index: 1;
+    font-size: 11px;
+    right: 45%;
+    top: 0px;
+}
+
+
+vr-tab-header-link .edit {
+    position: absolute;
+    z-index: 1;
+    font-size: 11px;
+    right: 8px;
+    top: 6px;
+}
+
+vr-tab-header-link .edit.share-space {
+    top: 1px;
 }
 
 vr-tabs .tab-validation-sign {
     color: #D44A47;
     position: relative;
-    right: calc(100% + 10px);
-    top: -3px;
+    right: unset;
+    position: absolute;
+    top: 0px;
+    width: unset !important;
+    left: 1px;
 }
 
 vr-columns[grouped] > div[class^="col"] {
