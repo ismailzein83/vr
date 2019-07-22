@@ -7,12 +7,15 @@ using System.Text;
 using TestRuntime;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Deal.Business;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Ericsson;
 using TOne.WhS.RouteSync.Ericsson.Business;
 using TOne.WhS.RouteSync.TelesIdb;
 using TOne.WhS.Routing.Data.SQL;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable;
 using Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules;
 using Vanrise.BusinessProcess;
@@ -21,7 +24,6 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Data.RDB;
 using Vanrise.GenericData.Entities;
-using Vanrise.Integration.Mappers;
 using Vanrise.Queueing;
 using Vanrise.Rules.Normalization;
 using Vanrise.Runtime;
@@ -33,14 +35,22 @@ namespace TOne.WhS.Runtime.Tasks
     {
         public void Execute()
         {
+            #region RuntimeTask
+            //RuntimeTask.RuntimeTask_Main();
+            #endregion
+
+            #region GetAllGenericBusinessEntitiesTask
+            //GetAllGenericBusinessEntitiesTask.GetAllGenericBusinessEntities_Main();
+            #endregion
+
+            #region DealMemoryAnalyticDataManagerTask
+            //DealMemoryAnalyticDataManagerTask.DealMemoryAnalyticDataManager_Main();
+            #endregion
+
             #region RDBTestingTask
             //var columnNames = new Dictionary<string, RDBCreateIndexDirection>();
             //columnNames.Add("CustomerId", RDBCreateIndexDirection.ASC);
             //var rdbResolvedQuery = RDBTestingTask.ResolveIndexCreationQuery("dbo", "CustomerRoute", RDBCreateIndexType.UniqueClustered, "IX_Customer", columnNames, 2);
-            #endregion
-
-            #region RuntimeTask
-            //RuntimeTask.RuntimeTask_Main();
             #endregion
 
             #region BillingMeasureExternalSourceTask
@@ -83,11 +93,199 @@ namespace TOne.WhS.Runtime.Tasks
             //prepareCodePrefixesTask.DisplayList(codePrefixesResult);
             #endregion
         }
+
+        private static void FillModifiedRouteName(dynamic rdr, dynamic processedRDR)
+        {
+            int internationalBothWayIn = 1; int internationalBothWayOut = 2; int internationalOneWayIn = 3; int internationalOneWayOut = 4;
+            int nationalBothWayIn = 5; int nationalBothWayOut = 6; int invalid = 7;
+
+            string routeName = rdr.RouteName;
+            if (string.IsNullOrEmpty(routeName))
+                throw new NullReferenceException("RouteName");
+
+            int routeNameLength = routeName.Length;
+            if (routeNameLength <= 1)
+                throw new Exception("Invalid RouteName Length");
+
+            Char lastChar = routeName[routeNameLength - 1];
+            Char beforeLastChar = routeName[routeNameLength - 2];
+
+            int type; string modifiedRouteName = null;
+
+            if (beforeLastChar == 'B')
+            {
+                switch (lastChar)
+                {
+                    case 'I': type = internationalBothWayIn; modifiedRouteName = routeName.Remove(routeNameLength - 1, 1); break;
+                    case 'O': type = internationalBothWayOut; modifiedRouteName = routeName.Remove(routeNameLength - 1, 1); break;
+                    default: type = invalid; break;
+                }
+            }
+            else if (lastChar == 'I' || lastChar == 'O')
+            {
+                switch (lastChar)
+                {
+                    case 'I': type = internationalOneWayIn; modifiedRouteName = routeName; break;
+                    case 'O': type = internationalOneWayOut; modifiedRouteName = routeName; break;
+                    default: type = invalid; break;
+                }
+            }
+            else if (beforeLastChar == '4' || beforeLastChar == '9')
+            {
+                switch (beforeLastChar)
+                {
+                    case '4': type = nationalBothWayIn; modifiedRouteName = routeName.Remove(routeNameLength - 2, 1); break;
+                    case '9': type = nationalBothWayOut; modifiedRouteName = routeName.Remove(routeNameLength - 2, 1); break;
+                    default: type = invalid; break;
+                }
+            }
+            else
+            {
+                type = invalid;
+            }
+
+            processedRDR.Type = type; processedRDR.RouteName = type != invalid ? modifiedRouteName : routeName;
+        }
+
+        private void RDBJoin(Vanrise.GenericData.RDBDataStorage.RDBDataStorageAddJoinRDBExpressionContext context)
+        {
+            string tableToJoinTableAlias = context.GetTableToJoinTableAlias();
+
+            var join = context.RDBJoinContext.JoinSelect(tableToJoinTableAlias);
+            var joinSelect = join.SelectQuery();
+            joinSelect.From(Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable.GetRDBTableNameByRecordStorageId(new Guid("cacaa170-8d60-45de-833e-489d2784ed05")), "port", 1, true);
+
+            var inlineJoinContext = joinSelect.Join();
+            inlineJoinContext.JoinOnEqualOtherTableColumn(Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable.GetRDBTableNameByRecordStorageId(new Guid("5ae2fe1d-4056-4a28-bb72-6780f4aba39a")),
+                "vertical", "Id", "port", "OLTVertival");
+
+            var selectColumns = joinSelect.SelectColumns();
+            selectColumns.Columns("Id");
+            selectColumns.Column("vertical", "OLT", "OLT");
+
+            joinSelect.Where().EqualsCondition("port", "Status").Value(new Guid("d65f6900-7e1f-479d-be8c-c5ecbc45c7c5"));
+
+            join.On().EqualsCondition(context.GetJoinTableAlias("Splitter"), "OLT").Column(tableToJoinTableAlias, "OLT");
+        }
+
+        private void RDBJoin_2(Vanrise.GenericData.RDBDataStorage.RDBDataStorageAddJoinRDBExpressionContext context)
+        {
+            string tableToJoinTableAlias = context.GetTableToJoinTableAlias();
+
+            var join = context.RDBJoinContext.JoinSelect(tableToJoinTableAlias);
+            var joinSelect = join.SelectQuery();
+            joinSelect.From(Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable.GetRDBTableNameByRecordStorageId(new Guid("42ea8400-7373-4c79-b3c0-ee542266e88f")), "port", 1, true);
+
+            string slotTableAlias = "slot";
+            var inlineSlotJoinContext = joinSelect.Join();
+            inlineSlotJoinContext.JoinOnEqualOtherTableColumn(Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable.GetRDBTableNameByRecordStorageId(new Guid("dfc658ce-3b88-4207-961c-0b6f2362827a")),
+                slotTableAlias, "Id", "port", "Slot");
+
+            string cardTableAlias = "card";
+            var inlineCardJoinContext = joinSelect.Join();
+            inlineCardJoinContext.JoinOnEqualOtherTableColumn(Vanrise.GenericData.RDBDataStorage.RecordStorageRDBAnalyticDataProviderTable.GetRDBTableNameByRecordStorageId(new Guid("1fbc003d-5169-4a24-a083-b333d9a3ab61")),
+                cardTableAlias, "Id", slotTableAlias, "Card");
+
+            var selectColumns = joinSelect.SelectColumns();
+            selectColumns.Columns("Id");
+            selectColumns.Column(cardTableAlias, "IMS", "IMS");
+
+            joinSelect.Where().EqualsCondition("port", "Status").Value(new Guid("d65f6900-7e1f-479d-be8c-c5ecbc45c7c5"));
+
+            join.On().EqualsCondition(context.GetJoinTableAlias("OLT"), "IMS").Column(tableToJoinTableAlias, "IMS");
+        }
+    }
+
+    public class RuntimeTask
+    {
+        public static void RuntimeTask_Main()
+        {
+            var runtimeServices = new List<RuntimeService>();
+
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(schedulerService);
+
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorRuntimeService);
+
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpService);
+
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueRegulatorService);
+
+            //QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueActivationService);
+
+            //SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(summaryQueueActivationService);
+
+            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(dsRuntimeService);
+
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bigDataService);
+
+            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingRuntimeService);
+
+            CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingDistributorRuntimeService);
+
+            DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingExecutorRuntimeService);
+
+            DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingDistributorRuntimeService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
+
+            Console.ReadKey();
+        }
+    }
+
+    public class GetAllGenericBusinessEntitiesTask 
+    {
+        public static void GetAllGenericBusinessEntities_Main()
+        {
+            NumberRecordFilter recordFilter1 = new NumberRecordFilter() { FieldName = "ID", Value = 1 };
+            NumberRecordFilter recordFilter2 = new NumberRecordFilter() { FieldName = "ID", Value = 2 };
+            NumberRecordFilter recordFilter3 = new NumberRecordFilter() { FieldName = "ID", Value = 3 };
+            NumberRecordFilter recordFilter4 = new NumberRecordFilter() { FieldName = "ID", Value = 4 };
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+            recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
+            recordFilterGroup.Filters = new List<RecordFilter>();
+            recordFilterGroup.Filters.Add(recordFilter1);
+            recordFilterGroup.Filters.Add(recordFilter2);
+            recordFilterGroup.Filters.Add(recordFilter3);
+            recordFilterGroup.Filters.Add(recordFilter4);
+
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(new Guid("4f17b219-ae8c-4c39-ae0b-60bc53a10aac"), null, recordFilterGroup);
+        }
+    }
+
+    public class DealMemoryAnalyticDataManagerTask
+    {
+        public static void DealMemoryAnalyticDataManager_Main()
+        {
+            AnalyticQuery analyticQuery = new AnalyticQuery();
+            analyticQuery.TableId = Guid.NewGuid();
+            analyticQuery.DimensionFields = new List<string>() { "SaleZone", "Supplier" }; //"SupplierZone", "SaleZone", "Supplier"
+            analyticQuery.MeasureFields = new List<string>();
+            analyticQuery.FromTime = new DateTime(2019, 04, 02);
+            analyticQuery.ToTime = new DateTime(2019, 04, 04);
+
+            DealMemoryAnalyticDataManager dealMemoryAnalyticDataManager = new DealMemoryAnalyticDataManager();
+            List<RawMemoryRecord> rawMemoryRecords = dealMemoryAnalyticDataManager.GetRawRecords(analyticQuery, null);
+        }
     }
 
     public class RDBTestingTask
     {
-        public static RDBResolvedQuery ResolveIndexCreationQuery(string schemaName, string tableName, RDBCreateIndexType indexType, string indexName, 
+        public static RDBResolvedQuery ResolveIndexCreationQuery(string schemaName, string tableName, RDBCreateIndexType indexType, string indexName,
             Dictionary<string, RDBCreateIndexDirection> columnNames, int? maxDOP)
         {
             string tableDBNameForIndex;
@@ -136,54 +334,16 @@ namespace TOne.WhS.Runtime.Tasks
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
             return resolvedQuery;
         }
-    }
 
-    public class RuntimeTask
-    {
-        public static void RuntimeTask_Main()
+        public static void RDBCustomCode(RDBExpressionContext rdbExpressionContext)
         {
-            var runtimeServices = new List<RuntimeService>();
+            var caseExpression = rdbExpressionContext.CaseExpression();
 
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(schedulerService);
+            var case1 = caseExpression.AddCase();
+            case1.When().NotNullCondition("DunningStatus");
+            case1.Then().Value(1);
 
-            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(bpRegulatorRuntimeService);
-
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(bpService);
-
-            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueRegulatorService);
-
-            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueActivationService);
-
-            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(summaryQueueActivationService);
-
-            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(dsRuntimeService);
-
-            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(bigDataService);
-
-            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(cachingRuntimeService);
-
-            CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(cachingDistributorRuntimeService);
-
-            DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(dataGroupingExecutorRuntimeService);
-
-            DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(dataGroupingDistributorRuntimeService);
-
-            RuntimeHost host = new RuntimeHost(runtimeServices);
-            host.Start();
-
-            Console.ReadKey();
+            caseExpression.Else().Value(0);
         }
     }
 
@@ -733,18 +893,14 @@ namespace TOne.WhS.Runtime.Tasks
 
         private string DeserializeCustomerRouteOptions(string serializedOptions)
         {
-            throw new NotImplementedException();
-
-            //List<TOne.WhS.Routing.Entities.RouteOption> routeOptions = TOne.WhS.Routing.Entities.Helper.DeserializeOptions(serializedOptions);
-            //return Vanrise.Common.Serializer.Serialize(routeOptions, true);
+            List<TOne.WhS.Routing.Entities.RouteOption> routeOptions = TOne.WhS.Routing.Entities.Helper.DeserializeOptions(serializedOptions);
+            return Vanrise.Common.Serializer.Serialize(routeOptions, true);
         }
 
         private string DeserializeOptionsDetailsBySupplier(string serializedOptionsDetailsBySupplier)
         {
-            throw new NotImplementedException();
-
-            //Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier = TOne.WhS.Routing.Entities.Helper.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
-            //return Vanrise.Common.Serializer.Serialize(optionsDetailsBySupplier, true);
+            Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier = TOne.WhS.Routing.Entities.Helper.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
+            return Vanrise.Common.Serializer.Serialize(optionsDetailsBySupplier, true);
         }
 
         private string DeserializeOptionsByPolicy(string serializedOptionsByPolicy)
@@ -926,5 +1082,907 @@ namespace TOne.WhS.Runtime.Tasks
         }
 
         #endregion
+    }
+
+    public class Vanrise_Analytic_Data_RDBExpression
+    {
+        public class RDBExpressionSetterBatchStart_23a7675689f6423498ee0a8fcfdae4f6 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("BatchStart");
+            }
+        }
+        public class RDBReaderValueGetterBatchStart_23a7675689f6423498ee0a8fcfdae4f6 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCostCurrency_ae57778323c043aa98d4a0683df66558 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CostCurrencyId");
+            }
+        }
+        public class RDBReaderValueGetterCostCurrency_ae57778323c043aa98d4a0683df66558 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCostFinancialAccount_4818ffe68f3f44beb3cfb302a54180b2 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CostFinancialAccount");
+            }
+        }
+        public class RDBReaderValueGetterCostFinancialAccount_4818ffe68f3f44beb3cfb302a54180b2 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCostRate_9c8da4358a2b4c6fa4c9dae74a10a66e : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CostRateValue");
+            }
+        }
+        public class RDBReaderValueGetterCostRate_9c8da4358a2b4c6fa4c9dae74a10a66e : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCustomer_c71949cf27fe41428fbaa0707ade530a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("Customer");
+            }
+        }
+        public class RDBReaderValueGetterCustomer_c71949cf27fe41428fbaa0707ade530a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCustomerProfile_804aed2aaf5e41938b5c9a08aa10af74 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CustomerProfile");
+            }
+        }
+        public class RDBReaderValueGetterCustomerProfile_804aed2aaf5e41938b5c9a08aa10af74 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterDay_06504c76ef3d450da6ab8edd0a9629ae : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var rdbExpressionContext = context.RDBExpressionContext.DateTimePart(Vanrise.Data.RDB.RDBDateTimePart.DateOnly);
+                rdbExpressionContext.Column("BatchStart");
+            }
+        }
+        public class RDBReaderValueGetterDay_06504c76ef3d450da6ab8edd0a9629ae : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBExpressionSetterDestinationMobileCountry_95b2be74124d45d59d21c44806808c40 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("DestinationMC");
+            }
+        }
+        public class RDBReaderValueGetterDestinationMobileCountry_95b2be74124d45d59d21c44806808c40 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterDestinationMobileNetwork_fb4a0e47b1aa42868708fb5585a25240 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("DestinationMN");
+            }
+        }
+        public class RDBReaderValueGetterDestinationMobileNetwork_fb4a0e47b1aa42868708fb5585a25240 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBReaderValueGetterHalfHourQueryShiftedTime_bed3902efc2e4daf9ed505297e4e22b3 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBReaderValueGetterMonthQueryTimeShift_c4a682fba7a1459ab37871d2f66a1356 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetString(fieldName);
+            }
+        }
+        public class RDBExpressionSetterOriginationMobileCountry_d69d2bd609c74f089e58ea3f9f9a1ee9 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("OriginationMC");
+            }
+        }
+        public class RDBReaderValueGetterOriginationMobileCountry_d69d2bd609c74f089e58ea3f9f9a1ee9 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterOriginationMobileNetwork_e028848a766a4adda95799617793a636 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("OriginationMN");
+            }
+        }
+        public class RDBReaderValueGetterOriginationMobileNetwork_e028848a766a4adda95799617793a636 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSaleCurrency_3a539554813646bcbe4353b7df20d25a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SaleCurrencyId");
+            }
+        }
+        public class RDBReaderValueGetterSaleCurrency_3a539554813646bcbe4353b7df20d25a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSaleFinancialAccount_c06a621a9b4846a4b2817b0802737e80 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SaleFinancialAccount");
+            }
+        }
+        public class RDBReaderValueGetterSaleFinancialAccount_c06a621a9b4846a4b2817b0802737e80 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSaleRate_785657748a5542ea8948b0b3f8f34814 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SaleRateValue");
+            }
+        }
+        public class RDBReaderValueGetterSaleRate_785657748a5542ea8948b0b3f8f34814 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSMSType_6c6424e222da4a3184cef4b16c0ec979 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("Type");
+            }
+        }
+        public class RDBReaderValueGetterSMSType_6c6424e222da4a3184cef4b16c0ec979 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSupplier_9ff8e12e19e34c108c41bc97a6d81f1b : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("Supplier");
+            }
+        }
+        public class RDBReaderValueGetterSupplier_9ff8e12e19e34c108c41bc97a6d81f1b : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSupplierProfile_fd779e2cee554365a048428f00ed4ce8 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SupplierProfile");
+            }
+        }
+        public class RDBReaderValueGetterSupplierProfile_fd779e2cee554365a048428f00ed4ce8 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSwitch_9ad84505b8db4621b2cd85aac7063bb4 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("Switch");
+            }
+        }
+        public class RDBReaderValueGetterSwitch_9ad84505b8db4621b2cd85aac7063bb4 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCountSaleHolidayRate_f79fddd3c3b24d999248f84b7110fb64 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CASE WHEN SaleRateValue = -1 THEN SaleRateValue END");
+            }
+        }
+        public class RDBReaderValueGetterCountSaleHolidayRate_f79fddd3c3b24d999248f84b7110fb64 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterMaxBillingPeriod_0b9899f635164c7fae4b2bccf979edd7 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("BatchStart");
+            }
+        }
+        public class RDBReaderValueGetterMaxBillingPeriod_0b9899f635164c7fae4b2bccf979edd7 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBExpressionSetterMinBillingPeriod_cb2aaebd44ea4c9a8462502f348330fe : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("BatchStart");
+            }
+        }
+        public class RDBReaderValueGetterMinBillingPeriod_cb2aaebd44ea4c9a8462502f348330fe : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumCostNet_5f4d6c672d8143cfa8f6638d7f5113cf : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CostNet");
+            }
+        }
+        public class RDBReaderValueGetterSumCostNet_5f4d6c672d8143cfa8f6638d7f5113cf : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumCostNet_OrigCurr_caf349c3fcac4ec68043a1641453fb92 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("ISNULL(CostNet,0)");
+            }
+        }
+        public class RDBReaderValueGetterSumCostNet_OrigCurr_caf349c3fcac4ec68043a1641453fb92 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumCostNetNotNULL_c4b519967d8d4af6bcacafc77939dd09 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("ISNULL(CostNet,0)");
+            }
+        }
+        public class RDBReaderValueGetterSumCostNetNotNULL_c4b519967d8d4af6bcacafc77939dd09 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumCostRateNumberOfSMS_86a8ca2e252c49d8971408f88fc39cc0 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("ISNULL(CostRateValue * NumberOfSMS,0)");
+            }
+        }
+        public class RDBReaderValueGetterSumCostRateNumberOfSMS_86a8ca2e252c49d8971408f88fc39cc0 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumNumberOfSMS_2ade16f8e8b04c989945d64db6aae7a5 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("NumberOfSMS");
+            }
+        }
+        public class RDBReaderValueGetterSumNumberOfSMS_2ade16f8e8b04c989945d64db6aae7a5 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumSaleHolidayRate_91cf27c8e2e64a7493ff5e8d89b502ef : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CASE WHEN SaleRateValue = -1 THEN ISNULL(SaleRateValue,0) END");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleHolidayRate_91cf27c8e2e64a7493ff5e8d89b502ef : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumSaleNet_54394f8a377c4b8183013d6d794472e3 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SaleNet");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleNet_54394f8a377c4b8183013d6d794472e3 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumSaleNet_OrigCurr_1bd097face67491ea7b1c87ca447f421 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("ISNULL(SaleNet,0)");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleNet_OrigCurr_1bd097face67491ea7b1c87ca447f421 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+
+
+        public class RDBExpressionSetterSumSaleNetNotNULL_cef7d591371d4d5dab62f2dd2e020761 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var caseExpressionContext = context.RDBExpressionContext.CaseExpression();
+                var caseExpressionWhenContext = caseExpressionContext.AddCase();
+
+                var conditionContext = caseExpressionWhenContext.When(RDBConditionGroupOperator.OR);
+                conditionContext.EqualsCondition("CostRateValue").Null();
+                conditionContext.EqualsCondition("CostDurationInSeconds").Null();
+                caseExpressionWhenContext.Then().Value(0);
+
+                var arithmeticExpression = caseExpressionContext.Else().ArithmeticExpression(RDBArithmeticExpressionOperator.Multiply);
+                arithmeticExpression.Expression1().Column("CostRateValue");
+                arithmeticExpression.Expression2().Column("CostDurationInSeconds");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleNetNotNULL_cef7d591371d4d5dab62f2dd2e020761 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+
+
+        public class RDBExpressionSetterSumSaleRateNumberOfSMS_10100fa8e2504f2bbd66835c85d60f83 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var caseExpressionContext = context.RDBExpressionContext.CaseExpression();
+                var caseExpressionWhenContext = caseExpressionContext.AddCase();
+
+                var conditionContext = caseExpressionWhenContext.When(RDBConditionGroupOperator.OR); //.EqualsCondition("SaleNet").Null();
+                conditionContext.EqualsCondition("SaleRateValue").Null();
+                conditionContext.EqualsCondition("NumberOfSMS").Null();
+
+                caseExpressionWhenContext.Then().Value(0);
+                caseExpressionContext.Else().Column("SaleNet");
+
+                //context.RDBExpressionContext.Column("ISNULL(SaleRateValue * NumberOfSMS,0)");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleRateNumberOfSMS_10100fa8e2504f2bbd66835c85d60f83 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+    }
+
+    public class Test
+    {
+        public class RDBExpressionSetterBatchStart_23a7675689f6423498ee0a8fcfdae4f6 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("BatchStart");
+            }
+        }
+        public class RDBReaderValueGetterBatchStart_23a7675689f6423498ee0a8fcfdae4f6 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCostCurrency_ae57778323c043aa98d4a0683df66558 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CostCurrencyId");
+            }
+        }
+        public class RDBReaderValueGetterCostCurrency_ae57778323c043aa98d4a0683df66558 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCostFinancialAccount_4818ffe68f3f44beb3cfb302a54180b2 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CostFinancialAccount");
+            }
+        }
+        public class RDBReaderValueGetterCostFinancialAccount_4818ffe68f3f44beb3cfb302a54180b2 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCostRate_9c8da4358a2b4c6fa4c9dae74a10a66e : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CostRateValue");
+            }
+        }
+        public class RDBReaderValueGetterCostRate_9c8da4358a2b4c6fa4c9dae74a10a66e : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCustomer_c71949cf27fe41428fbaa0707ade530a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("Customer");
+            }
+        }
+        public class RDBReaderValueGetterCustomer_c71949cf27fe41428fbaa0707ade530a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterCustomerProfile_804aed2aaf5e41938b5c9a08aa10af74 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CustomerProfile");
+            }
+        }
+        public class RDBReaderValueGetterCustomerProfile_804aed2aaf5e41938b5c9a08aa10af74 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterDay_06504c76ef3d450da6ab8edd0a9629ae : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var rdbExpressionContext = context.RDBExpressionContext.DateTimePart(Vanrise.Data.RDB.RDBDateTimePart.DateOnly);
+                rdbExpressionContext.Column("BatchStart");
+            }
+        }
+        public class RDBReaderValueGetterDay_06504c76ef3d450da6ab8edd0a9629ae : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBExpressionSetterDestinationMobileCountry_95b2be74124d45d59d21c44806808c40 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("DestinationMC");
+            }
+        }
+        public class RDBReaderValueGetterDestinationMobileCountry_95b2be74124d45d59d21c44806808c40 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterDestinationMobileNetwork_fb4a0e47b1aa42868708fb5585a25240 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("DestinationMN");
+            }
+        }
+        public class RDBReaderValueGetterDestinationMobileNetwork_fb4a0e47b1aa42868708fb5585a25240 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBReaderValueGetterHalfHourQueryShiftedTime_bed3902efc2e4daf9ed505297e4e22b3 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBReaderValueGetterMonthQueryTimeShift_c4a682fba7a1459ab37871d2f66a1356 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetString(fieldName);
+            }
+        }
+        public class RDBExpressionSetterOriginationMobileCountry_d69d2bd609c74f089e58ea3f9f9a1ee9 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("OriginationMC");
+            }
+        }
+        public class RDBReaderValueGetterOriginationMobileCountry_d69d2bd609c74f089e58ea3f9f9a1ee9 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterOriginationMobileNetwork_e028848a766a4adda95799617793a636 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("OriginationMN");
+            }
+        }
+        public class RDBReaderValueGetterOriginationMobileNetwork_e028848a766a4adda95799617793a636 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSaleCurrency_3a539554813646bcbe4353b7df20d25a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SaleCurrencyId");
+            }
+        }
+        public class RDBReaderValueGetterSaleCurrency_3a539554813646bcbe4353b7df20d25a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSaleFinancialAccount_c06a621a9b4846a4b2817b0802737e80 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SaleFinancialAccount");
+            }
+        }
+        public class RDBReaderValueGetterSaleFinancialAccount_c06a621a9b4846a4b2817b0802737e80 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSaleRate_785657748a5542ea8948b0b3f8f34814 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SaleRateValue");
+            }
+        }
+        public class RDBReaderValueGetterSaleRate_785657748a5542ea8948b0b3f8f34814 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSMSType_6c6424e222da4a3184cef4b16c0ec979 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("Type");
+            }
+        }
+        public class RDBReaderValueGetterSMSType_6c6424e222da4a3184cef4b16c0ec979 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSupplier_9ff8e12e19e34c108c41bc97a6d81f1b : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("Supplier");
+            }
+        }
+        public class RDBReaderValueGetterSupplier_9ff8e12e19e34c108c41bc97a6d81f1b : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSupplierProfile_fd779e2cee554365a048428f00ed4ce8 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SupplierProfile");
+            }
+        }
+        public class RDBReaderValueGetterSupplierProfile_fd779e2cee554365a048428f00ed4ce8 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSwitch_9ad84505b8db4621b2cd85aac7063bb4 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("Switch");
+            }
+        }
+        public class RDBReaderValueGetterSwitch_9ad84505b8db4621b2cd85aac7063bb4 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterMaxBillingPeriod_0b9899f635164c7fae4b2bccf979edd7 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("BatchStart");
+            }
+        }
+        public class RDBReaderValueGetterMaxBillingPeriod_0b9899f635164c7fae4b2bccf979edd7 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBExpressionSetterMinBillingPeriod_cb2aaebd44ea4c9a8462502f348330fe : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("BatchStart");
+            }
+        }
+        public class RDBReaderValueGetterMinBillingPeriod_cb2aaebd44ea4c9a8462502f348330fe : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDateTime(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumCostNet_5f4d6c672d8143cfa8f6638d7f5113cf : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("CostNet");
+            }
+        }
+        public class RDBReaderValueGetterSumCostNet_5f4d6c672d8143cfa8f6638d7f5113cf : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumCostNet_OrigCurr_caf349c3fcac4ec68043a1641453fb92 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var caseExpressionContext = context.RDBExpressionContext.CaseExpression(); var caseExpressionWhenContext = caseExpressionContext.AddCase(); caseExpressionWhenContext.When().EqualsCondition("CostNet").Null(); caseExpressionWhenContext.Then().Value(0); caseExpressionContext.Else().Column("CostNet");
+            }
+        }
+        public class RDBReaderValueGetterSumCostNet_OrigCurr_caf349c3fcac4ec68043a1641453fb92 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumCostNetNotNULL_c4b519967d8d4af6bcacafc77939dd09 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var caseExpressionContext = context.RDBExpressionContext.CaseExpression(); var caseExpressionWhenContext = caseExpressionContext.AddCase(); caseExpressionWhenContext.When().EqualsCondition("CostNet").Null(); caseExpressionWhenContext.Then().Value(0); caseExpressionContext.Else().Column("CostNet");
+            }
+        }
+        public class RDBReaderValueGetterSumCostNetNotNULL_c4b519967d8d4af6bcacafc77939dd09 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumCostRateNumberOfSMS_c35c1ea72d284e34857a459c1568924a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var caseExpressionContext = context.RDBExpressionContext.CaseExpression(); var caseExpressionWhenContext = caseExpressionContext.AddCase(); var conditionContext = caseExpressionWhenContext.When(RDBConditionGroupOperator.OR); conditionContext.EqualsCondition("CostRateValue").Null(); conditionContext.EqualsCondition("CostDurationInSeconds").Null(); caseExpressionWhenContext.Then().Value(0); var arithmeticExpression = caseExpressionContext.Else().ArithmeticExpression(RDBArithmeticExpressionOperator.Multiply); arithmeticExpression.Expression1().Column("CostRateValue"); arithmeticExpression.Expression2().Column("CostDurationInSeconds");
+            }
+        }
+        public class RDBReaderValueGetterSumCostRateNumberOfSMS_c35c1ea72d284e34857a459c1568924a : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumNumberOfSMS_2ade16f8e8b04c989945d64db6aae7a5 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("NumberOfSMS");
+            }
+        }
+        public class RDBReaderValueGetterSumNumberOfSMS_2ade16f8e8b04c989945d64db6aae7a5 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableInt(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumSaleNet_54394f8a377c4b8183013d6d794472e3 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                context.RDBExpressionContext.Column("SaleNet");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleNet_54394f8a377c4b8183013d6d794472e3 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumSaleNet_OrigCurr_1bd097face67491ea7b1c87ca447f421 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var caseExpressionContext = context.RDBExpressionContext.CaseExpression(); var caseExpressionWhenContext = caseExpressionContext.AddCase(); caseExpressionWhenContext.When().EqualsCondition("SaleNet").Null(); caseExpressionWhenContext.Then().Value(0); caseExpressionContext.Else().Column("SaleNet");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleNet_OrigCurr_1bd097face67491ea7b1c87ca447f421 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumSaleNetNotNULL_cef7d591371d4d5dab62f2dd2e020761 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var caseExpressionContext = context.RDBExpressionContext.CaseExpression(); var caseExpressionWhenContext = caseExpressionContext.AddCase(); caseExpressionWhenContext.When().EqualsCondition("SaleNet").Null(); caseExpressionWhenContext.Then().Value(0); caseExpressionContext.Else().Column("SaleNet");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleNetNotNULL_cef7d591371d4d5dab62f2dd2e020761 : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
+        public class RDBExpressionSetterSumSaleRateNumberOfSMS_85806ea41cb74b0bb5eddce214f1d49d : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+        {
+            public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+            {
+                var caseExpressionContext = context.RDBExpressionContext.CaseExpression(); var caseExpressionWhenContext = caseExpressionContext.AddCase(); var conditionContext = caseExpressionWhenContext.When(RDBConditionGroupOperator.OR); conditionContext.EqualsCondition("SaleRateValue").Null(); conditionContext.EqualsCondition("SaleDurationInSeconds").Null(); caseExpressionWhenContext.Then().Value(0); var arithmeticExpression = caseExpressionContext.Else().ArithmeticExpression(RDBArithmeticExpressionOperator.Multiply); arithmeticExpression.Expression1().Column("SaleRateValue"); arithmeticExpression.Expression2().Column("SaleDurationInSeconds");
+            }
+        }
+        public class RDBReaderValueGetterSumSaleRateNumberOfSMS_85806ea41cb74b0bb5eddce214f1d49d : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+        {
+            public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+            {
+                return reader.GetNullableDecimal(fieldName);
+            }
+        }
     }
 }
