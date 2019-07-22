@@ -140,7 +140,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 						$scope.scopeModel.isCarrierAccountBlockorInActive = false;
 						if (response != undefined) {
 							if (response.CarrierAccountSettings != undefined && response.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value) {
-								isCarrierAccountInActive = true
+                                isCarrierAccountInActive = true;
 								$scope.scopeModel.isCarrierAccountBlockorInActive = true;
 							}
 							else
