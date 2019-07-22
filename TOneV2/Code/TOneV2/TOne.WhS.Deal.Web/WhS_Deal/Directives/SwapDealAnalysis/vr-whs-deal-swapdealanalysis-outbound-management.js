@@ -121,7 +121,7 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
             var carrierAccountId = context.settingsAPI.getCarrierAccountId();
             var onOutboundAdded = function (addedOutbound) {
                 lastGroupNumber += 1;
-                addedOutbound.ZoneGroupNumber = lastGroupNumber
+                addedOutbound.ZoneGroupNumber = lastGroupNumber;
                 var obj = { Entity: addedOutbound };
                 $scope.scopeModel.outbounds.push(obj);
                 clearCalclulatedFields();
