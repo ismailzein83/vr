@@ -1664,6 +1664,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    dataItem.fullScreenMode = true;
 	                    ctrl.hasOpenedDataItem = true;
 	                    ctrl.objectType.objectTypeId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
+	                    if (dataItem.viewReadyPromiseDeffered != undefined)
+	                        dataItem.viewReadyPromiseDeffered = undefined;
 	                    ctrl.objectType.dataItem = UtilsService.cloneObject(dataItem);
 	                    VRDataGridService.addObjectType(ctrl.objectType);
 	                    ctrl.parentNames = VRDataGridService.getRegisterdObjectTypes();
