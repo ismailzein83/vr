@@ -1,7 +1,7 @@
 ﻿<vr-row removeline ng-if="ctrl.tabobject.isLoaded &&  !ctrl.vertical" ng-show="ctrl.tabobject.isSelected" tabcontent="true" id="{{ctrl.tabobject.guid}}">
     <vr-columns width="fullrow" tabs="true">
         <vr-validation-group validationcontext="ctrl.tabobject.validationContext">
-            <vr-textbox value="ctrl.tabobject.data[ctrl.datatitlefield]" ng-if="ctrl.datatitlefield" ng-show="false" isrequired="true"></vr-textbox>
+            <vr-textbox value="ctrl.tabobject.tabItem[ctrl.datatitlefield]" ng-if="ctrl.datatitlefield" ng-show="false" isrequired="true"></vr-textbox>
             <div ng-transclude></div>
         </vr-validation-group>
     </vr-columns>

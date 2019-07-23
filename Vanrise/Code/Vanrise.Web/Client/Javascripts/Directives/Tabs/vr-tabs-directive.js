@@ -57,7 +57,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
             ctrl.isForwardPaginationVisible = function () {
                 return ctrl.tabs.length > ctrl.pageSize && ctrl.tabsCountLimit < ctrl.tabs.length;
             };
-
+           
             function addRemainingTabs() {
                 isLock = false;
                 if (tempTabs.length > 0) {
@@ -72,6 +72,10 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                     tab.isLoaded = true;
                     tab.isSelected = true;
                 }
+                if (ctrl.datasource != undefined) {
+                    tab.tabItem = ctrl.datasource[ctrl.tabs.length];
+                }
+
                 ctrl.tabs.push(tab);
             }
 
@@ -103,8 +107,8 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                         ctrl.tabs[i].orderedIndex = newindex;
                     }
                     if (ctrl.datasource && ctrl.datasource.length)
-                        for (var i = 0 ; i < ctrl.datasource.length ; i++) {
-                            ctrl.datasource[i] = ctrl.tabs[i].data;
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            ctrl.datasource[i] = ctrl.tabs[i].tabItem;
                         }
                 }
             };
