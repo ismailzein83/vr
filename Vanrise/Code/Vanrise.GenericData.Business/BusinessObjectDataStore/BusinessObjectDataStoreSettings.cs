@@ -50,5 +50,10 @@ namespace Vanrise.GenericData.Business
         {
             throw new NotImplementedException();
         }
+        
+        public override string GetStorageName(IGetStorageNameContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

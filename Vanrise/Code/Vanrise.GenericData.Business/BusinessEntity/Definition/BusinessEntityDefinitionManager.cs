@@ -85,6 +85,12 @@ namespace Vanrise.GenericData.Business
                     if (filter.ExcludedIds != null && filter.ExcludedIds.Contains(item.BusinessEntityDefinitionId))
                         return false;
 
+                    if (filter.DataRecordTypeIds != null) {
+                        var dataRecordTypeId = this.GetBEDataRecordTypeIdIfGeneric(item.BusinessEntityDefinitionId);
+                        if (!dataRecordTypeId.HasValue || !filter.DataRecordTypeIds.Contains(dataRecordTypeId.Value))
+                            return false;
+                    } 
+
                     if (filter.Filters != null && !CheckIfFilterIsMatch(item, filter.Filters))
                         return false;
                 }

@@ -57,5 +57,10 @@ namespace Vanrise.GenericData.FileDataStorage
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
         }
+
+        public override string GetStorageName(IGetStorageNameContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

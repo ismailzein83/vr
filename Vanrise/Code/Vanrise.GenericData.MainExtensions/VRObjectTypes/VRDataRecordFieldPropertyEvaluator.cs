@@ -16,6 +16,9 @@ namespace Vanrise.GenericData.MainExtensions.VRObjectTypes
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
+            if (context.Object == null)
+                return null;
+
             VRDataRecordObjectType dataRecordObjectType = context.ObjectType as VRDataRecordObjectType;
             if (dataRecordObjectType == null)
                 throw new NullReferenceException("dataRecordObjectType");

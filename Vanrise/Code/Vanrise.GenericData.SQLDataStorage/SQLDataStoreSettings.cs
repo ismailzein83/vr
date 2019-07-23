@@ -104,5 +104,10 @@ namespace Vanrise.GenericData.SQLDataStorage
             SQLRecordStorageDataManager dataManager = new SQLRecordStorageDataManager(sqlDataStoreSettings, sqlDataRecordStorageSettings, context.DataRecordStorage, sqlTempStorageInformation);
             return dataManager.GetStorageRowCount();
         }
+
+        public override string GetStorageName(IGetStorageNameContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

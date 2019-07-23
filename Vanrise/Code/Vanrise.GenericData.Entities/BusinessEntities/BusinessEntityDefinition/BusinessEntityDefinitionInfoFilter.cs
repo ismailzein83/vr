@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Entities
         public List<IBusinessEntityDefinitionFilter> Filters { get; set; }
 
         public List<Guid> ExcludedIds { get; set; }
+
+        public List<Guid> DataRecordTypeIds { get; set; }
     }
 }

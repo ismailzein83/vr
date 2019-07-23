@@ -53,5 +53,10 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages.DataStore
         {
             throw new NotSupportedException("GetStorageRowCount is not supported in VRRestAPIDataStoreSettings.");
         }
+
+        public override string GetStorageName(IGetStorageNameContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

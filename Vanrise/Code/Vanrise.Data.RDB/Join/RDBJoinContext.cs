@@ -9,6 +9,8 @@ namespace Vanrise.Data.RDB
         List<RDBJoin> _joins;
         string _tableAlias;
 
+        public RDBQueryBuilderContext QueryBuilderContext { get { return _queryBuilderContext; } }
+
         internal RDBJoinContext(RDBQueryBuilderContext queryBuilderContext, List<RDBJoin> joins, string tableAlias)
         {
             _queryBuilderContext = queryBuilderContext;
@@ -58,6 +60,11 @@ namespace Vanrise.Data.RDB
         public RDBJoinStatementContext Join(string tableName, string tableAlias)
         {
             return Join(new RDBTableDefinitionQuerySource(tableName), tableAlias);
+        }
+
+        public RDBJoinStatementContext Join(string databaseName, string tableName, string tableAlias)
+        {
+            return Join(new RDBTableDefinitionQuerySource(databaseName, tableName), tableAlias);
         }
 
         public RDBJoinStatementContext Join(IRDBTableQuerySource table, string tableAlias)

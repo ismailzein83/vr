@@ -26,6 +26,14 @@ namespace Vanrise.GenericData.RDBDataStorage
         /// </summary>
         public string ConnectionStringAppSettingName { get; set; }
 
+        public override string GetStorageName(IGetStorageNameContext context)
+        {
+            var rdbDataRecordStorageSettings = context.DataRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.DataRecordStorage.DataRecordStorageId);
+
+            RDBRecordStorageDataManager dataManager = new RDBRecordStorageDataManager(this, rdbDataRecordStorageSettings, context.DataRecordStorage, null);
+            return dataManager.GetDataBaseName();
+        }
+
         public override void CreateTempStorage(ICreateTempStorageContext context)
         {
             var rdbDataStoreSettings = context.DataStore.Settings.CastWithValidate<RDBDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId);
@@ -86,7 +94,7 @@ namespace Vanrise.GenericData.RDBDataStorage
         {
             var rdbDataStoreSettings = context.DataStore.Settings.CastWithValidate<RDBDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId);
             var rdbDataRecordStorageSettings = context.DataRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.DataRecordStorage.DataRecordStorageId);
-            
+
             RDBTempStorageInformation rdbTempStorageInformation = null;
             if (context.TempStorageInformation != null)
                 rdbTempStorageInformation = context.TempStorageInformation.CastWithValidate<RDBTempStorageInformation>("context.TempStorageInformation", context.DataRecordStorage.DataRecordStorageId);

@@ -176,6 +176,12 @@ namespace Vanrise.GenericData.RDBDataStorage
             return new RDBQueryContext(GetDataProvider()).GetDBQueryMaxParameterNumber();
         }
 
+        public string GetDataBaseName()
+        {
+            BaseRDBDataProvider provider = GetDataProvider();
+            return provider.GetDataBaseName(new RDBDataProviderGetDataBaseNameContext());
+        }
+
         public List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context)
         {
             List<DataRecord> dataRecords = new List<DataRecord>();
@@ -340,7 +346,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
             if (rdbRegistrationInfo.IsIdIdentity)
                 insertQuery.AddSelectGeneratedId();
-            
+
             int nbOfAddedColumns = SetRDBWriteQueryColumnsFromDict(insertQuery, false, null, currentStorageFieldValues, createdUserId, modifiedUserId, rdbRegistrationInfo);
 
             if (nbOfAddedColumns == 0)
@@ -870,7 +876,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                                     {
                                         parentRDBRegistrationInfo = null;
                                     }
-                                                                        
+
                                     if (_dataRecordStorageSettings.Filter != null)
                                         rdbTableDefinition.FilterDefinition = new RDBRecordStorageRDBTableFilterDefinition { DataRecordStorageId = _dataRecordStorage.DataRecordStorageId };
 

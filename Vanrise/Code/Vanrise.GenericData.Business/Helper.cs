@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
@@ -18,6 +19,19 @@ namespace Vanrise.GenericData.Business
             if (convertedRecordFilter is ListRecordFilter<T>)
                 ((ListRecordFilter<T>)convertedRecordFilter).CompareOperator = listRecordFilter.CompareOperator;
             return convertedRecordFilter;
+        }
+
+        public static string GetStorageName(Guid dataRecordStorageId)
+        {
+            DataRecordStorageManager drsManager = new DataRecordStorageManager();
+            var dataRecordStorage = drsManager.GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+
+            DataStoreManager dsManager = new DataStoreManager();
+            var dataStore = dsManager.GetDataStore(dataRecordStorage.DataStoreId);
+            dataStore.ThrowIfNull("dataStore", dataRecordStorage.DataStoreId);
+
+            return dataStore.Settings.GetStorageName(new GetStorageNameContext() { DataRecordStorage = dataRecordStorage });
         }
     }
 }

@@ -23,7 +23,15 @@ namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins
 
             codeBuilder.AppendLine("var tableToJoinTableAlias = context.GetTableToJoinTableAlias();");
 
-            codeBuilder.AppendLine($@"var joinStatement = context.RDBJoinContext.Join(RecordStorageRDBAnalyticDataProviderTable.GetRDBTableNameByRecordStorageId(new Guid(""{this.RecordStorageId}"")), tableToJoinTableAlias);");
+            codeBuilder.AppendLine($@"var otherDataBaseName = Vanrise.GenericData.Business.Helper.GetStorageName(new Guid(""{ this.RecordStorageId }""));");
+            codeBuilder.AppendLine("var databaseName = context.RDBJoinContext.QueryBuilderContext.DataProvider.GetDataBaseName(new Vanrise.Data.RDB.RDBDataProviderGetDataBaseNameContext());");
+
+            codeBuilder.AppendLine("Vanrise.Data.RDB.RDBJoinStatementContext joinStatement;");
+
+            codeBuilder.AppendLine("if (string.Compare(databaseName, otherDataBaseName, true) != 0)");
+            codeBuilder.AppendLine($@"joinStatement = context.RDBJoinContext.Join(otherDataBaseName, RecordStorageRDBAnalyticDataProviderTable.GetRDBTableNameByRecordStorageId(new Guid(""{ this.RecordStorageId }"")), tableToJoinTableAlias);");
+            codeBuilder.AppendLine("else");
+            codeBuilder.AppendLine($@"joinStatement = context.RDBJoinContext.Join(RecordStorageRDBAnalyticDataProviderTable.GetRDBTableNameByRecordStorageId(new Guid(""{this.RecordStorageId}"")), tableToJoinTableAlias);");
 
             codeBuilder.AppendLine($"joinStatement.JoinType(Vanrise.Data.RDB.RDBJoinType.{this.JoinType.ToString()});");
 
@@ -56,7 +64,7 @@ namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins
 
     public class RDBDataRecordStorageJoinOtherRecordStorageCondition
     {
-        
+
         /// <summary>
         /// this is optional, it will be the current storage in case it is null
         /// </summary>

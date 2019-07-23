@@ -23,28 +23,59 @@
         function DataRecordObjectType($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var selectorAPI;
+            var dataRecordObjectTypeSelectorAPI;
+            var dataRecordObjectTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var context;
+
+            var beDefinitionSelectorAPI;
+            var beDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var beDefinitionSelectionChangedDeferred;
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onDataRecordObjectTypeSelectorReady = function (api) {
-                    selectorAPI = api;
-                    defineAPI();
+                    dataRecordObjectTypeSelectorAPI = api;
+                    dataRecordObjectTypeSelectorReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onDataRecordObjectTypeSelectionChanged = function (selectedItem) {
-                    if (selectedItem != undefined) {
+                    if (selectedItem == undefined)
+                        return;
+
+                    if (beDefinitionSelectionChangedDeferred != undefined) {
+                        beDefinitionSelectionChangedDeferred.resolve();
+                    }
+                    else {
                         context.canDefineProperties(true);
+
+                        var beDefinitionSelectorPayload = {
+                            filter: {
+                                DataRecordTypeIds: [selectedItem.DataRecordTypeId]
+                            }
+                        };
+
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingbeDefinitionSelector = value;
+                        };
+
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, beDefinitionSelectorAPI, beDefinitionSelectorPayload, setLoader);
                     }
                 };
+
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                    beDefinitionSelectorAPI = api;
+                    beDefinitionSelectorReadyDeferred.resolve();
+                };
+
+                defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var selectorPayload;
+                    var promises = [];
 
                     if (payload != undefined) {
                         context = payload.context;
@@ -53,20 +84,55 @@
                     }
 
                     if (payload != undefined && payload.objectType != undefined) {
-                        selectorPayload = { selectedIds: payload.objectType.RecordTypeId };
+                        beDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                        var loadBEDefinitionSelectorPromise = loadBEDefinitionSelector();
+                        promises.push(loadBEDefinitionSelectorPromise);
                     }
 
-                    var dataRecordObjectTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    var loadDataRecordObjectTypeSelectorPromise = loadDataRecordObjectTypeSelector();
+                    promises.push(loadDataRecordObjectTypeSelectorPromise);
 
-                    VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, dataRecordObjectTypeSelectorLoadDeferred);
+                    function loadDataRecordObjectTypeSelector() {
+                        var dataRecordObjectTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    return dataRecordObjectTypeSelectorLoadDeferred.promise;
+                        dataRecordObjectTypeSelectorReadyDeferred.promise.then(function () {
+                            var selectorPayload;
+
+                            if (payload != undefined && payload.objectType != undefined)
+                                selectorPayload = { selectedIds: payload.objectType.RecordTypeId };
+
+                            VRUIUtilsService.callDirectiveLoad(dataRecordObjectTypeSelectorAPI, selectorPayload, dataRecordObjectTypeSelectorLoadDeferred);
+                        });
+
+                        return dataRecordObjectTypeSelectorLoadDeferred.promise;
+                    }
+
+                    function loadBEDefinitionSelector() {
+                        var loadBEDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        UtilsService.waitMultiplePromises([beDefinitionSelectionChangedDeferred.promise, beDefinitionSelectorReadyDeferred.promise]).then(function () {
+                            beDefinitionSelectionChangedDeferred = undefined;
+
+                            var beDefinitionSelectorPayload = {
+                                filter: {
+                                    DataRecordTypeIds: [dataRecordObjectTypeSelectorAPI.getSelectedIds()]
+                                },
+                                selectedIds: payload.objectType.BusinessEntityDefinitionId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorAPI, beDefinitionSelectorPayload, loadBEDefinitionSelectorPromiseDeferred);
+                        });
+
+                        return loadBEDefinitionSelectorPromiseDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.GenericData.MainExtensions.VRObjectTypes.VRDataRecordObjectType, Vanrise.GenericData.MainExtensions",
-                        RecordTypeId: selectorAPI.getSelectedIds()
+                        RecordTypeId: dataRecordObjectTypeSelectorAPI.getSelectedIds(),
+                        BusinessEntityDefinitionId: beDefinitionSelectorAPI.getSelectedIds()
                     };
                     return data;
                 };
