@@ -20,9 +20,15 @@ namespace Vanrise.DevTools.Business
 
             Guid connectionId = query.ConnectionId;
             SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
-            string connectionString = (settings != null) ? settings.ConnectionString : null;
-            tableDataDataManager.Connection_String = connectionString;
-
+            if (settings != null)
+            {
+                if (settings.ConnectionString != null)
+                    tableDataDataManager.Connection_String = settings.ConnectionString;
+                else if (settings.ConnectionStringAppSettingName != null)
+                    tableDataDataManager.Connection_String = settings.ConnectionStringAppSettingName;
+                else
+                    tableDataDataManager.Connection_String = settings.ConnectionStringName;
+            }
             return tableDataDataManager.GetTableData(query.SchemaName, query.TableName, query.JoinStatement, query.WhereCondition).MapRecords(x=>TableDataDetailsMapper(x),x=> { return true; });
             //Func<GeneratedScriptItemTableRow, bool> filterExpression = (TableData) =>
             //{
@@ -65,8 +71,15 @@ namespace Vanrise.DevTools.Business
 
             Guid connectionId = query.ConnectionId;
             SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
-            string connectionString = (settings != null) ? settings.ConnectionString : null;
-            tableDataDataManager.Connection_String = connectionString;
+            if (settings != null)
+            {
+                if (settings.ConnectionString != null)
+                    tableDataDataManager.Connection_String = settings.ConnectionString;
+                else if (settings.ConnectionStringAppSettingName != null)
+                    tableDataDataManager.Connection_String = settings.ConnectionStringAppSettingName;
+                else
+                    tableDataDataManager.Connection_String = settings.ConnectionStringName;
+            }
 
             List<GeneratedScriptItemTableRow> allTableData = tableDataDataManager.GetTableData(query.SchemaName, query.TableName,query.JoinStatement, query.WhereCondition);
             VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
@@ -87,7 +100,6 @@ namespace Vanrise.DevTools.Business
             }
 
             return selectedTableData;
-
         }
 
 

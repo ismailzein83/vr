@@ -1,15 +1,2 @@
-﻿<vr-columns width="1/2row">
-    <vr-select label="Connection Type" datasource="connectionStringType" selectedvalues="selectedConnectionStringType"
-               datavaluefield="value" datatextfield="description" isrequired="true" onselectionchanged="onConnectionStringTypeSelectionChanged" hideremoveicon>
-</vr-columns>
-
-<vr-columns width="1/2row" ng-show="showConnectionStringName">
-    <vr-textbox value="connectionStringName" label="Connection String Name" isrequired="showConnectionStringName"></vr-textbox>
-</vr-columns>
-<vr-columns width="1/2row" ng-show="showConnectionStringAppSettingName">
-    <vr-textbox value="connectionStringAppSettingName" label="Connection String App Setting Name" isrequired="showConnectionStringAppSettingName"></vr-textbox>
-</vr-columns>
-<vr-columns width="fullrow" ng-show="showConnectionString">
-    <vr-textarea value="connectionString" label="Connection String" isrequired="showConnectionString"></vr-textarea>
-</vr-columns>
+﻿<vr-common-connectionstring on-ready="onConnectionStringReady"></vr-common-connectionstring>
 

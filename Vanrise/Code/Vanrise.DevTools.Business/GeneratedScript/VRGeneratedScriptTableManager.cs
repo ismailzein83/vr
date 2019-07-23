@@ -16,13 +16,17 @@ namespace Vanrise.DevTools.Business
         public IEnumerable<VRGeneratedScriptTableInfo> GetTablesInfo(VRGeneratedScriptTableInfoFilter tableInfoFilter)
         {
             IVRGeneratedScriptTableDataManager tableDataManager = VRDevToolsFactory.GetDataManager<IVRGeneratedScriptTableDataManager>();
-
-
             Guid connectionId = tableInfoFilter.ConnectionId;
             SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
-            string connectionString = (settings != null) ? settings.ConnectionString : null;
-
-            tableDataManager.Connection_String = connectionString;
+            if (settings != null)
+            {
+                if (settings.ConnectionString != null)
+                    tableDataManager.Connection_String = settings.ConnectionString;
+                else if (settings.ConnectionStringAppSettingName != null)
+                    tableDataManager.Connection_String = settings.ConnectionStringAppSettingName;
+                else
+                    tableDataManager.Connection_String = settings.ConnectionStringName;
+            }
 
             List<VRGeneratedScriptTable> allTables = tableDataManager.GetTables(tableInfoFilter.SchemaName);
 

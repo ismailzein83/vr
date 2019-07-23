@@ -19,9 +19,15 @@ namespace Vanrise.DevTools.Business
 
             Guid connectionId = schemaInfoFilter.ConnectionId;
             SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
-            string connectionString = (settings != null) ? settings.ConnectionString : null;
-
-            schemaDataManager.Connection_String = connectionString;
+            if (settings != null)
+            {
+                if (settings.ConnectionString != null)
+                    schemaDataManager.Connection_String = settings.ConnectionString;
+                else if (settings.ConnectionStringAppSettingName != null)
+                    schemaDataManager.Connection_String = settings.ConnectionStringAppSettingName;
+                else
+                    schemaDataManager.Connection_String = settings.ConnectionStringName;
+            }
 
             List<VRGeneratedScriptSchema> allSchemas = schemaDataManager.GetSchemas();
 

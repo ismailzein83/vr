@@ -18,7 +18,16 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                 state = new SqlSourceReaderState();
             SqlSourceBatch sourceBatch = new SqlSourceBatch();
             SQLConnection settings = new VRConnectionManager().GetVRConnection(Setting.VRConnectionId).Settings as SQLConnection;
-            string connectionString = (settings != null) ? settings.ConnectionString : null;
+            string connectionString = null;
+            if (settings != null)
+            {
+                if (settings.ConnectionString != null)
+                    connectionString = settings.ConnectionString;
+                else if (settings.ConnectionStringAppSettingName != null)
+                    connectionString = settings.ConnectionStringAppSettingName;
+                else 
+                    connectionString = settings.ConnectionStringName;
+            }
             if (String.IsNullOrEmpty(connectionString))
                 throw new NullReferenceException(String.Format("connection string is null or empty"));
             using (SqlConnection connection = new SqlConnection(connectionString))

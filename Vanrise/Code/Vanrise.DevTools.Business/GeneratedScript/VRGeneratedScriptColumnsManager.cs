@@ -18,10 +18,16 @@ namespace Vanrise.DevTools.Business
 
             Guid connectionId = columnInfoFilter.ConnectionId;
             SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
-            string connectionString = (settings != null) ? settings.ConnectionString : null;
 
-            columnsDataManager.Connection_String = connectionString;
-
+            if (settings != null)
+            {
+                if (settings.ConnectionString != null)
+                    columnsDataManager.Connection_String = settings.ConnectionString;
+                else if (settings.ConnectionStringAppSettingName != null)
+                    columnsDataManager.Connection_String = settings.ConnectionStringAppSettingName;
+                else
+                    columnsDataManager.Connection_String = settings.ConnectionStringName;
+            }
             List<VRGeneratedScriptColumns> allColumns = columnsDataManager.GetColumns(columnInfoFilter.TableName);
 
             Func<VRGeneratedScriptColumns, bool> filterFunc = (columns) =>
@@ -46,7 +52,7 @@ namespace Vanrise.DevTools.Business
             return extensionConfigurationManager.GetExtensionConfigurations<GeneratedScriptVariableSettingsConfig>(GeneratedScriptVariableSettingsConfig.EXTENSION_TYPE);
         }
 
-        
+
         public List<GeneratedScriptItemValidatorOutput> Validate(GeneratedScriptItemTables generatedScriptItemTables)
         {
 

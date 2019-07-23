@@ -59,6 +59,15 @@ namespace Vanrise.Common.BP.Activities
                     if (ShouldStop(handle))
                         break;
 
+                    string connectionString;
+
+                    if (sqlConnection.ConnectionString != null)
+                        connectionString = sqlConnection.ConnectionString;
+                    else if (sqlConnection.ConnectionStringAppSettingName != null)
+                        connectionString = sqlConnection.ConnectionStringAppSettingName;
+                    else
+                        connectionString = sqlConnection.ConnectionStringName;
+
                     DBReplicationTableDetails dbReplicationTableDetails = new DBReplicationTableDetails()
                     {
                         DBReplicationPreInsert = table.DBReplicationPreInsert,
@@ -68,7 +77,7 @@ namespace Vanrise.Common.BP.Activities
                         TableSchema = table.TableSchema,
                         SourceConnectionStringName = dbConnectionEntity.SourceConnectionStringName,
                         TableName = table.TableName,
-                        TargetConnectionString = sqlConnection.ConnectionString
+                        TargetConnectionString = connectionString
                     };
 
                     List<DBReplicationTableDetails> dbReplicationTableDetailsList = dbReplicationTableDetailsListByTargetLinkedServer.GetOrCreateItem(dbReplicationTableDetails.TargetConnectionString);

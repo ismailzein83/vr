@@ -25,7 +25,13 @@ namespace Vanrise.Common.MainExtensions.SMSSendHandler
         {
 
             SQLConnection settings = new VRConnectionManager().GetVRConnection(VRConnectionId).Settings as SQLConnection;
-            string connectionString = (settings != null) ? settings.ConnectionString : null;
+            string connectionString = null;
+            if (settings.ConnectionString != null)
+                connectionString = settings.ConnectionString;
+            else if (settings.ConnectionStringAppSettingName != null)
+                connectionString = settings.ConnectionStringAppSettingName;
+            else
+                connectionString = settings.ConnectionStringName;
             if (String.IsNullOrEmpty(connectionString))
                 throw new NullReferenceException(String.Format("connection string is null or empty"));
 
