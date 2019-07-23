@@ -211,6 +211,9 @@
     <Content Include="VR_GenericData\Constants\CallRestAPIHTTPMethodEnum.js" />
     <Content Include="VR_GenericData\Constants\CompareToConstantOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateCounterTypeEnum.js" />
+    <Content Include="VR_GenericData\Constants\DateTimeValidationOperatorEnum.js" />
+    <Content Include="VR_GenericData\Constants\DateTimeValidationSeatEnum.js" />
+    <Content Include="VR_GenericData\Constants\DateTimeDefaultValueEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldNumberDataPrecisionEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldTextTextTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\GenericBEDefinitionBulkActionUpdateFieldStateEnum.js" />
@@ -742,7 +745,9 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist-settings.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\Templates\DatetimeFieldTypeSettingTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\Templates\DatetimeFieldTypeViewerEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\vr-genericdata-fieldtype-datetime-settings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\vr-genericdata-fieldtype-datetime-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\Templates\DictionaryFieldTypeRuleFilterEditor.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\Templates\DictionaryFieldTypeTemplate.html" />
