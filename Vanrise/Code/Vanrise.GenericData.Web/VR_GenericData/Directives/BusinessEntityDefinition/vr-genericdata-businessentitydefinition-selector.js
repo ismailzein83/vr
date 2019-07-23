@@ -23,7 +23,7 @@
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
                 $scope.label = ctrl.customlabel;
-                if (ctrl.customlabel == "") {
+                if (ctrl.customlabel == undefined || ctrl.customlabel == "") {
                     $scope.label = "Business Entity Definition";
 
                     if ($attrs.ismultipleselection != undefined) {
