@@ -24,23 +24,16 @@
             this.initializeController = initializeController;
 
             var context;
-            var gridAPI;
+            var fields;
+            var dataRecordFieldTypes = [];
+
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var setFieldsNumber;
-            var dataRecordFieldTypes = [];
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.datasource = [];
+                $scope.scopeModel.fields = [];
 
-                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
-
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
-
-                };
                 $scope.scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady = function (api) {
                     dataRecordTypeFieldsSelectorAPI = api;
                     dataRecordTypeFieldsSelectorReadyPromiseDeferred.resolve();
@@ -51,179 +44,81 @@
                 };
 
                 $scope.scopeModel.onFieldDeselected = function (item) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, item.Name, "entity.FieldPath");
-                    $scope.scopeModel.datasource.splice(index, 1);
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.fields, item.Name, "FieldPath");
+                    $scope.scopeModel.fields.splice(index, 1);
 
-                    if (setFieldsNumber != undefined)
-                        setFieldsNumber($scope.scopeModel.datasource.length);
-                };
-
-                $scope.scopeModel.removeField = function (dataItem) {
-                    var index = $scope.scopeModel.datasource.indexOf(dataItem);
-                    var selectedFieldIndex = UtilsService.getItemIndexByVal($scope.scopeModel.selectedFields, dataItem.entity.FieldPath, "Name");
-                    $scope.scopeModel.selectedFields.splice(selectedFieldIndex, 1);
-                    $scope.scopeModel.datasource.splice(index, 1);
-
-                    if (setFieldsNumber != undefined)
-                        setFieldsNumber($scope.scopeModel.datasource.length);
+                    if (context.setFieldsNumber != undefined)
+                        context.setFieldsNumber($scope.scopeModel.fields.length);
                 };
 
                 $scope.scopeModel.deselectAllFields = function () {
-                    $scope.scopeModel.datasource.length = 0;
+                    $scope.scopeModel.fields.length = 0;
 
-                    if (setFieldsNumber != undefined)
-                        setFieldsNumber(0);
+                    if (context.setFieldsNumber != undefined)
+                        context.setFieldsNumber(0);
                 };
 
-                $scope.scopeModel.isValid = function () {
-                    if ($scope.scopeModel.datasource == undefined || $scope.scopeModel.datasource.length == 0)
-                        return "You Should add at least one Field.";
-                    return null;
-                };
-                $scope.scopeModel.showCollapseButton = function () {
-                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                        if ($scope.scopeModel.datasource[i].isRowExpanded)
-                        return true;
-                    }
-                    return false
-                };
-                $scope.scopeModel.showExpandButton = function () {
-                    if ($scope.scopeModel.datasource.length == 0)
-                        return false;
-                    return !$scope.scopeModel.showCollapseButton();
-                };
-                $scope.scopeModel.collapseRows = function () {
-                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                        gridAPI.collapseRow($scope.scopeModel.datasource[i]);
-                    }
-                };
-                $scope.scopeModel.expandRows = function () {
-                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                        gridAPI.expandRow($scope.scopeModel.datasource[i]);
-                    }
-                };
+                defineAPI();
             }
+
             function prepareAddedField(item) {
+                var dataItem = {};
 
-                var fieldType = context.getFieldType(item.Name);
-                var dataRecordFieldType = UtilsService.getItemByVal(dataRecordFieldTypes, fieldType.ConfigId, "ExtensionConfigurationId");
-
-
-                var dataItem = {
-                    entity: {
+                dataItem.onFieldTypeGenericDesignEditorReady = function (api) {
+                    dataItem.fieldTypeGenereicDesignEditorAPI = api;
+                    var setLoader = function (value) { dataItem.isFieldTypeGenericDesignEditorLoading = value; };
+                    var payload = {
                         FieldPath: item.Name,
-                        FieldTitle: item.Title,
-                        runtimeViewSettingEditor: fieldType.RuntimeViewSettingEditor
-                    },
-                };
-
-                if (dataRecordFieldType != undefined) {
-                    dataItem.fieldTypeRuntimeDirective = dataRecordFieldType.RuntimeEditor;
-                }
-                dataItem.onTextResourceSelectorReady = function (api) {
-                    dataItem.textResourceSeletorAPI = api;
-                    var setLoader = function (value) { dataItem.isFieldTextResourceSelectorLoading = value; };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
-                };
-
-                if (fieldType.RuntimeViewSettingEditor != undefined) {
-                    dataItem.onRuntimeViewSettingsEditorDirectiveReady = function (api) {
-                        dataItem.directiveAPI = api;
-                        var setLoader = function (value) { dataItem.isRuntimeViewSettingsEditorDirectiveLoading = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, {
-                            context: context,
-                            dataRecordTypeId: fieldType.DataRecordTypeId,
-                            isEditorRequired: function () {
-                                return !dataItem.entity.ShowAsLabel;
-                            }
-                        }, setLoader);
+                        FieldTitle: item.Title
                     };
-                }
-
-                dataItem.onFieldTypeRumtimeDirectiveReady = function (api) {
-                    dataItem.fieldTypeRuntimeDirectiveAPI = api;
-                    var setLoader = function (value) { dataItem.isFieldTypeRumtimeDirectiveLoading = value; };
                     var directivePayload = {
-                        fieldTitle: "Default value",
-                        fieldType: fieldType,
-                        fieldName: item.Name,
-                        fieldValue: undefined
+                        context: context,
+                        fieldTypeEntity: payload
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldTypeRuntimeDirectiveAPI, directivePayload, setLoader);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldTypeGenereicDesignEditorAPI, directivePayload, setLoader);
                 };
-                gridAPI.expandRow(dataItem); 
 
-                $scope.scopeModel.datasource.push(dataItem);
+                $scope.scopeModel.fields.push(dataItem);
 
-                if (setFieldsNumber != undefined)
-                    setFieldsNumber($scope.scopeModel.datasource.length);
+                if (context.setFieldsNumber != undefined)
+                    context.setFieldsNumber($scope.scopeModel.fields.length);
             }
-            function getDataRecordFieldTypeConfigs() {
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
-                    dataRecordFieldTypes = [];
-                    for (var i = 0; i < response.length; i++) {
-                        dataRecordFieldTypes.push(response[i]);
-                    }
-                });
-            }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    $scope.scopeModel.datasource = [];
-                    var fields;
-                    var promises = [];
-                    var rootPromiseNode;
+                    var initialPromises = [];
+                    $scope.scopeModel.fields.length = 0;
+
                     if (payload != undefined) {
                         context = payload.context;
                         fields = payload.fields;
-                        setFieldsNumber = payload.setFieldsNumber;
+                    }
 
-                        var selectedIds = [];
-                        if (fields != undefined && fields.length > 0) {
-                            for (var i = 0; i < fields.length; i++) {
-                                selectedIds.push(fields[i].FieldPath);
-                            }
-                        }
-                        if (context != undefined && context.getDataRecordTypeId() != undefined) {
-                            var loadDataRecordTypeFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                            dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
-                                var typeFieldsPayload = {
-                                    dataRecordTypeId: context.getDataRecordTypeId(),
-                                    selectedIds: selectedIds
-                                };
+                    initialPromises.push(loadFieldNameSelector());
+                    var rootPromiseNode = {
+                        promises: initialPromises,
+                        getChildNode: function () {
+                            var childPromises = [];
+                            if (fields != undefined) {
+                                for (var i = 0; i < fields.length; i++) {
+                                    var field = fields[i];
 
-                                VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, typeFieldsPayload, loadDataRecordTypeFieldsSelectorPromiseDeferred);
-                            });
-                            promises.push(loadDataRecordTypeFieldsSelectorPromiseDeferred.promise);
-
-                        }
-                        promises.push(getDataRecordFieldTypeConfigs());
-                        rootPromiseNode = {
-                            promises: promises,
-                            getChildNode: function () {
-                                var childPromises = [];
-                                if (fields != undefined) {
-                                    for (var i = 0; i < fields.length; i++) {
-                                        var field = fields[i];
-
-                                        var fieldObject = {
-                                            payload: field,
-                                            textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                            textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        };
-                                        if ($scope.scopeModel.isLocalizationEnabled)
-                                            childPromises.push(fieldObject.textResourceLoadPromiseDeferred.promise);
-                                        prepareDataItem(fieldObject, childPromises);
-                                    }
+                                    var fieldObject = {
+                                        payload: field,
+                                        genreicDesignEditorReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        genreicDesignEditorLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    };
+                                    childPromises.push(fieldObject.genreicDesignEditorLoadPromiseDeferred.promise);
+                                    prepareDataItem(fieldObject);
                                 }
-                                return { promises: childPromises };
                             }
+                            return { promises: childPromises };
                         }
                     }
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
-
 
                 api.getData = function () {
                     return getFields();
@@ -234,95 +129,65 @@
                 }
             }
 
+            function loadFieldNameSelector() {
+                var loadDataRecordTypeFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
+                    var selectedIds = [];
+
+                    if (fields != undefined && fields.length > 0) {
+                        for (var i = 0; i < fields.length; i++) {
+                            var field = fields[i];
+                            selectedIds.push(field.FieldPath);
+                        }
+                    }
+
+                    var typeFieldsPayload = {
+                        dataRecordTypeId: context.getDataRecordTypeId(),
+                        selectedIds: selectedIds
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, typeFieldsPayload, loadDataRecordTypeFieldsSelectorPromiseDeferred);
+                });
+                return loadDataRecordTypeFieldsSelectorPromiseDeferred.promise;
+            }
+
             function prepareDataItem(field) {
                 var payload = field.payload;
-
-                var fieldType = context.getFieldType(payload.FieldPath);
-                var dataRecordFieldType = UtilsService.getItemByVal(dataRecordFieldTypes, fieldType.ConfigId, "ExtensionConfigurationId");
+                
                 var dataItem = {
-                    entity: {
-                        FieldPath: payload.FieldPath,
-                        FieldTitle: payload.FieldTitle,
-                        IsRequired: payload.IsRequired,
-                        IsDisabled: payload.IsDisabled,
-                        ShowAsLabel: payload.ShowAsLabel,
-                        HideLabel: payload.HideLabel,
-                        ReadOnly: payload.ReadOnly,
-                        FieldWidth: payload.FieldWidth,
-                        runtimeViewSettingEditor: fieldType.RuntimeViewSettingEditor,
-                    },
-                    oldTextResourceKey: payload.TextResourceKey,
-                    oldRuntimeViewSettings: payload.FieldViewSettings,
-                    oldFieldTypeRumtimeSettings: payload.DefaultFieldValue
-
-                };
-                if (dataRecordFieldType != undefined) {
-                    dataItem.fieldTypeRuntimeDirective = dataRecordFieldType.RuntimeEditor;
-                }
-                dataItem.onTextResourceSelectorReady = function (api) {
-                    dataItem.textResourceSeletorAPI = api;
-                    field.textResourceReadyPromiseDeferred.resolve();
+                    id: $scope.scopeModel.fields.length + 1,
                 };
 
+                dataItem.onFieldTypeGenericDesignEditorReady = function (api) {
+                    dataItem.fieldTypeGenereicDesignEditorAPI = api;
+                    field.genreicDesignEditorReadyPromiseDeferred.resolve();
+                };
 
-                field.textResourceReadyPromiseDeferred.promise.then(function () {
-                    var textResourcePayload = { selectedValue: field.payload.TextResourceKey };
-                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, field.textResourceLoadPromiseDeferred);
+                field.genreicDesignEditorReadyPromiseDeferred.promise.then(function () {
+                    var fieldTypeEntityPayload = payload;
+                    if (payload != undefined) {
+                        fieldTypeEntityPayload.oldTextResourceKey = payload.TextResourceKey;
+                        fieldTypeEntityPayload.oldRuntimeViewSettings = payload.FieldViewSettings;
+                        fieldTypeEntityPayload.oldFieldTypeRumtimeSettings = payload.DefaultFieldValue;
+                    }
+
+                    var fieldTypePayload = {
+                        context: context,
+                        fieldTypeEntity: fieldTypeEntityPayload
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.fieldTypeGenereicDesignEditorAPI, fieldTypePayload, field.genreicDesignEditorLoadPromiseDeferred);
                 });
 
-                if (dataRecordFieldType != undefined) {
-                    dataItem.fieldTypeRuntimeDirective = dataRecordFieldType.RuntimeEditor;
-                }
-
-                if (fieldType.RuntimeViewSettingEditor)
-                    dataItem.onRuntimeViewSettingsEditorDirectiveReady = function (api) {
-                        dataItem.directiveAPI = api;
-                        var setLoader = function (value) { dataItem.isRuntimeViewSettingsEditorDirectiveLoading = value; };
-                        var runtimeViewSettingEditorPayload = {
-                            configId: payload.FieldViewSettings != undefined ? payload.FieldViewSettings.ConfigId : undefined,
-                            context: context,
-                            settings: payload.FieldViewSettings,
-                            dataRecordTypeId: fieldType.DataRecordTypeId,
-                            isEditorRequired: function () {
-                                return !dataItem.entity.ShowAsLabel;
-                            }
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, runtimeViewSettingEditorPayload, setLoader);
-                    };
-
-                dataItem.onFieldTypeRumtimeDirectiveReady = function (api) {
-                    dataItem.fieldTypeRuntimeDirectiveAPI = api;
-                    var setLoader = function (value) { dataItem.isFieldTypeRumtimeDirectiveLoading = value; };
-                    var directivePayload = {
-                        fieldTitle: "Default Value",
-                        fieldType: fieldType,
-                        fieldName: payload.FieldPath,
-                        fieldValue: payload.DefaultFieldValue
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldTypeRuntimeDirectiveAPI, directivePayload, setLoader);                };
-
-                $scope.scopeModel.datasource.push(dataItem);
+                $scope.scopeModel.fields.push(dataItem);
             }
 
 
             function getFields() {
                 var fields = [];
-                for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                    var currentField = $scope.scopeModel.datasource[i];
-                    var fieldEntity = currentField.entity;
-                    fields.push({
-                        FieldPath: fieldEntity.FieldPath,
-                        FieldTitle: fieldEntity.FieldTitle,
-                        IsRequired: fieldEntity.IsRequired,
-                        IsDisabled: fieldEntity.IsDisabled,
-                        ShowAsLabel: fieldEntity.ShowAsLabel,
-                        HideLabel: fieldEntity.HideLabel,
-                        ReadOnly: fieldEntity.ReadOnly,
-                        FieldWidth: fieldEntity.FieldWidth,
-                        FieldViewSettings: currentField.directiveAPI != undefined ? currentField.directiveAPI.getData() : currentField.oldRuntimeViewSettings,
-                        TextResourceKey: currentField.textResourceSeletorAPI != undefined ? currentField.textResourceSeletorAPI.getSelectedValues() : currentField.oldTextResourceKey,
-                        DefaultFieldValue: currentField.fieldTypeRuntimeDirectiveAPI != undefined ? currentField.fieldTypeRuntimeDirectiveAPI.getData() : currentField.oldFieldTypeRumtimeSettings,
-                    });
+                for (var i = 0; i < $scope.scopeModel.fields.length; i++) {
+                    var currentField = $scope.scopeModel.fields[i];
+                    var data = currentField.fieldTypeGenereicDesignEditorAPI.getData();
+                    if (data != undefined)
+                        fields.push(data);
                 }
                 return fields;
             }

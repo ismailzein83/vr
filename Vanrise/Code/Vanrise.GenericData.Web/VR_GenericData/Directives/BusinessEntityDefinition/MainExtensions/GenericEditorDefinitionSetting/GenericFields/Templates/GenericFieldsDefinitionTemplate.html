@@ -1,68 +1,20 @@
 ﻿<vr-row>
     <vr-columns width="1/4row">
-        <vr-genericdata-datarecordtypefields-selector selectedvalues="scopeModel.selectedFields" label="Fields"
-                                                      onselectitem="scopeModel.onFieldSelected" ondeselectitem="scopeModel.onFieldDeselected" ondeselectallitems="scopeModel.deselectAllFields"
-                                                      hideselectedvaluessection="true" on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" ismultipleselection isrequired="true"
+        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady"
+                                                      selectedvalues="scopeModel.selectedFields"
+                                                      label="Fields"
+                                                      onselectitem="scopeModel.onFieldSelected"
+                                                      ondeselectitem="scopeModel.onFieldDeselected"
+                                                      ondeselectallitems="scopeModel.deselectAllFields"
+                                                      hideselectedvaluessection="true"
+                                                      ismultipleselection
+                                                      isrequired="true"
                                                       hide-select-all="true"></vr-genericdata-datarecordtypefields-selector>
-
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-columns width="normal" ng-if="scopeModel.showCollapseButton()">
-        <a href="" class="link" ng-click="scopeModel.collapseRows()">Collapse All</a>
-    </vr-columns>
-    <vr-columns width="normal" ng-if="scopeModel.showExpandButton()">
-        <a href="" class="link" ng-click="scopeModel.expandRows()">Expand All</a>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" 
-                         on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeField" hidegridmenu>
-                <vr-datagridcolumn headertext="'Field Name'" disablesorting widthfactor="6">
-                    <vr-label>{{dataItem.entity.FieldPath}}</vr-label>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Field Title'" disablesorting widthfactor="8">
-                    <vr-textbox value="dataItem.entity.FieldTitle" isrequired></vr-textbox>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Field Width'" disablesorting widthfactor="4">
-                    <vr-textbox value="dataItem.entity.FieldWidth" type="number"></vr-textbox>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true" columnindex="'3'">
-                    <vr-span vr-loader="dataItem.isTextResourceSelectorLoading">
-                        <vr-row removeline>
-                            <vr-row removeline>
-                                <vr-row removeline>
-                                    <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
-                                </vr-row>
-                            </vr-row>
-                        </vr-row>
-                    </vr-span>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Required'" disablesorting widthfactor="4">
-                    <vr-switch value="dataItem.entity.IsRequired"></vr-switch>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Disabled'" disablesorting widthfactor="4">
-                    <vr-switch value="dataItem.entity.IsDisabled"></vr-switch>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Show As Label'" disablesorting widthfactor="4">
-                    <vr-switch value="dataItem.entity.ShowAsLabel"></vr-switch>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Hide Label'" disablesorting widthfactor="4">
-                    <vr-switch value="dataItem.entity.HideLabel"></vr-switch>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Read Only'" disablesorting widthfactor="4">
-                    <vr-switch value="dataItem.entity.ReadOnly"></vr-switch>
-                </vr-datagridcolumn>
-
-                <vr-datagridexpandablerow>
-                    <span vr-loader="dataItem.isFieldTypeRumtimeDirectiveLoading" ng-if="dataItem.fieldTypeRuntimeDirective != undefined">
-                        <vr-directivewrapper directive="dataItem.fieldTypeRuntimeDirective" on-ready="dataItem.onFieldTypeRumtimeDirectiveReady" selectionmode="single" normal-col-num="3"></vr-directivewrapper>
-                    </span>
-                    <span vr-loader="dataItem.isRuntimeViewSettingsEditorDirectiveLoading" ng-if="dataItem.entity.runtimeViewSettingEditor !=undefined">
-                        <vr-directivewrapper directive="dataItem.entity.runtimeViewSettingEditor" selectionmode=single  normal-col-num="3" on-ready="dataItem.onRuntimeViewSettingsEditorDirectiveReady"></vr-directivewrapper>
-                    </span>
-                </vr-datagridexpandablerow>
-            </vr-datagrid>
-        </vr-validator>
-    </vr-columns>
+    <span ng-repeat="field in scopeModel.fields" vr-loader="field.isFieldTypeGenericDesignEditorLoading">
+        <vr-genericdata-fieldtype-genericdesigneditor on-ready="field.onFieldTypeGenericDesignEditorReady"></vr-genericdata-fieldtype-genericdesigneditor>
+    </span>
 </vr-row>
+

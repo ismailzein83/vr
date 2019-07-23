@@ -1,19 +1,19 @@
-﻿<!--<vr-columns colnum="4" haschildcolumns>
-    <div style=" border: 1px solid gray;position: relative;">
+﻿<vr-columns colnum="{{scopeModel.fieldWidth}}">
+    <div style=" border: 1px solid #ddd;position: relative; margin-bottom: 10px;">
         <vr-row>
-            <div style="position: absolute;top: -11px;left: 5px;padding-left: 4px;padding-right: 4px;background-color: white;">
+            <div style="position: absolute;top: -11px;left: 5px;padding-left: 4px;padding-right: 4px; background-color: white;">
                 <vr-label largesize> {{scopeModel.fieldPath}}</vr-label>
             </div>
         </vr-row>
         <vr-row>
-            <vr-columns colnum="11">
-                <vr-textbox placeholder="Field Title"></vr-textbox>
-            </vr-columns>
-            <vr-columns colnum="1">
-                <div style="font-size: 25px;position: absolute; top: -6px;right: 20px; cursor: pointer;">
+            <vr-columns colnum="12">
+                <div style="display: inline-block;width:calc(100% - 25px);">
+                    <vr-textbox placeholder="Field Title" value="scopeModel.fieldTitle"></vr-textbox>
+                </div>
+                <div style="display: inline-block;width:25px;height: 25px; font-size: 25px;padding: 2px;position: relative;top: -4.5px;cursor: pointer;">
                     <span class="glyphicon glyphicon-edit" ng-click="scopeModel.openSettingsModal()"></span>
                 </div>
             </vr-columns>
         </vr-row>
     </div>
-</vr-columns>-->
+</vr-columns>

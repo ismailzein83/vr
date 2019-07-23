@@ -1,16 +1,17 @@
-﻿<!--<div vr-modalcontent ng-controller="VR_GenericData_FieldTypeGenericDesignEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="VR_GenericData_FieldTypeGenericDesignEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form validationcontext="fieldTypeGenericDesignEditor">
             <vr-row removeline>
-                <span vr-loader="scopeModel.isFieldTypeRumtimeDirectiveLoading" ng-if="scopeModel.fieldTypeRuntimeDirective != undefined">
-                    <vr-directivewrapper directive="scopeModel.fieldTypeRuntimeDirective" on-ready="scopeModel.onFieldTypeRumtimeDirectiveReady" selectionmode="single" normal-col-num="4"></vr-directivewrapper>
+                <span ng-if="scopeModel.fieldTypeRuntimeDirective != undefined">
+                    <vr-directivewrapper directive="scopeModel.fieldTypeRuntimeDirective"
+                                         on-ready="scopeModel.onFieldTypeRumtimeDirectiveReady"
+                                         selectionmode="single"
+                                         normal-col-num="4"></vr-directivewrapper>
                 </span>
                 <vr-columns colnum="4">
                     <vr-textbox value="scopeModel.fieldWidth" label="Field Width" type="number" decimalprecision="0" minvalue="1" maxvalue="12"></vr-textbox>
                 </vr-columns>
-                <span vr-loader="scopeModel.isLocalizationTextResourceSelectorLoading">
-                    <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="4"></vr-common-vrlocalizationtextresource-selector>
-                </span>
+                <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="4" label="Text Resource"></vr-common-vrlocalizationtextresource-selector>
             </vr-row>
             <vr-row removeline>
                 <vr-columns colnum="2">
@@ -29,25 +30,21 @@
                     <vr-switch value="scopeModel.readOnly" label="Read Only"></vr-switch>
                 </vr-columns>
             </vr-row>
-            <span vr-loader="scopeModel.isRuntimeViewSettingsEditorDirectiveLoading" ng-if="scopeModel.runtimeViewSettingEditor !=undefined">
-                <vr-directivewrapper directive="scopeModel.runtimeViewSettingEditor" selectionmode=single isrequired="true" normal-col-num="6" on-ready="scopeModel.onRuntimeViewSettingsEditorDirectiveReady"></vr-directivewrapper>
+            <span ng-if="scopeModel.runtimeViewSettingEditor !=undefined">
+                <vr-directivewrapper directive="scopeModel.runtimeViewSettingEditor"
+                                     selectionmode=single
+                                     isrequired="true"
+                                     normal-col-num="6"
+                                     on-ready="scopeModel.onRuntimeViewSettingsEditorDirectiveReady"></vr-directivewrapper>
             </span>
         </vr-form>
-    </vr-modalbody>-->
-   <!--<div>
+    </vr-modalbody>
+    <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-           <div transclude-to="buttons">
+            <div transclude-to="buttons">
                 <vr-button type="Save" validationcontext="fieldTypeGenericDesignEditor" data-onclick="scopeModel.saveFieldTypeSettings"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
-             <vr-row>
-                <vr-columns colnum="12" haschildcolumns>
-                    <div style="height:20px">
-                        <div class="vr-editor-popup-save" ng-click="scopeModel.savePopup($event)">✔</div>
-                        <div class="vr-editor-popup-close" ng-click="scopeModel.hidePopup($event)">✘</div>
-                    </div>
-                </vr-columns>
-            </vr-row>
         </vr-actionbar>
-    </div>-->
-<!--</div>-->
+    </div>
+</div>
