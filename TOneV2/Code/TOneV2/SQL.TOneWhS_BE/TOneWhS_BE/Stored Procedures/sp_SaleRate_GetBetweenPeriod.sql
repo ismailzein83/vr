@@ -18,6 +18,7 @@ BEGIN
 		  ,sr.EED
 		  ,sr.change
 		  ,sr.CurrencyID
+		  ,sr.Note
 	  FROM [TOneWhS_BE].SaleRate sr  WITH(NOLOCK)
 	  Where (sr.BED <=@Till_local and (sr.EED is null or sr.EED > @From_local ))
 END
