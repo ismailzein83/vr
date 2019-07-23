@@ -58,7 +58,8 @@ namespace Retail.RA.Entities
     {
         Voice = 0,
         SMS = 1,
-        Transaction = 2,
-        TopUp = 3
+        RecuringCharges = 2,
+        Residual = 3,
+        TopUp = 4
     }
 }

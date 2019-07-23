@@ -1,0 +1,9 @@
+﻿<vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-list maxitemsperrow="1">
+            <vr-listitem ng-show="ctrl.totalTopUpAmount!=undefined"><vr-label> Rule.TotalTopUpAmount = {{ ctrl.totalTopUpAmount }}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.totalTopUpTaxValue!=undefined"><vr-label>{{ ctrl.totalTopUpTaxValue }} = Rule.TotalTopUpTaxValue</vr-label></vr-listitem>
+        </vr-list>
+    </vr-columns>
+</vr-row>

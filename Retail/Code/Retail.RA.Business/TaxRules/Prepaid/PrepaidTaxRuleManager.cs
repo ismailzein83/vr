@@ -11,24 +11,24 @@ namespace Retail.RA.Business
 {
     public class PrepaidTaxRuleManager: GenericRuleManager<PrepaidTaxRule>
     {
-        //public void ApplyTaxRule(IPrepaidTaxRuleContext context, Guid ruleDefinitionId, GenericRuleTarget target)
-        //{
-        //    this.ApplyPrepaidTaxRule(context, () => GetMatchRule(ruleDefinitionId, target), target);
-        //}
+        public void ApplyTaxRule(IPrepaidTaxRuleContext context, Guid ruleDefinitionId, GenericRuleTarget target)
+        {
+            this.ApplyPrepaidTaxRule(context, () => GetMatchRule(ruleDefinitionId, target), target);
+        }
 
-        //public void ApplyTaxRule(IPrepaidTaxRuleContext context, RuleTree ruleTree, GenericRuleTarget target)
-        //{
-        //    this.ApplyPrepaidTaxRule(context, () => ruleTree.GetMatchRule(target) as PrepaidTaxRule, target);
-        //}
+        public void ApplyTaxRule(IPrepaidTaxRuleContext context, RuleTree ruleTree, GenericRuleTarget target)
+        {
+            this.ApplyPrepaidTaxRule(context, () => ruleTree.GetMatchRule(target) as PrepaidTaxRule, target);
+        }
 
-        //void ApplyPrepaidTaxRule(IPrepaidTaxRuleContext context, Func<PrepaidTaxRule> getMatchRule, GenericRuleTarget target)
-        //{
-        //    var prepaidTaxRule = getMatchRule();
-        //    if (prepaidTaxRule != null)
-        //    {
-        //        prepaidTaxRule.Settings.ApplyPrepaidTaxRule(context);
-        //        context.Rule = prepaidTaxRule;
-        //    }
-        //}
+        void ApplyPrepaidTaxRule(IPrepaidTaxRuleContext context, Func<PrepaidTaxRule> getMatchRule, GenericRuleTarget target)
+        {
+            var prepaidTaxRule = getMatchRule();
+            if (prepaidTaxRule != null)
+            {
+                prepaidTaxRule.Settings.ApplyPrepaidTaxRule(context);
+                context.Rule = prepaidTaxRule;
+            }
+        }
     }
 }

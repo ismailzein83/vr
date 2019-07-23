@@ -9,34 +9,34 @@ namespace Retail.RA.Business
 {
     public class PrepaidTaxRuleSettings
     {
-        //public ResidualPrepaidTaxRuleSettings ResidualSettings { get; set; }
-        //public TransactionTaxRuleSettings TopUpSettings { get; set; }
-        //public string GetDescription(IGenericRuleSettingsDescriptionContext context)
-        //{
-        //    StringBuilder description = new StringBuilder();
-        //    if (ResidualSettings != null)
-        //    {}
+        public ResidualPrepaidTaxRuleSettings ResidualSettings { get; set; }
+        public TransactionTaxRuleSettings TopUpSettings { get; set; }
+        public string GetDescription(IGenericRuleSettingsDescriptionContext context)
+        {
+            StringBuilder description = new StringBuilder();
+            if (ResidualSettings != null)
+            { }
 
-        //    if (TopUpSettings != null)
-        //    {
-        //        if (description.Length > 0)
-        //            description.Append(" ");
-        //        description.Append(TopUpSettings.GetDescription(context));
-        //    }
+            if (TopUpSettings != null)
+            {
+                if (description.Length > 0)
+                    description.Append(" ");
+                description.Append(TopUpSettings.GetDescription(context));
+            }
 
-        //    return description.ToString();
-        //}
+            return description.ToString();
+        }
 
-        //public void ApplyPrepaidTaxRule(IPrepaidTaxRuleContext context)
-        //{
-        //    if (ResidualSettings != null && context.ResidualContext != null)
-        //    { }
-       
-        //    if (TopUpSettings != null && context.TopUpContext != null)
-        //    {
-        //        TopUpSettings.ApplyTransactionTaxRule(context.TopUpContext);
-        //    }
-        //}
+        public void ApplyPrepaidTaxRule(IPrepaidTaxRuleContext context)
+        {
+            if (ResidualSettings != null && context.ResidualContext != null)
+            { }
+
+            if (TopUpSettings != null && context.TopUpContext != null)
+            {
+                TopUpSettings.ApplyTransactionTaxRule(context.TopUpContext);
+            }
+        }
     }
 
     public class ResidualPrepaidTaxRuleSettings

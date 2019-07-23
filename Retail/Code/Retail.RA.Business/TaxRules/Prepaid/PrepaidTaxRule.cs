@@ -9,24 +9,14 @@ namespace Retail.RA.Business
 {
     public class PrepaidTaxRule : GenericRule
     {
-        //public PrepaidTaxRuleSettings Settings { get; set; }
-        //public override bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue)
-        //{
-        //    return true;
-        //}
-
-        //public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)
-        //{
-        //    return Settings.GetDescription(context);
-        //}
+        public PrepaidTaxRuleSettings Settings { get; set; }
         public override bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue)
         {
-            throw new NotImplementedException();
+            return true;
         }
-
         public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)
         {
-            throw new NotImplementedException();
+            return Settings.GetDescription(context);
         }
     }
 }

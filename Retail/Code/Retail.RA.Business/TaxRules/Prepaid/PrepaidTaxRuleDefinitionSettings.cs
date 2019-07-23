@@ -13,8 +13,8 @@ namespace Retail.RA.Business
         public override List<string> GetFieldNames()
         {
             List<string> fieldNames = new List<string>();
-            fieldNames.Add("TotalAmount");
-            fieldNames.Add("TotalTaxValue");
+            fieldNames.Add("TotalTopUpAmount");
+            fieldNames.Add("TotalTopUpTaxValue");
             return fieldNames;
         }
     }

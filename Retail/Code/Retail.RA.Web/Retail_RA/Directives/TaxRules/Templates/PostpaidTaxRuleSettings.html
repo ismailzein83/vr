@@ -1,48 +1,63 @@
 ﻿<vr-row>
     <vr-columns width="fullrow" haschildcolumns>
-        <vr-section header="Voice Tax">
+        <vr-section header="Usage Tax">
             <vr-columns width="1/2row">
-                <vr-select datasource="scopeModel.voiceTaxChargeTypes"
+                <vr-select datasource="scopeModel.usagePostpaidTaxRuleTypes"
                            datatextfield="description"
                            datavaluefield="value"
-                           selectedvalues="scopeModel.voiceTaxChargeType"
-                           label="Voice Tax Charge Types">
+                           selectedvalues="scopeModel.usagePostpaidTaxRuleType"
+                           onselectionchanged="scopeModel.onUsageTaxRuleChanged"
+                           isrequired
+                           label="Usage Tax Rule Types">
                 </vr-select>
             </vr-columns>
-            <vr-columns width="1/2row" ng-if="scopeModel.voiceTaxChargeType!=undefined && scopeModel.voiceTaxChargeType.value == 0">
-                <vr-textbox value="scopeModel.voiceTaxPercentage" label="Tax %" type="number" maxvalue="100" isrequired></vr-textbox>
+            <vr-columns width="1/2row" ng-if="scopeModel.usagePostpaidTaxRuleType !=undefined && scopeModel.usagePostpaidTaxRuleType.value == 0">
+                <vr-textbox value="scopeModel.usageTaxPercentage" label="Tax %" type="number" maxvalue="100" isrequired></vr-textbox>
             </vr-columns>
-            <vr-columns width="1/2row" ng-if="scopeModel.voiceTaxChargeType!=undefined && scopeModel.voiceTaxChargeType.value == 1">
-                <vr-textbox value="scopeModel.taxPerMinute" label="Tax Per Minute" type="number" isrequired></vr-textbox>
+            <vr-columns haschildcolumns width="fullrow" ng-if="scopeModel.usagePostpaidTaxRuleType !=undefined && scopeModel.usagePostpaidTaxRuleType.value == 1">
+                <vr-columns width="1/2row">
+                    <vr-select datasource="scopeModel.voiceTaxChargeTypes"
+                               datatextfield="description"
+                               datavaluefield="value"
+                               selectedvalues="scopeModel.voiceTaxChargeType"
+                               onselectionchanged="scopeModel.onVoiceTaxRuleChanged"
+                               isrequired
+                               label="Voice Tax Charge Types">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="1/2row" ng-if="scopeModel.voiceTaxChargeType!=undefined && scopeModel.voiceTaxChargeType.value == 0">
+                    <vr-textbox value="scopeModel.voiceTaxPercentage" label="Tax %" type="number" maxvalue="100" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row" ng-if="scopeModel.voiceTaxChargeType!=undefined && scopeModel.voiceTaxChargeType.value == 1">
+                    <vr-textbox value="scopeModel.taxPerMinute" label="Tax Per Minute" type="number" isrequired></vr-textbox>
+                </vr-columns>
+            </vr-columns>
+            <vr-columns haschildcolumns width="fullrow" ng-if="scopeModel.usagePostpaidTaxRuleType !=undefined && scopeModel.usagePostpaidTaxRuleType.value == 1">
+                <vr-columns width="1/2row">
+                    <vr-select datasource="scopeModel.smsTaxChargeTypes"
+                               datatextfield="description"
+                               datavaluefield="value"
+                               selectedvalues="scopeModel.smsTaxChargeType"
+                               onselectionchanged="scopeModel.onSMSTaxRuleChanged"
+                               isrequired
+                               label="SMS Tax Charge Types">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="1/2row" ng-if="scopeModel.smsTaxChargeType!=undefined && scopeModel.smsTaxChargeType.value == 0">
+                    <vr-textbox value="scopeModel.smsTaxPercentage" label="Tax %" type="number" maxvalue="100" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row" ng-if="scopeModel.smsTaxChargeType!=undefined && scopeModel.smsTaxChargeType.value == 1">
+                    <vr-textbox value="scopeModel.taxPerSMS" label="Tax Per SMS" type="number" isrequired></vr-textbox>
+                </vr-columns>
             </vr-columns>
         </vr-section>
     </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns width="fullrow" haschildcolumns>
-        <vr-section header="SMS Tax">
+        <vr-section header="Non Usage Tax">
             <vr-columns width="1/2row">
-                <vr-select datasource="scopeModel.smsTaxChargeTypes"
-                           datatextfield="description"
-                           datavaluefield="value"
-                           selectedvalues="scopeModel.smsTaxChargeType"
-                           label="SMS Tax Charge Types">
-                </vr-select>
-            </vr-columns>
-            <vr-columns width="1/2row" ng-if="scopeModel.smsTaxChargeType!=undefined && scopeModel.smsTaxChargeType.value == 0">
-                <vr-textbox value="scopeModel.smsTaxPercentage" label="Tax %" type="number" maxvalue="100" isrequired></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/2row" ng-if="scopeModel.smsTaxChargeType!=undefined && scopeModel.smsTaxChargeType.value == 1">
-                <vr-textbox value="scopeModel.taxPerSMS" label="Tax Per SMS" type="number" isrequired></vr-textbox>
-            </vr-columns>
-        </vr-section>
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <vr-columns width="fullrow" haschildcolumns>
-        <vr-section header="Transaction Tax">
-            <vr-columns width="1/2row">
-                <vr-textbox value="scopeModel.transactionTaxPercentage" label="Tax %" type="number" maxvalue="100"></vr-textbox>
+                <vr-textbox value="scopeModel.transactionTaxPercentage" label="Tax %" type="number" maxvalue="100" isrequired></vr-textbox>
             </vr-columns>
         </vr-section>
     </vr-columns>

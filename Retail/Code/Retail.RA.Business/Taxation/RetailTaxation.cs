@@ -140,7 +140,7 @@ namespace Retail.RA.Business
             GetBillingRecordsByDimensionFields(prepaidTransactionAnalyticRecords, allRecords, true, SourceType.TopUp);
 
             List<AnalyticRecord> postpaidTransactionAnalyticRecords = analyticManager.GetAllFilteredRecords(postpaidTransactionAnalyticQuery, out _);
-            GetBillingRecordsByDimensionFields(postpaidTransactionAnalyticRecords, allRecords,  false, SourceType.Transaction);
+            GetBillingRecordsByDimensionFields(postpaidTransactionAnalyticRecords, allRecords,  false, SourceType.TopUp);
 
             foreach (var record in allRecords)
             {
@@ -205,7 +205,7 @@ namespace Retail.RA.Business
                     if (revenue?.Value != null)
                         billingRecord.Revenue = Convert.ToDecimal(revenue.Value ?? 0.0);
 
-                    if (!isPrepaid || (sourceType == SourceType.TopUp || sourceType==SourceType.Transaction))
+                    if (!isPrepaid || (sourceType == SourceType.TopUp || sourceType==SourceType.TopUp))
                     {
                         MeasureValue income;
                         analyticRecord.MeasureValues.TryGetValue("TotalIncome", out income);
