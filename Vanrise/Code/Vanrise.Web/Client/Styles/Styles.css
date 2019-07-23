@@ -3082,7 +3082,8 @@ vr-switch[class*="divDisabled"] .switch {
     overflow: hidden;
 }
 .vr-tabs label > span.vr-header-label:focus {
-    padding:2px;
+    padding: 2px;
+    text-overflow: unset;
 }
 
 .vr-tabs label > span.vr-header-label.with-tab-control {        
