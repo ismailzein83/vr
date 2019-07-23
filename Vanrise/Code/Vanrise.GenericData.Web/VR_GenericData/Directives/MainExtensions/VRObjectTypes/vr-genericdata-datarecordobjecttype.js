@@ -29,7 +29,7 @@
 
             var beDefinitionSelectorAPI;
             var beDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-            var beDefinitionSelectionChangedDeferred;
+            var dataRecordObjectTypeSelectionChangedDeferred;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -43,12 +43,12 @@
                     if (selectedItem == undefined)
                         return;
 
-                    if (beDefinitionSelectionChangedDeferred != undefined) {
-                        beDefinitionSelectionChangedDeferred.resolve();
+                    context.canDefineProperties(true);
+
+                    if (dataRecordObjectTypeSelectionChangedDeferred != undefined) {
+                        dataRecordObjectTypeSelectionChangedDeferred.resolve();
                     }
                     else {
-                        context.canDefineProperties(true);
-
                         var beDefinitionSelectorPayload = {
                             filter: {
                                 DataRecordTypeIds: [selectedItem.DataRecordTypeId]
@@ -84,7 +84,7 @@
                     }
 
                     if (payload != undefined && payload.objectType != undefined) {
-                        beDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                        dataRecordObjectTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
                         var loadBEDefinitionSelectorPromise = loadBEDefinitionSelector();
                         promises.push(loadBEDefinitionSelectorPromise);
                     }
@@ -110,8 +110,8 @@
                     function loadBEDefinitionSelector() {
                         var loadBEDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        UtilsService.waitMultiplePromises([beDefinitionSelectionChangedDeferred.promise, beDefinitionSelectorReadyDeferred.promise]).then(function () {
-                            beDefinitionSelectionChangedDeferred = undefined;
+                        UtilsService.waitMultiplePromises([dataRecordObjectTypeSelectionChangedDeferred.promise, beDefinitionSelectorReadyDeferred.promise]).then(function () {
+                            dataRecordObjectTypeSelectionChangedDeferred = undefined;
 
                             var beDefinitionSelectorPayload = {
                                 filter: {
