@@ -81,8 +81,9 @@ set nocount on;
 ;with cte_data([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('C8E0DA0A-F0AA-4677-8386-2A8D0CA42E0B',null,'Selling Rule','Selling Rule',null			,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["3d638c43-0191-464c-9e6e-caaa5a2e2fdc"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',27,null),
-('DC7132CA-8212-4F48-BC92-2948D601EA19',null,'Account Manager','Account Manager',null,'937F4A80-74FD-43BA-BCC1-F674445170BB',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"0146109f-4e5d-4d66-be2f-15d689c960ee"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',2,null)
+('DC7132CA-8212-4F48-BC92-2948D601EA19',null,'Account Manager','Account Manager',null,'937F4A80-74FD-43BA-BCC1-F674445170BB',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"0146109f-4e5d-4d66-be2f-15d689c960ee"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',2,null),
+('C8E0DA0A-F0AA-4677-8386-2A8D0CA42E0B',null,'Selling Rules','Selling Rules',null,'DBEFC1B4-2538-4A2B-BF47-7CAD1CE31C42',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["3d638c43-0191-464c-9e6e-caaa5a2e2fdc"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',10,null),
+('8C00BBB3-D71F-4A7A-A51B-007FDECD8211',null,'Sale Pricing Rules','Sale Pricing Rules',null																			,'DBEFC1B4-2538-4A2B-BF47-7CAD1CE31C42',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["90a47a0a-3ef9-4941-bc21-ca0be44fc5a4","8a637067-0056-4bae-b4d5-f80f00c0141b","f24cb510-0b65-48c8-a723-1f6ebfeea9e8"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',5,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
@@ -199,4 +200,26 @@ when not matched by target then
 	insert([ID],[TableId],[ItemType],[Name],[Title],[Config])
 	values(s.[ID],s.[TableId],s.[ItemType],s.[Name],s.[Title],s.[Config]);
 ----------------------------------------------------------------------------------------------------
+end
+--[sec].[Module]---------------------------1301 to 1400---------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+
+('DBEFC1B4-2538-4A2B-BF47-7CAD1CE31C42','Sale',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,0,0)
+
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView]))
+merge	[sec].[Module] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic], [RenderedAsView] = s.[RenderedAsView]
+when not matched by target then
+	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView])
+	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[RenderedAsView]);
+--------------------------------------------------------------------------------------------------------------
 end
