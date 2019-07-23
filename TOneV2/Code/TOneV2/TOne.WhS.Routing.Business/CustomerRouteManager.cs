@@ -276,6 +276,7 @@ namespace TOne.WhS.Routing.Business
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CustomerRouteDetail> context)
             {
                 ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+                bool hasViewRatePermission = new CustomerRouteManager().HasViewCustomerRouteRatesPermission();
 
                 IGeneralSettingsManager generalSettingsManager = BusinessManagerFactory.GetManager<IGeneralSettingsManager>();
                 int longPrecision = generalSettingsManager.GetLongPrecisionValue();
@@ -291,7 +292,10 @@ namespace TOne.WhS.Routing.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 45 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zone", Width = 25 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = string.Format("Rate ({0})", systemCurrencySymbol), Width = 10 });
+
+                if (hasViewRatePermission)
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = string.Format("Rate ({0})", systemCurrencySymbol), Width = 10 });
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Linked Rules" });
@@ -311,7 +315,10 @@ namespace TOne.WhS.Routing.Business
                         row.Cells.Add(new ExportExcelCell { Value = record.Code });
                         row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
                         row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
-                        row.Cells.Add(new ExportExcelCell { Value = record.Rate.HasValue ? record.Rate.Value.ToString(rateFormat) : string.Empty });
+
+                        if (hasViewRatePermission)
+                            row.Cells.Add(new ExportExcelCell { Value = record.Rate.HasValue ? record.Rate.Value.ToString(rateFormat) : string.Empty });
+
                         row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.SaleZoneServiceIds.ToList()) });
                         row.Cells.Add(new ExportExcelCell { Value = record.IsBlocked });
                         row.Cells.Add(new ExportExcelCell { Value = record.LinkedRouteRuleCount });
@@ -336,7 +343,11 @@ namespace TOne.WhS.Routing.Business
                                     backups.Append(">");
                                 }
 
-                                string routeOptionsDetails = string.Concat(optionPercentage, customerRouteOptionDetail.SupplierName, " (", customerRouteOptionDetail.SupplierRate.ToString(rateFormat), ")", backups.ToString());
+                                string routeOptionsDetails = string.Concat(optionPercentage, customerRouteOptionDetail.SupplierName);
+                                if (hasViewRatePermission)
+                                    routeOptionsDetails = string.Concat(routeOptionsDetails, " (", customerRouteOptionDetail.SupplierRate.ToString(rateFormat), ")");
+                                routeOptionsDetails = string.Concat(routeOptionsDetails, backups.ToString());
+
                                 row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
                             }
 
