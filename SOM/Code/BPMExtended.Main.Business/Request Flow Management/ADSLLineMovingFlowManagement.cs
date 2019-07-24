@@ -72,7 +72,7 @@ namespace BPMExtended.Main.Business
                 if (entities.Count > 0)
                 {
                     var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
-                    ports = new DslamManager().GetFreeDSLAMPorts(phoneNumber.ToString());
+                    ports = new InventoryManager().GetFreeDSLAMPorts(phoneNumber.ToString());
                 }
             }
 

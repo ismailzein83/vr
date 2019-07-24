@@ -383,6 +383,12 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("BDFC6820-9932-4FE1-A628-D3537EFF100E")]
         LastMileChange = 44,
 
+        [Description("ADSL Take Over")]
+        [EntitySchemaName("StADSLContractTakeOver")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("1E0E1552-A872-4C70-8EC5-49E606FA09CD")]
+        ADSLTakeOver = 45,
+
     }
     public enum ContractStatus
     {

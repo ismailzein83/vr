@@ -203,6 +203,29 @@ namespace BPMExtended.Main.Business
             return "Test900";
         }
 
+        public List<DSLAMPortInfo> GetFreeDSLAMPorts(string phoneNumber)
+        {
+            TechnicalDetails item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM.ST/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
+            }
+
+            string switchId = item.SwitchId;
+            List<PortInfo> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM.ST/Inventory/GetDSLAMPorts?switchId={0}", switchId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new DSLAMPortInfo
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+            //return InventoryMockDataGenerator.GetDSLAMFreePorts();
+        }
+
 
         public string GetSubTypeId(string phoneNumber)
         {

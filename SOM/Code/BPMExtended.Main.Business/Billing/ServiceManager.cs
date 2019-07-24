@@ -170,11 +170,20 @@ namespace BPMExtended.Main.Business
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
             var businessEntityManager = new BusinessEntityManager();
-            Packages packages = businessEntityManager.GetServicePackagesEntity();
 
+            Packages packages = businessEntityManager.GetServicePackagesEntity();
             var excludedPackages = new List<string>();
-            excludedPackages.Add(packages.Core);
-            excludedPackages.Add(packages.Telephony);
+
+            if (lob == "Line Subscription")
+            {
+                excludedPackages.Add(packages.Core);
+                excludedPackages.Add(packages.Telephony);
+            }
+            if (lob == "ADSL Subscription")
+            {
+                excludedPackages.Add(packages.XDSL);
+            }
+            
             CRMCustomerManager manager = new CRMCustomerManager();
             bool isForeigner = false;
 

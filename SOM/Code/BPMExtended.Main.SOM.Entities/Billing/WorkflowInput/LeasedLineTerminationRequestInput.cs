@@ -10,6 +10,7 @@ namespace BPMExtended.Main.SOMAPI
     public class LeasedLineTerminationRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public string LinePathId{ get; set; }
 
     }
 }

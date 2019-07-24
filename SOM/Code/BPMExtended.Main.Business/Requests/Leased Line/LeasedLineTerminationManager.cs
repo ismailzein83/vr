@@ -21,6 +21,13 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region public
+
+        public string GetConnectionType(Guid requestId)
+        {
+            Random random = new Random();
+            return random.Next(10) > 5 ? "Fiber" : "Copper";
+        }
+
         public void PostLeasedLineTerminationToOM(Guid requestId)
         {
             EntitySchemaQuery esq;
@@ -29,12 +36,7 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLineTermination");
             esq.AddColumn("StContractId");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
-
+            esq.AddColumn("StLinePathId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -43,9 +45,7 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractId");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var pathId = entities[0].GetColumnValue("StLinePathId");
 
                 SOMRequestInput<LeasedLineTerminationRequestInput> somRequestInput = new SOMRequestInput<LeasedLineTerminationRequestInput>
                 {
@@ -54,12 +54,10 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            // ContractId = contractId.ToString(),
-                            // ContactId = contactId.ToString(),
-                            // AccountId = null,
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            // CustomerId = customerId.ToString()
-                        }
+                        },
+                         LinePathId= pathId.ToString()
                     }
 
                 };

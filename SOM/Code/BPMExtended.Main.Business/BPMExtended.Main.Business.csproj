@@ -99,6 +99,7 @@
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="MainProxy.cs" />
+    <Compile Include="Request Flow Management\ADSLContractTakeOverFlowManagement.cs" />
     <Compile Include="Request Flow Management\LastMileChangeFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateCustomerCategoryFlowManagement.cs" />
     <Compile Include="Request Flow Management\AdministrativeComplaintFlowManagement.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Requests\ADSL\ADSLLineTerminationManager.cs" />
     <Compile Include="Requests\ADSL\ADSLPrintConfigurationManager.cs" />
     <Compile Include="Requests\ADSL\ADSLSubscriptionManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLTakeOverManager.cs" />
     <Compile Include="Requests\GSHDSL\GSHDSLSubscriptionManager.cs" />
     <Compile Include="Requests\GSHDSL\GSHDSLTerminationManager.cs" />
     <Compile Include="Requests\Leased Line\ChangeLeasedLineSpeedManager.cs" />

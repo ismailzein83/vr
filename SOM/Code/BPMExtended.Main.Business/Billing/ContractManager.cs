@@ -76,6 +76,24 @@ namespace BPMExtended.Main.Business
             return telephonyContractDetails;
 
         }
+
+        public List<ContractDetail> GetxDSLContracts(string customerId) // MYA: Uncomment and handle object client side
+        {
+            var xDSLontractDetails = new List<ContractDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                var items = client.Get<List<CustomerContract>>(String.Format("api/SOM.ST/Billing/GetCustomerDSLContracts?CustomerId={0}", customerId));
+                foreach (var item in items)
+                {
+                    // var telephonyContractDetailItem = TelephonyContractToDetail(item);
+                    var xDSLContractDetailItem = xDSLCustomerContractToDetail(item);
+                    xDSLontractDetails.Add(xDSLContractDetailItem);
+                }
+            }
+            return xDSLontractDetails;
+
+        }
+
         public List<TelephonyContractDetail> GetTelephonyContractsByNumber(string phoneNumber)
         {
             return RatePlanMockDataGenerator.GetTelephonyContractsByNumber(phoneNumber);
@@ -709,6 +727,26 @@ namespace BPMExtended.Main.Business
                 ContractId = contract.Id,
                 Status = GetContractStatusByEnumValue(contract.Status.ToString()), //Check if API and Our conventions are the same
                 PhoneNumber = contract.PhoneNumber,
+                ActivationDate = contract.ActivationDate,
+                //ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
+                //ContractStatusId = GetContractStatusByEnumValue(contract.Status.ToString())
+            };
+        }
+
+        private ContractDetail xDSLCustomerContractToDetail(CustomerContract contract)
+        {
+            int stat = 0;
+            int.TryParse(contract.Status.ToString(), out stat);
+
+            var contractAddress = new Address()
+            {
+                Street = contract.Street,
+                City = contract.City
+            };
+            return new ContractDetail
+            {
+                ContractId = contract.Id,
+                Status = GetContractStatusByEnumValue(contract.Status.ToString()), //Check if API and Our conventions are the same
                 ActivationDate = contract.ActivationDate,
                 //ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
                 //ContractStatusId = GetContractStatusByEnumValue(contract.Status.ToString())

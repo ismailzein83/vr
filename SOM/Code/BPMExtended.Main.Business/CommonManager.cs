@@ -92,6 +92,34 @@ namespace BPMExtended.Main.Business
             return "";
         }
 
+        public bool IsCustomerSyrian(string contactId, string accountId)
+        {
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
+            esq.AddColumn("Id");
+            var c = esq.AddColumn("Country");
+            var country = esq.AddColumn("Country.Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var countryId = entities[0].GetColumnValue("CountryId");
+
+
+                if (countryId.ToString().ToLower() == "F9EB7E62-DADB-4D0C-BC2C-38A9A33995B5".ToLower()) return true;
+            }
+
+            return false;
+        }
+
         public AddressData GetAddressData(string city , string province , string area, string town)
         {
             Guid cityId=Guid.Empty, provinceId= Guid.Empty, areaId= Guid.Empty, townId= Guid.Empty;
@@ -290,6 +318,83 @@ namespace BPMExtended.Main.Business
 
             }
 
+        }
+
+        public List<Contact> GetActiveContacts()
+        {
+            using (SOMClient client = new SOMClient())
+            {
+                return client.Get<List<Contact>>(String.Format("api/SOM.ST/Billing/GetActiveContacts"));
+            }
+        }
+
+        public List<Account> GetActiveAccounts()
+        {
+            using (SOMClient client = new SOMClient())
+            {
+                return client.Get<List<Account>>(String.Format("api/SOM.ST/Billing/GetActiveAccounts"));
+            }
+
+        }
+
+        public List<Contact> GetValidContacts()
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter, esqSecondFilter;
+            List<Contact> contacts = new List<Contact>();
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
+            esq.AddColumn("Name");
+            esq.AddColumn("StBlackList");
+            esq.AddColumn("StCustomerId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StBlackList", false);
+            esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerType.Id", "6C906EA6-B0FC-478F-A463-D94CB7E54F6D");
+            esq.Filters.Add(esqFirstFilter);
+            esq.Filters.Add(esqSecondFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                var customerId = entity.GetColumnValue("StCustomerId");
+                var name = entity.GetColumnValue("Name");
+
+                contacts.Add(new Contact()
+                {
+                    CustomerId = customerId.ToString(),
+                    CustomerName = name.ToString()
+                });
+            }
+            return contacts;
+        }
+
+        public List<Account> GetValidAccounts()
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            List<Account> accounts = new List<Account>();
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Account");
+            esq.AddColumn("Name");
+            esq.AddColumn("StBlackList");
+            esq.AddColumn("StCustomerId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StBlackList", false);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                var customerId = entity.GetColumnValue("StCustomerId");
+                var name = entity.GetColumnValue("Name");
+
+                accounts.Add(new Account()
+                {
+                    CustomerId = customerId.ToString(),
+                    //CustomerName = name.ToString()
+                });
+            }
+            return accounts;
         }
 
     }
