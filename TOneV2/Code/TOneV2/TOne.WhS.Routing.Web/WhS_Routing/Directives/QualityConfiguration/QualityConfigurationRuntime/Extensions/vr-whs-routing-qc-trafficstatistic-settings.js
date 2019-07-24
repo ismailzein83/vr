@@ -62,6 +62,9 @@
                 var api = {};
 
                 api.load = function (payload) {
+
+                    $scope.scopeModel.qualityConfigurationFields.length = 0;
+
                     var promises = [];
 
                     var qualityConfigurationSettings;
@@ -104,6 +107,10 @@
                     }
                     function loadTimePeriodDirective() {
                         var timeSettingsDirective = trafficStatisticQCDefinitionData.TimeSettingsDirective;
+                        if (timeSettingsDirective != $scope.scopeModel.timeSettingsDirective && (timeSettingsDirective != undefined || $scope.scopeModel.timeSettingsDirective != 'vr-common-timeperiod')) {
+                            timePeriodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                        }
+
                         $scope.scopeModel.timeSettingsDirective = timeSettingsDirective != undefined ? timeSettingsDirective : "vr-common-timeperiod";
 
                         var loadTimePeriodPromiseDeferred = UtilsService.createPromiseDeferred();

@@ -12,9 +12,11 @@
 
         var qualityConfigurationDefinitionSelectorAPI;
         var qualityConfigurationDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var qualityConfigurationDefinitionSelectionChangedDeferred;
 
         var qualityConfigurationSettingsDirectiveAPI;
         var qualityConfigurationSettingsDirectiveReadyDeferred;
+
 
         loadParameters();
         defineScope();
@@ -40,18 +42,37 @@
 
             $scope.scopeModel.onQualityConfigurationSettingsDirectiveReady = function (api) {
                 qualityConfigurationSettingsDirectiveAPI = api;
+                qualityConfigurationSettingsDirectiveReadyDeferred.resolve();
+            };
 
-                var qualityConfigurationSettingsDirectivePayload;
-                if ($scope.scopeModel.selectedQualityConfigurationDefinition != undefined) {
-                    qualityConfigurationSettingsDirectivePayload = {
-                        qualityConfigurationDefinitionId: $scope.scopeModel.selectedQualityConfigurationDefinition.QualityConfigurationDefinitionId
-                    };
+            $scope.scopeModel.onQualityConfigurationDefinitionSelectionChanged = function (selectedQualityConfigurationDefinition) {
+                if (selectedQualityConfigurationDefinition == undefined) {
+                    return;
                 }
 
-                var setLoader = function (value) {
-                    $scope.scopeModel.isQualityConfigurationSettingsDirectiveLoading = value;
-                };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, qualityConfigurationSettingsDirectiveAPI, qualityConfigurationSettingsDirectivePayload, setLoader, qualityConfigurationSettingsDirectiveReadyDeferred);
+                if (qualityConfigurationDefinitionSelectionChangedDeferred != undefined) {
+                    qualityConfigurationDefinitionSelectionChangedDeferred.resolve();
+                }
+                else {
+                    if ($scope.scopeModel.selectedQualityConfigurationDefinition == undefined || selectedQualityConfigurationDefinition.RuntimeEditor != $scope.scopeModel.selectedQualityConfigurationDefinition.RuntimeEditor) {
+                        qualityConfigurationSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    }
+
+                    qualityConfigurationSettingsDirectiveReadyDeferred.promise.then(function () {
+
+                        var qualityConfigurationSettingsDirectivePayload;
+                        if (selectedQualityConfigurationDefinition != undefined) {
+                            qualityConfigurationSettingsDirectivePayload = {
+                                qualityConfigurationDefinitionId: selectedQualityConfigurationDefinition.QualityConfigurationDefinitionId
+                            };
+                        }
+
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isQualityConfigurationSettingsDirectiveLoading = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, qualityConfigurationSettingsDirectiveAPI, qualityConfigurationSettingsDirectivePayload, setLoader);
+                    });
+                }
             };
 
             $scope.scopeModel.validateQualityConfigurationName = function () {
@@ -123,12 +144,13 @@
                 if (!isEditMode)
                     return;
 
+                qualityConfigurationDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
                 qualityConfigurationSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
                 var qualityConfigurationSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                qualityConfigurationSettingsDirectiveReadyDeferred.promise.then(function () {
-                    qualityConfigurationSettingsDirectiveReadyDeferred = undefined;
+                UtilsService.waitMultiplePromises([qualityConfigurationSettingsDirectiveReadyDeferred.promise, qualityConfigurationDefinitionSelectionChangedDeferred.promise]).then(function () {
+                    qualityConfigurationDefinitionSelectionChangedDeferred = undefined;
 
                     var qualityConfigurationSettingsDirectivePayload = { qualityConfigurationDefinitionId: qualityConfigurationEntity.QualityConfigurationDefinitionId };
                     if (qualityConfigurationEntity != undefined && qualityConfigurationEntity.Settings != undefined) {
