@@ -18,6 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool ProductRoute { get; set; }
         public bool Traffic { get; set; }
         public bool Billing { get; set; }
-        public bool DisplaySupplierAmounts { get; set; }
+        public bool HideSupplierAmounts { get; set; }
     }
 }

@@ -587,7 +587,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
             accountManagerSettings.ThrowIfNull("accountManagerSettings");
-            return accountManagerSettings.CarrierAccountFiltering.DisplaySupplierAmounts;
+            return accountManagerSettings.CarrierAccountFiltering.HideSupplierAmounts;
         }
 
         public bool GetGenerateTrafficStatsByCode()
