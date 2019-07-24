@@ -27,6 +27,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         Hour = 5
     }
 
+    public enum FieldDateTimeDefaultValue { Today = 0, Now = 1 }
+
+    public enum FieldDateTimeValidationTarget { Today = 0, Now = 1, SpecificField = 2 }
+
+    public enum FieldDateTimeValidationOperator { Equals = 0, NotEquals = 1, Greater = 2, GreaterOrEquals = 3, Less = 4, LessOrEquals = 5, }
+
     public class FieldDateTimeType : DataRecordFieldType
     {
         public override Guid ConfigId { get { return new Guid("b8712417-83ab-4d4b-9ee1-109d20ceb909"); } }
@@ -34,6 +40,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-datetime-runtimeeditor"; } }
 
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-datetime-viewereditor"; } }
+
+        public override string RuntimeViewSettingEditor { get { return "vr-genericdata-fieldtype-datetime-settings"; } }
+
+        public override bool ShowDefaultValue { get { return false; } }
 
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
@@ -82,7 +92,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return _runtimeType;
         }
-        
+
         Type _nonNullableRuntimeType;
         public override Type GetNonNullableRuntimeType()
         {
@@ -152,7 +162,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             int valueMinute;
             int valueSecond;
             int valueMillisecond;
-                    
+
             switch (dateTimeRecordFilter.ComparisonPart)
             {
                 #region DateTime
@@ -233,9 +243,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     DateTime hourNowDateTime = DateTime.Now;
 
 
-                    
+
                     ParseTimeValue(fieldValue, out valueHour, out valueMinute, out valueSecond, out valueMillisecond);
-                                        
+
                     valueAsDateTime = new DateTime(hourNowDateTime.Year, hourNowDateTime.Month, hourNowDateTime.Day, valueHour, 0, 0, 0);
 
                     Time hourFilterValueAsTime = dateTimeRecordFilter.Value as Time;
@@ -424,7 +434,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetRuntimeTypeDescription()
         {
-            switch(this.DataType)
+            switch (this.DataType)
             {
                 case FieldDateTimeDataType.Date: return "Date";
                 case FieldDateTimeDataType.DateTime: return "DateTime";
@@ -465,7 +475,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             {
 
                 Time time = fieldValue as Time;
-                if(time == null)
+                if (time == null)
                 {
                     int valueHour;
                     int valueMinute;
@@ -542,7 +552,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
-            switch(this.DataType)
+            switch (this.DataType)
             {
                 case FieldDateTimeDataType.Date:
                 case FieldDateTimeDataType.DateTime:
@@ -558,10 +568,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     if (valueAsTime != null)
                         return valueAsTime;
                     else
-                        return new Time(originalValue.ToString());                        
+                        return new Time(originalValue.ToString());
                 default: throw new NotSupportedException(String.Format("DataType '{0}'", this.DataType.ToString()));
             }
-            
+
         }
 
         public override void GetValueByDescription(IGetValueByDescriptionContext context)
@@ -666,6 +676,22 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
 
         #endregion
+    }
+
+    public class DateTimeRuntimeViewSetting : FieldTypeRuntimeViewSettings
+    {
+        public FieldDateTimeDefaultValue DefaultValue { get; set; }
+
+        public List<FieldDateTimeValidation> Validations { get; set; }
+    }
+
+    public class FieldDateTimeValidation
+    {
+        public FieldDateTimeValidationTarget ValidationTarget { get; set; }
+
+        public FieldDateTimeValidationOperator ValidationOperator { get; set; }
+
+        public string FieldName { get; set; }
     }
 
     public class FieldDateTimeDataTypeInfoAttribute : Attribute
