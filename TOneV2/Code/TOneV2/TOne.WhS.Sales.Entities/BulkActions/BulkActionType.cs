@@ -102,7 +102,11 @@ namespace TOne.WhS.Sales.Entities
 		DateTime? GetCountryBED(int countryId);
 
 		DateTime? GetCountryEED(int countryId);
-	}
+
+        ZoneItem GetContextZoneItem(long zoneId);
+
+        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+    }
 
 	public interface IPreApplyBulkActionToZoneItemContext
 	{

@@ -277,7 +277,6 @@
     <Compile Include="SalePriceList\SalePriceListDetail.cs" />
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />
     <Compile Include="SaleZone\SaleZoneGroupConfig.cs" />
-    <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
     <Compile Include="SaleCode\Query\BaseSaleCodeQueryHandler.cs" />
     <Compile Include="SaleZone\SaleZoneQuery.cs" />
     <Compile Include="SellingNumberPlan\SellingNumberPlanDetail.cs" />

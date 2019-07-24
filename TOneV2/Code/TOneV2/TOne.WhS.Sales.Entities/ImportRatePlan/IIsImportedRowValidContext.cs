@@ -35,13 +35,13 @@ namespace TOne.WhS.Sales.Entities
         int LongPrecision { get; set; }
     }
 
-    public interface IIsImportedTargetMatchRowValidContext
+    public interface IIsImportedCustomerTargetMatchRowValidContext
     {
         SalePriceListOwnerType OwnerType { get; }
 
         int OwnerId { get; }
 
-        ImportedRow ImportedRow { get; }
+        CustomerTargetMatchImportedRow ImportedRow { get; }
 
         ZoneChanges ZoneDraft { get; }
 
@@ -51,7 +51,7 @@ namespace TOne.WhS.Sales.Entities
 
         IEnumerable<int> ClosedCountryIds { get; }
 
-        ImportedRowStatus Status { set; }
+        CustomerTargetMatchImportedRowStatus Status { set; }
 
         string DateTimeFormat { get; }
 
@@ -59,14 +59,14 @@ namespace TOne.WhS.Sales.Entities
 
         string ErrorMessage { set; }
 
-        Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+        //Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
 
         RateCalculationMethod RateCalculationMethod { get; set; }
-
-        IEnumerable<CostCalculationMethod> CostCalculationMethods { get; set; }
-
-        ZoneItem ZoneItem { get; set; }
-
+        
         int LongPrecision { get; set; }
+
+        Func<long, ZoneItem> GetZoneItem { get; set; }
+
+        Func<Guid, int?> GetCostCalculationMethodIndex { get; set; }
     }
 }

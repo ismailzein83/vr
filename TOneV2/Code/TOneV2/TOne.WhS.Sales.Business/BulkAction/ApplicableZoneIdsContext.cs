@@ -26,6 +26,10 @@ namespace TOne.WhS.Sales.Business
         public Changes DraftData { get; set; }
         public BulkActionType BulkAction { get; set; }
 
+        public List<CostCalculationMethod> CostCalculationMethods { get; set; }
+
+        public Func<Dictionary<long, ZoneItem>> GetContextZoneItems { get; set; }
+
         public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId)
         {
             return _getSellingProductZoneRate(sellingProductId, zoneId);

@@ -62,7 +62,7 @@ namespace TOne.WhS.Sales.Business
                 if (input.BulkActionFilter == null)
                     throw new Vanrise.Entities.DataIntegrityValidationException("BulkActionZoneFilter of BulkAction was not found");
 
-                Changes draft = new RatePlanDraftManager().GetDraft(input.OwnerType, input.OwnerId);
+                //Changes draft = new RatePlanDraftManager().GetDraft(input.OwnerType, input.OwnerId);
                 IEnumerable<long> saleZoneIds = saleZones.MapRecords(x => x.SaleZoneId);
 
                 int sellingProductId;
@@ -74,13 +74,74 @@ namespace TOne.WhS.Sales.Business
                 Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate;
                 UtilitiesManager.SetBulkActionContextCurrentRateHelpers(currentRateReader, out currentRateLocator, out getSellingProductZoneRate, out getCustomerZoneRate);
 
+                #region set draft data
+                Changes draft;
+                IEnumerable<int> newCountryIds;
+                IEnumerable<int> changedCountryIds;
+                Dictionary<long, ZoneChanges> zoneDraftsByZoneId;
+                SetDraftVariables(SalePriceListOwnerType.Customer, input.OwnerId, out draft, out zoneDraftsByZoneId, out newCountryIds, out changedCountryIds);
+                #endregion
+
+                int normalPrecisionValue, longPrecisionValue;
+                SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
+
+                #region prepare rate manager
+                var rateManager = new ZoneRateManager(SalePriceListOwnerType.Customer, input.OwnerId, sellingProductId, DateTime.Now, draft, input.CurrencyId, longPrecisionValue, currentRateLocator);
+                #endregion
+
+                #region prepare routing product manager
+                Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
+                SaleEntityRoutingProductReadByRateBED zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { input.OwnerId }, zoneEffectiveDatesByZoneId);
+                SaleEntityZoneRoutingProductLocator zoneRPLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReader);
+                var routingProductManager = new ZoneRPManager(SalePriceListOwnerType.Customer, input.OwnerId, draft, zoneRPLocator, zoneRoutingProductReader);
+                #endregion
+
+                var saleRateManager = new SaleRateManager();
+
+
+                Dictionary<long, ZoneItem> contextZoneItemsByZoneId = null;
+
+                Func<Dictionary<long, ZoneItem>> getContextZoneItems = () =>
+                {
+                    if (contextZoneItemsByZoneId == null)
+                    {
+                        var setContextZoneItemsInput = new ContextZoneItemInput()
+                        {
+                            OwnerType = input.OwnerType,
+                            OwnerId = input.OwnerId,
+                            SaleZones = saleZones,
+                            Draft = draft,
+                            ZoneDraftsByZoneId = zoneDraftsByZoneId,
+                            SellingProductId = sellingProductId,
+                            NewCountryIds = newCountryIds,
+                            ChangedCountryIds = changedCountryIds,
+                            EffectiveOn = input.EffectiveOn,
+                            CountryBEDsByCountryId = countryBEDsByCountryId,
+                            RoutingDatabaseId = input.RoutingDatabaseId,
+                            PolicyConfigId = input.PolicyConfigId,
+                            NumberOfOptions = input.NumberOfOptions,
+                            CostCalculationMethods = input.CostCalculationMethods,
+                            CurrencyId = input.CurrencyId,
+                            LongPrecisionValue = longPrecisionValue,
+                            NormalPrecisionValue = normalPrecisionValue,
+                            RateManager = rateManager,
+                            RoutingProductManager = routingProductManager,
+                            SaleRateManager = saleRateManager
+                        };
+                        SetContextZoneItems(ref contextZoneItemsByZoneId, setContextZoneItemsInput);
+                    }
+                    return contextZoneItemsByZoneId;
+                };
+
                 var applicableZoneIdsContext = new ApplicableZoneIdsContext(getSellingProductZoneRate, getCustomerZoneRate)
                 {
                     OwnerType = input.OwnerType,
                     OwnerId = input.OwnerId,
                     BulkAction = input.BulkAction,
                     DraftData = draft,
-                    SaleZones = saleZones
+                    SaleZones = saleZones,
+                    CostCalculationMethods = input.CostCalculationMethods,
+                    GetContextZoneItems = getContextZoneItems
                 };
 
                 applicableZoneIds = input.BulkActionFilter.GetApplicableZoneIds(applicableZoneIdsContext);
@@ -536,7 +597,7 @@ namespace TOne.WhS.Sales.Business
             if (saleZones == null)
                 return null;
 
-            Changes draft = new RatePlanDraftManager().GetDraft(input.OwnerType, input.OwnerId);
+            //Changes draft = new RatePlanDraftManager().GetDraft(input.OwnerType, input.OwnerId);
 
             int sellingProductId;
             Dictionary<int, DateTime> countryBEDsByCountryId;
@@ -546,6 +607,64 @@ namespace TOne.WhS.Sales.Business
             Func<int, long, SaleEntityZoneRate> getSellingProductZoneRate;
             Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate;
             UtilitiesManager.SetBulkActionContextCurrentRateHelpers(currentRateReader, out currentRateLocator, out getSellingProductZoneRate, out getCustomerZoneRate);
+
+            #region set draft data
+            Changes draft;
+            IEnumerable<int> newCountryIds;
+            IEnumerable<int> changedCountryIds;
+            Dictionary<long, ZoneChanges> zoneDraftsByZoneId;
+            SetDraftVariables(SalePriceListOwnerType.Customer, input.OwnerId, out draft, out zoneDraftsByZoneId, out newCountryIds, out changedCountryIds);
+            #endregion
+
+            int normalPrecisionValue, longPrecisionValue;
+            SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
+
+            #region prepare rate manager
+            var rateManager = new ZoneRateManager(SalePriceListOwnerType.Customer, input.OwnerId, sellingProductId, DateTime.Now, draft, input.CurrencyId, longPrecisionValue, currentRateLocator);
+            #endregion
+            #region prepare routing product manager
+            Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
+            SaleEntityRoutingProductReadByRateBED zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { input.OwnerId }, zoneEffectiveDatesByZoneId);
+            SaleEntityZoneRoutingProductLocator zoneRPLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReader);
+            var routingProductManager = new ZoneRPManager(SalePriceListOwnerType.Customer, input.OwnerId, draft, zoneRPLocator, zoneRoutingProductReader);
+            #endregion
+
+            var saleRateManager = new SaleRateManager();
+
+
+            Dictionary<long, ZoneItem> contextZoneItemsByZoneId = null;
+
+            Func<Dictionary<long, ZoneItem>> getContextZoneItems = () =>
+            {
+                if (contextZoneItemsByZoneId == null)
+                {
+                    var setContextZoneItemsInput = new ContextZoneItemInput()
+                    {
+                        OwnerType = input.OwnerType,
+                        OwnerId = input.OwnerId,
+                        SaleZones = saleZones,
+                        Draft = draft,
+                        ZoneDraftsByZoneId = zoneDraftsByZoneId,
+                        SellingProductId = sellingProductId,
+                        NewCountryIds = newCountryIds,
+                        ChangedCountryIds = changedCountryIds,
+                        EffectiveOn = input.EffectiveOn,
+                        CountryBEDsByCountryId = countryBEDsByCountryId,
+                        RoutingDatabaseId = input.RoutingDatabaseId,
+                        PolicyConfigId = input.PolicyConfigId,
+                        NumberOfOptions = input.NumberOfOptions,
+                        CostCalculationMethods = input.CostCalculationMethods,
+                        CurrencyId = input.CurrencyId,
+                        LongPrecisionValue = longPrecisionValue,
+                        NormalPrecisionValue = normalPrecisionValue,
+                        RateManager = rateManager,
+                        RoutingProductManager = routingProductManager,
+                        SaleRateManager = saleRateManager
+                    };
+                    SetContextZoneItems(ref contextZoneItemsByZoneId, setContextZoneItemsInput);
+                }
+                return contextZoneItemsByZoneId;
+            };
 
             // Filter and page the sale zones
             IEnumerable<long> applicableZoneIds = null;
@@ -561,7 +680,9 @@ namespace TOne.WhS.Sales.Business
                     OwnerId = input.OwnerId,
                     SaleZones = saleZones,
                     DraftData = draft,
-                    BulkAction = input.BulkAction
+                    BulkAction = input.BulkAction,
+                    CostCalculationMethods = input.CostCalculationMethods,
+                    GetContextZoneItems = getContextZoneItems
                 };
                 applicableZoneIds = input.Filter.BulkActionFilter.GetApplicableZoneIds(applicableZoneContext);
             }
@@ -592,8 +713,6 @@ namespace TOne.WhS.Sales.Business
             if (pagedSaleZones == null || pagedSaleZones.Count() == 0)
                 return null;
 
-            Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
-            SaleEntityRoutingProductReadByRateBED zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { input.OwnerId }, zoneEffectiveDatesByZoneId);
             SaleEntityZoneRoutingProductLocator routingProductLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReader);
 
             var ratePlanZoneCreationInput = new RatePlanZoneCreationInput()
@@ -661,24 +780,6 @@ namespace TOne.WhS.Sales.Business
             Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate;
             UtilitiesManager.SetBulkActionContextCurrentRateHelpers(currentRateReader, out currentRateLocator, out getSellingProductZoneRate, out getCustomerZoneRate);
 
-
-            var applicableZoneContext = new ApplicableZoneIdsContext(getSellingProductZoneRate, getCustomerZoneRate)
-            {
-                OwnerType = input.OwnerType,
-                OwnerId = input.OwnerId,
-                SaleZones = saleZones,
-                DraftData = draft,
-                BulkAction = input.BulkAction
-            };
-
-            applicableZoneIds = input.BulkActionZoneFilter.GetApplicableZoneIds(applicableZoneContext);
-
-            if (applicableZoneIds == null || applicableZoneIds.Count() == 0)
-                return null;
-
-            BulkActionValidationResult validationResult = null;
-            IEnumerable<SaleZone> applicableSaleZones = saleZones.FindAllRecords(x => applicableZoneIds.Contains(x.SaleZoneId));
-
             int normalPrecisionValue, longPrecisionValue;
             SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
 
@@ -725,6 +826,25 @@ namespace TOne.WhS.Sales.Business
                 return contextZoneItemsByZoneId;
             };
 
+            var applicableZoneContext = new ApplicableZoneIdsContext(getSellingProductZoneRate, getCustomerZoneRate)
+            {
+                OwnerType = input.OwnerType,
+                OwnerId = input.OwnerId,
+                SaleZones = saleZones,
+                DraftData = draft,
+                BulkAction = input.BulkAction,
+                CostCalculationMethods = input.CostCalculationMethods,
+                GetContextZoneItems = getContextZoneItems
+            };
+
+            applicableZoneIds = input.BulkActionZoneFilter.GetApplicableZoneIds(applicableZoneContext);
+
+            if (applicableZoneIds == null || applicableZoneIds.Count() == 0)
+                return null;
+
+            BulkActionValidationResult validationResult = null;
+            IEnumerable<SaleZone> applicableSaleZones = saleZones.FindAllRecords(x => applicableZoneIds.Contains(x.SaleZoneId));
+
             Func<decimal, decimal> getRoundedRate = (rate) =>
             {
                 return decimal.Round(rate, longPrecisionValue);
@@ -758,7 +878,7 @@ namespace TOne.WhS.Sales.Business
                 saleZones.AddRange(ownerSaleZones);
 
             var ratePlanDraftManager = new RatePlanDraftManager();
-            Changes draft = ratePlanDraftManager.GetDraft(input.OwnerType, input.OwnerId);
+            //Changes draft = ratePlanDraftManager.GetDraft(input.OwnerType, input.OwnerId);
 
             int sellingProductId;
             Dictionary<int, DateTime> countryBEDsByCountryId;
@@ -771,6 +891,64 @@ namespace TOne.WhS.Sales.Business
 
             var pricingSettings = UtilitiesManager.GetPricingSettings(input.OwnerType, input.OwnerId);
 
+            #region set draft data
+            Changes draft;
+            IEnumerable<int> newCountryIds;
+            IEnumerable<int> changedCountryIds;
+            Dictionary<long, ZoneChanges> zoneDraftsByZoneId;
+            SetDraftVariables(SalePriceListOwnerType.Customer, input.OwnerId, out draft, out zoneDraftsByZoneId, out newCountryIds, out changedCountryIds);
+            #endregion
+
+            int normalPrecisionValue, longPrecisionValue;
+            SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
+
+            #region prepare rate manager
+            var rateManager = new ZoneRateManager(SalePriceListOwnerType.Customer, input.OwnerId, sellingProductId, DateTime.Now, draft, input.CurrencyId, longPrecisionValue, currentRateLocator);
+            #endregion
+            #region prepare routing product manager
+            Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
+            SaleEntityRoutingProductReadByRateBED zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { input.OwnerId }, zoneEffectiveDatesByZoneId);
+            SaleEntityZoneRoutingProductLocator zoneRPLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReader);
+            var routingProductManager = new ZoneRPManager(SalePriceListOwnerType.Customer, input.OwnerId, draft, zoneRPLocator, zoneRoutingProductReader);
+            #endregion
+
+            var saleRateManager = new SaleRateManager();
+
+
+            Dictionary<long, ZoneItem> contextZoneItemsByZoneId = null;
+
+            Func<Dictionary<long, ZoneItem>> getContextZoneItems = () =>
+            {
+                if (contextZoneItemsByZoneId == null)
+                {
+                    var setContextZoneItemsInput = new ContextZoneItemInput()
+                    {
+                        OwnerType = input.OwnerType,
+                        OwnerId = input.OwnerId,
+                        SaleZones = saleZones,
+                        Draft = draft,
+                        ZoneDraftsByZoneId = zoneDraftsByZoneId,
+                        SellingProductId = sellingProductId,
+                        NewCountryIds = newCountryIds,
+                        ChangedCountryIds = changedCountryIds,
+                        EffectiveOn = input.EffectiveOn,
+                        CountryBEDsByCountryId = countryBEDsByCountryId,
+                        RoutingDatabaseId = input.RoutingDatabaseId,
+                        PolicyConfigId = input.PolicyConfigId,
+                        NumberOfOptions = input.NumberOfOptions,
+                        CostCalculationMethods = input.CostCalculationMethods,
+                        CurrencyId = input.CurrencyId,
+                        LongPrecisionValue = longPrecisionValue,
+                        NormalPrecisionValue = normalPrecisionValue,
+                        RateManager = rateManager,
+                        RoutingProductManager = routingProductManager,
+                        SaleRateManager = saleRateManager
+                    };
+                    SetContextZoneItems(ref contextZoneItemsByZoneId, setContextZoneItemsInput);
+                }
+                return contextZoneItemsByZoneId;
+            };
+
             // Filter the sale zones by applicable zones
             var applicableZoneIdsContext = new ApplicableZoneIdsContext(getSellingProductZoneRate, getCustomerZoneRate)
             {
@@ -778,7 +956,9 @@ namespace TOne.WhS.Sales.Business
                 OwnerId = input.OwnerId,
                 SaleZones = saleZones,
                 DraftData = draft,
-                BulkAction = input.BulkAction
+                BulkAction = input.BulkAction,
+                CostCalculationMethods = input.CostCalculationMethods,
+                GetContextZoneItems = getContextZoneItems
             };
 
             IEnumerable<long> applicableZoneIds = input.BulkActionFilter.GetApplicableZoneIds(applicableZoneIdsContext);
@@ -797,7 +977,6 @@ namespace TOne.WhS.Sales.Business
             if (draft != null && draft.ZoneChanges != null)
                 existingZoneDrafts = draft.ZoneChanges.FindAllRecords(x => applicableZoneIds.Contains(x.ZoneId));
 
-            SaleEntityRoutingProductReadByRateBED zoneRoutingProductReader = null;
             SaleEntityZoneRoutingProductLocator routingProductLocator = null;
             IEnumerable<ZoneItem> zoneItems = null;
 
@@ -807,8 +986,6 @@ namespace TOne.WhS.Sales.Business
                 {
                     if (routingProductLocator == null || zoneRoutingProductReader == null)
                     {
-                        Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
-                        zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { input.OwnerId }, zoneEffectiveDatesByZoneId);
                         routingProductLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReader);
                     }
                     var ratePlanZoneCreationInput = new RatePlanZoneCreationInput()
@@ -1081,15 +1258,16 @@ namespace TOne.WhS.Sales.Business
 
             return result;
         }
-        public ImportedDataValidationResult ValidateTargetMatchImportedData(TargetMatchImportedDataInput input)
+
+        public CustomerTargetMatchImportedDataValidationResult ValidateTargetMatchImportedData(TargetMatchImportedDataInput input)
         {
             var allowRateZero = new BusinessEntity.Business.ConfigManager().GetSaleAreaAllowRateZero();
             Dictionary<long, DateTime> customerZoneEffectiveDatesByZoneId = new Dictionary<long, DateTime>();
             List<long> zoneIds = new List<long>();
             IEnumerable<string> worksheetHeaders;
-            IEnumerable<ImportedRow> importedRows = GetImportedRows(input.FileId, input.HeaderRowExists, out worksheetHeaders);
-            var result = new ImportedDataValidationResult();
-            var validator = new ImportedRowValidator();
+            IEnumerable<CustomerTargetMatchImportedRow> importedRows = GetCustomerTargetMatchImportedRows(input.FileId, input.HeaderRowExists, out worksheetHeaders);
+            var result = new CustomerTargetMatchImportedDataValidationResult();
+            var validator = new ImportedCustomerTargetMatchRowValidator();
             DateTime minDate = DateTime.MaxValue;
 
             if (importedRows == null || importedRows.Count() == 0)
@@ -1098,27 +1276,30 @@ namespace TOne.WhS.Sales.Business
                 return result;
             }
 
+            Dictionary<string, SaleZone> saleZonesByName = new Dictionary<string, SaleZone>();
+            Dictionary<string, ZoneChanges> zoneDraftsByZoneName = GetZoneDraftsByZoneName(SalePriceListOwnerType.Customer, input.OwnerId);
+
             #region GetSaleZones
-            List<SaleZone> saleZones = new List<SaleZone>();
+            IEnumerable<SaleZone> saleZones = GetSaleZones(SalePriceListOwnerType.Customer, input.OwnerId, DateTime.Now, true);
 
-            Dictionary<int, DateTime> additionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
-            // Get the sale zones
-            IEnumerable<SaleZone> ownerSaleZones = GetSaleZones(SalePriceListOwnerType.Customer, input.OwnerId, DateTime.Now, true);
-            if (ownerSaleZones != null)
-                saleZones.AddRange(ownerSaleZones);
-
-            var saleZonesByName = new Dictionary<string, SaleZone>();
-            foreach (var salezone in ownerSaleZones)
+            foreach (var salezone in saleZones)
             {
                 if (salezone.Name != null && !saleZonesByName.ContainsKey(salezone.Name))
                     saleZonesByName.Add(salezone.Name.ToLower(), salezone);
             }
             #endregion
 
-            Dictionary<string, ZoneChanges> zoneDraftsByZoneName = GetZoneDraftsByZoneName(SalePriceListOwnerType.Customer, input.OwnerId);
+            #region temp
+            var countryBEDsByCountry = new Dictionary<int, DateTime>();
+            IEnumerable<int> closedCountryIds = new List<int>();
+
+            countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, true);
+            closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, null, DateTime.Today);
+            #endregion
+
 
             // Validate the data of the entire file
-            var importedFileValidationContext = new ImportedFileValidationContext()
+            var importedFileValidationContext = new CustomerTargetMatchImportedFileValidationContext()
             {
                 ImportedRows = importedRows,
                 SaleZonesByZoneName = saleZonesByName
@@ -1128,87 +1309,24 @@ namespace TOne.WhS.Sales.Business
 
             if (importedFileValidationContext.InvalidImportedRows != null)
             {
-                foreach (InvalidImportedRow invalidImportedRow in importedFileValidationContext.InvalidImportedRows)
+                foreach (CustomerTargetMatchInvalidImportedRow invalidImportedRow in importedFileValidationContext.InvalidImportedRows)
                     result.InvalidDataByRowIndex.Add(invalidImportedRow.RowIndex, invalidImportedRow);
             }
 
+            var additionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
             // Validate the data of each zone
             int normalPrecisionValue, longPrecisionValue;
             SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
 
-            #region set draft data
-            Changes draft;
-            IEnumerable<int> newCountryIds;
-            IEnumerable<int> changedCountryIds;
-            Dictionary<long, ZoneChanges> zoneDraftsByZoneId;
-            SetDraftVariables(SalePriceListOwnerType.Customer, input.OwnerId, out draft, out zoneDraftsByZoneId, out newCountryIds, out changedCountryIds);
-            #endregion
-
-            IEnumerable<int> closedCountryIds = new List<int>();
-            closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, draft, DateTime.Today);
-
-            #region prepare rate manager
-            int sellingProductId;
-            Dictionary<int, DateTime> countryBEDsByCountryId;
-            ISaleRateReader currentRateReader = GetCurrentRateReader(SalePriceListOwnerType.Customer, input.OwnerId, saleZones, DateTime.Now, out sellingProductId, out countryBEDsByCountryId, additionalCountryBEDsByCountryId);
-            var rateLocator = new SaleEntityZoneRateLocator(currentRateReader);
-            var rateManager = new ZoneRateManager(SalePriceListOwnerType.Customer, input.OwnerId, sellingProductId, DateTime.Now, draft, input.CurrencyId, longPrecisionValue, rateLocator);
-            #endregion
-
-            #region prepare routing product manager
-            Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
-            SaleEntityRoutingProductReadByRateBED zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { input.OwnerId }, zoneEffectiveDatesByZoneId);
-            SaleEntityZoneRoutingProductLocator zoneRPLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReader);
-            var routingProductManager = new ZoneRPManager(SalePriceListOwnerType.Customer, input.OwnerId, draft, zoneRPLocator, zoneRoutingProductReader);
-            #endregion
-
-            var saleRateManager = new SaleRateManager();
-
-            var setContextZoneItemsInput = new ContextZoneItemInput()
-            {
-                OwnerType = SalePriceListOwnerType.Customer,
-                OwnerId = input.OwnerId,
-                SaleZones = saleZones,
-                Draft = draft,
-                ZoneDraftsByZoneId = zoneDraftsByZoneId,
-                SellingProductId = sellingProductId,
-                NewCountryIds = newCountryIds,
-                ChangedCountryIds = closedCountryIds,
-                EffectiveOn = DateTime.Today,
-                CountryBEDsByCountryId = countryBEDsByCountryId,
-                RoutingDatabaseId = input.RoutingDatabaseId,
-                PolicyConfigId = input.PolicyConfigId,
-                NumberOfOptions = input.NumberOfOptions,
-                CostCalculationMethods = input.CostCalculationMethods.ToList(),
-                CurrencyId = input.CurrencyId,
-                LongPrecisionValue = longPrecisionValue,
-                NormalPrecisionValue = normalPrecisionValue,
-                RateManager = rateManager,
-                RoutingProductManager = routingProductManager,
-                SaleRateManager = saleRateManager
-            };
-
-            Dictionary<long, ZoneItem> zoneItemsByZoneId = null;
-            SetContextZoneItems(ref zoneItemsByZoneId, setContextZoneItemsInput);
-
             for (int i = 0; i < importedRows.Count(); i++)
             {
-                ImportedRow importedRow = importedRows.ElementAt(i);
+                CustomerTargetMatchImportedRow importedRow = importedRows.ElementAt(i);
                 string zoneName = (importedRow.Zone != null) ? BulkActionUtilities.GetZoneNameKey(importedRow.Zone) : null;
 
                 if (zoneName != null && importedFileValidationContext.InvalidImportedRows.FindRecord(x => BulkActionUtilities.GetZoneNameKey(x.ImportedRow.Zone) == zoneName) != null)
                     continue;
 
-                ZoneItem zoneItem = null;
                 var existingZone = saleZonesByName.GetRecord(zoneName);
-                //if (existingZone == null)
-                //throw new DataIntegrityValidationException(string.Format("No existing zone item found with name '{0}'.", zoneName));
-                if (existingZone != null)
-                {
-                    zoneItem = zoneItemsByZoneId.GetRecord(existingZone.SaleZoneId);
-                    //if (zoneItem == null)
-                    //throw new DataIntegrityValidationException(string.Format("No zone item found with id '{0}'.", existingZone.SaleZoneId));
-                }
 
                 var context = new IsImportedTargetMatchRowValidContext()
                 {
@@ -1216,24 +1334,23 @@ namespace TOne.WhS.Sales.Business
                     ImportedRow = importedRow,
                     ExistingZone = existingZone,
                     ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
-                    CountryBEDsByCountry = countryBEDsByCountryId,
+                    CountryBEDsByCountry = countryBEDsByCountry,
                     ClosedCountryIds = closedCountryIds,
                     AllowRateZero = allowRateZero,
                     AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId,
-                    CostCalculationMethods = input.CostCalculationMethods,
                     RateCalculationMethod = input.RateCalculationMethod,
-                    ZoneItem = zoneItem,
-                    LongPrecision = longPrecisionValue
+                    LongPrecision = longPrecisionValue,
+                    GetCostCalculationMethodIndex = input.GetCostCalculationMethodIndex,
+                    GetZoneItem = input.GetZoneItem
                 };
 
-
-                if (validator.IsTargetMatchImportedRowValid(context))
+                if (validator.IsCustomerTargetMatchImportedRowValid(context))
                 {
-                    var validDataImportedRow = new ImportedRow()
+                    var validDataImportedRow = new CustomerTargetMatchImportedRow()
                     {
                         Zone = importedRow.Zone,
                         Rate = importedRow.Rate,
-                        EffectiveDate = DateTime.Now.ToString(),
+                        TargetVolume = importedRow.TargetVolume,
                         Status = context.Status
                     };
                     DateTime effectiveDateAsDateTime;
@@ -1254,7 +1371,7 @@ namespace TOne.WhS.Sales.Business
                     {
                         result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
                     }
-                    result.InvalidDataByRowIndex.Add(i, new InvalidImportedRow()
+                    result.InvalidDataByRowIndex.Add(i, new CustomerTargetMatchInvalidImportedRow()
                     {
                         RowIndex = i,
                         ImportedRow = importedRow,
@@ -1265,11 +1382,8 @@ namespace TOne.WhS.Sales.Business
                 }
 
             }
-            if (result.ValidDataByZoneId != null)
-                ValidateRates(input.OwnerId, SalePriceListOwnerType.Customer, zoneIds, minDate, customerZoneEffectiveDatesByZoneId, result.ValidDataByZoneId, saleZonesByName);
-
-            if (additionalCountryBEDsByCountryId != null && additionalCountryBEDsByCountryId.Count > 0)
-                result.AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId;
+            //if (additionalCountryBEDsByCountryId != null && additionalCountryBEDsByCountryId.Count > 0)
+            //result.AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId;
 
             return result;
         }
@@ -1426,7 +1540,7 @@ namespace TOne.WhS.Sales.Business
 
             return zoneItems;
         }
-        private void SetContextZoneItems(ref Dictionary<long, ZoneItem> contextZoneItems, ContextZoneItemInput input)
+        public void SetContextZoneItems(ref Dictionary<long, ZoneItem> contextZoneItems, ContextZoneItemInput input)
         {
             contextZoneItems = new Dictionary<long, ZoneItem>();
             var baseRatesByZone = new BaseRatesByZone();
@@ -1482,7 +1596,7 @@ namespace TOne.WhS.Sales.Business
             ZoneRouteOptionManager routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, contextRPZones, input.CostCalculationMethods, null, null, input.CurrencyId, input.LongPrecisionValue, input.NormalPrecisionValue, includeBlockedSuppliers);
             routeOptionManager.SetZoneRouteOptionProperties(contextZoneItems.Values);
         }
-        private void SetDraftVariables(SalePriceListOwnerType ownerType, int ownerId, out Changes draft, out Dictionary<long, ZoneChanges> zoneDraftsByZoneId, out IEnumerable<int> newCountryIds, out IEnumerable<int> changedCountryIds)
+        public void SetDraftVariables(SalePriceListOwnerType ownerType, int ownerId, out Changes draft, out Dictionary<long, ZoneChanges> zoneDraftsByZoneId, out IEnumerable<int> newCountryIds, out IEnumerable<int> changedCountryIds)
         {
             draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
             zoneDraftsByZoneId = new Dictionary<long, ZoneChanges>();
@@ -1573,14 +1687,14 @@ namespace TOne.WhS.Sales.Business
             public IEnumerable<int> AdditionalCountryIds { get; set; }
         }
 
-        private void SetNumberPrecisionValues(out int normalPrecisionValue, out int longPrecisionValue)
+        public void SetNumberPrecisionValues(out int normalPrecisionValue, out int longPrecisionValue)
         {
             var generalSettingsManager = new Vanrise.Common.Business.GeneralSettingsManager();
             normalPrecisionValue = generalSettingsManager.GetNormalPrecisionValue();
             longPrecisionValue = generalSettingsManager.GetLongPrecisionValue();
         }
 
-        #endregion
+#endregion
 
         #region Import Rate Plan
 
@@ -1706,6 +1820,69 @@ namespace TOne.WhS.Sales.Business
             }
             return importedRows;
         }
+
+        private IEnumerable<CustomerTargetMatchImportedRow> GetCustomerTargetMatchImportedRows(long fileId, bool headerRowExists, out IEnumerable<string> worksheetHeaders)
+        {
+            var fileManager = new VRFileManager();
+            VRFile file = fileManager.GetFile(fileId);
+            if (file == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("File '{0}' was not found", fileId));
+            if (file.Content == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("File '{0}' is empty", fileId));
+
+            byte[] bytes = file.Content;
+            var fileStream = new MemoryStream(bytes);
+            Vanrise.Common.Utilities.ActivateAspose();
+
+            var workbook = new Workbook(fileStream);
+            if (workbook.Worksheets == null || workbook.Worksheets.Count == 0)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Workbook created from file '{0}' does not contain any worksheets", fileId));
+
+            Worksheet worksheet = workbook.Worksheets.ElementAt(0);
+            Dictionary<string, List<CustomerTargetMatchImportedRow>> importedRowsByZoneName = new Dictionary<string, List<CustomerTargetMatchImportedRow>>();
+            var importedRows = new List<CustomerTargetMatchImportedRow>();
+            int startingRowIndex = 0;
+
+            if (headerRowExists)
+            {
+                startingRowIndex = 1;
+                worksheetHeaders = new List<string>() { worksheet.Cells[0, 0].StringValue, worksheet.Cells[0, 1].StringValue, worksheet.Cells[0, 2].StringValue, };
+            }
+            else
+            {
+                worksheetHeaders = new List<string>() { "Zone", "Rate", "Target Volume" };
+            }
+
+            for (int i = startingRowIndex; i < worksheet.Cells.Rows.Count; i++)
+            {
+                Cell zoneCell = worksheet.Cells[i, 0], rateCell = worksheet.Cells[i, 1], volumeCell = worksheet.Cells[i, 2];
+                string importedZone, importedRate, importedVolume;
+                if (!IsRowEmpty(zoneCell, rateCell, volumeCell, out importedZone, out importedRate, out importedVolume))
+                {
+                    var importedRow = new CustomerTargetMatchImportedRow()
+                    {
+                        Zone = importedZone,
+                        Rate = importedRate,
+                        TargetVolume = importedVolume,
+                    };
+                    List<CustomerTargetMatchImportedRow> zoneImportedRows;
+                    if (importedRowsByZoneName.TryGetValue(importedZone, out zoneImportedRows) && zoneImportedRows.Count() > 0)
+                    {
+                        if (AreCustomerTargetMatchImportedRowsDuplicated(zoneImportedRows, importedZone, importedRate, importedVolume))
+                            continue;
+                        else
+                            zoneImportedRows.Add(importedRow);
+                    }
+                    else
+                    {
+                        importedRowsByZoneName.Add(importedZone, new List<CustomerTargetMatchImportedRow>() { importedRow });
+                    }
+                    importedRows.Add(importedRow);
+                }
+            }
+            return importedRows;
+        }
+
         //In this function (AreImportedRowsDuplicated) we check if 2 imported rows are the same we ignore one of them otherwise and if we have the same zone name but with different 
         //data (rate,effective date,other rates) we add both rows to duplicated zones.
         public bool AreImportedRowsDuplicated(List<ImportedRow> importedRows, string zone, string rate, string effectiveDate, string routingProductName, List<ImportedOtherRate> otherRates)
@@ -1732,6 +1909,17 @@ namespace TOne.WhS.Sales.Business
             }
             return isImportedRowMatched;
         }
+
+        public bool AreCustomerTargetMatchImportedRowsDuplicated(List<CustomerTargetMatchImportedRow> importedRows, string zone, string rate, string targetvolume)
+        {
+            foreach (var importedRow in importedRows)
+            {
+                if (importedRow.Zone == zone && importedRow.Rate == rate && importedRow.TargetVolume == targetvolume)
+                    return true;
+            }
+            return false;
+        }
+
         private bool IsRowEmpty(Cell zoneCell, Cell rateCell, Cell dateCell, Cell routingProductCell, List<Cell> otherRateCells, List<RateTypeInfo> otherRateTypes, out string importedZone, out string importedRate, out string importedDate, out string importedRoutingProduct, out List<ImportedOtherRate> otherRates)
         {
             bool isImportedZoneEmpty = IsStringEmpty(zoneCell.StringValue, out importedZone);
@@ -1748,6 +1936,15 @@ namespace TOne.WhS.Sales.Business
                 otherRates.Add(new ImportedOtherRate { TypeName = otherRateTypes[i].Name, Value = otherRateValue, TypeId = otherRateTypes[i].RateTypeId });
             }
             return (isImportedZoneEmpty && isImportedRateEmpty && isImportedDateEmpty && isOtherRatesEmpty && isImportedRoutingProductEmpty);
+        }
+
+        private bool IsRowEmpty(Cell zoneCell, Cell rateCell, Cell volumeCell, out string importedZone, out string importedRate, out string importedVolume)
+        {
+            bool isImportedZoneEmpty = IsStringEmpty(zoneCell.StringValue, out importedZone);
+            bool isImportedRateEmpty = IsStringEmpty(rateCell.StringValue, out importedRate);
+            bool isImportedVolumeEmpty = IsStringEmpty(volumeCell.StringValue, out importedVolume);
+
+            return (isImportedZoneEmpty && isImportedRateEmpty && isImportedVolumeEmpty);
         }
 
         private bool IsStringEmpty(string originalString, out string trimmedString)

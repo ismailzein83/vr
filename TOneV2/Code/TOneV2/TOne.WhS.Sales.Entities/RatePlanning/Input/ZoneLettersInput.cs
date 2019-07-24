@@ -21,10 +21,20 @@ namespace TOne.WhS.Sales.Entities
 
         public DateTime EffectiveOn { get; set; }
 
-		public BulkActionType BulkAction { get; set; }
+        public BulkActionType BulkAction { get; set; }
 
-		public BulkActionZoneFilter BulkActionFilter { get; set; }
+        public BulkActionZoneFilter BulkActionFilter { get; set; }
 
         public IEnumerable<long> ExcludedZoneIds { get; set; }
+
+        public int CurrencyId { get; set; }
+
+        public int RoutingDatabaseId { get; set; }
+
+        public Guid PolicyConfigId { get; set; }
+
+        public int? NumberOfOptions { get; set; }
+
+        public List<CostCalculationMethod> CostCalculationMethods { get; set; }
     }
 }

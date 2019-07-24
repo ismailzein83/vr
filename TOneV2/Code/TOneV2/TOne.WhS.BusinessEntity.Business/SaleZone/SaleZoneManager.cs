@@ -4,6 +4,7 @@ using System.Linq;
 using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -300,9 +301,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZonesBySellingNumberPlan;
         }
 
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter, string serializedCostCalculationMethods, int? currencyId, int? numberOfOptions, Guid? policyConfigId, int? routingDatabaseId)
         {
             string zoneName = nameFilter != null ? nameFilter.ToLower() : null;
+            List<CostCalculationMethod> costCalculationMethods = (string.IsNullOrEmpty(serializedCostCalculationMethods)) ? null : Vanrise.Common.Serializer.Deserialize<List<CostCalculationMethod>>(serializedCostCalculationMethods);
             IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
 
             if (filter == null)
@@ -350,7 +352,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     for (int i = 0; i < filter.Filters.Count(); i++)
                     {
-                        var saleZoneFilterContext = new SaleZoneFilterContext() { SaleZone = zone, CustomData = customObjects[i], SellingNumberPlanId = sellingNumberPlanId };
+                        var saleZoneFilterContext = new SaleZoneFilterContext()
+                        {
+                            SaleZone = zone,
+                            CustomData = customObjects[i],
+                            SellingNumberPlanId = sellingNumberPlanId,
+                            CostCalculationMethods = costCalculationMethods,
+                            NumberOfOptions = numberOfOptions
+                        };
+                        if (currencyId.HasValue)
+                            saleZoneFilterContext.CurrencyId = currencyId.Value;
+                        if (policyConfigId.HasValue)
+                            saleZoneFilterContext.PolicyConfigId = policyConfigId.Value;
+                        if (routingDatabaseId.HasValue)
+                            saleZoneFilterContext.RoutingDatabaseId = routingDatabaseId.Value;
+
                         bool filterResult = filter.Filters.ElementAt(i).IsExcluded(saleZoneFilterContext);
                         customObjects[i] = saleZoneFilterContext.CustomData;
                         if (filterResult)

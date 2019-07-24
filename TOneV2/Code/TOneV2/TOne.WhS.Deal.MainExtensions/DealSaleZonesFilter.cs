@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Business;
 

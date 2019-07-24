@@ -28,6 +28,22 @@ namespace TOne.WhS.Sales.Business
 
         private Dictionary<int, DateTime> _countryEEDsByCountryId;
 
+        private Func<Dictionary<long, ZoneItem>> _getContextZoneItems;
+
+        private IEnumerable<CostCalculationMethod> _costCalculationMethods;
+
+        public ActionApplicableToZoneContext(Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP, Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP, Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED, Dictionary<int, DateTime> countryBEDsByCountryId, Dictionary<int, DateTime> countryEEDsByCountryId, Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods)
+        {
+            _getCurrentSellingProductZoneRP = getCurrentSellingProductZoneRP;
+            _getCurrentCustomerZoneRP = getCurrentCustomerZoneRP;
+            _getSellingProductZoneRate = getSellingProductZoneRate;
+            _getCustomerZoneRate = getCustomerZoneRate;
+            _getRateBED = getRateBED;
+            _countryBEDsByCountryId = countryBEDsByCountryId;
+            _countryEEDsByCountryId = countryEEDsByCountryId;
+            _getContextZoneItems = getContextZoneItems;
+            _costCalculationMethods = costCalculationMethods;
+        }
         public ActionApplicableToZoneContext(Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP, Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP, Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED, Dictionary<int, DateTime> countryBEDsByCountryId, Dictionary<int, DateTime> countryEEDsByCountryId)
         {
             _getCurrentSellingProductZoneRP = getCurrentSellingProductZoneRP;
@@ -39,6 +55,16 @@ namespace TOne.WhS.Sales.Business
             _countryEEDsByCountryId = countryEEDsByCountryId;
         }
 
+        public ZoneItem GetContextZoneItem(long zoneId)
+        {
+            Dictionary<long, ZoneItem> zoneItemsByZone = _getContextZoneItems();
+            return zoneItemsByZone?.GetRecord(zoneId);
+        }
+
+        public int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId)
+        {
+            return UtilitiesManager.GetCostCalculationMethodIndex(_costCalculationMethods, costCalculationMethodConfigId);
+        }
         #endregion
 
         public SalePriceListOwnerType OwnerType { get; set; }

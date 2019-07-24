@@ -10,11 +10,11 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
-    public class ImportCustomerTargetMatch : BulkActionType
+    public class ImportCustomerTargetMatchBulkActionType : BulkActionType
     {
         private ImportBulkActionValidationCacheManager _cacheManager;
 
-        public ImportCustomerTargetMatch()
+        public ImportCustomerTargetMatchBulkActionType()
         {
             _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<ImportBulkActionValidationCacheManager>();
         }
@@ -26,16 +26,6 @@ namespace TOne.WhS.Sales.MainExtensions
         public long FileId { get; set; }
         public RateCalculationMethod RateCalculationMethod { get; set; }
 
-        public IEnumerable<CostCalculationMethod> CostCalculationMethods { get; set; }
-
-        public int RoutingDatabaseId { get; set; }
-
-        public Guid PolicyConfigId { get; set; }
-
-        public int? NumberOfOptions { get; set; }
-
-        public int CurrencyId { get; set; }
-
         public bool HeaderRowExists { get; set; }
 
         public int OwnerId { get; set; }
@@ -45,9 +35,9 @@ namespace TOne.WhS.Sales.MainExtensions
         {
             if (context.ValidationResult == null)
             {
-                var validationResult = new ImportBulkActionValidationResult();
+                var validationResult = new CustomerTargetMatchImportBulkActionValidationResult();
 
-                ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+                CustomerTargetMatchImportedDataValidationResult cachedValidationData = GetOrCreateObject(context.GetContextZoneItem, context.GetCostCalculationMethodIndex);
                 if (cachedValidationData.FileIsEmpty)
                 {
                     validationResult.InvalidDataExists = true;
@@ -57,11 +47,11 @@ namespace TOne.WhS.Sales.MainExtensions
                 {
                     validationResult.InvalidDataExists = true;
 
-                    foreach (InvalidImportedRow invalidImportedRow in cachedValidationData.InvalidDataByRowIndex.Values)
+                    foreach (CustomerTargetMatchInvalidImportedRow invalidImportedRow in cachedValidationData.InvalidDataByRowIndex.Values)
                     {
                         validationResult.InvalidImportedRows.Add(invalidImportedRow);
 
-                        if (invalidImportedRow.ZoneId.HasValue && invalidImportedRow.Status != ImportedRowStatus.OnlyNormalRateValid)
+                        if (invalidImportedRow.ZoneId.HasValue)
                         {
                             validationResult.ExcludedZoneIds.Add(invalidImportedRow.ZoneId.Value);
                         }
@@ -73,23 +63,23 @@ namespace TOne.WhS.Sales.MainExtensions
         }
         public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
         {
-            return UtilitiesManager.IsActionApplicableToCountry(context, this.IsApplicableToZone);
+            //return UtilitiesManager.IsActionApplicableToCountry(context, this.IsApplicableToZone);
+            return true;
         }
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
-            ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+            CustomerTargetMatchImportedDataValidationResult cachedValidationData = GetOrCreateObject(context.GetContextZoneItem, context.GetCostCalculationMethodIndex);
             return cachedValidationData.ApplicableZoneIds.Contains(context.SaleZone.SaleZoneId);
         }
         public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
         {
-            IEnumerable<DraftRateToChange> zoneDraftNewRates = (context.ZoneDraft != null) ? context.ZoneDraft.NewRates : null;
-
-            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate);
+            IEnumerable<DraftRateToChange> zoneDraftNewRates = context.ZoneDraft?.NewRates;
+            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate, context.GetContextZoneItem, context.GetCostCalculationMethodIndex);
 
         }
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
         {
-            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate);
+            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate, context.GetZoneItem, context.GetCostCalculationMethodIndex);
         }
         public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
         {
@@ -123,14 +113,9 @@ namespace TOne.WhS.Sales.MainExtensions
             zoneDraft.NewRates = newRates;
         }
 
-        public override Dictionary<int, DateTime> PreApplyBulkActionToZoneItem()
-        {
-            ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
-            return cachedValidationData.AdditionalCountryBEDsByCountryId;
-        }
         #endregion
 
-        private ImportedDataValidationResult GetOrCreateObject()
+        private CustomerTargetMatchImportedDataValidationResult GetOrCreateObject(Func<long, ZoneItem> getZoneItem, Func<Guid, int?> getCostCalculationMethodIndex)
         {
             return _cacheManager.GetOrCreateObject(CacheObjectName, () =>
             {
@@ -139,20 +124,17 @@ namespace TOne.WhS.Sales.MainExtensions
                     FileId = FileId,
                     HeaderRowExists = HeaderRowExists,
                     OwnerId = OwnerId,
-                    CostCalculationMethods = CostCalculationMethods,
                     RateCalculationMethod = RateCalculationMethod,
-                    RoutingDatabaseId = RoutingDatabaseId,
-                    PolicyConfigId = PolicyConfigId,
-                    NumberOfOptions = NumberOfOptions,
-                    CurrencyId = CurrencyId
+                    GetZoneItem = getZoneItem,
+                    GetCostCalculationMethodIndex = getCostCalculationMethodIndex
                 });
             });
         }
 
-        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate)
+        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate, Func<long, ZoneItem> getZoneItem, Func<Guid, int?> getCostCalculationMethodIndex)
         {
-            ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
-            ImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
+            CustomerTargetMatchImportedDataValidationResult cachedValidationData = GetOrCreateObject(getZoneItem, getCostCalculationMethodIndex);
+            CustomerTargetMatchImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
             if (importedRow == null)
                 return zoneDraftNewRates;
 

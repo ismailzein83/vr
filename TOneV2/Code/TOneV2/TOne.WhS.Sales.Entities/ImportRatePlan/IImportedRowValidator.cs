@@ -38,13 +38,46 @@ namespace TOne.WhS.Sales.Entities
 
         bool AllowRateZero { get; }
 
-        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
-
-        RateCalculationMethod RateCalculationMethod { get; set; }
-
-        ZoneItem ZoneItem { get; set; }
-
-        bool InvalidDueExpectedRateViolation {get; set;}
         int LongPrecision { get; set; }
     }
+
+    public interface ICustomerTargetMatchImportedRowValidator
+    {
+        bool IsValid(ICustomerTargetMatchIsValidContext context);
+    }
+    public interface ICustomerTargetMatchIsValidContext
+    {
+        SalePriceListOwnerType OwnerType { get; }
+
+        int OwnerId { get; }
+
+        IEnumerable<int> AllRateTypeIds { get; }
+
+        CustomerTargetMatchImportedRow ImportedRow { get; }
+
+        ZoneChanges ZoneDraft { get; }
+
+        SaleZone ExistingZone { get; }
+
+        Dictionary<int, DateTime> CountryBEDsByCountry { get; }
+
+        IEnumerable<int> ClosedCountryIds { get; }
+
+        string DateTimeFormat { get; }
+
+        string ErrorMessage { set; }
+
+        bool AllowRateZero { get; }
+
+        bool InvalidDueExpectedRateViolation { get; set; }
+
+        int LongPrecision { get; set; }
+
+        Func<long, ZoneItem> GetZoneItem { get; set; }
+
+        Func<Guid, int?> GetCostCalculationMethodIndex { get; set; }
+
+        RateCalculationMethod RateCalculationMethod { get; set; }
+    }
+
 }

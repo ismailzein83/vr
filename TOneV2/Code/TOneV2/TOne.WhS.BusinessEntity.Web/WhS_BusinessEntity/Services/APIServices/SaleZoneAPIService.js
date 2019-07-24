@@ -19,6 +19,10 @@
             });
         }
 
+        function GetSaleZonesInfos(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSaleZonesInfos"), input);
+        }
+
         function GetSaleZonesInfoByIds(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSaleZonesInfoByIds"), input);
         }
@@ -48,7 +52,7 @@
             });
         }
 
-        function UpdateSaleZoneName(zoneId, zoneName,sellingNumberPlanId) {
+        function UpdateSaleZoneName(zoneId, zoneName, sellingNumberPlanId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateSaleZoneName"), {
                 zoneId: zoneId,
                 zoneName: zoneName,
@@ -75,6 +79,7 @@
         return ({
             GetFilteredSaleZones: GetFilteredSaleZones,
             GetSaleZonesInfo: GetSaleZonesInfo,
+            GetSaleZonesInfos: GetSaleZonesInfos,
             GetSellingNumberPlanIdBySaleZoneIds: GetSellingNumberPlanIdBySaleZoneIds,
             GetSaleZonesInfoByIds: GetSaleZonesInfoByIds,
             GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,

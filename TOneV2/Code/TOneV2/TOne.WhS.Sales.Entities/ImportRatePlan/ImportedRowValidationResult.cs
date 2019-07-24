@@ -26,4 +26,25 @@ namespace TOne.WhS.Sales.Entities
 			AdditionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
 		}
     }
+
+    public class CustomerTargetMatchImportedDataValidationResult
+    {
+        public HashSet<long> ApplicableZoneIds { get; set; }
+
+        public Dictionary<long, CustomerTargetMatchImportedRow> ValidDataByZoneId { get; set; }
+
+        public Dictionary<int, CustomerTargetMatchInvalidImportedRow> InvalidDataByRowIndex { get; set; }
+
+        //public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+
+        public bool FileIsEmpty;
+
+        public CustomerTargetMatchImportedDataValidationResult()
+        {
+            ApplicableZoneIds = new HashSet<long>();
+            ValidDataByZoneId = new Dictionary<long, CustomerTargetMatchImportedRow>();
+            InvalidDataByRowIndex = new Dictionary<int, CustomerTargetMatchInvalidImportedRow>();
+            //AdditionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
+        }
+    }
 }

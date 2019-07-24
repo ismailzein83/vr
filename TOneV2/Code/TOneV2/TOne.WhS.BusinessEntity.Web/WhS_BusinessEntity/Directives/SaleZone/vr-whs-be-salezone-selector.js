@@ -84,6 +84,12 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
             var availableZoneIds;
             var excludedZoneIds;
 
+            var costCalculationMethods;
+            var numberOfOptions;
+            var policyConfigId;
+            var routingDatabaseId;
+            var currencyId;
+
             var sellingNumberPlanId;
             var oldSellingNumberPlanId;
 
@@ -147,7 +153,18 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                     filter.excludedZoneIds = excludedZoneIds;
 
                     var serializedFilter = UtilsService.serializetoJson(filter);
-                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter).then(function (response) {
+                    var serializedCostCalculationMethods = UtilsService.serializetoJson(costCalculationMethods);
+                    var input = {
+                        NameFilter: nameFilter,
+                        SellingNumberPlanId: sellingNumberPlanId,
+                        SerializedFilter: serializedFilter,
+                        SerializedCostCalculationMethods: serializedCostCalculationMethods,
+                        CurrencyId: currencyId,
+                        NumberOfOptions: numberOfOptions,
+                        PolicyConfigId: policyConfigId,
+                        RoutingDatabaseId: routingDatabaseId
+                    };
+                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfos(input).then(function (response) {
                         availableSaleZones.length = 0;
                         if (response != undefined) {
                             for (var i = 0; i < response.length; i++)
@@ -187,6 +204,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                         genericUIContext = payload.genericUIContext;
                         showSellingNumberPlanIfMultiple = payload.showSellingNumberPlanIfMultiple;
                         onSellingNumberPlanSelectionChanged = payload.onSellingNumberPlanSelectionChanged;
+                        costCalculationMethods = payload.costCalculationMethods
+                        numberOfOptions = payload.numberOfOptions;
+                        policyConfigId = payload.policyConfigId;
+                        routingDatabaseId = payload.routingDatabaseId;
+                        currencyId = payload.currencyId;
 
                         if (payload.areSaleZonesRequired != undefined)
                             areSaleZonesRequired = payload.areSaleZonesRequired;
@@ -416,7 +438,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                         saleZoneSelectorCtrl.selectedvalues = undefined;
                     }
 
-                    
+
                     if (sellingDirectiveApi != undefined) {
                         sellingDirectiveApi.clearDataSource();
                     }

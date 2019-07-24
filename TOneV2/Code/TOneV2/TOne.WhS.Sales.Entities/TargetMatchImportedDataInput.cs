@@ -14,17 +14,10 @@ namespace TOne.WhS.Sales.Entities
 
         public bool HeaderRowExists { get; set; }
 
-        public int RoutingDatabaseId { get; set; }
-
-        public Guid PolicyConfigId { get; set; }
-
-        public int? NumberOfOptions { get; set; }
-
         public RateCalculationMethod RateCalculationMethod { get; set; }
 
-        public IEnumerable<CostCalculationMethod> CostCalculationMethods { get; set; }
+        public Func<long, ZoneItem> GetZoneItem { get; set; }
 
-        public int CurrencyId { get; set; }
-
+        public Func<Guid, int?> GetCostCalculationMethodIndex { get; set; }
     }
 }

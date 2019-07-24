@@ -115,15 +115,10 @@ app.directive('vrWhsSalesBulkactionTypeImportcustomertargetmatch', ['WhS_Sales_R
 
                 api.getData = function () {
                     var data = {
-                        $type: 'TOne.WhS.Sales.MainExtensions.ImportCustomerTargetMatch, TOne.WhS.Sales.MainExtensions',
+                        $type: 'TOne.WhS.Sales.MainExtensions.ImportCustomerTargetMatchBulkActionType, TOne.WhS.Sales.MainExtensions',
                         HeaderRowExists: $scope.scopeModel.headerRowExists,
-                        CacheObjectName: cacheObjectName,
+                        CacheObjectName: cacheObjectName,//UtilsService.guid(),
                         RateCalculationMethod: (directiveAPI != undefined) ? directiveAPI.getData() : null,
-                        CostCalculationMethods: bulkActionContext != undefined ? bulkActionContext.costCalculationMethods : null,
-                        PolicyConfigId: bulkActionContext.policyConfigId,
-                        RoutingDatabaseId: bulkActionContext.routingDatabaseId,
-                        NumberOfOptions: bulkActionContext.numberOfOptions,
-                        CurrencyId: bulkActionContext.currencyId
                     };
                     if ($scope.scopeModel.file != undefined) {
                         data.FileId = $scope.scopeModel.file.fileId;

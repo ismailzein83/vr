@@ -17,4 +17,17 @@ namespace TOne.WhS.Sales.Entities
         public string ErrorMessage { get; set; }
         public ImportedRowStatus Status { get; set; }
     }
+
+    public class CustomerTargetMatchInvalidImportedRow
+    {
+        public CustomerTargetMatchImportedRow ImportedRow { get; set; }
+
+        public int RowIndex { get; set; }
+
+        public long? ZoneId { get; set; }
+
+        public string ErrorMessage { get; set; }
+
+        public CustomerTargetMatchImportedRowStatus Status { get; set; }
+    }
 }

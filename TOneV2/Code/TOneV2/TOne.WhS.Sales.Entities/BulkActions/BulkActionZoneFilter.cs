@@ -29,5 +29,10 @@ namespace TOne.WhS.Sales.Entities
         SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId);
 
         SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId);
+
+        List<CostCalculationMethod> CostCalculationMethods { get; }
+
+        Func<Dictionary<long, ZoneItem>> GetContextZoneItems { get; set; }
+
     }
 }

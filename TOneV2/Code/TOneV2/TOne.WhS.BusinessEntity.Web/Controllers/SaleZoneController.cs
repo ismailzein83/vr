@@ -47,7 +47,16 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, filter);
+            return manager.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, filter, null, null, null, null, null);
+        }
+
+        [HttpPost]
+        [Route("GetSaleZonesInfos")]
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfos(GetSaleZonesInfosInput input)
+        {
+            SaleZoneInfoFilter filter = input.SerializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(input.SerializedFilter) : null;
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZonesInfo(input.NameFilter, input.SellingNumberPlanId, filter, input.SerializedCostCalculationMethods, input.CurrencyId, input.NumberOfOptions, input.PolicyConfigId, input.RoutingDatabaseId);
         }
 
         //[HttpGet]
@@ -107,10 +116,22 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
     public class SaleZoneInput
     {
-       // public int SellingNumberPlanId { get; set; }
+        // public int SellingNumberPlanId { get; set; }
 
         public HashSet<long> SaleZoneIds { get; set; }
 
         public SaleZoneFilterSettings SaleZoneFilterSettings { get; set; }
+    }
+
+    public class GetSaleZonesInfosInput
+    {
+        public string NameFilter { get; set; }
+        public int SellingNumberPlanId { get; set; }
+        public string SerializedFilter { get; set; }
+        public string SerializedCostCalculationMethods { get; set; }
+        public int CurrencyId { get; set; }
+        public int? NumberOfOptions { get; set; }
+        public Guid PolicyConfigId { get; set; }
+        public int RoutingDatabaseId { get; set; }
     }
 }

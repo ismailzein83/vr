@@ -19,4 +19,17 @@ namespace TOne.WhS.Sales.MainExtensions
             InvalidImportedRows = new List<InvalidImportedRow>();
         }
     }
+
+    public class CustomerTargetMatchImportBulkActionValidationResult : BulkActionValidationResult
+    {
+        public string ErrorMessage { get; set; }
+
+        public List<CustomerTargetMatchInvalidImportedRow> InvalidImportedRows { get; set; }
+
+        public CustomerTargetMatchImportBulkActionValidationResult()
+        {
+            base.ExcludedZoneIds = new List<long>();
+            InvalidImportedRows = new List<CustomerTargetMatchInvalidImportedRow>();
+        }
+    }
 }

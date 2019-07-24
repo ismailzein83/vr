@@ -19,7 +19,22 @@ namespace TOne.WhS.Sales.Entities
 	{
 		Valid = 0,
 		Invalid = 1,
-        OnlyNormalRateValid = 2,
-        InvalidDueExpectedRateViolation = 3
+        OnlyNormalRateValid = 2
 	}
+
+    public class ValidatedCustomerTargetMatchImportedRow
+    {
+        public CustomerTargetMatchImportedRow ImportedRow { get; set; }
+
+        public CustomerTargetMatchImportedRowStatus Status { get; set; }
+
+        public string ErrorMessage { get; set; }
+    }
+
+    public enum CustomerTargetMatchImportedRowStatus
+    {
+        Valid = 0,
+        Invalid = 1,
+        InvalidDueExpectedRateViolation = 2
+    }
 }

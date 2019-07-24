@@ -27,14 +27,6 @@ namespace TOne.WhS.Sales.Business
                         new EffectiveDateValidator(),
                         new RoutingProductValidator()
                   };
-            _taregtMatchValidators = new List<IImportedRowValidator>()
-                  {
-                    new CountryValidator(),
-                        new ZoneValidator(),
-                        new RateValidator(),
-                        new TargetMatchRateValidator(),
-                        new EffectiveTargetMatchDateValidator()
-                  };
             var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
             _allRateTypeIds = rateTypeManager.GetAllRateTypes().Select(item => item.RateTypeId);
         }
@@ -149,50 +141,7 @@ namespace TOne.WhS.Sales.Business
                 return false;
             }
         }
-        public bool IsTargetMatchImportedRowValid(IIsImportedTargetMatchRowValidContext context)
-        {
-            bool isValid = true;
-            var errorMessages = new List<string>();
-            var isValidContext = new IsTargetMatchValidContext(context.CostCalculationMethods)
-            {
-                OwnerType = context.OwnerType,
-                OwnerId = context.OwnerId,
-                AllRateTypeIds = _allRateTypeIds,
-                ImportedRow = context.ImportedRow,
-                ZoneDraft = context.ZoneDraft,
-                ExistingZone = context.ExistingZone,
-                CountryBEDsByCountry = context.CountryBEDsByCountry,
-                ClosedCountryIds = context.ClosedCountryIds,
-                AllowRateZero = context.AllowRateZero,
-                RateCalculationMethod = context.RateCalculationMethod,
-                ZoneItem = context.ZoneItem,
-                LongPrecision = context.LongPrecision
-            };
-            foreach (IImportedRowValidator validator in _taregtMatchValidators)
-            {
-                if (!validator.IsValid(isValidContext))
-                {
-                    if (isValidContext.ErrorMessage != null)
-                        errorMessages.Add(isValidContext.ErrorMessage);
-                    isValid = false;
-                }
-            }
-            if (isValid)
-            {
-                return true;
-            }
-            else
-            {
-                if (isValidContext.InvalidDueExpectedRateViolation)
-                    context.Status = ImportedRowStatus.InvalidDueExpectedRateViolation;
 
-                else context.Status = ImportedRowStatus.Invalid;
-
-                if (errorMessages.Count > 0)
-                    context.ErrorMessage = string.Join(" ; ", errorMessages);
-                return false;
-            }
-        }
         public bool IsOtherRateValid(IIsValidContext context)
         {
             context.ErrorMessage = null;
@@ -255,11 +204,151 @@ namespace TOne.WhS.Sales.Business
             public int RowIndex { get; set; }
             public ImportedRow ImportedRow { get; set; }
         }
-
         #endregion
     }
 
-    #region Public Classes
+    public class ImportedCustomerTargetMatchRowValidator
+    {
+        #region Fields / Constructors
+
+        private IEnumerable<ICustomerTargetMatchImportedRowValidator> _taregtMatchValidators;
+        private IEnumerable<int> _allRateTypeIds;
+
+        public ImportedCustomerTargetMatchRowValidator()
+        {
+            _taregtMatchValidators = new List<ICustomerTargetMatchImportedRowValidator>()
+                  {
+                    new CustomerTargetMatchCountryValidator(),
+                        new CustomerTargetMatchZoneValidator(),
+                        new TargetMatchRateValidator(),
+                        new CustomerTargetMatchRateValidator(),
+                        new CustomerTargetMatchEffectiveTargetMatchDateValidator()
+                  };
+        }
+
+        #endregion
+
+        public void ValidateImportedFile(CustomerTargetMatchImportedFileValidationContext context)
+        {
+            if (context.ImportedRows == null || context.ImportedRows.Count() == 0)
+                return;
+
+            var importedRowsByZoneName = new Dictionary<string, List<CustomerTargetMatchImportedRowWrapper>>();
+            var duplicateZoneNameKeys = new HashSet<string>();
+
+            for (int i = 0; i < context.ImportedRows.Count(); i++)
+            {
+                CustomerTargetMatchImportedRow importedRow = context.ImportedRows.ElementAt(i);
+
+                if (string.IsNullOrWhiteSpace(importedRow.Zone))
+                    continue;
+
+                List<CustomerTargetMatchImportedRowWrapper> zoneImportedRows;
+                string zoneNameKey = BulkActionUtilities.GetZoneNameKey(importedRow.Zone);
+
+                if (!importedRowsByZoneName.TryGetValue(zoneNameKey, out zoneImportedRows))
+                {
+                    zoneImportedRows = new List<CustomerTargetMatchImportedRowWrapper>();
+                    importedRowsByZoneName.Add(zoneNameKey, zoneImportedRows);
+                }
+                else
+                {
+                    duplicateZoneNameKeys.Add(zoneNameKey);
+                }
+
+                zoneImportedRows.Add(new CustomerTargetMatchImportedRowWrapper() { RowIndex = i, ImportedRow = importedRow });
+            }
+
+            var invalidImportedRows = new List<CustomerTargetMatchInvalidImportedRow>();
+
+            foreach (string duplicateZoneNameKey in duplicateZoneNameKeys)
+            {
+                long? importedZoneId = GetSaleZoneId(context.SaleZonesByZoneName, duplicateZoneNameKey);
+                IEnumerable<CustomerTargetMatchImportedRowWrapper> zoneImportedRows = importedRowsByZoneName.GetRecord(duplicateZoneNameKey);
+
+                foreach (CustomerTargetMatchImportedRowWrapper zoneImportedRow in zoneImportedRows)
+                {
+                    invalidImportedRows.Add(new CustomerTargetMatchInvalidImportedRow()
+                    {
+                        RowIndex = zoneImportedRow.RowIndex,
+                        ZoneId = importedZoneId,
+                        ImportedRow = zoneImportedRow.ImportedRow,
+                        ErrorMessage = string.Format("Zone '{0}' is duplicated", zoneImportedRow.ImportedRow.Zone)
+                    });
+                }
+            }
+
+            context.InvalidImportedRows = invalidImportedRows;
+        }
+
+        public bool IsCustomerTargetMatchImportedRowValid(IIsImportedCustomerTargetMatchRowValidContext context)
+        {
+            bool isValid = true;
+            var errorMessages = new List<string>();
+            var isValidContext = new IsTargetMatchValidContext()
+            {
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                AllRateTypeIds = _allRateTypeIds,
+                ImportedRow = context.ImportedRow,
+                ZoneDraft = context.ZoneDraft,
+                ExistingZone = context.ExistingZone,
+                CountryBEDsByCountry = context.CountryBEDsByCountry,
+                ClosedCountryIds = context.ClosedCountryIds,
+                DateTimeFormat = context.DateTimeFormat,
+                AllowRateZero = context.AllowRateZero,
+                //AdditionalCountryBEDsByCountryId = context.AdditionalCountryBEDsByCountryId,
+                LongPrecision = context.LongPrecision,
+                GetZoneItem = context.GetZoneItem,
+                GetCostCalculationMethodIndex = context.GetCostCalculationMethodIndex,
+                RateCalculationMethod = context.RateCalculationMethod
+            };
+            foreach (ICustomerTargetMatchImportedRowValidator validator in _taregtMatchValidators)
+            {
+                if (!validator.IsValid(isValidContext))
+                {
+                    if (isValidContext.ErrorMessage != null)
+                        errorMessages.Add(isValidContext.ErrorMessage);
+                    isValid = false;
+                }
+            }
+
+            if (isValid)
+            {
+                context.Status = CustomerTargetMatchImportedRowStatus.Valid;
+                context.ErrorMessage = null;
+                return true;
+            }
+            else
+            {
+
+                if (isValidContext.InvalidDueExpectedRateViolation)
+                    context.Status = CustomerTargetMatchImportedRowStatus.InvalidDueExpectedRateViolation;
+                else context.Status = CustomerTargetMatchImportedRowStatus.Invalid;
+
+                if (errorMessages.Count > 0)
+                    context.ErrorMessage = string.Join(" ; ", errorMessages);
+                return false;
+            }
+        }
+
+        #region Private Members
+
+        private long? GetSaleZoneId(Dictionary<string, SaleZone> saleZonesByZoneName, string saleZoneName)
+        {
+            SaleZone saleZone = saleZonesByZoneName.GetRecord(saleZoneName);
+            if (saleZone == null)
+                return null;
+            return saleZone.SaleZoneId;
+        }
+
+        private class CustomerTargetMatchImportedRowWrapper
+        {
+            public int RowIndex { get; set; }
+            public CustomerTargetMatchImportedRow ImportedRow { get; set; }
+        }
+        #endregion
+    }
 
     public class ImportedFileValidationContext
     {
@@ -270,6 +359,7 @@ namespace TOne.WhS.Sales.Business
         public IEnumerable<InvalidImportedRow> InvalidImportedRows { get; set; }
     }
 
+    #region Validators
     public class CountryValidator : IImportedRowValidator
     {
         public bool IsValid(IIsValidContext context)
@@ -329,33 +419,6 @@ namespace TOne.WhS.Sales.Business
 
             context.ErrorMessage = null;
             return true;
-        }
-    }
-
-    public class TargetMatchRateValidator : IImportedRowValidator
-    {
-        public bool IsValid(IIsValidContext context)
-        {
-            decimal zoneRate;
-            if (decimal.TryParse(context.ImportedRow.Rate, out zoneRate) && context.ZoneItem != null)
-            {
-                zoneRate = decimal.Round(zoneRate, context.LongPrecision);
-                if (context.AllowRateZero && zoneRate >= 0 || !context.AllowRateZero && zoneRate > 0)
-                {
-                    var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = context.ZoneItem };
-                    context.RateCalculationMethod.CalculateRate(rateCalculationContext);
-                    if (rateCalculationContext.Rate.HasValue && rateCalculationContext.Rate.Value > zoneRate)
-                    {
-                        context.ErrorMessage = "Less than expected rate";
-                        context.InvalidDueExpectedRateViolation = true;
-                        return false;
-                    }
-                    context.ErrorMessage = null;
-                    return true;
-                }
-            }
-            context.ErrorMessage = null;
-            return false;
         }
     }
 
@@ -432,48 +495,6 @@ namespace TOne.WhS.Sales.Business
         }
     }
 
-    public class EffectiveTargetMatchDateValidator : IImportedRowValidator
-    {
-        public bool IsValid(IIsValidContext context)
-        {
-            string effectiveDate = DateTime.Now.ToString();
-            CountryManager countryManager = new CountryManager();
-
-            // Convert ImportedRow.EffectiveDate to a string in a format that the grid's date column expects
-            //  context.ImportedRow.EffectiveDate = effectiveDateAsDateTime.ToString("yyyy-MM-ddTHH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
-
-            if (context.ExistingZone != null)
-            {
-                if (context.ExistingZone.BED > DateTime.Now)
-                {
-                    context.ErrorMessage = string.Format("Effective date is smaller than the Zone's BED '{0}'", UtilitiesManager.GetDateTimeAsString(context.ExistingZone.BED));
-                    return false;
-                }
-
-                if (context.ExistingZone.EED.HasValue)
-                {
-                    context.ErrorMessage = string.Format("Zone '{0}' will be closed on '{1}'. Cannot define new Rates for pending closed Zones", context.ExistingZone.Name, UtilitiesManager.GetDateTimeAsString(context.ExistingZone.EED.Value));
-                    return false;
-                }
-
-
-                DateTime countryBED;
-                context.CountryBEDsByCountry.TryGetValue(context.ExistingZone.CountryId, out countryBED);
-                var countryName = countryManager.GetCountryName(context.ExistingZone.CountryId);
-
-                if (countryBED > DateTime.Now)
-                {
-                    context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is greater than the effective date '{2}'", countryName, UtilitiesManager.GetDateTimeAsString(countryBED), UtilitiesManager.GetDateTimeAsString(DateTime.Now));
-                    return false;
-                }
-
-            }
-
-            context.ErrorMessage = null;
-            return true;
-        }
-    }
-
     public class RoutingProductValidator : IImportedRowValidator
     {
         public bool IsValid(IIsValidContext context)
@@ -520,56 +541,153 @@ namespace TOne.WhS.Sales.Business
         }
     }
 
-    //public class OtherRateValidator : IImportedRowValidator
-    //{
-    //    public bool IsValid(IIsValidContext context)
-    //    {
-    //        context.ErrorMessage = null;
-    //        IEnumerable<int> applicableRateTypeIds;
-    //        bool isValid = true;
-    //        List<string> errorMessages = new List<string>();
-    //        List<int> validRateTypeIds = new List<int>();
-    //        string errorMessage;
+    #endregion
 
-    //        if (context.ExistingZone == null)
-    //            return true;
+    public class CustomerTargetMatchImportedFileValidationContext
+    {
+        public IEnumerable<CustomerTargetMatchImportedRow> ImportedRows { get; set; }
 
-    //        if (context.OwnerType == SalePriceListOwnerType.SellingProduct)
-    //            applicableRateTypeIds = context.AllRateTypeIds;
-    //        else applicableRateTypeIds = BusinessEntity.Business.Helper.GetRateTypeIds(context.OwnerId, context.ExistingZone.SaleZoneId, DateTime.Now);
+        public Dictionary<string, SaleZone> SaleZonesByZoneName { get; set; }
 
-    //        foreach (var otherRate in context.ImportedRow.OtherRates)
-    //        {
-    //            if (string.IsNullOrEmpty(otherRate.Value))
-    //                continue;
+        public IEnumerable<CustomerTargetMatchInvalidImportedRow> InvalidImportedRows { get; set; }
+    }
 
-    //            if (!applicableRateTypeIds.Contains(otherRate.TypeId))
-    //            {
-    //                //isValid = false;
-    //                errorMessages.Add(string.Format("{0} Rules (Under Rules-Sale-RateType) is not configured for this customer's zone.", otherRate.TypeName));
-    //            }
-    //            else if (!BulkActionUtilities.ValidateRateValue(otherRate.Value, out errorMessage))
-    //            {
-    //                isValid = false;
-    //                errorMessages.Add(string.Join(" ", otherRate.TypeName, errorMessage));
-    //            }
-    //            else
-    //            {
-    //                validRateTypeIds.Add(otherRate.TypeId);
-    //            }
-    //        }
+    #region CustomerTargetMatch Validators
+    public class TargetMatchRateValidator : ICustomerTargetMatchImportedRowValidator
+    {
+        public bool IsValid(ICustomerTargetMatchIsValidContext context)
+        {
+            string rateValue = context.ImportedRow.Rate;
 
-    //        if (!isValid)
-    //        {
-    //            context.ErrorMessage = string.Join("; ", errorMessages);
-    //            return false;
-    //        }
+            string errorMessage;
+            if (!string.IsNullOrEmpty(rateValue) && !BulkActionUtilities.ValidateRateValue(rateValue, out errorMessage, context.AllowRateZero, context.LongPrecision))
+            {
+                context.ErrorMessage = errorMessage;
+                return false;
+            }
 
-    //        context.ImportedRow.OtherRates = context.ImportedRow.OtherRates.FindAllRecords(item => validRateTypeIds.Contains(item.TypeId)).ToList();
-    //        return true;
+            context.ErrorMessage = null;
+            return true;
+        }
+    }
+    public class CustomerTargetMatchEffectiveTargetMatchDateValidator : ICustomerTargetMatchImportedRowValidator
+    {
+        public bool IsValid(ICustomerTargetMatchIsValidContext context)
+        {
+            string effectiveDate = DateTime.Now.ToString();
+            CountryManager countryManager = new CountryManager();
 
-    //    }
-    //}
+            // Convert ImportedRow.EffectiveDate to a string in a format that the grid's date column expects
+            //  context.ImportedRow.EffectiveDate = effectiveDateAsDateTime.ToString("yyyy-MM-ddTHH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
 
+            if (context.ExistingZone != null)
+            {
+                if (context.ExistingZone.BED > DateTime.Now)
+                {
+                    context.ErrorMessage = string.Format("Effective date is smaller than the Zone's BED '{0}'", UtilitiesManager.GetDateTimeAsString(context.ExistingZone.BED));
+                    return false;
+                }
+
+                if (context.ExistingZone.EED.HasValue)
+                {
+                    context.ErrorMessage = string.Format("Zone '{0}' will be closed on '{1}'. Cannot define new Rates for pending closed Zones", context.ExistingZone.Name, UtilitiesManager.GetDateTimeAsString(context.ExistingZone.EED.Value));
+                    return false;
+                }
+
+
+                DateTime countryBED;
+                context.CountryBEDsByCountry.TryGetValue(context.ExistingZone.CountryId, out countryBED);
+                var countryName = countryManager.GetCountryName(context.ExistingZone.CountryId);
+
+                if (countryBED > DateTime.Now)
+                {
+                    context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is greater than the effective date '{2}'", countryName, UtilitiesManager.GetDateTimeAsString(countryBED), UtilitiesManager.GetDateTimeAsString(DateTime.Now));
+                    return false;
+                }
+
+            }
+
+            context.ErrorMessage = null;
+            return true;
+        }
+    }
+    public class CustomerTargetMatchZoneValidator : ICustomerTargetMatchImportedRowValidator
+    {
+        public bool IsValid(ICustomerTargetMatchIsValidContext context)
+        {
+            string zoneName = context.ImportedRow.Zone;
+
+            if (string.IsNullOrEmpty(zoneName))
+            {
+                context.ErrorMessage = "Zone is empty";
+                return false;
+            }
+
+            if (context.ExistingZone == null)
+            {
+                context.ErrorMessage = "Zone does not exist";
+                return false;
+            }
+
+            context.ErrorMessage = null;
+            return true;
+        }
+    }
+    public class CustomerTargetMatchCountryValidator : ICustomerTargetMatchImportedRowValidator
+    {
+        public bool IsValid(ICustomerTargetMatchIsValidContext context)
+        {
+            if (context.ExistingZone == null)
+            {
+                context.ErrorMessage = null;
+                return true;
+            }
+
+            if (context.ClosedCountryIds.Contains(context.ExistingZone.CountryId))
+            {
+                context.ErrorMessage = "Country is closed";
+                return false;
+            }
+
+            context.ErrorMessage = null;
+            return true;
+        }
+    }
+    public class CustomerTargetMatchRateValidator : ICustomerTargetMatchImportedRowValidator
+    {
+        public bool IsValid(ICustomerTargetMatchIsValidContext context)
+        {
+            decimal zoneRate;
+            if (decimal.TryParse(context.ImportedRow.Rate, out zoneRate) && context.ExistingZone != null)
+            {
+                if (context.GetZoneItem == null || context.GetCostCalculationMethodIndex == null)
+                {
+                    context.InvalidDueExpectedRateViolation = true;
+                    return false;
+                }
+
+                zoneRate = decimal.Round(zoneRate, context.LongPrecision);
+                var zoneItem = context.GetZoneItem(context.ExistingZone.SaleZoneId);
+                if (zoneItem == null)
+                    throw new NullReferenceException(string.Format("No ZoneItem found with Id '{0}'.", context.ExistingZone.SaleZoneId));
+
+                if (context.AllowRateZero && zoneRate >= 0 || !context.AllowRateZero && zoneRate > 0)
+                {
+                    var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = zoneItem };
+                    context.RateCalculationMethod.CalculateRate(rateCalculationContext);
+                    if (rateCalculationContext.Rate.HasValue && rateCalculationContext.Rate.Value > zoneRate)
+                    {
+                        context.ErrorMessage = "Less than expected rate";
+                        context.InvalidDueExpectedRateViolation = true;
+                        return false;
+                    }
+                    context.ErrorMessage = null;
+                    return true;
+                }
+            }
+            context.ErrorMessage = null;
+            return false;
+        }
+    }
     #endregion
 }

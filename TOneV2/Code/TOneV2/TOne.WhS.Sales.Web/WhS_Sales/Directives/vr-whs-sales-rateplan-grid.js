@@ -497,6 +497,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             getZoneLettersInput.ZoneNameFilter = gridQuery.Filter.ZoneNameFilter;
                             getZoneLettersInput.BulkActionFilter = gridQuery.Filter.BulkActionFilter;
                             getZoneLettersInput.ExcludedZoneIds = gridQuery.Filter.ExcludedZoneIds;
+                            getZoneLettersInput.CurrencyId = gridQuery.CurrencyId;
+                            getZoneLettersInput.RoutingDatabaseId = gridQuery.RoutingDatabaseId;
+                            getZoneLettersInput.PolicyConfigId = gridQuery.PolicyConfigId;
+                            getZoneLettersInput.NumberOfOptions = gridQuery.NumberOfOptions;
+                            getZoneLettersInput.CostCalculationMethods = gridQuery.CostCalculationMethods;
                         }
 
                         return WhS_Sales_RatePlanAPIService.GetZoneLetters(getZoneLettersInput).then(function (response) {

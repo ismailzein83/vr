@@ -305,6 +305,11 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
 
                 if (bulkActionContext != undefined) {
                     saleZoneSelectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
+                    saleZoneSelectorPayload.costCalculationMethods = bulkActionContext.costCalculationMethods;
+                    saleZoneSelectorPayload.numberOfOptions = bulkActionContext.numberOfOptions;
+                    saleZoneSelectorPayload.policyConfigId = bulkActionContext.policyConfigId;
+                    saleZoneSelectorPayload.routingDatabaseId = bulkActionContext.routingDatabaseId;
+                    saleZoneSelectorPayload.currencyId = bulkActionContext.currencyId;
                 }
 
                 var countryId = countrySelectorAPI.getSelectedIds();
@@ -357,11 +362,11 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                     };
                     saleZoneSelectorFilters.push(countrySoldToCustomerFilter);
                 }
-                  var applicableSaleZoneFilter = {
+                var applicableSaleZoneFilter = {
                     $type: 'TOne.WhS.Sales.Business.ApplicableSaleZoneFilter, TOne.WhS.Sales.Business',
-                        OwnerType: ownerType,
-                        OwnerId: ownerId,
-                        ActionType: bulkAction
+                    OwnerType: ownerType,
+                    OwnerId: ownerId,
+                    ActionType: bulkAction
                 };
                 saleZoneSelectorFilters.push(applicableSaleZoneFilter);
 

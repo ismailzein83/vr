@@ -3,6 +3,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Business;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.Routing.MainExtensions
 {

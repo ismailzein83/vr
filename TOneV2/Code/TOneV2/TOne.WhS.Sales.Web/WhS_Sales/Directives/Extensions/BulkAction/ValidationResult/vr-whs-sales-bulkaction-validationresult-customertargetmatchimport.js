@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', 'LabelColorsEnum', 'WhS_Sales_ImportedRowStatus',
-    function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter, LabelColorsEnum, WhS_Sales_ImportedRowStatus) {
+app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', 'LabelColorsEnum', 'WhS_Sales_CustomerTargetMatchImportedRowStatus',
+    function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter, LabelColorsEnum, WhS_Sales_CustomerTargetMatchImportedRowStatus) {
         return {
             restrict: "E",
             scope: {
@@ -85,7 +85,7 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
                     return;
                 if (gridArray.length < sourceArray.length) {
                     for (var i = 0; i < sourceArray.length && i < pageSize; i++) {
-                        sourceArray[i].CanBeIncluded = sourceArray[i].Status == WhS_Sales_ImportedRowStatus.InvalidDueExpectedRateViolation.value;
+                        sourceArray[i].CanBeIncluded = sourceArray[i].Status == WhS_Sales_CustomerTargetMatchImportedRowStatus.InvalidDueExpectedRateViolation.value;
                         gridArray.push({
                             Entity: sourceArray[i]
                         });
@@ -97,7 +97,7 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
                 if (invalidImportedRows == undefined)
                     return false;
                 for (var i = 0; i < invalidImportedRows.length; i++) {
-                    if (invalidImportedRows[i].Status == WhS_Sales_ImportedRowStatus.InvalidDueExpectedRateViolation.value) {
+                    if (invalidImportedRows[i].Status == WhS_Sales_CustomerTargetMatchImportedRowStatus.InvalidDueExpectedRateViolation.value) {
                         $scope.scopeModel.hasIncludableZones = true;
                         break;
                     }
@@ -108,7 +108,6 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
                 var includedZones = [];
                 for (var i = 0; i < invalidImportedRows.length; i++) {
                     var element = invalidImportedRows[i];
-                    console.log(element);
                     if (element.Include) {
                         includedZones.push({
                             ZoneId: element.ZoneId,

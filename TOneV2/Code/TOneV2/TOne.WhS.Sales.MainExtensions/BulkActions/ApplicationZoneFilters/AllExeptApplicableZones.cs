@@ -22,7 +22,7 @@ namespace TOne.WhS.Sales.MainExtensions
         public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
         {
             if (context.SaleZones == null || context.SaleZones.Count() == 0)
-				return null;// throw new Vanrise.Entities.MissingArgumentValidationException("saleZones");
+                return null;// throw new Vanrise.Entities.MissingArgumentValidationException("saleZones");
 
             var applicableZoneIds = new List<long>();
 
@@ -66,7 +66,9 @@ namespace TOne.WhS.Sales.MainExtensions
                     GetSellingProductZoneRate = getSellingProductZoneRate,
                     GetCustomerZoneRate = getCustomerZoneRate,
                     CountryBEDsByCountryId = countryBEDsByCountryId,
-                    CountryEEDsByCountryId = countryEEDsByCountryId
+                    CountryEEDsByCountryId = countryEEDsByCountryId,
+                    CostCalculationMethods = context.CostCalculationMethods,
+                    GetContextZoneItems = context.GetContextZoneItems
                 };
 
                 if (UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))

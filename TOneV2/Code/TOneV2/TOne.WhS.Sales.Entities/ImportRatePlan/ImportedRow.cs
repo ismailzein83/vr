@@ -6,26 +6,37 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-	public class ImportedRow
-	{
-		public string Zone { get; set; }
+    public class ImportedRow
+    {
+        public string Zone { get; set; }
 
-		public string Rate { get; set; }
+        public string Rate { get; set; }
 
-		public string EffectiveDate { get; set; }
+        public string EffectiveDate { get; set; }
 
         public List<ImportedOtherRate> OtherRates { get; set; }
 
-		public string RoutingProductName { get; set; }
+        public string RoutingProductName { get; set; }
 
-		public int? RoutingProductId { get; set; }
+        public int? RoutingProductId { get; set; }
 
-		public ImportedRowStatus Status { get; set; }
+        public ImportedRowStatus Status { get; set; }
     }
     public class ImportedOtherRate
     {
         public string Value { get; set; }
         public string TypeName { get; set; }
         public int TypeId { get; set; }
+    }
+
+    public class CustomerTargetMatchImportedRow
+    {
+        public string Zone { get; set; }
+
+        public string Rate { get; set; }
+
+        public string TargetVolume { get; set; }
+
+        public CustomerTargetMatchImportedRowStatus Status { get; set; }
     }
 }

@@ -93,12 +93,13 @@ namespace TOne.WhS.Sales.Business
             if (input.Draft != null && input.Draft.ZoneChanges != null)
                 zoneDraft = input.Draft.ZoneChanges.FindRecord(x => x.ZoneId == input.SaleZone.SaleZoneId);
 
-            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId)
+            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId,input.GetContextZoneItems, input.CostCalculationMethods)
+            //var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId)
             {
                 OwnerType = input.OwnerType,
                 OwnerId = input.OwnerId,
                 SaleZone = input.SaleZone,
-                ZoneDraft = zoneDraft
+                ZoneDraft = zoneDraft                
             };
 
             return input.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
@@ -165,6 +166,7 @@ namespace TOne.WhS.Sales.Business
 
             foreach (SaleZone saleZone in saleZones)
             {
+                //var bulkActionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId, getContextZoneItems, costCalculationMethods)
                 var bulkActionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId)
                 {
                     OwnerType = input.OwnerType,
@@ -434,6 +436,10 @@ namespace TOne.WhS.Sales.Business
         public Func<int, int, long, bool, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
 
         public Func<decimal?, decimal, DateTime> GetRateBED { get; set; }
+
+        public List<CostCalculationMethod> CostCalculationMethods { get; set; }
+
+        public Func<Dictionary<long,ZoneItem>> GetContextZoneItems { get; set; }
     }
 
     #endregion
