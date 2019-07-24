@@ -534,11 +534,6 @@ when not matched by target then
                 sb = sb.Replace(mainItem, "StandardRAStructure");
             }
 
-            if (projectName == "DevTool")
-            {
-                sb = sb.Replace(mainItem, "StandardDevToolStructure");
-            }
-
             if (projectName == "TestCallAnalysis")
             {
                 sb = sb.Replace(mainItem, "StandardTestCallAnalysis");
