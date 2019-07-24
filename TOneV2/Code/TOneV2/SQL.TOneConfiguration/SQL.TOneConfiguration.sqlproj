@@ -991,5 +991,6 @@
     <None Include="VRJSON_PostScripts\CommonEntities_CommonEntities.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\CommonEntities_BankEntities.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\Demo_MarketView.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\DevTools.PostDeployment.json" />
   </ItemGroup>
 </Project>
