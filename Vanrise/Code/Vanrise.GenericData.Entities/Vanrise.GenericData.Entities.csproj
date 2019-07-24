@@ -117,6 +117,7 @@
     <Compile Include="CDRCorrelation\CDRCorrelationFilterGroup.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationProcessState.cs" />
     <Compile Include="DataRecordTypes\DataRecordFieldTypeInfo.cs" />
+    <Compile Include="DataRecordTypes\FieldTypeRuntimeViewSettings.cs" />
     <Compile Include="DataRecordTypes\ListRecordRuntimeViewType.cs" />
     <Compile Include="DataStorage\IGetStorageNameContext.cs" />
     <Compile Include="GenericBusinessEntityCustomActions\RangeGenericEditorProcessInput.cs" />
