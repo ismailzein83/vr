@@ -90,7 +90,7 @@
                     $scope.scopeModel.runtimeViewSettingEditor = fieldType.RuntimeViewSettingEditor;
 
                     var dataRecordFieldType = UtilsService.getItemByVal(dataRecordFieldTypes, fieldType.ConfigId, "ExtensionConfigurationId");
-                    if (dataRecordFieldType != undefined) {
+                    if (dataRecordFieldType != undefined) { //AS: && dataRecordFieldType.ShowDefaultValue 
                         $scope.scopeModel.fieldTypeRuntimeDirective = dataRecordFieldType.RuntimeEditor;
                         if ($scope.scopeModel.fieldTypeRuntimeDirective != undefined)
                             directivePromises.push(loadFieldTypeRuntimeDirective());
