@@ -971,6 +971,7 @@
     <None Include="InterConnect_Ogero.PostDeployment.sql" />
     <None Include="Retail_RetailBilling_common.PostDeployment.sql" />
     <None Include="Demo_MarketView.PostDeployment.sql" />
+    <None Include="VRJSON_PostScripts\Common.Localization.PostDeployment.json.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
