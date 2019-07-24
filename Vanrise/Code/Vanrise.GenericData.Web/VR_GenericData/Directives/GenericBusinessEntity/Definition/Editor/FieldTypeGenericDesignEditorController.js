@@ -2,9 +2,9 @@
 
     "use strict";
 
-    FieldTypeGenericDesignEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService'];
+    FieldTypeGenericDesignEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VRLocalizationService'];
 
-    function FieldTypeGenericDesignEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
+    function FieldTypeGenericDesignEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, VRLocalizationService) {
 
         var fieldTypeEntitySettings;
         var context;
@@ -76,6 +76,7 @@
                     $scope.scopeModel.showAsLabel = fieldTypeEntitySettings.ShowAsLabel;
                     $scope.scopeModel.hideLabel = fieldTypeEntitySettings.HideLabel;
                     $scope.scopeModel.readOnly = fieldTypeEntitySettings.ReadOnly;
+                    $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
                 }
             }
 
@@ -99,11 +100,12 @@
                     if ($scope.scopeModel.runtimeViewSettingEditor != undefined)
                         directivePromises.push(loadRuntimeViewSettingsEditorDirective());
 
-                    directivePromises.push(loadLocalizationResourceSelector());
+                    if ($scope.scopeModel.isLocalizationEnabled)
+                        directivePromises.push(loadLocalizationResourceSelector());
 
                     return {
                         promises: directivePromises,
-                    }
+                    };
                 }
             };
 
@@ -169,7 +171,7 @@
 
             currentContext.getFieldTypeWith = function () {
                 return $scope.scopeModel.fieldWidth;
-            }
+            };
             return currentContext;
         }
 

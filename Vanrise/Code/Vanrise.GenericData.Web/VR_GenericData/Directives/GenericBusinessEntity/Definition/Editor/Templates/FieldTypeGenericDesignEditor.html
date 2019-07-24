@@ -11,7 +11,9 @@
                 <vr-columns colnum="4">
                     <vr-textbox value="scopeModel.fieldWidth" label="Field Width" type="number" decimalprecision="0" minvalue="1" maxvalue="12"></vr-textbox>
                 </vr-columns>
-                <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="4" label="Text Resource"></vr-common-vrlocalizationtextresource-selector>
+                <span ng-if="scopeModel.isLocalizationEnabled">
+                    <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="4" label="Text Resource"></vr-common-vrlocalizationtextresource-selector>
+                </span>
             </vr-row>
             <vr-row removeline>
                 <vr-columns colnum="2">
