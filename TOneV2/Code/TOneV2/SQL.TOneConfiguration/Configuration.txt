@@ -165,3 +165,6 @@ Retail_CRMForFixedOperator.PostDeployment.json
 RetailBilling
 Retail_RetailBilling_common.PostDeployment.sql
 Retail_RetailBilling.PostDeployment.json
+
+DevTools
+DevTools.PostDeployment.json
