@@ -113,6 +113,11 @@
                 $scope.ctrl.onFocusDirective = function (e) {
                     if (ctrl.value && typeof (ctrl.value) == "string" && $attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name)
                         ctrl.value = ctrl.value.replace(/,/g, '');
+
+                    var onfocustextboxMethod = $scope.$parent.$eval($attrs.onfocustextbox);
+                    if (onfocustextboxMethod != undefined && onfocustextboxMethod != null && typeof (onfocustextboxMethod) == 'function') {
+                        onfocustextboxMethod();
+                    }
                 };
             },
             compile: function (element, attrs) {
