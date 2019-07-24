@@ -119,6 +119,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\ChildEntityFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\IsEmptyFilterDefinitonSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\LimitResultFilterDefinitionSettings.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\ListGenericFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEGridCondition\FilterGroupGenericBEGridCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\ListGenericBEOnBeforeInsertHandler.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\SetGenericBEFixedValuesBeforeSaveHandler.cs" />
