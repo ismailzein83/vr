@@ -16,7 +16,7 @@
             }
 
             ngModel.$render = function () {
-                element.html(ngModel.$viewValue.trim() || "");
+                element.html(ngModel.$viewValue != undefined && ngModel.$viewValue.trim() || "");
             };
 
             element.bind("blur", onElementBlur);

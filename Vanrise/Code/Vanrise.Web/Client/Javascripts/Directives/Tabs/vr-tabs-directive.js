@@ -111,7 +111,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                             ctrl.datasource[i] = ctrl.tabs[i].tabItem;
                         }
                 }
-            };
+            };            
             ctrl.hideTab = function ($index) {
                 if (ctrl.hidepaginationcontrols != undefined) return false;
                 return ($index >= ctrl.tabsCountLimit || $index < ctrl.tabsCountStart) && !($index == 0 && ctrl.tabs.length == 1);
@@ -119,14 +119,14 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
             };
             ctrl.editClick = function (tab) {
                 if (ctrl.oneditclicked != undefined && typeof ctrl.oneditclicked == 'function')
-                    ctrl.oneditclicked(tab.data);
+                    ctrl.oneditclicked(tab.tabItem);
             };
-
+           
             ctrl.removeTab = function (tab) {
                 var index = ctrl.tabs.indexOf(tab);
                 ctrl.tabs.splice(index, 1);
                 if (typeof (tab.onremove) === 'function') {
-                    tab.onremove(tab);
+                    tab.onremove(tab.tabItem);                    
                 }
                 $("#" + tab.guid).remove();
                 setTimeout(function () {
