@@ -220,8 +220,10 @@
     <Content Include="WhS_Deal\Directives\Extensions\DealTimePeriod\vr-whs-dealtimeperiod-lastsevendays.js" />
     <Content Include="WhS_Deal\Directives\Extensions\ReprocessFilterDefinition\Templates\DealReprocessFilterDefinitionTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\ReprocessFilterDefinition\vr-whs-deal-reprocessfilterdefinition-definition.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealWholeDealProgressDataProviderSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealOverallProgressBusinessObjectDataProviderSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealBusinessObjectDataProviderSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-wholedealprogress-dataprovidersettings.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-overallprogress-businessobject-dataprovidersettings.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-businessobject-dataprovidersettings.js" />
     <Content Include="WhS_Deal\Directives\Extensions\RouteRule\RouteRuleCriteria\Templates\SaleDealRouteRuleCriteriaDirective.html" />
