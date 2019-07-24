@@ -390,10 +390,12 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\vr-genericdata-genericbe-bulkadd-customaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\BasicAdvancedFilterDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\ChildEntityFilterDefinitionTemplate.html" />
+    <!--<Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\GenericListFilterDefinitionTemplate.html" />-->
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\IsEmptyFilterDefinitonTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\vr-genericdata-genericbe-filterdefinition-basicadvanced.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\vr-genericdata-genericbe-filterdefinition-childentityfilter.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\vr-genericdata-genericbe-filterdefinition-isemptyfilter.js" />
+    <!--<Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\vr-genericdata-genericbe-listfilterdefinition-genericfilter.js" />-->
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\MainExtensions\Templates\AdvancedOrderTypeTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\MainExtensions\vr-genericdata-ordertype-advancedorderoptions.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\vr-genericdata-genericbe-orderdirection-selective.js" />
@@ -415,6 +417,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\IsEmptyFilterRuntimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-filterruntime-childentity.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-filterruntime-isempty.js" />
+    <!--<Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-listfilterruntime-generic.js" />-->
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBERuntimeManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericEditorSubViewViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\Templates\StatusHistoryGenericBEDefinitionViewTemplate.html" />
