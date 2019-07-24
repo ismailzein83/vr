@@ -13,7 +13,7 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Web.config.DevTool.exclud" /y /v /z /i
 ::by default load flat theme
 xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-DevTool-logoonheader.png" /S /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\Images\logoonheader.png*"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-DevTool-login.png" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\Images\login.png*"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-DevTool-iconheader.ico" /S /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\Images\iconheader.ico*"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-tone-iconheader.ico" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\Images\iconheader.ico*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-01.png" 		 /S /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\Client\Images\01.png*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-02.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\Client\Images\02.png*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-member.png" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\Client\Images\member.png*"
