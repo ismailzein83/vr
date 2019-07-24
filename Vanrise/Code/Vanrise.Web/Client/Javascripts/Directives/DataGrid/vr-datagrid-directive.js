@@ -29,7 +29,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            dragdropsetting: '=',
 	            mobilegridlayout: '=',
 	            alternativecolor: '=',
-	            rowviewsetting: '='
+	            rowviewsetting: '=',
+                oncollapserow:"="
 	        },
 	        controller: function ($scope, $element, $attrs) {
 	            columnVisibilities = [];
@@ -1657,6 +1658,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    }
 	                }
 	                dataItem.isRowExpanded = false;
+	                if (ctrl.oncollapserow != undefined && typeof ctrl.oncollapserow == 'function')
+	                    ctrl.oncollapserow(dataItem);
 	            };
 	            ctrl.hasOpenedDataItem = false;
 	            ctrl.switchFullScreenModeOn = function (dataItem, evnt) {
