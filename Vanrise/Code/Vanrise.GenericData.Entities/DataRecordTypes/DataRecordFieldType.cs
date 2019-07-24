@@ -27,6 +27,8 @@ namespace Vanrise.GenericData.Entities
 
         public virtual string DetailViewerEditor { get { return "vr-genericdata-datarecordfield-defaultdetailviewer"; } }
 
+        public virtual bool ShowDefaultValue { get { return true; } }
+
         public abstract Type GetRuntimeType();
 
         public abstract Type GetNonNullableRuntimeType();
