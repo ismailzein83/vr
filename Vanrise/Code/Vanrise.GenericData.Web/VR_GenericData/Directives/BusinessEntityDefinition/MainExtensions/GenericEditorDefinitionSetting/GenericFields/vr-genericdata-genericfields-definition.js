@@ -116,7 +116,7 @@
                             }
                             return { promises: childPromises };
                         }
-                    }
+                    };
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
