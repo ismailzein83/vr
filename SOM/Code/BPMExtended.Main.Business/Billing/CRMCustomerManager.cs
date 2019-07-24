@@ -525,7 +525,7 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public List<RequestHeaderDetail> GetRequestHeaderData(string contactId, string accountId, string contractId)
+        public List<RequestHeaderDetail> GetRequestHeaderData(string contactId, string accountId, string contractId, string requestId, string from, string to)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
