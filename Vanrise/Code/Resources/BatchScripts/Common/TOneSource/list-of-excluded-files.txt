@@ -6,6 +6,7 @@
 \Web.config.JAZZ.exclud
 \appSettings.config
 \ConnectionStrings.config
+Web.config.DevTool.exclud
 
 \Images
 NImages\

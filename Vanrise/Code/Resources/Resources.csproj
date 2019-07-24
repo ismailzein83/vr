@@ -97,6 +97,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="BatchScripts\DevTool\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\DevTool\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Common\CarrierPortalSource\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Common\CarrierPortalSource\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Common\CarrierPortalSource\runtime-list-of-excluded-files.txt" />
@@ -361,6 +363,15 @@
     <None Include="BatchScripts\CDRAnalysis\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\CDRAnalysis\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CDRAnalysis\All.bat" />
+    <None Include="BatchScripts\DevTool\01-Runtime.bat" />
+    <None Include="BatchScripts\DevTool\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\DevTool\03-WebSite.bat" />
+    <None Include="BatchScripts\DevTool\05-CompressFiles.bat" />
+    <None Include="BatchScripts\DevTool\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\DevTool\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\DevTool\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\DevTool\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\DevTool\All.bat" />
     <None Include="BatchScripts\CentralAuth\01-Runtime.bat" />
     <None Include="BatchScripts\CentralAuth\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CentralAuth\03-WebSite.bat" />
