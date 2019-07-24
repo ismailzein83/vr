@@ -1,0 +1,222 @@
+﻿{
+  "Scripts": [
+    {
+      "ConnectionId": "7268cf3c-9b82-46ce-9a88-ffccb1a62265",
+      "Schema": "sec",
+      "TableName": "View",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "d1619004-1cb5-4a0c-92b2-55ada59c417e",
+              "ActionNames": "VRCommon/Settings/GetFilteredTechnicalSettings",
+              "Audience": null,
+              "Content": null,
+              "CreatedTime": "2018-03-13T14:33:38.05",
+              "DevProjectID": null,
+              "IsDeleted": null,
+              "LastModifiedTime": "2019-02-14T14:39:40.827",
+              "Module": "50624672-cd25-44fd-8580-0e3ac8e34c71",
+              "Name": "Post Script Generator",
+              "Rank": 2,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\"}",
+              "Title": "Post Script Generator",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Url": "#/view/VR_DevTools/Elements/GeneratedScript/Views/VRGeneratedScriptManagement"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Title",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ActionNames",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Audience",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Content",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "IsDeleted",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Module",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Rank",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Type",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Url",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "name like '%post%'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "7268cf3c-9b82-46ce-9a88-ffccb1a62265",
+      "Schema": "common",
+      "TableName": "ExtensionConfiguration",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "1f5bddad-b1c2-4056-bec6-44233de11cf2",
+              "Title": "Select",
+              "Name": "Select",
+              "Settings": "{\"Editor\":\"vr-devtools-generated-script-select-variable\"}",
+              "ConfigType": "VR_Tools_GeneratedScriptVariableSettings",
+              "CreatedTime": "2019-01-08T15:02:54.943",
+              "LastModifiedTime": "2019-01-08T15:02:54.943"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "411f4a51-1b9a-4221-9f16-1a05c1877eb2",
+              "Title": "Delete",
+              "Name": "GeneratedScriptItem",
+              "Settings": "{\"Editor\":\"vr-devtools-generated-script-delete\"}",
+              "ConfigType": "VR_Tools_GeneratedScriptSettings",
+              "CreatedTime": "2018-11-02T17:27:01.36",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+              "Title": "Merge",
+              "Name": "GeneratedScriptItem",
+              "Settings": "{\"Editor\":\"vr-devtools-generated-script-merge\"}",
+              "ConfigType": "VR_Tools_GeneratedScriptSettings",
+              "CreatedTime": "2018-11-02T11:09:48.68",
+              "LastModifiedTime": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Title",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ConfigType",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "name like '%genera%'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    }
+  ]
+}
