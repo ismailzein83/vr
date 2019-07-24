@@ -212,7 +212,7 @@
     <Content Include="VR_GenericData\Constants\CompareToConstantOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateCounterTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\DateTimeValidationOperatorEnum.js" />
-    <Content Include="VR_GenericData\Constants\DateTimeValidationSeatEnum.js" />
+    <Content Include="VR_GenericData\Constants\DateTimeValidationTargetEnum.js" />
     <Content Include="VR_GenericData\Constants\DateTimeDefaultValueEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldNumberDataPrecisionEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldTextTextTypeEnum.js" />
