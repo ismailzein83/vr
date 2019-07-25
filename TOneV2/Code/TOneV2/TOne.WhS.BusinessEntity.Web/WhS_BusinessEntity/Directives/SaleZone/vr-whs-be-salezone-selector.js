@@ -204,7 +204,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                         genericUIContext = payload.genericUIContext;
                         showSellingNumberPlanIfMultiple = payload.showSellingNumberPlanIfMultiple;
                         onSellingNumberPlanSelectionChanged = payload.onSellingNumberPlanSelectionChanged;
-                        costCalculationMethods = payload.costCalculationMethods
+                        costCalculationMethods = payload.costCalculationMethods;
                         numberOfOptions = payload.numberOfOptions;
                         policyConfigId = payload.policyConfigId;
                         routingDatabaseId = payload.routingDatabaseId;
