@@ -253,6 +253,7 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                 var outboundManagementLoadDeferred = UtilsService.createPromiseDeferred();
 
                 UtilsService.waitMultiplePromises([swapDealSettingsLoadDeferred.promise, settingsLoadDeferred.promise, outboundManagementReadyDeferred.promise]).then(function () {
+                    var settingsData = settingsAPI.getData();
                     var outboundManagementPayload = {
                         context: {
                             settingsAPI: settingsAPI,
@@ -260,7 +261,8 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                         },
                         settings: {
                             defaultRateCalcMethodId: swapDealSettings.DefaultCalculationMethodId,
-                            outboundRateCalcMethods: swapDealSettings.OutboundCalculationMethods
+                            outboundRateCalcMethods: swapDealSettings.OutboundCalculationMethods,
+                            beginDate: settingsData.FromDate
                         }
                         , Outbounds: outbounds
                     };
