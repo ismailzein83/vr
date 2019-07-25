@@ -89,7 +89,9 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['UtilsService', 'VRUIUtilsSe
             api.getCarrierAccountId = function () {
                 return carrierAccountSelectorAPI.getSelectedIds();
             };
-
+            api.getBeginDate = function () {
+                return $scope.scopeModel.fromDate;
+            };
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);
         }

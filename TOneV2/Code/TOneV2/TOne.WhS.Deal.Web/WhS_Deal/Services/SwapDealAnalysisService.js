@@ -6,11 +6,12 @@
 
     function SwapDealAnalysisService(VRModalService, VRNotificationService, UtilsService, VR_GenericData_GenericBEActionService) {
 
-        function addInbound(settings, carrierAccountId, sellingNumberPlanId, onInboundAdded) {
+        function addInbound(settings, carrierAccountId, sellingNumberPlanId, beginDate, onInboundAdded) {
             var parameters = {
                 settings: settings,
                 carrierAccountId: carrierAccountId,
-                sellingNumberPlanId: sellingNumberPlanId
+                sellingNumberPlanId: sellingNumberPlanId,
+                beginDate: beginDate
             };
 
             var settings = {};
@@ -21,12 +22,13 @@
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/InboundEditor.html', parameters, settings);
         }
 
-        function editInbound(settings, carrierAccountId, sellingNumberPlanId, inboundEntity, onInboundUpdated) {
+        function editInbound(settings, carrierAccountId, sellingNumberPlanId, beginDate, inboundEntity, onInboundUpdated) {
             var parameters = {
                 settings: settings,
                 carrierAccountId: carrierAccountId,
                 sellingNumberPlanId: sellingNumberPlanId,
-                inboundEntity: inboundEntity
+                inboundEntity: inboundEntity,
+                beginDate: beginDate
             };
 
             var settings = {};

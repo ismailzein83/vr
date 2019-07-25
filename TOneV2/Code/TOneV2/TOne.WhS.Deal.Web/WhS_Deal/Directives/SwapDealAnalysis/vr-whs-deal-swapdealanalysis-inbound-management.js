@@ -124,6 +124,7 @@ app.directive('vrWhsDealSwapdealanalysisInboundManagement', ['WhS_Deal_SwapDealA
         }
         function addInbound() {
             var carrierAccountId = context.settingsAPI.getCarrierAccountId();
+            var beginDate = context.settingsAPI.getBeginDate();
             var onInboundAdded = function (addedInbound) {
                 lastGroupNumber += 1;
                 addedInbound.ZoneGroupNumber = lastGroupNumber;
@@ -133,16 +134,18 @@ app.directive('vrWhsDealSwapdealanalysisInboundManagement', ['WhS_Deal_SwapDealA
                 $scope.scopeModel.inbounds.push(obj);
                 clearCalclulatedFields();
             };
-            WhS_Deal_SwapDealAnalysisService.addInbound(settings, carrierAccountId, sellingNumberPlanId, onInboundAdded);
+            WhS_Deal_SwapDealAnalysisService.addInbound(settings, carrierAccountId, sellingNumberPlanId, beginDate, onInboundAdded);
         }
         function editInbound(inboundEntity) {
+            
             var carrierAccountId = context.settingsAPI.getCarrierAccountId();
+            var beginDate = context.settingsAPI.getBeginDate();
             var onInboundUpdated = function (updatedInbound) {
                 var obj = { Entity: updatedInbound };
                 $scope.scopeModel.inbounds[$scope.scopeModel.inbounds.indexOf(inboundEntity)] = obj;
                 clearCalclulatedFields();
             };
-            WhS_Deal_SwapDealAnalysisService.editInbound(settings, carrierAccountId, sellingNumberPlanId, inboundEntity.Entity, onInboundUpdated);
+            WhS_Deal_SwapDealAnalysisService.editInbound(settings, carrierAccountId, sellingNumberPlanId, beginDate, inboundEntity.Entity, onInboundUpdated);
         }
 
         function getInboundEntities() {

@@ -10,6 +10,7 @@
         var customerId;
         var sellingNumberPlanId;
         var inboundEntity;
+        var beginDate;
 
         var countrySelectorAPI;
         var countrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -38,6 +39,7 @@
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
                 inboundEntity = parameters.inboundEntity;
                 settings = parameters.settings;
+                beginDate = parameters.beginDate;
             }
 
             isEditMode = (inboundEntity != undefined);
@@ -196,7 +198,7 @@
                     Filters: [{
                         $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
                         CustomerId: customerId,
-                        EffectiveOn: settings.beginDate,
+                        EffectiveOn: beginDate,
                         IsEffectiveInFuture: false
                     }]
                 };
