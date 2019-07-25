@@ -33,12 +33,12 @@ namespace TOne.WhS.Sales.Entities
         #region Rate
         public long? CurrentRateId { get; set; }
         public Decimal? CurrentRate { get; set; }
-        
+
         /// <summary>
         /// CurrentRate currency
         /// </summary>
         public int TargetCurrencyId { get; set; }
-        
+
         /// <summary>
         /// Initial rate currency
         /// </summary>
@@ -137,6 +137,7 @@ namespace TOne.WhS.Sales.Entities
         #endregion
 
         public decimal? ProfitPerc { get; set; }
+        public int TargetVolume { get; set; }
 
         #region IBaseRates Implementation
 

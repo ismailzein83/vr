@@ -26,5 +26,6 @@ namespace TOne.WhS.Sales.Entities
         public DraftClosedZoneService ClosedService { get; set; }
 
         public DraftResetZoneService ResetService { get; set; }
+        public int TargetVolume { get; set; }
     }
 }
