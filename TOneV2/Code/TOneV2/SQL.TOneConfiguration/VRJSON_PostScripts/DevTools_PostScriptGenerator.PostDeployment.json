@@ -10,6 +10,8 @@
           {
             "FieldValues": {
               "ID": "d1619004-1cb5-4a0c-92b2-55ada59c417e",
+              "Name": "Post Script Generator",
+              "Title": "Post Script Generator",
               "ActionNames": "VRCommon/Settings/GetFilteredTechnicalSettings",
               "Audience": null,
               "Content": null,
@@ -18,10 +20,8 @@
               "IsDeleted": null,
               "LastModifiedTime": "2019-02-14T14:39:40.827",
               "Module": "50624672-cd25-44fd-8580-0e3ac8e34c71",
-              "Name": "Post Script Generator",
               "Rank": 2,
               "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\"}",
-              "Title": "Post Script Generator",
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Url": "#/view/VR_DevTools/Elements/GeneratedScript/Views/VRGeneratedScriptManagement"
             }
