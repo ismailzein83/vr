@@ -21,9 +21,8 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
         function TargetMatchValidationResult($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
-            var pageSize = 10;
+            var pageSize = 15;
             var invalidImportedRows;
-
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -42,7 +41,7 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
                     if (invalidImportedRows == undefined)
                         return;
                     for (var i = 0; i < invalidImportedRows.length && i < invalidImportedRows.length; i++) {
-                        if (invalidImportedRows[i].CanBeIncluded)
+                        if (invalidImportedRows[i].Status == WhS_Sales_CustomerTargetMatchImportedRowStatus.InvalidDueExpectedRateViolation.value)
                             invalidImportedRows[i].Include = value;
                     }
                 };
@@ -83,8 +82,12 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
             function loadMoreGridData(gridArray, sourceArray) {
                 if (sourceArray == undefined)
                     return;
-                if (gridArray.length < sourceArray.length) {
-                    for (var i = 0; i < sourceArray.length && i < pageSize; i++) {
+                var gridArrayLength = 0;
+                if (gridArray != undefined)
+                    gridArrayLength = gridArray.length;
+
+                if (gridArrayLength < sourceArray.length) {
+                    for (var i = gridArrayLength; i < sourceArray.length && i < gridArrayLength + pageSize; i++) {
                         sourceArray[i].CanBeIncluded = sourceArray[i].Status == WhS_Sales_CustomerTargetMatchImportedRowStatus.InvalidDueExpectedRateViolation.value;
                         gridArray.push({
                             Entity: sourceArray[i]
