@@ -553,16 +553,28 @@ namespace BPMExtended.Main.Business
             // var c = esq.AddColumn("StContact");
             // var contact = esq.AddColumn("StContact.Id");
 
-            if (contactId != null) { 
+            if (contactId != null && contactId!="") { 
                 esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContact", contactId);
             }
-            else if (accountId != null)
+            else if (accountId != null && accountId!="")
             {
                 esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StAccount", accountId);
             }
             else
                 esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contractId);
+
             esq.Filters.Add(esqFirstFilter);
+
+
+            if (requestId != null && requestId!="")
+            {
+                IEntitySchemaQueryFilterItem esqSecondFilter;
+                esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+                esq.Filters.Add(esqSecondFilter);
+            }
+            
+
+
 
             entities = esq.GetEntityCollection(BPM_UserConnection);
             foreach (Entity entity in entities)
