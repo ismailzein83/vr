@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
-using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -680,7 +679,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
     public class DateTimeRuntimeViewSetting : FieldTypeRuntimeViewSettings
     {
-        public FieldDateTimeDefaultValue DefaultValue { get; set; }
+        public FieldDateTimeDefaultValue? DefaultValue { get; set; }
 
         public List<FieldDateTimeValidation> Validations { get; set; }
     }

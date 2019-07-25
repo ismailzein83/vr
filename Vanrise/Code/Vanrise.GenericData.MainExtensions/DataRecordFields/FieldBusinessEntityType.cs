@@ -137,6 +137,21 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
         }
 
+        //AS: GetDescription Methods
+        //public override bool ShouldCollectFieldValues()
+        //{
+        //    var beManager = GetBusinessEntityManager();
+        //    return beManager.ShouldCollectFieldValues(this.BusinessEntityDefinitionId);
+        //}
+
+        //public override Dictionary<object, string> GetDescriptionByIds(IGetDescriptionByIdsContext getDescriptionByIdsContext)
+        //{
+        //    getDescriptionByIdsContext.ThrowIfNull("getDescriptionByIdsContext");
+
+        //    var beManager = GetBusinessEntityManager();
+        //    return beManager.GetDescriptionByIds(getDescriptionByIdsContext, this.BusinessEntityDefinitionId);
+        //}
+
         public override bool IsMatched(object fieldValue, object filterValue)
         {
             if (fieldValue == null || filterValue == null)
@@ -297,7 +312,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (context.FieldValue == null)
                 return;
 
-            if(context.DataRecordFields[context.FieldName].Type.GetNonNullableRuntimeType() == typeof(Guid))
+            if (context.DataRecordFields[context.FieldName].Type.GetNonNullableRuntimeType() == typeof(Guid))
             {
                 if (context.FieldValue.GetType() == typeof(string) && new Guid(context.FieldValue.ToString()) == Guid.Empty)
                     return;
@@ -330,11 +345,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 dependantFieldType.Type.SetDependentFieldValues(setDependentFieldValuesContext);
             }
         }
+
         public override bool TryGetStyleDefinitionId(IDataRecordFieldStyleDefinitionContext context)
         {
             BaseBusinessEntityManager baseBusinessEntityManager = GetBusinessEntityManager();
             var businessEntityStyleDefinitionContext = new BusinessEntityStyleDefinitionContext { FieldValue = context.FieldValue };
-            bool tryGetStyleDefinitionId= baseBusinessEntityManager.TryGetStyleDefinitionId(businessEntityStyleDefinitionContext);
+            bool tryGetStyleDefinitionId = baseBusinessEntityManager.TryGetStyleDefinitionId(businessEntityStyleDefinitionContext);
 
             context.StyleDefinitionId = businessEntityStyleDefinitionContext.StyleDefinitionId;
 
