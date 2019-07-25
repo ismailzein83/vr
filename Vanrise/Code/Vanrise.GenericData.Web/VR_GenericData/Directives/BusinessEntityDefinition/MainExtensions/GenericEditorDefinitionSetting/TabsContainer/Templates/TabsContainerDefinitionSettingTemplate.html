@@ -2,33 +2,25 @@
     <vr-columns width="fullrow">
         <vr-button type="Add" data-onclick="scopeModel.addTabContainer" standalone></vr-button>
     </vr-columns>
-    <vr-columns width="fullrow">
+</vr-row>
+
+<vr-row removeline>
+    <div style="padding-left: 6px;">
         <vr-validator validate="scopeModel.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" 
-                         on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeTabContainer" hidegridmenu>
-                <vr-datagridcolumn headertext="'Title'" disablesorting widthfactor="4">
-                    <vr-textbox value="dataItem.entity.TabTitle" isrequired></vr-textbox>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Show Tab'" disablesorting widthfactor="4">
-                    <vr-switch value="dataItem.entity.ShowTab"></vr-switch>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true" columnindex="'3'">
-                    <vr-span vr-loader="dataItem.isTextResourceSelectorLoading">
-                        <vr-row removeline>
-                            <vr-row removeline>
-                                <vr-row removeline>
-                                    <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
-                                </vr-row>
-                            </vr-row>
-                        </vr-row>
-                    </vr-span>
-                </vr-datagridcolumn>
-                <vr-datagridexpandablerow>
-                    <span vr-loader="dataItem.isEditorDirectiveLoading">
-                        <vr-genericdata-genericbe-editordefinition-settings on-ready="dataItem.onEditorDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
-                    </span>
-                </vr-datagridexpandablerow>
-            </vr-datagrid>
+            <vr-tabs settings="scopeModel.tabsSettings" on-ready="scopeModel.onTabsReady">
+                <vr-tab header="tab.TabTitle" ng-repeat="tab in ctrl.datasource" onremove="scopeModel.onRemoveTab">
+                    <vr-row>
+                        <vr-span vr-loader="tab.isTextResourceSelectorLoading" ng-if="scopeModel.isLocalizationEnabled">
+                            <vr-common-vrlocalizationtextresource-selector on-ready="tab.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                        </vr-span>
+                    </vr-row>
+                    <vr-row>
+                        <span vr-loader="tab.isEditorDirectiveLoading">
+                            <vr-genericdata-genericbe-editordefinition-settings on-ready="tab.onEditorDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
+                        </span>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
         </vr-validator>
-    </vr-columns>
+    </div>
 </vr-row>

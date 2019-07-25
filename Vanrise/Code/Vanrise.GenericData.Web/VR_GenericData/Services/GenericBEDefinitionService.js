@@ -57,6 +57,7 @@
             addGenericBEBeforeInsertHandler: addGenericBEBeforeInsertHandler,
             editGenericBEBeforeInsertHandler: editGenericBEBeforeInsertHandler,
             openFieldTypeGenericEditorDesignModal: openFieldTypeGenericEditorDesignModal,
+            openGenericBETabContainerEditor: openGenericBETabContainerEditor,
             //addGenericBEField: addGenericBEField,
             //editGenericBEField: editGenericBEField
         });
@@ -517,6 +518,21 @@
 
             VRModalService.showModal("/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/FieldTypeGenericDesignEditor.html", parameters, settings);
         }
+
+        function openGenericBETabContainerEditor(onTabSettingsChanged, tabEntityObject, context) {
+            var parameters = {
+                tabEntitySettings: tabEntityObject,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onTabSettingsChanged = onTabSettingsChanged;
+            };
+
+            VRModalService.showModal("/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/TabContainerGenericDesignEditor.html", parameters, settings);
+        }
+
         //function addGenericBEField(onBEFieldAdded, context, recordTypeFields) {
         //    var parameters = {
         //        context: context,

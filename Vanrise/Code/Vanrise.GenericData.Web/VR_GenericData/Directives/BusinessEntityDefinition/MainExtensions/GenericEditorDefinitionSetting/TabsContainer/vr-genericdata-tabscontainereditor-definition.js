@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VRUIUtilsService","VRLocalizationService",
-    function (UtilsService, VRUIUtilsService, VRLocalizationService) {
+app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VRUIUtilsService", "VRLocalizationService", "VR_GenericData_GenericBEDefinitionService", "VRNotificationService",
+    function (UtilsService, VRUIUtilsService, VRLocalizationService, VR_GenericData_GenericBEDefinitionService, VRNotificationService) {
 
         var directiveDefinitionObject = {
 
@@ -22,31 +22,24 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
 
         function TabsContainer($scope, ctrl, $attrs) {
 
-            var gridAPI;
             var context;
+            var tabItemSettings;
+
+            var tabsAPI;
 
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
-                $scope.scopeModel.isValid = function () {
-                    if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
-                        return "You Should add at least one tab.";
-                    if (ctrl.datasource.length > 0 && checkDuplicateName())
-                        return "Title in each tab should be unique.";
 
-                    return null;
-                };
-                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
-
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
+                $scope.scopeModel.onTabsReady = function (api) {
+                    tabsAPI = api;
                     defineAPI();
-
                 };
+
                 $scope.scopeModel.addTabContainer = function () {
                     var dataItem = {
-                        entity: {  }
+                        ShowTab: true
                     };
 
                     dataItem.onTextResourceSelectorReady = function (api) {
@@ -64,27 +57,115 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.editorDirectiveAPI, payload, setLoader);
                     };
 
-                    gridAPI.expandRow(dataItem);
-
                     ctrl.datasource.push(dataItem);
+
+                    var index = ctrl.datasource.indexOf(dataItem);
+                    tabsAPI.setTabSelected(index);
                 };
 
-                $scope.scopeModel.removeTabContainer = function (dataItem) {
+                $scope.scopeModel.openEditTab = function (item) {
+                    var currentItem = UtilsService.getItemByVal(ctrl.datasource, item.TabTitle, "TabTitle");
+
+                    var payload = {
+                        TabTitle: currentItem.TabTitle,
+                        ShowTab: currentItem.ShowTab,
+                    };
+
+                    var onTabSettingsChanged = function (tabItem) {
+                        currentItem.ShowTab = tabItem.ShowTab;
+                    };
+                    VR_GenericData_GenericBEDefinitionService.openGenericBETabContainerEditor(onTabSettingsChanged, payload, getContext());
+                };
+
+                $scope.scopeModel.onRemoveTab = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
-                $scope.scopeModel.disableAddTabContainer = function () {
-                    if (context == undefined) return true;
-                    var recordTypeFields = context.getRecordTypeFields();
-                    return context.getDataRecordTypeId() == undefined && (recordTypeFields == undefined || recordTypeFields.length == 0);
+
+                $scope.scopeModel.tabsSettings = {
+                    datasource: ctrl.datasource,
+                    datatitlefield: "TabTitle",
+                    sortable: true,
+                    oneditclicked: $scope.scopeModel.openEditTab,
+                    pagesize: 5
+                };
+
+                $scope.scopeModel.isValid = function () {
+                    if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
+                        return "You Should add at least one tab.";
+                    if (ctrl.datasource.length > 0 && checkDuplicateName())
+                        return "Title in each tab should be unique.";
+
+                    return null;
                 };
             }
+
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+                    var promises = [];
+                    ctrl.datasource.length = 0;
+
+                    $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
+
+                    if (payload != undefined) {
+                        context = payload.context;
+
+                        if (payload.settings != undefined && payload.settings.TabContainers != undefined) {
+                            var tabContainers = payload.settings.TabContainers;
+                            for (var i = 0; i < tabContainers.length; i++) {
+                                var item = tabContainers[i];
+
+                                var tabObject = {
+                                    payload: item,
+                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    editorDirectiveReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    editorDirectiveLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                if ($scope.scopeModel.isLocalizationEnabled)
+                                    promises.push(tabObject.textResourceLoadPromiseDeferred.promise);
+                                promises.push(tabObject.editorDirectiveLoadPromiseDeferred.promise);
+                                prepareTab(tabObject);
+                            }
+                        }
+                    }
+                    return UtilsService.waitPromiseNode({ promises: promises });
+                };
+
+                api.getData = function () {
+                    var tabs;
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+                        tabs = [];
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var currentItem = ctrl.datasource[i];
+                            tabs.push({
+                                TabTitle: currentItem.TabTitle,
+                                ShowTab: currentItem.ShowTab,
+                                TabSettings: currentItem.editorDirectiveAPI != undefined ? currentItem.editorDirectiveAPI.getData() : currentItem.oldSettings,
+                                TextResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : currentItem.oldTextResourceKey
+                            });
+                        }
+                    }
+                    return {
+                        $type: "Vanrise.GenericData.MainExtensions.TabsContainerEditorDefinitionSetting, Vanrise.GenericData.MainExtensions",
+                        TabContainers: tabs
+                    };
+                };
+
+                api.clearDataSource = function () {
+                    ctrl.datasource.length = 0;
+                };
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
+
             function prepareTab(tabObject) {
                 var dataItem = {
-                    entity: {
-                        TabTitle: tabObject.payload.TabTitle,
-                        ShowTab: tabObject.payload.ShowTab,
-                    },
+                    TabTitle: tabObject.payload.TabTitle,
+                    ShowTab: tabObject.payload.ShowTab,
                     oldSettings: tabObject.payload.TabSettings,
                     oldTextResourceKey: tabObject.payload.TextResourceKey
                 };
@@ -101,72 +182,17 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
 
                 dataItem.onEditorDirectiveReady = function (api) {
                     dataItem.editorDirectiveAPI = api;
-                    var setLoader = function (value) { dataItem.isEditorDirectiveLoading = value; };
+                    tabObject.editorDirectiveReadyPromiseDeferred.resolve();
+                };
 
+                tabObject.editorDirectiveReadyPromiseDeferred.promise.then(function () {
                     var tabPayload = {
                         settings: tabObject.payload.TabSettings,
                         context: getContext(),
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.editorDirectiveAPI, tabPayload, setLoader);
-                };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.editorDirectiveAPI, tabPayload, tabObject.editorDirectiveLoadPromiseDeferred);
+                });
                 ctrl.datasource.push(dataItem);
-            }
- 
-            function defineAPI() {
-                var api = {};
-
-                api.getData = function () {
-                    var tabs;
-                    if (ctrl.datasource != undefined && ctrl.datasource.length>0) {
-                        tabs = [];
-                        for (var i = 0; i < ctrl.datasource.length; i++) {
-                            var currentItem = ctrl.datasource[i];
-                            tabs.push({
-                                TabTitle: currentItem.entity.TabTitle,
-                                ShowTab: currentItem.entity.ShowTab,
-                                TabSettings: currentItem.editorDirectiveAPI != undefined ? currentItem.editorDirectiveAPI.getData() : currentItem.oldSettings,
-                                TextResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : currentItem.oldTextResourceKey
-                            });
-                        }
-                    }
-                    return {
-                        $type: "Vanrise.GenericData.MainExtensions.TabsContainerEditorDefinitionSetting, Vanrise.GenericData.MainExtensions",
-                        TabContainers: tabs
-                    };
-                };
-
-                api.load = function (payload) {
-                    var promises = [];
-                    ctrl.datasource = [];
-                    if (payload != undefined) {
-                        context = payload.context;
-                        api.clearDataSource();
-                        if (payload.settings != undefined && payload.settings.TabContainers != undefined) {
-                            var tabContainers = payload.settings.TabContainers;
-                            for (var i = 0; i < tabContainers.length; i++) {
-                                var item = tabContainers[i];
-
-                                var tabObject = {
-                                    payload: item,
-                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                };
-                                if ($scope.scopeModel.isLocalizationEnabled)
-                                    promises.push(tabObject.textResourceLoadPromiseDeferred.promise);
-                                prepareTab(tabObject);
-                            }
-                        }
-                    }
-                    return UtilsService.waitPromiseNode({ promises: promises });
-                };
-
-
-                api.clearDataSource = function () {
-                    ctrl.datasource.length = 0;
-                };
-
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
             }
 
             function getContext() {
@@ -195,7 +221,7 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                 for (var i = 0; i < ctrl.datasource.length; i++) {
                     var currentItem = ctrl.datasource[i];
                     for (var j = 0; j < ctrl.datasource.length; j++) {
-                        if (i != j && ctrl.datasource[j].entity.TabTitle == currentItem.entity.TabTitle)
+                        if (i != j && ctrl.datasource[j].TabTitle == currentItem.TabTitle)
                             return true;
                     }
                 }
