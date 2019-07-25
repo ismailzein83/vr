@@ -191,11 +191,19 @@
             var countrySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             countrySelectorReadyDeferred.promise.then(function () {
-                var countrySelectorPayload;
+                var payload = {};
+                payload.filter = {
+                    Filters: [{
+                        $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
+                        CustomerId: customerId,
+                        EffectiveOn: settings.beginDate,
+                        IsEffectiveInFuture: false
+                    }]
+                };
                 if (inboundEntity != undefined) {
-                    countrySelectorPayload = { selectedIds: inboundEntity.CountryIds };
+                    payload.selectedIds = inboundEntity.CountryIds;
                 }
-                VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countrySelectorPayload, countrySelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, payload, countrySelectorLoadDeferred);
             });
 
             return countrySelectorLoadDeferred.promise;
