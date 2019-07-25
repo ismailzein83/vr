@@ -529,8 +529,14 @@ namespace BPMExtended.Main.Business
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
+            IEntitySchemaQueryFilterItem esqSecondFilter;
+            IEntitySchemaQueryFilterItem esqFromFilter;
+            IEntitySchemaQueryFilterItem esqToFilter;
             EntityCollection entities;
             List<RequestHeaderDetail> requests = new List<RequestHeaderDetail>();
+
+            var fromDate = new DateTime();
+            var toDate = new DateTime();
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
             esq.AddColumn("Id");
@@ -568,10 +574,26 @@ namespace BPMExtended.Main.Business
 
             if (requestId != null && requestId!="")
             {
-                IEntitySchemaQueryFilterItem esqSecondFilter;
                 esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
                 esq.Filters.Add(esqSecondFilter);
             }
+
+            if (from != null && from != "")
+            {
+                fromDate = Convert.ToDateTime(from);
+                esqFromFilter = esq.CreateFilterWithParameters(FilterComparisonType.GreaterOrEqual, "CreatedOn", fromDate);
+                esq.Filters.Add(esqFromFilter);
+            }
+
+            
+
+            if (to != null && to != "")
+            {
+                toDate = Convert.ToDateTime(to);
+                esqToFilter = esq.CreateFilterWithParameters(FilterComparisonType.LessOrEqual, "CreatedOn", toDate);
+                esq.Filters.Add(esqToFilter);
+            }
+
             
 
 
