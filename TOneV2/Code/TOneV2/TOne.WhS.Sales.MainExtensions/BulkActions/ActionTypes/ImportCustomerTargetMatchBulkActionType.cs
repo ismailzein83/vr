@@ -74,12 +74,15 @@ namespace TOne.WhS.Sales.MainExtensions
         public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
         {
             IEnumerable<DraftRateToChange> zoneDraftNewRates = context.ZoneDraft?.NewRates;
-            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate, context.GetContextZoneItem, context.GetCostCalculationMethodIndex);
-
+            string targetVolume;
+            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate, context.GetContextZoneItem, context.GetCostCalculationMethodIndex, out targetVolume);
+            context.ZoneItem.TargetVolume = targetVolume;
         }
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
         {
-            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate, context.GetZoneItem, context.GetCostCalculationMethodIndex);
+            string targetVolume;
+            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate, context.GetZoneItem, context.GetCostCalculationMethodIndex, out targetVolume);
+            context.ZoneDraft.TargetVolume = targetVolume;
         }
         public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
         {
@@ -90,6 +93,7 @@ namespace TOne.WhS.Sales.MainExtensions
             {
                 ZoneChanges zoneDraft = context.GetZoneDraft(includedZone.ZoneId);
                 AddNewNormalRate(zoneDraft, includedZone.Rate, DateTime.Today);
+                zoneDraft.TargetVolume = includedZone.TargetVolume;
             }
         }
 
@@ -131,12 +135,15 @@ namespace TOne.WhS.Sales.MainExtensions
             });
         }
 
-        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate, Func<long, ZoneItem> getZoneItem, Func<Guid, int?> getCostCalculationMethodIndex)
+        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate, Func<long, ZoneItem> getZoneItem, Func<Guid, int?> getCostCalculationMethodIndex, out string targetVolume)
         {
             CustomerTargetMatchImportedDataValidationResult cachedValidationData = GetOrCreateObject(getZoneItem, getCostCalculationMethodIndex);
             CustomerTargetMatchImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
+            targetVolume = null;
             if (importedRow == null)
                 return zoneDraftNewRates;
+
+            targetVolume = importedRow.TargetVolume;
 
             var newRates = new List<DraftRateToChange>();
 

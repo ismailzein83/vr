@@ -112,7 +112,8 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
                         includedZones.push({
                             ZoneId: element.ZoneId,
                             ZoneName: element.ImportedRow.Zone,
-                            Rate: element.ImportedRow.Rate
+                            Rate: element.ImportedRow.Rate,
+                            TargetVolume: element.ImportedRow.TargetVolume
                         });
                     }
                 }

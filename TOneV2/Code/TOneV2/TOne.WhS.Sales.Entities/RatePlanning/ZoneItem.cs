@@ -137,7 +137,7 @@ namespace TOne.WhS.Sales.Entities
         #endregion
 
         public decimal? ProfitPerc { get; set; }
-        public int TargetVolume { get; set; }
+        public string TargetVolume { get; set; }
 
         #region IBaseRates Implementation
 

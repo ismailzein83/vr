@@ -15,5 +15,6 @@ namespace TOne.WhS.Sales.MainExtensions
         public long ZoneId { get; set; }
         public string ZoneName { get; set; }
         public decimal Rate { get; set; }
+        public string TargetVolume { get; set; }
     }
 }
