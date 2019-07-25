@@ -21,7 +21,10 @@ namespace TOne.WhS.Sales.Business
             var excelFile = new VRExcelFile();
             var excelSheet = excelFile.CreateSheet();
 
-            var excelTable = excelSheet.CreateTable(1, 0);
+            var zoneColumnConfig = new VRExcelColumnConfig { ColumnIndex = 0, ColumnWidth = 30 };
+            excelSheet.SetColumnConfig(zoneColumnConfig);
+
+            var excelTable = excelSheet.CreateTable(0, 0);
 
             var headerRow = excelTable.CreateHeaderRow();
             headerRow.CreateStyle();

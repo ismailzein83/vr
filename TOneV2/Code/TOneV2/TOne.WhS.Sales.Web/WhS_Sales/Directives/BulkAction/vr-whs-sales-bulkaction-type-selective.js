@@ -47,11 +47,10 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
                 if (bulkActionContext.selectDefaultBulkActionZoneFilter != undefined)
                     bulkActionContext.selectDefaultBulkActionZoneFilter(selectedBulkAction.DefaultBulkActionZoneFilterConfigId, selectedBulkAction.CanApplyZoneFilter);
 
-                if (bulkActionContext.onBulkActionChanged != undefined)
-                {
+                if (bulkActionContext.onBulkActionChanged != undefined) {
                     bulkActionContext.onBulkActionChanged();
                 }
-                   
+
             };
 
             $scope.scopeModel.onDirectiveReady = function (api) {
@@ -126,6 +125,7 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
                 var data;
                 if ($scope.scopeModel.selectedExtensionConfig != undefined && directiveAPI != undefined) {
                     data = directiveAPI.getData();
+                    data.ConfigId = $scope.scopeModel.selectedExtensionConfig.ExtensionConfigurationId;
                 }
                 return data;
             };

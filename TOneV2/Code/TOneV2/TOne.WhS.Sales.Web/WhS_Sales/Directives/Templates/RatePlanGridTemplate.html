@@ -629,6 +629,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div style="width: 55px; display:inline-flex" ng-if="isCustomerTargetMatchSelected" ng-init="::addColumnFixedAndRecalculate('volume', 55,'T.Volume',false)">
+                                    <div class="vr-datagrid-header-cell vr-datagrid-celltext">
+                                        <div col-index="renderIndex" style="width:100%">
+                                            <div class="vr-datagrid-celltext" style="overflow: hidden;">
+                                                <span>T.Volume</span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                                 <div style="width: 25px; display:inline-flex" ng-init="::addColumnFixedAndRecalculate('noteIcon', 25,'',false)">
                                     <div class="vr-datagrid-header-cell vr-datagrid-celltext">
                                         <div col-index="renderIndex" style="width:100%">
@@ -942,6 +952,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                di
                                                             </div>
 
                                                             <!--<div ng-show="rateCalculationMethod" style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
@@ -1011,14 +1022,32 @@
                                                                 </div>
                                                             </div>
 
-
+                                                            <div ng-if="isCustomerTargetMatchSelected && !ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container" ng-style="{'width':'55px'}">
+                                                                <div class="vr-datagrid-cell">
+                                                                    <div class="vr-datagrid-celltext ">
+                                                                        <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                                                            <span class="span-summary"> {{dataItem.TargetVolume}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div ng-if="isCustomerTargetMatchSelected && columnsConfig.profitPerc.includeInListView && ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container" ng-style="{'width': columnsConfig.profitPerc.mobileWidth}">
+                                                                <div class="vr-datagrid-cell">
+                                                                    <div class="mobile-label-container"><label class="mobile-label">T.Volume: </label></div>
+                                                                    <div class="vr-datagrid-celltext " ng-style="{'width': '55px'}">
+                                                                        <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                                                            <span class="span-summary"> {{dataItem.TargetVolume}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <div style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container" ng-style="{'width':'25px'}">
                                                                 <div class="vr-datagrid-cell" ng-if="!ratePlanGridCtrl.isMobile">
                                                                     <div class="vr-datagrid-celltext ">
-                                                                        <span  ng-click="scopeModel.onEditIconClick(dataItem)">
+                                                                        <span ng-click="scopeModel.onEditIconClick(dataItem)">
                                                                             <span ng-show="dataItem.NewRate && !scopeModel.isPreview" class="hand-cursor">
                                                                                 <vr-icon icontype="'edit'"></vr-icon>
-                                                                            </span>                                                                           
+                                                                            </span>
                                                                         </span>
                                                                     </div>
                                                                 </div>

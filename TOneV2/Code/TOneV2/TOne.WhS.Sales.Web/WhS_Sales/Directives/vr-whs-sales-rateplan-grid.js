@@ -73,7 +73,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 $scope.zoneLetters = [];
                 $scope.scopeModel.selectedZoneLetterIndex = 0;
                 $scope.scopeModel.isPreview = (attrs.ispreview != undefined);
-
+                $scope.isCustomerTargetMatchSelected = false;
                 $scope.normalPrecision = UISettingsService.getNormalPrecision();
                 $scope.longPrecision = UISettingsService.getLongPrecision();
                 $scope.layoutOption = UISettingsService.getGridLayoutOptions();
@@ -383,12 +383,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 var api = {};
 
                 api.load = function (query) {
+
                     gridQuery = query;
                     isSellingProductGrid = (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);
                     if (query != undefined) {
                         countryChangesEED = query.countryChangesEED;
                         ownerName = query.OwnerName;
                         setCostCalculationMethods(query.CostCalculationMethods, query.RateCalculationMethod);
+                        $scope.isCustomerTargetMatchSelected = gridQuery.BulkAction != undefined && gridQuery.BulkAction.ConfigId == 'e6d4013f-f618-4f42-8308-4d0c0a282b47';
                     }
 
                     defineRouteOptionNumbers();

@@ -1,7 +1,7 @@
 ﻿<span vr-loader="scopeModel.isLoading">
     <vr-columns colnum="12" haschildcolumns>
         <vr-columns colnum="3">
-            <vr-fileupload tempfile="true" label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>
+            <vr-fileupload tempfile="true" label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="true"></vr-fileupload>
         </vr-columns>
         <vr-columns colnum="2">
             <vr-switch label="Header" value="scopeModel.headerRowExists" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>
