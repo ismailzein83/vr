@@ -21,24 +21,24 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
             },
             templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/GenericEditor/Templates/GenericEditorDefinitionSettingTemplate.html"
         };
+       
         function GenericEditorDefinitionSetting($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             ctrl.datasource = [];
-            var gridAPI;
             var context;
             var rows;
+
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
-
-                };
                 $scope.scopeModel.addRow = function () {
                     var dataItem = {
-                        entity: { fieldsNumber:0}
+                        entity: {
+                            fieldsNumber: 0,
+                            fieldsWorld: "Field"
+                        }
                     };
+
                     dataItem.onGenericFieldsDirectiveReady = function (api) {
                         dataItem.genericFieldsDirectiveAPI = api;
                         var setLoader = function (value) { dataItem.isGenericFieldsDirectiveLoading = value; };
@@ -47,15 +47,13 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.genericFieldsDirectiveAPI, payload, setLoader);
                     };
-                  
-                    gridAPI.expandRow(dataItem);
+
+                    dataItem.removeRow = function () {
+                        var index = ctrl.datasource.indexOf(dataItem);
+                        ctrl.datasource.splice(index, 1);
+                    };
 
                     ctrl.datasource.push(dataItem);
-                };
-
-                $scope.scopeModel.removeRow = function (dataItem) {
-                    var index = ctrl.datasource.indexOf(dataItem);
-                    ctrl.datasource.splice(index, 1);
                 };
 
                 $scope.scopeModel.isValid = function () {
@@ -63,6 +61,7 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                         return "You Should add at least one row.";
                     return null;
                 };
+                defineAPI();
             }
 
             function defineAPI() {
@@ -85,14 +84,17 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                             };
                             prepareRow(rowObject);
                         }
-                    } 
+                    }
                     return UtilsService.waitPromiseNode({ promises: promises });
                 };
+
                 function prepareRow(rowObject) {
                     var dataItem = {
                         entity: { fieldsNumber: rowObject.payload.Fields != undefined ? rowObject.payload.Fields.length : 0 },
                         oldData: rowObject.payload.Fields
                     };
+
+                    dataItem.entity.fieldsWorld = dataItem.entity.fieldsNumber == 1 || dataItem.entity.fieldsNumber == 0 ? "Field" : "Fields";
 
                     dataItem.onGenericFieldsDirectiveReady = function (api) {
                         dataItem.genericFieldsDirectiveAPI = api;
@@ -104,8 +106,15 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.genericFieldsDirectiveAPI, rowPayload, setLoader);
                     };
+
+                    dataItem.removeRow = function () {
+                        var index = ctrl.datasource.indexOf(dataItem);
+                        ctrl.datasource.splice(index, 1);
+                    };
+
                     ctrl.datasource.push(dataItem);
                 }
+
                 api.getData = function () {
 
                     var rows = [];
@@ -149,12 +158,11 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                 currentContext.setFieldsNumber = function (fieldsNumber) {
                     dataItem.entity.fieldsNumber = fieldsNumber;
                 };
-           
+
                 return currentContext;
             }
 
         }
-
         return directiveDefinitionObject;
     }
 ]);

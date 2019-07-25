@@ -1,23 +1,35 @@
-﻿    <vr-row removeline>
-    <vr-columns width="fullrow">
-        <vr-button type="Add" data-onclick="scopeModel.addRow" standalone></vr-button>
-    </vr-columns>
-    <vr-columns width="fullrow">
+﻿<vr-row removeline>
+    <span ng-repeat="row in ctrl.datasource">
+        <div vr-loader="row.isGenericFieldsDirectiveLoading" style="border: 1px solid #ddd;margin: 10px 15px;">
+            <vr-label mediumsize style="position: absolute; top: -11px; left: 11px;background-color: white;">{{row.entity.fieldsNumber}} {{row.entity.fieldsWorld}} </vr-label>
+            <div ng-click="row.removeRow()" class="glyphicon glyphicon-remove hand-cursor" style="position :absolute;right: 4px;font-size: 13px;"></div>
+            <vr-genericdata-genericfields-definition on-ready="row.onGenericFieldsDirectiveReady"></vr-genericdata-genericfields-definition>
+        </div>
+    </span>
+</vr-row>
+
+<vr-row>
+    <vr-columns colnum="12">
         <vr-validator validate="scopeModel.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
-                         on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeRow" hidegridmenu>
-                <vr-datagridcolumn headertext="'Fields Number'" disablesorting isfielddynamic>
-                    <vr-label>{{dataItem.entity.fieldsNumber}}</vr-label>
-                    <vr-label ng-if="dataItem.entity.fieldsNumber==1">Field</vr-label>
-                    <vr-label ng-if="dataItem.entity.fieldsNumber!=1">Fields</vr-label>
-                </vr-datagridcolumn>
-                <vr-datagridexpandablerow>
-                    <span vr-loader="dataItem.isGenericFieldsDirectiveLoading">
-                        <vr-genericdata-genericfields-definition on-ready="dataItem.onGenericFieldsDirectiveReady"></vr-genericdata-genericfields-definition>
-                    </span>
-                </vr-datagridexpandablerow>
-            </vr-datagrid>
+            <div class="vr-additem-box">
+                <span class="glyphicon glyphicon-plus"  ng-click="scopeModel.addRow()" style="position: absolute;color: #5cb85c;font-size: 36px;top: 10%;width: 100%;text-align: center;cursor: pointer;color: #5cb85c;"></span>
+            </div>
         </vr-validator>
     </vr-columns>
-   
 </vr-row>
+
+
+
+<style>
+    .vr-additem-box {
+        border: 1px dashed lightgray;
+        position: relative;
+        height: 50px;
+    }
+
+        .vr-additem-box:hover {
+            opacity: 0.8 !important;
+            transition: 0.3s;
+            background-color: #ECECEC;
+        }
+</style>
