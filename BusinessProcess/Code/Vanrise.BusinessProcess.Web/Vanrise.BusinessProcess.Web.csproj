@@ -323,6 +323,10 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-manualexeceditor.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivityFieldTypeExpressionBuilderTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowManualExecEditorTemplate.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\bp-vr-workflow-variables-expandablegrid.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\Templates\VRWorkflowVariableDirectiveTemplate.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\Templates\VRWorkflowVariablesExpandableGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\bp-vr-workflow-variable-directive.js" />
     <Content Include="BusinessProcess\Reports\OpenRDLCReport.aspx" />
     <Content Include="BusinessProcess\Services\APIServices\BPGenericTaskTypeActionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPVisualEventAPIService.js" />
