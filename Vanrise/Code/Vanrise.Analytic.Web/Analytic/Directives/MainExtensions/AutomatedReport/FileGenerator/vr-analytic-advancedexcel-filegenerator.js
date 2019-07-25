@@ -90,8 +90,8 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     listNameSelectorReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.removeTable = function (obj) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.tables, obj.data.tableTabIndex, 'tableTabIndex');
+            $scope.scopeModel.removeTable = function (obj) {
+                var index = $scope.scopeModel.tables.indexOf(obj);
                     $scope.scopeModel.tables.splice(index, 1);
                     if (context != undefined && context.disableTestGenerateButton != undefined && typeof (context.disableTestGenerateButton) == 'function') {
                         if ($scope.scopeModel.tables.length == 0) {
