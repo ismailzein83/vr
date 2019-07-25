@@ -85,7 +85,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
             };
 
             $scope.scopeModel.removeTable = function (obj) {
-                var index = UtilsService.getItemIndexByVal($scope.scopeModel.tables, obj.data.tableTabIndex, 'tableTabIndex');
+                var index = $scope.scopeModel.tables.indexOf(obj);
                 $scope.scopeModel.tables.splice(index, 1);
             };
 
