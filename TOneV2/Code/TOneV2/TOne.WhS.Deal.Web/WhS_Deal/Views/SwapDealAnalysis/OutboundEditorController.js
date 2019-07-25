@@ -144,7 +144,7 @@
 			if (isEditMode) {
 				var outboundEntityName;
 				if (outboundEntity != undefined)
-					outboundEntityName = outboundEntity.Name;
+                    outboundEntityName = outboundEntity.GroupName;
 				$scope.title = UtilsService.buildTitleForUpdateEditor(outboundEntityName, 'Outbound');
 			}
 			else

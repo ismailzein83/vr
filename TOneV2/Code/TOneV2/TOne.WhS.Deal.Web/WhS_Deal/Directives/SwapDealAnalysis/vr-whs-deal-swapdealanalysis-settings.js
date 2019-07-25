@@ -38,12 +38,13 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['UtilsService', 'VRUIUtilsSe
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function (selectedCarrierAccount) {
 
-                var carrierAccountId = carrierAccountSelectorAPI.getSelectedIds();
-                if (carrierAccountId == undefined || carrierAccountId == currentCarrierAccountId)
-                    return;
+                if (selectedCarrierAccount != undefined) {
+                    context.setSellingNumberPlanId(selectedCarrierAccount.SellingNumberPlanId);
+                    if (selectedCarrierAccount.CarrierAccountId == currentCarrierAccountId)
+                        return;
 
-                context.setSellingNumberPlanId(selectedCarrierAccount.SellingNumberPlanId);
-                context.clearAnalysis();
+                    context.clearAnalysis();
+                }
             };
 
             $scope.scopeModel.validateTimeRange = function () {

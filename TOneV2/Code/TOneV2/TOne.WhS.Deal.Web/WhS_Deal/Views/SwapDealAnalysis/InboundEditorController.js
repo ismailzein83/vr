@@ -150,7 +150,7 @@
             if (isEditMode) {
                 var inboundEntityName;
                 if (inboundEntity != undefined)
-                    inboundEntityName = inboundEntity.Name;
+                    inboundEntityName = inboundEntity.GroupName;
                 $scope.title = UtilsService.buildTitleForUpdateEditor(inboundEntityName, 'Inbound');
             }
             else
@@ -193,7 +193,7 @@
             countrySelectorReadyDeferred.promise.then(function () {
                 var countrySelectorPayload;
                 if (inboundEntity != undefined) {
-                    countrySelectorPayload = { selectedIds: inboundEntity.CountryId };
+                    countrySelectorPayload = { selectedIds: inboundEntity.CountryIds };
                 }
                 VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countrySelectorPayload, countrySelectorLoadDeferred);
             });
