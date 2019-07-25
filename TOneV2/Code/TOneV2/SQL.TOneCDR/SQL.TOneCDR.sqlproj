@@ -71,6 +71,9 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="COMMON\" />
     <Folder Include="COMMON\Functions\" />
+    <Folder Include="TOneWhS_CallQuality\" />
+    <Folder Include="TOneWhS_CallQuality\Tables\" />
+    <Folder Include="TOneWhS_CallQuality\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_CDR\Tables\CDRMain.sql" />
@@ -97,5 +100,10 @@
     <Build Include="Security\COMMON.sql" />
     <Build Include="TOneWhS_CDR\User Defined Types\vw_CDRProblemsType.sql" />
     <Build Include="TOneWhS_CDR\User Defined Types\vw_CDRInvalidAndRawType.sql" />
+    <Build Include="TOneWhS_CallQuality\Tables\RawCallQuality.sql" />
+    <Build Include="TOneWhS_CallQuality\Tables\MappedCallQuality.sql" />
+    <Build Include="TOneWhS_CallQuality\User Defined Types\RawCallQualityType.sql" />
+    <Build Include="TOneWhS_CallQuality\User Defined Types\MappedCallQualityType.sql" />
+    <Build Include="Security\TOneWhS_CallQuality.sql" />
   </ItemGroup>
 </Project>

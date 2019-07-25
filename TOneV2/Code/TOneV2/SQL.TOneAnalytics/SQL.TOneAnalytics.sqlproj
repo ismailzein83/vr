@@ -77,6 +77,9 @@
     <Folder Include="TOneWhS_Deal\Functions\" />
     <Folder Include="TOneWhS_Deal\Stored Procedures\" />
     <Folder Include="TOneWhS_Deal\User Defined Types\" />
+    <Folder Include="TOneWhS_CallQuality\" />
+    <Folder Include="TOneWhS_CallQuality\Tables\" />
+    <Folder Include="TOneWhS_CallQuality\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_Analytics\Tables\TrafficStats15Min.sql" />
@@ -120,5 +123,8 @@
     <Build Include="TOneWhS_Analytics\Tables\TrafficStats15MinByCode.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\TrafficStats15MinByCodeType.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealProgress_GetByDealId.sql" />
+    <Build Include="TOneWhS_CallQuality\Tables\AccumulatedCallQuality15Min.sql" />
+    <Build Include="TOneWhS_CallQuality\User Defined Types\AccumulatedCallQuality15MinType.sql" />
+    <Build Include="Security\TOneWhS_CallQuality.sql" />
   </ItemGroup>
 </Project>
