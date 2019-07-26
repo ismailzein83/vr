@@ -27,7 +27,7 @@ namespace BPMExtended.Main.Business
         const string chooseContractStep = "BE540720-169E-456B-B0D0-6D243D5B7F82";
         const string printStep = "4F032C27-BBB9-420B-A064-6A88E7E532A0";
         const string DSLAMPortStep = "0E26138A-89CA-4A06-9370-D4EB9060B639";
-        const string paymentValidationStep = "20CB8C91-E898-4935-9193-B0321289573C";
+        const string addressStep = "3FC6B8EE-5F35-445A-8700-D0D19800711F";
         const string waitingListStep = "979ED714-3DEE-4376-AE01-9C4F78702AE9";
         const string paymentStep = "ED21BA09-A2BB-4E4F-920A-26912132265A";
 
@@ -35,19 +35,18 @@ namespace BPMExtended.Main.Business
         const string technicalStep = "9A9C358C-8A33-4580-A5BE-36126E805E3E";
         const string completedStep = "F3384A9D-A1D3-4F2C-8985-8987639522DE";
 
-        public string GetNextStep(string id, string currentStepId)
+        public string GetNextStep(string id, string currentStepId,bool isWaitingList)
         {
             string nextStepId = "";
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = chooseContractStep; break;
                 case chooseContractStep: nextStepId = printStep; break;
-                case printStep: nextStepId = SameSwitch(id) ? paymentStep :  DSLAMPortStep; break;
-                case DSLAMPortStep: nextStepId = FreeDSLAMPorts(id) != null ? paymentStep : paymentValidationStep; break;
-                case paymentValidationStep: nextStepId = waitingListStep; break;
-                case waitingListStep: nextStepId = DSLAMPortStep; break;
-                case paymentStep: nextStepId = attachmentsStep; break;
-                case attachmentsStep: nextStepId = technicalStep; break;
+                case printStep: nextStepId = SameSwitch(id) ? addressStep :  DSLAMPortStep; break;
+                case DSLAMPortStep: nextStepId = isWaitingList ? waitingListStep : addressStep; break;
+                case waitingListStep: nextStepId = addressStep; break;
+                case addressStep: nextStepId = paymentStep; break;
+                case paymentStep: nextStepId = technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;

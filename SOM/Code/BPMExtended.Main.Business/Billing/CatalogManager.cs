@@ -516,6 +516,25 @@ namespace BPMExtended.Main.Business
             return null;
         }
 
+        public string GetWaitingListDepositAmount()
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("StWaitingListDepositAmount");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "825208A4-FA56-4678-9EE4-529D82A8E17D");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return entities[0].GetTypedColumnValue<string>("StWaitingListDepositAmount");
+            }
+            return null;
+        }
+
         public string GetDowngradeSpeedServiceId()
         {
             List<SaleService> fees = new List<SaleService>();
