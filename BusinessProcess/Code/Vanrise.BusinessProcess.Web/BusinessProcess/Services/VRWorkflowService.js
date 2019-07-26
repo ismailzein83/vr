@@ -137,6 +137,17 @@
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/ExpressionBuilderEditor.html', parameter, modalSettings);
 		}
 
+        function openExpressionEditorBuilder(onSetValue, params) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onSetValue = onSetValue;
+            };
+            var parameters = {
+                params: params,
+            };
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/ExpressionBuilderEditorEditor.html', parameters, modalSettings);
+        }
 		function openVariablesEditor(onSaveVariables, variables, parentVariables, reserveVariableName, eraseVariableName, isVariableNameReserved, reserveVariableNames) {
 			var modalSettings = {};
 
@@ -306,7 +317,8 @@
             openAssignTaskEditor: openAssignTaskEditor,
             openAddBusinessEntityEditor: openAddBusinessEntityEditor,
             openUpdateBusinessEntityEditor: openUpdateBusinessEntityEditor,
-            openGetBusinessEntityEditor: openGetBusinessEntityEditor
+            openGetBusinessEntityEditor: openGetBusinessEntityEditor,
+            openExpressionEditorBuilder: openExpressionEditorBuilder
 		});
 	}
 

@@ -1,0 +1,50 @@
+<div vr-modalcontent ng-controller="BusinessProcess_VRWorkflow_ExpressionBuilderEditorController" vr-loader="isLoading" width="'100%'">
+    <vr-modalbody>
+        <vr-form>
+            <vr-tabs>
+                <vr-tab header="'Expression Builder'">
+                        <vr-tabs>
+                            <vr-tab header="'Arguments'" ng-if="scopeModel.arguments!= undefined && scopeModel.arguments.length>0">
+                                <vr-columns haschildcolumns width="fullrow">
+                                    <vr-datalist scrollable datasource="scopeModel.arguments" onitemclicked="scopeModel.insertText" maxitemsperrow="6" ng-show="scopeModel.arguments.length>0">
+                                        <span title="{{dataItem.Name}}">
+                                            {{dataItem.Name}}
+                                        </span>
+                                    </vr-datalist>
+                                </vr-columns>
+                            </vr-tab>
+                            <vr-tab header="'Variables'" ng-if="scopeModel.variables!= undefined && scopeModel.variables.length>0">
+                                <vr-columns haschildcolumns width="fullrow">
+                                    <vr-datalist scrollable datasource="scopeModel.variables" onitemclicked="scopeModel.insertText" maxitemsperrow="6" ng-show="scopeModel.variables.length>0">
+                                        <span title="{{dataItem.Name}}">
+                                            {{dataItem.Name}}
+                                        </span>
+                                    </vr-datalist>
+                                </vr-columns>
+                            </vr-tab>
+                        </vr-tabs>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-textarea on-ready="scopeModel.onTextAreaReady" trim="false" label="Expression" value="scopeModel.expressionValue" rows="35"></vr-textarea>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Field Value'" ng-if="scopeModel.fieldType!= undefined">
+                    <vr-columns haschildcolumns width="fullrow">
+                        <vr-row>
+                            <vr-directivewrapper directive="scopeModel.runTimeEditor" enableadd on-ready="scopeModel.onFieldDirectiveReady"  selectionmode="single" normal-col-num="6"></vr-directivewrapper>
+                        </vr-row>
+                    </vr-columns>
+                </vr-tab>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="expressionBuilderEditorGroup" data-onclick="scopeModel.saveValue"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

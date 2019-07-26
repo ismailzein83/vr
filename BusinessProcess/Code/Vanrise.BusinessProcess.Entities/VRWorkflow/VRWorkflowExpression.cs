@@ -36,6 +36,8 @@ namespace Vanrise.BusinessProcess.Entities
         public Object Value { get; set; }
         public override string GetCode(IVRWorkflowExpressionGetCodeContext context)
         {
+            if (FieldType != null)
+                return FieldType.GenerateValueCode(Value);
             return null;
         }
     }

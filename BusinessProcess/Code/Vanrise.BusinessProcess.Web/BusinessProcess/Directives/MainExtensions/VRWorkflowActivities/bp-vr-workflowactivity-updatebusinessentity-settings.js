@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService',
-    function (UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService) {
+app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VRUIUtilsService',
+    function (UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -26,6 +26,15 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
 
             var inputItems;
             var inputGridAPI;
+
+            var context;
+            var settings; 
+            var isSucceededExpressionBuilderDirectiveAPI;
+            var isSucceededExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+            var userIdExpressionBuilderDirectiveAPI;
+            var userIdExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
             var inputGridPromiseReadyDefferd = UtilsService.createPromiseDeferred();
 
             this.initializeController = initializeController;
@@ -34,6 +43,14 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                 $scope.scopeModel.fields = [];
                 $scope.scopeModel.inputItems = [];
 
+                $scope.scopeModel.onIsSucceededExpressionBuilderDirectiveReady = function (api) {
+                    isSucceededExpressionBuilderDirectiveAPI = api;
+                    isSucceededExpressionBuilderPromiseReadyDeffered.resolve();
+                };
+                $scope.scopeModel.onUserIdExpressionBuilderDirectiveReady = function (api) {
+                    userIdExpressionBuilderDirectiveAPI = api;
+                    userIdExpressionBuilderPromiseReadyDeffered.resolve();
+                };
                 $scope.scopeModel.onInputGridReady = function (api) {
                     inputGridAPI = api;
                     inputGridPromiseReadyDefferd.resolve();
@@ -52,8 +69,8 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                     var genericBEDefinitionSettings;
                     var dataRecordType;
                     if (payload != undefined) {
-                        $scope.scopeModel.context = payload.context;
-                        var settings = payload.settings;
+                        context = payload.context;
+                           settings = payload.settings;
 
                         if (settings != undefined) {
                             $scope.scopeModel.isSucceeded = settings.IsSucceeded;
@@ -83,19 +100,45 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                                     return {
                                         promises: [childPromise],
                                         getChildNode: function () {
+                                            var promises = [];
+
                                             if (dataRecordType != undefined) {
                                                 inputGridAPI.clearDataSource();
                                                 var fields = dataRecordType.Fields;
                                                 for (var i = 0; i < fields.length; i++) {
-                                                    var fieldName = fields[i].Name;
-                                                    $scope.scopeModel.inputItems.push({
-                                                        fieldName: fieldName,
-                                                        inputValue: inputItems[fieldName]
-                                                    });
+                                                    var fieldObject = {
+                                                        payload: fields[i],
+                                                        inputValueExpressionBuilderPromiseLoadDeffered: UtilsService.createPromiseDeferred()
+                                                    };
+                                                    promises.push(fieldObject.inputValueExpressionBuilderPromiseLoadDeffered.promise);
+                                                    prepareField(fieldObject);
                                                 }
-                                                return { promises: [] };
                                             }
+
+                                            function prepareField(fieldObject) {
+                                                var dataItem = {
+                                                    entity: { fieldName: fieldObject.payload.Name }
+                                                };
+                                                dataItem.onInputValueExpressionBuilderDirectiveReady = function (api) {
+                                                    dataItem.inputValueExpressionBuilderDirectiveAPI = api;
+                                                    var payload = {
+                                                        context: context,
+                                                        value: inputItems[fieldObject.payload.Name],
+                                                        fieldType: fieldObject.payload.Type
+                                                    };
+                                                    VRUIUtilsService.callDirectiveLoad(dataItem.inputValueExpressionBuilderDirectiveAPI, payload, fieldObject.inputValueExpressionBuilderPromiseLoadDeffered);
+                                                };
+                                                $scope.scopeModel.inputItems.push(dataItem);
+                                            }
+
+
+                                            promises.push(loadIsSucceededExpressionBuilder());
+                                          
+                                            promises.push(loadUserIdExpressionBuilder());
+
+                                            return { promises: promises };
                                         }
+
                                     };
                                 }
                             };
@@ -103,36 +146,68 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                         else {
                             rootPromiseNode.promises = [];
                         }
+                        return UtilsService.waitPromiseNode(rootPromiseNode);
+
                     }
-                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowUpdateGenericBEActivity, Vanrise.BusinessProcess.MainExtensions",
-                        IsSucceeded: $scope.scopeModel.isSucceeded,
-                        UserId: $scope.scopeModel.userId,
-                        InputItems: $scope.scopeModel.inputItems.length > 0 ? getInputFields() : undefined,
+                        IsSucceeded: isSucceededExpressionBuilderDirectiveAPI != undefined ? isSucceededExpressionBuilderDirectiveAPI.getData() : undefined,
+                        UserId: userIdExpressionBuilderDirectiveAPI != undefined ? userIdExpressionBuilderDirectiveAPI.getData() : undefined,
+                    InputItems: $scope.scopeModel.inputItems.length > 0 ? getInputFields() : undefined,
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+            function loadIsSucceededExpressionBuilder() {
+                var isSucceededExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                isSucceededExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: settings != undefined ? settings.IsSucceeded : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(isSucceededExpressionBuilderDirectiveAPI, payload, isSucceededExpressionBuilderPromiseLoadDeffered);
+                });
+                return isSucceededExpressionBuilderPromiseLoadDeffered.promise;
+            }
+            function loadUserIdExpressionBuilder() {
+
+                var userIdExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                userIdExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: settings != undefined ? settings.UserId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(userIdExpressionBuilderDirectiveAPI, payload, userIdExpressionBuilderPromiseLoadDeffered);
+                });
+                return userIdExpressionBuilderPromiseLoadDeffered.promise;
+            }
             function getInputFields() {
+
                 var fields = [];
                 for (var i = 0; i < $scope.scopeModel.inputItems.length; i++) {
                     var field = $scope.scopeModel.inputItems[i];
-                    if (field.inputValue != undefined) {
-                        fields.push({
-                            FieldName: field.fieldName,
-                            Value: field.inputValue,
-                        });
-                    }
+                    addField(field, fields);
                 }
                 return fields;
             }
+            function addField(field, fields) {
 
+                if (field.inputValueExpressionBuilderDirectiveAPI != undefined) {
+
+                    var objValue = field.inputValueExpressionBuilderDirectiveAPI.getData();
+                    if (objValue != undefined)
+                        fields.push({
+                            FieldName: field.entity.fieldName,
+                            Value: objValue,
+                        });
+                }
+
+            }
         }
         return directiveDefinitionObject;
     }]);

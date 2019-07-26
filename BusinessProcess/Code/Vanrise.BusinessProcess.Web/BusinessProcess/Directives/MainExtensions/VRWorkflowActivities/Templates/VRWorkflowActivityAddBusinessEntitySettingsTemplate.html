@@ -1,17 +1,15 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                                getworkflowarguments="scopeModel.context.getWorkflowArguments"
+        <businessprocess-vr-workflow-activity-editor-expressionbuilder  on-ready="scopeModel.onEntityIdExpressionBuilderDirectiveReady"
                                                                 label="Entity Id"
                                                                 value="scopeModel.entityId">
-        </businessprocess-vr-workflow-activity-expressionbuilder>
+        </businessprocess-vr-workflow-activity-editor-expressionbuilder>
     </vr-columns>
     <vr-columns width="1/2row">
-        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                                getworkflowarguments="scopeModel.context.getWorkflowArguments"
-                                                                label="Succeeded"
-                                                                value="scopeModel.isSucceeded">
-        </businessprocess-vr-workflow-activity-expressionbuilder>
+        <businessprocess-vr-workflow-activity-editor-expressionbuilder label="Succeeded" on-ready="scopeModel.onIsSucceededExpressionBuilderDirectiveReady" value="scopeModel.isSucceeded">
+                                                                
+                                                               
+        </businessprocess-vr-workflow-activity-editor-expressionbuilder>
     </vr-columns>
 </vr-row>
 <vr-row>
@@ -19,11 +17,10 @@
         <vr-section title="Input Fields" collapsible>
             <vr-row>
                 <vr-columns width="1/2row">
-                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
+                    <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onUserIdExpressionBuilderDirectiveReady"
                                                                             label="User Id"
                                                                             value="scopeModel.userId">
-                    </businessprocess-vr-workflow-activity-expressionbuilder>
+                    </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                 </vr-columns>
             </vr-row>
             <vr-row>
@@ -34,19 +31,14 @@
                                  maxheight="500px"
                                  disabledraggablecolumns
                                  vr-loader="scopeModel.isInputGridLoading">
-
                         <vr-datagridcolumn headertext="'Field Name'" disablesorting="true" widthfactor="10">
-                            <vr-label>{{dataItem.fieldName}}</vr-label>
+                            <vr-label>{{dataItem.entity.fieldName}}</vr-label>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn disablesorting="true" fixedwidth="15">
                             <vr-label>=</vr-label>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true" widthfactor="20">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables"
-                                                                                    getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
-                                                                                    value="dataItem.inputValue"
-                                                                                    hidelabel="true">
-                            </businessprocess-vr-workflow-activity-expressionbuilder>
+                            <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="dataItem.onInputValueExpressionBuilderDirectiveReady" hidelabel="true"></businessprocess-vr-workflow-activity-editor-expressionbuilder>
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
