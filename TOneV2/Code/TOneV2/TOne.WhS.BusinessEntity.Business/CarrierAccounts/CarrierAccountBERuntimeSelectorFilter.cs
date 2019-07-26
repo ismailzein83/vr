@@ -10,65 +10,74 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierAccountBERuntimeSelectorFilter : BERuntimeSelectorFilter, ICarrierAccountFilter
     {
-        public DataTypeEnum DataType { get; set; }
+        public DataTypeEnum? DataType { get; set; }
         public bool IsExcluded(ICarrierAccountFilterContext context)
         {
-            ConfigManager configManager = new ConfigManager();
-
-            var carrierAccount = context.CarrierAccount;
-
-            bool getFilteredData = false;
-            if (this.DataType == DataTypeEnum.Traffic)
-                getFilteredData = configManager.GetTrafficCarrierAccountFiltering();
-            else if (this.DataType == DataTypeEnum.Billing)
-                getFilteredData = configManager.GetBillingCarrierAccountFiltering();
-
-            if (!getFilteredData)
-                return false;
-            else
+            if(DataType.HasValue)
             {
-                AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
-                IEnumerable<AccountManagerAssignment> accountManagerAssignments;
-                bool result = accountManagerAssignmentManager.TryGetCurrentUserAccountManagerAssignments(out accountManagerAssignments);
-                if (accountManagerAssignments != null)
+                ConfigManager configManager = new ConfigManager();
+
+                var carrierAccount = context.CarrierAccount;
+
+                bool getFilteredData = false;
+                if (this.DataType.Value == DataTypeEnum.Traffic)
+                    getFilteredData = configManager.GetTrafficCarrierAccountFiltering();
+                else if (this.DataType.Value == DataTypeEnum.Billing)
+                    getFilteredData = configManager.GetBillingCarrierAccountFiltering();
+
+                if (!getFilteredData)
+                    return false;
+                else
                 {
-                    foreach (var accountManagerAssignement in accountManagerAssignments)
+                    AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
+                    IEnumerable<AccountManagerAssignment> accountManagerAssignments;
+                    bool result = accountManagerAssignmentManager.TryGetCurrentUserAccountManagerAssignments(out accountManagerAssignments);
+                    if (accountManagerAssignments != null)
                     {
-                        if (accountManagerAssignement.CarrierAccountId == carrierAccount.CarrierAccountId)
-                            return false;
+                        foreach (var accountManagerAssignement in accountManagerAssignments)
+                        {
+                            if (accountManagerAssignement.CarrierAccountId == carrierAccount.CarrierAccountId)
+                                return false;
+                        }
                     }
+                    return true;
                 }
-                return true;
             }
+            return false;
         }
 
         public override bool IsMatched(IBERuntimeSelectorFilterSelectorFilterContext context)
         {
-            ConfigManager configManager = new ConfigManager();
-
-            bool getFilteredData = false;
-            if (this.DataType == DataTypeEnum.Traffic)
-                getFilteredData = configManager.GetTrafficCarrierAccountFiltering();
-            else if (this.DataType == DataTypeEnum.Billing)
-                getFilteredData = configManager.GetBillingCarrierAccountFiltering();
-
-            if (!getFilteredData)
-                return true;
-            else
+            if (DataType.HasValue)
             {
-                AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
-                IEnumerable<AccountManagerAssignment> accountManagerAssignments;
-                bool result = accountManagerAssignmentManager.TryGetCurrentUserAccountManagerAssignments(out accountManagerAssignments);
-                if (accountManagerAssignments != null)
+                ConfigManager configManager = new ConfigManager();
+
+                bool getFilteredData = false;
+                if (this.DataType.Value == DataTypeEnum.Traffic)
+                    getFilteredData = configManager.GetTrafficCarrierAccountFiltering();
+                else if (this.DataType.Value == DataTypeEnum.Billing)
+                    getFilteredData = configManager.GetBillingCarrierAccountFiltering();
+
+                if (!getFilteredData)
+                    return true;
+                else
                 {
-                    foreach (var accountManagerAssignement in accountManagerAssignments)
+                    AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
+                    IEnumerable<AccountManagerAssignment> accountManagerAssignments;
+                    bool result = accountManagerAssignmentManager.TryGetCurrentUserAccountManagerAssignments(out accountManagerAssignments);
+                    if (accountManagerAssignments != null)
                     {
-                        if (accountManagerAssignement.CarrierAccountId == (int)context.BusinessEntityId)
-                            return true;
+                        foreach (var accountManagerAssignement in accountManagerAssignments)
+                        {
+                            if (accountManagerAssignement.CarrierAccountId == (int)context.BusinessEntityId)
+                                return true;
+                        }
                     }
+                    return false;
                 }
-                return false;
             }
+
+            return true;
         }
     }
 }
