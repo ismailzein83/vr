@@ -21,10 +21,18 @@ app.directive('vrGenericeditorConditionalruleFieldvalue', ['UtilsService', 'VRUI
         function conditionalRuleFieldValueCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
+            var logicalOperatorDirectiveAPI;
+            var logicalOperatorDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.dataRecordFields = [];
                 $scope.scopeModel.conditions = [];
+
+                $scope.scopeModel.onLogicalOperatorDirectiveReady = function (api) {
+                    logicalOperatorDirectiveAPI = api;
+                    logicalOperatorDirectiveReadyPromiseDeferred.resolve();
+                };
 
                 $scope.scopeModel.addCondition = function () {
                     prepareCondition();
@@ -54,14 +62,19 @@ app.directive('vrGenericeditorConditionalruleFieldvalue', ['UtilsService', 'VRUI
                     var promises = [];
 
                     var conditions;
+                    var logicalOperator;
 
                     if (payload != undefined) {
                         $scope.scopeModel.dataRecordFields = payload.context.getFields();
                         var genericEditorConditionalRule = payload.genericEditorConditionalRule;
                         if (genericEditorConditionalRule != undefined) {
                             conditions = genericEditorConditionalRule.Conditions;
+                            logicalOperator = genericEditorConditionalRule.LogicalOperator;
                         }
                     }
+
+                    var logicalOperatorDirectiveLoadedPromise = loadLogicalOperatorDirective();
+                    promises.push(logicalOperatorDirectiveLoadedPromise);
 
                     if (conditions != undefined) {
                         for (var i = 0; i < conditions.length; i++) {
@@ -95,6 +108,18 @@ app.directive('vrGenericeditorConditionalruleFieldvalue', ['UtilsService', 'VRUI
                         return dataRecordTypeFieldRuntimeEditorLoadDeferred.promise;
                     }
 
+                    function loadLogicalOperatorDirective() {
+                        var logicalOperatorDirectiveLoadedPromiseDeferred = UtilsService.createPromiseDeferred();
+                        logicalOperatorDirectiveReadyPromiseDeferred.promise.then(function () {
+                            var logicalOperatorDirectivePayload;
+                            if (logicalOperator != undefined) {
+                                logicalOperatorDirectivePayload = { LogicalOperator: logicalOperator };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(logicalOperatorDirectiveAPI, logicalOperatorDirectivePayload, logicalOperatorDirectiveLoadedPromiseDeferred);
+                        });
+                        return logicalOperatorDirectiveLoadedPromiseDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -118,7 +143,8 @@ app.directive('vrGenericeditorConditionalruleFieldvalue', ['UtilsService', 'VRUI
 
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.GenericEditorFieldValueConditionalRule, Vanrise.GenericData.MainExtensions",
-                        Conditions: genericEditorFieldValueCondition.length > 0 ? genericEditorFieldValueCondition : null
+                        Conditions: genericEditorFieldValueCondition.length > 0 ? genericEditorFieldValueCondition : null,
+                        LogicalOperator: logicalOperatorDirectiveAPI.getData()
                     };
                 };
 

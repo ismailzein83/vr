@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericEditorConditionalRuleContainerService.$inject = ['UtilsService'];
+    GenericEditorConditionalRuleContainerService.$inject = ['UtilsService', 'VR_GenericData_RecordQueryLogicalOperatorEnum'];
 
-    function GenericEditorConditionalRuleContainerService(UtilsService) {
+    function GenericEditorConditionalRuleContainerService(UtilsService, VR_GenericData_RecordQueryLogicalOperatorEnum) {
 
         var conditionalRuleActions = {};
 
@@ -15,9 +15,12 @@
                     var genericEditorConditionalRule = subscribeToFieldValueChangedContext.genericEditorConditionalRule;
                     var fieldValuesByFieldName = subscribeToFieldValueChangedContext.fieldValuesByFieldName;
 
-                    var conditionalRuleEvaluationResult = evaluateConditions(genericEditorConditionalRule.Conditions, fieldValuesByFieldName);
+                    var conditionalRuleEvaluationResult = evaluateConditions(genericEditorConditionalRule, fieldValuesByFieldName);
 
-                    function evaluateConditions(conditions, fieldValuesByFieldName) {
+                    function evaluateConditions(genericEditorConditionalRule, fieldValuesByFieldName) {
+                        var conditions = genericEditorConditionalRule.Conditions;
+                        var logicalOperator = genericEditorConditionalRule.LogicalOperator;
+
                         if (fieldValuesByFieldName == undefined)
                             return false;
 
@@ -25,26 +28,33 @@
                             var fieldName = conditions[i].FieldName;
                             var fieldValues = conditions[i].FieldValues;
 
-                            if (fieldValuesByFieldName[fieldName] == undefined)
-                                return false;
-
-                            var currentValue = fieldValuesByFieldName[fieldName];
-                            if (currentValue != undefined && Array.isArray(currentValue))
-                                currentValue = currentValue[0];
 
                             var containValue = false;
-                            for (var j = 0; j < fieldValues.length; j++) {
-                                if (currentValue == fieldValues[j]) {
-                                    containValue = true;
-                                    break;
+                            var currentValue = fieldValuesByFieldName[fieldName];
+
+                            if (currentValue != undefined) {
+                                if (Array.isArray(currentValue))
+                                    currentValue = currentValue[0];
+
+                                for (var j = 0; j < fieldValues.length; j++) {
+                                    if (currentValue == fieldValues[j]) {
+                                        containValue = true;
+                                        break;
+                                    }
                                 }
                             }
 
-                            if (!containValue)
-                                return false;
+                            switch (logicalOperator) {
+                                case VR_GenericData_RecordQueryLogicalOperatorEnum.And.value: if (!containValue) { return false; } break;
+                                case VR_GenericData_RecordQueryLogicalOperatorEnum.Or.value: if (containValue) { return true; } break;
+                            }
+
                         }
 
-                        return true;
+                        switch (logicalOperator) {
+                            case VR_GenericData_RecordQueryLogicalOperatorEnum.And.value: return true;
+                            case VR_GenericData_RecordQueryLogicalOperatorEnum.Or.value: return false;
+                        }
                     }
 
                     return conditionalRuleEvaluationResult;
