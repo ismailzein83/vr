@@ -35,7 +35,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             uniqueIdentifier = Guid.NewGuid();
             return true;
         }
+        public override string GenerateValueCode(object value)
+        {
+            if (value == null)
+                return "null";
+            var valueItem = ParseNonNullValueToFieldType(value);
+            return string.Concat("new Guid(", '"', valueItem.ToString(), '"', ")");
 
+        }
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)

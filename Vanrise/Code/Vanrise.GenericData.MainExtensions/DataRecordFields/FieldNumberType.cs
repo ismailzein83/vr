@@ -47,7 +47,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return GetNonNullableRuntimeType() == fieldType.GetNonNullableRuntimeType();
         }
+        public override string GenerateValueCode(object value)
+        {
+            if (value == null)
+                return "null";
+            var valueItem = ParseNonNullValueToFieldType(value);
+            if (valueItem is decimal)
+                return string.Concat('"', valueItem.ToString(), "m", '"');
+            else return valueItem.ToString();
 
+        }
         #region Public Methods
 
         Type _runtimeType;

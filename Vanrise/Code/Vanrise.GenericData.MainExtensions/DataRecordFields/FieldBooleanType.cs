@@ -100,7 +100,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 throw new NullReferenceException("booleanRecordFilter");
             return booleanRecordFilter.IsTrue == (bool)fieldValue;
         }
+        public override string GenerateValueCode(object value)
+        {
+            if (value == null)
+                return "null";
 
+            var valueItem = ParseNonNullValueToFieldType(value);
+            return valueItem == true ? "true" : "false";
+        }
         public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
             if (context.FilterValues == null || context.FilterValues.Count == 0)

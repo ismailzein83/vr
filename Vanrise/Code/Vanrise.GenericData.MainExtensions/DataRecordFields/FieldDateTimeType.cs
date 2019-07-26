@@ -52,6 +52,21 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             };
         }
 
+        public override string GenerateValueCode(object value)
+        {
+            if (value == null)
+                return "null";
+            var valueItem = ParseNonNullValueToFieldType(value);
+            if (valueItem is DateTime)
+            {
+                return string.Format("new System.DateTime({0},{1},{2},{3},{4},{5},{6})", valueItem.Year, valueItem.Month, valueItem.Day, valueItem.Hour, valueItem.Minute, valueItem.Second, valueItem.Millisecond);
+            }
+            else if (valueItem is Time)
+            {
+                return string.Format("new Vanrise.Entities.Time({0},{1},{2},{3})", valueItem.Hour, valueItem.Minute, valueItem.Second, valueItem.MilliSecond);
+            }
+            return "null";
+        }
         public FieldDateTimeDataType DataType { get; set; }
 
         public bool IsNullable { get; set; }

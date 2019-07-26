@@ -55,7 +55,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return _nonNullableRuntimeType;
         }
-
+        public override string GenerateValueCode(object value)
+        {
+            if (value == null)
+                return "null";
+            return string.Concat('"', value.ToString(), '"');
+        }
         public override string GetDescription(Object value)
         {
             if (value == null)

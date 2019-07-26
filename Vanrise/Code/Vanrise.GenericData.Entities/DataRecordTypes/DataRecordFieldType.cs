@@ -64,7 +64,10 @@ namespace Vanrise.GenericData.Entities
         {
             return GetDescription(context.FieldValue);
         }
-
+        public virtual string GenerateValueCode(Object value)
+        {
+            return value != null ? value.ToString() : "null";
+        }
         public abstract RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context);
 
         public abstract string GetDescription(Object value);
