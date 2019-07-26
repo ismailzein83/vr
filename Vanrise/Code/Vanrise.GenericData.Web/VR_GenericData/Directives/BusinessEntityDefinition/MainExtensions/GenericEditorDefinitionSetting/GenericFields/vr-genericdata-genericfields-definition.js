@@ -25,7 +25,7 @@
 
             var context;
             var fields;
-            var dataRecordFieldTypes = [];
+            var setFieldsNumber;
 
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -47,15 +47,15 @@
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.fields, item.Name, "FieldPath");
                     $scope.scopeModel.fields.splice(index, 1);
 
-                    if (context.setFieldsNumber != undefined)
-                        context.setFieldsNumber($scope.scopeModel.fields.length);
+                    if (setFieldsNumber != undefined)
+                        setFieldsNumber($scope.scopeModel.fields.length);
                 };
 
                 $scope.scopeModel.deselectAllFields = function () {
                     $scope.scopeModel.fields.length = 0;
 
-                    if (context.setFieldsNumber != undefined)
-                        context.setFieldsNumber(0);
+                    if (setFieldsNumber != undefined)
+                        setFieldsNumber(0);
                 };
 
                 defineAPI();
@@ -80,8 +80,8 @@
 
                 $scope.scopeModel.fields.push(dataItem);
 
-                if (context.setFieldsNumber != undefined)
-                    context.setFieldsNumber($scope.scopeModel.fields.length);
+                if (setFieldsNumber != undefined)
+                    setFieldsNumber($scope.scopeModel.fields.length);
             }
 
             function defineAPI() {
@@ -94,6 +94,7 @@
                     if (payload != undefined) {
                         context = payload.context;
                         fields = payload.fields;
+                        setFieldsNumber = payload.setFieldsNumber;
                     }
 
                     initialPromises.push(loadFieldNameSelector());

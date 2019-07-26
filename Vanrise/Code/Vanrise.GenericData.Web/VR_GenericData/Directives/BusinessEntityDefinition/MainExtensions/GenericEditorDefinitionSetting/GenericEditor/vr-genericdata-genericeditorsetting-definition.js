@@ -43,7 +43,10 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                         dataItem.genericFieldsDirectiveAPI = api;
                         var setLoader = function (value) { dataItem.isGenericFieldsDirectiveLoading = value; };
                         var payload = {
-                            context: getContext(dataItem)
+                            context: getContext(),
+                            setFieldsNumber: function (fieldsNumber) {
+                                dataItem.entity.fieldsNumber = fieldsNumber;
+                            }
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.genericFieldsDirectiveAPI, payload, setLoader);
                     };
@@ -62,7 +65,7 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                     return null;
                 };
                 defineAPI();
-            }
+            } 
 
             function defineAPI() {
                 var api = {};
@@ -102,7 +105,10 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
 
                         var rowPayload = {
                             fields: rowObject.payload.Fields,
-                            context: getContext(dataItem),
+                            context: getContext(),
+                            setFieldsNumber: function (fieldsNumber) {
+                                dataItem.entity.fieldsNumber = fieldsNumber;
+                            }
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.genericFieldsDirectiveAPI, rowPayload, setLoader);
                     };
@@ -141,7 +147,7 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                     ctrl.onReady(api);
             }
 
-            function getContext(dataItem) {
+            function getContext() {
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
@@ -153,10 +159,6 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                         data.push({ FieldPath: filterData[i].Name, FieldTitle: filterData[i].Title });
                     }
                     return data;
-                };
-
-                currentContext.setFieldsNumber = function (fieldsNumber) {
-                    dataItem.entity.fieldsNumber = fieldsNumber;
                 };
 
                 return currentContext;
