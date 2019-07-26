@@ -83,7 +83,7 @@ namespace TOne.WhS.BusinessEntity.Business.EventHandler
 					{
 						string carrierAccountName = carrierAccountManager.GetCarrierAccountName(carrierAccountId);
 						errorStringBuilder.AppendLine(string.Format("Couldn't Block Customer {0}.More Details: {1}",
-							carrierAccountName, e.Message));
+							carrierAccountName, e.ToString()));
 					}
 				}
 				if (errorStringBuilder.Length > 0)
