@@ -397,5 +397,32 @@ namespace BPMExtended.Main.Business
             return accounts;
         }
 
+        public bool IsOperationExistInRequestHeader(string contractId, string requestType, string statusId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFilter, esqFilter2, esqFilter3;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("Id");
+
+            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contractId);
+            esqFilter2 = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestType", requestType);
+            esqFilter3 = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus", statusId);
+
+            esq.Filters.Add(esqFilter);
+            esq.Filters.Add(esqFilter2);
+            esq.Filters.Add(esqFilter3);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
     }
 }

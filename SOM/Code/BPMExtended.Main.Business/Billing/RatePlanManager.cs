@@ -298,7 +298,7 @@ namespace BPMExtended.Main.Business
 
         public bool DeactivateCPTService(string contractId)
         {
-            this._cptManager.UnRegisterCPTNumber(contractId);
+            //this._cptManager.UnRegisterCPTNumber(contractId);
 
             //TODO: call BSCS to deactivate the service
             return true;

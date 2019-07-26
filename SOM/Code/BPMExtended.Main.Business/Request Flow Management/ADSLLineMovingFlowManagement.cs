@@ -104,6 +104,12 @@ namespace BPMExtended.Main.Business
                     var pilotcontract = entities[0].GetColumnValue("StTelephonyContractId");
                     InventoryManager manager = new InventoryManager();
                     isonsameswitch = manager.IsNumbersOnSameSwitch(selectedcontract.ToString(), pilotcontract.ToString());
+
+                    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                    var update = new Update(connection, "StADSLLineMoving").Set("StIsSameSwitch", Column.Parameter(isonsameswitch))
+                        .Where("Id").IsEqual(Column.Parameter(id));
+                    update.Execute();
+
                 }
             }
             return isonsameswitch;

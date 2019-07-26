@@ -7,6 +7,7 @@ using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -30,14 +31,15 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
+            string serviceId;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLAlterSpeed");
             esq.AddColumn("StContractId");
             esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StNewRatePlanId");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -46,10 +48,32 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var oldRatePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var newRatePlanId = entities[0].GetColumnValue("StNewRatePlanId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                //fees
+                List<SaleService> feesServices = JsonConvert.DeserializeObject<List<SaleService>>(fees);
+
+                //Get ranks
+                int oldRank = new CatalogManager().GetRankByRatePlanId(oldRatePlanId.ToString());
+                int newRank = new CatalogManager().GetRankByRatePlanId(newRatePlanId.ToString());
+
+                
+                if(oldRank < newRank)
+                {
+                    //get upgrade rank
+                    serviceId = new CatalogManager().GetUpgradSpeedServiceId();
+                    feesServices.Add(new SaleService() {Id=serviceId,UpFront=false });
+                }
+                else if (oldRank > newRank)
+                {
+                    //get downgrade rank
+                    serviceId = new CatalogManager().GetDowngradeSpeedServiceId();
+                    feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                }
 
                 SOMRequestInput<ADSLAlterSpeedRequestInput> somRequestInput = new SOMRequestInput<ADSLAlterSpeedRequestInput>
                 {
@@ -59,11 +83,14 @@ namespace BPMExtended.Main.Business
                         CommonInputArgument = new CommonInputArgument()
                         {
                             //ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            //AccountId = null,
                             RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
-                        }
+                            CustomerId = customerId.ToString()
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = feesServices,
+                            IsPaid = (bool)isPaid
+                        },
                     }
 
                 };

@@ -516,6 +516,44 @@ namespace BPMExtended.Main.Business
             return null;
         }
 
+        public string GetDowngradeSpeedServiceId()
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("StDowngradeSpeedServiceId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "E3CE1E0B-1DBE-4AE0-B80D-CBB2F1E46C63");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return entities[0].GetTypedColumnValue<string>("StDowngradeSpeedServiceId");
+            }
+            return null;
+        }
+
+        public string GetUpgradSpeedServiceId()
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("StUpgradeSpeedServiceId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "E3CE1E0B-1DBE-4AE0-B80D-CBB2F1E46C63");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return entities[0].GetTypedColumnValue<string>("StUpgradeSpeedServiceId");
+            }
+            return null;
+        }
+
         public SaleService GetVPNServiceFee()
         {
             string serviceId;
@@ -622,6 +660,30 @@ namespace BPMExtended.Main.Business
             }
 
             return null;
+
+        }
+
+        public int GetRankByRatePlanId(string ratePlanId)
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlansInCatalog");
+            var rank = esq.AddColumn("StRatePlanCatalog.StRank");
+            esq.AddColumn("StRatePlanID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRatePlanID", ratePlanId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return entities[0].GetTypedColumnValue<int>(rank.Name);
+
+            }
+
+            return -1;
 
         }
 

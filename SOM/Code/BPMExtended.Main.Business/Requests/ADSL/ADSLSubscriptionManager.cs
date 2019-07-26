@@ -47,7 +47,7 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
-        public string CheckADSLRequestInWaitingListByTelContract(string contractId)
+/*        public string CheckADSLRequestInWaitingListByTelContract(string contractId)
         {
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
@@ -71,7 +71,7 @@ namespace BPMExtended.Main.Business
                 return requestId.ToString();
             }
             return null;
-        }
+        }*/
 
         public SOMRequestOutput CreateADSLContractOnHold(Guid requestId, string coreServices, string optionalServices, string ratePlanId)
         {

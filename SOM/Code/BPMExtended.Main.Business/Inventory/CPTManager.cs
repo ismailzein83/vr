@@ -47,7 +47,7 @@ namespace BPMExtended.Main.Business
             return output;
         }
 
-        public bool UnRegisterCPTNumber(string contractId)
+/*        public bool UnRegisterCPTNumber(string contractId)
         {
             string result = null;
             //TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
@@ -57,7 +57,7 @@ namespace BPMExtended.Main.Business
             }
             
             return result==null || result== ""  ? false:true;
-        }
+        }*/
 
         public List<CPTNumberDetail> GetCountrFreeCptNumbers()
         {
