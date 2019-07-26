@@ -75,7 +75,29 @@ when not matched by target then
 	insert([ID],[DevProjectID],[Name],[Title],[Settings])
 	values(s.[ID],s.[DevProjectID],s.[Name],s.[Title],s.[Settings]);
 	
-	
+--[sec].[Module]---------------------------1301 to 1400---------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+
+('DBEFC1B4-2538-4A2B-BF47-7CAD1CE31C42','Sale',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,0,0)
+
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView]))
+merge	[sec].[Module] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic], [RenderedAsView] = s.[RenderedAsView]
+when not matched by target then
+	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView])
+	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[RenderedAsView]);
+--------------------------------------------------------------------------------------------------------------
+end
+
 --[sec].[View]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
@@ -201,26 +223,4 @@ when not matched by target then
 	insert([ID],[TableId],[ItemType],[Name],[Title],[Config])
 	values(s.[ID],s.[TableId],s.[ItemType],s.[Name],s.[Title],s.[Config]);
 ----------------------------------------------------------------------------------------------------
-end
---[sec].[Module]---------------------------1301 to 1400---------------------------------------------------------
-begin
-set nocount on;
-;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-
-('DBEFC1B4-2538-4A2B-BF47-7CAD1CE31C42','Sale',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,0,0)
-
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView]))
-merge	[sec].[Module] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic], [RenderedAsView] = s.[RenderedAsView]
-when not matched by target then
-	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView])
-	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[RenderedAsView]);
---------------------------------------------------------------------------------------------------------------
 end
