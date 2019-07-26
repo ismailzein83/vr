@@ -79,9 +79,9 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
 
                 WhS_Routing_CustomerRouteAPIService.HasViewCustomerRouteRatesPermission().then(function (response) {
                     hasViewRatesPermission = response;
+                    defineMenuActions();
                     $scope.showGrid = true;
                 });
-                defineMenuActions();
             }
 
             function defineAPI() {
@@ -135,12 +135,14 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
 
             function defineMenuActions() {
                 $scope.gridMenuActions = function (dataItem) {
-                    var menu = [];
-                    menu.push({
-                        name: "Matching Rule",
-                        clicked: viewRouteRuleEditor
-                    });
-                    return menu;
+                    if (hasViewRatesPermission) {
+                        var menu = [];
+                        menu.push({
+                            name: "Matching Rule",
+                            clicked: viewRouteRuleEditor
+                        });
+                        return menu;
+                    }
                 };
             }
 
