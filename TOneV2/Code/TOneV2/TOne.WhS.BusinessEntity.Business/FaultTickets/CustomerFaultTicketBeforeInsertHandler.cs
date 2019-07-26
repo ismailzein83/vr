@@ -15,14 +15,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
-            context.GenericBusinessEntity.ThrowIfNull("context.BusinessEntityDefinitionId");
-            context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
-            GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-
-            var entities = genericBusinessEntityManager.GetAllGenericBusinessEntities(context.BusinessEntityDefinitionId, new List<string> { "SaleZoneId", "CustomerId", "StatusId" }, new RecordFilterGroup
+            if (context.OperationType == HandlerOperationType.Add)
             {
-                LogicalOperator = RecordQueryLogicalOperator.And,
-                Filters = new List<RecordFilter>
+                context.GenericBusinessEntity.ThrowIfNull("context.BusinessEntityDefinitionId");
+                context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
+                GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
+
+                var entities = genericBusinessEntityManager.GetAllGenericBusinessEntities(context.BusinessEntityDefinitionId, new List<string> { "SaleZoneId", "CustomerId", "StatusId" }, new RecordFilterGroup
+                {
+                    LogicalOperator = RecordQueryLogicalOperator.And,
+                    Filters = new List<RecordFilter>
                 {
                     new ObjectListRecordFilter
                     {
@@ -42,12 +44,13 @@ namespace TOne.WhS.BusinessEntity.Business
                         Values =new List<object> { new Guid("f299eb6d-b50c-4338-812f-142d4d8515ca") }
                     }
                 }
-            });
+                });
 
-            if (entities != null && entities.Count > 0)
-            {
-                context.OutputResult.Result = false;
-                context.OutputResult.Messages.Add("Same Customer And SaleZone Already Exist In Another Fault Ticket");
+                if (entities != null && entities.Count > 0)
+                {
+                    context.OutputResult.Result = false;
+                    context.OutputResult.Messages.Add("Same Customer And SaleZone Already Exist In Another Fault Ticket");
+                }
             }
         }
 
