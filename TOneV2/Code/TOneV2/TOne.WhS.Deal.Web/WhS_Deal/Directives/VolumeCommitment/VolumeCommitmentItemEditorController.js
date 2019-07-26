@@ -34,7 +34,7 @@
                 volumeCommitmentItemEntity = parametersObj.volumeCommitmentItemEntity;
                 context = parametersObj.context;
                 carrierAccountId = parametersObj.carrierAccountId;
-                sendOrPay = parametersObj.sendOrPay;
+                sendOrPay = context.getSendOrPayValue();
                 if (context != undefined)
                     $scope.scopeModel.zoneSelector = context.getZoneSelector();
             }
