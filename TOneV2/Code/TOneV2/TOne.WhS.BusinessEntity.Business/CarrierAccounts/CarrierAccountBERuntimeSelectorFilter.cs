@@ -32,15 +32,16 @@ namespace TOne.WhS.BusinessEntity.Business
                     AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
                     IEnumerable<AccountManagerAssignment> accountManagerAssignments;
                     bool result = accountManagerAssignmentManager.TryGetCurrentUserAccountManagerAssignments(out accountManagerAssignments);
-                    if (accountManagerAssignments != null)
+                    if (accountManagerAssignments != null && accountManagerAssignments.Count() > 0)
                     {
                         foreach (var accountManagerAssignement in accountManagerAssignments)
                         {
                             if (accountManagerAssignement.CarrierAccountId == carrierAccount.CarrierAccountId)
                                 return false;
                         }
+                        return true;
                     }
-                    return true;
+                    return false;
                 }
             }
             return false;
@@ -65,15 +66,16 @@ namespace TOne.WhS.BusinessEntity.Business
                     AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
                     IEnumerable<AccountManagerAssignment> accountManagerAssignments;
                     bool result = accountManagerAssignmentManager.TryGetCurrentUserAccountManagerAssignments(out accountManagerAssignments);
-                    if (accountManagerAssignments != null)
+                    if (accountManagerAssignments != null && accountManagerAssignments.Count() > 0)
                     {
                         foreach (var accountManagerAssignement in accountManagerAssignments)
                         {
                             if (accountManagerAssignement.CarrierAccountId == (int)context.BusinessEntityId)
                                 return true;
                         }
+                        return false;
                     }
-                    return false;
+                    return true;
                 }
             }
 
