@@ -1,1 +1,17 @@
-﻿
+﻿<div vr-modalcontent ng-controller="VR_GenericData_CRCGenericDesignEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form validationcontext="CRCGenericDesignEditor">
+            <vr-row>
+                <vr-genericdata-conditionalrulecontainereditorsetting-conditionalrules on-ready="scopeModel.onGenericEditorConditionalRulesDirectiveReady" normal-col-num="4"></vr-genericdata-conditionalrulecontainereditorsetting-conditionalrules>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="CRCGenericDesignEditor" data-onclick="scopeModel.saveCRCSettings"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

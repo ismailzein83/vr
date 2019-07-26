@@ -1,8 +1,16 @@
-﻿<vr-tabs>
-    <vr-tab header="'Editor Settings'">
-        <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEFieldEditorDefinitionDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
-    </vr-tab>
-    <vr-tab header="'Conditions'">
-        <vr-genericdata-conditionalrulecontainereditorsetting-conditionalrules on-ready="scopeModel.onGenericEditorConditionalRulesDirectiveReady" normal-col-num="3"></vr-genericdata-conditionalrulecontainereditorsetting-conditionalrules>
-    </vr-tab>
-</vr-tabs>
+﻿<vr-row>
+    <vr-columns width="fullrow" style="position: relative;">
+        <span class="glyphicon glyphicon-pencil" ng-click="scopeModel.openCRCSettings()" style="font-size: 19px;cursor: pointer;left: calc(100% - 65px);top: -13px;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;padding: 4px;position: absolute;"></span>
+        <vr-label largesize style="background-color:white; position:absolute;top: -10px;left: 28px;padding: 0px 8px 0px 9px;">Condition ?</vr-label>
+        <vr-validator validate="scopeModel.validate()" tobottom>
+            <div style="border:1px solid #ddd; ">
+                <vr-row withemptyline>
+                    <vr-columns colnum="12">
+                        <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEFieldEditorDefinitionDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
+                    </vr-columns>
+                </vr-row>
+            </div>
+        </vr-validator>
+    </vr-columns>
+</vr-row>
+
