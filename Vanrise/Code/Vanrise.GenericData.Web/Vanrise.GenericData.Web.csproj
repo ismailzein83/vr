@@ -351,11 +351,13 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-uniqueconstraints.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbexpressionfieldsettings-selective.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbjoinsettings-selective.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\CRCGenericDesignEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\CustomActionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\AdditionalSettingEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\FieldTypeGenericDesignEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\GridActionGroupDefintionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\TabContainerSettingsEditorController.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\CRCGenericDesignEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\CustomActionDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\CustomActionDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\AdditionalSettingEditor.html" />
