@@ -171,7 +171,7 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Url],s.[DefaultViewId],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[Settings]);
 
 
-Delete from [sec].[View] where [ID] IN ('0D2A2A90-A3B7-42BE-AA37-7C9D2DECE9D3','B26EA2B0-06F6-4FBF-BE49-DA01859073DD')--'Switches','Route Sync Definitions'
+Delete from [sec].[View] where [ID] IN ('0D2A2A90-A3B7-42BE-AA37-7C9D2DECE9D3')--'Switches'
 --[sec].[View]------------------------------------------------------------------------------------
 begin
 set nocount on;
