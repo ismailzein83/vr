@@ -1,35 +1,53 @@
 ﻿<vr-section header="Settings">
-    <vr-row>
-        <vr-columns width="1/4row">
-            <vr-textbox label="Date Time Field" value="ctrl.dateTimeField"></vr-textbox>
+	<vr-row>
+		<vr-columns width="1/4row">
+			<vr-textbox label="Date Time Field" value="ctrl.dateTimeField"></vr-textbox>
 
-        </vr-columns>
-        <vr-columns width="1/4row">
-            <vr-textbox label="Id Field" value="ctrl.idField"></vr-textbox>
-        </vr-columns>
-
-    </vr-row>
+		</vr-columns>
+		<vr-columns width="1/4row">
+			<vr-textbox label="Id Field" value="ctrl.idField"></vr-textbox>
+		</vr-columns>
+	</vr-row>
 </vr-section>
 <vr-section header="Extra Fields">
-    <vr-row>
-        <vr-columns width="1/4row">
-            <vr-switch label="Extra Fields" value="ctrl.hasExtraFields" isrequired></vr-switch>
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <span ng-if="ctrl.hasExtraFields">
-            <vr-genericdata-datarecordtypeextrafields-template on-ready="ctrl.onDataRecordTypeExtraFieldsReady" isrequired="true" normal-col-num="3" vr-loader="ctrl.isDirectiveLoading"></vr-genericdata-datarecordtypeextrafields-template>
-        </span>
-    </vr-row>
+	<vr-row>
+		<vr-columns width="1/4row">
+			<vr-switch label="Extra Fields" value="ctrl.hasExtraFields" isrequired></vr-switch>
+		</vr-columns>
+	</vr-row>
+	<vr-row>
+		<span ng-if="ctrl.hasExtraFields">
+			<vr-genericdata-datarecordtypeextrafields-template on-ready="ctrl.onDataRecordTypeExtraFieldsReady" isrequired="true" normal-col-num="3" vr-loader="ctrl.isDirectiveLoading"></vr-genericdata-datarecordtypeextrafields-template>
+		</span>
+	</vr-row>
 </vr-section>
 <vr-section header="Static Fields">
-    <vr-button type="Add" data-onclick="ctrl.addDataRecordField" vr-disabled="ctrl.disableAddButton()" standalone></vr-button>
-
-    <vr-validator validate="ctrl.isValid()">
-        <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                     on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
-            <vr-datagridcolumn headertext="'Name'" field="'Name'" widthfactor="5" disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Type Description'" field="'TypeDescription'" widthfactor="15" disablesorting></vr-datagridcolumn>
-        </vr-datagrid>
-    </vr-validator>
+	<vr-button type="Add" data-onclick="ctrl.addDataRecordField" standalone></vr-button>
+	<vr-validator>
+		<vr-datagrid datasource="ctrl.datasource" 
+					 norowhighlightonclick="true" 
+					 menuactions="gridMenuActions"
+					 maxheight="300px"
+					 on-ready="scopeModel.onGridReady" 
+					 enabledraggablerow="true"
+					 ondeleterow="ctrl.removeFilter" 
+					 showexpand="ctrl.showExpand"
+                     rowdeleteicontitle="Delete Option"
+					 hidegridmenu>
+			<vr-datagridcolumn headertext="'Name'" field="'Name'" widthfactor="10" disablesorting>
+				<vr-textbox value="dataItem.Name" isrequired></vr-textbox>
+			</vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'Type Description'" field="'Title'" widthfactor="10" disablesorting>
+				<vr-textbox value="dataItem.Title" isrequired></vr-textbox>
+			</vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'Additional Settings'" field="'AdditionalSettings'" widthfactor="10" disablesorting>
+				<center><a href="" ng-click="dataItem.edit(dataItem)">Edit</a></center>
+			</vr-datagridcolumn>
+			<vr-datagridexpandablerow>
+						<span vr-loader="dataItem.isFieldTypeSelectorLoading">
+							<vr-genericdata-fieldtype-selective on-ready="dataItem.onFieldTypeSelectorReady"></vr-genericdata-fieldtype-selective>
+						</span>
+			</vr-datagridexpandablerow>
+		</vr-datagrid>
+	</vr-validator>
 </vr-section>

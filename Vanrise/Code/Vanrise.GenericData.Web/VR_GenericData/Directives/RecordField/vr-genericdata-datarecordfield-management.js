@@ -1,236 +1,274 @@
 ﻿"use strict";
 
 app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldService", "VR_GenericData_DataRecordFieldAPIService", "VRUIUtilsService", "VR_GenericData_DataRecordTypeAPIService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldService, VR_GenericData_DataRecordFieldAPIService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
+	function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldService, VR_GenericData_DataRecordFieldAPIService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
 
-        var directiveDefinitionObject = {
+		var directiveDefinitionObject = {
 
-            restrict: "E",
-            scope: {
-                onReady: "=",
-                validationcontext: "="
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var dataRecordFieldManagement = new DataRecordFieldManagement($scope, ctrl, $attrs);
-                dataRecordFieldManagement.initializeController();
-            },
-            controllerAs: "ctrl",
-            bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordField/Templates/DataRecordFieldManagement.html"
-        };
+			restrict: "E",
+			scope: {
+				onReady: "=",
+				validationcontext: "="
+			},
+			controller: function ($scope, $element, $attrs) {
+				var ctrl = this;
+				var dataRecordFieldManagement = new DataRecordFieldManagement($scope, ctrl, $attrs);
+				dataRecordFieldManagement.initializeController();
+			},
+			controllerAs: "ctrl",
+			bindToController: true,
+			templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordField/Templates/DataRecordFieldManagement.html"
+		};
 
-        function DataRecordFieldManagement($scope, ctrl, $attrs) {
-            this.initializeController = initializeController;
+		function DataRecordFieldManagement($scope, ctrl, $attrs) {
+			this.initializeController = initializeController;
 
-            var gridAPI;
+			var gridAPI;
+			var gridAPIdeferred = UtilsService.createPromiseDeferred();
+			var dataRecordTypeExtraFieldsApi;
+			var dataRecordTypeExtraFieldsReadyDeferred;
 
-            var dataRecordTypeExtraFieldsApi;
-            var dataRecordTypeExtraFieldsReadyDeferred;
+			function initializeController() {
+				ctrl.datasource = [];
 
-            function initializeController() {
-                ctrl.datasource = [];
-                ctrl.fieldTypeConfigs = [];
+				ctrl.fieldTypeConfigs = [];
 
-                ctrl.isValid = function () {
-                    if (ctrl.hasExtraFields || (ctrl.datasource != undefined && ctrl.datasource.length > 0))
-                        return null;
-                    return "You Should Add at least one field";
-                };
+				ctrl.isValid = function () {
+					if (ctrl.hasExtraFields || (ctrl.datasource != undefined && ctrl.datasource.length > 0))
+						return null;
+					return "You Should Add at least one field";
+				};
 
-                ctrl.onDataRecordTypeExtraFieldsReady = function (api) {
-                    dataRecordTypeExtraFieldsApi = api;
-                    var setLoader = function (value) {
-                        ctrl.isDirectiveLoading = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeExtraFieldsApi, undefined, setLoader, dataRecordTypeExtraFieldsReadyDeferred);
-                };
+				ctrl.onDataRecordTypeExtraFieldsReady = function (api) {
+					dataRecordTypeExtraFieldsApi = api;
+					var setLoader = function (value) {
+						ctrl.isDirectiveLoading = value;
+					};
+					VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeExtraFieldsApi, undefined, setLoader, dataRecordTypeExtraFieldsReadyDeferred);
+				};
 
-                ctrl.disableAddButton = function () {
-                    if (ctrl.isValid() != null)
-                        return false;
+				ctrl.disableAddButton = function () {
+					if (ctrl.isValid() != null)
+						return false;
 
-                    return ctrl.validationcontext.validate() != null;
-                };
+					return ctrl.validationcontext.validate() != null;
+				};
 
-                ctrl.addDataRecordField = function () {
+				ctrl.removeFilter = function (item) {
+					var index = UtilsService.getItemIndexByVal(ctrl.datasource, item.rowIndex, 'rowIndex');
+					if (index > -1)
+						ctrl.datasource.splice(index, 1);
+				};
 
-                    var onDataRecordFieldAdded = function (dataRecordField) {
-                        addNeededFields(dataRecordField);
-                        ctrl.datasource.push(dataRecordField);
-                    };
+				$scope.scopeModel = {};
 
-                    var allFields = [];
+				$scope.scopeModel.onGridReady = function (api) {
+					gridAPI = api;
+					gridAPIdeferred.resolve();
+				};
 
-                    for (var j = 0; j < ctrl.datasource.length; j++) {
-                        allFields.push(ctrl.datasource[j]);
-                    }
+				ctrl.addDataRecordField = function () {
+					var gridItem = {
+						Name: undefined,
+						Title: undefined,
+						fieldTypeSelectorAPI: undefined,
+						fieldTypeSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
+					};
 
-                    getDataRecordExtraFieldsReturnedPromise(allFields).then(function () {
-                        VR_GenericData_DataRecordFieldService.addDataRecordField(onDataRecordFieldAdded, allFields, true);
-                    });
-                };
+					gridItem.edit = function (dataItem) {
 
-                defineMenuActions();
-                defineAPI();
-            }
+						var onDataRecordFieldUpdated = function (dataRecordField) {
+							dataItem.Formula = dataRecordField.Formula;
+						};
+						var allFields = [];
+						for (var j = 0; j < ctrl.datasource.length; j++) {
+							allFields.push(ctrl.datasource[j]);
+						}
 
-            function defineAPI() {
-                var api = {};
+						getDataRecordExtraFieldsReturnedPromise(allFields).then(function () {
+							var formula = dataItem != undefined ? dataItem.Formula : undefined;
+							VR_GenericData_DataRecordFieldService.editDataRecordField(onDataRecordFieldUpdated, formula, allFields, true);
+						});
+					};
 
-                api.getData = function () {
-                    var fields;
-                    if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        fields = [];
-                        for (var i = 0; i < ctrl.datasource.length; i++) {
-                            var currentItem = ctrl.datasource[i];
-                            fields.push({
-                                Name: currentItem.Name,
-                                Type: currentItem.Type,
-                                Title: currentItem.Title,
-                                Formula: currentItem.Formula
-                            });
-                        }
-                    }
+					gridItem.onFieldTypeSelectorReady = function (api) {
+						gridItem.fieldTypeSelectorAPI = api;
+						gridItem.fieldTypeSelectorReadyDeferred.resolve();
+					};
 
-                    var obj = {
-                        Settings: {
-                            DateTimeField: ctrl.dateTimeField,
-                            IdField: ctrl.idField
-                        },
-                        Fields: fields,
-                        HasExtraFields: ctrl.hasExtraFields,
-                        ExtraFieldsEvaluator: ctrl.hasExtraFields ? dataRecordTypeExtraFieldsApi.getData() : undefined
-                    };
-                    return obj;
-                };
+					gridItem.fieldTypeSelectorReadyDeferred.promise.then(function () {
+						var dataRecordFieldTypePayload = {};
+						dataRecordFieldTypePayload.additionalParameters = { showDependantFieldsGrid: true };
+						var setLoader = function (value) { gridItem.isFieldTypeSelectorLoading = value; };
+						VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.fieldTypeSelectorAPI, dataRecordFieldTypePayload, setLoader);
+					});
+					gridAPI.expandRow(gridItem);
+					ctrl.datasource.push(gridItem);
+				};
 
-                api.load = function (payload) {
-                    var promises = [];
-                    var settings;
-                    if (payload != undefined) {
-                        settings = payload.Settings;
+				defineAPI();
+			}
 
-                        ctrl.hasExtraFields = payload.ExtraFieldsEvaluator != undefined;
-                        if (ctrl.hasExtraFields) {
-                            dataRecordTypeExtraFieldsReadyDeferred = UtilsService.createPromiseDeferred();
-                            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+			function defineAPI() {
+				var api = {};
 
-                            dataRecordTypeExtraFieldsReadyDeferred.promise.then(function () {
+				api.getData = function () {
+					var fields;
+					if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
+						fields = [];
+						for (var i = 0; i < ctrl.datasource.length; i++) {
+							var currentItem = ctrl.datasource[i];
+							if (currentItem != undefined) {
+								fields.push({
+									Name: currentItem.Name,
+									Type: (currentItem.fieldTypeSelectorAPI != undefined) ? currentItem.fieldTypeSelectorAPI.getData() : null,
+									Title: currentItem.Title,
+									Formula: currentItem.Formula,
+								});
+							}
+						}
+					}
 
-                                dataRecordTypeExtraFieldsReadyDeferred = undefined;
-                                var dataRecordTypeExtraFieldsPayload = payload.ExtraFieldsEvaluator;
-                                VRUIUtilsService.callDirectiveLoad(dataRecordTypeExtraFieldsApi, dataRecordTypeExtraFieldsPayload, directiveLoadDeferred);
-                            });
+					var obj = {
+						Settings: {
+							DateTimeField: ctrl.dateTimeField,
+							IdField: ctrl.idField
+						},
+						Fields: fields,
+						HasExtraFields: ctrl.hasExtraFields,
+						ExtraFieldsEvaluator: ctrl.hasExtraFields ? dataRecordTypeExtraFieldsApi.getData() : undefined
+					};
+					return obj;
+				};
 
-                            promises.push(directiveLoadDeferred.promise);
-                        }
-                    }
+				api.load = function (payload) {
+					var promises = [];
+					var settings;
+					if (payload != undefined) {
+						settings = payload.Settings;
 
-                    if (settings != undefined) {
-                        ctrl.dateTimeField = settings.DateTimeField;
-                        ctrl.idField = settings.IdField;
-                    }
+						ctrl.hasExtraFields = payload.ExtraFieldsEvaluator != undefined;
+						if (ctrl.hasExtraFields) {
+							dataRecordTypeExtraFieldsReadyDeferred = UtilsService.createPromiseDeferred();
+							var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    var dataRecorddFieldTypePromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
-                        angular.forEach(response, function (item) {
-                            ctrl.fieldTypeConfigs.push(item);
-                        });
-                        if (payload != undefined) {
-                            if (payload.Fields && payload.Fields.length > 0) {
-                                for (var i = 0; i < payload.Fields.length; i++) {
-                                    var dataItem = payload.Fields[i];
-                                    addNeededFields(dataItem);
-                                    ctrl.datasource.push(dataItem);
-                                }
-                            }
-                        }
-                    });
-                    promises.push(dataRecorddFieldTypePromise);
-                    return UtilsService.waitMultiplePromises(promises);
-                };
+							dataRecordTypeExtraFieldsReadyDeferred.promise.then(function () {
 
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
+								dataRecordTypeExtraFieldsReadyDeferred = undefined;
+								var dataRecordTypeExtraFieldsPayload = payload.ExtraFieldsEvaluator;
+								VRUIUtilsService.callDirectiveLoad(dataRecordTypeExtraFieldsApi, dataRecordTypeExtraFieldsPayload, directiveLoadDeferred);
+							});
 
-            function addNeededFields(dataItem) {
-                var template = UtilsService.getItemByVal(ctrl.fieldTypeConfigs, dataItem.Type.ConfigId, "ExtensionConfigurationId");
-                dataItem.TypeDescription = template != undefined ? template.Name : "";
-            }
+							promises.push(directiveLoadDeferred.promise);
+						}
+					}
 
-            function defineMenuActions() {
-                var defaultMenuActions = [{
-                    name: "Edit",
-                    clicked: editDataRecordField
-                },
-                {
-                    name: "Delete",
-                    clicked: deleteDataRecordField
-                }];
+					if (settings != undefined) {
+						ctrl.dateTimeField = settings.DateTimeField;
+						ctrl.idField = settings.IdField;
+					}
+					var dataRecorddFieldTypePromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
+						angular.forEach(response, function (item) {
+							ctrl.fieldTypeConfigs.push(item);
+						});
+					});
+					promises.push(dataRecorddFieldTypePromise);
 
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
+					if (payload != undefined && payload.Fields != undefined) {
+						for (var i = 0; i < payload.Fields.length; i++) {
+							var field = payload.Fields[i];
+							if (field != undefined) {
+								var gridItem = {
+									Name: field.Name,
+									Type: field.Type,
+									Title: field.Title,
+									Formula: field.Formula,
+									fieldTypeSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
+									fieldTypeSelectorLoadDeferred: UtilsService.createPromiseDeferred(),
+								};
+								promises.push(gridItem.fieldTypeSelectorLoadDeferred.promise);
 
-            function editDataRecordField(dataRecordFieldObj) {
-                var validationMessage = ctrl.validationcontext.validate();
-                if (validationMessage != null) {
-                    VRNotificationService.showWarning(validationMessage);
-                    return;
-                }
+								addColumnOnEdit(gridItem);
+								addNeededFields(gridItem);
+								ctrl.datasource.push(gridItem);
+							}
+						}
 
-                var onDataRecordFieldUpdated = function (dataRecordField) {
-                    addNeededFields(dataRecordField);
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordFieldObj.Name, 'Name');
-                    ctrl.datasource[index] = dataRecordField;
-                };
+						gridAPIdeferred.promise.then(function () {
+							for (var i = 0; i < ctrl.datasource.length; i++) {
+								gridAPI.expandRow(ctrl.datasource[i]);
+							};
+						});
+					}
+					return UtilsService.waitMultiplePromises(promises);
+				};
 
-                var allFields = [];
+				if (ctrl.onReady != null)
+					ctrl.onReady(api);
+			}
 
-                for (var j = 0; j < ctrl.datasource.length; j++) {
-                    allFields.push(ctrl.datasource[j]);
-                }
+			function addColumnOnEdit(gridItem) {
 
-                getDataRecordExtraFieldsReturnedPromise(allFields).then(function () {
-                    VR_GenericData_DataRecordFieldService.editDataRecordField(onDataRecordFieldUpdated, dataRecordFieldObj, allFields, true);
-                });
-            }
+				gridItem.onFieldTypeSelectorReady = function (api) {
+					gridItem.fieldTypeSelectorAPI = api;
+					gridItem.fieldTypeSelectorReadyDeferred.resolve();
+					var dataRecordFieldTypePayload = gridItem.Type;
+					dataRecordFieldTypePayload.additionalParameters = { showDependantFieldsGrid: true };
+					VRUIUtilsService.callDirectiveLoad(gridItem.fieldTypeSelectorAPI, dataRecordFieldTypePayload, gridItem.fieldTypeSelectorLoadDeferred);
+				};
 
-            function deleteDataRecordField(dataRecordFieldObj) {
-                var onDataRecordFieldDeleted = function (dataRecordField) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordFieldObj.Name, 'Name');
-                    ctrl.datasource.splice(index, 1);
-                };
+				gridItem.edit = function (dataItem) {
+					var isEdit = dataItem.Formula != undefined;
+					var onDataRecordFieldAdded = function (dataRecordField) {
+						dataItem.Formula = dataRecordField.Formula;
+					};
+					var onDataRecordFieldUpdated = function (dataRecordField) {
+						dataItem.Formula = dataRecordField.Formula;
+					};
 
-                VR_GenericData_DataRecordFieldService.deleteDataRecordField($scope, dataRecordFieldObj, onDataRecordFieldDeleted);
-            }
+					var allFields = [];
 
-            function getDataRecordExtraFieldsReturnedPromise(allFields) {
-                var addDataRecordFieldReadyDeferred = UtilsService.createPromiseDeferred();
+					for (var j = 0; j < ctrl.datasource.length; j++) {
+						allFields.push(ctrl.datasource[j]);
+					}
+					getDataRecordExtraFieldsReturnedPromise(allFields).then(function () {
+						var formula = dataItem != undefined ? dataItem.Formula : undefined;
+						VR_GenericData_DataRecordFieldService.editDataRecordField(onDataRecordFieldUpdated, formula, allFields, true);
 
-                var extraFieldsEvaluator = (dataRecordTypeExtraFieldsApi != undefined && ctrl.hasExtraFields) ? dataRecordTypeExtraFieldsApi.getData() : undefined;
+					});
+				}
+			}
 
-                if (ctrl.hasExtraFields && extraFieldsEvaluator != undefined) {
-                    VR_GenericData_DataRecordTypeAPIService.GetDataRecordExtraFields(extraFieldsEvaluator).then(function (response) {
-                        if (response && response.length > 0) {
-                            for (var i = 0; i < response.length; i++) {
-                                allFields.push(response[i]);
-                            }
-                        }
-                        addDataRecordFieldReadyDeferred.resolve();
-                    });
-                }
-                else {
-                    addDataRecordFieldReadyDeferred.resolve();
-                }
+			function addNeededFields(dataItem) {
+				var template = UtilsService.getItemByVal(ctrl.fieldTypeConfigs, dataItem.Type.ConfigId, "ExtensionConfigurationId");
+				dataItem.TypeDescription = template != undefined ? template.Name : "";
+			}
 
-                return addDataRecordFieldReadyDeferred.promise;
-            }
-        }
+			function getDataRecordExtraFieldsReturnedPromise(allFields) {
+				var addDataRecordFieldReadyDeferred = UtilsService.createPromiseDeferred();
 
-        return directiveDefinitionObject;
+				var extraFieldsEvaluator = (dataRecordTypeExtraFieldsApi != undefined && ctrl.hasExtraFields) ? dataRecordTypeExtraFieldsApi.getData() : undefined;
 
-    }
+				if (ctrl.hasExtraFields && extraFieldsEvaluator != undefined) {
+					VR_GenericData_DataRecordTypeAPIService.GetDataRecordExtraFields(extraFieldsEvaluator).then(function (response) {
+						if (response && response.length > 0) {
+							for (var i = 0; i < response.length; i++) {
+								allFields.push(response[i]);
+							}
+						}
+						addDataRecordFieldReadyDeferred.resolve();
+					});
+				}
+				else {
+					addDataRecordFieldReadyDeferred.resolve();
+				}
+
+				return addDataRecordFieldReadyDeferred.promise;
+			}
+
+		}
+
+		return directiveDefinitionObject;
+
+	}
 ]);

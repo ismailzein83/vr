@@ -1,0 +1,5 @@
+﻿<span ng-if="scopeModel.filters != undefined && scopeModel.filters.length>0">
+    <span ng-repeat="filter in scopeModel.filters">
+        <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2" isrequired="filter.isRequired"></vr-directivewrapper>
+    </span>
+</span>
