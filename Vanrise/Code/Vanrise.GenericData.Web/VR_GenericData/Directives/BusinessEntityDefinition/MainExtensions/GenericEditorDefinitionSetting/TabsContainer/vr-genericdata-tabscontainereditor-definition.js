@@ -32,6 +32,10 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
 
+                $scope.scopeModel.dragsettings = {
+                    handle: '.handeldrag'
+                };
+
                 $scope.scopeModel.onTabsReady = function (api) {
                     tabsAPI = api;
                     defineAPI();

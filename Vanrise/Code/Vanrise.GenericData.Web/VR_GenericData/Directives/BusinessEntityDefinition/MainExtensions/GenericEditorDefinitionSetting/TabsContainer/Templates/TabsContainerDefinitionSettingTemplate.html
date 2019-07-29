@@ -6,20 +6,24 @@
 
 <vr-row removeline>
     <div style="padding-left: 6px;">
-        <vr-validator validate="scopeModel.isValid()">
+        <vr-validator tobottom validate="scopeModel.isValid()">
             <vr-tabs settings="scopeModel.tabsSettings" on-ready="scopeModel.onTabsReady">
-                <vr-tab header="tab.TabTitle" ng-repeat="tab in ctrl.datasource" onremove="scopeModel.onRemoveTab">
-                    <vr-row>
-                        <vr-span vr-loader="tab.isTextResourceSelectorLoading" ng-if="scopeModel.isLocalizationEnabled">
-                            <vr-common-vrlocalizationtextresource-selector on-ready="tab.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
-                        </vr-span>
-                    </vr-row>
-                    <vr-row>
-                        <span vr-loader="tab.isEditorDirectiveLoading">
-                            <vr-genericdata-genericbe-editordefinition-settings on-ready="tab.onEditorDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
-                        </span>
-                    </vr-row>
-                </vr-tab>
+                <div ng-sortable="scopeModel.dragsettings">
+                    <vr-tab header="tab.TabTitle" ng-repeat="tab in ctrl.datasource" onremove="scopeModel.onRemoveTab">
+                        <vr-row>
+                            <vr-span vr-loader="tab.isTextResourceSelectorLoading" ng-if="scopeModel.isLocalizationEnabled">
+                                <vr-row>
+                                    <vr-common-vrlocalizationtextresource-selector on-ready="tab.onTextResourceSelectorReady" normal-col-num="3"></vr-common-vrlocalizationtextresource-selector>
+                                </vr-row>
+                            </vr-span>
+                        </vr-row>
+                        <vr-row>
+                            <span vr-loader="tab.isEditorDirectiveLoading">
+                                <vr-genericdata-genericbe-editordefinition-settings on-ready="tab.onEditorDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
+                            </span>
+                        </vr-row>
+                    </vr-tab>
+                </div>
             </vr-tabs>
         </vr-validator>
     </div>
