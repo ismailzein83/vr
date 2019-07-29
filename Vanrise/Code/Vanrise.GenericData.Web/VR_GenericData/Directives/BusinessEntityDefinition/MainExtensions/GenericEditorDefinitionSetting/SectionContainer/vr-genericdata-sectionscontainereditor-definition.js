@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService", "VRUIUtilsService", "VRLocalizationService",
-    function (UtilsService, VRUIUtilsService, VRLocalizationService) {
+app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService", "VRUIUtilsService", "VRLocalizationService", "VR_GenericData_GenericBEDefinitionService",
+    function (UtilsService, VRUIUtilsService, VRLocalizationService, VR_GenericData_GenericBEDefinitionService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -26,10 +26,18 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
+                $scope.scopeModel.showAddButton = true;
+
+                $scope.scopeModel.dragsettings = {
+                    handle: '.handeldrag'
+                };
 
                 $scope.scopeModel.isValid = function () {
                     if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
                         return "You Should add at least one section.";
+
+                    if (ctrl.datasource.length > 0 && checkColNum())
+                        return "Sections should be aligned on the same row";
 
                     if (ctrl.datasource.length > 0 && checkDuplicateName())
                         return "Title in each section should be unique.";
@@ -39,14 +47,11 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
 
                 $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
-
-                };
                 $scope.scopeModel.addSectionContainer = function () {
                     var dataItem = {
-                        entity: {}
+                        entity: {
+                            ColNum: 6
+                        }
                     };
 
                     dataItem.onTextResourceSelectorReady = function (api) {
@@ -64,9 +69,16 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.editorDirectiveAPI, payload, setLoader);
                     };
 
-                    gridAPI.expandRow(dataItem);
-
                     ctrl.datasource.push(dataItem);
+                };
+
+                $scope.scopeModel.editSectionContainer = function (dataItem) {
+                    var sectionEntityObject = UtilsService.cloneObject(dataItem);
+
+                    var onSectionSettingsChanged = function (sectionItem) {
+                        dataItem.entity.ColNum = sectionItem.ColNum != undefined ? parseInt(sectionItem.ColNum) : 6;
+                    };
+                    VR_GenericData_GenericBEDefinitionService.openGenericBESectionContainerEditor(onSectionSettingsChanged, sectionEntityObject, getContext());
                 };
 
                 $scope.scopeModel.removeSectionContainer = function (dataItem) {
@@ -74,53 +86,13 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                     ctrl.datasource.splice(index, 1);
                 };
 
-                $scope.scopeModel.disableAddSectionContainer = function () {
-                    if (context == undefined)
-                        return true;
-
-                    var dataRecordTypeId = context.getDataRecordTypeId();
-                    if (dataRecordTypeId == undefined)
-                        return true;
-
-                    var recordTypeFields = context.getRecordTypeFields();
-                    if (recordTypeFields == undefined || recordTypeFields.length == 0)
-                        return true;
-
-                    return false;
+                $scope.scopeModel.sectionSettings = {
+                    sortable: true,
+                    headerEditable: true,
+                    oneditclicked: $scope.scopeModel.editSectionContainer
                 };
 
-            }
-            function prepareSection(sectionObject) {
-                var dataItem = {
-                    entity: {
-                        SectionTitle: sectionObject.payload.SectionTitle,
-                        ColNum: sectionObject.payload.ColNum,
-                    },
-                    oldSettings: sectionObject.payload.SectionSettings,
-                    oldTextResourceKey: sectionObject.payload.TextResourceKey
-                };
-
-                dataItem.onTextResourceSelectorReady = function (api) {
-                    dataItem.textResourceSeletorAPI = api;
-                    sectionObject.textResourceReadyPromiseDeferred.resolve();
-                };
-
-                sectionObject.textResourceReadyPromiseDeferred.promise.then(function () {
-                    var textResourcePayload = { selectedValue: sectionObject.payload.TextResourceKey };
-                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, sectionObject.textResourceLoadPromiseDeferred);
-                });
-
-                dataItem.onEditorDirectiveReady = function (api) {
-                    dataItem.editorDirectiveAPI = api;
-                    var setLoader = function (value) { dataItem.isEditorDirectiveLoading = value; };
-
-                    var sectionPayload = {
-                        settings: sectionObject.payload.SectionSettings,
-                        context: getContext(),
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.editorDirectiveAPI, sectionPayload, setLoader);
-                };
-                ctrl.datasource.push(dataItem);
+                defineAPI();
             }
 
             function defineAPI() {
@@ -140,9 +112,13 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                                     payload: item,
                                     textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                     textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    editorDefinitionSettingsReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    editorDefinitionSettingsLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 };
                                 if ($scope.scopeModel.isLocalizationEnabled)
                                     promises.push(sectionObject.textResourceLoadPromiseDeferred.promise);
+
+                                promises.push(sectionObject.editorDefinitionSettingsLoadPromiseDeferred.promise);
                                 prepareSection(sectionObject);
                             }
                         }
@@ -179,6 +155,42 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                     ctrl.onReady(api);
             }
 
+            function prepareSection(sectionObject) {
+                var dataItem = {
+                    entity: {
+                        SectionTitle: sectionObject.payload.SectionTitle,
+                        ColNum: sectionObject.payload.ColNum,
+                    },
+                    oldSettings: sectionObject.payload.SectionSettings,
+                    oldTextResourceKey: sectionObject.payload.TextResourceKey
+                };
+
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    sectionObject.textResourceReadyPromiseDeferred.resolve();
+                };
+
+                sectionObject.textResourceReadyPromiseDeferred.promise.then(function () {
+                    var textResourcePayload = { selectedValue: sectionObject.payload.TextResourceKey };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, sectionObject.textResourceLoadPromiseDeferred);
+                });
+
+                dataItem.onEditorDirectiveReady = function (api) {
+                    dataItem.editorDirectiveAPI = api;
+                    sectionObject.editorDefinitionSettingsReadyPromiseDeferred.resolve();
+                };
+
+                sectionObject.editorDefinitionSettingsReadyPromiseDeferred.promise.then(function () {
+                    var sectionPayload = {
+                        settings: sectionObject.payload.SectionSettings,
+                        context: getContext(),
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.editorDirectiveAPI, sectionPayload, sectionObject.editorDefinitionSettingsLoadPromiseDeferred);
+                });
+
+                ctrl.datasource.push(dataItem);
+            }
+
             function getContext() {
 
                 var currentContext = {
@@ -209,6 +221,23 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                             return true;
                     }
                 }
+                return false;
+            }
+
+            function checkColNum() {
+                var sum = 0;
+                for (var i = 0; i < ctrl.datasource.length; i++) {
+                    var currentItem = ctrl.datasource[i];
+                    sum += currentItem.entity.ColNum;
+                }
+
+                if (sum >= 12)
+                    $scope.scopeModel.showAddButton = false;
+                else
+                    $scope.scopeModel.showAddButton = true;
+
+                if (sum > 12)
+                    return true;
                 return false;
             }
         }
