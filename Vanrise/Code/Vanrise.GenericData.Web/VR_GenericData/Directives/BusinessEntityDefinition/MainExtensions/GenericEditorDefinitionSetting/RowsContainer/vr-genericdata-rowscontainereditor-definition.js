@@ -25,16 +25,14 @@
             this.initializeController = initializeController;
 
             var context;
-            var gridAPI;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.datasource = [];
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
-
+                $scope.scopeModel.dragsettings = {
+                    handle: '.vr-control-label'
                 };
+
                 $scope.scopeModel.addRowContainer = function () {
                     var dataItem = {
                         entity: {
@@ -53,26 +51,18 @@
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.rowContainerFieldsDirectiveAPI, payload, setLoader);
                     };
-                    gridAPI.expandRow(dataItem);
+
+                    dataItem.removeRow = function () {
+                        VRNotificationService.showConfirmation().then(function (response) {
+                            if (response) {
+                                var index = $scope.scopeModel.datasource.indexOf(dataItem);
+                                if (index != -1)
+                                    $scope.scopeModel.datasource.splice(index, 1);
+                            }
+                        });
+                    };
 
                     $scope.scopeModel.datasource.push(dataItem);
-                };
-
-                $scope.scopeModel.deleteFunction = function (rowContainerObj) {
-                    VRNotificationService.showConfirmation().then(function (response) {
-                        if (response) {
-                            var index = $scope.scopeModel.datasource.indexOf(rowContainerObj);
-                            if (index != -1)
-                                $scope.scopeModel.datasource.splice(index, 1);
-                        }
-                    });
-                };
-
-                $scope.scopeModel.disableAddRowContainer = function () {
-                    if (context == undefined)
-                        return true;
-
-                    return false;
                 };
 
                 $scope.scopeModel.isValid = function () {
@@ -81,7 +71,7 @@
 
                     return null;
                 };
-
+                defineAPI();
             }
 
             function defineAPI() {
@@ -144,6 +134,16 @@
                         }
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.rowContainerFieldsDirectiveAPI, payload, setLoader);
+                };
+
+                dataItem.removeRow = function () {
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            var index = $scope.scopeModel.datasource.indexOf(dataItem);
+                            if (index != -1)
+                                $scope.scopeModel.datasource.splice(index, 1);
+                        }
+                    });
                 };
 
                 $scope.scopeModel.datasource.push(dataItem);
