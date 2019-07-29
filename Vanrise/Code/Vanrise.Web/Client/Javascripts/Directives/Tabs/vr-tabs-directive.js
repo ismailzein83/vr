@@ -57,7 +57,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
             ctrl.isForwardPaginationVisible = function () {
                 return ctrl.tabs.length > ctrl.pageSize && ctrl.tabsCountLimit < ctrl.tabs.length;
             };
-           
+
             function addRemainingTabs() {
                 isLock = false;
                 if (tempTabs.length > 0) {
@@ -111,7 +111,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                             ctrl.datasource[i] = ctrl.tabs[i].tabItem;
                         }
                 }
-            };            
+            };
             ctrl.hideTab = function ($index) {
                 if (ctrl.hidepaginationcontrols != undefined) return false;
                 return ($index >= ctrl.tabsCountLimit || $index < ctrl.tabsCountStart) && !($index == 0 && ctrl.tabs.length == 1);
@@ -121,12 +121,16 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 if (ctrl.oneditclicked != undefined && typeof ctrl.oneditclicked == 'function')
                     ctrl.oneditclicked(tab.tabItem);
             };
-           
+
             ctrl.removeTab = function (tab) {
                 var index = ctrl.tabs.indexOf(tab);
                 ctrl.tabs.splice(index, 1);
                 if (typeof (tab.onremove) === 'function') {
-                    tab.onremove(tab.tabItem);                    
+                    tab.onremove(tab.tabItem);
+                }
+                for (var i = 0; i < ctrl.tabs.length; i++) {
+                    var newindex = i;
+                    ctrl.tabs[i].orderedIndex = newindex;
                 }
                 $("#" + tab.guid).remove();
                 setTimeout(function () {
@@ -144,20 +148,37 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                     }
                     else if (tab.onremove != undefined) {
                         if (tab.isSelected == false || tab.isSelected == undefined) {
+                            if (ctrl.pageSize >= ctrl.tabs.length) {
+                                ctrl.tabsCountStart = 0;
+                                ctrl.tabsCountLimit = ctrl.pageSize;
+                            }
+                            else {
+                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
+                                ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
+                            }
+                            return;
+                        }
+                        if (ctrl.tabs[index - 1] != undefined) {
+                            ctrl.tabs[index - 1].isSelected = true;
+
+                            if (ctrl.pageSize >= ctrl.tabs.length) {
+                                ctrl.tabsCountStart = 0;
+                                ctrl.tabsCountLimit = ctrl.pageSize;
+                            }
+
+                            else {
+                                ctrl.selectedTabIndex = index - 1;
+                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
+                                ctrl.tabsCountLimit = ctrl.tabsCountLimit - 1 > ctrl.pageSize ? ctrl.tabsCountLimit - 1 : ctrl.pageSize;
+                            }                            
                             return;
                         }
                         if (ctrl.tabs[index] != undefined) {
                             ctrl.tabs[index].isSelected = true;
                             ctrl.selectedTabIndex = index;
-                            ctrl.tabsCountStart = index;
-                            ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
-                            return;
-                        }
-                        if (ctrl.tabs.length == index && ctrl.tabs[index - 1] != undefined) {
-                            ctrl.tabs[index - 1].isSelected = true;
                             if (ctrl.tabs.length > ctrl.pageSize) {
-                                ctrl.selectedTabIndex = index - 1;
-                                ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
+                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
+                                ctrl.tabsCountLimit = ctrl.tabsCountLimit - 1;
                             }
                             else {
                                 ctrl.tabsCountStart = 0;
@@ -165,6 +186,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                             }
                             return;
                         }
+
                         if (ctrl.tabs[0] != undefined) {
                             ctrl.tabs[0].isSelected = true;
                             ctrl.selectedTabIndex = 0;
@@ -218,8 +240,24 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 var deferred = UtilsService.createPromiseDeferred();
                 setTimeout(function () {
                     var tab = ctrl.tabs[index];
-                    if (tab != undefined)
+                    if (tab != undefined) {
+                        for (var i = 0; i < ctrl.tabs.length; i++) {
+                            ctrl.tabs[i].isSelected = false;
+                        }
                         tab.isSelected = true;
+                        if (index < ctrl.tabsCountLimit && index >= ctrl.tabsCountStart) {
+                            return;
+                        }
+                        if (index > ctrl.tabsCountLimit - 1) {
+                            ctrl.tabsCountStart = index - (ctrl.pageSize - 1);
+                            ctrl.tabsCountLimit = index + 1;
+                            return;
+                        }
+                        if (index < ctrl.tabsCountStart) {
+                            ctrl.tabsCountStart = index;
+                            ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
+                        }                            
+                    }                        
                     deferred.resolve();
                 }, 1);
                 return deferred.promise;
