@@ -25,7 +25,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             var customerCountryToChange = context.Target as CustomerCountryToChange;
             var dealDefinitionManager = new DealDefinitionManager();
             var salezoneManager = new SaleZoneManager();
-            var zoneMessages = new List<String>();
+            var countryMessages = new List<String>();
 
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
@@ -34,19 +34,19 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             var countrySaleZones = salezoneManager.GetSaleZonesByCountryId(ratePlanContext.OwnerSellingNumberPlanId, countryId, ratePlanContext.EffectiveDate);
             foreach (var saleZone in countrySaleZones)
             {
-                var dealId = dealDefinitionManager.IsZoneIncludedInDeal(ratePlanContext.OwnerId, saleZone.SaleZoneId, DateTime.Now, true);
+                var dealId = dealDefinitionManager.IsZoneIncludedInEffectiveDeal(ratePlanContext.OwnerId, saleZone.SaleZoneId, DateTime.Now, true);
                 if (dealId.HasValue)
                 {
                     var countryName = new CountryManager().GetCountryName(countryId);
-                    zoneMessages.Add(countryName);
+                    countryMessages.Add(countryName);
                     break;
                 }
             }
 
-            if (zoneMessages.Any())
+            if (countryMessages.Any())
             {
-                string zoneMessagesString = string.Join(",", zoneMessages);
-                context.Message = $"Cannot Close Country(ies) having zones included in effective deals. Following zones are:  {zoneMessagesString}";
+                string countryMessagesString = string.Join(",", countryMessages);
+                context.Message = $"Cannot Close Country(ies) having zones included in effective deals. Following countries are:  {countryMessagesString}";
                 return false;
             }
             return true;
