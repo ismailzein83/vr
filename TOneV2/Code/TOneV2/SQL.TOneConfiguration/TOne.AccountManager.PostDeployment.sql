@@ -226,3 +226,43 @@ when not matched by target then
 	values(s.[ID],s.[TableId],s.[ItemType],s.[Name],s.[Title],s.[Config]);
 ----------------------------------------------------------------------------------------------------
 end
+
+--[bp].[BPBusinessRuleDefinition]----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[BPDefintionId],[Settings],[Rank])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('B14809F3-0C6E-40A9-A126-35A22F1F7954','RatePlan_ValidateAfterProcessing','8ABA2EC4-04FD-4BB1-A593-B651943C6411','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"New rate less than Selling Rule threshold","Condition":{"$type":"TOne.WhS.Sales.Business.BusinessRules.SellingRuleCondition, TOne.WhS.Sales.Business"},"ActionTypes":["715f7f90-2c23-4185-aeb8-eda947de3978"],"ExecutionDependsOnRules":[]}',1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[BPDefintionId],[Settings],[Rank]))
+merge  [bp].[BPBusinessRuleDefinition] as t
+using  cte_data as s
+on            1=1 and t.[ID] = s.[ID]
+when matched then
+       update set
+       [Name] = s.[Name],[BPDefintionId] = s.[BPDefintionId],[Settings] = s.[Settings],[Rank] = s.[Rank]
+when not matched by target then
+       insert([ID],[Name],[BPDefintionId],[Settings],[Rank])
+       values(s.[ID],s.[Name],s.[BPDefintionId],s.[Settings],s.[Rank]);
+
+
+
+--[bp].BPBusinessRuleAction----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [bp].BPBusinessRuleAction on;
+;with cte_data([ID],[Settings],[BusinessRuleDefinitionId])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(141,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','B14809F3-0C6E-40A9-A126-35A22F1F7954')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Settings],[BusinessRuleDefinitionId]))
+merge  [bp].[BPBusinessRuleAction] as t
+using  cte_data as s
+on            1=1 and t.[ID] = s.[ID]
+when matched then
+       update set
+       [Settings] = s.[Settings],[BusinessRuleDefinitionId] = s.[BusinessRuleDefinitionId]
+when not matched by target then
+       insert([ID],[Settings],[BusinessRuleDefinitionId])
+       values(s.[ID],s.[Settings],s.[BusinessRuleDefinitionId]);
+set identity_insert [bp].BPBusinessRuleAction off;

@@ -241,8 +241,8 @@ namespace TOne.WhS.Deal.Business
                     inboundResult.Profit = rateProfitPerMinute * inboundSettings.Volume;
                     totalSaleMargin += inboundResult.Profit;
                 }
-                else
-                    totalSaleMargin = null;
+                //else
+                //    totalSaleMargin = null;
 
                 inboundResult.Revenue = inboundSettings.DealRate * inboundSettings.Volume;
                 totalSaleRevenue += inboundResult.Revenue;
@@ -295,8 +295,8 @@ namespace TOne.WhS.Deal.Business
                     outboundResult.Savings = rateSavingsPerMinute * outboundSettings.Volume;
                     totalCostMargin += outboundResult.Savings;
                 }
-                else
-                    totalCostMargin = null;
+                //else
+                //    totalCostMargin = null;
 
                 outboundResult.Revenue = outboundSettings.DealRate * outboundSettings.Volume;
                 totalCostRevenue += outboundResult.Revenue;
