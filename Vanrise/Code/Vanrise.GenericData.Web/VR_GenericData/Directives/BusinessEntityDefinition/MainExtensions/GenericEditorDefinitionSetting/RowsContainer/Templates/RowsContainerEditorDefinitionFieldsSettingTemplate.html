@@ -1,23 +1,26 @@
-﻿<vr-validator validate="scopeModel.isValid()">
-    <vr-row>
-        <vr-columns width="1/6row">
-            <vr-button type="Add" data-onclick="scopeModel.addField" standalone vr-disabled="scopeModel.disableAddField()"></vr-button>
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns width="fullrow">
-            <vr-datalist datasource="scopeModel.datasource" onremoveitem="scopeModel.onRemoveField" maxitemsperrow="1" isitemdraggable collapsible>
-                <span vr-loader="dataItem.isEditorDirectiveLoading">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-genericdata-genericbe-editordefinition-settings on-ready="dataItem.onGenericBEFieldEditorDefinitionDirectiveReady"
-                                                                                onselectionchanged="dataItem.onFieldEditorDefinitionSelectionChanged"
-                                                                                customlabel="Field Type" normal-col-num="3">
-                            </vr-genericdata-genericbe-editordefinition-settings>
-                        </vr-columns>
-                    </vr-row>
-                </span>
-            </vr-datalist>
-        </vr-columns>
-    </vr-row>
-</vr-validator>
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datalist datasource="scopeModel.datasource" onremoveitem="scopeModel.onRemoveField" maxitemsperrow="1" isitemdraggable collapsible>
+            <span vr-loader="dataItem.isEditorDirectiveLoading">
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-genericdata-genericbe-editordefinition-settings on-ready="dataItem.onGenericBEFieldEditorDefinitionDirectiveReady"
+                                                                            onselectionchanged="dataItem.onFieldEditorDefinitionSelectionChanged"
+                                                                            customlabel="Field Type" normal-col-num="3">
+                        </vr-genericdata-genericbe-editordefinition-settings>
+                    </vr-columns>
+                </vr-row>
+            </span>
+        </vr-datalist>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns colnum="12">
+        <vr-validator tobottom validate="scopeModel.isValid()">
+            <div class="vr-additem-box-horizontal">
+                <span class="glyphicon glyphicon-plus" ng-click="scopeModel.addField()" style="position: absolute;color: #5cb85c;font-size: 36px;top: 10%;width: 100%;text-align: center;cursor: pointer;color: #5cb85c;"></span>
+            </div>
+        </vr-validator>
+    </vr-columns>
+</vr-row>
