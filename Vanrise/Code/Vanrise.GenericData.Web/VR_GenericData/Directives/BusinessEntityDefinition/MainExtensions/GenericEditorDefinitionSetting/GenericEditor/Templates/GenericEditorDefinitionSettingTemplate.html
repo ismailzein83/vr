@@ -10,26 +10,11 @@
 
 <vr-row>
     <vr-columns colnum="12">
-        <vr-validator validate="scopeModel.isValid()">
-            <div class="vr-additem-box">
+        <vr-validator tobottom validate="scopeModel.isValid()">
+            <div class="vr-additem-box-horizontal">
                 <span class="glyphicon glyphicon-plus"  ng-click="scopeModel.addRow()" style="position: absolute;color: #5cb85c;font-size: 36px;top: 10%;width: 100%;text-align: center;cursor: pointer;color: #5cb85c;"></span>
             </div>
         </vr-validator>
     </vr-columns>
 </vr-row>
 
-
-
-<style>
-    .vr-additem-box {
-        border: 1px dashed lightgray;
-        position: relative;
-        height: 50px;
-    }
-
-        .vr-additem-box:hover {
-            opacity: 0.8 !important;
-            transition: 0.3s;
-            background-color: #ECECEC;
-        }
-</style>
