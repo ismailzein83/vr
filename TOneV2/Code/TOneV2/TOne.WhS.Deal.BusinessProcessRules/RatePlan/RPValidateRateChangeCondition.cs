@@ -30,7 +30,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             foreach (var dataByZone in allDataByZone.DataByZoneList)
             {
                 if (dataByZone.NormalRateToChange == null && dataByZone.NormalRateToClose == null)
-                    return true;
+                    continue;
 
                 var zoneName = new SaleZoneManager().GetSaleZoneName(dataByZone.ZoneId);
                 string dealMessage = Helper.GetDealZoneMessage(ratePlanContext.OwnerId, dataByZone.ZoneId, zoneName, DateTime.Now, true);
