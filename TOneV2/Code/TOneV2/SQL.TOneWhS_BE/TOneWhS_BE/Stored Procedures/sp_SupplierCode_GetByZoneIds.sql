@@ -10,9 +10,9 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @ZonesIDsTable TABLE (ZoneID INT)
+	DECLARE @ZonesIDsTable TABLE (ZoneID bigint)
 	INSERT INTO @ZonesIDsTable (ZoneID)
-	SELECT CONVERT(INT, ParsedString) FROM [TOneWhS_BE].[ParseStringList](@ZonesIDs)
+	SELECT CONVERT(bigint, ParsedString) FROM [TOneWhS_BE].[ParseStringList](@ZonesIDs)
 		
 	SELECT  [ID],[Code],[ZoneID],[BED],[EED],[CodeGroupID],[SourceID]
 	FROM	[TOneWhS_BE].[SupplierCode] sc WITH(NOLOCK) 
