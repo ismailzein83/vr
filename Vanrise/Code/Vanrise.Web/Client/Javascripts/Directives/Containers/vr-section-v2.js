@@ -8,7 +8,9 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
 			menuactions: "=",
 			onRemove: "=",
 			header: "=",
-			warning: "="
+			warning: "=",
+			dataitem: "=",
+		    settings:"="
 		},
 		transclude: true,
 		controller: function ($scope, $element, $attrs) {
@@ -20,6 +22,12 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
 				$scope.classlevel = " panel-vr-child ";
 			$scope.sectionId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
 			$scope.expandname = 'expanded_' + $scope.sectionId;
+			if (ctrl.settings != undefined) {
+			    ctrl.oneditclicked = ctrl.settings.oneditclicked != undefined ? ctrl.settings.oneditclicked : undefined;
+			    ctrl.enablesortable = ctrl.settings.sortable != undefined ? ctrl.settings.sortable : false;
+			    ctrl.headerEditable = ctrl.settings.headerEditable != undefined ? ctrl.settings.headerEditable : undefined;
+			}
+
 		},
 		controllerAs: 'sectionCtrl',
 		bindToController: true,
@@ -29,13 +37,22 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
 				focusClass = "vr-clickable-panel";
 			}
 			var htmlTempalte = '<div class="panel-primary panel-vr ' + focusClass + '"  ng-class="classlevel" >'
-				+ '<div class="panel-heading" ng-init="expandname=true" expanded="{{expandname}}" id="{{sectionId}}" ng-click="$root.addFocusPanelClass($event)">'
-				+ '<span class="glyphicon glyphicon-th-list handeldrag hand-cursor drag-icon" ng-show="dragable" ></span>'
-				+ '<span style="padding-left: 4px;" class="hand-cursor collapsible-icon glyphicon " ng-show="collapsible" ng-click=" expandname =!expandname " ng-class=" expandname ?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span><label>{{sectionCtrl.header}}</label>'
-				+ '<span class="section-menu"  style="absolute: relative; right: 10px;" ng-if="sectionCtrl.menuactions.length > 0" > <vr-button type="SectionAction" menuactions="sectionCtrl.menuactions" isasynchronous="true" ></vr-button></span> '
-				+ '<span class="warning-icon"  style="position: absolute;top: 7px;" ng-style="{\'right\': sectionCtrl.menuactions.length > 0 ? \'80px\' : \'20px\'}" ng-if="sectionCtrl.warning!=\'\'" > <vr-warning  value="{{sectionCtrl.warning}}"></vr-warning></span> '
-				+ '<span class="hand-cursor glyphicon glyphicon-remove" style="position: absolute; right: 5px; top: 12px;" ng-show="sectionCtrl.onRemove != undefined" ng-click="sectionCtrl.onRemove()" ></span></div>'
-				+ '<div class="panel-body" ng-show="expandname"  ng-transclude></div></div>';
+				    + '<div class="panel-heading" ng-init="expandname=true" expanded="{{expandname}}" id="{{sectionId}}" ng-click="$root.addFocusPanelClass($event)">'
+				        + '<span class="glyphicon glyphicon-th-list handeldrag hand-cursor drag-icon" ng-show="dragable || sectionCtrl.enablesortable" ></span>'
+                        + '<span style="padding:0px 2px;" class="hand-cursor collapsible-icon glyphicon " ng-show="collapsible" ng-click=" expandname =!expandname " ng-class=" expandname ?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span>'
+                        + '<label ng-if="!sectionCtrl.headerEditable">{{ sectionCtrl.header }}</label>'
+                        + '<span  ng-if="sectionCtrl.headerEditable"><span title="{{sectionCtrl.header}}" class="edit-header-container single-line {{dragable || sectionCtrl.enablesortable ? \'share-space\' : \'\'}} {{ !sectionCtrl.header ? \'required-header\' : \'\' }}"   contenteditable="true" ng-model="sectionCtrl.header"></span></span>'
+                        + '<span ng-if="sectionCtrl.validationContext.validate() != null" class="hand-cursor section-validation-sign"  title="has validation errors!">*</span> '
+                        + '<span class="section-menu"  style="position: absolute; right: 9px;top:-1px;" ng-if="sectionCtrl.menuactions.length > 0" > <vr-button type="SectionAction" menuactions="sectionCtrl.menuactions" isasynchronous="true" ></vr-button></span> '
+                        + '<span class="warning-icon {{sectionCtrl.menuactions.length > 0 ? \'share-space\' : \'\'}}"  style="position: absolute;top:4px;" ng-style="{\'right\': sectionCtrl.menuactions.length > 0 ? \'80px\' : \'20px\'}" ng-if="sectionCtrl.warning != undefined && sectionCtrl.warning!=\'\'" > <vr-warning  value="{{sectionCtrl.warning}}"></vr-warning></span>'
+                        + '<i ng-if="sectionCtrl.oneditclicked != undefined"  class="glyphicon glyphicon-pencil edit hand-cursor {{sectionCtrl.onRemove ? \'share-space\' : \'\' }}" ng-click="sectionCtrl.oneditclicked(sectionCtrl.dataitem)"></i>'
+				        + '<span class="hand-cursor glyphicon glyphicon-remove remove {{ sectionCtrl.oneditclicked ? \'share-space\' : \'\' }}"  ng-if="sectionCtrl.onRemove != undefined" ng-click="sectionCtrl.onRemove(sectionCtrl.dataitem)" ></span>'
+                        + ' </div>'
+                    + ' <vr-validation-group validationcontext="sectionCtrl.validationContext">'
+                        + ' <vr-textbox value="sectionCtrl.header"  ng-if="sectionCtrl.headerEditable" ng-show="false" isrequired="true"></vr-textbox>'
+                        + ' <div class="panel-body" ng-show="expandname"  ng-transclude></div>'
+                    + ' </vr-validation-group>'
+                + ' </div>';
 
 			return htmlTempalte;
 		}

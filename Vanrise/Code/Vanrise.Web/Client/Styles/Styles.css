@@ -2101,6 +2101,7 @@ loader .outer-loader {
         text-transform: uppercase;
         font-weight: bold;
         font-size: 12px;
+        height:26px;
         background-color: #fff;
         margin-bottom: -2px;
         top: -1px;
@@ -2117,16 +2118,85 @@ loader .outer-loader {
         border-bottom: transparent;
     }
 
-        .panel-vr > .panel-heading[expanded="false"] {
-            border-bottom: 1px solid #ddd;
-            margin-bottom: unset;
+
+        .panel-vr > .panel-heading .drag-icon {
+            position: relative;
+            top: -3px;
+            width: unset !important;
         }
+
+        .panel-vr > .panel-heading .collapsible-icon {
+            position: relative;
+            top: -3px;
+            width: unset !important;
+        }
+
+    .panel-vr > .panel-heading .section-validation-sign {
+        color: #D44A47;
+        right: unset;
+        position: absolute;
+        top: -4px;
+        width: unset !important;
+        left: 1px;
+    }
+
+    .panel-vr > .panel-heading .edit-header-container {
+        display: inline-block;
+        margin: 0px 2px;
+    }
+
+    .panel-vr > .panel-heading .edit-header-container:focus {
+        background-color: #fff;
+    }
+
+
+    .panel-vr > .panel-heading .edit-header-container.required-header {
+        outline: #de6965 auto 0.5px
+    }
+
+    .panel-vr > .panel-heading .edit-header-container.required-header:focus {
+        outline: #D44A47 auto 0.5px;
+    }
+
+    .panel-vr > .panel-heading .edit {
+        position: absolute;
+        top: 7px;
+        right: 5px;
+        font-size: 11px;
+    }
+
+    .panel-vr > .panel-heading .edit.share-space {
+        top: 1px;
+    }
+    .panel-vr > .panel-heading .remove {
+        position: absolute;
+        right: 5px;
+        top: 7px;
+        font-size: 11px;
+    }
+
+    .panel-vr > .panel-heading .remove.share-space {
+        top: 12px;
+    }
+
+    .panel-vr > .panel-heading .warning-icon {
+        right: 20px !important;
+    }
+
+    .panel-vr > .panel-heading .warning-icon.share-space {
+        right: 80px !important;
+    }
+
+.panel-vr > .panel-heading[expanded="false"] {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: unset;
+}
 
         .panel-vr > .panel-heading label {
             font-weight: bold;
         }
 
-    .panel-vr > .panel-body {
+    .panel-vr > vr-validation-group > .panel-body, .panel-vr > .panel-body {
         border: 1px solid #ddd;
         border-radius: 0px 0px 4px 4px;
     }
@@ -5769,3 +5839,23 @@ span.option-marketprice {
         background-color: #ECECEC;
     }
 /*end vr-additem-box*/
+
+
+
+[contenteditable="true"].single-line {
+    white-space: nowrap;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+[contenteditable="true"].single-line:focus {  
+    text-overflow: unset;
+}
+[contenteditable="true"].single-line br {
+    display: none;
+}
+
+[contenteditable="true"].single-line * {
+    display: inline;
+    white-space: nowrap;
+}

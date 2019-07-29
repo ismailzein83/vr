@@ -710,8 +710,35 @@
     padding-right: unset;
     padding-left:3px;
 }
+
+.rtl .panel-vr > .panel-heading .warning-icon {
+    right: unset !important;
+    left: 20px !important;
+}
+
+.rtl .panel-vr > .panel-heading .section-validation-sign { 
+    left: unset;
+    right: 1px;
+}
+
+.rtl .panel-vr > .panel-heading .warning-icon.share-space {
+    right: unset !important;
+    left: 80px !important;
+}
+
+.rtl .panel-vr > .panel-heading .edit {
+   
+    right: unset;
+    left: 5px;
+}
+.rtl .panel-vr > .panel-heading .remove {
+    right: unset;
+    left: 5px;
+}
+
+
 .rtl .section-menu {
-    right:unset;
+    right: unset !important;
     left: 2px;
 }
 .rtl .panel-vr.panel-vr-child > .panel-heading { 
