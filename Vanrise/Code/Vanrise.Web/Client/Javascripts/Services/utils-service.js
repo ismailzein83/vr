@@ -572,7 +572,7 @@
             } catch (e) {
                 return conversionResultType;
             }
-           
+
         }
 
         function getDateTimeFormat(date, dateTimeFormatEnumObject) {
@@ -593,7 +593,7 @@
 
         function getShortDate(date) {
             var dateString = '';
-            if (date) {
+            if (date && date instanceof Date && !isNaN(date)) {
 
                 var day = "" + (parseInt(date.getDate()));
                 if (day.length == 1)
@@ -693,7 +693,7 @@
                 obj = convertDatePropertiesToString(obj);
             return angular.toJson(obj);
         }
-        
+
         function convertDatePropertiesToString(obj) {
             if (obj == null || typeof obj != "object")
                 return obj;
