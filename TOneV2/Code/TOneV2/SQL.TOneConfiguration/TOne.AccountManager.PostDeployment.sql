@@ -38,8 +38,7 @@ as (select * from (values
 ('2B794920-FE60-4186-80DE-1CB05512F338','MaxMarginPercentage','Max Margin %','WHS_Sales_Rules_SellingRuleThresholdSetting','{"Editor":"vr-whs-sales-sellingrulesettings-threshold-maxmarginpercentage"}'),
 ('066FCA8E-F4B8-4643-957D-AFAC44339470','MinRate','Min Rate','WHS_Sales_Rules_SellingRuleThresholdSetting','{"Editor":"vr-whs-sales-sellingrulesettings-threshold-fixed"}'),
 
-('A249CBD8-EA0D-48F0-A630-AD3B4F6087DE','VR_WHS_SellingRule','Selling Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-whs-sales-genericruledefinitionsettings-sellingrule","RuntimeEditor":"vr-whs-sales-sellingrulesettings", "RuleTypeFQTN":"TOne.WhS.Sales.Entities.SellingRule, 
-TOne.WhS.Sales.Entities", "RuleManagerFQTN":"TOne.WhS.Sales.Business.SellingRuleManager, TOne.WhS.Sales.Business"}'),
+('A249CBD8-EA0D-48F0-A630-AD3B4F6087DE','VR_WHS_SellingRule','Selling Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-whs-sales-genericruledefinitionsettings-sellingrule","RuntimeEditor":"vr-whs-sales-sellingrulesettings", "RuleTypeFQTN":"TOne.WhS.Sales.Entities.SellingRule,TOne.WhS.Sales.Entities", "RuleManagerFQTN":"TOne.WhS.Sales.Business.SellingRuleManager, TOne.WhS.Sales.Business"}'),
 ('ADFE8423-2666-4B45-A881-446D8C368E4C','WhS_AccountManagerAssignment','Account Manager Assignment','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{ "Editor": "whs-be-accountmanagerassignment-onbeforesavehandler" }'),
 ('A6F4D0D4-3562-4151-8ED8-984CE7A83C20','DataRecordStorageAccountManagerPermanentFilter','Account Manager','VR_GenericData_PermanentFilterSettings','{"Editor": "whs-be-datarecordstorage-permanentfilter-accountmanager"}'),
 ('4A3AD674-9ADB-40C6-BEFD-A1813F08F333','VR_Analytic_AccountManagerAnalyticTablePermanentFilter','Account Manager','VR_Analytic_PermanentFilterSettings','{"Editor": "whs-be-analytic-permanentfilter-accountmanager" }')

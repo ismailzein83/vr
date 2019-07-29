@@ -32,7 +32,7 @@ app.directive('vrWhsSalesSellingrulesettingsThresholdMaxmarginpercentage', ['$co
 
                 api.getData = function () {
                     var obj = {
-                        $type: "TOne.WhS.Sales.MainExtensions.PercentageRateThreshold,TOne.WhS.Sales.MainExtensions",
+                        $type: "TOne.WhS.Sales.MainExtensions.MaxMarginPercentageRateThreshold,TOne.WhS.Sales.MainExtensions",
                         Percentage: ctrl.percentage
                     };
                     return obj;
