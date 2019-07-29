@@ -108,7 +108,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 var selfOffset = $(self).offset();
                 var elleft = selfOffset.left - $(window).scrollLeft() + $(self).width();
                 var left = 0;
-                var tooltip = self.parent().find('.tooltip-error');
+                var tooltip = self.parent().find('.tooltip-error').last();
                 $(tooltip).removeClass('tooltip-error-right');
                 if ($scope.isMobile) {
                     var initialTop = (selfOffset.top - $(window).scrollTop());
@@ -133,7 +133,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                     $(tooltip).addClass('tooltip-error-bottom');
                     var initialTop = (selfOffset.top - $(window).scrollTop());
                     var left = selfOffset.left - $(window).scrollLeft() + (selfWidth / 2) - 150;
-                    $(tooltip).css({ position: 'fixed', top: initialTop + selfHeight, left: left, width: 300 });
+                    $(tooltip).css({ position: 'fixed', top: initialTop + selfHeight, left: left, maxWidth: 300, width:'auto' });
                 }
 
                 e.stopPropagation();
