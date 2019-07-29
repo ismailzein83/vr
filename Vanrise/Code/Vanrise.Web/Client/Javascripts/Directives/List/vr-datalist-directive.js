@@ -98,12 +98,12 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
                 onItemClickedAttr = 'ng-click="ondataitemclicked(dataItem)"';
                 itemCssClass = 'class ="vr-list-item-clickable"';
             }
-            var title='';
+            var title = '';
             if (attrs.enabletitle != undefined)
                 title = 'title="{{dataItem}}"';
             var template = '<vr-list maxitemsperrow="{{VRDatalistCtrl.maxitemsperrow}}" hideremoveicon="VRDatalistCtrl.hideremoveicon"  iscollapsible="{{VRDatalistCtrl.collapsible}}">'
 				+ '<div class="datalist-container" style="white-space: pre-line;" ng-sortable="VRDatalistCtrl.itemsSortable" ng-class="VRDatalistCtrl.dragdropsetting &&  VRDatalistCtrl.datasource.length == 0 ?\'empty-vr-datalist-drop\':\'\'">'
-				+ '<vr-listitem ' + onItemClickedAttr + ' ' + itemCssClass + ' ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + ' > '
+                + '<vr-listitem ' + onItemClickedAttr + ' ' + itemCssClass + ' ng-hide="dataItem.hideItem" ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + ' > '
                 + '<span class="hand-cursor collapse-icon glyphicon" ng-show="VRDatalistCtrl.collapsible" ng-init="expande=getExpandStatus(dataItem)" ng-click="expande=!expande" ng-class="expande?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'"></span>'
 				+ '<span class="listitem-title" ng-show="!expande" ng-if="VRDatalistCtrl.collapsible && dataItem.title"><vr-label>{{dataItem.title}}</vr-label></span>'
 				+ draggableIconTemplate
@@ -117,7 +117,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
 
     };
 
-	return directiveDefinitionObject;
+    return directiveDefinitionObject;
 
 
 
