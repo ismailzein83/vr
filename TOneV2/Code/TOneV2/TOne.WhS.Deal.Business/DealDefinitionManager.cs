@@ -919,7 +919,8 @@ namespace TOne.WhS.Deal.Business
                                         DealId = deal.DealId,
                                         ZoneId = zoneId,
                                         BED = deal.Settings.RealBED,
-                                        EED = deal.Settings.RealEED
+                                        EED = deal.Settings.RealEED,
+                                        DealStatus = deal.Settings.Status
                                     });
                                 }
                             }

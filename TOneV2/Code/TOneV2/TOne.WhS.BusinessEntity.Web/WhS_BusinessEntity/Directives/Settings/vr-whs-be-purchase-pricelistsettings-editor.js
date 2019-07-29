@@ -61,9 +61,10 @@ app.directive('vrWhsBePurchasePricelistsettingsEditor', ['UtilsService', 'VRUIUt
                         selectedMailMsgTemplateId = data.DefaultSupplierPLMailTemplateId;
                         ctrl.selecteSendEmailOption = UtilsService.getItemByVal(ctrl.sendEmailOption, data.SendEmail, 'value');
                     }
-
-                    var loadMailMsgTemplateSelectorPromise = loadMailMsgTemplateSelector(selectedMailMsgTemplateId);
-                    promises.push(loadMailMsgTemplateSelectorPromise);
+                    if (ctrl.showMailTemplateSelector) {
+                        var loadMailMsgTemplateSelectorPromise = loadMailMsgTemplateSelector(selectedMailMsgTemplateId);
+                        promises.push(loadMailMsgTemplateSelectorPromise);
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

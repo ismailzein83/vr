@@ -13,8 +13,11 @@ namespace TOne.WhS.Sales.Business
         public byte[] GetCustomerTargetMatchTemplateFileContent(int customerId)
         {
             var saleZoneManager = new SaleZoneManager();
-            List<SaleZone> customerSaleZones = saleZoneManager.GetCustomerSaleZones(customerId, DateTime.Now, false).ToList();
-            return GetCustomerZoneSheetBytes(customerSaleZones.Where(zone => !zone.EED.HasValue));
+            IEnumerable<SaleZone> customerSaleZones = saleZoneManager.GetCustomerSaleZones(customerId, DateTime.Now, false);
+
+            if (customerSaleZones != null && customerSaleZones.Count() > 0)
+                return GetCustomerZoneSheetBytes(customerSaleZones.Where(zone => !zone.EED.HasValue));
+            return null;
         }
         private byte[] GetCustomerZoneSheetBytes(IEnumerable<SaleZone> saleZones)
         {
