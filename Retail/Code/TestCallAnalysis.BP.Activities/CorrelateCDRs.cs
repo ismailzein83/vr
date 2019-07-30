@@ -156,7 +156,7 @@ namespace TestCallAnalysis.BP.Activities
                                                                 IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(operatorId, recievedCDR.CalledNumber);
                                                                 foreach (var generatedCDR in generatedCDRs)
                                                                 {
-                                                                    if (recievedCDR.AttemptDateTime.Subtract(generatedCDR.AttemptDateTime) <= dateTimeMargin)
+                                                                    if (Math.Abs(recievedCDR.AttemptDateTime.Subtract(generatedCDR.AttemptDateTime).TotalSeconds) <= dateTimeMargin.TotalSeconds)
                                                                     {
                                                                         if (recievedCDR.CalledNumber == generatedCDR.CalledNumber || (mappingNumberList != null && mappingNumberList.Count() > 0 && mappingNumberList.Contains(generatedCDR.CalledNumber)))
                                                                         {

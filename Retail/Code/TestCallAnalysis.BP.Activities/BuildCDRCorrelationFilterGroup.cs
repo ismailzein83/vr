@@ -81,6 +81,8 @@ namespace TestCallAnalysis.BP.Activities
 
         private List<TestCallAnalysis.Entities.CDRCorrelationFilterGroup> BuildRecordFilterGroups(DateTime minDate, DateTime maxDate, string datetimeFieldName, long maxId, string idFieldName)
         {
+            TimeSpan oneSecond = new TimeSpan(0, 0, 0, 1);
+            maxDate = maxDate + oneSecond;
             List<TestCallAnalysis.Entities.CDRCorrelationFilterGroup> cdrCorrelationFilterGroups = new List<TestCallAnalysis.Entities.CDRCorrelationFilterGroup>();
             RecordFilterGroup recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
             recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = datetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals, Value = minDate });
