@@ -31,6 +31,10 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
             function initializeController() {
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.dragsettings = {
+                    handle: '.vr-control-label'
+                };
+
                 $scope.scopeModel.addRow = function () {
                     var dataItem = {
                         entity: {
