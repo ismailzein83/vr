@@ -26,15 +26,15 @@ app.directive('vrScrollableContainer', ['$compile', 'MobileService', function ($
         scope: false,
         compile: function (tElement, tAttrs) {
             var margin = parseInt(tAttrs.margin) || 0;
-            var maxheigth = parseInt(tAttrs.maxheigth);
+            var maxheight = parseInt(tAttrs.maxheight);
             var containerHeightTrim = MobileService.isMobile() ? 63 : 122;
-            var maxHeigth = window.innerHeight - (containerHeightTrim + margin);
-            var finalMaxHeigth;
-            if (maxheigth)
-                finalMaxHeigth = maxheigth;
+            var maxHeight = window.innerHeight - (containerHeightTrim + margin);
+            var finalMaxHeight;
+            if (maxheight)
+                finalMaxHeight = maxheight;
             else
-                finalMaxHeigth = maxHeigth > 200 && maxHeigth || 200;
-            var newElement = '<div style="max-height:' + finalMaxHeigth + 'px;overflow-y:auto;overflow-x:auto;">' + tElement.html() + '</div>';
+                finalMaxHeight = maxHeight > 200 && maxHeight || 200;
+            var newElement = '<div style="max-height:' + finalMaxHeight + 'px;overflow-y:auto;overflow-x:auto;">' + tElement.html() + '</div>';
             tElement.html(newElement);
         }
     };
