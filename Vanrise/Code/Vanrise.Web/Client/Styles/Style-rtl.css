@@ -780,6 +780,15 @@
    margin-right: unset !important;
 }
 
+.rtl .vr-tabs .tabs-add-container {
+    border-left: 2px dashed #DDD;
+    border-right: none;
+}
+
+.rtl .vr-tabs .tabs-add-container:hover {
+    border-left: 2px solid #DDD;
+    border-right: none;
+}
 /*end  vr-choices-filter*/
 
 

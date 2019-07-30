@@ -103,7 +103,7 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService'
             var endtemplate = isvertical ? '' : '</vr-columns> </vr-row>';
             var verticalflag = isvertical == true ? "vertical" : " ";
              
-            var template = '<vr-tab-header-links ' + verticalflag + ' ' + flatflag + ' ' + hidepaginationcontrols + '  backwardvisible="{{ctrl.isBackwardPaginationVisible()}}" forwardvisible="{{ctrl.isForwardPaginationVisible()}}" selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0" >'
+            var template = '<vr-tab-header-links ' + verticalflag + ' ' + flatflag + ' ' + hidepaginationcontrols + '  backwardvisible="{{ctrl.isBackwardPaginationVisible()}}" forwardvisible="{{ctrl.isForwardPaginationVisible()}}" selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0 || ctrl.onaddclicked " >'
                 + ' <span  ng-init="initPaginitionControlsBehavior()"   ng-if="!ctrl.hidepaginationcontrols" class="vr-tabs-expander previous" id="{{dropdownPreviousTabsId}}" style="position:relative" ng-show="(ctrl.tabsCountLimit > ctrl.pageSize && ctrl.tabs.length > ctrl.pageSize) ||  ( ctrl.tabs.length  <  ctrl.tabsCountLimit &&  ctrl.tabsCountStart > 0 )" >'
                                     + '  <span  data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">'
                                             + ' <span class="glyphicon  glyphicon-backward hand-cursor list-view-icon" ></span>'
@@ -121,7 +121,7 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService'
 	                            + ' <vr-tab-header-link  ng-repeat="tab in ctrl.tabs " id="header-{{tab.guid}}" ng-show="(tab.showTab == undefined || tab.showTab == true) && !ctrl.hideTab($index)" isvisible="(tab.showTab == undefined || tab.showTab == true) && !ctrl.hideTab($index)"  isselected="tab.isSelected" > '
 		                            + ' <img class="tab-icon page-view-icon" ng-show="::tab.iconurl" ng-src="{{::tab.iconurl}}"/> '
 		                            + ' <span class="vr-header-label {{tab.onremove || ctrl.sortable ?\'with-tab-control\':\'\'  }}" title="{{tab.header}}" ng-if="!ctrl.datatitlefield">{{tab.header}}</span>'
-                + ' <span class="vr-header-label {{tab.onremove || ctrl.sortable ?\'with-tab-control\':\'\'  }} {{(tab.onremove || ctrl.sortable) &&  tab.iconurl ?\'icon-space\':\'\'  }} {{!tab.tabItem[ctrl.datatitlefield]?\'required-header\':\'\'}}"  title="{{tab.tabItem[ctrl.datatitlefield]}}" ng-if="ctrl.datatitlefield" contenteditable="true" ng-model="tab.tabItem[ctrl.datatitlefield]"></span> '
+                                    + ' <span class="vr-header-label {{tab.onremove || ctrl.sortable ?\'with-tab-control\':\'\'  }} {{(tab.onremove || ctrl.sortable) &&  tab.iconurl ?\'icon-space\':\'\'  }} {{!tab.tabItem[ctrl.datatitlefield]?\'required-header\':\'\'}}"  title="{{tab.tabItem[ctrl.datatitlefield]}}" ng-if="ctrl.datatitlefield" contenteditable="true" ng-model="tab.tabItem[ctrl.datatitlefield]"></span> '
 		                            + ' <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon {{ctrl.oneditclicked ? \'share-space\':\'\'}}" ng-click="ctrl.removeTab(tab)"></i> '
 		                            + ' <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span> '
 		                            + ' <i ng-if="ctrl.sortable" class="glyphicon  glyphicon-option-horizontal handeldrag hand-cursor " ></i> '
@@ -136,11 +136,15 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService'
                                         + '<li  ng-repeat="tab in ctrl.tabs " ng-hide="tab.orderedIndex < ctrl.tabsCountLimit">'
                                              + ' <a class="hand-cursor" ng-click="ctrl.setlastTabSelectedIndex(tab.orderedIndex,tab)"  orderindex="{{tab.orderedIndex}}" ><span><img class="tab-icon page-view-icon" ng-show="::tab.iconurl" ng-src="{{::tab.iconurl}}"/>'
                                              + ' <span title="{{tab.header}}" ng-if="!ctrl.datatitlefield">{{tab.header}}</span>'
-                + ' <span title="{{tab.tabItem[ctrl.datatitlefield]}}" ng-if="ctrl.datatitlefield" contenteditable="false" ng-model="tab.tabItem[ctrl.datatitlefield]"></span> '
+                                             + ' <span title="{{tab.tabItem[ctrl.datatitlefield]}}" ng-if="ctrl.datatitlefield" contenteditable="false" ng-model="tab.tabItem[ctrl.datatitlefield]"></span> '
                                             +'</span> </a>'
                                         + '</li>'
                                 + '</ul>'
-                            +'</span>'
+                            + '</span>'
+                           + ' <label class="hand-cursor tabs-add-container" ng-if="ctrl.onaddclicked" ng-click="ctrl.onaddclicked()">'
+                             + '  <span class="glyphicon  glyphicon glyphicon-plus  hand-cursor tabs-add-icon" ></span>'
+                           + ' </label>'
+
                         + '</vr-tab-header-links>';
 
             if (MobileService.isMobile()) {

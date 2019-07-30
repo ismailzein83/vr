@@ -3105,10 +3105,32 @@ vr-switch[class*="divDisabled"] .switch {
     vertical-align: top;
 }
 
-    .vr-tabs[vertical] {
-        width: 150px;
-        margin-right: -5px;
-    }
+.vr-tabs .tabs-add-container {
+    vertical-align: top;
+    border: 2px dashed #DDD;
+    background-color: #fff;
+    text-align: center;
+    border-left: none;
+    border-bottom: none;
+    height: 21px;
+}
+
+.vr-tabs .tabs-add-container:hover {
+    background-color: #F0F0F0;
+    border: 2px solid #DDD;
+    border-left: none;
+    border-bottom: none;
+}
+
+.vr-tabs .tabs-add-container .tabs-add-icon {
+    color: #5cb85c;
+    left:1px;
+}
+
+.vr-tabs[vertical] {
+    width: 150px;
+    margin-right: -5px;
+}
 
         
     .vr-tabs[vertical] .sortable-container vr-tab-header-link {

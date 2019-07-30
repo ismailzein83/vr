@@ -17,6 +17,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 ctrl.pageSize = ctrl.settings.pagesize || ctrl.pageSize;
                 ctrl.datasource = ctrl.settings.datasource != undefined ? ctrl.settings.datasource : undefined;
                 ctrl.oneditclicked = ctrl.settings.oneditclicked != undefined ? ctrl.settings.oneditclicked : undefined;
+                ctrl.onaddclicked = ctrl.settings.onaddclicked != undefined ? ctrl.settings.onaddclicked : undefined;
                 ctrl.sortable = ctrl.settings.sortable != undefined ? ctrl.settings.sortable : false;
                 ctrl.datatitlefield = ctrl.settings.datatitlefield != undefined ? ctrl.settings.datatitlefield : undefined;
             }
@@ -128,6 +129,10 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 if (typeof (tab.onremove) === 'function') {
                     tab.onremove(tab.tabItem);
                 }
+                for (var i = 0; i < ctrl.tabs.length; i++) {
+                    var newindex = i;
+                    ctrl.tabs[i].orderedIndex = newindex;
+                }
                 $("#" + tab.guid).remove();
                 setTimeout(function () {
                     UtilsService.safeApply($scope);
@@ -144,20 +149,37 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                     }
                     else if (tab.onremove != undefined) {
                         if (tab.isSelected == false || tab.isSelected == undefined) {
+                            if (ctrl.pageSize >= ctrl.tabs.length) {
+                                ctrl.tabsCountStart = 0;
+                                ctrl.tabsCountLimit = ctrl.pageSize;
+                            }
+                            else {
+                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
+                                ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
+                            }
+                            return;
+                        }
+                        if (ctrl.tabs[index - 1] != undefined) {
+                            ctrl.tabs[index - 1].isSelected = true;
+
+                            if (ctrl.pageSize >= ctrl.tabs.length) {
+                                ctrl.tabsCountStart = 0;
+                                ctrl.tabsCountLimit = ctrl.pageSize;
+                            }
+
+                            else {
+                                ctrl.selectedTabIndex = index - 1;
+                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
+                                ctrl.tabsCountLimit = ctrl.tabsCountLimit - 1 > ctrl.pageSize ? ctrl.tabsCountLimit - 1 : ctrl.pageSize;
+                            }
                             return;
                         }
                         if (ctrl.tabs[index] != undefined) {
                             ctrl.tabs[index].isSelected = true;
                             ctrl.selectedTabIndex = index;
-                            ctrl.tabsCountStart = index;
-                            ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
-                            return;
-                        }
-                        if (ctrl.tabs.length == index && ctrl.tabs[index - 1] != undefined) {
-                            ctrl.tabs[index - 1].isSelected = true;
                             if (ctrl.tabs.length > ctrl.pageSize) {
-                                ctrl.selectedTabIndex = index - 1;
-                                ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
+                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
+                                ctrl.tabsCountLimit = ctrl.tabsCountLimit - 1;
                             }
                             else {
                                 ctrl.tabsCountStart = 0;
@@ -165,6 +187,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                             }
                             return;
                         }
+
                         if (ctrl.tabs[0] != undefined) {
                             ctrl.tabs[0].isSelected = true;
                             ctrl.selectedTabIndex = 0;
