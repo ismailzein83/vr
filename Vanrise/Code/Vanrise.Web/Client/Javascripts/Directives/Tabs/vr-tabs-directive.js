@@ -128,10 +128,6 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 if (typeof (tab.onremove) === 'function') {
                     tab.onremove(tab.tabItem);
                 }
-                for (var i = 0; i < ctrl.tabs.length; i++) {
-                    var newindex = i;
-                    ctrl.tabs[i].orderedIndex = newindex;
-                }
                 $("#" + tab.guid).remove();
                 setTimeout(function () {
                     UtilsService.safeApply($scope);
@@ -148,37 +144,20 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                     }
                     else if (tab.onremove != undefined) {
                         if (tab.isSelected == false || tab.isSelected == undefined) {
-                            if (ctrl.pageSize >= ctrl.tabs.length) {
-                                ctrl.tabsCountStart = 0;
-                                ctrl.tabsCountLimit = ctrl.pageSize;
-                            }
-                            else {
-                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
-                                ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
-                            }
-                            return;
-                        }
-                        if (ctrl.tabs[index - 1] != undefined) {
-                            ctrl.tabs[index - 1].isSelected = true;
-
-                            if (ctrl.pageSize >= ctrl.tabs.length) {
-                                ctrl.tabsCountStart = 0;
-                                ctrl.tabsCountLimit = ctrl.pageSize;
-                            }
-
-                            else {
-                                ctrl.selectedTabIndex = index - 1;
-                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
-                                ctrl.tabsCountLimit = ctrl.tabsCountLimit - 1 > ctrl.pageSize ? ctrl.tabsCountLimit - 1 : ctrl.pageSize;
-                            }                            
                             return;
                         }
                         if (ctrl.tabs[index] != undefined) {
                             ctrl.tabs[index].isSelected = true;
                             ctrl.selectedTabIndex = index;
+                            ctrl.tabsCountStart = index;
+                            ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
+                            return;
+                        }
+                        if (ctrl.tabs.length == index && ctrl.tabs[index - 1] != undefined) {
+                            ctrl.tabs[index - 1].isSelected = true;
                             if (ctrl.tabs.length > ctrl.pageSize) {
-                                ctrl.tabsCountStart = ctrl.tabsCountStart - 1;
-                                ctrl.tabsCountLimit = ctrl.tabsCountLimit - 1;
+                                ctrl.selectedTabIndex = index - 1;
+                                ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
                             }
                             else {
                                 ctrl.tabsCountStart = 0;
@@ -186,7 +165,6 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                             }
                             return;
                         }
-
                         if (ctrl.tabs[0] != undefined) {
                             ctrl.tabs[0].isSelected = true;
                             ctrl.selectedTabIndex = 0;
@@ -244,20 +222,16 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                         for (var i = 0; i < ctrl.tabs.length; i++) {
                             ctrl.tabs[i].isSelected = false;
                         }
-                        tab.isSelected = true;
-                        if (index < ctrl.tabsCountLimit && index >= ctrl.tabsCountStart) {
-                            return;
-                        }
+                        tab.isSelected = true;                       
                         if (index > ctrl.tabsCountLimit - 1) {
                             ctrl.tabsCountStart = index - (ctrl.pageSize - 1);
                             ctrl.tabsCountLimit = index + 1;
-                            return;
                         }
-                        if (index < ctrl.tabsCountStart) {
+                        else if (index < ctrl.tabsCountStart) {
                             ctrl.tabsCountStart = index;
                             ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
-                        }                            
-                    }                        
+                        }
+                    }
                     deferred.resolve();
                 }, 1);
                 return deferred.promise;
