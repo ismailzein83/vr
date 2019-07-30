@@ -64,10 +64,10 @@ app.directive('businessprocessVrWorkflowActivityEditorExpressionbuilder', ['Util
                             $scope.scopeModel.expression = undefined;
                         }
                        
-                    };
+                    }; 
                     var params = {
-                        variables: context != undefined ? context.getWorkflowArguments() : undefined,
-                        arguments: context != undefined ? context.getParentVariables() : undefined,
+                        variables: context != undefined ? context.getParentVariables() : undefined,
+                        arguments: context != undefined ? context.getWorkflowArguments() : undefined,
                         fieldType: fieldType,
                         expression: getExpression()
                     };
@@ -97,6 +97,8 @@ app.directive('businessprocessVrWorkflowActivityEditorExpressionbuilder', ['Util
                         expression = payload.value;
                         fieldType = payload.fieldType;
                     }
+                    $scope.scopeModel.expression = undefined;
+
                     if (expression != undefined) {
                         if (expression.CodeExpression != undefined)
                             $scope.scopeModel.expression = expression.CodeExpression;
