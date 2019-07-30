@@ -23,8 +23,7 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
         function TabsContainer($scope, ctrl, $attrs) {
 
             var context;
-            var tabItemSettings;
-
+            var indexTab = 1;
             var tabsAPI;
 
             this.initializeController = initializeController;
@@ -43,7 +42,8 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
 
                 $scope.scopeModel.addTabContainer = function () {
                     var dataItem = {
-                        ShowTab: true
+                        ShowTab: true,
+                        TabTitle: "Tab " + (indexTab++)
                     };
 
                     dataItem.onTextResourceSelectorReady = function (api) {
