@@ -63,11 +63,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                         CurrentCurrencyId = zone.NormalRateToChange.CurrencyId.Value
                     };
 
-
+                    var accountManagerId = new AccountManagerManager().GetCurrentUserAccountManagerId();
                     var target = new Vanrise.GenericData.Entities.GenericRuleTarget
                     {
                         TargetFieldValues = new Dictionary<string, object>
                         {
+                            {"AccountManager", accountManagerId},
                             {"SellingProduct", sellingProductId},
                             {"Customer", ratePlanContext.OwnerId},
                             {"SaleZone", zone.ZoneId},

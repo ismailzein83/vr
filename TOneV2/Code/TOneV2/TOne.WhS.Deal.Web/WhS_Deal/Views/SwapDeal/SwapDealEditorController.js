@@ -458,7 +458,6 @@
             $scope.scopeModel.isLoading = true;
             var createDealFromAnalysis = false;
             return WhS_Deal_SwapDealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
-                console.log(response);
                 createDealFromAnalysis = isCreateDealFromAnalysis && response != undefined;
                 if (VRNotificationService.notifyOnItemAdded('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealAdded != undefined)
@@ -475,9 +474,11 @@
                                     $scope.IsItemInserted(false);
                             }).finally(function () {
                                 $scope.scopeModel.isLoading = false;
-                            
+                                $scope.modalContext.closeModal();
                             });
                     }
+                    else
+                        $scope.modalContext.closeModal();
                 }
                 else {
                     $scope.validationMessages = response.ValidationMessages;
@@ -489,8 +490,6 @@
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-                //if (!createDealFromAnalysis)
-                //    $scope.modalContext.closeModal();
             });
         }
         function updateSwapDeal() {
