@@ -35,6 +35,10 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.tabsSettings = {
+                pagesize: 7
+            };
+
             $scope.scopeModel.onSettingDirectiveReady = function (api) {
                 settingDirectiveAPI = api;
                 var setLoader = function (value) {
