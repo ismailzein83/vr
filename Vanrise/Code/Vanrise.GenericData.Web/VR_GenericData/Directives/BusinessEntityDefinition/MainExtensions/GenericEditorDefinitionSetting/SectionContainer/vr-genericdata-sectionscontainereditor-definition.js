@@ -22,7 +22,8 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
             this.initializeController = initializeController;
 
             var context;
-            var gridAPI;
+            var indexSection = 1;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
@@ -50,7 +51,8 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                 $scope.scopeModel.addSectionContainer = function () {
                     var dataItem = {
                         entity: {
-                            ColNum: 6
+                            ColNum: 6,
+                            SectionTitle: "Section " + (indexSection++)
                         }
                     };
 
