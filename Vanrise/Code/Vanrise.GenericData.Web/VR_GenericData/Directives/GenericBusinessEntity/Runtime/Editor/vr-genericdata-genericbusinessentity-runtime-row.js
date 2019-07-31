@@ -27,33 +27,33 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
             var genericContext;
             var allFieldValuesByName;
             var parentFieldValues;
-          //  var styleDefinitions = [];
+            var styleDefinitions = [];
 
-            //var dataRecordTypeId;
+            var dataRecordTypeId;
 
             function initializeController() {
                 ctrl.fields = [];
 
-                //ctrl.getFieldColor = function (field) {
-                //    if (field != undefined) {
-                //        var style = UtilsService.getItemByVal(styleDefinitions, field.styleDefinitionId, 'StyleDefinitionId');
-                //        if (style != undefined && style.StyleDefinitionSettings != undefined && style.StyleDefinitionSettings.StyleFormatingSettings != undefined) {
-                //            return style.StyleDefinitionSettings.StyleFormatingSettings.ClassName;
-                //        }
-                //    }
-                //};
+                ctrl.getFieldColor = function (field) {
+                    if (field != undefined) {
+                        var style = UtilsService.getItemByVal(styleDefinitions, field.styleDefinitionId, 'StyleDefinitionId');
+                        if (style != undefined && style.StyleDefinitionSettings != undefined && style.StyleDefinitionSettings.StyleFormatingSettings != undefined) {
+                            return style.StyleDefinitionSettings.StyleFormatingSettings.ClassName;
+                        }
+                    }
+                };
                 defineAPI();
             }
 
-            //function loadStyleDefinitions() {
-            //    return VRCommon_StyleDefinitionAPIService.GetAllStyleDefinitions().then(function (response) {
-            //        if (response) {
-            //            for (var i = 0; i < response.length; i++) {
-            //                styleDefinitions.push(response[i]);
-            //            }
-            //        }
-            //    });
-            //}
+            function loadStyleDefinitions() {
+                return VRCommon_StyleDefinitionAPIService.GetAllStyleDefinitions().then(function (response) {
+                    if (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            styleDefinitions.push(response[i]);
+                        }
+                    }
+                });
+            }
             function defineAPI() {
                 var api = {};
 
@@ -64,7 +64,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                         genericContext = payload.genericContext;
                         allFieldValuesByName = payload.allFieldValuesByName;
                         parentFieldValues = payload.parentFieldValues;
-                        //dataRecordTypeId = payload.dataRecordTypeId;
+                        dataRecordTypeId = payload.dataRecordTypeId;
 
                         var promises = [];
 
@@ -82,8 +82,8 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             prepareFieldObject(field);
                         }
 
-                        //var styleDefinitionsLoadPromise = loadStyleDefinitions();
-                        //promises.push(styleDefinitionsLoadPromise);
+                        var styleDefinitionsLoadPromise = loadStyleDefinitions();
+                        promises.push(styleDefinitionsLoadPromise);
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -197,8 +197,8 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 var fieldValue = currentContext != undefined ? currentContext.getFieldPathValue(field.FieldPath) : undefined;
                 return VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription(field.FieldType, fieldValue).then(function (response) {
                     field.valueAsString = response;
-                    // field.valueAsString = response.FieldDescription;
-                   // field.styleDefinitionId = response.StyleDefinitionId;
+                    field.valueAsString = response.FieldDescription;
+                    field.styleDefinitionId = response.StyleDefinitionId;
                 });
             }
         }

@@ -147,31 +147,24 @@ namespace Vanrise.GenericData.Business
             return manager.GetExtensionConfigurations<ListRecordRuntimeViewTypeConfig>(ListRecordRuntimeViewTypeConfig.EXTENSION_TYPE);
         }
 
-        public string GetFieldTypeDescription(FieldTypeDescriptionInput input)
+        public DataRecordFieldTypeInfo GetFieldTypeDescription(FieldTypeDescriptionInput input)
         {
+
             if (input.FieldType == null)
                 return null;
-            return input.FieldType.GetDescription(input.FieldValue);
+
+            var fieldTypeInfo = new DataRecordFieldTypeInfo()
+            {
+                FieldDescription = input.FieldType.GetDescription(input.FieldValue),
+            };
+
+            var context = new DataRecordFieldStyleDefinitionContext { FieldValue = input.FieldValue };
+
+            input.FieldType.TryGetStyleDefinitionId(context);
+            fieldTypeInfo.StyleDefinitionId = context.StyleDefinitionId;
+
+            return fieldTypeInfo;
         }
-
-        //public DataRecordFieldTypeInfo GetFieldTypeDescription(FieldTypeDescriptionInput input)
-        //{
-
-        //    if (input.FieldType == null)
-        //        return null;
-
-        //    var fieldTypeInfo = new DataRecordFieldTypeInfo()
-        //    {
-        //        FieldDescription = input.FieldType.GetDescription(input.FieldValue),
-        //    };
-
-        //    var context = new DataRecordFieldStyleDefinitionContext { FieldValue = input.FieldValue };
-
-        //    input.FieldType.TryGetStyleDefinitionId(context);
-        //    fieldTypeInfo.StyleDefinitionId = context.StyleDefinitionId;
-
-        //    return fieldTypeInfo;
-        //}
         public List<Dictionary<string, string>> GetFieldTypeListDescription(ListFieldTypeDescriptionInput input)
         {
             List<Dictionary<string, string>> fieldsDescription = null;

@@ -72,17 +72,9 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.GetFieldCustomObjectTypeSettingsConfig();
         }
-
-        //[HttpPost]
-        //[Route("GetFieldTypeDescription")]
-        //public DataRecordFieldTypeInfo GetFieldTypeDescription(FieldTypeDescriptionInput input)
-        //{
-        //    DataRecordFieldManager manager = new DataRecordFieldManager();
-        //    return manager.GetFieldTypeDescription(input);
-        //}
         [HttpPost]
         [Route("GetFieldTypeDescription")]
-        public string GetFieldTypeDescription(FieldTypeDescriptionInput input)
+        public DataRecordFieldTypeInfo GetFieldTypeDescription(FieldTypeDescriptionInput input)
         {
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.GetFieldTypeDescription(input);
