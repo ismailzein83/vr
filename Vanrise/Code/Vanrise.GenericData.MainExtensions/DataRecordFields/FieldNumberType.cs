@@ -59,7 +59,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return "null";
             var valueItem = ParseNonNullValueToFieldType(value);
             if (valueItem is decimal)
-                return string.Concat('"', valueItem.ToString(), "m", '"');
+                return valueItem.ToString() + "m";
             else return valueItem.ToString();
 
         }
