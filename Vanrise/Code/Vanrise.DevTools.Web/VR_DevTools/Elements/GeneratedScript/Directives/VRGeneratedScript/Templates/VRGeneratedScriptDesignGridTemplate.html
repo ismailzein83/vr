@@ -8,7 +8,8 @@
                  pagingtype="'PagingOnScroll'"
                  menuactions="scopeModel.gridMenuActions"
                  idfield="ConnectionId"
-                 enableautoexport="true">
+                 enableautoexport="true"
+                 ondeleterow="scopeModel.onDeleteRow">
         <vr-datagridcolumn headertext="'Schema'" field="'Entity.Schema'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Table'" field="'Entity.TableName'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Type'" field="'Entity.Title'" type="'Text'"></vr-datagridcolumn>

@@ -87,6 +87,9 @@
                     }
                     catch (error) { $scope.scopeModel.isLoading = false; }
                 }
+                else {
+                    gridApi.load();
+                }
             };
 
             $scope.scopeModel.onSourceTabSelected = function () {

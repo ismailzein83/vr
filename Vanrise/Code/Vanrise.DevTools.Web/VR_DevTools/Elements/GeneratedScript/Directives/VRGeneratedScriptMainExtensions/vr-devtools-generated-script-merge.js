@@ -141,19 +141,21 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var item = ctrl.datasource[i].data;
                             if (item.IsIdentifier) {
-                                item.IncludeInInsert = true;
                                 identifierColumnExists = true;
+                                if (!item.IncludeInInsert)
+                                    return 'Identifier Column Must Be Included In Insert Columns ';
                             }
-                            if (item.IncludeInInsert || item.IncludeInUpdate)
-                                insertOrUpdateColumnExists = true;
+
+                            //if (item.IncludeInInsert || item.IncludeInUpdate)
+                            //    insertOrUpdateColumnExists = true; && !insertOrUpdateColumnExists
                         }
                     }
-                    if (!identifierColumnExists && !insertOrUpdateColumnExists)
-                        return 'You Should At Least Select One Identifier Column And One Insert Or Update Column ';
-                    else if (!identifierColumnExists)
-                        return 'You Should At Least Select One Identifier Column'
-                    else if (!insertOrUpdateColumnExists)
-                        return 'You Should At Least Select One Insert Or Update Column'
+                    //if (!identifierColumnExists)
+                    //    return 'You Should At Least Select One Identifier Column And One Insert Or Update Column ';
+                    if (!identifierColumnExists)
+                        return 'You Should At Least Select One Identifier Column';
+                    //else if (!insertOrUpdateColumnExists)
+                    //    return 'You Should At Least Select One Insert Or Update Column'
                     return null;
                 };
 

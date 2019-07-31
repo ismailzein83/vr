@@ -63,6 +63,10 @@
                     }
                 };
 
+                $scope.scopeModel.onDeleteRow = function (dataItem) {
+                    var index = $scope.scopeModel.designs.indexOf(dataItem);
+                    $scope.scopeModel.designs.splice(index, 1);
+                };
 
                 $scope.scopeModel.onGeneratedScriptDesignAdded = function () {
                     var onGeneratedScriptDesignAdded = function (design) {
