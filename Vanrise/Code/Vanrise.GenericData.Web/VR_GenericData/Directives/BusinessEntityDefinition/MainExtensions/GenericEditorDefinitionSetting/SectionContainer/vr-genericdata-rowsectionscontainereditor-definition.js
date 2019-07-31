@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsService", "VRUIUtilsService", "VRLocalizationService", "VR_GenericData_GenericBEDefinitionService",
-    function (UtilsService, VRUIUtilsService, VRLocalizationService, VR_GenericData_GenericBEDefinitionService) {
+app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsService", "VRUIUtilsService", "VRLocalizationService", "VR_GenericData_GenericBEDefinitionService", "VRNotificationService",
+    function (UtilsService, VRUIUtilsService, VRLocalizationService, VR_GenericData_GenericBEDefinitionService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -28,6 +28,10 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
                 $scope.scopeModel.showAddButton = true;
+
+                function onBeforeRemoveSection() {
+                    return VRNotificationService.showDeleteConfirmation();
+                }
 
                 $scope.scopeModel.dragsettings = {
                     handle: '.handeldrag'
@@ -91,7 +95,8 @@ app.directive("vrGenericdataRowsectionscontainereditorDefinition", ["UtilsServic
                 $scope.scopeModel.sectionSettings = {
                     sortable: true,
                     headerEditable: true,
-                    oneditclicked: $scope.scopeModel.editSectionContainer
+                    oneditclicked: $scope.scopeModel.editSectionContainer,
+                    onbeforeremoveaction: onBeforeRemoveSection,
                 };
 
                 defineAPI();
