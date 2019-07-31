@@ -128,6 +128,10 @@
       <Project>{30df9a71-05b6-4199-ae6b-68db57864909}</Project>
       <Name>Vanrise.DevTools.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DevTools.MainExtensions\Vanrise.DevTools.MainExtensions.csproj">
+      <Project>{a6361bd6-bdb9-4a21-beaf-f429d41c723f}</Project>
+      <Name>Vanrise.DevTools.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{CFECFD8A-51F6-4020-9F80-FB334684FA3D}</Project>
       <Name>Vanrise.Entities</Name>
