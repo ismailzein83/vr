@@ -50,7 +50,8 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 	            ctrl.getChildContext = function () {
 	                var childContext = {};
 
-	                if (context != undefined) {
+                    if (context != undefined) {
+                        childContext.inEditor = context.inEditor;  //AS : Added for hide errors if inEditor
 	                    childContext.vrWorkflowId = context.vrWorkflowId;
 	                    childContext.getWorkflowArguments = context.getWorkflowArguments;
 	                    childContext.addToList = context.addToList;
@@ -123,7 +124,7 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 	                        var trueWorkflowContainerPayload = {
 	                            vRWorkflowActivity: trueActivity,
 	                            getChildContext: ctrl.getChildContext
-	                        };
+                            };
 	                        VRUIUtilsService.callDirectiveLoad(trueWorkflowContainerAPI, trueWorkflowContainerPayload, trueWorkflowContainerLoadDeferred);
 	                    });
 
