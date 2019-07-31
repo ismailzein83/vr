@@ -9,7 +9,7 @@
         var isEditMode;
         var departmentId;
         var branchEntity;
-        var index;
+        var departmentEntity;
 
         var departmentSettingsAPI;
         var departmentSettingsGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -34,9 +34,9 @@
 
             $scope.scopeModel.saveDepartment = function () {
                 if (isEditMode)
-                    EditDepartment();
+                    editDepartment();
                 else
-                    AddDepartment();
+                    addDepartment();
             };
 
             $scope.scopeModel.onDepartmentSettingsDirectiveReady = function (api) {
@@ -55,7 +55,7 @@
             loadAllControls();
         };
 
-        function AddDepartment() {
+        function addDepartment() {
             var departmentObject = buildDepartmentObjectFromScope();
             departmentObject.DepartmentId = UtilsService.guid();
 
@@ -65,7 +65,7 @@
             $scope.modalContext.closeModal();
         }
 
-        function EditDepartment() {
+        function editDepartment() {
             var departmentObject = buildDepartmentObjectFromScope();
 
             if ($scope.onDepartmentUpdated != undefined) {
@@ -76,12 +76,17 @@
         }
 
         function loadAllControls() {
+            if (isEditMode && branchEntity != undefined && branchEntity.Settings != undefined && branchEntity.Settings.Departments != undefined) {
+                var index = branchEntity.Settings.Departments.findIndex(department => department.DepartmentId === departmentId);
+                if (index != -1) {
+                    departmentEntity = branchEntity.Settings.Departments[index];
+                }
+            }
 
             function setTitle() {
 
-                if (isEditMode && branchEntity != undefined) {
-                    index = branchEntity.Settings.Departments.findIndex(department => department.DepartmentId === departmentId);
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(branchEntity.Settings.Departments[index].Name, "Department");
+                if (isEditMode && departmentEntity != undefined) {
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(departmentEntity.Name, "Department");
                 }
                 else {
                     $scope.title = UtilsService.buildTitleForAddEditor("Department");
@@ -89,10 +94,10 @@
             };
 
             function loadStaticData() {
-                if (isEditMode && branchEntity != undefined) {
+                if (isEditMode && departmentEntity != undefined) {
 
-                    $scope.scopeModel.name = branchEntity.Settings.Departments[index].Name;
-                    $scope.scopeModel.floorNumber = branchEntity.Settings.Departments[index].FloorNumber;
+                    $scope.scopeModel.name = departmentEntity.Name;
+                    $scope.scopeModel.floorNumber = departmentEntity.FloorNumber;
                 }
             };
 
@@ -100,10 +105,11 @@
                 var departmentSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 departmentSettingsGridReadyDeferred.promise.then(function () {
-                    var departmentSettingsPayload = {};
+                    var departmentSettingsPayload;
 
-                    if (branchEntity != undefined && index != -1) // -1: adding a new department
-                        departmentSettingsPayload.branchDepartmentSettingsEntity = (branchEntity.Settings.Departments[index].Settings != undefined) ? branchEntity.Settings.Departments[index].Settings : branchEntity.Settings;
+                    if (departmentEntity != undefined && departmentEntity.Settings != undefined) {
+                        departmentSettingsPayload = { branchDepartmentSettingsEntity: departmentEntity.Settings };
+                    }
 
                     VRUIUtilsService.callDirectiveLoad(departmentSettingsAPI, departmentSettingsPayload, departmentSettingsDirectiveLoadDeferred);
                 });
@@ -121,7 +127,7 @@
         function buildDepartmentObjectFromScope() {
             var object = {
                 $type: "Demo.Module.Entities.Department, Demo.Module.Entities",
-                DepartmentId: (branchEntity != undefined) ? branchEntity.Settings.Departments[index].DepartmentId : undefined,
+                DepartmentId: (departmentEntity != undefined) ? departmentEntity.DepartmentId : undefined,
                 Name: $scope.scopeModel.name,
                 FloorNumber: $scope.scopeModel.floorNumber,
                 Settings: departmentSettingsAPI.getData()
