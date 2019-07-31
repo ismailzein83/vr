@@ -2,41 +2,64 @@
 
 app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function (UtilsService, MultiTranscludeService) {
 
-	var directiveDefinitionObject = {
-		restrict: 'E',
-		scope: {
-			menuactions: "=",
-			onRemove: "=",
-			header: "=",
-			warning: "=",
-			dataitem: "=",
-		    settings:"="
-		},
-		transclude: true,
-		controller: function ($scope, $element, $attrs) {
-			var ctrl = this;
-			$scope.classlevel = "1";
-			$scope.dragable = $attrs.dragable != undefined;
-			$scope.collapsible = $attrs.collapsible != undefined;
-			if ($attrs.level != undefined && $attrs.level == "2")
-				$scope.classlevel = " panel-vr-child ";
-			$scope.sectionId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
-			$scope.expandname = 'expanded_' + $scope.sectionId;
-			if (ctrl.settings != undefined) {
-			    ctrl.oneditclicked = ctrl.settings.oneditclicked != undefined ? ctrl.settings.oneditclicked : undefined;
-			    ctrl.enablesortable = ctrl.settings.sortable != undefined ? ctrl.settings.sortable : false;
-			    ctrl.headerEditable = ctrl.settings.headerEditable != undefined ? ctrl.settings.headerEditable : undefined;
-			}
+    var directiveDefinitionObject = {
+        restrict: 'E',
+        scope: {
+            menuactions: "=",
+            onRemove: "=",
+            header: "=",
+            warning: "=",
+            dataitem: "=",
+            settings: "="
+        },
+        transclude: true,
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            $scope.classlevel = "1";
+            $scope.dragable = $attrs.dragable != undefined;
+            $scope.collapsible = $attrs.collapsible != undefined;
+            if ($attrs.level != undefined && $attrs.level == "2")
+                $scope.classlevel = " panel-vr-child ";
+            $scope.sectionId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
+            $scope.expandname = 'expanded_' + $scope.sectionId;
+            if (ctrl.settings != undefined) {
+                ctrl.oneditclicked = ctrl.settings.oneditclicked != undefined ? ctrl.settings.oneditclicked : undefined;
+                ctrl.onbeforeremoveaction = ctrl.settings.onbeforeremoveaction != undefined ? ctrl.settings.onbeforeremoveaction : undefined;
+                ctrl.enablesortable = ctrl.settings.sortable != undefined ? ctrl.settings.sortable : false;
+                ctrl.headerEditable = ctrl.settings.headerEditable != undefined ? ctrl.settings.headerEditable : undefined;
+            }
 
-		},
-		controllerAs: 'sectionCtrl',
-		bindToController: true,
-		template: function (attrs) {
-			var focusClass = "";
-			if (attrs.focusonclick != undefined) {
-				focusClass = "vr-clickable-panel";
-			}
-			var htmlTempalte = '<div class="panel-primary panel-vr ' + focusClass + '"  ng-class="classlevel" >'
+            ctrl.onRemoveClicked = function (dataitem) {
+                if (ctrl.onbeforeremoveaction != undefined && typeof (ctrl.onbeforeremoveaction) == 'function') {
+                    var onBeforeDeleteSectionClickedPromise = ctrl.onbeforeremoveaction(dataitem);
+                    if (onBeforeDeleteSectionClickedPromise != undefined && onBeforeDeleteSectionClickedPromise.then != undefined) {
+                        onBeforeDeleteSectionClickedPromise.then(function (response) {
+                            if (response)
+                                ctrl.onRemove(dataitem);
+                            else
+                                return;
+                        }).catch(function () {
+                            return;
+                        });
+                    }
+                    else {
+                        ctrl.onRemove(dataitem);
+                    }
+                }
+                else {
+                    ctrl.onRemove(dataitem);
+                }
+            };
+
+        },
+        controllerAs: 'sectionCtrl',
+        bindToController: true,
+        template: function (attrs) {
+            var focusClass = "";
+            if (attrs.focusonclick != undefined) {
+                focusClass = "vr-clickable-panel";
+            }
+            var htmlTempalte = '<div class="panel-primary panel-vr ' + focusClass + '"  ng-class="classlevel" >'
 				    + '<div class="panel-heading" ng-init="expandname=true" expanded="{{expandname}}" id="{{sectionId}}" ng-click="$root.addFocusPanelClass($event)">'
 				        + '<span style="padding:0px 2px;" class="glyphicon glyphicon-th-list handeldrag hand-cursor drag-icon" ng-show="dragable || sectionCtrl.enablesortable" ></span>'
                         + '<span style="padding:0px 2px;" class="hand-cursor collapsible-icon glyphicon " ng-show="collapsible" ng-click=" expandname =!expandname " ng-class=" expandname ?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span>'
@@ -46,7 +69,7 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
                         + '<span class="section-menu"  style="position: absolute; right: 9px;top:-1px;" ng-if="sectionCtrl.menuactions.length > 0" > <vr-button type="SectionAction" menuactions="sectionCtrl.menuactions" isasynchronous="true" ></vr-button></span> '
                         + '<span class="warning-icon {{sectionCtrl.menuactions.length > 0 ? \'share-space\' : \'\'}}"  style="position: absolute;top:4px;" ng-style="{\'right\': sectionCtrl.menuactions.length > 0 ? \'80px\' : \'20px\'}" ng-if="sectionCtrl.warning != undefined && sectionCtrl.warning!=\'\'" > <vr-warning  value="{{sectionCtrl.warning}}"></vr-warning></span>'
                         + '<i ng-if="sectionCtrl.oneditclicked != undefined"  class="glyphicon glyphicon-pencil edit hand-cursor {{sectionCtrl.onRemove ? \'share-space\' : \'\' }}" ng-click="sectionCtrl.oneditclicked(sectionCtrl.dataitem)"></i>'
-				        + '<span class="hand-cursor glyphicon glyphicon-remove remove {{ sectionCtrl.oneditclicked ? \'share-space\' : \'\' }}"  ng-if="sectionCtrl.onRemove != undefined" ng-click="sectionCtrl.onRemove(sectionCtrl.dataitem)" ></span>'
+				        + '<span class="hand-cursor glyphicon glyphicon-remove remove {{ sectionCtrl.oneditclicked ? \'share-space\' : \'\' }}"  ng-if="sectionCtrl.onRemove != undefined" ng-click="sectionCtrl.onRemoveClicked(sectionCtrl.dataitem)" ></span>'
                         + ' </div>'
                     + ' <vr-validation-group validationcontext="sectionCtrl.validationContext">'
                         + ' <vr-textbox value="sectionCtrl.header"  ng-if="sectionCtrl.headerEditable" ng-show="false" isrequired="true"></vr-textbox>'
@@ -54,10 +77,10 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
                     + ' </vr-validation-group>'
                 + ' </div>';
 
-			return htmlTempalte;
-		}
-	};
+            return htmlTempalte;
+        }
+    };
 
-	return directiveDefinitionObject;
+    return directiveDefinitionObject;
 
 }]);
