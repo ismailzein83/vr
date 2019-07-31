@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +67,11 @@
     <Compile Include="INewSupplierZonesServicesDataManager.cs" />
     <Compile Include="INewSupplierRateDataManager.cs" />
     <Compile Include="INewSupplierZoneDataManager.cs" />
+    <Compile Include="ISupplierCodeDataManager.cs" />
+    <Compile Include="ISupplierRateDataManager.cs" />
+    <Compile Include="ISupplierZoneServiceDataManager.cs" />
+    <Compile Include="ISupplierZone_NewDataManager.cs" />
+    <Compile Include="ISupplierZoneDataManager.cs" />
     <Compile Include="IReceivedPricelistManager.cs" />
     <Compile Include="ISupplierPricelistPreviewSummaryDataManager.cs" />
     <Compile Include="ISupplierZoneServicePreviewDataManager.cs" />
