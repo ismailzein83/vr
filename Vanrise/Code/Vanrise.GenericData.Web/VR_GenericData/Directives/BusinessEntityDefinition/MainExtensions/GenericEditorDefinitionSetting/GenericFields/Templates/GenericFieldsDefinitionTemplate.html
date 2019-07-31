@@ -12,9 +12,14 @@
                                                       hide-select-all="true"></vr-genericdata-datarecordtypefields-selector>
     </vr-columns>
 </vr-row>
-<vr-row>
-    <span ng-repeat="field in scopeModel.fields" vr-loader="field.isFieldTypeGenericDesignEditorLoading">
-        <vr-genericdata-fieldtype-genericdesigneditor on-ready="field.onFieldTypeGenericDesignEditorReady"></vr-genericdata-fieldtype-genericdesigneditor>
-    </span>
+<vr-row  >
+    <div ng-sortable="scopeModel.sortableSettings">
+        <div  ng-repeat="field in scopeModel.fields" >
+            <span vr-loader="field.isFieldTypeGenericDesignEditorLoading">
+                <vr-genericdata-fieldtype-genericdesigneditor on-ready="field.onFieldTypeGenericDesignEditorReady"></vr-genericdata-fieldtype-genericdesigneditor>
+            </span>
+        </div>
+    </div>
+   
 </vr-row>
 

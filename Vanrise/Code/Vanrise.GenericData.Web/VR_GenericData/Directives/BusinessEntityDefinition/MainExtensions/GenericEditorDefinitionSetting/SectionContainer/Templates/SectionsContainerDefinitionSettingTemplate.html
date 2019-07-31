@@ -1,7 +1,7 @@
 ﻿<vr-validator tobottom validate="scopeModel.isValid()">
-    <vr-row>
+    <div>
         <div ng-sortable="scopeModel.dragsettings">
-            <vr-columns colnum="{{section.entity.ColNum}}" ng-repeat="section in ctrl.datasource">
+            <vr-columns colnum="{{section.entity.ColNum}}" ng-repeat="section in ctrl.datasource" haschildcolumns>
                 <vr-section-v2 header="section.entity.SectionTitle" dataitem="section" settings="scopeModel.sectionSettings" on-remove="scopeModel.removeSectionContainer">
                     <vr-row>
                         <span ng-if="scopeModel.isLocalizationEnabled" vr-loader="section.isTextResourceSelectorLoading">
@@ -16,7 +16,7 @@
                 </vr-section-v2>
             </vr-columns>
         </div>
-        <vr-columns colnum="6" ng-show="scopeModel.showAddButton">
+        <vr-columns colnum="6" ng-show="scopeModel.showAddButton" haschildcolumns>
             <div style="margin-top: 8px;">
                 <div class="vr-additem-box-vertical">
                     <span class="glyphicon glyphicon-plus" ng-click="scopeModel.addSectionContainer()" style="position: absolute;color: #5cb85c;font-size: 36px;top: 25%;width: 100%;text-align: center;cursor: pointer;color: #5cb85c;"></span>
@@ -24,5 +24,5 @@
                 </div>
             </div>
         </vr-columns>
-    </vr-row>
+    </div>
 </vr-validator>
