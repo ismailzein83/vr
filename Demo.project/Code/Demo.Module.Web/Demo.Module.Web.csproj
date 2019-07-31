@@ -231,7 +231,7 @@
     <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-districtsettings.js" />
     <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-search.js" />
     <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-grid.js" />
-    <Content Include="Demo_Module\Elements\City\Views\FactoryEditorController.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\FactoryEditorController.js" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\City\demo-module-city-citytype-big.js" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\City\demo-module-city-citytype-small.js" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\City\Templates\BigCityTemplate.html" />
@@ -244,7 +244,7 @@
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\District\demo-module-city-districtsettings-touristic.js" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\Templates\CarFactoryTemplate.html" />
     <Content Include="Demo_Module\Elements\City\Directives\Templates\DistrictGridTemplate.html" />
-    <Content Include="Demo_Module\Elements\City\Views\FactoryEditor.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\Templates\FactoryEditor.html" />
     <Content Include="Demo_Module\Elements\City\Directives\Templates\FactoryManagementTemplate.html" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\Templates\MilitaryFactoryTemplate.html" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\District\Templates\TouristicDistrictTemplate.html" />

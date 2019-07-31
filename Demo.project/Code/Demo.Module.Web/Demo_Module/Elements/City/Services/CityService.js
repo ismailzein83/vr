@@ -39,7 +39,7 @@ app.service("Demo_Module_CityService", ['VRModalService', 'VRNotificationService
 			settings.onScopeReady = function (modalScope) {
 				modalScope.onFactoryAdded = onFactoryAdded;
 			};
-			VRModalService.showModal('/Client/Modules/Demo_Module/Elements/City/Views/FactoryEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Elements/City/Directives/MainExtensions/Factory/Templates/FactoryEditor.html', parameters, settings);
 		};
 
 		function editFactory(onFactoryUpdated, factoryItem) {
@@ -52,7 +52,7 @@ app.service("Demo_Module_CityService", ['VRModalService', 'VRNotificationService
 			settings.onScopeReady = function (modalScope) {
 				modalScope.onFactoryUpdated = onFactoryUpdated;
 			};
-			VRModalService.showModal('/Client/Modules/Demo_Module/Elements/City/Views/FactoryEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Elements/City/Directives/MainExtensions/Factory/Templates/FactoryEditor.html', parameters, settings);
 		};
 
 		return {
