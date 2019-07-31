@@ -21,6 +21,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public FieldNumberDataType DataType { get; set; }
 
         public bool IsNullable { get; set; }
+
+        public object MinValue { get; set; } //AS: Added For Validation
+
+        public object MaxValue { get; set; } //AS: Added For Validation
+
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
             RDBDataRecordFieldAttribute rDBDataRecordFieldAttribute = new RDBDataRecordFieldAttribute();
@@ -47,6 +52,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return GetNonNullableRuntimeType() == fieldType.GetNonNullableRuntimeType();
         }
+
         public override string GenerateValueCode(object value)
         {
             if (value == null)
