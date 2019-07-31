@@ -18,6 +18,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 ctrl.datasource = ctrl.settings.datasource != undefined ? ctrl.settings.datasource : undefined;
                 ctrl.oneditclicked = ctrl.settings.oneditclicked != undefined ? ctrl.settings.oneditclicked : undefined;
                 ctrl.onaddclicked = ctrl.settings.onaddclicked != undefined ? ctrl.settings.onaddclicked : undefined;
+                ctrl.onbeforeremoveaction = ctrl.settings.onbeforeremoveaction != undefined ? ctrl.settings.onbeforeremoveaction : undefined;
                 ctrl.sortable = ctrl.settings.sortable != undefined ? ctrl.settings.sortable : false;
                 ctrl.datatitlefield = ctrl.settings.datatitlefield != undefined ? ctrl.settings.datatitlefield : undefined;
             }
@@ -124,6 +125,28 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
             };
 
             ctrl.removeTab = function (tab) {
+                if (ctrl.onbeforeremoveaction != undefined && typeof (ctrl.onbeforeremoveaction) == 'function') {
+                    var onBeforeDeleteTabClickedPromise = ctrl.onbeforeremoveaction(tab);
+                    if (onBeforeDeleteTabClickedPromise != undefined && onBeforeDeleteTabClickedPromise.then != undefined) {
+                        onBeforeDeleteTabClickedPromise.then(function (response) {
+                            if (response)
+                                removeTab(tab);
+                            else
+                                return;
+                        }).catch(function () {
+                            return;
+                        });
+                    }
+                    else {
+                         removeTab(tab);
+                    }
+                }
+                else {
+                    removeTab(tab);
+                }
+            };
+
+            function removeTab(tab) {
                 var index = ctrl.tabs.indexOf(tab);
                 ctrl.tabs.splice(index, 1);
                 if (typeof (tab.onremove) === 'function') {
@@ -194,8 +217,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                         }
                     }
                 }
-
-            };
+            }
             ctrl.removeTabAndHeader = function (tab) {
                 if (tab != undefined && !tab.removed) {
                     var index = ctrl.tabs.indexOf(tab);
@@ -245,7 +267,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                         for (var i = 0; i < ctrl.tabs.length; i++) {
                             ctrl.tabs[i].isSelected = false;
                         }
-                        tab.isSelected = true;                       
+                        tab.isSelected = true;
                         if (index > ctrl.tabsCountLimit - 1) {
                             ctrl.tabsCountStart = index - (ctrl.pageSize - 1);
                             ctrl.tabsCountLimit = index + 1;
