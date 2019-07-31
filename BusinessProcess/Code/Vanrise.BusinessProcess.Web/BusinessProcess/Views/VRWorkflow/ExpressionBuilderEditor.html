@@ -1,42 +1,60 @@
 <div vr-modalcontent ng-controller="BusinessProcess_VRWorkflow_ExpressionBuilderController" vr-loader="isLoading" width="'100%'">
-	<vr-modalbody>
-		<vr-form>
-			<vr-row>
-				<vr-tabs>
-					<vr-tab header="'Arguments'" ng-if="scopeModel.arguments!= undefined && scopeModel.arguments.length>0">
-						<vr-columns haschildcolumns width="fullrow">
-							<vr-datalist scrollable datasource="scopeModel.arguments" onitemclicked="scopeModel.insertText" maxitemsperrow="6" ng-show="scopeModel.arguments.length>0">
-								<span title="{{dataItem.Name}}">
-									{{dataItem.Name}}
-								</span>
-							</vr-datalist>
-						</vr-columns>
-					</vr-tab>
-					<vr-tab header="'Variables'" ng-if="scopeModel.variables!= undefined && scopeModel.variables.length>0">
-						<vr-columns haschildcolumns width="fullrow">
-							<vr-datalist scrollable datasource="scopeModel.variables" onitemclicked="scopeModel.insertText" maxitemsperrow="6" ng-show="scopeModel.variables.length>0">
-								<span title="{{dataItem.Name}}">
-									{{dataItem.Name}}
-								</span>
-							</vr-datalist>
-						</vr-columns>
-					</vr-tab>
-				</vr-tabs>
-			</vr-row>
-			<vr-row>
-				<vr-columns width="fullrow">
-					<vr-textarea on-ready="scopeModel.onTextAreaReady" trim="false" label="Expression" value="scopeModel.expressionValue" rows="35" isrequired></vr-textarea>
-				</vr-columns>
-			</vr-row>
-		</vr-form>
-	</vr-modalbody>
-	<div>
-		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-			<div transclude-to="buttons">
-				<vr-button type="Save" validationcontext="expressionBuilderEditorGroup" data-onclick="scopeModel.saveExpressionValue"></vr-button>
-				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-			</div>
-		</vr-actionbar>
+    <vr-modalbody>
+        <vr-form>
+            <vr-row>
+                <vr-columns colnum="{{(scopeModel.arguments!= undefined && scopeModel.arguments.length>0)||(scopeModel.variables!= undefined && scopeModel.variables.length>0)?'9':'12'}}">
+                    <vr-row>
+                        <vr-columns haschildcolumns colnum="12">
+                            <vr-textarea on-ready="scopeModel.onTextAreaReady" trim="false" label="Expression" value="scopeModel.expressionValue" height="600" isrequired></vr-textarea>
+                        </vr-columns>
+                    </vr-row>
+                </vr-columns>
 
-	</div>
+                <vr-columns haschildcolumns colnum="3" ng-if="(scopeModel.arguments!= undefined && scopeModel.arguments.length>0)||(scopeModel.variables!= undefined && scopeModel.variables.length>0)">
+                    <vr-row>
+                        <vr-columns colnum="8">
+                            <vr-textbox label="Name" onvaluechanged="scopeModel.filterValueChanged"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-tabs>
+                        <vr-tab header="'Arguments'" ng-if="scopeModel.arguments!= undefined && scopeModel.arguments.length>0">
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-scrollable-container maxheight="519">
+                                        <vr-datalist datasource="scopeModel.arguments" onitemclicked="scopeModel.insertText" maxitemsperrow="1" ng-show="scopeModel.arguments.length>0">
+                                            <span title="{{dataItem.Name}}">
+                                                {{dataItem.Name}}
+                                            </span>
+                                        </vr-datalist>
+                                    </vr-scrollable-container>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                        <vr-tab header="'Variables'" ng-if="scopeModel.variables!= undefined && scopeModel.variables.length>0">
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-scrollable-container maxheight="519">
+                                        <vr-datalist datasource="scopeModel.variables" onitemclicked="scopeModel.insertText" maxitemsperrow="1" ng-show="scopeModel.variables.length>0">
+                                            <span title="{{dataItem.Name}}">
+                                                {{dataItem.Name}}
+                                            </span>
+                                        </vr-datalist>
+                                    </vr-scrollable-container>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                    </vr-tabs>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="expressionBuilderEditorGroup" data-onclick="scopeModel.saveExpressionValue"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
 </div>

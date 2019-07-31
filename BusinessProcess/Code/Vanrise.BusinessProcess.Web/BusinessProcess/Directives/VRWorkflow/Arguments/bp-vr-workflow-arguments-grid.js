@@ -73,7 +73,24 @@ app.directive('businessprocessVrWorkflowArgumentsGrid', ['BusinessProcess_VRWork
 					eraseVariableName(dataItem.Entity.Name);
 				};
 
-				defineMenuActions();
+                $scope.scopeModel.editVRWorkflowArgument = function (argumentObj) {
+                    var onArgumentUpdated = function (updatedArgument) {
+                        extendVRWorkflowArgument(updatedArgument);
+                        getVRWorkflowArgumentTypeDescription(updatedArgument).then(function () {
+                            eraseVariableName(argumentObj.Entity.Name);
+                            reserveVariableName(updatedArgument.Name);
+                            var index = $scope.scopeModel.datasource.indexOf(argumentObj);
+                            $scope.scopeModel.datasource[index] = { Entity: updatedArgument };
+                        });
+                    };
+
+                    var vrWorkflowArgumentNames = [];
+                    angular.forEach($scope.scopeModel.datasource, function (val) {
+                        vrWorkflowArgumentNames.push(val.Entity.Name);
+                    });
+                    BusinessProcess_VRWorkflowService.editVRWorkflowArgument(argumentObj.Entity, vrWorkflowArgumentNames, onArgumentUpdated, isVariableNameReserved);
+                };
+
 				defineAPI();
 			}
 
@@ -123,35 +140,6 @@ app.directive('businessprocessVrWorkflowArgumentsGrid', ['BusinessProcess_VRWork
 
 				if (ctrl.onReady != null)
 					ctrl.onReady(api);
-			}
-
-			function defineMenuActions() {
-				var defaultMenuActions = [{
-					name: "Edit",
-					clicked: editVRWorkflowArgument
-				}];
-
-				$scope.scopeModel.gridMenuActions = function (dataItem) {
-					return defaultMenuActions;
-				};
-			}
-
-			function editVRWorkflowArgument(argumentObj) {
-				var onArgumentUpdated = function (updatedArgument) {
-					extendVRWorkflowArgument(updatedArgument);
-					getVRWorkflowArgumentTypeDescription(updatedArgument).then(function () {
-						eraseVariableName(argumentObj.Entity.Name);
-						reserveVariableName(updatedArgument.Name);
-						var index = $scope.scopeModel.datasource.indexOf(argumentObj);
-						$scope.scopeModel.datasource[index] = { Entity: updatedArgument };
-					});
-				};
-
-				var vrWorkflowArgumentNames = [];
-				angular.forEach($scope.scopeModel.datasource, function (val) {
-					vrWorkflowArgumentNames.push(val.Entity.Name);
-				});
-				BusinessProcess_VRWorkflowService.editVRWorkflowArgument(argumentObj.Entity, vrWorkflowArgumentNames, onArgumentUpdated, isVariableNameReserved);
 			}
 
 			function extendVRWorkflowArgument(vrWorkflowArgument) {

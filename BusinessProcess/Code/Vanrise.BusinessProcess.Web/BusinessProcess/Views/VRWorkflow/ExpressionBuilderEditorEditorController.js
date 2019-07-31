@@ -1,10 +1,10 @@
 ﻿(function (appControllers) {
 
-	"use strict";
+    "use strict";
 
-	ExpressionBuilderEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    ExpressionBuilderEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-	function ExpressionBuilderEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function ExpressionBuilderEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var textAreaAPI;
         var expression;
@@ -12,18 +12,25 @@
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		loadParameters();
-		defineScope();
-		load();
+        loadParameters();
+        defineScope();
+        load();
 
-		function loadParameters() {
-			$scope.scopeModel = {};
+        function loadParameters() {
+            $scope.scopeModel = {};
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null && parameters.params != undefined) {
                 var params = parameters.params;
                 expression = params.expression;
+
                 $scope.scopeModel.arguments = params.arguments;
+                if ($scope.scopeModel.arguments != undefined && $scope.scopeModel.arguments.length > 0) {
+                    $scope.scopeModel.arguments.sort(sortByName);
+                }
                 $scope.scopeModel.variables = params.variables;
+                if ($scope.scopeModel.variables != undefined && $scope.scopeModel.variables.length > 0) {
+                    $scope.scopeModel.variables.sort(sortByName);
+                }
                 $scope.scopeModel.fieldType = params.fieldType;
             }
             if ($scope.scopeModel.fieldType) {
@@ -32,12 +39,12 @@
                 isEditMode = $scope.scopeModel.expressionValue != undefined;
 
             }
-		}
+        }
 
-		function defineScope() {
+        function defineScope() {
 
-			$scope.scopeModel.onTextAreaReady = function (api) {
-				textAreaAPI = api;
+            $scope.scopeModel.onTextAreaReady = function (api) {
+                textAreaAPI = api;
             };
 
             $scope.scopeModel.onFieldDirectiveReady = function (api) {
@@ -45,28 +52,56 @@
                 runtimeEditorReadyDeferred.resolve();
             };
 
-			$scope.scopeModel.saveValue = function () {
+            $scope.scopeModel.saveValue = function () {
                 saveValue();
                 $scope.modalContext.closeModal();
-			};
+            };
 
-			$scope.scopeModel.insertText = function (item) {
-				if (textAreaAPI != undefined) {
-					textAreaAPI.appendAtCursorPosition(item.Name);
-				}
-			};
+            $scope.scopeModel.insertText = function (item) {
+                if (textAreaAPI != undefined) {
+                    textAreaAPI.appendAtCursorPosition(item.Name);
+                }
+            };
 
-			$scope.scopeModel.close = function () {
-				$scope.modalContext.closeModal();
-			};
-		}
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal();
+            };
+
+            $scope.scopeModel.filterValueChanged = function (value) {
+
+                if (value == undefined || value.length == 0) {
+                    setHideItemsFalse($scope.scopeModel.variables);
+                    setHideItemsFalse($scope.scopeModel.arguments);
+                    return;
+                }
+
+                var filter = value.toLowerCase();
+
+                for (var i = 0; i < $scope.scopeModel.variables.length; i++) {
+                    var variable = $scope.scopeModel.variables[i].Name.toLowerCase();
+                    if (variable.indexOf(filter) == -1)
+                        $scope.scopeModel.variables[i].hideItem = true;
+                    else
+                        $scope.scopeModel.variables[i].hideItem = false;
+                }
+
+                for (var j = 0; j < $scope.scopeModel.arguments.length; j++) {
+                    var argument = $scope.scopeModel.arguments[j].Name.toLowerCase();
+                    if (argument.indexOf(filter) == -1)
+                        $scope.scopeModel.arguments[j].hideItem = true;
+                    else
+                        $scope.scopeModel.arguments[j].hideItem = false;
+                }
+            };
+
+        }
         function loadEditorRuntimeDirective() {
             var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
             runtimeEditorReadyDeferred.promise.then(function () {
                 var payload = {
                     fieldType: $scope.scopeModel.fieldType,
                     fieldValue: expression != undefined ? expression.Value : undefined,
-                    fieldTitle:"Value"
+                    fieldTitle: "Value"
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, payload, runtimeEditorLoadDeferred);
             });
@@ -121,8 +156,29 @@
                 }
                 $scope.onSetValue();
             }
-		}
-	}
+        }
+
+        function setHideItemsFalse(objectsList) {
+
+            if (objectsList == undefined || objectsList.length == 0)
+                return;
+
+            for (var i = 0; i < objectsList.length; i++)
+                objectsList[i].hideItem = false;
+        }
+
+        function sortByName(a, b) {
+            var nameA = a.Name.toLowerCase();
+            var nameB = b.Name.toLowerCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        }
+    }
 
     appControllers.controller('BusinessProcess_VRWorkflow_ExpressionBuilderEditorController', ExpressionBuilderEditorController);
 })(appControllers);
