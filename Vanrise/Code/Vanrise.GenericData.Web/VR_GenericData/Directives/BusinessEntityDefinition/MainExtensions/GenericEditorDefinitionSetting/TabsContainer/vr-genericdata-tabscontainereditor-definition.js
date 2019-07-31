@@ -28,19 +28,8 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
 
             this.initializeController = initializeController;
             function initializeController() {
-                $scope.scopeModel = {};
-                ctrl.datasource = [];
 
-                $scope.scopeModel.dragsettings = {
-                    handle: '.handeldrag'
-                };
-
-                $scope.scopeModel.onTabsReady = function (api) {
-                    tabsAPI = api;
-                    defineAPI();
-                };
-
-                $scope.scopeModel.addTabContainer = function () {
+                function addTabContainer() {
                     var dataItem = {
                         ShowTab: true,
                         TabTitle: "Tab " + (indexTab++)
@@ -65,9 +54,9 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
 
                     var index = ctrl.datasource.indexOf(dataItem);
                     tabsAPI.setTabSelected(index);
-                };
+                }
 
-                $scope.scopeModel.openEditTab = function (item) {
+                function openEditTab (item) {
                     var currentItem = UtilsService.getItemByVal(ctrl.datasource, item.TabTitle, "TabTitle");
 
                     var payload = {
@@ -79,7 +68,25 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                         currentItem.ShowTab = tabItem.ShowTab;
                     };
                     VR_GenericData_GenericBEDefinitionService.openGenericBETabContainerEditor(onTabSettingsChanged, payload, getContext());
+                }
+
+                function onBeforeRemoveTab() {
+                    return VRNotificationService.showDeleteConfirmation();
+                }
+
+                $scope.scopeModel = {};
+                ctrl.datasource = [];
+
+                $scope.scopeModel.dragsettings = {
+                    handle: '.handeldrag'
                 };
+
+                $scope.scopeModel.onTabsReady = function (api) {
+                    tabsAPI = api;
+                    defineAPI();
+                };
+
+          
 
                 $scope.scopeModel.onRemoveTab = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
@@ -90,7 +97,9 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                     datasource: ctrl.datasource,
                     datatitlefield: "TabTitle",
                     sortable: true,
-                    oneditclicked: $scope.scopeModel.openEditTab,
+                    oneditclicked: openEditTab,
+                    onaddclicked: addTabContainer,
+                    onbeforeremoveaction: onBeforeRemoveTab,
                     pagesize: 5
                 };
 
