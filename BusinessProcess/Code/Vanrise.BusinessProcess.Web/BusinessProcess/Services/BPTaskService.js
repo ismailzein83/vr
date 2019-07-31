@@ -47,10 +47,20 @@
             return VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTask/BPTaskAssignEditor.html', modalParameters, modalSettings);
         }
 
+        function getTaskIdFieldType() {
+            return {
+                $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType,Vanrise.GenericData.MainExtensions",
+                ConfigId: "75aef329-27bd-4108-b617-f5cc05ff2aa3",
+                RuntimeEditor: "vr-genericdata-fieldtype-number-runtimeeditor",
+                ViewerEditor: "vr-genericdata-fieldtype-number-viewereditor",
+                DataType: 2
+            }
+        }
         return ({
             getStatusColor: getStatusColor,
             openTask: openTask,
-            assignTask: assignTask
+            assignTask: assignTask,
+            getTaskIdFieldType: getTaskIdFieldType
         });
     }
     appControllers.service('BusinessProcess_BPTaskService', BusinessProcess_BPTaskService);
