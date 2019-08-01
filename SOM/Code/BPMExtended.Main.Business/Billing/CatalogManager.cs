@@ -591,8 +591,7 @@ namespace BPMExtended.Main.Business
 
                 return new SaleService()
                 {
-                    Id = serviceId,
-                    UpFront = false
+                    Id = serviceId
                 };              
             }
             return null;

@@ -35,7 +35,7 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = printStep; break;
                 case printStep: nextStepId = ReasonStep; break;
-                case ReasonStep: nextStepId = IsAdavatageous(id)?attachmentStep : paymentStep; break;
+                case ReasonStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = TechnicalStep; break;
                 case TechnicalStep: nextStepId = completedStep; break;
@@ -43,28 +43,5 @@ namespace BPMExtended.Main.Business
             }
             return nextStepId;
         }
-          public bool IsAdavatageous(string id)
-          {
-              bool isAdavatageous = false;
-              if (id != "")
-              {
-                  //get request from bpm
-                  Guid idd = new Guid(id.ToUpper());
-                  var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineTermination");
-                  esq.AddColumn("Id");
-                  esq.AddColumn("StAdvantageous");
-                  // Creation of the first filter instance.
-                  var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
-                  // Adding created filters to query collection. 
-                  esq.Filters.Add(esqFirstFilter);
-                  // Objects, i.e. query results, filtered by two filters, will be included into this collection.
-                  var entities = esq.GetEntityCollection(BPM_UserConnection);
-                  if (entities.Count > 0)
-                  {
-                      return (bool)entities[0].GetColumnValue("StAdvantageous");
-                  }
-              }
-              return isAdavatageous;
-          }
     }
 }

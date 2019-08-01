@@ -62,7 +62,9 @@ namespace BPMExtended.Main.Business
                 List <CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());
                 List<SaleService> vpnServices = new CatalogManager().GetVPNDivisionServices();
 
-                foreach(var item in vpnServices)
+                isVPNServiceFound = contractServices.Any(x => vpnServices.Any(y => y.Id == x.Id));
+
+              /*  foreach (var item in vpnServices)
                 {
                     foreach(var Service in contractServices)
                     {
@@ -73,13 +75,14 @@ namespace BPMExtended.Main.Business
                         }
                     }
                     if (isVPNServiceFound) break;
-                }
+                }*/
 
                 List<SaleService> feesServices= JsonConvert.DeserializeObject<List<SaleService>>(fees);
 
                 if (isVPNServiceFound)
                 {
                     SaleService vpnServiceFee = new CatalogManager().GetVPNServiceFee();
+                    vpnServiceFee.UpFront = false;
                     if (vpnServiceFee != null) feesServices.Add(vpnServiceFee);
                 }
 

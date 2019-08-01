@@ -424,5 +424,30 @@ namespace BPMExtended.Main.Business
             }
 
         }
+
+        public List<string> GetOperationsFromRequestHeader(string requestType, string statusId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFilter, esqFilter2;
+            List<string> requestIds = new List<string>();
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("Id");
+            esq.AddColumn("StRequestId");
+
+            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestType", requestType);
+            esqFilter2 = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus", statusId);
+
+            esq.Filters.Add(esqFilter);
+            esq.Filters.Add(esqFilter2);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            for (int i = 0; i < entities.Count; i++)
+            {
+                var id = entities[i].GetColumnValue("StRequestId");
+                requestIds.Add(id.ToString());
+            }
+            return requestIds;
+        }
     }
 }

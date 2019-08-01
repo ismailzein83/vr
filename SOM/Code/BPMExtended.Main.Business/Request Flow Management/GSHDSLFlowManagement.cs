@@ -38,7 +38,7 @@ namespace BPMExtended.Main.Business
         const string credentialsStep = "21FDEC10-505B-4A6A-BA7D-634B387BBDCF";
 
         const string printCredentialsStep = "B6A7D392-3F98-434E-98C1-C8FDE914186F";
-        const string attachmentStep = "30B4782C-18AA-494C-A1D3-F4DBD25A840B";
+        const string attachmentStep = "0DA92B1F-CB6C-4DB1-95E2-B40A36331315";
         const string waitingListStep = "ED5E126A-3336-47E6-9138-2788FF96B78A";
         const string reservePhoneNumberStep = "004A1891-960D-4D0B-9995-BE3DF680D2B8";
         const string technicalStep = "4A64F6DD-F60A-4D7D-ABB8-CC1AE8D501F6";
@@ -51,60 +51,26 @@ namespace BPMExtended.Main.Business
             string nextStepId = "";
             switch (currentStepId)
             {
-                case welcomeStep: nextStepId = decisionIdStep; break;
-                case decisionIdStep: nextStepId = printTemplateStep; break;
-                case printTemplateStep: nextStepId = nearByNumberStep; break;
-                case nearByNumberStep: nextStepId = freeTechnicalStep; break;
+                case welcomeStep: nextStepId = nearByNumberStep; break;
+                case nearByNumberStep: nextStepId = printTemplateStep; break;
+                case printTemplateStep: nextStepId = freeTechnicalStep; break;
                 //case freeTechnicalStep: nextStepId = canReserve(id)? addressStep : networkTeamStep; break;
                 case freeTechnicalStep:
-
-                    if (!isWaitingList && !isNetworkTeam) nextStepId = addressStep;
-                    else if (isWaitingList) nextStepId = waitingListStep;
-                    else nextStepId = networkTeamStep;
+                    if (isWaitingList) nextStepId = waitingListStep;
+                    else if (isNetworkTeam) nextStepId = technicalStep;
+                    else nextStepId = addressStep;
                     break;
-
-                case waitingListStep: nextStepId = freeTechnicalStep; break;
-                //case networkTeamStep: nextStepId = addressStep; break;
-                case reservePhoneNumberStep: nextStepId = addressStep; break;
-                case addressStep: nextStepId = servicesStep; break;
+                case waitingListStep: nextStepId = addressStep; break;
+                case addressStep: nextStepId = credentialsStep; break;
+                case credentialsStep: nextStepId = printCredentialsStep; break;
+                case printCredentialsStep: nextStepId = servicesStep; break;
                 case servicesStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = printContractStep; break;
-                case printContractStep: nextStepId = credentialsStep; break;
-                case credentialsStep: nextStepId = printCredentialsStep; break;
-                case printCredentialsStep: nextStepId = attachmentStep; break;
+                case printContractStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
-
             }
             return nextStepId;
         }
-
-        public bool canReserve(string id)
-        {
-            bool stCanReserve = false;
-
-            if (id != "")
-            {
-                Guid idd = new Guid(id.ToUpper());
-                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGSHDSL");
-                esq.AddColumn("Id");
-                esq.AddColumn("StNearbyNumber");
-                // Creation of the first filter instance.
-                var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
-                // Adding created filters to query collection. 
-                esq.Filters.Add(esqFirstFilter);
-                // Objects, i.e. query results, filtered by two filters, will be included into this collection.
-                var entities = esq.GetEntityCollection(BPM_UserConnection);
-                if (entities.Count > 0)
-                {
-                    var phoneNumber = entities[0].GetColumnValue("StNearbyNumber");
-                    stCanReserve = Boolean.Parse(new InventoryManager().GSHDSLGetTechnicalReservation(phoneNumber.ToString()).CanReserve);
-                }
-            }
-
-            return stCanReserve;
-
-        }
-
     }
 }
