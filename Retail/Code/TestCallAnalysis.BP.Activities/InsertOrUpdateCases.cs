@@ -10,9 +10,16 @@ using Vanrise.Queueing;
 namespace TestCallAnalysis.BP.Activities
 {
     #region Arguments
+
+    public class CDRCasesInsertedOrUpdatedOutput
+    {
+        public Dictionary<long,string> CasesInsertedOrUpdated { get; set; }
+    }
     public class InsertOrUpdateCaseCDRsInput
     {
         public MemoryQueue<PrepareCDRCasesOutput> InputQueue { get; set; }
+        public MemoryQueue<CDRCasesInsertedOrUpdatedOutput> OutputQueue { get; set; }
+
     }
     #endregion
 
@@ -20,11 +27,15 @@ namespace TestCallAnalysis.BP.Activities
     {
         [RequiredArgument]
         public InOutArgument<MemoryQueue<PrepareCDRCasesOutput>> InputQueueToInsertOrUpdate { get; set; }
+        [RequiredArgument]
+        public InOutArgument<MemoryQueue<CDRCasesInsertedOrUpdatedOutput>> OutputQueueToInsertOrUpdate { get; set; }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.InputQueueToInsertOrUpdate.Get(context) == null)
                 this.InputQueueToInsertOrUpdate.Set(context, new MemoryQueue<PrepareCDRCasesOutput>());
+            if (this.OutputQueueToInsertOrUpdate.Get(context) == null)
+                this.OutputQueueToInsertOrUpdate.Set(context, new MemoryQueue<CDRCasesInsertedOrUpdatedOutput>());
             base.OnBeforeExecute(context, handle);
         }
 
@@ -33,6 +44,7 @@ namespace TestCallAnalysis.BP.Activities
             return new InsertOrUpdateCaseCDRsInput()
             {
                 InputQueue = this.InputQueueToInsertOrUpdate.Get(context),
+                OutputQueue = this.OutputQueueToInsertOrUpdate.Get(context),
             };
         }
 
@@ -66,6 +78,28 @@ namespace TestCallAnalysis.BP.Activities
                                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Update case CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1} (s)",
                                     casesToInsertOrUpdate.CasesToUpdate.Count, elapsedTimeToUpdate.ToString());
                             }
+
+                            if(casesToInsertOrUpdate != null)
+                            {
+                                if(casesToInsertOrUpdate.CasesToInsert != null)
+                                {
+                                    CDRCasesInsertedOrUpdatedOutput cdrCasesInsertedOrUpdatedOutput = new CDRCasesInsertedOrUpdatedOutput
+                                    {
+                                        CasesInsertedOrUpdated = new Dictionary<long, string>()
+                                    };
+                                    foreach (var caseToInsert in casesToInsertOrUpdate.CasesToInsert)
+                                    {
+                                        cdrCasesInsertedOrUpdatedOutput.CasesInsertedOrUpdated.Add(caseToInsert.CaseId, caseToInsert.CallingNumber);
+                                    }
+                                    foreach (var caseToUpdate in casesToInsertOrUpdate.CasesToUpdate)
+                                    {
+                                        cdrCasesInsertedOrUpdatedOutput.CasesInsertedOrUpdated.Add(caseToUpdate.CaseId, caseToUpdate.CallingNumber);
+
+                                    }
+                                    inputArgument.OutputQueue.Enqueue(cdrCasesInsertedOrUpdatedOutput);
+                                }
+                            }
+
                         });
                     }
                     else

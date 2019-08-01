@@ -12,6 +12,8 @@ namespace TestCallAnalysis.BP.Activities
     public class UpdateCorrelatedCDRsInput
     {
         public MemoryQueue<CDRCorrelationBatch> InsertedCorrelatedCDRs { get; set; }
+        public MemoryQueue<CDRCasesInsertedOrUpdatedOutput> InsertedOrUpdatedCases { get; set; }
+
     }
     public class UpdateCorrelatedCDRsOutput
     {
@@ -22,12 +24,15 @@ namespace TestCallAnalysis.BP.Activities
     {
         [RequiredArgument]
         public InOutArgument<MemoryQueue<CDRCorrelationBatch>> InsertedCorrelatedCDRs { get; set; }
+        [RequiredArgument]
+        public InOutArgument<MemoryQueue<CDRCasesInsertedOrUpdatedOutput>> InsertedOrUpdatedCases { get; set; }
 
         protected override UpdateCorrelatedCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new UpdateCorrelatedCDRsInput
             {
                 InsertedCorrelatedCDRs = this.InsertedCorrelatedCDRs.Get(context),
+                InsertedOrUpdatedCases = this.InsertedOrUpdatedCases.Get(context),
             };
         }
 
@@ -44,18 +49,26 @@ namespace TestCallAnalysis.BP.Activities
                     if (inputArgument.InsertedCorrelatedCDRs != null && inputArgument.InsertedCorrelatedCDRs.Count > 0)
                     {
                         DateTime batchStartTime = DateTime.Now;
-                        var callingNumbersList = caseCDRManager.GetExistingCases();
-                        if (callingNumbersList != null && callingNumbersList.Count > 0)
+                      
+                        if (inputArgument.InsertedOrUpdatedCases != null && inputArgument.InsertedOrUpdatedCases.Count > 0)
                         {
                             hasItems = inputArgument.InsertedCorrelatedCDRs.TryDequeue((listOfUpdatedCorrolatedCDRs) =>
                             {
-                                if (listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert != null && listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert.Count > 0)
+                                inputArgument.InsertedOrUpdatedCases.TryDequeue((insertedOrUpdatedCases) =>
                                 {
-                                    var numberOfUpdatedCorrelation = correlatedCDRManager.UpdateCorrelatedCDRs(listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert, callingNumbersList);
-                                    double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-                                    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Update 'CaseId' field in CorrelatedCDRs Table is done. Events Count: {0}.  ElapsedTime: {1} (s)",
-                                       numberOfUpdatedCorrelation, elapsedTime.ToString());
-                                }
+                                    if(insertedOrUpdatedCases != null && insertedOrUpdatedCases.CasesInsertedOrUpdated != null && insertedOrUpdatedCases.CasesInsertedOrUpdated.Count > 0)
+                                    {
+                                        if (listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert != null && listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert.Count > 0)
+                                        {
+                                            var numberOfUpdatedCorrelation = correlatedCDRManager.UpdateCorrelatedCDRs(listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert, insertedOrUpdatedCases.CasesInsertedOrUpdated);
+                                            double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
+                                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Update 'CaseId' field in CorrelatedCDRs Table is done. Events Count: {0}.  ElapsedTime: {1} (s)",
+                                               numberOfUpdatedCorrelation, elapsedTime.ToString());
+                                        }
+                                    }
+                                });
+
+                               
                             });
                         }
                     }
