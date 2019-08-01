@@ -482,6 +482,7 @@
     <Content Include="Images\menu-icons\Business Entities.png" />
     <Content Include="Images\menu-icons\NOC.png" />
     <Content Include="Images\menu-icons\Purchase Area.png" />
+    <Content Include="Images\menu-icons\training.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
