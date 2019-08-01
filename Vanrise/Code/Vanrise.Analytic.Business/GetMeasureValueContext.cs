@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Analytic.Entities;
-using Vanrise.Common;
 
 namespace Vanrise.Analytic.Business
 {
@@ -17,8 +16,10 @@ namespace Vanrise.Analytic.Business
         string _recordGroupingKey;
         string _subTableRecordGroupingKey;
 
+        public bool FromUIReport { get; set; }
+
         internal GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, HashSet<string> allDimensions,
-            bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey)
+            bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey, bool fromUIReport)
         {
             if (analyticTableQueryContext == null)
                 throw new ArgumentNullException("analyticTableQueryContext");
@@ -35,6 +36,8 @@ namespace Vanrise.Analytic.Business
             _subTableIndex = subTableIndex;
             _recordGroupingKey = recordGroupingKey;
             _subTableRecordGroupingKey = subTableRecordGroupingKey;
+
+            this.FromUIReport = fromUIReport;
         }
 
         public dynamic GetAggregateValue(string aggregateName)
@@ -79,7 +82,7 @@ namespace Vanrise.Analytic.Business
         }
 
         public bool IsFilterIncluded(string filterName)
-        {            
+        {
             return _analyticTableQueryContext.GetDimensionNamesFromQueryFilters().Contains(filterName);
         }
 
@@ -120,18 +123,9 @@ namespace Vanrise.Analytic.Business
 
             public int? SubTableIndex { get; set; }
 
+            public string RecordGroupingKey { get; set; }
 
-            public string RecordGroupingKey
-            {
-                get;
-                set;
-            }
-
-            public string SubTableRecordGroupingKey
-            {
-                get;
-                set;
-            }
+            public string SubTableRecordGroupingKey { get; set; }
         }
 
         #endregion

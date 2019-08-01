@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -22,6 +19,8 @@ namespace Vanrise.Analytic.Entities
 
     public interface IGetMeasureValueContext
     {
+        bool FromUIReport { get; }
+
         dynamic GetAggregateValue(string aggregateName);
 
         bool IsGroupingDimensionIncluded(string dimensionName);
@@ -38,5 +37,4 @@ namespace Vanrise.Analytic.Entities
 
         DateTime GetQueryToTime();
     }
-
 }

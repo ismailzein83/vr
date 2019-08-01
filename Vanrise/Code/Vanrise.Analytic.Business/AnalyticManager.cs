@@ -15,7 +15,7 @@ namespace Vanrise.Analytic.Business
     public class AnalyticManager
     {
         #region Public Methods
-
+         
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             //CheckAnalyticRequiredPermission(input);
@@ -276,9 +276,14 @@ namespace Vanrise.Analytic.Business
         }
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery inputQuery, bool dontApplyOrdering, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
+            return GetAllFilteredRecords(inputQuery, dontApplyOrdering, false, out summaryRecord, out resultSubTables);
+        }
+
+        public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery inputQuery, bool dontApplyOrdering, bool fromUIReport, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
+        {
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             var query = inputQuery.VRDeepCopy();
-            if(query.TimePeriod != null)
+            if (query.TimePeriod != null)
             {
                 var timePeriodContext = new VRTimePeriodContext { EffectiveDate = DateTime.Now };
                 query.TimePeriod.GetTimePeriod(timePeriodContext);
@@ -301,10 +306,10 @@ namespace Vanrise.Analytic.Business
             }
             var analyticTable = analyticTableManager.GetAnalyticTableById(inputQuery.TableId);
             analyticTable.ThrowIfNull("analyticTable", inputQuery.TableId);
-            if (analyticTable.PermanentFilter != null && analyticTable.PermanentFilter.Settings != null)
+            if (fromUIReport && analyticTable.PermanentFilter != null && analyticTable.PermanentFilter.Settings != null)
             {
                 var permanentFilter = analyticTable.PermanentFilter.Settings.ConvertToRecordFilter(new AnalyticTablePermanentFilterContext());
-                if(permanentFilter != null)
+                if (permanentFilter != null)
                 {
                     query.FilterGroup = MergeRecordFilterGroup(query.FilterGroup, permanentFilter);
                 }
@@ -367,10 +372,10 @@ namespace Vanrise.Analytic.Business
             HashSet<string> allDimensionNames = new HashSet<string>(allDimensionNamesList);
             if (dbRecords != null)
             {
-                Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = query.MeasureStyleRules != null && query.MeasureStyleRules.Count > 0? BuildMeasureStyleRulesDictionary(query.MeasureStyleRules): BuildMeasureStyleRulesDictionary(analyticTableManager.GetMergedMeasureStyles(query.TableId));
+                Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = query.MeasureStyleRules != null && query.MeasureStyleRules.Count > 0 ? BuildMeasureStyleRulesDictionary(query.MeasureStyleRules) : BuildMeasureStyleRulesDictionary(analyticTableManager.GetMergedMeasureStyles(query.TableId));
                 FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, allDBDimensions, query.Filters, query.FilterGroup);
                 var records = ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
-                    query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, out summaryRecord, out resultSubTables);
+                    query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, fromUIReport, out summaryRecord, out resultSubTables);
                 if (dontApplyOrdering || !query.OrderType.HasValue)
                 {
                     return records;
@@ -384,7 +389,7 @@ namespace Vanrise.Analytic.Business
                     else
                     {
                         var orderedData = GetOrderedAnalyticRecords(queryContext, query.OrderType.Value, query.DimensionFields, query.MeasureFields, query.AdvancedOrderOptions, records, record => record).ToList();
-                        if(query.TopRecords.HasValue)
+                        if (query.TopRecords.HasValue)
                         {
                             if (orderedData != null)
                                 orderedData = orderedData.Take(query.TopRecords.Value).ToList();
@@ -720,7 +725,7 @@ namespace Vanrise.Analytic.Business
 
         private List<AnalyticRecord> ApplyFinalGroupingAndFiltering(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<DBAnalyticRecord> dbRecords,
             List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
-            List<DimensionFilter> dimensionFilters, List<AnalyticQuerySubTable> querySubTables, RecordFilterGroup filterGroup, bool withSummary, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
+            List<DimensionFilter> dimensionFilters, List<AnalyticQuerySubTable> querySubTables, RecordFilterGroup filterGroup, bool withSummary, bool fromUIReport, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
             Dictionary<string, DBAnalyticRecord> groupedRecordsByDimensionsKey = new Dictionary<string, DBAnalyticRecord>();
             DBAnalyticRecord summaryDBRecord = null;
@@ -791,13 +796,13 @@ namespace Vanrise.Analytic.Business
             List<SubTableAnalyticRecordInProcessByGroupingKey> subTablesSummaryRecordsByGroupingKey;
             List<List<string>> subTablesOrderedDimensionKeys;
             BuildSubTablesRecordsFromDBRecords(subTablesDBRecords, subTablesSummaryDBRecords, analyticTableQueryContext, allDimensionNames, measureStyleRulesDictionary,
-                querySubTables, buildSummaryRecord, out resultSubTables, out subTablesRecordsByParentGroupingKey, out subTablesSummaryRecordsByGroupingKey, out subTablesOrderedDimensionKeys);
+                querySubTables, buildSummaryRecord, fromUIReport, out resultSubTables, out subTablesRecordsByParentGroupingKey, out subTablesSummaryRecordsByGroupingKey, out subTablesOrderedDimensionKeys);
             foreach (var dbRecordEntry in groupedRecordsByDimensionsKey)
             {
                 string recordGroupingKey = dbRecordEntry.Key;
                 bool allMeasuresAreNull = true;
                 AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecordEntry.Value, requestedDimensionNames,
-                    allDimensionNames, measureNames, measureStyleRulesDictionary, false, null, recordGroupingKey, null, out allMeasuresAreNull);
+                    allDimensionNames, measureNames, measureStyleRulesDictionary, false, null, recordGroupingKey, null, fromUIReport, out allMeasuresAreNull);
                 if (querySubTables != null)
                     AddSubTablesMeasuresToRecord(analyticRecord, recordGroupingKey, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesRecordsByParentGroupingKey, subTablesOrderedDimensionKeys);
 
@@ -828,7 +833,7 @@ namespace Vanrise.Analytic.Business
             {
                 bool allSummaryMeasuresAreNull;
                 summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summaryDBRecord, null, allDimensionNames, measureNames, measureStyleRulesDictionary,
-                    true, null, null, null, out allSummaryMeasuresAreNull);
+                    true, null, null, null, fromUIReport, out allSummaryMeasuresAreNull);
                 if (querySubTables != null)
                     AddSubTablesMeasuresToSummaryRecord(summaryRecord, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesSummaryRecordsByGroupingKey, subTablesOrderedDimensionKeys);
             }
@@ -915,7 +920,7 @@ namespace Vanrise.Analytic.Business
 
         private void BuildSubTablesRecordsFromDBRecords(List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesDBRecords, List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesSummaryDBRecords,
             IAnalyticTableQueryContext analyticTableQueryContext, HashSet<string> allDimensionNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
-            List<AnalyticQuerySubTable> querySubTables, bool buildSummaryRecord, out List<AnalyticResultSubTable> resultSubTables,
+            List<AnalyticQuerySubTable> querySubTables, bool buildSummaryRecord, bool fromUIReport, out List<AnalyticResultSubTable> resultSubTables,
             out List<SubTableAnalyticRecordInProcessByParentGroupingKey> subTablesRecordsByParentGroupingKey, out List<SubTableAnalyticRecordInProcessByGroupingKey> subTablesSummaryRecordsByGroupingKey, out List<List<string>> subTablesOrderedDimensionKeys)
         {
             resultSubTables = null;
@@ -943,7 +948,7 @@ namespace Vanrise.Analytic.Business
                     {
                         bool subTableAllMeasuresAreNull;
                         AnalyticRecord subTableAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subtableDBRecord.Record, null,
-                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, false, subTableIndex, subtableDBRecord.ParentRecordGroupingKey, subtableDBRecord.GroupingKey,
+                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, false, subTableIndex, subtableDBRecord.ParentRecordGroupingKey, subtableDBRecord.GroupingKey, fromUIReport,
                     out subTableAllMeasuresAreNull);//no need to fill dimensions values for sub table records 
                         var subTableAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
                         {
@@ -962,7 +967,7 @@ namespace Vanrise.Analytic.Business
                     {
                         bool subTableSummaryAllMeasuresAreNull;
                         AnalyticRecord subTableSummaryAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subTableSummaryDBRecord.Record, querySubTable.Dimensions,
-                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, true, subTableIndex, null, subTableSummaryDBRecord.GroupingKey,
+                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, true, subTableIndex, null, subTableSummaryDBRecord.GroupingKey, fromUIReport,
                     out subTableSummaryAllMeasuresAreNull);//dimensions values are needed for summary sub table records to sort sub table records at the final stages
                         var subTableSummaryAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
                         {
@@ -976,7 +981,7 @@ namespace Vanrise.Analytic.Business
                     {
                         subTableSummaryRecords = GetOrderedAnalyticRecords(analyticTableQueryContext, AnalyticQueryOrderType.ByAllDimensions, querySubTable.Dimensions, querySubTable.Measures, querySubTable.AdvancedOrderOptions, subTableSummaryRecords, recordInProcexcc => recordInProcexcc.Record).ToList();
                     }
-                    
+
                     if (querySubTable.OrderType.HasValue)
                     {
                         subTableSummaryRecords = GetOrderedAnalyticRecords(analyticTableQueryContext, querySubTable.OrderType.Value, querySubTable.Dimensions, querySubTable.Measures, querySubTable.AdvancedOrderOptions, subTableSummaryRecords, recordInProcexcc => recordInProcexcc.Record).ToList();
@@ -1219,7 +1224,7 @@ namespace Vanrise.Analytic.Business
 
         private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, List<string> dimensionNames,
             HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
-            bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey, out bool allMeasuresAreNull)
+            bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey, bool fromUIReport, out bool allMeasuresAreNull)
         {
             StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
@@ -1240,7 +1245,7 @@ namespace Vanrise.Analytic.Business
                 }
             }
 
-            var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext, dbRecord, allDimensionNames, isSummaryRecord, subTableIndex, recordGroupingKey, subTableRecordGroupingKey);
+            var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext, dbRecord, allDimensionNames, isSummaryRecord, subTableIndex, recordGroupingKey, subTableRecordGroupingKey, fromUIReport);
             RecordFilterManager filterManager = new RecordFilterManager();
             allMeasuresAreNull = true;
 
@@ -1308,8 +1313,8 @@ namespace Vanrise.Analytic.Business
             IEnumerable<T> orderedRecords;
             switch (orderType)
             {
-                case AnalyticQueryOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(queryContext, dimensions, allRecords, getAnalyticRecord,false); break;
-                case AnalyticQueryOrderType.ByAllDimensionsDescending: orderedRecords = GetOrderedByAllDimensions(queryContext, dimensions, allRecords, getAnalyticRecord,true); break;
+                case AnalyticQueryOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(queryContext, dimensions, allRecords, getAnalyticRecord, false); break;
+                case AnalyticQueryOrderType.ByAllDimensionsDescending: orderedRecords = GetOrderedByAllDimensions(queryContext, dimensions, allRecords, getAnalyticRecord, true); break;
                 case AnalyticQueryOrderType.ByAllMeasures: orderedRecords = GetOrderedByAllMeasures(measures, allRecords, getAnalyticRecord); break;
                 case AnalyticQueryOrderType.AdvancedMeasureOrder: orderedRecords = GetOrderedByAllAdvancedMeasureOrder(measures, advancedOrderOptions, allRecords, getAnalyticRecord); break;
                 default: orderedRecords = null; break;
@@ -1344,9 +1349,9 @@ namespace Vanrise.Analytic.Business
         {
             Func<T, Object> orderFuncion;
             if (orderType == DataRecordFieldOrderType.ByFieldValue)
-                orderFuncion =(record) => getAnalyticRecord(record).DimensionValues[index].Value;
+                orderFuncion = (record) => getAnalyticRecord(record).DimensionValues[index].Value;
             else
-                orderFuncion =(record) => getAnalyticRecord(record).DimensionValues[index].Name;
+                orderFuncion = (record) => getAnalyticRecord(record).DimensionValues[index].Name;
             return orderFuncion;
         }
         private static IEnumerable<T> GetOrderedByAllMeasures<T>(List<string> measures, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
@@ -1395,7 +1400,7 @@ namespace Vanrise.Analytic.Business
             }
             return orderedRecords;
         }
-
+        
 
         #endregion
 
@@ -1551,7 +1556,7 @@ namespace Vanrise.Analytic.Business
             public override IEnumerable<AnalyticRecord> RetrieveAllData(DataRetrievalInput<AnalyticQuery> input)
             {
                 var analyticManager = new AnalyticManager();
-                return analyticManager.GetAllFilteredRecords(input.Query, true, out _summaryRecord, out _subTables);
+                return analyticManager.GetAllFilteredRecords(input.Query, true, true, out _summaryRecord, out _subTables);
             }
 
             protected override BigResult<AnalyticRecord> AllRecordsToBigResult(DataRetrievalInput<AnalyticQuery> input, IEnumerable<AnalyticRecord> allRecords)
