@@ -30,12 +30,14 @@ namespace Vanrise.DevTools.Business
             }
             List<VRGeneratedScriptColumns> allColumns = columnsDataManager.GetColumns(columnInfoFilter.TableName);
 
-            Func<VRGeneratedScriptColumns, bool> filterFunc = (columns) =>
+            Func<VRGeneratedScriptColumns, bool> filterFunc = (column) =>
             {
                 if (columnInfoFilter.ColumnNames != null && columnInfoFilter.ColumnNames.Count > 0)
                 {
-                    return columnInfoFilter.ColumnNames.Any(x => x.Name == columns.Name);
+                    return columnInfoFilter.ColumnNames.Any(x => x.Name != "timestamp" && x.Name == column.Name);
                 }
+                if (column.Name == "timestamp")
+                    return false;
                 return true;
             };
             return allColumns.MapRecords(ColumnsInfoMapper, filterFunc).OrderBy(columns => columns.Name);
