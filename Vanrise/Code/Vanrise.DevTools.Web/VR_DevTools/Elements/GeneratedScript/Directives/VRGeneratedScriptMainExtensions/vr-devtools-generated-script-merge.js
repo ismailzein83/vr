@@ -223,6 +223,12 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
             function getFilter() {
 
                 setColumns();
+                var columns = [];
+                if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+                    for (var i = 0; i < ctrl.datasource.length; i++) {
+                        columns.push(ctrl.datasource[i].data.ColumnName);
+                    }
+                }
                 return {
 
                     context: {
@@ -249,7 +255,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                     },
                     columnNames: selectedColumnsNames,
                     generateSelectedTableDataGrid: function (payload) {
-                        payload.ColumnNames = columnsDirectiveApi.getSelectedIds();
+                        payload.ColumnNames = columns;
                         return selectedTableDataGridApi.load(payload);
                     }
 
@@ -342,7 +348,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                                         var identifierColumnName = identifierColumnNames[l].ColumnName;
                                         if (row.FieldValues[identifierColumnName] != undefined && row.FieldValues[identifierColumnName] != null && row.FieldValues[identifierColumnName] != "")
                                         identifierKey += row.FieldValues[identifierColumnName] + "_";
-                                    }
+                                    } 
                                     if (identifierKey == selectedIdentifierKey) {
                                         var columnNames = columnsDirectiveApi.getSelectedIds();
 
@@ -372,8 +378,8 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                                         } 
                                       
                                             selectedRow.rowExists = true;
-                                            row.rowExists = true;
-                                            break;
+                                        row.rowExists = true;
+                                        break;
                                     }
                                     else {
                                         selectedRow.rowExists = false;
@@ -427,7 +433,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                         return selectTableDataGridLoadPromiseDeferred.promise;
                     }
 
-                    function loadVariablesGridDirective(variablesPayload) {
+                    function loadVariablesGridDirective() {
                         var variablesGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         variablesGridReadyPromiseDeferred.promise.then(function () {
@@ -498,7 +504,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                     var dataRows;
 
                     if (selectedTableDataGridApi != undefined) {
-                        dataRows = selectedTableDataGridApi.getData().tableRows;
+                        dataRows = selectedTableDataGridApi.getData().tableRows; 
                     } 
 
                     return {

@@ -33,7 +33,7 @@ namespace Vanrise.DevTools.Business
 
             Func<VRGeneratedScriptSchema, bool> filterFunc = (schema) =>
             {
-                if (schema.Name.StartsWith("db_") || schema.Name == "sys")
+                if (schema.Name.StartsWith("db_") || schema.Name == "sys" || schema.Name == "guest" || schema.Name == "INFORMATION_SCHEMA")
                     return false;
                 return true;
             };
