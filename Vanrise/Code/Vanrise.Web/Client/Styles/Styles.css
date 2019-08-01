@@ -874,6 +874,10 @@ Use this for keyframe animations .disable-animations.ng-animate {
     cursor: hand !important;
 }
 
+.handeldrag {
+    cursor: move !important;
+}
+
 .custom-input {
     font-family: "Lato","Helvetica Neue",Arial,Helvetica,sans-serif;
     padding: 5px;
@@ -5836,11 +5840,11 @@ span.option-marketprice {
 }
 
 /*start vr-additem-box*/
-.vr-additem-box-horizontal {
-    border: 1px dashed lightgray;
-    position: relative;
-    height: 50px;
-}
+    .vr-additem-box-horizontal {
+        border: 1px dashed lightgray;
+        position: relative;
+        height: 50px;
+    }
 
     .vr-additem-box-horizontal:hover {
         opacity: 0.8 !important;
@@ -5848,17 +5852,23 @@ span.option-marketprice {
         background-color: #ECECEC;
     }
 
-.vr-additem-box-vertical {
-    border: 1px dashed lightgray;
-    position: relative;
-    height:100%;
-    min-height: 105px;
-}
+    .vr-additem-box-vertical {
+        border: 1px dashed lightgray;
+        position: relative;
+        height:100%;
+        min-height: 105px;
+    }
 
     .vr-additem-box-vertical:hover {
         opacity: 0.8 !important;
         transition: 0.3s;
         background-color: #ECECEC;
+    }
+    
+    vr-genericdata-genericeditorsetting-definition div[ng-sortable*="SortSettings"] vr-label .vr-control-label:hover {
+        cursor: move;
+        outline: 1px dashed #ccc;
+        background: #f5f2f2;
     }
 /*end vr-additem-box*/
 

@@ -1,6 +1,6 @@
 ﻿<vr-validator tobottom validate="scopeModel.isValid()">
     <div>
-        <div ng-sortable="scopeModel.dragsettings">
+        <div ng-sortable="scopeModel.sectionsContaineSortSettings">
             <vr-columns colnum="{{section.entity.ColNum}}" ng-repeat="section in ctrl.datasource" haschildcolumns>
                 <vr-section-v2 header="section.entity.SectionTitle" dataitem="section" settings="scopeModel.sectionSettings" on-remove="scopeModel.removeSectionContainer">
                     <vr-row>

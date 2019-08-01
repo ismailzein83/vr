@@ -33,7 +33,7 @@ app.directive("vrGenericdataSectionscontainereditorDefinition", ["UtilsService",
                     return VRNotificationService.showDeleteConfirmation();
                 }
 
-                $scope.scopeModel.dragsettings = {
+                $scope.scopeModel.sectionsContaineSortSettings = {
                     handle: '.handeldrag'
                 };
 

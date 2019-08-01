@@ -34,6 +34,10 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.fields = [];
 
+                $scope.scopeModel.genericFieldsSortSettings = {
+                    handle: '.vr-control-label'
+                };
+
                 $scope.scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady = function (api) {
                     dataRecordTypeFieldsSelectorAPI = api;
                     dataRecordTypeFieldsSelectorReadyPromiseDeferred.resolve();
