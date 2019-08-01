@@ -15,59 +15,57 @@ namespace TOne.WhS.Deal.Business
 
         public Dictionary<DealZoneGroup, List<DealBillingSummary>> LoadDealBillingSummaryRecords(DateTime beginDate, bool isSale)
         {
-            Dictionary<DealZoneGroup, List<DealBillingSummary>> dealBillingSummaryRecords = null;
-            Dictionary<BatchDealZoneGroup, DealDurations> batchDealZoneGroupDict = null;
-
             Dictionary<PropertyName, string> propertyNames = BuildPropertyNames(isSale == true ? "Sale" : "Cost");
             Dictionary<PropertyName, int> dimensionFieldsDict = BuildDimensionFieldsDict(isSale == true ? "Sale" : "Cost");
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = BuildAnalyticQuery(beginDate, propertyNames);
+            AnalyticQuery analyticQuery = BuildAnalyticQuery(beginDate, propertyNames);
 
-            var result = new AnalyticManager().GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
-            if (result != null && result.Data != null && result.Data.Count() > 0)
+            AnalyticRecord analyticRecordSummary;
+            List<AnalyticRecord> analyticRecords = new AnalyticManager().GetAllFilteredRecords(analyticQuery, out analyticRecordSummary);
+            if (analyticRecords == null || analyticRecords.Count == 0)
+                return null;
+
+            var dealBillingSummaryRecords = new Dictionary<DealZoneGroup, List<DealBillingSummary>>(); ;
+            var batchDealZoneGroupDict = new Dictionary<BatchDealZoneGroup, DealDurations>(); ;
+
+            foreach (var analyticRecord in analyticRecords)
             {
-                dealBillingSummaryRecords = new Dictionary<DealZoneGroup, List<DealBillingSummary>>();
-                batchDealZoneGroupDict = new Dictionary<BatchDealZoneGroup, DealDurations>();
+                DateTime batchStart = (DateTime)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.HalfHour]].Value;
+                int origDealId = (int)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.OrigDeal]].Value;
+                int origDealZoneGroupNb = (int)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.OrigDealZoneGroupNb]].Value;
+                int? dealId = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.Deal]].Value;
+                int? dealZoneGroupNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealZoneGroupNb]].Value;
+                int? dealTierNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealTierNb]].Value;
+                int? dealRateTierNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealRateTierNb]].Value;
+                decimal durationInSeconds = (decimal)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.PricedDurationInSec]).Value;
+                decimal? dealDurationInSeconds = (decimal?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealDurationInSec]).Value;
 
-                foreach (var analyticRecord in result.Data)
+                BatchDealZoneGroup batchDealZoneGroup = new BatchDealZoneGroup() { DealId = origDealId, DealZoneGroupNb = origDealZoneGroupNb, BatchStart = batchStart };
+                DealDurations dealDurations = batchDealZoneGroupDict.GetOrCreateItem(batchDealZoneGroup, () => { return new DealDurations() { DealDurationInSeconds = 0, DurationInSeconds = 0 }; });
+                dealDurations.DurationInSeconds += durationInSeconds;
+                dealDurations.DealDurationInSeconds += dealDurationInSeconds.HasValue ? dealDurationInSeconds.Value : 0;
+
+                if (dealId.HasValue)
                 {
-                    DateTime batchStart = (DateTime)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.HalfHour]].Value;
-                    int origDealId = (int)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.OrigDeal]].Value;
-                    int origDealZoneGroupNb = (int)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.OrigDealZoneGroupNb]].Value;
-                    int? dealId = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.Deal]].Value;
-                    int? dealZoneGroupNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealZoneGroupNb]].Value;
-                    int? dealTierNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealTierNb]].Value;
-                    int? dealRateTierNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealRateTierNb]].Value;
-                    decimal durationInSeconds = (decimal)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.PricedDurationInSec]).Value;
-                    decimal? dealDurationInSeconds = (decimal?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealDurationInSec]).Value;
+                    DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealId.Value, ZoneGroupNb = dealZoneGroupNb.Value };
+                    DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, batchStart, dealId.Value, dealZoneGroupNb.Value, dealDurationInSeconds.Value, dealTierNb, dealRateTierNb);
 
-                    BatchDealZoneGroup batchDealZoneGroup = new BatchDealZoneGroup() { DealId = origDealId, DealZoneGroupNb = origDealZoneGroupNb, BatchStart = batchStart };
-                    DealDurations dealDurations = batchDealZoneGroupDict.GetOrCreateItem(batchDealZoneGroup, () => { return new DealDurations() { DealDurationInSeconds = 0, DurationInSeconds = 0 }; });
-                    dealDurations.DurationInSeconds += durationInSeconds;
-                    dealDurations.DealDurationInSeconds += dealDurationInSeconds.HasValue ? dealDurationInSeconds.Value : 0;
-
-                    if (dealId.HasValue)
-                    {
-                        DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealId.Value, ZoneGroupNb = dealZoneGroupNb.Value };
-                        DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, batchStart, dealId.Value, dealZoneGroupNb.Value, dealDurationInSeconds.Value, dealTierNb, dealRateTierNb);
-
-                        List<DealBillingSummary> dealBillingSummaryList = dealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
-                        dealBillingSummaryList.Add(dealBillingSummary);
-                    }
+                    List<DealBillingSummary> dealBillingSummaryList = dealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
+                    dealBillingSummaryList.Add(dealBillingSummary);
                 }
+            }
 
-                foreach (var batchDealZoneGroupItem in batchDealZoneGroupDict)
+            foreach (var batchDealZoneGroupItem in batchDealZoneGroupDict)
+            {
+                decimal outDealDurationInSeconds = batchDealZoneGroupItem.Value.DurationInSeconds - batchDealZoneGroupItem.Value.DealDurationInSeconds;
+                if (outDealDurationInSeconds > 0)
                 {
-                    decimal outDealDurationInSeconds = batchDealZoneGroupItem.Value.DurationInSeconds - batchDealZoneGroupItem.Value.DealDurationInSeconds;
-                    if (outDealDurationInSeconds > 0)
-                    {
-                        BatchDealZoneGroup batchDealZoneGroup = batchDealZoneGroupItem.Key;
-                        DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = batchDealZoneGroup.DealId, ZoneGroupNb = batchDealZoneGroup.DealZoneGroupNb };
-                        DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, batchDealZoneGroup.BatchStart, batchDealZoneGroup.DealId, batchDealZoneGroup.DealZoneGroupNb, outDealDurationInSeconds, null, null);
+                    BatchDealZoneGroup batchDealZoneGroup = batchDealZoneGroupItem.Key;
+                    DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = batchDealZoneGroup.DealId, ZoneGroupNb = batchDealZoneGroup.DealZoneGroupNb };
+                    DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, batchDealZoneGroup.BatchStart, batchDealZoneGroup.DealId, batchDealZoneGroup.DealZoneGroupNb, outDealDurationInSeconds, null, null);
 
-                        List<DealBillingSummary> dealBillingSummaryList = dealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
-                        dealBillingSummaryList.Add(dealBillingSummary);
-                    }
+                    List<DealBillingSummary> dealBillingSummaryList = dealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
+                    dealBillingSummaryList.Add(dealBillingSummary);
                 }
             }
 
@@ -78,30 +76,26 @@ namespace TOne.WhS.Deal.Business
 
         #region Private Methods
 
-        private DataRetrievalInput<AnalyticQuery> BuildAnalyticQuery(DateTime beginDate, Dictionary<PropertyName, string> propertyNames)
+        private AnalyticQuery BuildAnalyticQuery(DateTime beginDate, Dictionary<PropertyName, string> propertyNames)
         {
-            return new DataRetrievalInput<AnalyticQuery>()
+            return new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                DimensionFields = new List<string> { propertyNames[PropertyName.HalfHour], propertyNames[PropertyName.OrigDeal], propertyNames[PropertyName.OrigDealZoneGroupNb],
+                                                     propertyNames[PropertyName.Deal], propertyNames[PropertyName.DealZoneGroupNb], propertyNames[PropertyName.DealTierNb],
+                                                     propertyNames[PropertyName.DealRateTierNb] },
+                MeasureFields = new List<string>() { propertyNames[PropertyName.PricedDurationInSec], propertyNames[PropertyName.DealDurationInSec] },
+                FromTime = beginDate,
+                FilterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup()
                 {
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    DimensionFields = new List<string> { propertyNames[PropertyName.HalfHour], propertyNames[PropertyName.OrigDeal], propertyNames[PropertyName.OrigDealZoneGroupNb], propertyNames[PropertyName.Deal], 
-                                                         propertyNames[PropertyName.DealZoneGroupNb], propertyNames[PropertyName.DealTierNb], propertyNames[PropertyName.DealRateTierNb] },
-                    MeasureFields = new List<string>() { propertyNames[PropertyName.PricedDurationInSec], propertyNames[PropertyName.DealDurationInSec] },
-                    
-                    FromTime = beginDate,
-                    FilterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup()
+                    Filters = new List<Vanrise.GenericData.Entities.RecordFilter>()
                     {
-                        Filters = new List<Vanrise.GenericData.Entities.RecordFilter>() 
-                        { 
-                            new Vanrise.GenericData.Entities.NonEmptyRecordFilter()
-                            {
-                                FieldName =  propertyNames[PropertyName.OrigDeal]
-                            }
+                        new Vanrise.GenericData.Entities.NonEmptyRecordFilter()
+                        {
+                            FieldName =  propertyNames[PropertyName.OrigDeal]
                         }
                     }
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                }
             };
         }
 

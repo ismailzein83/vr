@@ -73,7 +73,7 @@ namespace TOne.WhS.Deal.Business
 
                 rawMemoryRecord.FieldValues.Add("ZoneProfit", zoneProfit);
                 rawMemoryRecord.FieldValues.Add("CompletionPercentage", completionPercentage);
-                rawMemoryRecord.FieldValues.Add("Priority", rawMemoryRecordData.MinDealPriority);
+                rawMemoryRecord.FieldValues.Add("CostDealPriority", rawMemoryRecordData.MinDealPriority);
                 rawMemoryRecords.Add(rawMemoryRecord);
             }
 
@@ -136,7 +136,7 @@ namespace TOne.WhS.Deal.Business
             dimensionFields.AddRange(query.DimensionFields);
             dimensionFields.Add(propertyNames[PropertyName.CostDeal]);
             dimensionFields.Add(propertyNames[PropertyName.CostDealZoneGroupNb]);
-            dimensionFields.Add(propertyNames[PropertyName.Priority]);
+            dimensionFields.Add(propertyNames[PropertyName.CostDealPriority]);
 
             DimensionFilter costDealDimensionFilter = new DimensionFilter()
             {
@@ -312,7 +312,7 @@ namespace TOne.WhS.Deal.Business
                 { PropertyName.SaleZone, "SaleZone" },
                 { PropertyName.CostDeal, "CostDeal" },
                 { PropertyName.CostDealZoneGroupNb, "CostDealZoneGroupNb" },
-                { PropertyName.Priority, "Priority" },
+                { PropertyName.CostDealPriority, "CostDealPriority" },
                 { PropertyName.CostDealDurInSec, "CostDealDurationInSec" },
                 { PropertyName.TotalProfit, "TotalProfit" }
             };
@@ -320,7 +320,7 @@ namespace TOne.WhS.Deal.Business
             return propertyNames;
         }
 
-        private enum PropertyName { SupplierZone, Supplier, SaleZone, CostDeal, CostDealZoneGroupNb, Priority, CostDealDurInSec, TotalProfit }
+        private enum PropertyName { SupplierZone, Supplier, SaleZone, CostDeal, CostDealZoneGroupNb, CostDealPriority, CostDealDurInSec, TotalProfit }
 
         private class CostDealBillingStatRecord
         {
