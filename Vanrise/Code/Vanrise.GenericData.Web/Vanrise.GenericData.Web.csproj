@@ -392,8 +392,10 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\Templates\GenericBEBulkActionsManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\Templates\NewOrExistingGenericBEDefinitionCustomActionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\Templates\BulkAddGenericBEDefinitionCustomActionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\Templates\UploadGenericBEDefinitionCustomActionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\vr-genericdata-genericbe-neworexisting-customaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\vr-genericdata-genericbe-bulkadd-customaction-definition.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBECustomActionDefinition\vr-genericdata-genericbe-upload-customaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\BasicAdvancedFilterDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\ChildEntityFilterDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEFilterDefinition\Templates\GenericListFilterDefinitionTemplate.html" />
