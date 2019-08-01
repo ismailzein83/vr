@@ -58,6 +58,8 @@ namespace BPMExtended.Main.SOMAPI
         public string IsDPFaulty { get; set; }
         public string MDF { get; set; }
 
+        public string DEV_TYPE { get; set; }
+
 
 
     }
