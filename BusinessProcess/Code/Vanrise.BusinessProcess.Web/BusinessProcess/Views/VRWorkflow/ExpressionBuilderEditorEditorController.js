@@ -2,9 +2,9 @@
 
     "use strict";
 
-    ExpressionBuilderEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    ExpressionBuilderEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataRecordFieldAPIService'];
 
-    function ExpressionBuilderEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function ExpressionBuilderEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
 
         var textAreaAPI;
         var expression;
@@ -144,16 +144,20 @@
 
                 if (runtimeEditorAPI != undefined) {
                     var fieldValue = runtimeEditorAPI.getData();
-                    if (fieldValue != undefined) {
-                        $scope.onSetValue({
-                            $type: "Vanrise.BusinessProcess.Entities.VRWorkflowFieldTypeExpression, Vanrise.BusinessProcess.Entities",
-                            Value: fieldValue,
-                            FieldType: $scope.scopeModel.fieldType
+                    if (fieldValue != undefined && $scope.scopeModel.fieldType != undefined) {
+                        VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription($scope.scopeModel.fieldType, fieldValue).then(function (response) {
+                            $scope.onSetValue({
+                                $type: "Vanrise.BusinessProcess.Entities.VRWorkflowFieldTypeExpression, Vanrise.BusinessProcess.Entities",
+                                Value: fieldValue,
+                                Description: response != undefined ? response.FieldDescription : undefined,
+                                FieldType: $scope.scopeModel.fieldType
+                            });
                         });
-                        return;
                     }
                 }
-                $scope.onSetValue();
+                else {
+                    $scope.onSetValue();
+                }
             }
         }
 

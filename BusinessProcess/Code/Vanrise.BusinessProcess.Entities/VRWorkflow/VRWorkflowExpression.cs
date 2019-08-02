@@ -34,6 +34,7 @@ namespace Vanrise.BusinessProcess.Entities
         public override Guid ConfigId => new Guid("1BD963E6-1069-48FC-A64E-79D671E21B89");
         public DataRecordFieldType FieldType { get; set; }
         public Object Value { get; set; }
+        public string Description { get; set; }
         public override string GetCode(IVRWorkflowExpressionGetCodeContext context)
         {
             if (FieldType != null)

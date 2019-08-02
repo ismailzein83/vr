@@ -56,8 +56,8 @@ app.directive('businessprocessVrWorkflowActivityEditorExpressionbuilder', ['Util
 
                             if (value.CodeExpression != undefined)
                                 $scope.scopeModel.expression = value.CodeExpression;
-                            else if (expression.Value != undefined)
-                                $scope.scopeModel.expression = value.Value;
+                            else if (value.Description != undefined)
+                                $scope.scopeModel.expression = value.Description;
 
                         }
                         else {
@@ -108,8 +108,8 @@ app.directive('businessprocessVrWorkflowActivityEditorExpressionbuilder', ['Util
                     if (expression != undefined) {
                         if (expression.CodeExpression != undefined)
                             $scope.scopeModel.expression = expression.CodeExpression;
-                        else if (expression.Value != undefined)
-                            $scope.scopeModel.expression = expression.Value;
+                        else if (expression.Description != undefined)
+                            $scope.scopeModel.expression = expression.Description;
                     }
                     var rootPromiseNode = {
                         promises: []
