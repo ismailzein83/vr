@@ -260,7 +260,7 @@
                 var pageInfo = gridApi.getPageInfo();
                 var itemsLength = pageInfo.toRow; 
                 if (pageInfo.toRow > $scope.scopeModel.tableData.length) {
-                    if (pageInfo.fromRow < $scope.scopeModel.tableData.length) { itemsLength = $scope.scopeModel.tableData.length; }
+                    if (pageInfo.fromRow <= $scope.scopeModel.tableData.length) { itemsLength = $scope.scopeModel.tableData.length; }
                     else
                         return;
                 }
