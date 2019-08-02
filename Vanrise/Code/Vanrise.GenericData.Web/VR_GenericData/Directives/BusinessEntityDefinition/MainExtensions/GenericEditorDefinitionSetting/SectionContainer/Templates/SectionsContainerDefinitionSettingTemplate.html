@@ -1,5 +1,5 @@
 ﻿<vr-validator tobottom validate="scopeModel.isValid()">
-    <div>
+    <div class="rowsectionscontainer">
         <div ng-sortable="scopeModel.sectionsContaineSortSettings">
             <vr-columns colnum="{{section.entity.ColNum}}" ng-repeat="section in ctrl.datasource" haschildcolumns>
                 <vr-section-v2 header="section.entity.SectionTitle" dataitem="section" settings="scopeModel.sectionSettings" on-remove="scopeModel.removeSectionContainer">
@@ -17,9 +17,9 @@
             </vr-columns>
         </div>
         <vr-columns colnum="6" ng-show="scopeModel.showAddButton" haschildcolumns>
-            <div style="margin-top: 8px;">
+            <div class="add-section-container">
                 <div class="vr-additem-box-vertical">
-                    <span title="Add new section" class="glyphicon glyphicon-plus" ng-click="scopeModel.addSectionContainer()" style="position: absolute;color: #5cb85c;font-size: 36px;top: 25%;width: 100%;text-align: center;cursor: pointer;color: #5cb85c;"></span>
+                    <span title="Add new section" class="glyphicon glyphicon-plus add-icon" ng-click="scopeModel.addSectionContainer()"></span>
                 </div>
             </div>
         </vr-columns>

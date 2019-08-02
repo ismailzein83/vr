@@ -1,4 +1,4 @@
-﻿<vr-columns colnum="{{scopeModel.fieldWidth}}">
+﻿<vr-columns colnum="{{scopeModel.fieldWidth}}" class="fieldtypecontainer">
     <vr-textbox placeholder="Field Title" value="scopeModel.fieldTitle" label="{{scopeModel.fieldPath}}"></vr-textbox>
-    <span class="glyphicon glyphicon-pencil" ng-click="scopeModel.openSettingsModal()" style="left: calc(100% - 35px);  position: absolute;  top: 25px; font-size: 15px;cursor: pointer;"></span>
+    <span class="glyphicon glyphicon-pencil edit-field--icon" ng-click="scopeModel.openSettingsModal()"></span>
 </vr-columns>

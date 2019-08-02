@@ -1,20 +1,20 @@
-﻿<vr-row removeline>
+﻿<vr-row removeline class="genericeditorsetting">
     <div ng-sortable="scopeModel.dragsettings">
         <div ng-repeat="row in scopeModel.datasource">
-            <div vr-loader="row.isRowContainerFieldsDirectiveLoading" style="border: 1px solid #ddd;margin: 10px 15px;">
-                <vr-label mediumsize style="position: absolute; top: -11px; left: 11px;background-color: white;">{{row.entity.numberOfFields}}</vr-label>
-                <div ng-click="row.removeRow()" class="glyphicon glyphicon-remove hand-cursor" style="position :absolute;right: 4px;font-size: 13px;"></div>
+            <div class="main-row" vr-loader="row.isRowContainerFieldsDirectiveLoading">
+                <vr-label class="row-title" mediumsize>{{row.entity.numberOfFields}}</vr-label>
+                <div ng-click="row.removeRow()" class="glyphicon glyphicon-remove hand-cursor remove-icon"></div>
                 <vr-genericdata-rowscontainereditor-fields-definition on-ready="row.onRowContainerFieldsDirectiveReady" normal-col-num="3"></vr-genericdata-rowscontainereditor-fields-definition>
             </div>
         </div>
     </div>
 </vr-row>
 
-<vr-row>
-    <vr-columns colnum="12">
+<vr-row class="genericeditorsetting">
+    <vr-columns colnum="12" >
         <vr-validator tobottom validate="scopeModel.isValid()">
             <div class="vr-additem-box-horizontal">
-                <span title="Add new row" class="glyphicon glyphicon-plus" ng-click="scopeModel.addRowContainer()" style="position: absolute;color: #5cb85c;font-size: 36px;top: 10%;width: 100%;text-align: center;cursor: pointer;color: #5cb85c;"></span>
+                <span title="Add new row" class="glyphicon glyphicon-plus add-icon" ng-click="scopeModel.addRowContainer()" ></span>
             </div>
         </vr-validator>
     </vr-columns>

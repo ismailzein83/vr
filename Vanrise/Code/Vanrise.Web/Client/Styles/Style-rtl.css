@@ -1012,3 +1012,35 @@
     border-top-right-radius: unset;
     border-bottom-right-radius: unset;
 }
+
+
+/*start generic-business-entity-definition-components */
+
+.rtl .crc-definitionsettings-container .condition-title {   
+    left: unset;
+    right: 28px;
+    padding: 0px 9px 0px 8px;
+}
+
+.rtl .crc-definitionsettings-container .edit-icon {    
+    left: unset;
+    right: calc(100% - 65px);
+}
+
+.rtl .genericeditorsetting .row-title {  
+    left: unset;
+    right: 11px;
+}
+
+.rtl .genericeditorsetting .remove-icon {
+    right: unset;
+    left: 4px;
+}
+
+.rtl .fieldtypecontainer .edit-field--icon {    
+    left: unset;
+    right: calc(100% - 35px);
+}
+
+
+/*end generic-business-entity-definition-components */

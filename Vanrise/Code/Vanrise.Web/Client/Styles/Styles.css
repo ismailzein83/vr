@@ -5839,7 +5839,85 @@ span.option-marketprice {
     }
 }
 
-/*start vr-additem-box*/
+/*start generic-business-entity-definition-components */
+
+    .crc-definitionsettings-container .condition-title {
+        background-color: white;
+        position: absolute;
+        top: -10px;
+        left: 28px;
+        padding: 0px 8px 0px 9px;
+    }
+
+    .crc-definitionsettings-container .edit-icon {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        position: absolute;
+        font-size: 19px;
+        cursor: pointer;
+        left: calc(100% - 65px);
+        top: -13px;
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    .crc-definitionsettings-container .condition-main-body {
+        border: 1px solid #ddd;
+    }
+
+
+    .genericeditorsetting .main-row {
+        border: 1px solid #ddd;
+        margin: 10px 15px;
+    }
+
+    .genericeditorsetting .row-title {
+        position: absolute;
+        top: -11px;
+        left: 11px;
+        background-color: white;
+    }
+
+    .genericeditorsetting .remove-icon {
+        position: absolute;
+        right: 4px;
+        font-size: 13px;
+    }
+
+    .genericeditorsetting .add-icon {
+        position: absolute;
+        color: #5cb85c;
+        font-size: 36px;
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+        transform: translate(0%,-50%);
+    }
+
+    .rowsectionscontainer .add-section-container {
+        margin-top: 8px;
+    }
+
+    .rowsectionscontainer .add-icon {
+        position: absolute;
+        color: #5cb85c;
+        font-size: 36px;
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+        transform: translate(0%,-50%);
+    }
+
+    .fieldtypecontainer .edit-field--icon {
+        font-size: 15px;
+        cursor: pointer;
+        position: absolute;
+        top: 25px;
+        left: calc(100% - 35px);
+    }
+
     .vr-additem-box-horizontal {
         border: 1px dashed lightgray;
         position: relative;
@@ -5870,7 +5948,8 @@ span.option-marketprice {
         outline: 1px dashed #ccc;
         background: #f5f2f2;
     }
-/*end vr-additem-box*/
+
+/*end generic-business-entity-definition-components */
 
 
 

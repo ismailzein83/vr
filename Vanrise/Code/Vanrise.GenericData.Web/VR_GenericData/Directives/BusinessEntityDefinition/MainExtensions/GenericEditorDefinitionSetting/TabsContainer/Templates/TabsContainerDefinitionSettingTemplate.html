@@ -1,5 +1,5 @@
 ﻿<vr-row removeline>
-    <div style="padding-left: 6px;">
+    <vr-columns colnum="12" medium-spacing>
         <vr-validator tobottom validate="scopeModel.isValid()">
             <vr-tabs settings="scopeModel.tabsSettings" on-ready="scopeModel.onTabsReady">
                 <div ng-sortable="scopeModel.dragsettings">
@@ -20,5 +20,5 @@
                 </div>
             </vr-tabs>
         </vr-validator>
-    </div>
+    </vr-columns>
 </vr-row>

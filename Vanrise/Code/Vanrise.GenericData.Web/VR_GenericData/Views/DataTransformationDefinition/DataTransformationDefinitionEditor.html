@@ -8,7 +8,34 @@
         }
 
         .stepSequence-title {
-            padding-left:4px;
+            padding-left: 4px;
+        }
+
+        .step-pproperties-icons .icon {
+            width: 10px;
+            cursor: default;
+            position: absolute;
+            top: -25px;
+            left:unset;
+        }
+
+        .step-pproperties-icons .remove-icon {
+            right: 7px;
+        }
+
+        .step-pproperties-icons .refresh-icon {
+            right: 30px;
+        }
+
+
+        .rtl .step-pproperties-icons .remove-icon {
+            right: unset;
+            left: 7px;
+        }
+
+        .rtl .step-pproperties-icons .refresh-icon {
+            right: unset;
+            left: 30px;
         }
 
         .rtl .stepSequence-check-icon {
@@ -66,9 +93,9 @@
                         <vr-columns colnum="3">
                             <vr-section title="Properties" vr-loader="scopeModal.isLoadingDirective">
                                 <vr-row removeline>
-                                    <vr-columns width="fullrow">
-                                        <i class="glyphicon glyphicon-remove hand-cursor" style="width: 10px;  cursor: default ;right: 7px; position: absolute; top: -15px;" ng-click="scopeModal.onEditorRemove()" ng-show="scopeModal.selectedStep !=undefined"></i>
-                                        <i class="glyphicon glyphicon-refresh hand-cursor" style="width: 10px;  cursor: default ;right: 30px; position: absolute; top: -15px;" ng-click="scopeModal.refreshEditor()" ng-show="scopeModal.selectedStep !=undefined"></i>
+                                    <vr-columns width="fullrow" class="step-pproperties-icons">
+                                        <i class="glyphicon glyphicon-remove hand-cursor icon remove-icon" ng-click="scopeModal.onEditorRemove()" ng-show="scopeModal.selectedStep !=undefined"></i>
+                                        <i class="glyphicon glyphicon-refresh hand-cursor icon refresh-icon" ng-click="scopeModal.refreshEditor()" ng-show="scopeModal.selectedStep !=undefined"></i>
 
                                     </vr-columns>
                                 </vr-row>
