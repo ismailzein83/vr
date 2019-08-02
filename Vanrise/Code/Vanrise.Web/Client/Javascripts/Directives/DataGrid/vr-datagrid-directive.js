@@ -629,8 +629,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            ctrl.updateColumnHeader = updateColumnHeader;
 
 	            ctrl.onColumnClicked = function (colDef, dataItem, event) {
-	                if (colDef.onClickedAttr != undefined)
+	                if (colDef.onClickedAttr != undefined) {
 	                    colDef.onClickedAttr(dataItem, colDef, event);
+	                    event.stopPropagation();
+	                }
 	            };
 	            ctrl.onDescriptionClicked = function (colDef, dataItem) {
 	                var modalSettings = {
