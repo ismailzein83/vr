@@ -11,7 +11,8 @@
             editGroup: editGroup,
             registerObjectTrackingDrillDownToGroup: registerObjectTrackingDrillDownToGroup,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            getGroupIdFieldType: getGroupIdFieldType
         });
 
 
@@ -100,6 +101,15 @@
 
         function getDrillDownDefinition() {
             return drillDownDefinitions;
+        }
+        function getGroupIdFieldType() {
+            return {
+                $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType,Vanrise.GenericData.MainExtensions",
+                ConfigId: "2e16c3d4-837b-4433-b80e-7c02f6d71467",
+                RuntimeEditor: "vr-genericdata-fieldtype-businessentity-runtimeeditor",
+                ViewerEditor: "vr-genericdata-fieldtype-businessentity-viewereditor",
+                BusinessEntityDefinitionId: "c9d147c3-316d-488b-8cef-5836d35b3c3b"
+            };
         }
     };
     

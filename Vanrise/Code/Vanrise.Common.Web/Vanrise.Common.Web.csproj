@@ -233,6 +233,7 @@
     <Content Include="Common\Services\APIServices\VRDynamicAPIModuleAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRestCountryAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRestCurrencyAPIService.js" />
+    <Content Include="Common\Services\FieldTypesService.js" />
     <Content Include="Common\Services\HttpProxyMethodService.js" />
     <Content Include="Common\Services\VRDynamicAPIModuleService.js" />
     <Content Include="Common\Services\VRDynamicAPIService.js" />

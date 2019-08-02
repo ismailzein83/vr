@@ -40,6 +40,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return _nonNullableRuntimeType;
         }
+        public override string GenerateValueCode(object value)
+        {
+            if (value == null)
+                return "null";
+            var valueItem = Utilities.ConvertJsonToList<dynamic>(value);
+            return string.Concat("{", string.Join(",", valueItem), "}");
+        }
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
             return new RDBDataRecordFieldAttribute

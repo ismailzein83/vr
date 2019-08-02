@@ -16,7 +16,8 @@
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToUser: registerObjectTrackingDrillDownToUser,
             getEntityUniqueName: getEntityUniqueName,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            getUserIdFieldType: getUserIdFieldType
         });
 
 
@@ -85,7 +86,6 @@
             VRModalService.showModal('/Client/Modules/Security/Views/User/ResetPasswordEditor.html', modalParameters, modalSettings);
         }
 
-
         function resetAuthServerPassword(scope, userId) {
             VRNotificationService.showConfirmation('Are you sure you want to reset the password?')
                 .then(function (response) {
@@ -109,7 +109,6 @@
 
             VRModalService.showModal('/Client/Modules/Security/Views/User/ForgotPasswordEditor.html', modalParameters, undefined);
         }
-
 
         function registerHistoryViewAction() {
 
@@ -151,6 +150,7 @@
             addDrillDownDefinition(drillDownDefinition);
 
         }
+
         function addDrillDownDefinition(drillDownDefinition) {
 
             drillDownDefinitions.push(drillDownDefinition);
@@ -158,6 +158,16 @@
 
         function getDrillDownDefinition() {
             return drillDownDefinitions;
+        }
+
+        function getUserIdFieldType() {
+            return {
+                $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType,Vanrise.GenericData.MainExtensions",
+                ConfigId: "2e16c3d4-837b-4433-b80e-7c02f6d71467",
+                RuntimeEditor: "vr-genericdata-fieldtype-businessentity-runtimeeditor",
+                ViewerEditor: "vr-genericdata-fieldtype-businessentity-viewereditor",
+                BusinessEntityDefinitionId: "217a8f71-1dd6-4613-8ae2-540a510f5ff5"
+            };
         }
     };
 
