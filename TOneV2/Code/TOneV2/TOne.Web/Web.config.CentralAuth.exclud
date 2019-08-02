@@ -56,7 +56,7 @@
         <add assembly="Microsoft.Build.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B03F5F7F11D50A3A" />
       </assemblies>
     </compilation>
-    <httpRuntime targetFramework="4.7.2" executionTimeout="900" maxRequestLength="1048576" enableVersionHeader="false"/>
+    <httpRuntime targetFramework="4.7.2" executionTimeout="2097151" maxRequestLength="2097151" enableVersionHeader="false"/>
     <customErrors mode="On" defaultRedirect="~/Client/Views/ErrorPage.htm"/>
   </system.web>
   <system.webServer>
