@@ -37,12 +37,12 @@ namespace BPMExtended.Main.Business
             EntityCollection entities;
             List<SaleService> services = new List<SaleService>();
 
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            string entityName = new CRMCustomerManager().GetEntityNameByRequestId(requestId);
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
             esq.AddColumn("StContractID");
 
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
 
              entities = esq.GetEntityCollection(BPM_UserConnection);

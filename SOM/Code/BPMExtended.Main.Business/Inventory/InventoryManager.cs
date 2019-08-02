@@ -413,8 +413,6 @@ namespace BPMExtended.Main.Business
             }).ToList();
         }
 
-       
-
         public List<Device> GetDevices(string phoneNumbers)
         {
             List<DeviceDetailItem> apiResult;

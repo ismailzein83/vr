@@ -24,11 +24,48 @@ namespace BPMExtended.Main.Business
         #region public
         public void PostGSHDSLTerminationRequestToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGSHDSLTermination");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<GSHDSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<GSHDSLSubscriptionRequestInput>
+                {
+
+                    InputArguments = new GSHDSLSubscriptionRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<GSHDSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_GSHDSL_CreateContract/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
         #endregion

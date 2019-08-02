@@ -94,6 +94,26 @@ namespace BPMExtended.Main.Business
 
         }
 
+       public void UpdateContractId(string requestId, string contractId)
+        {
+            string entityName = new CRMCustomerManager().GetEntityNameByRequestId(requestId);
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName(entityName);
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, entityName);
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
+            var collection = eSQ.GetEntityCollection(UserConnection);
+            if (collection.Count > 0)
+            {
+                recordEntity = collection[0];
+                recordEntity.SetColumnValue("StContractID", contractId);
+            }
+            recordEntity.Save();
+        }
+
         public List<TelephonyContractDetail> GetTelephonyContractsByNumber(string phoneNumber)
         {
             return RatePlanMockDataGenerator.GetTelephonyContractsByNumber(phoneNumber);
