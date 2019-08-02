@@ -525,6 +525,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\vr-whs-be-salerate-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CustomerSoldZones\Templates\CustomerSoldZonesGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CustomerSoldZones\vr-whs-be-customersoldzones-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\ScheduleTask\Templates\SalePricelistEmailSenderTaskTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\ScheduleTask\vr-whs-be-salepricelistemailsendertask.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\AutoImportSPLSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\AutoImportTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\BETechnicalNumberPlanSettingsTemplate.html" />
