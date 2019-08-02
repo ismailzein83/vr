@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 app.directive('businessprocessVrWorkflowactivityCustomcode', ['UtilsService', 'VRUIUtilsService',
-	function (UtilsService, VRUIUtilsService) {
+    function (UtilsService, VRUIUtilsService) {
 
 	    var directiveDefinitionObject = {
 	        restrict: 'E',
@@ -24,35 +24,52 @@ app.directive('businessprocessVrWorkflowactivityCustomcode', ['UtilsService', 'V
 
 	    function workflowCustomCode(ctrl, $scope, $attrs) {
 
-	        this.initializeController = initializeController;
+            this.initializeController = initializeController;
+            var codeExpressionBuilderDirectiveAPI;
+            var codeExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+            var settings;
+            var context;
 	        function initializeController() {
 	            $scope.scopeModel = {};
-	            $scope.scopeModel.isVRWorkflowActivityDisabled = false;
+                $scope.scopeModel.isVRWorkflowActivityDisabled = false;
+                $scope.scopeModel.onCodeExpressionBuilderDirectiveReady = function (api) {
+                    codeExpressionBuilderDirectiveAPI = api;
+                    codeExpressionBuilderPromiseReadyDeffered.resolve();
+                };
 	            defineAPI();
-	        }
+            }
+            function loadCodeExpressionBuilder() {
+
+                var codeExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                codeExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: settings != undefined ? settings.Code : undefined,
+                    };
+                    VRUIUtilsService.callDirectiveLoad(codeExpressionBuilderDirectiveAPI, payload, codeExpressionBuilderPromiseLoadDeffered);
+                });
+                return codeExpressionBuilderPromiseLoadDeffered.promise;
+            }
 	        function defineAPI() {
 	            var api = {};
 
-				api.load = function (payload) {
-					var promises = [];
-	                if (payload != undefined) {
-	                    if (payload.Settings != undefined) {
-	                        $scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
-	                        if (payload.Settings.Code != null) {
-	                            $scope.scopeModel.customCode = payload.Settings.Code;
-	                        }
-	                    }
-
-	                    if (payload.Context != null)
-	                        $scope.scopeModel.context = payload.Context;
-					}
-					return UtilsService.waitMultiplePromises(promises);
-	            };
+                api.load = function (payload) {
+                    var promises = [];
+                    if (payload != undefined) {
+                        settings = payload.Settings;
+                        if (settings != undefined) {
+                            $scope.scopeModel.isVRWorkflowActivityDisabled = settings.IsDisabled;
+                        }
+                        context = payload.Context;
+                        promises.push(loadCodeExpressionBuilder());
+                    }
+                    return UtilsService.waitPromiseNode({ promises: promises });
+                };
 
 	            api.getData = function () {
 	                return {
-	                    $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCustomLogicActivity, Vanrise.BusinessProcess.MainExtensions",
-	                    Code: $scope.scopeModel.customCode
+                        $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCustomLogicActivity, Vanrise.BusinessProcess.MainExtensions",
+                        Code: codeExpressionBuilderDirectiveAPI != undefined ? codeExpressionBuilderDirectiveAPI.getData() : undefined
 	                };
 	            };
 
@@ -64,8 +81,8 @@ app.directive('businessprocessVrWorkflowactivityCustomcode', ['UtilsService', 'V
 	                return $scope.scopeModel.isVRWorkflowActivityDisabled;
 	            };
 
-	            api.isActivityValid = function () {
-	                return $scope.scopeModel.customCode != undefined;
+                api.isActivityValid = function () {
+                    return codeExpressionBuilderDirectiveAPI != undefined && codeExpressionBuilderDirectiveAPI.getData() != undefined;
 	            };
 
 	            if (ctrl.onReady != null)

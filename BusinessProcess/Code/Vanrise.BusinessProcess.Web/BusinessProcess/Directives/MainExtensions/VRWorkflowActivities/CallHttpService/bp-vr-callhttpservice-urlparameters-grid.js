@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessVrCallhttpserviceUrlparametersGrid", ["UtilsService",
-	function (UtilsService) {
+app.directive("businessprocessVrCallhttpserviceUrlparametersGrid", ["UtilsService", "VRUIUtilsService","VRCommon_FieldTypesService",
+    function (UtilsService, VRUIUtilsService, VRCommon_FieldTypesService) {
 
 		var directiveDefinitionObject = {
 
@@ -27,6 +27,8 @@ app.directive("businessprocessVrCallhttpserviceUrlparametersGrid", ["UtilsServic
 			this.initializeController = initializeController;
 
 			var gridAPI;
+            var context;
+            var fieldTextType = VRCommon_FieldTypesService.getTextFieldType();
 
 			function initializeController() {
 				$scope.scopeModel = {};
@@ -38,8 +40,8 @@ app.directive("businessprocessVrCallhttpserviceUrlparametersGrid", ["UtilsServic
 				};
 
 				$scope.scopeModel.addRow = function (data) {
-					$scope.scopeModel.urlParameters.push({ Entity: {} });
-				};
+                    prepareItemToAdd();
+                };
 
 				$scope.scopeModel.deleteRow = function (dataItem) {
 					var index = UtilsService.getItemIndexByVal($scope.scopeModel.urlParameters, dataItem.Entity.Name, 'Entity.Name');
@@ -65,26 +67,78 @@ app.directive("businessprocessVrCallhttpserviceUrlparametersGrid", ["UtilsServic
 					return null;
 				};
 			}
+            function prepareItemToAdd() {
+                var dataItem = {
+                    Entity: {}
+                };
+                dataItem.onValueExpressionBuilderDirectiveReady = function (api) {
+                    dataItem.valueExpressionBuilderDirectiveAPI = api;
+                    var setLoader = function (value) { dataItem.isValueExpressionBuilderDirectiveLoading = value; };
+                    var payload = {
+                        context: context
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.valueExpressionBuilderDirectiveAPI, payload, setLoader);
+                };
+                $scope.scopeModel.urlParameters.push(dataItem);
+            }
+            function perpareItem(parameterObject) {
 
+                var dataItem = {
+                    Entity: {
+                        Name: parameterObject.payload.Name
+                    }
+                };
+
+                dataItem.onValueExpressionBuilderDirectiveReady = function (api) {
+                    dataItem.valueExpressionBuilderDirectiveAPI = api;
+                    parameterObject.valueReadyPromiseDeferred.resolve();
+                };
+                parameterObject.valueReadyPromiseDeferred.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: parameterObject.payload.Value
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.valueExpressionBuilderDirectiveAPI, payload, parameterObject.valueLoadPromiseDeferred);
+                });
+                $scope.scopeModel.urlParameters.push(dataItem);
+            }
 			function defineAPI() {
 				var api = {};
 
-				api.load = function (payload) {
-					if (payload != undefined) {
-						$scope.scopeModel.getWorkflowArguments = payload.getWorkflowArguments;
-						$scope.scopeModel.getParentVariables = payload.getParentVariables;
+                api.load = function (payload) {
+                    var promises = [];
+                    if (payload != undefined) {
+                        context = {
+                            getWorkflowArguments: payload.getWorkflowArguments,
+                            getParentVariables: payload.getParentVariables
+                        };
 
-						if (payload.urlParameters != undefined) {
-							for (var i = 0; i < payload.urlParameters.length; i++)
-								$scope.scopeModel.urlParameters.push({
-									Entity: payload.urlParameters[i]
-								});
-						}
-					}
+                        if (payload.urlParameters != undefined) {
+                            for (var i = 0; i < payload.urlParameters.length; i++) {
+                                var urlParameterObject = {
+                                    payload: payload.urlParameters[i],
+                                    valueReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    valueLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                promises.push(urlParameterObject.valueLoadPromiseDeferred.promise);
+                                perpareItem(urlParameterObject);
+                            }
+                        }
+                    }
+                    return UtilsService.waitPromiseNode({ promises: promises });
 				};
 
-				api.getData = function () {
-					return $scope.scopeModel.urlParameters.map(a => a.Entity);
+                api.getData = function () {
+                    var items = [];
+                    for (var x = 0; x < $scope.scopeModel.urlParameters.length; x++) {
+                        var urlParameter = $scope.scopeModel.urlParameters[x];
+                        items.push(
+                            {
+                                Name: urlParameter.Entity.Name,
+                                Value: urlParameter.valueExpressionBuilderDirectiveAPI != undefined ? urlParameter.valueExpressionBuilderDirectiveAPI.getData() : undefined
+                            });
+                    }
+                    return items;
 				};
 
 				if (ctrl.onReady != null)

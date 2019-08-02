@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BPTechnicalDefinitionEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService'];
+    BPTechnicalDefinitionEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService','VRCommon_FieldTypesService'];
 
-    function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService) {
+    function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, VRCommon_FieldTypesService) {
 
         var isEditMode;
         var vrWorkflowArguments;
@@ -41,8 +41,11 @@
         var devProjectDirectiveApi;
         var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var vrWorkflowFields;
+        var processTitleExpressionBuilderDirectiveAPI;
+        var processTitleExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
 
+        var vrWorkflowFields;
+        var textFieldType = VRCommon_FieldTypesService.getTextFieldType();
         loadParameters();
         defineScope();
         load();
@@ -104,6 +107,11 @@
                 devProjectDirectiveApi = api;
                 devProjectPromiseReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onProcessTitleExpressionBuilderDirectiveReady = function (api) {
+                processTitleExpressionBuilderDirectiveAPI = api;
+                processTitleExpressionBuilderPromiseReadyDeffered.resolve();
+            };
             $scope.scopeModel.onVRWorkflowSelectionChanged = function (selectedVRWorkflow) {
                 validationMessages = undefined;
                 if (selectedVRWorkflow != undefined) {
@@ -114,7 +122,16 @@
                     else {
                         $scope.scopeModel.isLoadingArguments = true;
                         getVRWorkflowArguments(selectedVRWorkflow.VRWorkflowId).then(function () {
-                            $scope.scopeModel.processTitle = undefined;
+                            if (processTitleExpressionBuilderDirectiveAPI != undefined) {
+                                processTitleExpressionBuilderDirectiveAPI.load({
+                                    context: getContext(),
+                                    value: undefined,
+                                    fieldEntity: {
+                                        fieldType: textFieldType,
+                                        fieldTitle: "Process Title"
+                                    }
+                                });
+                            }
                             $scope.scopeModel.isLoadingArguments = false;
                         }).catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -308,6 +325,23 @@
             });
             return devProjectPromiseLoadDeferred.promise;
         }
+
+        function loadProcessTitleExpressionBuilder() {
+            var processTitleExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+            processTitleExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                var processTitlePayload = {
+                    context: getContext(),
+                    value: businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.Configuration != undefined ? businessProcessDefinitionEntity.Configuration.ProcessTitle : undefined,
+                    fieldEntity: {
+                        fieldType: textFieldType,
+                        fieldTitle:"Process Title"
+                    }
+                };
+                VRUIUtilsService.callDirectiveLoad(processTitleExpressionBuilderDirectiveAPI, processTitlePayload, processTitleExpressionBuilderPromiseLoadDeffered);
+            });
+            return processTitleExpressionBuilderPromiseLoadDeffered.promise;
+        }
+
         function loadAllControls() {
 
             function setTitle() {
@@ -326,7 +360,6 @@
                 $scope.scopeModel.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
                 $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
                 $scope.scopeModel.warningMessage = businessProcessDefinitionEntity.Configuration.WarningMessage;
-                $scope.scopeModel.processTitle = businessProcessDefinitionEntity.Configuration.ProcessTitle;
                 $scope.scopeModel.manualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings && businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable || false;
                 $scope.scopeModel.scheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable || false;
                 $scope.scopeModel.sameAsManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.SameAsManualEditor || false;
@@ -469,6 +502,9 @@
                 }
 
             }
+            if ($scope.scopeModel.loadVRWorklowSelector) {
+                operations.push(loadProcessTitleExpressionBuilder);
+            }
             return UtilsService.waitMultipleAsyncOperations(operations).then(function () {
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -568,6 +604,12 @@
                 getActionInfos: function () {
                     var data = [];
                     return data;
+                },
+                getWorkflowArguments: function () {
+                    return vrWorkflowArguments;
+                },
+                getParentVariables: function () {
+                    return null;
                 }
             };
         }
@@ -586,7 +628,7 @@
             obj.Title = $scope.scopeModel.title;
             obj.VRWorkflowId = $scope.scopeModel.loadVRWorklowSelector ? vrWorkflowSelectorAPI.getSelectedIds() : null;
             obj.DevProjectId = devProjectDirectiveApi.getSelectedIds();
-            obj.Configuration.ProcessTitle = $scope.scopeModel.loadVRWorklowSelector ? $scope.scopeModel.processTitle : null;
+            obj.Configuration.ProcessTitle = $scope.scopeModel.loadVRWorklowSelector && processTitleExpressionBuilderDirectiveAPI != undefined ? processTitleExpressionBuilderDirectiveAPI.getData() : null;
             obj.Configuration.EditorSize = modalWidthSelectorAPI != undefined ? modalWidthSelectorAPI.getSelectedIds() : null;
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
@@ -626,3 +668,4 @@
 
     appControllers.controller('BusinessProcess_BP_TechnicalDefinitionEditorController', BPTechnicalDefinitionEditorController);
 })(appControllers);
+

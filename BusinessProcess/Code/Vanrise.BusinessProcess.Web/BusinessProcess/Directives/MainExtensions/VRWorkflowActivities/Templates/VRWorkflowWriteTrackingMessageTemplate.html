@@ -4,7 +4,9 @@
                    label="Severity" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedSeverity">
     </vr-columns>
     
-	<vr-columns colnum="9">
-		<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Message" isrequired="true" value="scopeModel.message"></businessprocess-vr-workflow-activity-expressionbuilder>
-	</vr-columns>
+    <vr-columns colnum="9">
+        <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onMessageExpressionBuilderDirectiveReady"
+                                                                       label="Message" isrequired="!scopeModel.isVRWorkflowActivityDisabled">
+        </businessprocess-vr-workflow-activity-editor-expressionbuilder>
+    </vr-columns>
 </vr-row>

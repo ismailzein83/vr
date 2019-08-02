@@ -18,6 +18,9 @@
         var settingsDirectiveAPI;
         var settingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var entityIdExpressionBuilderDirectiveAPI;
+        var entityIdExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -57,6 +60,10 @@
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onEntityIdExpressionBuilderDirectiveReady = function (api) {
+                entityIdExpressionBuilderDirectiveAPI = api;
+                entityIdExpressionBuilderPromiseReadyDeffered.resolve();
             };
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (value) {
                 $scope.scopeModel.selectedBusinessEntity = value;
@@ -101,7 +108,6 @@
 
             function loadStaticData() {
                 $scope.scopeModel.displayName = displayName;
-                $scope.scopeModel.entityId = entityId;
             }
 
             function loadBusinessEntityDefinitionSelector() {
@@ -137,6 +143,17 @@
                 return settingsSelectorLoadDeferred.promise;
             }
 
+            function loadEntityIdExpressionBuilder() {
+                var entityIdExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                entityIdExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: entityId
+                    };
+                    VRUIUtilsService.callDirectiveLoad(entityIdExpressionBuilderDirectiveAPI, payload, entityIdExpressionBuilderPromiseLoadDeffered);
+                });
+                return entityIdExpressionBuilderPromiseLoadDeffered.promise;
+            }
             setTitle();
             loadStaticData();
             promises.push(loadBusinessEntityDefinitionSelector());
@@ -145,6 +162,7 @@
                 businessEntityDefinitionSelectedPromise = UtilsService.createPromiseDeferred();
                 promises.push(loadSettingsSelector());
             }
+            promises.push(loadEntityIdExpressionBuilder());
             var rootPromiseNode = { promises: promises };
 
             return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
@@ -156,10 +174,10 @@
         }
 
         function updateActivity() {
-            $scope.scopeModel.isLoading = true;
+            $scope.scopeModel.isLoading = true; 
             var updatedObject = {
                 displayName: $scope.scopeModel.displayName,
-                entityId: $scope.scopeModel.entityId,
+                entityId: entityIdExpressionBuilderDirectiveAPI != undefined ? entityIdExpressionBuilderDirectiveAPI.getData() : undefined,
                 entityDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
                 settings: settingsDirectiveAPI.getData(),
             };

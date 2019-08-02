@@ -50,7 +50,6 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.context = context;
             $scope.scopeModel.hasInArguments = false;
             $scope.scopeModel.hasOutArguments = false;
             $scope.scopeModel.inArguments = [];
@@ -85,10 +84,10 @@
                             getChildNode: function () {
                                 var gridPromises = [];
                                 if ($scope.scopeModel.hasInArguments)
-                                    gridPromises.push(loadInArgumentsGrid());
+                                    gridPromises.push(loadInArgumentsGrid(undefined, gridPromises));
 
                                 if ($scope.scopeModel.hasOutArguments)
-                                    gridPromises.push(loadOutArgumentsGrid());
+                                    gridPromises.push(loadOutArgumentsGrid(undefined, gridPromises));
 
                                 return {
                                     promises: gridPromises
@@ -148,10 +147,10 @@
                                 getChildNode: function () {
                                     var gridPromises = [];
                                     if ($scope.scopeModel.hasInArguments)
-                                        gridPromises.push(loadInArgumentsGrid(inArguments));
+                                        gridPromises.push(loadInArgumentsGrid(inArguments, gridPromises));
 
                                     if ($scope.scopeModel.hasOutArguments)
-                                        gridPromises.push(loadOutArgumentsGrid(outArguments));
+                                        gridPromises.push(loadOutArgumentsGrid(outArguments, gridPromises));
 
                                     return {
                                         promises: gridPromises
@@ -209,8 +208,10 @@
                 inArgumentsObject = {};
                 for (var x = 0; x < $scope.scopeModel.inArguments.length; x++) {
                     var currentInArgument = $scope.scopeModel.inArguments[x];
-                    if (currentInArgument.value != undefined) {
-                        inArgumentsObject[currentInArgument.name] = currentInArgument.value;
+                    if (currentInArgument.valueExpressionBuilderDirectiveAPI != undefined) {
+                        var value = currentInArgument.valueExpressionBuilderDirectiveAPI.getData();
+                        if (value != undefined)
+                            inArgumentsObject[currentInArgument.entity.name] = value;
                     }
                 }
             }
@@ -220,8 +221,10 @@
                 outArgumentsObject = {};
                 for (var x = 0; x < $scope.scopeModel.outArguments.length; x++) {
                     var currentOutArgument = $scope.scopeModel.outArguments[x];
-                    if (currentOutArgument.value != undefined) {
-                        outArgumentsObject[currentOutArgument.name] = currentOutArgument.value;
+                    if (currentOutArgument.valueExpressionBuilderDirectiveAPI != undefined) {
+                        var value = currentOutArgument.valueExpressionBuilderDirectiveAPI.getData();
+                        if (value != undefined)
+                            outArgumentsObject[currentOutArgument.entity.name] = value;
                     }
                 }
             }
@@ -255,7 +258,7 @@
             });
         }
 
-        function loadInArgumentsGrid(selectedArguments) {
+        function loadInArgumentsGrid(selectedArguments,gridPromises) {
             $scope.scopeModel.inArguments = [];
             var inArgumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
             inArgumentsGridReadyDeferred.promise.then(function () {
@@ -263,8 +266,13 @@
                     for (var i = 0; i < selectedVRWrkflow.Settings.Arguments.length; i++) {
                         var currentArgumentDefinition = selectedVRWrkflow.Settings.Arguments[i];
                         if (currentArgumentDefinition.Direction != 1) {
-                            var argValue = tryGetArgumentValue(selectedArguments, currentArgumentDefinition.Name);
-                            $scope.scopeModel.inArguments.push({ name: currentArgumentDefinition.Name, value: argValue });
+                            var argumentObject = {
+                                payload: currentArgumentDefinition,
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            };
+                            gridPromises.push(argumentObject.loadPromiseDeferred.promise);
+                            prepareInArgument(argumentObject, selectedArguments);
                         }
                     }
                 }
@@ -273,7 +281,31 @@
 
             return inArgumentsGridLoadDeferred.promise;
         }
-
+        function prepareInArgument(argumentObject, selectedArguments) {
+            var dataItem = {
+                entity: {
+                    name: argumentObject.payload.Name
+                }
+            };
+            var argValue = tryGetArgumentValue(selectedArguments, argumentObject.payload.Name);
+            dataItem.onValueExpressionBuilderDirectiveReady = function (api) {
+                dataItem.valueExpressionBuilderDirectiveAPI = api;
+                argumentObject.readyPromiseDeferred.resolve();
+            }; 
+            argumentObject.readyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: argValue,
+                    fieldEntity: {
+                        fieldType: argumentObject.payload.Type != undefined ? argumentObject.payload.Type.FieldType : undefined,
+                        fieldTitle: argumentObject.payload.Name
+                    }
+                };
+                VRUIUtilsService.callDirectiveLoad(dataItem.valueExpressionBuilderDirectiveAPI, payload, argumentObject.loadPromiseDeferred);
+            });
+              
+            $scope.scopeModel.inArguments.push(dataItem);
+        }
         function tryGetArgumentValue(selectedArguments, argumentName) {
             if (selectedArguments == undefined)
                 return;
@@ -281,7 +313,7 @@
             return selectedArguments[argumentName];
         }
 
-        function loadOutArgumentsGrid(selectedArguments) {
+        function loadOutArgumentsGrid(selectedArguments, gridPromises) {
             $scope.scopeModel.outArguments = [];
             var outArgumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
             outArgumentsGridReadyDeferred.promise.then(function () {
@@ -289,8 +321,13 @@
                     for (var i = 0; i < selectedVRWrkflow.Settings.Arguments.length; i++) {
                         var currentArgumentDefinition = selectedVRWrkflow.Settings.Arguments[i];
                         if (currentArgumentDefinition.Direction != 0) {
-                            var argValue = tryGetArgumentValue(selectedArguments, currentArgumentDefinition.Name);
-                            $scope.scopeModel.outArguments.push({ name: currentArgumentDefinition.Name, value: argValue });
+                            var argumentObject = {
+                                payload: currentArgumentDefinition,
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            };
+                            gridPromises.push(argumentObject.loadPromiseDeferred.promise);
+                            prepareOutArgument(argumentObject, selectedArguments);
                         }
                     }
                 }
@@ -298,6 +335,26 @@
             });
 
             return outArgumentsGridLoadDeferred.promise;
+        }
+        function prepareOutArgument(argumentObject, selectedArguments) {
+            var dataItem = {
+                entity: {
+                    name: argumentObject.payload.Name
+                }
+            };
+            var argValue = tryGetArgumentValue(selectedArguments,argumentObject.payload.Name);
+            dataItem.onValueExpressionBuilderDirectiveReady = function (api) {
+                dataItem.valueExpressionBuilderDirectiveAPI = api;
+                argumentObject.readyPromiseDeferred.resolve();
+            };
+            argumentObject.readyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: argValue
+                };
+                VRUIUtilsService.callDirectiveLoad(dataItem.valueExpressionBuilderDirectiveAPI, payload, argumentObject.loadPromiseDeferred);
+            });
+            $scope.scopeModel.outArguments.push(dataItem);
         }
     }
 

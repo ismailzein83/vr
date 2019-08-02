@@ -6,19 +6,18 @@
                     <vr-textbox value="scopeModel.displayName" label="Display Name" isrequired="!scopeModel.isVRWorkflowActivityDisabled"></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="4">
-                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
-                                                                             isrequired="true"
-                                                                            label="Entity ID"
-                                                                            value="scopeModel.entityId">
-                    </businessprocess-vr-workflow-activity-expressionbuilder>
+                    <businessprocess-vr-workflow-activity-editor-expressionbuilder label="Entity ID" on-ready="scopeModel.onEntityIdExpressionBuilderDirectiveReady" isrequired="true">
+
+
+                    </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                 </vr-columns>
                 <vr-columns colnum="4">
+
                     <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
                                                                       isrequired="true" customlabel="Business Entity Definition"
                                                                       onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"
                                                                       selectedvalues="scopeModel.selectedBusinessEntity"
-                                                                       hideremoveicon="true">
+                                                                      hideremoveicon="true">
                     </vr-genericdata-businessentitydefinition-selector>
 
                 </vr-columns>

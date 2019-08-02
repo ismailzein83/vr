@@ -12,6 +12,9 @@
 		var workflowContainerAPI;
 		var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var listExpressionBuilderDirectiveAPI;
+        var listExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
 		var dragdropsetting;
         var list;
         var conditionDescription;
@@ -58,7 +61,10 @@
 				iterationVariableTypeSelectorAPI = api;
 				iterationVariableTypeSelectorReadyDeferred.resolve();
 			};
-
+            $scope.scopeModel.onListExpressionBuilderDirectiveReady = function (api) {
+                listExpressionBuilderDirectiveAPI = api;
+                listExpressionBuilderPromiseReadyDeffered.resolve();
+            };
 			$scope.scopeModel.isVariableNameValid = function () {
 				if ($scope.scopeModel.iterationVariableName == undefined)
 					return null;
@@ -167,6 +173,17 @@
 				return newContainerChildContext;
 			}
 
+            function loadListExpressionBuilder() {
+                var listExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                listExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value:list
+                    };
+                    VRUIUtilsService.callDirectiveLoad(listExpressionBuilderDirectiveAPI, payload, listExpressionBuilderPromiseLoadDeffered);
+                });
+                return listExpressionBuilderPromiseLoadDeffered.promise;
+            }
 			function loadWorkflowContainer() {
 				var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -190,7 +207,7 @@
 				});
 			}
 
-			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVariableTypeSelector, loadWorkflowActivityExtensionConfigs, loadWorkflowContainer]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVariableTypeSelector, loadWorkflowActivityExtensionConfigs, loadWorkflowContainer, loadListExpressionBuilder]).then(function () {
 			}).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
 			}).finally(function () {
@@ -211,8 +228,8 @@
 					context.eraseVariableName(oldIterationVariableName);
 			}
 
-			var updatedObject = {
-				List: $scope.scopeModel.list,
+            var updatedObject = {
+                List: listExpressionBuilderDirectiveAPI != undefined ? listExpressionBuilderDirectiveAPI.getData : undefined,
 				IterationVariableName: $scope.scopeModel.iterationVariableName,
 				IterationVariableType: iterationVariableTypeSelectorAPI.getData(),
                 Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null,

@@ -27,8 +27,9 @@
                             <vr-columns colnum="11">
                                 <span vr-loader="scopeModel.isLoadingArguments">
                                     <vr-validator validate="scopeModel.isTitleValid()">
-                                        <businessprocess-vr-workflow-activity-expressionbuilder getworkflowarguments="scopeModel.getVRWorkflowArguments"
-                                                                                                label="Process Title" value="scopeModel.processTitle" nb-of-rows="2"></businessprocess-vr-workflow-activity-expressionbuilder>
+                                        <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onProcessTitleExpressionBuilderDirectiveReady"
+                                                                                                       label="Process Title" nb-of-rows="2">
+                                        </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                                     </vr-validator>
                                 </span>
                             </vr-columns>

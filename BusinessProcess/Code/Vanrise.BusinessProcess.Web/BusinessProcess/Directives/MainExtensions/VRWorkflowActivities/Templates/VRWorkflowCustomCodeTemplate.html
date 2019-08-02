@@ -1,3 +1,5 @@
 ﻿<vr-columns colnum="12">
-    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Code" isrequired="!scopeModel.isVRWorkflowActivityDisabled" value="scopeModel.customCode" nb-of-rows="5"></businessprocess-vr-workflow-activity-expressionbuilder>
-</vr-columns>
+    <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onCodeExpressionBuilderDirectiveReady"
+                                                                   label="Code" isrequired="!scopeModel.isVRWorkflowActivityDisabled" nb-of-rows="5">
+    </businessprocess-vr-workflow-activity-editor-expressionbuilder>
+   </vr-columns>

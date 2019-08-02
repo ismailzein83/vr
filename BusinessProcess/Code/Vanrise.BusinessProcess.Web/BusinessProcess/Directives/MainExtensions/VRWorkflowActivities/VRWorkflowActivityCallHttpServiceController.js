@@ -2,9 +2,9 @@
 
     "use strict";
 
-    CallHttpServiceEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService', 'VRWorkflowCallHttpServiceMethodEnum', 'VRWorkflowCallHttpServiceMessageFormatEnum', 'VRWorkflowCallHttpRetrySettingsEnum'];
+    CallHttpServiceEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'VRWorkflowCallHttpServiceMethodEnum', 'VRWorkflowCallHttpServiceMessageFormatEnum', 'VRWorkflowCallHttpRetrySettingsEnum'];
 
-    function CallHttpServiceEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService, VRWorkflowCallHttpServiceMethodEnum, VRWorkflowCallHttpServiceMessageFormatEnum, VRWorkflowCallHttpRetrySettingsEnum) {
+    function CallHttpServiceEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowService, VRWorkflowCallHttpServiceMethodEnum, VRWorkflowCallHttpServiceMessageFormatEnum, VRWorkflowCallHttpRetrySettingsEnum) {
 
         var serviceName;
         var connectionId;
@@ -32,6 +32,22 @@
 
         var urlParametersGridAPI;
         var urlParametersGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var isSucceededExpressionBuilderDirectiveAPI;
+        var isSucceededExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var actionPathExpressionBuilderDirectiveAPI;
+        var actionPathExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var responseLogicExpressionBuilderDirectiveAPI;
+        var responseLogicExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var bodyLogicExpressionBuilderDirectiveAPI;
+        var bodyLogicExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var errorLogicExpressionBuilderDirectiveAPI;
+        var errorLogicExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+                       
 
         loadParameters();
         defineScope();
@@ -73,6 +89,33 @@
                 }
             };
 
+
+            $scope.scopeModel.onIsSucceededExpressionBuilderDirectiveReady = function (api) {
+                isSucceededExpressionBuilderDirectiveAPI = api;
+                isSucceededExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+
+            $scope.scopeModel.onActionPathExpressionBuilderDirectiveReady = function (api) {
+                actionPathExpressionBuilderDirectiveAPI = api;
+                actionPathExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+
+            $scope.scopeModel.onBodyLogicExpressionBuilderDirectiveReady = function (api) {
+                bodyLogicExpressionBuilderDirectiveAPI = api;
+                bodyLogicExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+
+            $scope.scopeModel.onResponseLogicExpressionBuilderDirectiveReady = function (api) {
+                responseLogicExpressionBuilderDirectiveAPI = api;
+                responseLogicExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+
+            $scope.scopeModel.onErrorLogicExpressionBuilderDirectiveReady = function (api) {
+                errorLogicExpressionBuilderDirectiveAPI = api;
+                errorLogicExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+
+
             $scope.scopeModel.onConnectionSelectorReady = function (api) {
                 connectionSelectorAPI = api;
                 connectionSelectorReadyDeferred.resolve();
@@ -101,6 +144,7 @@
 
         }
 
+
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
@@ -115,11 +159,6 @@
             function loadStaticData() {
                 $scope.scopeModel.serviceName = serviceName;
                 $scope.scopeModel.connectionId = connectionId;
-                $scope.scopeModel.actionPath = actionPath;
-                $scope.scopeModel.buildBodyLogic = buildBodyLogic;
-                $scope.scopeModel.responseLogic = responseLogic;
-                $scope.scopeModel.errorLogic = errorLogic;
-                $scope.scopeModel.isSucceeded = isSucceeded;
                 $scope.scopeModel.continueWorkflowIfCallFailed = continueWorkflowIfCallFailed;
                 $scope.scopeModel.context = context;
                 $scope.scopeModel.classMembersCode = classMembersCode;
@@ -195,7 +234,62 @@
                 return connectionSelectorLoadDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadHeadersGrid, loadURLParametersGrid, loadCallHttpServiceMethodSelector, loadCallHttpServiceMessageFormatSelector, loadCallHttpRetrySettingsSelector, loadConnectionSelector]).then(function () {
+            function loadIsSucceededExpressionBuilder() {
+                var isSucceededExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                isSucceededExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: isSucceeded
+                    };
+                    VRUIUtilsService.callDirectiveLoad(isSucceededExpressionBuilderDirectiveAPI, payload, isSucceededExpressionBuilderPromiseLoadDeffered);
+                });
+                return isSucceededExpressionBuilderPromiseLoadDeffered.promise;
+            }
+            function loadActionPathExpressionBuilder() {
+                var actionPathExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                actionPathExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: actionPath
+                    };
+                    VRUIUtilsService.callDirectiveLoad(actionPathExpressionBuilderDirectiveAPI, payload, actionPathExpressionBuilderPromiseLoadDeffered);
+                });
+                return actionPathExpressionBuilderPromiseLoadDeffered.promise;
+            }
+            function loadBodyLogicExpressionBuilder() {
+                var bodyLogicExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                bodyLogicExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: buildBodyLogic
+                    };
+                    VRUIUtilsService.callDirectiveLoad(bodyLogicExpressionBuilderDirectiveAPI, payload, bodyLogicExpressionBuilderPromiseLoadDeffered);
+                });
+                return bodyLogicExpressionBuilderPromiseLoadDeffered.promise;
+            }
+            function loadResponseLogicExpressionBuilder() {
+                var responseLogicExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                responseLogicExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: responseLogic
+                    };
+                    VRUIUtilsService.callDirectiveLoad(responseLogicExpressionBuilderDirectiveAPI, payload, responseLogicExpressionBuilderPromiseLoadDeffered);
+                });
+                return responseLogicExpressionBuilderPromiseLoadDeffered.promise;
+            }
+            function loadErrorLogicExpressionBuilder() {
+                var errorLogicExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                errorLogicExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: errorLogic
+                    };
+                    VRUIUtilsService.callDirectiveLoad(errorLogicExpressionBuilderDirectiveAPI, payload, errorLogicExpressionBuilderPromiseLoadDeffered);
+                });
+                return errorLogicExpressionBuilderPromiseLoadDeffered.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadHeadersGrid, loadURLParametersGrid, loadCallHttpServiceMethodSelector, loadCallHttpServiceMessageFormatSelector, loadCallHttpRetrySettingsSelector, loadConnectionSelector, loadIsSucceededExpressionBuilder, loadActionPathExpressionBuilder, loadBodyLogicExpressionBuilder, loadResponseLogicExpressionBuilder, loadErrorLogicExpressionBuilder]).then(function () {
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -208,13 +302,13 @@
             var updatedObject = {
                 connectionId: connectionSelectorAPI.getSelectedIds(),
                 callHttpServiceMethod: $scope.scopeModel.selectedCallHttpServiceMethod.value,
-                actionPath: $scope.scopeModel.actionPath,
-                buildBodyLogic: $scope.scopeModel.buildBodyLogic,
+                actionPath: actionPathExpressionBuilderDirectiveAPI != undefined ? actionPathExpressionBuilderDirectiveAPI.getData() : undefined,
+                buildBodyLogic: bodyLogicExpressionBuilderDirectiveAPI != undefined ? bodyLogicExpressionBuilderDirectiveAPI.getData() : undefined,
                 callHttpServiceMessageFormat: $scope.scopeModel.selectedCallHttpServiceMessageFormat.value,
                 callHttpRetrySettings: $scope.scopeModel.selectedCallHttpRetrySettings.value,
-                responseLogic: $scope.scopeModel.responseLogic,
-                errorLogic: $scope.scopeModel.errorLogic,
-                isSucceeded: $scope.scopeModel.isSucceeded,
+                responseLogic: responseLogicExpressionBuilderDirectiveAPI != undefined ? responseLogicExpressionBuilderDirectiveAPI.getData() : undefined,
+                errorLogic: errorLogicExpressionBuilderDirectiveAPI != undefined ? errorLogicExpressionBuilderDirectiveAPI.getData() : undefined,
+                isSucceeded: isSucceededExpressionBuilderDirectiveAPI != undefined ? isSucceededExpressionBuilderDirectiveAPI.getData() : undefined,
                 continueWorkflowIfCallFailed: $scope.scopeModel.continueWorkflowIfCallFailed,
                 serviceName: $scope.scopeModel.serviceName,
                 headers: (headersGridAPI != undefined) ? headersGridAPI.getData() : undefined,

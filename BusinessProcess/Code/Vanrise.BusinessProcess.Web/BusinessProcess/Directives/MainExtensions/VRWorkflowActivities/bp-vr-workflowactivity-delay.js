@@ -23,26 +23,46 @@ app.directive('businessprocessVrWorkflowactivityDelay', ['UtilsService', 'VRUIUt
 
         function workflowDelay(ctrl, $scope, $attrs) {
 
+            var delayExpressionBuilderDirectiveAPI;
+            var delayExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+            var settings;
+            var context;
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.isVRWorkflowActivityDisabled = false;
+
+                $scope.scopeModel.onDelayExpressionBuilderDirectiveReady = function (api) {
+                    delayExpressionBuilderDirectiveAPI = api;
+                    delayExpressionBuilderPromiseReadyDeffered.resolve();
+                };
                 defineAPI();
             }
+            function loadDelayExpressionBuilder() {
 
+                var delayExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                delayExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: settings != undefined ? settings.Delay : undefined,
+                    };
+                    VRUIUtilsService.callDirectiveLoad(delayExpressionBuilderDirectiveAPI, payload, delayExpressionBuilderPromiseLoadDeffered);
+                });
+                return delayExpressionBuilderPromiseLoadDeffered.promise;
+            }
             function defineAPI() {
                 var api = {};
 
 				api.load = function (payload) {
 					var promises = [];
                     if (payload != undefined) {
-                        if (payload.Settings != undefined) {
-                            $scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
-                            $scope.scopeModel.delay = payload.Settings.Delay;
+                        settings = payload.Settings;
+                        if (settings != undefined) {
+                            $scope.scopeModel.isVRWorkflowActivityDisabled = settings.IsDisabled;
                         }
 
-                        if (payload.Context != null)
-                            $scope.scopeModel.context = payload.Context;
+                        context = payload.Context;
+                        promises.push(loadDelayExpressionBuilder());
 					}
 					return UtilsService.waitMultiplePromises(promises);
                 };
@@ -50,7 +70,7 @@ app.directive('businessprocessVrWorkflowactivityDelay', ['UtilsService', 'VRUIUt
                 api.getData = function () {
                     return {
                         $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowDelayActivity, Vanrise.BusinessProcess.MainExtensions",
-                        Delay: $scope.scopeModel.delay,
+                        Delay: delayExpressionBuilderDirectiveAPI != undefined ? delayExpressionBuilderDirectiveAPI.getData() : undefined,
                     };
                 };
 
@@ -63,7 +83,7 @@ app.directive('businessprocessVrWorkflowactivityDelay', ['UtilsService', 'VRUIUt
                 };
 
                 api.isActivityValid = function () {
-                    return $scope.scopeModel.delay != undefined;
+                    return delayExpressionBuilderDirectiveAPI != undefined && delayExpressionBuilderDirectiveAPI.getData() != undefined;
                 };
 
                 if (ctrl.onReady != null)

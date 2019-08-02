@@ -37,6 +37,7 @@ app.directive('businessprocessVrWorkflowActivityEditorExpressionbuilder', ['Util
             var expression;
             var isDisabled = false;
             var fieldType;
+            var fieldTitle;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -69,6 +70,7 @@ app.directive('businessprocessVrWorkflowActivityEditorExpressionbuilder', ['Util
                         variables: context != undefined ? context.getParentVariables() : undefined,
                         arguments: context != undefined ? context.getWorkflowArguments() : undefined,
                         fieldType: fieldType,
+                        fieldTitle: fieldTitle,
                         expression: getExpression()
                     };
                     BusinessProcess_VRWorkflowService.openExpressionEditorBuilder(onSetValue, params);
@@ -95,7 +97,11 @@ app.directive('businessprocessVrWorkflowActivityEditorExpressionbuilder', ['Util
                     if (payload != undefined) {
                         context = payload.context;
                         expression = payload.value;
-                        fieldType = payload.fieldType;
+                        var fieldEntity = payload.fieldEntity;
+                        if (fieldEntity != undefined) {
+                            fieldType = fieldEntity.fieldType;
+                            fieldTitle = fieldEntity.fieldTitle;
+                        }
                     }
                     $scope.scopeModel.expression = undefined;
 

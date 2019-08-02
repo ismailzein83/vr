@@ -1,7 +1,5 @@
 ﻿<vr-columns colnum="3">
-    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.getParentVariables"
-                                                            getworkflowarguments="scopeModel.getWorkflowArguments"
-                                                            label="Group Ids" isrequired="!scopeModel.isVRWorkflowActivityDisabled"
-                                                            value="scopeModel.groupIds">
-    </businessprocess-vr-workflow-activity-expressionbuilder>
+    <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onGroupIdsExpressionBuilderDirectiveReady"
+                                                                   label="Group Ids" isrequired="!scopeModel.isVRWorkflowActivityDisabled">
+    </businessprocess-vr-workflow-activity-editor-expressionbuilder>
 </vr-columns>

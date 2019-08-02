@@ -7,29 +7,26 @@
                 </vr-columns>
                 <bp-tasktype-selector on-ready="scopeModel.onBPTaskTypeSelectorReady" selectedvalues="scopeModel.selectedTaskType" isrequired="!scopeModel.isVRWorkflowActivityDisabled" onselectionchanged="scopeModel.onBPTaskTypeSelectionChanged" normal-col-num="3" showaddbutton></bp-tasktype-selector>
                 <vr-columns colnum="6">
-                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
-                                                                            label="Task Title" isrequired="!scopeModel.isVRWorkflowActivityDisabled"
-                                                                            value="scopeModel.taskTitle">
-                    </businessprocess-vr-workflow-activity-expressionbuilder>
+                    <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onTaskTitleExpressionBuilderDirectiveReady"
+                                                                                   label="Task Title"
+                                                                                   value="scopeModel.taskTitle">
+                    </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                 </vr-columns>
             </vr-row>
 
             <vr-row>
                 <bp-vr-workflow-taskassignees on-ready="scopeModel.onTaskAssigneesSelectorReady" normal-col-num="3"></bp-vr-workflow-taskassignees>
                 <vr-columns colnum="3">
-                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
-                                                                            label="Executed By"
-                                                                            value="scopeModel.executedBy">
-                    </businessprocess-vr-workflow-activity-expressionbuilder>
+                    <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onExecutedByExpressionBuilderDirectiveReady"
+                                                                                   label="Executed By"
+                                                                                   value="scopeModel.executedBy">
+                    </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                 </vr-columns>
                 <vr-columns colnum="3">
-                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
-                                                                            label="Task Id"
-                                                                            value="scopeModel.taskId">
-                    </businessprocess-vr-workflow-activity-expressionbuilder>
+                    <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onTaskIdExpressionBuilderDirectiveReady"
+                                                                                   label="Task Id"
+                                                                                   value="scopeModel.taskId">
+                    </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                 </vr-columns>
                 <vr-columns colnum="3">
                     <vr-switch value="scopeModel.enableVisualization" label="Enable Visualization"></vr-switch>
@@ -55,11 +52,10 @@
                                         <vr-label>=</vr-label>
                                     </vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true" widthfactor="20">
-                                        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables"
-                                                                                                getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
-                                                                                                value="dataItem.inputValue"
-                                                                                                hidelabel="true">
-                                        </businessprocess-vr-workflow-activity-expressionbuilder>
+                                        <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="dataItem.onInputValueExpressionBuilderDirectiveReady"
+                                                                                                       hidelabel="true">
+                                                                                                      
+                                        </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                                     </vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-section>
@@ -75,11 +71,9 @@
                                              vr-loader="scopeModel.isOutputGridLoading">
 
                                     <vr-datagridcolumn headertext="'Expression To Set'" type="'Text'" disablesorting="true" widthfactor="20">
-                                        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables"
-                                                                                                getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
-                                                                                                value="dataItem.outputTo"
-                                                                                                hidelabel="true">
-                                        </businessprocess-vr-workflow-activity-expressionbuilder>
+                                        <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="dataItem.onOutputToExpressionBuilderDirectiveReady"
+                                                                                                       hidelabel="true">
+                                        </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                                     </vr-datagridcolumn>
                                     <vr-datagridcolumn disablesorting="true" fixedwidth="15">
                                         <vr-label>=</vr-label>
@@ -94,17 +88,29 @@
                     <vr-tab header="'Advanced'">
                         <vr-row>
                             <vr-columns colnum="12">
-                                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="On Task Created" value="scopeModel.onTaskCreated" nb-of-rows="6"></businessprocess-vr-workflow-activity-expressionbuilder>
+                                <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onTaskCreatedExpressionBuilderDirectiveReady"
+                                                                                               value="scopeModel.onTaskCreated"
+                                                                                               label="On Task Created" nb-of-rows="6">
+                                                                                               
+                                </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                             </vr-columns>
                         </vr-row>
                         <vr-row>
                             <vr-columns colnum="12">
-                                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="On Task Taken" value="scopeModel.onTaskTaken" nb-of-rows="6"></businessprocess-vr-workflow-activity-expressionbuilder>
+                                <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onTaskTakenExpressionBuilderDirectiveReady"
+                                                                                               value="scopeModel.onTaskTaken"
+                                                                                               label="On Task Taken" nb-of-rows="6">
+
+                                </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                             </vr-columns>
                         </vr-row>
                         <vr-row>
                             <vr-columns colnum="12">
-                                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="On Task Released" value="scopeModel.onTaskReleased" nb-of-rows="6"></businessprocess-vr-workflow-activity-expressionbuilder>
+                                <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onTaskReleasedExpressionBuilderDirectiveReady"
+                                                                                               value="scopeModel.onTaskReleased"
+                                                                                               label="On Task Released" nb-of-rows="6">
+
+                                </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                             </vr-columns>
                         </vr-row>
                     </vr-tab>

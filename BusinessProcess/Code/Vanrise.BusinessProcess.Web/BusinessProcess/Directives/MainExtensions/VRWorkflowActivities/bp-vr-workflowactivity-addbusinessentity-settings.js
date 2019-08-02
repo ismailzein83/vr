@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowactivityAddbusinessentitySettings', ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService','VRUIUtilsService',
-    function (UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService, VRUIUtilsService) {
+app.directive('businessprocessVrWorkflowactivityAddbusinessentitySettings', ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VRUIUtilsService','VR_Sec_UserService',
+    function (UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService, VRUIUtilsService, VR_Sec_UserService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -118,6 +118,7 @@ app.directive('businessprocessVrWorkflowactivityAddbusinessentitySettings', ['Ut
                                                 for (var i = 0; i < fields.length; i++) {
                                                     var fieldObject = {
                                                         payload: fields[i],
+                                                        inputValueExpressionBuilderPromiseReadyDeffered: UtilsService.createPromiseDeferred(),
                                                         inputValueExpressionBuilderPromiseLoadDeffered: UtilsService.createPromiseDeferred()
                                                     };
                                                     promises.push(fieldObject.inputValueExpressionBuilderPromiseLoadDeffered.promise);
@@ -127,20 +128,26 @@ app.directive('businessprocessVrWorkflowactivityAddbusinessentitySettings', ['Ut
                                             }
                                             function prepareField(fieldObject) {
                                                 var dataItem = {
-                                                    entity: { fieldName: fieldObject.payload.Name}
+                                                    entity: { fieldName: fieldObject.payload.Name }
                                                 };
                                                 dataItem.onInputValueExpressionBuilderDirectiveReady = function (api) {
                                                     dataItem.inputValueExpressionBuilderDirectiveAPI = api;
+                                                    fieldObject.inputValueExpressionBuilderPromiseReadyDeffered.resolve();
+                                                };
+                                                fieldObject.inputValueExpressionBuilderPromiseReadyDeffered.promise.then(function () {
                                                     var payload = {
                                                         context: context,
                                                         value: inputItems[fieldObject.payload.Name],
-                                                        fieldType: fieldObject.payload.Type
+                                                        fieldEntity: {
+                                                            fieldType: fieldObject.payload.Type,
+                                                            fieldTitle: fieldObject.payload.Title
+                                                        }
                                                     };
                                                     VRUIUtilsService.callDirectiveLoad(dataItem.inputValueExpressionBuilderDirectiveAPI, payload, fieldObject.inputValueExpressionBuilderPromiseLoadDeffered);
-                                                };
+
+                                                });
                                                 $scope.scopeModel.inputItems.push(dataItem);
                                             }
-                                          
                                             promises.push(loadIsSucceededExpressionBuilder());
                                             promises.push(loadUserIdExpressionBuilder());
                                             promises.push(loadEntityIdExpressionBuilder());
@@ -185,7 +192,11 @@ app.directive('businessprocessVrWorkflowactivityAddbusinessentitySettings', ['Ut
                     userIdExpressionBuilderPromiseReadyDeffered.promise.then(function () {
                         var payload = {
                             context: context,
-                            value: settings != undefined ? settings.UserId : undefined
+                            value: settings != undefined ? settings.UserId : undefined,
+                            fieldEntity: {
+                                fieldType: VR_Sec_UserService.getUserIdFieldType(),
+                                fieldTitle:"User"
+                            }
                         };
                         VRUIUtilsService.callDirectiveLoad(userIdExpressionBuilderDirectiveAPI, payload, userIdExpressionBuilderPromiseLoadDeffered);
                     });

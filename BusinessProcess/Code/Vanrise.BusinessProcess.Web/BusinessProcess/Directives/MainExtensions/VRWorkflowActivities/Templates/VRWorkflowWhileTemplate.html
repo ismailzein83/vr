@@ -1,9 +1,9 @@
 ﻿<vr-columns colnum="8">
-	<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-															getworkflowarguments="scopeModel.context.getWorkflowArguments"
-															value="scopeModel.condition" label="Condition" isrequired="!scopeModel.isVRWorkflowActivityDisabled">
-	</businessprocess-vr-workflow-activity-expressionbuilder>
+    <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onConditionExpressionBuilderDirectiveReady"
+                                                                   label="Condition" isrequired="!scopeModel.isVRWorkflowActivityDisabled">
+    </businessprocess-vr-workflow-activity-editor-expressionbuilder>
 </vr-columns>
+
 <vr-columns colnum="4">
 	<vr-textbox value="scopeModel.conditionDescription" label="Condition Description" isrequired="true"></vr-textbox>
 </vr-columns>

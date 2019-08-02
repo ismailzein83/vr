@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VRUIUtilsService',
-    function (UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService, VRUIUtilsService) {
+app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VRUIUtilsService','VR_Sec_UserService',
+    function (UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService, VRUIUtilsService, VR_Sec_UserService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -65,7 +65,6 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                     var rootPromiseNode = {};
                     inputItems = {};
                     $scope.scopeModel.isSucceeded = undefined;
-                    $scope.scopeModel.userId = undefined;
                     var genericBEDefinitionSettings;
                     var dataRecordType;
                     if (payload != undefined) {
@@ -74,7 +73,6 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
 
                         if (settings != undefined) {
                             $scope.scopeModel.isSucceeded = settings.IsSucceeded;
-                            $scope.scopeModel.userId = settings.UserId;
 
                             if (settings.InputItems != undefined) {
                                 var items = settings.InputItems;
@@ -108,6 +106,7 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                                                 for (var i = 0; i < fields.length; i++) {
                                                     var fieldObject = {
                                                         payload: fields[i],
+                                                        inputValueExpressionBuilderPromiseReadyDeffered: UtilsService.createPromiseDeferred(),
                                                         inputValueExpressionBuilderPromiseLoadDeffered: UtilsService.createPromiseDeferred()
                                                     };
                                                     promises.push(fieldObject.inputValueExpressionBuilderPromiseLoadDeffered.promise);
@@ -121,16 +120,21 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                                                 };
                                                 dataItem.onInputValueExpressionBuilderDirectiveReady = function (api) {
                                                     dataItem.inputValueExpressionBuilderDirectiveAPI = api;
+                                                    fieldObject.inputValueExpressionBuilderPromiseReadyDeffered.resolve();
+                                                };
+                                                fieldObject.inputValueExpressionBuilderPromiseReadyDeffered.promise.then(function () {
                                                     var payload = {
                                                         context: context,
                                                         value: inputItems[fieldObject.payload.Name],
-                                                        fieldType: fieldObject.payload.Type
+                                                        fieldEntity: {
+                                                            fieldType: fieldObject.payload.Type,
+                                                            fieldTitle: fieldObject.payload.Title
+                                                        }
                                                     };
                                                     VRUIUtilsService.callDirectiveLoad(dataItem.inputValueExpressionBuilderDirectiveAPI, payload, fieldObject.inputValueExpressionBuilderPromiseLoadDeffered);
-                                                };
+                                                });
                                                 $scope.scopeModel.inputItems.push(dataItem);
                                             }
-
 
                                             promises.push(loadIsSucceededExpressionBuilder());
                                           
@@ -180,7 +184,11 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                 userIdExpressionBuilderPromiseReadyDeffered.promise.then(function () {
                     var payload = {
                         context: context,
-                        value: settings != undefined ? settings.UserId : undefined
+                        value: settings != undefined ? settings.UserId : undefined,
+                        fieldEntity: {
+                            fieldType: VR_Sec_UserService.getUserIdFieldType(),
+                            fieldTitle:"User"
+                        }
                     };
                     VRUIUtilsService.callDirectiveLoad(userIdExpressionBuilderDirectiveAPI, payload, userIdExpressionBuilderPromiseLoadDeffered);
                 });

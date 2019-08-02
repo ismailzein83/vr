@@ -49,12 +49,12 @@
 
         function getTaskIdFieldType() {
             return {
-                $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType,Vanrise.GenericData.MainExtensions",
-                ConfigId: "75aef329-27bd-4108-b617-f5cc05ff2aa3",
-                RuntimeEditor: "vr-genericdata-fieldtype-number-runtimeeditor",
-                ViewerEditor: "vr-genericdata-fieldtype-number-viewereditor",
-                DataType: 2
-            }
+                $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType,Vanrise.GenericData.MainExtensions",
+                ConfigId: "2e16c3d4-837b-4433-b80e-7c02f6d71467",
+                RuntimeEditor: "vr-genericdata-fieldtype-businessentity-runtimeeditor",
+                ViewerEditor: "vr-genericdata-fieldtype-businessentity-viewereditor",
+                BusinessEntityDefinitionId: "d33fd65a-721f-4ae1-9d41-628be9425796"
+            };
         }
         return ({
             getStatusColor: getStatusColor,

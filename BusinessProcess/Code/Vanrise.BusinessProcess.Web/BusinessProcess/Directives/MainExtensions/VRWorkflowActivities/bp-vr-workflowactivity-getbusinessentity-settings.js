@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowactivityGetbusinessentitySettings', ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService',
-    function (UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService) {
+app.directive('businessprocessVrWorkflowactivityGetbusinessentitySettings', ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService','VRUIUtilsService',
+    function (UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -27,7 +27,7 @@ app.directive('businessprocessVrWorkflowactivityGetbusinessentitySettings', ['Ut
             var outputItems;
             var outputGridAPI;
             var outputGridPromiseReadyDefferd = UtilsService.createPromiseDeferred();
-
+            var context;
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -50,7 +50,7 @@ app.directive('businessprocessVrWorkflowactivityGetbusinessentitySettings', ['Ut
                     var genericBEDefinitionSettings;
                     var dataRecordType;
                     if (payload != undefined) {
-                        $scope.scopeModel.context = payload.context;
+                        context = payload.context;
                         var settings = payload.settings;
 
                         if (settings != undefined) {
@@ -79,18 +79,39 @@ app.directive('businessprocessVrWorkflowactivityGetbusinessentitySettings', ['Ut
                                     return {
                                         promises: [childPromise],
                                         getChildNode: function () {
+                                            var promises = [];
                                             if (dataRecordType != undefined) {
                                                 outputGridAPI.clearDataSource();
                                                 var fields = dataRecordType.Fields;
                                                 for (var i = 0; i < fields.length; i++) {
-                                                    var fieldName = fields[i].Name;
-                                                    $scope.scopeModel.outputItems.push({
-                                                        fieldName: fieldName,
-                                                        outputValue: outputItems[fieldName]
-                                                    });
+                                                    var fieldObject = {
+                                                        payload: fields[i],
+                                                        outputValueExpressionBuilderPromiseReadyDeffered: UtilsService.createPromiseDeferred(),
+                                                        outputValueExpressionBuilderPromiseLoadDeffered: UtilsService.createPromiseDeferred()
+                                                    };
+                                                    promises.push(fieldObject.outputValueExpressionBuilderPromiseLoadDeffered.promise);
+                                                    prepareField(fieldObject);
                                                 }
-                                                return { promises: [] };
                                             }
+                                            function prepareField(fieldObject) {
+                                                var dataItem = {
+                                                    entity: { fieldName: fieldObject.payload.Name }
+                                                };
+                                                dataItem.onOutputValueExpressionBuilderDirectiveReady = function (api) {
+                                                    dataItem.outputValueExpressionBuilderDirectiveAPI = api;
+                                                    fieldObject.outputValueExpressionBuilderPromiseReadyDeffered.resolve();
+                                                };
+                                                fieldObject.outputValueExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                                                    var payload = {
+                                                        context: context,
+                                                        value: outputItems[fieldObject.payload.Name],
+                                                    };
+                                                    VRUIUtilsService.callDirectiveLoad(dataItem.outputValueExpressionBuilderDirectiveAPI, payload, fieldObject.outputValueExpressionBuilderPromiseLoadDeffered);
+                                                });
+                                                $scope.scopeModel.outputItems.push(dataItem);
+                                            }
+
+                                            return { promises: promises };
                                         }
                                     };
                                 }
@@ -117,16 +138,15 @@ app.directive('businessprocessVrWorkflowactivityGetbusinessentitySettings', ['Ut
                 var fields = [];
                 for (var i = 0; i < $scope.scopeModel.outputItems.length; i++) {
                     var field = $scope.scopeModel.outputItems[i];
-                    if (field.outputValue != undefined) {
+                    var objValue = field.outputValueExpressionBuilderDirectiveAPI.getData();
+                    if (objValue != undefined)
                         fields.push({
-                            FieldName: field.fieldName,
-                            Value: field.outputValue,
+                            FieldName: field.entity.fieldName,
+                            Value: objValue,
                         });
-                    }
                 }
                 return fields;
             }
-
         }
         return directiveDefinitionObject;
     }]);

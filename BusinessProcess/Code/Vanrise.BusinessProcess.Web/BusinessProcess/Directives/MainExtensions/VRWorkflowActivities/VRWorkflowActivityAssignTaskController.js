@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AssignTaskEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_BPTaskTypeAPIService', 'VR_GenericData_DataRecordTypeAPIService'];
+    AssignTaskEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPTaskService', 'VRCommon_FieldTypesService', 'BusinessProcess_BPTaskTypeAPIService', 'VR_GenericData_DataRecordTypeAPIService','VR_Sec_UserService'];
 
-    function AssignTaskEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService, BusinessProcess_BPTaskTypeAPIService, VR_GenericData_DataRecordTypeAPIService) {
+    function AssignTaskEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_BPTaskService, VRCommon_FieldTypesService, BusinessProcess_BPTaskTypeAPIService, VR_GenericData_DataRecordTypeAPIService, VR_Sec_UserService) {
 
         var taskTypeId;
         var taskTitle;
@@ -35,6 +35,26 @@
 
         var outputGridAPI;
         var outputGridPromiseReadyDefferd = UtilsService.createPromiseDeferred();
+
+        var taskTitleExpressionBuilderDirectiveAPI;
+        var taskTitleExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var executedByExpressionBuilderDirectiveAPI;
+        var executedByExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var taskIdExpressionBuilderDirectiveAPI;
+        var taskIdExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var onTaskCreatedExpressionBuilderDirectiveAPI;
+        var onTaskCreatedExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var onTaskTakenExpressionBuilderDirectiveAPI;
+        var onTaskTakenExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var onTaskReleasedExpressionBuilderDirectiveAPI;
+        var onTaskReleasedExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var textFieldType= VRCommon_FieldTypesService.getTextFieldType();
 
         loadParameters();
         defineScope();
@@ -81,7 +101,6 @@
             $scope.scopeModel.isBPTaskTypeLoading = true;
             $scope.scopeModel.enableVisualization = true;
 
-            $scope.scopeModel.context = context;
 
             $scope.modalContext.onModalHide = function () {
                 if ($scope.remove != undefined && isNew == true) {
@@ -97,6 +116,31 @@
             $scope.scopeModel.onBPTaskTypeSelectorReady = function (api) {
                 bPTaskTypeSelectorAPI = api;
                 bPTaskTypeSelectorReadyDeffered.resolve();
+            };
+
+            $scope.scopeModel.onTaskTitleExpressionBuilderDirectiveReady = function (api) {
+                taskTitleExpressionBuilderDirectiveAPI = api;
+                taskTitleExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+            $scope.scopeModel.onExecutedByExpressionBuilderDirectiveReady = function (api) {
+                executedByExpressionBuilderDirectiveAPI = api;
+                executedByExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+            $scope.scopeModel.onTaskIdExpressionBuilderDirectiveReady = function (api) {
+                taskIdExpressionBuilderDirectiveAPI = api;
+                taskIdExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+            $scope.scopeModel.onTaskCreatedExpressionBuilderDirectiveReady = function (api) {
+                onTaskCreatedExpressionBuilderDirectiveAPI = api;
+                onTaskCreatedExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+            $scope.scopeModel.onTaskTakenExpressionBuilderDirectiveReady = function (api) {
+                onTaskTakenExpressionBuilderDirectiveAPI = api;
+                onTaskTakenExpressionBuilderPromiseReadyDeffered.resolve();
+            };
+            $scope.scopeModel.onTaskReleasedExpressionBuilderDirectiveReady = function (api) {
+                onTaskReleasedExpressionBuilderDirectiveAPI = api;
+                onTaskReleasedExpressionBuilderPromiseReadyDeffered.resolve();
             };
 
             $scope.scopeModel.onBPTaskTypeSelectionChanged = function (taskTypeField) {
@@ -132,7 +176,76 @@
                 $scope.modalContext.closeModal();
             };
         }
-
+        function loadTaskTitleExpressionBuilder() {
+            var taskTitleExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+            taskTitleExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: taskTitle,
+                    fieldEntity: {
+                        fieldType: textFieldType,
+                        fieldTitle:"Task Title"
+                    }
+                };
+                VRUIUtilsService.callDirectiveLoad(taskTitleExpressionBuilderDirectiveAPI, payload, taskTitleExpressionBuilderPromiseLoadDeffered);
+            });
+            return taskTitleExpressionBuilderPromiseLoadDeffered.promise;
+        }
+        function loadExecutedByExpressionBuilder() {
+            var executedByExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+            executedByExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: executedBy
+                };
+                VRUIUtilsService.callDirectiveLoad(executedByExpressionBuilderDirectiveAPI, payload, executedByExpressionBuilderPromiseLoadDeffered);
+            });
+            return executedByExpressionBuilderPromiseLoadDeffered.promise;
+        }
+        function loadTaskIdExpressionBuilder() {
+            var taskIdExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+            taskIdExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: taskId,
+                };
+                VRUIUtilsService.callDirectiveLoad(taskIdExpressionBuilderDirectiveAPI, payload, taskIdExpressionBuilderPromiseLoadDeffered);
+            });
+            return taskIdExpressionBuilderPromiseLoadDeffered.promise;
+        }
+        function loadOnTaskCreatedExpressionBuilder() {
+            var onTaskCreatedExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+            onTaskCreatedExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: onTaskCreated
+                };
+                VRUIUtilsService.callDirectiveLoad(onTaskCreatedExpressionBuilderDirectiveAPI, payload, onTaskCreatedExpressionBuilderPromiseLoadDeffered);
+            });
+            return onTaskCreatedExpressionBuilderPromiseLoadDeffered.promise;
+        }
+        function loadOnTaskTakenExpressionBuilder() {
+            var onTaskTakenExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+            onTaskTakenExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: onTaskTaken
+                };
+                VRUIUtilsService.callDirectiveLoad(onTaskTakenExpressionBuilderDirectiveAPI, payload, onTaskTakenExpressionBuilderPromiseLoadDeffered);
+            });
+            return onTaskTakenExpressionBuilderPromiseLoadDeffered.promise;
+        }
+        function loadOnTaskReleasedExpressionBuilder() {
+            var onTaskReleasedExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+            onTaskReleasedExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: onTaskReleased
+                };
+                VRUIUtilsService.callDirectiveLoad(onTaskReleasedExpressionBuilderDirectiveAPI, payload, onTaskReleasedExpressionBuilderPromiseLoadDeffered);
+            });
+            return onTaskReleasedExpressionBuilderPromiseLoadDeffered.promise;
+        }
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
@@ -145,12 +258,6 @@
             }
 
             function loadStaticData() {
-                $scope.scopeModel.taskTitle = taskTitle;
-                $scope.scopeModel.executedBy = executedBy;
-                $scope.scopeModel.taskId = taskId;
-                $scope.scopeModel.onTaskCreated = onTaskCreated;
-                $scope.scopeModel.onTaskTaken = onTaskTaken;
-                $scope.scopeModel.onTaskReleased = onTaskReleased;
                 $scope.scopeModel.displayName = displayName;
                 $scope.scopeModel.enableVisualization = enableVisualization;
             }
@@ -193,12 +300,20 @@
             }
 
 
-            promises.push(setTitle);
-            promises.push(loadStaticData);
-            promises.push(loadBPTaskTypeSelector);
-            promises.push(loadTaskAssigneesSelector);
-            promises.push(loadGrids);
-            return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
+            setTitle();
+            loadStaticData();
+            promises.push(loadBPTaskTypeSelector());
+            promises.push(loadTaskAssigneesSelector());
+            loadGrids();
+            promises.push(loadExecutedByExpressionBuilder());
+            promises.push(loadTaskTitleExpressionBuilder());
+            promises.push(loadTaskIdExpressionBuilder());
+            promises.push(loadOnTaskCreatedExpressionBuilder());
+            promises.push(loadOnTaskReleasedExpressionBuilder());
+            promises.push(loadOnTaskTakenExpressionBuilder());
+
+
+            return UtilsService.waitPromiseNode({ promises: promises }).then(function () {
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -222,12 +337,14 @@
                             var inputItem = {
                                 payload: response.Fields[i],
                                 readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                inputValueExpressionBuilderPromiseLoadDeffered: UtilsService.createPromiseDeferred()
                             };
                             var outputItem = {
                                 payload: response.Fields[i],
                                 readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                outputValueExpressionBuilderPromiseLoadDeffered: UtilsService.createPromiseDeferred(),
                             };
 
                             addInputGrid(inputItem);
@@ -235,7 +352,10 @@
 
                             if (promises != undefined) {
                                 promises.push(inputItem.loadPromiseDeferred.promise);
+                                promises.push(inputItem.inputValueExpressionBuilderPromiseLoadDeffered.promise);
                                 promises.push(outputItem.loadPromiseDeferred.promise);
+                                promises.push(outputItem.outputValueExpressionBuilderPromiseLoadDeffered.promise);
+
                             }
                         }
 
@@ -265,6 +385,19 @@
 
             var dataItemPayload = inputItem.payload;
 
+            dataItem.onInputValueExpressionBuilderDirectiveReady = function (api) {
+                dataItem.inputValueExpressionBuilderDirectiveAPI = api;
+                var payload = {
+                    context: context,
+                    value: dataItem.inputValue,
+                    fieldEntity: {
+                        fieldType: inputItem.payload.Type,
+                        fieldTitle: inputItem.payload.Title
+                    }
+                };
+                VRUIUtilsService.callDirectiveLoad(dataItem.inputValueExpressionBuilderDirectiveAPI, payload, inputItem.inputValueExpressionBuilderPromiseLoadDeffered);
+            };
+
             dataItem.onDirectiveReady = function (api) {
                 dataItem.directiveAPI = api;
                 inputItem.readyPromiseDeferred.resolve();
@@ -291,6 +424,15 @@
             }
             var dataItemPayload = outputItem.payload;
 
+            dataItem.onOutputToExpressionBuilderDirectiveReady = function (api) {
+                dataItem.outputValueExpressionBuilderDirectiveAPI = api;
+                var payload = {
+                    context: context,
+                    value: dataItem.outputTo
+                };
+                VRUIUtilsService.callDirectiveLoad(dataItem.outputValueExpressionBuilderDirectiveAPI, payload, outputItem.outputValueExpressionBuilderPromiseLoadDeffered);
+            };
+
             dataItem.onDirectiveReady = function (api) {
                 dataItem.directiveAPI = api;
                 outputItem.readyPromiseDeferred.resolve();
@@ -308,12 +450,12 @@
             var taskAssigneeSettings = taskAssigneesAPI.getData();
             var updatedObject = {
                 taskTypeId: $scope.scopeModel.selectedTaskType.BPTaskTypeId,
-                taskTitle: $scope.scopeModel.taskTitle,
-                executedBy: $scope.scopeModel.executedBy,
-                taskId: $scope.scopeModel.taskId,
-                onTaskCreated: $scope.scopeModel.onTaskCreated,
-                onTaskTaken: $scope.scopeModel.onTaskTaken,
-                onTaskReleased: $scope.scopeModel.onTaskReleased,
+                taskTitle: taskTitleExpressionBuilderDirectiveAPI != undefined ? taskTitleExpressionBuilderDirectiveAPI.getData() : undefined,
+                executedBy: executedByExpressionBuilderDirectiveAPI != undefined ? executedByExpressionBuilderDirectiveAPI.getData() : undefined,
+                taskId: taskIdExpressionBuilderDirectiveAPI != undefined ? taskIdExpressionBuilderDirectiveAPI.getData() : undefined,
+                onTaskCreated: onTaskCreatedExpressionBuilderDirectiveAPI != undefined ? onTaskCreatedExpressionBuilderDirectiveAPI.getData() : undefined,
+                onTaskTaken: onTaskTakenExpressionBuilderDirectiveAPI != undefined ? onTaskTakenExpressionBuilderDirectiveAPI.getData() : undefined,
+                onTaskReleased: onTaskReleasedExpressionBuilderDirectiveAPI != undefined ? onTaskReleasedExpressionBuilderDirectiveAPI.getData() : undefined,
                 displayName: $scope.scopeModel.displayName,
                 taskAssignees: { Settings: taskAssigneeSettings },
                 inputItems: $scope.scopeModel.inputItems.length > 0 ? getInputColumns() : null,
@@ -334,12 +476,12 @@
             var columns = [];
             for (var i = 0; i < $scope.scopeModel.inputItems.length; i++) {
                 var column = $scope.scopeModel.inputItems[i];
-                if (column.inputValue != undefined) {
+                var objValue = column.inputValueExpressionBuilderDirectiveAPI.getData();
+                if (objValue != undefined)
                     columns.push({
                         FieldName: column.fieldName,
-                        Value: column.inputValue,
+                        Value: objValue,
                     });
-                }
             }
             return columns;
         }
@@ -348,12 +490,12 @@
             var columns = [];
             for (var i = 0; i < $scope.scopeModel.outputItems.length; i++) {
                 var column = $scope.scopeModel.outputItems[i];
-                if (column.outputTo != undefined) {
+                var objValue = column.outputValueExpressionBuilderDirectiveAPI.getData();
+                if (objValue != undefined)
                     columns.push({
                         FieldName: column.fieldName,
-                        To: column.outputTo,
+                        Value: objValue,
                     });
-                }
             }
             return columns;
         }

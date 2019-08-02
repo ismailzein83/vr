@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessVrWorkflowSpecificusersTaskassignees", ["UtilsService",
-    function (UtilsService) {
+app.directive("businessprocessVrWorkflowSpecificusersTaskassignees", ["UtilsService", "VRUIUtilsService", "VR_Sec_UserService","VRCommon_FieldTypesService",
+    function (UtilsService, VRUIUtilsService, VR_Sec_UserService, VRCommon_FieldTypesService) {
 
         var directiveDefinitionObject = {
 
@@ -24,29 +24,59 @@ app.directive("businessprocessVrWorkflowSpecificusersTaskassignees", ["UtilsServ
         };
 
         function SpecificUsersTaskAssignees($scope, ctrl, $attrs) {
+
+            var userIdsExpressionBuilderDirectiveAPI;
+            var userIdsExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+            var settings;
+            var context;
             this.initializeController = initializeController;
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onUserIdsExpressionBuilderDirectiveReady = function (api) {
+                    userIdsExpressionBuilderDirectiveAPI = api;
+                    userIdsExpressionBuilderPromiseReadyDeffered.resolve();
+                };
                 defineAPI()
             }
+            function loadUserIdsExpressionBuilder() {
 
+                var userIdsExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                userIdsExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: settings != undefined ? settings.UserIds : undefined,
+                        fieldEntity: {
+                            fieldType: VRCommon_FieldTypesService.getArrayFieldType(VR_Sec_UserService.getUserIdFieldType()),
+                            fieldTitle: "Users"
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(userIdsExpressionBuilderDirectiveAPI, payload, userIdsExpressionBuilderPromiseLoadDeffered);
+                });
+                return userIdsExpressionBuilderPromiseLoadDeffered.promise;
+            }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
                     if (payload != undefined) {
-                        $scope.scopeModel.userIds = (payload.settings) != undefined ? payload.settings.UserIds : undefined;
-                        $scope.scopeModel.getParentVariables = payload.getParentVariables;
-                        $scope.scopeModel.getWorkflowArguments = payload.getWorkflowArguments;
+                        settings = payload.settings;
+                        context = {
+                            getParentVariables: payload.getParentVariables,
+                            getWorkflowArguments: payload.getWorkflowArguments
+                        };
                         $scope.scopeModel.isVRWorkflowActivityDisabled = payload.isVRWorkflowActivityDisabled;
                     }
+                    promises.push(loadUserIdsExpressionBuilder());
+                    return UtilsService.waitPromiseNode({ promises: promises });
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflow_TaskAssignees.VRWorkflowSpecificUsersTaskAssignees,  Vanrise.BusinessProcess.MainExtensions",
-                        UserIds: $scope.scopeModel.userIds,
+                        UserIds: userIdsExpressionBuilderDirectiveAPI != undefined ? userIdsExpressionBuilderDirectiveAPI.getData() : undefined,
                     };
                 };
 

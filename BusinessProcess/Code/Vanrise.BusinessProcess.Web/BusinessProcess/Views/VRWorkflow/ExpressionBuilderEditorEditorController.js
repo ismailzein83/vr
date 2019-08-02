@@ -11,7 +11,7 @@
         var isEditMode;
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var fieldTitle;
         loadParameters();
         defineScope();
         load();
@@ -22,7 +22,7 @@
             if (parameters != undefined && parameters != null && parameters.params != undefined) {
                 var params = parameters.params;
                 expression = params.expression;
-
+                fieldTitle = params.fieldTitle;
                 $scope.scopeModel.arguments = params.arguments;
                 if ($scope.scopeModel.arguments != undefined && $scope.scopeModel.arguments.length > 0) {
                     $scope.scopeModel.arguments.sort(sortByName);
@@ -35,7 +35,6 @@
             }
             if ($scope.scopeModel.fieldType) {
                 $scope.scopeModel.runTimeEditor = $scope.scopeModel.fieldType.RuntimeEditor;
-
                 isEditMode = $scope.scopeModel.expressionValue != undefined;
 
             }
@@ -101,7 +100,7 @@
                 var payload = {
                     fieldType: $scope.scopeModel.fieldType,
                     fieldValue: expression != undefined ? expression.Value : undefined,
-                    fieldTitle: "Value"
+                    fieldTitle:fieldTitle
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, payload, runtimeEditorLoadDeferred);
             });

@@ -10,12 +10,11 @@
                      maxheight="400px"
                      ondeleterow="scopeModel.deleteRow">
             <vr-datagridcolumn type="'Text'" headertext="'Key'">
-                <vr-textbox value="dataItem.Entity.Key" label="Title" isrequired="true"></vr-textbox>
+                <vr-textbox value="dataItem.Entity.Key" isrequired="true"></vr-textbox>
                 <!--<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.getParentVariables" getworkflowarguments="viewScope.scopeModel.getWorkflowArguments" value="dataItem.Entity.Key" isrequired="true" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>-->
             </vr-datagridcolumn>
-
             <vr-datagridcolumn type="'Text'" headertext="'Value'" disablesorting>
-                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.getParentVariables" getworkflowarguments="viewScope.scopeModel.getWorkflowArguments" value="dataItem.Entity.Value" isrequired="true" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>
+                <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="dataItem.onValueExpressionBuilderDirectiveReady" hidelabel="true" isrequired="true"></businessprocess-vr-workflow-activity-editor-expressionbuilder>
             </vr-datagridcolumn>
         </vr-datagrid>
     </vr-validator>

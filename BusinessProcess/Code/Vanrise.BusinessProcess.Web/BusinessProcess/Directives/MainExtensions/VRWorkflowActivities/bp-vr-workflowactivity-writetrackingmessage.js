@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsService', 'VRUIUtilsService', 'VRWorkflowTrackingMessageSeverityEnum',
-	function (UtilsService, VRUIUtilsService, VRWorkflowTrackingMessageSeverityEnum) {
+app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsService', 'VRUIUtilsService', 'VRWorkflowTrackingMessageSeverityEnum','VRCommon_FieldTypesService',
+    function (UtilsService, VRUIUtilsService, VRWorkflowTrackingMessageSeverityEnum, VRCommon_FieldTypesService) {
 
 		var directiveDefinitionObject = {
 			restrict: 'E',
@@ -22,34 +22,58 @@ app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsSe
 		};
 
 		function workflowTrackingMessage(ctrl, $scope, $attrs) {
-
+            var messageExpressionBuilderDirectiveAPI;
+            var messageExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+            var settings;
+            var context;
 			this.initializeController = initializeController;
 			function initializeController() {
 				$scope.scopeModel = {};
 				$scope.scopeModel.isVRWorkflowActivityDisabled = false;
 				$scope.scopeModel.severityEnums = UtilsService.getArrayEnum(VRWorkflowTrackingMessageSeverityEnum);
 
+                $scope.scopeModel.onMessageExpressionBuilderDirectiveReady = function (api) {
+                    messageExpressionBuilderDirectiveAPI = api;
+                    messageExpressionBuilderPromiseReadyDeffered.resolve();
+                };
 				$scope.scopeModel.onSeveritySelectorReady = function (api) {
 					defineAPI();
 				};
 			}
 
+            function loadMessageExpressionBuilder() {
+
+                var messageExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+                messageExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                    var payload = {
+                        context: context,
+                        value: settings != undefined ? settings.Message : undefined,
+                        fieldEntity: {
+                            fieldType: VRCommon_FieldTypesService.getTextFieldType(),
+                            fieldTitle: "Message"
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(messageExpressionBuilderDirectiveAPI, payload, messageExpressionBuilderPromiseLoadDeffered);
+                });
+                return messageExpressionBuilderPromiseLoadDeffered.promise;
+            }
 			function defineAPI() {
 				var api = {};
 
 				api.load = function (payload) {
 					var promises = [];
 					var selectedSeverity;
-					if (payload != undefined) {
-						if (payload.Settings != undefined) {
-							$scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
-							$scope.scopeModel.message = payload.Settings.Message;
-							selectedSeverity = payload.Settings.Severity;
+                    if (payload != undefined) {
+                        settings = payload.Settings;
+                        if (settings!= undefined) {
+                            $scope.scopeModel.isVRWorkflowActivityDisabled = settings.IsDisabled;
+                            selectedSeverity = settings.Severity;
 						}
 
 						if (payload.Context != null)
-							$scope.scopeModel.context = payload.Context;
-					}
+						  context = payload.Context;
+                    }
+                    promises.push(loadMessageExpressionBuilder());
 
 					if (selectedSeverity != undefined)
 						$scope.scopeModel.selectedSeverity = UtilsService.getItemByVal($scope.scopeModel.severityEnums, selectedSeverity, "value");
@@ -61,8 +85,8 @@ app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsSe
 
 				api.getData = function () {
 					return {
-						$type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowWriteTrackingMessageActivity, Vanrise.BusinessProcess.MainExtensions",
-						Message: $scope.scopeModel.message,
+                        $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowWriteTrackingMessageActivity, Vanrise.BusinessProcess.MainExtensions",
+                        Message: messageExpressionBuilderDirectiveAPI != undefined ? messageExpressionBuilderDirectiveAPI.getData() : undefined,
 						Severity: $scope.scopeModel.selectedSeverity.value
 					};
 				};
@@ -75,8 +99,8 @@ app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsSe
 					return $scope.scopeModel.isVRWorkflowActivityDisabled;
 				};
 
-				api.isActivityValid = function () {
-					return $scope.scopeModel.message != undefined;
+                api.isActivityValid = function () {
+                    return messageExpressionBuilderDirectiveAPI != undefined && messageExpressionBuilderDirectiveAPI.getData() != undefined;
 				};
 
 				if (ctrl.onReady != null)

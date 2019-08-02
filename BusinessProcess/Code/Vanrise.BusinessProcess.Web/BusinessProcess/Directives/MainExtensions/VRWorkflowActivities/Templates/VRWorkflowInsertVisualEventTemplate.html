@@ -3,10 +3,8 @@
         <vr-textbox value="scopeModel.displayName" label="Display Name" isrequired="!scopeModel.isVRWorkflowActivityDisabled"></vr-textbox>
     </vr-columns>
     <vr-columns colnum="6">
-        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                                getworkflowarguments="scopeModel.context.getWorkflowArguments"
-                                                                label="Event Title" isrequired="!scopeModel.isVRWorkflowActivityDisabled"
-                                                                value="scopeModel.eventTitle">
-        </businessprocess-vr-workflow-activity-expressionbuilder>
+        <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onEventTitleExpressionBuilderDirectiveReady"
+                                                                       label="Event Title" isrequired="!scopeModel.isVRWorkflowActivityDisabled">
+        </businessprocess-vr-workflow-activity-editor-expressionbuilder>
     </vr-columns>
 </vr-row>

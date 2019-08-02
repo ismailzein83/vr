@@ -5,7 +5,9 @@
 				<vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="List" isrequired="true" value="scopeModel.list"></businessprocess-vr-workflow-activity-expressionbuilder>
+                            <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onListExpressionBuilderDirectiveReady"
+                                                                                           label="List">
+                            </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                         </vr-columns>
                         <vr-columns width="1/3row">
                             <vr-textbox value="scopeModel.conditionDescription" label="Condition Description"></vr-textbox>

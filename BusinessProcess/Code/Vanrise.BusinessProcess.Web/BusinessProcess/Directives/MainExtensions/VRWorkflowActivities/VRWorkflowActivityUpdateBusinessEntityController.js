@@ -18,6 +18,8 @@
         var settingsDirectiveAPI;
         var settingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var settingsDirective;
+        var entityIdExpressionBuilderDirectiveAPI;
+        var entityIdExpressionBuilderPromiseReadyDeffered = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -58,6 +60,10 @@
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onEntityIdExpressionBuilderDirectiveReady = function (api) {
+                entityIdExpressionBuilderDirectiveAPI = api;
+                entityIdExpressionBuilderPromiseReadyDeffered.resolve();
             };
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (value) {
                 if (value != undefined && settingsDirective != undefined && settingsDirective != value.WorkFlowAddBEActivityEditor)
@@ -150,6 +156,8 @@
                 businessEntityDefinitionSelectedPromise = UtilsService.createPromiseDeferred();
                 promises.push(loadSettingsSelector());
             }
+            promises.push(loadEntityIdExpressionBuilder());
+
             var rootPromiseNode = { promises: promises };
 
             return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
@@ -160,11 +168,22 @@
             });
         }
 
+        function loadEntityIdExpressionBuilder() {
+            var entityIdExpressionBuilderPromiseLoadDeffered = UtilsService.createPromiseDeferred();
+            entityIdExpressionBuilderPromiseReadyDeffered.promise.then(function () {
+                var payload = {
+                    context: context,
+                    value: entityId
+                };
+                VRUIUtilsService.callDirectiveLoad(entityIdExpressionBuilderDirectiveAPI, payload, entityIdExpressionBuilderPromiseLoadDeffered);
+            });
+            return entityIdExpressionBuilderPromiseLoadDeffered.promise;
+        }
         function updateActivity() {
             $scope.scopeModel.isLoading = true;
             var updatedObject = {
                 displayName: $scope.scopeModel.displayName,
-                entityId: $scope.scopeModel.entityId,
+                entityId: entityIdExpressionBuilderDirectiveAPI != undefined ? entityIdExpressionBuilderDirectiveAPI.getData() : undefined,
                 entityDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
                 settings: settingsDirectiveAPI.getData(),
             };

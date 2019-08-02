@@ -1,4 +1,5 @@
-﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivityCallHttpServiceController" size="large">
+﻿\
+<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivityCallHttpServiceController" size="large">
     <vr-modalbody>
         <vr-form name="formEditActivity" vr-loader="scopeModel.isLoading">
             <vr-tabs>
@@ -20,7 +21,9 @@
 
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Action Path" isrequired="true" value="scopeModel.actionPath"></businessprocess-vr-workflow-activity-expressionbuilder>
+                            <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onActionPathExpressionBuilderDirectiveReady"
+                                                                                           label="Action Path">
+                            </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                         </vr-columns>
                         <vr-columns colnum="3">
                             <vr-switch value="scopeModel.enableVisualization" label="Enable Visualization"></vr-switch>
@@ -28,10 +31,14 @@
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Body Logic" value="scopeModel.buildBodyLogic" nb-of-rows="7"></businessprocess-vr-workflow-activity-expressionbuilder>
+                            <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onBodyLogicExpressionBuilderDirectiveReady"
+                                                                                           label="Body Logic" nb-of-rows="7">
+                            </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Response Logic" value="scopeModel.responseLogic" nb-of-rows="7"></businessprocess-vr-workflow-activity-expressionbuilder>
+                            <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onResponseLogicExpressionBuilderDirectiveReady"
+                                                                                           label="Response Logic" nb-of-rows="7">
+                            </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -47,12 +54,16 @@
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Is Succeeded" value="scopeModel.isSucceeded"></businessprocess-vr-workflow-activity-expressionbuilder>
+                            <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onIsSucceededExpressionBuilderDirectiveReady"
+                                                                                           label="Is Succeeded">
+                            </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Error Logic" value="scopeModel.errorLogic" nb-of-rows="7"></businessprocess-vr-workflow-activity-expressionbuilder>
+                            <businessprocess-vr-workflow-activity-editor-expressionbuilder on-ready="scopeModel.onErrorLogicExpressionBuilderDirectiveReady"
+                                                                                           label="Error Logic">
+                            </businessprocess-vr-workflow-activity-editor-expressionbuilder>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
