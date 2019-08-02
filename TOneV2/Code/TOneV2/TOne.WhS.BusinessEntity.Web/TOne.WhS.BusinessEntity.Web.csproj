@@ -301,11 +301,15 @@
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerFaultTicketSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerCaseStaticEditorDefinitionTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerTicketDetailsPropertyEvaluatorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerFaultTicketOnBeforeSaveHandlerTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\whs-be-customerfaultticket-onbeforesavehandler.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\whs-be-customerticketdetailspropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\whs-be-casemanagement-customercase-staticeditor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\Templates\SupplierFaultTicketOnBeforeSaveHandlerTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\Templates\SupplierFaultTicketSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\Templates\SupplierCaseStaticEditorDefinitionTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-casemanagement-suppliercase-staticeditor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-supplierfaultticket-onbeforesavehandler.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-supplierfaultticket-customobjectsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\CDRImportSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\CDRImportZoneIdentificationTemplate.html" />
