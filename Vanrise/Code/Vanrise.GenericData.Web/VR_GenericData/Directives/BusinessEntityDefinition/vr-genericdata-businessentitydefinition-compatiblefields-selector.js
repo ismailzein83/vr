@@ -67,6 +67,7 @@
                     var selectedIds;
                     var entityDefinitionId;
                     var dataRecordFieldType;
+                    var context;
 
                     if (payload != undefined) {
                         filter = payload.filter;
@@ -104,6 +105,16 @@
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('FieldName', attrs, ctrl);
+                };
+
+
+                api.clearData= function () {
+                    selectorAPI.clearDataSource();
+                    ctrl.selectedvalues = (attrs.ismultipleselection != undefined) ? [] : undefined;
+                };
+
+                api.getSelectedValues = function () {
+                    return ctrl.selectedvalues;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

@@ -142,7 +142,7 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldGrid', ['Utils
                     dependantFieldDataItem.compatibleFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    extendOptionPromises.push(dependantFieldDataItem.compatibleFieldsSelectorLoadDeferred.promise);
+                    //extendOptionPromises.push(dependantFieldDataItem.compatibleFieldsSelectorLoadDeferred.promise);
                 }
 
 
@@ -151,34 +151,42 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldGrid', ['Utils
                 dependantFieldDataItem.onDependantFieldsSelectorReady = function (api) {
                     dependantFieldDataItem.dependantFieldsSelectorAPI = api;
                     dependantFieldDataItem.dependantFieldsSelectorReadyPromiseDeferred.resolve();
-
-                    if (dependantField != undefined && dependantField.FieldName != undefined) {
-                        var selectedValue = UtilsService.getItemByVal($scope.scopeModel.allDataRecordTypeFields, dependantField.FieldName, "fieldName");
-                        if (selectedValue != null)
-                            dependantFieldDataItem.selectedField = selectedValue;
+                    var dependantFieldSelectorPayload = {
+                        context: context,
+                    };
+                    if (dependantField != undefined) {
+                        dependantFieldSelectorPayload.selectedIds = dependantField.FieldName;
                     }
+                    VRUIUtilsService.callDirectiveLoad(dependantFieldDataItem.dependantFieldsSelectorAPI, dependantFieldSelectorPayload, undefined);
+                    //if (dependantField != undefined && dependantField.FieldName != undefined) {
+                    //    var selectedValue = UtilsService.getItemByVal(dependantFieldDataItem.dependantFieldsSelectorAPI.getData(), dependantField.FieldName, "fieldName");
+                    //    if (selectedValue != null)
+                    //dependantFieldDataItem.selectedField = dependantFieldDataItem.dependantFieldsSelectorAPI.getSelectedIds();
+                    //}
                 };
 
                 dependantFieldDataItem.onDataRecordFieldChanged = function (selectedDataRecordField) {
-                    if (selectedDataRecordField == undefined)
-                        return;
-
-                    if (dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred != undefined) {
-                        dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred.resolve();
+                    if (selectedDataRecordField == undefined) {
+                        if (dependantFieldDataItem.compatibleFieldsSelectorAPI != undefined && dependantFieldDataItem.compatibleFieldsSelectorAPI.getSelectedValues()!=undefined)
+                            dependantFieldDataItem.compatibleFieldsSelectorAPI.clearData();
                         return;
                     }
-
-                    var compatibleFieldsSelectorPayload = {
-                        entityDefinitionId: beDefinitionId,
-                        dataRecordFieldType: selectedDataRecordField.fieldType
-                    };
-                    var setLoader = function (value) {
+                if (dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred != undefined) {
+                    dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred.resolve();
+                    return;
+                    }
+                var compatibleFieldsSelectorPayload = {
+                    entityDefinitionId: beDefinitionId,
+                    dataRecordFieldType: selectedDataRecordField.fieldType,
+                    selectedIds: dependantFieldDataItem.compatibleFieldsSelectorAPI.getSelectedIds()
+                };
+                var setLoader = function (value) {
                         dependantFieldDataItem.isLoadingCompatibleFieldsSelector = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dependantFieldDataItem.compatibleFieldsSelectorAPI, compatibleFieldsSelectorPayload, setLoader);
                 };
 
-                //Loading CompatibleFieldsSelector
+                //Loading CompatibleFieldsSelector 
                 dependantFieldDataItem.onCompatibleFieldsSelectorReady = function (api) {
                     dependantFieldDataItem.compatibleFieldsSelectorAPI = api;
 
@@ -187,10 +195,9 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldGrid', ['Utils
 
                     dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred.promise.then(function () {
                         dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred = undefined;
-
                         var compatibleFieldsSelectorPayload = {
                             entityDefinitionId: beDefinitionId,
-                            dataRecordFieldType: dependantFieldDataItem.selectedField.fieldType
+                            dataRecordFieldType: dependantFieldDataItem.dependantFieldsSelectorAPI.getSelectedValues().fieldType
                         };
                         if (dependantField.MappedFieldName != undefined) {
                             compatibleFieldsSelectorPayload.selectedIds = dependantField.MappedFieldName;
@@ -206,8 +213,8 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldGrid', ['Utils
 
             function buildFieldBusinessEntityTypeDependantField(dependantFieldDataItem) {
                 return {
-                    FieldName: dependantFieldDataItem.selectedField != undefined ? dependantFieldDataItem.selectedField.fieldName : null,
-                    MappedFieldName: dependantFieldDataItem.compatibleFieldsSelectorAPI.getSelectedIds(),
+                    FieldName: dependantFieldDataItem.dependantFieldsSelectorAPI != undefined ? dependantFieldDataItem.dependantFieldsSelectorAPI.getSelectedIds() : null,
+                    MappedFieldName: (dependantFieldDataItem.compatibleFieldsSelectorAPI != undefined) ? dependantFieldDataItem.compatibleFieldsSelectorAPI.getSelectedIds():null,
                     IsRequired: dependantFieldDataItem.IsRequired
                 };
             }

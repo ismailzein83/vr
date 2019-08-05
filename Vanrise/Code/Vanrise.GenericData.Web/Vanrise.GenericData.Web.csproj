@@ -321,6 +321,7 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\BEDependantFieldGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\FieldTypeGenericEditorDesign.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-compatiblefields-selector.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-dependantfield-selector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-restapiitem-output-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-restapiitem-input-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-dependantfield-grid.js" />

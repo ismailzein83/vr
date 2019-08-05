@@ -84,14 +84,13 @@ function (UtilsService, VRUIUtilsService) {
                 return UtilsService.waitMultiplePromises(promises);
             };
 
-
             api.getData = function () {
                 return directiveApi.getData();
             };
 
-            if (ctrl.onReady != null)
+            if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                 ctrl.onReady(api);
-        };
+        }
     }
 
     return directiveDefinitionObject;
