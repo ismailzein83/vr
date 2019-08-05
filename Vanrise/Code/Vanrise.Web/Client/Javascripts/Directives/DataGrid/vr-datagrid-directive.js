@@ -1042,7 +1042,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    var cellTemplate = currentColumn.cellTemplate;
 	                    if (ctrl.hasExpendableColumn(currentColumn))
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateExpendableContent);
-	                    else if (currentColumn.isClickableAttr != undefined)
+	                    else if (currentColumn.isClickableAttr)
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateClickableContent);
 	                    else
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateNormalContent);
@@ -1665,7 +1665,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            };
 	            ctrl.hasOpenedDataItem = false;
 	            ctrl.switchFullScreenModeOn = function (dataItem, evnt) {
-	                if (!dataItem.fullScreenMode) {
+	                if (!dataItem.fullScreenMode) {	                    
 	                    dataItem.fullScreenMode = true;
 	                    ctrl.hasOpenedDataItem = true;
 	                    ctrl.objectType.objectTypeId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
