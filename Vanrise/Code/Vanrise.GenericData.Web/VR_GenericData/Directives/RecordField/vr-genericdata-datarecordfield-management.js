@@ -82,6 +82,12 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                         var registerIndex = allRegisteredItems.indexOf(item);
                         if (registerIndex > -1)
                             allRegisteredItems.splice(registerIndex, 1);
+                        if (allRegisteredItems != undefined) {
+                            for (var i = 0; i < allRegisteredItems.length; i++) {
+                                var elemenToTrigger = allRegisteredItems[i];
+                                elemenToTrigger();
+                            }
+                        }
                     }
                 };
 
@@ -170,7 +176,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                             if (currentItem != undefined) {
                                 fields.push({
                                     Name: currentItem.Name,
-                                    Type: (currentItem.fieldTypeSelectorAPI != undefined) ? currentItem.fieldTypeSelectorAPI.getData() : null,
+                                    Type: (currentItem.fieldTypeSelectorAPI != undefined) ? currentItem.fieldTypeSelectorAPI.getData() : currentItem.Type,
                                     Title: currentItem.Title,
                                     Formula: currentItem.Formula,
                                 });
@@ -236,7 +242,10 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     gridItem.fieldTypeSelectorReadyDeferred.resolve();
                     var dataRecordFieldTypePayload = gridItem.Type;
                     dataRecordFieldTypePayload.additionalParameters = { showDependantFieldsGrid: true, context: getContext() };
-                    VRUIUtilsService.callDirectiveLoad(gridItem.fieldTypeSelectorAPI, dataRecordFieldTypePayload, gridItem.fieldTypeSelectorLoadDeferred);
+                    var setLoader = function (value) {
+                        gridItem.isFieldTypeSelectorLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.fieldTypeSelectorAPI, dataRecordFieldTypePayload, setLoader, undefined);
                 };
 
                 gridItem.edit = function (dataItem) {
@@ -270,7 +279,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                         for (var i = 0; i < allRegisteredItems.length; i++) {
                             var elemenToTrigger = allRegisteredItems[i];
                             elemenToTrigger();
-                        };
+                        }
                     }
                 };
             }
@@ -376,18 +385,18 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                                 fieldTypeSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
                                 fieldTypeSelectorLoadDeferred: UtilsService.createPromiseDeferred()
                             };
-                            promises.push(gridItem.fieldTypeSelectorLoadDeferred.promise);
+                            //promises.push(gridItem.fieldTypeSelectorLoadDeferred.promise);
 
                             addColumnOnEdit(gridItem);
                             addNeededFields(gridItem);
                             ctrl.datasource.push(gridItem);
                         }
                     }
-                    gridAPIdeferred.promise.then(function () {
-                        for (var i = 0; i < ctrl.datasource.length; i++) {
-                            gridAPI.expandRow(ctrl.datasource[i]);
-                        }
-                    });
+                    //gridAPIdeferred.promise.then(function () {
+                    //    for (var i = 0; i < ctrl.datasource.length; i++) {
+                    //        gridAPI.expandRow(ctrl.datasource[i]);
+                    //    }
+                    //});
                 }
                 return promises;
             }
