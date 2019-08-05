@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicableSaleZoneFilterContext.cs" />
     <Compile Include="BulkActions\ApplyActionToDraftInput.cs" />
     <Compile Include="BulkActions\BulkActionCorrectedData.cs" />
     <Compile Include="BulkActions\BulkActionTypeSettings.cs" />

@@ -26,8 +26,11 @@ namespace TOne.WhS.Sales.Business
             if (context.SaleZone == null)
                 throw new ArgumentNullException("SaleZone");
 
+            ApplicableSaleZoneFilterContext applicableSaleZoneFilterContext = context as ApplicableSaleZoneFilterContext;
+            applicableSaleZoneFilterContext.ThrowIfNull("applicableSaleZoneFilterContext");
+
             if (context.CustomData == null)
-                context.CustomData = (object)new CustomData(this.OwnerType, this.OwnerId, DateTime.Today, context.RoutingDatabaseId, context.PolicyConfigId, context.NumberOfOptions, context.CurrencyId, context.CostCalculationMethods);
+                context.CustomData = (object)new CustomData(this.OwnerType, this.OwnerId, DateTime.Today, applicableSaleZoneFilterContext.RoutingDatabaseId, applicableSaleZoneFilterContext.PolicyConfigId, applicableSaleZoneFilterContext.NumberOfOptions, applicableSaleZoneFilterContext.CurrencyId, applicableSaleZoneFilterContext.CostCalculationMethods);
 
             CustomData customData = context.CustomData as CustomData;
 
@@ -48,7 +51,7 @@ namespace TOne.WhS.Sales.Business
                 GetRateBED = customData.GetRateBED,
                 CountryBEDsByCountryId = customData.CountryBEDsByCountryId,
                 CountryEEDsByCountryId = customData.CountryEEDsByCountryId,
-                CostCalculationMethods = context.CostCalculationMethods,
+                CostCalculationMethods = applicableSaleZoneFilterContext.CostCalculationMethods,
                 GetContextZoneItems = customData.GetContextZoneItems
             };
 

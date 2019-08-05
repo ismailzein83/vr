@@ -86,6 +86,7 @@
     <Compile Include="RecurringCharges\SupplierBillingRecurringCharge.cs" />
     <Compile Include="PortalAccountResetPasswordInput.cs" />
     <Compile Include="SaleRate\OtherSaleRateQuery.cs" />
+    <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
     <Compile Include="Settings\AutoImportSPLSettings.cs" />
     <Compile Include="BaseOtherRatesPreviewQueryHandler.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />

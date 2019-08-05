@@ -47,16 +47,16 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, filter, null, null, null, null, null);
+            return manager.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, filter);
         }
 
         [HttpPost]
-        [Route("GetSaleZonesInfos")]
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfos(GetSaleZonesInfosInput input)
+        [Route("GetSaleZonesInfoAdvanced")]
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoAdvanced(GetSaleZonesInfoAdvancedInput input)
         {
             SaleZoneInfoFilter filter = input.SerializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(input.SerializedFilter) : null;
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfo(input.NameFilter, input.SellingNumberPlanId, filter, input.SerializedCostCalculationMethods, input.CurrencyId, input.NumberOfOptions, input.PolicyConfigId, input.RoutingDatabaseId);
+            return manager.GetSaleZonesInfoAdvanced(input.NameFilter, input.SellingNumberPlanId, filter, input.SerializedCostCalculationMethods, input.CurrencyId, input.NumberOfOptions, input.PolicyConfigId, input.RoutingDatabaseId);
         }
 
         //[HttpGet]
@@ -123,14 +123,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SaleZoneFilterSettings SaleZoneFilterSettings { get; set; }
     }
 
-    public class GetSaleZonesInfosInput
+    public class GetSaleZonesInfoAdvancedInput
     {
         public string NameFilter { get; set; }
         public int SellingNumberPlanId { get; set; }
         public string SerializedFilter { get; set; }
         public string SerializedCostCalculationMethods { get; set; }
         public int CurrencyId { get; set; }
-        public int? NumberOfOptions { get; set; }
+        public int NumberOfOptions { get; set; }
         public Guid PolicyConfigId { get; set; }
         public int RoutingDatabaseId { get; set; }
     }

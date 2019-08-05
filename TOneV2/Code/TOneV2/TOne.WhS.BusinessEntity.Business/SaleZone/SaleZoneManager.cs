@@ -301,10 +301,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZonesBySellingNumberPlan;
         }
 
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter, string serializedCostCalculationMethods, int? currencyId, int? numberOfOptions, Guid? policyConfigId, int? routingDatabaseId)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter)
         {
             string zoneName = nameFilter != null ? nameFilter.ToLower() : null;
-            List<CostCalculationMethod> costCalculationMethods = (string.IsNullOrEmpty(serializedCostCalculationMethods)) ? null : Vanrise.Common.Serializer.Deserialize<List<CostCalculationMethod>>(serializedCostCalculationMethods);
             IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
 
             if (filter == null)
@@ -352,20 +351,82 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     for (int i = 0; i < filter.Filters.Count(); i++)
                     {
-                        var saleZoneFilterContext = new SaleZoneFilterContext()
+                        var saleZoneFilterContext = new SaleZoneFilterContext() { SaleZone = zone, CustomData = customObjects[i], SellingNumberPlanId = sellingNumberPlanId };
+                        bool filterResult = filter.Filters.ElementAt(i).IsExcluded(saleZoneFilterContext);
+                        customObjects[i] = saleZoneFilterContext.CustomData;
+                        if (filterResult)
+                            return false;
+                    }
+                }
+
+                return true;
+            };
+
+            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, filterPredicate).OrderBy(x => x.Name);
+        }
+
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoAdvanced(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter, string serializedCostCalculationMethods, int currencyId, int numberOfOptions, Guid policyConfigId, int routingDatabaseId)
+        {
+            string zoneName = nameFilter?.ToLower();
+            List<CostCalculationMethod> costCalculationMethods = (string.IsNullOrEmpty(serializedCostCalculationMethods)) ? null : Vanrise.Common.Serializer.Deserialize<List<CostCalculationMethod>>(serializedCostCalculationMethods);
+            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+
+            if (filter == null)
+            {
+                return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, x => zoneName == null || x.Name.ToLower() == zoneName).OrderBy(x => x.Name);
+            }
+
+            var today = filter.EffectiveDate ?? DateTime.Today;
+            HashSet<long> filteredZoneIds = null;
+
+            if (filter.SaleZoneFilterSettings != null)
+            {
+                filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
+            }
+
+            var customObjects = new List<object>();
+            if (filter.Filters != null)
+            {
+                foreach (ISaleZoneFilter saleZoneFilter in filter.Filters)
+                    customObjects.Add(null);
+            }
+
+            Func<SaleZone, bool> filterPredicate = (zone) =>
+            {
+                if (!zone.IsEffective(filter.EffectiveMode, today))
+                    return false;
+
+                if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+
+                if (zoneName != null && !zone.Name.ToLower().Contains(zoneName))
+                    return false;
+
+                if (filter.CountryIds != null && !filter.CountryIds.Contains(zone.CountryId))
+                    return false;
+
+                if (filter.AvailableZoneIds != null && filter.AvailableZoneIds.Count() > 0 && !filter.AvailableZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+
+                if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Count() > 0 && filter.ExcludedZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+                if (filter.ExcludePendingClosedZones && zone.EED.HasValue)
+                    return false;
+                if (filter.Filters != null)
+                {
+                    for (int i = 0; i < filter.Filters.Count(); i++)
+                    {
+                        var saleZoneFilterContext = new ApplicableSaleZoneFilterContext()
                         {
                             SaleZone = zone,
                             CustomData = customObjects[i],
                             SellingNumberPlanId = sellingNumberPlanId,
                             CostCalculationMethods = costCalculationMethods,
-                            NumberOfOptions = numberOfOptions
+                            NumberOfOptions = numberOfOptions,
+                            CurrencyId = currencyId,
+                            PolicyConfigId = policyConfigId,
+                            RoutingDatabaseId = routingDatabaseId
                         };
-                        if (currencyId.HasValue)
-                            saleZoneFilterContext.CurrencyId = currencyId.Value;
-                        if (policyConfigId.HasValue)
-                            saleZoneFilterContext.PolicyConfigId = policyConfigId.Value;
-                        if (routingDatabaseId.HasValue)
-                            saleZoneFilterContext.RoutingDatabaseId = routingDatabaseId.Value;
 
                         bool filterResult = filter.Filters.ElementAt(i).IsExcluded(saleZoneFilterContext);
                         customObjects[i] = saleZoneFilterContext.CustomData;

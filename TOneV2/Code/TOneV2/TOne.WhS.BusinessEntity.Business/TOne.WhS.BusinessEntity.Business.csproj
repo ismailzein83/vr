@@ -223,7 +223,6 @@
     <Compile Include="SaleRate\History\RateHistoryUtilities.cs" />
     <Compile Include="SaleRate\OtherSaleRateManager.cs" />
     <Compile Include="SaleRate\SaleRateReadLastRateNoCache.cs" />
-    <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
     <Compile Include="SaleZone\SaleZoneSoldCountryToCustomerFilter.cs" />
     <Compile Include="StateBackup\StateBackupCanRestoreContext.cs" />
     <Compile Include="SupplierBillingRecurringChargeManager.cs" />

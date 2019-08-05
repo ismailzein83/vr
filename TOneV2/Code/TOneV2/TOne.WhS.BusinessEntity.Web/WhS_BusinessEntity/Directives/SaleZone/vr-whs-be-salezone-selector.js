@@ -164,7 +164,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                         PolicyConfigId: policyConfigId,
                         RoutingDatabaseId: routingDatabaseId
                     };
-                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfos(input).then(function (response) {
+                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoAdvanced(input).then(function (response) {
                         availableSaleZones.length = 0;
                         if (response != undefined) {
                             for (var i = 0; i < response.length; i++)

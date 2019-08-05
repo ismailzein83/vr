@@ -1,5 +1,5 @@
 ﻿using System;
-using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Business
 {

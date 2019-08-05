@@ -19,8 +19,8 @@
             });
         }
 
-        function GetSaleZonesInfos(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSaleZonesInfos"), input);
+        function GetSaleZonesInfoAdvanced(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSaleZonesInfoAdvanced"), input);
         }
 
         function GetSaleZonesInfoByIds(input) {
@@ -79,7 +79,7 @@
         return ({
             GetFilteredSaleZones: GetFilteredSaleZones,
             GetSaleZonesInfo: GetSaleZonesInfo,
-            GetSaleZonesInfos: GetSaleZonesInfos,
+            GetSaleZonesInfoAdvanced: GetSaleZonesInfoAdvanced,
             GetSellingNumberPlanIdBySaleZoneIds: GetSellingNumberPlanIdBySaleZoneIds,
             GetSaleZonesInfoByIds: GetSaleZonesInfoByIds,
             GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
