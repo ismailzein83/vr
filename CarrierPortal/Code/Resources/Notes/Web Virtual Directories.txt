@@ -1,16 +1,21 @@
-﻿Expand the IIS web site of CarrierPortal.Web project:
- - Add the following virtual directory under the root site:
-Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+﻿Open cmd command as Administrator 
+Copy below script inside the command prompt.
+This will create application pool, application, assign the application to pool, and add all virtual directories. You may have to change the site id and the bindings port.
 
- - Add the following virtual directories under Client > Modules folder:
-Common							C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-Security						C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
-CP_SupplierPricelist			C:\TFS\CarrierPortal\Code\CP.SupplierPricelist.Web\CP_SupplierPricelist
-Runtime							C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-PartnerPortal_CustomerAccess	C:\TFS\CarrierPortal\Code\PartnerPortal.CustomerAccess.Web\PartnerPortal_CustomerAccess
-VR_GenericData					C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
-Analytic						C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
-PartnerPortal_Invoice			C:\TFS\CarrierPortal\Code\PartnerPortal.Invoice.Web\PartnerPortal_Invoice
-CP_Ringo						C:\TFS\CarrierPortal\Code\CP.Ringo.Web\CP_Ringo
-CP_MultiNet						C:\TFS\CarrierPortal\Code\CP.MultiNet.Web\CP_MultiNet
-CP_WhS			            	C:\TFS\CarrierPortal\Code\CP.WhS.Web\CP_WhS
+cd c:\windows\system32\inetsrv
+appcmd add apppool /name:"CarrierPortal.Web" /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+appcmd add site /name:CarrierPortal.Web /id:12 /physicalPath:C:\TFS\Retail\Code\CarrierPortal.Web /bindings:http/*:8012:
+appcmd set site /site.name:CarrierPortal.Web /[path='/'].applicationPool:CarrierPortal.Web
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Web\Client
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/Common /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/Security /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/Runtime /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/VR_GenericData /physicalPath:C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/Analytic /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/ExcelConversion /physicalPath:C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/CP_SupplierPricelist /physicalPath:C:\TFS\CarrierPortal\Code\CP.SupplierPricelist.Web\CP_SupplierPricelist
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/PartnerPortal_CustomerAccess /physicalPath:C:\TFS\CarrierPortal\Code\PartnerPortal.CustomerAccess.Web\PartnerPortal_CustomerAccess
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/PartnerPortal_Invoice /physicalPath:C:\TFS\CarrierPortal\Code\PartnerPortal.Invoice.Web\PartnerPortal_Invoice
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/CP_Ringo /physicalPath:C:\TFS\CarrierPortal\Code\CP.Ringo.Web\CP_Ringo
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/CP_MultiNet /physicalPath:C:\TFS\CarrierPortal\Code\CP.MultiNet.Web\CP_MultiNet
+appcmd add vdir /app.name:CarrierPortal.Web/ /path:/Client/Modules/CP_WhS /physicalPath:C:\TFS\CarrierPortal\Code\CP.WhS.Web\CP_WhS
