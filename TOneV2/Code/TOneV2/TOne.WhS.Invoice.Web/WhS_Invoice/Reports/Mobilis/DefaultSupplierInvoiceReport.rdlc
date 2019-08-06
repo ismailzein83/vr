@@ -2,20 +2,6 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
-      <Image Name="Image5">
-        <Source>Embedded</Source>
-        <Value>ATM_Mobilis</Value>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.7187cm</Top>
-        <Left>0.48675cm</Left>
-        <Height>2.27187cm</Height>
-        <Width>6.52152cm</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
       <Textbox Name="Textbox2">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -38,11 +24,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>2.76601in</Top>
+        <Top>1.14101in</Top>
         <Left>0.22927in</Left>
         <Height>0.375in</Height>
         <Width>7.67222in</Width>
-        <ZIndex>1</ZIndex>
         <Style>
           <Border />
           <PaddingLeft>2pt</PaddingLeft>
@@ -373,11 +358,11 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>8.5332cm</Top>
+        <Top>4.4057cm</Top>
         <Left>0.58236cm</Left>
         <Height>2.4cm</Height>
         <Width>19.48743cm</Width>
-        <ZIndex>2</ZIndex>
+        <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -480,11 +465,11 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>17.06467cm</Top>
+        <Top>12.93717cm</Top>
         <Left>5.85305cm</Left>
         <Height>0.6cm</Height>
         <Width>14.22723cm</Width>
-        <ZIndex>3</ZIndex>
+        <ZIndex>2</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -551,11 +536,11 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>18.02617cm</Top>
+        <Top>13.89867cm</Top>
         <Left>0.56386cm</Left>
         <Height>0.6cm</Height>
         <Width>4.53729cm</Width>
-        <ZIndex>4</ZIndex>
+        <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -636,11 +621,11 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>18.62617cm</Top>
+        <Top>14.49867cm</Top>
         <Left>0.56386cm</Left>
         <Height>1.34083cm</Height>
         <Width>19.45771cm</Width>
-        <ZIndex>5</ZIndex>
+        <ZIndex>4</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1560,11 +1545,11 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>3.5594cm</Top>
+        <Top>0.635cm</Top>
         <Left>0.58236cm</Left>
         <Height>3cm</Height>
         <Width>19.48743cm</Width>
-        <ZIndex>6</ZIndex>
+        <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1653,8 +1638,8 @@ La facture doit être payée avant </Value>
               </Parameter>
             </Parameters>
             <Top>0.00974in</Top>
-            <Height>0.25264in</Height>
-            <Width>7.66052in</Width>
+            <Height>0.28668in</Height>
+            <Width>7.90149in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1666,11 +1651,11 @@ La facture doit être payée avant </Value>
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>20.14339cm</Top>
-        <Left>0.56386cm</Left>
-        <Height>0.69118cm</Height>
-        <Width>19.45772cm</Width>
-        <ZIndex>7</ZIndex>
+        <Top>16.01589cm</Top>
+        <Left>0cm</Left>
+        <Height>0.75292cm</Height>
+        <Width>20.08028cm</Width>
+        <ZIndex>6</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value and Parameters!NoSMS.Value and Parameters!NoRecurringCharges.Value and Parameters!NoDeals.Value</Hidden>
         </Visibility>
@@ -2727,11 +2712,11 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>11.77078cm</Top>
+        <Top>7.64328cm</Top>
         <Left>0.58236cm</Left>
         <Height>5.1175cm</Height>
         <Width>19.48743cm</Width>
-        <ZIndex>8</ZIndex>
+        <ZIndex>7</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2739,15 +2724,42 @@ La facture doit être payée avant </Value>
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>21.04624cm</Height>
+    <Height>16.83937cm</Height>
     <Style>
       <Border>
         <Style>None</Style>
       </Border>
     </Style>
   </Body>
-  <Width>20.35018cm</Width>
+  <Width>20.11206cm</Width>
   <Page>
+    <PageHeader>
+      <Height>2.54cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Image Name="Image1">
+          <Source>Database</Source>
+          <Value>=Parameters!Image.Value</Value>
+          <MIMEType>image/png</MIMEType>
+          <Sizing>FitProportional</Sizing>
+          <Top>0.14306in</Top>
+          <Left>0.22928in</Left>
+          <Height>0.73471in</Height>
+          <Width>2.10859in</Width>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Image>
+      </ReportItems>
+      <Style>
+        <Border>
+          <Style>None</Style>
+        </Border>
+      </Style>
+    </PageHeader>
     <PageFooter>
       <Height>3.25792cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
@@ -2757,7 +2769,7 @@ La facture doit être payée avant </Value>
           <Top>0.05in</Top>
           <Left>0.19163in</Left>
           <Height>0in</Height>
-          <Width>7.82025in</Width>
+          <Width>7.71399in</Width>
           <Style>
             <Border>
               <Style>Solid</Style>
@@ -2784,7 +2796,7 @@ La facture doit être payée avant </Value>
           </Paragraphs>
           <rd:DefaultName>Textbox24</rd:DefaultName>
           <Top>0.85556in</Top>
-          <Left>6.76607in</Left>
+          <Left>6.74709in</Left>
           <Height>0.25in</Height>
           <Width>1.13542in</Width>
           <ZIndex>1</ZIndex>

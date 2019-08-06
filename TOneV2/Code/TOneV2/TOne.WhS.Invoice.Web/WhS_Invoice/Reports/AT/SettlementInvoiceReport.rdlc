@@ -17,10 +17,8 @@
                 <Value>=Parameters!Name.Value</Value>
               </Parameter>
             </Parameters>
-            <Top>0.04167in</Top>
-            <Left>0.04383in</Left>
-            <Height>0.08124in</Height>
-            <Width>7.55148in</Width>
+            <Height>0.13456in</Height>
+            <Width>7.68965in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -33,9 +31,9 @@
         </PageBreak>
         <KeepTogether>true</KeepTogether>
         <Top>17.69904cm</Top>
-        <Left>0.23962cm</Left>
-        <Height>0.3122cm</Height>
-        <Width>19.29209cm</Width>
+        <Left>0cm</Left>
+        <Height>0.34178cm</Height>
+        <Width>19.53171cm</Width>
         <Visibility>
           <Hidden>=IIf((CountRows("InvoiceMonths") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -2047,32 +2045,21 @@
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
-        <Rectangle Name="Rectangle2">
-          <ReportItems>
-            <Image Name="Image1">
-              <Source>Embedded</Source>
-              <Value>EttisalatJazaer</Value>
-              <Sizing>FitProportional</Sizing>
-              <Height>0.76042in</Height>
-              <Width>1.80208in</Width>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
-          </ReportItems>
-          <KeepTogether>true</KeepTogether>
-          <Top>0.10292in</Top>
-          <Left>0.21986in</Left>
-          <Height>0.76042in</Height>
-          <Width>1.80208in</Width>
+        <Image Name="Image2">
+          <Source>Database</Source>
+          <Value>=Parameters!Image.Value</Value>
+          <MIMEType>image/png</MIMEType>
+          <Sizing>FitProportional</Sizing>
+          <Top>0.04452in</Top>
+          <Left>0.13817in</Left>
+          <Height>0.81722in</Height>
+          <Width>1.94698in</Width>
           <Style>
             <Border>
               <Style>None</Style>
             </Border>
           </Style>
-        </Rectangle>
+        </Image>
       </ReportItems>
       <Style>
         <Border>

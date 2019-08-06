@@ -896,7 +896,7 @@
         <Top>1.13347in</Top>
         <Left>0.13237in</Left>
         <Height>1.43967in</Height>
-        <Width>7.55729in</Width>
+        <Width>7.55728in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -2239,10 +2239,10 @@
                 <Value>=Parameters!NoRecurringCharges.Value</Value>
               </Parameter>
             </Parameters>
-            <Top>0cm</Top>
-            <Left>0.10902cm</Left>
-            <Height>1.59396cm</Height>
-            <Width>19.19553cm</Width>
+            <Top>0.03528cm</Top>
+            <Left>0cm</Left>
+            <Height>1.30292cm</Height>
+            <Width>19.53173cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2255,9 +2255,9 @@
         </PageBreak>
         <KeepTogether>true</KeepTogether>
         <Top>20.28331cm</Top>
-        <Left>0.22718cm</Left>
-        <Height>1.59396cm</Height>
-        <Width>19.30455cm</Width>
+        <Left>0cm</Left>
+        <Height>1.3382cm</Height>
+        <Width>19.53173cm</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value and Parameters!NoDeals.Value and Parameters!NoRecurringCharges.Value</Hidden>
@@ -2611,42 +2611,31 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>21.87727cm</Height>
+    <Height>21.91255cm</Height>
     <Style />
   </Body>
   <Width>19.53174cm</Width>
   <Page>
     <PageHeader>
-      <Height>2.30188cm</Height>
+      <Height>2.4673cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
-        <Rectangle Name="Rectangle2">
-          <ReportItems>
-            <Image Name="Image1">
-              <Source>Embedded</Source>
-              <Value>EttisalatJazaer</Value>
-              <Sizing>FitProportional</Sizing>
-              <Height>0.76042in</Height>
-              <Width>1.80208in</Width>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
-          </ReportItems>
-          <KeepTogether>true</KeepTogether>
-          <Top>0.10292in</Top>
-          <Left>0.21986in</Left>
-          <Height>0.76042in</Height>
-          <Width>1.80208in</Width>
+        <Image Name="Image1">
+          <Source>Database</Source>
+          <Value>=Parameters!Image.Value</Value>
+          <MIMEType>image/png</MIMEType>
+          <Sizing>FitProportional</Sizing>
+          <Top>0.10417in</Top>
+          <Left>0.13237in</Left>
+          <Height>0.74513in</Height>
+          <Width>1.94984in</Width>
           <Style>
             <Border>
               <Style>None</Style>
             </Border>
           </Style>
-        </Rectangle>
+        </Image>
       </ReportItems>
       <Style>
         <Border>
@@ -3393,6 +3382,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Phone">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Image">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

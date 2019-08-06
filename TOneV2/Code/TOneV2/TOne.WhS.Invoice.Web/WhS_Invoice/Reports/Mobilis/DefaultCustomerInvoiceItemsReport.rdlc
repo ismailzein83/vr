@@ -4,8 +4,8 @@
     <ReportItems>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>2.90952in</Top>
-        <Left>1.99052in</Left>
+        <Top>1.65952in</Top>
+        <Left>2.09052in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
         <Visibility>
@@ -741,8 +741,8 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.16875in</Top>
-        <Left>0.06596in</Left>
+        <Top>0.91875in</Top>
+        <Left>0.16596in</Left>
         <Height>0.63541in</Height>
         <Width>7.71854in</Width>
         <ZIndex>1</ZIndex>
@@ -1013,8 +1013,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.9616in</Top>
-        <Left>1.99052in</Left>
+        <Top>1.7116in</Top>
+        <Left>2.09052in</Left>
         <Height>0.19792in</Height>
         <Width>5.78301in</Width>
         <ZIndex>2</ZIndex>
@@ -1029,8 +1029,8 @@
       </Tablix>
       <Rectangle Name="Rectangle5">
         <KeepTogether>true</KeepTogether>
-        <Top>5.32774in</Top>
-        <Left>1.99604in</Left>
+        <Top>4.07774in</Top>
+        <Left>2.09604in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
         <ZIndex>3</ZIndex>
@@ -1765,8 +1765,8 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerSMSInvoiceItemDetails</DataSetName>
-        <Top>4.75365in</Top>
-        <Left>0.06051in</Left>
+        <Top>3.50365in</Top>
+        <Left>0.16051in</Left>
         <Height>0.46875in</Height>
         <Width>7.71302in</Width>
         <ZIndex>4</ZIndex>
@@ -2037,8 +2037,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>5.37983in</Top>
-        <Left>1.99604in</Left>
+        <Top>4.12983in</Top>
+        <Left>2.09604in</Left>
         <Height>0.19792in</Height>
         <Width>5.78301in</Width>
         <ZIndex>5</ZIndex>
@@ -2069,8 +2069,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox29</rd:DefaultName>
-        <Top>4.83808cm</Top>
-        <Left>0.16754cm</Left>
+        <Top>1.66308cm</Top>
+        <Left>0.42154cm</Left>
         <Height>0.6cm</Height>
         <Width>4.88838cm</Width>
         <ZIndex>6</ZIndex>
@@ -2105,8 +2105,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox32</rd:DefaultName>
-        <Top>11.40372cm</Top>
-        <Left>0.16753cm</Left>
+        <Top>8.22872cm</Top>
+        <Left>0.42153cm</Left>
         <Height>0.6cm</Height>
         <Width>4.88839cm</Width>
         <ZIndex>7</ZIndex>
@@ -2123,21 +2123,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Image Name="Image5">
-        <Source>Embedded</Source>
-        <Value>ATM_Mobilis</Value>
-        <Sizing>FitProportional</Sizing>
-        <Top>1.59982cm</Top>
-        <Left>0.16753cm</Left>
-        <Height>2.27187cm</Height>
-        <Width>6.52152cm</Width>
-        <ZIndex>8</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
       <Tablix Name="Tablix55">
         <TablixBody>
           <TablixColumns>
@@ -2689,11 +2674,11 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>SaleDealItemDetails</DataSetName>
-        <Top>3.43575in</Top>
-        <Left>0.06596in</Left>
+        <Top>2.18575in</Top>
+        <Left>0.16596in</Left>
         <Height>0.46875in</Height>
         <Width>7.7296in</Width>
-        <ZIndex>9</ZIndex>
+        <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=IIf((Parameters!NoDeals.Value=true),true,false)</Hidden>
         </Visibility>
@@ -3173,11 +3158,11 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>RecurringChargeItem</DataSetName>
-        <Top>6.29513in</Top>
-        <Left>0.05499in</Left>
+        <Top>5.04513in</Top>
+        <Left>0.15499in</Left>
         <Height>0.46875in</Height>
         <Width>7.71853in</Width>
-        <ZIndex>10</ZIndex>
+        <ZIndex>9</ZIndex>
         <Visibility>
           <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
         </Visibility>
@@ -3191,11 +3176,11 @@
       </Tablix>
       <Rectangle Name="Rectangle6">
         <KeepTogether>true</KeepTogether>
-        <Top>3.98194in</Top>
-        <Left>1.99051in</Left>
+        <Top>2.73194in</Top>
+        <Left>2.09051in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
-        <ZIndex>11</ZIndex>
+        <ZIndex>10</ZIndex>
         <Visibility>
           <Hidden>=IIf((Parameters!NoDeals.Value=true),true,false)</Hidden>
         </Visibility>
@@ -3462,11 +3447,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>4.03402in</Top>
-        <Left>1.99051in</Left>
+        <Top>2.78402in</Top>
+        <Left>2.09051in</Left>
         <Height>0.19792in</Height>
         <Width>5.78301in</Width>
-        <ZIndex>12</ZIndex>
+        <ZIndex>11</ZIndex>
         <Visibility>
           <Hidden>=IIf((Parameters!NoDeals.Value=true),true,false)</Hidden>
         </Visibility>
@@ -3478,11 +3463,11 @@
       </Tablix>
       <Rectangle Name="Rectangle7">
         <KeepTogether>true</KeepTogether>
-        <Top>6.81805in</Top>
-        <Left>2.00156in</Left>
+        <Top>5.56805in</Top>
+        <Left>2.10156in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
-        <ZIndex>13</ZIndex>
+        <ZIndex>12</ZIndex>
         <Visibility>
           <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
         </Visibility>
@@ -3749,11 +3734,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>6.87014in</Top>
-        <Left>2.00156in</Left>
+        <Top>5.62014in</Top>
+        <Left>2.10156in</Left>
         <Height>0.19792in</Height>
         <Width>5.78302in</Width>
-        <ZIndex>14</ZIndex>
+        <ZIndex>13</ZIndex>
         <Visibility>
           <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
         </Visibility>
@@ -3781,11 +3766,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox32</rd:DefaultName>
-        <Top>15.31907cm</Top>
-        <Left>0.13967cm</Left>
+        <Top>12.14407cm</Top>
+        <Left>0.39367cm</Left>
         <Height>0.6cm</Height>
         <Width>4.48297cm</Width>
-        <ZIndex>15</ZIndex>
+        <ZIndex>14</ZIndex>
         <Visibility>
           <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
         </Visibility>
@@ -3800,10 +3785,10 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>18.34447cm</Height>
+    <Height>15.01072cm</Height>
     <Style />
   </Body>
-  <Width>19.80072cm</Width>
+  <Width>20.11822cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>

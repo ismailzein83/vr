@@ -18,9 +18,8 @@
               </Parameter>
             </Parameters>
             <Top>0.04167in</Top>
-            <Left>0.04383in</Left>
             <Height>0.08124in</Height>
-            <Width>7.73416in</Width>
+            <Width>7.87233in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -30,9 +29,9 @@
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>17.24962cm</Top>
-        <Left>0.23962cm</Left>
+        <Left>0cm</Left>
         <Height>0.3122cm</Height>
-        <Width>19.75609cm</Width>
+        <Width>19.99571cm</Width>
         <Visibility>
           <Hidden>=IIf((CountRows("InvoiceMonths") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -2577,14 +2576,15 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
-        <Image Name="Image5">
-          <Source>Embedded</Source>
-          <Value>ATM_Mobilis</Value>
+        <Image Name="Image1">
+          <Source>Database</Source>
+          <Value>=Parameters!Image.Value</Value>
+          <MIMEType>image/png</MIMEType>
           <Sizing>FitProportional</Sizing>
-          <Top>0.50448cm</Top>
-          <Left>0.40333cm</Left>
-          <Height>2.27187cm</Height>
-          <Width>6.52152cm</Width>
+          <Top>0.19584in</Top>
+          <Left>0.13817in</Left>
+          <Height>0.96388in</Height>
+          <Width>2.47067in</Width>
           <Style>
             <Border>
               <Style>None</Style>

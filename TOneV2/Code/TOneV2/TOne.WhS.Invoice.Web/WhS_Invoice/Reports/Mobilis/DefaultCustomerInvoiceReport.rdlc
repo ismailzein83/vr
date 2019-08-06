@@ -21,7 +21,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox72</rd:DefaultName>
-        <Top>7.1125in</Top>
+        <Top>5.9875in</Top>
         <Left>0.15536in</Left>
         <Height>0.17708in</Height>
         <Width>2.07823in</Width>
@@ -37,7 +37,7 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>7.35902in</Top>
+        <Top>6.23402in</Top>
         <Left>0.15536in</Left>
         <Height>0.01042in</Height>
         <Width>2.24907in</Width>
@@ -71,7 +71,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>2.85306in</Top>
+        <Top>1.72806in</Top>
         <Left>0.16264in</Left>
         <Height>0.375in</Height>
         <Width>7.67222in</Width>
@@ -406,7 +406,7 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>8.7543cm</Top>
+        <Top>5.8968cm</Top>
         <Left>0.41311cm</Left>
         <Height>2.4cm</Height>
         <Width>19.48744cm</Width>
@@ -513,7 +513,7 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>17.19614cm</Top>
+        <Top>14.33864cm</Top>
         <Left>5.66309cm</Left>
         <Height>0.6cm</Height>
         <Width>14.22723cm</Width>
@@ -584,7 +584,7 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>21.10477cm</Top>
+        <Top>18.24727cm</Top>
         <Left>0.39461cm</Left>
         <Height>0.6cm</Height>
         <Width>4.53729cm</Width>
@@ -669,7 +669,7 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>21.70477cm</Top>
+        <Top>18.84727cm</Top>
         <Left>0.39461cm</Left>
         <Height>1.34083cm</Height>
         <Width>19.50594cm</Width>
@@ -929,7 +929,7 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>7.53882in</Top>
+        <Top>6.41382in</Top>
         <Left>0.14366in</Left>
         <Height>0.61181in</Height>
         <Width>7.6912in</Width>
@@ -1027,10 +1027,8 @@ La facture doit être payée avant </Value>
                 <Value>=Parameters!TotalInvoiceAmountBeforeTax.Value</Value>
               </Parameter>
             </Parameters>
-            <Top>0.03125in</Top>
-            <Left>0.04203in</Left>
-            <Height>0.23042in</Height>
-            <Width>7.64514in</Width>
+            <Height>0.26167in</Height>
+            <Width>7.84253in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1042,10 +1040,10 @@ La facture doit être payée avant </Value>
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>23.22199cm</Top>
-        <Left>0.37511cm</Left>
-        <Height>0.66466cm</Height>
-        <Width>19.52544cm</Width>
+        <Top>20.36449cm</Top>
+        <Left>0cm</Left>
+        <Height>0.66464cm</Height>
+        <Width>19.92003cm</Width>
         <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value and Parameters!NoSMS.Value and Parameters!NoRecurringCharges.Value and Parameters!NoDeals.Value</Hidden>
@@ -1803,7 +1801,7 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>3.33926cm</Top>
+        <Top>0.48176cm</Top>
         <Left>0.41311cm</Left>
         <Height>3cm</Height>
         <Width>19.48744cm</Width>
@@ -2293,64 +2291,11 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>13.95801cm</Top>
+        <Top>11.10051cm</Top>
         <Left>0.41311cm</Left>
         <Height>2.4cm</Height>
         <Width>19.48743cm</Width>
         <ZIndex>10</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Tablix>
-      <Tablix Name="Tablix2">
-        <TablixBody>
-          <TablixColumns>
-            <TablixColumn>
-              <Width>6.27551cm</Width>
-            </TablixColumn>
-          </TablixColumns>
-          <TablixRows>
-            <TablixRow>
-              <Height>2.44826cm</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Image Name="Image1">
-                      <Source>Database</Source>
-                      <Value>=Parameters!Image.Value</Value>
-                      <MIMEType>image/png</MIMEType>
-                      <Sizing>FitProportional</Sizing>
-                      <ZIndex>11</ZIndex>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                      </Style>
-                    </Image>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-          </TablixRows>
-        </TablixBody>
-        <TablixColumnHierarchy>
-          <TablixMembers>
-            <TablixMember />
-          </TablixMembers>
-        </TablixColumnHierarchy>
-        <TablixRowHierarchy>
-          <TablixMembers>
-            <TablixMember />
-          </TablixMembers>
-        </TablixRowHierarchy>
-        <DataSetName>InvoiceHeader</DataSetName>
-        <Top>0.50271cm</Top>
-        <Left>0.41311cm</Left>
-        <Height>2.44826cm</Height>
-        <Width>6.27551cm</Width>
-        <ZIndex>11</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2545,11 +2490,11 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>11.48773cm</Top>
+        <Top>8.63023cm</Top>
         <Left>0.41312cm</Left>
         <Height>0.9175cm</Height>
         <Width>19.48743cm</Width>
-        <ZIndex>12</ZIndex>
+        <ZIndex>11</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2818,11 +2763,11 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>12.58162cm</Top>
+        <Top>9.72412cm</Top>
         <Left>0.41313cm</Left>
         <Height>1.2cm</Height>
         <Width>19.48743cm</Width>
-        <ZIndex>13</ZIndex>
+        <ZIndex>12</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2990,11 +2935,11 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>16.49912cm</Top>
+        <Top>13.64162cm</Top>
         <Left>0.41311cm</Left>
         <Height>0.6cm</Height>
         <Width>19.48743cm</Width>
-        <ZIndex>14</ZIndex>
+        <ZIndex>13</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3002,18 +2947,36 @@ La facture doit être payée avant </Value>
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>23.93956cm</Height>
+    <Height>21.16144cm</Height>
     <Style>
       <Border>
         <Style>None</Style>
       </Border>
     </Style>
   </Body>
-  <Width>20.08369cm</Width>
+  <Width>20.00432cm</Width>
   <Page>
     <PageHeader>
-      <Height>1cm</Height>
+      <Height>2.44826cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Image Name="Image1">
+          <Source>Database</Source>
+          <Value>=Parameters!Image.Value</Value>
+          <MIMEType>image/png</MIMEType>
+          <Sizing>FitProportional</Sizing>
+          <Top>0.13889in</Top>
+          <Left>0.16265in</Left>
+          <Height>0.73471in</Height>
+          <Width>2.21472in</Width>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Image>
+      </ReportItems>
       <Style>
         <Border>
           <Style>None</Style>
