@@ -104,31 +104,23 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                         var gridItem = {
                             Name: undefined,
                             Title: undefined,
-                            Type:undefined,
+                            Type: undefined,
                             fieldTypeSelectorAPI: undefined,
                             fieldTypeSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
-                        };
-
-                        gridItem.edit = function (dataItem) {
-
-                            var onDataRecordFieldUpdated = function (dataRecordField) {
-                                dataItem.Formula = dataRecordField.Formula;
-                            };
-                            var allFields = [];
-                            for (var j = 0; j < ctrl.datasource.length; j++) {
-                                allFields.push(ctrl.datasource[j]);
-                            }
-
-                            getDataRecordExtraFieldsReturnedPromise().then(function () {
-                                var formula = dataItem != undefined ? dataItem.Formula : undefined;
-                                VR_GenericData_DataRecordFieldService.editDataRecordField(onDataRecordFieldUpdated, formula, allFields, true);
-                            });
+                            dataRecordTypeFieldsFormulaAPI: undefined,
+                            dataRecordTypeFieldsFormulaReadyDeferred: UtilsService.createPromiseDeferred()
                         };
 
                         gridItem.onFieldTypeSelectorReady = function (api) {
                             gridItem.fieldTypeSelectorAPI = api;
                             gridItem.fieldTypeSelectorReadyDeferred.resolve();
                         };
+
+                        gridItem.onDataRecordTypeFieldsFormulaReady = function (api) {
+                            gridItem.dataRecordTypeFieldsFormulaAPI = api;
+                            gridItem.dataRecordTypeFieldsFormulaReadyDeferred.resolve();
+                        };
+
 
                         gridItem.onFieldTileChanged = function (item) {
                             if (allRegisteredItems != undefined) {
@@ -154,6 +146,15 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                             var setLoader = function (value) { gridItem.isFieldTypeSelectorLoading = value; };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.fieldTypeSelectorAPI, dataRecordFieldTypePayload, setLoader);
                         });
+                        gridItem.dataRecordTypeFieldsFormulaReadyDeferred.promise.then(function () {
+                            var dataRecordTypeFieldsFormulaPayload = { formula: undefined, context: getContext() };
+                            var setLoader = function (value) {
+                                gridItem.isDataRecordTypeFormulaLoading = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.dataRecordTypeFieldsFormulaAPI, dataRecordTypeFieldsFormulaPayload, setLoader, undefined);
+                        });
+
+
 
                         gridAPI.expandRow(gridItem);
 
@@ -178,7 +179,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                                     Name: currentItem.Name,
                                     Type: (currentItem.fieldTypeSelectorAPI != undefined) ? currentItem.fieldTypeSelectorAPI.getData() : currentItem.Type,
                                     Title: currentItem.Title,
-                                    Formula: currentItem.Formula,
+                                    Formula: currentItem.dataRecordTypeFieldsFormulaAPI != undefined ? currentItem.dataRecordTypeFieldsFormulaAPI.getData() : currentItem.Formula,
                                 });
                             }
                         }
@@ -248,23 +249,6 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.fieldTypeSelectorAPI, dataRecordFieldTypePayload, setLoader, undefined);
                 };
 
-                gridItem.edit = function (dataItem) {
-                    var onDataRecordFieldUpdated = function (dataRecordField) {
-                        dataItem.Formula = dataRecordField.Formula;
-                    };
-
-                    var allFields = [];
-
-                    for (var j = 0; j < ctrl.datasource.length; j++) {
-                        allFields.push(ctrl.datasource[j]);
-                    }
-                    getDataRecordExtraFieldsReturnedPromise().then(function () {
-                        var formula = dataItem != undefined ? dataItem.Formula : undefined;
-                        VR_GenericData_DataRecordFieldService.editDataRecordField(onDataRecordFieldUpdated, formula, allFields, true);
-
-                    });
-                };
-
                 gridItem.onFieldTileChanged = function (item) {
                     if (allRegisteredItems != undefined) {
                         for (var i = 0; i < allRegisteredItems.length; i++) {
@@ -282,6 +266,18 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                         }
                     }
                 };
+
+                gridItem.onDataRecordTypeFieldsFormulaReady = function (api) {
+                    gridItem.dataRecordTypeFieldsFormulaAPI = api;
+                    gridItem.dataRecordTypeFieldsFormulaReadyDeferred.resolve();
+                };
+                gridItem.dataRecordTypeFieldsFormulaReadyDeferred.promise.then(function () {
+                    var dataRecordTypeFieldsFormulaPayload = { formula: gridItem.Formula, context: getContext() };
+                    var setLoader = function (value) {
+                        gridItem.isDataRecordTypeFormulaLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.dataRecordTypeFieldsFormulaAPI, dataRecordTypeFieldsFormulaPayload, setLoader, undefined);
+                });
             }
 
             function addNeededFields(dataItem) {
@@ -383,10 +379,8 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                                 Title: field.Title,
                                 Formula: field.Formula,
                                 fieldTypeSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
-                                fieldTypeSelectorLoadDeferred: UtilsService.createPromiseDeferred()
+                                dataRecordTypeFieldsFormulaReadyDeferred: UtilsService.createPromiseDeferred(),
                             };
-                            //promises.push(gridItem.fieldTypeSelectorLoadDeferred.promise);
-
                             addColumnOnEdit(gridItem);
                             addNeededFields(gridItem);
                             ctrl.datasource.push(gridItem);

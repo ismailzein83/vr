@@ -1,10 +1,5 @@
 ﻿<vr-columns width="1/3row">
-    <vr-select datasource="fields"
-               datatextfield="fieldTitle"
-               datavaluefield="fieldName"
-               selectedvalues="selectedFieldName"
-               entityname="Field Name"
-               isrequired="true"
-               label="Child Field Name">
-    </vr-select>
+    <vr-genericdata-businessentitydefinition-dependantfield-selector on-ready="scopeModel.onDependantFieldsSelectorReady"
+                                                                     customlabel="Child Field Name">
+    </vr-genericdata-businessentitydefinition-dependantfield-selector>
 </vr-columns>

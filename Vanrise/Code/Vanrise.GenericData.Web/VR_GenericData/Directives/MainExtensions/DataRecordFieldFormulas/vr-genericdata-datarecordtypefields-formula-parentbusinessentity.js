@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypefieldsFormulaParentbusinessentity', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataDatarecordtypefieldsFormulaParentbusinessentity', ['UtilsService','VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -33,8 +33,17 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaParentbusinessentity', ['
 
         function textTypeCtor(ctrl, $scope) {
             var context;
+            var childName;
+            var dependantFieldsSelectorAPI;
+            var dependantFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.fields = [];
+                $scope.scopeModel = {};
+                $scope.scopeModel.onDependantFieldsSelectorReady = function (api) {
+                    dependantFieldsSelectorAPI = api;
+                    dependantFieldsSelectorReadyPromiseDeferred.resolve();
+                };
+
                 defineAPI();
             }
 
@@ -42,26 +51,42 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaParentbusinessentity', ['
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
                     if (payload != undefined) {
                         $scope.fields.length = 0;
                         context = payload.context;
-                        if (context != undefined && context.getFields != undefined)
-                            $scope.fields = context.getFields();
+                        //if (context != undefined && context.getFields != undefined)
+                        //    $scope.fields = context.getFields();
                         if (payload.formula != undefined) {
-                            $scope.selectedFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.ChildFieldName, "fieldName");
+                            //$scope.selectedFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.ChildFieldName, "fieldName");
+                            childName = payload.formula.ChildFieldName;
                         }
+                        promises.push(loadDependantFieldSelector());
                     }
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas.ParentBusinessEntityFieldFormula, Vanrise.GenericData.MainExtensions",
-                        ChildFieldName: $scope.selectedFieldName != undefined ? $scope.selectedFieldName.fieldName : undefined
+                        ChildFieldName: dependantFieldsSelectorAPI != undefined ? dependantFieldsSelectorAPI.getSelectedIds() : undefined
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function loadDependantFieldSelector() {
+                var dependantFieldSelectorLoadDeferredReady = UtilsService.createPromiseDeferred();
+                dependantFieldsSelectorReadyPromiseDeferred.promise.then(function () {
+                    var dependantFieldSelectorPayload = {
+                        context: context,
+                    };
+                    if (childName != undefined) {
+                        dependantFieldSelectorPayload.selectedIds = childName;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(dependantFieldsSelectorAPI, dependantFieldSelectorPayload, dependantFieldSelectorLoadDeferredReady);
+                });
+                return dependantFieldSelectorLoadDeferredReady.promise;
             }
 
             this.initializeController = initializeController;

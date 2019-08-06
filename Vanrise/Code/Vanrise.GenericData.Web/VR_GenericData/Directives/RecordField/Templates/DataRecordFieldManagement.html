@@ -40,15 +40,20 @@
             <vr-datagridcolumn headertext="'Type Description'" field="'Title'" widthfactor="10" disablesorting>
                 <vr-textbox value="dataItem.Title" onvaluechanged="dataItem.onFieldTileChanged" isrequired></vr-textbox>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Additional Settings'" field="'AdditionalSettings'" widthfactor="10" disablesorting>
-                <center><a href="" ng-click="dataItem.edit(dataItem)">Edit</a></center>
-            </vr-datagridcolumn>
             <vr-datagridexpandablerow>
-                <span vr-loader="dataItem.isFieldTypeSelectorLoading">
-                    <vr-genericdata-fieldtype-selective on-ready="dataItem.onFieldTypeSelectorReady"></vr-genericdata-fieldtype-selective>
-                </span>
+                <vr-tabs>
+                    <vr-tab header="'Definition'">
+                        <span vr-loader="dataItem.isFieldTypeSelectorLoading">
+                            <vr-genericdata-fieldtype-selective on-ready="dataItem.onFieldTypeSelectorReady"></vr-genericdata-fieldtype-selective>
+                        </span>
+                    </vr-tab>
+                    <vr-tab header="'Formula'">
+                        <span vr-loader="dataItem.isDataRecordTypeFormulaLoading">
+                            <vr-genericdata-datarecordtypefields-formula normal-col-num="2" on-ready="dataItem.onDataRecordTypeFieldsFormulaReady"></vr-genericdata-datarecordtypefields-formula>
+                        </span>
+                    </vr-tab>
             </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-validator>
 </vr-section>
- <!---->
+<!---->

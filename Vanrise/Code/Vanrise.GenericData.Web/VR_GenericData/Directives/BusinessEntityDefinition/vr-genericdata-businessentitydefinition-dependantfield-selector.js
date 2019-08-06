@@ -8,7 +8,8 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldSelector', ['U
             scope: {
                 ismultipleselection: "@",
                 onReady: '=',
-                onselectionchanged:'='
+                onselectionchanged: '=',
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -33,20 +34,22 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldSelector', ['U
             }
         };
 
-        function getDependentFieldSelectorTemplate(attrs)
-        {
+        function getDependentFieldSelectorTemplate(attrs) {
+            var label = '';
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
             }
-
-            return '<vr-select '+ multipleselection + ' on-ready="ctrl.onDependantFieldsSelectorReady" '+
+            if (attrs.customlabel != undefined)
+                label = 'label= "' + attrs.customlabel + '"';
+            return '<vr-select ' + multipleselection + ' on-ready="ctrl.onDependantFieldsSelectorReady" ' +
                 ' datasource = "ctrl.datasource" ' +
                 ' selectedvalues="ctrl.selectedvalues" ' +
                 ' datatextfield = "fieldTitle" ' +
+                label +
                 ' datavaluefield = "fieldName" ' +
                 ' onselectionchanged = "ctrl.onselectionchanged" ' +
-            ' entityName = "Dependant Field" isrequired = "true" hidelabel hideremoveicon ></vr-select>';
+                ' entityName = "Dependant Field" isrequired = "true"  hideremoveicon ></vr-select>';
         }
 
         function DependantFieldGridCtor(ctrl, $scope, attrs) {
@@ -59,8 +62,8 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldSelector', ['U
             var subscribedEvent;
             function initializeController() {
                 $scope.$on("$destroy", function () {
-                    if(context!=undefined)
-                    context.unSubscribeToFieldChangeEvent(subscribedEvent);
+                    if (context != undefined)
+                        context.unSubscribeToFieldChangeEvent(subscribedEvent);
                 });
                 ctrl.onDependantFieldsSelectorReady = function (api) {
                     dependantDataRecordFieldAPI = api;
@@ -75,7 +78,7 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldSelector', ['U
 
                 api.load = function (payload) {
                     var selectedIds;
-                    if (payload != undefined ) {
+                    if (payload != undefined) {
                         context = payload.context;
                         subscribedEvent = subscribeEvent;
                         context.subscribeToFieldChangeEvent(subscribedEvent);
@@ -104,7 +107,7 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldSelector', ['U
             function subscribeEvent() {
                 ctrl.datasource = context.getFields();
                 var isFieldExist = false;
-                for (var i = 0; i <ctrl.datasource.length; i++) {
+                for (var i = 0; i < ctrl.datasource.length; i++) {
                     var recordType = ctrl.datasource[i];
                     if (ctrl.selectedvalues != undefined && recordType.fieldName == ctrl.selectedvalues.fieldName) {
                         ctrl.selectedvalues = recordType;
@@ -112,7 +115,7 @@ app.directive('vrGenericdataBusinessentitydefinitionDependantfieldSelector', ['U
                     }
                 }
                 if (!isFieldExist)
-                    ctrl.selectedvalues=undefined;
+                    ctrl.selectedvalues = undefined;
             }
         }
 
