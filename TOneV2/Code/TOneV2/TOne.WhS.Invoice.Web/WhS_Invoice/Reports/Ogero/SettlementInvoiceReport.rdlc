@@ -3063,15 +3063,15 @@
                 </TablixMember>
                 <TablixMember>
                   <Group Name="Details3" />
+                  <Visibility>
+                    <Hidden>=IIf((CountRows("ItemsDetails") &gt; 0),False,True)</Hidden>
+                  </Visibility>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>ItemsDetails</DataSetName>
             <Height>0.5in</Height>
             <Width>7.74312in</Width>
-            <Visibility>
-              <Hidden>=IIf((CountRows("ItemsDetails") &gt; 0),False,True)</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
