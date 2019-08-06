@@ -1,14 +1,18 @@
-﻿Expand the IIS web site of Xbooster.Web project:
- - Add the following virtual directory under the root site:
-Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+﻿Open cmd as Administrator 
+Copy below script inside the command prompt.
+This will create application pool, application, assign the application to pool, and add all virtual directories. You may have to change the site id and the bindings port.
 
- - Add the following virtual directories under Client > Modules folder:
-Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
-Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
-VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
-CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
-ExcelConversion			C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
-XBooster_PriceListConversion	C:\TFS\Xbooster\Code\XBooster.PriceListConversion.Web\XBooster_PriceListConversion
-VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+cd c:\windows\system32\inetsrv
+appcmd add apppool /name:"XBooster.Web" /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+appcmd add site /name:XBooster.Web /id:15 /physicalPath:C:\TFS\Xbooster\Code\Xbooster.Web /bindings:http/*:8015:
+appcmd set site /site.name:XBooster.Web /[path='/'].applicationPool:XBooster.Web
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Web\Client
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/Common /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/Security /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/BusinessProcess /physicalPath:C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/Runtime /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/VR_Rules /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/VR_GenericData /physicalPath:C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/ExcelConversion /physicalPath:C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/CDRComparison /physicalPath:C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
+appcmd add vdir /app.name:XBooster.Web/ /path:/Client/Modules/XBooster_PriceListConversion /physicalPath:C:\TFS\Xbooster\Code\XBooster.PriceListConversion.Web\XBooster_PriceListConversion
