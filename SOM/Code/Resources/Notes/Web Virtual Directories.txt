@@ -4,7 +4,7 @@ This will create application pool, application, assign the application to pool, 
 
 cd c:\windows\system32\inetsrv
 appcmd add apppool /name:"SOM.Web" /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
-appcmd add site /name:SOM.Web /id:13 /physicalPath:C:\TFS\Retail\Code\SOM.Web /bindings:http/*:8013:
+appcmd add site /name:SOM.Web /id:13 /physicalPath:C:\TFS\SOM\Code\SOM.Web /bindings:http/*:8013:
 appcmd set site /site.name:SOM.Web /[path='/'].applicationPool:SOM.Web
 appcmd add vdir /app.name:SOM.Web/ /path:/Client /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Web\Client
 appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/Common /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
