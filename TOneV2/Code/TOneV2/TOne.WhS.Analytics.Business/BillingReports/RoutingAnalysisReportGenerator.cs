@@ -57,7 +57,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 topNSaleZoneQuery.Filters.Add(dimensionFilter);
             }
 
-            var resultN = analyticManager.GetAllFilteredRecords(topNSaleZoneQuery);
+            var resultN = analyticManager.GetAllFilteredRecords(topNSaleZoneQuery, true);
             List<RoutingAnalysisFormatted> listRoutingAnalysisFormatteds = new List<RoutingAnalysisFormatted>();
 
             if (resultN != null)
@@ -121,7 +121,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 };
                 analyticQuery.Filters.Add(zoneFilter);
 
-            #endregion
+                #endregion
                 #region TrafficStats
 
                 var trafficDataRetrievalInput = new AnalyticQuery
@@ -184,7 +184,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 double TotalSale = 0;
                 double TotalCost = 0;
                 double TotalProfit = 0;
-                var result = analyticManager.GetAllFilteredRecords(analyticQuery);
+                var result = analyticManager.GetAllFilteredRecords(analyticQuery, true);
                 if (result != null)
                     foreach (var analyticRecord in result)
                     {
@@ -230,7 +230,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         routingAnalysis.AVGSale = Convert.ToDouble(saleRate.Value ?? 0.0);
                         routingAnalysis.AVGSaleFormatted = ReportHelpers.FormatLongNumberDigit(routingAnalysis.AVGSale);
 
-                        
+
 
                         if (!routingAnalysisFormatteds.ContainsKey(routingAnalysis.SaleZone + routingAnalysis.Supplier))
                             routingAnalysisFormatteds[routingAnalysis.SaleZone + routingAnalysis.Supplier] = routingAnalysis;
@@ -247,7 +247,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 parameters.TotalCost = TotalCost;
                 parameters.TotalProfit = TotalProfit;
 
-                result = analyticManager.GetAllFilteredRecords(trafficDataRetrievalInput);
+                result = analyticManager.GetAllFilteredRecords(trafficDataRetrievalInput, true);
 
                 if (result != null)
                     foreach (var analyticRecord in result)

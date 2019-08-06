@@ -134,7 +134,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             List<DetailedBillingByZone> listDetailedBillingByZone = new List<DetailedBillingByZone>();
 
-            var result = analyticManager.GetAllFilteredRecords(analyticQuery);
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery, true);
             if (result != null)
                 foreach (var analyticRecord in result)
                 {
