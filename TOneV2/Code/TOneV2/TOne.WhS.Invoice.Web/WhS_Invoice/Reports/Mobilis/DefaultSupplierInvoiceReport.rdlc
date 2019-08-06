@@ -24,7 +24,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.14101in</Top>
+        <Top>1.51601in</Top>
         <Left>0.22927in</Left>
         <Height>0.375in</Height>
         <Width>7.67222in</Width>
@@ -358,7 +358,7 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>4.4057cm</Top>
+        <Top>5.3582cm</Top>
         <Left>0.58236cm</Left>
         <Height>2.4cm</Height>
         <Width>19.48743cm</Width>
@@ -465,7 +465,7 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>12.93717cm</Top>
+        <Top>13.88967cm</Top>
         <Left>5.85305cm</Left>
         <Height>0.6cm</Height>
         <Width>14.22723cm</Width>
@@ -536,7 +536,7 @@ iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>13.89867cm</Top>
+        <Top>14.85117cm</Top>
         <Left>0.56386cm</Left>
         <Height>0.6cm</Height>
         <Width>4.53729cm</Width>
@@ -621,7 +621,7 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>14.49867cm</Top>
+        <Top>15.45117cm</Top>
         <Left>0.56386cm</Left>
         <Height>1.34083cm</Height>
         <Width>19.45771cm</Width>
@@ -1651,7 +1651,7 @@ La facture doit être payée avant </Value>
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>16.01589cm</Top>
+        <Top>16.96839cm</Top>
         <Left>0cm</Left>
         <Height>0.75292cm</Height>
         <Width>20.08028cm</Width>
@@ -2712,7 +2712,7 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>7.64328cm</Top>
+        <Top>8.59578cm</Top>
         <Left>0.58236cm</Left>
         <Height>5.1175cm</Height>
         <Width>19.48743cm</Width>
@@ -2724,7 +2724,7 @@ La facture doit être payée avant </Value>
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>16.83937cm</Height>
+    <Height>17.72131cm</Height>
     <Style>
       <Border>
         <Style>None</Style>
