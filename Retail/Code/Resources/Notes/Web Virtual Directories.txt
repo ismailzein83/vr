@@ -1,4 +1,8 @@
-﻿cd c:\windows\system32\inetsrv
+﻿Open cmd as Administrator 
+Copy below script inside the command prompt.
+This will create application pool, application, assign the application to pool, and add all virtual directories. You may have to change the site id and the bindings port.
+
+cd c:\windows\system32\inetsrv
 appcmd add apppool /name:"Retail.Web" /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
 appcmd add site /name:Retail.Web /id:11 /physicalPath:C:\TFS\Retail\Code\Retail.Web /bindings:http/*:8011:
 appcmd set site /site.name:Retail.Web /[path='/'].applicationPool:Retail.Web
