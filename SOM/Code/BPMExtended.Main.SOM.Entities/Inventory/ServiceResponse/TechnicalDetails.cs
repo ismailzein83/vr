@@ -12,6 +12,7 @@ namespace BPMExtended.Main.SOMAPI
     {
         public PhoneType PhoneType { get; set; }
         public PhoneStatus PhoneStatus { get; set; }
+        public string PhoneNumber { get; set; }
         public string PhoneCategory { get; set; }
         public string VerticalMDF { get; set; }
         public string PhoneID { get; set; }
@@ -28,39 +29,33 @@ namespace BPMExtended.Main.SOMAPI
         public string SwitchOMC { get; set; }
         public string SWITCH_TYPE { get; set; }
         public string PathId { get; set; }
-
+        public string PathStatus { get; set; }
         public string DSlam { get; set; }
         public string DSlamPort { get; set; }
         public string DSlamOMC { get; set; }
-
-
         public string Transmitter { get; set; }
         public string TransmitterPort { get; set; }
         public string Receiver { get; set; }
         public string ReceiverPort { get; set; }
-
-
+        public string MSANName { get; set; }
         public string MSAN_EID { get; set; }
         public string MSAN_TID { get; set; }
+        public string MSAN_OMC { get; set; }
         public string MSANType { get; set; }
         public string DPId { get; set; }
         public string DPPortId { get; set; }
         public bool IsMultiplexed { get; set; }
-
         public string SwitchStatus { get; set; }
         public string MDFStatus { get; set; }
         public string CabinetStatus { get; set; }
         public string DPStatus { get; set; }
-
         public string IsSwitchFaulty { get; set; }
         public string IsMDFFaulty { get; set; }
         public string IsCabinetFaulty { get; set; }
         public string IsDPFaulty { get; set; }
         public string MDF { get; set; }
-
         public string DEV_TYPE { get; set; }
-
-
-
-    }
+        public string DevName { get; set; }
+        public string PrimaryMuxPortName { get; set; }
+}
 }
