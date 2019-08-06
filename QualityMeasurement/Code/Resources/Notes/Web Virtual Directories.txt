@@ -1,14 +1,18 @@
-﻿Expand the IIS web site of QualityMeasurement.Web project:
- - Add the following virtual directory under the root site:
-Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+﻿Open cmd as Administrator 
+Copy below script inside the command prompt.
+This will create application pool, application, assign the application to pool, and add all virtual directories. You may have to change the site id and the bindings port.
 
- - Add the following virtual directories under Client > Modules folder:
-BI						C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI
-BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
-Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
-QM_CLITester			C:\TFS\QualityMeasurement\Code\QM.CLITester.Web\QM_CLITester
-QM_BusinessEntity		C:\TFS\QualityMeasurement\Code\QM.BusinessEntity.Web\QM_BusinessEntity
-Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
-VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+cd c:\windows\system32\inetsrv
+appcmd add apppool /name:"QualityMeasurement.Web" /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+appcmd add site /name:QualityMeasurement.Web /id:16 /physicalPath:C:\TFS\QualityMeasurement\Code\QualityMeasurement.Web /bindings:http/*:8016:
+appcmd set site /site.name:QualityMeasurement.Web /[path='/'].applicationPool:QualityMeasurement.Web
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Web\Client
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/Common /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/Security /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/BusinessProcess /physicalPath:C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/Runtime /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/Integration /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/VR_GenericData /physicalPath:C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/ExcelConversion /physicalPath:C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/QM_CLITester /physicalPath:C:\TFS\QualityMeasurement\Code\QM.CLITester.Web\QM_CLITester
+appcmd add vdir /app.name:QualityMeasurement.Web/ /path:/Client/Modules/QM_BusinessEntity /physicalPath:C:\TFS\QualityMeasurement\Code\QM.BusinessEntity.Web\QM_BusinessEntity
