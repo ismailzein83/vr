@@ -15,7 +15,7 @@ namespace Vanrise.Analytic.Business
     public class AnalyticManager
     {
         #region Public Methods
-         
+
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             //CheckAnalyticRequiredPermission(input);
@@ -66,6 +66,7 @@ namespace Vanrise.Analytic.Business
                 return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler());
             }
         }
+
         public List<VRVisualizationRange> GetMeasureStyleRulesRanges(string measureName, Guid analyticTableId)
         {
             StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
@@ -246,6 +247,7 @@ namespace Vanrise.Analytic.Business
         {
             return GetAllFilteredRecords(query, false, out summaryRecord, out resultSubTables);
         }
+
         private RecordFilterGroup MergeRecordFilterGroup(RecordFilterGroup oldRecordFilter, RecordFilterGroup newRecordFilter)
         {
             if (oldRecordFilter != null)
@@ -274,6 +276,12 @@ namespace Vanrise.Analytic.Business
                 return newRecordFilter;
             }
         }
+
+        public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, bool fromUIReport)
+        {
+            return GetAllFilteredRecords(query, false, fromUIReport, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables);
+        }
+
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery inputQuery, bool dontApplyOrdering, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
             return GetAllFilteredRecords(inputQuery, dontApplyOrdering, false, out summaryRecord, out resultSubTables);
@@ -373,7 +381,7 @@ namespace Vanrise.Analytic.Business
             if (dbRecords != null)
             {
                 Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = query.MeasureStyleRules != null && query.MeasureStyleRules.Count > 0 ? BuildMeasureStyleRulesDictionary(query.MeasureStyleRules) : BuildMeasureStyleRulesDictionary(analyticTableManager.GetMergedMeasureStyles(query.TableId));
-                FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, allDBDimensions, query.Filters, query.FilterGroup);
+                FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, allDBDimensions, query.Filters, query.FilterGroup, fromUIReport);
                 var records = ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
                     query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, fromUIReport, out summaryRecord, out resultSubTables);
                 if (dontApplyOrdering || !query.OrderType.HasValue)
@@ -671,7 +679,7 @@ namespace Vanrise.Analytic.Business
         }
 
         private void FillCalculatedDimensions(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<string> allGroupingDimensionNames, IEnumerable<DBAnalyticRecord> sqlRecords, HashSet<string> availableDimensions, List<DimensionFilter> dimensionFilters,
-           RecordFilterGroup filterGroup)
+           RecordFilterGroup filterGroup, bool fromUIReport)
         {
             List<string> dimensionNamesToCalculate = new List<string>();
             if (allGroupingDimensionNames != null)
@@ -690,7 +698,7 @@ namespace Vanrise.Analytic.Business
                 {
                     foreach (var dimToCalculate in dimensionsToCalculate)
                     {
-                        var getDimensionValueContext = new GetDimensionValueContext(analyticTableQueryContext, sqlRecord);
+                        var getDimensionValueContext = new GetDimensionValueContext(analyticTableQueryContext, sqlRecord, fromUIReport);
                         sqlRecord.GroupingValuesByDimensionName.Add(dimToCalculate.Name, new DBAnalyticRecordGroupingValue
                         {
                             Value = dimToCalculate.Evaluator.GetDimensionValue(getDimensionValueContext)
@@ -1400,7 +1408,7 @@ namespace Vanrise.Analytic.Business
             }
             return orderedRecords;
         }
-        
+
 
         #endregion
 

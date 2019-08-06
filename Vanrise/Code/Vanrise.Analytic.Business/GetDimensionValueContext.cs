@@ -1,25 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+
 namespace Vanrise.Analytic.Business
 {
     public class GetDimensionValueContext : IGetDimensionValueContext
     {
         DBAnalyticRecord _record;
         IAnalyticTableQueryContext _analyticTableQueryContext;
-        public GetDimensionValueContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord record)
+
+        public bool FromUIReport { get; set; }
+
+        public GetDimensionValueContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord record, bool fromUIReport)
         {
             if (analyticTableQueryContext == null)
                 throw new ArgumentNullException("analyticTableQueryContext");
             if (record == null)
                 throw new NullReferenceException("record");
+
             _record = record;
             _analyticTableQueryContext = analyticTableQueryContext;
+            FromUIReport = fromUIReport;
         }
+
         public dynamic GetDimensionValue(string dimensionName)
         {
             DBAnalyticRecordGroupingValue groupingValue;
@@ -27,6 +30,7 @@ namespace Vanrise.Analytic.Business
                 throw new NullReferenceException(String.Format("groupingValue. dimName '{0}'", dimensionName));
             return groupingValue.Value;
         }
+
         public dynamic GetDimensionDescription(string dimensionName)
         {
             var dimensionValue = GetDimensionValue(dimensionName);
@@ -40,6 +44,7 @@ namespace Vanrise.Analytic.Business
             }
             return null;
         }
+
         public DateTime GetQueryFromTime()
         {
             return _analyticTableQueryContext.FromTime;
@@ -52,8 +57,9 @@ namespace Vanrise.Analytic.Business
 
         public dynamic GetQueryParameter(string parameterName)
         {
-            if(_analyticTableQueryContext.QueryParameters != null)
+            if (_analyticTableQueryContext.QueryParameters != null)
                 return _analyticTableQueryContext.QueryParameters.GetRecord(parameterName);
+
             return null;
         }
     }
