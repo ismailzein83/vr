@@ -1,42 +1,42 @@
-﻿Expand the IIS web site of Retail.Web project:
- - Add the following virtual directory under the root site:
-Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
-
- - Add the following virtual directories under Client > Modules folder:
-Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
-Retail_BusinessEntity	C:\TFS\Retail\Code\Retail.BusinessEntity.Web\Retail_BusinessEntity
-Retail_Voice			C:\TFS\Retail\Code\Retail.Voice.Web\Retail_Voice
-Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-Queueing				C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing
-Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
-VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
-VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
-Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
-Retail_SMS				C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS
-Retail_Data				C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data
-BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
-VR_AccountBalance		C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
-VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
-VR_BEBridge				C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
-VR_NumberingPlan		C:\TFS\Vanrise\Code\Vanrise.NumberingPlan.Web\VR_NumberingPlan
-VR_Invoice				C:\TFS\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice
-Retail_Invoice			C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice
-Retail_Ringo			C:\TFS\Retail\Code\Retail.Ringo.Web\Retail_Ringo
-Retail_Zajil			C:\TFS\Retail\Code\Retail.Zajil.Web\Retail_Zajil
-Reprocess				C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess
-Retail_Teles			C:\TFS\Retail\Code\Retail.Teles.Web\Retail_Teles
-VR_InvToAccBalanceRelation  C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
-Retail_MultiNet			C:\TFS\Retail\Code\Retail.MultiNet.Web\Retail_MultiNet
-Retail_Cost				C:\TFS\Retail\Code\Retail.Cost.Web\Retail_Cost
-VR_AccountManager		C:\TFS\Vanrise\Code\Vanrise.AccountManager.Web\VR_AccountManager
-Retail_Interconnect		C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect
-VR_Voucher				C:\TFS\Vanrise\Code\Vanrise.Voucher.Web\VR_Voucher
-Retail_Demo				C:\TFS\Retail\Code\Retail.Demo.Web\Retail_Demo
-Retail_RA				C:\TFS\Retail\Code\Retail.RA.Web\Retail_RA
-ExcelConversion			C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
-VR_MobileNetwork        C:\TFS\Vanrise\Code\Vanrise.MobileNetwork.Web\VR_MobileNetwork
-TestCallAnalysis        C:\TFS\Retail\Code\TestCallAnalysis.Web\TestCallAnalysis
-RecordAnalysis			C:\TFS\Retail\Code\RecordAnalysis.Web\RecordAnalysis
-Retail_Billing			C:\TFS\Retail\Code\Retail.Billing.Web\Retail_Billing
-Retail_NIM				C:\TFS\Retail\Code\Retail.NIM.Web\Retail_NIM
+﻿cd c:\windows\system32\inetsrv
+appcmd add apppool /name:"Retail.Web" /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+appcmd add site /name:Retail.Web /id:11 /physicalPath:C:\TFS\Retail\Code\Retail.Web /bindings:http/*:8011:
+appcmd set site /site.name:Retail.Web /[path='/'].applicationPool:Retail.Web
+appcmd add vdir /app.name:Retail.Web/ /path:/Client /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Web\Client
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Common /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Security /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/BusinessProcess /physicalPath:C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Runtime /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Queueing /physicalPath:C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing	
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_Rules /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Integration /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_GenericData /physicalPath:C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Analytic /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/ExcelConversion /physicalPath:C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Reprocess /physicalPath:C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_Invoice /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_Notification /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_AccountBalance /physicalPath:C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_InvToAccBalanceRelation /physicalPath:C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_BEBridge /physicalPath:C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_MobileNetwork /physicalPath:C:\TFS\Vanrise\Code\Vanrise.MobileNetwork.Web\VR_MobileNetwork
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_NumberingPlan /physicalPath:C:\TFS\Vanrise\Code\Vanrise.NumberingPlan.Web\VR_NumberingPlan
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_AccountManager /physicalPath:C:\TFS\Vanrise\Code\Vanrise.AccountManager.Web\VR_AccountManager
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/VR_Voucher /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Voucher.Web\VR_Voucher
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_BusinessEntity /physicalPath:C:\TFS\Retail\Code\Retail.BusinessEntity.Web\Retail_BusinessEntity
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Voice /physicalPath:C:\TFS\Retail\Code\Retail.Voice.Web\Retail_Voice
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_SMS /physicalPath:C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Data /physicalPath:C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Invoice /physicalPath:C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Ringo /physicalPath:C:\TFS\Retail\Code\Retail.Ringo.Web\Retail_Ringo
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Zajil /physicalPath:C:\TFS\Retail\Code\Retail.Zajil.Web\Retail_Zajil
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Teles /physicalPath:C:\TFS\Retail\Code\Retail.Teles.Web\Retail_Teles
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_MultiNet /physicalPath:C:\TFS\Retail\Code\Retail.MultiNet.Web\Retail_MultiNet
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Cost /physicalPath:C:\TFS\Retail\Code\Retail.Cost.Web\Retail_Cost
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Interconnect /physicalPath:C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Demo /physicalPath:C:\TFS\Retail\Code\Retail.Demo.Web\Retail_Demo
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_RA /physicalPath:C:\TFS\Retail\Code\Retail.RA.Web\Retail_RA
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/TestCallAnalysis /physicalPath:C:\TFS\Retail\Code\TestCallAnalysis.Web\TestCallAnalysis
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/RecordAnalysis /physicalPath:C:\TFS\Retail\Code\RecordAnalysis.Web\RecordAnalysis
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Billing /physicalPath:C:\TFS\Retail\Code\Retail.Billing.Web\Retail_Billing
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_NIM /physicalPath:C:\TFS\Retail\Code\Retail.NIM.Web\Retail_NIM
