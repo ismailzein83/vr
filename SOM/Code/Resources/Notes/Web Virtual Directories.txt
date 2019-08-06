@@ -1,18 +1,20 @@
-﻿- Open IIS > Create a new web site called SOM.Web > Make the physical directory point to SOM.Web Project > Change
- the port to 8082 for example
-- Make sure the Application Pool of the newly created site is set to .Net FWK 4.0
-- Expand the IIS web site of SOM.Web project:
- - Add the following virtual directory under the root site:
-	Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+﻿Open cmd command as Administrator 
+Copy below script inside the command prompt.
+This will create application pool, application, assign the application to pool, and add all virtual directories. You may have to change the site id and the bindings port.
 
- - Add the following virtual directories under "Client > Modules" folder:
-	Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-	Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
-	BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
-	Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-	VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
-	VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
-	Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
-	VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
-	SOM_Main				C:\TFS\SOM\Code\SOM.Main.Web\SOM_Main
-	SOM_ST					C:\TFS\SOM\Code\SOM.ST.Web\SOM_ST
+cd c:\windows\system32\inetsrv
+appcmd add apppool /name:"SOM.Web" /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+appcmd add site /name:SOM.Web /id:13 /physicalPath:C:\TFS\Retail\Code\SOM.Web /bindings:http/*:8013:
+appcmd set site /site.name:SOM.Web /[path='/'].applicationPool:SOM.Web
+appcmd add vdir /app.name:SOM.Web/ /path:/Client /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Web\Client
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/Common /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/Security /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/BusinessProcess /physicalPath:C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/Runtime /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/VR_Rules /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/VR_GenericData /physicalPath:C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/Analytic /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/ExcelConversion /physicalPath:C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/VR_Notification /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/SOM_Main /physicalPath:C:\TFS\SOM\Code\SOM.Main.Web\SOM_Main
+appcmd add vdir /app.name:SOM.Web/ /path:/Client/Modules/SOM_ST /physicalPath:C:\TFS\SOM\Code\SOM.ST.Web\SOM_ST
