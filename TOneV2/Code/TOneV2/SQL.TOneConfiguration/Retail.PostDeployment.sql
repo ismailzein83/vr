@@ -313,8 +313,7 @@ as (select * from (values
 ('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_CDRRules','CDR Rules'								,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]'),
 ('703B2838-ABA9-4578-A6F1-F9D609A01698','Retail_AccountBalance_Processes','Account Balance'			,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["Start Process","View Process Logs"]'),
 
-('219C0512-7A4D-41C9-A93B-97B2DF5FC673','BillingAlerts','Billing Alerts'							,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View Rules","Add Rules","Edit Rules","Start Process","View Process Logs","View Alerts"]'),
-('7DDD7451-DBE4-4D35-AE61-1F720EB5DBD1','FinancialAccount','Financial Account','520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Add","Edit"]')
+('7DDD7451-DBE4-4D35-AE61-1F720EB5DBD1','FinancialAccount','Financial Account'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
