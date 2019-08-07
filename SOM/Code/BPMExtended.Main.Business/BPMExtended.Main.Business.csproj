@@ -66,6 +66,8 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,6 +76,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="Terrasoft.Common">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Terrasoft.Configuration">
+      <HintPath>D:\BPM7.12-Test\Terrasoft.WebApp\Terrasoft.Configuration\bin\Terrasoft.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Terrasoft.Core, Version=7.11.0.3122, Culture=neutral, PublicKeyToken=edaadfbc3b0bb879, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -196,6 +201,7 @@
     <Compile Include="Request Flow Management\LineTerminationRequestFlowManagement.cs" />
     <Compile Include="Request Flow Management\ManagePabxFlowManagement.cs" />
     <Compile Include="Request Flow Management\TelephonyContractTakeOverFlowManagement.cs" />
+    <Compile Include="SecurityManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BPMExtended.Main.Common\BPMExtended.Main.Common.csproj">
