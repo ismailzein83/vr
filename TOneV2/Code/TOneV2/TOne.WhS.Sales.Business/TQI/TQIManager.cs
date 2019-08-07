@@ -63,15 +63,16 @@ namespace TOne.WhS.Sales.Business
 
             IEnumerable<int> supplierIds = input.RPRouteDetail.RouteOptionsDetails.Select(item => item.SupplierId);
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, supplierIds, saleZoneDimensionFilterName, input.RPRouteDetail.SaleZoneId, fromDate, toDate);
-            if (analyticResult == null || analyticResult.Data == null)
+            var analyticRecords = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, supplierIds, saleZoneDimensionFilterName, input.RPRouteDetail.SaleZoneId
+                                , fromDate, toDate, out AnalyticRecord summaryRecord);
+            if (analyticRecords == null)
                 return null;
 
-            IEnumerable<TQISuppplierInfo> suppliersInfo = analyticResult.Data.MapRecords(TQISupplierInfoMapper);
+            IEnumerable<TQISuppplierInfo> suppliersInfo = analyticRecords.MapRecords(TQISupplierInfoMapper);
 
             TQISupplierInfoWithSummary suppliersInfoWithSummary = new TQISupplierInfoWithSummary();
             suppliersInfoWithSummary.SuppliersInfo = suppliersInfo;
-            suppliersInfoWithSummary.TotalDurationInMinutesSummary = GetSuppliersInfoSummary(analyticResult.Summary);
+            suppliersInfoWithSummary.TotalDurationInMinutesSummary = GetSuppliersInfoSummary(summaryRecord);
 
             return suppliersInfoWithSummary;
         }
@@ -105,24 +106,21 @@ namespace TOne.WhS.Sales.Business
 
         #region Private Methods
 
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string firstDimensionFilterName, object firstDimensionFilterValue,
-        string secondDimensionFilterName, object secondDimensionFilterValue, DateTime fromDate, DateTime toDate)
+        private IEnumerable<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string firstDimensionFilterName, object firstDimensionFilterValue,
+        string secondDimensionFilterName, object secondDimensionFilterValue, DateTime fromDate, DateTime toDate, out AnalyticRecord summaryRecord)
         {
+            summaryRecord = null;
             AnalyticManager analyticManager = new AnalyticManager();
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            AnalyticQuery analyticQuery = new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = listDimensions,
-                    MeasureFields = listMeasures,
-                    TableId = Guid.Parse("58DD0497-498D-40F2-8687-08F8356C63CC"),
-                    FromTime = fromDate,
-                    ToTime = toDate,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>(),
-                    WithSummary = true
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = listDimensions,
+                MeasureFields = listMeasures,
+                TableId = Guid.Parse("58DD0497-498D-40F2-8687-08F8356C63CC"),
+                FromTime = fromDate,
+                ToTime = toDate,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                WithSummary = true
             };
 
             List<object> firstDimensionFilterValues = new List<object>();
@@ -142,10 +140,10 @@ namespace TOne.WhS.Sales.Business
                 Dimension = secondDimensionFilterName,
                 FilterValues = new List<object> { secondDimensionFilterValue }
             };
-            analyticQuery.Query.Filters.Add(dimensionFilter);
-            analyticQuery.Query.Filters.Add(secondDimensionFilter);
+            analyticQuery.Filters.Add(dimensionFilter);
+            analyticQuery.Filters.Add(secondDimensionFilter);
 
-            return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+            return analyticManager.GetAllFilteredRecords(analyticQuery, false, true, out summaryRecord, out _);
         }
 
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)

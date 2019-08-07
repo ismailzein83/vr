@@ -94,11 +94,11 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
 
             DateTime toDate = DateTime.Today;
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, zoneIds, fromDate, toDate);
+            var analyticRecords = GetFilteredRecords(listDimensions, listMeasures, zoneIds, fromDate, toDate);
 
             DurationByZone durationByZone = new DurationByZone();
 
-            foreach (var analyticRecord in analyticResult.Data)
+            foreach (var analyticRecord in analyticRecords)
             {
                 DimensionValue supplierDimension = analyticRecord.DimensionValues.ElementAt(0);
                 DimensionValue zoneDimension = analyticRecord.DimensionValues.ElementAt(1);
@@ -123,22 +123,19 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             return durationByZone;
         }
 
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, IEnumerable<long> saleZoneIds, DateTime fromDate, DateTime toDate)
+        private IEnumerable<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, IEnumerable<long> saleZoneIds, DateTime fromDate, DateTime toDate)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+
+            var analyticQuery = new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = listDimensions,
-                    MeasureFields = listMeasures,
-                    TableId = Guid.Parse("58dd0497-498d-40f2-8687-08f8356c63cc"),
-                    FromTime = fromDate,
-                    ToTime = toDate,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = listDimensions,
+                MeasureFields = listMeasures,
+                TableId = Guid.Parse("58dd0497-498d-40f2-8687-08f8356c63cc"),
+                FromTime = fromDate,
+                ToTime = toDate,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>()
             };
 
             DimensionFilter dimensionFilter = new DimensionFilter()
@@ -148,8 +145,8 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
 
             };
 
-            analyticQuery.Query.Filters.Add(dimensionFilter);
-            return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+            analyticQuery.Filters.Add(dimensionFilter);
+            return analyticManager.GetAllFilteredRecords(analyticQuery, true);
         }
 
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)

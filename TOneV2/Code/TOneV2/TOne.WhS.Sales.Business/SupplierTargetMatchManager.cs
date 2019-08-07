@@ -76,18 +76,19 @@ namespace TOne.WhS.Sales.Business
                                     SupplierAnalyticDetail = supplierAnalyticDetail
                                 };
                                 List<SupplierTargetMatchAnalyticItem> supplierTargetMatchAnalyticItems = new List<SupplierTargetMatchAnalyticItem>();
-								foreach (var rpDetail in rpRouteDetail.RouteOptionsDetails)
-								{ SupplierTargetMatchAnalyticItem linkedrpRouteToZoneAnalytic;
-									if (supplierAnalyticDetail.TryGetValue(rpDetail.SupplierId, out linkedrpRouteToZoneAnalytic))
-									{
-										//for (var i = 0; i < supplierAnalyticDetail.Count && i < input.Query.NumberOfOptions; i++)
-										//{
-										//	supplierTargetMatchAnalyticItems.Add(supplierAnalyticDetail.ElementAt(i).Value);
-										//}
-										//break;
-										supplierTargetMatchAnalyticItems.Add(linkedrpRouteToZoneAnalytic);
-									}
-								}
+                                foreach (var rpDetail in rpRouteDetail.RouteOptionsDetails)
+                                {
+                                    SupplierTargetMatchAnalyticItem linkedrpRouteToZoneAnalytic;
+                                    if (supplierAnalyticDetail.TryGetValue(rpDetail.SupplierId, out linkedrpRouteToZoneAnalytic))
+                                    {
+                                        //for (var i = 0; i < supplierAnalyticDetail.Count && i < input.Query.NumberOfOptions; i++)
+                                        //{
+                                        //	supplierTargetMatchAnalyticItems.Add(supplierAnalyticDetail.ElementAt(i).Value);
+                                        //}
+                                        //break;
+                                        supplierTargetMatchAnalyticItems.Add(linkedrpRouteToZoneAnalytic);
+                                    }
+                                }
 
                                 if (supplierTargetMatchAnalyticItems.Count > 0)
                                 {
@@ -179,7 +180,7 @@ namespace TOne.WhS.Sales.Business
                 };
 
                 analyticQuery.Query.Filters.Add(dimensionFilter);
-                return analyticManager.GetAllFilteredRecords(analyticQuery.Query);
+                return analyticManager.GetAllFilteredRecords(analyticQuery.Query, true);
             }
 
             List<RPZone> GetRPZones(DataRetrievalInput<SupplierTargetMatchQuery> input)
