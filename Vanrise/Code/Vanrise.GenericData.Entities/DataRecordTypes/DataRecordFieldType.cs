@@ -313,18 +313,6 @@ namespace Vanrise.GenericData.Entities
 
         DataRecordFieldType FieldType { get; set; }
     }
-    public class GetValueByDescriptionContext
-    {
-        Object FieldDescription { get; set; }
-
-        List<AdditionalField> AdditionalFields { get; set; }
-
-        string ErrorMessage { get; set; }
-
-        Object FieldValue { get; set; }
-
-        DataRecordFieldType FieldType { get; set; }
-    }
 
     public class DataRecordFieldTypeIsStillAvailableContext : IDataRecordFieldTypeIsStillAvailableContext
     {
