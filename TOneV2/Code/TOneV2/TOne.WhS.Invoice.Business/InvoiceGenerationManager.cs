@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Invoice.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
@@ -16,6 +13,15 @@ namespace TOne.WhS.Invoice.Business
 {
     public class InvoiceGenerationManager
     {
+        #region Properties/Ctor
+
+        Guid invoiceVoiceAnalyticTableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B");
+        Guid invoiceSMSAnalyticTableId = Guid.Parse("53e9ebc8-c674-4aff-b6c0-9b3b18f95c1f");
+
+        WHSFinancialAccountManager _financialAccountManager = new WHSFinancialAccountManager();
+
+        static Dictionary<Type, Type> s_nullableInlineTypes = new Dictionary<Type, Type>();
+
         static InvoiceGenerationManager()
         {
             s_nullableInlineTypes.Add(typeof(int?), typeof(int));
@@ -25,9 +31,11 @@ namespace TOne.WhS.Invoice.Business
             s_nullableInlineTypes.Add(typeof(float?), typeof(float));
             s_nullableInlineTypes.Add(typeof(double?), typeof(double));
         }
-        Guid invoiceVoiceAnalyticTableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B");
-        Guid invoiceSMSAnalyticTableId = Guid.Parse("53e9ebc8-c674-4aff-b6c0-9b3b18f95c1f");
-        WHSFinancialAccountManager _financialAccountManager = new WHSFinancialAccountManager();
+
+        #endregion
+
+        #region Public/Internal Methods
+
         public void AddGeneratedInvoiceItemSet<T>(string itemSetName, List<GeneratedInvoiceItemSet> generatedInvoiceItemSets, IEnumerable<T> items)
         {
             if (items != null && items.Count() > 0)
@@ -46,14 +54,17 @@ namespace TOne.WhS.Invoice.Business
                 generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
             }
         }
-        public List<T> GetInvoiceVoiceMappedRecords<T>(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue, Func<AnalyticRecord, T> mapper)where T:class
+
+        public List<T> GetInvoiceVoiceMappedRecords<T>(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue, Func<AnalyticRecord, T> mapper) where T : class
         {
-            return GetInvoiceMappedRecords(invoiceVoiceAnalyticTableId, listDimensions, listMeasures, dimensionFilterName, dimentionFilterValue, fromDate, toDate, currencyId, offsetValue,mapper);
+            return GetInvoiceMappedRecords(invoiceVoiceAnalyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId, offsetValue, mapper);
         }
-        public List<T> GetInvoiceSMSMappedRecords<T>( List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue, Func<AnalyticRecord, T> mapper) where T : class
+
+        public List<T> GetInvoiceSMSMappedRecords<T>(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue, Func<AnalyticRecord, T> mapper) where T : class
         {
-            return GetInvoiceMappedRecords(invoiceSMSAnalyticTableId, listDimensions, listMeasures, dimensionFilterName, dimentionFilterValue, fromDate, toDate, currencyId, offsetValue,mapper);
+            return GetInvoiceMappedRecords(invoiceSMSAnalyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId, offsetValue, mapper);
         }
+
         public ResolvedInvoicePayloadObject GetDatesWithTimeZone<T>(T customSectionPayload, int financialAccountId, DateTime fromDate, DateTime toDate) where T : BaseGenerationCustomSectionPayload
         {
             ResolvedInvoicePayloadObject resolvedInvoicePayloadObject = new ResolvedInvoicePayloadObject();
@@ -66,12 +77,12 @@ namespace TOne.WhS.Invoice.Business
                     resolvedInvoicePayloadObject.Commission = generationCustomSectionPayload.Commission.Value;
                     resolvedInvoicePayloadObject.CommissionType = generationCustomSectionPayload.CommissionType;
                 }
-				if (generationCustomSectionPayload.Adjustment.HasValue)
-				{
-					resolvedInvoicePayloadObject.Adjustment = generationCustomSectionPayload.Adjustment.Value;
-				}
+                if (generationCustomSectionPayload.Adjustment.HasValue)
+                {
+                    resolvedInvoicePayloadObject.Adjustment = generationCustomSectionPayload.Adjustment.Value;
+                }
 
-			}
+            }
             if (!resolvedInvoicePayloadObject.TimeZoneId.HasValue)
             {
                 resolvedInvoicePayloadObject.TimeZoneId = _financialAccountManager.GetCustomerTimeZoneId(financialAccountId);
@@ -80,6 +91,7 @@ namespace TOne.WhS.Invoice.Business
             resolvedInvoicePayloadObject.FromDate = fromDate;
             resolvedInvoicePayloadObject.ToDate = toDate;
             resolvedInvoicePayloadObject.ToDateForBillingTransaction = toDate.Date.AddDays(1);
+
             if (resolvedInvoicePayloadObject.TimeZoneId.HasValue)
             {
                 VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(resolvedInvoicePayloadObject.TimeZoneId.Value);
@@ -94,6 +106,7 @@ namespace TOne.WhS.Invoice.Business
             }
             return resolvedInvoicePayloadObject;
         }
+
         public T GetMeasureValue<T>(AnalyticRecord analyticRecord, string measureName)
         {
             MeasureValue measureValue;
@@ -106,10 +119,10 @@ namespace TOne.WhS.Invoice.Business
                     else
                         return (T)Convert.ChangeType(measureValue.Value, GetInlineType(typeof(T)));
                 }
-                   
             }
             return default(T);
         }
+
         public T GetDimensionValue<T>(AnalyticRecord analyticRecord, int dimIndex)
         {
             if (analyticRecord.DimensionValues != null)
@@ -121,14 +134,15 @@ namespace TOne.WhS.Invoice.Business
                         return (T)dimension.Value;
                     else
                         return (T)Convert.ChangeType(dimension.Value, GetInlineType(typeof(T)));
+
                     //return (T)dimension.Value;
-                    // return  (T)Convert.ChangeType(dimension.Value, typeof(T));
+                    //return (T)Convert.ChangeType(dimension.Value, typeof(T));
                 }
-                
+
             }
             return default(T);
         }
-        static Dictionary<Type, Type> s_nullableInlineTypes = new Dictionary<Type, Type>();
+
         internal static Type GetInlineType(Type nullableType)
         {
             Type inlineType;
@@ -137,16 +151,24 @@ namespace TOne.WhS.Invoice.Business
             else
                 return nullableType;
         }
-        private List<T> GetInvoiceMappedRecords<T>(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue, Func<AnalyticRecord, T> mapper) where T : class
+
+        #endregion
+
+        #region Private Methods
+
+        private List<T> GetInvoiceMappedRecords<T>(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, 
+            DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue, Func<AnalyticRecord, T> mapper) where T : class
         {
-            var analyticRecords = GetInvoiceAnalyticRecords(analyticTableId, listDimensions, listMeasures, dimensionFilterName, dimentionFilterValue, fromDate, toDate, currencyId, offsetValue);
+            var analyticRecords = GetInvoiceAnalyticRecords(analyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId, offsetValue);
             if (analyticRecords != null && analyticRecords.Data != null && analyticRecords.Data.Count() > 0)
             {
                 return PrepareItemSetNames<T>(analyticRecords.Data, mapper);
             }
             return default(List<T>);
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetInvoiceAnalyticRecords(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue)
+
+        private AnalyticSummaryBigResult<AnalyticRecord> GetInvoiceAnalyticRecords(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, 
+            object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue)
         {
             Dictionary<string, dynamic> queryParameters = null;
             if (offsetValue.HasValue)
@@ -174,12 +196,13 @@ namespace TOne.WhS.Invoice.Business
             DimensionFilter dimensionFilter = new DimensionFilter()
             {
                 Dimension = dimensionFilterName,
-                FilterValues = new List<object> { dimentionFilterValue }
+                FilterValues = new List<object> { dimensionFilterValue }
             };
             analyticQuery.Query.Filters.Add(dimensionFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
-        public List<T> PrepareItemSetNames<T>(IEnumerable<AnalyticRecord> analyticRecords, Func<AnalyticRecord, T> mapper) where T : class
+
+        private List<T> PrepareItemSetNames<T>(IEnumerable<AnalyticRecord> analyticRecords, Func<AnalyticRecord, T> mapper) where T : class
         {
             List<T> itemSetNames = null;
             if (analyticRecords != null)
@@ -188,11 +211,13 @@ namespace TOne.WhS.Invoice.Business
                 foreach (var analyticRecord in analyticRecords)
                 {
                     var mappedItem = mapper(analyticRecord);
-                    if(mappedItem != null)
-                     itemSetNames.Add(mapper(analyticRecord));
+                    if (mappedItem != null)
+                        itemSetNames.Add(mapper(analyticRecord));
                 }
             }
             return itemSetNames;
         }
+
+        #endregion
     }
 }
