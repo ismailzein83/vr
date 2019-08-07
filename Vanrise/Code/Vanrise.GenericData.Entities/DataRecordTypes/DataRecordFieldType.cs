@@ -301,7 +301,7 @@ namespace Vanrise.GenericData.Entities
         Object Changes { set; }
     }
 
-    public interface IGetValueByDescriptionContext
+    public interface IGetValueByDescriptionContext 
     {
         Object FieldDescription { get; }
 
@@ -312,6 +312,19 @@ namespace Vanrise.GenericData.Entities
         Object FieldValue { set; }
 
         DataRecordFieldType FieldType { get; set; }
+    }
+    public interface IFieldCustomObjectTypeSettingsGetValueByDescriptionContext
+    {
+        Object FieldDescription { get; }
+
+        Object FieldValue { set; }
+    }
+
+    public class FieldCustomObjectTypeSettingsGetValueByDescriptionContext : IFieldCustomObjectTypeSettingsGetValueByDescriptionContext
+    {
+        public Object FieldDescription { get; set; }
+
+        public Object FieldValue { get; set; }
     }
 
     public class DataRecordFieldTypeIsStillAvailableContext : IDataRecordFieldTypeIsStillAvailableContext
