@@ -11,7 +11,7 @@ namespace SOM.Main.Entities
     public class InventoryPhoneItem
     {
 
-        public PhoneType PhoneType { get; set; }
+        public string PhoneType { get; set; }
         public string PATH_TYPE { get; set; }
         public PhoneStatus PhoneStatus { get; set; }
         public string VerticalMDF { get; set; }

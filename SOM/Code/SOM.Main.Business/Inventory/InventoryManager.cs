@@ -42,7 +42,7 @@ namespace SOM.Main.Business
                     CabinetPrimaryPort = detail.PRIMARY_PORT,
                     CabinetSecondaryPort = detail.SECONDARY_PORT,
                     PATH_TYPE = detail.PATH_TYPE,
-                    PhoneType = detail.PATH_TYPE.ToLower().Contains("wll") ? PhoneType.WLL : detail.PATH_TYPE == "PSTN_LINK" ? PhoneType.PSTN : PhoneType.ISDN
+                    PhoneType = detail.PATH_TYPE//detail.PATH_TYPE.ToLower().Contains("wll") ? PhoneType.WLL : detail.PATH_TYPE == "PSTN_LINK" ? PhoneType.PSTN : PhoneType.ISDN
                 };
 
             }
@@ -481,7 +481,7 @@ namespace SOM.Main.Business
                     CabinetPrimaryPort = detail.PRIMARY_PORT,
                     CabinetSecondaryPort = detail.SECONDARY_PORT,
                     PATH_TYPE = detail.PATH_TYPE,
-                    PhoneType = detail.PATH_TYPE.ToLower().Contains("wll") ? PhoneType.WLL : detail.PATH_TYPE == "PSTN_LINK" ? PhoneType.PSTN : PhoneType.ISDN
+                    PhoneType = detail.PATH_TYPE//detail.PATH_TYPE.ToLower().Contains("wll") ? PhoneType.WLL : detail.PATH_TYPE == "PSTN_LINK" ? PhoneType.PSTN : PhoneType.ISDN
                 };
 
             }

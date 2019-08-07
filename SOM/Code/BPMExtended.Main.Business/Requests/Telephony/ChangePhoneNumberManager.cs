@@ -7,6 +7,7 @@ using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -44,7 +45,7 @@ namespace BPMExtended.Main.Business
                 if (collection.Count > 0)
                 {
                     recordEntity = collection[0];
-                    recordEntity.SetColumnValue("StTechnicalStepId", "4EE8DB9E-684E-4FB6-AE69-C04C41C4635B");
+                    recordEntity.SetColumnValue("StWorkOrderStageId", "4EE8DB9E-684E-4FB6-AE69-C04C41C4635B");
                     recordEntity.SetColumnValue("StWorkOrderID", workOrderId);
                     recordEntity.SetColumnValue("StIsWorkOrderCompleted", false);
                 }
@@ -74,6 +75,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -92,6 +95,8 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 //Get fees to remove if exist
                 if (isDeclassify && oldSubTypeClass!= "Normal")
@@ -107,13 +112,18 @@ namespace BPMExtended.Main.Business
                         OldDirectoryNumber = oldDirectoryNumber.ToString(),
                         NewDirectoryNumber = newDirectoryNumber.ToString(),
                         OldRatePlanId = oldRatePlanId.ToString(),
-                        NewRatePlanId = newRatePlanId.ToString(),
+                        NewRatePlanId = (newRatePlanId == null || newRatePlanId.ToString() == "") ? oldRatePlanId.ToString() : newRatePlanId.ToString(),
                         FeesToRemove = feesToRemove,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                        }
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
                     }
 
                 };
@@ -149,6 +159,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -167,6 +179,8 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 //Get fees to remove if exist
                 if (isDeclassify && oldSubTypeClass != "Normal")
@@ -182,13 +196,18 @@ namespace BPMExtended.Main.Business
                         OldDirectoryNumber = oldDirectoryNumber.ToString(),
                         NewDirectoryNumber = newDirectoryNumber.ToString(),
                         OldRatePlanId = oldRatePlanId.ToString(),
-                        NewRatePlanId = newRatePlanId.ToString(),
+                        NewRatePlanId = (newRatePlanId == null || newRatePlanId.ToString() == "") ? oldRatePlanId.ToString() : newRatePlanId.ToString(),
                         FeesToRemove = feesToRemove,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                        }
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
                     }
 
                 };

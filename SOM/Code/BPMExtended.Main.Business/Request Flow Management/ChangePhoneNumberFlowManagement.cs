@@ -20,18 +20,18 @@ namespace BPMExtended.Main.Business
         const string submitToOMStep = "04034AE2-4078-4722-A223-B400C13F89A3";
         const string technicalStep = "2B8B0E7C-9925-4ABE-A9E7-145E96F77982";
 
-        public string GetNextStep(string id, string currentStepId)
+        public string GetNextStep(string id, string currentStepId,bool isSubTypeChanged)
         {
 
             string nextStepId = "";
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = choosePhoneNumberStep; break;
-                case choosePhoneNumberStep: nextStepId = changeRatePlanStep; break;
+                case choosePhoneNumberStep: nextStepId = isSubTypeChanged?changeRatePlanStep : printStep; break;
                 case changeRatePlanStep: nextStepId = printStep; break;
-                case printStep: nextStepId = attachmentStep; break;
-                case attachmentStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = submitToOMStep; break;
+                case printStep: nextStepId = paymentStep; break;
+                case paymentStep: nextStepId = attachmentStep; break;
+                case attachmentStep: nextStepId = technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;

@@ -30,7 +30,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
-            esq.AddColumn("StContractIdOnHold");
+            esq.AddColumn("StContractID");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -39,7 +39,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractIdOnHold");
+                var contractId = entities[0].GetColumnValue("StContractID");
 
                 SOMRequestInput<ActivateTelephonyContractInput> somRequestInput = new SOMRequestInput<ActivateTelephonyContractInput>
                 {
@@ -54,18 +54,12 @@ namespace BPMExtended.Main.Business
                     }
 
                 };
-
-
                 //call api
                 using (var client = new SOMClient())
                 {
                     output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Billing_SubmitActivateContract/StartProcess", somRequestInput);
                 }
-
-
             }
-
-
         }
 
         public void ActivateLineSubscriptionToOM(Guid requestId)
@@ -76,7 +70,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
-            esq.AddColumn("StContractIdOnHold");
+            esq.AddColumn("StContractID");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -85,7 +79,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractIdOnHold");
+                var contractId = entities[0].GetColumnValue("StContractID");
 
                 SOMRequestInput<ActivateTelephonyContractInput> somRequestInput = new SOMRequestInput<ActivateTelephonyContractInput>
                 {

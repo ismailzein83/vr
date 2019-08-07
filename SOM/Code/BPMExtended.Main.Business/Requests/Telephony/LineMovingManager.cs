@@ -7,6 +7,7 @@ using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -38,8 +39,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StNewLinePathID");
             esq.AddColumn("StOldLinePathId");
             esq.AddColumn("StIsNewSwitch");
-
-
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -52,6 +53,8 @@ namespace BPMExtended.Main.Business
                 var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var newSwitch = entities[0].GetColumnValue("StIsNewSwitch");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
                 {
@@ -66,9 +69,13 @@ namespace BPMExtended.Main.Business
                         },
                         OldLinePathId= oldLinePathId.ToString(),
                         NewLinePathId= newLinePathID.ToString(),
-                        SameSwitch = !((bool)newSwitch)
-                    }
-
+                        SameSwitch = !((bool)newSwitch),
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        }
+                    },
                 };
 
 
@@ -96,7 +103,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StNewPhoneNumber");
             esq.AddColumn("StIsNewSwitch");
-
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -109,6 +117,8 @@ namespace BPMExtended.Main.Business
                 var newPhoneNumber = entities[0].GetColumnValue("StNewPhoneNumber");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 bool isNewSwitch = (bool)entities[0].GetColumnValue("StIsNewSwitch");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
                 {
@@ -123,7 +133,12 @@ namespace BPMExtended.Main.Business
                         },
                         OldDirectoryNumber = oldPhoneNumber.ToString(),
                         NewDirectoryNumber = newPhoneNumber.ToString(),
-                        SameSwitch = !isNewSwitch
+                        SameSwitch = !isNewSwitch,
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        }
                     }
 
                 };
@@ -151,7 +166,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StNewPhoneNumber");
             esq.AddColumn("StIsNewSwitch");
-
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -164,6 +180,8 @@ namespace BPMExtended.Main.Business
                 var newPhoneNumber = entities[0].GetColumnValue("StNewPhoneNumber");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 bool isNewSwitch = (bool)entities[0].GetColumnValue("StIsNewSwitch");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
                 {
@@ -178,7 +196,12 @@ namespace BPMExtended.Main.Business
                         },
                         OldDirectoryNumber = oldPhoneNumber.ToString(),
                         NewDirectoryNumber = newPhoneNumber.ToString(),
-                        SameSwitch = !isNewSwitch
+                        SameSwitch = !isNewSwitch,
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        }
                     }
 
                 };

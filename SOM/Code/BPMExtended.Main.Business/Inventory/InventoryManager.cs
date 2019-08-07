@@ -237,7 +237,7 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSubTypes");
             var IdCol = esq.AddColumn("Id");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSubTypeIdentifier", GetTechnicalDetails(phoneNumber).PhoneType.ToString());
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSubTypeIdentifier", GetTechnicalDetails(phoneNumber).PhoneType);
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
@@ -254,26 +254,26 @@ namespace BPMExtended.Main.Business
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
-            string subTypeId = null, subTypeIdentifier;
+            string subTypeId = null, subTypeName;
 
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSubTypes");
             var IdCol = esq.AddColumn("Id");
-            esq.AddColumn("StSubTypeIdentifier");
+            esq.AddColumn("StName");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSubTypeIdentifier", GetTechnicalDetails(phoneNumber).PhoneType.ToString());
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSubTypeIdentifier", GetTechnicalDetails(phoneNumber).PhoneType);
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 subTypeId = entities[0].GetTypedColumnValue<string>(IdCol.Name);
-                subTypeIdentifier = entities[0].GetTypedColumnValue<string>("StSubTypeIdentifier");
+                subTypeName = entities[0].GetTypedColumnValue<string>("StName");
 
                 return new SubType()
                 {
                     Id = subTypeId,
-                    Name = subTypeIdentifier
+                    Name = subTypeName
                 };
             }
 

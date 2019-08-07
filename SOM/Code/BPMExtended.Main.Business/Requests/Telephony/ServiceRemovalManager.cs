@@ -109,8 +109,7 @@ namespace BPMExtended.Main.Business
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
-                            RequestId = requestId.ToString(),
-                            CustomerId= customerId.ToString()
+                            RequestId = requestId.ToString()
                         }
                     }
 
@@ -165,8 +164,7 @@ namespace BPMExtended.Main.Business
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
-                            RequestId = requestId.ToString(),
-                            CustomerId = customerId.ToString()
+                            RequestId = requestId.ToString()
                         }
                     }
 

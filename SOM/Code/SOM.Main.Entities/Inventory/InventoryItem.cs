@@ -20,7 +20,7 @@ namespace SOM.Main.Entities
                 MDFPort = "MDFPort1",
                 Cabinet = "C1",
                 CabinetPrimaryPort = "CabinetPrimaryPort_123",
-                PhoneType = PhoneType.ISDN,
+                PhoneType = "ISDN_LINK",//PhoneType.ISDN,
                 CabinetSecondaryPort = "CabinetSecondaryPort_124",
                 DP = "DP1",
                 DPPorts = new List<string> { "DPPort1", "DPPort2" },
@@ -38,7 +38,7 @@ namespace SOM.Main.Entities
             {
                 Cabinet = "C2",
                 CabinetPrimaryPort = "CabinetPrimaryPort_222",
-                PhoneType = PhoneType.PES,
+                PhoneType = "PES_LINK",//PhoneType.PES,
                 PhoneStatus = Entities.PhoneStatus.F,
                 CabinetSecondaryPort = "CabinetSecondaryPort_333",
                 DP = "DP2",
@@ -59,7 +59,7 @@ namespace SOM.Main.Entities
             {
                 Cabinet = "C5",
                 CabinetPrimaryPort = "CabinetPrimaryPort_444",
-                PhoneType = PhoneType.WLL,
+                PhoneType = "WLL",//PhoneType.WLL,
                 CabinetSecondaryPort = "CabinetSecondaryPort_555",
                 DP = "DP6",
                 PhoneStatus = Entities.PhoneStatus.F,

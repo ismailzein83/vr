@@ -15,6 +15,8 @@ namespace BPMExtended.Main.SOMAPI
         public string OldRatePlanId { get; set; }
         public string NewRatePlanId { get; set; }
         public List<SaleService> FeesToRemove { get; set; }
+        public PaymentData PaymentData { get; set; }
+
     }
 
 }

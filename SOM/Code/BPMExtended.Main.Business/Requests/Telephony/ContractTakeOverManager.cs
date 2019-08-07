@@ -39,6 +39,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StNewUserName");
             esq.AddColumn("StPassword");
             esq.AddColumn("StOldUserName");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StLinePathId");
@@ -63,6 +65,9 @@ namespace BPMExtended.Main.Business
                 var oldUserName = entities[0].GetColumnValue("StOldUserName");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
+                var contactId = entities[0].GetColumnValue("StContactId");
+
+                CRMCustomerInfo info = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null);
 
                 SOMRequestInput<ContractTakeOverRequestInput> somRequestInput = new SOMRequestInput<ContractTakeOverRequestInput>
                 {
@@ -85,7 +90,8 @@ namespace BPMExtended.Main.Business
                         OldUserName= oldUserName.ToString(),
                         NewCustomerId = newCustomerId.ToString(),
                         LinePathId = linePathId.ToString(),
-                        ADSLContractId = adslContractId.ToString()
+                        ADSLContractId = adslContractId.ToString(),
+                        CSO = info.csoId
                         //SubType = divisionName.ToString()
                     }
 

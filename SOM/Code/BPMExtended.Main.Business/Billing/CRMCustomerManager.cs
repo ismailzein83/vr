@@ -1004,6 +1004,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
+            esq.AddColumn("StSubTypes");
+            esq.AddColumn("StSubTypes.Id");
             esq.AddColumn("StSponsor");
             var sponsorcol = esq.AddColumn("StSponsor.Id");
 
@@ -1019,7 +1021,7 @@ namespace BPMExtended.Main.Business
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var phoneNumber = entities[0].GetColumnValue("StNumberToReserve");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
-                var lineType = entities[0].GetColumnValue("StLineType");
+                var subTypeId = entities[0].GetColumnValue("StSubTypesId");
                 var city = entities[0].GetColumnValue("StCityName");
                 
                 CRMCustomerInfo info = GetCRMCustomerInfo(contactId.ToString(), null);
@@ -1072,7 +1074,7 @@ namespace BPMExtended.Main.Business
                     {
                         LinePathId = linePathId,//"11112222",
                         PhoneNumber = phoneNumber.ToString(),
-                        SubType = lineType.ToString(),
+                        SubType = new CommonManager().GetSubTypeIdentifier(subTypeId.ToString()),
                         ServiceResource = serviceResourceId,
                         City = city.ToString(),
                         CSO = info.csoId,

@@ -10,7 +10,7 @@ namespace BPMExtended.Main.SOMAPI
     public enum PhoneStatus { A, F, R }
     public class TechnicalDetails
     {
-        public PhoneType PhoneType { get; set; }
+        public string PhoneType { get; set; }
         public PhoneStatus PhoneStatus { get; set; }
         public string PhoneNumber { get; set; }
         public string PhoneCategory { get; set; }

@@ -13,5 +13,7 @@ namespace BPMExtended.Main.SOMAPI
         public string NewDirectoryNumber { get; set; }
         public string OldDirectoryNumber { get; set; }
         public bool SameSwitch { get; set; }
+        public PaymentData PaymentData { get; set; }
+
     }
 }

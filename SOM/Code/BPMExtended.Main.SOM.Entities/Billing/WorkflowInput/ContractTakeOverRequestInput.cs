@@ -16,6 +16,8 @@ namespace BPMExtended.Main.SOMAPI
         public string NewUserName { get; set; }
         public string NewPassword { get; set; }
         public string SubType { get; set; }
+        public string CSO { get; set; }
+
         public PaymentData PaymentData { get; set; }
         public CommonInputArgument CommonInputArgument { get; set; }
 
