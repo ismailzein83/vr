@@ -1,5 +1,5 @@
-﻿appControllers.directive("vrDevtoolsGeneratedScriptDesignGrid", ["UtilsService", "VRNotificationService", "VR_Devtools_GeneratedScriptService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
-    function (UtilsService, VRNotificationService, VR_Devtools_GeneratedScriptService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
+﻿appControllers.directive("vrDevtoolsGeneratedScriptDesignGrid", ["UtilsService", "VR_Devtools_GeneratedScriptService", "VR_Devtools_ColumnsAPIService",
+    function (UtilsService, VR_Devtools_GeneratedScriptService, VR_Devtools_ColumnsAPIService) {
         "use strict";
 
         var directiveDefinitionObject = {
@@ -22,7 +22,6 @@
 
             var gridApi;
             var addText;
-            var generatedScripts;
 
             $scope.scopeModel = {};
             $scope.scopeModel.designs = [];
@@ -46,9 +45,8 @@
                             var promises = [];
                             $scope.scopeModel.designs = [];
                             if (payload != undefined && payload.designs != undefined) {
-
                                 for (var i = 0; i < payload.designs.length; i++) {
-                                    $scope.scopeModel.designs.push(payload.designs[i]);
+                                    $scope.scopeModel.designs.push({ Entity: payload.designs[i] });
                                 }
                             }
 
@@ -62,7 +60,41 @@
                         return directiveApi;
                     }
                 };
+                $scope.scopeModel.getRowStyle = function (row) {
+                    var rowStyle;
+                    if (row.IsSimilar==false)
+                        rowStyle = { CssClass: 'alert-danger' };
+                    return rowStyle;
+                };
 
+                $scope.scopeModel.editGeneratedScriptDesign = function (Design) {
+
+                    var index = $scope.scopeModel.designs.indexOf(Design);
+                    var onGeneratedScriptDesignUpdated = function (design) {
+                        $scope.scopeModel.designs[index] = design;
+                        $scope.scopeModel.compareItems();
+                    };
+
+                    VR_Devtools_GeneratedScriptService.editGeneratedScriptDesign(onGeneratedScriptDesignUpdated, Design);
+                }
+                $scope.scopeModel.compareItems = function () {
+                    $scope.scopeModel.isLoading = true;
+                    var designs=[];
+                    for (var j = 0; j < $scope.scopeModel.designs.length; j++) {
+                        designs.push($scope.scopeModel.designs[j].Entity);
+                    }
+                    VR_Devtools_ColumnsAPIService.CompareItems({ Scripts: designs }).then(function (response) {
+                        if (response != undefined && response.length > 0) {
+                            for (var i = 0; i < response.length; i++) {
+                                var output = response[i];
+                                $scope.scopeModel.designs[i].IsSimilar = output.IsSimilar;
+                                $scope.scopeModel.designs[i].Message = output.Message;
+                            }
+                        }
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
+                };
                 $scope.scopeModel.onDeleteRow = function (dataItem) {
                     var index = $scope.scopeModel.designs.indexOf(dataItem);
                     $scope.scopeModel.designs.splice(index, 1);
@@ -71,29 +103,12 @@
                 $scope.scopeModel.onGeneratedScriptDesignAdded = function () {
                     var onGeneratedScriptDesignAdded = function (design) {
                         $scope.scopeModel.designs.push(design);
+                        $scope.scopeModel.compareItems();
                     };
 
                     VR_Devtools_GeneratedScriptService.addGeneratedScriptDesign(onGeneratedScriptDesignAdded);
                 };
 
-                defineMenuActions();
-            }
-
-            function defineMenuActions() {
-                $scope.scopeModel.gridMenuActions = [{
-                    name: "Edit",
-                    clicked: editGeneratedScriptDesign,
-                }];
-            }
-
-            function editGeneratedScriptDesign(Design) {
-
-                var index = $scope.scopeModel.designs.indexOf(Design);
-                var onGeneratedScriptDesignUpdated = function (design) {
-                    $scope.scopeModel.designs[index] = design;
-                };
-
-                VR_Devtools_GeneratedScriptService.editGeneratedScriptDesign(onGeneratedScriptDesignUpdated, Design);
             }
 
         }

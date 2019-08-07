@@ -75,8 +75,7 @@
                                 }
                                 else {
                                     for (var k = 0; k < generatedScripts.length; k++) {
-                                        generatedScript = generatedScripts[k];
-                                        designs.push({ Entity: generatedScripts[k] });
+                                        designs.push(generatedScripts[k]);
                                     }
                                     gridApi.load({ designs: designs });
                                 }

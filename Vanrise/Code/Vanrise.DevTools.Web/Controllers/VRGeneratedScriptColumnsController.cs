@@ -42,6 +42,12 @@ namespace Vanrise.DevTools.Web.Controllers
         }
 
         [HttpPost]
+        [Route("CompareItems")]
+        public List<GeneratedScriptItemComparisonOutput> CompareItems(GeneratedScriptItemTables generatedScriptItemTables)
+        {
+            return columnsManager.CompareItems(generatedScriptItemTables);
+        }
+        [HttpPost]
         [Route("GenerateQueries")]
         public string GenerateQueries(GeneratedScriptItem generatedScriptItem)
         {

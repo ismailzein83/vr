@@ -15,7 +15,7 @@ namespace Vanrise.DevTools.Entities
 
     public class GeneratedScriptItemTables
     {
-        public  List<GeneratedScriptItemTable> Scripts { get; set; }
+        public List<GeneratedScriptItemTable> Scripts { get; set; }
 
     }
 
@@ -44,9 +44,29 @@ namespace Vanrise.DevTools.Entities
         public abstract Guid ConfigId { get; }
         public abstract bool Validate(IGeneratedScriptItemTableValidationContext context);
         public abstract string GenerateQuery(IGeneratedScriptItemTableContext context);
-
+        public virtual GeneratedScriptItemComparisonOutput Compare(IGeneratedScriptComparisonContext context)
+        {
+            return new GeneratedScriptItemComparisonOutput { IsSimilar = true };
+        }
     }
+    public class GeneratedScriptItemComparisonOutput
+    {
+        public bool IsSimilar { get; set; }
+        public string Message { get; set; }
+    }
+    public interface IGeneratedScriptComparisonContext
+    {
+        Guid ConnectionId { get; }
+        string Schema { get; }
+        string TableName { get; }
+    }
+    public class GeneratedScriptComparisonContext:IGeneratedScriptComparisonContext
+    {
 
+        public Guid ConnectionId { get; set; }
+        public string Schema { get; set; }
+        public string TableName { get; set; }
+    }
     public interface IGeneratedScriptItemTableContext
     {
          GeneratedScriptItemTable Item { get; }

@@ -5,6 +5,9 @@ using Vanrise.DevTools.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Data.RDB;
+using Vanrise.DevTools.Business;
+using System.Linq;
+
 namespace Vanrise.DevTools.MainExtensions
 {
     public class MergeGeneratedScriptItem : GeneratedScriptItemTableSettings
@@ -30,6 +33,119 @@ namespace Vanrise.DevTools.MainExtensions
             }
             return true;
         }
+        public override GeneratedScriptItemComparisonOutput Compare(IGeneratedScriptComparisonContext context)
+        {
+            VRGeneratedScriptTableDataManager generatedScriptTableDataManager = new VRGeneratedScriptTableDataManager();
+            var dataBaseRows = generatedScriptTableDataManager.GetFilteredTableData(new VRGeneratedScriptTableDataQuery
+            {
+                ConnectionId = context.ConnectionId,
+                SchemaName = context.Schema,
+                TableName = context.TableName,
+                WhereCondition = LastWhereCondition,
+                JoinStatement = LastJoinStatement
+            });
+
+            GeneratedScriptItemComparisonOutput comparisonOutput = new GeneratedScriptItemComparisonOutput() { IsSimilar = true };
+            int newRowsCount = 0;
+            int unmatchedRowsCount = 0;
+            int rowsHavingDifferencesCount = 0;
+
+            if (dataBaseRows != null && dataBaseRows.Count() > 0)
+            {
+                newRowsCount = dataBaseRows.Count();
+
+                if (DataRows != null && DataRows.Count > 0)
+                {
+                    unmatchedRowsCount = DataRows.Count;
+                    foreach (var row in dataBaseRows)
+                    {
+                        string dataBaseRowKey = "";
+                        if (Columns != null && Columns.Count > 0)
+                        {
+                            foreach (var column in Columns)
+                            {
+                                if (column.IsIdentifier)
+                                {
+                                    string key = column.ColumnName;
+                                    dataBaseRowKey += row.FieldValues[key] + "_";
+                                }
+                            }
+                        }
+                        foreach (var selectedRow in DataRows)
+                        {
+                            string selectedRowKey = "";
+                            if (Columns != null && Columns.Count > 0)
+                            {
+                                foreach (var column in Columns)
+                                {
+                                    if (column.IsIdentifier)
+                                    {
+                                        string key = column.ColumnName;
+                                        selectedRowKey += selectedRow.FieldValues[key] + "_";
+                                    }
+                                }
+                            }
+                            if (dataBaseRowKey == selectedRowKey)
+                            {
+                                newRowsCount--;
+                                unmatchedRowsCount--;
+
+                                if (Columns != null && Columns.Count > 0)
+                                {
+                                    foreach (var column in Columns)
+                                    {
+                                        if (column.ColumnName != "timestamp")
+                                        {
+
+                                            var selectedRowValue = selectedRow.FieldValues[column.ColumnName];
+
+                                            if (selectedRowValue is GeneratedScriptVariableData)
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                var rowFieldValue = row.FieldValues[column.ColumnName] != null ? row.FieldValues[column.ColumnName].ToString() : null;
+                                                var value = selectedRowValue != null ? selectedRowValue.ToString() : null;
+
+                                                if (rowFieldValue != value)
+                                                {
+                                                    rowsHavingDifferencesCount++;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (newRowsCount != 0)
+            {
+                comparisonOutput.Message = string.Concat("New Rows : ", newRowsCount);
+                comparisonOutput.IsSimilar = false;
+            }
+            if (unmatchedRowsCount != 0)
+            {
+                if (comparisonOutput.Message != null)
+                    comparisonOutput.Message = string.Concat(comparisonOutput.Message, " ; ");
+                comparisonOutput.Message = string.Concat(comparisonOutput.Message, "Unmatched Rows : ", unmatchedRowsCount);
+                comparisonOutput.IsSimilar = false;
+            }
+            if (rowsHavingDifferencesCount != 0)
+            {
+                if (comparisonOutput.Message != null)
+                    comparisonOutput.Message = string.Concat(comparisonOutput.Message, " ; ");
+                comparisonOutput.Message = string.Concat(comparisonOutput.Message, "Rows Having Differences : ", rowsHavingDifferencesCount);
+                comparisonOutput.IsSimilar = false;
+            }
+            return comparisonOutput;
+        }
+        
         public override string GenerateQuery(IGeneratedScriptItemTableContext context)
         {
             switch (context.Type)
