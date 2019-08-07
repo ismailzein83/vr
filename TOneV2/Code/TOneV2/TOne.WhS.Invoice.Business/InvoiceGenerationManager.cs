@@ -156,18 +156,17 @@ namespace TOne.WhS.Invoice.Business
 
         #region Private Methods
 
-        private List<T> GetInvoiceMappedRecords<T>(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, 
+        private List<T> GetInvoiceMappedRecords<T>(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue,
             DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue, Func<AnalyticRecord, T> mapper) where T : class
         {
             var analyticRecords = GetInvoiceAnalyticRecords(analyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId, offsetValue);
-            if (analyticRecords != null && analyticRecords.Data != null && analyticRecords.Data.Count() > 0)
-            {
-                return PrepareItemSetNames<T>(analyticRecords.Data, mapper);
-            }
-            return default(List<T>);
+            if (analyticRecords == null || analyticRecords.Count == 0)
+                return default(List<T>);
+
+            return PrepareItemSetNames<T>(analyticRecords, mapper);
         }
 
-        private AnalyticSummaryBigResult<AnalyticRecord> GetInvoiceAnalyticRecords(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, 
+        private List<AnalyticRecord> GetInvoiceAnalyticRecords(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName,
             object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue)
         {
             Dictionary<string, dynamic> queryParameters = null;
@@ -176,30 +175,28 @@ namespace TOne.WhS.Invoice.Business
                 queryParameters = new Dictionary<string, dynamic>();
                 queryParameters.Add("BatchStart_TimeShift", offsetValue.Value);
             }
-            AnalyticManager analyticManager = new AnalyticManager();
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+
+            AnalyticQuery analyticQuery = new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = listDimensions,
-                    MeasureFields = listMeasures,
-                    TableId = analyticTableId,
-                    FromTime = fromDate,
-                    ToTime = toDate,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>(),
-                    CurrencyId = currencyId,
-                    QueryParameters = queryParameters
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = listDimensions,
+                MeasureFields = listMeasures,
+                TableId = analyticTableId,
+                FromTime = fromDate,
+                ToTime = toDate,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                CurrencyId = currencyId,
+                QueryParameters = queryParameters
             };
+
             DimensionFilter dimensionFilter = new DimensionFilter()
             {
                 Dimension = dimensionFilterName,
                 FilterValues = new List<object> { dimensionFilterValue }
             };
-            analyticQuery.Query.Filters.Add(dimensionFilter);
-            return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+            analyticQuery.Filters.Add(dimensionFilter);
+
+            return new AnalyticManager().GetAllFilteredRecords(analyticQuery);
         }
 
         private List<T> PrepareItemSetNames<T>(IEnumerable<AnalyticRecord> analyticRecords, Func<AnalyticRecord, T> mapper) where T : class
