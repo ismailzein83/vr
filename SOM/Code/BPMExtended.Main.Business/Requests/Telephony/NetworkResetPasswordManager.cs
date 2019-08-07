@@ -86,7 +86,7 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StNetworkResetPassword");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StNetwrokResetKeyword");
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StOperationAddedFees");
@@ -120,8 +120,7 @@ namespace BPMExtended.Main.Business
                     {
                         ContractId = contractId,
                         RequestId = requestId
-                    },
-                    LinePathId = linePathId
+                    }
                 }
             };
 

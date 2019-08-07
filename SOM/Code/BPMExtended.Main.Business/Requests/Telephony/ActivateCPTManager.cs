@@ -6,6 +6,7 @@ using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
+using Newtonsoft.Json;
 
 namespace BPMExtended.Main.Business
 {
@@ -34,6 +35,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StCptId");
             esq.AddColumn("StPhoneNumber");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+            esq.AddColumn("StCptNumber");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -46,20 +50,30 @@ namespace BPMExtended.Main.Business
                 var cptId = entities[0].GetColumnValue("StCptId");
                 var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+                var cptNumber = entities[0].GetColumnValue("StCptNumber");
 
                 SOMRequestInput<ActivateCptRequestInput> somRequestInput = new SOMRequestInput<ActivateCptRequestInput>
                 {
 
                     InputArguments = new ActivateCptRequestInput
                     {
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        DirectoryNumber= phoneNumber.ToString(),
-                        CPTId= cptId.ToString()
+                        CPTServiceId = new CatalogManager().GetCPTServiceId(),
+                        DirectoryNumber = phoneNumber.ToString(),
+                        CPTId= cptId.ToString(),
+                        CPTNumber = cptNumber.ToString()
                     }
 
                 };
@@ -87,6 +101,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCptId");
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StCptNumber");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -100,19 +116,26 @@ namespace BPMExtended.Main.Business
                 var cptNumber = entities[0].GetColumnValue("StCptNumber");
                 var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<ActivateCptRequestInput> somRequestInput = new SOMRequestInput<ActivateCptRequestInput>
                 {
 
                     InputArguments = new ActivateCptRequestInput
                     {
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        CPTService = new CatalogManager().GetCPTServiceId(),
+                        CPTServiceId = new CatalogManager().GetCPTServiceId(),
                         CPTId = cptId.ToString(),
                         CPTNumber = cptNumber.ToString()
                     }
