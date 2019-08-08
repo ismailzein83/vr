@@ -24,7 +24,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Activation;
 using Terrasoft.Common;
-using Terrasoft.Configuration;
+//using Terrasoft.Configuration;
 
 namespace BPMExtended.Main.Business
 {
@@ -40,7 +40,7 @@ namespace BPMExtended.Main.Business
         public bool GetPermission(string operationPermission)
         {
             bool result = false;
-            ConfigurationServiceResponse response = new ConfigurationServiceResponse();
+            //ConfigurationServiceResponse response = new ConfigurationServiceResponse();
             try
             {
                 BPM_UserConnection.DBSecurityEngine.CheckCanExecuteOperation(operationPermission);
@@ -48,7 +48,7 @@ namespace BPMExtended.Main.Business
             }
             catch (Exception e)
             {
-                response.Exception = e;
+                //response.Exception = e;
                 result = false;
             }
             return result;
