@@ -16,7 +16,7 @@ BEGIN
 	declare @ZoneIdTable table (ZoneId bigint)
 	insert into @ZoneIdTable (ZoneId) select convert(bigint, ParsedString) from TOneWhS_BE.ParseStringList(@ZoneIds)
 
-	select	rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[RateTypeID], rate.[Rate], rate.[BED], rate.[EED], rate.[Change]
+	select	rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[RateTypeID], rate.[Rate], rate.[BED], rate.[EED], rate.[Change],rate.[Note]
 	from	TOneWhS_BE.SaleRate rate WITH(NOLOCK) inner join TOneWhS_BE.SalePriceList pricelist with(nolock) on rate.PriceListID = pricelist.ID
 	where (rate.EED is null or rate.EED > @MinimumDate)
 		and pricelist.OwnerType = @OwnerType
