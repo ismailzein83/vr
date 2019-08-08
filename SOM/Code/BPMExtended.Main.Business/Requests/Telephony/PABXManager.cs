@@ -73,18 +73,22 @@ namespace BPMExtended.Main.Business
                                               {
                                                 contractId = g.Key.groupByContractID
                                               };
-
-
-                foreach (var secondaryContractId in secondaryContracts)
+                if (entities.Count == 0)
+                    return items;
+                else
                 {
-
-                    filteredItems.Add(new TelephonyContractInfo()
+                    foreach (var secondaryContractId in secondaryContracts)
                     {
-                        Id= secondaryContractId.contractId,
-                        PhoneNumber = items.Where(e=>e.Id == secondaryContractId.contractId).Select(e=>e.PhoneNumber).First()
-                    });
 
+                        filteredItems.Add(new TelephonyContractInfo()
+                        {
+                            Id = secondaryContractId.contractId,
+                            PhoneNumber = items.Where(e => e.Id == secondaryContractId.contractId).Select(e => e.PhoneNumber).First()
+                        });
+
+                    }
                 }
+                    
             }
 
             return filteredItems;
