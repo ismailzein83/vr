@@ -19,6 +19,16 @@ namespace Vanrise.HelperTools
             {
                 string currentDate = DateTime.Now.ToString("yyyMMddHHmm");
                 string currentDateShort = DateTime.Now.ToString("yyyMMdd");
+                DateTime dt = new DateTime();
+
+                if (args.Length > 2)
+                {                    
+                    DateTime.TryParse(args[2], out dt);
+                    if (dt > DateTime.MinValue)
+                    {
+                        currentDateShort = args[2];
+                    }
+                }
 
                 switch (args[0])
                 {
@@ -55,36 +65,6 @@ namespace Vanrise.HelperTools
                         Console.WriteLine("Invalid argument: {0} or {1}", args[0], args[1]);
                         break;
                 }
-
-                //if (args[0] == "DBs")
-                //{
-                //    Common.GenerateDBStructure(currentDate, currentDateShort, new List<string>(), null);
-                //}
-                //if (args[0] == "GRPSQL")
-                //{
-                //    Common.GroupSQLPostScriptFiles(currentDateShort, false, null);
-                //}
-
-                //if (args[0] == "GRPSQLOverridden")
-                //{
-                //    Common.GroupSQLPostScriptFiles(currentDateShort, true, null);
-                //}
-
-                //if (args[0] == "CompressJS")
-                //{
-                //    Common.CompressJSFiles(currentDateShort, "Javascripts", null);
-                //    Common.CompressJSFiles(currentDateShort, "Modules", null);
-                //}
-
-                //if (args[0] == "GRPJS")
-                //{
-                //    Common.GroupJSFiles(currentDateShort, "Javascripts", false, null);
-                //    Common.GroupJSFiles(currentDateShort, "Modules", false, null);
-                //}
-                //if (args[0] == "GRPJSOverridden")
-                //{
-                //    Common.GroupJSFiles(currentDateShort, "Modules", true, null);
-                //}
             }
             else
             {
