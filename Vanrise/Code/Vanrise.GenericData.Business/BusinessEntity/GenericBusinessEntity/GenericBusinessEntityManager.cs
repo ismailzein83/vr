@@ -1488,11 +1488,19 @@ namespace Vanrise.GenericData.Business
                     if (records == null || records.Count() == 0)
                         return null;
 
+                    genericBEDefinitionSetting.TitleFieldName.ThrowIfNull("TitleFieldName", businessEntityDefinitionId);
+
+                    DataRecordField titleField;
+                    if (!dataRecordFields.TryGetValue(genericBEDefinitionSetting.TitleFieldName, out titleField))
+                        throw new NullReferenceException($"titleField. BusinessEntityDefinitionId {businessEntityDefinitionId}");
+                    titleField.Type.ThrowIfNull("titleField.Type", businessEntityDefinitionId);
+
                     foreach (var record in records)
                     {
                         var titleValue = record.FieldValues.GetRecord(genericBEDefinitionSetting.TitleFieldName);
-                        if (!resultByTitleFieldName.ContainsKey(titleValue))
-                            resultByTitleFieldName.Add(titleValue, DataRecordStorageToGenericBEMapper(record));
+                        var titleDescription = titleField.Type.GetDescription(titleValue);
+                        if (!resultByTitleFieldName.ContainsKey(titleDescription))
+                            resultByTitleFieldName.Add(titleDescription, DataRecordStorageToGenericBEMapper(record));
                     }
 
                     return resultByTitleFieldName.Count > 0 ? resultByTitleFieldName : null;
