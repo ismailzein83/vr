@@ -85,14 +85,14 @@ namespace Vanrise.DevTools.Business
             return results;
         }
 
-        public List<GeneratedScriptItemComparisonOutput> CompareItems(GeneratedScriptItemTables generatedScriptItemTables)
+        public List<GeneratedScriptItemComparisonOutput> CompareItems(GeneratedScriptItem generatedScriptItem)
         {
             List<GeneratedScriptItemComparisonOutput> comparisonOutputs = new List<GeneratedScriptItemComparisonOutput>();
-            if (generatedScriptItemTables != null && generatedScriptItemTables.Scripts != null && generatedScriptItemTables.Scripts.Count > 0)
+            if (generatedScriptItem != null && generatedScriptItem.Tables!=null && generatedScriptItem.Tables.Scripts != null && generatedScriptItem.Tables.Scripts.Count > 0)
             {
-                foreach (var script in generatedScriptItemTables.Scripts)
+                foreach (var script in generatedScriptItem.Tables.Scripts)
                 {
-                    comparisonOutputs.Add(script.Settings.Compare(new GeneratedScriptComparisonContext { ConnectionId=script.ConnectionId,Schema=script.Schema,TableName=script.TableName}));
+                    comparisonOutputs.Add(script.Settings.Compare(new GeneratedScriptComparisonContext { ConnectionId=script.ConnectionId,Schema=script.Schema,TableName=script.TableName, IncludeOverriddenValuesInComparison =generatedScriptItem.IncludeOverriddenValuesInComparison }));
                 }
             }
             return comparisonOutputs;

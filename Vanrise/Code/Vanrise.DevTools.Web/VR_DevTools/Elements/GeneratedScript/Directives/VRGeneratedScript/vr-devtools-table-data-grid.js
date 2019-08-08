@@ -75,7 +75,7 @@
 
                 $scope.getStatusColor = function (dataItem, column) {
 
-                    if (dataItem.DescriptionEntity[column.name] != undefined && dataItem.DescriptionEntity[column.name].differentValue)
+                    if (dataItem.DescriptionEntity[column.name] != undefined && dataItem.DescriptionEntity[column.name].isDifferent)
                         return LabelColorsEnum.Processing.color;
                 };
 

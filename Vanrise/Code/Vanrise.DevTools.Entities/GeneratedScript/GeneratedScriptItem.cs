@@ -10,6 +10,7 @@ namespace Vanrise.DevTools.Entities
     public class GeneratedScriptItem
     {
         public GeneratedScriptType Type { get; set; }
+        public bool IncludeOverriddenValuesInComparison { get; set; }
         public GeneratedScriptItemTables Tables { get; set; }
     }
 
@@ -59,6 +60,7 @@ namespace Vanrise.DevTools.Entities
         Guid ConnectionId { get; }
         string Schema { get; }
         string TableName { get; }
+        bool IncludeOverriddenValuesInComparison { get; }
     }
     public class GeneratedScriptComparisonContext:IGeneratedScriptComparisonContext
     {
@@ -66,6 +68,7 @@ namespace Vanrise.DevTools.Entities
         public Guid ConnectionId { get; set; }
         public string Schema { get; set; }
         public string TableName { get; set; }
+        public bool IncludeOverriddenValuesInComparison { get; set; }
     }
     public interface IGeneratedScriptItemTableContext
     {
@@ -117,7 +120,11 @@ namespace Vanrise.DevTools.Entities
         public bool IsVariable { get; set; }
 
     }
-
+    public class GeneratedScriptOverriddenData
+    {
+        public object Value { get; set; }
+        public bool IsOverridden { get; set; }
+    }
     public interface IGeneratedScriptVariableContext
     {
          string Name { get; }

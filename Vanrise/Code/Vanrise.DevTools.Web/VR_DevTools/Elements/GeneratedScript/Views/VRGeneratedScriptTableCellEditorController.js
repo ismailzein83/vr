@@ -12,7 +12,6 @@
         var fieldValueTypeDirectiveAPI;
         var fieldValueTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var fieldValueTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-        var variablesDirectiveAPI;
         var variablesReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         
 
@@ -32,8 +31,16 @@
             
 
             $scope.scopeModel.saveTableCell = function () {
-                if ($scope.scopeModel.isFieldTypeText())
-                    $scope.modifySelectedTableData($scope.scopeModel.cellValue);
+                if ($scope.scopeModel.isFieldTypeText()) {
+                    if (!$scope.scopeModel.compareValues())
+                        $scope.modifySelectedTableData({
+                            $type: "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                            IsOverridden: true,
+                            Value: $scope.scopeModel.cellValue
+                        });
+                    else 
+                        $scope.modifySelectedTableData($scope.scopeModel.cellValue);
+                }
                 else $scope.modifySelectedTableData({
                     $type:"Vanrise.DevTools.Entities.GeneratedScriptVariableData,Vanrise.DevTools.Entities",
                     VariableId: $scope.scopeModel.selectedVariable.Id,
@@ -75,7 +82,7 @@
                     }
                 }
             };
-            $scope.scopeModel.originalCellValue = $scope.scopeModel.originalCellValue = (originalCellValue != undefined && typeof (cellValue) == "object" && cellValue != null && !cellValue.IsVariable) ? JSON.stringify(originalCellValue) : originalCellValue;
+            $scope.scopeModel.originalCellValue = $scope.scopeModel.originalCellValue = (originalCellValue != undefined && typeof (cellValue) == "object" && cellValue != null && !cellValue.IsVariable && !cellValue.IsOverridden) ? JSON.stringify(originalCellValue) : originalCellValue;
 
             $scope.scopeModel.moveOriginalCellValue = function () {
                 $scope.scopeModel.cellValue = $scope.scopeModel.originalCellValue;
@@ -110,6 +117,9 @@
                             }
                         });
                     }
+                    else if (cellValue.IsOverridden) {
+                        $scope.scopeModel.cellValue = cellValue.Value;
+                    }
                     else $scope.scopeModel.cellValue = JSON.stringify(cellValue);
                 }
                 else
@@ -118,7 +128,7 @@
 
             function loadFieldValueTypeDirective() {
                 var fieldValueTypeLoadDeferred = UtilsService.createPromiseDeferred();
-                fieldValueTypeReadyPromiseDeferred.promise.then(function (response) {
+                fieldValueTypeReadyPromiseDeferred.promise.then(function () {
                     var payload = {
                         selectedIds: (cellValue != undefined && typeof (cellValue) == "object" && cellValue.IsVariable) ? VR_Devtools_GeneratedScriptFieldValueTypeEnum.Variable.value
                             : VR_Devtools_GeneratedScriptFieldValueTypeEnum.Text.value

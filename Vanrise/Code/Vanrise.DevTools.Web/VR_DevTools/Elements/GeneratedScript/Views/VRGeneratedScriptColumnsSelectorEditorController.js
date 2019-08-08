@@ -55,6 +55,8 @@
             $scope.scopeModel.generateSelectedTableData=function() {
                 $scope.scopeModel.isLoading = true;
                 payload.filteredColumnNames = columnsSelectionTypeDirectiveApi.getSelectedIds() == VR_Devtools_GeneratedScriptColumnsSelectionTypeEnum.AllColumns.value ? undefined : columnsDirectiveApi.getSelectedIds();
+                payload.includeVariables = $scope.scopeModel.includeVariables;
+                payload.includeOverriddenValues = $scope.scopeModel.includeOverriddenValues;
                 $scope.generateSelectedTableDataGrid(payload).then(function () {
                     $scope.deselectAllItems();
                     payload.context.compareTables();

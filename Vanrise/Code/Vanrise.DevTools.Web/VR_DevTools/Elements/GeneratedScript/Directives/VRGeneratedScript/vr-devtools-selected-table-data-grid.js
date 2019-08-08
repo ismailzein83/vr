@@ -27,6 +27,9 @@
             var originalTableData = []; 
             var executeQuery; 
             var columns;
+            var includeOverriddenValues;
+            var includeVariables;
+
             $scope.scopeModel = {};
             $scope.scopeModel.selectedTableData = [];
             $scope.scopeModel.selectedTableDataGridDS = [];
@@ -57,10 +60,16 @@
                     return null;
                 };
 
-                $scope.getStatusColor = function (dataItem,column) {
-                    
-                    if (dataItem.DescriptionEntity[column.name] != undefined && dataItem.DescriptionEntity[column.name].differentValue)
-                        return LabelColorsEnum.Processing.color;
+                $scope.getStatusColor = function (dataItem, column) {
+
+                    if (dataItem.DescriptionEntity[column.name] != undefined) {
+                        if (dataItem.DescriptionEntity[column.name].isDifferent)
+                            return LabelColorsEnum.Processing.color;
+                        if (dataItem.DescriptionEntity[column.name].isVariable)
+                            return LabelColorsEnum.Error.color;
+                        if (dataItem.DescriptionEntity[column.name].isOverridden)
+                            return LabelColorsEnum.New.color;
+                    }
                 };
 
                 $scope.scopeModel.loadMoreData = function () {
@@ -82,8 +91,9 @@
                             newRowsCount++;
                         else {
                             for (var j = 0; j < columns.length; j++) {
+
                                 var column = columns[j];
-                                if (row.DescriptionEntity[column] != undefined  && row.DescriptionEntity[column].differentValue) {
+                                if (row.DescriptionEntity[column] != undefined && (row.DescriptionEntity[column].isDifferent || (row.DescriptionEntity[column].includeOverriddenValues && row.DescriptionEntity[column].isOverridden))) {
                                     $scope.scopeModel.rowsHavingDifferences++;
                                     break;
                                 }
@@ -93,24 +103,28 @@
                     return newRowsCount;
                 };
 
-                function generateTargetRow(sourceRow) {
-                    var selectedTableRow = {
-                        Entity: {}
-                    };
-                    var fieldValues = {};
-                    var fieldValuesDescription = {};
+                function generateTargetRow(sourceRow, selectedTableRow) {
+                    if (selectedTableRow == undefined)
+                        selectedTableRow = {
+                            Entity: {
+                                FieldValues: {}
+                            },
+                            DescriptionEntity: {}
+                        };
+
                     for (var j = 0; j < columns.length; j++) {
                         var columnName = columns[j];
-                        fieldValues[columnName] = sourceRow.FieldValues[columnName];
-                        fieldValuesDescription[columnName] = {
-                            value: sourceRow.FieldValues[columnName]
-                        };
-                        
-                    }
-                    selectedTableRow.DescriptionEntity = fieldValuesDescription;
-                    selectedTableRow.Entity.FieldValues = fieldValues;
-                    return selectedTableRow;
+                        if ((selectedTableRow.Entity.FieldValues[columnName] == undefined || selectedTableRow.Entity.FieldValues[columnName].$type == undefined) ||
+                            (selectedTableRow.Entity.FieldValues[columnName] != undefined && selectedTableRow.Entity.FieldValues[columnName].$type != undefined && selectedTableRow.Entity.FieldValues[columnName].$type.includes("GeneratedScriptOverriddenData") && includeOverriddenValues) ||
+                            (selectedTableRow.Entity.FieldValues[columnName] != undefined && selectedTableRow.Entity.FieldValues[columnName].$type != undefined && selectedTableRow.Entity.FieldValues[columnName].$type.includes("GeneratedScriptVariableData") && includeVariables)) {
 
+                            selectedTableRow.Entity.FieldValues[columnName] = sourceRow.FieldValues[columnName];
+                            selectedTableRow.DescriptionEntity[columnName] = {
+                                value: sourceRow.FieldValues[columnName]
+                            };
+                        }
+                    }
+                    return selectedTableRow;
                 }
               
                 function getDirectiveApi() {
@@ -126,6 +140,8 @@
                         executeQuery = payload.executeQuery;
                         var variables = getVariables();
                         var filteredColumnNames = payload.filteredColumnNames;
+                        includeOverriddenValues = payload.includeOverriddenValues;
+                        includeVariables = payload.includeVariables;
                         var moveItems = payload.moveItems;
 
                         $scope.scopeModel.columnNames = [];
@@ -143,7 +159,15 @@
                                     var columnName = $scope.scopeModel.columnNames[j];
                                     dataRowDescription[columnName] = { value: dataRow.FieldValues[columnName] };
                                     if (dataRow.FieldValues[columnName] != undefined && typeof (dataRow.FieldValues[columnName]) == "object" && dataRow.FieldValues[columnName].IsVariable)
-                                        dataRowDescription[columnName].value = '@' + UtilsService.getItemByVal(variables, dataRowDescription[columnName].value.VariableId, 'Id').Name;
+                                        dataRowDescription[columnName] = {
+                                            value: '@' + UtilsService.getItemByVal(variables, dataRowDescription[columnName].value.VariableId, 'Id').Name,
+                                            $type: dataRowDescription[columnName].value.$type
+                                        };
+                                    else if (dataRow.FieldValues[columnName] != undefined && typeof (dataRow.FieldValues[columnName]) == "object" && dataRow.FieldValues[columnName].IsOverridden)
+                                        dataRowDescription[columnName] = {
+                                            $type: dataRow.FieldValues[columnName].$type,
+                                            value: dataRow.FieldValues[columnName].Value
+                                        };
                                 }
 
                                 $scope.scopeModel.selectedTableData.push({
@@ -166,12 +190,21 @@
                             if (!executeQuery) {
                                 if (moveItems) {
                                     if (filter.BulkActionFinalState.IsAllSelected) {
-
-                                        $scope.scopeModel.selectedTableData.length=0;
                                         $scope.scopeModel.selectedTableDataGridDS.length=0;
                                         for (var i = 0; i < originalTableData.length; i++) {
                                             var dataRow = originalTableData[i];
-                                            $scope.scopeModel.selectedTableData.push(generateTargetRow(dataRow));
+                                            var exists = false;
+                                            for (var k = 0; k < $scope.scopeModel.selectedTableData.length; k++) {
+                                                var selectedTableRow = $scope.scopeModel.selectedTableData[k];
+                                                if (compareIdentifierKeys(dataRow, selectedTableRow)) {
+                                                    $scope.scopeModel.selectedTableData[k] = generateTargetRow(dataRow, selectedTableRow);
+                                                    exists = true; 
+                                                    break;
+                                                }
+                                            }
+                                            if (!exists) {
+                                                $scope.scopeModel.selectedTableData.push(generateTargetRow(dataRow));
+                                            }
                                         }
                                         loadMoreSelectedRows();
                                         loadPromiseDeferred.resolve();
@@ -187,8 +220,8 @@
                                                     for (var k = 0; k < $scope.scopeModel.selectedTableData.length; k++) {
                                                         var selectedTableRow = $scope.scopeModel.selectedTableData[k];
                                                         if (compareIdentifierKeys(dataRow, selectedTableRow)) {
-                                                            exists = true;
-                                                            $scope.scopeModel.selectedTableData[k] = generateTargetRow(dataRow); 
+                                                            exists = true; 
+                                                            $scope.scopeModel.selectedTableData[k] = generateTargetRow(dataRow, selectedTableRow); 
                                                             break;
                                                         }
                                                     }
@@ -196,7 +229,6 @@
                                                         $scope.scopeModel.selectedTableData.push(generateTargetRow(dataRow));
                                                     }
                                                 }
-
                                             }
                                             $scope.scopeModel.selectedTableDataGridDS.length = 0;
                                             loadMoreSelectedRows();
@@ -321,16 +353,20 @@
                 $scope.scopeModel.editCell = function (dataItem, column) {
                     var variables = getVariables();
                     var index = $scope.scopeModel.selectedTableData.indexOf(dataItem);
-                    var cellValue = ($scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name] != undefined
-                        && $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name] != null
-                        && $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name].IsVariable) ?
-                        $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name] : $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name];
+                    var cellValue = $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name];
 
                     var modifySelectedTableData = function (newCellValue) {
                         $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name] = (newCellValue != undefined && newCellValue != null) ? newCellValue : "*";
                         if (newCellValue != undefined && typeof (newCellValue) == "object" && newCellValue.IsVariable) {
                             $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name] = newCellValue;
+                            $scope.scopeModel.selectedTableData[dataItem.rowIndex].DescriptionEntity[column.name].$type = newCellValue.$type;
                             $scope.scopeModel.selectedTableData[dataItem.rowIndex].DescriptionEntity[column.name].value = '@' + UtilsService.getItemByVal(variables, newCellValue.VariableId, 'Id').Name;
+                        }
+                        else if (newCellValue != undefined && typeof (newCellValue) == "object" && newCellValue.IsOverridden) {
+                            $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name] = newCellValue;
+                            $scope.scopeModel.selectedTableData[dataItem.rowIndex].DescriptionEntity[column.name].$type = newCellValue.$type;
+                            $scope.scopeModel.selectedTableData[dataItem.rowIndex].DescriptionEntity[column.name].value = (newCellValue != undefined && newCellValue.Value != undefined) ? newCellValue.Value : "*";
+
                         }
                         else {
                             $scope.scopeModel.selectedTableData[dataItem.rowIndex].DescriptionEntity[column.name].value = (newCellValue != undefined && newCellValue != null) ? newCellValue : "*";

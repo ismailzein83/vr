@@ -83,7 +83,7 @@
                     for (var j = 0; j < $scope.scopeModel.designs.length; j++) {
                         designs.push($scope.scopeModel.designs[j].Entity);
                     }
-                    VR_Devtools_ColumnsAPIService.CompareItems({ Scripts: designs }).then(function (response) {
+                    VR_Devtools_ColumnsAPIService.CompareItems({ Tables: { Scripts: designs }, IncludeOverriddenValuesInComparison: $scope.scopeModel.includeOverriddenValuesInComparison }).then(function (response) {
                         if (response != undefined && response.length > 0) {
                             for (var i = 0; i < response.length; i++) {
                                 var output = response[i];

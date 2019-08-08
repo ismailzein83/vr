@@ -101,18 +101,28 @@ namespace Vanrise.DevTools.MainExtensions
 
                                             if (selectedRowValue is GeneratedScriptVariableData)
                                             {
-                                                break;
+                                                continue;
                                             }
-                                            else
+                                            if (selectedRowValue is GeneratedScriptOverriddenData)
                                             {
-                                                var rowFieldValue = row.FieldValues[column.ColumnName] != null ? row.FieldValues[column.ColumnName].ToString() : null;
-                                                var value = selectedRowValue != null ? selectedRowValue.ToString() : null;
-
-                                                if (rowFieldValue != value)
+                                                if (context.IncludeOverriddenValuesInComparison)
                                                 {
                                                     rowsHavingDifferencesCount++;
                                                     break;
                                                 }
+                                                else
+                                                {
+                                                    continue;
+                                                }
+                                            }
+
+                                            var rowFieldValue = row.FieldValues[column.ColumnName] != null ? row.FieldValues[column.ColumnName].ToString() : null;
+                                            var value = selectedRowValue != null ? selectedRowValue.ToString() : null;
+
+                                            if (rowFieldValue != value)
+                                            {
+                                                rowsHavingDifferencesCount++;
+                                                break;
                                             }
                                         }
                                     }
@@ -171,6 +181,11 @@ namespace Vanrise.DevTools.MainExtensions
                 GeneratedScriptVariableData variable = value as GeneratedScriptVariableData;
             if(variable !=null)
                 return "@" + Variables.Find(x => x.Id == variable.VariableId).Name + '_'+variable.VariableId.ToString("N");
+
+            var overriddenData = value as GeneratedScriptOverriddenData;
+            if (overriddenData != null)
+                value = overriddenData.Value;
+
             if (value is null)
                 return "NULL";
             if (value is int || value is float || value is decimal || value is long || value is double)

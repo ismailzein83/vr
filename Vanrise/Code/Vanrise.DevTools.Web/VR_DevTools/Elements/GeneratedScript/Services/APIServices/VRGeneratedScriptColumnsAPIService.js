@@ -17,8 +17,8 @@
         function Validate(generatedScriptItemTables) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Devtools_ModuleConfig.moduleName, controller, "Validate"), generatedScriptItemTables);
         }
-        function CompareItems(generatedScriptItemTables) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Devtools_ModuleConfig.moduleName, controller, "CompareItems"), generatedScriptItemTables);
+        function CompareItems(generatedScriptItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Devtools_ModuleConfig.moduleName, controller, "CompareItems"), generatedScriptItem);
         }
         function GenerateQueries(generatedScriptItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Devtools_ModuleConfig.moduleName, controller, "GenerateQueries"), generatedScriptItem);

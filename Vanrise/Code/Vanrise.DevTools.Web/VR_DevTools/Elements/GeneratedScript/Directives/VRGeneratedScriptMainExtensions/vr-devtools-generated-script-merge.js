@@ -49,7 +49,6 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
 
             var columnsChangedPromiseDeferred;
 
-            var gridLoadedPromiseDeferred=UtilsService.createPromiseDeferred();;
 
             var variablesDataGridApi;
             var variablesGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -77,42 +76,39 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                             }
                         });
                     }
-            
+
                 };
 
                 $scope.scopeModel.clearAllColumns = function () {
-                    ctrl.datasource.length=0;
+                    ctrl.datasource.length = 0;
                 };
                 $scope.scopeModel.onDataTabSelected = function () {
 
                     if (columnsDirectiveApi != undefined) {
-                        //if (gridLoadedPromiseDeferred != undefined) {
-                        //    gridLoadedPromiseDeferred.resolve();
-                        //}
-                        //else {
-                            $scope.scopeModel.isLoading = true;
+                  
+                        $scope.scopeModel.isLoading = true;
 
-                            setColumns();
-                            var columnNames = columnsDirectiveApi.getSelectedIds();
-                      
+                        setColumns();
+                        var columnNames = columnsDirectiveApi.getSelectedIds();
+
                         var gridQuery;
                         if (tableDataGridApi.getData().gridQuery) {
-                            gridQuery= tableDataGridApi.getData().gridQuery;
+                            gridQuery = tableDataGridApi.getData().gridQuery;
                             gridQuery.IdentifierColumns = identifierColumnNames;
                         }
 
-                            selectedTableDataGridApi.load({
-                                Query: gridQuery,
-                                ColumnNames: columnNames,
-                                context: getContext(),
-                                tableData: tableDataGridApi.getData().tableData,
-                                moveItems: false
+                        selectedTableDataGridApi.load({
+                            Query: gridQuery,
+                            ColumnNames: columnNames,
+                            context: getContext(),
+                            tableData: tableDataGridApi.getData().tableData,
+                            moveItems: false
 
-                            }).finally(function () {
+                        }).finally(function () {
 
-                                $scope.scopeModel.isLoading = false;
+                            $scope.scopeModel.isLoading = false;
 
-                                });
+                        });
                         //}
                     }
                 };
@@ -199,7 +195,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                                         tableData: tableDataGridApi.getData().tableData,
                                     }).then(function () {
                                         compareTables();
-                                        });
+                                    });
                                 });
                                 columnsChangedPromiseDeferred = undefined;
                                 gridLoadedPromiseDeferred = undefined;
@@ -243,7 +239,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                             $scope.scopeModel.setActionsEnablity = !enablity;
                         },
                         selectedTableDataContext: getContext(),
-                        nonIdentifierColumnNames:getNonIdentifierColumnNames
+                        nonIdentifierColumnNames: getNonIdentifierColumnNames
                     },
                     query: {
                         ConnectionId: entity.filter.ConnectionId,
@@ -278,7 +274,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
             }
 
             function getNonIdentifierColumnNames() {
-                var selectedColumns=[];
+                var selectedColumns = [];
                 for (var i = 0; i < ctrl.datasource.length; i++) {
                     var item = ctrl.datasource[i].data;
                     if (!item.IsIdentifier)
@@ -286,7 +282,13 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                 }
                 return selectedColumns;
             }
+            function setRowAttributes(row, isDifferent, isVariable, isOverridden) {
 
+                row.isDifferent = isDifferent;
+                row.isVariable = isVariable;
+                row.isOverridden = isOverridden;
+                row.includeOverriddenValues = $scope.scopeModel.includeOverriddenValues;
+            }
 
             function compareTables(rowIndex, dataItem, column) {
                 if (tableDataGridApi && selectedTableDataGridApi) {
@@ -313,13 +315,28 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                                 if (dataItemdentifierKey == identifierKey) {
                                     if (column != undefined) {
                                         if (row.FieldValues[column.name] != dataItem.DescriptionEntity[column.name].value) {
-                                            selectedTableData[rowIndex].DescriptionEntity[column.name].differentValue = true;
-                                            row.DescriptionEntity[column.name] = { differentValue: true };
+                                            if (dataItem.DescriptionEntity[column.name].$type != undefined && dataItem.DescriptionEntity[column.name].$type.includes("GeneratedScriptOverriddenData")) {
+                                                setRowAttributes(selectedTableData[rowIndex].DescriptionEntity[column.name], false, false, true);
+                                                row.DescriptionEntity[column.name] = { isDifferent: $scope.scopeModel.includeOverriddenValues };
+                                            }
+                                            else if (dataItem.DescriptionEntity[column.name].$type != undefined && dataItem.DescriptionEntity[column.name].$type.includes("GeneratedScriptVariableData")) {
+                                                setRowAttributes(selectedTableData[rowIndex].DescriptionEntity[column.name], false, true, false);
+                                                row.DescriptionEntity[column.name] = { isDifferent: false };
+                                            }
+                                            else {
+                                                if (selectedTableData[rowIndex].DescriptionEntity[column.name].value == "*") {
+                                                    setRowAttributes(selectedTableData[rowIndex].DescriptionEntity[column.name], false, false, false);
+                                                    row.DescriptionEntity[column.name] = { isDifferent: false };
+                                                }
+                                                else {
+                                                    setRowAttributes(selectedTableData[rowIndex].DescriptionEntity[column.name], true, false, false);
+                                                    row.DescriptionEntity[column.name] = { isDifferent: true };
+                                                }
+                                            }
                                         }
                                         else {
-                                            selectedTableData[rowIndex].DescriptionEntity[column.name].differentValue = false;
-                                            row.DescriptionEntity[column.name] = { differentValue: false };
-
+                                            setRowAttributes(selectedTableData[rowIndex].DescriptionEntity[column.name], false, false, false);
+                                            row.DescriptionEntity[column.name] = { isDifferent: false };
                                         }
                                     }
                                     else {
@@ -347,8 +364,8 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                                     for (var l = 0; l < identifierColumnNames.length; l++) {
                                         var identifierColumnName = identifierColumnNames[l].ColumnName;
                                         if (row.FieldValues[identifierColumnName] != undefined && row.FieldValues[identifierColumnName] != null && row.FieldValues[identifierColumnName] != "")
-                                        identifierKey += row.FieldValues[identifierColumnName] + "_";
-                                    } 
+                                            identifierKey += row.FieldValues[identifierColumnName] + "_";
+                                    }
                                     if (identifierKey == selectedIdentifierKey) {
                                         var columnNames = columnsDirectiveApi.getSelectedIds();
 
@@ -356,28 +373,37 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                                             var columnName = columnNames[l];
                                             if (selectedRow.DescriptionEntity[columnName] != undefined && selectedRow.DescriptionEntity[columnName].value != undefined && selectedRow.DescriptionEntity[columnName].value != "*") {
                                                 if (row.FieldValues[columnName] != selectedRow.DescriptionEntity[columnName].value) {
-                                                    selectedRow.DescriptionEntity[columnName].differentValue = true;
-                                                    row.DescriptionEntity[columnName] = { differentValue: true };
+                                                    if (selectedRow.DescriptionEntity[columnName].$type != undefined && selectedRow.DescriptionEntity[columnName].$type.includes("GeneratedScriptOverriddenData")) {
+                                                        setRowAttributes(selectedRow.DescriptionEntity[columnName], false, false, true);
+                                                        row.DescriptionEntity[columnName] = { isDifferent: $scope.scopeModel.includeOverriddenValues };
+                                                    }
+                                                    else if (selectedRow.DescriptionEntity[columnName].$type != undefined && selectedRow.DescriptionEntity[columnName].$type.includes("GeneratedScriptVariableData")) {
+                                                        setRowAttributes(selectedRow.DescriptionEntity[columnName], false, true, false);
+                                                        row.DescriptionEntity[columnName] = { isDifferent: false };
+                                                    }
+                                                    else {
+                                                        setRowAttributes(selectedRow.DescriptionEntity[columnName], true, false, false);
+                                                        row.DescriptionEntity[columnName] = { isDifferent: true };
+                                                    }
                                                 }
                                                 else {
-                                                    selectedRow.DescriptionEntity[columnName].differentValue = false;
-                                                    row.DescriptionEntity[columnName] = { differentValue: false };
+                                                    setRowAttributes(selectedRow.DescriptionEntity[columnName], false, false, false);
+                                                    row.DescriptionEntity[columnName] = { isDifferent: false };
                                                 }
                                             }
                                             else {
                                                 if (row.FieldValues[columnName] != undefined) {
-                                                    selectedRow.DescriptionEntity[columnName] = { value: "*", differentValue: true };
-                                                    row.DescriptionEntity[columnName] = { differentValue: true };
+                                                    selectedRow.DescriptionEntity[columnName] = { value: "*", isDifferent: false, isOverridden: true, isVariable: false };
+                                                    row.DescriptionEntity[columnName] = { isDifferent: false };
                                                 }
-                                                else
-                                                {
-                                                    selectedRow.DescriptionEntity[columnName] = { value: "*", differentValue: false };
-                                                    row.DescriptionEntity[columnName] = { differentValue: false };
+                                                else {
+                                                    selectedRow.DescriptionEntity[columnName] = { value: "*", isDifferent: false, isOverridden: false, isVariable: false };
+                                                    row.DescriptionEntity[columnName] = { isDifferent: false };
                                                 }
                                             }
-                                        } 
-                                      
-                                            selectedRow.rowExists = true;
+                                        }
+
+                                        selectedRow.rowExists = true;
                                         row.rowExists = true;
                                         break;
                                     }
@@ -426,7 +452,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                         promises.push(selectTableDataGridReadyPromiseDeferred.promise);
                         promises.push(variablesGridReadyPromiseDeferred.promise);
                         var selectTableDataGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                       
+
                         UtilsService.waitMultiplePromises(promises).then(function () {
                             VRUIUtilsService.callDirectiveLoad(selectedTableDataGridApi, selectTableDataPayload, selectTableDataGridLoadPromiseDeferred);
                         });
@@ -439,14 +465,14 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                         variablesGridReadyPromiseDeferred.promise.then(function () {
                             var variablesPayload = {
                                 connectionStringId: entity.filter.ConnectionId,
-                                variables: entity.isEditMode?entity.Settings.Variables:undefined
-                            }; 
+                                variables: entity.isEditMode ? entity.Settings.Variables : undefined
+                            };
 
                             VRUIUtilsService.callDirectiveLoad(variablesDataGridApi, variablesPayload, variablesGridLoadPromiseDeferred);
                         });
                         return variablesGridLoadPromiseDeferred.promise;
                     }
-                  
+
                     promises.push(loadVariablesGridDirective());
                     if (isEditMode) {
 
@@ -455,8 +481,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                         $scope.scopeModel.sqlJoinStatement = entity.Settings.LastJoinStatement;
                         var columnsNames = [];
 
-                        for (var k = 0; k < entity.Settings.Columns.length; k++)
-                        {
+                        for (var k = 0; k < entity.Settings.Columns.length; k++) {
                             var data = entity.Settings.Columns[k];
                             ctrl.datasource.push({ data: data });
                             columnsNames.push(data.ColumnName);
@@ -466,7 +491,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                             filter: entity.filter,
                             selectedIds: columnsNames
                         };
-                        
+
 
                         var selectTableDataPayload = {
                             selectedDataRows: entity.Settings.DataRows,
@@ -493,8 +518,8 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                 };
 
                 api.getData = function () {
-                
-                    var columns=[];
+
+                    var columns = [];
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             columns.push(ctrl.datasource[i].data);
@@ -504,8 +529,8 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                     var dataRows;
 
                     if (selectedTableDataGridApi != undefined) {
-                        dataRows = selectedTableDataGridApi.getData().tableRows; 
-                    } 
+                        dataRows = selectedTableDataGridApi.getData().tableRows;
+                    }
 
                     return {
                         $type: "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",

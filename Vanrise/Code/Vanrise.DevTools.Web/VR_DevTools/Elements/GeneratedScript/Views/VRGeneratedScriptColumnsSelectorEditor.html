@@ -1,11 +1,19 @@
 ﻿<div vr-modalcontent ng-controller="VR_Devtools_GeneratedScriptColumnsSelectorEditorController" size="medium">
     <vr-modalbody>
-        <vr-columns colnum="6">
-            <vr-devtools-generated-script-columns-selection-type-selector on-ready="scopeModel.onColumnsSelectionTypeDirectiveReady" onselectionchanged="scopeModel.onColumnsChanged"></vr-devtools-generated-script-columns-selection-type-selector>
-        </vr-columns>
-        <vr-columns colnum="6" ng-show="scopeModel.isColumnsSelection()">
-            <vr-devtools-columns-selector on-ready="scopeModel.onColumnsDirectiveReady" ismultipleselection vr-loader="scopeModel.isColumnsDirectiveloading" label="Columns" selectedvalues="scopeModel.selectedColumns"></vr-devtools-columns-selector>
-</vr-columns>
+        <vr-row>
+            <vr-devtools-generated-script-columns-selection-type-selector on-ready="scopeModel.onColumnsSelectionTypeDirectiveReady" normal-col-num="6" onselectionchanged="scopeModel.onColumnsChanged"></vr-devtools-generated-script-columns-selection-type-selector>
+            <span ng-show="scopeModel.isColumnsSelection()">
+                <vr-devtools-columns-selector on-ready="scopeModel.onColumnsDirectiveReady" normal-col-num="6" ismultipleselection vr-loader="scopeModel.isColumnsDirectiveloading" label="Columns" selectedvalues="scopeModel.selectedColumns"></vr-devtools-columns-selector>
+            </span>
+        </vr-row>
+        <vr-row>
+            <vr-columns colnum="3">
+                <vr-switch value="scopeModel.includeOverriddenValues" label="Include Overridden Values"></vr-switch>
+            </vr-columns>
+            <vr-columns colnum="3">
+                <vr-switch value="scopeModel.includeVariables" label="Include Variables"></vr-switch>
+            </vr-columns>
+        </vr-row>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
