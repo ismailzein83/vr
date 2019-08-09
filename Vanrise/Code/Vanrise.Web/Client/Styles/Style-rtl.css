@@ -464,6 +464,15 @@
    left:unset;
 }
 
+.rtl .modal .vr-modal-full-screen-row {
+    margin: 0px -15px 5px 0px;
+}
+
+.rtl .vr-modal-full-screen-row .vr-modal-datagrid-row {    
+    margin-left: unset;
+    margin-right: 15px;
+}
+
 .rtl .vr-row-action-container {
     right: unset;
     left: 10px;

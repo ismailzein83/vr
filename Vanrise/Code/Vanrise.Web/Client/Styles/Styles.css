@@ -2808,6 +2808,25 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     width: calc(100% - 215px);
 }
 
+.modal .vr-datagrid-body.row-full-screen {
+    position:static;
+}
+
+.modal .vr-modal-full-screen-row {
+    margin: 0px 0px 5px -15px;
+}
+
+.modal .expanded-row-content-full {
+    margin: 5px;
+}
+
+.vr-modal-full-screen-row .vr-modal-datagrid-row {
+    width: calc(100% - 20px) !important;
+    border: 1px solid #ddd;
+    margin-left: 15px;
+    padding: 5px;
+}
+
 .wrapper-normal .vr-datagrid-body.row-full-screen {
     left: 30px;
     width: calc(100% - 30px);
@@ -2855,7 +2874,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 .vr-row-action-container {
     position: absolute;
     right: 5px;
-    width: 50%;
+    /*width: 50%;*/
     display: flex;
     flex-direction: row-reverse;
 }
@@ -5970,3 +5989,7 @@ span.option-marketprice {
     display: inline;
     white-space: nowrap;
 }
+
+/*.unset-scroll-container{
+    overflow:unset !important;
+}*/

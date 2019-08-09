@@ -1,187 +1,269 @@
-﻿<div class="vr-datagrid" ng-class="ctrl.isMobile ? ctrl.mobileGridView ? 'mobile-grid-view' : 'mobile-list-view' : '' " vr-loader="ctrl.isLoadingMoreData" level="{{ctrl.ngClassLevel}}" alternative-color="{{ctrl.layoutOption.alternativeColor}}" vertical-line="{{ctrl.layoutOption.verticalLine}}" horizontal-line="{{ctrl.layoutOption.horizontalLine}}">
-    <vr-choices ng-show="ctrl.updateItems.length > 0" onselectionchanged="ctrl.viewSelectionChanged()" selectedindex="ctrl.selectedView">
-        <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
-        <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
-    </vr-choices>
-    <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" style="display: flex" ng-class="ctrl.ngClassLevel">
-        <div ng-if="!ctrl.isMobile" style="display:flex;width: 100%;">
-            <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-flex'}">
-            </div>
-            <div ng-init="ctrl.expandMenu = false" ng-mouseleave="ctrl.expandMenu = false" ng-mouseenter="ctrl.expandMenu = true" ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="{withChoices : ctrl.updateItems.length > 0 , toggledd : ctrl.showgmenu==true }" ng-click="ctrl.toggelGridMenu($event)">
-                <span class="vr-grid-menu-h-circle hand-cursor {{ctrl.expandMenu == false?'collapsed':''}}" ng-class="ctrl.ngClassLevel"></span>
-                <span class="glyphicon hand-cursor {{ctrl.expandMenu == false?'collapsed-menu-option':''}}" ng-class="ctrl.expandMenu?'glyphicon-cog':'glyphicon-menu-left'">
-                    <!--<img src="Client/Images/setting-table.png" ng-show="ctrl.expandMenu" />-->
-                </span>
-            </div>
-            <ul class="vr-grid-menu out-div" ng-show="ctrl.showgmenu==true && ctrl.hideGridMenu == false " click-outside="ctrl.toggelGridMenu($event, false)" outside-if-not="out-div">
-                <li role="presentation" class="hand-cursor" vr-disabled="ctrl.isExporting" ng-if="ctrl.showExportAction() && ctrl.exportIsClickable" ng-click="ctrl.onExportClicked()">
-                    <span style="padding-left:4px;color:black;text-align:center" aria-hidden="true">Export</span>
-                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="ctrl.isExporting" />
-                </li>
-                <li role="presentation" ng-repeat="menuAction in ctrl.getGridMenuActions()" class="hand-cursor" ng-click="ctrl.executeGridAction(menuAction)">
-                    <span style="padding-left:4px;color:black;text-align:center" aria-hidden="true">{{menuAction.name}}</span>
-                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="menuAction.isExecuting" />
-                </li>
-                <li role="separator" class="divider"></li>
-                <li style="color:#000" role="presentation" ng-repeat="colDef in ctrl.columnDefs" ng-if="!colDef.nonHiddable">
-                    <a ng-click="ctrl.switchColumnVisibility(colDef)">
-                        <span style="float: right; color: #000;" class="vr-gridmenu-checkitem" ng-show="!colDef.isHidden">✔</span>
-                        <span style="color:black;text-align:center" aria-hidden="true">{{colDef.name}}</span>
-                    </a>
-                </li>
-            </ul>
-            <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="ctrl.expandableColumnWidth != undefined">
+﻿    <div class="vr-datagrid" ng-class="ctrl.isMobile ? ctrl.mobileGridView ? 'mobile-grid-view' : 'mobile-list-view' : '' " vr-loader="ctrl.isLoadingMoreData" level="{{ctrl.ngClassLevel}}" alternative-color="{{ctrl.layoutOption.alternativeColor}}" vertical-line="{{ctrl.layoutOption.verticalLine}}" horizontal-line="{{ctrl.layoutOption.horizontalLine}}">
+        <vr-choices ng-show="ctrl.updateItems.length > 0" onselectionchanged="ctrl.viewSelectionChanged()" selectedindex="ctrl.selectedView">
+            <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
+            <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
+        </vr-choices>
+        <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" style="display: flex" ng-class="ctrl.ngClassLevel">
+            <div ng-if="!ctrl.isMobile" style="display:flex;width: 100%;">
+                <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-flex'}">
+                </div>
+                <div ng-init="ctrl.expandMenu = false" ng-mouseleave="ctrl.expandMenu = false" ng-mouseenter="ctrl.expandMenu = true" ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="{withChoices : ctrl.updateItems.length > 0 , toggledd : ctrl.showgmenu==true }" ng-click="ctrl.toggelGridMenu($event)">
+                    <span class="vr-grid-menu-h-circle hand-cursor {{ctrl.expandMenu == false?'collapsed':''}}" ng-class="ctrl.ngClassLevel"></span>
+                    <span class="glyphicon hand-cursor {{ctrl.expandMenu == false?'collapsed-menu-option':''}}" ng-class="ctrl.expandMenu?'glyphicon-cog':'glyphicon-menu-left'">
+                        <!--<img src="Client/Images/setting-table.png" ng-show="ctrl.expandMenu" />-->
+                    </span>
+                </div>
+                <ul class="vr-grid-menu out-div" ng-show="ctrl.showgmenu==true && ctrl.hideGridMenu == false " click-outside="ctrl.toggelGridMenu($event, false)" outside-if-not="out-div">
+                    <li role="presentation" class="hand-cursor" vr-disabled="ctrl.isExporting" ng-if="ctrl.showExportAction() && ctrl.exportIsClickable" ng-click="ctrl.onExportClicked()">
+                        <span style="padding-left:4px;color:black;text-align:center" aria-hidden="true">Export</span>
+                        <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="ctrl.isExporting" />
+                    </li>
+                    <li role="presentation" ng-repeat="menuAction in ctrl.getGridMenuActions()" class="hand-cursor" ng-click="ctrl.executeGridAction(menuAction)">
+                        <span style="padding-left:4px;color:black;text-align:center" aria-hidden="true">{{menuAction.name}}</span>
+                        <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="menuAction.isExecuting" />
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li style="color:#000" role="presentation" ng-repeat="colDef in ctrl.columnDefs" ng-if="!colDef.nonHiddable">
+                        <a ng-click="ctrl.switchColumnVisibility(colDef)">
+                            <span style="float: right; color: #000;" class="vr-gridmenu-checkitem" ng-show="!colDef.isHidden">✔</span>
+                            <span style="color:black;text-align:center" aria-hidden="true">{{colDef.name}}</span>
+                        </a>
+                    </li>
+                </ul>
+                <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="ctrl.expandableColumnWidth != undefined">
 
-            </div>
-            <div ng-style="{'display':'inline-flex', 'width': ctrl.dataColumnsSectionWidth}" ng-class="ctrl.isDraggableColumns?'dragcol':''" ng-sortable="ctrl.headerSortableListener">
-                <div ng-repeat="colDef in ctrl.columnDefs" ng-hide="colDef.isHidden" ng-style="{'width': colDef.width, 'display':'inline-block'}">
-                    <vr-datagridcell htmltemplate='colDef.headerCellTemplate' ng-hide="colDef.invisibleHeader"></vr-datagridcell>
+                </div>
+                <div ng-style="{'display':'inline-flex', 'width': ctrl.dataColumnsSectionWidth}" ng-class="ctrl.isDraggableColumns?'dragcol':''" ng-sortable="ctrl.headerSortableListener">
+                    <div ng-repeat="colDef in ctrl.columnDefs" ng-hide="colDef.isHidden" ng-style="{'width': colDef.width, 'display':'inline-block'}">
+                        <vr-datagridcell htmltemplate='colDef.headerCellTemplate' ng-hide="colDef.invisibleHeader"></vr-datagridcell>
+                    </div>
+                </div>
+                <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-flex'}">
+                </div>
+                <div ng-if="ctrl.showDeleteRowSection" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-flex'}">
                 </div>
             </div>
-            <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-flex'}">
-            </div>
-            <div ng-if="ctrl.showDeleteRowSection" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-flex'}">
+            <div ng-if="ctrl.isMobile" style="display:flex;width: 100%;">
+                <div ng-style="{'display':'flex', 'width': '100%','flex-wrap':'wrap'}" ng-show="ctrl.mobileGridView">
+                    <div bs-tooltip data-title="{{colDef.name}}" ng-repeat="colDef in ctrl.columnDefs" ng-hide="colDef.isHidden" ng-style="{'width': colDef.mobileWidth, 'display':'inline-flex','flex-grow':'1'}">
+                        <vr-datagridcell htmltemplate='colDef.headerCellTemplate' ng-hide="colDef.invisibleHeader"></vr-datagridcell>
+                    </div>
+                </div>
+
+                <div ng-if="ctrl.mobileGridView" ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.ngClassLevel">
+                    <span style="position: absolute;right: 55px;font-size: 19px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.redrawGridlayout(false)">
+                        <span class="glyphicon glyphicon-th-list" ng-show="ctrl.mobileSwitchBtn"></span>
+                        <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" ng-show="!ctrl.mobileSwitchBtn" style="width:14px;margin:0px 3px;position: relative;top: -2px;" />
+                    </span>
+                    <span style="position: absolute;right: 30px;top:3px;font-size: 17px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.openGridSortingMenuOptions($event)">
+                        <span class="glyphicon glyphicon-sort"></span>
+                    </span>
+                    <span ng-click="ctrl.openGridMenu($event)" style="position: absolute;right: 4px">
+                        <span class="glyphicon glyphicon-align-justify hand-cursor" style="font-size: 20px;"></span>
+                    </span>
+                </div>
+
+                <div ng-if="!ctrl.mobileGridView" ng-show="!ctrl.hideGridMenu" style="display:inline-flex;margin-left: auto;font-size:22px;margin-top:-5px">
+                    <span style="position: absolute;right: 55px;top:2px;font-size: 17px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.redrawGridlayout(true)">
+                        <span class="glyphicon  glyphicon-th" ng-show="ctrl.mobileSwitchBtn"></span>
+                        <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" ng-show="!ctrl.mobileSwitchBtn" style="width:14px;margin:0px 3px" />
+                    </span>
+                    <span style="position: absolute;right: 30px;top:3px;font-size: 17px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.openGridSortingMenuOptions($event)">
+                        <span class="glyphicon glyphicon-sort"></span>
+                    </span>
+                    <span ng-click="ctrl.openGridMenu($event)" style="position: absolute;right: 4px">
+                        <span class="glyphicon glyphicon-align-justify hand-cursor" style="font-size: 20px;"></span>
+                    </span>
+                </div>
             </div>
         </div>
-        <div ng-if="ctrl.isMobile" style="display:flex;width: 100%;">
-            <div ng-style="{'display':'flex', 'width': '100%','flex-wrap':'wrap'}" ng-show="ctrl.mobileGridView">
-                <div bs-tooltip data-title="{{colDef.name}}" ng-repeat="colDef in ctrl.columnDefs" ng-hide="colDef.isHidden" ng-style="{'width': colDef.mobileWidth, 'display':'inline-flex','flex-grow':'1'}">
-                    <vr-datagridcell htmltemplate='colDef.headerCellTemplate' ng-hide="colDef.invisibleHeader"></vr-datagridcell>
+
+        <div id="gridBodyContainer" ng-style="ctrl.gridStyle" ng-show="ctrl.isMainItemsShown">
+            <div id="gridBody">
+                <div ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body" style="white-space: nowrap; background-color: Transparent; font-weight: bolder; border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; " ng-if="ctrl.summaryRowHtml != undefined">
+                    <div ng-if="!ctrl.isMobile" style="width:100%">
+                        <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}">
+                        </div>
+                        <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="ctrl.expandableColumnWidth != undefined">
+                        </div>
+                        <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}">
+                            <div vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
+                        </div>
+                    </div>
+                    <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row summary-container">
+                        <div class="grid-base-row" vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
+                    </div>
                 </div>
-            </div>
+                <div ng-sortable="ctrl.itemsSortable" ng-class="ctrl.dragdropsetting && ctrl.datasource.length==0  ?'empty-vrdatagrid-drop' : '' ">
+                    <div id="rowSection1" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body {{dataItem.fullScreenMode ? 'row-full-screen':''}}" ng-repeat="dataItem in ctrl.datasource" vr-loader="dataItem.isLoadingRowFullScreen">
+                    </div>
+                </div>
 
-            <div ng-if="ctrl.mobileGridView" ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.ngClassLevel">
-                <span style="position: absolute;right: 55px;font-size: 19px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.redrawGridlayout(false)">
-                    <span class="glyphicon glyphicon-th-list" ng-show="ctrl.mobileSwitchBtn"></span>
-                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" ng-show="!ctrl.mobileSwitchBtn" style="width:14px;margin:0px 3px;position: relative;top: -2px;" />
-                </span>
-                <span style="position: absolute;right: 30px;top:3px;font-size: 17px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.openGridSortingMenuOptions($event)">
-                    <span class="glyphicon glyphicon-sort"></span>
-                </span>
-                <span ng-click="ctrl.openGridMenu($event)" style="position: absolute;right: 4px">
-                    <span class="glyphicon glyphicon-align-justify hand-cursor" style="font-size: 20px;"></span>
-                </span>
             </div>
+        </div>
+        <div id="gridBodyContainer_2" ng-style="ctrl.gridStyle" ng-show="!ctrl.isMainItemsShown">
+            <div id="gridBody_2">
+                <div id="rowSection2" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body {{dataItem.fullScreenMode ? 'row-full-screen':''}}" ng-repeat="dataItem in ctrl.updateItems" vr-loader="dataItem.isLoadingRowFullScreen">
 
-            <div ng-if="!ctrl.mobileGridView" ng-show="!ctrl.hideGridMenu" style="display:inline-flex;margin-left: auto;font-size:22px;margin-top:-5px">
-                <span style="position: absolute;right: 55px;top:2px;font-size: 17px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.redrawGridlayout(true)">
-                    <span class="glyphicon  glyphicon-th" ng-show="ctrl.mobileSwitchBtn"></span>
-                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" ng-show="!ctrl.mobileSwitchBtn" style="width:14px;margin:0px 3px" />
-                </span>
-                <span style="position: absolute;right: 30px;top:3px;font-size: 17px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.openGridSortingMenuOptions($event)">
-                    <span class="glyphicon glyphicon-sort"></span>
-                </span>
-                <span ng-click="ctrl.openGridMenu($event)" style="position: absolute;right: 4px">
-                    <span class="glyphicon glyphicon-align-justify hand-cursor" style="font-size: 20px;"></span>
-                </span>
+                </div>
             </div>
         </div>
     </div>
-
-    <div id="gridBodyContainer" ng-style="ctrl.gridStyle" ng-show="ctrl.isMainItemsShown">
-        <div id="gridBody">
-            <div ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body" style="white-space: nowrap; background-color: Transparent; font-weight: bolder; border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; " ng-if="ctrl.summaryRowHtml != undefined">
-                <div ng-if="!ctrl.isMobile" style="width:100%">
-                    <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}">
-                    </div>
-                    <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="ctrl.expandableColumnWidth != undefined">
-                    </div>
-                    <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}">
-                        <div vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
-                    </div>
-                </div>
-                <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row summary-container">
-                    <div class="grid-base-row" vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
-                </div>
-            </div>
-            <div ng-sortable="ctrl.itemsSortable" ng-class="ctrl.dragdropsetting && ctrl.datasource.length==0  ?'empty-vrdatagrid-drop' : '' ">
-                <div id="rowSection1" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body {{dataItem.fullScreenMode ? 'row-full-screen':''}}" ng-repeat="dataItem in ctrl.datasource" vr-loader="ctrl.isLoadingRowFullScreen">
-                </div>
-            </div>
-
-        </div>
+    <div ng-show="ctrl.showPager && ctrl.pagerSettings.totalDataCount > 5" ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
+        <vr-pagination pagersettings="ctrl.pagerSettings" on-ready="ctrl.pagerSettingOnReady"></vr-pagination>
     </div>
-    <div id="gridBodyContainer_2" ng-style="ctrl.gridStyle" ng-show="!ctrl.isMainItemsShown">
-        <div id="gridBody_2">
-            <div id="rowSection2" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body {{dataItem.fullScreenMode ? 'row-full-screen':''}}" ng-repeat="dataItem in ctrl.updateItems" vr-loader="ctrl.isLoadingRowFullScreen">
-
-            </div>
-        </div>
+    <div ng-show="!ctrl.hidePagingInfo && !ctrl.showPager &&  ctrl.datasource.length > 0 && ctrl.pagerSettings.totalDataCount > 0 " ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
+        <div class="vr-scroll-pager-info"> Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
     </div>
-</div>
-<div ng-show="ctrl.showPager && ctrl.pagerSettings.totalDataCount > 5" ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
-    <vr-pagination pagersettings="ctrl.pagerSettings" on-ready="ctrl.pagerSettingOnReady"></vr-pagination>
-</div>
-<div ng-show="!ctrl.hidePagingInfo && !ctrl.showPager &&  ctrl.datasource.length > 0 && ctrl.pagerSettings.totalDataCount > 0 " ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
-    <div class="vr-scroll-pager-info"> Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
-</div>
-<div id="rowTemplate">
-    <div class="row-header-container" ng-show="dataItem.fullScreenMode">
-        <div ng-show="dataItem.fullScreenMode" class="vr-datarow-breadcrumb">
-            <div class="btn-group btn-breadcrumb">
-                <span class="btn btn-default start-arrow"  ><i class="glyphicon"></i></span>
-                <span class="btn btn-default level-{{ 5 + (($index + 1) - $parent.ctrl.parentNames.length )}}" index="{{$index}}" len="{{$parent.ctrl.parentNames.length}}" style=" cursor: default; font-size:13px" title="{{p.objectTypeName}}" ng-repeat="p in $parent.ctrl.parentNames">
-                    <span>{{p.objectTypeName}}</span>
-                </span>
-                <span class="btn btn-default" style=" cursor: default; font-size:13px;display:none"><i class="glyphicon"></i></span>
+    <div id="rowTemplate">
+        <div class="row-header-container" ng-show="dataItem.fullScreenMode">
+            <div ng-show="dataItem.fullScreenMode" class="vr-datarow-breadcrumb">
+                <div class="btn-group btn-breadcrumb">
+                    <span class="btn btn-default start-arrow"  ><i class="glyphicon"></i></span>
+                    <span class="btn btn-default level-{{ 5 + (($index + 1) - $parent.ctrl.parentNames.length )}}" index="{{$index}}" len="{{$parent.ctrl.parentNames.length}}" style=" cursor: default; font-size:13px" title="{{p.objectTypeName}}" ng-repeat="p in $parent.ctrl.parentNames">
+                        <span>{{p.objectTypeName}}</span>
+                    </span>
+                    <span class="btn btn-default" style=" cursor: default; font-size:13px;display:none"><i class="glyphicon"></i></span>
+                </div>
             </div>
-        </div>
-        <div class="vr-row-action-container">
-            <div vr-desktop-element class="action-full-screen-icon  inline-btn" ng-show="dataItem.fullScreenMode">
-                <button class="btn btn-default btncustom " ng-click="$parent.ctrl.switchFullScreenModeOff(dataItem,$event)">{{::$parent.ctrl.closeAtributesText}}</button>
-            </div>
-            <grid-row-action ng-if="dataItem.fullScreenMode && $parent.ctrl.isActionMenuVisible(dataItem)" ng-show="$parent.ctrl.hasDefinedMenuAction(dataItem)">
-                <div class="action-full-screen-icon inline-btn " ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)">
-                    <button ng-disabled="action.isSubmitting" ng-if="!action.childsactions" type="button" class="btn btn-default btncustom" ng-hide="action.disable" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)">
-                        {{action.name}}
-                        <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;margin-left:3px" ng-show="action.isSubmitting" />
-                    </button>
-                    <div ng-if="action.childsactions.length > 0" ng-show="$parent.ctrl.hasVisibleMenuAction(action.childsactions)" style="position:relative">
-                        <button type="button" class="btn btn-default btncustom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="vr-row-action-container">
+                <div vr-desktop-element class="action-full-screen-icon  inline-btn" ng-show="dataItem.fullScreenMode">
+                    <button class="btn btn-default btncustom " ng-click="$parent.ctrl.switchFullScreenModeOff(dataItem,$event)">{{::$parent.ctrl.closeAtributesText}}</button>
+                </div>
+                <grid-row-action ng-if="dataItem.fullScreenMode && $parent.ctrl.isActionMenuVisible(dataItem)" ng-show="$parent.ctrl.hasDefinedMenuAction(dataItem)">
+                    <div class="action-full-screen-icon inline-btn " ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)">
+                        <button ng-disabled="action.isSubmitting" ng-if="!action.childsactions" type="button" class="btn btn-default btncustom" ng-hide="action.disable" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)">
                             {{action.name}}
-                            <span class="caret"></span>
+                            <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;margin-left:3px" ng-show="action.isSubmitting" />
                         </button>
-                        <ul class="dropdown-menu expanded-row-action" style="min-width: 140px;">
-                            <li role="presentation">
-                                <div class="mark-select action-item" ng-repeat="childAction in $parent.ctrl.getGroupMenuActionItem(dataItem,action)">
-                                    <div ng-hide="childAction.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(childAction, dataItem)">
-                                        <span style="font-size:11px">{{childAction.name}}</span>
+                        <div ng-if="action.childsactions.length > 0" ng-show="$parent.ctrl.hasVisibleMenuAction(action.childsactions)" style="position:relative">
+                            <button type="button" class="btn btn-default btncustom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{action.name}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu expanded-row-action" style="min-width: 140px;">
+                                <li role="presentation">
+                                    <div class="mark-select action-item" ng-repeat="childAction in $parent.ctrl.getGroupMenuActionItem(dataItem,action)">
+                                        <div ng-hide="childAction.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(childAction, dataItem)">
+                                            <span style="font-size:11px">{{childAction.name}}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </grid-row-action>
+            </div>
+        </div>
+
+        <div class="row-main-content {{$parent.ctrl.getRowCSSClass(dataItem)}}" style="white-space:nowrap" ng-class="{'expanded':dataItem.fullScreenMode,'vr-datagrid-body-odd':dataItem.rowIndex % 2 == 0}" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5 !important' : '', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0', 'display': 'flex'}">
+            <div ng-if="!ctrl.isMobile" style="display:flex;width: 100%;">
+                <div ng-if="ctrl.showDraggableRowSection && !ctrl.readOnly" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}" style="height:24px">
+                    <i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 6px); left: 3px"></i>
+                </div>
+                <div style="margin: -2px; height: 24px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="$parent.ctrl.expandableColumnWidth != undefined " ng-show="!dataItem.fullScreenMode">
+                    <div ng-show="ctrl.showExpandCollapseIcon(dataItem) && !dataItem.fullScreenMode" style="height:24px">
+                        <span ng-show="!$parent.ctrl.expandAsfullScreen">
+                            <span class="glyphicon glyphicon-menu-right hand-cursor grid-expand-collapse-icon" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
+                            <span class="glyphicon glyphicon-menu-down hand-cursor  grid-expand-collapse-icon" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
+                        </span>
+                        <span class="glyphicon glyphicon glyphicon-fullscreen  hand-cursor  grid-expand-collapse-icon vr-fullscreen" ng-click="$parent.ctrl.switchFullScreenModeOn(dataItem,$event)" ng-show="$parent.ctrl.expandAsfullScreen"></span>
+                    </div>
+                </div>
+
+                <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event,dataItem);showMenu=$parent.ctrl.isActionMenuVisible(dataItem); " ng-mouseleave="showMenu = false">
+                    <div ng-show="!dataItem.fullScreenMode" ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
+                    <div ng-if="$parent.ctrl.expandAsfullScreen" class="row" ng-show="dataItem.fullScreenMode" style="width: calc(100% + 25px);">
+                        <div ng-if="!$parent.ctrl.viewDirective" class="col-lg-12 vr-detail-summary">
+                            <div class="col-lg-4 col-md-6 parent-col-container row-col-item" ng-repeat="colDef in ctrl.columnDefs">
+                                <div class="col-lg-6 col-md-6">
+                                    <label class="control-label vr-control-label grid-cell-label">{{colDef.name}}: </label>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="vr-datagrid-celltext ">
+                                        <div class="grid-cell-value">
+                                            <span ng-style="::$parent.ctrl.cellLayoutStyle" ng-bind="ctrl.getCellValue(dataItem, colDef) {{colDef.filter}}" ng-class="::dataItem.columnsValues['col_' + colDef.columnId].cellClass" style="white-space: nowrap;">
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </grid-row-action>
-        </div>
-    </div>
-
-    <div class="row-main-content {{$parent.ctrl.getRowCSSClass(dataItem)}}" style="white-space:nowrap" ng-class="{'expanded':dataItem.fullScreenMode,'vr-datagrid-body-odd':dataItem.rowIndex % 2 == 0}" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5 !important' : '', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0', 'display': 'flex'}">
-        <div ng-if="!ctrl.isMobile" style="display:flex;width: 100%;">
-            <div ng-if="ctrl.showDraggableRowSection && !ctrl.readOnly" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}" style="height:24px">
-                <i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 6px); left: 3px"></i>
-            </div>
-            <div style="margin: -2px; height: 24px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="$parent.ctrl.expandableColumnWidth != undefined " ng-show="!dataItem.fullScreenMode">
-                <div ng-show="ctrl.showExpandCollapseIcon(dataItem) && !dataItem.fullScreenMode" style="height:24px">
-                    <span ng-show="!$parent.ctrl.expandAsfullScreen">
-                        <span class="glyphicon glyphicon-menu-right hand-cursor grid-expand-collapse-icon" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
-                        <span class="glyphicon glyphicon-menu-down hand-cursor  grid-expand-collapse-icon" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
-                    </span>
-                    <span class="glyphicon glyphicon glyphicon-fullscreen  hand-cursor  grid-expand-collapse-icon vr-fullscreen" ng-click="$parent.ctrl.switchFullScreenModeOn(dataItem,$event)" ng-show="$parent.ctrl.expandAsfullScreen"></span>
-                </div>
-            </div>
-
-            <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event,dataItem);showMenu=$parent.ctrl.isActionMenuVisible(dataItem); " ng-mouseleave="showMenu = false">
-                <div ng-show="!dataItem.fullScreenMode" ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
-                <div ng-if="$parent.ctrl.expandAsfullScreen" class="row" ng-show="dataItem.fullScreenMode" style="width: calc(100% + 25px);">
-                    <div ng-if="!$parent.ctrl.viewDirective" class="col-lg-12 vr-detail-summary">
-                        <div class="col-lg-4 col-md-6 parent-col-container row-col-item" ng-repeat="colDef in ctrl.columnDefs">
-                            <div class="col-lg-6 col-md-6">
-                                <label class="control-label vr-control-label grid-cell-label">{{colDef.name}}: </label>
                             </div>
-                            <div class="col-lg-6 col-md-6">
+                        </div>
+                        <div class="vr-detail-summary-custom" style="padding:5px" ng-if="$parent.ctrl.viewDirective && dataItem.isRowExpanded" vr-loader="dataItem.isLoadingRowView">
+                            <vr-directivewrapper directive="$parent.ctrl.viewDirective" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper>
+                        </div>
+                    </div>
+                    <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="showMenu == true && !dataItem.fullScreenMode"
+                        ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
+                        <li role="presentation" ng-if="showMenu==true">
+                            <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select action-item">
+                                <div ng-if="!action.childsactions" ng-hide="action.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)">
+                                    <span style="font-size:11px">{{action.name}}</span>
+                                </div>
+                                <div ng-if="action.childsactions.length > 0" ng-show="$parent.ctrl.hasVisibleMenuAction(action.childsactions)" ng-class="$parent.ctrl.toLeftDirection ? 'left' : ''" class=" hand-cursor grouped" style="position:relative" ng-mouseleave="action.showChilsMenu = false" ng-mouseenter="$parent.ctrl.onGroupMenuActionHover($event,action);">
+                                    <span style="font-size:11px;" class="group-name">
+                                        {{action.name}}
+                                        <ul class="dropdown-menu" ng-style="{'top': $parent.ctrl.toTopDirection ? - ($parent.ctrl.visibleActionCount * 17) : 0 , 'left': $parent.ctrl.toLeftDirection ? '-160px' : '100%' }" ng-class="action.showChilsMenu ? 'show' : ''" style="position: absolute;">
+                                            <li role="presentation">
+                                                <div class="mark-select action-item" ng-repeat="childAction in $parent.ctrl.getGroupMenuActionItem(dataItem,action)">
+                                                    <div ng-hide="childAction.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(childAction, dataItem)">
+                                                        <span style="font-size:11px">{{childAction.name}}</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                    <span class="chevron-icon glyphicon " ng-class="$parent.ctrl.toLeftDirection ? 'glyphicon-chevron-left':'glyphicon-chevron-right'" style="right: 0px;position: absolute;top: 5px;font-size: 8px;"></span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-block', 'position':'relative'}">
+                    <span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary" style="top: 50%; position: absolute; transform: translate(0%,-50%);">  {{ dataItem.actionType}}</span>
+                </div>
+                <div ng-if="ctrl.showDeleteRowSection &&  !ctrl.readOnly" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-block', 'position':'relative'}">
+                    <span class="hand-cursor glyphicon glyphicon-remove vr-remove-row" ng-click="ctrl.deleteRowClicked(dataItem)" title="{{ctrl.getRowDeleteIconTitle()}}"></span>
+                </div>
+            </div>
+            <div ng-if="ctrl.isMobile" style="width:100%;position:relative" class="mobile-grid-row">
+                <div ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" ng-swipe-right="$parent.ctrl.expandRow(dataItem,$event)" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;">
+                </div>
+                <div ng-show="dataItem.showRow == false" style="width:100%;position:absolute;height: 100%;background-color: #fff; z-index: 1;top:0px">
+                    <img src="/Client/images/loadingbar.gif" style="position: absolute;left: calc(50% - 80px);top: 33%;height:6px" />
+                </div>
+            </div>
+
+        </div>
+
+        <div id="divExpandableRowContent_{{$index}}" class="expandable-row-content {{ ::ctrl.isMobile ?'am-fade-and-slide-left' : ''}}" ng-class="dataItem.isRowExpanded ? 'row-content-expanded':''" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
+            <div ng-if="!ctrl.isMobile" style="width: calc(100% - 9px);position:relative;">
+                <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
+
+                <div ng-class="dataItem.fullScreenMode?'expanded-row-content-full':''" vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': $parent.ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #D0D0D0'}">
+
+                </div>
+            </div>
+            <div ng-if="ctrl.isMobile" style="width:100%" ng-swipe-left="$parent.ctrl.collapseRow(dataItem,$event)">
+                <div style="position:relative">
+                    <button ng-click="$parent.ctrl.collapseRow(dataItem,$event)" style="font-size: 18px;" ng-show="dataItem.isRowExpanded && $parent.ctrl.rowClickDetails ==  false">
+                        <span class="glyphicon glyphicon-chevron-left hand-cursor"></span>
+                        Back
+                    </button>
+                    <button ng-click="$parent.ctrl.openRowContextMenuPopup($event,dataItem)" style="position:absolute;right:0px;font-size: 18px;" ng-if="$parent.ctrl.isActionMenuVisible(dataItem)">
+                        <span class="glyphicon glyphicon-align-justify hand-cursor"></span>
+                        Actions
+                    </button>
+                </div>
+                <div class="grid-base-row row-full-view" style="display: flex;" ng-style="::$parent.ctrl.hasDefinedMenuAction(dataItem)?{'padding-top': '32px'}:''">
+                    <div ng-repeat="colDef in ctrl.columnDefs">
+                        <div ng-style="{ 'width': colDef.mobileWidth, 'display':'inline-flex','vertical-align':'top','border-left': 'none'}" ng-class=" ctrl.getCellContainerClass(dataItem, colDef,true)" class="vr-datagrid-cell-container ng-scope">
+                            <div class="mobile-label-container">
+                                <label class="mobile-label">{{colDef.name}}: </label>
+                            </div>
+                            <div>
                                 <div class="vr-datagrid-celltext ">
-                                    <div class="grid-cell-value">
+                                    <div style="text-align: left;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
                                         <span ng-style="::$parent.ctrl.cellLayoutStyle" ng-bind="ctrl.getCellValue(dataItem, colDef) {{colDef.filter}}" ng-class="::dataItem.columnsValues['col_' + colDef.columnId].cellClass" style="white-space: nowrap;">
                                         </span>
                                     </div>
@@ -189,90 +271,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="vr-detail-summary-custom" style="padding:5px" ng-if="$parent.ctrl.viewDirective && dataItem.isRowExpanded" vr-loader="dataItem.isLoadingRowView">
-                        <vr-directivewrapper directive="$parent.ctrl.viewDirective" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper>
-                    </div>
                 </div>
-                <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="showMenu == true"
-                    ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
-                    <li role="presentation" ng-if="showMenu==true">
-                        <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select action-item">
-                            <div ng-if="!action.childsactions" ng-hide="action.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)">
-                                <span style="font-size:11px">{{action.name}}</span>
-                            </div>
-                            <div ng-if="action.childsactions.length > 0" ng-show="$parent.ctrl.hasVisibleMenuAction(action.childsactions)" ng-class="$parent.ctrl.toLeftDirection ? 'left' : ''" class=" hand-cursor grouped" style="position:relative" ng-mouseleave="action.showChilsMenu = false" ng-mouseenter="$parent.ctrl.onGroupMenuActionHover($event,action);">
-                                <span style="font-size:11px;" class="group-name">
-                                    {{action.name}}
-                                    <ul class="dropdown-menu" ng-style="{'top': $parent.ctrl.toTopDirection ? - ($parent.ctrl.visibleActionCount * 17) : 0 , 'left': $parent.ctrl.toLeftDirection ? '-160px' : '100%' }" ng-class="action.showChilsMenu ? 'show' : ''" style="position: absolute;">
-                                        <li role="presentation">
-                                            <div class="mark-select action-item" ng-repeat="childAction in $parent.ctrl.getGroupMenuActionItem(dataItem,action)">
-                                                <div ng-hide="childAction.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(childAction, dataItem)">
-                                                    <span style="font-size:11px">{{childAction.name}}</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </span>
-                                <span class="chevron-icon glyphicon " ng-class="$parent.ctrl.toLeftDirection ? 'glyphicon-chevron-left':'glyphicon-chevron-right'" style="right: 0px;position: absolute;top: 5px;font-size: 8px;"></span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': 'calc(100% + 15px)', 'display':'inline-block', 'padding': '5px 0px', 'margin':'0px -5px'}"></div>
             </div>
-            <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-block', 'position':'relative'}">
-                <span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary" style="top: 50%; position: absolute; transform: translate(0%,-50%);">  {{ dataItem.actionType}}</span>
-            </div>
-            <div ng-if="ctrl.showDeleteRowSection &&  !ctrl.readOnly" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-block', 'position':'relative'}">
-                <span class="hand-cursor glyphicon glyphicon-remove vr-remove-row" ng-click="ctrl.deleteRowClicked(dataItem)" title="{{ctrl.getRowDeleteIconTitle()}}"></span>
-            </div>
-        </div>
-        <div ng-if="ctrl.isMobile" style="width:100%;position:relative" class="mobile-grid-row">
-            <div ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" ng-swipe-right="$parent.ctrl.expandRow(dataItem,$event)" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;">
-            </div>
-            <div ng-show="dataItem.showRow == false" style="width:100%;position:absolute;height: 100%;background-color: #fff; z-index: 1;top:0px">
-                <img src="/Client/images/loadingbar.gif" style="position: absolute;left: calc(50% - 80px);top: 33%;height:6px" />
-            </div>
-        </div>
-
-    </div>
-
-    <div id="divExpandableRowContent_{{$index}}" class="expandable-row-content {{ ::ctrl.isMobile ?'am-fade-and-slide-left' : ''}}" ng-class="dataItem.isRowExpanded ? 'row-content-expanded':''" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
-        <div ng-if="!ctrl.isMobile" style="width:100%;position:relative;">
-            <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
-
-            <div ng-class="dataItem.fullScreenMode?'expanded-row-content-full':''" vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': $parent.ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #D0D0D0'}">
-
-            </div>
-        </div>
-        <div ng-if="ctrl.isMobile" style="width:100%" ng-swipe-left="$parent.ctrl.collapseRow(dataItem,$event)">
-            <div style="position:relative">
-                <button ng-click="$parent.ctrl.collapseRow(dataItem,$event)" style="font-size: 18px;" ng-show="dataItem.isRowExpanded && $parent.ctrl.rowClickDetails ==  false">
-                    <span class="glyphicon glyphicon-chevron-left hand-cursor"></span>
-                    Back
-                </button>
-                <button ng-click="$parent.ctrl.openRowContextMenuPopup($event,dataItem)" style="position:absolute;right:0px;font-size: 18px;" ng-if="$parent.ctrl.isActionMenuVisible(dataItem)">
-                    <span class="glyphicon glyphicon-align-justify hand-cursor"></span>
-                    Actions
-                </button>
-            </div>
-            <div class="grid-base-row row-full-view" style="display: flex;" ng-style="::$parent.ctrl.hasDefinedMenuAction(dataItem)?{'padding-top': '32px'}:''">
-                <div ng-repeat="colDef in ctrl.columnDefs">
-                    <div ng-style="{ 'width': colDef.mobileWidth, 'display':'inline-flex','vertical-align':'top','border-left': 'none'}" ng-class=" ctrl.getCellContainerClass(dataItem, colDef,true)" class="vr-datagrid-cell-container ng-scope">
-                        <div class="mobile-label-container">
-                            <label class="mobile-label">{{colDef.name}}: </label>
-                        </div>
-                        <div>
-                            <div class="vr-datagrid-celltext ">
-                                <div style="text-align: left;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-                                    <span ng-style="::$parent.ctrl.cellLayoutStyle" ng-bind="ctrl.getCellValue(dataItem, colDef) {{colDef.filter}}" ng-class="::dataItem.columnsValues['col_' + colDef.columnId].cellClass" style="white-space: nowrap;">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': 'calc(100% + 15px)', 'display':'inline-block', 'padding': '5px 0px', 'margin':'0px -5px'}"></div>
         </div>
     </div>
-</div>

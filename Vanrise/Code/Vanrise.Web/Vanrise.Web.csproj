@@ -254,6 +254,8 @@
     <Content Include="Client\Javascripts\Directives\Containers\vr-legend-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-figure-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\GridMenuActionModalPopup.html" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\RowFullScreenModeModalPopupController.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\RowFullScreenModeModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\DataGrid\SortByColumnsModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\DataGrid\RowActionModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\DataGrid\GridMenuActionActionPopupController.js" />

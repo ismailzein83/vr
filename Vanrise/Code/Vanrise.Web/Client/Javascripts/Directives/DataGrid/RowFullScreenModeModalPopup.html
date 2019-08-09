@@ -1,0 +1,73 @@
+﻿<div vr-modalcontent ng-controller="RowFullScreenModeModalPopupController" vr-loader="isLoading" size="xlarge">
+    <vr-modalbody>
+        <div class="vr-datagrid-body row-full-screen " vr-loader="ctrl.isLoadingRowFullScreen">
+            <div id="rowTemplate" class="vr-modal-full-screen-row">
+                <div class="row-header-container">
+                    <div class="vr-datarow-breadcrumb">
+                        <div class="btn-group btn-breadcrumb">
+                            <span class="btn btn-default start-arrow"><i class="glyphicon"></i></span>
+                            <span class="btn btn-default level-{{ 5 + (($index + 1) - ctrl.parentNames.length )}}" index="{{$index}}" len="{{ctrl.parentNames.length}}" style=" cursor: default; font-size:13px" title="{{p.objectTypeName}}" ng-repeat="p in ctrl.parentNames">
+                                <span>{{p.objectTypeName}}</span>
+                            </span>
+                            <span class="btn btn-default" style=" cursor: default; font-size:13px;display:none"><i class="glyphicon"></i></span>
+                        </div>
+                    </div>
+                    <div class="vr-row-action-container">
+                        <div vr-desktop-element class="action-full-screen-icon  inline-btn">
+                            <button class="btn btn-default btncustom " ng-click="closeFullViewAndCloseModal(dataItem,$event)">{{ctrl.closeAtributesText}}</button>
+                        </div>
+                        <grid-row-action ng-if="ctrl.isActionMenuVisible(dataItem)" ng-show="ctrl.hasDefinedMenuAction(dataItem)">
+                            <div class="action-full-screen-icon inline-btn " ng-repeat="action in ctrl.getMenuActions(dataItem)">
+                                <button ng-disabled="action.isSubmitting" ng-if="!action.childsactions" type="button" class="btn btn-default btncustom" ng-hide="action.disable" ng-click="ctrl.menuActionClicked(action, dataItem)">
+                                    {{action.name}}
+                                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;margin-left:3px" ng-show="action.isSubmitting" />
+                                </button>
+                                <div ng-if="action.childsactions.length > 0" ng-show="ctrl.hasVisibleMenuAction(action.childsactions)" style="position:relative">
+                                    <button type="button" class="btn btn-default btncustom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{action.name}}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu expanded-row-action" style="min-width: 140px;">
+                                        <li role="presentation">
+                                            <div class="mark-select action-item" ng-repeat="childAction in ctrl.getGroupMenuActionItem(dataItem,action)">
+                                                <div ng-hide="childAction.disable" class=" hand-cursor" ng-click="ctrl.menuActionClicked(childAction, dataItem)">
+                                                    <span style="font-size:11px">{{childAction.name}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </grid-row-action>
+                    </div>
+                </div>
+
+                <div class="vr-modal-datagrid-row">
+                    <div class="row" style="width: calc(100% + 25px);">
+                        <div ng-if="!ctrl.viewDirective" class="col-lg-12 vr-detail-summary">
+                            <div class="col-lg-4 col-md-6 parent-col-container row-col-item" ng-repeat="colDef in ctrl.columnDefs">
+                                <div class="col-lg-6 col-md-6">
+                                    <label class="control-label vr-control-label grid-cell-label">{{colDef.name}}: </label>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="vr-datagrid-celltext ">
+                                        <div class="grid-cell-value">
+                                            <span ng-style="ctrl.cellLayoutStyle" ng-bind="ctrl.getCellValue(dataItem, colDef) {{colDef.filter}}" ng-class="::dataItem.columnsValues['col_' + colDef.columnId].cellClass" style="white-space: nowrap;">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vr-detail-summary-custom" style="padding:5px" ng-if="ctrl.viewDirective && dataItem.isRowExpanded" vr-loader="dataItem.isLoadingRowView">
+                            <vr-directivewrapper directive="ctrl.viewDirective" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper>
+                        </div>
+                    </div>
+                </div>                
+                <div class="expandable-row-content  row-content-expanded">
+                    <div class="expanded-row-content-full" vr-htmlcompiler="dataItem.expandableRowTemplate"></div>
+                </div>
+            </div>
+        </div>
+    </vr-modalbody>
+</div>

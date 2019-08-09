@@ -77,9 +77,9 @@
         right: 50%;
         top: -10px;
     }
-    .full-mobile-body{
+    .vr-mobile-view .full-mobile-body {
         overflow: hidden !important;
-        width:100%;
+        width: 100%;
     }
     body.modal-open .mobile-view{      
         touch-action:none;
