@@ -2810,6 +2810,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 
 .modal .modal-dialog.row-full-screen-modal {
     top: 0px !important;
+    left: 0px !important;
 }
 
 .modal .vr-datagrid-body.row-full-screen {
