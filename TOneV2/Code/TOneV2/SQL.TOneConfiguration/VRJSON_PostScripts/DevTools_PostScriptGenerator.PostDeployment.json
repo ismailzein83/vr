@@ -5,7 +5,7 @@
       "Schema": "sec",
       "TableName": "View",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -131,7 +131,7 @@
       "Schema": "common",
       "TableName": "ExtensionConfiguration",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {

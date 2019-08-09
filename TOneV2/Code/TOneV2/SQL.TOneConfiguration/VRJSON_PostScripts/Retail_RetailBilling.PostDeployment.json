@@ -5,7 +5,7 @@
       "Schema": "common",
       "TableName": "VRDevProject",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -54,7 +54,7 @@
       "Schema": "genericdata",
       "TableName": "DataStore",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -117,7 +117,7 @@
       "Schema": "genericdata",
       "TableName": "DataRecordType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -746,7 +746,7 @@
       "Schema": "genericdata",
       "TableName": "DataRecordStorage",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -1290,7 +1290,7 @@
       "Schema": "genericdata",
       "TableName": "BusinessEntityDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -1888,7 +1888,7 @@
       "Schema": "sec",
       "TableName": "View",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2584,7 +2584,7 @@
       "Schema": "sec",
       "TableName": "Module",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2712,7 +2712,7 @@
       "Schema": "common",
       "TableName": "StatusDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2958,7 +2958,7 @@
       "Schema": "common",
       "TableName": "VRNamespace",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3006,7 +3006,7 @@
       "Schema": "common",
       "TableName": "VRNamespaceItem",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3084,7 +3084,7 @@
       "Schema": "common",
       "TableName": "VRDynamicAPIModule",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3146,7 +3146,7 @@
       "Schema": "common",
       "TableName": "VRDynamicAPI",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3224,7 +3224,7 @@
       "Schema": "genericdata",
       "TableName": "DataRecordFieldChoice",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3367,7 +3367,7 @@
       "Schema": "common",
       "TableName": "VRComponentType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3459,7 +3459,7 @@
       "Schema": "genericdata",
       "TableName": "GenericRuleDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3552,7 +3552,7 @@
       "Schema": "common",
       "TableName": "ExtensionConfiguration",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3633,7 +3633,7 @@
       "Schema": "VR_Invoice",
       "TableName": "InvoiceType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3688,7 +3688,7 @@
       "Schema": "common",
       "TableName": "VRObjectTypeDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3771,7 +3771,7 @@
       "Schema": "common",
       "TableName": "MailMessageType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3834,7 +3834,7 @@
       "Schema": "Analytic",
       "TableName": "AnalyticTable",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3923,7 +3923,7 @@
       "Schema": "Analytic",
       "TableName": "AnalyticItemConfig",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -4181,7 +4181,7 @@
       "Schema": "RetailBilling",
       "TableName": "ContractType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -4294,7 +4294,7 @@
       "Schema": "RetailBilling",
       "TableName": "Service",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -5141,7 +5141,7 @@
       "Schema": "RetailBilling",
       "TableName": "CDRType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -5233,7 +5233,7 @@
       "Schema": "VR_AccountBalance",
       "TableName": "BillingTransactionType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.DeleteGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.DeleteGeneratedScriptItem, Vanrise.DevTools.Business",
         "IdentifierColumn": {
           "ColumnName": "ID"
         },
@@ -5262,7 +5262,7 @@
       "Schema": "VR_AccountBalance",
       "TableName": "BillingTransactionType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -5334,7 +5334,7 @@
       "Schema": "RetailBilling",
       "TableName": "Bundle",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -5425,7 +5425,7 @@
       "Schema": "queue",
       "TableName": "ExecutionFlowDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -5488,7 +5488,7 @@
       "Schema": "queue",
       "TableName": "ExecutionFlow",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -5544,7 +5544,7 @@
       "Schema": "genericdata",
       "TableName": "DataTransformationDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -5625,7 +5625,7 @@
       "Schema": "integration",
       "TableName": "DataSource",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -5714,7 +5714,7 @@
       "Schema": "runtime",
       "TableName": "ScheduleTask",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {

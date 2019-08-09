@@ -5,7 +5,7 @@
       "Schema": "genericdata",
       "TableName": "DataRecordType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -515,7 +515,7 @@
       "Schema": "genericdata",
       "TableName": "DataRecordStorage",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -816,7 +816,7 @@
       "Schema": "genericdata",
       "TableName": "DataStore",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -872,7 +872,7 @@
       "Schema": "genericdata",
       "TableName": "BusinessEntityDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -1255,7 +1255,7 @@
       "Schema": "bp",
       "TableName": "BPTaskType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -1424,7 +1424,7 @@
       "Schema": "bp",
       "TableName": "VRWorkflow",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -1549,7 +1549,7 @@
       "Schema": "bp",
       "TableName": "BPDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -1674,7 +1674,7 @@
       "Schema": "common",
       "TableName": "Connection",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -1729,7 +1729,7 @@
       "Schema": "common",
       "TableName": "StatusDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -1975,7 +1975,7 @@
       "Schema": "sec",
       "TableName": "Module",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2072,7 +2072,7 @@
       "Schema": "sec",
       "TableName": "View",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2497,7 +2497,7 @@
       "Schema": "sec",
       "TableName": "Group",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2610,7 +2610,7 @@
       "Schema": "NetworkRentalManager",
       "TableName": "ContractType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2682,7 +2682,7 @@
       "Schema": "NetworkRentalManager",
       "TableName": "OrderType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2774,7 +2774,7 @@
       "Schema": "NetworkRentalManager",
       "TableName": "TelephonyService",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2866,7 +2866,7 @@
       "Schema": "NetworkRentalManager",
       "TableName": "TelephonyComplaintType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -2954,7 +2954,7 @@
       "Schema": "NetworkRentalManager",
       "TableName": "TelephonyComplaintDamageType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -3034,7 +3034,7 @@
       "Schema": "NetworkRentalManager",
       "TableName": "TelephonyComplaintBrokenCategory",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
