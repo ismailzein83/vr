@@ -746,7 +746,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var city = entities[0].GetTypedColumnValue<Guid>(cityName.Name);
+                var city = entities[0].GetTypedColumnValue<string>(cityName.Name);
                 var lastName = entities[0].GetColumnValue("StFirstName");
                 var firstName = entities[0].GetColumnValue("StLastName");
                 var addressId = entities[0].GetColumnValue("StAddressID");  
