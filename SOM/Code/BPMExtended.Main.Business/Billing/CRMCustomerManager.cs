@@ -738,7 +738,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StLastName");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StAddressID");
-            var cityId = esq.AddColumn("StCity.Id");
+            var cityName = esq.AddColumn("StCity.Name");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -746,7 +746,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var city = entities[0].GetTypedColumnValue<Guid>(cityId.Name);
+                var city = entities[0].GetTypedColumnValue<Guid>(cityName.Name);
                 var lastName = entities[0].GetColumnValue("StFirstName");
                 var firstName = entities[0].GetColumnValue("StLastName");
                 var addressId = entities[0].GetColumnValue("StAddressID");  
