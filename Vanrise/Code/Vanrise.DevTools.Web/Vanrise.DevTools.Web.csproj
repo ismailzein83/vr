@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRGeneratedScriptDevProjectTemplateController.cs" />
     <Compile Include="Controllers\VRGeneratedScriptTableDataController.cs" />
     <Compile Include="Controllers\VRGeneratedScriptTableController.cs" />
     <Compile Include="Controllers\VRGeneratedScriptSchemaController.cs" />
@@ -166,16 +167,20 @@
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRTableDataGridTemplate.html" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRSelectedTableDataGridTemplate.html" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRGeneratedScriptDesignGridTemplate.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-devprojects-selector.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-generated-script-variables-grid.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-generated-script-design-grid.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-selected-table-data-grid.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-table-data-grid.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptDevProjectTemplateAPIService.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptTableDataAPIService.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptTableAPIService.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptSchemaAPIService.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptColumnsAPIService.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Services\VRGeneratedScriptService.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptDevProjectTemplate.html" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptColumnsSelectorEditor.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptDevProjectTemplateController.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptVariableEditor.html" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptColumnsSelectorEditorController.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptVariableEditorController.js" />

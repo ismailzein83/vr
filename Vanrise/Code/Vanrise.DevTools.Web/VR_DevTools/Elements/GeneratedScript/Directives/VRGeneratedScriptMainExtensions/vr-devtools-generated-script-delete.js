@@ -124,7 +124,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptDelete", ["UtilsService", "VR
                     api.getData = function () {
 
                         return {
-                            $type: "Vanrise.DevTools.MainExtensions.DeleteGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+                            $type: "Vanrise.DevTools.Business.DeleteGeneratedScriptItem, Vanrise.DevTools.Business",
                             IdentifierColumn: { ColumnName: identifierColumnsDirectiveApi.getSelectedIds() },
                             KeyValues: $scope.keyValues
                         };

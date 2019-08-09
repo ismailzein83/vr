@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneratedScript\DeleteGeneratedScriptItem.cs" />
+    <Compile Include="GeneratedScript\MergeGeneratedScriptItem.cs" />
+    <Compile Include="GeneratedScript\VRGeneratedScriptDevProjectTemplateManager.cs" />
     <Compile Include="GeneratedScript\VRGeneratedScriptColumnsManager.cs" />
     <Compile Include="GeneratedScript\VRGeneratedScriptTableDataManager.cs" />
     <Compile Include="GeneratedScript\VRGeneratedScriptTableManager.cs" />

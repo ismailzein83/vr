@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IVRGeneratedScriptDevProjectTemplateDataManager.cs" />
     <Compile Include="IVRGeneratedScriptColumnsDataManager.cs" />
     <Compile Include="IVRGeneratedScripSchemaDataManager.cs" />
     <Compile Include="IVRGeneratedScriptTableDataManager.cs" />
@@ -60,6 +61,10 @@
     <ProjectReference Include="..\Vanrise.DevTools.Entities\Vanrise.DevTools.Entities.csproj">
       <Project>{30DF9A71-05B6-4199-AE6B-68DB57864909}</Project>
       <Name>Vanrise.DevTools.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{CFECFD8A-51F6-4020-9F80-FB334684FA3D}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

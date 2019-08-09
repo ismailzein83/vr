@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VRGeneratedScriptDevProjectTemplateDataManager.cs" />
     <Compile Include="VRGeneratedScriptColumnsDataManager.cs" />
     <Compile Include="VRGeneratedScriptTableDataManager.cs" />
     <Compile Include="VRGeneratedScriptTableDataDataManager.cs" />

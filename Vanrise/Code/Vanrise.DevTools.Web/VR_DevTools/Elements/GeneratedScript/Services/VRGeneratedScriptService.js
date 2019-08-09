@@ -24,6 +24,16 @@
             };
             VRModalService.showModal('/Client/Modules/VR_DevTools/Elements/GeneratedScript/Views/VRGeneratedScriptDesignEditor.html', parameters, settings);
         }
+        function addTemplate(onTemplateAdded) {
+
+            var settings = {};
+            var parameters = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onTemplateAdded = onTemplateAdded;
+
+            };
+            VRModalService.showModal('/Client/Modules/VR_DevTools/Elements/GeneratedScript/Views/VRGeneratedScriptDevProjectTemplate.html', parameters, settings);
+        } 
 
         function chooseSelectedTableDataColumns(payload,deselectAllItems,columnNames, generateSelectedTableDataGrid) {
             var settings = {};
@@ -98,7 +108,8 @@
             editTableCell: editTableCell,
             addGeneratedScriptVariable: addGeneratedScriptVariable,
             editGeneratedScriptVariable: editGeneratedScriptVariable,
-            chooseSelectedTableDataColumns: chooseSelectedTableDataColumns
+            chooseSelectedTableDataColumns: chooseSelectedTableDataColumns,
+            addTemplate: addTemplate
         };
 
     }]);

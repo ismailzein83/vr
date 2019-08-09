@@ -198,7 +198,6 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                                     });
                                 });
                                 columnsChangedPromiseDeferred = undefined;
-                                gridLoadedPromiseDeferred = undefined;
                             }
                         });
                     });
@@ -533,7 +532,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                     }
 
                     return {
-                        $type: "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+                        $type: "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
                         DataRows: dataRows,
                         Columns: columns,
                         IsIdentity: $scope.scopeModel.IsIdentity,

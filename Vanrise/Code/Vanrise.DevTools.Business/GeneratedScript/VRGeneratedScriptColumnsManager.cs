@@ -40,7 +40,7 @@ namespace Vanrise.DevTools.Business
                     return false;
                 return true;
             };
-            return allColumns.MapRecords(ColumnsInfoMapper, filterFunc).OrderBy(columns => columns.Name);
+            return allColumns.MapRecords(ColumnsInfoMapper, filterFunc);
         }
 
         public IEnumerable<GeneratedScriptItemTableSettingsConfig> GetGeneratedScriptItemTableSettingsConfigs()
@@ -88,11 +88,11 @@ namespace Vanrise.DevTools.Business
         public List<GeneratedScriptItemComparisonOutput> CompareItems(GeneratedScriptItem generatedScriptItem)
         {
             List<GeneratedScriptItemComparisonOutput> comparisonOutputs = new List<GeneratedScriptItemComparisonOutput>();
-            if (generatedScriptItem != null && generatedScriptItem.Tables!=null && generatedScriptItem.Tables.Scripts != null && generatedScriptItem.Tables.Scripts.Count > 0)
+            if (generatedScriptItem != null && generatedScriptItem.Tables != null && generatedScriptItem.Tables.Scripts != null && generatedScriptItem.Tables.Scripts.Count > 0)
             {
                 foreach (var script in generatedScriptItem.Tables.Scripts)
                 {
-                    comparisonOutputs.Add(script.Settings.Compare(new GeneratedScriptComparisonContext { ConnectionId=script.ConnectionId,Schema=script.Schema,TableName=script.TableName, IncludeOverriddenValuesInComparison =generatedScriptItem.IncludeOverriddenValuesInComparison }));
+                    comparisonOutputs.Add(script.Settings.Compare(new GeneratedScriptComparisonContext { ConnectionId = script.ConnectionId, Schema = script.Schema, TableName = script.TableName, IncludeOverriddenValuesInComparison = generatedScriptItem.IncludeOverriddenValuesInComparison }));
                 }
             }
             return comparisonOutputs;
@@ -134,8 +134,6 @@ namespace Vanrise.DevTools.Business
                 return string.Format("{0}", value);
             else return string.Format("'{0}'", value);
         }
-
-
         #endregion
 
         #region Private Classes
@@ -147,7 +145,6 @@ namespace Vanrise.DevTools.Business
         #endregion
 
         #region Mappers
-
         public VRGeneratedScriptColumnsInfo ColumnsInfoMapper(VRGeneratedScriptColumns columns)
         {
             return new VRGeneratedScriptColumnsInfo

@@ -49,7 +49,6 @@
                                     $scope.scopeModel.designs.push({ Entity: payload.designs[i] });
                                 }
                             }
-
                             return UtilsService.waitMultiplePromises(promises);
                         };
 
@@ -108,7 +107,14 @@
 
                     VR_Devtools_GeneratedScriptService.addGeneratedScriptDesign(onGeneratedScriptDesignAdded);
                 };
-
+                $scope.scopeModel.addTemplate = function () {
+                    var onTemplateAdded = function (designs) {
+                        for (var design in designs) {
+                            $scope.scopeModel.designs.push(design);
+                        }
+                    };
+                    VR_Devtools_GeneratedScriptService.addTemplate(onTemplateAdded);
+                };
             }
 
         }

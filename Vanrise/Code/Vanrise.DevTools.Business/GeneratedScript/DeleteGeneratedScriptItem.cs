@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Vanrise.DevTools.Entities;
 using Vanrise.Common;
-namespace Vanrise.DevTools.MainExtensions
+namespace Vanrise.DevTools.Business
 {
     public class DeleteGeneratedScriptItem : GeneratedScriptItemTableSettings
     {

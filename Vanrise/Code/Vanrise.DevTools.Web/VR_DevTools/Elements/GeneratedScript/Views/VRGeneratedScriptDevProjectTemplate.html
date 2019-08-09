@@ -1,0 +1,14 @@
+﻿<div vr-modalcontent ng-controller="VR_Devtools_VRGeneratedScriptDevProjectTemplateController" size="medium">
+    <vr-modalbody>
+        <vr-common-connection-selector on-ready="scopeModel.onConnectionStringDirectiveReady" onselectionchanged="scopeModel.onConnectionStringChanged" isrequired="true" normal-col-num="6"></vr-common-connection-selector>
+        <vr-devtools-devprojects-selector on-ready="scopeModel.onDevProjectsDirectiveReady" normal-col-num="6" label="Projects"></vr-devtools-devprojects-selector>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Generate" formname="formGeneratedScriptDesignEditor" data-onclick="scopeModel.generateScripts"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

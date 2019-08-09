@@ -45,8 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GeneratedScript\DeleteGeneratedScriptItem.cs" />
-    <Compile Include="GeneratedScript\MergeGeneratedScriptItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Variable\SelectGeneratedScriptVariable.cs" />
   </ItemGroup>
@@ -71,6 +69,9 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GeneratedScript\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

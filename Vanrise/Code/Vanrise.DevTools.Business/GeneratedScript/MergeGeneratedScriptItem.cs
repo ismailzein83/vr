@@ -4,11 +4,9 @@ using System.Text;
 using Vanrise.DevTools.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
-using Vanrise.Data.RDB;
-using Vanrise.DevTools.Business;
 using System.Linq;
 
-namespace Vanrise.DevTools.MainExtensions
+namespace Vanrise.DevTools.Business
 {
     public class MergeGeneratedScriptItem : GeneratedScriptItemTableSettings
     {
@@ -155,7 +153,6 @@ namespace Vanrise.DevTools.MainExtensions
             }
             return comparisonOutput;
         }
-        
         public override string GenerateQuery(IGeneratedScriptItemTableContext context)
         {
             switch (context.Type)
@@ -170,8 +167,6 @@ namespace Vanrise.DevTools.MainExtensions
         public List<MergeGeneratedScriptItemColumn> Columns { get; set; }
         public List<GeneratedScriptItemTableRow> DataRows { get; set; }
         public List<GeneratedScriptVariable> Variables { get; set; }
-       
-
         public string LastWhereCondition { get; set; }
         public string LastJoinStatement { get; set; }
 
