@@ -53,6 +53,10 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
                 else
                     modalCssClass = "full-view";
             }
+
+            if (tAttrs.rowfullscreen != undefined)
+                modalCssClass = "row-full-screen-modal";
+
             var style = "";
             var direction = VRLocalizationService.isLocalizationRTL() && 'right' || 'left';
                if ($('.modal-dialog').length > 0) {

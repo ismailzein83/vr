@@ -2808,8 +2808,12 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     width: calc(100% - 215px);
 }
 
+.modal .modal-dialog.row-full-screen-modal {
+    top: 0px !important;
+}
+
 .modal .vr-datagrid-body.row-full-screen {
-    position:static;
+    position: static;
 }
 
 .modal .vr-modal-full-screen-row {
