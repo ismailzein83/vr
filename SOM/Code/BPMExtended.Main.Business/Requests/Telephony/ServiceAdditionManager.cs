@@ -142,7 +142,7 @@ namespace BPMExtended.Main.Business
                         }
                     }
 
-                };
+                }; 
 
                 //call api
                 using (var client = new SOMClient())
