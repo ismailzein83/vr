@@ -25,13 +25,16 @@ namespace Vanrise.Analytic.Entities
                 if (analyticTable.DoesUserHaveAccess(context.UserId, id) == false)
                     return false;
             }
+
             foreach (var w in this.Widgets)
             {
                 if (analyticItem.DoesUserHaveAccess(context.UserId, w.AnalyticTableId, w.GetMeasureNames()) == false)
                     return false;
             }
+
             return true;
         }
+
         public override void ApplyTranslation(IAnalyticReportTranslationContext context)
         {
             if (SearchSettings != null)
@@ -55,4 +58,3 @@ namespace Vanrise.Analytic.Entities
         }
     }
 }
-
