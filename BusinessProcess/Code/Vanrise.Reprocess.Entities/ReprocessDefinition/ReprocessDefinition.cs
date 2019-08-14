@@ -8,7 +8,7 @@ namespace Vanrise.Reprocess.Entities
         public Guid ReprocessDefinitionId { get; set; }
 
         public string Name { get; set; }
-
+        public Guid? DevProjectId { get; set; }
         public ReprocessDefinitionSettings Settings { get; set; }
     }
 

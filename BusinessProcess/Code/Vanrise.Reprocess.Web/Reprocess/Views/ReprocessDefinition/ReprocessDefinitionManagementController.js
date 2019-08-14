@@ -8,6 +8,8 @@
     function ReprocessDefinitionManagementController($scope, Reprocess_ReprocessDefinitionService, Reprocess_ReprocessDefinitionAPIService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -16,6 +18,10 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.search = function () {
                 var query = buildGridQuery();
                 return gridAPI.load(query);
@@ -37,12 +43,30 @@
         }
 
         function load() {
-
+            $scope.isLoading = true;
+            loadAllControls();
+        }
+        function loadAllControls() {
+            return UtilsService.waitPromiseNode({ promises: [loadDevProjectSelector()] })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
         }
 
         function buildGridQuery() {
             return {
-                Name: $scope.scopeModel.name
+                Name: $scope.scopeModel.name,
+                DevProjectIds: devProjectDirectiveApi != undefined ? devProjectDirectiveApi.getSelectedIds() : undefined
             };
         }
     }

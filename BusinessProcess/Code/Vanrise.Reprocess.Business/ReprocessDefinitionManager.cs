@@ -14,12 +14,23 @@ namespace Vanrise.Reprocess.Business
 {
     public class ReprocessDefinitionManager : IReprocessDefinitionManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         public IDataRetrievalResult<ReprocessDefinitionDetail> GetFilteredReprocessDefinitions(DataRetrievalInput<ReprocessDefinitionQuery> input)
         {
             var allReprocessDefinitions = this.GetCachedReprocessDefinitions();
-            Func<ReprocessDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<ReprocessDefinition, bool> filterExpression = (x) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.DevProjectIds != null && (!x.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(x.DevProjectId.Value)))
+                    return false;
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(ReprocessDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allReprocessDefinitions.ToBigResult(input, filterExpression, ReprocessDefinitionDetailMapper));
         }
@@ -93,6 +104,8 @@ namespace Vanrise.Reprocess.Business
                 {
                     if (filter != null)
                     {
+                        if (Utilities.ShouldHideItemHavingDevProjectId(reprocessDefinition.DevProjectId))
+                            return false;
                         if (filter.ExcludedReprocessDefinitionIds != null && filter.ExcludedReprocessDefinitionIds.Contains(reprocessDefinition.ReprocessDefinitionId))
                             return false;
 
@@ -112,7 +125,13 @@ namespace Vanrise.Reprocess.Business
             }
             else
             {
-                return allReprocessDefinitions.MapRecords(ReprocessDefinitionMapper);
+                Func<ReprocessDefinition, bool> filterExpression = (reprocessDefinition) =>
+                {
+                    if (Utilities.ShouldHideItemHavingDevProjectId(reprocessDefinition.DevProjectId))
+                        return false;
+                    return true;
+                };
+                return allReprocessDefinitions.MapRecords(ReprocessDefinitionMapper, filterExpression);
             }
         }
 
@@ -198,9 +217,15 @@ namespace Vanrise.Reprocess.Business
 
         private ReprocessDefinitionDetail ReprocessDefinitionDetailMapper(ReprocessDefinition reprocessDefinition)
         {
+            string devProjectName = null;
+            if (reprocessDefinition.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(reprocessDefinition.DevProjectId.Value);
+            }
             ReprocessDefinitionDetail reprocessDefinitionDetail = new ReprocessDefinitionDetail()
             {
-                Entity = reprocessDefinition
+                Entity =reprocessDefinition,
+                DevProjectName=devProjectName
             };
             return reprocessDefinitionDetail;
         }
@@ -210,12 +235,12 @@ namespace Vanrise.Reprocess.Business
         {
             if (reprocessDefinition == null)
                 return null;
-
+            
             return new ReprocessDefinitionInfo()
             {
                 ReprocessDefinitionId = reprocessDefinition.ReprocessDefinitionId,
                 Name = reprocessDefinition.Name,
-                ForceUseTempStorage = reprocessDefinition.Settings != null ? reprocessDefinition.Settings.ForceUseTempStorage : false
+                ForceUseTempStorage = reprocessDefinition.Settings != null ? reprocessDefinition.Settings.ForceUseTempStorage : false,
             };
         }
         #endregion

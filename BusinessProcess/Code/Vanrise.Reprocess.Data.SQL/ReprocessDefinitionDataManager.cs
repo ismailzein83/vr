@@ -39,7 +39,7 @@ namespace Vanrise.Reprocess.Data.SQL
         {
             string serializedSettings = reprocessDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(reprocessDefinitionItem.Settings) : null;
 
-            int affectedRecords = ExecuteNonQuerySP("reprocess.sp_ReprocessDefinition_Insert", reprocessDefinitionItem.ReprocessDefinitionId, reprocessDefinitionItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("reprocess.sp_ReprocessDefinition_Insert", reprocessDefinitionItem.ReprocessDefinitionId, reprocessDefinitionItem.Name, reprocessDefinitionItem.DevProjectId,serializedSettings);
 
             return (affectedRecords > 0);
         }
@@ -48,7 +48,7 @@ namespace Vanrise.Reprocess.Data.SQL
         {
             string serializedSettings = ReprocessDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(ReprocessDefinitionItem.Settings) : null;
 
-            int affectedRecords = ExecuteNonQuerySP("reprocess.sp_ReprocessDefinition_Update", ReprocessDefinitionItem.ReprocessDefinitionId, ReprocessDefinitionItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("reprocess.sp_ReprocessDefinition_Update", ReprocessDefinitionItem.ReprocessDefinitionId, ReprocessDefinitionItem.Name, ReprocessDefinitionItem.DevProjectId, serializedSettings);
             return (affectedRecords > 0);
         }
 
@@ -63,6 +63,7 @@ namespace Vanrise.Reprocess.Data.SQL
             {
                 ReprocessDefinitionId =GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<ReprocessDefinitionSettings>(reader["Settings"] as string)
             };
             return ReprocessDefinition;

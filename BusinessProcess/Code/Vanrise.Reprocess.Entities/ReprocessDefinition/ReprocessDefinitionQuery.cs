@@ -9,6 +9,7 @@ namespace Vanrise.Reprocess.Entities
     public class ReprocessDefinitionQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }
         

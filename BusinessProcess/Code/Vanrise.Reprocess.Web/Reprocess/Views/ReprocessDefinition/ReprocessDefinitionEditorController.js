@@ -31,6 +31,9 @@
         var reprocessFilterDefinitionSettingsAPI;
         var reprocessFilterDefinitionSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var stageAPI;
         var stageSelectorReadyDeferred;
 
@@ -57,6 +60,10 @@
             $scope.scopeModel.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageAPI = api;
                 dataRecordStorageSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             $scope.scopeModel.onDataRecordStorageSelectionChanged = function () {
                 tryLoadFlowStagesOrResolvePromise(onDataRecordStorageSelectionChangedDeferred);
@@ -166,7 +173,7 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToProcess = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToProcessAPI, stagesToProcessPayload, setLoader);
             };
-
+   
             function tryLoadFlowStagesOrResolvePromise(promiseDeferred) {
                 if (promiseDeferred != undefined)
                     promiseDeferred.resolve();
@@ -364,9 +371,21 @@
 
                 return reprocessFilterDefinitionSettingsLoadDeferred.promise;
             }
-
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (reprocessDefinitionEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: reprocessDefinitionEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
+            }
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowDefinitionSelector, loadExecutionFlowStageSelector, loadChunkTimeSelector,
-                loadReprocessDefinitionSelector, loadReprocessFilterDefinitionSettings]).catch(function (error) {
+                loadReprocessDefinitionSelector, loadReprocessFilterDefinitionSettings, loadDevProjectSelector]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -435,6 +454,7 @@
             return {
                 ReprocessDefinitionId: reprocessDefinitionId != undefined ? reprocessDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: settings
             };
         };

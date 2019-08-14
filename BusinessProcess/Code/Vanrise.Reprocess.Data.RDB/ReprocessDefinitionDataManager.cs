@@ -17,6 +17,7 @@ namespace Vanrise.Reprocess.Data.RDB
 
         const string COL_Id = "Id";
         const string COL_Name = "Name";
+        public const string COL_DevProjectID = "DevProjectID";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
@@ -26,6 +27,7 @@ namespace Vanrise.Reprocess.Data.RDB
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_Id, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -68,6 +70,8 @@ namespace Vanrise.Reprocess.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.Column(COL_Id).Value(reprocessDefinitionItem.ReprocessDefinitionId);
             insertQuery.Column(COL_Name).Value(reprocessDefinitionItem.Name);
+            if (reprocessDefinitionItem.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(reprocessDefinitionItem.DevProjectId.Value);
 
             if (reprocessDefinitionItem.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Serializer.Serialize(reprocessDefinitionItem.Settings));
@@ -87,6 +91,11 @@ namespace Vanrise.Reprocess.Data.RDB
 
             updateQuery.FromTable(TABLE_NAME);
             updateQuery.Column(COL_Name).Value(reprocessDefinitionItem.Name);
+
+            if (reprocessDefinitionItem.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(reprocessDefinitionItem.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
 
             if (reprocessDefinitionItem.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(reprocessDefinitionItem.Settings));
@@ -114,6 +123,7 @@ namespace Vanrise.Reprocess.Data.RDB
             {
                 ReprocessDefinitionId = reader.GetGuid(COL_Id),
                 Name = reader.GetString(COL_Name),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Settings = Serializer.Deserialize<ReprocessDefinitionSettings>(reader.GetString(COL_Settings))
             };
         }
