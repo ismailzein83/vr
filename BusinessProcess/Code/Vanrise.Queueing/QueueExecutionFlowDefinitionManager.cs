@@ -288,11 +288,13 @@ namespace Vanrise.Queueing
         private QueueExecutionFlowDefinitionDetail QueueExecutionFlowDefinitionDetailMapper(QueueExecutionFlowDefinition executionFlowDefinition)
         {
             QueueExecutionFlowDefinitionDetail executionFlowDefinitionDetail = new QueueExecutionFlowDefinitionDetail();
+            string devProjectName = null;
+            if (executionFlowDefinition.DevProjectId.HasValue)
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(executionFlowDefinition.DevProjectId.Value);
             executionFlowDefinitionDetail.Entity = executionFlowDefinition;
             if (executionFlowDefinitionDetail.Entity.DevProjectId.HasValue)
-            {
-                executionFlowDefinitionDetail.Entity.DevProjectName = vrDevProjectManager.GetVRDevProjectName(executionFlowDefinitionDetail.Entity.DevProjectId.Value);
-            }
+                executionFlowDefinitionDetail.DevProjectName = devProjectName;
+
             return executionFlowDefinitionDetail;
         }
 

@@ -11,7 +11,6 @@ namespace Vanrise.Queueing.Entities
         public Guid ID { get; set; }
         public string Name { get; set; }
         public Guid? DevProjectId { get; set; }
-        public string DevProjectName { get; set; }
         public string Title { get; set; }
         public List<QueueExecutionFlowStage> Stages { get; set; }
     }
