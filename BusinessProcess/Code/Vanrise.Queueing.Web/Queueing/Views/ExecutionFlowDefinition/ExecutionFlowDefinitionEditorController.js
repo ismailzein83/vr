@@ -10,6 +10,8 @@
         var executionFlowDefinitionEntity;
         var executionFlowStageAPI;
         var executionFlowStageReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -31,7 +33,10 @@
                 executionFlowStageAPI = api;
                 executionFlowStageReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModal.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.save = function () {
                 if (isEditMode) {
 
@@ -84,9 +89,21 @@
                 executionFlowDefinitionEntity = response;
             });
         }
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (executionFlowDefinitionEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: executionFlowDefinitionEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadExecutionFlowStage])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadExecutionFlowStage, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -135,6 +152,7 @@
                 ID: (executionFlowDefinitionId != null) ? executionFlowDefinitionId : 0,
                 Name: $scope.scopeModal.name,
                 Title: $scope.scopeModal.title,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Stages: stages != undefined ? stages.Stages : undefined
             };
             return executionFlowDefinitionObject;

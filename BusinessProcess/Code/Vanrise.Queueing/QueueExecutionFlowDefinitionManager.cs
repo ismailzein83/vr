@@ -13,13 +13,20 @@ namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowDefinitionManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
         #region Public Methods
 
         public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitionsInfo(QueueExecutionFlowDefinitionFilter filter)
         {
             var executionFlowDefinitions = GetCachedExecutionFlowDefinitions();
-            return executionFlowDefinitions.MapRecords(QueueExecutionFlowDefinitionInfoMapper, null);
+            Func<QueueExecutionFlowDefinition, bool> filterExpression = (item) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(item.DevProjectId))
+                    return false;
+                return true;
+            };
+            return executionFlowDefinitions.MapRecords(QueueExecutionFlowDefinitionInfoMapper, filterExpression);
         }
 
         public IEnumerable<QueueExecutionFlowStageInfo> GetExecutionFlowStagesInfo(Guid executionFlowDefinitionId, QueueExecutionFlowStageFilter filter)
@@ -97,9 +104,17 @@ namespace Vanrise.Queueing
             var queueExecutionFlowDefinitions = GetCachedExecutionFlowDefinitions();
 
             Func<QueueExecutionFlowDefinition, bool> filterExpression = (executionFlowDefinition) =>
-                      (input.Query.Title == null || executionFlowDefinition.Title.Contains(input.Query.Title)) &&
-                      (input.Query.Name == null || executionFlowDefinition.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(executionFlowDefinition.DevProjectId))
+                    return false;
+                if (input.Query.Title != null && !executionFlowDefinition.Title.Contains(input.Query.Title))
+                    return false;
+                if (input.Query.Name != null && !executionFlowDefinition.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.DevProjectIds != null && (!executionFlowDefinition.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(executionFlowDefinition.DevProjectId.Value)))
+                    return false;
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(QueueExecutionFlowDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, queueExecutionFlowDefinitions.ToBigResult(input, filterExpression, QueueExecutionFlowDefinitionDetailMapper));
 
@@ -255,10 +270,10 @@ namespace Vanrise.Queueing
         private QueueExecutionFlowDefinitionInfo QueueExecutionFlowDefinitionInfoMapper(QueueExecutionFlowDefinition queueExecutionFlowDefinition)
         {
             QueueExecutionFlowDefinitionInfo queueExecutionFlowDefinitionInfo = new QueueExecutionFlowDefinitionInfo();
+
             queueExecutionFlowDefinitionInfo.ID = queueExecutionFlowDefinition.ID;
             queueExecutionFlowDefinitionInfo.Title = queueExecutionFlowDefinition.Title;
             return queueExecutionFlowDefinitionInfo;
-
         }
 
         private QueueExecutionFlowStageInfo QueueExecutionFlowDefinitionInfoMapper(QueueExecutionFlowStage queueExecutionFlowStage)
@@ -274,6 +289,10 @@ namespace Vanrise.Queueing
         {
             QueueExecutionFlowDefinitionDetail executionFlowDefinitionDetail = new QueueExecutionFlowDefinitionDetail();
             executionFlowDefinitionDetail.Entity = executionFlowDefinition;
+            if (executionFlowDefinitionDetail.Entity.DevProjectId.HasValue)
+            {
+                executionFlowDefinitionDetail.Entity.DevProjectName = vrDevProjectManager.GetVRDevProjectName(executionFlowDefinitionDetail.Entity.DevProjectId.Value);
+            }
             return executionFlowDefinitionDetail;
         }
 

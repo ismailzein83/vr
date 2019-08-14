@@ -9,7 +9,7 @@ namespace Vanrise.Queueing.Entities
     public class QueueExecutionFlowDefinitionQuery
     {
         public string Name { get; set; }
-
         public string Title { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(executionFlowDefinitionObject.Stages);
             }
-            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Update", executionFlowDefinitionObject.ID, executionFlowDefinitionObject.Name, executionFlowDefinitionObject.Title, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Update", executionFlowDefinitionObject.ID, executionFlowDefinitionObject.Name,executionFlowDefinitionObject.DevProjectId, executionFlowDefinitionObject.Title, serializedObj);
             return (recordesEffected > 0);
         }
 
@@ -51,7 +51,7 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(executionFlowDefinition.Stages);
             }
-            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Insert", executionFlowDefinition.ID, executionFlowDefinition.Name, executionFlowDefinition.Title, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Insert", executionFlowDefinition.ID, executionFlowDefinition.Name,executionFlowDefinition.DevProjectId, executionFlowDefinition.Title, serializedObj);
             return (recordesEffected > 0);
         }
 
@@ -66,6 +66,7 @@ namespace Vanrise.Queueing.Data.SQL
                 ID = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Stages = Vanrise.Common.Serializer.Deserialize<List<QueueExecutionFlowStage>>(reader["Stages"] as string),
             };
         }
