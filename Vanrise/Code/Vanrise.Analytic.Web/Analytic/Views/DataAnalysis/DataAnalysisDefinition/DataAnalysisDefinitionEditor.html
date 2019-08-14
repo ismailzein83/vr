@@ -7,6 +7,7 @@
                         <vr-columns colnum="3">
                             <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
                         </vr-columns>
+                        <vr-common-devproject-selector on-ready="scopeModel.onDevProjectSelectorReady" normal-col-num="3"></vr-common-devproject-selector>
                     </vr-row>
                     <vr-row>
                         <vr-analytic-dataanalysisdefinition-settings on-ready="scopeModel.onSettingsDirectiveReady"></vr-analytic-dataanalysisdefinition-settings>

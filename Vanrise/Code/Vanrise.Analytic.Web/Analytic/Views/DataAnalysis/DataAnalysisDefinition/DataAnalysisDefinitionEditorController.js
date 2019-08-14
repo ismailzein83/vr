@@ -14,6 +14,9 @@
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -36,6 +39,11 @@
                 settingsDirectiveReadyDeferred.resolve();
             };
 
+
+             $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -71,7 +79,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective,loadDevProjectSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -104,6 +112,19 @@
 
                 return settingsDirectiveLoadDeferred.promise;
             }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (dataAnalysisDefinitionEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: dataAnalysisDefinitionEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         }
 
         function insert() {
@@ -142,6 +163,7 @@
             return {
                 DataAnalysisDefinitionId: dataAnalysisDefinitionEntity != undefined ? dataAnalysisDefinitionEntity.DataAnalysisDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: dataAnalysisDefinitionSettings
             };
         }

@@ -8,6 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class DataAnalysisDefinitionDetail
     {
-        public DataAnalysisDefinition Entity { get; set; } 
+        public DataAnalysisDefinition Entity { get; set; }
+        public string DevProjectName { get; set; }
     }
 }

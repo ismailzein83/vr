@@ -13,6 +13,8 @@ namespace Vanrise.Analytic.Business
 {
     public class DataAnalysisDefinitionManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         public DataAnalysisDefinition GetDataAnalysisDefinition(Guid dataAnalysisDefinitionId)
@@ -24,7 +26,16 @@ namespace Vanrise.Analytic.Business
         public IDataRetrievalResult<DataAnalysisDefinitionDetail> GetFilteredDataAnalysisDefinitions(DataRetrievalInput<DataAnalysisDefinitionQuery> input)
         {
             var allDataAnalysisDefinitions = GetCachedDataAnalysisDefinitions();
-            Func<DataAnalysisDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<DataAnalysisDefinition, bool> filterExpression = (x) => {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.DevProjectIds != null && (!x.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(x.DevProjectId.Value)))
+                    return false;
+                return true;
+
+            };
             VRActionLogger.Current.LogGetFilteredAction(DataAnalysisDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDataAnalysisDefinitions.ToBigResult(input, filterExpression, DataAnalysisDefinitionDetailMapper));
         }
@@ -95,6 +106,9 @@ namespace Vanrise.Analytic.Business
         {
             Func<DataAnalysisDefinition, bool> filterExpression = (dataAnalysisDefinition) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(dataAnalysisDefinition.DevProjectId))
+                    return false;
+
                 if (filter != null)
                 {
                     if (filter.Filters != null)
@@ -207,9 +221,15 @@ namespace Vanrise.Analytic.Business
 
         public DataAnalysisDefinitionDetail DataAnalysisDefinitionDetailMapper(DataAnalysisDefinition dataAnalysisDefinition)
         {
+            string devProjectName = null;
+            if (dataAnalysisDefinition.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(dataAnalysisDefinition.DevProjectId.Value);
+            }
             DataAnalysisDefinitionDetail dataAnalysisDefinitionDetail = new DataAnalysisDefinitionDetail()
             {
-                Entity = dataAnalysisDefinition
+                Entity = dataAnalysisDefinition,
+                DevProjectName= devProjectName
             };
             return dataAnalysisDefinitionDetail;
         }

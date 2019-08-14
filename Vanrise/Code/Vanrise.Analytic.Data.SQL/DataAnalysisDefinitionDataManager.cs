@@ -36,7 +36,7 @@ namespace Vanrise.Analytic.Data.SQL
         public bool Insert(DataAnalysisDefinition dataAnalysisDefinitionItem)
         {
             string serializedSettings = dataAnalysisDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(dataAnalysisDefinitionItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Analytic.sp_DataAnalysisDefinition_Insert", dataAnalysisDefinitionItem.DataAnalysisDefinitionId, dataAnalysisDefinitionItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Analytic.sp_DataAnalysisDefinition_Insert", dataAnalysisDefinitionItem.DataAnalysisDefinitionId, dataAnalysisDefinitionItem.Name,dataAnalysisDefinitionItem.DevProjectId, serializedSettings);
 
             if (affectedRecords > 0)
             {
@@ -49,7 +49,7 @@ namespace Vanrise.Analytic.Data.SQL
         public bool Update(DataAnalysisDefinition dataAnalysisDefinitionItem)
         {
             string serializedSettings = dataAnalysisDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(dataAnalysisDefinitionItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Analytic.sp_DataAnalysisDefinition_Update", dataAnalysisDefinitionItem.DataAnalysisDefinitionId, dataAnalysisDefinitionItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Analytic.sp_DataAnalysisDefinition_Update", dataAnalysisDefinitionItem.DataAnalysisDefinitionId, dataAnalysisDefinitionItem.Name,dataAnalysisDefinitionItem.DevProjectId, serializedSettings);
             return (affectedRecords > 0);
         }
 
@@ -64,6 +64,7 @@ namespace Vanrise.Analytic.Data.SQL
             {
                 DataAnalysisDefinitionId = (Guid) reader["ID"],
                 Name = reader["Name"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<DataAnalysisDefinitionSettings>(reader["Settings"] as string) 
             };
             return dataAnalysisDefinition;
