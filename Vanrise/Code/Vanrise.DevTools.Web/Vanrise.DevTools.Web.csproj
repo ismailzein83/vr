@@ -167,6 +167,7 @@
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRTableDataGridTemplate.html" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRSelectedTableDataGridTemplate.html" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRGeneratedScriptDesignGridTemplate.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-template-tables-selector.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-devprojects-selector.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-generated-script-variables-grid.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-generated-script-design-grid.js" />

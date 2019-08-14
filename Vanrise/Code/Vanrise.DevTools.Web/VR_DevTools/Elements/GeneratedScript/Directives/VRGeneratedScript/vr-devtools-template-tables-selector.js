@@ -1,5 +1,5 @@
 ﻿
-appControllers.directive('vrDevtoolsDevprojectsSelector', ['VR_Devtools_DevProjectTemplateAPIService', 'VRUIUtilsService',
+appControllers.directive('vrDevtoolsTemplateTablesSelector', ['VR_Devtools_DevProjectTemplateAPIService', 'VRUIUtilsService',
     function (VR_Devtools_DevProjectTemplateAPIService, VRUIUtilsService) {
         'use strict';
 
@@ -27,18 +27,18 @@ appControllers.directive('vrDevtoolsDevprojectsSelector', ['VR_Devtools_DevProje
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var devProjectsSelector = new DevProjectsSelector(ctrl, $scope, $attrs);
-                devProjectsSelector.initializeController();
+                var templateTablesSelector = new TemplateTablesSelector(ctrl, $scope, $attrs);
+                templateTablesSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
 
-                return getDevProjectTemplate(attrs);
+                return getTemplateTables(attrs);
             }
         };
 
-        function getDevProjectTemplate(attrs) {
+        function getTemplateTables(attrs) {
 
 
             var multipleselection = "";
@@ -48,18 +48,16 @@ appControllers.directive('vrDevtoolsDevprojectsSelector', ['VR_Devtools_DevProje
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="{{ctrl.label}}" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" ondeselectallitems="ctrl.ondeselectallitems" onselectionchanged="ctrl.onselectionchanged" entityName="Project"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="{{ctrl.label}}" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" ondeselectallitems="ctrl.ondeselectallitems" onselectionchanged="ctrl.onselectionchanged" entityName="Tables"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
 
         }
 
 
-        function DevProjectsSelector(ctrl, $scope, attrs) {
-
+        function TemplateTablesSelector(ctrl, $scope, attrs) {
 
             var selectorAPI;
 
             function initializeController() {
-
 
                 $scope.scopeModel = {};
 
@@ -72,22 +70,13 @@ appControllers.directive('vrDevtoolsDevprojectsSelector', ['VR_Devtools_DevProje
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) { //payload is an object that has selectedids and filter
+                api.load = function (payload) {
                     selectorAPI.clearDataSource();
-                    var selectedIds;
-                    var connectionId;
-                    if (payload != undefined) {
-                        selectedIds = payload.selectedIds;
-                        connectionId = payload.connectionId;
-                    }
-                    return VR_Devtools_DevProjectTemplateAPIService.GetVRDevProjectsInfo(connectionId).then(function (response) {
+                  
+                    return VR_Devtools_DevProjectTemplateAPIService.GetDevProjectTableNames().then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
-                            }
-
-                            if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                             }
                         }
                     });
@@ -95,9 +84,8 @@ appControllers.directive('vrDevtoolsDevprojectsSelector', ['VR_Devtools_DevProje
 
                 api.getSelectedIds = function () {
                     var selectedIds = [];
-                    selectedIds = VRUIUtilsService.getIdSelectedIds('VRDevProjectID', attrs, ctrl);
-                    return selectedIds;
-                };
+                    selectedIds = VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
+                    return selectedIds;                };
 
                 api.clear = function () {
                     selectorAPI.clearDataSource();

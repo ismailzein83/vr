@@ -40,7 +40,8 @@ namespace Vanrise.DevTools.Data.SQL
 
             foreach (var column in columns)
             {
-                tableData.FieldValues.Add(column.Name, GetReaderValue<dynamic>(reader, column.Name));
+                if (column.Name != "timestamp")
+                    tableData.FieldValues.Add(column.Name, GetReaderValue<dynamic>(reader, column.Name));
             }
 
             return tableData;

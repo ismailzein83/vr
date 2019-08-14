@@ -20,5 +20,19 @@ namespace Vanrise.DevTools.Web.Controllers
         {
             return devProjectTemplateManager.GetVRDevProjectsInfo(connectionId);
         }
+
+        [HttpPost]
+        [Route("GetDevProjectTemplates")]
+        public List<GeneratedScriptItemTable> GetDevProjectTemplates(VRGeneratedScriptDevProjectTemplatesInput input)
+        {
+            return devProjectTemplateManager.GetDevProjectTemplates(input);
+        }
+        [HttpGet]
+        [Route("GetDevProjectTableNames")]
+        public List<VRGeneratedScriptTable> GetDevProjectTableNames()
+        {
+            return devProjectTemplateManager.GetDevProjectTableNames();
+        }
+   
     }
 }

@@ -109,9 +109,23 @@
                 };
                 $scope.scopeModel.addTemplate = function () {
                     var onTemplateAdded = function (designs) {
-                        for (var design in designs) {
-                            $scope.scopeModel.designs.push(design);
-                        }
+                        var scriptTypes = {};
+                        VR_Devtools_ColumnsAPIService.GetGeneratedScriptItemTableSettingsConfigs().then(function (response) {
+                            if (response != null) {
+                                scriptTypes=response;
+                                for (var i = 0; i < response.length; i++) {
+                                    var type = response[i];
+                                    scriptTypes[type.ExtensionConfigurationId] = type.Title;
+                                };
+                            }
+                            if (designs != undefined && designs.length > 0) {
+                                for (var i = 0; i < designs.length; i++) {
+                                    var design = designs[i];
+                                    design.Title = scriptTypes[design.Settings.ConfigId];
+                                    $scope.scopeModel.designs.push({ Entity: design  });
+                                }
+                            }
+                        });
                     };
                     VR_Devtools_GeneratedScriptService.addTemplate(onTemplateAdded);
                 };

@@ -48,6 +48,7 @@
     <Compile Include="GeneratedScript\VRGeneratedScriptColumns\VRGeneratedScriptColumns.cs" />
     <Compile Include="GeneratedScript\VRGeneratedScriptColumns\VRGeneratedScriptColumnsInfoFilter.cs" />
     <Compile Include="GeneratedScript\VRGeneratedScriptColumns\VRGeneratedScriptColumnsInfo.cs" />
+    <Compile Include="GeneratedScript\VRGeneratedScriptDevProjectTemplate\VRGeneratedScriptDevProjectTemplatesInput.cs" />
     <Compile Include="GeneratedScript\VRGeneratedScriptSchema\VRGeneratedScriptSchema.cs" />
     <Compile Include="GeneratedScript\VRGeneratedScriptSchema\VRGeneratedScriptSchemaInfo.cs" />
     <Compile Include="GeneratedScript\VRGeneratedScriptSchema\VRGeneratedScriptSchemaInfoFilter.cs" />

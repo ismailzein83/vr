@@ -1,12 +1,21 @@
-﻿<div vr-modalcontent ng-controller="VR_Devtools_VRGeneratedScriptDevProjectTemplateController" size="medium">
+﻿<div vr-modalcontent ng-controller="VR_Devtools_VRGeneratedScriptDevProjectTemplateController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
-        <vr-common-connection-selector on-ready="scopeModel.onConnectionStringDirectiveReady" onselectionchanged="scopeModel.onConnectionStringChanged" isrequired="true" normal-col-num="6"></vr-common-connection-selector>
-        <vr-devtools-devprojects-selector on-ready="scopeModel.onDevProjectsDirectiveReady" normal-col-num="6" label="Projects"></vr-devtools-devprojects-selector>
-    </vr-modalbody>
+        <vr-form name="formGeneratedScriptDevProjectTemplate">
+            <vr-row>
+                <vr-common-connection-selector on-ready="scopeModel.onConnectionStringDirectiveReady" onselectionchanged="scopeModel.onConnectionStringChanged" isrequired="true" normal-col-num="4"></vr-common-connection-selector>
+                <span vr-loader="scopeModel.isDevProjectDirectiveloading">
+                    <vr-devtools-devprojects-selector on-ready="scopeModel.onDevProjectsDirectiveReady" normal-col-num="4" label="Project" isrequired="true"></vr-devtools-devprojects-selector>
+                </span>
+            </vr-row>
+            <vr-row>
+                <vr-devtools-template-tables-selector ismultipleselection="true" on-ready="scopeModel.onTemplateTablesDirectiveReady" label="Tables" isrequired="true" normal-col-num="4"></vr-devtools-template-tables-selector></vr-columns>
+            </vr-row>
+        </vr-form>
+            </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Generate" formname="formGeneratedScriptDesignEditor" data-onclick="scopeModel.generateScripts"></vr-button>
+                <vr-button type="Generate" formname="formGeneratedScriptDevProjectTemplate" data-onclick="scopeModel.generateScripts"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

@@ -216,23 +216,24 @@ namespace Vanrise.DevTools.Business
               ");
 
             StringBuilder variablesBuilder = new StringBuilder();
-            
-            foreach (var variable in this.Variables)
+            if (Variables != null && Variables.Count > 0)
             {
-                var context = new GeneratedScriptVariableContext()
+                foreach (var variable in Variables)
                 {
-                    Name = variable.Name,
-                    Description = RDBDataTypeAttribute.GetAttribute(variable.Type).Description,
-                    Size = variable.Size,
-                    Precision = variable.Precision
-                };
+                    var context = new GeneratedScriptVariableContext()
+                    {
+                        Name = variable.Name,
+                        Description = RDBDataTypeAttribute.GetAttribute(variable.Type).Description,
+                        Size = variable.Size,
+                        Precision = variable.Precision
+                    };
 
-                variablesBuilder.Append(string.Format("Declare @{0}_{1} ",variable.Name.Replace(" ", String.Empty),variable.Id.ToString("N")));
-                variablesBuilder.Append(GetType(variable.Type,variable.Size,variable.Precision).ToString());
-                variablesBuilder.Append(variable.Settings.GetSQLVariableSettings(context));
-                variablesBuilder.AppendLine();
+                    variablesBuilder.Append(string.Format("Declare @{0}_{1} ", variable.Name.Replace(" ", String.Empty), variable.Id.ToString("N")));
+                    variablesBuilder.Append(GetType(variable.Type, variable.Size, variable.Precision).ToString());
+                    variablesBuilder.Append(variable.Settings.GetSQLVariableSettings(context));
+                    variablesBuilder.AppendLine();
+                }
             }
-
             StringBuilder valuesBuilder = new StringBuilder();
             foreach (var row in this.DataRows)
             {
