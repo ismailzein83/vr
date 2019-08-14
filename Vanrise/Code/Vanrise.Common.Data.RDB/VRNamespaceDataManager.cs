@@ -15,7 +15,8 @@ namespace Vanrise.Common.Data.RDB
 		static string TABLE_ALIAS = "vrNamespace";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
-		const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_DevProjectID = "DevProjectID";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 		const string COL_CreatedTime = "CreatedTime";
 		#endregion
 
@@ -25,7 +26,8 @@ namespace Vanrise.Common.Data.RDB
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
 			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
 			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
-			columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
 			{
@@ -66,7 +68,9 @@ namespace Vanrise.Common.Data.RDB
             ifNotExist.EqualsCondition(COL_Name).Value(vrNamespaceItem.Name);
             insertQuery.Column(COL_ID).Value(vrNamespaceItem.VRNamespaceId);
             insertQuery.Column(COL_Name).Value(vrNamespaceItem.Name);
-         
+            if (vrNamespaceItem.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(vrNamespaceItem.DevProjectId.Value);
+
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -79,7 +83,10 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.NotEqualsCondition(COL_ID).Value(vrNamespaceItem.VRNamespaceId);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrNamespaceItem.Name);
 			updateQuery.Column(COL_Name).Value(vrNamespaceItem.Name);
-
+            if (vrNamespaceItem.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(vrNamespaceItem.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
             updateQuery.Where().EqualsCondition(COL_ID).Value(vrNamespaceItem.VRNamespaceId);
 			return queryContext.ExecuteNonQuery() > 0;
 		}

@@ -31,12 +31,12 @@ namespace Vanrise.Common.Data.SQL
 
         public bool Insert(VRNamespace vrNamespace)
         {
-            return ExecuteNonQuerySP("common.sp_VRNamespace_Insert", vrNamespace.VRNamespaceId, vrNamespace.Name) > 0;
+            return ExecuteNonQuerySP("common.sp_VRNamespace_Insert", vrNamespace.VRNamespaceId, vrNamespace.Name,vrNamespace.DevProjectId) > 0;
         }
 
         public bool Update(VRNamespace vrNamespace)
         {
-            return ExecuteNonQuerySP("common.sp_VRNamespace_Update", vrNamespace.VRNamespaceId, vrNamespace.Name) > 0;
+            return ExecuteNonQuerySP("common.sp_VRNamespace_Update", vrNamespace.VRNamespaceId, vrNamespace.Name, vrNamespace.DevProjectId) > 0;
         }
 
         #endregion
@@ -49,6 +49,7 @@ namespace Vanrise.Common.Data.SQL
             {
                 VRNamespaceId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID")
             };
             return vrNamespace;
         }

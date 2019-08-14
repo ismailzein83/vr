@@ -10,6 +10,10 @@
 
         var vrNamespaceId;
         var vrNamespaceEntity;
+
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -31,7 +35,10 @@
                 return tryCompileNamespace();
             };
 
-            
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.save = function () {
 
                 var promiseDeferred = UtilsService.createPromiseDeferred();
@@ -87,8 +94,22 @@
             });
         }
 
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (vrNamespaceEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: vrNamespaceEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
+
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDevProjectSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -147,6 +168,7 @@
             return {
                 VRNamespaceId: vrNamespaceEntity != undefined ? vrNamespaceEntity.VRNamespaceId : undefined,
                 Name: $scope.scopeModel.namespace,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
             };
         }
 

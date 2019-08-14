@@ -11,6 +11,7 @@ namespace Vanrise.Common.Business
     public class VRNamespaceManager : IVRNamespaceManager
     {
         static AssemblyObject assemblyObject = new AssemblyObject();
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
 
         #region Public Methods
@@ -18,7 +19,17 @@ namespace Vanrise.Common.Business
         public IDataRetrievalResult<VRNamespaceDetail> GetFilteredVRNamespaces(DataRetrievalInput<VRNamespaceQuery> input)
         {
             var allVRNamespaces = this.GetCachedVRNamespaces();
-            Func<VRNamespace, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<VRNamespace, bool> filterExpression = (nameSpace) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(nameSpace.DevProjectId))
+                    return false;
+                if (input.Query.Name != null && !nameSpace.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                if (input.Query.DevProjectIds != null && (!nameSpace.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(nameSpace.DevProjectId.Value)))
+                    return false;
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(VRNamespaceLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRNamespaces.ToBigResult(input, filterExpression, VRNamespaceDetailMapper));
         }
@@ -119,7 +130,13 @@ namespace Vanrise.Common.Business
             var vrNamespaces = GetCachedVRNamespaces();
             if (vrNamespaces != null && vrNamespaces.Count > 0)
             {
-                return vrNamespaces.MapRecords(VRNamespaceInfoMapper).OrderBy(ns => ns.Name);
+                Func<VRNamespace, bool> filterExpression = (item) =>
+                {
+                    if (Utilities.ShouldHideItemHavingDevProjectId(item.DevProjectId))
+                        return false;
+                    return true;
+                };
+                return vrNamespaces.MapRecords(VRNamespaceInfoMapper, filterExpression).OrderBy(ns => ns.Name);
             }
             return null;
         }
@@ -393,10 +410,16 @@ namespace Vanrise.Common.Business
 
         public VRNamespaceDetail VRNamespaceDetailMapper(VRNamespace vrNamespace)
         {
+            string devProjectName = null;
+            if (vrNamespace.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(vrNamespace.DevProjectId.Value);
+            }
             VRNamespaceDetail vrNamespaceDetail = new VRNamespaceDetail()
             {
                 VRNamespaceId = vrNamespace.VRNamespaceId,
-                Name = vrNamespace.Name
+                Name = vrNamespace.Name,
+                DevProjectName = devProjectName
             };
             return vrNamespaceDetail;
         }

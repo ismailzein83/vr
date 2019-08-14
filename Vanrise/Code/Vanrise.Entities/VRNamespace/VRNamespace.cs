@@ -6,6 +6,7 @@ namespace Vanrise.Entities
     public class VRNamespace
     {
         public Guid VRNamespaceId { get; set; }
+        public Guid? DevProjectId { get; set; }
         public string Name { get; set; }
     }
 
