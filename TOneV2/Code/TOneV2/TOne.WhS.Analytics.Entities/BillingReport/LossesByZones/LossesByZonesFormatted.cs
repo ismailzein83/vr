@@ -19,6 +19,10 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string SaleRateFormatted { get; set; }
         public decimal? CostRate { get; set; }
         public string CostRateFormatted { get; set; }
+
+        public decimal? DurationNet { get; set; }
+        public string DurationNetFormatted { get; set; }
+
         public decimal? CostDuration { get; set; }
         public string CostDurationFormatted { get; set; }
         public decimal? SaleDuration { get; set; }
