@@ -133,7 +133,8 @@
                     controller.showSearchSection = !controller.showSearchSection;
                 };
 
-                controller.hideSelectAll = $attrs.hideselectall != undefined;
+                controller.hideSelectAll = controller.hideselectall != undefined;
+                controller.hideClearAll = $attrs.hideclearall != undefined;
 
                 controller.cancelClickTrigger = function (e) {
                     controller.showSearchSection = false;
