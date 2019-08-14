@@ -112,7 +112,8 @@ namespace Vanrise.Common.Data.RDB
 			{
 				VRDynamicAPIModuleId = reader.GetGuid(COL_ID),
 				Name = reader.GetString(COL_Name),
-				CreatedTime = reader.GetDateTime(COL_CreatedTime),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
 				CreatedBy = reader.GetInt(COL_CreatedBy),
 				LastModifiedTime = reader.GetDateTime(COL_LastModifiedTime),
 				LastModifiedBy = reader.GetInt(COL_LastModifiedBy)

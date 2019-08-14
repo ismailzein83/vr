@@ -106,7 +106,8 @@ namespace Vanrise.Common.Data.RDB
 			{
 				VRNamespaceId = reader.GetGuid(COL_ID),
 				Name = reader.GetString(COL_Name),
-			};
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID)
+            };
 		}
 		#endregion
 
