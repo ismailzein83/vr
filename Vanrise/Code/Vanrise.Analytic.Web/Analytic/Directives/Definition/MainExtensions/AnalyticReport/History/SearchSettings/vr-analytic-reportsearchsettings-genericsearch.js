@@ -2,7 +2,7 @@
 
     'use strict';
 
-    ReportsearchsettingsGenericsearch.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AdvancedFilterFieldsRelationType','VRLocalizationService'];
+    ReportsearchsettingsGenericsearch.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AdvancedFilterFieldsRelationType', 'VRLocalizationService'];
 
     function ReportsearchsettingsGenericsearch(UtilsService, VRUIUtilsService, VR_Analytic_AdvancedFilterFieldsRelationType, VRLocalizationService) {
         return {
@@ -177,58 +177,7 @@
 
                 defineAPI();
             }
-            function addSelectedDimension(gridDimension) {
 
-                var textResourcePayload;
-
-                var dataItem = {};
-                if (gridDimension.payload != undefined) {
-                    dataItem.Name = gridDimension.payload.DimensionName;
-                    dataItem.Title = gridDimension.payload.Title != undefined ? gridDimension.payload.Title : gridDimension.payload.DimensionName;
-                    dataItem.IsSelected = gridDimension.payload.IsRequired;
-                    dataItem.oldTitleResourceKey = gridDimension.payload.TitleResourceKey;
-                    textResourcePayload = { selectedValue: gridDimension.payload.TitleResourceKey };
-
-                }
-                dataItem.onTextResourceSelectorReady = function (api) {
-                    dataItem.textResourceSeletorAPI = api;
-                    gridDimension.textResourceReadyPromiseDeferred.resolve();
-                };
-
-                gridDimension.textResourceReadyPromiseDeferred.promise
-                    .then(function () {
-                        VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridDimension.textResourceLoadPromiseDeferred);
-                    });
-
-                $scope.scopeModel.groupingDimensions.push(dataItem);
-
-            }
-            function addSelectedFilterDimension(filterDimension) {
-
-                var textResourcePayload;
-
-                var dataItem = {};
-                if (filterDimension.payload != undefined) {
-                    dataItem.Name = filterDimension.payload.DimensionName;
-                    dataItem.Title = filterDimension.payload.Title != undefined ? filterDimension.payload.Title : filterDimension.payload.DimensionName;
-                    dataItem.IsRequired = filterDimension.payload.IsSelected;
-                    dataItem.oldTitleResourceKey = filterDimension.payload.TitleResourceKey;
-                    textResourcePayload = { selectedValue: filterDimension.payload.TitleResourceKey };
-
-                }
-                dataItem.onTextResourceSelectorReady = function (api) {
-                    dataItem.textResourceSeletorAPI = api;
-                    filterDimension.textResourceReadyPromiseDeferred.resolve();
-                };
-
-                filterDimension.textResourceReadyPromiseDeferred.promise
-                    .then(function () {
-                        VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, filterDimension.textResourceLoadPromiseDeferred);
-                    });
-
-                $scope.scopeModel.filterDimensions.push(dataItem);
-
-            }
             function defineAPI() {
                 var api = {};
 
@@ -256,17 +205,21 @@
                                     selectedGroupingIds.push(groupingDimension.DimensionName);
                                 }
                             }
-                            var filters =payload.searchSettings.Filters;
+
+                            var filters = payload.searchSettings.Filters;
                             if (filters != undefined && filters.length > 0) {
                                 selectedFilterIds = [];
                                 for (var i = 0; i < filters.length; i++) {
                                     var filterDimension = filters[i];
                                     selectedFilterIds.push(filterDimension.DimensionName);
-                                   
+
                                 }
                             }
-                            if (payload.searchSettings != undefined)
+
+                            if (payload.searchSettings != undefined) {
                                 $scope.scopeModel.showLegend = payload.searchSettings.ShowLegend;
+                            }
+
                             if (payload.searchSettings.AdvancedFilters != undefined) {
                                 $scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues =
                                     UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, payload.searchSettings.AdvancedFilters.FieldsRelationType, "value");
@@ -315,8 +268,6 @@
                             VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
                         });
                         promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
-                       
-
 
                         var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadTableSelectorPromiseDeferred.promise);
@@ -369,8 +320,9 @@
                         };
 
                         return UtilsService.waitPromiseNode(rootPromiseNode);
-                    };
+                    } 
                 };
+
                 api.getData = function getData() {
 
                     var groupingDimensions;
@@ -421,6 +373,7 @@
                             AnalyticTableId: selectedTableId
                         });
                     }
+
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.History.SearchSettings.GenericSearchSettings, Vanrise.Analytic.MainExtensions ",
                         IsRequiredGroupingDimensions: $scope.scopeModel.isRequiredGroupingDimensions,
@@ -438,10 +391,58 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+            }
 
+            function addSelectedDimension(gridDimension) {
+
+                var textResourcePayload;
+
+                var dataItem = {};
+                if (gridDimension.payload != undefined) {
+                    dataItem.Name = gridDimension.payload.DimensionName;
+                    dataItem.Title = gridDimension.payload.Title != undefined ? gridDimension.payload.Title : gridDimension.payload.DimensionName;
+                    dataItem.IsSelected = gridDimension.payload.IsRequired;
+                    dataItem.oldTitleResourceKey = gridDimension.payload.TitleResourceKey;
+                    textResourcePayload = { selectedValue: gridDimension.payload.TitleResourceKey };
+                }
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    gridDimension.textResourceReadyPromiseDeferred.resolve();
+                };
+
+                gridDimension.textResourceReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridDimension.textResourceLoadPromiseDeferred);
+                });
+
+                $scope.scopeModel.groupingDimensions.push(dataItem);
+            }
+
+            function addSelectedFilterDimension(filterDimension) {
+
+                var textResourcePayload;
+
+                var dataItem = {};
+                if (filterDimension.payload != undefined) {
+                    dataItem.Name = filterDimension.payload.DimensionName;
+                    dataItem.Title = filterDimension.payload.Title != undefined ? filterDimension.payload.Title : filterDimension.payload.DimensionName;
+                    dataItem.IsRequired = filterDimension.payload.IsSelected;
+                    dataItem.oldTitleResourceKey = filterDimension.payload.TitleResourceKey;
+                    textResourcePayload = { selectedValue: filterDimension.payload.TitleResourceKey };
+                }
+
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    filterDimension.textResourceReadyPromiseDeferred.resolve();
+                };
+
+                filterDimension.textResourceReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, filterDimension.textResourceLoadPromiseDeferred);
+                });
+
+                $scope.scopeModel.filterDimensions.push(dataItem);
             }
         }
     }
-    app.directive('vrAnalyticReportsearchsettingsGenericsearch', ReportsearchsettingsGenericsearch);
 
+    app.directive('vrAnalyticReportsearchsettingsGenericsearch', ReportsearchsettingsGenericsearch);
 })(app);
