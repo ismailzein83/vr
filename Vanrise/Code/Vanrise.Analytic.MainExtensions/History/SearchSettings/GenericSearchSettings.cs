@@ -18,9 +18,11 @@ namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
         public List<GenericSearchSettingsFilter> Filters { get; set; }
 
         public GenericSearchSettingsAdvancedFilters AdvancedFilters { get; set; }
+
         public bool ShowLegend { get; set; }
 
         public List<GenericSearchSettingsLegend> Legends { get; set; }
+
         public override void ApplyTranslation(IAnalyticHistoryReportTranslationContext context)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
