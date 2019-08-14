@@ -73,6 +73,7 @@
     <Folder Include="RA_INTL_SMSAnalytics\User Defined Types\" />
     <Folder Include="RA_INTL_Analytics\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="RA_INTL_Analytics\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
@@ -90,5 +91,6 @@
     <Build Include="Security\RA_INTL_SMSAnalytics.sql" />
     <Build Include="Security\RA_INTL_Analytics.sql" />
     <Build Include="Security\COMMON.sql" />
+    <Build Include="RA_INTL_Analytics\Views\vw_OverallBillingStats.sql" />
   </ItemGroup>
 </Project>

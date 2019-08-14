@@ -74,6 +74,7 @@
     <Folder Include="RA_ICX_Analytics\User Defined Types\" />
     <Folder Include="Security\" />
     <Folder Include="dbo\Views\" />
+    <Folder Include="RA_ICX_Analytics\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
@@ -94,5 +95,6 @@
     <Build Include="Security\RA_ICX_Analytics.sql" />
     <Build Include="Security\COMMON.sql" />
     <Build Include="dbo\Views\vw_OverallBillingStats.sql" />
+    <Build Include="RA_ICX_Analytics\Views\vw_OverallBillingStats.sql" />
   </ItemGroup>
 </Project>
