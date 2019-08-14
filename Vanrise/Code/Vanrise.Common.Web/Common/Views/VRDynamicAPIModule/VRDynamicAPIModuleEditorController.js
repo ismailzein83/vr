@@ -9,6 +9,9 @@
         var vrDynamicAPIModuleId;
         var vrDynamicAPIModuleEntity;
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -23,6 +26,11 @@
         function defineScope() {
 
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.saveVRDynamicAPIModule = function () {
                 if (isEditMode)
                     return updateVRDynamicAPIModule();
@@ -57,6 +65,19 @@
                 vrDynamicAPIModuleEntity = response;
             });
         }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (vrDynamicAPIModuleEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: vrDynamicAPIModuleEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
 
         function loadAllControls() {
 
@@ -73,7 +94,7 @@
                 }
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDevProjectSelector])
              .catch(function (error) {
                  VRNotificationService.notifyExceptionWithClose(error, $scope);
              })
@@ -86,6 +107,7 @@
             var object = {
                 VRDynamicAPIModuleId: (vrDynamicAPIModuleId != undefined) ? vrDynamicAPIModuleId : undefined,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
             };
             return object;
         }

@@ -10,6 +10,7 @@ namespace Vanrise.Entities
     {
         public Guid VRDynamicAPIModuleId { get; set; }
         public string Name { get; set; }
+        public Guid? DevProjectId { get; set; }
         public DateTime CreatedTime { get; set; }
         public int CreatedBy { get; set; }
         public DateTime LastModifiedTime { get; set; }

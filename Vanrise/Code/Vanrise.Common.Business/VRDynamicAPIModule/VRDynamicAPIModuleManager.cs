@@ -12,16 +12,19 @@ namespace Vanrise.Common.Business
 {
     public class VRDynamicAPIModuleManager
     {
-
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
         #region Public Methods
         public IDataRetrievalResult<VRDynamicAPIModuleDetails> GetFilteredVRDynamicAPIModules(DataRetrievalInput<VRDynamicAPIModuleQuery> input)
         {
             var allVRDynamicAPIModules = GetCachedVRDynamicAPIModules();
             Func<VRDynamicAPIModule, bool> filterExpression = (vrDynamicAPIModule) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(vrDynamicAPIModule.DevProjectId))
+                    return false;
                 if (input.Query.Name != null && !vrDynamicAPIModule.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-               
+                if (input.Query.DevProjectIds != null && (!vrDynamicAPIModule.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(vrDynamicAPIModule.DevProjectId.Value)))
+                    return false;
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(VRDynamicAPIModuleLoggableEntity.Instance, input);
@@ -165,11 +168,16 @@ namespace Vanrise.Common.Business
         public VRDynamicAPIModuleDetails VRDynamicAPIModuleDetailMapper(VRDynamicAPIModule vrDynamicAPIModule)
         {
             IUserManager userManager = BEManagerFactory.GetManager<IUserManager>();
-
+            string devProjectName = null;
+            if (vrDynamicAPIModule.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(vrDynamicAPIModule.DevProjectId.Value);
+            }
             return new VRDynamicAPIModuleDetails
             {
                 Name = vrDynamicAPIModule.Name,
                 VRDynamicAPIModuleId = vrDynamicAPIModule.VRDynamicAPIModuleId,
+                DevProjectName = devProjectName,
                 CreatedTime=vrDynamicAPIModule.CreatedTime,
                 CreatedByDescription = userManager.GetUserName(vrDynamicAPIModule.CreatedBy),
                 LastModifiedTime=vrDynamicAPIModule.LastModifiedTime,

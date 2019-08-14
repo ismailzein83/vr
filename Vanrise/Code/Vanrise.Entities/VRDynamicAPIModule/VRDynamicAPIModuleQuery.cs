@@ -9,6 +9,6 @@ namespace Vanrise.Entities
     public class VRDynamicAPIModuleQuery
     {
         public string Name { get; set; }
-      
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

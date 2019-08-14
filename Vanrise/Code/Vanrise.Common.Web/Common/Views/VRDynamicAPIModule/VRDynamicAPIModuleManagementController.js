@@ -6,6 +6,9 @@
     function vrDynamicAPIModuleManagementController($scope, VRNotificationService, VRCommon_DynamicAPIModuleService, VRCommon_VRDynamicAPIModuleAPIService, VRCommon_VRDynamicAPIAPIService, UtilsService, VRUIUtilsService) {
 
         var gridApi;
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
       load();
 
@@ -17,7 +20,10 @@
                 gridApi = api;
                 api.load(getFilter());
             };
-
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.search = function () {
                 VRCommon_VRDynamicAPIAPIService.BuildAllDynamicAPIControllers();
                 return gridApi.load(getFilter());
@@ -38,19 +44,32 @@
         }
 
         function load() {
-            $scope.scopeModel.isLoading = true;
+            $scope.isLoading = true;
             loadAllControls();
         }
-
         function loadAllControls() {
-                 $scope.scopeModel.isLoading = false;
+            return UtilsService.waitPromiseNode({ promises: [loadDevProjectSelector()] })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
         }
-   
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
+
 
         function getFilter() {
             return {
                 query: {
                     Name: $scope.scopeModel.name,
+                    DevProjectIds: devProjectDirectiveApi != undefined ? devProjectDirectiveApi.getSelectedIds() : undefined
                 }
             };
         }

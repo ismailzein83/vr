@@ -15,7 +15,8 @@ namespace Vanrise.Common.Data.RDB
 		static string TABLE_ALIAS = "vrDynamicAPIModule";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
-		const string COL_CreatedTime = "CreatedTime";
+        public const string COL_DevProjectID = "DevProjectID";
+        const string COL_CreatedTime = "CreatedTime";
 		const string COL_CreatedBy = "CreatedBy";
 		const string COL_LastModifiedTime = "LastModifiedTime";
 		const string COL_LastModifiedBy = "LastModifiedBy";
@@ -27,7 +28,8 @@ namespace Vanrise.Common.Data.RDB
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
 			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
 			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
-			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 			columns.Add(COL_CreatedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
 			columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 			columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
@@ -64,7 +66,10 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(vrDynamicAPIModule.Name);
             insertQuery.Column(COL_ID).Value(vrDynamicAPIModule.VRDynamicAPIModuleId);
             insertQuery.Column(COL_Name).Value(vrDynamicAPIModule.Name);
-			insertQuery.Column(COL_CreatedBy).Value(vrDynamicAPIModule.CreatedBy);
+            if (vrDynamicAPIModule.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(vrDynamicAPIModule.DevProjectId.Value);
+
+            insertQuery.Column(COL_CreatedBy).Value(vrDynamicAPIModule.CreatedBy);
 			insertQuery.Column(COL_LastModifiedBy).Value(vrDynamicAPIModule.LastModifiedBy);
 			return queryContext.ExecuteNonQuery() > 0;
 		}
@@ -78,7 +83,11 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.NotEqualsCondition(COL_ID).Value(vrDynamicAPIModule.VRDynamicAPIModuleId);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrDynamicAPIModule.Name);
 			updateQuery.Column(COL_Name).Value(vrDynamicAPIModule.Name);
-			updateQuery.Column(COL_LastModifiedBy).Value(vrDynamicAPIModule.LastModifiedBy);
+            if (vrDynamicAPIModule.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(vrDynamicAPIModule.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+            updateQuery.Column(COL_LastModifiedBy).Value(vrDynamicAPIModule.LastModifiedBy);
 			updateQuery.Where().EqualsCondition(COL_ID).Value(vrDynamicAPIModule.VRDynamicAPIModuleId);
 			return queryContext.ExecuteNonQuery() > 0;
 		}

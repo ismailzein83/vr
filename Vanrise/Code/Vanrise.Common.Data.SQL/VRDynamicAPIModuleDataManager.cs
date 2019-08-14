@@ -24,14 +24,14 @@ namespace Vanrise.Common.Data.SQL
 
             public bool Insert(VRDynamicAPIModule vrDynamicAPIModule)
             {
-                int nbOfRecordsAffected = ExecuteNonQuerySP("[common].[sp_VRDynamicAPIModule_Insert]", vrDynamicAPIModule.VRDynamicAPIModuleId, vrDynamicAPIModule.Name, vrDynamicAPIModule.CreatedBy, vrDynamicAPIModule.LastModifiedBy);
+                int nbOfRecordsAffected = ExecuteNonQuerySP("[common].[sp_VRDynamicAPIModule_Insert]", vrDynamicAPIModule.VRDynamicAPIModuleId, vrDynamicAPIModule.Name, vrDynamicAPIModule.DevProjectId, vrDynamicAPIModule.CreatedBy, vrDynamicAPIModule.LastModifiedBy);
                 return (nbOfRecordsAffected > 0);
             }
 
             public bool Update(VRDynamicAPIModule vrDynamicAPIModule)
             {
                
-                int nbOfRecordsAffected = ExecuteNonQuerySP("[common].[sp_VRDynamicAPIModule_Update]", vrDynamicAPIModule.VRDynamicAPIModuleId, vrDynamicAPIModule.Name, vrDynamicAPIModule.LastModifiedBy);
+                int nbOfRecordsAffected = ExecuteNonQuerySP("[common].[sp_VRDynamicAPIModule_Update]", vrDynamicAPIModule.VRDynamicAPIModuleId, vrDynamicAPIModule.Name, vrDynamicAPIModule.DevProjectId, vrDynamicAPIModule.LastModifiedBy);
                 return (nbOfRecordsAffected > 0);
             }
 
@@ -46,7 +46,8 @@ namespace Vanrise.Common.Data.SQL
                 {
                     VRDynamicAPIModuleId = GetReaderValue<Guid>(reader, "ID"),
                     Name = GetReaderValue<string>(reader, "Name"),
-                    CreatedTime= GetReaderValue<DateTime>(reader, "CreatedTime"),
+                    DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
+                    CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                     CreatedBy=GetReaderValue<int>(reader, "CreatedBy"),
                     LastModifiedTime= GetReaderValue<DateTime>(reader, "LastModifiedTime"),
                     LastModifiedBy= GetReaderValue<int>(reader, "LastModifiedBy")
