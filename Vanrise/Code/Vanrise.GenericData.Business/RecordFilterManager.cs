@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
@@ -178,6 +177,39 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        public RecordFilterGroup ReBuildRecordFilterGroupWithExcludedFields(RecordFilterGroup recordFilter, List<string> fieldsToExclude)
+        {
+            RecordFilterGroup newFilterGroup = new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>(),
+                LogicalOperator = recordFilter.LogicalOperator
+            };
+            if (recordFilter.Filters != null)
+            {
+                foreach (var childFilter in recordFilter.Filters)
+                {
+                    RecordFilterGroup childFilterGroup = childFilter as RecordFilterGroup;
+                    if (childFilterGroup != null)
+                    {
+                        newFilterGroup.Filters.Add(ReBuildRecordFilterGroupWithExcludedFields(childFilterGroup, fieldsToExclude));
+                    }
+                    else
+                    {
+                        if (childFilter.FieldName != null && fieldsToExclude.Contains(childFilter.FieldName))
+                        {
+                            newFilterGroup.Filters.Add(new AlwaysTrueRecordFilter());
+                        }
+                        else
+                        {
+                            newFilterGroup.Filters.Add(childFilter);
+                        }
+                    }
+                }
+            }
+            return newFilterGroup;
+        }
+
+
         #region Private Classes
 
         private class SingleFieldRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
@@ -206,10 +238,13 @@ namespace Vanrise.GenericData.Business
             {
                 _parameterValues = parameterValues;
             }
+
             public bool TryGetParameterValue(Guid parameterId, out dynamic value)
             {
                 if (_parameterValues != null)
+                {
                     return _parameterValues.TryGetValue(parameterId, out value);
+                }
                 else
                 {
                     value = null;
@@ -247,38 +282,6 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-
-        public RecordFilterGroup ReBuildRecordFilterGroupWithExcludedFields(RecordFilterGroup recordFilter, List<string> fieldsToExclude)
-        {
-            RecordFilterGroup newFilterGroup = new RecordFilterGroup
-            {
-                Filters = new List<RecordFilter>(),
-                LogicalOperator = recordFilter.LogicalOperator
-            };
-            if (recordFilter.Filters != null)
-            {
-                foreach (var childFilter in recordFilter.Filters)
-                {
-                    RecordFilterGroup childFilterGroup = childFilter as RecordFilterGroup;
-                    if (childFilterGroup != null)
-                    {
-                        newFilterGroup.Filters.Add(ReBuildRecordFilterGroupWithExcludedFields(childFilterGroup, fieldsToExclude));
-                    }
-                    else
-                    {
-                        if (childFilter.FieldName != null && fieldsToExclude.Contains(childFilter.FieldName))
-                        {
-                            newFilterGroup.Filters.Add(new AlwaysTrueRecordFilter());
-                        }
-                        else
-                        {
-                            newFilterGroup.Filters.Add(childFilter);
-                        }
-                    }
-                }
-            }
-            return newFilterGroup;
-        }
     }
 
     public interface IRecordFilterGenericFieldMatchContext
@@ -290,7 +293,6 @@ namespace Vanrise.GenericData.Business
     {
         Dictionary<string, DataRecordField> _recordTypeFieldsByName;
         DataRecordObject _dataRecordObject;
-
 
         public DataRecordFilterGenericFieldMatchContext(DataRecordObject dataRecordObject)
         {
@@ -332,6 +334,7 @@ namespace Vanrise.GenericData.Business
             if (_recordTypeFieldsByName == null)
                 throw new NullReferenceException("_recordTypeFieldsByName");
         }
+
         public DataRecordDictFilterGenericFieldMatchContext(Dictionary<string, dynamic> dataRecord, Guid recordTypeId)
             : this(dataRecord, (new DataRecordTypeManager()).GetDataRecordTypeFields(recordTypeId))
         {
