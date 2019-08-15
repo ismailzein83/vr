@@ -2108,6 +2108,12 @@ La facture doit être payée avant </Value>
                           <Style>Solid</Style>
                           <Width>1.25pt</Width>
                         </Border>
+                        <TopBorder>
+                          <Width>=iif(Parameters!NoRecurringCharges.Value AND Parameters!NoDeals.Value ,"2.5pt","1.25pt")</Width>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Width>=iif(CountRows("TaxesDetails")&gt;0,"1.25pt","2.5pt")</Width>
+                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2143,6 +2149,12 @@ La facture doit être payée avant </Value>
                           <Style>Solid</Style>
                           <Width>1.25pt</Width>
                         </Border>
+                        <TopBorder>
+                          <Width>=iif(Parameters!NoRecurringCharges.Value AND Parameters!NoDeals.Value ,"2.5pt","1.25pt")</Width>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Width>=iif(CountRows("TaxesDetails")&gt;0,"1.25pt","2.5pt")</Width>
+                        </BottomBorder>
                         <RightBorder>
                           <Width>2.5pt</Width>
                         </RightBorder>
