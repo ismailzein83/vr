@@ -99,7 +99,7 @@ namespace TOne.WhS.Sales.Business
                     IEnumerable<int> newCountryIds;
                     IEnumerable<int> changedCountryIds;
                     Dictionary<long, ZoneChanges> zoneDraftsByZoneId;
-                    ratePlanManager.SetDraftVariables(SalePriceListOwnerType.Customer, ownerId, out draft, out zoneDraftsByZoneId, out newCountryIds, out changedCountryIds);
+                    ratePlanManager.SetDraftVariables(ownerType, ownerId, out draft, out zoneDraftsByZoneId, out newCountryIds, out changedCountryIds);
                     #endregion
                     CountryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true);
                     DraftChangedCountries draftChangedCountries = (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null) ? draft.CountryChanges.ChangedCountries : null;
@@ -117,13 +117,13 @@ namespace TOne.WhS.Sales.Business
                         ratePlanManager.SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
 
                         #region prepare rate manager
-                        var rateManager = new ZoneRateManager(SalePriceListOwnerType.Customer, ownerId, sellingProductId, DateTime.Now, draft, currencyId.Value, longPrecisionValue, _currentRateLocator);
+                        var rateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, DateTime.Now, draft, currencyId.Value, longPrecisionValue, _currentRateLocator);
                         #endregion
                         #region prepare routing product manager
                         Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
                         SaleEntityRoutingProductReadByRateBED zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { ownerId }, zoneEffectiveDatesByZoneId);
                         SaleEntityZoneRoutingProductLocator zoneRPLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReader);
-                        var routingProductManager = new ZoneRPManager(SalePriceListOwnerType.Customer, ownerId, draft, zoneRPLocator, zoneRoutingProductReader);
+                        var routingProductManager = new ZoneRPManager(ownerType, ownerId, draft, zoneRPLocator, zoneRoutingProductReader);
                         #endregion
 
                         var saleRateManager = new SaleRateManager();
