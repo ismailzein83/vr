@@ -75,7 +75,7 @@
                     };
 
                     VR_Devtools_GeneratedScriptService.editGeneratedScriptDesign(onGeneratedScriptDesignUpdated, Design);
-                }
+                };
                 $scope.scopeModel.compareItems = function () {
                     $scope.scopeModel.isLoading = true;
                     var designs=[];
