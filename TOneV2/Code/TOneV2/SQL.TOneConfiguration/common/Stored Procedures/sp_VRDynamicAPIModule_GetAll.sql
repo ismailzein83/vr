@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT	[ID],[Name], [CreatedTime], [CreatedBy], [LastModifiedBy], [LastModifiedTime]
+	SELECT	[ID],[Name],[DevProjectId], [CreatedTime], [CreatedBy], [LastModifiedBy], [LastModifiedTime]
     from	[common].[VRDynamicAPIModule] WITH(NOLOCK) 
 	ORDER BY [Name]
 END

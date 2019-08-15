@@ -5,6 +5,6 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-	SELECT	ID, Name, Settings
+	SELECT	ID, Name,DevProjectID, Settings
 	FROM	[Analytic].DataAnalysisDefinition WITH(NOLOCK) 
 END

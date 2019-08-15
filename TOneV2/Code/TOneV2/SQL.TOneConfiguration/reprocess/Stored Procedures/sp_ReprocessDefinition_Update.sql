@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [reprocess].[sp_ReprocessDefinition_Update]
 	@ID uniqueidentifier,
 	@Name Nvarchar(255),
+	@DevProjectId uniqueidentifier,
 	@Settings nvarchar(MAX)
 AS
 BEGIN
@@ -8,6 +9,7 @@ BEGIN
 	BEGIN
 		UPDATE [reprocess].ReprocessDefinition
 		SET Name = @Name,
+		DevProjectID=@DevProjectId,
 		LastModifiedTime = GETDATE(),
 		[Settings] = @Settings
 		WHERE ID = @ID

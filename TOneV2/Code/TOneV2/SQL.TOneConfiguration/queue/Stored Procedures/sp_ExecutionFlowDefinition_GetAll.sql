@@ -12,8 +12,9 @@ BEGIN
 	SELECT [Id]
       ,[Name]
       ,[Title]
+	  ,[DevProjectID]
       ,[Stages]
-       from [queue].ExecutionFlowDefinition WITH(NOLOCK) 
+       from [queue].[ExecutionFlowDefinition] WITH(NOLOCK) 
        
      SET NOCOUNT OFF;
 END
