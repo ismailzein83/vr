@@ -160,6 +160,39 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public string GetRatePlanNameFromCatalog(string rateplanId)
+        {
+            string ratePlanName = null;
+
+            if (rateplanId == null)
+                return null;
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlansInCatalog");
+            esq.AddColumn("Id");
+            esq.AddColumn("StRatePlanID");
+            esq.AddColumn("StRatePlanName");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRatePlanID", rateplanId);
+
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                ratePlanName = (string)entity.GetColumnValue("StRatePlanName");
+
+            }
+
+            return ratePlanName;
+        }
+
         public List<string> GetTelephonyOperations()
         {
             EntitySchemaQuery esq;

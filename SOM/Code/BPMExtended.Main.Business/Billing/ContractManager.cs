@@ -713,6 +713,9 @@ namespace BPMExtended.Main.Business
             int stat = 0;
             int.TryParse(contract.Status.ToString(), out stat);
 
+            var catalogManager = new CatalogManager();
+            string ratePlanName = catalogManager.GetRatePlanNameFromCatalog(contract.RateplanId);
+
             var contractAddress = new Address()
             {
                 Street = contract.Street,
@@ -724,6 +727,7 @@ namespace BPMExtended.Main.Business
                 ContractAddress = contractAddress,
                 ContractBalance = contract.CurrentBalance,
                 RatePlanId = contract.RateplanId,
+                RatePlanName = ratePlanName,
                 PathId = contract.LinePathId,
                 PhoneNumber = contract.PhoneNumber,
                 ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId,
