@@ -1,9 +1,6 @@
 ﻿using Retail.Interconnect.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -43,8 +40,7 @@ namespace Retail.Interconnect.Business
 
         public bool UpdateOriginalInvoiceData(OriginalInvoiceDataInput input)
         {
-
-            Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
+            var invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
             var invoice = invoiceManager.GetInvoice(input.InvoiceId);
             invoice.ThrowIfNull("invoice", input.InvoiceId);
 
@@ -53,10 +49,12 @@ namespace Retail.Interconnect.Business
                 VRFileManager vrFileManager = new VRFileManager();
                 foreach (var attachment in input.AttachementFiles)
                 {
-                    if (!vrFileManager.SetFileUsedAndUpdateSettings(attachment.FileId, new VRFileSettings { ExtendedSettings = new OriginalInvoiceDataFileSetting { InvoiceId = input.InvoiceId, InvoiceTypeId = invoice.InvoiceTypeId } }))
+                    var vrFileSettings = new VRFileSettings()
                     {
+                        ExtendedSettings = new OriginalInvoiceDataFileSetting { InvoiceId = input.InvoiceId, InvoiceTypeId = invoice.InvoiceTypeId }
+                    };
+                    if (!vrFileManager.SetFileUsedAndUpdateSettings(attachment.FileId, vrFileSettings))
                         return false;
-                    }
                 }
             }
 
@@ -66,23 +64,24 @@ namespace Retail.Interconnect.Business
             interconnectInvoiceDetails.Reference = input.Reference;
 
             interconnectInvoiceDetails.IsOriginalAmountSetted = false;
-            if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0)
+            if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Any(x => x.Value.OriginalAmount.HasValue))
             {
-                if (input.OriginalDataCurrency.Any(x => x.Value.OriginalAmount.HasValue))
-                {
-                    interconnectInvoiceDetails.OriginalAmountByCurrency = new Dictionary<int, OriginalDataCurrrency>();
+                interconnectInvoiceDetails.OriginalAmountByCurrency = new Dictionary<int, OriginalDataCurrrency>();
 
-                    foreach (var item in input.OriginalDataCurrency)
-                    {
-                        if (item.Value.OriginalAmount.HasValue)
-                            interconnectInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
-                    }
-                }
-                if (input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
+                foreach (var item in input.OriginalDataCurrency)
                 {
-                    interconnectInvoiceDetails.IsOriginalAmountSetted = true;
+                    if (item.Value.OriginalAmount.HasValue)
+                        interconnectInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
                 }
+
+                if (input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
+                    interconnectInvoiceDetails.IsOriginalAmountSetted = true;
             }
+            else
+            {
+                interconnectInvoiceDetails.OriginalAmountByCurrency = null;
+            }
+
             invoice.Details = interconnectInvoiceDetails;
 
             if (invoiceManager.TryUpdateInvoice(invoice))
@@ -90,6 +89,7 @@ namespace Retail.Interconnect.Business
                 VRActionLogger.Current.LogObjectCustomAction(new Vanrise.Invoice.Business.InvoiceManager.InvoiceLoggableEntity(invoice.InvoiceTypeId), "Update", true, invoice, "Invoice original data updated");
                 return true;
             }
+
             return false;
         }
 
@@ -105,10 +105,10 @@ namespace Retail.Interconnect.Business
             List<AttachementFile> attachementFiles = null;
 
             var interconnnectInvoiceDetails = invoice.Details as InterconnectInvoiceDetails;
-                    interconnnectInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
-                    reference = interconnnectInvoiceDetails.Reference;
-                    originalAmountByCurrency = interconnnectInvoiceDetails.OriginalAmountByCurrency;
-                    attachementFiles = interconnnectInvoiceDetails.AttachementFiles;
+            interconnnectInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
+            reference = interconnnectInvoiceDetails.Reference;
+            originalAmountByCurrency = interconnnectInvoiceDetails.OriginalAmountByCurrency;
+            attachementFiles = interconnnectInvoiceDetails.AttachementFiles;
 
             var originalInvoiceDataRuntime = new OriginalInvoiceDataRuntime
             {
@@ -172,7 +172,6 @@ namespace Retail.Interconnect.Business
             }
             return originalInvoiceDataRuntime;
         }
-
 
         public bool DoesUserHaveUpdateOriginalInvoiceDataAccess(long invoiceId)
         {
