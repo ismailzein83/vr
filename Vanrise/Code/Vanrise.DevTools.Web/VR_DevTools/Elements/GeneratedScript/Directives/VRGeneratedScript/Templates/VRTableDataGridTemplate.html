@@ -18,9 +18,9 @@
     </vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x.Name" field="'FieldValues.'+ x.Name" getcolor="getStatusColor" expendablecolumn expendablecolumndescription="'FieldValues.'+ x.Name" isfielddynamic="true"></vr-datagridcolumn>
 </vr-datagrid>
-<label class="label label-success" vr-alert>Total Rows:</label>
-<label>{{scopeModel.totalRows()}}</label>
-<label class="label label-success" vr-alert>  New Rows:</label>
-<label>{{scopeModel.newRows()}}</label>
+<label>Total Rows:</label>
+<label class="label label-success" vr-alert>{{scopeModel.totalRows()}}</label>
+<label>  New Rows:</label>
+<label class="label label-success" vr-alert>{{scopeModel.newRows()}}</label>
 
 
