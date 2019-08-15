@@ -63,17 +63,26 @@ namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
     }
 
     public enum AdvancedFilterFieldsRelationType { AllFields = 0, SpecificFields = 1 }
+    public enum AdvancedFilterMeasuresRelationType { AllFields = 0, SpecificMeasures = 1 }
     public class GenericSearchSettingsAdvancedFilters
     {
         public AdvancedFilterFieldsRelationType FieldsRelationType { get; set; }
 
         public List<AdvancedFilterField> AvailableFields { get; set; }
+
+        public AdvancedFilterMeasuresRelationType? MeasuresRelationType { get; set; }
+
+        public List<AdvancedFilterMeasure> AvailableMeasures { get; set; }
     }
     public class AdvancedFilterField
     {
         public string FieldName { get; set; }
 
         //public string FieldTitle { get; set; }
+    }
+    public class AdvancedFilterMeasure 
+    {
+        public string FieldName { get; set; }
     }
 
     public class GenericSearchSettingsLegend
