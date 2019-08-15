@@ -63,11 +63,11 @@ namespace Vanrise.Reprocess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
 
             var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
             ifNotExist.EqualsCondition(COL_Name).Value(reprocessDefinitionItem.Name);
 
-            insertQuery.IntoTable(TABLE_NAME);
             insertQuery.Column(COL_Id).Value(reprocessDefinitionItem.ReprocessDefinitionId);
             insertQuery.Column(COL_Name).Value(reprocessDefinitionItem.Name);
             if (reprocessDefinitionItem.DevProjectId.HasValue)
@@ -83,13 +83,12 @@ namespace Vanrise.Reprocess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var updateQuery = queryContext.AddUpdateQuery();
-
+            updateQuery.FromTable(TABLE_NAME);
             var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
 
             ifNotExist.NotEqualsCondition(COL_Id).Value(reprocessDefinitionItem.ReprocessDefinitionId);
             ifNotExist.EqualsCondition(COL_Name).Value(reprocessDefinitionItem.Name);
 
-            updateQuery.FromTable(TABLE_NAME);
             updateQuery.Column(COL_Name).Value(reprocessDefinitionItem.Name);
 
             if (reprocessDefinitionItem.DevProjectId.HasValue)
