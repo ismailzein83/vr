@@ -925,12 +925,39 @@ namespace BPMExtended.Main.Business
                 }
 
             };
-           
+
             using (var client = new SOMClient())
             {
                 client.Post<SOMRequestInput<CustomerCreationInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateCustomer/StartProcess", somRequestInput);
             }
 
+        }
+
+        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber)
+        {
+            IDManager manager = new IDManager();
+            CustomerId = manager.GetCustomerNextId();
+
+            CustomerCreationOutput output;
+            CreateCustomerInput input = new CreateCustomerInput
+            {
+                AccountNumber = AccountNumber,
+                BankCode = BankCode,
+                City = City,
+                CSO = CSO,
+                CustomerCategoryId = CustomerCategoryId,
+                FirstName = FirstName,
+                LastName = LastName,
+                PaymentMethodId = PaymentMethodId,
+                CustomerId = CustomerId
+            };
+
+            using (var client = new SOMClient())
+            {
+                output = client.Post<CreateCustomerInput, CustomerCreationOutput>("api/SOM.ST/Billing/CreateCustomer", input);
+                output.CustomerSequenceId = CustomerId;
+            }
+            return output;
         }
 
         public List<CustomerCategoryInfo> GetCustomerCategoriesInfoBySegmentId(string segmentId)
