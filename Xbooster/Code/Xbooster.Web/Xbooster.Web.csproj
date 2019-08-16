@@ -438,6 +438,9 @@
     <Content Include="appSettings.config" />
     <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\Xbooster.pubxml" />
+    <None Include="Web.config.CCT.exclud">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
     </None>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <connectionStrings>
+    <add name="CDRComparisonOutputDBConnString" connectionString="Server=localhost;Database=CDRComparisonOutput;User ID=sa;Password=" />
+  </connectionStrings>
+  <appSettings>
+    <add key="CDRComparisonDBConnStringKey"                     value="ConfigurationDBConnString"/>    
+    <add key="CDRComparisonOutputDBConnStringKey"                 value="CDRComparisonOutputDBConnString"/>
+    <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>
+    <add key="VRFile_Max_Uncompressed_MB_Size" value="5000" /><!--VRFile_Max_Uncompressed_MB_Size used to set limitation for maximum file size-->
+  </appSettings>
+</configuration>
