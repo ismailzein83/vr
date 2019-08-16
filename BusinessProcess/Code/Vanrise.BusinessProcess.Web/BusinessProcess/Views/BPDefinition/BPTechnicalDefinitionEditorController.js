@@ -601,6 +601,13 @@
                     }
                     return dataFields;
                 },
+                getFieldType: function (fieldName) {
+                    for (var i = 0; i < vrWorkflowFields.length; i++) {
+                        var field = vrWorkflowFields[i];
+                        if (field.Name == fieldName)
+                            return field.Type;
+                    }
+                },
                 getActionInfos: function () {
                     var data = [];
                     return data;
