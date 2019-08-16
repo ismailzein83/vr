@@ -993,5 +993,6 @@
     <None Include="VRJSON_PostScripts\Demo_MarketView.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\DevTools_PostScriptGenerator.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\Common.Localization.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\Retail_NIMForDIDs.PostDeployment.json" />
   </ItemGroup>
 </Project>
