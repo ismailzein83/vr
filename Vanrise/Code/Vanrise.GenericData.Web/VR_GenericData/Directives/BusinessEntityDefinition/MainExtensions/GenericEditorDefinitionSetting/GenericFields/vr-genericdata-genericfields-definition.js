@@ -101,7 +101,7 @@
                         setFieldsNumber = payload.setFieldsNumber;
                     }
 
-                    initialPromises.push(loadFieldNameSelector());
+                   initialPromises.push(loadFieldNameSelector());
                     var rootPromiseNode = {
                         promises: initialPromises,
                         getChildNode: function () {
@@ -147,6 +147,7 @@
                     }
 
                     var typeFieldsPayload = {
+                        context: context,
                         dataRecordTypeId: context.getDataRecordTypeId(),
                         selectedIds: selectedIds
                     };
@@ -157,7 +158,7 @@
 
             function prepareDataItem(field) {
                 var payload = field.payload;
-                
+
                 var dataItem = {
                     id: $scope.scopeModel.fields.length + 1,
                 };

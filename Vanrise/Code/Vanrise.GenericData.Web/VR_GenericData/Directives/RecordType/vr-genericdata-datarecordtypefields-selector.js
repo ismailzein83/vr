@@ -93,12 +93,13 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
 
 				api.load = function (payload) {
 
-                    var promises = [];
+                    var context;
                     var selectedIds;
                     var dataRecordTypeId;
                     var filter;
 
                     if (payload != undefined) {
+                        context = payload.context;
                         selectedIds = payload.selectedIds;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         filter = payload.filter;
@@ -109,17 +110,40 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                         serializedFilter = UtilsService.serializetoJson(filter);
                     }
 
-                    return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId, serializedFilter).then(function (response) {
+                    if (dataRecordTypeId != undefined) {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId, serializedFilter).then(function (response) {
+                            api.clearDataSource();
+                            if (response != undefined)
+                                for (var i = 0; i < response.length; i++) {
+                                    var currentField = response[i];
+                                    ctrl.datasource.push(currentField.Entity);
+                                }
+
+                            if (selectedIds != undefined)
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
+                        });
+                    }
+                    else {
+                        var loadPromise = UtilsService.createPromiseDeferred();
+                        loadPromise.resolve();
                         api.clearDataSource();
-                        if (response != undefined)
-                            for (var i = 0; i < response.length; i++) {
-                                var currentField = response[i];
-                                ctrl.datasource.push(currentField.Entity);
+                        var fields = context.getFields();
+                        if (fields != undefined) {
+                            for (var i = 0; i < fields.length; i++) {
+                                var currentField = fields[i];
+                                var field = {
+                                    Name: currentField.FieldName,
+                                    Title: currentField.FieldTitle,
+                                    Type: currentField.Type
+                                };
+                                ctrl.datasource.push(field);
                             }
 
-                        if (selectedIds != undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
-                    });
+                            if (selectedIds != undefined)
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
+                        }
+                        return loadPromise.promise;
+                    }
                 };
 
                 api.getSelectedIds = function () {
