@@ -454,7 +454,7 @@ when not matched by target then
             foreach (string script in dbname.Script(scriptOptions))
             {
                 dbExist = DbExist(script, autoGeneration);
-                if (!dbExist || projectName == "Component-ISP" || projectName == "Component-NetworkRental")
+                if (!dbExist || projectName == "Component-ISP" || projectName == "Component-NetworkRental" || projectName == "Component-CCT")
                 {
                     sb.AppendLine(script);
                     sb.AppendLine("GO");
@@ -474,6 +474,7 @@ when not matched by target then
                 if ((script.Contains("CREATE DATABASE") && !dbExist)
                     || (script.Contains("CREATE DATABASE") && projectName == "Component-ISP")
                     || (script.Contains("CREATE DATABASE") && projectName == "Component-NetworkRental")
+                    || (script.Contains("CREATE DATABASE") && projectName == "Component-CCT")
                     )
                 {
                     sb.AppendLine(string.Format("CREATE DATABASE [{0}]", item));
