@@ -34,15 +34,10 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 END
 
-DELETE FROM	[sec].[View] WHERE ID IN ('1F11C51B-1EDB-4559-8EE2-25A44330CCA4',
-									  '11927F62-D139-452B-B23B-14EC58F87012',
-									  '29FE98DA-91D7-4442-8A35-3A721CD5656A',
-									  '90331F0A-FB51-4DCF-8261-98D07B579938',
-									  '9B1C0D1F-F895-4435-9D60-7BBC80061A6B',
+DELETE FROM	[sec].[View] WHERE ID IN ('9B1C0D1F-F895-4435-9D60-7BBC80061A6B',
 									  '13B4CB67-38F4-4960-972C-D955E14E177D',
 									  'F6D9F876-2E1D-4281-B944-27C8CF41A86E',
-									  '15a4d584-97fb-45af-a0e9-f2cd31adf0fb',
-									  '05CD2EE2-7374-4296-A532-CC273EE1C540')--numbering plan module
+									  '15a4d584-97fb-45af-a0e9-f2cd31adf0fb')
 
 
 
