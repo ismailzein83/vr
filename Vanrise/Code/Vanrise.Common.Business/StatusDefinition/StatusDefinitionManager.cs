@@ -57,7 +57,10 @@ namespace Vanrise.Common.Business
             StatusDefinition statusDefinition = this.GetStatusDefinition(statusDefinitionId);
             return (statusDefinition != null) ? statusDefinition.Name : null;
         }
-
+        public StatusDefinition GetStatusDefinitionByName(string statusName,Guid beDefinitionId)
+        {
+            return GetCachedStatusDefinitionsByName(beDefinitionId).GetRecord(statusName);
+        }
         public IDataRetrievalResult<StatusDefinitionDetail> GetFilteredStatusDefinitions(DataRetrievalInput<StatusDefinitionQuery> input)
         {
             var allStatusDefinitions = GetCachedStatusDefinitions();
