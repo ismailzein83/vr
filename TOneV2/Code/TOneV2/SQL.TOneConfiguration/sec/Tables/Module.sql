@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [sec].[Module] (
     [ID]               UNIQUEIDENTIFIER NOT NULL,
     [Name]             NVARCHAR (255)   NOT NULL,
+    [DevProjectID]     UNIQUEIDENTIFIER NULL,
     [Url]              NVARCHAR (255)   NULL,
     [DefaultViewId]    UNIQUEIDENTIFIER NULL,
     [ParentId]         UNIQUEIDENTIFIER NULL,
@@ -14,6 +15,8 @@
     CONSTRAINT [PK_Module_1] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_Module_Module] FOREIGN KEY ([ID]) REFERENCES [sec].[Module] ([ID])
 );
+
+
 
 
 
