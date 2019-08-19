@@ -502,7 +502,7 @@ when not matched by target then
                     {
                         if (!script.Contains("CREATE USER") && !script.Contains("sys.sp_addrolemember"))
                         {
-                            if (script.Contains(schema))
+                            if (script.Contains(schema) && !sb.ToString().Contains(script))
                             {
                                 sb.AppendLine(script);
                                 sb.AppendLine("GO");
