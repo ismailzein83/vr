@@ -203,7 +203,7 @@
             };
 
             $scope.scopeModel.onManualEditorSwitchValueChanged = function () {
-                if ($scope.scopeModel.manualEditorDefinition) {
+                if ($scope.scopeModel.enableManualEditorDefinition) {
                     manualEditorDefinitionReadyPromiseDeferred.promise.then(function () {
                         var setEditorLoader = function (value) { $scope.scopeModel.isManualEditorLoading = value; };
                         var manualEditorPayload = {
@@ -360,7 +360,7 @@
                 $scope.scopeModel.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
                 $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
                 $scope.scopeModel.warningMessage = businessProcessDefinitionEntity.Configuration.WarningMessage;
-                $scope.scopeModel.manualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings && businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable || false;
+                $scope.scopeModel.enableManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings && businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable || false;
                 $scope.scopeModel.scheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable || false;
                 $scope.scopeModel.sameAsManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.SameAsManualEditor || false;
             }
@@ -642,7 +642,7 @@
             obj.Configuration.BPInstanceInsertHandler = bpInstanceInsertHandlerSettingsAPI.getData();
 
             if (obj.VRWorkflowId != undefined)
-                obj.Configuration.ManualExecEditor = $scope.scopeModel.manualEditorDefinition ? undefined : "bp-vr-workflow-manualexeceditor";
+                obj.Configuration.ManualExecEditor = !$scope.scopeModel.enableManualEditorDefinition ? undefined : "bp-vr-workflow-manualexeceditor";
 
             obj.Configuration.WarningMessage = $scope.scopeModel.warningMessage;
             obj.Configuration.Security = {
@@ -651,10 +651,10 @@
                 ScheduleTask: scheduleTaskPermissionAPI.getData()
             };
 
-            var manualEditorSettings = $scope.scopeModel.manualEditorDefinition ? manualEditorDefinitionAPI.getData() : undefined;
+            var manualEditorSettings = $scope.scopeModel.enableManualEditorDefinition ? manualEditorDefinitionAPI.getData() : undefined;
 
             obj.Configuration.ManualEditorSettings = {
-                Enable: $scope.scopeModel.manualEditorDefinition,
+                Enable: $scope.scopeModel.enableManualEditorDefinition,
                 EditorSettings: manualEditorSettings
             };
 
