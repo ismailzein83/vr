@@ -20,6 +20,7 @@ namespace Vanrise.Security.Entities
         public string Icon { get; set; }
         public bool AllowDynamic { get; set; }
         public int Rank { get; set; }
+        public Guid? DevProjectId { get; set; }
 
         public ModuleSettings Settings { get; set; }
         public bool RenderedAsView { get; set; }

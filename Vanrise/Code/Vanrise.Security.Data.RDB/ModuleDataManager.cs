@@ -15,6 +15,7 @@ namespace Vanrise.Security.Data.RDB
         static string TABLE_ALIAS = "module";
         const string COL_ID = "ID";
         const string COL_Name = "Name";
+        const string COL_DevProjectID = "DevProjectID";
         const string COL_Url = "Url";
         const string COL_DefaultViewId = "DefaultViewId";
         const string COL_ParentId = "ParentId";
@@ -30,6 +31,7 @@ namespace Vanrise.Security.Data.RDB
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Url, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_DefaultViewId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_ParentId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
@@ -60,6 +62,7 @@ namespace Vanrise.Security.Data.RDB
             {
                 ModuleId = reader.GetGuid(COL_ID),
                 Name = reader.GetString(COL_Name),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Url = reader.GetString(COL_Url),
                 DefaultViewId = reader.GetNullableGuid(COL_DefaultViewId),
                 ParentId = reader.GetNullableGuid(COL_ParentId),
@@ -89,6 +92,10 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
             var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.EqualsCondition(COL_Name).Value(moduleObject.Name);
+
+            if (moduleObject.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(moduleObject.DevProjectId.Value);
+
             if (moduleObject.ParentId.HasValue)
                 ifNotExists.EqualsCondition(COL_ParentId).Value(moduleObject.ParentId.Value);
             insertQuery.Column(COL_ID).Value(moduleObject.ModuleId);
@@ -129,6 +136,11 @@ namespace Vanrise.Security.Data.RDB
             var ifNotExists = updateQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.NotEqualsCondition(COL_ID).Value(moduleObject.ModuleId);
             ifNotExists.EqualsCondition(COL_Name).Value(moduleObject.Name);
+            if (moduleObject.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(moduleObject.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
             if (moduleObject.ParentId.HasValue)
                 ifNotExists.EqualsCondition(COL_ParentId).Value(moduleObject.ParentId.Value);
             updateQuery.Column(COL_Name).Value(moduleObject.Name);

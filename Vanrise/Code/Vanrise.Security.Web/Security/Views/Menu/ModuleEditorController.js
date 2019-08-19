@@ -17,6 +17,9 @@
         var nameResourceKeySelectorAPI;
         var nameResourceKeySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -63,6 +66,10 @@
                 nameResourceKeySelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
         }
 
         function load() {
@@ -90,13 +97,27 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadViewSelector, loadNameResourceKeySelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadViewSelector, loadNameResourceKeySelector, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.scopeModel.isLoading = false;
               });
+        }
+
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (moduleEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: moduleEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
         }
 
         function loadNameResourceKeySelector() {
@@ -153,6 +174,7 @@
                 Name: $scope.scopeModel.name,
                 AllowDynamic: moduleEntity && moduleEntity.isDynamic || false,
                 DefaultViewId: viewSelectorAPI.getSelectedIds(),
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 ParentId: parentId,
                 Settings: {
                     LocalizedName: nameResourceKeySelectorAPI.getResourceKey()

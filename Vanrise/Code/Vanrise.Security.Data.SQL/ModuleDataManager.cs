@@ -37,14 +37,14 @@ namespace Vanrise.Security.Data.SQL
         public bool AddModule(Entities.Module moduleObject)
         {
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings), moduleObject.RenderedAsView);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert", moduleObject.ModuleId, moduleObject.Name, moduleObject.DevProjectId, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings), moduleObject.RenderedAsView);
 
             return (recordesEffected > 0);
         }
 
         public bool UpdateModule(Entities.Module moduleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings),moduleObject.RenderedAsView);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.DevProjectId, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings), moduleObject.RenderedAsView);
             return (recordesEffected > 0);
         }
         #endregion
@@ -62,6 +62,7 @@ namespace Vanrise.Security.Data.SQL
                 Icon = reader["Icon"] as string,
                 AllowDynamic = true,// GetReaderValue<Boolean>(reader, "AllowDynamic"),
                 Rank = GetReaderValue<int>(reader, "Rank"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<ModuleSettings>(reader["Settings"] as string),
                 RenderedAsView = GetReaderValue<bool>(reader, "RenderedAsView")
             };

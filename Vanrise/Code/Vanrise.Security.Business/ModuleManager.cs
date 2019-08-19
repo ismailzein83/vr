@@ -8,6 +8,8 @@ using Vanrise.Security.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Caching;
+using Vanrise.Common.Business;
+
 namespace Vanrise.Security.Business
 {
     public class ModuleManager
@@ -16,6 +18,8 @@ namespace Vanrise.Security.Business
         #region ctor
 
         private IModuleDataManager _dataManager;
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         public ModuleManager()
         {
             _dataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
@@ -125,7 +129,12 @@ namespace Vanrise.Security.Business
         private ModuleDetail ModuleDetailMapper(Module moduleObject)
         {
             ModuleDetail moduleDetail = new ModuleDetail();
+
             moduleDetail.Entity = moduleObject;
+            if (moduleObject.DevProjectId.HasValue)
+            {
+                moduleDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(moduleObject.DevProjectId.Value);
+            }
             return moduleDetail;
         }
 
