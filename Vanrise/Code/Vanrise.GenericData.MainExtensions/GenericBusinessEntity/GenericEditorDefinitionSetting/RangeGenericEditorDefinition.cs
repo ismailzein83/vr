@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericEditor
             List<Object> numbers = new List<object>();
             for (var i = FromNumber; i <= ToNumber; i++)
             {
-                numbers.Add(GetEvaluatedNumber(i.ToString()));
+                numbers.Add(GetEvaluatedNumber(i.ToString().PadLeft(ToNumber.ToString().Length, '0')));
             }
             return numbers;
         }

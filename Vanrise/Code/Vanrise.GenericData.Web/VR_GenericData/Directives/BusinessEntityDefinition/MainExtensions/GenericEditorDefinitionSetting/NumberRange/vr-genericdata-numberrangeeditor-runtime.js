@@ -27,6 +27,8 @@ app.directive("vrGenericdataNumberrangeeditorRuntime", ["UtilsService", "VRUIUti
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.numbersValidation = function () {
+                    if ($scope.scopeModel.fromNumber != undefined && $scope.scopeModel.toNumber != undefined && $scope.scopeModel.fromNumber.toString().length != $scope.scopeModel.toNumber.toString().length)
+                        return "From & To numbers must have same numbers of digits";
                     if (Number($scope.scopeModel.fromNumber) > Number($scope.scopeModel.toNumber))
                         return "From number must be less than to number";
                     return null;
