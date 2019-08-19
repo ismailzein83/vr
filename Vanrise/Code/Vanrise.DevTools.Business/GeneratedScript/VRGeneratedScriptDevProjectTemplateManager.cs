@@ -38,6 +38,7 @@ namespace Vanrise.DevTools.Business
             new VRGeneratedScriptTable() { Name ="ExecutionFlowDefinition" },
             new VRGeneratedScriptTable() { Name ="ExecutionFlow" },
             new VRGeneratedScriptTable() { Name ="ReprocessDefinition" },
+            new VRGeneratedScriptTable() { Name ="Module" },
             new VRGeneratedScriptTable() { Name ="View" },
         };
       public class VRGeneratedScriptDevProjectTableParameters
@@ -84,6 +85,7 @@ namespace Vanrise.DevTools.Business
                     { "ExecutionFlowDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ExecutionFlowDefinition",Schema="queue",IdColumnName="Id",WhereCondition=WhereCondition}},
                     { "ExecutionFlow",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ExecutionFlow",Schema="queue",IdColumnName="Id",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("ExecutionFlowDefinitionID")}},
                     { "ReprocessDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ReprocessDefinition",Schema="reprocess",IdColumnName="Id",WhereCondition=WhereCondition}},
+                    { "Module",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Module",Schema="sec",IdColumnName="Id",WhereCondition=WhereCondition}},
                     { "View",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="View",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                 };
             }
