@@ -61,7 +61,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 
             var actionDefinitionGridAPI;
             var actionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        
+
             var gridActionDefinitionGridAPI;
             var gridActionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -100,7 +100,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var genericBEDefinitionTypeSelectedDeferred;
 
             var dataRecordStorageId;
-			var vrConnectionId;
+            var vrConnectionId;
 
             var orderTypeSelectorAPI;
             var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -299,7 +299,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, threeHundredSixtyDegreesEditorDefinitionAPI, { context: getContext(), }, setThreeHundredSixtyDegreesEditorLoader);
                 };
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
-                     dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+                    dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
                     if (dataRecordTypeId != undefined) {
                         reloadReleatedDirectives(dataRecordTypeId);
                         if (typefieldsSelectorDefered != undefined) {
@@ -385,6 +385,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         RemoteGenericBEDefinitionId: genericBEDefinitionRemoteSelectorAPI != undefined && $scope.scopeModel.selectedGenericBEDefinitionType == VR_GenericData_GenericBEDefinitionTypeEnum.Remote ? genericBEDefinitionRemoteSelectorAPI.getSelectedIds() : undefined,
                         OnBeforeGetFilteredHandler: beforeGetFilteredHandlerAPI.getData(),
                         ShowUpload: $scope.scopeModel.showUploadButton,
+                        CanBeViewedFromRelatedGenericBE: $scope.scopeModel.canBeViewedFromRelatedGenericBE,
                         UploadFields: ($scope.scopeModel.showUploadButton == true) ? uploadedFieldsGridAPI.getData() : null,
                         AdditionalSettings: additionalSettingsGridAPI.getData(),
                         RequiredParentFieldName: dataRecordTypeRequiredParentFieldsSelectorAPI.getSelectedIds(),
@@ -420,16 +421,17 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             $scope.scopeModel.hideAddButton = businessEntityDefinitionSettings.HideAddButton;
                             $scope.scopeModel.selectedGenericBEDefinitionType = UtilsService.getItemByVal($scope.scopeModel.genericBEDefinitionTypes, businessEntityDefinitionSettings.GenericBEType, "value");
                             $scope.scopeModel.showUploadButton = businessEntityDefinitionSettings.ShowUpload;
+                            $scope.scopeModel.canBeViewedFromRelatedGenericBE = businessEntityDefinitionSettings.CanBeViewedFromRelatedGenericBE;
                             $scope.scopeModel.isRemoteSelector = businessEntityDefinitionSettings.IsRemoteSelector;
                             $scope.scopeModel.doNotLoadByDefault = businessEntityDefinitionSettings.DoNotLoadByDefault;
                             $scope.scopeModel.hideViewInfo = businessEntityDefinitionSettings.HideViewInfo;
                             $scope.scopeModel.use360Degree = (businessEntityDefinitionSettings.ThreeSixtyDegreeSettings != undefined) ? businessEntityDefinitionSettings.ThreeSixtyDegreeSettings.Use360Degree : undefined;
                         }
 
-					}
-					firstPromises.push(loadDataRecordTypeSelector());
+                    }
+                    firstPromises.push(loadDataRecordTypeSelector());
                     if (businessEntityDefinitionSettings != undefined) {
-						firstPromises.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
+                        firstPromises.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
                     }
 
 
@@ -755,7 +757,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         getChildNode: function () {
                             var promises = [];
 
-                           
+
                             promises.push(loadActionDefinitionGrid());
                             promises.push(loadBulkActionDefinitionGrid());
                             promises.push(loadCustomActionDefinitionGrid());
@@ -828,7 +830,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         return data;
                     },
                     getFields: function () {
-                        var dataFields = []; 
+                        var dataFields = [];
 
                         for (var i = 0; i < dataRecordTypeFields.length; i++) {
                             dataFields.push({
@@ -894,7 +896,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             selectedIds: dataRecordStorageId,
                             DataRecordTypeId: selectedRecordTypeId,
                             showaddbutton: true,
-                            selectFirstItem:true
+                            selectFirstItem: true
                         };
                         VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, directivePayload, loadDataRecordStorageSelectorPromiseDeferred);
                     });
@@ -919,7 +921,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             $scope.scopeModel.isLoadingTitle = value;
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTitleFieldsSelectorAPI, recordTypePayload, setDataRecordTypeTitleLoader);
-                       
+
 
                         var setDataRecordStorageLoader = function (value) {
                             $scope.scopeModel.isLoadingDataRecordStorage = value;
@@ -1081,7 +1083,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         for (var i = 0; i < response.length; i++) {
                             var currentField = response[i];
                             dataRecordTypeFields.push(currentField.Entity);
-                        } 
+                        }
                 });
             }
 

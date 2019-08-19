@@ -53,6 +53,7 @@ namespace Vanrise.GenericData.Business
         public AdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
         public OrderDirection? Direction { get; set; }
         public bool ShowUpload { get; set; }
+        public bool CanBeViewedFromRelatedGenericBE { get; set; }
         public List<GenericBEUploadField> UploadFields { get; set; }
         public List<GenericBECustomAction> CustomActions { get; set; }
         public GenericBE360DegreeSettings ThreeSixtyDegreeSettings { get; set; }
