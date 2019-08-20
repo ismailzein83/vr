@@ -934,7 +934,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber)
+        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber, string BankName)
         {
             IDManager manager = new IDManager();
             CustomerId = manager.GetCustomerNextId();
@@ -944,6 +944,7 @@ namespace BPMExtended.Main.Business
             {
                 AccountNumber = AccountNumber,
                 BankCode = BankCode,
+                BankName = BankName,
                 City = City,
                 CSO = CSO,
                 CustomerCategoryId = CustomerCategoryId,

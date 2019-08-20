@@ -17,6 +17,7 @@ namespace BPMExtended.Main.SOMAPI
         public string City { get; set; }
         public string CSO { get; set; }
         public string BankCode { get; set; }
+        public string BankName { get; set; }
         public string AccountNumber { get; set; }
     }
 }
