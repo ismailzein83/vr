@@ -12,6 +12,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
     {
         private string totalCostDuration = "";
         private string totalSaleDuration = "";
+        private string totalNetDuration = "";
         private string totalCostNet = "";
         private string totalSaleNet = "";
         private string totalProfit = "";
@@ -30,7 +31,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery
                 {
                     DimensionFields = new List<string> { "Customer", "Supplier" },
-                    MeasureFields = new List<string> { "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "CostExtraCharges", "SaleExtraCharges", "ProfitNotNULL", "PercentageProfitNotNULL" },
+                    MeasureFields = new List<string> { "DurationNet", "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "CostExtraCharges", "SaleExtraCharges", "ProfitNotNULL", "PercentageProfitNotNULL" },
                     TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -64,6 +65,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             List<ProfitByCustomerFormatted> listCarrierSummaryDetailed = new List<ProfitByCustomerFormatted>();
             decimal? totalCostDur = 0;
             decimal? totalSaleDur = 0;
+            decimal? totalNetDur = 0;
             double? totalCostNt = 0;
             double? totalSaleNt = 0;
             double? totalProft = 0;
@@ -84,6 +86,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     var supplierValue = analyticRecord.DimensionValues[1];
                     if (supplierValue != null)
                         carrierSummary.Supplier = supplierValue.Name;
+
+
+
+                    MeasureValue durationNet;
+                    analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
+                    carrierSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
+                    carrierSummary.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.DurationNet);
+                    totalNetDur = totalNetDur + carrierSummary.DurationNet;
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
@@ -147,6 +157,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             totalProftPerc = totalProft / totalSaleNt;
             totalCostDuration = ReportHelpers.FormatNormalNumberDigit(totalCostDur);
             totalSaleDuration = ReportHelpers.FormatNormalNumberDigit(totalSaleDur);
+            totalNetDuration = ReportHelpers.FormatNormalNumberDigit(totalNetDur);
             totalSaleNet = ReportHelpers.FormatNormalNumberDigit(totalSaleNt);
             totalCostNet = ReportHelpers.FormatNormalNumberDigit(totalCostNt);
             totalProfit = ReportHelpers.FormatNormalNumberDigit(totalSaleNt - totalCostNt);
@@ -179,6 +190,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("ShowProfit", new RdlcParameter { Value = parameters.IsCommission.ToString(), IsVisible = true });
             list.Add("PageBreak", new RdlcParameter { Value = parameters.PageBreak.ToString(), IsVisible = true });
             list.Add("TotalCostDuration", new RdlcParameter { Value = totalCostDuration, IsVisible = true });
+            list.Add("TotalNetDuration", new RdlcParameter { Value = totalNetDuration, IsVisible = true });
             list.Add("TotalSaleDuration", new RdlcParameter { Value = totalSaleDuration, IsVisible = true });
             list.Add("TotalSaleNet", new RdlcParameter { Value = totalSaleNet, IsVisible = true });
             list.Add("TotalCostNet", new RdlcParameter { Value = totalCostNet, IsVisible = true });
