@@ -23,7 +23,7 @@ app.directive("bpVrWorkflowScheduleexeceditor", ['UtilsService', 'VRUIUtilsServi
             var runtimeEditorAPI;
             var runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var bpDefinitionId
+            var bpDefinitionId;
             var vrWorkflowFields;
             var bpDefinitionObj;
 
