@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [NIM_PSTN]
+    AUTHORIZATION [dbo];
+

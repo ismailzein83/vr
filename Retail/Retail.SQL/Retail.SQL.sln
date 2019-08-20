@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RevenueAssurance", "RevenueAssurance", "{087564B1-6AA2-45FC-BB57-5C93DDDACE46}"
 EndProject
@@ -40,6 +40,8 @@ EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.NIM.FixedOperator", "SQL.NIM.FixedOperator\SQL.NIM.FixedOperator.sqlproj", "{6DFB5AA3-4952-4F8E-A120-4F4F95A198B4}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.Retail.Billing", "SQL.Retail.Billing\SQL.Retail.Billing.sqlproj", "{137EA505-8353-46DA-B1F0-24828B0551D0}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.NIM.DIDManagement", "SQL.NIM.DIDManagement\SQL.NIM.DIDManagement.sqlproj", "{A24F94FD-53CB-4797-9DE1-44F4F0ACF1AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,6 +139,12 @@ Global
 		{137EA505-8353-46DA-B1F0-24828B0551D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{137EA505-8353-46DA-B1F0-24828B0551D0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{137EA505-8353-46DA-B1F0-24828B0551D0}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A24F94FD-53CB-4797-9DE1-44F4F0ACF1AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A24F94FD-53CB-4797-9DE1-44F4F0ACF1AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A24F94FD-53CB-4797-9DE1-44F4F0ACF1AD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A24F94FD-53CB-4797-9DE1-44F4F0ACF1AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A24F94FD-53CB-4797-9DE1-44F4F0ACF1AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A24F94FD-53CB-4797-9DE1-44F4F0ACF1AD}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -160,9 +168,9 @@ Global
 		SolutionGuid = {6368FAF0-4E49-43BC-A244-28822B5F68CE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = SQL.RA.ICX\\SQL.RA.ICX.sqlproj
 		SccProjectTopLevelParentUniqueName1 = Retail.SQL.sln
@@ -219,5 +227,8 @@ Global
 		SccProjectUniqueName15 = SQL.Retail.Billing\\SQL.Retail.Billing.sqlproj
 		SccProjectName15 = SQL.Retail.Billing
 		SccLocalPath15 = SQL.Retail.Billing
+		SccProjectUniqueName16 = SQL.NIM.DIDManagement\\SQL.NIM.DIDManagement.sqlproj
+		SccProjectName16 = SQL.NIM.DIDManagement
+		SccLocalPath16 = SQL.NIM.DIDManagement
 	EndGlobalSection
 EndGlobal
