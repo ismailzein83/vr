@@ -27,10 +27,10 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
         }
     }
 
-    function setLoginURL(value) {
-        if (value != undefined && value != '')
-            loginURL = value;
-    }
+        function setLoginURL(value) {
+            if (value != undefined && value != '')
+                loginURL = value;
+        }
 
     var pendingWEBAPICallHandles = [];
 
@@ -181,7 +181,7 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
                 if (exceptionMessage != undefined) {
                     showErrorMessage(exceptionMessage);
                 } else {
-                    showErrorMessage('An error occured while posting data!');
+                    showErrorMessage("Action Can't Be Completed, Check System Logs!");
                 }
                 setTimeout(function () {
                     notify.closeAll();
