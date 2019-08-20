@@ -2,14 +2,14 @@
 
     "use strict";
 
-    NewInstanceEditorController.$inject = ['$scope', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPDefinitionAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_DynamicBusinessProcessAPIService'];
+    NewInstanceEditorController.$inject = ['$scope', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPDefinitionAPIService', '$routeParams', 'notify', 'BusinessProcess_VRWorkflowAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_DynamicBusinessProcessAPIService'];
 
-    function NewInstanceEditorController($scope, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPDefinitionAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, BusinessProcess_DynamicBusinessProcessAPIService) {
+    function NewInstanceEditorController($scope, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPDefinitionAPIService, $routeParams, notify, BusinessProcess_VRWorkflowAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, BusinessProcess_DynamicBusinessProcessAPIService) {
 
         var bpDefinitionId;
 
-        var bpDefinitionDirectiveApi;
-        var bpDefinitionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var bpDefinitionManualDirectiveApi;
+        var bpDefinitionManualDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -27,9 +27,8 @@
             $scope.BPDefinitionID = bpDefinitionId;
 
             $scope.onBPDefinitionManualDirectiveReady = function (api) {
-                bpDefinitionDirectiveApi = api;
-                bpDefinitionDirectiveReadyPromiseDeferred.resolve();
-
+                bpDefinitionManualDirectiveApi = api;
+                bpDefinitionManualDirectiveReadyPromiseDeferred.resolve();
             };
 
             $scope.createNewProcess = function () {
@@ -95,16 +94,10 @@
             var loadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             getBPDefinition().then(function () {
-                if ($scope.bpDefinitionObj.Configuration.ManualExecEditor) {
-                    loadAllControls().finally(function () {
-                        $scope.isLoading = false;
-                        loadPromiseDeferred.resolve();
-                    });
-                }
-                else {
-                    loadPromiseDeferred.resolve();
+                loadAllControls().finally(function () {
                     $scope.isLoading = false;
-                }
+                    loadPromiseDeferred.resolve();
+                });
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
@@ -117,26 +110,48 @@
 
             return BusinessProcess_BPDefinitionAPIService.GetBPDefintion($scope.BPDefinitionID)
                 .then(function (response) {
-                   $scope.bpDefinitionObj = response;
-               }).catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               }).finally(function () {
+                    $scope.bpDefinitionObj = response;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
 
-               });
+                });
         }
 
         function loadAllControls() {
-            var loadBPDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
-            bpDefinitionDirectiveReadyPromiseDeferred.promise.then(function () {
-                var bpDefinitionPayload = { bpDefinitionId: bpDefinitionId };
-                VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, bpDefinitionPayload, loadBPDefinitionPromiseDeferred);
+            var initialPromises = [];
+
+            if ($scope.bpDefinitionObj.VRWorkflowId != undefined) {
+
+                if ($scope.bpDefinitionObj.Configuration.ManualExecEditor) {
+                    var loadBpDefinitionManualDirectivePromise = loadBpDefinitionManualDirective();
+                    initialPromises.push(loadBpDefinitionManualDirectivePromise);
+                }
+            }
+
+            var rootPromiseNode = {
+                promises: initialPromises
+            };
+
+            return UtilsService.waitPromiseNode(rootPromiseNode);;
+        }
+
+        function loadBpDefinitionManualDirective() {
+            var loadBPManualDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            bpDefinitionManualDirectiveReadyPromiseDeferred.promise.then(function () {
+                var bpDefinitionPayload = {
+                    bpDefinitionObj: $scope.bpDefinitionObj,
+                };
+                VRUIUtilsService.callDirectiveLoad(bpDefinitionManualDirectiveApi, bpDefinitionPayload, loadBPManualDefinitionPromiseDeferred);
             });
-            return loadBPDefinitionPromiseDeferred.promise;
+
+            return loadBPManualDefinitionPromiseDeferred.promise;
         }
 
         function buildInstanceObjFromScope() {
-            if (bpDefinitionDirectiveApi != undefined) {
-                return bpDefinitionDirectiveApi.getData();
+            if (bpDefinitionManualDirectiveApi != undefined) {
+                return bpDefinitionManualDirectiveApi.getData();
             }
             else return null;
         }

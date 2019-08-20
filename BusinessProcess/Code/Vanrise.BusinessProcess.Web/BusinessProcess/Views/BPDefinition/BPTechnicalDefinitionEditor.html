@@ -55,13 +55,13 @@
                 <vr-tab header="'Schedule Editor'" ng-if="scopeModel.selectedVRWorkflow!=undefined">
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-switch value="scopeModel.scheduleEditorDefinition" label="Enable Schedule Editor" onvaluechanged="scopeModel.onScheduleEditorSwitchValueChanged"></vr-switch>
+                            <vr-switch value="scopeModel.enableScheduleEditorDefinition" label="Enable Schedule Editor" onvaluechanged="scopeModel.onScheduleEditorSwitchValueChanged"></vr-switch>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-switch value="scopeModel.sameAsManualEditorDefinition" label="Same as Manual Editor" vr-disabled="!(scopeModel.enableManualEditorDefinition && scopeModel.scheduleEditorDefinition)" onvaluechanged="scopeModel.onSameAsManualSwitchValueChanged"></vr-switch>
+                            <vr-switch value="scopeModel.sameAsManualEditorDefinition" label="Same as Manual Editor" vr-disabled="!(scopeModel.enableManualEditorDefinition && scopeModel.enableScheduleEditorDefinition)" onvaluechanged="scopeModel.onSameAsManualSwitchValueChanged"></vr-switch>
                         </vr-columns>
                     </vr-row>
-                    <span ng-if="scopeModel.scheduleEditorDefinition && !scopeModel.sameAsManualEditorDefinition" vr-loader="scopeModel.isScheduleEditorLoading">
+                    <span ng-if="scopeModel.enableScheduleEditorDefinition && !scopeModel.sameAsManualEditorDefinition" vr-loader="scopeModel.isScheduleEditorLoading">
                         <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onScheduledEditorDefinitionDirectiveReady" normal-col-num="4" selectedvalues="scopeModel.selectedScheduleEditor" isnotrequired showremoveicon></vr-genericdata-genericbe-editordefinition-settings>
                     </span>
                 </vr-tab>

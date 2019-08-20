@@ -320,8 +320,10 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityAddBusinessEntityController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityAssignTaskController.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-activity-editor-expressionbuilder.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-scheduleexeceditor.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-manualexeceditor.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivityEditorExpressionBuilderTemplate.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowScheduleExecEditorTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowManualExecEditorTemplate.html" />
     <Content Include="BusinessProcess\Reports\OpenRDLCReport.aspx" />
     <Content Include="BusinessProcess\Services\APIServices\BPGenericTaskTypeActionAPIService.js" />

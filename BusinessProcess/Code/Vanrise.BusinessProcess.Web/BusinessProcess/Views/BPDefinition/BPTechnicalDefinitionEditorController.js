@@ -214,14 +214,14 @@
                 }
                 else {
                     $scope.scopeModel.sameAsManualEditorDefinition = false;
-                    if ($scope.scopeModel.scheduleEditorDefinition) {
+                    if ($scope.scopeModel.enableScheduleEditorDefinition) {
                         loadScheduleEditorSelector();
                     }
                 }
             };
 
             $scope.scopeModel.onScheduleEditorSwitchValueChanged = function () {
-                if ($scope.scopeModel.scheduleEditorDefinition) {
+                if ($scope.scopeModel.enableScheduleEditorDefinition) {
                     loadScheduleEditorSelector();
                 }
                 else {
@@ -231,7 +231,7 @@
 
             $scope.scopeModel.onSameAsManualSwitchValueChanged = function () {
                 if (!$scope.scopeModel.sameAsManualEditorDefinition) {
-                    if ($scope.scopeModel.scheduleEditorDefinition)
+                    if ($scope.scopeModel.enableScheduleEditorDefinition)
                         loadScheduleEditorSelector();
                 }
             };
@@ -361,7 +361,7 @@
                 $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
                 $scope.scopeModel.warningMessage = businessProcessDefinitionEntity.Configuration.WarningMessage;
                 $scope.scopeModel.enableManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings && businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable || false;
-                $scope.scopeModel.scheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable || false;
+                $scope.scopeModel.enableScheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable || false;
                 $scope.scopeModel.sameAsManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.SameAsManualEditor || false;
             }
             function loadVRWorkflowSelector() {
@@ -641,8 +641,10 @@
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
             obj.Configuration.BPInstanceInsertHandler = bpInstanceInsertHandlerSettingsAPI.getData();
 
-            if (obj.VRWorkflowId != undefined)
+            if (obj.VRWorkflowId != undefined) {
                 obj.Configuration.ManualExecEditor = !$scope.scopeModel.enableManualEditorDefinition ? undefined : "bp-vr-workflow-manualexeceditor";
+                obj.Configuration.ScheduledExecEditor = !$scope.scopeModel.enableScheduleEditorDefinition ? undefined : "bp-vr-workflow-scheduleexeceditor";
+            }
 
             obj.Configuration.WarningMessage = $scope.scopeModel.warningMessage;
             obj.Configuration.Security = {
@@ -659,14 +661,15 @@
             };
 
             obj.Configuration.ScheduleEditorSettings = {
-                Enable: $scope.scopeModel.scheduleEditorDefinition,
+                Enable: $scope.scopeModel.enableScheduleEditorDefinition,
                 SameAsManualEditor: $scope.scopeModel.sameAsManualEditorDefinition
             };
 
-            if ($scope.scopeModel.sameAsManualEditorDefinition)
+            if ($scope.scopeModel.sameAsManualEditorDefinition) {
                 obj.Configuration.ScheduleEditorSettings.EditorSettings = manualEditorSettings;
+            }
             else {
-                obj.Configuration.ScheduleEditorSettings.EditorSettings = $scope.scopeModel.scheduleEditorDefinition ? scheduleEditorDefinitionAPI.getData() : undefined;
+                obj.Configuration.ScheduleEditorSettings.EditorSettings = $scope.scopeModel.enableScheduleEditorDefinition ? scheduleEditorDefinitionAPI.getData() : undefined;
             }
 
             return obj;

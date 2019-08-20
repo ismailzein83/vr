@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService',
+    function (UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -20,9 +20,19 @@ app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService
         function ManualExecEditor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
+            var runtimeEditorAPI;
+            var runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var bpDefinitionObj;
+            var vrWorkflowFields;
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
+                    runtimeEditorAPI = api;
+                    runtimeEditorReadyPromiseDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -32,16 +42,78 @@ app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
+                    bpDefinitionObj = payload.bpDefinitionObj;
+
+                    var rootPromiseNode = {
+                        promises: []
+                    };
+
+                    if (bpDefinitionObj && bpDefinitionObj.Configuration && bpDefinitionObj.Configuration.ManualEditorSettings && bpDefinitionObj.Configuration.ManualEditorSettings.Enable) {
+                        $scope.scopeModel.hasRuntimeEditor = true;
+                        var getVRWorkflowInputArgumentFieldsPromise = getVRWorkflowInputArgumentFields()
+                        rootPromiseNode.promises.push(getVRWorkflowInputArgumentFieldsPromise);
+
+                        rootPromiseNode.getChildNode = function () {
+                            var loadRuntimeEditorPromise = loadRuntimeEditor();
+                            return {
+                                promises: [loadRuntimeEditorPromise]
+                            };
+                        };
+                    }
 
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    function getVRWorkflowInputArgumentFields() {
+                        return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowInputArgumentFields(bpDefinitionObj.VRWorkflowId).then(function (response) {
+                            vrWorkflowFields = response;
+                        });
+                    }
+
+                    function loadRuntimeEditor() {
+                        var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        runtimeEditorReadyPromiseDeferred.promise.then(function () {
+                            var runtimeEditorPayload = {
+                                definitionSettings: bpDefinitionObj.Configuration.ManualEditorSettings.EditorSettings,
+                                runtimeEditor: bpDefinitionObj.Configuration.ManualEditorSettings.EditorSettings.RuntimeEditor,
+                                context: buildContext()
+                            };
+                            VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadPromiseDeferred);
+                        });
+
+                        return runtimeEditorLoadPromiseDeferred.promise;
+                    }
+
+                    function buildContext() {
+                        return {
+                            getFields: function () {
+                                if (vrWorkflowFields == undefined || vrWorkflowFields.length == 0)
+                                    return undefined;
+
+                                var fields = [];
+                                for (var i = 0; i < vrWorkflowFields.length; i++) {
+                                    var field = UtilsService.cloneObject(vrWorkflowFields[i], false);
+                                    fields.push({
+                                        Name: field.Name,
+                                        Type: field.Type
+                                    });
+                                }
+
+                                return fields;
+                            }
+                        };
+                    }
+
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
-                    return {
+                    if ($scope.scopeModel.hasRuntimeEditor) {
+                        var data = {};
+                        runtimeEditorAPI.setData(data);
 
-                    };
+                        return {
+                            InputArguments: data
+                        };
+                    }
                 };
 
                 if (ctrl.onReady != null)
