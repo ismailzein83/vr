@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Common;
@@ -1174,6 +1175,24 @@ namespace BPMExtended.Main.Business
             return isForeigner;
         }
 
+        public void UpdateContactAddressID(string requestId, string addressId)
+        {
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("Contact");
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, "Contact");
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
+            var collection = eSQ.GetEntityCollection(UserConnection);
+            if (collection.Count > 0)
+            {
+                recordEntity = collection[0];
+                recordEntity.SetColumnValue("StAddressID", addressId);
+            }
+            recordEntity.Save();
+        }
 
         //public void convertFileToBinaryCode()
         //{
