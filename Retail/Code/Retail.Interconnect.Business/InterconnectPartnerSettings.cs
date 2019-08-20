@@ -1,20 +1,19 @@
 ﻿using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
+using Retail.BusinessEntity.MainExtensions.AccountParts;
+using Retail.Interconnect.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
-using Vanrise.Common;
-using Retail.BusinessEntity.MainExtensions.AccountParts;
-using Vanrise.Analytic.Business;
-using Retail.Interconnect.Entities;
 
 namespace Retail.Interconnect.Business
 {
+    #region Enums
+
     public enum RDLCParameter
     {
         AccountName = 0,
@@ -39,175 +38,88 @@ namespace Retail.Interconnect.Business
         SMSServiceTypes = 19,
         BillingCompanyContact = 20,
         AccountBillingContact = 21,
-        OriginalAmount = 22
+        OriginalAmount = 22,
+        CompanyProfileName = 23
     }
 
     public enum InterconnectPartnerType { Customer = 0, Supplier = 1, Settlement = 2 }
+
+    #endregion
 
     public class InterconnectPartnerSettings : InvoicePartnerManager
     {
         Guid _acountBEDefinitionId;
         InterconnectPartnerType _interconnectPartnerType;
-        CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+
+        public override string PartnerFilterSelector { get { return "retail-be-account-invoice-selector"; } }
+
+        public override string PartnerSelector { get { return "retail-be-account-invoice-selector"; } }
+
+        public override string PartnerInvoiceSettingFilterFQTN { get { return "Retail.Interconnect.Business.AssignedFinancialAccountToInvoiceSettingFilter, Retail.Interconnect.Business"; } }
+
+        #region Ctor
 
         public InterconnectPartnerSettings(Guid acountBEDefinitionId, InterconnectPartnerType interconnectPartnerType)
         {
-            this._acountBEDefinitionId = acountBEDefinitionId;
-            this._interconnectPartnerType = interconnectPartnerType;
+            _acountBEDefinitionId = acountBEDefinitionId;
+            _interconnectPartnerType = interconnectPartnerType;
         }
 
-        public override string PartnerFilterSelector
-        {
-            get
-            {
-                return "retail-be-account-invoice-selector";
-            }
-        }
-        public override string PartnerSelector
-        {
-            get
-            {
-                return "retail-be-account-invoice-selector";
-            }
-        }
-        public override string PartnerInvoiceSettingFilterFQTN
-        {
-            get
-            {
-                return "Retail.Interconnect.Business.AssignedFinancialAccountToInvoiceSettingFilter, Retail.Interconnect.Business";
-            }
-        }
+        #endregion
+
+        #region Public Methods 
+
         public override dynamic GetActualPartnerId(IActualPartnerContext context)
         {
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
-            return financialAccountData.Account.AccountId;
+            var account = GetAccountByPartnerId(context.PartnerId);
+            return account.AccountId;
         }
 
         public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
         {
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
-            AccountBEManager accountBEManager = new AccountBEManager();
+            var financialAccountData = GetFinancialAccountData(context.PartnerId);
+            financialAccountData.FinancialAccount.ThrowIfNull("financialAccountData.FinancialAccount", context.PartnerId);
+            financialAccountData.Account.ThrowIfNull("financialAccountData.Account", context.PartnerId);
+
             return new VRInvoiceAccountData
             {
                 BED = financialAccountData.FinancialAccount.BED,
                 EED = financialAccountData.FinancialAccount.EED,
-                Status = accountBEManager.IsAccountInvoiceActive(financialAccountData.Account) ? VRAccountStatus.Active : VRAccountStatus.InActive
+                Status = new AccountBEManager().IsAccountInvoiceActive(financialAccountData.Account) ? VRAccountStatus.Active : VRAccountStatus.InActive
             };
         }
 
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
+            var account = GetAccountByPartnerId(context.PartnerId);
+
             switch (context.InfoType)
             {
                 case "Account":
-                    return financialAccountData.Account;
+                    return account;
+
                 case "InvoiceRDLCReport":
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
-                    CurrencyManager currencyManager = new CurrencyManager();
                     AccountBEManager accountBEManager = new AccountBEManager();
-                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-                    string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-                    int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-                    string currencySymbol = currencyManager.GetCurrencySymbol(currencyId);
+                    CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
+                    string accountName = accountBEManager.GetAccountName(_acountBEDefinitionId, account.AccountId);
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountName, accountName, true);
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
-                    CityManager cityManager = new CityManager();
 
-                    IAccountProfile accountProfile;
-                    string address = null;
-                    if (accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile))
-                    {
-                        var companyProfile = accountProfile.CastWithValidate<AccountPartCompanyProfile>("accountProfile", financialAccountData.Account.AccountId);
+                    int accountCurrencyId = accountBEManager.GetCurrencyId(_acountBEDefinitionId, account.AccountId);
+                    string accountCurrencySymbol = new CurrencyManager().GetCurrencySymbol(accountCurrencyId);
+                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, accountCurrencySymbol, true);
 
-                        if (companyProfile != null)
-                        {
-                            address = companyProfile.Address;
-                            string phoneNumbers = null;
-                            if (companyProfile.PhoneNumbers != null && companyProfile.PhoneNumbers.Count > 0)
-                            {
-                                phoneNumbers = string.Join(",", companyProfile.PhoneNumbers);
-                            }
-                            if (companyProfile.MobileNumbers != null && companyProfile.MobileNumbers.Count > 0)
-                            {
-                                if (phoneNumbers != null)
-                                    phoneNumbers += ",";
-                                phoneNumbers += string.Join(",", companyProfile.MobileNumbers);
-                            }
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, phoneNumbers, true);
+                    if (accountBEManager.HasAccountProfile(_acountBEDefinitionId, account.AccountId, true, out IAccountProfile accountProfile))
+                        AddCompanyProfileParameters(rdlcReportParameters, accountProfile, accountProfile.CastWithValidate<AccountPartCompanyProfile>("accountProfile", account.AccountId));
 
-                            if (accountProfile.Faxes != null)
-                            {
-                                string faxes = string.Join(",", accountProfile.Faxes);
-                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, faxes, true);
-                            }
-                            if (companyProfile.Contacts != null)
-                            {
-                                AccountCompanyContact billingCompanyContact;
-                                if (companyProfile.Contacts.TryGetValue("Billing", out billingCompanyContact))
-                                {
-                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, billingCompanyContact.Email, true);
-                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountBillingContact, billingCompanyContact.ContactName, true);
-                                    if (billingCompanyContact.PhoneNumbers != null && billingCompanyContact.PhoneNumbers.Count > 0)
-                                    {
-                                        string accountNumbers = string.Join(",", billingCompanyContact.PhoneNumbers);
-                                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountNumber, accountNumbers, true);
-                                    }
-                                }
+                    AddCompanySettingsParameters(rdlcReportParameters, accountBEManager.GetCompanySetting(_acountBEDefinitionId, account.AccountId));
 
-                                AccountCompanyContact accountCompanyContact;
-                                if (companyProfile.Contacts.TryGetValue("Main", out accountCompanyContact))
-                                {
-
-                                    if (accountCompanyContact.ContactName != null)
-                                    {
-                                        string contactName = "";
-                                        if (accountCompanyContact.Salutation.HasValue)
-                                        {
-                                            contactName = string.Format("{0} ", Utilities.GetEnumDescription(accountCompanyContact.Salutation.Value));
-                                        }
-                                        contactName += accountCompanyContact.ContactName;
-                                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Attn, contactName, true);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
-                    if (companySetting != null)
-                    {
-                        CompanyContact companyContact;
-                        if (companySetting.Contacts.TryGetValue("Billing", out companyContact))
-                        {
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyPhone, companyContact.Phone, true);
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyContact, $"{companyContact.Title} {companyContact.ContactName}", true);
-                        }
-                        VRFileManager fileManager = new VRFileManager();
-                        var logo = fileManager.GetFile(companySetting.CompanyLogo);
-                        if (logo != null)
-                        {
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
-                        }
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegNo, companySetting.RegistrationNumber, true);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyName, companySetting.CompanyName, true);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
-
-                    }
-
-                    AccountPart accountPart;
-                    if (accountBEManager.TryGetAccountPart<AccountPartInterconnectSetting>(this._acountBEDefinitionId, financialAccountData.Account, false, out accountPart))
+                    if (accountBEManager.TryGetAccountPart<AccountPartInterconnectSetting>(_acountBEDefinitionId, account, false, out AccountPart accountPart))
                     {
                         var accountPartSettings = accountPart.Settings as AccountPartInterconnectSetting;
                         if (accountPartSettings != null && accountPartSettings.SMSServiceTypes != null)
-                        {
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, new SMSServiceTypeManager().GetSMSServiceTypesConcatenatedSymbolsByIds(accountPartSettings.SMSServiceTypes.MapRecords(sMSServiceType => sMSServiceType.SMSServiceTypeId)), true);
-                        }
                     }
 
                     switch (_interconnectPartnerType)
@@ -217,19 +129,25 @@ namespace Retail.Interconnect.Business
 
                         case InterconnectPartnerType.Supplier:
                             var supplierInvoiceDetails = context.Invoice.Details as InterconnectInvoiceDetails;
+
+                            if (supplierInvoiceDetails.OriginalAmountByCurrency == null || supplierInvoiceDetails.OriginalAmountByCurrency.Count == 0)
+                                break;
+
                             decimal? originalAmount = null;
-                            if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.Count > 0)
+                            foreach (var originalAmountByCurrency in supplierInvoiceDetails.OriginalAmountByCurrency)
                             {
-                                foreach (var originalAmountByCurrency in supplierInvoiceDetails.OriginalAmountByCurrency)
+                                int currencyId = originalAmountByCurrency.Key;
+                                OriginalDataCurrrency originalDataCurrrency = originalAmountByCurrency.Value;
+
+                                if (originalDataCurrrency.OriginalAmount.HasValue)
                                 {
-                                    if (originalAmountByCurrency.Value.OriginalAmount.HasValue)
-                                    {
-                                        if (!originalAmount.HasValue)
-                                            originalAmount = 0;
-                                        originalAmount += _currencyExchangeRateManager.ConvertValueToCurrency(originalAmountByCurrency.Value.OriginalAmount.Value, originalAmountByCurrency.Key, currencyId, context.Invoice.IssueDate);
-                                    }
+                                    if (!originalAmount.HasValue)
+                                        originalAmount = 0;
+
+                                    originalAmount += currencyExchangeRateManager.ConvertValueToCurrency(originalDataCurrrency.OriginalAmount.Value, currencyId, accountCurrencyId, context.Invoice.IssueDate);
                                 }
                             }
+
                             if (originalAmount.HasValue)
                                 AddRDLCParameter(rdlcReportParameters, RDLCParameter.OriginalAmount, originalAmount.Value.ToString(), true);
 
@@ -238,7 +156,6 @@ namespace Retail.Interconnect.Business
                         case InterconnectPartnerType.Settlement:
                             break;
                     }
-
                     return rdlcReportParameters;
             }
             return null;
@@ -246,17 +163,117 @@ namespace Retail.Interconnect.Business
 
         public override string GetPartnerName(IPartnerNameManagerContext context)
         {
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
-            AccountBEManager accountBEManager = new AccountBEManager();
-            return accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+            var account = GetAccountByPartnerId(context.PartnerId);
+            return new AccountBEManager().GetAccountName(_acountBEDefinitionId, account.AccountId);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void AddCompanyProfileParameters(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, IAccountProfile accountProfile, AccountPartCompanyProfile companyProfile)
+        {
+            if (companyProfile == null)
+                return;
+
+            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, companyProfile.Address, true);
+            AddCompanyProfilePhoneNumbers(rdlcReportParameters, companyProfile);
+
+            if (accountProfile.Faxes != null)
+            {
+                string faxes = string.Join(", ", accountProfile.Faxes);
+                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, faxes, true);
+            }
+
+            AddCompanyProfileContacts(rdlcReportParameters, companyProfile);
+        }
+
+        private void AddCompanyProfileContacts(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, AccountPartCompanyProfile companyProfile)
+        {
+            if (companyProfile.Contacts == null)
+                return;
+
+            if (companyProfile.Contacts.TryGetValue("Billing", out AccountCompanyContact billingCompanyContact))
+            {
+                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, billingCompanyContact.Email, true);
+                AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountBillingContact, billingCompanyContact.ContactName, true);
+
+                if (billingCompanyContact.PhoneNumbers != null && billingCompanyContact.PhoneNumbers.Count > 0)
+                {
+                    string accountNumbers = string.Join(", ", billingCompanyContact.PhoneNumbers);
+                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountNumber, accountNumbers, true);
+                }
+            }
+
+            if (companyProfile.Contacts.TryGetValue("Main", out AccountCompanyContact accountCompanyContact))
+            {
+                if (!string.IsNullOrEmpty(accountCompanyContact.ContactName))
+                {
+                    string salutation = accountCompanyContact.Salutation.HasValue ? Utilities.GetEnumDescription(accountCompanyContact.Salutation.Value) : string.Empty;
+                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Attn, $"{salutation} {accountCompanyContact.ContactName}", true);
+                }
+            }
+        }
+
+        private void AddCompanyProfilePhoneNumbers(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, AccountPartCompanyProfile companyProfile)
+        {
+            List<string> allPhoneNumbers = new List<string>();
+
+            if (companyProfile.PhoneNumbers != null)
+                allPhoneNumbers.AddRange(companyProfile.PhoneNumbers);
+
+            if (companyProfile.MobileNumbers != null)
+                allPhoneNumbers.AddRange(companyProfile.MobileNumbers);
+
+            string concatenatedPhoneNumbers = string.Join(", ", allPhoneNumbers);
+
+            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, concatenatedPhoneNumbers, true);
+        }
+
+        private void AddCompanySettingsParameters(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, CompanySetting companySetting)
+        {
+            if (companySetting == null)
+                return;
+
+            if (companySetting.Contacts.TryGetValue("Billing", out CompanyContact companyContact))
+            {
+                AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyPhone, companyContact.Phone, true);
+                AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyContact, $"{companyContact.Title} {companyContact.ContactName}", true);
+            }
+
+            var logo = new VRFileManager().GetFile(companySetting.CompanyLogo);
+            if (logo != null)
+                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
+
+            AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegNo, companySetting.RegistrationNumber, true);
+            AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
+            AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyName, companySetting.CompanyName, true);
+            AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyProfileName, companySetting.ProfileName, true);
+            AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
+            AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
         }
 
         private void AddRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, RDLCParameter key, string value, bool isVisible)
         {
-            if (rdlcReportParameters == null)
-                rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
             rdlcReportParameters.Add(key.ToString(), new VRRdlcReportParameter { Value = value, IsVisible = isVisible });
         }
+
+        private FinancialAccountData GetFinancialAccountData(string partnerId)
+        {
+            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(_acountBEDefinitionId, partnerId);
+            financialAccountData.ThrowIfNull("financialAccountData", partnerId);
+
+            return financialAccountData;
+        }
+
+        private Account GetAccountByPartnerId(string partnerId)
+        {
+            var financialAccountData = GetFinancialAccountData(partnerId);
+            financialAccountData.Account.ThrowIfNull("financialAccountData.Account", partnerId);
+
+            return financialAccountData.Account;
+        }
+
+        #endregion
     }
 }
