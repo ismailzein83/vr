@@ -198,6 +198,22 @@ namespace Vanrise.BusinessProcess.Data.RDB
             return queryContext.GetItem(BPInstanceMapper);
         }
 
+        public List<BPInstance> GetBPInstances(List<long> bpInstanceIds, bool getFromArchive)
+        {
+            string tableName, tableAlias;
+            GetTableNameAndAlias(getFromArchive, out tableName, out tableAlias);
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(tableName, "BPInstance", 1, true);
+            selectQuery.SelectColumns().AllTableColumns("BPInstance");
+
+            var whereContext = selectQuery.Where();
+            whereContext.ListCondition(RDBListConditionOperator.IN, bpInstanceIds);
+
+            return queryContext.GetItems(BPInstanceMapper);
+        }
+
         public List<BPInstance> GetFilteredBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds, bool getFromArchive)
         {
             string tableName, tableAlias;
@@ -553,7 +569,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             {
                 if (!pendingInstance.ServiceInstanceId.HasValue)
                     throw new NullReferenceException(String.Format("pendingInstance.ServiceInstanceId. ProcessInstanceId '{0}'", pendingInstance.ProcessInstanceID));
-                
+
                 var updateQuery = queryContext.AddUpdateQuery();
                 updateQuery.FromTable(BPINSTANCE_NAME);
                 updateQuery.Column(COL_ServiceInstanceID).Value(pendingInstance.ServiceInstanceId.Value);

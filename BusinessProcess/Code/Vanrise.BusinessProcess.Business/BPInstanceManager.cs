@@ -51,10 +51,41 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstance;
         }
 
+        public List<BPInstance> GetBPInstances(List<long> bpInstanceIds)
+        {
+            var bpInstances = GetBPInstances(bpInstanceIds, false);
+            List<BPInstance> archivedBPInstances = null;
+
+            var archivedIds = new List<long>();
+            foreach (var bpInstanceId in bpInstanceIds)
+            {
+                if (!bpInstances.Any(itm => itm.ProcessInstanceID == bpInstanceId))
+                    archivedIds.Add(bpInstanceId);
+            }
+
+            if (archivedIds != null && archivedIds.Count > 0)
+                archivedBPInstances = GetBPInstances(archivedIds, true);
+
+            var result = new List<BPInstance>();
+            if (bpInstances != null && bpInstances.Count > 0)
+                result.AddRange(bpInstances);
+
+            if (archivedBPInstances != null && archivedBPInstances.Count > 0)
+                result.AddRange(archivedBPInstances);
+
+            return result;
+        }
+
         public BPInstance GetBPInstance(long bpInstanceId, bool getFromArchive)
         {
             IBPInstanceDataManager bpInstanceDataManager = GetBPInstanceDataManager();
             return bpInstanceDataManager.GetBPInstance(bpInstanceId, getFromArchive);
+        }
+
+        public List<BPInstance> GetBPInstances(List<long> bpInstanceIds, bool getFromArchive)
+        {
+            IBPInstanceDataManager bpInstanceDataManager = GetBPInstanceDataManager();
+            return bpInstanceDataManager.GetBPInstances(bpInstanceIds, getFromArchive);
         }
 
         public string GetBPInstanceName(long bpInstanceId)

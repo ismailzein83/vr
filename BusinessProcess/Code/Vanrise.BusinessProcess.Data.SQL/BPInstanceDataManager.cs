@@ -41,6 +41,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemText(query, BPInstanceMapper, (cmd) => cmd.Parameters.Add(new SqlParameter("@ID", bpInstanceId)));
         }
 
+        public List<BPInstance> GetBPInstances(List<long> bpInstanceIds, bool getFromArchive)
+        {
+            string query = String.Format("SELECT {0} FROM bp.[BPInstance{1}] bp WITH(NOLOCK) WHERE ID in ({2})", BPInstanceSELECTCOLUMNS, (getFromArchive ? "_Archived" : ""), string.Join(",", bpInstanceIds));
+            return GetItemsText(query, BPInstanceMapper, null);
+        }
+
         public List<BPInstance> GetFilteredBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds, bool getFromArchive)
         {
             StringBuilder queryBuilder = new StringBuilder();

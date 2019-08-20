@@ -9,6 +9,8 @@ namespace Vanrise.BusinessProcess.Data
 
         BPInstance GetBPInstance(long bpInstanceId, bool getFromArchive);
 
+        List<BPInstance> GetBPInstances(List<long> bpInstanceIds, bool getFromArchive);
+
         List<BPInstance> GetFilteredBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds, bool getFromArchive);
 
         List<BPInstance> GetFirstPage(out object lastUpdateHandle, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId);
