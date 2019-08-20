@@ -35,27 +35,31 @@ app.directive("vrRuntimeTaskactionWorkflow", ['UtilsService', 'VRUIUtilsService'
             var bpDefenitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var bpDefinitionId;
+            var scheduledExecEditor;
 
             function initializeController() {
                 $scope.bpDefinitions = [];
 
                 $scope.onBPDefinitionDirectiveReady = function (api) {
                     bpDefenitionDirectiveAPI = api;
-
-                    var setLoader = function (value) {
-                        $scope.isLoadingAction = value;
-                    };
-
-                    var payloadDirective = {
-                        context: getContext(),
-                        bpDefinitionId: bpDefinitionId
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpDefenitionDirectiveAPI, payloadDirective, setLoader, bpDefenitionDirectiveReadyPromiseDeferred);
+                    loadScheduledExecEditorDirective();
                 };
 
                 $scope.onBPDefinitionSelectorReady = function (api) {
                     bpDefenitionSelectorAPI = api;
                     bpDefenitionSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.onBPDefinitionSelectionChanged = function (selectedBPDefinition) {
+                    if (selectedBPDefinition == undefined)
+                        return;
+
+                    if (scheduledExecEditor != selectedBPDefinition.Configuration.ScheduledExecEditor) {
+                        scheduledExecEditor = selectedBPDefinition.Configuration.ScheduledExecEditor;
+                        return;
+                    }
+
+                    loadScheduledExecEditorDirective();
                 };
 
                 defineAPI();
@@ -123,7 +127,7 @@ app.directive("vrRuntimeTaskactionWorkflow", ['UtilsService', 'VRUIUtilsService'
                                 data: data.ProcessInputArguments,
                                 rawExpressions: data.RawExpressions
                             };
-                           
+
                             VRUIUtilsService.callDirectiveLoad(bpDefenitionDirectiveAPI, payloadDirective, loadBPDefinitionPromiseDeferred);
 
                         });
@@ -147,6 +151,18 @@ app.directive("vrRuntimeTaskactionWorkflow", ['UtilsService', 'VRUIUtilsService'
                 if (currentContext == undefined)
                     currentContext = {};
                 return currentContext;
+            }
+
+            function loadScheduledExecEditorDirective() {
+                var setLoader = function (value) {
+                    $scope.isLoadingAction = value;
+                };
+
+                var payloadDirective = {
+                    context: getContext(),
+                    bpDefinitionId: $scope.selectedBPDefintion.BPDefinitionID
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpDefenitionDirectiveAPI, payloadDirective, setLoader, bpDefenitionDirectiveReadyPromiseDeferred);
             }
 
             this.initializeController = initializeController;
