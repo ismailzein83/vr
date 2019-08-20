@@ -234,7 +234,7 @@ namespace NP.IVSwitch.Business
 			};
 			int routeId;
 			string mssg;
-			if (!RoutesValidation(routeItems, out mssg))
+			if (!AreRoutesValid(routeItems, out mssg))
 			{
 				insertOperationOutput.ShowExactMessage = true;
 				insertOperationOutput.Message = mssg;
@@ -365,8 +365,16 @@ namespace NP.IVSwitch.Business
 				Result = UpdateOperationResult.Failed,
 				UpdatedObject = null
 			};
+            string mssg;
+            Dictionary<int, Route> allRoutes = this.GetCachedRoutes();
+            if (!IsRouteValid(routeItem, allRoutes, out mssg))
+            {
+                updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = mssg;
+                return updateOperationOutput;
+            };
 
-			CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 			RouteCarrierAccountExtension routesExtendedSettings =
 				   carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(routeItem.CarrierAccountId) ??
 				   new RouteCarrierAccountExtension();
@@ -727,30 +735,38 @@ namespace NP.IVSwitch.Business
 				});
 		}
 
-		private bool RoutesValidation(MultipleRoutesToAdd routeItems, out string mssg)
+		private bool AreRoutesValid(MultipleRoutesToAdd routeItems, out string mssg)
 		{
 			mssg = "";
-			Dictionary<int, Route> allRoutes = this.GetCachedRoutes();
-			if (routeItems.RoutesToAdd != null && allRoutes != null)
+            Dictionary<int, Route> allRoutes = this.GetCachedRoutes();
+            if (routeItems.RoutesToAdd != null)
 			{
 				foreach (var routeToAdd in routeItems.RoutesToAdd)
 				{
-					var itemExisted = allRoutes.Values.FindRecord(x => x.Host.Equals(routeToAdd.Entity.Host));
-					if (itemExisted != null)
-					{
-						if (itemExisted.TransRuleId != routeToAdd.Entity.TransRuleId)
-							continue;
-						else
-						{
-							mssg = String.Format("Route with same Host: {0} and translation rule already exist. ", routeToAdd.Entity.Host);
-						}
-						return false;
-					}
-				}
+                    if(IsRouteValid(routeToAdd, allRoutes,out mssg))               
+                    {
+                        continue;
+                    }
+                    return false;
+                }
 			}
 			return true;
 		}
-		private void InsertRouteStatusHistories(int routeId, State status, string moreInfo)
+        private bool IsRouteValid(RouteToAdd routeToAdd, Dictionary<int, Route> allRoutes,out string mssg)
+        {
+            mssg = "";                 
+            if (allRoutes != null)
+            {
+                var itemExisted = allRoutes.Values.FindRecord(x => x.Host.Equals(routeToAdd.Entity.Host));
+                if (itemExisted != null && itemExisted.TransRuleId == routeToAdd.Entity.TransRuleId)
+                {
+                    mssg = String.Format("Route with same Host: {0} and translation rule already exist. ", routeToAdd.Entity.Host);
+                    return false;
+                }
+            }
+            return true;
+        }
+        private void InsertRouteStatusHistories(int routeId, State status, string moreInfo)
 		{
 			switch (status)
 			{

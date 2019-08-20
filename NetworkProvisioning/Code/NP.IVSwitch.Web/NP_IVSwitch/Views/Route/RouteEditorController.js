@@ -336,7 +336,7 @@
 			return {
 
 				Entity: {
-					RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
+                    RouteId: routeId,
 					Description: $scope.scopeModel.description,
 					ChannelsLimit: $scope.scopeModel.channelslimit,
 					LogAlias: $scope.scopeModel.logalias,
