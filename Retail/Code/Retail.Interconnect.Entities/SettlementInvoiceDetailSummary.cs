@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Retail.Interconnect.Entities
 {
@@ -12,12 +8,16 @@ namespace Retail.Interconnect.Entities
         public string CurrencyIdDescription { get; set; }
         public decimal Amount { get; set; }
 
-        public SettlementInvoiceDetailSummary() { }
+        public SettlementInvoiceDetailSummary()
+        {
+        }
+
         public IEnumerable<SettlementInvoiceDetailSummary> GetRDLCSettlementInvoiceDetailSummarySchema()
         {
             return null;
         }
     }
+
     public class SettlementInvoiceDetailByCurrency
     {
         public long InvoiceId { get; set; }

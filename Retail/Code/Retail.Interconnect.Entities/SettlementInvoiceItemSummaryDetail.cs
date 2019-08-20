@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Retail.Interconnect.Entities
 {
@@ -17,7 +13,8 @@ namespace Retail.Interconnect.Entities
         public decimal DueToSystemTotalTrafficAmount { get; set; }
         public decimal DueToSystemTotalSMSAmount { get; set; }
         public decimal DueToSystemFullAmount { get; set; }
-
+        public int DueToSystemNumberOfCalls { get; set; }
+        public decimal DueToSystemDifference { get; set; }
 
         public decimal DueToCompanyAmount { get; set; }
         public decimal DueToCompanyAmountWithTaxes { get; set; }
@@ -25,15 +22,14 @@ namespace Retail.Interconnect.Entities
         public decimal DueToCompanyTotalTrafficAmount { get; set; }
         public decimal DueToCompanyTotalSMSAmount { get; set; }
         public decimal DueToCompanyFullAmount { get; set; }
-
-        public int DueToSystemNumberOfCalls { get; set; }
         public int DueToCompanyNumberOfCalls { get; set; }
-
-        public decimal DueToSystemDifference { get; set; }
         public decimal DueToCompanyDifference { get; set; }
 
 
-        public SettlementInvoiceItemSummaryDetail() { }
+        public SettlementInvoiceItemSummaryDetail()
+        {
+        }
+
         public IEnumerable<SettlementInvoiceItemSummaryDetail> GetRDLCSettlementInvoiceDetailSchema()
         {
             return null;

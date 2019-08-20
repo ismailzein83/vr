@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Retail.BusinessEntity.Entities;
+﻿using System.Collections.Generic;
 
 namespace Retail.Interconnect.Entities
 {
@@ -36,11 +31,13 @@ namespace Retail.Interconnect.Entities
         public string Reference { get; set; }
         public bool IsOriginalAmountSetted { get; set; }
 
-        public InterconnectInvoiceDetails() { }
+        public InterconnectInvoiceDetails()
+        {
+        }
+
         public IEnumerable<InterconnectInvoiceDetails> GetInterconnectInvoiceDetailsRDLCSchema()
         {
             return null;
         }
     }
 }
-

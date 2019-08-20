@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.Interconnect.Entities
 {
@@ -13,6 +10,8 @@ namespace Retail.Interconnect.Entities
         public string CurrencyIdDescription { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+        public string Month { get; set; }
+        public string MonthDescription { get; set; }
 
         public decimal DueToSystemAmount { get; set; }
         public decimal DueToSystemAmountWithTaxes { get; set; }
@@ -21,7 +20,8 @@ namespace Retail.Interconnect.Entities
         public decimal DueToSystemTotalDealAmount { get; set; }
         public decimal DueToSystemTotalSMSAmount { get; set; }
         public decimal DueToSystemFullAmount { get; set; }
-
+        public int DueToSystemNumberOfCalls { get; set; }
+        public decimal DueToSystemDifference { get; set; }
 
         public decimal DueToCompanyAmount { get; set; }
         public decimal DueToCompanyAmountWithTaxes { get; set; }
@@ -29,16 +29,13 @@ namespace Retail.Interconnect.Entities
         public decimal DueToCompanyTotalTrafficAmount { get; set; }
         public decimal DueToCompanyTotalSMSAmount { get; set; }
         public decimal DueToCompanyFullAmount { get; set; }
-
-        public int DueToSystemNumberOfCalls { get; set; }
         public int DueToCompanyNumberOfCalls { get; set; }
-
-        public decimal DueToSystemDifference { get; set; }
         public decimal DueToCompanyDifference { get; set; }
-        public string Month { get; set; }
-        public string MonthDescription { get; set; }
 
-        public SettlementInvoiceItemDetailByCurrency() { }
+        public SettlementInvoiceItemDetailByCurrency()
+        {
+        }
+
         public IEnumerable<SettlementInvoiceItemDetailByCurrency> GetSettlementInvoiceItemDetailByCurrencyRDLCSchema()
         {
             return null;

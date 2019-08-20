@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.Interconnect.Entities
 {
@@ -24,6 +21,7 @@ namespace Retail.Interconnect.Entities
         public int CurrencyId { get; set; }
         public string Month { get; set; }
     }
+
     public class InterconnectInvoiceByCurrencyItemDetailsByCurrency
     {
         public HashSet<int> Currencies { get; set; }

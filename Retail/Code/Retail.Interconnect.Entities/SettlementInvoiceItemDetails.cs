@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.Interconnect.Entities
 {
@@ -24,7 +21,11 @@ namespace Retail.Interconnect.Entities
         public decimal? OriginalAmount { get; set; }
         public bool MultipleCurrencies { get; set; }
         public bool IsOriginalAmountSetted { get; set; }
-        public SettlementInvoiceItemDetails() { }
+
+        public SettlementInvoiceItemDetails()
+        {
+        }
+
         public IEnumerable<SettlementInvoiceItemDetails> GetSettlementInvoiceItemDetailsRDLCSchema()
         {
             return null;
