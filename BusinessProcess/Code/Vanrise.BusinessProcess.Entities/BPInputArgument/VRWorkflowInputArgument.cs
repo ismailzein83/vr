@@ -14,7 +14,11 @@ namespace Vanrise.BusinessProcess.Entities
     /// </summary>
     public class VRWorkflowDictInputArgument : VRWorkflowInputArgument
     {
+        public Guid BPDefinitionId { get; set; }
+
         public Dictionary<string, Object> InputArguments { get; set; }
+
+        public override string ProcessName { get { return string.Format("VRWorkflowInputArgument_{0} ", this.BPDefinitionId.ToString("N")); } }
 
         public override Dictionary<string, object> ConvertArgumentsToDictionary()
         {
