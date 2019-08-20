@@ -47,6 +47,12 @@ namespace Vanrise.HelperTools
             List<string> lst = new List<string>();
             if (ConfigurationManager.AppSettings[projectName + "_" + dbName + "_Schemas"] != null)
             {
+                //adding default schema
+                if(ConfigurationManager.AppSettings[dbName + "_Schemas"] != null)
+                {
+                    lst.AddRange(ConfigurationManager.AppSettings[dbName + "_Schemas"].ToString().Split('#').ToList());
+                }
+
                 lst.AddRange(ConfigurationManager.AppSettings[projectName + "_" + dbName + "_Schemas"].ToString().Split('#').ToList());
             }
             return lst;
