@@ -12,7 +12,7 @@ namespace SOM.Main.Entities
         
         public string Name { get; set; }
 
-        public LineOfBusiness LOB { get; set; }
+        //public LineOfBusiness LOB { get; set; }
 
         public string SubType { get; set; }
 

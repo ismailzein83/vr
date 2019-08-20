@@ -61,7 +61,7 @@ namespace BPMExtended.Main.Entities
     }
     public enum OperationType
     {
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Subscription")]
         [EntitySchemaName("StLineSubscriptionRequest")]
         [TechnicalStepFieldName("StWorkOrderStageId")]
@@ -70,7 +70,7 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("EBACDCBA-0DB9-4582-999B-6317DA0094A7")]
         TelephonyLineSubscription = 0,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Termination")]
         [EntitySchemaName("StLineTerminationRequest")]
         [TechnicalStepFieldName("StWorkOrderStageId")]
@@ -79,42 +79,42 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("CEBCB883-84AA-4183-9938-817E711EB2BF")]
         TelephonyLineTermination = 1,
          
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Moving Same Switch")]
         [EntitySchemaName("StLineMovingSameSwitchRequest")]
         [CompletedStep("StStepId")]
         [CompletedStepId("15F6B32E-978A-421E-9FDF-CCA45D422AB8")]
         TelephonyLineMovingSameSwitch = 2,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Change Phone Number")]
         [EntitySchemaName("StChangePhoneNumberRequest")]
         [CompletedStep("StStepId")]
         [CompletedStepId("A359D1DA-9970-4C97-A669-8F30E7B31550")]
         TelephonyChangePhoneNumber = 3,
 
-        [LineOfBusiness(LineOfBusiness.LeasedLine)]
+        //[LineOfBusiness(LineOfBusiness.LeasedLine)]
         [Description("Leased Line Subscription")]
         [EntitySchemaName("StLeasedLine")]
         [CompletedStep("StStepId")]
         [CompletedStepId("DBEF5609-03E6-47D9-A901-6F48914A57F3")]
         LeasedLineSubscription = 4,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Subscription")]
         [EntitySchemaName("StADSL")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ADSLSubscription = 5,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL for ISP Subscription")]
         [EntitySchemaName("StISPADSL")]
         [CompletedStep("StStepId")]
         [CompletedStepId("72EE0965-4F1F-4A3E-A78F-02DBDD96F168")]
         ADSLForISPSubscription = 6,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("New Pabx Operation")]
         [EntitySchemaName("StPabx")]
         [TechnicalStepFieldName("StWorkOrderStageId")]
@@ -123,147 +123,147 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("1386C350-017D-400B-855C-04FC427868BF")]
         NewPabxOperation = 7,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Line Moving")]
         [EntitySchemaName("StADSLLineMoving")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ADSLLineMoving = 8,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Line Termination")]
         [EntitySchemaName("StADSLLineTermination")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ADSLLineTermination = 9,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Moving New Switch")]
         [EntitySchemaName("StLineMovingNewSwitch")]
         [CompletedStep("")]
         [CompletedStepId("")]
         TelephonyLineMovingNewSwitch = 10,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Alter Speed")]
         [EntitySchemaName("StADSLAlterSpeed")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ADSLAlterSpeed = 11,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Change Password")]
         [EntitySchemaName("StADSLChangePassword")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ADSLChangePassword = 12,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Contract Take Over")]
         [EntitySchemaName("StTelephonyContractTakeOver")]
         [CompletedStep("StStepId")]
         [CompletedStepId("A826F4E8-9352-46FB-814E-8B0B52655659")]
         ContractTakeOver = 13,
 
-        [LineOfBusiness(LineOfBusiness.LeasedLine)]
+        //[LineOfBusiness(LineOfBusiness.LeasedLine)]
         [Description("Leased Line Termination")]
         [EntitySchemaName("StLeasedLineTermination")]
         [CompletedStep("")]
         [CompletedStepId("")]
         LeasedLineTermination = 14,
 
-        [LineOfBusiness(LineOfBusiness.GSHDSL)]
+        //[LineOfBusiness(LineOfBusiness.GSHDSL)]
         [Description("GSHDSL Subscription")]
         [EntitySchemaName("StGSHDSL")]
         [CompletedStep("")]
         [CompletedStepId("")]
         GSHDSLSubscription = 15,
 
-        [LineOfBusiness(LineOfBusiness.GSHDSL)]
+        //[LineOfBusiness(LineOfBusiness.GSHDSL)]
         [Description("GSHDSL Termination")]
         [EntitySchemaName("StGSHDSLTermination")]
         [CompletedStep("")]
         [CompletedStepId("")]
         GSHDSLTermination = 16,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Deported Number")]
         [EntitySchemaName("StDeportedNumber")]
         [CompletedStep("StStepId")]
         [CompletedStepId("5442DDB1-82C0-4763-9BE8-DB8C6AD58B7A")]
         DeportedNumber = 17,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Friend And Family")]
         [EntitySchemaName("StFriendAndFamily")]
         [CompletedStep("StStepId")]
         [CompletedStepId("498A1C06-03A9-4EB7-A3BF-B0CC6554C40A")]
         FriendAndFamily = 18,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Service Addition")]
         [EntitySchemaName("StServiceAdditionRequest")]
         [CompletedStep("StStepId")]
         [CompletedStepId("64436D8D-547F-4B12-AFAA-B44425FE6EAF")]
         ServiceAddition = 19,
 
-        [LineOfBusiness(LineOfBusiness.LeasedLine)]
+        //[LineOfBusiness(LineOfBusiness.LeasedLine)]
         [Description("Change Speed")]
         [EntitySchemaName("StChangeLeasedLineSpeed")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ChangeSpeed = 20,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Complaint")]
         [EntitySchemaName("StADSLComplaint")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ADSLComplaint = 21,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Complaint")]
         [EntitySchemaName("")]
         [CompletedStep("")]
         [CompletedStepId("")]
         TelephonyComplaint = 22,
 
-        [LineOfBusiness(LineOfBusiness.LeasedLine)]
+        //[LineOfBusiness(LineOfBusiness.LeasedLine)]
         [Description("Leased Line Complaint")]
         [EntitySchemaName("")]
         [CompletedStep("")]
         [CompletedStepId("")]
         LeasedLineComplaint = 23,
 
-        [LineOfBusiness(LineOfBusiness.Administrative)]
+        //[LineOfBusiness(LineOfBusiness.Administrative)]
         [Description("Administrative Complaint")]
         [EntitySchemaName("")]
         [CompletedStep("")]
         [CompletedStepId("")]
         AdministrativeComplaint = 24,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Print Configuration")]
         [EntitySchemaName("StADSLPrintConfiguration")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ADSLPrintConfiguration = 25,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Manage PABX")]
         [EntitySchemaName("StManagePabx")]
         [CompletedStep("")]
         [CompletedStepId("")]
         ManagePABX = 26,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Deactivate PABX")]
         [EntitySchemaName("StDeactivatePabx")]
         [CompletedStep("")]
         [CompletedStepId("")]
         DeactivatePABX = 27,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Cpt Request")]
         [EntitySchemaName("StCpt")]
         [TechnicalStepFieldName("StWorkOrderStageId")]
@@ -272,35 +272,35 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("2A290E4F-A034-46A5-95BF-E0C8ED760805")]
         CptRequest = 28,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Deactivate Cpt")]
         [EntitySchemaName("StDeactivateCpt")]
         [CompletedStep("")]
         [CompletedStepId("")]
         DeactivateCpt = 29,
 
-        [LineOfBusiness(LineOfBusiness.Administrative)]
+        //[LineOfBusiness(LineOfBusiness.Administrative)]
         [Description("Create Payment Plan")]
         [EntitySchemaName("StCreatePaymentPlan")]
         [CompletedStep("")]
         [CompletedStepId("")]
         CreatePaymentPlan = 30,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        ///[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Change Rate Plan")]
         [EntitySchemaName("StChangeRatePlan")]
         [CompletedStep("StStepId")]
         [CompletedStepId("1F05083D-6074-47DD-822D-ED30362E30BE")]
         ChangeRatePlan = 31,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Update Contract Address")]
         [EntitySchemaName("StUpdateContractAddress")]
         [CompletedStep("StStepId")]
         [CompletedStepId("4AFB7452-F5FF-4CB7-8AE3-79801A6DEB7F")]
         UpdateContractAddress = 32,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Network Reset Password")]
         [EntitySchemaName("StNetwrokResetKeyword")]
         [CompletedStep("StStepId")]
@@ -310,7 +310,7 @@ namespace BPMExtended.Main.Entities
         NetworkResetPassword = 33,
 
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Other Charges")]
         [EntitySchemaName("StOtherCharges")]
         [CompletedStep("")]
@@ -318,7 +318,7 @@ namespace BPMExtended.Main.Entities
         OtherCharges = 34,
 
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Line Blocking")]  
         [EntitySchemaName("StLineBlock")]
         [CompletedStep("StTypeId")]
@@ -326,7 +326,7 @@ namespace BPMExtended.Main.Entities
         LineBlocking = 35,
 
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
+        //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Line Unblocking")]
         [EntitySchemaName("StLineUnblock")]
         [CompletedStep("StTypeId")]

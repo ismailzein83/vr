@@ -1380,14 +1380,15 @@ namespace BPMExtended.Main.Common
 
         #region Rate Plan
 
-        public static List<SOM.Main.Entities.RatePlan> GetRatePlans(SOM.Main.Entities.LineOfBusiness lob, string customerCategoryId, string subType)
-        {
-            if (subType == null)
-                return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()).ToList();
-            else
-                return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()
-                    && x.SubType.ToLower() == subType.ToLower()).ToList();
-        }
+        //public static List<SOM.Main.Entities.RatePlan> GetRatePlans(SOM.Main.Entities.LineOfBusiness lob, string customerCategoryId, string subType)
+        //{
+        //    //if (subType == null)
+        //    //    return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()).ToList();
+        //    //else
+        //    //    return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()
+        //    //        && x.SubType.ToLower() == subType.ToLower()).ToList();
+        //    return null;
+        //}
 
         public static SOM.Main.Entities.RatePlan GetRatePlan(string ratePlanId)
         {
@@ -1402,7 +1403,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_TL_PSTN_RES_NORMAL,
                     Name = "Normal Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
                     SubType = "PSTN",
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
                     CorePackage = GetServicePackage(PCKG_CORE_TL),
@@ -1412,7 +1413,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = "5",
                     Name = "Normal Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
                     SubType = "PSTN",
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
                     CorePackage = GetServicePackage(PCKG_CORE_TL),
@@ -1422,7 +1423,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_TL_PSTN_RES_ENG,
                     Name = "Engineers Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
                     SubType = "PSTN",
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
                     CorePackage = GetServicePackage(PCKG_CORE_TL),
@@ -1432,7 +1433,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_TL_PSTN_RES_MAR,
                     Name = "Family of Martyr Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
                     SubType = "PSTN",
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_MARTYR),
                     CorePackage = GetServicePackage(PCKG_CORE_TL),
@@ -1442,7 +1443,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_TL_ISDN_RES_NORMAL,
                     Name = "Normal Plan (ISDN)",
-                    LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
                     SubType = "ISDN",
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
                     CorePackage = GetServicePackage(PCKG_CORE_TL),
@@ -1452,7 +1453,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_TL_ISDN_RES_MAR,
                     Name = "Family of Martyr Plan (ISDN)",
-                    LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
                     SubType = "ISDN",
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_MARTYR),
                     CorePackage = GetServicePackage(PCKG_CORE_TL),
@@ -1462,7 +1463,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_LL_RES_NORMAL,
                     Name = "Normal Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
                     CorePackage = GetServicePackage(PCKG_CORE_LL),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_LL_1 })
@@ -1471,7 +1472,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_LL_RES_ENG,
                     Name = "Engineers Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
                     CorePackage = GetServicePackage(PCKG_CORE_LL),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_LL_1 })
@@ -1480,7 +1481,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_LL_RES_MAR,
                     Name = "Family of Martyr Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_MARTYR),
                     CorePackage = GetServicePackage(PCKG_CORE_LL),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_LL_1 })
@@ -1489,7 +1490,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_ADSL_RES_NORMAL,
                     Name = "Normal Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
                     CorePackage = GetServicePackage(PCKG_CORE_ADSL_1),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_ADSL_1 })
@@ -1498,7 +1499,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_ADSL_RES_NORMAL,
                     Name = "Normal Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
                     CorePackage = GetServicePackage(PCKG_CORE_ADSL_1),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_ADSL_1 })
@@ -1507,7 +1508,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_ADSL_RES_STUDENT,
                     Name = "Student Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
                     CorePackage = GetServicePackage(PCKG_CORE_ADSL_1),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_ADSL_1, PCKG_OPT_ADSL_2 })
@@ -1516,7 +1517,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_GSHDSL_RES_NORMAL,
                     Name = "Student Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.GSHDSL,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.GSHDSL,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
                     CorePackage = GetServicePackage(PCKG_CORE_GSHDSL_1),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_GSHDSL_1 , PCKG_OPT_GSHDSL_3})
@@ -1525,7 +1526,7 @@ namespace BPMExtended.Main.Common
                 {
                     RatePlanId = RP_GSHDSL_RES_STUDENT,
                     Name = "Student Plan",
-                    LOB = SOM.Main.Entities.LineOfBusiness.GSHDSL,
+                    //LOB = SOM.Main.Entities.LineOfBusiness.GSHDSL,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
                     CorePackage = GetServicePackage(PCKG_CORE_GSHDSL_1),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_GSHDSL_1, PCKG_OPT_GSHDSL_2,PCKG_OPT_GSHDSL_3 })

@@ -15,23 +15,24 @@ namespace SOM.Main.Entities
 
         LeasedLine = 1,
 
-        ADSL = 2,
+        XDSL = 2
+        //ADSL = 2,
 
-        GSHDSL = 3,
+        //GSHDSL = 3,
 
-        Administrative = 4
+        //Administrative = 4
 
     }
 
-    public class LineOfBusinessAttribute : Attribute
-    {
-        public LineOfBusiness LOB { get; private set; }
+    //public class LineOfBusinessAttribute : Attribute
+    //{
+    //    public LineOfBusiness LOB { get; private set; }
 
-        public LineOfBusinessAttribute(LineOfBusiness lob)
-        {
-            this.LOB = lob;
-        }
-    }
+    //    public LineOfBusinessAttribute(LineOfBusiness lob)
+    //    {
+    //        this.LOB = lob;
+    //    }
+    //}
 
     //public class Description : Attribute
     //{

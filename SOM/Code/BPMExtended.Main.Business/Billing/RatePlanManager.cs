@@ -45,37 +45,37 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetCustomerCategory(customerCategoryId);
         }
 
-        public List<RatePlanInfo> GetRatePlanInfo(BPMCustomerType customerType, string customerCategoryId, OperationType operationType, string subType , string filter = null)
-        {
-            List<string> ratePlanIds = null;
+        //public List<RatePlanInfo> GetRatePlanInfo(BPMCustomerType customerType, string customerCategoryId, OperationType operationType, string subType , string filter = null)
+        //{
+        //    List<string> ratePlanIds = null;
 
-            var lobAttr = Utilities.GetEnumAttribute<OperationType, SOM.Main.Entities.LineOfBusinessAttribute>(operationType);
-            List<SOM.Main.Entities.RatePlan> ratePlans = RatePlanMockDataGenerator.GetRatePlans(lobAttr.LOB, customerCategoryId, subType);
-
-
-            Func<SOM.Main.Entities.RatePlan, bool> filterExpression = (item) =>
-            {
-                if (ratePlanIds.Find(x => x == item.RatePlanId) != null)
-                    return false;
+        //    var lobAttr = Utilities.GetEnumAttribute<OperationType, SOM.Main.Entities.LineOfBusinessAttribute>(operationType);
+        //    List<SOM.Main.Entities.RatePlan> ratePlans = RatePlanMockDataGenerator.GetRatePlans(lobAttr.LOB, customerCategoryId, subType);
 
 
-                return true;
-            };
+        //    Func<SOM.Main.Entities.RatePlan, bool> filterExpression = (item) =>
+        //    {
+        //        if (ratePlanIds.Find(x => x == item.RatePlanId) != null)
+        //            return false;
 
-            if (filter == null)
-            {
-                return ratePlans.MapRecords(RatePlanInfoMapper).ToList();
 
-            }
-            else
-            {
-                //deserialize filter
-                ratePlanIds = JsonConvert.DeserializeObject<Filter>(filter).ExcludedRatePlanIds;
+        //        return true;
+        //    };
 
-                return ratePlans.MapRecords(RatePlanInfoMapper, filterExpression).ToList();
-            }
+        //    if (filter == null)
+        //    {
+        //        return ratePlans.MapRecords(RatePlanInfoMapper).ToList();
 
-        }
+        //    }
+        //    else
+        //    {
+        //        //deserialize filter
+        //        ratePlanIds = JsonConvert.DeserializeObject<Filter>(filter).ExcludedRatePlanIds;
+
+        //        return ratePlans.MapRecords(RatePlanInfoMapper, filterExpression).ToList();
+        //    }
+
+        //}
 
         public List<RatePlanInfo> GetRatePlansBSCSInfo()
         {
