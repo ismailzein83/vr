@@ -8,4 +8,23 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public abstract Dictionary<string, object> ConvertArgumentsToDictionary();
     }
+
+    /// <summary>
+    /// Temporary
+    /// </summary>
+    public class VRWorkflowDictInputArgument : VRWorkflowInputArgument
+    {
+        public Dictionary<string, Object> InputArguments { get; set; }
+
+        public override Dictionary<string, object> ConvertArgumentsToDictionary()
+        {
+            return this.InputArguments;
+        }
+
+        public override string GetTitle()
+        {
+            return "New Instance";
+        }
+    }
+
 }
