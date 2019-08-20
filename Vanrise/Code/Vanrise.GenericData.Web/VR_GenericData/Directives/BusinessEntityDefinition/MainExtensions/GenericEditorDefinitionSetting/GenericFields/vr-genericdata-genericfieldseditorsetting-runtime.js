@@ -95,7 +95,8 @@
                     function getGenericFieldsRuntimeRow() {
                         var input = {
                             Fields: definitionSettings != undefined ? definitionSettings.Fields : definitionSettings,
-                            DataRecordTypeId: dataRecordTypeId
+                            DataRecordTypeId: dataRecordTypeId,
+                            RecordFields: genericContext != undefined && dataRecordTypeId == undefined ? genericContext.getRecordFields() : undefined
                         };
 
                         return VR_GenericData_GenericUIRuntimeAPIService.GetGenericFieldsRuntimeRow(input).then(function (response) {
@@ -114,6 +115,7 @@
                             runtimeFields = response ? response.Fields : undefined;
                         });
                     }
+
 
                     function loadRowDirective() {
                         var rowDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();

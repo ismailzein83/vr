@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "GenericUIRuntime")]
-    public class GenericUIRuntimeController:BaseAPIController
+    public class GenericUIRuntimeController : BaseAPIController
     {
         [HttpGet]
         [Route("GetExtensibleBEItemRuntime")]
@@ -27,7 +27,7 @@ namespace Vanrise.GenericData.Web.Controllers
         //    GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
         //    return manager.GetManagementRuntime(businessEntityDefinitionId);
         //}
-      //  [HttpGet]
+        //  [HttpGet]
         //[Route("GetGenericEditorRuntime")]
         //public GenericEditorRuntime GetGenericEditorRuntime(Guid businessEntityDefinitionId)
         //{
@@ -39,7 +39,7 @@ namespace Vanrise.GenericData.Web.Controllers
         public List<GenericEditorRuntimeRow> GetGenericEditorRuntimeRows(GenericEditorRuntimeRowsInput input)
         {
             GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
-            return manager.GetGenericEditorRuntimeRows(input.Rows, input.DataRecordTypeId);
+            return manager.GetGenericEditorRuntimeRows(input.Rows, input.DataRecordTypeId, input.RecordFields);
         }
 
         [HttpPost]
@@ -47,7 +47,15 @@ namespace Vanrise.GenericData.Web.Controllers
         public GenericFieldsRuntimeRowOutput GetGenericFieldsRuntimeRow(GenericFieldsRuntimeRowInput input)
         {
             GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
-            return manager.GetGenericFieldsRuntimeRow(input.Fields, input.DataRecordTypeId);
+            return manager.GetGenericFieldsRuntimeRow(input.Fields, input.DataRecordTypeId, input.RecordFields);
+        }
+
+        [HttpPost]
+        [Route("GetGenericEditorRuntimeField")]
+        public GenericEditorRuntimeField GetGenericEditorRuntimeField(GenericEditorRuntimeFieldInput input)
+        {
+            GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
+            return null; //manager.GetGenericEditorRuntimeField(input.Field, input.DataRecordTypeId);
         }
 
         [HttpPost]
@@ -64,6 +72,9 @@ namespace Vanrise.GenericData.Web.Controllers
             var manager = GetManager(businessEntityDefinitionId);
             return manager.GetDataRecordTypesInfo(businessEntityDefinitionId);
         }
+
+
+
         IExtensibleBEManager GetManager(Guid businessEntityDefinitionId)
         {
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
@@ -77,9 +88,11 @@ namespace Vanrise.GenericData.Web.Controllers
 
     public class GenericFieldsRuntimeRowInput
     {
-        public Guid DataRecordTypeId { get; set; }
+        public Guid? DataRecordTypeId { get; set; }
 
         public List<GenericEditorField> Fields { get; set; }
+
+        public List<GenericEditorRecordField> RecordFields { get; set; }
     }
 
     public class GenericEditorDefinitionSectionsInput
@@ -89,7 +102,16 @@ namespace Vanrise.GenericData.Web.Controllers
     }
     public class GenericEditorRuntimeRowsInput
     {
-        public Guid DataRecordTypeId { get; set; }
+        public Guid? DataRecordTypeId { get; set; }
         public List<GenericEditorRow> Rows { get; set; }
+        public List<GenericEditorRecordField> RecordFields { get; set; }
     }
+
+    public class GenericEditorRuntimeFieldInput
+    {
+        public Guid DataRecordTypeId { get; set; }
+
+        public GenericEditorField Field { get; set; }
+    }
+
 }

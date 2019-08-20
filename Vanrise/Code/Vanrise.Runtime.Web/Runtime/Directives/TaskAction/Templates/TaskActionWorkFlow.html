@@ -5,7 +5,7 @@
 </vr-row>
 <vr-row>
     <vr-section title="{{selectedBPDefintion.Title}}" level="2" vr-loader="isLoadingBPSection" ng-if="selectedBPDefintion.Configuration.ScheduledExecEditor">
-        <vr-columns width="fullrow">
+        <vr-columns width="fullrow" withemptyline>
             <vr-directivewrapper directive="selectedBPDefintion.Configuration.ScheduledExecEditor" on-ready="onBPDefinitionDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-section>

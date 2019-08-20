@@ -95,6 +95,9 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                 };
 
                 api.setData = function (dicData) {
+                    if (sectionDirectiveAPI == undefined)
+                        return;
+
 
                     var sectionData = sectionDirectiveAPI.getData();
                     if (sectionData != undefined) {
@@ -180,10 +183,13 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
             }
 
             function getGenericEditorRuntimeRows() {
+
                 var input = {
                     Rows: definitionSettings != undefined ? definitionSettings.Rows : definitionSettings,
-                    DataRecordTypeId: dataRecordTypeId
+                    DataRecordTypeId: dataRecordTypeId,
+                    RecordFields: genericContext != undefined && dataRecordTypeId == undefined ? genericContext.getRecordFields() : undefined
                 };
+
                 return VR_GenericData_GenericUIRuntimeAPIService.GetGenericEditorRuntimeRows(input).then(function (response) {
                     if (parentFieldValues != undefined && response != undefined && response.length > 0) {
                         for (var i = 0; i < response.length; i++) {

@@ -116,14 +116,17 @@
     <Compile Include="CDRCorrelation\CDRCorrelationBatch.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationFilterGroup.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationProcessState.cs" />
+    <Compile Include="DataRecords\ISetRecordDescription.cs" />
     <Compile Include="DataRecordTypes\DataRecordFieldTypeInfo.cs" />
     <Compile Include="DataRecordTypes\FieldTypeRuntimeViewSettings.cs" />
     <Compile Include="DataRecordTypes\ListRecordRuntimeViewType.cs" />
     <Compile Include="DataStorage\IGetStorageNameContext.cs" />
     <Compile Include="GenericBusinessEntityCustomActions\RangeGenericEditorProcessInput.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEField360DegreeViewData.cs" />
     <Compile Include="GenericBusinessEntity\GetDescriptionByIdsDicValueOutput.cs" />
     <Compile Include="GenericBusinessEntity\RangeGenericEditorDefinitionSettings.cs" />
     <Compile Include="GenericEditorDefinitionSetting\ExecuteActionTypeEditorDefinitionSetting.cs" />
+    <Compile Include="GenericEditor\Definition\GenericEditorRecordField.cs" />
     <Compile Include="GenericEditor\Runtime\GenericFieldsRuntimeRow.cs" />
     <Compile Include="GenericFinancialAccount.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionDetail.cs" />
