@@ -50,7 +50,7 @@ app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService
 
                     if (bpDefinitionObj && bpDefinitionObj.Configuration && bpDefinitionObj.Configuration.ManualEditorSettings && bpDefinitionObj.Configuration.ManualEditorSettings.Enable) {
                         $scope.scopeModel.hasRuntimeEditor = true;
-                        var getVRWorkflowInputArgumentFieldsPromise = getVRWorkflowInputArgumentFields()
+                        var getVRWorkflowInputArgumentFieldsPromise = getVRWorkflowInputArgumentFields();
                         rootPromiseNode.promises.push(getVRWorkflowInputArgumentFieldsPromise);
 
                         rootPromiseNode.getChildNode = function () {

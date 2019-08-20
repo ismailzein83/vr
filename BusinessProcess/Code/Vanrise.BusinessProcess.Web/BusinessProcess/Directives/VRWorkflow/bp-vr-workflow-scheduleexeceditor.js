@@ -63,7 +63,7 @@ app.directive("bpVrWorkflowScheduleexeceditor", ['UtilsService', 'VRUIUtilsServi
                         getChildNode: function () {
                             if (bpDefinitionObj && bpDefinitionObj.Configuration && bpDefinitionObj.Configuration.ScheduleEditorSettings && bpDefinitionObj.Configuration.ScheduleEditorSettings.Enable) {
                                 $scope.scopeModel.hasRuntimeEditor = true;
-                                var getVRWorkflowInputArgumentFieldsPromise = getVRWorkflowInputArgumentFields()
+                                var getVRWorkflowInputArgumentFieldsPromise = getVRWorkflowInputArgumentFields();
 
                                 return {
                                     promises: [getVRWorkflowInputArgumentFieldsPromise],
