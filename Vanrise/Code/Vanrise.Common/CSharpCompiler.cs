@@ -185,6 +185,9 @@ namespace Vanrise.Common
 
             #endregion
 
+            if (string.Compare(type.FullName, "System.Void", true) == 0)
+                return "void";
+
             if (type.IsGenericType)
             {
                 if (type.GetGenericTypeDefinition() == typeof(Nullable<>))

@@ -46,20 +46,23 @@ namespace Vanrise.Common.MainExtensions.VRDynamicAPI
                     }
                     vrDynamicAPIMethodSettingsContext.InParameters = inParameters;
                 }
-                vrDynamicAPIMethodSettingsContext.ReturnType = CSharpCompiler.TypeToString(method.ReturnType);
+                string returnedType = CSharpCompiler.TypeToString(method.ReturnType);
+                vrDynamicAPIMethodSettingsContext.ReturnType = returnedType;
+
+                string returnedValue = string.Compare(returnedType, "void", true) != 0 ? "return " : string.Empty;
 
                 StringBuilder methodBodyBuilder = new StringBuilder();
                 if (method.IsStatic)
                 {
-                    methodBodyBuilder.Append(@"
-                    return #NAMESPACE#.#CLASS#.#METHOD#(#PARAMETERS#);
+                    methodBodyBuilder.Append($@"
+                    {returnedValue} #NAMESPACE#.#CLASS#.#METHOD#(#PARAMETERS#);
                     ");
                 }
                 else if (!method.IsStatic && method.IsPublic)
                 {
-                    methodBodyBuilder.Append(@"
+                    methodBodyBuilder.Append($@"
                     #NAMESPACE#.#CLASS# x = new #NAMESPACE#.#CLASS#();
-                    return x.#METHOD#(#PARAMETERS#);
+                    {returnedValue} x.#METHOD#(#PARAMETERS#);
                     ");
                 }
                 methodBodyBuilder.Replace("#NAMESPACE#", vrNamespace.Name);
