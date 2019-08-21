@@ -47,6 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
@@ -74,6 +78,10 @@
     <Compile Include="C4Switch\VRActions\BlockInInterconnection\BlockInInterconnectionDefinitionSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RecordAnalysis.Business\RecordAnalysis.Business.csproj">
+      <Project>{90627A1F-5042-4080-9453-B39EE40E11F3}</Project>
+      <Name>RecordAnalysis.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RecordAnalysis.Entities\RecordAnalysis.Entities.csproj">
       <Project>{1289411c-4f16-4003-8875-23b2c5a0aec5}</Project>
       <Name>RecordAnalysis.Entities</Name>
