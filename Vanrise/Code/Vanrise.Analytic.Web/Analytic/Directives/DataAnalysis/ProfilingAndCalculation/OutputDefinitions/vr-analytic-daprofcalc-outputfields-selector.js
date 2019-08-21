@@ -93,6 +93,15 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
         function getTemplate(attrs) {
 
             var multipleselection = "";
+            var hideSelectAll = "";
+            var hideClearAll = "";
+
+            if (attrs.hideselectall != undefined)
+                hideSelectAll = "hideselectall";
+
+            if (attrs.hideclearall != undefined)
+                hideClearAll = "hideclearall";
+
             var label = "Output Field";
 
             if (attrs.ismultipleselection != undefined) {
@@ -103,9 +112,9 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
                 label = attrs.customlabel;
 
             var template =
-                '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" label="' + label +
-                    '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" entityName="' + label +
-                    '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" ' + hideSelectAll + ' ' + hideClearAll + ' label="' + label +
+                '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" entityName="' + label +
+                '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                 '</vr-select>';
 
             return template;
