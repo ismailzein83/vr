@@ -7,17 +7,59 @@ using BPMExtended.Main.Entities;
 
 namespace BPMExtended.Main.SOMAPI
 {
+    //public class CreateCustomerInput
+    //{
+    //    public string CustomerId { get; set; }
+    //    public string CustomerCategoryId { get; set; }
+    //    public string PaymentMethodId { get; set; }
+    //    public string FirstName { get; set; }
+    //    public string LastName { get; set; }
+    //    public string City { get; set; }
+    //    public string CSO { get; set; }
+    //    public string BankCode { get; set; }
+    //    public string BankName { get; set; }
+    //    public string AccountNumber { get; set; }
+    //}
     public class CreateCustomerInput
     {
         public string CustomerId { get; set; }
         public string CustomerCategoryId { get; set; }
-        public string PaymentMethodId { get; set; }
+        public string DefaultRatePlan { get; set; }
         public string FirstName { get; set; }
+        public string MiddleName { get; set; }
         public string LastName { get; set; }
+        public string Sex { get; set; }
+        public string MotherName { get; set; }
+        public string FatherName { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Career { get; set; }
+        public string Nationality { get; set; }
+        public string Country { get; set; }
+        public string Region { get; set; }
         public string City { get; set; }
+        public string Zip { get; set; }
+        public string Street { get; set; }
+        public string Building { get; set; }
+        public string Floor { get; set; }
+        public string HomePhone { get; set; }
+        public string FaxNumber { get; set; }
+        public string MobilePhone { get; set; }
+        public string Email { get; set; }
         public string CSO { get; set; }
+        public string PaymentMethodId { get; set; }
+        public string BillCycle { get; set; }
         public string BankCode { get; set; }
         public string BankName { get; set; }
         public string AccountNumber { get; set; }
+        public string IBAN { get; set; }
+        public string BankSwiftCode { get; set; }
+        public string DocumentId { get; set; }
+        public string DocumentTypeId { get; set; }
+        public DateTime ValidFromDate { get; set; }
+        public bool IsUrgent { get; set; }
+        public bool IsForward { get; set; }
+        public bool IsEmployee { get; set; }
+        public string CustomerType { get; set; }
+        public string DebitAccountOwner { get; set; }
     }
 }

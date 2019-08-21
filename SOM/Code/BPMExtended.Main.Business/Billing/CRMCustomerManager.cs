@@ -945,7 +945,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber, string BankName)
+        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber, string BankName, string IBAN)
         {
             IDManager manager = new IDManager();
             CustomerId = manager.GetCustomerNextId();
@@ -962,7 +962,14 @@ namespace BPMExtended.Main.Business
                 FirstName = FirstName,
                 LastName = LastName,
                 PaymentMethodId = PaymentMethodId,
-                CustomerId = CustomerId
+                CustomerId = CustomerId,
+                Country = "206",
+                DefaultRatePlan = "TM005",
+                CustomerType = "C",
+                IBAN = IBAN,
+                Nationality = "206",
+                ValidFromDate = DateTime.Now,
+                DebitAccountOwner = FirstName
             };
 
             using (var client = new SOMClient())
