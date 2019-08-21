@@ -31,7 +31,9 @@ as (select * from (values
 ('CD4A108F-AE74-424B-924C-A1FF0D353A36','VR_AccountBalance_AccountStatmentView','Account Statment','VR_Security_ViewTypeConfig'													,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-accountbalance-accountstatement-vieweditor"}'),
 ('C057CFBA-1E29-4C86-BB24-E3B504562E77','VR_AccountBalance_AccountBalancesView','Account Balances','VR_Security_ViewTypeConfig'													,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-accountbalance-accountbalances-vieweditor"}'),
 ('85BB0A94-C4C4-47B3-A575-3C630C0D000D','Billing Transaction','Billing Transaction','VR_Invoice_InvoiceType_RDLCDataSourceSettings','{"Editor":"vr-invoicetype-datasourcesettings-billingtransaction"}'),
-('53E07D3A-3D37-4F81-BAD0-225713E41B9A','InvToAccBalanceRelationDefinition','Invoice To Account Balance Relation','VR_Common_VRComponentType','{"Editor":"vr-invtoaccbalancerelation-definition-settings"}')
+('53E07D3A-3D37-4F81-BAD0-225713E41B9A','InvToAccBalanceRelationDefinition','Invoice To Account Balance Relation','VR_Common_VRComponentType','{"Editor":"vr-invtoaccbalancerelation-definition-settings"}'),
+('9B248C32-B9A6-4B87-9D0A-8CF7FD6FB11E','Generic Financial Account Balance','Generic Financial Account Balance','VR_AccountBalance_AccountTypeExtendedSettingsConfig','{"Editor":"vr-accountbalance-generic-financialaccountbalance-settings"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

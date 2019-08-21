@@ -626,7 +626,8 @@ set nocount on;
 as (select* from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('1535dbf0-01e9-4e8b-9566-a278f357cc80','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig','2019-06-19 12:23:28.820','2019-06-19 17:14:14.923','Billing Invoice','{"Editor":"retail-billing-invoicetypesettings"}','Billing Invoice'),
-('128aa4a3-719f-4c60-8908-aa652ed612d7','VR_Invoice_InvoiceType_RDLCDataSourceSettings','2018-09-30 17:49:14.773','2019-03-20 20:35:49.340','Customer Messages','{"Editor":"retail-billing-datasourcesettings-customermessages"}','Customer Messages')
+('128aa4a3-719f-4c60-8908-aa652ed612d7','VR_Invoice_InvoiceType_RDLCDataSourceSettings','2018-09-30 17:49:14.773','2019-03-20 20:35:49.340','Customer Messages','{"Editor":"retail-billing-datasourcesettings-customermessages"}','Customer Messages'),
+('1535DBF0-01E9-4E8B-9566-A278F357CC80','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig','2018-09-30 17:49:14.773','2019-03-20 20:35:49.340','Billing Invoice','{"Editor":"retail-billing-invoicetypesettings"}','Billing Invoice')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[ConfigType],[CreatedTime],[LastModifiedTime],[Name],[Settings],[Title]))
 merge[common].[ExtensionConfiguration] as t
