@@ -187,6 +187,7 @@
     <Content Include="Client\Images\menu-icons\Business Entities-tile.png" />
     <Content Include="Client\Images\menu-icons\configuration-tile.png" />
     <Content Include="Client\Images\menu-icons\configuration.png" />
+    <Content Include="Client\Images\menu-icons\notifications.png" />
     <Content Include="Client\Images\menu-icons\other-tile.png" />
     <Content Include="Client\Images\menu-icons\rules-tile.png" />
     <Content Include="Client\Images\menu-icons\rules.png" />
