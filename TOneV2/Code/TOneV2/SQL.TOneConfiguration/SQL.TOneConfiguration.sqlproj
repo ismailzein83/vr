@@ -946,7 +946,6 @@
     <None Include="Retail_RA_OnNet.PostDeployment.sql" />
     <None Include="TOne_SMS.PostDeployment.sql" />
     <None Include="ProbesAnalytics.PostDeployment.sql" />
-    <None Include="Retail_RecordAnalysis.PostDeployment.sql" />
     <None Include="TOne_VoiceSMSPostFix.PostDeployment.sql" />
     <None Include="Mediation_Namibia.PostDeployment.sql" />
     <None Include="Mediation_MobileAnalysis.PostDeployment.sql" />
