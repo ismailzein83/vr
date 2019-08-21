@@ -41,7 +41,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('94E29C06-8B09-4460-B495-5A7413C52C8C','Notifications'	,null,null,null,115,1,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.Notification"}')
+('94E29C06-8B09-4460-B495-5A7413C52C8C','Notifications'	,null,null,'/Client/Images/menu-icons/notifications.png',115,1,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"Common.Notification"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings]))
 merge	[sec].[Module] as t
