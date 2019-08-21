@@ -128,7 +128,7 @@
         }
 
         function setTitle() {
-            $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor(genericRuleDefintion.Name) : UtilsService.buildTitleForAddEditor(genericRuleDefintion.Name);
+            $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor(genericRuleDefintion.Title) : UtilsService.buildTitleForAddEditor(genericRuleDefintion.Title);
         }
 
         function loadStaticSection() {
