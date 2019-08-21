@@ -1,19 +1,19 @@
-﻿- Open IIS > Create a new web site Demo.Web > Make the physical directory point to Demo.Web Project > assign
- new port (8xxx for example)
-- Make sure the Application Pool of the newly created site is set to .Net FWK 4.0
-Expand the IIS web site of Demo.Web project:
+﻿Open cmd as Administrator 
+Copy below script inside the command prompt.
+This will create application pool, application, assign the application to pool, and add all virtual directories. You may have to change the site id and the bindings port.
 
- - Add the following virtual directory under the root site:
-Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
-
- - Add the following virtual directories under Client > Modules folder:
-Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
-VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
-Demo_Module				C:\TFS\Demo.project\Code\Demo.Module.Web\Demo_Module
-Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
-Demo_BestPractices		C:\TFS\Demo.project\Code\Demo.BestPractices.Web\Demo_BestPractices
-VR_Tools				C:\TFS\Demo.project\Code\Vanrise.Tools.Web\VR_Tools
-VR_DevTools				C:\TFS\Vanrise\Code\Vanrise.DevTools.Web\VR_DevTools
-VR_NumberingPlan	    C:\TFS\Vanrise\Code\Vanrise.NumberingPlan.Web\VR_NumberingPlan
+cd c:\windows\system32\inetsrv
+appcmd add apppool /name:"Demo.Web" /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+appcmd add site /name:Demo.Web /id:17 /physicalPath:C:\TFS\Retail\Code\Demo.Web /bindings:http/*:8017:
+appcmd set site /site.name:Demo.Web /[path='/'].applicationPool:Demo.Web
+appcmd add vdir /app.name:Demo.Web/ /path:/Client /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Web\Client
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/Common /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/Security /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/Runtime /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/Integration /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/VR_GenericData /physicalPath:C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/Demo_Module /physicalPath:C:\TFS\Demo.project\Code\Demo.Module.Web\Demo_Module
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/Demo_BestPractices /physicalPath:C:\TFS\Demo.project\Code\Demo.BestPractices.Web\Demo_BestPractices
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/VR_NumberingPlan /physicalPath:C:\TFS\Vanrise\Code\Vanrise.NumberingPlan.Web\VR_NumberingPlan
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/VR_Tools /physicalPath:C:\TFS\Demo.project\Code\Vanrise.Tools.Web\VR_Tools
+appcmd add vdir /app.name:Demo.Web/ /path:/Client/Modules/VR_DevTools /physicalPath:C:\TFS\Vanrise\Code\Vanrise.DevTools.Web\VR_DevTools
