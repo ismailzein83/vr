@@ -1197,8 +1197,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     item.isUpdated = true;
                     itemChanged(item, "Updated");
                     if (ctrl.openedDataItem) {
-                        item.fullScreenMode = true;
+                        if (!isInModal()) {
+                            item.fullScreenMode = true;
+                        }
                         ctrl.switchFullScreenModeOn(item);
+
                     }
                     else
                         if (ctrl.isMobile)
@@ -1654,21 +1657,28 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 };
 
                 ctrl.openedDataItem = undefined;
-
+                var dataItemModalScope;
                 ctrl.switchFullScreenModeOn = function (dataItem, evnt) {
                     if (isInModal()) {
+                        dataItem.objectTypeId = ctrl.objectType.objectTypeId;
+                        if (dataItemModalScope != undefined) {
+                            dataItemModalScope.modalContext.closeModal();
+                            dataItemModalScope.dataItem.fullScreenMode = false;
+                            ctrl.switchFullScreenModeOff(dataItemModalScope.dataItem);
+                        }
                         prepareDataItemExpandableItemObject(dataItem);
                         var modalSettings = {
-                            autoclose: false
-                        };
-                        modalSettings.onScopeReady = function (modalScope) {
-                            modalScope.ctrl = ctrl;
-                            modalScope.dataItem = dataItem;
+                            autoclose: false,
+                            stopAnimation: true
                         };
 
-                        setTimeout(function () {
-                            VRModalService.showModal("/Client/Javascripts/Directives/DataGrid/RowFullScreenModeModalPopup.html", null, modalSettings);
-                        }, 1);
+                        modalSettings.onScopeReady = function (modalScope) {
+                            dataItemModalScope = modalScope;
+                            modalScope.ctrl = ctrl;
+                            modalScope.dataItem = ctrl.openedDataItem;
+                            modalScope.objectTypeId = ctrl.objectType.objectTypeId;
+                        };
+                        VRModalService.showModal("/Client/Javascripts/Directives/DataGrid/RowFullScreenModeModalPopup.html", null, modalSettings);
                         return;
                     }
                     if (!dataItem.fullScreenMode) {
@@ -1682,7 +1692,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     dataItem.fullScreenMode = false;
                     ctrl.openedDataItem = undefined;
                     VRDataGridService.removeObjectType(ctrl.objectType);
-
+                    dataItemModalScope = undefined;
                     ctrl.parentNames = VRDataGridService.getRegisterdObjectTypes();
                     ctrl.collapseRow(dataItem, evnt);
                 };
@@ -1695,7 +1705,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         dataItem.viewReadyPromiseDeffered = undefined;
                     ctrl.objectType.dataItem = UtilsService.cloneObject(dataItem);
 
-                    VRDataGridService.addObjectType(ctrl.objectType);
+                    var objectTypeFounded = VRDataGridService.isObjectTypeAlreadyExist(ctrl.objectType.objectTypeId);
+                    if (!objectTypeFounded)
+                        VRDataGridService.addObjectType(ctrl.objectType);
                     ctrl.parentNames = VRDataGridService.getRegisterdObjectTypes();
 
                     if (ctrl.viewDirective) {
@@ -2063,6 +2075,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
             if (index >= 0)
                 objectTypes.splice(index, 1);
         }
+        function isObjectTypeAlreadyExist(objectTypeId) {
+            var index = UtilsService.getItemIndexByVal(objectTypes, objectTypeId, "objectTypeId");
+            if (index >= 0)
+                return true;
+        }
         function getRegisterdObjectTypes() {
             return objectTypes;
         }
@@ -2080,7 +2097,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
             addObjectType: addObjectType,
             removeObjectType: removeObjectType,
             clearobjectTypes: clearobjectTypes,
-            getDataItemByRegisterdObjectTypeId: getDataItemByRegisterdObjectTypeId
+            getDataItemByRegisterdObjectTypeId: getDataItemByRegisterdObjectTypeId,
+            isObjectTypeAlreadyExist: isObjectTypeAlreadyExist
         };
     }
     app.service('VRDataGridService', VRDataGridService);

@@ -15,7 +15,11 @@
                 $scope.ctrl.switchFullScreenModeOff(dataItem, $event);
                 closeModal();
             };
-
+            $scope.isLastFullView = function () {
+                if ($scope.ctrl.parentNames && $scope.ctrl.parentNames.length > 1)
+                    return $scope.objectTypeId == $scope.ctrl.parentNames[$scope.ctrl.parentNames.length - 1].objectTypeId;
+                else return true;
+            };
         }
         function load() {
 

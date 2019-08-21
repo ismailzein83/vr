@@ -24,7 +24,7 @@
                 deferred.resolve(response);
                 modalScope.$destroy();
             };
-               
+
             var sizeOptions = {
                 small: "vr-modal-sm",
                 medium: "vr-modal-md",
@@ -33,6 +33,7 @@
             };
 
             VRNavigationService.setParameters(modalScope, parameters);
+            var stopAnimation = false;
             if (settings != undefined && settings != null) {
                 if (settings.useModalTemplate === true) {
                     modalUrl = '/Client/Javascripts/Services/ModalService/vr-modal-service.html';
@@ -64,6 +65,8 @@
 
                 modalScope.modalWidth = settings.width;
                 modalScope.modalMaxHeight = settings.maxHeight;
+
+                stopAnimation = settings.stopAnimation == true;
 
                 modalScope.title = settings.title;
                 modalScope.showFooter = MobileService.isMobile();
@@ -99,7 +102,7 @@
                     if ($('.modal-dialog').length > 1) {
                         $('body').addClass('full-mobile-body');
                     }
-                    
+
 
 
                     if ($('.expandable-row-content').length > 1) {
@@ -118,7 +121,7 @@
                     if ($('.expandable-row-content').length > 1) {
                         $('.expandable-row-content').addClass('full-view');
                     }
-                }
+                }            
             });
 
             //modalScope.$on("$destroy", function () {
@@ -127,7 +130,7 @@
 
 
 
-            var animationClass = MobileService.isMobile() ? "" : "am-fade-and-scale";
+            var animationClass = MobileService.isMobile() || stopAnimation ? "" : "am-fade-and-scale";
             modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, keyboard : false, show: true, animation: animationClass, onHide: onhideModal });
             return deferred.promise;
         }
