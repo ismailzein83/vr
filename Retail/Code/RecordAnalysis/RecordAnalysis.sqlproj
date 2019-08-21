@@ -76,5 +76,7 @@
     <Build Include="RecordAnalysis\User Defined Types\C4ProbeType.sql" />
     <Build Include="RecordAnalysis\User Defined Types\C4SwitchType.sql" />
     <Build Include="Security\RecordAnalysis.sql" />
+    <Build Include="RecordAnalysis\Tables\C4Command.sql" />
+    <Build Include="RecordAnalysis\User Defined Types\C4CommandType.sql" />
   </ItemGroup>
 </Project>

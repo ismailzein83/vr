@@ -13,5 +13,9 @@
     [IsRerouted]           BIT             NULL,
     [CauseFromReleaseCode] VARCHAR (50)    NULL,
     [CauseToReleaseCode]   VARCHAR (50)    NULL,
+    [OriginationPointCode] VARCHAR (50)    NULL,
+    [DestinationPointCode] VARCHAR (50)    NULL,
     [QueueItemId]          BIGINT          NULL);
+
+
 
