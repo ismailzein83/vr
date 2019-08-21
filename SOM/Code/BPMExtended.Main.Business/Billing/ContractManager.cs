@@ -114,6 +114,17 @@ namespace BPMExtended.Main.Business
             recordEntity.Save();
         }
 
+        public List<BPInstance> GetFulfilmentLogs()
+        {
+            List<BPInstance> logs;
+
+            using (SOMClient client = new SOMClient())
+            {
+                logs = client.Get<List<BPInstance>>(String.Format("api/SOM.ST/Billing/GetBPInstances"));
+            }
+            return logs;
+        }
+
         public List<TelephonyContractDetail> GetTelephonyContractsByNumber(string phoneNumber)
         {
             return RatePlanMockDataGenerator.GetTelephonyContractsByNumber(phoneNumber);

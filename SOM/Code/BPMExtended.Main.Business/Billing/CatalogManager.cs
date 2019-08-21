@@ -81,30 +81,26 @@ namespace BPMExtended.Main.Business
             string publicId;
 
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSpecialServiceCatalog");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceDefinitionInCatalog");
             esq.AddColumn("Id");
-            esq.AddColumn("StServiceId");
-            esq.AddColumn("StIsSpecial");
+            esq.AddColumn("StServiceID");
+            esq.AddColumn("StExcludedFromServiceAddition");
 
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StIsSpecial", true);
-
-
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StExcludedFromServiceAddition", true);
             esq.Filters.Add(esqFirstFilter);
 
             entities = esq.GetEntityCollection(BPM_UserConnection);
             foreach (Entity entity in entities)
             {
-                publicId = (string)entity.GetColumnValue("StServiceId");
+                publicId = (string)entity.GetColumnValue("StServiceID");
                 specialServicesIds.Add(publicId);
 
             }
-
             return specialServicesIds;
-
         }
 
-        public List<string> GetIsRequiredPasswordServicesIds()// MYA: To be tested 
+       /* public List<string> GetIsRequiredPasswordServicesIds()// MYA: To be tested 
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -129,7 +125,7 @@ namespace BPMExtended.Main.Business
             }
 
             return isRequiredPasswordServices;
-        }
+        }*/
 
         public string GetPABXServiceId()
         {
@@ -721,8 +717,9 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlansInCatalog");
-            var rank = esq.AddColumn("StRatePlanCatalog.StRank");
+            //var rank = esq.AddColumn("StRatePlanCatalog.StRank");
             esq.AddColumn("StRatePlanID");
+            esq.AddColumn("StRank");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRatePlanID", ratePlanId);
             esq.Filters.Add(esqFirstFilter);
@@ -730,12 +727,9 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                return entities[0].GetTypedColumnValue<int>(rank.Name);
-
+                return entities[0].GetTypedColumnValue<int>("StRank");
             }
-
             return -1;
-
         }
 
         public Dictionary<string,string> GetDiscountServicesByServiceId() // To be Tested

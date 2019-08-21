@@ -739,6 +739,10 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StLastName");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StAddressID");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StFloorNumber");
+            esq.AddColumn("StAddressID");
             var cityName = esq.AddColumn("StCity.Name");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -752,6 +756,9 @@ namespace BPMExtended.Main.Business
                 var firstName = entities[0].GetColumnValue("StLastName");
                 var addressId = entities[0].GetColumnValue("StAddressID");  
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var street = entities[0].GetColumnValue("StStreet");
+                var building = entities[0].GetColumnValue("StBuildingNumber");
+                var floor = entities[0].GetColumnValue("StFloorNumber");
 
                 SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
                 {
@@ -760,7 +767,11 @@ namespace BPMExtended.Main.Business
                         City = city.ToString(),
                         FirstName = firstName.ToString(),
                         LastName = lastName.ToString(),
-                        AddressSeq = addressId.ToString(),
+                        AddressSeq = long.Parse(addressId.ToString()),
+                        Building= building.ToString(),
+                        Street = street.ToString(),
+                        Country="206",
+                        Floor=floor.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             CustomerId = customerId.ToString(),

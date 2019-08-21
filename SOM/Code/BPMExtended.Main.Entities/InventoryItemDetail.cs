@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace BPMExtended.Main.Entities
 {
     public enum PhoneStatus { A, F, R }
-    public enum PhoneType { ISDN = 0, DID = 1, WLL = 2, PES = 3, Fiber = 4, PSTN = 5 }
+    //public enum PhoneType { ISDN = 0, DID = 1, WLL = 2, PES = 3, Fiber = 4, PSTN = 5 }
     public class InventoryPhoneItemDetail
     {
-        public PhoneType PhoneType { get; set; }
+        public string PhoneType { get; set; }
         public PhoneStatus PhoneStatus { get; set; }
         public string VerticalMDF { get; set; }
         public string MDFPort { get; set; }

@@ -650,6 +650,13 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public bool isPathExist(string pathId)
+        {
+            //TODO: check if path exist
+            Random value = new Random();
+            return value.Next(10) <= 5 ? true : false;
+        }
+
         public GSHDSLTechnicalReservationDetail GSHDSLGetTechnicalReservationById(string contractId)
         {
 

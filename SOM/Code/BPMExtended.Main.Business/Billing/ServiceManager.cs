@@ -137,15 +137,15 @@ namespace BPMExtended.Main.Business
 
         public List<ServiceInfo> GetServicesWithPasswordResetSupport(string contractId)
         {
-            var servicesWithRequiredPasswordList = new List<ServiceInfo>();
+            //var servicesWithRequiredPasswordList = new List<ServiceInfo>();
 
             var catalogManager = new CatalogManager();
             List<ServiceInfo> contractServices = GetContractServicesInfo(contractId);
-            List<string> isRequiredPasswordServicesIDs = catalogManager.GetIsRequiredPasswordServicesIds();
+            //List<string> isRequiredPasswordServicesIDs = catalogManager.GetIsRequiredPasswordServicesIds();
 
-            servicesWithRequiredPasswordList = contractServices.Where(p => isRequiredPasswordServicesIDs.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
+            //servicesWithRequiredPasswordList = contractServices.Where(p => isRequiredPasswordServicesIDs.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
 
-            return servicesWithRequiredPasswordList;
+            return contractServices;
         }
 
         public List<ServiceDetail> GetCoreServices(string ratePlanId)
