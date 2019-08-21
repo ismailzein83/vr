@@ -3,6 +3,6 @@
 AS
 BEGIN
 	SELECT	ec.ID,ec.Title,ec.Settings,ec.Name
-	FROM	[Common].ExtensionConfiguration ec  WITH(NOLOCK) 
+	FROM	[common].[ExtensionConfiguration] ec  WITH(NOLOCK) 
 	WHERE	ec.[ConfigType]=@Type
 END

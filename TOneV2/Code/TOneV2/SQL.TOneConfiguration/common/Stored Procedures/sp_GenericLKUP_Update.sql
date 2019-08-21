@@ -10,10 +10,10 @@ CREATE PROCEDURE [common].[sp_GenericLKUP_Update]
 	@Settings nvarchar(MAX)
 AS
 BEGIN
-IF NOT EXISTS(SELECT 1 FROM [Common].GenericLKUP WHERE ID != @ID and Name = @Name and BusinessEntityDefinitionID = @BusinessEntityDefinitionId)
+IF NOT EXISTS(SELECT 1 FROM [common].[GenericLKUP] WHERE ID != @ID and Name = @Name and BusinessEntityDefinitionID = @BusinessEntityDefinitionId)
 	BEGIN
-		update [Common].GenericLKUP
-		set  Name = @Name ,Settings= @Settings, BusinessEntityDefinitionID = @BusinessEntityDefinitionId,LastModifiedTime = getdate()
-		where  ID = @ID
+		update	[common].[GenericLKUP]
+		set		Name = @Name ,Settings= @Settings, BusinessEntityDefinitionID = @BusinessEntityDefinitionId,LastModifiedTime = getdate()
+		where	ID = @ID
 	END
 END

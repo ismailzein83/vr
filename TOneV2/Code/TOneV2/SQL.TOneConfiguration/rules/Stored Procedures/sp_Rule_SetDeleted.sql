@@ -11,10 +11,10 @@ AS
 BEGIN
 	DECLARE @RuleIdsTable TABLE (RuleId int)
 	INSERT INTO @RuleIdsTable (RuleId)
-	SELECT ParsedString FROM [Common].[ParseStringList](@RuleIds)
+	SELECT ParsedString FROM [common].[ParseStringList](@RuleIds)
 
-	Update rules.[Rule]
-	Set  [IsDeleted] = 1, [LastModifiedBy] = @LastModifiedBy, [LastModifiedTime] = GETDATE()
-	WHERE ID in  (select RuleId from @RuleIdsTable)
+	Update	[rules].[Rule]
+	Set		[IsDeleted] = 1, [LastModifiedBy] = @LastModifiedBy, [LastModifiedTime] = GETDATE()
+	WHERE	ID in  (select RuleId from @RuleIdsTable)
 
 END

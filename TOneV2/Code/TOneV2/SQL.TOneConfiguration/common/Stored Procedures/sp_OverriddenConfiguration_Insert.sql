@@ -10,9 +10,9 @@ CREATE PROCEDURE [common].[sp_OverriddenConfiguration_Insert]
     @Settings nvarchar(MAX)
 AS
 BEGIN
-IF NOT EXISTS(SELECT 1 FROM [Common].OverriddenConfiguration WHERE Name = @Name AND GroupId = @GroupId)
+IF NOT EXISTS(SELECT 1 FROM [common].[OverriddenConfiguration] WHERE Name = @Name AND GroupId = @GroupId)
 	BEGIN
-	INSERT INTO [Common].OverriddenConfiguration(ID,Name,GroupId,Settings)
+	INSERT INTO [common].[OverriddenConfiguration](ID,Name,GroupId,Settings)
 	VALUES (@ID, @Name,@GroupId,@Settings)
 	END
 END

@@ -7,9 +7,9 @@
 	@LastModifiedBy int
 AS
 BEGIN
-IF NOT EXISTS(SELECT 1 FROM [Common].StatusDefinition WHERE Name = @Name and BusinessEntityDefinitionID = @BusinessEntityDefinitionId)
+IF NOT EXISTS(SELECT 1 FROM [common].[StatusDefinition] WHERE Name = @Name and BusinessEntityDefinitionID = @BusinessEntityDefinitionId)
 	BEGIN
-	INSERT INTO [Common].StatusDefinition (ID,Name,BusinessEntityDefinitionID,Settings, CreatedBy, LastModifiedBy, LastModifiedTime)
+	INSERT INTO [common].[StatusDefinition] (ID,Name,BusinessEntityDefinitionID,Settings, CreatedBy, LastModifiedBy, LastModifiedTime)
 	VALUES (@ID, @Name, @BusinessEntityDefinitionId,@Settings, @CreatedBy, @LastModifiedBy, GETDATE())
 	END
 END
