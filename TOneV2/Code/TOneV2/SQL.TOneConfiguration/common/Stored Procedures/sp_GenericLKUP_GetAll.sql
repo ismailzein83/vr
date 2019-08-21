@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE[Common].[sp_GenericLKUP_GetAll]
+CREATE PROCEDURE[common].[sp_GenericLKUP_GetAll]
 AS
 BEGIN
 	SELECT ID, Name, Settings, BusinessEntityDefinitionID
-	FROM [Common].GenericLKUP  with(nolock)
+	FROM [common].[GenericLKUP]  with(nolock)
 END
