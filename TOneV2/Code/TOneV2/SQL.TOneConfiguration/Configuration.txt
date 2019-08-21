@@ -147,7 +147,7 @@ FZero
 FMSV1.PostDeployment.sql
 
 Inspkt
-Retail_RecordAnalysis.PostDeployment.sql
+Retail_RecordAnalysis.PostDeployment.json
 ProbesAnalytics.PostDeployment.sql
 
 NetworkInventory
