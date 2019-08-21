@@ -81,6 +81,11 @@
     <Compile Include="Employee\EmployeeSettingsConfig.cs" />
     <Compile Include="Factory\Factory.cs" />
     <Compile Include="Factory\FactoryTypeConfig.cs" />
+    <Compile Include="Manufactory\Manufactory.cs" />
+    <Compile Include="Manufactory\ManufactoryDetail.cs" />
+    <Compile Include="Manufactory\ManufactoryInfo.cs" />
+    <Compile Include="Manufactory\ManufactoryInfoFilter.cs" />
+    <Compile Include="Manufactory\ManufactoryQuery.cs" />
     <Compile Include="OldEntities\CallCenterCustomer\CDR.cs" />
     <Compile Include="OldEntities\CallCenterCustomer\CDRQuery.cs" />
     <Compile Include="OldEntities\CallCenterCustomer\Complaint.cs" />
@@ -116,6 +121,11 @@
     <Compile Include="OldEntities\Master\Master.cs" />
     <Compile Include="OldEntities\Master\MasterDetails.cs" />
     <Compile Include="OldEntities\Master\MasterQuery.cs" />
+    <Compile Include="Product\SoftwareOperatingSystemConfig.cs" />
+    <Compile Include="Product\Product.cs" />
+    <Compile Include="Product\ProductDetail.cs" />
+    <Compile Include="Product\ProductQuery.cs" />
+    <Compile Include="Product\ProductSettingsConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

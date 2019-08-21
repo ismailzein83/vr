@@ -1,0 +1,26 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_ManufactoryEditorController" vr-loader="scopeModel.isLoading" width="small">
+    <vr-modalbody>
+        <vr-form name="editorForm">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.countryOfOrigin" label="Country" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar>
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="editorForm" data-onclick="scopeModel.onSaveClicked"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.onCloseClicked"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

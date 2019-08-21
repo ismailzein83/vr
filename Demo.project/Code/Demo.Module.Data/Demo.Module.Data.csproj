@@ -45,6 +45,12 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -55,6 +61,8 @@
     <Compile Include="ICityDataManager.cs" />
     <Compile Include="ICompanyDataManager.cs" />
     <Compile Include="ICountryDataManager.cs" />
+    <Compile Include="IManufactoryDataManager.cs" />
+    <Compile Include="IProductDataManager.cs" />
     <Compile Include="OldEntities\ICDRDataManager.cs" />
     <Compile Include="OldEntities\IComplaintDataManager.cs" />
     <Compile Include="OldEntities\IColorDataManager.cs" />

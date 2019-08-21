@@ -65,6 +65,14 @@
     <Reference Include="Vanrise.Common.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -94,6 +102,7 @@
     <Compile Include="CityManager.cs" />
     <Compile Include="CompanyManager.cs" />
     <Compile Include="CountryManager.cs" />
+    <Compile Include="ManufactoryManager.cs" />
     <Compile Include="OldEntites\CDRManager.cs" />
     <Compile Include="OldEntites\ColorManager.cs" />
     <Compile Include="OldEntites\DesksizeManager.cs" />
@@ -107,6 +116,7 @@
     <Compile Include="OldEntites\ContractManager.cs" />
     <Compile Include="OldEntites\CustomerInfoManager.cs" />
     <Compile Include="OldEntites\MasterManager.cs" />
+    <Compile Include="ProductManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +127,10 @@
     <ProjectReference Include="..\Demo.Module.Entities\Demo.Module.Entities.csproj">
       <Project>{7f3a2fab-e969-475d-9eaa-ea742e5222de}</Project>
       <Name>Demo.Module.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.Module.MainExtension\Demo.Module.MainExtension.csproj">
+      <Project>{7d0273be-2a89-4cf4-a485-b8475dd5f2d5}</Project>
+      <Name>Demo.Module.MainExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

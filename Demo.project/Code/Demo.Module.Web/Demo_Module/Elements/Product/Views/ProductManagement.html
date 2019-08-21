@@ -1,0 +1,25 @@
+﻿<vr-panel ng-controller="Demo_Module_ProductManagementController">
+    <vr-form name="filterForm">
+        <div ng-hide="filterFormCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                </vr-columns>
+                <demo-module-manufactory-selector on-ready="scopeModel.onManufactorySelectorReady" normal-col-num="2" ismultipleselection></demo-module-manufactory-selector>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterFormCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="filterForm" data-onclick="scopeModel.onSearchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.onAddClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row removeline>
+            <vr-columns width="fullrow">
+                <demo-module-product-grid on-ready="scopeModel.onProductGridReady"></demo-module-product-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

@@ -1,0 +1,11 @@
+﻿<vr-datagrid datasource="scopeModel.products"
+             on-ready="scopeModel.onProductGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="Id" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'Id'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Manufactory'" field="'ManufactoryName'" type="'Text'" ng-show="!scopeModel.hideManufactoryColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Settings'" field="'ProductDescription'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

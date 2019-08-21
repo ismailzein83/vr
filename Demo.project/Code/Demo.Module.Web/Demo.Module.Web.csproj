@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_Module\Constant\CDRTypeEnum.js" />
+    <Content Include="Demo_Module\Constant\MaterialEnum.js" />
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
     <Content Include="Demo_Module\Directives\Description\demo-module-description.js" />
     <Content Include="Demo_Module\Directives\Description\DescriptionEditorController.js" />
@@ -277,6 +278,15 @@
     <Content Include="Demo_Module\Elements\Country\Views\CountryEditor.html" />
     <Content Include="Demo_Module\Elements\Country\Views\CountryManagement.html" />
     <Content Include="Demo_Module\Elements\Country\Views\CountryManagementController.js" />
+    <Content Include="Demo_Module\Elements\Manufactory\Directives\demo-module-manufactory-grid.js" />
+    <Content Include="Demo_Module\Elements\Manufactory\Directives\demo-module-manufactory-selector.js" />
+    <Content Include="Demo_Module\Elements\Manufactory\Directives\Templates\ManufactoryGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\Manufactory\Services\APIServices\ManufactoryAPIService.js" />
+    <Content Include="Demo_Module\Elements\Manufactory\Services\ManufactoryService.js" />
+    <Content Include="Demo_Module\Elements\Manufactory\Views\ManufactoryEditor.html" />
+    <Content Include="Demo_Module\Elements\Manufactory\Views\ManufactoryEditorController.js" />
+    <Content Include="Demo_Module\Elements\Manufactory\Views\ManufactoryManagement.html" />
+    <Content Include="Demo_Module\Elements\Manufactory\Views\ManufactoryManagementController.js" />
     <Content Include="Demo_Module\Elements\Master\Directives\demo-module-master-grid.js" />
     <Content Include="Demo_Module\Elements\Master\Directives\Templates\MasterGridTemplate.html" />
     <Content Include="Demo_Module\Elements\Master\Services\APIServices\MasterAPIService.js" />
@@ -285,6 +295,27 @@
     <Content Include="Demo_Module\Elements\Master\Views\MasterEditorController.js" />
     <Content Include="Demo_Module\Elements\Master\Views\MasterManagement.html" />
     <Content Include="Demo_Module\Elements\Master\Views\MasterManagementController.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\demo-module-product-grid.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\demo-module-product-search.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\demo-module-product-settings.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\demo-module-operatingsystem-linux.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\demo-module-operatingsystem-windows.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\demo-module-softwareproduct-operatingsystem-grid.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\Templates\LinuxTemplate.html" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\Templates\OperatingSystemGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\Templates\WindowsTemplate.html" />
+    <Content Include="Demo_Module\Elements\Product\Directives\Templates\ProductGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\demo-module-product-settings-hardware.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\demo-module-product-settings-software.js" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\Templates\HardwareTemplate.html" />
+    <Content Include="Demo_Module\Elements\Product\Directives\MainExtensions\Templates\SoftwareTemplate.html" />
+    <Content Include="Demo_Module\Elements\Product\Directives\Templates\ProductSearchTemplate.html" />
+    <Content Include="Demo_Module\Elements\Product\Services\APIServices\ProductAPIService.js" />
+    <Content Include="Demo_Module\Elements\Product\Services\ProductService.js" />
+    <Content Include="Demo_Module\Elements\Product\Views\ProductEditor.html" />
+    <Content Include="Demo_Module\Elements\Product\Views\ProductEditorController.js" />
+    <Content Include="Demo_Module\Elements\Product\Views\ProductManagement.html" />
+    <Content Include="Demo_Module\Elements\Product\Views\ProductManagementController.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\BIDsASKsAPIService.js" />
     <Content Include="Demo_Module\Services\OldEntities\AdvancedGridService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\PageRunTimeAPIService.js" />
@@ -323,6 +354,7 @@
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
+    <Compile Include="Controllers\ManufactoryController.cs" />
     <Compile Include="Controllers\OldEntities\CDRController.cs" />
     <Compile Include="Controllers\OldEntities\ColorController.cs" />
     <Compile Include="Controllers\OldEntities\DesksizeController.cs" />
@@ -336,6 +368,7 @@
     <Compile Include="Controllers\OldEntities\ContractController.cs" />
     <Compile Include="Controllers\OldEntities\CustomerInfoController.cs" />
     <Compile Include="Controllers\OldEntities\MasterController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
