@@ -20,6 +20,7 @@
                         <vr-select on-ready="dataItem.onOperatingSystemSelectorReady"
                                    datasource="viewScope.scopeModel.operatingSystemsConfigs"
                                    selectedvalues="dataItem.selectedOperatingSystem"
+                                   onselectionchanged="dataItem.onSelectionChanged"
                                    datavaluefield="ExtensionConfigurationId"
                                    datatextfield="Title"
                                    entityName="Operating System"
@@ -29,15 +30,18 @@
                 </vr-datagridcolumn>
 
                 <vr-datagridexpandablerow>
-                    <vr-directivewrapper ng-if="dataItem.selectedOperatingSystem != undefined"
-                                         directive="dataItem.selectedOperatingSystem.Editor"
-                                         on-ready=dataItem.onDirectiveReady
-                                         normal-col-num="12"
-                                         isrequired="true"
-                                         customvalidate="dataItem.customvalidate">
-                    </vr-directivewrapper>
+                    <span vr-loader="dataItem.isDirectiveLoading">
+                        <vr-directivewrapper ng-if="dataItem.selectedOperatingSystem != undefined"
+                                             directive="dataItem.selectedOperatingSystem.Editor"
+                                             on-ready=dataItem.onDirectiveReady
+                                             normal-col-num="12"
+                                             isrequired="true"
+                                             customvalidate="dataItem.customvalidate">
+                        </vr-directivewrapper>
+                    </span>
                 </vr-datagridexpandablerow>
             </vr-datagrid>
         </vr-validator>
     </vr-columns>
 </vr-row>
+

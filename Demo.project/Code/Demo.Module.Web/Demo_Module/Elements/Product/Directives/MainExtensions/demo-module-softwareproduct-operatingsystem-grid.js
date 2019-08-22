@@ -65,7 +65,7 @@
                     if (payload != undefined) {
                         softwareOperatingSystems = payload.softwareOperatingSystems;
                     }
-                    
+
                     var loadOperatingSystemSelectorPromise = loadOperatingSystemSelector();
                     var rootPromiseNode = {
                         promises: [loadOperatingSystemSelectorPromise],
@@ -87,9 +87,20 @@
                 api.getData = function () {
                     var softwareOperatingSystems = [];
                     for (var i = 0; i < $scope.scopeModel.operatingSystemsGridItems.length; i++) {
-                        var softwareOperatingSystem = $scope.scopeModel.operatingSystemsGridItems[i].operatingSystemDirectiveAPI.getData();
-                        softwareOperatingSystem.ConfigId = $scope.scopeModel.operatingSystemsGridItems[i].selectedOperatingSystem.ExtensionConfigurationId;
-                        softwareOperatingSystems.push(softwareOperatingSystem);
+                        var currentGridItem = $scope.scopeModel.operatingSystemsGridItems[i];
+
+                        var softwareOperatingSystem;
+                        if (currentGridItem.operatingSystemDirectiveAPI != undefined) {
+                            softwareOperatingSystem = currentGridItem.operatingSystemDirectiveAPI.getData();
+                        }
+                        else {
+                            softwareOperatingSystem = currentGridItem.softwareOperatingSystem;
+                        }
+
+                        if (softwareOperatingSystem != undefined) {
+                            softwareOperatingSystem.ConfigId = $scope.scopeModel.operatingSystemsGridItems[i].selectedOperatingSystem.ExtensionConfigurationId;
+                            softwareOperatingSystems.push(softwareOperatingSystem);
+                        }
                     }
                     return softwareOperatingSystems;
                 };
@@ -113,37 +124,60 @@
             function extendOperatingSystemRow(softwareOperatingSystem) {
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
-                var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                var directiveLoadDeferred;
 
                 var gridItem = {
-                    selectedOperatingSystem: [],
+                    isFirstLoad: true,
+                    isDirectiveLoading: true,
+                    selectedOperatingSystem: undefined,
                     operatingSystemSelectorAPI: undefined,
-                    operatingSystemDirectiveAPI: undefined
+                    operatingSystemDirectiveAPI: undefined,
+                    softwareOperatingSystem: softwareOperatingSystem
                 };
 
                 gridItem.onOperatingSystemSelectorReady = function (api) {
                     gridItem.operatingSystemSelectorAPI = api;
                     if (softwareOperatingSystem != undefined) {
-                        gridItem.selectedOperatingSystem = UtilsService.getItemByVal($scope.scopeModel.operatingSystemsConfigs, softwareOperatingSystem.ConfigId, 'ExtensionConfigurationId');
+                        var selectedOperatingSystemValue = UtilsService.getItemByVal($scope.scopeModel.operatingSystemsConfigs, softwareOperatingSystem.ConfigId, 'ExtensionConfigurationId');
+                        if (selectedOperatingSystemValue != null) {
+                            gridItem.selectedOperatingSystem = selectedOperatingSystemValue;
+                        }
                     }
                     selectorLoadDeferred.resolve();
                 };
 
                 gridItem.onDirectiveReady = function (api) {
                     gridItem.operatingSystemDirectiveAPI = api;
+
                     var payload = {
                         softwareOperatingSystem: softwareOperatingSystem
                     };
                     softwareOperatingSystem = undefined;
-                    VRUIUtilsService.callDirectiveLoad(gridItem.operatingSystemDirectiveAPI, payload, directiveLoadDeferred);
+
+                    var setLoader = function (value) {
+                        gridItem.isDirectiveLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.operatingSystemDirectiveAPI, payload, setLoader, directiveLoadDeferred);
                 };
 
-                operatingSystemGridAPI.expandRow(gridItem);
-                operatingSystemGridAPI.collapseRow(gridItem);
-                
+                gridItem.onSelectionChanged = function () {
+                    if (gridItem.isFirstLoad) {
+                        gridItem.isFirstLoad = false;
+                        return;
+                    }
+
+                    softwareOperatingSystem = undefined;
+                    if (gridItem.selectedOperatingSystem == undefined) {
+                        operatingSystemGridAPI.collapseRow(gridItem);
+                    }
+                    else {
+                        operatingSystemGridAPI.expandRow(gridItem);
+                    }
+                };
+
                 $scope.scopeModel.operatingSystemsGridItems.push(gridItem);
 
-                return UtilsService.waitMultiplePromises([selectorLoadDeferred.promise, directiveLoadDeferred.promise]);
+                return UtilsService.waitMultiplePromises([selectorLoadDeferred.promise]);
             }
         }
     }
