@@ -286,11 +286,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
             #endregion
         }
 
-        public void TryMergeByCurrencyItemSets(List<SupplierInvoiceBySaleCurrencyItemDetails> mainByCurrencyItemSets, List<SupplierInvoiceBySaleCurrencyItemDetails> sMSInvoiceBySaleCurrency)
+        public void TryMergeByCurrencyItemSets(List<SupplierInvoiceBySaleCurrencyItemDetails> mainByCurrencyItemSets, List<SupplierInvoiceBySaleCurrencyItemDetails> smsInvoiceBySaleCurrency)
         {
-            if (sMSInvoiceBySaleCurrency != null && sMSInvoiceBySaleCurrency.Count > 0)
+            if (smsInvoiceBySaleCurrency != null && smsInvoiceBySaleCurrency.Count > 0)
             {
-                foreach (var item in sMSInvoiceBySaleCurrency)
+                foreach (var item in smsInvoiceBySaleCurrency)
                 {
                     var invoiceBySaleCurrencyItem = mainByCurrencyItemSets.FindRecord(x => x.CurrencyId == item.CurrencyId && x.Month == item.Month);
                     if (invoiceBySaleCurrencyItem != null)
@@ -321,8 +321,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
         private void AddAdjustmentToSupplierCurrency(List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceByCostCurrencyItemDetails, int currency, DateTime fromDate, DateTime toDate, decimal value)
         {
+            string month = Vanrise.Common.Utilities.GetPeriod(fromDate, toDate, "MMMM - yyyy");
 
-            string month = fromDate.Year == toDate.Year && fromDate.Month == toDate.Month ? fromDate.ToString("MMMM - yyyy") : string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
             var customerInvoiceBySaleCurrencyItemDetail = supplierInvoiceByCostCurrencyItemDetails.FindRecord(x => x.CurrencyId == currency && x.Month == month);
             if (customerInvoiceBySaleCurrencyItemDetail != null)
             {
@@ -518,9 +518,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     }
 
                     if (voiceItemSetNames.Count > 0)
-                    {
                         supplierInvoiceDetails.OriginalSupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.OriginalSupplierCurrencyId);
-                    }
                 }
 
                 if (smsItemSetNames != null && smsItemSetNames.Count > 0)

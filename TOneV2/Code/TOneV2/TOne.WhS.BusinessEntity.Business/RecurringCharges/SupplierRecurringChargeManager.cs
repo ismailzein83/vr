@@ -62,11 +62,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var period in context.Periods)
                     {
-                        string recurringChargeMonth;
-                        if (period.From.Month == period.To.Month && period.From.Year == period.To.Year)
-                            recurringChargeMonth = period.RecurringChargeDate.ToString("MMMM - yyyy");
-                        else
-                            recurringChargeMonth = string.Format("{0} / {1}", period.From.ToString("MMMM - yyyy"), period.To.ToString("MMMM - yyyy"));
+                        string recurringChargeMonth = Vanrise.Common.Utilities.GetPeriod(period.From, period.To, "MMMM - yyyy");
 
                         evaluatedRecurringCharges.Add(new RecurringChargeItem
                         {

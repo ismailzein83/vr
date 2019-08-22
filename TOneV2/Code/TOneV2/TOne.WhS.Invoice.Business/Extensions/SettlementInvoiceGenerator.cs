@@ -122,7 +122,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 foreach (var customerInvoice in customerInvoices)
                 {
                     List<int> currenciesUsed = new List<int>();
-                    //bool isNewInvoice = true;
 
                     var customerInvoiceDetails = customerInvoice.Details as CustomerInvoiceDetails;
                     if (customerInvoiceDetails != null)
@@ -142,7 +141,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                 {
                                     OriginalDataCurrrency originalDataCurrrency = new OriginalDataCurrrency();
 
-                                    var month = invoiceItemDetails.Month;
+                                    string month = invoiceItemDetails.Month;
 
                                     bool hasOriginalAmount = false;
                                     var fromDate = invoiceItemDetails.FromDate;
@@ -153,10 +152,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         hasOriginalAmount = true;
                                         fromDate = customerInvoice.FromDate;
                                         toDate = customerInvoice.ToDate;
-                                        if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
-                                            month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
-                                        else
-                                            month = string.Format("{0}", fromDate.ToString("MMMM - yyyy"));
+                                        month = Vanrise.Common.Utilities.GetPeriod(fromDate, toDate, "MMMM - yyyy");
                                     }
 
                                     var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month), () =>
@@ -227,17 +223,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             }
 
                                             dueToSystemFullAmountSettlementInvoicedetail += originalDataCurrrency.TrafficAmount.Value;
-                                            //if (isNewInvoice)
-                                            //{
-
-                                            //}
-                                            //else
-                                            //{
-                                            //    settlementInvoicedetail.DueToSystemAmount = originalDataCurrrency.TrafficAmount.Value;
-                                            //    settlementInvoicedetail.DueToSystemAmountAfterCommission = originalDataCurrrency.TrafficAmount.Value;
-                                            //    settlementInvoicedetail.DueToSystemAmountAfterCommissionWithTaxes = originalDataCurrrency.TrafficAmount.Value;
-                                            //    settlementInvoicedetail.DueToSystemTotalTrafficAmount = originalDataCurrrency.TrafficAmount.Value;
-                                            //}
                                         }
 
                                         if (canUseCurrency)
@@ -245,15 +230,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
                                             settlementInvoicedetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
                                         }
-
-                                        //if (isNewInvoice)
-                                        //{
-
-                                        //}
-                                        //else
-                                        //{
-                                        //    settlementInvoicedetail.DueToSystemNumberOfCalls = customerInvoiceDetails.TotalNumberOfCalls;
-                                        //}
 
                                         if (originalDataCurrrency.SMSAmount.HasValue)
                                         {
@@ -268,13 +244,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                             }
                                             dueToSystemFullAmountSettlementInvoicedetail += originalDataCurrrency.SMSAmount.Value;
-                                            //if (isNewInvoice)
-                                            //{
-                                            //}
-                                            //else
-                                            //{
-                                            //    settlementInvoicedetail.DueToSystemTotalSMSAmount = originalDataCurrrency.SMSAmount.Value;
-                                            //}
                                         }
 
                                         if (originalDataCurrrency.DealAmount.HasValue)
@@ -290,14 +259,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             }
 
                                             dueToSystemFullAmountSettlementInvoicedetail += originalDataCurrrency.DealAmount.Value;
-                                            //if (isNewInvoice)
-                                            //{
-                                            //    settlementInvoicedetail.DueToSystemTotalDealAmount += originalDataCurrrency.DealAmount.Value;
-                                            //}
-                                            //else
-                                            //{
-                                            //    settlementInvoicedetail.DueToSystemTotalDealAmount = originalDataCurrrency.DealAmount.Value;
-                                            //}
                                         }
 
                                         if (originalDataCurrrency.RecurringChargeAmount.HasValue)
@@ -315,13 +276,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             }
 
                                             dueToSystemFullAmountSettlementInvoicedetail += originalDataCurrrency.RecurringChargeAmount.Value;
-                                            //if (isNewInvoice)
-                                            //{
-                                            //}
-                                            //else
-                                            //{
-                                            //    settlementInvoicedetail.DueToSystemAmountRecurringCharges = originalDataCurrrency.RecurringChargeAmount.Value;
-                                            //}
                                         }
 
                                         if (canUseCurrency)
@@ -329,15 +283,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += dueToSystemFullAmountSettlementInvoiceItemSummaryDetail;
                                             settlementInvoicedetail.DueToSystemFullAmount += dueToSystemFullAmountSettlementInvoicedetail;
                                         }
-
-                                        //if (isNewInvoice)
-                                        //{
-
-                                        //}
-                                        //else
-                                        //{
-                                        //    settlementInvoicedetail.DueToSystemFullAmount = dueToSystemFullAmountSettlementInvoicedetail;
-                                        //}
                                     }
                                     else
                                     {
@@ -375,7 +320,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                     if (!hasOriginalAmount || (hasOriginalAmount && canAddSettlementInvoiceDetailByCurrency))
                                         settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
                                 }
-                                // isNewInvoice = false;
                             }
                         }
 
@@ -430,7 +374,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 foreach (var supplierInvoice in supplierInvoices)
                 {
                     List<int> currenciesUsed = new List<int>();
-                    //bool isNewInvoice = true;
+
                     var supplierInvoiceDetails = supplierInvoice.Details as SupplierInvoiceDetails;
                     if (supplierInvoiceDetails != null)
                     {
@@ -452,7 +396,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                 {
                                     OriginalDataCurrrency originalDataCurrrency = new OriginalDataCurrrency();
 
-                                    var month = invoiceItemDetails.Month;
+                                    string month = invoiceItemDetails.Month;
 
                                     bool hasOriginalAmount = false;
                                     var fromDate = invoiceItemDetails.FromDate;
@@ -460,14 +404,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                     if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && supplierInvoiceDetails.IncludeOriginalAmountInSettlement && (originalDataCurrrency.TrafficAmount.HasValue || originalDataCurrrency.SMSAmount.HasValue || originalDataCurrrency.DealAmount.HasValue || originalDataCurrrency.RecurringChargeAmount.HasValue))
                                     {
+                                        hasOriginalAmount = true;
                                         fromDate = supplierInvoice.FromDate;
                                         toDate = supplierInvoice.ToDate;
-                                        hasOriginalAmount = true;
-                                        if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
-                                            month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
-                                        else
-                                            month = string.Format("{0}", fromDate.ToString("MMMM - yyyy"));
+                                        month = Vanrise.Common.Utilities.GetPeriod(fromDate, toDate, "MMMM - yyyy");
+
+                                        //if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
+                                        //    month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
+                                        //else
+                                        //    month = string.Format("{0}", fromDate.ToString("MMMM - yyyy"));
                                     }
+
                                     var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month), () =>
                                     {
                                         return new SettlementInvoiceItemDetail()
@@ -534,18 +481,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                                 settlementInvoicedetail.DueToCarrierAmountAfterCommissionWithTaxes += originalDataCurrrency.TrafficAmount.Value;
                                                 settlementInvoicedetail.DueToCarrierTotalTrafficAmount += originalDataCurrrency.TrafficAmount.Value;
                                             }
-                                            dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.TrafficAmount.Value;
-                                            //if (isNewInvoice)
-                                            //{
 
-                                            //}
-                                            //else
-                                            //{
-                                            //    settlementInvoicedetail.DueToCarrierAmount = originalDataCurrrency.TrafficAmount.Value;
-                                            //    settlementInvoicedetail.DueToCarrierAmountAfterCommission = originalDataCurrrency.TrafficAmount.Value;
-                                            //    settlementInvoicedetail.DueToCarrierAmountAfterCommissionWithTaxes = originalDataCurrrency.TrafficAmount.Value;
-                                            //    settlementInvoicedetail.DueToCarrierTotalTrafficAmount = originalDataCurrrency.TrafficAmount.Value;
-                                            //}
+                                            dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.TrafficAmount.Value;
                                         }
 
                                         if (canUseCurrency)
@@ -553,14 +490,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             settlementInvoiceItemSummaryDetail.DueToCarrierNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
                                             settlementInvoicedetail.DueToCarrierNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
                                         }
-
-                                        //if (isNewInvoice)
-                                        //{
-                                        //}
-                                        //else
-                                        //{
-                                        //    settlementInvoicedetail.DueToCarrierNumberOfCalls = supplierInvoiceDetails.TotalNumberOfCalls;
-                                        //}
 
                                         if (originalDataCurrrency.SMSAmount.HasValue)
                                         {
@@ -577,13 +506,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             }
 
                                             dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.SMSAmount.Value;
-                                            //if (isNewInvoice)
-                                            //{
-                                            //}
-                                            //else
-                                            //{
-                                            //    settlementInvoicedetail.DueToCarrierTotalSMSAmount = originalDataCurrrency.SMSAmount.Value;
-                                            //}
                                         }
 
                                         if (originalDataCurrrency.DealAmount.HasValue)
@@ -597,16 +519,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                                 settlementInvoiceItemSummaryDetail.DueToCarrierTotalDealAmount += originalDataCurrrency.DealAmount.Value;
                                                 settlementInvoicedetail.DueToCarrierTotalDealAmount += originalDataCurrrency.DealAmount.Value;
-
                                             }
+
                                             dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.DealAmount.Value;
-                                            //if (isNewInvoice)
-                                            //{
-                                            //}
-                                            //else
-                                            //{
-                                            //    settlementInvoicedetail.DueToCarrierTotalDealAmount = originalDataCurrrency.DealAmount.Value;
-                                            //}
                                         }
 
                                         if (originalDataCurrrency.RecurringChargeAmount.HasValue)
@@ -622,16 +537,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                                 settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = originalDataCurrrency.RecurringChargeAmount.Value;
                                                 settlementInvoicedetail.DueToCarrierAmountRecurringCharges += originalDataCurrrency.RecurringChargeAmount.Value;
-
                                             }
+
                                             dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.RecurringChargeAmount.Value;
-                                            //if (isNewInvoice)
-                                            //{
-                                            //}
-                                            //else
-                                            //{
-                                            //    settlementInvoicedetail.DueToCarrierAmountRecurringCharges = originalDataCurrrency.RecurringChargeAmount.Value;
-                                            //}
                                         }
 
                                         if (canUseCurrency)
@@ -639,15 +547,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount += dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail;
                                             settlementInvoicedetail.DueToCarrierFullAmount += dueToCarrierFullAmountSettlementInvoicedetail;
                                         }
-
-                                        //if (isNewInvoice)
-                                        //{
-
-                                        //}
-                                        //else
-                                        //{
-                                        //    settlementInvoicedetail.DueToCarrierFullAmount = dueToCarrierFullAmountSettlementInvoicedetail;
-                                        //}
                                     }
                                     else
                                     {
@@ -687,8 +586,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                     if (!hasOriginalAmount || (hasOriginalAmount && canAddSettlementInvoiceDetailByCurrency))
                                         settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
                                 }
-
-                                //isNewInvoice = false;
                             }
                         }
 
@@ -774,7 +671,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             Amount = difference,
                             CurrencyId = settlementInvoiceItemSummary.Value.CurrencyId,
                             CurrencyIdDescription = settlementInvoiceItemSummary.Value.CurrencyIdDescription,
-                            // OriginalAmountWithCommission = commission.HasValue ? sum + ((sum * commission.Value) / 100) : sum,
+                            //OriginalAmountWithCommission = commission.HasValue ? sum + ((sum * commission.Value) / 100) : sum,
                         });
                     }
                     else if (difference < 0)
@@ -789,7 +686,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             Amount = amount,
                             CurrencyId = settlementInvoiceItemSummary.Value.CurrencyId,
                             CurrencyIdDescription = settlementInvoiceItemSummary.Value.CurrencyIdDescription,
-                            //  OriginalAmountWithCommission = commission.HasValue ? amount + ((amount * commission.Value) / 100) : amount
+                            //OriginalAmountWithCommission = commission.HasValue ? amount + ((amount * commission.Value) / 100) : amount
                         });
                     }
 
@@ -809,6 +706,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         if (systemRecurringChargesSummary == null)
                             systemRecurringChargesSummary = new List<SettlementInvoiceDetailSummary>();
+
                         systemRecurringChargesSummary.Add(new SettlementInvoiceDetailSummary
                         {
                             Amount = settlementInvoiceItemSummary.Value.DueToSystemAmountRecurringCharges,
@@ -922,7 +820,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -940,7 +838,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             isApplicableToSupplier = financialAccountInvoiceType.IsApplicableToSupplier;
             isApplicableToCustomer = financialAccountInvoiceType.IsApplicableToCustomer;
-            // commission = null;
             partnerType = null;
 
             availableCustomerInvoices = null;
@@ -952,11 +849,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             if (settlementGenerationCustomSectionPayload != null)
             {
-                //if (settlementGenerationCustomSectionPayload.Commission.HasValue)
-                //{
-                //    commission = settlementGenerationCustomSectionPayload.Commission.Value;
-                //}
-
                 availableCustomerInvoices = settlementGenerationCustomSectionPayload.AvailableCustomerInvoices;
                 availableSupplierInvoices = settlementGenerationCustomSectionPayload.AvailableSupplierInvoices;
             }
@@ -1002,8 +894,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 PartnerType = partnerType,
                 IsApplicableToCustomer = isApplicableToCustomer,
                 IsApplicableToSupplier = isApplicableToSupplier
-                // Commission = commission,
-                // HasComission = commission.HasValue ? true : false
             };
 
             if (customerInvoiceItemSet != null && customerInvoiceItemSet.Count > 0)
