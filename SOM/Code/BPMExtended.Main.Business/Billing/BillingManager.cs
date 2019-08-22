@@ -171,9 +171,9 @@ namespace BPMExtended.Main.Business
         {
             //Get sequence Number
             string sequenceNumber = new CRMCustomerManager().GetSequenceNumberFromRequestHeader(requestId);
-            
+
             //TODO: check if user paid 
-            return true;
+            return new Random().Next(10) <= 5 ? true : false;
 
         }
 

@@ -108,6 +108,50 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void CreateSwitchAccount(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
+            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StDeviceType");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var pathId = entities[0].GetColumnValue("StLinePathID");
+                var deviceType = entities[0].GetColumnValue("StDeviceType");
+
+                SOMRequestInput<CreateSwitchAccountInput> somRequestInput = new SOMRequestInput<CreateSwitchAccountInput>
+                {
+
+                    InputArguments = new CreateSwitchAccountInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            RequestId = requestId.ToString()
+                        },
+                        LinePathId = pathId.ToString(),
+                        DeviceType = deviceType.ToString()
+                    },
+                    
+
+                };
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<CreateSwitchAccountInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateSwitchAccount/StartProcess", somRequestInput);
+                }
+            }
+        }
+
         #endregion
     }
 }

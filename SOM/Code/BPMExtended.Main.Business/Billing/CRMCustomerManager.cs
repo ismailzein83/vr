@@ -1044,7 +1044,6 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StServices");
             esq.AddColumn("StNumberToReserve");
             esq.AddColumn("StLinePathID");
-            esq.AddColumn("StLineType");
             esq.AddColumn("StContact");
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");

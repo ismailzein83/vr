@@ -650,19 +650,24 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        public bool isPathExist(string pathId)
+        public bool CheckIfLinePathExist(string pathId)
         {
-            //TODO: check if path exist
-            Random value = new Random();
-            return value.Next(10) <= 5 ? true : false;
+            bool result;
+
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<bool>(String.Format("api/SOM_Main/Inventory/CheckIfLinePathExist?pathID={0}", pathId));
+            }
+
+            return result;
         }
 
-        public bool isAboveThreshold(string nearbyNumber , string subType)
+       /* public bool isAboveThreshold(string nearbyNumber , string subType)
         {
             //TODO: check if path exist
             Random value = new Random();
             return value.Next(10) <= 5 ? true : false;
-        }
+        }*/
 
         public GSHDSLTechnicalReservationDetail GSHDSLGetTechnicalReservationById(string contractId)
         {

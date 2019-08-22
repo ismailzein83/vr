@@ -51,6 +51,7 @@ namespace BPMExtended.Main.SOMAPI
         public string CanReserve { get; set; }
         public string CurrentUtilization { get; set; }
         public string Threshold { get; set; }
+        public bool IsAboveThreshold { get; set; }
 
         public string DSLAMPortId { get; set; }
 
