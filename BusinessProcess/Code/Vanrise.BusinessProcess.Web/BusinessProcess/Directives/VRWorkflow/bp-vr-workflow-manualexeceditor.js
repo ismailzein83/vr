@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService',
-    function (UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService) {
+app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_BPDefinitionAPIService',
+    function (UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_BPDefinitionAPIService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -42,25 +42,41 @@ app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService
                 var api = {};
 
                 api.load = function (payload) {
-                    bpDefinitionObj = payload.bpDefinitionObj;
+                    var bpDefinitionId = payload.bpDefinitionId;
+
+                    var getBPDefinitionPromise = getBPDefinition();
+                    var initialPromise = [getBPDefinitionPromise];
 
                     var rootPromiseNode = {
-                        promises: []
+                        promises: initialPromise,
+                        getChildNode: function () {
+                            if (bpDefinitionObj && bpDefinitionObj.Configuration && bpDefinitionObj.Configuration.ManualEditorSettings && bpDefinitionObj.Configuration.ManualEditorSettings.Enable) {
+                                $scope.scopeModel.hasRuntimeEditor = true;
+                                var getVRWorkflowInputArgumentFieldsPromise = getVRWorkflowInputArgumentFields();
+
+                                return {
+                                    promises: [getVRWorkflowInputArgumentFieldsPromise],
+                                    getChildNode: function () {
+                                        var loadRuntimeEditorPromise = loadRuntimeEditor();
+                                        return {
+                                            promises: [loadRuntimeEditorPromise]
+                                        };
+                                    }
+                                };
+                            }
+                            else {
+                                return {
+                                    promises: [],
+                                };
+                            }
+                        }
                     };
 
-                    if (bpDefinitionObj && bpDefinitionObj.Configuration && bpDefinitionObj.Configuration.ManualEditorSettings && bpDefinitionObj.Configuration.ManualEditorSettings.Enable) {
-                        $scope.scopeModel.hasRuntimeEditor = true;
-                        var getVRWorkflowInputArgumentFieldsPromise = getVRWorkflowInputArgumentFields();
-                        rootPromiseNode.promises.push(getVRWorkflowInputArgumentFieldsPromise);
-
-                        rootPromiseNode.getChildNode = function () {
-                            var loadRuntimeEditorPromise = loadRuntimeEditor();
-                            return {
-                                promises: [loadRuntimeEditorPromise]
-                            };
-                        };
+                    function getBPDefinition() {
+                        return BusinessProcess_BPDefinitionAPIService.GetBPDefintion(bpDefinitionId).then(function (response) {
+                            bpDefinitionObj = response;
+                        });
                     }
-
 
                     function getVRWorkflowInputArgumentFields() {
                         return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowInputArgumentFields(bpDefinitionObj.VRWorkflowId).then(function (response) {
@@ -106,14 +122,13 @@ app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService
                 };
 
                 api.getData = function () {
+                    var result = {};
                     if ($scope.scopeModel.hasRuntimeEditor) {
                         var data = {};
                         runtimeEditorAPI.setData(data);
-
-                        return {
-                            InputArguments: data
-                        };
+                        result.InputArguments = data;
                     }
+                    return result;
                 };
 
                 if (ctrl.onReady != null)

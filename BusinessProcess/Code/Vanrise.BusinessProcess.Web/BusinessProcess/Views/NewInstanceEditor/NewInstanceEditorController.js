@@ -121,33 +121,35 @@
         function loadAllControls() {
             var initialPromises = [];
 
-            if ($scope.bpDefinitionObj.VRWorkflowId != undefined) {
+            // if ($scope.bpDefinitionObj.VRWorkflowId == undefined) {
 
-                if ($scope.bpDefinitionObj.Configuration.ManualExecEditor) {
-                    var loadBpDefinitionManualDirectivePromise = loadBpDefinitionManualDirective();
-                    initialPromises.push(loadBpDefinitionManualDirectivePromise);
-                }
+            if ($scope.bpDefinitionObj.Configuration.ManualExecEditor) {
+                var loadBpDefinitionManualDirectivePromise = loadBpDefinitionManualDirective();
+                initialPromises.push(loadBpDefinitionManualDirectivePromise);
             }
+            // }
 
             var rootPromiseNode = {
                 promises: initialPromises
             };
 
+            function loadBpDefinitionManualDirective() {
+                var loadBPManualDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                bpDefinitionManualDirectiveReadyPromiseDeferred.promise.then(function () {
+                    var bpDefinitionPayload = {
+                        bpDefinitionId: bpDefinitionId
+                    };
+                    VRUIUtilsService.callDirectiveLoad(bpDefinitionManualDirectiveApi, bpDefinitionPayload, loadBPManualDefinitionPromiseDeferred);
+                });
+
+                return loadBPManualDefinitionPromiseDeferred.promise;
+            }
+
             return UtilsService.waitPromiseNode(rootPromiseNode);;
         }
 
-        function loadBpDefinitionManualDirective() {
-            var loadBPManualDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            bpDefinitionManualDirectiveReadyPromiseDeferred.promise.then(function () {
-                var bpDefinitionPayload = {
-                    bpDefinitionObj: $scope.bpDefinitionObj,
-                };
-                VRUIUtilsService.callDirectiveLoad(bpDefinitionManualDirectiveApi, bpDefinitionPayload, loadBPManualDefinitionPromiseDeferred);
-            });
-
-            return loadBPManualDefinitionPromiseDeferred.promise;
-        }
 
         function buildInstanceObjFromScope() {
             if (bpDefinitionManualDirectiveApi != undefined) {
