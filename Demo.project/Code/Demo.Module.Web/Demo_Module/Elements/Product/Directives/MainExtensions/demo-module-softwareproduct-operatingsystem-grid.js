@@ -77,7 +77,10 @@
                                     childPromises.push(extendOperatingSystemRowPromise);
                                 }
                             }
-                            return { promises: childPromises };
+
+                            return {
+                                promises: childPromises
+                            };
                         }
                     };
 
@@ -127,13 +130,15 @@
                 var directiveLoadDeferred;
 
                 var gridItem = {
-                    isFirstLoad: true,
                     isDirectiveLoading: true,
                     selectedOperatingSystem: undefined,
                     operatingSystemSelectorAPI: undefined,
-                    operatingSystemDirectiveAPI: undefined,
-                    softwareOperatingSystem: softwareOperatingSystem
+                    operatingSystemDirectiveAPI: undefined
                 };
+
+                if (softwareOperatingSystem != undefined) {
+                    gridItem.softwareOperatingSystem = softwareOperatingSystem;
+                }
 
                 gridItem.onOperatingSystemSelectorReady = function (api) {
                     gridItem.operatingSystemSelectorAPI = api;
@@ -143,16 +148,16 @@
                             gridItem.selectedOperatingSystem = selectedOperatingSystemValue;
                         }
                     }
-                    selectorLoadDeferred.resolve();
                 };
 
                 gridItem.onDirectiveReady = function (api) {
                     gridItem.operatingSystemDirectiveAPI = api;
 
-                    var payload = {
-                        softwareOperatingSystem: softwareOperatingSystem
-                    };
-                    softwareOperatingSystem = undefined;
+                    var payload;
+                    if (softwareOperatingSystem != undefined) {
+                        payload = { softwareOperatingSystem: softwareOperatingSystem };
+                        softwareOperatingSystem = undefined;
+                    }
 
                     var setLoader = function (value) {
                         gridItem.isDirectiveLoading = value;
@@ -161,8 +166,8 @@
                 };
 
                 gridItem.onSelectionChanged = function () {
-                    if (gridItem.isFirstLoad) {
-                        gridItem.isFirstLoad = false;
+                    if (selectorLoadDeferred != undefined) {
+                        selectorLoadDeferred.resolve();
                         return;
                     }
 
@@ -177,7 +182,9 @@
 
                 $scope.scopeModel.operatingSystemsGridItems.push(gridItem);
 
-                return UtilsService.waitMultiplePromises([selectorLoadDeferred.promise]);
+                return UtilsService.waitMultiplePromises([selectorLoadDeferred.promise]).then(function () {
+                    selectorLoadDeferred = undefined;
+                });
             }
         }
     }

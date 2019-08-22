@@ -32,7 +32,12 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var softwareOperatingSystem = payload.softwareOperatingSystem;
+                    var softwareOperatingSystem;
+
+                    if (payload != undefined) {
+                        softwareOperatingSystem = payload.softwareOperatingSystem;
+                    }
+
                     if (softwareOperatingSystem != undefined) {
                         $scope.scopeModel.version = softwareOperatingSystem.Version;
                         $scope.scopeModel.hasGUI = softwareOperatingSystem.HasGUI;

@@ -27,10 +27,11 @@
                 $scope.scopeModel = {};
                 
                 $scope.scopeModel.isValid = function () {
-                    var errorMessage = "License Key must respect this format: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx";
                     var licenseKey = $scope.scopeModel.licenseKey;
                     if (licenseKey == undefined)
                         return null;
+
+                    var errorMessage = "License Key must respect this format: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx";
 
                     var keys = licenseKey.split('-');
                     if (keys.length != 5)
@@ -41,6 +42,7 @@
                         if (key[0].length != 5)
                             return errorMessage;
                     }
+
                     return null;
                 };
 
@@ -51,7 +53,12 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var softwareOperatingSystem = payload.softwareOperatingSystem;
+                    var softwareOperatingSystem;
+
+                    if (payload != undefined) {
+                        softwareOperatingSystem = payload.softwareOperatingSystem;
+                    }
+
                     if (softwareOperatingSystem != undefined) {
                         $scope.scopeModel.version = softwareOperatingSystem.Version;
                         $scope.scopeModel.licenseKey = softwareOperatingSystem.LicenseKey;
