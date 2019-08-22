@@ -1,16 +1,12 @@
 ﻿using Retail.BusinessEntity.Business;
-using Retail.BusinessEntity.Entities;
 using Retail.Interconnect.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
-using ConfigManager = Retail.BusinessEntity.Business.ConfigManager;
 
 namespace Retail.Interconnect.Business
 {
@@ -33,9 +29,10 @@ namespace Retail.Interconnect.Business
             bool isApplicableToSupplier;
             List<InvoiceAvailableForSettlement> availableCustomerInvoices;
             List<InvoiceAvailableForSettlement> availableSupplierInvoices;
-            int currencyId;
-            PrepareDataForProcessing(context.PartnerId, context.InvoiceTypeId, context.CustomSectionPayload, out isApplicableToSupplier, out isApplicableToCustomer, out availableCustomerInvoices, out availableSupplierInvoices, out currencyId);
 
+            int currencyId;
+            PrepareDataForProcessing(context.PartnerId, context.InvoiceTypeId, context.CustomSectionPayload, out isApplicableToSupplier, out isApplicableToCustomer,
+                out availableCustomerInvoices, out availableSupplierInvoices, out currencyId);
 
             IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices = null;
             IEnumerable<InvoiceItem> customerInvoiceItems = null;
@@ -47,7 +44,8 @@ namespace Retail.Interconnect.Business
             GenerateInvoiceResult generateInvoiceResult;
             List<long> invoiceToSettleIds;
 
-            if (!TryLoadInvoicesAndItemSetNames(isApplicableToCustomer, availableCustomerInvoices, isApplicableToSupplier, availableSupplierInvoices, context.FromDate, context.ToDate, out customerInvoices, out customerInvoiceItems, out supplierInvoices, out supplierInvoiceItems, out errorMessage, out generateInvoiceResult, out invoiceToSettleIds))
+            if (!TryLoadInvoicesAndItemSetNames(isApplicableToCustomer, availableCustomerInvoices, isApplicableToSupplier, availableSupplierInvoices, context.FromDate, context.ToDate,
+                out customerInvoices, out customerInvoiceItems, out supplierInvoices, out supplierInvoiceItems, out errorMessage, out generateInvoiceResult, out invoiceToSettleIds))
             {
                 context.ErrorMessage = errorMessage;
                 context.GenerateInvoiceResult = generateInvoiceResult;
@@ -69,7 +67,7 @@ namespace Retail.Interconnect.Business
 
             Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice;
 
-            BusinessEntity.Business.ConfigManager configManager = new ConfigManager();
+            var configManager = new Retail.BusinessEntity.Business.ConfigManager();
             var invoiceSettings = configManager.GetRetailInvoiceSettings();
             if (invoiceSettings != null)
             {
@@ -87,6 +85,7 @@ namespace Retail.Interconnect.Business
                             }
                         }
                     }
+
                     if (supplierInvoices != null && supplierInvoices.Count() > 0)
                     {
                         foreach (var supplierInvoice in supplierInvoices)
@@ -102,28 +101,29 @@ namespace Retail.Interconnect.Business
                 }
             }
 
-            ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices, availableSupplierInvoices, out companyRecurringChargesSummary, out systemRecurringChargesSummary, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency, out companySummary, out systemSummary, out settlementInvoiceCurrencyByInvoice, out settlementInvoiceByCurrency);
+            ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices, availableSupplierInvoices,
+                out companyRecurringChargesSummary, out systemRecurringChargesSummary, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency,
+                out companySummary, out systemSummary, out settlementInvoiceCurrencyByInvoice, out settlementInvoiceByCurrency);
 
-            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, companySummary, systemSummary, companyRecurringChargesSummary, systemRecurringChargesSummary, settlementInvoiceCurrencyByInvoice, isApplicableToCustomer, isApplicableToSupplier, settlementInvoiceByCurrency, currencyId, context.IssueDate);
+            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, companySummary, systemSummary,
+                companyRecurringChargesSummary, systemRecurringChargesSummary, settlementInvoiceCurrencyByInvoice, isApplicableToCustomer, isApplicableToSupplier,
+                settlementInvoiceByCurrency, currencyId, context.IssueDate);
         }
 
         private void ProcessItemSetName(IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices, IEnumerable<InvoiceItem> customerInvoiceItems, IEnumerable<Vanrise.Invoice.Entities.Invoice> supplierInvoices,
-            IEnumerable<InvoiceItem> supplierInvoiceItems, List<InvoiceAvailableForSettlement> availableCustomerInvoices, List<InvoiceAvailableForSettlement> availableSupplierInvoices, out List<SettlementInvoiceDetailSummary> companyRecurringChargesSummary,
-          out List<SettlementInvoiceDetailSummary> systemRecurringChargesSummary, out List<SettlementInvoiceItemDetails> customerInvoiceItemSet, out List<SettlementInvoiceItemDetails> supplierInvoiceItemSet, out Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, out List<SettlementInvoiceDetailSummary> companySummary, out List<SettlementInvoiceDetailSummary> systemSummary, out Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, out Dictionary<String, SettlementInvoiceItemDetailByCurrency> settlementInvoiceByCurrency)
+            IEnumerable<InvoiceItem> supplierInvoiceItems, List<InvoiceAvailableForSettlement> availableCustomerInvoices, List<InvoiceAvailableForSettlement> availableSupplierInvoices,
+            out List<SettlementInvoiceDetailSummary> companyRecurringChargesSummary, out List<SettlementInvoiceDetailSummary> systemRecurringChargesSummary, out List<SettlementInvoiceItemDetails> customerInvoiceItemSet,
+            out List<SettlementInvoiceItemDetails> supplierInvoiceItemSet, out Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryDetailByCurrency, out List<SettlementInvoiceDetailSummary> companySummary,
+            out List<SettlementInvoiceDetailSummary> systemSummary, out Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, out Dictionary<String, SettlementInvoiceItemDetailByCurrency> settlementInvoiceItemDetailByCurrencyDict)
         {
-
             customerInvoiceItemSet = null;
             supplierInvoiceItemSet = null;
 
-            var customerInvoiceByCurrencyItemDetailsByInvoice = GenerateInterconnectInvoiceByCurrencyItemDetailsByCurrencyDic(customerInvoices, customerInvoiceItems);
-            var supplierInvoiceByCurrencyItemDetailsByInvoice = GenerateInterconnectInvoiceByCurrencyItemDetailsByCurrencyDic(supplierInvoices, supplierInvoiceItems);
-
-            settlementInvoiceItemSummaryByCurrency = new Dictionary<int, SettlementInvoiceItemSummaryDetail>();
-
+            settlementInvoiceItemSummaryDetailByCurrency = new Dictionary<int, SettlementInvoiceItemSummaryDetail>();
             settlementInvoiceCurrencyByInvoice = new Dictionary<long, List<SettlementInvoiceDetailByCurrency>>();
+            settlementInvoiceItemDetailByCurrencyDict = new Dictionary<String, SettlementInvoiceItemDetailByCurrency>();
 
-            settlementInvoiceByCurrency = new Dictionary<String, SettlementInvoiceItemDetailByCurrency>();
-
+            var customerInvoiceByCurrencyItemDetailsByInvoice = GenerateInterconnectInvoiceByCurrencyItemDetailsByCurrencyDic(customerInvoices, customerInvoiceItems);
             if (customerInvoices != null && customerInvoiceByCurrencyItemDetailsByInvoice != null)
             {
                 customerInvoiceItemSet = new List<SettlementInvoiceItemDetails>();
@@ -133,96 +133,100 @@ namespace Retail.Interconnect.Business
                     var customerInvoiceDetails = customerInvoice.Details as InterconnectInvoiceDetails;
                     if (customerInvoiceDetails == null)
                         continue;
-                    bool multipleCurrencies = false;
-                    var invoiceItemsByCurrency = customerInvoiceByCurrencyItemDetailsByInvoice.GetRecord(customerInvoice.InvoiceId);
 
+                    bool multipleCurrencies = false;
+
+                    var invoiceItemsByCurrency = customerInvoiceByCurrencyItemDetailsByInvoice.GetRecord(customerInvoice.InvoiceId);
                     if (invoiceItemsByCurrency != null)
                     {
                         var settlementInvoiceCurrency = settlementInvoiceCurrencyByInvoice.GetOrCreateItem(customerInvoice.InvoiceId);
 
-                        foreach (var currency in invoiceItemsByCurrency.Currencies)
+                        foreach (var currencyId in invoiceItemsByCurrency.Currencies)
                         {
-                            var months = invoiceItemsByCurrency.MonthsByCurrency.GetRecord(currency);
+                            var months = invoiceItemsByCurrency.MonthsByCurrency.GetRecord(currencyId);
                             if (months == null)
                                 continue;
 
-                            foreach (var month in months)
+                            if (!availableCustomerInvoices.Any(x => x.InvoiceId == customerInvoice.InvoiceId && x.CurrencyId == currencyId && x.IsSelected))
+                                continue;
+
+                            if (currencyId != customerInvoiceDetails.InterconnectCurrencyId)
+                                multipleCurrencies = true;
+
+                            OriginalDataCurrrency originalDataCurrrency = TryGetOriginalAmount(customerInvoiceDetails, currencyId);
+
+                            foreach (var invoiceItemDetails in months)
                             {
-                                var invoiceItemDetails = month as InterconnectInvoiceByCurrencyItemDetails;
+                                if (invoiceItemDetails == null)
+                                    continue;
 
-                                if (invoiceItemDetails != null && invoiceItemDetails.CurrencyId != customerInvoiceDetails.InterconnectCurrencyId)
-                                    multipleCurrencies = true;
+                                var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
+                                settlementInvoiceDetailByCurrency.InvoiceId = customerInvoice.InvoiceId;
+                                settlementInvoiceDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
+                                settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
+                                settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
 
-                                if (invoiceItemDetails != null && availableCustomerInvoices.Any(x => x.InvoiceId == customerInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId && x.IsSelected))
+                                if (originalDataCurrrency != null)
                                 {
-                                    var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month), () =>
-                                    {
-                                        return new SettlementInvoiceItemDetailByCurrency()
-                                        {
-                                            CurrencyId = invoiceItemDetails.CurrencyId,
-                                            InvoiceId = customerInvoice.InvoiceId,
-                                            Month = invoiceItemDetails.Month,
-                                            FromDate = invoiceItemDetails.FromDate,
-                                            ToDate = invoiceItemDetails.ToDate,
-                                        };
-                                    });
-
-                                    OriginalDataCurrrency originalDataCurrrency;
-
-                                    var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
-                                    settlementInvoiceDetailByCurrency.InvoiceId = customerInvoice.InvoiceId;
-                                    settlementInvoiceDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
-                                    settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
-                                    settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
-
-                                    if (customerInvoiceDetails.OriginalAmountByCurrency != null && customerInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
-                                    {
-                                        var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
-                                        settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += originalDataCurrrency.OriginalAmount.Value;
-
-
-                                        settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceDetailByCurrency.TotalFullAmount = originalDataCurrrency.OriginalAmount.Value;
-
-                                        settlementInvoicedetail.DueToSystemAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToSystemAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
-                                        settlementInvoicedetail.DueToSystemFullAmount += originalDataCurrrency.OriginalAmount.Value;
-
-                                    }
-                                    else
-                                    {
-                                        var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
-                                        settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemAmount += invoiceItemDetails.Amount;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += invoiceItemDetails.TotalFullAmount;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
-
-                                        settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
-
-                                        settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
-                                        settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
-                                        settlementInvoiceDetailByCurrency.TotalSMSAmount = invoiceItemDetails.TotalSMSAmount;
-                                        settlementInvoiceDetailByCurrency.TotalFullAmount = invoiceItemDetails.TotalFullAmount;
-
-                                        settlementInvoicedetail.DueToSystemAmount += invoiceItemDetails.AmountWithTaxes;
-                                        settlementInvoicedetail.DueToSystemAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
-                                        settlementInvoicedetail.DueToSystemFullAmount += invoiceItemDetails.TotalFullAmount;
-                                        settlementInvoicedetail.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
-                                        settlementInvoicedetail.DueToSystemAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
-                                        settlementInvoicedetail.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
-                                        settlementInvoicedetail.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
-
-                                    }
+                                    settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceDetailByCurrency.TotalFullAmount = originalDataCurrrency.OriginalAmount.Value;
                                     settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
+
+                                    var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryDetailByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
+                                    settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemAmount += originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += originalDataCurrrency.OriginalAmount.Value;
+
+                                    string month = Vanrise.Common.Utilities.GetPeriod(customerInvoice.FromDate, customerInvoice.ToDate, "MMMM - yyyy");
+                                    string currencyMonthKey = string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month);
+                                    var settlementInvoiceItemDetailByCurrency = settlementInvoiceItemDetailByCurrencyDict.GetOrCreateItem(currencyMonthKey);
+                                    settlementInvoiceItemDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
+                                    settlementInvoiceItemDetailByCurrency.InvoiceId = customerInvoice.InvoiceId;
+                                    settlementInvoiceItemDetailByCurrency.Month = month;
+                                    settlementInvoiceItemDetailByCurrency.FromDate = customerInvoice.FromDate;
+                                    settlementInvoiceItemDetailByCurrency.ToDate = customerInvoice.ToDate;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemAmount += originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemFullAmount += originalDataCurrrency.OriginalAmount.Value;
+
+                                    break; //In case of originalAmount the invoice whole period is calculated in this loop and no need to check other months
+                                }
+                                else
+                                {
+                                    settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
+                                    settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
+                                    settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
+                                    settlementInvoiceDetailByCurrency.TotalSMSAmount = invoiceItemDetails.TotalSMSAmount;
+                                    settlementInvoiceDetailByCurrency.TotalFullAmount = invoiceItemDetails.TotalFullAmount;
+                                    settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
+
+                                    var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryDetailByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
+                                    settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemAmount += invoiceItemDetails.Amount;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += invoiceItemDetails.TotalFullAmount;
+                                    settlementInvoiceItemSummaryDetail.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
+
+                                    string currencyMonthKey = string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month);
+                                    var settlementInvoiceItemDetailByCurrency = settlementInvoiceItemDetailByCurrencyDict.GetOrCreateItem(currencyMonthKey);
+                                    settlementInvoiceItemDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
+                                    settlementInvoiceItemDetailByCurrency.InvoiceId = customerInvoice.InvoiceId;
+                                    settlementInvoiceItemDetailByCurrency.Month = invoiceItemDetails.Month;
+                                    settlementInvoiceItemDetailByCurrency.FromDate = invoiceItemDetails.FromDate;
+                                    settlementInvoiceItemDetailByCurrency.ToDate = invoiceItemDetails.ToDate;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemAmount += invoiceItemDetails.AmountWithTaxes;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemFullAmount += invoiceItemDetails.TotalFullAmount;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
+                                    settlementInvoiceItemDetailByCurrency.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
                                 }
                             }
                         }
@@ -230,7 +234,6 @@ namespace Retail.Interconnect.Business
 
                     var settlementInvoiceItemDetails = new SettlementInvoiceItemDetails
                     {
-
                         Amount = multipleCurrencies ? default(decimal?) : customerInvoiceDetails.TotalInvoiceAmount,
                         DurationInSeconds = customerInvoiceDetails.Duration,
                         CurrencyId = multipleCurrencies ? default(int?) : customerInvoiceDetails.InterconnectCurrencyId,
@@ -251,6 +254,7 @@ namespace Retail.Interconnect.Business
                 }
             }
 
+            var supplierInvoiceByCurrencyItemDetailsByInvoice = GenerateInterconnectInvoiceByCurrencyItemDetailsByCurrencyDic(supplierInvoices, supplierInvoiceItems);
             if (supplierInvoices != null && supplierInvoiceByCurrencyItemDetailsByInvoice != null)
             {
                 supplierInvoiceItemSet = new List<SettlementInvoiceItemDetails>();
@@ -260,6 +264,7 @@ namespace Retail.Interconnect.Business
                     var supplierInvoiceDetails = supplierInvoice.Details as InterconnectInvoiceDetails;
                     if (supplierInvoiceDetails == null)
                         continue;
+
                     bool isOriginalAmountSetted = supplierInvoiceDetails.IsOriginalAmountSetted;
                     bool multipleCurrencies = false;
 
@@ -268,100 +273,99 @@ namespace Retail.Interconnect.Business
                     {
                         var settlementInvoiceCurrency = settlementInvoiceCurrencyByInvoice.GetOrCreateItem(supplierInvoice.InvoiceId);
 
-                        foreach (var currency in invoiceItemsByCurrency.Currencies)
+                        foreach (var currencyId in invoiceItemsByCurrency.Currencies)
                         {
-                            var months = invoiceItemsByCurrency.MonthsByCurrency.GetRecord(currency);
+                            var months = invoiceItemsByCurrency.MonthsByCurrency.GetRecord(currencyId);
                             if (months == null)
                                 continue;
 
-                            foreach (var month in months)
+                            if (!availableSupplierInvoices.Any(x => x.InvoiceId == supplierInvoice.InvoiceId && x.CurrencyId == currencyId && x.IsSelected))
+                                continue;
+
+                            if (currencyId != supplierInvoiceDetails.InterconnectCurrencyId)
+                                multipleCurrencies = true;
+
+                            OriginalDataCurrrency originalDataCurrrency = TryGetOriginalAmount(supplierInvoiceDetails, currencyId);
+
+                            foreach (var invoiceItemDetails in months)
                             {
-                                var invoiceItemDetails = month as InterconnectInvoiceByCurrencyItemDetails;
+                                if (invoiceItemDetails == null)
+                                    continue;
 
-                                if (invoiceItemDetails != null && invoiceItemDetails.CurrencyId != supplierInvoiceDetails.InterconnectCurrencyId)
-                                    multipleCurrencies = true;
+                                var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
+                                settlementInvoiceDetailByCurrency.InvoiceId = supplierInvoice.InvoiceId;
+                                settlementInvoiceDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
+                                settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
+                                settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
 
-                                if (invoiceItemDetails != null && availableSupplierInvoices.Any(x => x.InvoiceId == supplierInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId && x.IsSelected))
+                                if (originalDataCurrrency != null)
                                 {
-                                    var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month), () =>
-                                    {
-                                        return new SettlementInvoiceItemDetailByCurrency()
-                                        {
-                                            CurrencyId = invoiceItemDetails.CurrencyId,
-                                            InvoiceId = supplierInvoice.InvoiceId,
-                                            Month = invoiceItemDetails.Month,
-                                            FromDate = invoiceItemDetails.FromDate,
-                                            ToDate = invoiceItemDetails.ToDate,
-                                        };
-                                    });
-
-                                    OriginalDataCurrrency originalDataCurrrency;
-
-                                    var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
-                                    settlementInvoiceDetailByCurrency.InvoiceId = supplierInvoice.InvoiceId;
-                                    settlementInvoiceDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
-                                    settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
-                                    settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
-
-                                    if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
-                                    {
-                                        var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
-                                        settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyFullAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        // settlementInvoiceItemSummaryDetail.DueToCompanyTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
-
-                                        settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceDetailByCurrency.TotalFullAmount = originalDataCurrrency.OriginalAmount.Value;
-
-                                        settlementInvoicedetail.DueToCompanyAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToCompanyAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToCompanyNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
-                                        settlementInvoicedetail.DueToCompanyFullAmount += originalDataCurrrency.OriginalAmount.Value;
-
-                                    }
-                                    else
-                                    {
-                                        isOriginalAmountSetted = false;
-
-                                        var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
-                                        settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyAmount += invoiceItemDetails.Amount;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyNumberOfCalls += invoiceItemDetails.NumberOfCalls;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyFullAmount += invoiceItemDetails.TotalFullAmount;
-                                        settlementInvoiceItemSummaryDetail.DueToCompanyTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
-
-
-                                        settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
-
-                                        settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
-                                        settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
-                                        settlementInvoiceDetailByCurrency.TotalSMSAmount = invoiceItemDetails.TotalSMSAmount;
-                                        settlementInvoiceDetailByCurrency.TotalFullAmount = invoiceItemDetails.TotalFullAmount;
-
-                                        settlementInvoicedetail.DueToCompanyAmount += invoiceItemDetails.Amount;
-                                        settlementInvoicedetail.DueToCompanyAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
-                                        settlementInvoicedetail.DueToCompanyNumberOfCalls += invoiceItemDetails.NumberOfCalls;
-                                        settlementInvoicedetail.DueToCompanyAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
-                                        settlementInvoicedetail.DueToCompanyTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
-                                        settlementInvoicedetail.DueToCompanyFullAmount += invoiceItemDetails.TotalFullAmount;
-
-                                        settlementInvoicedetail.DueToCompanyTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
-                                    }
+                                    settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceDetailByCurrency.TotalFullAmount = originalDataCurrrency.OriginalAmount.Value;
                                     settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
 
+                                    var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryDetailByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
+                                    settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyAmount += originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyFullAmount += originalDataCurrrency.OriginalAmount.Value;
+                                    //settlementInvoiceItemSummaryDetail.DueToCompanyTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
+
+                                    string month = Vanrise.Common.Utilities.GetPeriod(supplierInvoice.FromDate, supplierInvoice.ToDate, "MMMM - yyyy");
+                                    string currencyMonthKey = string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month);
+                                    var settlementInvoiceItemDetailByCurrency = settlementInvoiceItemDetailByCurrencyDict.GetOrCreateItem(currencyMonthKey);
+                                    settlementInvoiceItemDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
+                                    settlementInvoiceItemDetailByCurrency.InvoiceId = supplierInvoice.InvoiceId;
+                                    settlementInvoiceItemDetailByCurrency.Month = month;
+                                    settlementInvoiceItemDetailByCurrency.FromDate = supplierInvoice.FromDate;
+                                    settlementInvoiceItemDetailByCurrency.ToDate = supplierInvoice.ToDate;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyAmount += originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyFullAmount += originalDataCurrrency.OriginalAmount.Value;
+
+                                    break; //In case of originalAmount the invoice whole period is calculated in this loop and no need to check other months
+                                }
+                                else
+                                {
+                                    isOriginalAmountSetted = false;
+
+                                    settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
+                                    settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
+                                    settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
+                                    settlementInvoiceDetailByCurrency.TotalSMSAmount = invoiceItemDetails.TotalSMSAmount;
+                                    settlementInvoiceDetailByCurrency.TotalFullAmount = invoiceItemDetails.TotalFullAmount;
+                                    settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
+
+                                    var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryDetailByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
+                                    settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyAmount += invoiceItemDetails.Amount;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyNumberOfCalls += invoiceItemDetails.NumberOfCalls;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyFullAmount += invoiceItemDetails.TotalFullAmount;
+                                    settlementInvoiceItemSummaryDetail.DueToCompanyTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
+
+                                    string currencyMonthKey = string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month);
+                                    var settlementInvoiceItemDetailByCurrency = settlementInvoiceItemDetailByCurrencyDict.GetOrCreateItem(currencyMonthKey);
+                                    settlementInvoiceItemDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
+                                    settlementInvoiceItemDetailByCurrency.InvoiceId = supplierInvoice.InvoiceId;
+                                    settlementInvoiceItemDetailByCurrency.Month = invoiceItemDetails.Month;
+                                    settlementInvoiceItemDetailByCurrency.FromDate = invoiceItemDetails.FromDate;
+                                    settlementInvoiceItemDetailByCurrency.ToDate = invoiceItemDetails.ToDate;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyAmount += invoiceItemDetails.Amount;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyNumberOfCalls += invoiceItemDetails.NumberOfCalls;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyFullAmount += invoiceItemDetails.TotalFullAmount;
+                                    settlementInvoiceItemDetailByCurrency.DueToCompanyTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
                                 }
                             }
                         }
                     }
-
-
-
 
                     var settlementInvoiceItemDetails = new SettlementInvoiceItemDetails
                     {
@@ -381,19 +385,19 @@ namespace Retail.Interconnect.Business
                         ToDate = supplierInvoice.ToDate,
                         IsOriginalAmountSetted = isOriginalAmountSetted
                     };
+
                     supplierInvoiceItemSet.Add(settlementInvoiceItemDetails);
                 }
             }
-
 
             systemSummary = null;
             companySummary = null;
             companyRecurringChargesSummary = null;
             systemRecurringChargesSummary = null;
 
-            if (settlementInvoiceByCurrency != null && settlementInvoiceByCurrency.Count > 0)
+            if (settlementInvoiceItemDetailByCurrencyDict != null && settlementInvoiceItemDetailByCurrencyDict.Count > 0)
             {
-                foreach (var settlementInvoiceItemByCurrency in settlementInvoiceByCurrency)
+                foreach (var settlementInvoiceItemByCurrency in settlementInvoiceItemDetailByCurrencyDict)
                 {
                     decimal sum = settlementInvoiceItemByCurrency.Value.DueToCompanyAmountWithTaxes - settlementInvoiceItemByCurrency.Value.DueToSystemAmountWithTaxes;
                     if (sum > 0)
@@ -407,9 +411,9 @@ namespace Retail.Interconnect.Business
                 }
             }
 
-            if (settlementInvoiceItemSummaryByCurrency != null && settlementInvoiceItemSummaryByCurrency.Count > 0)
+            if (settlementInvoiceItemSummaryDetailByCurrency != null && settlementInvoiceItemSummaryDetailByCurrency.Count > 0)
             {
-                foreach (var settlementInvoiceItemSummary in settlementInvoiceItemSummaryByCurrency)
+                foreach (var settlementInvoiceItemSummary in settlementInvoiceItemSummaryDetailByCurrency)
                 {
                     decimal difference = settlementInvoiceItemSummary.Value.DueToCompanyFullAmount - settlementInvoiceItemSummary.Value.DueToSystemFullAmount;
                     if (difference > 0)
@@ -433,13 +437,14 @@ namespace Retail.Interconnect.Business
 
                         if (systemSummary == null)
                             systemSummary = new List<SettlementInvoiceDetailSummary>();
+
                         var amount = Math.Abs(difference);
                         systemSummary.Add(new SettlementInvoiceDetailSummary
                         {
                             Amount = amount,
                             CurrencyId = settlementInvoiceItemSummary.Value.CurrencyId,
                             CurrencyIdDescription = settlementInvoiceItemSummary.Value.CurrencyIdDescription,
-                            //  OriginalAmountWithCommission = commission.HasValue ? amount + ((amount * commission.Value) / 100) : amount
+                            //OriginalAmountWithCommission = commission.HasValue ? amount + ((amount * commission.Value) / 100) : amount
                         });
                     }
 
@@ -447,6 +452,7 @@ namespace Retail.Interconnect.Business
                     {
                         if (companyRecurringChargesSummary == null)
                             companyRecurringChargesSummary = new List<SettlementInvoiceDetailSummary>();
+
                         companyRecurringChargesSummary.Add(new SettlementInvoiceDetailSummary
                         {
                             Amount = settlementInvoiceItemSummary.Value.DueToCompanyAmountRecurringCharges,
@@ -458,6 +464,7 @@ namespace Retail.Interconnect.Business
                     {
                         if (systemRecurringChargesSummary == null)
                             systemRecurringChargesSummary = new List<SettlementInvoiceDetailSummary>();
+
                         systemRecurringChargesSummary.Add(new SettlementInvoiceDetailSummary
                         {
                             Amount = settlementInvoiceItemSummary.Value.DueToSystemAmountRecurringCharges,
@@ -467,16 +474,31 @@ namespace Retail.Interconnect.Business
                     }
                 }
             }
-
-
         }
+
+        private OriginalDataCurrrency TryGetOriginalAmount(InterconnectInvoiceDetails interconnectInvoiceDetails, int currencyId)
+        {
+            OriginalDataCurrrency originalDataCurrrency;
+            if (interconnectInvoiceDetails.OriginalAmountByCurrency == null || !interconnectInvoiceDetails.OriginalAmountByCurrency.TryGetValue(currencyId, out originalDataCurrrency))
+                return null;
+
+            if (!originalDataCurrrency.IncludeOriginalAmountInSettlement || !originalDataCurrrency.OriginalAmount.HasValue)
+                return null;
+
+            return originalDataCurrrency;
+        }
+         
         private bool GetNoInvoiceSelected(out string errorMessage, out GenerateInvoiceResult generateInvoiceResult)
         {
             errorMessage = "No Invoices Selected.";
             generateInvoiceResult = GenerateInvoiceResult.Failed;
             return false;
         }
-        private bool TryLoadInvoicesAndItemSetNames(bool isApplicableToCustomer, List<InvoiceAvailableForSettlement> availableCustomerInvoices, bool isApplicableToSupplier, List<InvoiceAvailableForSettlement> availableSupplierInvoices, DateTime fromDate, DateTime toDate, out IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices, out IEnumerable<InvoiceItem> customerInvoiceItems, out IEnumerable<Vanrise.Invoice.Entities.Invoice> supplierInvoices, out IEnumerable<InvoiceItem> supplierInvoiceItems, out string errorMessage, out GenerateInvoiceResult generateInvoiceResult, out List<long> invoiceToSettleIds)
+
+        private bool TryLoadInvoicesAndItemSetNames(bool isApplicableToCustomer, List<InvoiceAvailableForSettlement> availableCustomerInvoices, bool isApplicableToSupplier,
+            List<InvoiceAvailableForSettlement> availableSupplierInvoices, DateTime fromDate, DateTime toDate, out IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices,
+            out IEnumerable<InvoiceItem> customerInvoiceItems, out IEnumerable<Vanrise.Invoice.Entities.Invoice> supplierInvoices, out IEnumerable<InvoiceItem> supplierInvoiceItems,
+            out string errorMessage, out GenerateInvoiceResult generateInvoiceResult, out List<long> invoiceToSettleIds)
         {
             InvoiceItemManager _invoiceItemManager = new InvoiceItemManager();
             invoiceToSettleIds = null;
@@ -486,8 +508,6 @@ namespace Retail.Interconnect.Business
             supplierInvoiceItems = null;
             errorMessage = null;
             generateInvoiceResult = GenerateInvoiceResult.Succeeded;
-
-
 
             if (isApplicableToCustomer && isApplicableToSupplier)
             {
@@ -505,6 +525,7 @@ namespace Retail.Interconnect.Business
 
                 }
             }
+
             if (isApplicableToSupplier && !isApplicableToCustomer)
             {
                 if (availableSupplierInvoices == null || availableSupplierInvoices.Count == 0 || availableSupplierInvoices.All(x => x.IsSelected == false))
@@ -512,7 +533,6 @@ namespace Retail.Interconnect.Business
                     return GetNoInvoiceSelected(out errorMessage, out generateInvoiceResult);
                 }
             }
-
 
             if (isApplicableToCustomer && availableCustomerInvoices != null)
             {
@@ -547,8 +567,6 @@ namespace Retail.Interconnect.Business
                 }
             }
 
-
-
             if (isApplicableToCustomer && isApplicableToSupplier)
             {
                 if ((supplierInvoices == null || supplierInvoices.Count() == 0) && (customerInvoices == null || customerInvoices.Count() == 0))
@@ -566,6 +584,7 @@ namespace Retail.Interconnect.Business
                     return false;
                 }
             }
+
             if (isApplicableToSupplier && !isApplicableToCustomer)
             {
                 if (supplierInvoices == null || supplierInvoices.Count() == 0)
@@ -574,9 +593,12 @@ namespace Retail.Interconnect.Business
                     return false;
                 }
             }
+
             return true;
         }
-        private void PrepareDataForProcessing(string partnerId, Guid invoiceTypeId, dynamic customSectionPayload, out bool isApplicableToSupplier, out bool isApplicableToCustomer, out List<InvoiceAvailableForSettlement> availableCustomerInvoices, out List<InvoiceAvailableForSettlement> availableSupplierInvoices, out int currencyId)
+
+        private void PrepareDataForProcessing(string partnerId, Guid invoiceTypeId, dynamic customSectionPayload, out bool isApplicableToSupplier, out bool isApplicableToCustomer,
+            out List<InvoiceAvailableForSettlement> availableCustomerInvoices, out List<InvoiceAvailableForSettlement> availableSupplierInvoices, out int currencyId)
         {
             var financialAccountMananger = new FinancialAccountManager();
 
@@ -610,6 +632,7 @@ namespace Retail.Interconnect.Business
 
 
         }
+
         private bool ValidateInvoicesDates(IEnumerable<Vanrise.Invoice.Entities.Invoice> invoices, DateTime fromDate, DateTime toDate, out string errorMessage, out GenerateInvoiceResult generateInvoiceResult)
         {
             errorMessage = null;
@@ -623,6 +646,7 @@ namespace Retail.Interconnect.Business
             }
             return true;
         }
+
         private IEnumerable<Vanrise.Invoice.Entities.Invoice> GetInvoices(List<long> invoiceIds)
         {
             return new Vanrise.Invoice.Business.InvoiceManager().GetInvoices(invoiceIds);
@@ -631,9 +655,9 @@ namespace Retail.Interconnect.Business
         private GeneratedInvoice BuildGeneratedInvoice(List<SettlementInvoiceItemDetails> customerInvoiceItemSet, List<SettlementInvoiceItemDetails> supplierInvoiceItemSet,
             Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, List<SettlementInvoiceDetailSummary> companySummary, List<SettlementInvoiceDetailSummary> systemSummary,
             List<SettlementInvoiceDetailSummary> companyRecurringChargesSummary, List<SettlementInvoiceDetailSummary> systemRecurringChargesSummary,
-            Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, bool isApplicableToCustomer, bool isApplicableToSupplier, Dictionary<String, SettlementInvoiceItemDetailByCurrency> settlementInvoiceByCurrency, int currencyId, DateTime issueDate)
+            Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, bool isApplicableToCustomer, bool isApplicableToSupplier,
+            Dictionary<String, SettlementInvoiceItemDetailByCurrency> settlementInvoiceByCurrency, int currencyId, DateTime issueDate)
         {
-
             CurrencyExchangeRateManager exchangeRateManager = new CurrencyExchangeRateManager();
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
 
@@ -643,7 +667,6 @@ namespace Retail.Interconnect.Business
                 IsApplicableToSupplier = isApplicableToSupplier
             };
 
-
             if (customerInvoiceItemSet != null && customerInvoiceItemSet.Count > 0)
             {
                 var customerItemSet = new GeneratedInvoiceItemSet
@@ -651,6 +674,7 @@ namespace Retail.Interconnect.Business
                     SetName = "CustomerInvoices",
                     Items = new List<GeneratedInvoiceItem>()
                 };
+
                 foreach (var customerInvoice in customerInvoiceItemSet)
                 {
                     settlementInvoiceDetails.CustomerDuration += customerInvoice.DurationInSeconds;
@@ -662,13 +686,11 @@ namespace Retail.Interconnect.Business
                         Details = customerInvoice,
                         Name = " "
                     });
-
                 }
+
                 if (customerItemSet.Items.Count > 0)
                     generatedInvoiceItemSets.Add(customerItemSet);
             }
-
-
 
             if (supplierInvoiceItemSet != null && supplierInvoiceItemSet.Count > 0)
             {
@@ -677,6 +699,7 @@ namespace Retail.Interconnect.Business
                     SetName = "SupplierInvoices",
                     Items = new List<GeneratedInvoiceItem>()
                 };
+
                 foreach (var supplierInvoice in supplierInvoiceItemSet)
                 {
                     settlementInvoiceDetails.SupplierDuration += supplierInvoice.DurationInSeconds;
@@ -712,10 +735,9 @@ namespace Retail.Interconnect.Business
                             Name = " "
                         });
                     }
+
                     if (generatedInvoiceItemSet.Items.Count > 0)
-                    {
                         generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                    }
                 }
             }
 
@@ -734,16 +756,14 @@ namespace Retail.Interconnect.Business
                     settlementInvoiceDetails.DueToCompanyAmountRecurringCharges += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCompanyAmountRecurringCharges, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     settlementInvoiceDetails.DueToCompanyTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCompanyTotalTrafficAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     settlementInvoiceDetails.DueToCompanyTotalSMSAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCompanyTotalSMSAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
-                    settlementInvoiceDetails.DueToCompanyFullAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCompanyFullAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate); // sattlementInvoiceDetails.ful.DueToCompanyTotalTrafficAmount + sattlementInvoiceDetails.DueToCompanyAmountRecurringCharges + sattlementInvoiceDetails.DueToCompanyTotalDealAmount + sattlementInvoiceDetails.DueToCompanyTotalSMSAmount;
+                    settlementInvoiceDetails.DueToCompanyFullAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCompanyFullAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate); //settlementInvoiceDetails.ful.DueToCompanyTotalTrafficAmount + sattlementInvoiceDetails.DueToCompanyAmountRecurringCharges + sattlementInvoiceDetails.DueToCompanyTotalDealAmount + sattlementInvoiceDetails.DueToCompanyTotalSMSAmount;
 
                     settlementInvoiceDetails.DueToSystemAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     settlementInvoiceDetails.DueToSystemAmountWithTaxes += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmountWithTaxes, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     settlementInvoiceDetails.DueToSystemAmountRecurringCharges += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmountRecurringCharges, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     settlementInvoiceDetails.DueToSystemTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemTotalTrafficAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     settlementInvoiceDetails.DueToSystemTotalSMSAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemTotalSMSAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
-                    settlementInvoiceDetails.DueToSystemFullAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemFullAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate); //sattlementInvoiceDetails.DueToSystemTotalTrafficAmount + sattlementInvoiceDetails.DueToSystemAmountRecurringCharges + sattlementInvoiceDetails.DueToSystemTotalDealAmount + sattlementInvoiceDetails.DueToSystemTotalSMSAmount;
-
-
+                    settlementInvoiceDetails.DueToSystemFullAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemFullAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate); //settlementInvoiceDetails.DueToSystemTotalTrafficAmount + sattlementInvoiceDetails.DueToSystemAmountRecurringCharges + sattlementInvoiceDetails.DueToSystemTotalDealAmount + sattlementInvoiceDetails.DueToSystemTotalSMSAmount;
 
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
@@ -753,9 +773,7 @@ namespace Retail.Interconnect.Business
 
                     if (generatedInvoiceItemSet.Items.Count > 0)
                         generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-
                 }
-
             }
 
             if (settlementInvoiceDetails.DueToCompanyFullAmount > settlementInvoiceDetails.DueToSystemFullAmount)
@@ -766,6 +784,7 @@ namespace Retail.Interconnect.Business
             {
                 settlementInvoiceDetails.DueToSystemDifference = settlementInvoiceDetails.DueToSystemFullAmount - settlementInvoiceDetails.DueToCompanyFullAmount;
             }
+
             settlementInvoiceDetails.NoCompanySMS = settlementInvoiceDetails.DueToCompanyTotalSMSAmount == 0;
             settlementInvoiceDetails.NoCompanyVoice = settlementInvoiceDetails.DueToCompanyAmountWithTaxes == 0;
             settlementInvoiceDetails.NoCompanyRecurringCharges = settlementInvoiceDetails.DueToCompanyAmountRecurringCharges == 0;
@@ -774,25 +793,23 @@ namespace Retail.Interconnect.Business
             settlementInvoiceDetails.NoSystemVoice = settlementInvoiceDetails.DueToSystemAmountWithTaxes == 0;
             settlementInvoiceDetails.NoSystemRecurringCharges = settlementInvoiceDetails.DueToSystemAmountRecurringCharges == 0;
 
-
             if (settlementInvoiceItemSummaryByCurrency != null && settlementInvoiceItemSummaryByCurrency.Count > 0)
             {
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
                 generatedInvoiceItemSet.SetName = "SettlementInvoiceSummary";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
                 foreach (var settlementInvoiceItemSummaryDetail in settlementInvoiceItemSummaryByCurrency)
                 {
-
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = settlementInvoiceItemSummaryDetail.Value,
                         Name = " "
                     });
                 }
+
                 if (generatedInvoiceItemSet.Items.Count > 0)
-                {
                     generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                }
             }
 
 
@@ -801,6 +818,7 @@ namespace Retail.Interconnect.Business
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
                 generatedInvoiceItemSet.SetName = "SystemSummary";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
                 foreach (var summary in systemSummary)
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -809,10 +827,9 @@ namespace Retail.Interconnect.Business
                         Name = " "
                     });
                 }
+
                 if (generatedInvoiceItemSet.Items.Count > 0)
-                {
                     generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                }
             }
 
             if (companySummary != null && companySummary.Count > 0)
@@ -820,6 +837,7 @@ namespace Retail.Interconnect.Business
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
                 generatedInvoiceItemSet.SetName = "CompanySummary";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
                 foreach (var summary in companySummary)
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -828,16 +846,17 @@ namespace Retail.Interconnect.Business
                         Name = " "
                     });
                 }
+
                 if (generatedInvoiceItemSet.Items.Count > 0)
-                {
                     generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                }
             }
+
             if (companyRecurringChargesSummary != null && companyRecurringChargesSummary.Count > 0)
             {
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
                 generatedInvoiceItemSet.SetName = "CompanyRecurringChargesSummary";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
                 foreach (var summary in companyRecurringChargesSummary)
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -846,16 +865,17 @@ namespace Retail.Interconnect.Business
                         Name = " "
                     });
                 }
+
                 if (generatedInvoiceItemSet.Items.Count > 0)
-                {
                     generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                }
             }
+
             if (systemRecurringChargesSummary != null && systemRecurringChargesSummary.Count > 0)
             {
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
                 generatedInvoiceItemSet.SetName = "SystemRecurringChargesSummary";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
                 foreach (var summary in systemRecurringChargesSummary)
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -864,12 +884,10 @@ namespace Retail.Interconnect.Business
                         Name = " "
                     });
                 }
-                if (generatedInvoiceItemSet.Items.Count > 0)
-                {
-                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                }
-            }
 
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+            }
 
             return new GeneratedInvoice
             {
@@ -880,27 +898,23 @@ namespace Retail.Interconnect.Business
 
         private Dictionary<long, InterconnectInvoiceByCurrencyItemDetailsByCurrency> GenerateInterconnectInvoiceByCurrencyItemDetailsByCurrencyDic(IEnumerable<Vanrise.Invoice.Entities.Invoice> invoices, IEnumerable<InvoiceItem> invoiceItems)
         {
-            var interconnectInvoiceByCurrencyItemDetailsByInvoiceIdDic = new Dictionary<long, InterconnectInvoiceByCurrencyItemDetailsByCurrency>();
-
             if (invoices == null)
                 return null;
+
+            var interconnectInvoiceByCurrencyItemDetailsByInvoiceIdDic = new Dictionary<long, InterconnectInvoiceByCurrencyItemDetailsByCurrency>();
 
             foreach (var invoice in invoices)
             {
                 var invoiceDetails = invoice.Details as InterconnectInvoiceDetails;
-
                 if (invoiceDetails == null)
                     continue;
 
                 invoiceItems.ThrowIfNull("Invoice Items", invoice.InvoiceId);
-
                 var items = invoiceItems.FindAllRecords(x => x.InvoiceId == invoice.InvoiceId);
-
                 if (items == null)
                     continue;
 
                 var interconnectInvoiceByCurrencyItemDetailsByCurrency = interconnectInvoiceByCurrencyItemDetailsByInvoiceIdDic.GetOrCreateItem(invoice.InvoiceId);
-
                 if (interconnectInvoiceByCurrencyItemDetailsByCurrency.Currencies == null)
                 {
                     interconnectInvoiceByCurrencyItemDetailsByCurrency.Currencies = new HashSet<int>();
@@ -910,17 +924,15 @@ namespace Retail.Interconnect.Business
                 foreach (var item in items)
                 {
                     var invoiceItemDetails = item.Details as InterconnectInvoiceByCurrencyItemDetails;
-
                     if (invoiceItemDetails == null)
                         continue;
 
                     interconnectInvoiceByCurrencyItemDetailsByCurrency.Currencies.Add(invoiceItemDetails.CurrencyId);
-
                     var interconnectInvoiceByCurrencyItemDetails = interconnectInvoiceByCurrencyItemDetailsByCurrency.MonthsByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
-
                     interconnectInvoiceByCurrencyItemDetails.Add(invoiceItemDetails);
                 }
             }
+
             return interconnectInvoiceByCurrencyItemDetailsByInvoiceIdDic;
         }
     }
