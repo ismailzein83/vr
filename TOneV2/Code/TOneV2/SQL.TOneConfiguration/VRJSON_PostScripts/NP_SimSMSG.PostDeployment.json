@@ -13,9 +13,9 @@
               "ID": "569f4821-2a88-4d04-97bf-0ec3b46f4119",
               "DevProjectID": "7576942b-3be2-4a0f-9629-36231c702219",
               "Name": "SimSMSGStore",
-              "Settings": "{\"$type\":\"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage\",\"ConfigId\":\"2aeec2de-ec44-4698-aaef-8e9dbf669d1e\",\"ConnectionStringName\":\"SimSMSG\",\"IsRemoteDataStore\":false}",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage\",\"ConfigId\":\"2aeec2de-ec44-4698-aaef-8e9dbf669d1e\",\"ConnectionStringAppSettingName\":\"SimSMSGnDBConnStringKey\",\"IsRemoteDataStore\":false}",
               "CreatedTime": "2019-08-20T18:32:52.677",
-              "LastModifiedTime": "2019-08-22T14:28:47.363"
+              "LastModifiedTime": "2019-08-22T19:11:33.617"
             }
           }
         ],
