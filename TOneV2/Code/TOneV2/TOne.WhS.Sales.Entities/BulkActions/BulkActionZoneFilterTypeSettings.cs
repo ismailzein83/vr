@@ -11,5 +11,7 @@ namespace TOne.WhS.Sales.Entities
 		public const string EXTENSION_TYPE = "WhS_Sales_BulkActionZoneFilterType";
 
 		public string Editor { get; set; }
+
+        public bool ShowForSellingProduct { get; set; }
 	}
 }

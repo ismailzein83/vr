@@ -68,7 +68,8 @@ as (select * from (values
 
 ('3C5CCF5B-224E-4502-AFA4-2F18A8E39660','Last 7 Days','Last 7 Days','WhS_Deal_DealTimePeriodConfig'																			,'{"Editor":"vr-whs-dealtimeperiod-lastsevendays"}'),
 ('215017D3-256F-4AFD-AF99-4266DD4D0AC4','Last 24 Hours','Last 24 Hours','WhS_Deal_DealTimePeriodConfig'																		,'{"Editor":"vr-whs-dealtimeperiod-lasttwentyfourhours"}'),
-('CED02013-65C0-49B9-97A7-7F557FF945BA','Whole Deal Period','Whole Deal Period','WhS_Deal_DealTimePeriodConfig'																,'{"Editor":"vr-whs-dealtimeperiod-wholedeal"}')
+('CED02013-65C0-49B9-97A7-7F557FF945BA','Whole Deal Period','Whole Deal Period','WhS_Deal_DealTimePeriodConfig'																,'{"Editor":"vr-whs-dealtimeperiod-wholedeal"}'),
+('2DA95830-D267-41F2-AB04-B1031FDB4505','WhS_Sales_BulkActionZoneFilterType_AllDealZones','All Deal Zones','WhS_Sales_BulkActionZoneFilterType'							    ,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-alldealzones","ShowForSellingProduct":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

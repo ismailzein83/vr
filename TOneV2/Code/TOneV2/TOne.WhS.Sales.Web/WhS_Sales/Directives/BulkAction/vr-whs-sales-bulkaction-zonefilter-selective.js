@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', 'WhS_Sales_SalePriceListOwnerTypeEnum', function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, WhS_Sales_SalePriceListOwnerTypeEnum) {
     return {
         restrict: "E",
         scope: {
@@ -83,7 +83,9 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
                     return WhS_Sales_RatePlanAPIService.GetBulkActionZoneFilterTypeExtensionConfigs().then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
-                                $scope.scopeModel.extensionConfigs.push(response[i]);
+                                var zoneFilterObject = response[i];
+                                if ((bulkActionContext.ownerType != WhS_Sales_SalePriceListOwnerTypeEnum.SellingProduct.value) || zoneFilterObject.ShowForSellingProduct)
+                                    $scope.scopeModel.extensionConfigs.push(zoneFilterObject);
                             }
                             if (zoneFilterType != undefined) {
                                 $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, zoneFilterType.ConfigId, 'ExtensionConfigurationId');
