@@ -657,6 +657,13 @@ namespace BPMExtended.Main.Business
             return value.Next(10) <= 5 ? true : false;
         }
 
+        public bool isAboveThreshold(string nearbyNumber , string subType)
+        {
+            //TODO: check if path exist
+            Random value = new Random();
+            return value.Next(10) <= 5 ? true : false;
+        }
+
         public GSHDSLTechnicalReservationDetail GSHDSLGetTechnicalReservationById(string contractId)
         {
 
