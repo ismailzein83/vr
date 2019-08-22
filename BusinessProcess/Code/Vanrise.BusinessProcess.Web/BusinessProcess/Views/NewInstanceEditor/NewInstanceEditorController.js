@@ -121,13 +121,10 @@
         function loadAllControls() {
             var initialPromises = [];
 
-            // if ($scope.bpDefinitionObj.VRWorkflowId == undefined) {
-
             if ($scope.bpDefinitionObj.Configuration.ManualExecEditor) {
                 var loadBpDefinitionManualDirectivePromise = loadBpDefinitionManualDirective();
                 initialPromises.push(loadBpDefinitionManualDirectivePromise);
             }
-            // }
 
             var rootPromiseNode = {
                 promises: initialPromises
