@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2016
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{BCA3F114-0824-43F3-AEC8-6A39519BB5F4}"
 EndProject
@@ -36,6 +36,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NP.IVSwitch.Web", "NP.IVSwitch.Web\NP.IVSwitch.Web.csproj", "{D300FE75-8B51-441D-87DB-F02D830932F9}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.NetworkProvisioning", "SQL.NetworkProvisioning\SQL.NetworkProvisioning.sqlproj", "{4230E7A2-3EC2-4E1B-93C8-37D56474FCB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SimSMSG", "SimSMSG", "{93A0725C-312F-40B6-B1FB-D38036968FD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NP.SMSG.Web", "NP.SMSG.Web\NP.SMSG.Web.csproj", "{BD313A82-E87D-426F-99EC-37817D99DC47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +117,12 @@ Global
 		{4230E7A2-3EC2-4E1B-93C8-37D56474FCB9}.x64|Any CPU.ActiveCfg = Debug|Any CPU
 		{4230E7A2-3EC2-4E1B-93C8-37D56474FCB9}.x64|Any CPU.Build.0 = Debug|Any CPU
 		{4230E7A2-3EC2-4E1B-93C8-37D56474FCB9}.x64|Any CPU.Deploy.0 = Debug|Any CPU
+		{BD313A82-E87D-426F-99EC-37817D99DC47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD313A82-E87D-426F-99EC-37817D99DC47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD313A82-E87D-426F-99EC-37817D99DC47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD313A82-E87D-426F-99EC-37817D99DC47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD313A82-E87D-426F-99EC-37817D99DC47}.x64|Any CPU.ActiveCfg = Release|Any CPU
+		{BD313A82-E87D-426F-99EC-37817D99DC47}.x64|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,12 +140,14 @@ Global
 		{9FCA948F-C31C-43AA-AB80-20AF788A2CE2} = {40E7C91A-1932-41EA-9765-ADE317B72C32}
 		{D300FE75-8B51-441D-87DB-F02D830932F9} = {40E7C91A-1932-41EA-9765-ADE317B72C32}
 		{4230E7A2-3EC2-4E1B-93C8-37D56474FCB9} = {E33424EA-5B1C-4AE8-BA64-410190B957CB}
+		{93A0725C-312F-40B6-B1FB-D38036968FD0} = {DD78267E-3DB1-4A4A-AEC5-D2449F73EDCC}
+		{BD313A82-E87D-426F-99EC-37817D99DC47} = {93A0725C-312F-40B6-B1FB-D38036968FD0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {554E68FD-9286-45C6-B196-9E0313DC332B}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -183,5 +195,9 @@ Global
 		SccProjectTopLevelParentUniqueName11 = NetworkProvisioning.sln
 		SccProjectName11 = SQL.NetworkProvisioning
 		SccLocalPath11 = SQL.NetworkProvisioning
+		SccProjectUniqueName12 = NP.SMSG.Web\\NP.SMSG.Web.csproj
+		SccProjectTopLevelParentUniqueName12 = NetworkProvisioning.sln
+		SccProjectName12 = NP.SMSG.Web
+		SccLocalPath12 = NP.SMSG.Web
 	EndGlobalSection
 EndGlobal
