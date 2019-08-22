@@ -6,6 +6,6 @@ Set PARSEARG="eol=; tokens=1,2,3,4* delims=/, "
 For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO Retail.Ringo Group SQL Scripts
-start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "GRPSQLOverridden" "Retail.Ringo"
+start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "GRPSQLOverridden" "Retail.Ringo" "Retail"
 
 rename "\\192.168.110.185\Fixes\WebSite\Retail.Ringo\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\DBsStructure_Overridden.sql" "DBsStructure.sql"

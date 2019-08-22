@@ -619,7 +619,7 @@ namespace Dean.Edwards
                 DisplayProgressBar(2);
                 Thread.Sleep(1000);
                 pBar1.PerformStep();
-                Common.GroupSQLPostScriptFiles("currentDateShort", chkOverriddenNode.Checked, jsFilesPath,"");
+                Common.GroupSQLPostScriptFiles("currentDateShort", chkOverriddenNode.Checked, jsFilesPath,"","");
                 pBar1.PerformStep();
             }
             else

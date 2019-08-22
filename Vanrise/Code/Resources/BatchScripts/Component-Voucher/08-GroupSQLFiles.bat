@@ -1,3 +1,3 @@
 ECHO OFF
 ECHO Component-Voucher Group SQL Scripts
-start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "GRPSQLOverridden" "Component-Voucher"
+start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "GRPSQLOverridden" "Component-Voucher" ""

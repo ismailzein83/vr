@@ -61,28 +61,6 @@ namespace Vanrise.HelperTools
             return lst;
         }
 
-        public static Dictionary<string, string> ProductName
-        {
-            get { return new Dictionary<string, string> {
-                
-                { "BIL", "SOM" },
-                { "CarrierPortal", "Portal" },                
-                { "ClearVoice", "Clear Voice" },
-                { "CloudXPointV2", "cLoudXpoint" },
-                { "FMSV1", "FZero" },
-                { "NetworkInventory", "NIM" },
-                { "NtegraV2", "Ntegra" },                
-                { "RA", "Revenue Assurance" },
-                { "RA.ICX", "Interconnect" },                
-                { "RA.INTL", "International" },
-                { "RA.Retail", "On-net" },
-                { "Retail.Billing", "Retail Billing" },
-                { "Retail.Ntegra", "Retail Ntegra" },
-                { "TestCallAnalysis", "FZero" },
-                { "TOneV2", "T.One" }};
-            }
-        }
-
         #region CompressJS, GRPJS and GRPJSOverridden
         public static void CompressJSFiles(string currentDateShort, string folder, string javascriptsOutputPath, string projectName)
         {
@@ -246,7 +224,7 @@ namespace Vanrise.HelperTools
         #endregion
 
         #region GRPSQL and GRPSQLOverridden
-        public static void GroupSQLPostScriptFiles(string currentDateShort, bool overridden, string sqlFilesOutputPath, string projectName)
+        public static void GroupSQLPostScriptFiles(string currentDateShort, bool overridden, string sqlFilesOutputPath, string projectName, string productDisplayName)
         {
             if (string.IsNullOrEmpty(sqlFilesOutputPath))
             {
@@ -255,10 +233,7 @@ namespace Vanrise.HelperTools
 
             var allDirectories = Directory.GetDirectories(string.Format(sqlFilesOutputPath, currentDateShort, "", projectName), "*", SearchOption.TopDirectoryOnly);
 
-            //get product name to be replaced in 'product info'
-            string dicProjectName;
-            ProductName.TryGetValue(projectName, out dicProjectName);
-            projectName = string.IsNullOrEmpty(dicProjectName) ? projectName : dicProjectName;
+            projectName = string.IsNullOrEmpty(productDisplayName) ? projectName : productDisplayName;
             foreach (var directory in allDirectories)
             {
                 var orgDirectoryName = Path.GetFileName(directory);

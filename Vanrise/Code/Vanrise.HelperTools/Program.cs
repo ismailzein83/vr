@@ -36,10 +36,10 @@ namespace Vanrise.HelperTools
                         Common.GenerateDBStructure(currentDate, currentDateShort, new List<string>(), null, args[1]);
                         break;
                     case "GRPSQL":
-                        Common.GroupSQLPostScriptFiles(currentDateShort, false, null, args[1]);
+                        Common.GroupSQLPostScriptFiles(currentDateShort, false, null, args[1], args[2]);
                         break;
                     case "GRPSQLOverridden":
-                        Common.GroupSQLPostScriptFiles(currentDateShort, true, null, args[1]);
+                        Common.GroupSQLPostScriptFiles(currentDateShort, true, null, args[1], args[2]);
                         break;
                     case "CompressJS":
                         Common.CompressJSFiles(currentDateShort, "Javascripts", null, args[1]);
