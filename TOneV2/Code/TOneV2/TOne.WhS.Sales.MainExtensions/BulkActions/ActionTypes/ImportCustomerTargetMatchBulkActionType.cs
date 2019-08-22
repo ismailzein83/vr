@@ -156,7 +156,7 @@ namespace TOne.WhS.Sales.MainExtensions
                     ZoneId = zoneId,
                     RateTypeId = null,
                     Rate = getRoundedRate(Convert.ToDecimal(importedRow.Rate)),
-                    BED = DateTime.Now
+                    BED = DateTime.Today
                 };
             }
             else if (zoneDraftNewRates != null)
