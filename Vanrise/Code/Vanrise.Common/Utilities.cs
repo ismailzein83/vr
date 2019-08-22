@@ -737,6 +737,14 @@ namespace Vanrise.Common
             return string.Format("Week {0} {1}", weekOfYearAsString, year.ToString());
         }
 
+        public static string GetPeriod(DateTime fromDate, DateTime toDate, string dateFormat)
+        {
+            if (fromDate.Month != toDate.Month || fromDate.Year != toDate.Year)
+                return string.Format("{0} / {1}", fromDate.ToString(dateFormat), toDate.ToString(dateFormat));
+            else
+                return string.Format("{0}", fromDate.ToString(dateFormat));
+        }
+
         public static bool AreEquals(byte[] a1, byte[] a2)
         {
             if (a1 == null || a2 == null)
