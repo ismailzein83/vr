@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.GenericData.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
-using TOne.WhS.BusinessEntity.Business.RecurringCharges;
+using Vanrise.GenericData.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -16,17 +11,15 @@ namespace TOne.WhS.BusinessEntity.Business
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
         static Guid supplierRecurringChargesBEDefinitionId = new Guid("e9c11a90-864c-45a1-b90c-d7fdd80e9cf3");
 
-
         public IEnumerable<SupplierRecurringCharge> GetSupplierRecurringChargesByFinancialAccountId(int financialAccountId)
         {
             var supplierRecurringCharges = GetCachedSupplierRecurringCharges();
             if (supplierRecurringCharges == null)
-            {
                 return null;
-            }
+
             return supplierRecurringCharges.Values.FindAllRecords(x => x.FinancialAccountId == financialAccountId);
         }
-        
+
         public List<SupplierRecurringCharge> GetEffectiveSupplierRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate)
         {
             var supplierRecurringCharges = GetSupplierRecurringChargesByFinancialAccountId(financialAccountId);
@@ -34,17 +27,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
 
             var effectiveSupplierRecurringCharges = new List<SupplierRecurringCharge>();
+
             foreach (var supplierRecurringCharge in supplierRecurringCharges)
             {
                 if (Utilities.AreTimePeriodsOverlapped(supplierRecurringCharge.BED, supplierRecurringCharge.EED, fromDate, toDate))
                     effectiveSupplierRecurringCharges.Add(supplierRecurringCharge);
             }
+
             return effectiveSupplierRecurringCharges;
         }
 
         public List<RecurringChargeItem> GetEvaluatedRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate, DateTime issueDate)
         {
-           
             var effectiveSupplierRecurringCharges = GetEffectiveSupplierRecurringCharges(financialAccountId, fromDate, toDate);
             if (effectiveSupplierRecurringCharges == null)
                 return null;
@@ -56,26 +50,25 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 effectiveSupplierRecurringCharge.RecurringChargePeriod.ThrowIfNull("effectiveSupplierRecurringCharge.RecurringChargePeriod");
                 effectiveSupplierRecurringCharge.RecurringChargePeriod.Settings.ThrowIfNull("effectiveSupplierRecurringCharge.RecurringChargePeriod.Settings");
-                
+
                 var context = new RecurringChargePeriodSettingsContext()
                 {
                     FromDate = fromDate > effectiveSupplierRecurringCharge.BED ? fromDate : effectiveSupplierRecurringCharge.BED,
                     ToDate = effectiveSupplierRecurringCharge.EED.HasValue && toDate > effectiveSupplierRecurringCharge.EED.Value ? effectiveSupplierRecurringCharge.EED.Value : toDate
                 };
-
                 effectiveSupplierRecurringCharge.RecurringChargePeriod.Settings.Execute(context);
 
                 if (context.Periods != null)
                 {
                     foreach (var period in context.Periods)
-					{
-						string recurringChargeMonth;
-						if (period.From.Month == period.To.Month && period.From.Year == period.To.Year)
-							recurringChargeMonth = period.RecurringChargeDate.ToString("MMMM - yyyy");
-						else
-							recurringChargeMonth = string.Format("{0} / {1}", period.From.ToString("MMMM - yyyy"), period.To.ToString("MMMM - yyyy"));
+                    {
+                        string recurringChargeMonth;
+                        if (period.From.Month == period.To.Month && period.From.Year == period.To.Year)
+                            recurringChargeMonth = period.RecurringChargeDate.ToString("MMMM - yyyy");
+                        else
+                            recurringChargeMonth = string.Format("{0} / {1}", period.From.ToString("MMMM - yyyy"), period.To.ToString("MMMM - yyyy"));
 
-						evaluatedRecurringCharges.Add(new RecurringChargeItem
+                        evaluatedRecurringCharges.Add(new RecurringChargeItem
                         {
                             Name = supplierRecurringChargeTypeManager.GetSupplierRecurringChargeTypeName(effectiveSupplierRecurringCharge.RecurringChargeTypeId),
                             Amount = effectiveSupplierRecurringCharge.Amount,
@@ -86,11 +79,12 @@ namespace TOne.WhS.BusinessEntity.Business
                             RecurringChargeId = effectiveSupplierRecurringCharge.ID,
                             DueDate = effectiveSupplierRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveSupplierRecurringCharge.DuePeriod.Value) : issueDate,
                             RecurringChargeMonth = recurringChargeMonth,
-							RecurringChargeDate = period.RecurringChargeDate
+                            RecurringChargeDate = period.RecurringChargeDate
                         });
                     }
                 }
             }
+
             return evaluatedRecurringCharges;
         }
 
@@ -99,6 +93,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedSupplierRecurringCharges", supplierRecurringChargesBEDefinitionId, () =>
             {
                 Dictionary<long, SupplierRecurringCharge> supplierRecurringChargesDic = new Dictionary<long, SupplierRecurringCharge>();
+
                 var supplierRecurringChargesBEDefinitions = _genericBusinessEntityManager.GetAllGenericBusinessEntities(supplierRecurringChargesBEDefinitionId);
                 if (supplierRecurringChargesBEDefinitions != null)
                 {
@@ -123,6 +118,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         }
                     }
                 }
+
                 return supplierRecurringChargesDic;
             });
         }

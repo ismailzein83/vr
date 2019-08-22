@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business.RecurringCharges;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -14,17 +11,16 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
         static Guid customerRecurringChargesBEDefinitionId = new Guid("fa6c91c0-adc9-4bb2-aedb-77a6ee1c9131");
-       
         
         public IEnumerable<CustomerRecurringCharge> GetCustomerRecurringChargesByFinancialAccountId(int financialAccountId)
         {
             var customerRecurringCharges = GetCachedCustomerRecurringCharges();
             if(customerRecurringCharges == null)
-            {
                 return null;
-            }
+
             return customerRecurringCharges.Values.FindAllRecords(x => x.FinancialAccountId == financialAccountId);
         }
+
         public List<CustomerRecurringCharge> GetEffectiveCustomerRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate)
         {
             var customerRecurringCharges = GetCustomerRecurringChargesByFinancialAccountId(financialAccountId);
@@ -37,8 +33,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (Utilities.AreTimePeriodsOverlapped(customerRecurringCharge.BED, customerRecurringCharge.EED, fromDate, toDate))
                     effectiveCustomerRecurringCharges.Add(customerRecurringCharge);
             }
+
             return effectiveCustomerRecurringCharges;
         }
+
         public List<RecurringChargeItem> GetEvaluatedRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate, DateTime issueDate)
         {
             var effectiveCustomerRecurringCharges = GetEffectiveCustomerRecurringCharges(financialAccountId, fromDate, toDate);
@@ -50,15 +48,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (var effectiveCustomerRecurringCharge in effectiveCustomerRecurringCharges)
             {
-
                 effectiveCustomerRecurringCharge.RecurringChargePeriod.ThrowIfNull("effectiveCustomerRecurringCharge.RecurringChargePeriod");
                 effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings.ThrowIfNull("effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings");
+
                 var context = new RecurringChargePeriodSettingsContext()
                 {
                     FromDate = fromDate>effectiveCustomerRecurringCharge.BED ? fromDate : effectiveCustomerRecurringCharge.BED,
                     ToDate = effectiveCustomerRecurringCharge.EED.HasValue && toDate > effectiveCustomerRecurringCharge.EED.Value ? effectiveCustomerRecurringCharge.EED.Value : toDate
                 };
                 effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings.Execute(context);
+
                 if (context.Periods != null)
                 {
                     foreach (var period in context.Periods)
@@ -85,15 +84,16 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                 }
             }
+
             return evaluatedRecurringCharges;
         }
-
 
         private Dictionary<long, CustomerRecurringCharge> GetCachedCustomerRecurringCharges()
         {
             return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedCustomerRecurringCharges", customerRecurringChargesBEDefinitionId, () =>
             {
                 Dictionary<long, CustomerRecurringCharge> customerRecurringChargesDic = new Dictionary<long, CustomerRecurringCharge>();
+
                 var customerRecurringChargesBEDefinitions = _genericBusinessEntityManager.GetAllGenericBusinessEntities(customerRecurringChargesBEDefinitionId);
                 if (customerRecurringChargesBEDefinitions != null)
                 {
@@ -118,6 +118,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         }
                     }
                 }
+
                 return customerRecurringChargesDic;
             });
         }
