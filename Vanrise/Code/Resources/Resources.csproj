@@ -525,6 +525,7 @@
     <None Include="BatchScripts\Inspkt\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Inspkt\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Inspkt\All.bat" />
+    <None Include="BatchScripts\NtegraV2\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.Billing\01-Runtime.bat" />
     <None Include="BatchScripts\Retail.Billing\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.Billing\03-WebSite.bat" />
@@ -534,6 +535,7 @@
     <None Include="BatchScripts\Retail.Billing\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.Billing\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Retail.Billing\All.bat" />
+    <None Include="BatchScripts\Retail.NtegraV2\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\TelecomCRM\01-Runtime.bat" />
     <None Include="BatchScripts\TelecomCRM\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\TelecomCRM\03-WebSite.bat" />
@@ -591,8 +593,8 @@
     <None Include="BatchScripts\ZebraV2\DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\ZebraV2\WebSiteThemes.bat" />
     <None Include="BatchScripts\NtegraV2\All.bat" />
-    <None Include="BatchScripts\NtegraV2\DataBaseFirstDeploymentScripts.bat" />
-    <None Include="BatchScripts\NtegraV2\WebSiteThemes.bat" />
+    <None Include="BatchScripts\NtegraV2\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\NtegraV2\03-WebSiteThemes.bat" />
     <None Include="BatchScripts\Ntegra\All.bat" />
     <None Include="BatchScripts\Ntegra\Component_TelesClass5_Switch.bat" />
     <None Include="BatchScripts\Ntegra\Service_Ntegra.CDRBilling.bat" />
@@ -672,8 +674,8 @@
     <None Include="BatchScripts\Retail.MultiNet\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\Retail.MultiNet\All.bat" />
     <None Include="BatchScripts\Retail.NtegraV2\All.bat" />
-    <None Include="BatchScripts\Retail.NtegraV2\DataBaseFirstDeploymentScripts.bat" />
-    <None Include="BatchScripts\Retail.NtegraV2\WebSiteThemes.bat" />
+    <None Include="BatchScripts\Retail.NtegraV2\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\Retail.NtegraV2\03-WebSiteThemes.bat" />
     <None Include="BatchScripts\Retail.Ringo\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.Ringo\01-Runtime.bat" />
     <None Include="BatchScripts\Retail.Ringo\30-WebSite_FullVersion.bat" />
