@@ -14,36 +14,32 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
-            {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = new List<string>(),
-                    MeasureFields = new List<string> { "SaleDuration", "CostDuration", "SaleNetNotNULL", "CostNetNotNULL", "ProfitNotNULL" },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>(),
-                    OrderType = AnalyticQueryOrderType.ByAllDimensions
-                },
-                SortByColumnName = "DimensionValues[0].Name"
-            };
+            var analyticQuery = new AnalyticQuery()
+                 {
+                     DimensionFields = new List<string>(),
+                     MeasureFields = new List<string> { "SaleDuration", "CostDuration", "SaleNetNotNULL", "CostNetNotNULL", "ProfitNotNULL" },
+                     TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                     FromTime = parameters.FromTime,
+                     ToTime = parameters.ToTime,
+                     CurrencyId = parameters.CurrencyId,
+                     ParentDimensions = new List<string>(),
+                     Filters = new List<DimensionFilter>(),
+                     OrderType = AnalyticQueryOrderType.ByAllDimensions
+                 };
 
             if (parameters.GroupByProfile)
-                analyticQuery.Query.DimensionFields.Add("CustomerProfile");
+                analyticQuery.DimensionFields.Add("CustomerProfile");
             else
-                analyticQuery.Query.DimensionFields.Add("Customer");
+                analyticQuery.DimensionFields.Add("Customer");
 
             if (parameters.GroupByProfile)
-                analyticQuery.Query.DimensionFields.Add("SupplierProfile");
+                analyticQuery.DimensionFields.Add("SupplierProfile");
             else
-                analyticQuery.Query.DimensionFields.Add("Supplier");
+                analyticQuery.DimensionFields.Add("Supplier");
 
-            analyticQuery.Query.DimensionFields.Add("SaleZoneName");
-            analyticQuery.Query.MeasureFields.Add("SaleRate_DurAvg");
-            analyticQuery.Query.MeasureFields.Add("CostRate_DurAvg");
+            analyticQuery.DimensionFields.Add("SaleZoneName");
+            analyticQuery.MeasureFields.Add("SaleRate_DurAvg");
+            analyticQuery.MeasureFields.Add("CostRate_DurAvg");
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
@@ -52,7 +48,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -62,13 +58,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
             List<RoutingByCustomerFormatted> listByCustomerFormatteds = new List<RoutingByCustomerFormatted>();
 
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery);
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     RoutingByCustomerFormatted customerFormatted = new RoutingByCustomerFormatted();
                     var customer = analyticRecord.DimensionValues[0];

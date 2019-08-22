@@ -13,28 +13,24 @@ namespace TOne.WhS.Analytics.Business.BillingReports
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
-            //
 
             AnalyticManager analyticManager = new AnalyticManager();
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
-            {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = new List<string> { "SaleZone" },
-                    MeasureFields = new List<string>() { "CostRate_DurAvg", "SaleDuration" },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
-            };
 
+            var analyticQuery = new AnalyticQuery()
+            {
+                DimensionFields = new List<string> { "SaleZone" },
+                MeasureFields = new List<string>() { "CostRate_DurAvg", "SaleDuration" },
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
+            };
             if (parameters.GroupByCustomer)
-                analyticQuery.Query.DimensionFields.Add("Customer");
+                analyticQuery.DimensionFields.Add("Customer");
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
@@ -43,7 +39,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -53,15 +49,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             List<CostBySaleZone> listCostBySaleZone = new List<CostBySaleZone>();
-
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery);
 
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     CostBySaleZone costBySaleZone = new CostBySaleZone();
 
@@ -91,7 +86,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ?parameters.ToTime.ToString():null, IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString() : null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Cost By Sale Zone", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });

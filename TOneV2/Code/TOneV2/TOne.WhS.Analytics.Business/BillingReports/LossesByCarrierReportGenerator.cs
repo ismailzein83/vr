@@ -14,20 +14,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             AnalyticManager analyticManager = new AnalyticManager();
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+
+
+            var analyticQuery = new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = new List<string> { "Supplier", "SaleZone", "SupplierZone", "Customer" },
-                    MeasureFields = new List<string>() { "SaleNetNotNULL", "CostNetNotNULL", "DurationNet" },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = new List<string> { "Supplier", "SaleZone", "SupplierZone", "Customer" },
+                MeasureFields = new List<string>() { "SaleNetNotNULL", "CostNetNotNULL", "DurationNet" },
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
             };
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
@@ -37,7 +36,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -47,15 +46,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             List<LossesByCarrier> listLossesByCarrier = new List<LossesByCarrier>();
 
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery);
 
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
 
                     LossesByCarrier lossesByCarrier = new LossesByCarrier();

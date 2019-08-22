@@ -36,20 +36,19 @@ namespace TOne.WhS.Analytics.Business
         {
             AnalyticManager analyticManager = new AnalyticManager();
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            AnalyticQuery analyticQuery = new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = new List<string> { "Month" },
-                    MeasureFields = new List<string>() {  },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = query.fromDate,
-                    ToTime = query.toDate,
-                    CurrencyId = query.currencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+
+                DimensionFields = new List<string> { "Month" },
+                MeasureFields = new List<string>() { },
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = query.fromDate,
+                ToTime = query.toDate,
+                CurrencyId = query.currencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
+
             };
             List<object> listCustomers = new List<object>
             {
@@ -63,9 +62,9 @@ namespace TOne.WhS.Analytics.Business
                     Dimension = "Customer",
                     FilterValues = listCustomers
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
-                analyticQuery.Query.MeasureFields.Add("TotalSaleNet");
-                analyticQuery.Query.MeasureFields.Add("SaleDuration");
+                analyticQuery.Filters.Add(dimensionFilter);
+                analyticQuery.MeasureFields.Add("TotalSaleNet");
+                analyticQuery.MeasureFields.Add("SaleDuration");
             }
             else
             {
@@ -74,9 +73,9 @@ namespace TOne.WhS.Analytics.Business
                     Dimension = "Supplier",
                     FilterValues = listCustomers
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
-                analyticQuery.Query.MeasureFields.Add("TotalCostNet");
-                analyticQuery.Query.MeasureFields.Add("CostDuration");
+                analyticQuery.Filters.Add(dimensionFilter);
+                analyticQuery.MeasureFields.Add("TotalCostNet");
+                analyticQuery.MeasureFields.Add("CostDuration");
             }
 
             var dates = monthsBetween(query.fromDate, query.toDate.Value);
@@ -87,7 +86,7 @@ namespace TOne.WhS.Analytics.Business
             }
             List<BusinessCaseStatus> listBusinessCaseStatus = new List<BusinessCaseStatus>();
 
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery, true);
             int monthCount = 0;
             for (int i = 0; i < arrayOfDate.Count(); i++)
             {
@@ -100,7 +99,7 @@ namespace TOne.WhS.Analytics.Business
 
             if (result != null)
             {
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     var monthValue = analyticRecord.DimensionValues[0];
                     if (monthValue != null)
@@ -122,13 +121,13 @@ namespace TOne.WhS.Analytics.Business
                                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out duration);
                                 else
                                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out duration);
-                                caseStatus.Durations = Math.Round(Convert.ToDecimal(duration.Value ?? 0.0), ReportHelpers.GetNormalNumberPrecision()); 
+                                caseStatus.Durations = Math.Round(Convert.ToDecimal(duration.Value ?? 0.0), ReportHelpers.GetNormalNumberPrecision());
                             }
                         }
                     }
                 }
             }
-                
+
             return listBusinessCaseStatus;
         }
         private List<BusinessCaseStatus> GetBusinessCaseStatus(BusinessCaseStatusQuery query, bool isSale, bool isAmount)
@@ -187,10 +186,10 @@ namespace TOne.WhS.Analytics.Business
             CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Supplier", listBusinessCaseStatusDurationAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency, carrierName);
             CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", listBusinessCaseStatusAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount For Supplier", style, currency, carrierName);
             CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", listBusinessCaseStatus, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration For Supplier", style, duration, carrierName);
-            
+
             byte[] array;
             using (MemoryStream ms = new MemoryStream())
-            {     
+            {
                 wbk.Save(ms, SaveFormat.Xlsx);
                 array = ms.ToArray();
             }
@@ -214,7 +213,7 @@ namespace TOne.WhS.Analytics.Business
             worksheet.Cells.SetColumnWidth(6, 20);
             worksheet.Cells.SetColumnWidth(7, 20);
 
-            if (lstCarrierProfileCount > 0 && totalDuration >0 && totalDuration > 0)
+            if (lstCarrierProfileCount > 0 && totalDuration > 0 && totalDuration > 0)
             {
                 string colName = GetExcelColumnName(2 + lstCarrierProfileCount);
 
@@ -354,7 +353,7 @@ namespace TOne.WhS.Analytics.Business
 
                 TimeSpan span = (toDate.HasValue) ? ((DateTime)toDate).Subtract(fromDate) : DateTime.Now.Subtract(fromDate);
                 int numberOfMonths = (int)(Math.Round(span.TotalDays / 30));
-                if (toDate.HasValue && (toDate.Value.Month - fromDate.Month) == numberOfMonths )
+                if (toDate.HasValue && (toDate.Value.Month - fromDate.Month) == numberOfMonths)
                     numberOfMonths++;
 
                 int headerIndex = 2;
@@ -363,8 +362,8 @@ namespace TOne.WhS.Analytics.Business
                 string colName = GetExcelColumnName(2 + numberOfMonths);
 
                 worksheet.Cells.SetColumnWidth(0, 4);
-                
-                List<string> lstZones = listBusinessCaseStatus.GroupBy(x => x.ZoneId).Select(x => 
+
+                List<string> lstZones = listBusinessCaseStatus.GroupBy(x => x.ZoneId).Select(x =>
                 {
                     var firstItem = x.First();
                     var ret = new BusinessCaseStatus
@@ -375,8 +374,8 @@ namespace TOne.WhS.Analytics.Business
                         MonthYear = firstItem.MonthYear,
                         Year = firstItem.Year
                     };
-                    ret.Durations = x.Sum(xt => xt.Durations); 
-                    return ret; 
+                    ret.Durations = x.Sum(xt => xt.Durations);
+                    return ret;
                 }).OrderByDescending(x => x.Durations).Select(x => x.Zone).ToList<string>();
                 int listZonesCount = lstZones.Count;
                 int maxZoneLenght = 0;
@@ -423,7 +422,7 @@ namespace TOne.WhS.Analytics.Business
                         }
                         if (f == false)
                         {
-                           
+
                             var cell = worksheet.Cells[irow, valueIndex++];
                             cell.PutValue(0);
                             cell.SetStyle(cellstyle);
@@ -450,19 +449,19 @@ namespace TOne.WhS.Analytics.Business
                 chart.ValueAxis.TickLabelPosition = Aspose.Cells.Charts.TickLabelPositionType.Low;
                 chart.Legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
                 chart.Title.Font.IsBold = true;
-                chart.Title.Text = chartTitle + " " +carrierName;
+                chart.Title.Text = chartTitle + " " + carrierName;
                 chart.Title.TextHorizontalAlignment = TextAlignmentType.Right;
                 chart.Title.X = 2000;
                 chart.Title.Y = 100;
                 if ((35 * listZonesCount) > 200)
-                    chart.ChartObject.Height = (35*listZonesCount);
+                    chart.ChartObject.Height = (35 * listZonesCount);
                 else
                     chart.ChartObject.Height = 200;
             }
         }
-     
-        
-        
+
+
+
         private string GetExcelColumnName(int columnNumber)
         {
             int dividend = columnNumber;
@@ -478,6 +477,6 @@ namespace TOne.WhS.Analytics.Business
 
             return columnName;
         }
-       
+
     }
 }

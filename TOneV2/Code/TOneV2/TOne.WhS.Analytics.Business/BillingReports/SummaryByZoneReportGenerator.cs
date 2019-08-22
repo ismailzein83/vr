@@ -71,20 +71,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("SaleExtraCharges");
             }
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            var analyticQuery = new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = listDimensions,
-                    MeasureFields = listMeasures,
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = listDimensions,
+                MeasureFields = listMeasures,
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
             };
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
@@ -94,7 +91,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -104,14 +101,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             List<SummaryByZone> listSummaryByZone = new List<SummaryByZone>();
 
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery);
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     SummaryByZone summaryByZone = new SummaryByZone();
 
@@ -181,11 +178,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             //parameters.ServicesForCustomer = services;
             parameters.NormalDuration = listSummaryByZone.Where(y => !y.RateType.HasValue).Sum(x => Math.Round(x.DurationInSeconds, 2));
 
-            parameters.OffPeakDuration = Math.Round(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => Math.Round(x.DurationInSeconds, 2)),2);
+            parameters.OffPeakDuration = Math.Round(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => Math.Round(x.DurationInSeconds, 2)), 2);
 
-            parameters.NormalNet = Math.Round(listSummaryByZone.Where(y => !y.RateType.HasValue).Sum(x => x.Net).Value , 2);
+            parameters.NormalNet = Math.Round(listSummaryByZone.Where(y => !y.RateType.HasValue).Sum(x => x.Net).Value, 2);
 
-            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => x.Net).Value,2);
+            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => x.Net).Value, 2);
 
             parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
 

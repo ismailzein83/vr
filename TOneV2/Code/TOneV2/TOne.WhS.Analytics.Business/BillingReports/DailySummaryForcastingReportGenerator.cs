@@ -16,22 +16,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             List<string> listDimensions = new List<string>() { "Day" };
             List<string> listMeasures = new List<string> { "SaleNet", "CostNet" };
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
-            {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = listDimensions,
-                    MeasureFields = listMeasures,
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
-            };
 
+            var analyticQuery = new AnalyticQuery()
+            {
+                DimensionFields = listDimensions,
+                MeasureFields = listMeasures,
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
+            };
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
                 DimensionFilter dimensionFilter = new DimensionFilter()
@@ -39,7 +36,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -49,14 +46,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             List<DailySummaryFormatted> listDailySummary = new List<DailySummaryFormatted>();
 
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery);
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     DailySummaryFormatted dailySummary = new DailySummaryFormatted();
 

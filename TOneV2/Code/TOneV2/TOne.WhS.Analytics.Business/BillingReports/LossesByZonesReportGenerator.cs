@@ -36,22 +36,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             listMeasures.Add("PercentageLoss");
 
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
-            {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = listGrouping,
-                    MeasureFields = listMeasures,
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
-            };
 
+            var analyticQuery = new AnalyticQuery()
+            {
+                DimensionFields = listGrouping,
+                MeasureFields = listMeasures,
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
+            };
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
                 DimensionFilter dimensionFilter = new DimensionFilter()
@@ -59,7 +56,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -69,7 +66,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.ZonesId))
@@ -79,15 +76,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "SaleZone",
                     FilterValues = parameters.ZonesId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
 
             List<LossesByZonesFormatted> listRateLossFromatted = new List<LossesByZonesFormatted>();
 
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery, true);
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     LossesByZonesFormatted rateLossFromatted = new LossesByZonesFormatted();
 
@@ -107,6 +104,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
                     rateLossFromatted.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
                     rateLossFromatted.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.DurationNet);
+
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
@@ -157,7 +155,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue percentageLoss;
                     analyticRecord.MeasureValues.TryGetValue("PercentageLoss", out percentageLoss);
 
-                    rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(System.Math.Abs((decimal)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)) / rateLossFromatted.CostNet);
+                    rateLossFromatted.LossPerFormatted = rateLossFromatted.CostNet != 0 ? ReportHelpers.FormatNumberPercentage(System.Math.Abs((decimal)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)) / rateLossFromatted.CostNet) : "";
 
                     listRateLossFromatted.Add(rateLossFromatted);
                 }

@@ -22,20 +22,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             List<string> listCustomerDimensions = new List<string> { parameters.GroupByProfile ? "CustomerProfile" : "Customer" };
 
-            DataRetrievalInput<AnalyticQuery> analyticCustomerQuery = new DataRetrievalInput<AnalyticQuery>
+            var analyticCustomerQuery = new AnalyticQuery
             {
-                Query = new AnalyticQuery
-                {
-                    DimensionFields = listCustomerDimensions,
-                    MeasureFields = new List<string> { "TotalSaleNet", "TotalCostNet", "TotalProfit" },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = listCustomerDimensions,
+                MeasureFields = new List<string> { "TotalSaleNet", "TotalCostNet", "TotalProfit" },
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
             };
 
             if (exchangeAccounts.Any())
@@ -45,27 +42,25 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = exchangeAccounts.Cast<object>().ToList()
                 };
-                analyticCustomerQuery.Query.Filters.Add(dimensionFilter);
+                analyticCustomerQuery.Filters.Add(dimensionFilter);
             }
 
             #endregion
             #region supplier part
             List<string> listSupplierDimensions = new List<string> { parameters.GroupByProfile ? "SupplierProfile" : "Supplier" };
 
-            DataRetrievalInput<AnalyticQuery> analyticSupplierQuery = new DataRetrievalInput<AnalyticQuery>
+            var analyticSupplierQuery = new AnalyticQuery
             {
-                Query = new AnalyticQuery
-                {
-                    DimensionFields = listSupplierDimensions,
-                    MeasureFields = new List<string> { "TotalSaleNet", "TotalCostNet", "TotalProfit" },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = listSupplierDimensions,
+                MeasureFields = new List<string> { "TotalSaleNet", "TotalCostNet", "TotalProfit" },
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
+
             };
             if (exchangeAccounts.Any())
             {
@@ -74,15 +69,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = exchangeAccounts.Cast<object>().ToList()
                 };
-                analyticSupplierQuery.Query.Filters.Add(dimensionFilter);
+                analyticSupplierQuery.Filters.Add(dimensionFilter);
             }
             #endregion
             List<ProfitByCarrier> listprofitByCarrier = new List<ProfitByCarrier>();
             Dictionary<string, ProfitByCarrier> dictionaryprofitByCustomer = new Dictionary<string, ProfitByCarrier>();
 
-            var result = analyticManager.GetFilteredRecords(analyticCustomerQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticCustomerQuery);
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     ProfitByCarrier profitByCarrier = new ProfitByCarrier();
                     var customerValue = analyticRecord.DimensionValues[0];
@@ -101,9 +96,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
                 }
 
-            result = analyticManager.GetFilteredRecords(analyticSupplierQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            result = analyticManager.GetAllFilteredRecords(analyticSupplierQuery) ;
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     ProfitByCarrier profitByCarrier = new ProfitByCarrier();
                     var customerValue = analyticRecord.DimensionValues[0];

@@ -26,20 +26,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             AnalyticManager analyticManager = new AnalyticManager();
 
-            DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>
+            AnalyticQuery analyticQuery = new AnalyticQuery
             {
-                Query = new AnalyticQuery
-                {
-                    DimensionFields = new List<string> { "Customer", "Supplier" },
-                    MeasureFields = new List<string> { "DurationNet", "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "CostExtraCharges", "SaleExtraCharges", "ProfitNotNULL", "PercentageProfitNotNULL" },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = new List<string> { "Customer", "Supplier" },
+                MeasureFields = new List<string> { "DurationNet", "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "CostExtraCharges", "SaleExtraCharges", "ProfitNotNULL", "PercentageProfitNotNULL" },
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
             };
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
@@ -49,7 +46,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -59,7 +56,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             List<ProfitByCustomerFormatted> listCarrierSummaryDetailed = new List<ProfitByCustomerFormatted>();
@@ -74,9 +71,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             double? totalCostExtraChrg = 0;
             double? totalSaleExtraChrg = 0;
             double? netProft = 0;
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery, true);
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     ProfitByCustomerFormatted carrierSummary = new ProfitByCustomerFormatted();
 

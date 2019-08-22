@@ -15,20 +15,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             AnalyticManager analyticManager = new AnalyticManager();
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            var analyticQuery = new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = new List<string> { "Customer" },
-                    MeasureFields = new List<string>() { "SaleNetNotNULL", "CostNetNotNULL", "SaleDuration", "CostDuration" },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = new List<string> { "Customer" },
+                MeasureFields = new List<string>() { "SaleNetNotNULL", "CostNetNotNULL", "SaleDuration", "CostDuration" },
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
             };
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
@@ -38,15 +35,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             List<SalesAndProfitsByCustomer> listSalesAndProfitsByCustomer = new List<SalesAndProfitsByCustomer>();
 
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery);
 
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     SalesAndProfitsByCustomer salesAndProfitsByCustomer = new SalesAndProfitsByCustomer();
 
@@ -94,7 +91,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet);
                     salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet);
-                    salesAndProfitsByCustomer.ProfitPercentageFormatted = (salesAndProfitsByCustomer.SaleNet == 0)? "" :ReportHelpers.FormatNumberPercentage((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet);
+                    salesAndProfitsByCustomer.ProfitPercentageFormatted = (salesAndProfitsByCustomer.SaleNet == 0) ? "" : ReportHelpers.FormatNumberPercentage((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet);
 
                     if (!String.IsNullOrEmpty(salesAndProfitsByCustomer.Customer))
                         listSalesAndProfitsByCustomer.Add(salesAndProfitsByCustomer);
@@ -143,7 +140,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Profit = Math.Truncate((double)((r.SaleNet - r.CostNet) * 100)) / 100,
                 FormattedProfit = ReportHelpers.FormatNormalNumberDigit((r.SaleNet - r.CostNet)),
                 Customer = r.Customer.ToString()
-            }).OrderByDescending(r => r.Profit).Take(10).ToList();          
+            }).OrderByDescending(r => r.Profit).Take(10).ToList();
             return lstProfitSummary;
         }
         private List<SaleAmountSummary> GetCustomerSaleAmountSummary(List<SalesAndProfitsByCustomer> summarieslist)
@@ -159,7 +156,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Customer = cs.Customer
                 };
                 saleAmountSummary.Add(s);
-            }          
+            }
             return saleAmountSummary.OrderByDescending(s => s.SaleAmount).Take(10).ToList();
         }
     }
