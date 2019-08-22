@@ -363,8 +363,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('76D26913-DCEA-4CF6-BD7B-E8A78992B10B','Dispute Settings','Retail_RA_Dispute_Settings','Business Entities','{"Editor":"retail-ra-dispute-settings-editor"}','{"$type":"Retail.RA.Entities.DisputeSettingsData, Retail.RA.Entities","SerialNumberPattern":"#Operator##Counter##Year##Month##Day#","InitialSequence":0}',0),
-('509E467B-4562-4CA6-A32E-E50473B74D2C','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Revenue Assurance","VersionNumber":"version #VersionNumber# ~ #VersionDate#"}}',1)
+('76D26913-DCEA-4CF6-BD7B-E8A78992B10B','Dispute Settings','Retail_RA_Dispute_Settings','Business Entities','{"Editor":"retail-ra-dispute-settings-editor"}','{"$type":"Retail.RA.Entities.DisputeSettingsData, Retail.RA.Entities","SerialNumberPattern":"#Operator##Counter##Year##Month##Day#","InitialSequence":0}',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t

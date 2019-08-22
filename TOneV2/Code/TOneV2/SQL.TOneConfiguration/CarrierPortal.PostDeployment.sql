@@ -44,26 +44,6 @@ END
 --												'1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE',--'System Currency'
 --												'81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Company Setting'
 Delete from [common].[Setting] where ID = '4047054E-1CF4-4BE6-A005-6D4706757AD3'--,'Session Lock'
---[common].[Setting]---------------------------801 to 900-------------------------------------------
-begin
-set nocount on;
-;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('509E467B-4562-4CA6-A32E-E50473B74D2C','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Carrier Portal","VersionNumber":"version #VersionNumber# ~ #VersionDate#"}}',1)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
-merge	[common].[Setting] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
-when not matched by target then
-	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
-----------------------------------------------------------------------------------------------------
-end
 
 Delete from [runtime].[SchedulerTaskActionType] where Id in ('0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9','7A35F562-319B-47B3-8258-EC1A704A82EB') --Exchange Rate, workflow
 
