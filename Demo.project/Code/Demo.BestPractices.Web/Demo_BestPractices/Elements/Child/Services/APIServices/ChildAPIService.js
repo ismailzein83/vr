@@ -24,7 +24,7 @@
 
         function AddChild(child) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "AddChild"), child);
-        };
+        }
 
         function UpdateChild(child) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "UpdateChild"), child);

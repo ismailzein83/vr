@@ -16,8 +16,8 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onChildAdded = onChildAdded;
             };
-            VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html', parameters, settings);
-        };
+            VRModalService.showModal("/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html", parameters, settings);
+        }
 
         function editChild(onChildUpdated, childId, parentIdItem) {
 
@@ -30,14 +30,14 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onChildUpdated = onChildUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html', parameters, settings);
-        };
+            VRModalService.showModal("/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html", parameters, settings);
+        }
 
         return {
             addChild: addChild,
             editChild: editChild
         };
-    };
+    }
 
     appControllers.service("Demo_BestPractices_ChildService", childService);
 })(appControllers);

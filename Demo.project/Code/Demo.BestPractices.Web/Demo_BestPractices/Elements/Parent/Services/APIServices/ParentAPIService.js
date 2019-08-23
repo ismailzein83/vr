@@ -20,7 +20,7 @@
 
         function AddParent(parent) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "AddParent"), parent);
-        };
+        }
 
         function UpdateParent(parent) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "UpdateParent"), parent);
@@ -30,7 +30,7 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "GetParentsInfo"), {
                 filter: filter
             });
-        };
+        }
 
         return {
             GetFilteredParents: GetFilteredParents,
@@ -39,7 +39,7 @@
             AddParent: AddParent,
             UpdateParent: UpdateParent
         };
-    };
+    }
 
     appControllers.service("Demo_BestPractices_ParentAPIService", parentAPIService);
 })(appControllers);
