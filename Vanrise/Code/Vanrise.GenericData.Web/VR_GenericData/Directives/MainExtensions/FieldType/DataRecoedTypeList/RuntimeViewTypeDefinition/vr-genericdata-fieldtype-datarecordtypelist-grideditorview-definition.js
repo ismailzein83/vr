@@ -112,7 +112,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                             availableColumns = settings.AvailableColumns;
                         }
                      
-                        dataRecordTypeId = payload.dataRecordTypeId;
+                        dataRecordTypeId = payload.fieldType != undefined ? payload.fieldType.DataRecordTypeId : payload.dataRecordTypeId;
                         promises.push(getDataRecordFieldsInfo(dataRecordTypeId));
 
                         rootPromiseNode.promises = promises;

@@ -109,7 +109,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridgenericeditorviewDefi
                     var promises = [];
                     if (payload != undefined) {
                         var settings = payload.settings;
-                        dataRecordTypeId = payload.dataRecordTypeId;
+                        dataRecordTypeId = payload.fieldType != undefined ? payload.fieldType.DataRecordTypeId : payload.dataRecordTypeId;
                         var fields;
 
                         if (settings != undefined) {

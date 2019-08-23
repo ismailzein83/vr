@@ -90,7 +90,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                     var promises = [];
                     var recordTypeFields=[];
                     if (payload != undefined) {
-                        var dataRecordTypeId = payload.dataRecordTypeId;
+                        var dataRecordTypeId = payload.fieldType != undefined ? payload.fieldType.DataRecordTypeId : payload.dataRecordTypeId;
                         var settings = payload.settings;
                         var fieldsPayload = {
                             dataRecordTypeId: dataRecordTypeId,

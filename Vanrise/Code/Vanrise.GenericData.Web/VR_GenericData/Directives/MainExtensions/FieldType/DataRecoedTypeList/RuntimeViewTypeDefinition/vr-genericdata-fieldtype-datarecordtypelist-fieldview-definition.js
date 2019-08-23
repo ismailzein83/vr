@@ -77,7 +77,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistFieldviewDefinition', ['V
                     settings = payload.settings;
                     if (settings != undefined )
                         settings = settings.RecordField;
-                    var dataRecordTypeId = payload.dataRecordTypeId;
+                    var dataRecordTypeId = payload.fieldType != undefined ? payload.fieldType.DataRecordTypeId : payload.dataRecordTypeId;
                     var selectedDataRecordType = settings != undefined ? settings.Name : undefined;
                     var rootPromiseNode = {
                         promises: [getDataRecordFieldsInfo(dataRecordTypeId)]

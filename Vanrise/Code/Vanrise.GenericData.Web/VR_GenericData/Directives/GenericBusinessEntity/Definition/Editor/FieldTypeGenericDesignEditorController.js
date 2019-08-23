@@ -87,7 +87,7 @@
                 getChildNode: function () {
                     var directivePromises = [];
 
-                    var fieldType = context.getFieldType(fieldTypeEntitySettings.FieldPath);
+                    var fieldType = getContext().getFieldType(fieldTypeEntitySettings.FieldPath);
                     $scope.scopeModel.runtimeViewSettingEditor = fieldType.RuntimeViewSettingEditor;
 
                     var dataRecordFieldType = UtilsService.getItemByVal(dataRecordFieldTypes, fieldType.ConfigId, "ExtensionConfigurationId");
@@ -130,9 +130,10 @@
             fieldTypeRuntimeReadyPromiseDeferred.promise.then(function () {
                 var directivePayload = {
                     fieldTitle: "Default Value",
-                    fieldType: context.getFieldType(fieldTypeEntitySettings.FieldPath),
+                    fieldType: getContext().getFieldType(fieldTypeEntitySettings.FieldPath),
                     fieldName: fieldTypeEntitySettings.FieldPath,
-                    fieldValue: fieldTypeEntitySettings.DefaultFieldValue
+                    fieldValue: fieldTypeEntitySettings.DefaultFieldValue,
+                    fieldViewSettings: fieldTypeEntitySettings.FieldViewSettings
                 };
                 VRUIUtilsService.callDirectiveLoad(fieldTypeRuntimeDirectiveAPI, directivePayload, fieldTypeRuntimeLoadPromiseDeferred);
             });
@@ -155,9 +156,10 @@
             runtimeViewSettingsEditorDirectiveReadyPromiseDeferred.promise.then(function () {
                 var payload = {
                     configId: fieldTypeEntitySettings.FieldViewSettings != undefined ? fieldTypeEntitySettings.FieldViewSettings.ConfigId : undefined,
-                    context: context,
+                    context: getContext(),
                     settings: fieldTypeEntitySettings.FieldViewSettings,
-                    dataRecordTypeId: context.getDataRecordTypeId()
+                    dataRecordTypeId: getContext().getDataRecordTypeId(),
+                    fieldType: getContext().getFieldType(fieldTypeEntitySettings.FieldPath)
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeViewSettingsEditorDirectiveAPI, payload, runtimeViewSettingsEditorDirectiveloadPromiseDeferred);
             });
@@ -168,10 +170,6 @@
             var currentContext = context;
             if (currentContext == undefined)
                 currentContext = {};
-
-            currentContext.getFieldTypeWith = function () {
-                return $scope.scopeModel.fieldWidth;
-            };
             return currentContext;
         }
 
