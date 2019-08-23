@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +47,7 @@
   <ItemGroup>
     <Compile Include="DailyTimeTaskTriggerArgument.cs" />
     <Compile Include="IntervalTimeTaskTriggerArgument.cs" />
+    <Compile Include="MonthlyTimeTaskTriggerArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeTaskTriggerArgument.cs" />
     <Compile Include="WeeklyTimeTaskTriggerArgument.cs" />
