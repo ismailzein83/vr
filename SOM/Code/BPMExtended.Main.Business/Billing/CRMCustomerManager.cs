@@ -1182,13 +1182,13 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
             esq.AddColumn("Id");
-            var nationalitycol = esq.AddColumn("StNationality.Id");
+            var nationalitycol = esq.AddColumn("StCustomerDocumentType.Id");
             esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId));
 
             entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                isForeigner = entities[0].GetTypedColumnValue<Guid>(nationalitycol.Name) == Guid.Parse("BC3E1014-D6BA-42E1-BB2D-CF9F40E6B241") ? false : true;
+                isForeigner = entities[0].GetTypedColumnValue<Guid>(nationalitycol.Name) == Guid.Parse("39A1AAE9-6FC8-4204-82B7-60E5EEE91E03") ? true : false;
             }
             return isForeigner;
         }
