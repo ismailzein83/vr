@@ -35,7 +35,7 @@ namespace TOne.WhS.Deal.Business
             return dealDefinitions;
         }
 
-        public IEnumerable<DealDefinition> GetSwapDealsBetweenDate(DateTime beginDate, DateTime endDate)
+        public IEnumerable<DealDefinition> GetSwapDealsBetweenDate(DateTime beginDate, DateTime? endDate)
         {
             var dealDefinitions = new List<DealDefinition>();
             var deals = GetCachedSwapDeals();
@@ -45,8 +45,7 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealDefinition in deals)
             {
-                if (dealDefinition.Settings.Status != DealStatus.Draft
-                    && (!dealDefinition.Settings.RealEED.HasValue || dealDefinition.Settings.RealBED < endDate && dealDefinition.Settings.RealEED.Value > beginDate))
+                if (dealDefinition.Settings.Status != DealStatus.Draft && isEffectiveDeal(beginDate, endDate, dealDefinition.Settings.RealBED, dealDefinition.Settings.RealEED))
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;
@@ -111,7 +110,7 @@ namespace TOne.WhS.Deal.Business
                 var swapDealInbound = new SwapDealInbound
                 {
                     ZoneGroupNumber = analysisInbound.ZoneGroupNumber,
-                    CountryIds =analysisInbound.CountryIds,
+                    CountryIds = analysisInbound.CountryIds,
                     Name = analysisInbound.GroupName,
                     Rate = analysisInbound.DealRate,
                     Volume = analysisInbound.Volume,
@@ -137,7 +136,7 @@ namespace TOne.WhS.Deal.Business
                 var swapDealOutbound = new SwapDealOutbound
                 {
                     ZoneGroupNumber = analysisOutbound.ZoneGroupNumber,
-                    CountryIds =  analysisOutbound.CountryIds,
+                    CountryIds = analysisOutbound.CountryIds,
                     Name = analysisOutbound.GroupName,
                     SubstituteRateType = SubstituteRateType.NormalRate,
                     Rate = analysisOutbound.DealRate,
@@ -287,6 +286,22 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
+        #endregion
+
+        #region private Methods
+
+        private bool isEffectiveDeal(DateTime fromDate, DateTime? toDate, DateTime dealBED, DateTime? DealEED)
+        {
+            if (toDate.HasValue)
+            {
+                if (!DealEED.HasValue || dealBED < toDate && DealEED.Value > fromDate)
+                    return true;
+            }
+            else if (dealBED > fromDate)
+                return true;
+
+            return false;
+        }
         #endregion
 
         #region Private Classes
