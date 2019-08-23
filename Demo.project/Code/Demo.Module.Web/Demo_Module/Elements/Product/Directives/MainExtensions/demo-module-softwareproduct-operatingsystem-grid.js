@@ -60,6 +60,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+
                     var softwareOperatingSystems;
 
                     if (payload != undefined) {
@@ -71,7 +72,7 @@
                         promises: [loadOperatingSystemSelectorPromise],
                         getChildNode: function () {
                             var childPromises = [];
-                            if (softwareOperatingSystems != null && softwareOperatingSystems != undefined) {
+                            if (softwareOperatingSystems != undefined) {
                                 for (var i = 0; i < softwareOperatingSystems.length; i++) {
                                     var extendOperatingSystemRowPromise = extendOperatingSystemRow(softwareOperatingSystems[i]);
                                     childPromises.push(extendOperatingSystemRowPromise);
@@ -127,7 +128,6 @@
             function extendOperatingSystemRow(softwareOperatingSystem) {
 
                 var selectorLoadDeferred = UtilsService.createPromiseDeferred();
-                var directiveLoadDeferred;
 
                 var gridItem = {
                     isDirectiveLoading: true,
@@ -158,11 +158,10 @@
                         payload = { softwareOperatingSystem: softwareOperatingSystem };
                         softwareOperatingSystem = undefined;
                     }
-
                     var setLoader = function (value) {
                         gridItem.isDirectiveLoading = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.operatingSystemDirectiveAPI, payload, setLoader, directiveLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.operatingSystemDirectiveAPI, payload, setLoader);
                 };
 
                 gridItem.onSelectionChanged = function () {
@@ -190,5 +189,4 @@
     }
 
     app.directive('demoModuleSoftwareproductOperatingsystemGrid', operatingSystemGrid);
-
 })(app);
