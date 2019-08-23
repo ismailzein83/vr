@@ -42,6 +42,21 @@ namespace Vanrise.GenericData.Entities
         {
             return false;
         }
+
+        public virtual bool CanGetDescriptionByIds(IBusinessEntityCanGetDescriptionByIdsContext context)
+        {
+            return false;
+        }
+
+        public virtual Dictionary<object, string> GetDescriptionByIds(IBusinessEntityGetDescriptionByIdsContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool HasThreeSixtyDegreeView(IBusinessEntityHasThreeSixtyDegreeViewContext context)
+        {
+            return false;
+        }
     }
 
     public class BusinessEntityCompatibleFieldInfo
@@ -55,11 +70,51 @@ namespace Vanrise.GenericData.Entities
         object FieldValue { get; }
         Guid StyleDefinitionId { set; }
     }
-    public  class BusinessEntityStyleDefinitionContext : IBusinessEntityStyleDefinitionContext
+    public class BusinessEntityStyleDefinitionContext : IBusinessEntityStyleDefinitionContext
     {
         public object FieldValue { get; set; }
         public Guid StyleDefinitionId { get; set; }
 
     }
-}
 
+    public interface IBusinessEntityCanGetDescriptionByIdsContext
+    {
+        Guid BusinessEntityDefinitionId { get; }
+    }
+
+    public class BusinessEntityCanGetDescriptionByIdsContext : IBusinessEntityCanGetDescriptionByIdsContext
+    {
+        public Guid BusinessEntityDefinitionId { get; set; }
+    }
+
+    public interface IBusinessEntityGetDescriptionByIdsContext
+    {
+        Guid BusinessEntityDefinitionId { get; }
+        IEnumerable<object> Values { get; }
+    }
+
+    public class BusinessEntityGetDescriptionByIdsContext : IBusinessEntityGetDescriptionByIdsContext
+    {
+        public Guid BusinessEntityDefinitionId { get; set; }
+
+        public IEnumerable<object> Values { get; set; }
+    }
+
+    public class GenericBusinessEntityGetDescriptionByIdsInput
+    {
+        public Guid GenericBusinessEntityDefinitionId { get; set; }
+
+        public List<object> Values { get; set; }
+    }
+
+    public interface IBusinessEntityHasThreeSixtyDegreeViewContext
+    {
+        Guid BusinessEntityDefinitionId { get; }
+    }
+
+    public class BusinessEntityHasThreeSixtyDegreeViewContext:  IBusinessEntityHasThreeSixtyDegreeViewContext
+    {
+
+        public Guid BusinessEntityDefinitionId { get; set; }
+    }
+}

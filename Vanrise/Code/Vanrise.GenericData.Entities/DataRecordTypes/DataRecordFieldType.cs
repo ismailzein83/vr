@@ -72,27 +72,14 @@ namespace Vanrise.GenericData.Entities
 
         public abstract string GetDescription(Object value);
 
-        public virtual Dictionary<Object, string> GetDescriptionByIds(IGetDescriptionByIdsContext getDescriptionByIdsContext)
-        {
-            getDescriptionByIdsContext.ThrowIfNull("getDescriptionByIdsContext");
-            var values = getDescriptionByIdsContext.values;
-
-            if (values == null)
-                return null;
-
-            var descriptions = new Dictionary<Object, string>();
-            var i = 0;
-            foreach (var value in values)
-            {
-                descriptions.Add(++i, GetDescription(value));
-            }
-
-            return descriptions;
-        }
-
-        public virtual bool ShouldCollectFieldValues()
+        public virtual bool CanGetDescriptionByIds(IDataRecordFieldTypeCanGetDescriptionByIdsContext context)
         {
             return false;
+        }
+
+        public virtual Dictionary<Object, string> GetDescriptionByIds(IDataRecordFieldTypeGetDescriptionByIdsContext context)
+        {
+            throw new NotImplementedException();
         }
 
         public abstract bool IsMatched(Object fieldValue, Object filterValue);
@@ -193,6 +180,11 @@ namespace Vanrise.GenericData.Entities
         {
         }
         public virtual bool TryGetStyleDefinitionId(IDataRecordFieldStyleDefinitionContext context)
+        {
+            return false;
+        }
+
+        public virtual bool HasThreeSixtyDegreeView(IDataRecordFieldTypeHasThreeSixtyDegreeViewContext context)
         {
             return false;
         }
@@ -301,7 +293,7 @@ namespace Vanrise.GenericData.Entities
         Object Changes { set; }
     }
 
-    public interface IGetValueByDescriptionContext 
+    public interface IGetValueByDescriptionContext
     {
         Object FieldDescription { get; }
 
@@ -368,13 +360,31 @@ namespace Vanrise.GenericData.Entities
         public Dictionary<string, object> DependentFieldValues { get; set; }
     }
 
-    public class GetDescriptionByIdsContext : IGetDescriptionByIdsContext
+    public interface IDataRecordFieldTypeCanGetDescriptionByIdsContext
     {
-        public List<object> values { get; set; }
     }
 
-    public interface IGetDescriptionByIdsContext
+    public class DataRecordFieldTypeCanGetDescriptionByIdsContext : IDataRecordFieldTypeCanGetDescriptionByIdsContext
     {
-        List<object> values { get; }
+    }
+
+    public interface IDataRecordFieldTypeGetDescriptionByIdsContext
+    {
+        Guid BusinessEntityDefinitionId { get; }
+        IEnumerable<object> Values { get; }
+    }
+
+    public class DataRecordFieldTypeGetDescriptionByIdsContext : IDataRecordFieldTypeGetDescriptionByIdsContext
+    {
+        public Guid BusinessEntityDefinitionId { get; set; }
+        public IEnumerable<object> Values { get; set; }
+    }
+
+    public interface IDataRecordFieldTypeHasThreeSixtyDegreeViewContext
+    {
+    }
+
+    public class DataRecordFieldTypeHasThreeSixtyDegreeViewContext : IDataRecordFieldTypeHasThreeSixtyDegreeViewContext
+    {
     }
 }

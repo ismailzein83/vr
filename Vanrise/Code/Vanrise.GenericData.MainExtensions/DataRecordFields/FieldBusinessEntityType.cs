@@ -145,20 +145,23 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return string.Concat("new Guid(", '"', valueItem.ToString(), '"', ")");
             return valueItem.ToString();
         }
-        //AS: GetDescription Methods
-        //public override bool ShouldCollectFieldValues()
-        //{
-        //    var beManager = GetBusinessEntityManager();
-        //    return beManager.ShouldCollectFieldValues(this.BusinessEntityDefinitionId);
-        //}
+        public override bool CanGetDescriptionByIds(IDataRecordFieldTypeCanGetDescriptionByIdsContext context)
+        {
+            var beManager = GetBusinessEntityManager();
+            return beManager.CanGetDescriptionByIds(new BusinessEntityCanGetDescriptionByIdsContext() { BusinessEntityDefinitionId = this.BusinessEntityDefinitionId });
+        }
 
-        //public override Dictionary<object, string> GetDescriptionByIds(IGetDescriptionByIdsContext getDescriptionByIdsContext)
-        //{
-        //    getDescriptionByIdsContext.ThrowIfNull("getDescriptionByIdsContext");
+        public override Dictionary<object, string> GetDescriptionByIds(IDataRecordFieldTypeGetDescriptionByIdsContext context)
+        {
+            context.ThrowIfNull("getDescriptionByIdsContext");
 
-        //    var beManager = GetBusinessEntityManager();
-        //    return beManager.GetDescriptionByIds(getDescriptionByIdsContext, this.BusinessEntityDefinitionId);
-        //}
+            var beManager = GetBusinessEntityManager();
+            return beManager.GetDescriptionByIds(new BusinessEntityGetDescriptionByIdsContext()
+            {
+                BusinessEntityDefinitionId = this.BusinessEntityDefinitionId,
+                Values = context.Values
+            });
+        }
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
@@ -363,6 +366,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             context.StyleDefinitionId = businessEntityStyleDefinitionContext.StyleDefinitionId;
 
             return tryGetStyleDefinitionId;
+        }
+
+        public override bool HasThreeSixtyDegreeView(IDataRecordFieldTypeHasThreeSixtyDegreeViewContext context)
+        {
+            var beManager = GetBusinessEntityManager();
+            return beManager.HasThreeSixtyDegreeView(new BusinessEntityHasThreeSixtyDegreeViewContext() { BusinessEntityDefinitionId = this.BusinessEntityDefinitionId });
         }
         #endregion
 

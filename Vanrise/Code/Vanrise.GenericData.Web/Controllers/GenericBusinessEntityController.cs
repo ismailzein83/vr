@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.Web.Controllers
                 return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredGenericBusinessEntities(input), _manager.GenericBusinessEntityDefinitionTitle(input.Query.BusinessEntityDefinitionId));
         }
-         
+
         [HttpGet]
         [Route("GetGenericBusinessEntityEditorRuntime")]
         public GenericBusinessEntityRuntimeEditor GetGenericBusinessEntityEditorRuntime(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId, int? historyId = null)
@@ -160,7 +160,7 @@ namespace Vanrise.GenericData.Web.Controllers
         }
         [HttpPost]
         [Route("GetGenericEditorColumnsInfo")]
-        public Dictionary<string,GridColumnAttribute> GetGenericEditorColumnsInfo(GetGenericEditorColumnsInfoInput input)
+        public Dictionary<string, GridColumnAttribute> GetGenericEditorColumnsInfo(GetGenericEditorColumnsInfoInput input)
         {
             return _manager.GetGenericEditorColumnsInfo(input.DataRecordTypeId, input.ListRecordViewType);
         }
@@ -193,6 +193,14 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             input.ThrowIfNull("input");
             return _manager.GetAllGenericBusinessEntities(input.BusinessEntityDefinitionId, input.ColumnsNeeded, input.FilterGroup);
+        }
+
+        [HttpPost]
+        [Route("GetDescriptionByIds")]
+        public Dictionary<object, string> GetDescriptionByIds(GenericBusinessEntityGetDescriptionByIdsInput input)
+        {
+            input.ThrowIfNull("input");
+            return _manager.GetDescriptionByIds(new BusinessEntityGetDescriptionByIdsContext() { BusinessEntityDefinitionId = input.GenericBusinessEntityDefinitionId, Values = input.Values });
         }
 
         public class GetDependentFieldValuesInput

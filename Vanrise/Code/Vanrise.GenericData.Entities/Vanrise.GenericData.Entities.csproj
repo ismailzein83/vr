@@ -123,7 +123,7 @@
     <Compile Include="DataStorage\IGetStorageNameContext.cs" />
     <Compile Include="GenericBusinessEntityCustomActions\RangeGenericEditorProcessInput.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEField360DegreeViewData.cs" />
-    <Compile Include="GenericBusinessEntity\GetDescriptionByIdsDicValueOutput.cs" />
+    <Compile Include="GenericBusinessEntity\GroupedValuesForGetDescriptionByIds.cs" />
     <Compile Include="GenericBusinessEntity\RangeGenericEditorDefinitionSettings.cs" />
     <Compile Include="GenericEditorDefinitionSetting\ExecuteActionTypeEditorDefinitionSetting.cs" />
     <Compile Include="GenericEditor\Definition\GenericEditorRecordField.cs" />
