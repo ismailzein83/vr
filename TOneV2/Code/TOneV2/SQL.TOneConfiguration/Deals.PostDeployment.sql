@@ -417,6 +417,8 @@ when not matched by target then
 
 --[Analytic].[AnalyticItemConfig]--------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+DELETE FROM [Analytic].[AnalyticItemConfig] WHERE ID IN ('D19100FA-BF92-465F-9407-D7980BCA849A')
+
 set nocount on;
 ;with cte_data([ID],[TableId],[ItemType],[Name],[Title],[Config])
 as (select * from (values
