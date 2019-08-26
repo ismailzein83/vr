@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animal\Mammal.cs" />
+    <Compile Include="Animal\Reptile.cs" />
     <Compile Include="Branch\MediumBranch.cs" />
     <Compile Include="Branch\SmallBranch.cs" />
     <Compile Include="City\BigCityType.cs" />
@@ -71,6 +73,8 @@
     <Compile Include="Product\Hardware.cs" />
     <Compile Include="Product\Software.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZooSection\African.cs" />
+    <Compile Include="ZooSection\SouthAmerican.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Entities\Demo.Module.Entities.csproj">

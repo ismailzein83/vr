@@ -127,6 +127,12 @@
     <Compile Include="Product\ProductQuery.cs" />
     <Compile Include="Product\ProductSettingsConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZooSection\ZooSectionQuery.cs" />
+    <Compile Include="ZooSection\ZooSectionDetail.cs" />
+    <Compile Include="ZooSection\ZooSection.cs" />
+    <Compile Include="Zoo\Zoo.cs" />
+    <Compile Include="Zoo\ZooDetail.cs" />
+    <Compile Include="Zoo\ZooQuery.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

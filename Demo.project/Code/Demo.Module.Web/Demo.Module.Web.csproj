@@ -316,6 +316,16 @@
     <Content Include="Demo_Module\Elements\Product\Views\ProductEditorController.js" />
     <Content Include="Demo_Module\Elements\Product\Views\ProductManagement.html" />
     <Content Include="Demo_Module\Elements\Product\Views\ProductManagementController.js" />
+    <Content Include="Demo_Module\Constant\ZooSizeEnum.js" />
+    <Content Include="Demo_Module\Elements\Zoo\Directives\demo-module-size-selector.js" />
+    <Content Include="Demo_Module\Elements\Zoo\Directives\demo-module-zoo-grid.js" />
+    <Content Include="Demo_Module\Elements\Zoo\Directives\Templates\ZooGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\Zoo\Services\APIServices\ZooAPIService.js" />
+    <Content Include="Demo_Module\Elements\Zoo\Services\ZooService.js" />
+    <Content Include="Demo_Module\Elements\Zoo\Views\ZooEditor.html" />
+    <Content Include="Demo_Module\Elements\Zoo\Views\ZooEditorController.js" />
+    <Content Include="Demo_Module\Elements\Zoo\Views\ZooManagement.html" />
+    <Content Include="Demo_Module\Elements\Zoo\Views\ZooManagementController.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\BIDsASKsAPIService.js" />
     <Content Include="Demo_Module\Services\OldEntities\AdvancedGridService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\PageRunTimeAPIService.js" />
@@ -369,6 +379,8 @@
     <Compile Include="Controllers\OldEntities\CustomerInfoController.cs" />
     <Compile Include="Controllers\OldEntities\MasterController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ZooSectionController.cs" />
+    <Compile Include="Controllers\ZooController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -405,6 +417,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Demo_Module\Directives\BIDsASKs\" />
+    <Folder Include="Demo_Module\Elements\ZooSection\Directives\Templates\" />
+    <Folder Include="Demo_Module\Elements\ZooSection\Services\" />
+    <Folder Include="Demo_Module\Elements\ZooSection\Views\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
