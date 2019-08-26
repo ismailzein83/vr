@@ -27,6 +27,7 @@ namespace Vanrise.HelperTools
         public static string ActiveDBs { get { return ConfigurationManager.AppSettings["ActiveDBs"]; } }
         public static string PreventCreateDbScript { get { return ConfigurationManager.AppSettings["PreventCreateDbScript"]; } }
         public static string PreventAddingStandardConfigurationStructure { get { return ConfigurationManager.AppSettings["PreventAddingStandardConfigurationStructure"]; } }
+        public static string CustomStandardStructure { get { return ConfigurationManager.AppSettings["CustomStandardStructure"]; } }
         public static string SqlFilesOutputPath { get { return ConfigurationManager.AppSettings["sqlFilesOutputPath"]; } }
         public static string JavascriptsOutputPath { get { return ConfigurationManager.AppSettings["javascriptsOutputPath"]; } }
         public static string BinPath { get { return ConfigurationManager.AppSettings["binPath"]; } }
@@ -47,7 +48,7 @@ namespace Vanrise.HelperTools
                 //adding common databases
                 var defaultObj = ConfigurationManager.AppSettings["StandardConfigurationStructure"];
 
-                bool projectKey = !ItemExist(PreventAddingStandardConfigurationStructure, projectName, true);
+                bool projectKey = !ItemExistExactMatch(PreventAddingStandardConfigurationStructure, projectName, true);
 
                 if (!string.IsNullOrEmpty(obj.ToString()))
                 {
@@ -492,7 +493,7 @@ when not matched by target then
             foreach (string script in dbname.Script(scriptOptions))
             {
                 dbExist = ItemExist(PreventCreateDbScript, script, autoGeneration);
-                if (!dbExist || projectName == "Component-ISP" || projectName == "Component-NetworkRental" || projectName == "Component-CCT")
+                if (!dbExist || projectName.Contains("Component-"))
                 {
                     sb.AppendLine(script);
                     sb.AppendLine("GO");
@@ -510,9 +511,9 @@ when not matched by target then
             {
                 dbExist = ItemExist(PreventCreateDbScript, script, autoGeneration);
                 if ((script.Contains("CREATE DATABASE") && !dbExist)
-                    || (script.Contains("CREATE DATABASE") && projectName == "Component-ISP")
-                    || (script.Contains("CREATE DATABASE") && projectName == "Component-NetworkRental")
-                    || (script.Contains("CREATE DATABASE") && projectName == "Component-CCT")
+                    || (script.Contains("CREATE DATABASE") && projectName.Contains("Component-"))
+                    || (script.Contains("CREATE DATABASE") && projectName.Contains("Component-"))
+                    || (script.Contains("CREATE DATABASE") && projectName.Contains("Component-"))
                     )
                 {
                     sb.AppendLine(string.Format("CREATE DATABASE [{0}]", item));
@@ -568,43 +569,10 @@ when not matched by target then
                 sb = sb.Replace(mainItem, string.Format("{0}_{1}", currentDateShort, mainItem));
             }
 
-            if (projectName == "RA")
+            //replace main DB retail with related project 
+            if (ItemExistExactMatch(CustomStandardStructure, projectName, true))
             {
-                sb = sb.Replace(mainItem, "StandardRAStructure");
-            }
-
-            if (projectName == "TestCallAnalysis")
-            {
-                sb = sb.Replace(mainItem, "StandardTestCallAnalysis");
-            }
-
-            if (projectName == "Inspkt")
-            {
-                sb = sb.Replace(mainItem, "StandardInspktStructure");
-            }
-
-            if (projectName == "Interconnect")
-            {
-                sb = sb.Replace(mainItem, "StandardInterconnectStructure");
-            }
-            if (projectName == "Retail.Billing")
-            {
-                sb = sb.Replace(mainItem, "StandardRetail_Billing");
-            }
-
-            if (projectName == "ISP" || projectName == "Component-ISP")
-            {
-                sb = sb.Replace(mainItem, "StandardISPStructure");
-            }
-
-            if (projectName == "NetworkRental" || projectName == "Component-NetworkRental")
-            {
-                sb = sb.Replace(mainItem, "StandardNetworkRentalStructure");
-            }
-
-            if (projectName == "TOne.SMS")
-            {
-                sb = sb.Replace(mainItem, "StandardTOneSMSStructure");
+                sb = sb.Replace(mainItem, "Standard"+ projectName + "Structure");
             }
 
             if (!Directory.Exists(sqlFilesOutputPath))
@@ -628,7 +596,31 @@ when not matched by target then
                     {
                         exist = script.Contains(db);
                     }
-                    if(exist)
+                    if (exist)
+                    {
+                        return exist;
+                    }
+                }
+            }
+
+            return exist;
+        }
+
+        private static bool ItemExistExactMatch(string stringItems, string script, bool autoGeneration)
+        {
+            bool exist = false;
+
+            if (autoGeneration)
+            {
+                List<string> lst = stringItems.ToString().Split('#').ToList();
+
+                foreach (string db in lst)
+                {
+                    if (!exist)
+                    {
+                        exist = script.Equals(db);
+                    }
+                    if (exist)
                     {
                         return exist;
                     }
