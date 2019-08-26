@@ -31,12 +31,13 @@ namespace TOne.WhS.Deal.Business
             if (!context.FromTime.HasValue)
                 throw new NullReferenceException("context.FromTime");
 
-            if (!context.ToTime.HasValue)
-                throw new NullReferenceException("context.ToTime");
+            DateTime? todDate = context.ToTime;
+            if (todDate.HasValue && todDate.Value == new DateTime())
+                todDate = null;
 
-            var deals = new SwapDealManager().GetSwapDealsBetweenDate(context.FromTime.Value, context.ToTime.Value);
+            var deals = new SwapDealManager().GetSwapDealsBetweenDate(context.FromTime.Value, todDate);
 
-            if (deals == null)
+            if (deals == null || deals.Count() == 0)
                 return;
 
             var saleDealInfos = new List<BaseDealInfo>();
@@ -118,11 +119,11 @@ namespace TOne.WhS.Deal.Business
                 DimensionFields = new List<string> { "OrigSaleDealZoneGroupNb", "SaleDealZoneGroupNb", "DayAsDate", "OrigSaleDeal", "SaleDeal", "SaleDealTierNb" },
                 MeasureFields = new List<string> { "SaleDuration", "TotalSaleRateDuration" },
                 FromTime = fromTime,
-                ToTime = context.ToTime.Value
+                ToTime = todDate
             };
 
             List<AnalyticRecord> saleRecords = analyticManager.GetAllFilteredRecords(saleAnalyticQuery, out analyticRecordSummary);
-            IEnumerable<DataRecordObject> saleDataRecordObjects = GetBillingRecords(saleDealInfos, saleRecords, context.ToTime.Value, true);
+            IEnumerable<DataRecordObject> saleDataRecordObjects = GetBillingRecords(saleDealInfos, saleRecords, todDate, true);
 
             foreach (var dataRecord in saleDataRecordObjects)
             {
@@ -135,18 +136,18 @@ namespace TOne.WhS.Deal.Business
                 DimensionFields = new List<string> { "OrigCostDealZoneGroupNb", "CostDealZoneGroupNb", "DayAsDate", "OrigCostDeal", "CostDeal", "CostDealTierNb" },
                 MeasureFields = new List<string> { "CostDuration", "TotalCostRateDuration" },
                 FromTime = fromTime,
-                ToTime = context.ToTime.Value
+                ToTime = todDate
             };
 
             List<AnalyticRecord> costRecords = analyticManager.GetAllFilteredRecords(costAnalyticQuery, out analyticRecordSummary);
-            IEnumerable<DataRecordObject> costDataRecordObjects = GetBillingRecords(costDealInfos, costRecords, context.ToTime.Value, false);
+            IEnumerable<DataRecordObject> costDataRecordObjects = GetBillingRecords(costDealInfos, costRecords, todDate, false);
 
             foreach (var dataRecord in costDataRecordObjects)
             {
                 context.OnRecordLoaded(dataRecord, DateTime.Now);
             }
         }
-        private IEnumerable<DataRecordObject> GetBillingRecords(List<BaseDealInfo> dealInfos, List<AnalyticRecord> analyticRecords, DateTime toDateDate, bool isSale)
+        private IEnumerable<DataRecordObject> GetBillingRecords(List<BaseDealInfo> dealInfos, List<AnalyticRecord> analyticRecords, DateTime? toDateDate, bool isSale)
         {
             Dictionary<PropertyName, string> propertyNames = BuildPropertyNames(isSale);
             BillingDataByDealId trafficByDealId = new BillingDataByDealId();
@@ -249,12 +250,12 @@ namespace TOne.WhS.Deal.Business
             }
             return datarecords;
         }
-        private void AddOrUpdateBilling(int dealId, int groupNb, decimal saleDurationValue, DateTime dateTimeValue, decimal? rate, BillingDataByDealId billingDataByDealId, DateTime toDateDate)
+        private void AddOrUpdateBilling(int dealId, int groupNb, decimal saleDurationValue, DateTime dateTimeValue, decimal? rate, BillingDataByDealId billingDataByDealId, DateTime? toDateDate)
         {
             BillingDataByGroupNb billingByGroupNb = billingDataByDealId.GetOrCreateItem(dealId);
             BillingData billing = billingByGroupNb.GetOrCreateItem(groupNb);
 
-            if (toDateDate.Date == dateTimeValue.Date)
+            if (toDateDate.HasValue && toDateDate.Value.Date == dateTimeValue.Date)
                 billing.ToDateVolume += saleDurationValue;
 
             if (dateTimeValue.Date == DateTime.Now.AddDays(-1).Date)
