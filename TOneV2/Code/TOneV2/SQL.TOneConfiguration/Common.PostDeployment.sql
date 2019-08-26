@@ -297,9 +297,9 @@ as (select * from (values
 ('C33B407D-476E-4779-83F8-5F88CA1A4DF3','Voice'						,null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,5,0,null),
 ('3B6E324F-4F1F-417A-AB60-963D4856B4CC','SMS'						,null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,10,0,null),
 
-('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sales'						,null,null,'/images/menu-icons/Sale Area.png',35,0),
-('aa947fb8-caf1-4196-b278-89d8e2ce3e12','Services'					,null,null,'/images/menu-icons/Routing.png',36,0),
-('40ea6f5e-1d32-4f14-adfa-ee67a20574b9','Lookups'					,null,'aa947fb8-caf1-4196-b278-89d8e2ce3e12', null,2,0)
+('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sales'						,null,null,'/images/menu-icons/Sale Area.png',35,0,null),
+('aa947fb8-caf1-4196-b278-89d8e2ce3e12','Services'					,null,null,'/images/menu-icons/Routing.png',36,0,null),
+('40ea6f5e-1d32-4f14-adfa-ee67a20574b9','Lookups'					,null,'aa947fb8-caf1-4196-b278-89d8e2ce3e12', null,2,0,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings]))
 merge	[sec].[Module] as t
