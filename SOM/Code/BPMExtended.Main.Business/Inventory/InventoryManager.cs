@@ -656,7 +656,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<bool>(String.Format("api/SOM_Main/Inventory/CheckIfLinePathExist?pathID={0}", pathId));
+                result = client.Get<bool>(String.Format("api/SOM.ST/Inventory/CheckIfLinePathExist?pathID={0}", pathId));
             }
 
             return result;

@@ -120,6 +120,31 @@ namespace BPMExtended.Main.Business
             return false;
         }
 
+        public string GetWorkOrderTypeName(string workOrderId)
+        {
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string name="";
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StStWorkOrderType1");
+            esq.AddColumn("Name");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", workOrderId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                name = entities[0].GetColumnValue("Name").ToString();
+
+            }
+
+            return name;
+        }
+
         public AddressData GetAddressData(string city , string province , string area, string town)
         {
             Guid cityId=Guid.Empty, provinceId= Guid.Empty, areaId= Guid.Empty, townId= Guid.Empty;
