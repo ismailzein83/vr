@@ -187,28 +187,16 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('E7855563-9173-47F0-A8E7-4C47CD2A1F42','Voice Entites'			,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,3,1),
 ('E70468BE-4793-466B-9B83-BAF2535D64D2','Network Elements'		,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,4,0),
-
 ('66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Pricing Management'	,null,null,'/images/menu-icons/Sale Area.png',30,1),
 ('7C025B42-ABCE-45A9-A429-0B197E3743DE','Revenue Audit'			,null,null,'/images/menu-icons/Revenue Auditing.png',100,0),
-
-('9DD01E06-7792-4FE0-B9BF-AD6EB8274B73','Voice',null,'7C025B42-ABCE-45A9-A429-0B197E3743DE',null,5,0),
-('070B6ECC-D846-403B-AEDA-9A5EAB7E0B48','SMS',null,'7C025B42-ABCE-45A9-A429-0B197E3743DE',null,10,0),
-
-
+('9DD01E06-7792-4FE0-B9BF-AD6EB8274B73','Voice'					,null,'7C025B42-ABCE-45A9-A429-0B197E3743DE',null,5,0),
+('070B6ECC-D846-403B-AEDA-9A5EAB7E0B48','SMS'					,null,'7C025B42-ABCE-45A9-A429-0B197E3743DE',null,10,0),
 ('C497B8A0-8608-4C3A-8CF3-0BE92263C8E0','Traffic Monitor'		,null,null,'/images/menu-icons/Traffic Monitoring.png',110,0),
-
-('1BE00B3E-DFFE-4230-BA7F-26B6D20E7CBD','Voice',null,'C497B8A0-8608-4C3A-8CF3-0BE92263C8E0', null,5,0),
-('28268D01-8DC2-4767-B6D6-6B3D84B2C7AE','SMS',null,'C497B8A0-8608-4C3A-8CF3-0BE92263C8E0',null,10,0),
-
+('1BE00B3E-DFFE-4230-BA7F-26B6D20E7CBD','Voice'					,null,'C497B8A0-8608-4C3A-8CF3-0BE92263C8E0', null,5,0),
+('28268D01-8DC2-4767-B6D6-6B3D84B2C7AE','SMS'					,null,'C497B8A0-8608-4C3A-8CF3-0BE92263C8E0',null,10,0),
 ('F1474322-B883-4859-8439-70CD53ECD28B','Taxes Management'		,null,null,'/images/menu-icons/Taxes Management.png',120,0),
-
-('CBD71991-9705-4FA6-8BDB-D2E437EA5C38','Voice',null,'F1474322-B883-4859-8439-70CD53ECD28B',null,5,0),
-('42D32C43-67C4-41CD-8916-77BBDFCD811F','SMS',null,'F1474322-B883-4859-8439-70CD53ECD28B',null,10,0),
-
-('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sales',null,null,'/images/menu-icons/Sale Area.png',35,0),
-
-('aa947fb8-caf1-4196-b278-89d8e2ce3e12','Services',null,null,'/images/menu-icons/Routing.png',36,0),
-('40ea6f5e-1d32-4f14-adfa-ee67a20574b9','Lookups',null,'aa947fb8-caf1-4196-b278-89d8e2ce3e12', null,2,0)
+('CBD71991-9705-4FA6-8BDB-D2E437EA5C38','Voice'					,null,'F1474322-B883-4859-8439-70CD53ECD28B',null,5,0),
+('42D32C43-67C4-41CD-8916-77BBDFCD811F','SMS'					,null,'F1474322-B883-4859-8439-70CD53ECD28B',null,10,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
