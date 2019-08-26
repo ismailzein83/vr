@@ -16,7 +16,7 @@ namespace TOne.WhS.Sales.MainExtensions
         public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
         {
             if (context.SaleZones == null || context.SaleZones.Count() == 0 || context.OwnerType != SalePriceListOwnerType.Customer)
-             throw new MissingMemberException("SaleZones");
+                throw new MissingMemberException("SaleZones");
 
             DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
             Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate;
@@ -45,7 +45,8 @@ namespace TOne.WhS.Sales.MainExtensions
                     GetSellingProductZoneRate = getSellingProductZoneRate,
                     GetCustomerZoneRate = getCustomerZoneRate,
                     CountryBEDsByCountryId = countryBEDsByCountryId,
-                    CountryEEDsByCountryId = countryEEDsByCountryId
+                    CountryEEDsByCountryId = countryEEDsByCountryId,
+                    GetContextZoneItems = context.GetContextZoneItems
                 };
                 var effectiveDate = saleZone.BED > DateTime.Today ? saleZone.BED : DateTime.Today;
                 if (dealDefinitionManager.IsZoneIncludedInEffectiveDeal(context.OwnerId, saleZone.SaleZoneId, effectiveDate, true).HasValue && UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
