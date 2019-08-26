@@ -647,7 +647,7 @@ namespace TOne.WhS.Deal.Business
 
             TimeSpan offSet = deal.Settings.OffSet ?? new TimeSpan();
 
-            DateTime endDealDate = deal.Settings.RealEED.Value.Add(offSet).AddDays(-1);
+            DateTime endDealDate = deal.Settings.RealEED.Value.Add(offSet);
             var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month);
 
             for (int i = 0; i < recurringNumber; i++)
@@ -657,7 +657,7 @@ namespace TOne.WhS.Deal.Business
                 switch (recurringType)
                 {
                     case RecurringType.Daily:
-                        recurredDeal.Settings.BeginDate = endDealDate.AddDays(1);
+                        recurredDeal.Settings.BeginDate = endDealDate;
                         recurredDeal.Settings.EEDToStore = recurredDeal.Settings.BeginDate.Add(dealLifeSpan);
                         endDealDate = recurredDeal.Settings.RealEED.Value.Add(offSet);
                         break;
