@@ -314,6 +314,29 @@ when not matched by target then
 --------------------------------------------------------------------------------------------------------------
 end
 
+--[sec].[Module]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[DevProjectID],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('26AB075A-62FC-4272-8234-5E5B32531CBA','System Logs',null,null,null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,15,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[DevProjectID],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView]))merge	[sec].[Module] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[DevProjectID] = s.[DevProjectID],[Url] = s.[Url],[DefaultViewId] = s.[DefaultViewId],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic],[Settings] = s.[Settings],[RenderedAsView] = s.[RenderedAsView]when not matched by target then	insert([ID],[Name],[DevProjectID],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView])	values(s.[ID],s.[Name],s.[DevProjectID],s.[Url],s.[DefaultViewId],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[Settings],s.[RenderedAsView]);
+
+DELETE FROM [sec].[View] WHERE ID ='7079BD63-BFE2-4519-9B1B-8158A2F3A12A'--,'System Logs'
+
+--[sec].[View]--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('905A2555-2658-4F75-A25C-E6F91DDC63BE',null,'General','General',null,'26AB075A-62FC-4272-8234-5E5B32531CBA',null,null,null,'{"$type":"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business","PageDirectiveHost":{"$type":"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View General Logs","Directive":"vr-log-entry-search","Title":"General","Data":null}}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1,null),
+('C1A9486F-C2D0-4C2D-B3CA-1D69E042C22E',null,'Action Audit','Action Audit',null,'26AB075A-62FC-4272-8234-5E5B32531CBA',null,null,null,'{"$type":"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business","PageDirectiveHost":{"$type":"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View Action Audit","Directive":"vr-common-actionaudit-search","Title":"Action Audit","Data":null}}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5,null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[DevProjectID] = s.[DevProjectID],[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
+when not matched by target then
+	insert([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+	values(s.[ID],s.[DevProjectID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
 
 --[sec].[View]-----------------------------1001 to 2000--------------------------------------------------------
 begin

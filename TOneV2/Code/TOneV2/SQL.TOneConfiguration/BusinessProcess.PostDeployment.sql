@@ -94,6 +94,25 @@ when not matched by target then
 --------------------------------------------------------------------------------------------------------------
 end
 
+--[sec].[View]--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('E5D1C2A3-D58A-4CBF-AC49-E556AAFDE077',null,'Business Process','Business Process',null,'26AB075A-62FC-4272-8234-5E5B32531CBA',null,null,null,'{"$type":"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business","PageDirectiveHost":{"$type":"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View General Logs","Directive":"bp-instance-log-search","Title":"Business Process","Data":null}}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4,null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[DevProjectID] = s.[DevProjectID],[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
+when not matched by target then
+	insert([ID],[DevProjectID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+	values(s.[ID],s.[DevProjectID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
+
 --[sec].[BusinessEntityModule]-------------601 to 700---------------------------------------------------------
 begin
 set nocount on;

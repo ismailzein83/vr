@@ -31,28 +31,6 @@ Delete from [runtime].[SchedulerTaskActionType] where Id='0A15BC35-A3A7-4ED3-B09
 DELETE FROM [bp].[BPDefinition] WHERE [ID] IN ('92082EE6-B150-46DE-937B-1CF56B5BA453'--'CDR Correlation'												
 												)
 
-
---[sec].[View]-----------------------------14001 to 15000-----------------------------------------------------
-begin
-set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','System Logs','System Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":{"$type":"System.Collections.Generic.List`1[[Vanrise.Common.Business.LogViewItem, Vanrise.Common.Business]], mscorlib","$values":[{"$type":"Vanrise.Common.Business.LogViewItem, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View General Logs","Directive":"vr-log-entry-search","Title":"General"},{"$type":"Vanrise.Common.Business.LogViewItem, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View General Logs","Directive":"bp-instance-log-search","Title":"Business Process"},{"$type":"Vanrise.Common.Business.LogViewItem, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View Action Audit","Directive":"vr-common-actionaudit-search","Title":"Action Audit"}]}}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
-merge	[sec].[View] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
---------------------------------------------------------------------------------------------------------------
-end
-
 --[runtime].[RuntimeNodeConfiguration]--------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;

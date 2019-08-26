@@ -56,25 +56,6 @@ delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','
 										--,'ADBB44FE-5470-413C-A5F6-8AE8C585FA31'--'Report Generation'
 										)
 
---[sec].[view]--------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','System Logs','System Logs','#/viewwithparams/Common/Views/MasterLog/MasterLogManagement/{"viewId":"7079bd63-bfe2-4519-9b1b-8158a2f3a12a"}','BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":{"$type":"System.Collections.Generic.List`1[[Vanrise.Common.Business.LogViewItem, Vanrise.Common.Business]], mscorlib","$values":[{"$type":"Vanrise.Common.Business.LogViewItem, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View General Logs","Directive":"vr-log-entry-search","Title":"General"},{"$type":"Vanrise.Common.Business.LogViewItem, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View General Logs","Directive":"bp-instance-log-search","Title":"Business Process"},{"$type":"Vanrise.Common.Business.LogViewItem, Vanrise.Common.Business","PermissionName":"VRCommon_System_Log: View Action Audit","Directive":"vr-common-actionaudit-search","Title":"Action Audit"}]}}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15,null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
-merge	[sec].[view] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
-	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
-
 --[bp].[BPDefinition]----------------------1 to 1000------------------------------------------------
 begin
 set nocount on;

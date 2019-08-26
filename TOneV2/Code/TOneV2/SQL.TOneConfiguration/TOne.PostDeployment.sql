@@ -450,8 +450,6 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','System Logs','System Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":[{"PermissionName":"VRCommon_System_Log: View General Logs","Directive":"vr-log-entry-search","Title":"General"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-log-search","Title":"Data Source"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-importedbatch-search","Title":"Imported Batch"},{"PermissionName":"VRCommon_System_Log: View General Logs","Directive":"bp-instance-log-search","Title":"Business Process"},{"PermissionName":"VRCommon_System_Log: View Action Audit","Directive":"vr-common-actionaudit-search","Title":"Action Audit"}]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
-
 ('C863CDC3-C0EF-407F-8524-A5D1A45E6C41','Checkpoint Controller','Checkpoint Controller','#/view/WhS_BusinessEntity/Views/StateBackup/StateBackupManagement','525B77DC-F097-4BF1-930A-034B9BBE1AC4','WhS_BE/StateBackup/GetFilteredStateBackups',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
 
 ('FB8AAD3C-A902-4FCD-B549-49F3A0C4087D','Carrier Profiles','Carrier Profiles','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileManagement','937F4A80-74FD-43BA-BCC1-F674445170BB','WhS_BE/CarrierProfile/GetFilteredCarrierProfiles',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2),
