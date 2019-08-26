@@ -49,7 +49,7 @@ namespace TOne.WhS.Deal.Business
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;
-        }
+        } 
 
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
@@ -292,12 +292,15 @@ namespace TOne.WhS.Deal.Business
 
         private bool isEffectiveDeal(DateTime fromDate, DateTime? toDate, DateTime dealBED, DateTime? DealEED)
         {
+            if (!DealEED.HasValue)
+                return true;
+
             if (toDate.HasValue)
             {
-                if (!DealEED.HasValue || dealBED < toDate && DealEED.Value > fromDate)
+                if (dealBED < toDate && DealEED.Value > fromDate)
                     return true;
             }
-            else if (dealBED > fromDate)
+            else if (DealEED.Value > fromDate)
                 return true;
 
             return false;
