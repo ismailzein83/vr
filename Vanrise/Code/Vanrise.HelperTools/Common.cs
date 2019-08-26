@@ -26,6 +26,7 @@ namespace Vanrise.HelperTools
         public static string ServerIP { get { return ConfigurationManager.AppSettings["ServerIP"]; } }
         public static string ActiveDBs { get { return ConfigurationManager.AppSettings["ActiveDBs"]; } }
         public static string PreventCreateDbScript { get { return ConfigurationManager.AppSettings["PreventCreateDbScript"]; } }
+        public static string PreventAddingStandardConfigurationStructure { get { return ConfigurationManager.AppSettings["PreventAddingStandardConfigurationStructure"]; } }
         public static string SqlFilesOutputPath { get { return ConfigurationManager.AppSettings["sqlFilesOutputPath"]; } }
         public static string JavascriptsOutputPath { get { return ConfigurationManager.AppSettings["javascriptsOutputPath"]; } }
         public static string BinPath { get { return ConfigurationManager.AppSettings["binPath"]; } }
@@ -38,7 +39,33 @@ namespace Vanrise.HelperTools
         public static int MaxPathLength { get { return int.Parse(ConfigurationManager.AppSettings["maxPathLength"]); } }
         public static List<string> GetDBs(string projectName)
         {
-            return ConfigurationManager.AppSettings[projectName].ToString().Split('#').ToList();
+            List<string> lst = new List<string>();
+            var obj = ConfigurationManager.AppSettings[projectName];
+
+            if (obj != null)
+            {
+                //adding common databases
+                var defaultObj = ConfigurationManager.AppSettings["StandardConfigurationStructure"];
+
+                bool projectKey = !ItemExist(PreventAddingStandardConfigurationStructure, projectName, true);
+
+                if (!string.IsNullOrEmpty(obj.ToString()))
+                {
+                    lst.AddRange(obj.ToString().Split('#').ToList());
+                    if (projectKey)
+                    {
+                        lst.InsertRange(1, defaultObj.ToString().Split('#'));
+                    }
+                }
+                else
+                {
+                    if (projectKey)
+                    {
+                        lst.AddRange(defaultObj.ToString().Split('#').ToList());
+                    }
+                }
+            }
+            return lst;
         }
 
         public static List<string> GetDBs_Schemas(string projectName, string dbName)
@@ -105,21 +132,21 @@ namespace Vanrise.HelperTools
                     var orgDirectoryName = Path.GetFileName(directory);
                     var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
 
-                //create file if not exist
-                if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".js")))
+                    //create file if not exist
+                    if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".js")))
                     {
                         StringBuilder fileContent = new StringBuilder();
 
-                    //add folder content to created file
-                    foreach (var file in allFiles)
+                        //add folder content to created file
+                        foreach (var file in allFiles)
                         {
                             fileContent.AppendLine(File.ReadAllText(file));
                             fileContent.Append(";");
                             fileContent.AppendLine();
-                        //rename or remove file
-                        File.Delete(file);
-                        //File.Move(file, string.Format("{0}{1}", file, "processed"));
-                    }
+                            //rename or remove file
+                            File.Delete(file);
+                            //File.Move(file, string.Format("{0}{1}", file, "processed"));
+                        }
 
                         File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".js"), fileContent.ToString());
                     }
@@ -162,20 +189,20 @@ namespace Vanrise.HelperTools
                     var allFiles = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories);
 
                     StringBuilder fileContent = new StringBuilder();
-                //fileContent.AppendLine(string.Format("Files exceeded the limit of {0} characters for the directory and file name.", maxLength));
+                    //fileContent.AppendLine(string.Format("Files exceeded the limit of {0} characters for the directory and file name.", maxLength));
 
-                //add file path to created file that matched the criteria
-                foreach (var file in allFiles)
+                    //add file path to created file that matched the criteria
+                    foreach (var file in allFiles)
                     {
-                    //File.WriteAllText(string.Format("{0}\\{1}{2}{3}", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file)), p.Pack(File.ReadAllText(Path.GetFullPath(file))));
-                    var fileLength = file.ToString().Length;
+                        //File.WriteAllText(string.Format("{0}\\{1}{2}{3}", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file)), p.Pack(File.ReadAllText(Path.GetFullPath(file))));
+                        var fileLength = file.ToString().Length;
 
                         if (fileLength > maxLength)
                         {
-                        //fileContent.AppendLine("Files exceeded the limit of 248 characters for the directory or 259 for the directory and file name.");
-                        fileContent.AppendLine(file.ToString());
-                        //fileContent.AppendLine();
-                    }
+                            //fileContent.AppendLine("Files exceeded the limit of 248 characters for the directory or 259 for the directory and file name.");
+                            fileContent.AppendLine(file.ToString());
+                            //fileContent.AppendLine();
+                        }
                     }
                     if (fileContent.Length > 0)
                     {
@@ -205,14 +232,14 @@ namespace Vanrise.HelperTools
 
                     string[] allFiles = Directory.GetFiles(directory, "*.txt", SearchOption.AllDirectories);
 
-                //add folder content to created file
-                foreach (var file in allFiles)
+                    //add folder content to created file
+                    foreach (var file in allFiles)
                     {
                         if (File.Exists(file))
                         {
                             fileContent.AppendLine(File.ReadAllText(file));
-                        //rename or remove file
-                        File.Delete(file);
+                            //rename or remove file
+                            File.Delete(file);
                         }
                     }
 
@@ -464,7 +491,7 @@ when not matched by target then
 
             foreach (string script in dbname.Script(scriptOptions))
             {
-                dbExist = DbExist(script, autoGeneration);
+                dbExist = ItemExist(PreventCreateDbScript, script, autoGeneration);
                 if (!dbExist || projectName == "Component-ISP" || projectName == "Component-NetworkRental" || projectName == "Component-CCT")
                 {
                     sb.AppendLine(script);
@@ -481,7 +508,7 @@ when not matched by target then
             StringCollection scriptCollection = scripter.Script(DatabaseURNs);
             foreach (string script in scriptCollection)
             {
-                dbExist = DbExist(script, autoGeneration);
+                dbExist = ItemExist(PreventCreateDbScript, script, autoGeneration);
                 if ((script.Contains("CREATE DATABASE") && !dbExist)
                     || (script.Contains("CREATE DATABASE") && projectName == "Component-ISP")
                     || (script.Contains("CREATE DATABASE") && projectName == "Component-NetworkRental")
@@ -587,19 +614,23 @@ when not matched by target then
             File.WriteAllText(string.Format("{0}\\{1}_{2}.sql", sqlFilesOutputPath, currentDate, item), sb.ToString());
         }
 
-        private static bool DbExist(string script, bool autoGeneration)
+        private static bool ItemExist(string stringItems, string script, bool autoGeneration)
         {
             bool exist = false;
 
             if (autoGeneration)
             {
-                List<string> lst = Common.GetDBs("PreventCreateDbScript");
+                List<string> lst = stringItems.ToString().Split('#').ToList();
 
                 foreach (string db in lst)
                 {
                     if (!exist)
                     {
                         exist = script.Contains(db);
+                    }
+                    if(exist)
+                    {
+                        return exist;
                     }
                 }
             }
