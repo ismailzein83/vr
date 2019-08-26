@@ -31,11 +31,11 @@
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
-                return getCompanyTemplate(attrs);
+                return getTemplate(attrs);
             }
         };
 
-        function getCompanyTemplate(attrs) {
+        function getTemplate(attrs) {
 
             var label = "Parent";
             var multipleselection = "";
