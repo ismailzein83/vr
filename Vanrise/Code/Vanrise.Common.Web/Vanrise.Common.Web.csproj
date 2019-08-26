@@ -221,6 +221,7 @@
     <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
+    <Content Include="Common\Services\APIServices\PageDirectiveHostAPIService.js" />
     <Content Include="Common\Services\APIServices\VRDevProjectAPIService.js" />
     <Content Include="Common\Services\APIServices\ThemeExtendedAPIService.js" />
     <Content Include="Common\Services\APIServices\VRIconPathAPIService.js" />
@@ -239,6 +240,8 @@
     <Content Include="Common\Services\VRDynamicAPIService.js" />
     <Content Include="Common\Services\TextPatternBuilderService.js" />
     <Content Include="Common\Services\VRNamespaceItemService.js" />
+    <Content Include="Common\Views\PageDirectiveHost\PageDirectiveHostManagement.html" />
+    <Content Include="Common\Views\PageDirectiveHost\PageDirectiveHostManagementController.js" />
     <Content Include="Common\Views\VRDashboard\VRDashboardManagement.html" />
     <Content Include="Common\Views\VRDashboard\VRDashboardManagementController.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditor.html" />
@@ -333,6 +336,7 @@
     <Compile Include="Controllers\VRObjectPropertyController.cs" />
     <Compile Include="Controllers\VRObjectTypeController.cs" />
     <Compile Include="Controllers\VRObjectTypeDefinitionController.cs" />
+    <Compile Include="Controllers\PageDirectiveHostController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
