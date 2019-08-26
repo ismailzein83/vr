@@ -152,7 +152,6 @@ as (select * from (values
 --('0f35bd74-81d4-4cf3-950d-98de8cdad7d9','SMS','SMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidsms"}'),
 ('81A1FFFA-8AE6-41F0-A3E2-ED6457F72FDB','Retail_BE_AccountBulkActionsSettingConfig_SendEmail','Send Rates','Retail_BE_AccountBulkActionSettingsConfig','{"Editor":"retail-be-accountbulkactionsettings-sendrates"}'),
 ('6388F486-9BB7-47D2-B16C-31C9FDCE9A8D','Taxes','Taxes','Retail_BE_AccountPartDefinition'		,'{"DefinitionEditor":"retail-be-accounttype-part-definition-taxes","RuntimeEditor":"retail-be-accounttype-part-runtime-taxes"}'),
-('2F5C2FB4-4380-4A18-986C-210459134B4B','Centrex Subscriber Invoice','Centrex Subscriber Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig'		,'{"Editor":"retail-invoice-invoicetype-retailsubscriberinvoicesettings"}'),
 ('A5A8B72B-F834-4DAA-80F8-25157C2C3D37','Quarterly Financial Recurring Charge Period','Quarterly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-quarterly"}'),
 ('A1D0F08B-B8F7-4B9C-9C83-49DABD2A68D5','Monthly Recurring Charge Period','Monthly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-monthly"}'),
 ('447B67A5-DBEA-4410-9C00-C8D297B8F81C','Yearly Recurring Charge Period','Yearly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-yearly"}'),
