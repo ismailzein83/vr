@@ -54,6 +54,7 @@ TOne.DefaultData.PostDeployment.sql
 
 Retail
 Retail.PostDeployment.sql
+Retail_Invoice.PostDeployment.sql
 Retail.SwitchReleaseCause.PostDeployment.sql
 
 Retail_Ntegra
