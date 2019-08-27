@@ -947,12 +947,19 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber, string BankName, string IBAN)
+        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO,
+            string BankCode, string AccountNumber, string BankName, string IBAN, string country, string DefaultRatePlan, string nationality, string birthDate, string building, string career,
+            string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
+            string street
+            )
         {
             IDManager manager = new IDManager();
             CustomerId = manager.GetCustomerNextId();
-
-            CustomerCreationOutput output;
+            DateTime dob = DateTime.MinValue;
+            DateTime.TryParse(birthDate, out dob);
+            string countryNumber = GetCountryNumber(country);
+            string nationalityNumber = GetNationalityNumber(nationality);
+            CustomerCreationOutput output = new CustomerCreationOutput() ;
             CreateCustomerInput input = new CreateCustomerInput
             {
                 AccountNumber = AccountNumber,
@@ -965,13 +972,28 @@ namespace BPMExtended.Main.Business
                 LastName = LastName,
                 PaymentMethodId = PaymentMethodId,
                 CustomerId = CustomerId,
-                Country = "206",
-                DefaultRatePlan = "TM005",
-                CustomerType = "C",
+                Country = countryNumber,
+                DefaultRatePlan = "TM002",
                 IBAN = IBAN,
-                Nationality = "206",
-                ValidFromDate = DateTime.Now,
-                DebitAccountOwner = FirstName
+                Nationality = nationalityNumber,
+                //ValidFromDate = DateTime.Now,
+                DebitAccountOwner = FirstName,
+                BankSwiftCode = "",
+                BillCycle = "",
+                BirthDate = dob,
+                Building = building,
+                Career = career,
+                DocumentId = documentId,
+                DocumentTypeId = "",
+                Email = email,
+                FaxNumber = faxNumber,
+                Floor = floor,
+                HomePhone = homePhone,
+                MiddleName = middleName,
+                MobilePhone = mobilePhone,
+                MotherName = motherName,
+                Region = region,
+                Street = street
             };
 
             using (var client = new SOMClient())
@@ -981,7 +1003,44 @@ namespace BPMExtended.Main.Business
             }
             return output;
         }
+        public string GetCountryNumber(string Id)
+        {
 
+            string countrynumber = "" ;
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Country");
+            esq.AddColumn("Id");
+            var countryNumberCol = esq.AddColumn("StCountryNumber");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", Id));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                countrynumber = entities[0].GetTypedColumnValue<string>(countryNumberCol.Name);
+            }
+            return countrynumber;
+        }
+        public string GetNationalityNumber(string Id)
+        {
+
+            string countrynumber = "";
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StNationalityLookup");
+            esq.AddColumn("Id");
+            var countryNumberCol = esq.AddColumn("StCountryNumber");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", Id));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                countrynumber = entities[0].GetTypedColumnValue<string>(countryNumberCol.Name);
+            }
+            return countrynumber;
+        }
         public List<CustomerCategoryInfo> GetCustomerCategoriesInfoBySegmentId(string segmentId)
         {
             EntitySchemaQuery esq;
