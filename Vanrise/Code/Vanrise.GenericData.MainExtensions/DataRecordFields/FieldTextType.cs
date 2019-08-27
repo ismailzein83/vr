@@ -8,7 +8,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
-    public enum TextType { RichText = 0, MultipleText = 1}
+    public enum TextType { RichText = 0, MultipleText = 1 } // AS :  , Email = 2, LabeledEmail = 3, IPv4 = 4, IPv6 = 5, FileName = 6, Password = 7 }
 
     public class FieldTextType : DataRecordFieldType
     {
