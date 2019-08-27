@@ -545,6 +545,88 @@ namespace BPMExtended.Main.Business
             return null;
         }
 
+
+        public DeviceType GetDeviceTypeByName(string deviceTypeName)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeviceType");
+            var IdCol = esq.AddColumn("Id");
+            esq.AddColumn("StName");
+            esq.AddColumn("StInventoryIdentifier");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StName", deviceTypeName);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return new DeviceType
+                {
+                    Id = entities[0].GetTypedColumnValue<string>(IdCol.Name),
+                    Identifier = entities[0].GetTypedColumnValue<string>("StInventoryIdentifier"),
+                    Name = entities[0].GetTypedColumnValue<string>("StName")
+                };
+            }
+            return null;
+        }
+
+        public DeviceType GetDeviceTypeById(string deviceTypeId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeviceType");
+            var IdCol = esq.AddColumn("Id");
+            esq.AddColumn("StName");
+            esq.AddColumn("StInventoryIdentifier");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", deviceTypeId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return new DeviceType
+                {
+                    Id = entities[0].GetTypedColumnValue<string>(IdCol.Name),
+                    Identifier = entities[0].GetTypedColumnValue<string>("StInventoryIdentifier"),
+                    Name = entities[0].GetTypedColumnValue<string>("StName")
+                };
+            }
+            return null;
+        }
+
+
+        public List<DeviceType> GetDevicesTypes()
+        {
+            List<DeviceType> deviceTypes = new List<DeviceType>();
+            EntitySchemaQuery esq;
+            
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeviceType");
+            var IdCol = esq.AddColumn("Id");
+            esq.AddColumn("StName");
+            esq.AddColumn("StInventoryIdentifier");
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach (var item in entities)
+                {
+                    string deviceTypeId = item.GetTypedColumnValue<string>(IdCol.Name);
+                    string name  = item.GetTypedColumnValue<string>("StName");
+                    string identifier = item.GetTypedColumnValue<string>("StInventoryIdentifier");
+
+                    deviceTypes.Add(new DeviceType
+                    {
+                        Id = deviceTypeId,
+                        Identifier= identifier,
+                        Name = name
+                    });
+                }
+            }
+            return deviceTypes;
+        }
+
         public string GetWaitingListDepositAmount()
         {
             List<SaleService> fees = new List<SaleService>();
