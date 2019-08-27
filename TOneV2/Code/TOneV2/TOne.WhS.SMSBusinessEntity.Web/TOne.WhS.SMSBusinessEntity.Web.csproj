@@ -108,6 +108,10 @@
     <Content Include="WhS_SMSBusinessEntity\Services\APIServices\SupplierSMS\SupplierSMSRateChangesAPIService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\SupplierSMSRatePlanService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\CustomerSMSRatePlanService.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSUploadRatesEditor.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSUploadRatesEditor.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSUploadRatesEditorController.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSUploadRatesEditorController.js" />
     <Content Include="WhS_SMSBusinessEntity\Views\SMSCostAnalysis.html" />
     <Content Include="WhS_SMSBusinessEntity\Views\SMSCostAnalysisController.js" />
     <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSPriceList.html" />
@@ -142,6 +146,8 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="WhS_SMSBusinessEntity\Templates\Import Customer SMS Rates Template.xlsx" />
+    <Content Include="WhS_SMSBusinessEntity\Templates\Import Supplier SMS Rates Template.xlsx" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

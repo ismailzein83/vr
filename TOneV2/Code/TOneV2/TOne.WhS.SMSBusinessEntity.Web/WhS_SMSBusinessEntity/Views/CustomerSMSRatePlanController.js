@@ -62,6 +62,19 @@
                 });
             };
 
+            $scope.scopeModel.uploadCustomerRates = function () {
+                return hasRunningProcessesForCustomer().then(function (response) {
+                    if (!response.hasRunningProcesses) {
+                        var onSaleSMSRatesUploaded = function () {
+                            $scope.scopeModel.isCustomerSMSRateDraftExist = true;
+                            $scope.scopeModel.isCustomerSMSRateLoaded = false;
+                        };
+
+                        WhS_SMSBusinessEntity_CustomerRatePlanService.uploadSMSRates(selectedCustomer, onSaleSMSRatesUploaded);
+                    }
+                });
+            };
+
             $scope.scopeModel.onCustomerChanged = function (customer) {
                 if (customer != undefined) {
                     selectedCustomer = customer;

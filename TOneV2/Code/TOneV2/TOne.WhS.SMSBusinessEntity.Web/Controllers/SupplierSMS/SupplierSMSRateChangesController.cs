@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -44,6 +45,34 @@ namespace TOne.WhS.SMSBusinessEntity.Web.Controllers
         public DraftData GetDraftData(SupplierDraftDataInput input)
         {
             return _supplierSMSRateChangesManager.GetDraftData(input);
+        }
+
+        [HttpGet]
+        [Route("DownloadImportSupplierSMSRateTemplate")]
+        public object DownloadImportSupplierSMSRateTemplate()
+        {
+            string templateRelativePath = "~/Client/Modules/WhS_SMSBusinessEntity/Templates/Import Supplier SMS Rates Template.xlsx";
+            string templateAbsolutePath = HttpContext.Current.Server.MapPath(templateRelativePath);
+            byte[] templateBytes = File.ReadAllBytes(templateAbsolutePath);
+            MemoryStream memoryStream = new System.IO.MemoryStream();
+            memoryStream.Write(templateBytes, 0, templateBytes.Length);
+            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+            return GetExcelResponse(memoryStream, "Import Supplier SMS Rates Template.xlsx");
+        }
+
+        [HttpPost]
+        [Route("UploadSMSRateChanges")]
+        public UploadSupplierSMSRateChangesLog UploadSMSRateChanges(UploadSupplierSMSRateChangesInput input)
+        {
+            return _supplierSMSRateChangesManager.UploadSMSRateChanges(input);
+        }
+
+        [HttpGet]
+        [Route("DownloadImportedSupplierSMSRateLog")]
+        public object DownloadImportedSupplierSMSRateLog(long fileId)
+        {
+            byte[] bytes = _supplierSMSRateChangesManager.DownloadImportedSupplierSMSRateLog(fileId);
+            return GetExcelResponse(bytes, "ImportedSMSRatesResults.xls");
         }
     }
 }

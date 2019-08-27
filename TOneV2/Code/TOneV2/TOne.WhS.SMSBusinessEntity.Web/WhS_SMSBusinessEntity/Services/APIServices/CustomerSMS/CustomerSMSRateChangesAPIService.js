@@ -24,6 +24,24 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, "GetDraftData"), input);
         }
 
+        function DownloadImportCustomerSMSRateTemplate() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, "DownloadImportCustomerSMSRateTemplate"), {}, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
+
+        function UploadSMSRateChanges(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, "UploadSMSRateChanges"), input);
+        }
+
+        function DownloadImportedCustomerSMSRateLog(fileId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, "DownloadImportedCustomerSMSRateLog"), { fileId: fileId}, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
+
         function HasApplyChangesPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, ['ApplyCustomerSMSRateChanges']));
         }
@@ -41,6 +59,9 @@
             InsertOrUpdateChanges: InsertOrUpdateChanges,
             UpdateSMSRateChangesStatus: UpdateSMSRateChangesStatus,
             GetDraftData: GetDraftData,
+            DownloadImportCustomerSMSRateTemplate: DownloadImportCustomerSMSRateTemplate,
+            UploadSMSRateChanges: UploadSMSRateChanges,
+            DownloadImportedCustomerSMSRateLog: DownloadImportedCustomerSMSRateLog,
             HasApplyChangesPermission: HasApplyChangesPermission,
             HasCancelDraftPermission: HasCancelDraftPermission,
             HasSaveChangesPermission: HasSaveChangesPermission

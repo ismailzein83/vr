@@ -1,0 +1,38 @@
+﻿<div vr-modalcontent ng-controller="WhS_SMSBusinessEntity_CustomerSMSUploadRatesEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formSMSUploadRatesEditor">
+            <vr-row removeline>
+                <vr-columns width="1/3row">
+                    <vr-label>SMS Rates</vr-label>
+                    <vr-fileupload value="scopeModel.document" extension="xls,xlsx" onvaluechanged="scopeModel.onFileChanged" isrequired=" true"></vr-fileupload>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-row removeline>
+                        <vr-columns width="fullrow" ng-show="scopeModel.isUploadingComplete">
+                            <vr-label>Number Of Items Added:</vr-label><vr-label isvalue>{{scopeModel.addedItems}}</vr-label>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="fullrow" ng-show="scopeModel.isUploadingComplete">
+                            <vr-label>Number Of Items Failed:</vr-label><vr-label isvalue>{{scopeModel.failedItems}}</vr-label>
+                        </vr-columns>
+                    </vr-row>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-columns width="fullrow" ng-show="scopeModel.isUploadingComplete">
+                        <vr-label>Download Result</vr-label>
+                        <vr-button type="Download" buttontitle="Download Result" data-onclick="scopeModel.downloadLog" standalone></vr-button>
+                    </vr-columns>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Upload" formname="formSMSUploadRatesEditor" data-onclick="scopeModel.uploadCustomerSMSRates"></vr-button>
+                <vr-button type="Download" data-onclick="scopeModel.downloadTemplate"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

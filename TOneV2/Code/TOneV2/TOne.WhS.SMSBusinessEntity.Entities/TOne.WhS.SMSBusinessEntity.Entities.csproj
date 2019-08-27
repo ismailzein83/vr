@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="CustomerSMSRateDraft\DraftData.cs" />
     <Compile Include="CustomerSMSRateDraft\DraftStateResult.cs" />
+    <Compile Include="CustomerSMSRateDraft\UploadCustomerSMSRateChangesInput.cs" />
+    <Compile Include="CustomerSMSRateDraft\UploadCustomerSMSRateChangesLog.cs" />
     <Compile Include="CustomerSMSRate\CustomerSMSPriceListDetail.cs" />
     <Compile Include="CustomerSMSRate\CustomerSMSPriceListQuery.cs" />
     <Compile Include="SupplierSMSRateDraft\SupplierDraftDataInput.cs" />
@@ -59,6 +61,8 @@
     <Compile Include="SupplierSMSRateDraft\SupplierSMSRateChangeToUpdate.cs" />
     <Compile Include="SupplierSMSRateDraft\SupplierSMSRateDraft.cs" />
     <Compile Include="SupplierSMSRateDraft\UpdateSupplierSMSDraftStatusInput.cs" />
+    <Compile Include="SupplierSMSRateDraft\UploadSupplierSMSRateChangesInput.cs" />
+    <Compile Include="SupplierSMSRateDraft\UploadSupplierSMSRateChangesLog.cs" />
     <Compile Include="SupplierSMSRate\SupplierSMSPriceListDetail.cs" />
     <Compile Include="SupplierSMSRate\SupplierSMSPriceListQuery.cs" />
     <Compile Include="SupplierSMSRate\SupplierSMSPriceList.cs" />
