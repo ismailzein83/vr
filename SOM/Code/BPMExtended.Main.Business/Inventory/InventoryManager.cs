@@ -234,10 +234,10 @@ namespace BPMExtended.Main.Business
             string deviceTypeId = new CatalogManager().GetDeviceTypeByName(deviceTypeName).Id;
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSubTypeTechnologies");
             var IdCol = esq.AddColumn("Id");
-            esq.AddColumn("StSubType");
-            esq.AddColumn("StSubType.Id");
-            var subTypeId = esq.AddColumn("StSubType.Id");
-            var subTypeName = esq.AddColumn("StSubType.StName");
+            esq.AddColumn("StSubTypes");
+            esq.AddColumn("StSubTypes.Id");
+            var subTypeId = esq.AddColumn("StSubTypes.Id");
+            var subTypeName = esq.AddColumn("StSubTypes.StName");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StDeviceType.Id", deviceTypeId);
             esq.Filters.Add(esqFirstFilter);
