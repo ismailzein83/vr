@@ -235,27 +235,6 @@ namespace BPMExtended.Main.Business
             return 0;
         }
 
-        public string GetSubTypeIdentifier(string subTypeId)
-        {
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            EntityCollection entities;
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSubTypes");
-            esq.AddColumn("StSubTypeIdentifier");
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal,"Id", subTypeId);
-            esq.Filters.Add(esqFirstFilter);
-
-            entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                return entities[0].GetColumnValue("StSubTypeIdentifier").ToString();
-            }
-
-            return null;
-        }
-
         public Contact GetContact(string contactId)
         {
             EntitySchemaQuery esq;

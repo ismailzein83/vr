@@ -545,6 +545,12 @@ namespace BPMExtended.Main.Business
             return null;
         }
 
+        public string GetDeviceTypeIdentifier(string phoneNumber)
+        {
+
+            return GetDeviceTypeByName(new InventoryManager().GetTechnicalDetails(phoneNumber).DEV_TYPE).Identifier;
+
+        }
 
         public DeviceType GetDeviceTypeByName(string deviceTypeName)
         {
