@@ -168,6 +168,18 @@ namespace Vanrise.MobileNetwork.Business
             return GetCachedMobileNetowrksByMobileCountryId();
         }
 
+        public Dictionary<string, Vanrise.MobileNetwork.Entities.MobileNetwork> GetCachedMobileNetworksByName()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMobileNetworksByName", BeDefinitionId, () =>
+            {
+                var cachedMobileNetworks = GetCachedMobileNetworks();
+                if (cachedMobileNetworks == null || cachedMobileNetworks.Count == 0)
+                    return null;
+
+                return cachedMobileNetworks.ToDictionary(item => item.NetworkName, item => item);
+            });
+        }
         #endregion
 
         #region Private Methods
