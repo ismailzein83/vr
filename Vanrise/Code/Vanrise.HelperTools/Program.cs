@@ -13,8 +13,7 @@ namespace Vanrise.HelperTools
         /// </summary>
         [STAThread]
         static void Main(string[] args)
-        {
-
+        {            
             if (args.Length > 1)
             {
                 string currentDate = DateTime.Now.ToString("yyyMMddHHmm");
@@ -34,6 +33,9 @@ namespace Vanrise.HelperTools
                 {
                     case "DBs":
                         Common.GenerateDBStructure(currentDate, currentDateShort, new List<string>(), null, args[1]);
+                        break;
+                    case "GenerateLocalDB":
+                        Common.GenerateLocalDB();
                         break;
                     case "GRPSQL":
                         Common.GroupSQLPostScriptFiles(currentDateShort, false, null, args[1], args[2]);

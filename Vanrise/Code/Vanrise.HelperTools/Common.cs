@@ -27,6 +27,8 @@ namespace Vanrise.HelperTools
         public static string ActiveDBs { get { return ConfigurationManager.AppSettings["ActiveDBs"]; } }
         public static string PreventCreateDbScript { get { return ConfigurationManager.AppSettings["PreventCreateDbScript"]; } }
         public static string PreventAddingStandardConfigurationStructure { get { return ConfigurationManager.AppSettings["PreventAddingStandardConfigurationStructure"]; } }
+        public static string StandardStructureLocalDBs { get { return ConfigurationManager.AppSettings["StandardStructureLocalDBs"]; } }
+        public static string StandardQueueingStructureLocalDBs { get { return ConfigurationManager.AppSettings["StandardQueueingStructureLocalDBs"]; } }
         public static string CustomStandardStructure { get { return ConfigurationManager.AppSettings["CustomStandardStructure"]; } }
         public static string SqlFilesOutputPath { get { return ConfigurationManager.AppSettings["sqlFilesOutputPath"]; } }
         public static string JavascriptsOutputPath { get { return ConfigurationManager.AppSettings["javascriptsOutputPath"]; } }
@@ -572,7 +574,7 @@ when not matched by target then
             //replace main DB retail with related project 
             if (ItemExistExactMatch(CustomStandardStructure, projectName, true))
             {
-                sb = sb.Replace(mainItem, "Standard"+ projectName + "Structure");
+                sb = sb.Replace(mainItem, "Standard" + projectName + "Structure");
             }
 
             if (!Directory.Exists(sqlFilesOutputPath))
@@ -654,6 +656,124 @@ when not matched by target then
 
             // generates script
             return transfer.ScriptTransfer();
+        }
+
+        private static StringBuilder GenerateSQLDBScript(string item)
+        {
+            var sb = new StringBuilder();
+            Server srv = new Server(Common.ServerIP);
+            ServerConnection conContext = new ServerConnection();
+            conContext = srv.ConnectionContext;
+            conContext.LoginSecure = false;
+            conContext.Login = Common.SQLUsername;
+            conContext.Password = Common.SQLPassword;
+            Server myServer = new Server(conContext);
+            Scripter scripter = new Scripter(myServer);
+            Database dbname = myServer.Databases[item];
+            StringCollection transferScript = GetTransferScript(dbname);
+            ScriptingOptions scriptOptions = new ScriptingOptions();
+            scriptOptions.ScriptDrops = true;
+            scriptOptions.WithDependencies = false;
+            scriptOptions.IncludeHeaders = true;
+            scriptOptions.IncludeIfNotExists = true;
+            scriptOptions.Indexes = true;
+            scriptOptions.NoIdentities = true;
+            scriptOptions.NonClusteredIndexes = true;
+            scriptOptions.SchemaQualify = true;
+            scriptOptions.AllowSystemObjects = true;
+
+            foreach (string script in dbname.Script(scriptOptions))
+            {
+                sb.AppendLine(script);
+                sb.AppendLine("GO");
+            }
+
+            Urn[] DatabaseURNs = new Urn[] { dbname.Urn };
+            StringCollection scriptCollection = scripter.Script(DatabaseURNs);
+            foreach (string script in scriptCollection)
+            {
+                if (script.Contains("CREATE DATABASE"))
+                {
+                    sb.AppendLine(string.Format("CREATE DATABASE [{0}]", item));
+                    sb.AppendLine("GO");
+
+                    sb.AppendLine(string.Format("USE [{0}]", item));
+                    sb.AppendLine("GO");
+                }
+                else
+                {
+                    sb.AppendLine(script);
+                    sb.AppendLine("GO");
+                }
+            }
+
+            foreach (string script in transferScript)
+            {
+                if (!script.Contains("CREATE USER") && !script.Contains("sys.sp_addrolemember"))
+                {
+                    sb.AppendLine(script);
+                    sb.AppendLine("GO");
+                }
+            }
+
+            return sb;
+        }
+
+        public static void GenerateLocalDB()
+        {
+            List<string> lstLoggingTransaction = StandardStructureLocalDBs.ToString().Split('#').ToList();
+            List<string> lstQueueing = StandardQueueingStructureLocalDBs.ToString().Split('#').ToList();
+
+            string sqlFilesOutputPath = Common.SqlFilesOutputPath;
+            string currentDateShort = DateTime.Now.ToString("yyyMMdd");
+            sqlFilesOutputPath = string.Format(sqlFilesOutputPath, currentDateShort, "DBsStructure", "LocalDatabases");
+
+            if (!Directory.Exists(sqlFilesOutputPath))
+            {
+                Directory.CreateDirectory(sqlFilesOutputPath);
+            }
+
+            StringBuilder sbLogging = GenerateSQLDBScript("StandardLoggingStructure");            
+            StringBuilder sbTransaction = GenerateSQLDBScript("StandardTransactionStructure");
+            StringBuilder sbQueueing = GenerateSQLDBScript("StandardQueueingStructure");
+
+            var postscriptLogging = File.ReadAllText(@"C:\TFS\TOneV2\Code\TOneV2\SQL.TOneLogging\Script.PostDeployment.sql");
+            var postscriptTransaction = File.ReadAllText(@"C:\TFS\TOneV2\Code\TOneV2\SQL.TOneTransaction\BusinessProcess.PostDeployment.sql");
+            var postscriptQueueing = File.ReadAllText(@"C:\TFS\TOneV2\Code\TOneV2\SQL.TOneQueueing\Script.PostDeployment.sql");
+
+            foreach (string project in lstLoggingTransaction)
+            {
+                StringBuilder stProject = new StringBuilder();
+                
+                stProject.Append(sbLogging.ToString());
+                stProject.AppendLine("GO");
+                stProject.AppendLine(string.Format("USE [{0}]", "StandardLoggingStructure"));
+                stProject.AppendLine("GO");
+                stProject.AppendLine(postscriptLogging);
+                stProject.AppendLine("GO");
+                stProject = stProject.Replace("StandardLoggingStructure", project + "_Dev_Logging");
+
+                stProject.Append(sbTransaction.ToString());
+                stProject.AppendLine("GO");
+                stProject.AppendLine(string.Format("USE [{0}]", "StandardTransactionStructure"));
+                stProject.AppendLine("GO");
+                stProject.AppendLine(postscriptTransaction);
+                stProject.AppendLine("GO");
+                stProject = stProject.Replace("StandardTransactionStructure", project + "_Dev_Transaction");
+
+                if (lstQueueing.Contains(project))
+                {
+                    stProject.Append(sbQueueing.ToString());
+                    stProject.AppendLine("GO");
+                    stProject.AppendLine(string.Format("USE [{0}]", "StandardQueueingStructure"));
+                    stProject.AppendLine("GO");
+                    stProject.AppendLine(postscriptQueueing);
+                    stProject.AppendLine("GO");
+                    stProject = stProject.Replace("StandardQueueingStructure", project + "_Dev_Queueing");
+                }
+
+                File.WriteAllText(string.Format("{0}\\{1}.sql", sqlFilesOutputPath, project), stProject.ToString());
+            }
         }
 
         #endregion
