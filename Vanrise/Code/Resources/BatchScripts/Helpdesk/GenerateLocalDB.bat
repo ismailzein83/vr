@@ -6,5 +6,5 @@ Set PARSEARG="eol=; tokens=1,2,3,4* delims=/, "
 For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO Generate LocalDB Standard Structure files
-start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "GenerateLocalDB"
+start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "GenerateLocalDB" "LocalDatabases"
 
