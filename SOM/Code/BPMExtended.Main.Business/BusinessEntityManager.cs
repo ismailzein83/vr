@@ -140,6 +140,17 @@ namespace BPMExtended.Main.Business
             }
             return monthNumber;
         }
+        public void InsertInstanceToProcessInstancesLogs(Guid requestId, long processInstanceId)
+        {
+            EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StSOMProcessInstancesLogs");
+            Entity entity = schema.CreateEntity(BPM_UserConnection);
+
+            entity.SetColumnValue("Id", Guid.NewGuid());
+            entity.SetColumnValue("StRequestId", requestId);
+            entity.SetColumnValue("StProcessInstanceId", processInstanceId);
+
+            entity.Save();
+        }
 
     }
 

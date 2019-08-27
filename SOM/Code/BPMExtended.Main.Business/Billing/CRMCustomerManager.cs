@@ -1145,6 +1145,15 @@ namespace BPMExtended.Main.Business
 
             }
 
+            if (output != null)
+            {
+                string stringifiedProcessId = output.ProcessId;
+                long processId;
+                long.TryParse(stringifiedProcessId,out processId);
+                var businessEntityManager = new BusinessEntityManager();
+                businessEntityManager.InsertInstanceToProcessInstancesLogs(requestId, processId);
+            }
+
             return output;
 
             //return new SOMRequestOutput()
