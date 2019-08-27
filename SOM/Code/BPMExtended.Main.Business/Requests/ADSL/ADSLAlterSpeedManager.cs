@@ -102,6 +102,9 @@ namespace BPMExtended.Main.Business
                     output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_AlterSpeed/StartProcess", somRequestInput);
                 }
 
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
             }
 
         }

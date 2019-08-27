@@ -84,6 +84,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitLineTermination/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 
@@ -150,6 +152,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateLineTermination/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

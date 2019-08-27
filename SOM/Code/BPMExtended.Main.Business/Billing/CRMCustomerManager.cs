@@ -785,8 +785,11 @@ namespace BPMExtended.Main.Business
 
                 using (var client = new SOMClient())
                 {
-                    client.Post<SOMRequestInput<CustomerAddressInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<CustomerAddressInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
                 }
+
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
             }
 
         }
@@ -840,14 +843,18 @@ namespace BPMExtended.Main.Business
 
                 using (var client = new SOMClient())
                 {
-                    client.Post<SOMRequestInput<CustomerPaymentProfileInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerPaymentProfile/StartProcess", somRequestInput);
+                    output= client.Post<SOMRequestInput<CustomerPaymentProfileInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerPaymentProfile/StartProcess", somRequestInput);
                 }
+
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
             }
 
         }
 
         public void UpdateCustomerCategory(string customerCategoryId, string customerId, string requestId)
         {
+            var output = new SOMRequestOutput();
                 SOMRequestInput<CustomerCategoryInput> somRequestInput = new SOMRequestInput<CustomerCategoryInput>
                 {
                     InputArguments = new CustomerCategoryInput
@@ -863,8 +870,12 @@ namespace BPMExtended.Main.Business
            
             using (var client = new SOMClient())
             {
-                client.Post<SOMRequestInput<CustomerCategoryInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomer/StartProcess", somRequestInput);
+                output = client.Post<SOMRequestInput<CustomerCategoryInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomer/StartProcess", somRequestInput);
             }
+
+            var manager = new BusinessEntityManager();
+            manager.InsertSOMRequestToProcessInstancesLogs(Guid.Parse(requestId), output);
+
 
         }
 
@@ -1205,7 +1216,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<TelephonyContractOnHoldInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateTelephonyContract/StartProcess", somRequestInput);
                 }
-
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

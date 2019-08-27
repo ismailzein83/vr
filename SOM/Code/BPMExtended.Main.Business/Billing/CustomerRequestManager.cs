@@ -391,7 +391,7 @@ namespace BPMExtended.Main.Business
             {
                 var processInstanceLog = new SOMProcessInstanceLog()
                 {
-                    ProcessInstanceId = (long)entities[i].GetColumnValue("StProcessInstanceId"),
+                    ProcessInstanceId = (int)entities[i].GetColumnValue("StProcessInstanceId"),
                     RequestId = requestId
                 };
                 processInstancesLogs.Add(processInstanceLog);

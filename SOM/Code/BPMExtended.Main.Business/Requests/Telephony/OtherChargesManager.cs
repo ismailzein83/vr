@@ -61,6 +61,9 @@ namespace BPMExtended.Main.Business
                     output = client.Post<SOMRequestInput<AddOtherChargesRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_AddOtherCharges/StartProcess", somRequestInput);
                 }
 
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
             }
 
         }

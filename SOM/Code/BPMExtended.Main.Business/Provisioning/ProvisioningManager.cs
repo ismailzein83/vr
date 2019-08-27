@@ -70,10 +70,13 @@ namespace BPMExtended.Main.Business
 
             using (var client = new SOMClient())
             {
-                client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitResetKeyword/StartProcess", somRequestInput);
+                output = client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitResetKeyword/StartProcess", somRequestInput);
             }
 
-            return processInstanceId;
+            var manager = new BusinessEntityManager();
+            manager.InsertSOMRequestToProcessInstancesLogs(Guid.Parse(requestId), output);
+
+            return output.ProcessId;
 
         }
     }

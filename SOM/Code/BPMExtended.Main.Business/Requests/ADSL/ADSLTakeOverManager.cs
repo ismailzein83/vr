@@ -82,6 +82,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_CreateContract/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

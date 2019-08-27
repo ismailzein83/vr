@@ -110,6 +110,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<LastMileChangeRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_CreateContract/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

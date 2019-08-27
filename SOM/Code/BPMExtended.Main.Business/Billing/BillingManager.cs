@@ -503,6 +503,9 @@ namespace BPMExtended.Main.Business
             {
                 ProcessInstanceId = client.Post<BillOnDemandInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/BillOnDemand/StartProcess", billOnDemandInput);
             }
+
+
+
             return ProcessInstanceId.ProcessId;
         }
 

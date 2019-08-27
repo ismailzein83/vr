@@ -102,6 +102,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ContractTakeOverRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ContractTakeOver/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

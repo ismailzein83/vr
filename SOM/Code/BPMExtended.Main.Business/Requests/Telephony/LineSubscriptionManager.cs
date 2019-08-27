@@ -59,6 +59,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Billing_SubmitActivateContract/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
             }
         }
 
@@ -101,6 +103,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
 
             }
@@ -149,6 +153,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<CreateSwitchAccountInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateSwitchAccount/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
             }
         }
 

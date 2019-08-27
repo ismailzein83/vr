@@ -105,6 +105,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ADSLForISPRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateADSLForISP/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

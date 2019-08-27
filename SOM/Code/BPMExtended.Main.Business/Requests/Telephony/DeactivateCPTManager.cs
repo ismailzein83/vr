@@ -68,6 +68,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<DeactivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitDeactivateCPT/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 
@@ -121,6 +123,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<DeactivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP//ST_Tel_DeactivateCPT/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

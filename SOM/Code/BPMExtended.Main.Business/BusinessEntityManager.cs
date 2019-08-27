@@ -151,7 +151,16 @@ namespace BPMExtended.Main.Business
 
             entity.Save();
         }
-
-    }
+        public void InsertSOMRequestToProcessInstancesLogs(Guid requestId, SOMRequestOutput output)
+        {
+            string stringifiedProcessId = output.ProcessId;
+            if (output.ProcessId != null)
+            {
+                long processId;
+                long.TryParse(stringifiedProcessId, out processId);
+                InsertInstanceToProcessInstancesLogs(requestId, processId);
+            }
+        }
+}
 
 }

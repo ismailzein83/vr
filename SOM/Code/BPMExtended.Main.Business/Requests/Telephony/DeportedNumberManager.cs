@@ -80,6 +80,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<DeportedNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitDeportNumber/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
         }

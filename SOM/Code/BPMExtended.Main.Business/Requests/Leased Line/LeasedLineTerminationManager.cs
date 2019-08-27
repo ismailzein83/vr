@@ -68,6 +68,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<LeasedLineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_TerminateContract/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

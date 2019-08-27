@@ -79,6 +79,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ChangeRatePlanRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ChangeRatePlan/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

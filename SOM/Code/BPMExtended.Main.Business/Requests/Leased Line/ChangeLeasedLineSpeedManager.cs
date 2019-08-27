@@ -76,6 +76,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ChangeLeasedLineSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_AlterSpeed/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

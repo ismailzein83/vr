@@ -62,6 +62,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ADSLChangePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_ResetPassword/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
         }

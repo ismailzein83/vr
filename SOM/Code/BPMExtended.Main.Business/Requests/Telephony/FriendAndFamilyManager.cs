@@ -105,6 +105,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<FAFManagementRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ManageFAF/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

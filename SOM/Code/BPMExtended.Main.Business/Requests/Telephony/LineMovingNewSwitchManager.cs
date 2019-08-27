@@ -75,6 +75,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<LineMovingNewSwitchInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_LineMoveSameSwitch/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

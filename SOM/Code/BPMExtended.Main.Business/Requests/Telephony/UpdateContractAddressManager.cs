@@ -115,6 +115,9 @@ namespace BPMExtended.Main.Business
                     output = client.Post<SOMRequestInput<UpdateContractAddressRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Billing_UpdateContractAddressAndAddToPublicDirectory/StartProcess", somRequestInput);
                 }
 
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
             }
 
         }

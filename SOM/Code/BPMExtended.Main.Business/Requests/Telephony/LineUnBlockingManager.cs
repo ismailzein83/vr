@@ -71,6 +71,8 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<LineUnBlockingRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_UnblockContract/StartProcess", somRequestInput);
                 }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
 

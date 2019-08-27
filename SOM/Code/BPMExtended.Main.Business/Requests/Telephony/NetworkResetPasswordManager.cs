@@ -74,6 +74,9 @@ namespace BPMExtended.Main.Business
                     output = client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_NetworkServiceResetPassword/StartProcess", somRequestInput);
                 }
 
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
             }
 
         }
@@ -126,8 +129,13 @@ namespace BPMExtended.Main.Business
 
             using (var client = new SOMClient())
             {
-                client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateResetKeyword/StartProcess", somRequestInput);
+                output = client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateResetKeyword/StartProcess", somRequestInput);
             }
+
+            var manager = new BusinessEntityManager();
+            manager.InsertSOMRequestToProcessInstancesLogs(Guid.Parse(requestId), output);
+
+
         }
         #endregion
     }

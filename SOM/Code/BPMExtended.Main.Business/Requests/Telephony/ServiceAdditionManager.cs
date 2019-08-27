@@ -150,6 +150,9 @@ namespace BPMExtended.Main.Business
                     output = client.Post<SOMRequestInput<ServiceAdditionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_AddAdditionalServices/StartProcess", somRequestInput);
                 }
 
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
             }
 
         }

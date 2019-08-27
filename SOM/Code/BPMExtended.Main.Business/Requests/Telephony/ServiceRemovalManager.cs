@@ -121,6 +121,9 @@ namespace BPMExtended.Main.Business
                     output = client.Post<SOMRequestInput<ServiceRemovalSubmitInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitRemoveContractServices/StartProcess", somRequestInput);
                 }
 
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
             }
         }
 
@@ -175,6 +178,9 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<ServiceRemovalSubmitInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateRemoveContractServices/StartProcess", somRequestInput);
                 }
+
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
         }

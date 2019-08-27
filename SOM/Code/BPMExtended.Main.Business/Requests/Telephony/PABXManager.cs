@@ -234,6 +234,9 @@ namespace BPMExtended.Main.Business
                     output = client.Post<SOMRequestInput<CreatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitPabx/StartProcess", somRequestInput);
                 }
 
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
             }
 
         }
@@ -320,6 +323,9 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<CreatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivatePABX/StartProcess", somRequestInput);
                 }
+
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
 
             }
         }
