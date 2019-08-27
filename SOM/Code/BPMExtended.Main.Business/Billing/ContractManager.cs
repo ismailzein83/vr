@@ -668,6 +668,8 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
+       
+
         public bool DeactivateLineTerminationRequest(string contractId, string requestId)
         {
             //TODO: Deactivate line  contract on the network

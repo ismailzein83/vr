@@ -87,6 +87,7 @@
     <Compile Include="DeviceType.cs" />
     <Compile Include="PromotionDetail.cs" />
     <Compile Include="InvoiceEntity.cs" />
+    <Compile Include="SOMProcessInstanceLog.cs" />
     <Compile Include="ServiceHistoryRecordDetail.cs" />
     <Compile Include="ServiceHistoryRecord .cs" />
     <Compile Include="Service.cs" />

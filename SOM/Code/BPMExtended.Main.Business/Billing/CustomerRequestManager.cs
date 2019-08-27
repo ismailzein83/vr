@@ -372,6 +372,34 @@ namespace BPMExtended.Main.Business
             return "";
         }
 
+        public List<SOMProcessInstanceLog> GetFulfillmentLogs(Guid requestId)
+        {
+            var processInstancesLogs = new List<SOMProcessInstanceLog>();
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSOMProcessInstancesLogs");
+            esq.AddColumn("Id");
+            esq.AddColumn("StRequestId");
+            esq.AddColumn("StProcessInstanceId");
+            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            for (int i = 0; i < entities.Count; i++)
+            {
+                var processInstanceLog = new SOMProcessInstanceLog()
+                {
+                    ProcessInstanceId = (long)entities[i].GetColumnValue("StProcessInstanceId"),
+                    RequestId = requestId
+                };
+                processInstancesLogs.Add(processInstanceLog);
+            }
+
+            return processInstancesLogs;
+        }
+
 
         private void UpdateRequestStatus(string requestId, string SchemaName, string CompletedStepId,string CompletedStep, string TechnicalStep)
         {

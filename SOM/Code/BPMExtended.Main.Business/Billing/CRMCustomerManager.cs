@@ -630,6 +630,8 @@ namespace BPMExtended.Main.Business
 
         }
 
+        
+
 
         public string GetSchemaName(string requestId, string entityName)
         {
@@ -1148,9 +1150,10 @@ namespace BPMExtended.Main.Business
 
             }
 
-            if (output != null)
+            
+            string stringifiedProcessId = output.ProcessId;
+            if (output.ProcessId != null)
             {
-                string stringifiedProcessId = output.ProcessId;
                 long processId;
                 long.TryParse(stringifiedProcessId,out processId);
                 var businessEntityManager = new BusinessEntityManager();
@@ -1165,6 +1168,9 @@ namespace BPMExtended.Main.Business
             //};
 
         }
+
+
+
 
 
         public int CheckTelephonyContractOnHoldStatus(string processId)
