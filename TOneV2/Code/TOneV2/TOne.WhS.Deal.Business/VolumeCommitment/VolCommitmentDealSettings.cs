@@ -17,12 +17,10 @@ namespace TOne.WhS.Deal.Business
         Customer = 2
     }
 
-
     public class VolCommitmentDealSettings : DealSettings
     {
         public static Guid VolCommitmentDealSettingsConfigId = new Guid("B606E88C-4AE5-4BF0-BCE5-10D456A092F5");
         public override Guid ConfigId { get { return VolCommitmentDealSettingsConfigId; } }
-
         public VolCommitmentDealType DealType { get; set; }
         public int CarrierAccountId { get; set; }
         public List<VolCommitmentDealItem> Items { get; set; }
@@ -33,16 +31,17 @@ namespace TOne.WhS.Deal.Business
         {
             get
             {
-                if (EndDate.HasValue)
-                {
-                    DateTime? EED = EndDate;
-                    if (DeActivationDate.HasValue)
-                        EED = DeActivationDate < EndDate ? DeActivationDate : EndDate;
+                if (!EndDate.HasValue)
+                    return null;
 
-                    if (OffSet.HasValue)
-                        return EED.Value.Subtract(OffSet.Value);
-                }
-                return EndDate;
+                DateTime? realEED = EndDate;
+                if (Status == DealStatus.Inactive && DeActivationDate.HasValue)
+                    realEED = DeActivationDate < EndDate ? DeActivationDate : EndDate;
+
+                if (OffSet.HasValue)
+                    realEED = realEED.Value.Subtract(OffSet.Value);
+
+                return realEED;
             }
         }
         public override DateTime RealBED
@@ -163,7 +162,7 @@ namespace TOne.WhS.Deal.Business
                             validateBeforeSaveContext.ValidateMessages.Add("Cannot add tier(s) with discount rate evaluater when deal type is 'Send Or Pay'");
                         }
                     }
-                } 
+                }
             }
 
 
