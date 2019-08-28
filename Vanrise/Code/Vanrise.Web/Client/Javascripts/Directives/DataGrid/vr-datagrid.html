@@ -127,7 +127,7 @@
                 </div>
             </div>
             <div class="vr-row-action-container">
-                <div vr-desktop-element class="action-full-screen-icon  inline-btn" ng-show="dataItem.fullScreenMode">
+                <div vr-desktop-element class="action-full-screen-icon  inline-btn" ng-show="dataItem.fullScreenMode && !$parent.ctrl.hideCloseButton" >
                     <button class="btn btn-default btncustom " ng-click="$parent.ctrl.switchFullScreenModeOff(dataItem,$event)">{{::$parent.ctrl.closeAtributesText}}</button>
                 </div>
                 <grid-row-action ng-if="dataItem.fullScreenMode && $parent.ctrl.isActionMenuVisible(dataItem)" ng-show="$parent.ctrl.hasDefinedMenuAction(dataItem)">

@@ -56,8 +56,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     }
                     ctrl.viewDirective = ctrl.rowviewsetting.viewDirective || undefined;
                     ctrl.directiveSettings = ctrl.rowviewsetting.directiveSettings || undefined;
+                    ctrl.hideCloseButton = ctrl.rowviewsetting.hideCloseButton || undefined;
                 }
-
                 ctrl.mobileGridView = ctrl.mobilegridlayout != undefined ? ctrl.mobilegridlayout : false;
                 ctrl.mobileSwitchBtn = true;
                 ctrl.itemsSortable = {
