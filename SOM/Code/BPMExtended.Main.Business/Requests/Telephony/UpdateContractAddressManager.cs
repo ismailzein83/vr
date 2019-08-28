@@ -62,6 +62,13 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StFloor");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -76,6 +83,10 @@ namespace BPMExtended.Main.Business
                 var addressSeq = entities[0].GetColumnValue("StAddressSequence");
                 var status = entities[0].GetColumnValue("StDirectoryStatus");
                 var city = entities[0].GetColumnValue("StCityName");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var province = entities[0].GetColumnValue("StProvinceName");
+                var floor = entities[0].GetColumnValue("StFloor");
+                var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
                 var fees = entities[0].GetColumnValue("StOperationAddedFees");
                 var deposits = entities[0].GetColumnValue("StOperationAddedDeposites");
                 var services = entities[0].GetColumnValue("StOperationAddedServices");
@@ -91,6 +102,11 @@ namespace BPMExtended.Main.Business
                     {
                         AddressSequence = addressSeq.ToString(),
                         City = city.ToString(),
+                        CountryId = "206",
+                        Building = buildingNumber.ToString(),
+                        Floor = floor.ToString(),
+                        State = province.ToString(),
+                        Region = area.ToString(),
                         ServiceId = serviceId.ToString(),
                         Street = street.ToString(),
                         Action = action,

@@ -154,7 +154,7 @@ namespace BPMExtended.Main.Business
 
             //city
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "City");
-            esq.AddColumn("Id");
+            var IdCol = esq.AddColumn("Id");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", city);
             esq.Filters.Add(esqFirstFilter);
@@ -162,12 +162,12 @@ namespace BPMExtended.Main.Business
             entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                cityId = entities[0].GetTypedColumnValue<Guid>("Id");
+                cityId = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);
             }
 
             //province
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Region");
-            esq.AddColumn("Id");
+            var IdColRegion = esq.AddColumn("Id");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", province);
             esq.Filters.Add(esqFirstFilter);
@@ -175,12 +175,12 @@ namespace BPMExtended.Main.Business
             entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                provinceId = entities[0].GetTypedColumnValue<Guid>("Id");
+                provinceId = entities[0].GetTypedColumnValue<Guid>(IdColRegion.Name);
             }
 
             //area
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StAreaLookup");
-            esq.AddColumn("Id");
+            var IdColArea = esq.AddColumn("Id");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", area);
             esq.Filters.Add(esqFirstFilter);
@@ -188,12 +188,12 @@ namespace BPMExtended.Main.Business
             entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                areaId = entities[0].GetTypedColumnValue<Guid>("Id");
+                areaId = entities[0].GetTypedColumnValue<Guid>(IdColArea.Name);
             }
 
             //town
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTownLookup");
-            esq.AddColumn("Id");
+            var IdColTown = esq.AddColumn("Id");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", town);
             esq.Filters.Add(esqFirstFilter);
@@ -201,7 +201,7 @@ namespace BPMExtended.Main.Business
             entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                townId = entities[0].GetTypedColumnValue<Guid>("Id");
+                townId = entities[0].GetTypedColumnValue<Guid>(IdColTown.Name);
             }
 
 

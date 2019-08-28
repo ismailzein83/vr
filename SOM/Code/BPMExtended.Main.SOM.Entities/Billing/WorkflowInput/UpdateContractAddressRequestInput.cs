@@ -11,7 +11,12 @@ namespace BPMExtended.Main.SOMAPI
     {
         public CommonInputArgument CommonInputArgument { get; set; }
         public string  City { get; set; }
+        public string CountryId { get; set; }
+        public string State { get; set; }
+        public string Region { get; set; }
         public string Street { get; set; }
+        public string Building { get; set; }
+        public string Floor { get; set; }
         public DirectoryInquiry Action { get; set; }
         public PaymentData PaymentData { get; set; }
         public string ServiceId { get; set; }

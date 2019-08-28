@@ -14,6 +14,11 @@ namespace BPMExtended.Main.SOMAPI
         public string CSO { get; set; }
         public string SubType { get; set; }
         public string City { get; set; }
+        public string Street { get; set; }
+        public string Building { get; set; }
+        public string Floor { get; set; }
+        public string Region { get; set; }
+        public string State { get; set; }
         public string ServiceResource { get; set; }
 
         public string PhoneNumber { get; set; }

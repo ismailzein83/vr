@@ -742,10 +742,16 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StAddressID");
             esq.AddColumn("StStreet");
-            esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloorNumber");
+            esq.AddColumn("StMiddleName");
             esq.AddColumn("StAddressID");
-            var cityName = esq.AddColumn("StCity.Name");
+            esq.AddColumn("StCity");
+            esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StBuildingNumber");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -753,27 +759,33 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var city = entities[0].GetTypedColumnValue<string>(cityName.Name);
                 var lastName = entities[0].GetColumnValue("StFirstName");
                 var firstName = entities[0].GetColumnValue("StLastName");
+                var middleName = entities[0].GetColumnValue("StMiddleName");
                 var addressId = entities[0].GetColumnValue("StAddressID");  
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var street = entities[0].GetColumnValue("StStreet");
                 var building = entities[0].GetColumnValue("StBuildingNumber");
                 var floor = entities[0].GetColumnValue("StFloorNumber");
+                var city = entities[0].GetColumnValue("StCityName");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var province = entities[0].GetColumnValue("StProvinceName");
 
                 SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
                 {
                     InputArguments = new CustomerAddressInput
                     {
                         City = city.ToString(),
+                        Building = building.ToString(),
+                        Floor = floor.ToString(),
+                        MiddleName = middleName.ToString(),
+                        StateProvince = province.ToString(),
+                        Region = area.ToString(),
                         FirstName = firstName.ToString(),
                         LastName = lastName.ToString(),
                         AddressSeq = long.Parse(addressId.ToString()),
-                        Building= building.ToString(),
                         Street = street.ToString(),
                         Country="206",
-                        Floor=floor.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             CustomerId = customerId.ToString(),
@@ -1122,6 +1134,15 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StFloor");
             esq.AddColumn("StSubTypes");
             esq.AddColumn("StSubTypes.Id");
             var subType = esq.AddColumn("StSubTypes.StName");
@@ -1139,9 +1160,15 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var phoneNumber = entities[0].GetColumnValue("StNumberToReserve");
+                var floor = entities[0].GetColumnValue("StFloor");
+                var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
+                var street = entities[0].GetColumnValue("StStreet");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var subTypeId = entities[0].GetColumnValue("StSubTypesId");
                 var city = entities[0].GetColumnValue("StCityName");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var province = entities[0].GetColumnValue("StProvinceName");
+                var town = entities[0].GetColumnValue("StTownName");
                 var subTypeName = entities[0].GetTypedColumnValue<string>(subType.Name);
 
 
@@ -1198,6 +1225,11 @@ namespace BPMExtended.Main.Business
                         SubType = subTypeName,//new CommonManager().GetSubTypeIdentifier(subTypeId.ToString()),
                         ServiceResource = serviceResourceId,
                         City = city.ToString(),
+                        Building = buildingNumber.ToString(),
+                        Floor = floor.ToString(),
+                        State = province.ToString(),
+                        Street= street.ToString(),
+                        Region = area.ToString(),
                         CSO = info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
