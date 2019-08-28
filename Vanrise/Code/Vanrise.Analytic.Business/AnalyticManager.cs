@@ -805,11 +805,20 @@ namespace Vanrise.Analytic.Business
             List<List<string>> subTablesOrderedDimensionKeys;
             BuildSubTablesRecordsFromDBRecords(subTablesDBRecords, subTablesSummaryDBRecords, analyticTableQueryContext, allDimensionNames, measureStyleRulesDictionary,
                 querySubTables, buildSummaryRecord, fromUIReport, out resultSubTables, out subTablesRecordsByParentGroupingKey, out subTablesSummaryRecordsByGroupingKey, out subTablesOrderedDimensionKeys);
+
+            var dataRecordFieldsByName = CreateDataRecordFieldsByName(analyticTableQueryContext, requestedDimensionNames);
+
+            Dictionary<string, DataRecordFieldType> fieldTypesByFieldNameForGetDescriptionByIds = null;
+            if (dataRecordFieldsByName != null && dataRecordFieldsByName.Values != null)
+                fieldTypesByFieldNameForGetDescriptionByIds = Vanrise.GenericData.Business.Helper.GetFieldTypesByFieldNameForDescriptionByIds(dataRecordFieldsByName.Values.ToList());
+
+            var groupedValuesForGetDescriptionByIdsDict = new Dictionary<string, GroupedValuesForGetDescriptionByIds>();
+
             foreach (var dbRecordEntry in groupedRecordsByDimensionsKey)
             {
                 string recordGroupingKey = dbRecordEntry.Key;
                 bool allMeasuresAreNull = true;
-                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecordEntry.Value, requestedDimensionNames,
+                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecordEntry.Value, requestedDimensionNames, fieldTypesByFieldNameForGetDescriptionByIds, dataRecordFieldsByName, groupedValuesForGetDescriptionByIdsDict,
                     allDimensionNames, measureNames, measureStyleRulesDictionary, false, null, recordGroupingKey, null, fromUIReport, out allMeasuresAreNull);
                 if (querySubTables != null)
                     AddSubTablesMeasuresToRecord(analyticRecord, recordGroupingKey, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesRecordsByParentGroupingKey, subTablesOrderedDimensionKeys);
@@ -828,6 +837,9 @@ namespace Vanrise.Analytic.Business
                     analyticRecords.Add(analyticRecord);
                 }
             }
+
+            Vanrise.GenericData.Business.Helper.FillDescriptionsForGroupedValues(groupedValuesForGetDescriptionByIdsDict);
+
             if (timeForMissingData != null)
             {
                 foreach (var dateTime in timeForMissingData)
@@ -840,7 +852,7 @@ namespace Vanrise.Analytic.Business
             if (withSummary && summaryDBRecord != null)
             {
                 bool allSummaryMeasuresAreNull;
-                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summaryDBRecord, null, allDimensionNames, measureNames, measureStyleRulesDictionary,
+                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summaryDBRecord, null, null, null, null, allDimensionNames, measureNames, measureStyleRulesDictionary,
                     true, null, null, null, fromUIReport, out allSummaryMeasuresAreNull);
                 if (querySubTables != null)
                     AddSubTablesMeasuresToSummaryRecord(summaryRecord, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesSummaryRecordsByGroupingKey, subTablesOrderedDimensionKeys);
@@ -955,7 +967,7 @@ namespace Vanrise.Analytic.Business
                     foreach (var subtableDBRecord in subTableDBRecords.Values)
                     {
                         bool subTableAllMeasuresAreNull;
-                        AnalyticRecord subTableAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subtableDBRecord.Record, null,
+                        AnalyticRecord subTableAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subtableDBRecord.Record, null, null, null, null,
                     allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, false, subTableIndex, subtableDBRecord.ParentRecordGroupingKey, subtableDBRecord.GroupingKey, fromUIReport,
                     out subTableAllMeasuresAreNull);//no need to fill dimensions values for sub table records 
                         var subTableAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
@@ -971,10 +983,18 @@ namespace Vanrise.Analytic.Business
                     SubTableAnalyticRecordInProcessByGroupingKey subTableSummaryRecordsByGroupingKey = new SubTableAnalyticRecordInProcessByGroupingKey();
                     subTablesSummaryRecordsByGroupingKey.Add(subTableSummaryRecordsByGroupingKey);
                     var subTableSummaryRecords = new List<SubTableAnalyticRecordInProcess>();
+                    var dataRecordFieldsByName = CreateDataRecordFieldsByName(analyticTableQueryContext, querySubTable.Dimensions);
+
+                    Dictionary<string, DataRecordFieldType> fieldTypesByFieldNameForGetDescriptionByIds = null;
+                    if (dataRecordFieldsByName != null && dataRecordFieldsByName.Values != null)
+                        fieldTypesByFieldNameForGetDescriptionByIds = Vanrise.GenericData.Business.Helper.GetFieldTypesByFieldNameForDescriptionByIds(dataRecordFieldsByName.Values.ToList());
+
+                    var groupedValuesForGetDescriptionByIdsDict = new Dictionary<string, GroupedValuesForGetDescriptionByIds>();
+
                     foreach (var subTableSummaryDBRecord in subTableSummaryDBRecords.Values)
                     {
                         bool subTableSummaryAllMeasuresAreNull;
-                        AnalyticRecord subTableSummaryAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subTableSummaryDBRecord.Record, querySubTable.Dimensions,
+                        AnalyticRecord subTableSummaryAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subTableSummaryDBRecord.Record, querySubTable.Dimensions, fieldTypesByFieldNameForGetDescriptionByIds, dataRecordFieldsByName, groupedValuesForGetDescriptionByIdsDict,
                     allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, true, subTableIndex, null, subTableSummaryDBRecord.GroupingKey, fromUIReport,
                     out subTableSummaryAllMeasuresAreNull);//dimensions values are needed for summary sub table records to sort sub table records at the final stages
                         var subTableSummaryAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
@@ -985,6 +1005,9 @@ namespace Vanrise.Analytic.Business
                         subTableSummaryRecordsByGroupingKey.Add(subTableSummaryAnalyticRecordInProcess.GroupingKey, subTableSummaryAnalyticRecordInProcess);
                         subTableSummaryRecords.Add(subTableSummaryAnalyticRecordInProcess);
                     }
+
+                    Vanrise.GenericData.Business.Helper.FillDescriptionsForGroupedValues(groupedValuesForGetDescriptionByIdsDict);
+
                     if (!querySubTable.OrderType.HasValue)
                     {
                         subTableSummaryRecords = GetOrderedAnalyticRecords(analyticTableQueryContext, AnalyticQueryOrderType.ByAllDimensions, querySubTable.Dimensions, querySubTable.Measures, querySubTable.AdvancedOrderOptions, subTableSummaryRecords, recordInProcexcc => recordInProcexcc.Record).ToList();
@@ -1231,7 +1254,8 @@ namespace Vanrise.Analytic.Business
         }
 
         private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, List<string> dimensionNames,
-            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
+           Dictionary<string, DataRecordFieldType> fieldTypesByFieldNameForGetDescriptionByIds, Dictionary<string, DataRecordField> dataRecordFieldsByName, Dictionary<string, GroupedValuesForGetDescriptionByIds> groupedValuesForGetDescriptionByIdsDict,
+           HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
             bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey, bool fromUIReport, out bool allMeasuresAreNull)
         {
             StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
@@ -1247,7 +1271,18 @@ namespace Vanrise.Analytic.Business
                     var dimensionValue = new DimensionValue();
                     dimensionValue.Value = dbRecord.GroupingValuesByDimensionName[dimName].Value;
                     if (dimensionValue.Value != null && dimensionValue.Value != DBNull.Value)
-                        dimensionValue.Name = analyticTableQueryContext.GetDimensionConfig(dimName).Config.FieldType.GetDescription(dimensionValue.Value);
+                    {
+                        if (fieldTypesByFieldNameForGetDescriptionByIds == null || !fieldTypesByFieldNameForGetDescriptionByIds.ContainsKey(dimName))
+                        {
+                            var dimensionType = dataRecordFieldsByName.GetRecord(dimName).Type;
+                            dimensionValue.Name = dimensionType.GetDescription(dimensionValue.Value);
+                        }
+                        else
+                        {
+                            Vanrise.GenericData.Business.Helper.GroupFieldValuesForGetDescriptionByIds(fieldTypesByFieldNameForGetDescriptionByIds, dimName, dimensionValue.Value, dimensionValue, groupedValuesForGetDescriptionByIdsDict);
+                        }
+                    }
+
                     analyticRecord.DimensionValues[dimIndex] = dimensionValue;
                     dimIndex++;
                 }
@@ -1313,6 +1348,24 @@ namespace Vanrise.Analytic.Business
             }
 
             return analyticRecord;
+        }
+
+        private Dictionary<string, DataRecordField> CreateDataRecordFieldsByName(IAnalyticTableQueryContext analyticTableQueryContext, List<string> dimensionNames)
+        {
+            if (dimensionNames == null || dimensionNames.Count == 0)
+                return null;
+
+            var fieldsByName = new Dictionary<string, DataRecordField>();
+            foreach (string dimName in dimensionNames)
+            {
+                var analyticDimension = analyticTableQueryContext.GetDimensionConfig(dimName);
+                analyticDimension.ThrowIfNull("analyticDimension", dimName);
+                analyticDimension.Config.ThrowIfNull("analyticDimension.Config", dimName);
+
+                fieldsByName.Add(dimName, new DataRecordField() { Type = analyticDimension.Config.FieldType, Name = dimName });
+            }
+
+            return fieldsByName;
         }
 
         private static IEnumerable<T> GetOrderedAnalyticRecords<T>(IAnalyticTableQueryContext queryContext, AnalyticQueryOrderType orderType, List<string> dimensions, List<string> measures,
