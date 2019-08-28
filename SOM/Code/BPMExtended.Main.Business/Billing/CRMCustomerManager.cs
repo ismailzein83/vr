@@ -973,7 +973,7 @@ namespace BPMExtended.Main.Business
         public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO,
             string BankCode, string AccountNumber, string BankName, string IBAN, string country, string DefaultRatePlan, string nationality, string birthDate, string building, string career,
             string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
-            string street
+            string street, string stateProvince, string language, string title
             )
         {
             IDManager manager = new IDManager();
@@ -981,7 +981,13 @@ namespace BPMExtended.Main.Business
             DateTime dob = DateTime.MinValue;
             DateTime.TryParse(birthDate, out dob);
             string countryNumber = GetCountryNumber(country);
+            string documentType = GetDocumentType(documentTypeId);
             string nationalityNumber = GetNationalityNumber(nationality);
+            string customerTitle = GetCustomerTitle(title);
+            long customerLanguage = 0;
+            long.TryParse(GetCustomerLanguage(language), out customerLanguage);
+
+
             CustomerCreationOutput output = new CustomerCreationOutput() ;
             CreateCustomerInput input = new CreateCustomerInput
             {
@@ -1007,7 +1013,7 @@ namespace BPMExtended.Main.Business
                 Building = building,
                 Career = career,
                 DocumentId = documentId,
-                DocumentTypeId = "",
+                DocumentTypeId = documentTypeId,
                 Email = email,
                 FaxNumber = faxNumber,
                 Floor = floor,
@@ -1016,7 +1022,11 @@ namespace BPMExtended.Main.Business
                 MobilePhone = mobilePhone,
                 MotherName = motherName,
                 Region = region,
-                Street = street
+                Street = street,
+                Language = customerLanguage,
+                PaymentResponsibility = true,
+                StateProvince= stateProvince,
+                Title=customerTitle
             };
 
             using (var client = new SOMClient())
@@ -1025,6 +1035,64 @@ namespace BPMExtended.Main.Business
                 output.CustomerSequenceId = CustomerId;
             }
             return output;
+        }
+
+        public string GetCustomerTitle(string Id)
+        {
+
+            string number = "";
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerTitle");
+            esq.AddColumn("Id");
+            var numberCol = esq.AddColumn("StBSCSId");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", Id));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                number = entities[0].GetTypedColumnValue<string>(numberCol.Name);
+            }
+            return number;
+        }
+        public string GetDocumentType(string Id)
+        {
+
+            string number = "";
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDocumentIdType");
+            esq.AddColumn("Id");
+            var numberCol = esq.AddColumn("StBSCSId");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", Id));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                number = entities[0].GetTypedColumnValue<string>(numberCol.Name);
+            }
+            return number;
+        }
+        public string GetCustomerLanguage(string Id)
+        {
+
+            string number = "";
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerLanguage");
+            esq.AddColumn("Id");
+            var numberCol = esq.AddColumn("StBSCSId");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", Id));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                number = entities[0].GetTypedColumnValue<string>(numberCol.Name);
+            }
+            return number;
         }
         public string GetCountryNumber(string Id)
         {

@@ -25,12 +25,14 @@ namespace BPMExtended.Main.SOMAPI
         public string CustomerId { get; set; }
         public string CustomerCategoryId { get; set; }
         public string DefaultRatePlan { get; set; }
+        public string Title { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string MotherName { get; set; }
         public DateTime BirthDate { get; set; }
         public string Career { get; set; }
+        public long Language { get; set; }
         public string Nationality { get; set; }
         public string Country { get; set; }
         public string Region { get; set; }
@@ -44,6 +46,7 @@ namespace BPMExtended.Main.SOMAPI
         public string MobilePhone { get; set; }
         public string Email { get; set; }
         public string CSO { get; set; }
+        public bool PaymentResponsibility { get; set; }
         public string PaymentMethodId { get; set; }
         public string BillCycle { get; set; }
         public string BankCode { get; set; }
@@ -57,4 +60,7 @@ namespace BPMExtended.Main.SOMAPI
         public DateTime ValidFromDate { get; set; }
         public bool IsEmployee { get; set; }
     }
+
+
+
 }
