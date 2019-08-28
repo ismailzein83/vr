@@ -129,6 +129,15 @@ namespace Vanrise.HelperTools
                         rdbDataRecordStorageColumn.DataType = RDBDataType.DateTime;
                         break;
 
+                    case string a when a.Contains("date"):
+                        rdbDataRecordStorageColumn.DataType = RDBDataType.Date;
+                        break;
+
+                    case string a when a.Contains("time"):
+                        rdbDataRecordStorageColumn.DataType = RDBDataType.Time;
+                        rdbDataRecordStorageColumn.Size = GetSize(sqlDataRecordStorageColumn.SQLDataType);
+                        break;
+
                     case string a when a.Contains("uniqueidentifier"):
                         rdbDataRecordStorageColumn.DataType = RDBDataType.UniqueIdentifier;
                         break;

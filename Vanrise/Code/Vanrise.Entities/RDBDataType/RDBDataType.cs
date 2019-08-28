@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public enum RDBDataType
     {
-        [RDBDataTypeAttribute(Description = "Varchar", RequireSize = true, HasSizeRequired=false)]
+        [RDBDataTypeAttribute(Description = "Varchar", RequireSize = true, HasSizeRequired = false)]
         Varchar = 0,
         [RDBDataTypeAttribute(Description = "NVarchar", RequireSize = true, HasSizeRequired = false)]
         NVarchar = 1,
@@ -27,7 +27,11 @@ namespace Vanrise.Entities
         [RDBDataTypeAttribute(Description = "VarBinary", RequireSize = true, HasSizeRequired = false)]
         VarBinary = 8,
         [RDBDataTypeAttribute(Description = "Cursor")]
-        Cursor = 9
+        Cursor = 9,
+        [RDBDataTypeAttribute(Description = "Date")]
+        Date = 10,
+        [RDBDataTypeAttribute(Description = "Time", RequireSize = true, HasSizeRequired = false)]
+        Time = 11
     }
     public class RDBDataTypeAttribute : Attribute
     {

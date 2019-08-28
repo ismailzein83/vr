@@ -605,6 +605,8 @@ namespace Vanrise.Data.RDB.DataProvider
                 case RDBDataType.BigInt: return GetBigIntDBType();
                 case RDBDataType.Decimal: return GetDecimalDBType(columnName, size, precision);
                 case RDBDataType.DateTime: return GetDatetimeDBType();
+                case RDBDataType.Date: return GetDateDBType();
+                case RDBDataType.Time: return GetTimeDBType(size);
                 case RDBDataType.Varchar: return GetVarcharDBType(size);
                 case RDBDataType.NVarchar: return GetNVarcharDBType(size);
                 case RDBDataType.UniqueIdentifier: return GetGuidDBType();
@@ -633,6 +635,17 @@ namespace Vanrise.Data.RDB.DataProvider
         protected virtual string GetDatetimeDBType()
         {
             return "datetime";
+        }
+
+        protected virtual string GetDateDBType()
+        {
+            return "date";
+        }
+
+        protected virtual string GetTimeDBType(int? size)
+        {
+            int effectiveSize = size.HasValue ? size.Value : 3;
+            return $"time({effectiveSize})";
         }
 
         protected virtual string GetDecimalDBType(string columnName, int? size, int? precision)

@@ -46,10 +46,29 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
-            return new RDBDataRecordFieldAttribute
+            switch (this.DataType)
             {
-                RdbDataType = RDBDataType.DateTime
-            };
+                case FieldDateTimeDataType.DateTime:
+                    return new RDBDataRecordFieldAttribute
+                    {
+                        RdbDataType = RDBDataType.DateTime
+                    };
+                case FieldDateTimeDataType.Date:
+                    return new RDBDataRecordFieldAttribute
+                    {
+                        RdbDataType = RDBDataType.Date
+                    };
+                case FieldDateTimeDataType.Time:
+                    return new RDBDataRecordFieldAttribute
+                    {
+                        RdbDataType = RDBDataType.Time
+                    };
+                default:
+                    return new RDBDataRecordFieldAttribute
+                    {
+                        RdbDataType = RDBDataType.DateTime
+                    };
+            }
         }
 
         public override string GenerateValueCode(object value)

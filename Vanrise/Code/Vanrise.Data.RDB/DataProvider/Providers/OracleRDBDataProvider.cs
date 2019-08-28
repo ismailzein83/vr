@@ -649,7 +649,10 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     if (!precision.HasValue)
                         throw new NullReferenceException(String.Format("Precision of '{0}'", columnName));
                     return String.Format("Number({0}, {1})", size.Value, precision.Value);
-                case RDBDataType.DateTime: return "date";
+                case RDBDataType.DateTime:
+                case RDBDataType.Date:
+                case RDBDataType.Time:
+                    return "date";
                 case RDBDataType.Varchar:
                     return GetVarcharDBType(size);
                 case RDBDataType.NVarchar:

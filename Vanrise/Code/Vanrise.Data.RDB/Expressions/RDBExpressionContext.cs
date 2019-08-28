@@ -64,6 +64,11 @@ namespace Vanrise.Data.RDB
             Expression(new RDBFixedBytesExpression { Value = value });
         }
 
+        public void Value(Vanrise.Entities.Time value)
+        {
+            Expression(new RDBFixedTimeExpression { Value = value });
+        }
+
         public void Column(string columnName)
         {
             Column(_tableAlias, columnName);

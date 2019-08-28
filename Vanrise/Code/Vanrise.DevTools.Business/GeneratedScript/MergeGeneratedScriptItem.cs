@@ -309,9 +309,12 @@ namespace Vanrise.DevTools.Business
                 case RDBDataType.Boolean:
                 case RDBDataType.Cursor:
                 case RDBDataType.DateTime:
+                case RDBDataType.Date:
                 case RDBDataType.UniqueIdentifier:
                 case RDBDataType.BigInt:
                     return string.Format("{0} ", RDBDataTypeAttribute.GetAttribute(rdbDataType).Description);
+                case RDBDataType.Time:
+                    return string.Format("{0}({1}) ", RDBDataTypeAttribute.GetAttribute(rdbDataType).Description, size.HasValue ? size.Value.ToString() : "3");
                 default: return null;
             }
 
