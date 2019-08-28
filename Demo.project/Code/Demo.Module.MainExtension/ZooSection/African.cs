@@ -1,15 +1,17 @@
 ﻿using Demo.Module.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Demo.Module.MainExtension.ZooSection
 {
-    public class African: ZooSectionType
+    public class African : ZooSectionType
     {
+        public override Guid ConfigId { get { return new Guid("9CCB94CF-D8A2-47ED-B78B-DDC932544846"); } }
         public List<ZooAnimal> Animals { get; set; }
 
-        public override string GetAnimalsNumber()
+        public override int GetAnimalsNumber(IZooSectionTypeGetAnimalsNumberContext context)
         {
-            return $"The number of animals in this African Zoo Section is: {Animals.Count}";
+            return Animals.Count;
         }
     }
 }

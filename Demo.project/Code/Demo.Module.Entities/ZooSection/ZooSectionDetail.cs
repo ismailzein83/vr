@@ -7,8 +7,7 @@ namespace Demo.Module.Entities
     {
         public long ZooSectionId { get; set; }
         public string Name { get; set; }
-        public long ZooId { get; set; }
-        public List<ZooSectionPositionEnum> Position { get; set; }
-
+        public string ZooName { get; set; }
+        public int NbOfAnimals { get; set; }
     }
 }
