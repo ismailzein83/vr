@@ -64,6 +64,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCity.Id");
             esq.AddColumn("StArea");
             esq.AddColumn("StArea.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
             esq.AddColumn("StProvince");
             esq.AddColumn("StProvince.Id");
             esq.AddColumn("StStreet");
@@ -83,6 +85,7 @@ namespace BPMExtended.Main.Business
                 var addressSeq = entities[0].GetColumnValue("StAddressSequence");
                 var status = entities[0].GetColumnValue("StDirectoryStatus");
                 var city = entities[0].GetColumnValue("StCityName");
+                var town = entities[0].GetColumnValue("StTownName");
                 var area = entities[0].GetColumnValue("StAreaName");
                 var province = entities[0].GetColumnValue("StProvinceName");
                 var floor = entities[0].GetColumnValue("StFloor");
@@ -105,8 +108,9 @@ namespace BPMExtended.Main.Business
                         CountryId = "206",
                         Building = buildingNumber.ToString(),
                         Floor = floor.ToString(),
-                        State = province.ToString(),
+                        StateProvince = province.ToString(),
                         Region = area.ToString(),
+                        Town = town.ToString(),
                         ServiceId = serviceId.ToString(),
                         Street = street.ToString(),
                         Action = action,
