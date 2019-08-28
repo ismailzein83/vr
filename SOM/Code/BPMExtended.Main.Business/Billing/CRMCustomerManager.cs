@@ -980,6 +980,10 @@ namespace BPMExtended.Main.Business
             CustomerId = manager.GetCustomerNextId();
             DateTime dob = DateTime.MinValue;
             DateTime.TryParse(birthDate, out dob);
+
+            string cso = GetCSOId(CSO);
+            string billcycle = GetDefaultBillCycle();
+            string rateplan = GetDefaultRatePlan();
             string countryNumber = GetCountryNumber(country);
             string documentType = GetDocumentType(documentTypeId);
             string nationalityNumber = GetNationalityNumber(nationality);
@@ -995,25 +999,25 @@ namespace BPMExtended.Main.Business
                 BankCode = BankCode,
                 BankName = BankName,
                 City = City,
-                CSO = CSO,
+                CSO = cso,
                 CustomerCategoryId = CustomerCategoryId,
                 FirstName = FirstName,
                 LastName = LastName,
                 PaymentMethodId = PaymentMethodId,
                 CustomerId = CustomerId,
                 Country = countryNumber,
-                DefaultRatePlan = "TM002",
+                DefaultRatePlan = rateplan=="" ? "TM002": rateplan,
                 IBAN = IBAN,
                 Nationality = nationalityNumber,
                 //ValidFromDate = DateTime.Now,
                 DebitAccountOwner = FirstName,
                 BankSwiftCode = "",
-                BillCycle = "",
+                BillCycle = billcycle,
                 BirthDate = dob,
                 Building = building,
                 Career = career,
                 DocumentId = documentId,
-                DocumentTypeId = documentTypeId,
+                DocumentTypeId = documentType,
                 Email = email,
                 FaxNumber = faxNumber,
                 Floor = floor,
@@ -1037,6 +1041,63 @@ namespace BPMExtended.Main.Business
             return output;
         }
 
+        public string GetCSOId(string Id)
+        {
+
+            string number = "";
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCSO");
+            esq.AddColumn("Id");
+            var numberCol = esq.AddColumn("StCSOBSCSId");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", Id));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                number = entities[0].GetTypedColumnValue<string>(numberCol.Name);
+            }
+            return number;
+        }
+        public string GetDefaultBillCycle()
+        {
+
+            string number = "";
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("Id");
+            var numberCol = esq.AddColumn("StBillingCycleId");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "92E58A70-8D14-4DC6-ABB4-EA10409D91B4"));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                number = entities[0].GetTypedColumnValue<string>(numberCol.Name);
+            }
+            return number;
+        }
+        public string GetDefaultRatePlan()
+        {
+
+            string number = "";
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("Id");
+            var numberCol = esq.AddColumn("StRatePlanId");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "92E58A70-8D14-4DC6-ABB4-EA10409D91B4"));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                number = entities[0].GetTypedColumnValue<string>(numberCol.Name);
+            }
+            return number;
+        }
         public string GetCustomerTitle(string Id)
         {
 
