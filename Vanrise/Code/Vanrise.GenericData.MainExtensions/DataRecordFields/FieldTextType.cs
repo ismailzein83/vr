@@ -36,7 +36,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 Size = 255
             };
         }
-
+            
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)
@@ -147,6 +147,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         protected override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
             return originalValue;
+        }
+        public override void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
+        {
+            context.HeaderCell.ThrowIfNull("context.HeaderCell");
+            var headerCell = context.HeaderCell;
+            headerCell.CellType = ExcelCellType.Text;
         }
 
         public override void GetValueByDescription(IGetValueByDescriptionContext context)

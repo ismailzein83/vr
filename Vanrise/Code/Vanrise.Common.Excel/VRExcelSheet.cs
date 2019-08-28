@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Excel
 {
@@ -119,6 +120,18 @@ namespace Vanrise.Common.Excel
 
         public VRExcelContainerHorizontalAlignment? HorizontalAlignment { get; set; }
         public VRExcelContainerVerticalAlignment? VerticalAlignment { get; set; }
+        public VRExcelContainerConfigSettings ExcelContainerConfigSettings { get; set; }
+    }
+    public class VRExcelContainerConfigSettings
+    {
+
+        public ExcelCellType? CellType { get; set; }
+
+        public DateTimeType? DateTimeType { get; set; }
+
+        public NumberType? NumberType { get; set; }
+
+        public int? Width { get; set; }
     }
     public class VRExcelRowConfig : VRExcelContainerConfig
     {

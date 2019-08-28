@@ -318,6 +318,10 @@
       <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
       <Name>Vanrise.Caching</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Excel\Vanrise.Common.Excel.csproj">
+      <Project>{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}</Project>
+      <Name>Vanrise.Common.Excel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>

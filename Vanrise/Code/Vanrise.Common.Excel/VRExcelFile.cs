@@ -6,8 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using Vanrise.Entities;
+
 namespace Vanrise.Common.Excel
 {
+  
     public class VRExcelFile
     {
         public VRExcelFile()
@@ -145,6 +148,7 @@ namespace Vanrise.Common.Excel
         }
         Style BuildSheetContainerCommonConfigs(VRExcelContainerConfig config, Workbook excelTemplate)
         {
+            ExcelManager excelManager = new ExcelManager();
             Style style = excelTemplate.CreateStyle();
             if (config.SetBorder == true)
             {
@@ -201,15 +205,38 @@ namespace Vanrise.Common.Excel
             style.Font.IsBold = config.IsBold;
             style.Font.IsItalic = config.IsItalic;
             style.Pattern = BackgroundType.Solid;
+            var containerConfigSettings = config.ExcelContainerConfigSettings;
+            if(containerConfigSettings != null && containerConfigSettings.CellType.HasValue)
+            {
+                switch (containerConfigSettings.CellType.Value)
+                {
+                    case ExcelCellType.DateTime:
+                        if (!containerConfigSettings.DateTimeType.HasValue)
+                            throw new NullReferenceException("containerConfigSettings.DateTimeType");
+                        style.Custom = Utilities.GetDateTimeFormat(containerConfigSettings.DateTimeType.Value);
+                        break;
+
+                    case ExcelCellType.Number:
+                        if (!containerConfigSettings.NumberType.HasValue)
+                            throw new NullReferenceException("containerConfigSettings.NumberType");
+                        style.Custom = excelManager.GetNumberFormat(containerConfigSettings.NumberType.Value);
+                        break;
+                    case ExcelCellType.Text:
+                        style.Custom = "@";
+                        break;
+                }
+            }
+           
             return style;
         }
-
+       
         StyleFlag BuildSheetContainerCommonConfigs<T>(T config)where T: VRExcelContainerConfig
         {
             StyleFlag styleFlag = new StyleFlag();
             styleFlag.All = false;
             styleFlag.Font = true;
             styleFlag.Borders = true;
+            styleFlag.NumberFormat = true;
             //styleFlag.HorizontalAlignment = config.HorizontalAlignment.HasValue;
             //styleFlag.VerticalAlignment = config.VerticalAlignment.HasValue;
             return styleFlag;

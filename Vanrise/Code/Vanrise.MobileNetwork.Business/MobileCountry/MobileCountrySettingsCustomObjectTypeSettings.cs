@@ -25,6 +25,23 @@ namespace Vanrise.MobileNetwork.Business
                 return null;
         }
 
+        public override void GetValueByDescription(IFieldCustomObjectTypeSettingsGetValueByDescriptionContext context)
+        {
+            var description = context.FieldDescription.ToString();
+            description= description.Replace(" ", String.Empty);
+            var codes = description.Split(',');
+            var mobileNetworkCodes = new List<MobileCountryCode>();
+            foreach (var code in codes)
+            {
+                mobileNetworkCodes.Add(new MobileCountryCode { Code = code });
+            }
+            var mobileNetworkSettings = new MobileCountrySettings()
+            {
+                Codes = mobileNetworkCodes
+            };
+            context.FieldValue = mobileNetworkSettings;
+        }
+
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             return true;

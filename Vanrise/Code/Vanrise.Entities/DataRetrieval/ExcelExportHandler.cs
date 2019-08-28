@@ -67,7 +67,7 @@ namespace Vanrise.Entities
         public int? Width { get; set; }
     }
 
-    public enum ExcelCellType { DateTime, Number }
+    public enum ExcelCellType { DateTime, Number ,Text}
 
     public enum DateTimeType { Date, DateTime, LongDateTime }
 

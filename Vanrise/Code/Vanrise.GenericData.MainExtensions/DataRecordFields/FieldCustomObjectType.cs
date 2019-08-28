@@ -5,6 +5,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Entities.GenericRules;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -62,7 +63,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return _nonNullableRuntimeType;
         }
-
+        public override void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
+        {
+            context.HeaderCell.ThrowIfNull("context.HeaderCell");
+            var headerCell = context.HeaderCell;
+            headerCell.CellType = ExcelCellType.Text;
+        }
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (this.Settings != null)
@@ -78,6 +84,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     FieldValue = value
                 });
             return null;
+        }
+        public override void GetValueByDescription(IGetValueByDescriptionContext context)
+        {
+            if (this.Settings != null)
+            {
+                var newContext = new FieldCustomObjectTypeSettingsGetValueByDescriptionContext {
+                    FieldDescription = context.FieldDescription,
+                };
+                Settings.GetValueByDescription(newContext);
+                context.FieldValue = newContext.FieldValue;
+            }
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)

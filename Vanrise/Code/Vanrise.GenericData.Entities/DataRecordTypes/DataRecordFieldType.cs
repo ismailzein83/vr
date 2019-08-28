@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Excel;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -188,6 +189,24 @@ namespace Vanrise.GenericData.Entities
         {
             return false;
         }
+        public void SetContainerConfigCellExcelType(VRExcelContainerConfig containerConfig)
+        {
+            containerConfig.ThrowIfNull("containerConfig");
+            var context = new DataRecordFieldTypeSetExcelCellTypeContext
+            {
+                HeaderCell = new ExportExcelHeaderCell()
+            };
+            if (context.HeaderCell != null)
+                SetExcelCellType(context);
+            if (context != null && context.HeaderCell != null)
+            {
+                containerConfig.ExcelContainerConfigSettings = new VRExcelContainerConfigSettings();
+                containerConfig.ExcelContainerConfigSettings.CellType = context.HeaderCell.CellType;
+                containerConfig.ExcelContainerConfigSettings.DateTimeType = context.HeaderCell.DateTimeType;
+                containerConfig.ExcelContainerConfigSettings.NumberType = context.HeaderCell.NumberType;
+                containerConfig.ExcelContainerConfigSettings.Width = context.HeaderCell.Width;
+            }
+        }
     }
     public interface IDataRecordFieldTypeTranslationContext : IGenericBETranslationContext
     {
@@ -261,6 +280,11 @@ namespace Vanrise.GenericData.Entities
     public interface IDataRecordFieldTypeSetExcelCellTypeContext
     {
         ExportExcelHeaderCell HeaderCell { get; }
+    }
+
+    public class DataRecordFieldTypeSetExcelCellTypeContext : IDataRecordFieldTypeSetExcelCellTypeContext
+    {
+        public ExportExcelHeaderCell HeaderCell { get; set; }
     }
 
     public interface IDataRecordFieldEvaluator

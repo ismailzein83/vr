@@ -35,8 +35,12 @@ namespace Vanrise.GenericData.Entities
         {
             return true;
         }
+        public virtual void GetValueByDescription(IFieldCustomObjectTypeSettingsGetValueByDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
+       
     }
-
     public interface IFieldCustomObjectTypeSettingsContext
     {
         object FieldValue { get; }

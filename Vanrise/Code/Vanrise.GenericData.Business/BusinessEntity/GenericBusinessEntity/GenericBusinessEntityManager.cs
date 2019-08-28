@@ -881,7 +881,7 @@ namespace Vanrise.GenericData.Business
             var dataRecordTypeFields = new DataRecordTypeManager().GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
             var excelFile = new VRExcelFile();
-            var excelSheet = new VRExcelSheet();
+            var excelSheet = new VRExcelSheet(); 
             var index = 0;
             if (genericBEDefinitionSetting != null && genericBEDefinitionSetting.ShowUpload && genericBEDefinitionSetting.UploadFields != null)
             {
@@ -892,15 +892,33 @@ namespace Vanrise.GenericData.Business
                         var dataRecordTypeField = dataRecordTypeFields.GetRecord(item.FieldName);
                         if (dataRecordTypeField != null)
                         {
-                            var value = dataRecordTypeField.Title;
+                           var containerConfig = new VRExcelContainerConfig ();
+                            dataRecordTypeField.Type.SetContainerConfigCellExcelType(containerConfig);
+                           
+                            var columnConfig = new VRExcelColumnConfig {
+                                ColumnIndex = index,
+                                BGColor= containerConfig.BGColor,
+                                ExcelContainerConfigSettings=containerConfig.ExcelContainerConfigSettings,
+                                FontColor = containerConfig.FontColor,
+                                FontSize = containerConfig.FontSize,
+                                HorizontalAlignment = containerConfig.HorizontalAlignment,
+                                IsBold = containerConfig.IsBold,
+                                IsItalic = containerConfig.IsItalic,
+                                SetBorder = containerConfig.SetBorder,
+                                VerticalAlignment = containerConfig.VerticalAlignment,
+                            };
+
+                            excelSheet.SetColumnConfig(columnConfig);
+                               var value = dataRecordTypeField.Title;
                             if (vrLocalizationManager.IsLocalizationEnabled())
                                 value = (!String.IsNullOrEmpty(item.TextResourceKey)) ? vrLocalizationManager.GetTranslatedTextResourceValue(item.TextResourceKey, item.FieldName) : dataRecordTypeField.Title;
                             excelSheet.AddCell(new VRExcelCell
                             {
                                 RowIndex = 0,
-                                ColumnIndex = index++,
+                                ColumnIndex = index,
                                 Value = value
                             });
+                            index++;
                         }
                     }
                 }
