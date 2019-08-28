@@ -13,6 +13,7 @@ namespace BPMExtended.Main.SOMAPI
         public string RatePlanId { get; set; }
         public string CSO { get; set; }
         public string SubType { get; set; }
+        public string CountryId { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string Building { get; set; }

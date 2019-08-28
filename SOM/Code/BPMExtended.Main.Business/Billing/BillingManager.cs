@@ -289,6 +289,18 @@ namespace BPMExtended.Main.Business
 
         public List<BillCycle> GetBillCycles()
         {
+            List<BillCycle> items = new List<BillCycle>();
+
+            using (SOMClient client = new SOMClient())
+            {
+                items = client.Get<List<BillCycle>>(String.Format("api/SOM.ST/Billing/GetBillCycles?processInstanceId"));
+            }
+            return items;
+        }
+
+
+      /*  public List<BillCycle> GetBillCycles()
+        {
             var startDate = DateTime.Now;
             var endDate = DateTime.Now.AddYears(-2);
 
@@ -307,7 +319,7 @@ namespace BPMExtended.Main.Business
                 endDate = endDate.AddMonths(1);
             }
             return billCycles;
-        }
+        }*/
        
         public bool ValidatePaymentWithoutDeposit(string requestId)
         {
@@ -657,6 +669,9 @@ namespace BPMExtended.Main.Business
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
+        public string IntervalType { get; set; }
+        public DateTime RunDate { get; set; }
     }
     public class CallDetailRequest
     {

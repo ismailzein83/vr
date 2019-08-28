@@ -1360,6 +1360,7 @@ namespace BPMExtended.Main.Business
                         StateProvince = province.ToString(),
                         Street= street.ToString(),
                         Region = area.ToString(),
+                        CountryId = "206",
                         CSO = info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
