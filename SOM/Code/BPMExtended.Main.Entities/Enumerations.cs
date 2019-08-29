@@ -389,6 +389,12 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("1E0E1552-A872-4C70-8EC5-49E606FA09CD")]
         ADSLTakeOver = 45,
 
+        [Description("Suspension")]
+        [EntitySchemaName("StSuspension")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("8340ad42-0c1e-4063-ba73-74b3cd917c2f")]
+        Suspension = 46,
+
     }
     public enum ContractStatus
     {

@@ -103,6 +103,7 @@
     <Compile Include="MainProxy.cs" />
     <Compile Include="Request Flow Management\ADSLContractTakeOverFlowManagement.cs" />
     <Compile Include="Request Flow Management\LastMileChangeFlowManagement.cs" />
+    <Compile Include="Request Flow Management\SuspensionFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateCustomerCategoryFlowManagement.cs" />
     <Compile Include="Request Flow Management\AdministrativeComplaintFlowManagement.cs" />
     <Compile Include="Request Flow Management\CreatePaymentPlanFlowManagement.cs" />
