@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleCriteriaDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_GenericData_GenericUIService'];
+    GenericRuleCriteriaDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericUIService'];
 
-    function GenericRuleCriteriaDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericUIService) {
+    function GenericRuleCriteriaDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRUIUtilsService, VR_GenericData_GenericUIService) {
 
         return {
             restrict: 'E',
@@ -13,72 +13,29 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var obj = new GenericRuleCriteria($scope, ctrl, $attrs);
-                obj.initializeController();
+                var ctor = new GenericRuleCriteria($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRule/Templates/GenericRuleCriteriaTemplate.html'
         };
 
         function GenericRuleCriteria($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var accessibility;
             var genericUIObj;
-
-            var loadAllFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
-
+            var criteriaFields = [];
+            var criteriaDefinitionGroups;
+            var criteriaAccessibility;
+            var criteriaPredefinedData;
             var criteriaFieldsValues;
-
-            var groupCriteriaFieldSelectedPromise;
+            var dataRecordFieldTypeConfigs;
 
             function initializeController() {
-
-                $scope.criteriaDefinitionFields;
-                $scope.criteria = [];
-                $scope.doGroupsExist = false;
-                $scope.onGroupCriteriaFieldSelectionChanged = function (selectedField) {
-                    if (selectedField != undefined) {
-                        if (groupCriteriaFieldSelectedPromise != undefined) {
-                            groupCriteriaFieldSelectedPromise.resolve();
-                        }
-                        else {
-                            if ($scope.criteria != undefined && $scope.criteria.length > 0) {
-                                for (var i = 0; i < $scope.criteria.length; i++) {
-                                    var criteriaGroup = $scope.criteria[i];
-                                    if (criteriaGroup.fields != undefined && criteriaGroup.fields.length > 0) {
-                                        var field = UtilsService.getItemByVal(criteriaGroup.fields, selectedField.FieldName, 'FieldName');
-                                        if (field != null) {
-                                            for (var k = 0; k < criteriaGroup.fields.length; k++) {
-                                                var criteriaGroupField = criteriaGroup.fields[k];
-                                                if (criteriaGroupField.runtimeEditor != undefined) {
-                                                    loadRuntimeEditor(criteriaGroupField);
-                                                }
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
-                function loadRuntimeEditor(criteriaGroupField) {
-                    criteriaGroupField.runtimeEditor.onReadyPromiseDeferred.promise.then(function () {
-                        var payload = {
-                            fieldTitle: criteriaGroupField.Title,
-                            fieldType: criteriaGroupField.FieldType,
-                            fieldValue: undefined,
-                            genericUIContext: criteriaGroupField.genericUIContext
-                        };
-
-                        VRUIUtilsService.callDirectiveLoad(criteriaGroupField.runtimeEditor.directiveAPI, payload, criteriaGroupField.runtimeEditor.loadPromiseDeferred);
-                    });
-                }
+                $scope.scopeModel = {};
+                $scope.scopeModel.criteriaObjects = [];
+                $scope.scopeModel.hiddenCriteriaFields = [];
 
                 defineAPI();
             }
@@ -86,153 +43,255 @@
             function defineAPI() {
                 var api = {};
 
-                api.getData = function () {
-                    var genericRuleCriteria;
-                    if ($scope.criteria != undefined && $scope.criteria.length > 0) {
-                        for (var i = 0; i < $scope.criteria.length; i++) {
-                            var item = $scope.criteria[i];
-                            if (item.groupId != undefined) {
-                                if (item.selectedField != undefined) {
-                                    var fieldGroupData = item.selectedField.runtimeEditor.directiveAPI.getData();
-                                    if (fieldGroupData != undefined) {
-                                        if (genericRuleCriteria == undefined) {
-                                            genericRuleCriteria = {};
-                                            genericRuleCriteria.FieldsValues = {};
-                                        }
-                                        genericRuleCriteria.FieldsValues[item.selectedField.FieldName] = fieldGroupData;
-                                    }
-                                }
-                            }
-                            else {
-                                var fieldValue = item.runtimeEditor.directiveAPI.getData();
-                                if (fieldValue != undefined) {
-                                    if (genericRuleCriteria == undefined) {
-                                        genericRuleCriteria = {};
-                                        genericRuleCriteria.FieldsValues = {};
-                                    }
-                                    genericRuleCriteria.FieldsValues[item.FieldName] = fieldValue;
-                                }
-                            }
-                        }
-                    }
-                    return genericRuleCriteria;
-                };
-
                 api.load = function (payload) {
                     criteriaFieldsValues = undefined;
                     if (payload == undefined || payload.criteriaDefinitionFields == undefined) {
                         return;
                     }
+
+                    var criteriaDefinitionFields = payload.criteriaDefinitionFields;
+                    genericUIObj = VR_GenericData_GenericUIService.createGenericUIObj(criteriaDefinitionFields);
                     criteriaFieldsValues = payload.criteriaFieldsValues;
-                    var criteriaAccessibility = payload.criteriaAccessibility;
-                    var criteriaPredefinedData = payload.criteriaPredefinedData;
-                    if (criteriaFieldsValues != undefined) {
-                        groupCriteriaFieldSelectedPromise = UtilsService.createPromiseDeferred();
-                    }
-                    if (payload.criteriaDefinitionGroups != undefined && payload.criteriaDefinitionGroups.length > 0)
-                        $scope.doGroupsExist = true;
+                    criteriaAccessibility = payload.criteriaAccessibility;
+                    criteriaPredefinedData = payload.criteriaPredefinedData;
+                    criteriaDefinitionGroups = payload.criteriaDefinitionGroups;
 
-                    loadAllFieldsPromiseDeferred.promise.then(function () {
-                        for (var i = 0; i < $scope.criteriaFields.length; i++) {
-                            var criteriaField = $scope.criteriaFields[i];
-                            var belongToGroup = false;
-                            if (payload.criteriaDefinitionGroups != undefined && payload.criteriaDefinitionGroups.length > 0) {
-                                for (var j = 0; j < payload.criteriaDefinitionGroups.length; j++) {
-                                    var criteriaDefinitionGroup = payload.criteriaDefinitionGroups[j];
-                                    var criteriaDefField = UtilsService.getItemByVal(criteriaDefinitionGroup.Fields, criteriaField.FieldName, 'FieldName');
-                                    if (criteriaDefField != undefined) {
-                                        var criteriaGroup = UtilsService.getItemByVal($scope.criteria, criteriaDefinitionGroup.GroupId, 'groupId');
-                                        if (criteriaGroup != undefined) {
-                                            var selectedFieldValue = criteriaFieldsValues != undefined ? criteriaFieldsValues[criteriaField.FieldName] : undefined;
-                                            if (selectedFieldValue != undefined) {
-                                                criteriaGroup.selectedField = criteriaField;
-                                            }
-                                            criteriaGroup.fields.push(criteriaField);
-                                        } else {
-                                            $scope.criteria.push({
-                                                groupId: criteriaDefinitionGroup.GroupId,
-                                                groupTitle: criteriaDefinitionGroup.GroupTitle,
-                                                fields: [criteriaField],
-                                                selectedField: criteriaField
-                                            });
-                                        }
-                                        belongToGroup = true;
-                                    }
-                                }
-                                if (!belongToGroup)
-                                    $scope.criteria.push(criteriaField);
-                            } else {
-                                $scope.criteria.push(criteriaField);
+                    var fieldsValues;
+                    if (criteriaFieldsValues != undefined)
+                        fieldsValues = UtilsService.cloneObject(criteriaFieldsValues, false);
+
+                    var initialPromises = [];
+
+                    var getDataRecordFieldTypeConfigsPromise = getDataRecordFieldTypeConfigs();
+                    initialPromises.push(getDataRecordFieldTypeConfigsPromise);
+
+                    var rootPromiseNode = {
+                        promises: initialPromises,
+                        getChildNode: function () {
+                            var promises = [];
+                            if (criteriaDefinitionFields != undefined && criteriaDefinitionFields.length > 0) {
+                                buildCriteriaFieldsArray();
+
+                                var loadCriteriaObjectsPromise = loadCriteriaObjects();
+                                promises.push(loadCriteriaObjectsPromise);
                             }
+
+                            return {
+                                promises: [loadCriteriaObjectsPromise]
+                            };
                         }
-                    });
+                    };
 
-                    genericUIObj = VR_GenericData_GenericUIService.createGenericUIObj(payload.criteriaDefinitionFields);
-                    $scope.criteriaDefinitionFields = payload.criteriaDefinitionFields;
-                    var promises = [];
+                    function getDataRecordFieldTypeConfigs() {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
+                            dataRecordFieldTypeConfigs = response;
+                        });
+                    }
 
-                    promises.push(loadAllFieldsPromiseDeferred.promise);
-                    var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (allConfigs) {
+                    function buildCriteriaFieldsArray() {
 
-                        var criteriaFieldsPromises = [];
+                        for (var i = 0; i < criteriaDefinitionFields.length; i++) {
+                            var field = criteriaDefinitionFields[i];
 
-                        angular.forEach($scope.criteriaDefinitionFields, function (field) {
-                            var dataFieldTypeConfig = UtilsService.getItemByVal(allConfigs, field.FieldType.ConfigId, 'ExtensionConfigurationId');
-                            field.runtimeEditor = {};
-                            field.runtimeEditor.directive = dataFieldTypeConfig.RuntimeEditor;
-                            field.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                            var dataFieldTypeConfig = UtilsService.getItemByVal(dataRecordFieldTypeConfigs, field.FieldType.ConfigId, 'ExtensionConfigurationId');
+                            field.genericUIContext = genericUIObj.getFieldContext(field);
+
+                            extendCritireaRuntimeFieldEditor(field, dataFieldTypeConfig);
+                            criteriaFields.push(field);
+                        }
+
+                        function extendCritireaRuntimeFieldEditor(field, dataFieldTypeConfig) {
+                            field.runtimeEditor = {
+                                directive: dataFieldTypeConfig.RuntimeEditor,
+                                directiveAPI: undefined,
+                                isFieldDirectiveLoading: false,
+                                onFieldSelectionChangedPromiseDeferred: undefined
+                            };
+
                             field.runtimeEditor.onDirectiveReady = function (api) {
                                 field.runtimeEditor.directiveAPI = api;
                                 field.runtimeEditor.onReadyPromiseDeferred.resolve();
                             };
+                        }
+                    }
 
-                            field.runtimeEditor.loadPromiseDeferred = UtilsService.createPromiseDeferred();
-                            //criteriaFieldsPromises.push(field.runtimeEditor.loadPromiseDeferred.promise);
+                    function loadCriteriaObjects() {
+                        var _loadPromises = [];
+
+                        for (var k = 0; k < criteriaFields.length; k++) {
+                            var criteriaField = criteriaFields[k];
+                            var isAccessible = true;
 
                             if (criteriaAccessibility != undefined) {
-                                var accessibleField = criteriaAccessibility[field.FieldName];
-                                if (accessibleField != undefined) {
-                                    field.notAccessible = accessibleField.notAccessible;
+                                var accessibleField = criteriaAccessibility[criteriaField.FieldName];
+                                if (accessibleField != undefined && accessibleField.notAccessible) {
+                                    $scope.scopeModel.hiddenCriteriaFields.push(criteriaField);
+
+                                    criteriaField.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    var loadCritireaFieldDirectivePromise = loadCritireaFieldDirective(criteriaField);
+                                    _loadPromises.push(loadCritireaFieldDirectivePromise);
+                                    continue;
                                 }
                             }
 
-                            field.genericUIContext = genericUIObj.getFieldContext(field);  //VR_GenericData_GenericUIService.buildGenericUIContext($scope.criteriaDefinitionFields, field);
+                            if (tryExtendFieldToGroup(criteriaField, _loadPromises))
+                                continue;
 
-                            field.runtimeEditor.onReadyPromiseDeferred.promise.then(function () {
+                            criteriaField.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                            var loadCritireaFieldDirectivePromise = loadCritireaFieldDirective(criteriaField);
+                            _loadPromises.push(loadCritireaFieldDirectivePromise);
+
+                            $scope.scopeModel.criteriaObjects.push({
+                                field: criteriaField,
+                                isGroup: false
+                            });
+                        }
+
+                        function tryExtendFieldToGroup(criteriaField, loadPromises) {
+                            if (criteriaDefinitionGroups == undefined && criteriaDefinitionGroups.length == 0) {
+                                return false;
+                            }
+
+                            for (var j = 0; j < criteriaDefinitionGroups.length; j++) {
+                                var criteriaDefinitionGroup = criteriaDefinitionGroups[j];
+
+                                var criteriaDefField = UtilsService.getItemByVal(criteriaDefinitionGroup.Fields, criteriaField.FieldName, 'FieldName');
+                                if (criteriaDefField == undefined)
+                                    continue;
+
+                                var selectedFieldValue = criteriaFieldsValues != undefined ? criteriaFieldsValues[criteriaField.FieldName] : undefined;
+                                if (selectedFieldValue != undefined) {
+                                    criteriaField.runtimeEditor.onFieldSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    criteriaField.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    var loadCritireaFieldDirectivePromise = loadCritireaFieldDirective(criteriaField);
+                                    loadPromises.push(loadCritireaFieldDirectivePromise);
+                                }
+
+                                var criteriaObject = UtilsService.getItemByVal($scope.scopeModel.criteriaObjects, criteriaDefinitionGroup.GroupId, 'groupId');
+                                if (criteriaObject != undefined) {
+                                    if (selectedFieldValue != undefined) {
+                                        criteriaObject.groupObj.selectedField = criteriaField;
+                                    }
+                                    criteriaObject.groupObj.fields.push(criteriaField);
+                                }
+                                else {
+                                    $scope.scopeModel.criteriaObjects.push({
+                                        groupObj: buildGroupObject(criteriaDefinitionGroup, criteriaField, selectedFieldValue != undefined),
+                                        groupId: criteriaDefinitionGroup.GroupId,
+                                        isGroup: true
+                                    });
+                                }
+
+                                return true;
+                            }
+
+                            return false;
+                        }
+
+                        function buildGroupObject(criteriaDefinitionGroup, criteriaField, isSelectedField) {
+
+                            var onGroupCriteriaFieldSelectionChanged = function (selectedCriteriaField) {
+                                if (selectedCriteriaField == undefined || selectedCriteriaField.runtimeEditor == undefined)
+                                    return;
+
+                                if (selectedCriteriaField.runtimeEditor.onFieldSelectionChangedPromiseDeferred != undefined) {
+                                    selectedCriteriaField.runtimeEditor.onFieldSelectionChangedPromiseDeferred.resolve();
+                                }
+                                else {
+                                    selectedCriteriaField.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    selectedCriteriaField.isFieldDirectiveLoading = true;
+                                    loadCritireaFieldDirective(selectedCriteriaField).then(function () {
+                                        genericUIObj.resendCritireaFieldValues(selectedCriteriaField);
+                                        selectedCriteriaField.isFieldDirectiveLoading = false;
+                                    });
+                                }
+                            };
+
+                            return {
+                                groupTitle: criteriaDefinitionGroup.GroupTitle,
+                                fields: [criteriaField],
+                                selectedField: isSelectedField ? criteriaField : undefined,
+                                onGroupCriteriaFieldSelectionChanged: onGroupCriteriaFieldSelectionChanged
+                            };
+                        }
+
+                        function loadCritireaFieldDirective(field) {
+                            var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                            var promises = [field.runtimeEditor.onReadyPromiseDeferred.promise];
+                            if (field.runtimeEditor.onFieldSelectionChangedPromiseDeferred != undefined) {
+                                promises.push(field.runtimeEditor.onFieldSelectionChangedPromiseDeferred.promise);
+                            }
+
+                            UtilsService.waitMultiplePromises(promises).then(function () {
+                                field.runtimeEditor.onFieldSelectionChangedPromiseDeferred = undefined;
+
                                 var payload = {
                                     fieldTitle: field.Title,
                                     fieldType: field.FieldType,
-                                    fieldValue: (criteriaFieldsValues != undefined) ?
-                                        criteriaFieldsValues[field.FieldName] :
-                                        (criteriaPredefinedData != undefined ?
-                                            criteriaPredefinedData[field.FieldName] : undefined),
+                                    fieldValue: (fieldsValues != undefined) ? fieldsValues[field.FieldName] : (criteriaPredefinedData != undefined ? criteriaPredefinedData[field.FieldName] : undefined),
                                     genericUIContext: field.genericUIContext
                                 };
-                                VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
+                                VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, loadPromiseDeferred);
                             });
+
+                            return loadPromiseDeferred.promise;
+                        }
+
+                        return UtilsService.waitMultiplePromises(_loadPromises).then(function () {
+                            fieldsValues = undefined;
                         });
+                    }
 
-                        UtilsService.waitMultiplePromises(criteriaFieldsPromises).then(function () {
-                            loadAllFieldsPromiseDeferred.resolve();
-                        }).catch(function (error) {
-                            loadAllFieldsPromiseDeferred.reject(error);
-                        });
-
-                        $scope.criteriaFields = payload.criteriaDefinitionFields;
-
-                    });
-                    promises.push(loadFieldTypeConfigPromise);
-
-                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                    return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
                         genericUIObj.loadingFinish();
                     });
                 };
 
+                api.getData = function () {
+                    var genericRuleCriteria = { FieldsValues: {} };
+
+                    if ($scope.scopeModel.criteriaObjects.length > 0) {
+
+                        for (var i = 0; i < $scope.scopeModel.criteriaObjects.length; i++) {
+                            var criteriaObject = $scope.scopeModel.criteriaObjects[i];
+                            var fieldValue;
+                            if (criteriaObject.isGroup) {
+                                if (criteriaObject.groupObj.selectedField == undefined) {
+                                    continue;
+                                }
+
+                                fieldValue = criteriaObject.groupObj.selectedField.runtimeEditor.directiveAPI.getData();
+                                if (fieldValue != undefined) {
+                                    genericRuleCriteria.FieldsValues[criteriaObject.groupObj.selectedField.FieldName] = fieldValue;
+                                }
+                            }
+                            else {
+                                fieldValue = criteriaObject.field.runtimeEditor.directiveAPI.getData();
+                                if (fieldValue != undefined) {
+                                    genericRuleCriteria.FieldsValues[criteriaObject.field.FieldName] = fieldValue;
+                                }
+                            }
+                        }
+                    }
+
+                    if ($scope.scopeModel.hiddenCriteriaFields.length > 0) {
+                        for (var j = 0; j < $scope.scopeModel.hiddenCriteriaFields.length; j++) {
+                            var hiddenCriteriaField = $scope.scopeModel.hiddenCriteriaFields[j];
+                            var fieldValue = hiddenCriteriaField.runtimeEditor.directiveAPI.getData();
+                            if (fieldValue != undefined) {
+                                genericRuleCriteria.FieldsValues[hiddenCriteriaField.FieldName] = fieldValue;
+                            }
+                        }
+                    }
+
+                    return Object.keys(genericRuleCriteria.FieldsValues).length > 0 ? genericRuleCriteria : undefined;
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
         }
     }
     app.directive('vrGenericdataGenericruleCriteria', GenericRuleCriteriaDirective);
-
 })(app);

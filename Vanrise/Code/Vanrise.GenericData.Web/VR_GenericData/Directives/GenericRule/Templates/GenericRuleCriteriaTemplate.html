@@ -1,36 +1,44 @@
 ﻿<vr-row>
-    <span ng-repeat="item in criteria">
-        <span ng-if="doGroupsExist">
-            <vr-row ng-if="item.groupId!=undefined">
-                <vr-columns colnum="12">
-                    <vr-columns colnum="12" medium-spacing>
-                        <vr-section title="{{item.groupTitle}}">
-                            <vr-row>
-                                <vr-columns width="1/4row">
-                                    <vr-label>{{item.groupTitle}}</vr-label>
-                                    <vr-select datasource="item.fields"
-                                               datatextfield="Title"
-                                               datavaluefield="FieldName"
-                                               onselectionchanged="onGroupCriteriaFieldSelectionChanged"
-                                               selectedValues="item.selectedField"
-                                               hideremoveicon
-                                               on-ready="onGroupCriteriaFieldSelectorReady">
-                                    </vr-select>
-                                </vr-columns>
-                            </vr-row>
-                            <vr-row>
-                                <span ng-repeat="field in item.fields">
-                                    <vr-directivewrapper directive="field.runtimeEditor.directive" on-ready="field.runtimeEditor.onDirectiveReady"
-                                                         selectionmode="dynamic" normal-col-num="3" ng-hide="field.notAccessible || field != item.selectedField"></vr-directivewrapper>
-                                </span>
-                            </vr-row>
-                        </vr-section>
-                    </vr-columns>
-                </vr-columns>
-            </vr-row>
+    <span ng-repeat="criteriaObj in scopeModel.criteriaObjects">
+        <span ng-if="criteriaObj.isGroup">
+            <vr-columns colnum="12">
+                <vr-section title="{{criteriaObj.groupObj.groupTitle}}">
+                    <vr-row>
+                        <vr-columns width="1/4row">
+                            <vr-label>{{criteriaObj.groupObj.groupTitle}}</vr-label>
+                            <vr-select datasource="criteriaObj.groupObj.fields"
+                                       datatextfield="Title"
+                                       datavaluefield="FieldName"
+                                       onselectionchanged="criteriaObj.groupObj.onGroupCriteriaFieldSelectionChanged"
+                                       selectedValues="criteriaObj.groupObj.selectedField"
+                                       hideremoveicon
+                                       on-ready="criteriaObj.groupObj.onGroupCriteriaFieldSelectorReady">
+                            </vr-select>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <span ng-repeat="fieldGroup in criteriaObj.groupObj.fields">
+                            <span ng-if="fieldGroup == criteriaObj.groupObj.selectedField" vr-loader="fieldGroup.isFieldDirectiveLoading">
+                                <vr-directivewrapper directive="fieldGroup.runtimeEditor.directive" on-ready="fieldGroup.runtimeEditor.onDirectiveReady"
+                                                     selectionmode="dynamic" normal-col-num="3">
+                                </vr-directivewrapper>
+                            </span>
+                        </span>
+                    </vr-row>
+                </vr-section>
+            </vr-columns>
         </span>
-        <vr-directivewrapper directive="item.runtimeEditor.directive" on-ready="item.runtimeEditor.onDirectiveReady"
-                             selectionmode="dynamic" normal-col-num="3" ng-hide="item.notAccessible || item.groupId !=undefined"></vr-directivewrapper>
+
+        <span ng-if="!criteriaObj.isGroup">
+            <vr-directivewrapper directive="criteriaObj.field.runtimeEditor.directive" on-ready="criteriaObj.field.runtimeEditor.onDirectiveReady"
+                                 selectionmode="dynamic" normal-col-num="3">
+            </vr-directivewrapper>
+        </span>
+    </span>
+
+    <span ng-show="false" ng-repeat="hiddenCriteriaField in scopeModel.hiddenCriteriaFields">
+        <vr-directivewrapper directive="hiddenCriteriaField.runtimeEditor.directive" on-ready="hiddenCriteriaField.runtimeEditor.onDirectiveReady"
+                             selectionmode="dynamic" normal-col-num="3">
+        </vr-directivewrapper>
     </span>
 </vr-row>
-

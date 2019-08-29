@@ -15,9 +15,10 @@
         };
 
 
-        function genericUIObj(fields) {
-            var fields = fields;
+        function genericUIObj(criteriaFields) {
+            var fields = criteriaFields;
             var fieldContexts;
+            var fieldValuesObjs = [];
 
             var isLoading = true;
             var pendingNotifications = [];
@@ -41,11 +42,28 @@
                     setTimeout(function () {
                         for (var x = 0; x < pendingNotifications.length; x++) {
                             var currentNotification = pendingNotifications[x];
-                            currentNotification.genericUIContext.onvaluechanged(currentNotification.relatedField, currentNotification.selectedvalue);
+                            if (currentNotification.genericUIContext != undefined && currentNotification.genericUIContext.onvaluechanged != undefined && typeof (currentNotification.genericUIContext.onvaluechanged) == "function") {
+                                currentNotification.genericUIContext.onvaluechanged(currentNotification.relatedField, currentNotification.selectedvalue);
+                            }
                         }
+                        pendingNotifications.length = 0;
                         UtilsService.safeApply($rootScope);
                     });
                 }
+            };
+
+            var resendCritireaFieldValues = function (selectedField) {
+                angular.forEach(fieldValuesObjs, function (currentFieldValuesObj) {
+
+                    if (selectedField != currentFieldValuesObj.fieldObj) {
+                        var currentField = currentFieldValuesObj.fieldObj;
+                        var fieldValue = currentFieldValuesObj.fieldValue;
+
+                        if (selectedField.genericUIContext != undefined && selectedField.genericUIContext.onvaluechanged != undefined && typeof (selectedField.genericUIContext.onvaluechanged) == "function") {
+                            selectedField.genericUIContext.onvaluechanged(currentField, fieldValue);
+                        }
+                    }
+                });
             };
 
             function initialize() {
@@ -67,6 +85,12 @@
                 var context = {
                     getFields: function () { return fields; },
                     notifyValueChanged: function (selectedvalue) {
+                        var item = UtilsService.getItemByVal(fieldValuesObjs, relatedField, 'fieldObj');
+                        if (item != undefined)
+                            item = { fieldObj: relatedField, fieldValue: selectedvalue };
+                        else
+                            fieldValuesObjs.push({ fieldObj: relatedField, fieldValue: selectedvalue });
+
                         angular.forEach(fields, function (currentField) {
                             if (currentField.genericUIContext != undefined && currentField.genericUIContext.onvaluechanged != undefined && typeof (currentField.genericUIContext.onvaluechanged) == "function") {
                                 if (!isLoading) {
@@ -74,6 +98,11 @@
                                 }
                                 else
                                     pendingNotifications.push({ genericUIContext: currentField.genericUIContext, relatedField: relatedField, selectedvalue: selectedvalue });
+                            }
+                            else {
+                                if (isLoading) {
+                                    pendingNotifications.push({ genericUIContext: currentField.genericUIContext, relatedField: relatedField, selectedvalue: selectedvalue });
+                                }
                             }
                         });
                     }
@@ -83,6 +112,7 @@
 
             this.getFieldContext = getFieldContext;
             this.loadingFinish = loadingFinish;
+            this.resendCritireaFieldValues = resendCritireaFieldValues;
         }
     };
 
