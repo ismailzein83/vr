@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Billing\ServiceResponse\BillOnDemandOutput.cs" />
+    <Compile Include="Billing\ServiceResponse\BPTrackingMessage.cs" />
     <Compile Include="Billing\ServiceResponse\BPInstance.cs" />
     <Compile Include="Billing\ServiceResponse\ContractAvailableServiceOutput.cs" />
     <Compile Include="Billing\ServiceResponse\CPTItem.cs" />

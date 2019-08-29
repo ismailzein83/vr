@@ -84,6 +84,7 @@
     <Compile Include="Contracts\PabxContractDetail.cs" />
     <Compile Include="Contracts\TelephonyContractEntity.cs" />
     <Compile Include="Contracts\TelephonyContractInfo.cs" />
+    <Compile Include="BPTrackingMessageDetail.cs" />
     <Compile Include="DeviceType.cs" />
     <Compile Include="PromotionDetail.cs" />
     <Compile Include="InvoiceEntity.cs" />

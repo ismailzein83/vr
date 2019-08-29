@@ -103,6 +103,36 @@ namespace BPMExtended.Main.Business
             return logs;
         }
 
+        public List<BPTrackingMessageDetail> GetBPInstanceTrackingMessagesDetails(long processId)
+        {
+            var BPTrackingMessages = new List<BPTrackingMessageDetail>();
+
+            using (SOMClient client = new SOMClient())
+            {
+                List<BPTrackingMessage> items = client.Get<List<BPTrackingMessage>>(String.Format("api/SOM.ST/Billing/GetBPInstanceTrackingMessages?processInstanceId={0}", processId));
+                foreach (var item in items)
+                {
+                    var bpItem = BPTrackingMessageToDetailMapper(item);
+                    BPTrackingMessages.Add(bpItem);
+                }
+            }
+            return BPTrackingMessages;
+        }
+
+        public BPTrackingMessageDetail BPTrackingMessageToDetailMapper(BPTrackingMessage bpTrackingMessage)
+        {
+            return new BPTrackingMessageDetail()
+            {
+                Id= bpTrackingMessage.Id,
+                ProcessInstanceId = bpTrackingMessage.ProcessInstanceId,
+                ParentProcessId = bpTrackingMessage.ParentProcessId,
+                //Severity = bpTrackingMessage.Severity,
+                TrackingMessage = bpTrackingMessage.TrackingMessage,
+                ExceptionDetail = bpTrackingMessage.ExceptionDetail,
+                EventTime = bpTrackingMessage.EventTime,
+            };
+
+        }
         public CreateCustomerRequestOutput CreateLineSubscriptionRequest(BPMCustomerType customerType, Guid accountOrContactId, LineSubscriptionRequest lineSubscriptionRequest)
         {
             string title = string.Format("Line Subscription '{0}'", lineSubscriptionRequest.PhoneNumber);
