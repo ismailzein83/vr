@@ -263,11 +263,11 @@ namespace Vanrise.HelperTools
 
             var allDirectories = Directory.GetDirectories(string.Format(sqlFilesOutputPath, currentDateShort, "", projectName), "*", SearchOption.TopDirectoryOnly);
 
-            projectName = string.IsNullOrEmpty(productDisplayName) ? projectName : productDisplayName;
+            productDisplayName = string.IsNullOrEmpty(productDisplayName) ? projectName : productDisplayName;
             foreach (var directory in allDirectories)
             {
                 var orgDirectoryName = Path.GetFileName(directory);
-                var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
+                var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden_"+ projectName) : orgDirectoryName;
 
                 //create file if not exist in order to create root output file
                 if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql")))
@@ -320,7 +320,7 @@ namespace Vanrise.HelperTools
 
                     fileContent = fileContent.Replace("#VersionDate#", DateTime.Now.ToString(VersionDateFormat));
                     fileContent = fileContent.Replace("#VersionNumber#", VersionNumber);
-                    fileContent = fileContent.Replace("#ProductName#", projectName);
+                    fileContent = fileContent.Replace("#ProductName#", productDisplayName);
 
                     File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql"), fileContent.ToString());
                     File.Delete(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt"));
