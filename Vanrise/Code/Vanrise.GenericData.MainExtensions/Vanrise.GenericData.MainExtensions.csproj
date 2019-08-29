@@ -74,6 +74,7 @@
     <Compile Include="DataRecordFieldFormulas\SingleMathOperationFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\SwitchCaseFieldFormula.cs" />
     <Compile Include="DataRecordFields\FieldArrayType.cs" />
+    <Compile Include="DataRecordFields\FieldByteArrayType.cs" />
     <Compile Include="DataRecordFields\FieldCustomObjectType.cs" />
     <Compile Include="DataRecordFields\FieldAttachmentType.cs" />
     <Compile Include="DataRecordFields\FieldDataRecordType.cs" />
