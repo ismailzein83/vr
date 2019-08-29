@@ -11,6 +11,7 @@ using Vanrise.Entities;
 using Vanrise.Security.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.GenericData.Business
 {
@@ -155,6 +156,26 @@ namespace Vanrise.GenericData.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
+            var overridenConfigs = GetOverridenBEByBEID();
+            if (overridenConfigs != null)
+            {
+                var overridenConfig = overridenConfigs.GetRecord(businessEntityDefinition.BusinessEntityDefinitionId);
+                if(overridenConfig != null)
+                {
+                    overridenConfig.Settings.OverriddenSettings = businessEntityDefinition.Settings;
+                    overridenConfig.Settings.OverriddenTitle = businessEntityDefinition.Title;
+                    overridenConfig.OverriddenConfiguration.Settings.ExtendedSettings = overridenConfig.Settings;
+                    var result = new OverriddenConfigurationManager().UpdateOverriddenConfiguration(overridenConfig.OverriddenConfiguration);
+                    updateOperationOutput.Result = result.Result;
+                    updateOperationOutput.Message = result.Message;
+                    if(result.Result == UpdateOperationResult.Succeeded)
+                    {
+                        updateOperationOutput.UpdatedObject = BusinessEntityDefinitionDetailMapper(businessEntityDefinition);
+                    }
+                    return updateOperationOutput;
+                }
+            }
+
             IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
             bool updateActionSucc = dataManager.UpdateBusinessEntityDefinition(businessEntityDefinition);
 
@@ -251,10 +272,51 @@ namespace Vanrise.GenericData.Business
                 {
                     IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
                     IEnumerable<BusinessEntityDefinition> beDefinitions = dataManager.GetBusinessEntityDefinitions();
+                    var overrridenConfigurations = GetOverridenBEByBEID();
+                    if(overrridenConfigurations != null)
+                    {
+                        foreach (var item in beDefinitions)
+                        {
+                            var overridenConfiguration = overrridenConfigurations.GetRecord(item.BusinessEntityDefinitionId);
+                            if (overridenConfiguration != null)
+                            {
+                                item.Title = overridenConfiguration.Settings.OverriddenTitle;
+                                item.Settings = overridenConfiguration.Settings.OverriddenSettings;
+                            }
+                        }
+                    }
+                  
                     return beDefinitions.ToDictionary(beDefinition => beDefinition.BusinessEntityDefinitionId, beDefinition => beDefinition);
                 });
         }
+        private Dictionary<Guid, OverriddenConfigBEEntity> GetOverridenBEByBEID()
+        {
+            OverriddenConfigurationManager overriddenConfigurationManager = new OverriddenConfigurationManager();
+            var overrridenConfigurations = overriddenConfigurationManager.GetEffectiveOverridenConfigurationByType<BEDefinitionOverriddenConfiguration>();
+            Dictionary<Guid, OverriddenConfigBEEntity> result = null;
+            if (overrridenConfigurations != null)
+            {
+                result = new Dictionary<Guid, OverriddenConfigBEEntity>();
 
+                foreach (var item in overrridenConfigurations)
+                {
+                    var settings = item.Settings.ExtendedSettings as BEDefinitionOverriddenConfiguration;
+                    if(settings != null && settings.OverriddenSettings != null)
+                    {
+                        if (result.ContainsKey(settings.BusinessEntityDefinitionId))
+                            throw new NotSupportedException("Business entity should be used only once in overrriden configuration.");
+                        result.Add(settings.BusinessEntityDefinitionId, new OverriddenConfigBEEntity
+                        {
+                            Settings = settings,
+                            OverriddenConfiguration = item
+                        });
+                    }
+                     
+                }
+            }
+
+            return result;
+        }
         #endregion
 
         #region Private Methods
@@ -353,10 +415,12 @@ namespace Vanrise.GenericData.Business
         {
             IBusinessEntityDefinitionDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
             object _updateHandle;
+            DateTime? _configLastCheck;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreGenericRuleDefinitionsUpdated(ref _updateHandle);
+                return _dataManager.AreGenericRuleDefinitionsUpdated(ref _updateHandle) 
+                     || Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Common.Business.OverriddenConfigurationManager.CacheManager>().IsCacheExpired(ref _configLastCheck);
             }
         }
 
@@ -403,4 +467,9 @@ namespace Vanrise.GenericData.Business
 public class BEDefinitionSettingsGetEditorRuntimeAdditionalDataContext : IBEDefinitionSettingsGetEditorRuntimeAdditionalDataContext
 {
     public BusinessEntityDefinition BEDefinition { get; set; }
+}
+public class OverriddenConfigBEEntity
+{
+    public BEDefinitionOverriddenConfiguration Settings { get; set; }
+    public OverriddenConfiguration OverriddenConfiguration { get; set; }
 }

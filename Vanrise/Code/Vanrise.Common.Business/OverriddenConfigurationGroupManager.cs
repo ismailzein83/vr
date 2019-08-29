@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,24 @@ namespace Vanrise.Common.Business
         {
             return GetCachedOverriddenConfigurationGroups().GetRecord(overriddenConfigurationGroupId);
         }
-
+        public IEnumerable<Guid> GetEffectiveOverriddenConfigurationGroupIds()
+        {
+            var configuration = ConfigurationManager.AppSettings["EffectiveOverriddenConfigurationGroupIds"];
+            if (configuration == null)
+                return null;
+            var cachedGroups = GetCachedOverriddenConfigurationGroups();
+            var groupIds = configuration.Split(',');
+            List<Guid> effectiveGroupIds = new List<Guid>();
+            foreach(var item in groupIds)
+            {
+                Guid groupId;
+                if(Guid.TryParse(item, out groupId) && cachedGroups.ContainsKey(groupId))
+                {
+                    effectiveGroupIds.Add(groupId);
+                }
+            }
+            return effectiveGroupIds;
+        }
         public void GenerateScript(List<OverriddenConfigurationGroup> groups, Action<string, string> addEntityScript)
         {
             IOverriddenConfigurationGroupDataManager dataManager = CommonDataManagerFactory.GetDataManager<IOverriddenConfigurationGroupDataManager>();
@@ -50,7 +68,7 @@ namespace Vanrise.Common.Business
 
             return insertOperationOutput;
         }
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IOverriddenConfigurationGroupDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IOverriddenConfigurationGroupDataManager>();
             object _updateHandle;
@@ -80,10 +98,11 @@ namespace Vanrise.Common.Business
         }
         private OverriddenConfigGroupDetail OverriddenConfigGroupDetailMapper(OverriddenConfigurationGroup overriddenConfigurationGroup)
         {
-            OverriddenConfigGroupDetail overriddenConfigGroupDetail = new OverriddenConfigGroupDetail();
-            overriddenConfigGroupDetail.Name = overriddenConfigurationGroup.Name;
-            overriddenConfigGroupDetail.OverriddenConfigurationGroupId = overriddenConfigurationGroup.OverriddenConfigurationGroupId;
-            return overriddenConfigGroupDetail;
+            return new OverriddenConfigGroupDetail
+            {
+                Name = overriddenConfigurationGroup.Name,
+                OverriddenConfigurationGroupId = overriddenConfigurationGroup.OverriddenConfigurationGroupId
+            };
         }
     }
 }

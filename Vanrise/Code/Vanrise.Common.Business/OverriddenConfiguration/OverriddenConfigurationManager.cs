@@ -44,7 +44,14 @@ namespace Vanrise.Common.Business
 
             return GetOverriddenConfiguration(overriddenConfigurationId, false);
         }
-       
+        public IEnumerable<OverriddenConfiguration> GetEffectiveOverridenConfigurationByType<T>() where T: OverriddenConfigurationExtendedSettings
+        {
+            var configs = GetCachedOverriddenConfigurations();
+            var effectiveGroupId = new OverriddenConfigurationGroupManager().GetEffectiveOverriddenConfigurationGroupIds();
+            if (effectiveGroupId == null)
+                return null;
+            return configs.FindAllRecords(x => effectiveGroupId.Contains(x.GroupId) && x.Settings.ExtendedSettings is T);
+        }
         public Vanrise.Entities.InsertOperationOutput<OverriddenConfigurationDetail> AddOverriddenConfiguration(OverriddenConfiguration overriddenConfiguration)
         {
             Vanrise.Entities.InsertOperationOutput<OverriddenConfigurationDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<OverriddenConfigurationDetail>();
@@ -192,7 +199,7 @@ namespace Vanrise.Common.Business
            return builder.ToString();
        }
 
-       void AddEntityScript(StringBuilder scriptBuilder, string entityName, string entityScript)
+        void AddEntityScript(StringBuilder scriptBuilder, string entityName, string entityScript)
        {
            scriptBuilder.AppendLine();
            scriptBuilder.AppendFormat("-------------- START Entity '{0}' -------------------", entityName);
@@ -212,7 +219,7 @@ namespace Vanrise.Common.Business
 
         #region Private Classes
        
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IOverriddenConfigurationDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IOverriddenConfigurationDataManager>();
             object _updateHandle;
