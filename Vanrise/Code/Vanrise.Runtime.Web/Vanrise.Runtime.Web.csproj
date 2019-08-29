@@ -23,7 +23,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
@@ -106,6 +107,7 @@
   <ItemGroup>
     <Content Include="Runtime\Constants\IntervalTimeTypeEnum.js" />
     <Content Include="Runtime\Constants\ModuleConfig.js" />
+    <Content Include="Runtime\Constants\DayOfMonthTypeEnum.js" />
     <Content Include="Runtime\Constants\SchedulerTaskStatusEnum.js" />
     <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\RuntimeNodeConfigurationServicesEditorController.js" />
@@ -137,11 +139,13 @@
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerDaily.html" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerInterval.html" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerManual.html" />
+    <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerMonthly.html" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerTimer.html" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerWeekly.html" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-daily.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-interval.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-manual.js" />
+    <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-monthly.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-timer.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-weekly.js" />
     <Content Include="Runtime\ModuleInitialization.js" />
@@ -169,14 +173,6 @@
     <Content Include="Runtime\Views\SchedulerTaskEditorController.js" />
     <Content Include="Runtime\Views\SchedulerTaskManagement.html" />
     <Content Include="Runtime\Views\SchedulerTaskManagementController.js" />
-    <Content Include="Runtime\Views\TriggerTemplates\DailyTimerTriggerTemplate.html" />
-    <Content Include="Runtime\Views\TriggerTemplates\DailyTimerTriggerTemplateController.js" />
-    <Content Include="Runtime\Views\TriggerTemplates\IntervalTimerTriggerTemplate.html" />
-    <Content Include="Runtime\Views\TriggerTemplates\IntervalTimerTriggerTemplateController.js" />
-    <Content Include="Runtime\Views\TriggerTemplates\TimerTriggerTemplate.html" />
-    <Content Include="Runtime\Views\TriggerTemplates\TimerTriggerTemplateController.js" />
-    <Content Include="Runtime\Views\TriggerTemplates\WeeklyTimerTriggerTemplate.html" />
-    <Content Include="Runtime\Views\TriggerTemplates\WeeklyTimerTriggerTemplateController.js" />
     <Content Include="Runtime\Views\WFScheduleTemplates\ScheduleDailyRepricingProcessTemplate.html" />
     <Content Include="Runtime\Views\WFScheduleTemplates\ScheduleDailyRepricingProcessTemplateController.js" />
   </ItemGroup>

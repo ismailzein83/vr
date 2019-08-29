@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Runtime.Entities;
 using Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments;
@@ -13,43 +11,42 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
     {
         public override DateTime? CalculateNextTimeToRun(SchedulerTask task, SchedulerTaskState taskState, BaseTaskTriggerArgument taskTriggerArgument)
         {
-            return DateTime.MaxValue;
-            //MonthlyTimeTaskTriggerArgument monthlyTimeTaskTriggerArgument = (MonthlyTimeTaskTriggerArgument)taskTriggerArgument;
+            MonthlyTimeTaskTriggerArgument monthlyTimeTaskTriggerArgument = taskTriggerArgument as MonthlyTimeTaskTriggerArgument;
 
-            //List<DateTime> listofScheduledDateTimes = new List<DateTime>();
-            //var now = DateTime.Now;
-            
-            //var nextruntime = taskState.NextRunTime.HasValue && !monthlyTimeTaskTriggerArgument.IgnoreSkippedIntervals ? taskState.NextRunTime.Value : now;
-                
-            //foreach (DayOfMonth dayOfMonth in monthlyTimeTaskTriggerArgument.ScheduledDays)
-            //{
-            //    int lastDayOfMonth = DateTime.DaysInMonth(now.Year, now.Month);
-            //    int day;
-            //    switch (dayOfMonth.MonthlyValue)
-            //    {
-            //        case MonthlyEnum.LastDay:
-            //            day = lastDayOfMonth;
-            //            break;
-            //        default:
-            //            day = dayOfMonth.SpecificDay.Value;
-            //            break;
-            //    }
-            //    int daysTillThen = day - nextruntime.Day;
+            var now = DateTime.Now;
+            var nextRuntime = taskState.NextRunTime.HasValue && !monthlyTimeTaskTriggerArgument.IgnoreSkippedIntervals ? taskState.NextRunTime.Value : now;
 
-            //    foreach (Time time in monthlyTimeTaskTriggerArgument.ScheduledTimesToRun)
-            //    {
-            //        TimeSpan scheduledTime = new TimeSpan(time.Hour, time.Minute, 0);
-            //        TimeSpan spanTillThen = scheduledTime - nextruntime.TimeOfDay;
+            int lastDayOfMonth = DateTime.DaysInMonth(now.Year, now.Month);
 
-            //        int daysToAdd = daysTillThen;
-            //        if ((daysTillThen < 0) || (daysTillThen == 0 && spanTillThen.Ticks <= 0))
-            //            daysToAdd += lastDayOfMonth;
+            List<DateTime> listofScheduledDateTimes = new List<DateTime>();
 
-            //        listofScheduledDateTimes.Add(nextruntime.AddDays(daysToAdd).Add(spanTillThen));
-            //    }
-            //}
+            foreach (DayOfMonth dayOfMonth in monthlyTimeTaskTriggerArgument.ScheduledDays)
+            {
+                int day;
 
-            //return listofScheduledDateTimes.OrderBy(x => x.Ticks).ToList().FirstOrDefault();
+                switch (dayOfMonth.DayOfMonthType)
+                {
+                    case DayOfMonthTypeEnum.LastDay: day = lastDayOfMonth; break;
+                    case DayOfMonthTypeEnum.SpecificDay: day = dayOfMonth.SpecificDay.Value; break;
+                    default: throw new NotSupportedException($"DayOfMonthType '{dayOfMonth.DayOfMonthType}' is not supported");
+                }
+
+                int daysTillThen = day - nextRuntime.Day;
+
+                foreach (Time time in monthlyTimeTaskTriggerArgument.ScheduledTimesToRun)
+                {
+                    TimeSpan scheduledTime = new TimeSpan(time.Hour, time.Minute, 0);
+                    TimeSpan spanTillThen = scheduledTime - nextRuntime.TimeOfDay;
+
+                    int daysToAdd = daysTillThen;
+                    if ((daysTillThen < 0) || (daysTillThen == 0 && spanTillThen.Ticks <= 0))
+                        daysToAdd += lastDayOfMonth;
+
+                    listofScheduledDateTimes.Add(nextRuntime.AddDays(daysToAdd).Add(spanTillThen));
+                }
+            }
+
+            return listofScheduledDateTimes.OrderBy(x => x.Ticks).ToList().FirstOrDefault();
         }
     }
 }

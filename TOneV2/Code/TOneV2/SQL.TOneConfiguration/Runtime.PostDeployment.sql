@@ -149,8 +149,8 @@ set nocount on;
 ;with cte_data([ID],[Name],[TriggerTypeInfo])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('7FDB2D2B-E1B2-47D5-ACD5-234E391CA759','Manual','{"URL": "/Client/Modules/Runtime/Views/TriggerTemplates/TaskTriggerManual.html","Editor": "vr-runtime-tasktrigger-manual","FQTN": "Vanrise.Runtime.Triggers.TimeTaskTrigger.ManualSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","AllowRunIfEnabled": true}'),
-('295B4FAC-DBF9-456F-855E-60D0B176F86B','Timer','{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html","Editor":"vr-runtime-tasktrigger-timer","FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","AllowRunIfEnabled": false}')
+('7FDB2D2B-E1B2-47D5-ACD5-234E391CA759','Manual','{"Editor": "vr-runtime-tasktrigger-manual","FQTN": "Vanrise.Runtime.Triggers.TimeTaskTrigger.ManualSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","AllowRunIfEnabled": true}'),
+('295B4FAC-DBF9-456F-855E-60D0B176F86B','Timer','{"Editor":"vr-runtime-tasktrigger-timer","FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","AllowRunIfEnabled": false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[TriggerTypeInfo]))
 merge	[runtime].[SchedulerTaskTriggerType] as t

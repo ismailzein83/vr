@@ -13,13 +13,10 @@ namespace Vanrise.Runtime.Entities
 
     public class TriggerTypeInfo
     {
-        public string URL { get; set; }
-
         public string FQTN { get; set; }
 
         public string Editor { get; set; }
 
         public bool AllowRunIfEnabled { get; set; }
     }
-
 }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments
 {
-    public enum MonthlyEnum { SpecificDay, LastDay }
+    public enum DayOfMonthTypeEnum { SpecificDay = 0, LastDay = 1 }
+
     public class MonthlyTimeTaskTriggerArgument : DailyTimeTaskTriggerArgument
     {
         public List<DayOfMonth> ScheduledDays { get; set; }
@@ -14,8 +11,8 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments
 
     public class DayOfMonth
     {
-        public MonthlyEnum MonthlyValue { get; set; }
+        public DayOfMonthTypeEnum DayOfMonthType { get; set; }
 
-        public int SpecificDay { get; set; }
+        public int? SpecificDay { get; set; }
     }
 }
