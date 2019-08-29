@@ -47,7 +47,7 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
-/*        public string CheckADSLRequestInWaitingListByTelContract(string contractId)
+        public bool CheckADSLRequestInWaitingListByTelContract(string contractId)
         {
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
@@ -67,11 +67,11 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                Guid requestId = entities[0].GetTypedColumnValue<Guid>("StRequestId");
-                return requestId.ToString();
+                //Guid requestId = entities[0].GetTypedColumnValue<Guid>("StRequestId");
+                return true;
             }
-            return null;
-        }*/
+            return false;
+        }
 
         public SOMRequestOutput CreateADSLContractOnHold(Guid requestId, string coreServices, string optionalServices, string ratePlanId)
         {
