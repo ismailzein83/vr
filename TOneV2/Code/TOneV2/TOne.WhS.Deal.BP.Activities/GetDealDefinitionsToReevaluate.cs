@@ -38,19 +38,18 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             var dealEffectiveAfter = inputArgument.DealEffectiveAfter;
 
-            var dealDefinitionManager = new DealDefinitionManager();
-            var cachedDealsWithDeleted = dealDefinitionManager.GetAllCachedDealDefinitions(true);
+            var cachedDealsWithDeleted = new DealDefinitionManager().GetAllCachedDealDefinitions(true);
 
-            var dealDefinitionsToReevaluate = new List<DealDefinition>();
-            var dealIdsToReevaluate = new List<int>();
             var dealIdsToKeep = new List<int>();
+            var dealIdsToReevaluate = new List<int>();
+            var dealDefinitionsToReevaluate = new List<DealDefinition>();
 
             if (cachedDealsWithDeleted != null)
             {
                 foreach (var cachedDealKvp in cachedDealsWithDeleted)
                 {
-                    var dealDefinition = cachedDealKvp.Value;
                     int dealId = cachedDealKvp.Key;
+                    var dealDefinition = cachedDealKvp.Value;
 
                     if (dealDefinition.IsDeleted)
                     {
@@ -64,8 +63,8 @@ namespace TOne.WhS.Deal.BP.Activities
 
                     if (dealDefinition.Settings.RealEED.VRGreaterThan(dealEffectiveAfter))
                     {
-                        dealDefinitionsToReevaluate.Add(dealDefinition);
                         dealIdsToReevaluate.Add(dealId);
+                        dealDefinitionsToReevaluate.Add(dealDefinition);
                     }
                     else
                     {
