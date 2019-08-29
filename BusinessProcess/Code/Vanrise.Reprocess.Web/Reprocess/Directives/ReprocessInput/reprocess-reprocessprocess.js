@@ -2,6 +2,7 @@
 
 app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'ReprocessChunkTimeEnum', 'Reprocess_ReprocessDefinitionAPIService', 'VRNotificationService',
     function (UtilsService, VRUIUtilsService, VRValidationService, ReprocessChunkTimeEnum, Reprocess_ReprocessDefinitionAPIService, VRNotificationService) {
+
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -14,19 +15,12 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: '/Client/Modules/Reprocess/Directives/ReprocessInput/Templates/ReprocessProcessTemplate.html'
         };
 
         function DirectiveConstructor($scope, ctrl) {
             this.initializeController = initializeController;
-
+               
             var reprocessDefinitionSettings;
 
             var reprocessDefinitionSelectorAPI;
@@ -51,11 +45,11 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                 $scope.scopeModel.onChunkTimeSelectorReady = function (api) {
                     chunkTimeSelectorAPI = api;
                     chunkTimeSelectorReadyDeferred.resolve();
-                };
+                }; 
 
                 $scope.scopeModel.onFilterDefinitionDirectiveReady = function (api) {
                     filterDefinitionDirectiveAPI = api;
-
+                    
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
@@ -75,7 +69,8 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                             var previousFilterDefinitionEditor = $scope.scopeModel.filterDefinitionEditor;
                             $scope.scopeModel.filterDefinitionEditor = reprocessDefinitionSettings.FilterDefinition != undefined ? reprocessDefinitionSettings.FilterDefinition.RuntimeEditor : undefined;
 
-                            if (previousFilterDefinitionEditor == $scope.scopeModel.filterDefinitionEditor && filterDefinitionDirectiveAPI != undefined) {
+                            if ($scope.scopeModel.filterDefinitionEditor != undefined && previousFilterDefinitionEditor == $scope.scopeModel.filterDefinitionEditor) {
+
                                 var setFilterDefinitionEditorLoader = function (value) {
                                     $scope.scopeModel.isLoadingDirective = value;
                                 };
@@ -113,6 +108,7 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                     }
                     else {
                         reprocessDefinitionSettings = undefined;
+                        filterDefinitionDirectiveAPI = undefined;
                         $scope.scopeModel.filterDefinitionEditor = undefined;
                     }
                 };
