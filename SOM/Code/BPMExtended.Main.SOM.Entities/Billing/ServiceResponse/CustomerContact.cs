@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BPMExtended.Main.Entities;
+using System;
 
 namespace BPMExtended.Main.SOMAPI
 {
@@ -12,8 +13,7 @@ namespace BPMExtended.Main.SOMAPI
         public string CustomerCode { get; set; }
         public string PhoneNumber { get; set; }
         public decimal CurrentBalance { get; set; }
-        public string Street { get; set; }
-        public string City { get; set; }
+        public Address ContractAddress { get; set; }
         public string ContractStatusId { get; set; }
         public DateTime ActivationDate { get; set; }
         public DateTime LastStatusChangeDate { get; set; }

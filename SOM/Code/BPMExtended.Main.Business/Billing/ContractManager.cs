@@ -729,15 +729,10 @@ namespace BPMExtended.Main.Business
             var catalogManager = new CatalogManager();
             string ratePlanName = catalogManager.GetRatePlanNameFromCatalog(contract.RateplanId);
 
-            var contractAddress = new Address()
-            {
-                Street = contract.Street,
-                City = contract.City
-            };
             return new TelephonyContractEntity
             {
                 ContractId = contract.Id,
-                ContractAddress = contractAddress,
+                ContractAddress = contract.ContractAddress,
                 ContractBalance = contract.CurrentBalance,
                 RatePlanId = contract.RateplanId,
                 RatePlanName = ratePlanName,
@@ -754,11 +749,6 @@ namespace BPMExtended.Main.Business
             int stat = 0;
             int.TryParse(contract.Status.ToString(), out stat);
 
-            var contractAddress = new Address()
-            {
-                Street = contract.Street,
-                City = contract.City
-            };
             return new TelephonyContractDetail
             {
                 ContractId = contract.Id,
@@ -775,11 +765,6 @@ namespace BPMExtended.Main.Business
             int stat = 0;
             int.TryParse(contract.Status.ToString(), out stat);
 
-            var contractAddress = new Address()
-            {
-                Street = contract.Street,
-                City = contract.City
-            };
             return new ContractDetail
             {
                 ContractId = contract.Id,
