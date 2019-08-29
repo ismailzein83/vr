@@ -16,7 +16,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-runtimeeditor";
         public Guid DataRecordTypeId { get; set; }
-        public ListRecordRuntimeViewType RuntimeViewType { get; set; }
         public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
             throw new NotImplementedException();
