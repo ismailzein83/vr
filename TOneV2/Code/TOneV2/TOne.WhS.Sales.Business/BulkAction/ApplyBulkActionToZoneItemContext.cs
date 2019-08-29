@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -20,15 +21,20 @@ namespace TOne.WhS.Sales.Business
         private IEnumerable<CostCalculationMethod> _costCalculationMethods;
 
         private Func<long, SaleEntityZoneRoutingProduct> _getSellingProductZoneRoutingProduct;
+        private SaleEntityZoneRateLocator SaleEntityZoneRateLocator;
 
         private Func<decimal, decimal> _getRoundedRate;
 
-        public ApplyBulkActionToZoneItemContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods, Func<long, SaleEntityZoneRoutingProduct> getSellingProductZoneRoutingProduct, Func<decimal, decimal> getRoundedRate)
+        private Func<DateTime, SaleEntityZoneRateLocator> _getCustomerZoneRateLocator;
+        public ApplyBulkActionToZoneItemContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods, Func<long, SaleEntityZoneRoutingProduct> getSellingProductZoneRoutingProduct, Func<decimal, decimal> getRoundedRate, SaleEntityZoneRateLocator saleEntityZoneRateLocator
+            , Func<DateTime, SaleEntityZoneRateLocator> getCustomerZoneRateLocator)
         {
             _getContextZoneItems = getContextZoneItems;
             _costCalculationMethods = costCalculationMethods;
             _getSellingProductZoneRoutingProduct = getSellingProductZoneRoutingProduct;
             _getRoundedRate = getRoundedRate;
+            SaleEntityZoneRateLocator = saleEntityZoneRateLocator;
+            _getCustomerZoneRateLocator = getCustomerZoneRateLocator;
         }
 
         #endregion
@@ -65,10 +71,26 @@ namespace TOne.WhS.Sales.Business
         {
             return _getRoundedRate(rate);
         }
-	}
 
-	public class PreApplyBulkActionToZoneItemContext : IPreApplyBulkActionToZoneItemContext
-	{
-		public Dictionary<int,DateTime> AdditionalCountryBEDsByCountryId { get; set; }
-	}
+        public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId)
+        {
+            return SaleEntityZoneRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+        }
+
+        public SaleRate GetCustomerNormalRate(int customerId, long zoneId, DateTime effectiveDate)
+        {
+            int sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+            var rateLocator = _getCustomerZoneRateLocator(effectiveDate);
+            var customerRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+
+            if (customerRate == null)
+                throw new DataIntegrityValidationException($"Rate is null on zone with id {zoneId} for customer with id {customerId}");
+
+            return customerRate.Rate;
+        }
+    }
+    public class PreApplyBulkActionToZoneItemContext : IPreApplyBulkActionToZoneItemContext
+    {
+        public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+    }
 }

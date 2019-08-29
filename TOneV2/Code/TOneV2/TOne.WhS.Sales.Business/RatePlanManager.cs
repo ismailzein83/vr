@@ -949,6 +949,21 @@ namespace TOne.WhS.Sales.Business
                 return contextZoneItemsByZoneId;
             };
 
+            SaleEntityZoneRateLocator customerNormalRateLocator = null;
+            Func<DateTime, SaleEntityZoneRateLocator> getCustomerRateLocator = null;
+            if (input.OwnerType == SalePriceListOwnerType.Customer)
+            {
+                getCustomerRateLocator = (effectiveDate) =>
+                {
+                    if (customerNormalRateLocator == null)
+                    {
+                        var routingCustomerInfoDetails = new List<RoutingCustomerInfoDetails> { new RoutingCustomerInfoDetails { CustomerId = input.OwnerId, SellingProductId = sellingProductId } };
+                        customerNormalRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(routingCustomerInfoDetails, effectiveDate, false));
+                    }
+                    return customerNormalRateLocator;
+                };
+            }
+
             // Filter the sale zones by applicable zones
             var applicableZoneIdsContext = new ApplicableZoneIdsContext(getSellingProductZoneRate, getCustomerZoneRate)
             {
@@ -1021,7 +1036,7 @@ namespace TOne.WhS.Sales.Business
                 return decimal.Round(rate, longPrecision);
             };
 
-            var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods, getRoundedRate)
+            var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods, getRoundedRate, getCustomerRateLocator)
             {
                 OwnerId = input.OwnerId,
                 OwnerType = input.OwnerType,
@@ -1382,12 +1397,9 @@ namespace TOne.WhS.Sales.Business
                 }
 
             }
-            //if (additionalCountryBEDsByCountryId != null && additionalCountryBEDsByCountryId.Count > 0)
-            //result.AdditionalCountryBEDsByCountryId = additionalCountryBEDsByCountryId;
-
             return result;
         }
-
+   
         private IEnumerable<ZoneItem> BuildZoneItems(RatePlanZoneCreationInput input)
         {
 
@@ -1458,6 +1470,21 @@ namespace TOne.WhS.Sales.Business
                 return contextZoneItemsByZoneId;
             };
 
+            SaleEntityZoneRateLocator customerNormalRateLocator = null;
+            Func<DateTime, SaleEntityZoneRateLocator> getCustomerRateLocator = null;
+            if (input.OwnerType == SalePriceListOwnerType.Customer)
+            {
+                getCustomerRateLocator = (effectiveDate) =>
+                {
+                    if (customerNormalRateLocator == null)
+                    {
+                        var routingCustomerInfoDetails = new List<RoutingCustomerInfoDetails> { new RoutingCustomerInfoDetails { CustomerId = input.OwnerId, SellingProductId = input.SellingProductId.Value } };
+                        customerNormalRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(routingCustomerInfoDetails, effectiveDate, false));
+                    }
+                    return customerNormalRateLocator;
+                };
+            }
+
             Func<long, SaleEntityZoneRoutingProduct> getSellingProductZoneRoutingProduct = (zoneId) =>
             {
                 return input.RoutingProductLocator.GetSellingProductZoneRoutingProduct(input.SellingProductId.Value, zoneId);
@@ -1488,7 +1515,7 @@ namespace TOne.WhS.Sales.Business
 
                 if (input.BulkAction != null)
                 {
-                    var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext(getContextZoneItems, input.CostCalculationMethods, getSellingProductZoneRoutingProduct, getRoundedRate)
+                    var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext(getContextZoneItems, input.CostCalculationMethods, getSellingProductZoneRoutingProduct, getRoundedRate, input.CurrentRateLocator, getCustomerRateLocator)
                     {
                         OwnerId = input.OwnerId,
                         OwnerType = input.OwnerType,
@@ -1496,7 +1523,7 @@ namespace TOne.WhS.Sales.Business
                         ZoneDraft = zoneDraft,
                         NewRateDayOffset = pricingSettings.NewRateDayOffset.Value,
                         IncreasedRateDayOffset = pricingSettings.IncreasedRateDayOffset.Value,
-                        DecreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value
+                        DecreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value,
                     };
                     input.BulkAction.ApplyBulkActionToZoneItem(applyBulkActionToZoneItemContext);
                 }
@@ -1694,7 +1721,7 @@ namespace TOne.WhS.Sales.Business
             longPrecisionValue = generalSettingsManager.GetLongPrecisionValue();
         }
 
-#endregion
+        #endregion
 
         #region Import Rate Plan
 

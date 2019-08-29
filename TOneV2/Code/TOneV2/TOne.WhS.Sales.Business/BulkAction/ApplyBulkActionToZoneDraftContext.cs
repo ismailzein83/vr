@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Sales.Entities;
 using Vanrise.Entities;
+using TOne.WhS.Sales.Entities;
+using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -21,11 +20,13 @@ namespace TOne.WhS.Sales.Business
 
         private Func<decimal, decimal> _getRoundedRate;
 
-        public ApplyBulkActionToZoneDraftContext(Func<IEnumerable<ZoneItem>> buildZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods, Func<decimal, decimal> getRoundedRate)
+        private Func<DateTime, SaleEntityZoneRateLocator> _getCustomerZoneRateLocator;
+        public ApplyBulkActionToZoneDraftContext(Func<IEnumerable<ZoneItem>> buildZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods, Func<decimal, decimal> getRoundedRate, Func<DateTime, SaleEntityZoneRateLocator> getCustomerZoneRateLocator)
         {
             this._buildZoneItems = buildZoneItems;
             this._costCalculationMethods = costCalculationMethods;
             _getRoundedRate = getRoundedRate;
+            _getCustomerZoneRateLocator = getCustomerZoneRateLocator;
         }
 
         #endregion
@@ -63,10 +64,20 @@ namespace TOne.WhS.Sales.Business
             }
             return null;
         }
+        public SaleRate GetCustomerNormalRate(int customerId, long zoneId, DateTime effectiveDate)
+        {
+            int sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+            var rateLocator = _getCustomerZoneRateLocator(effectiveDate);
+            var customerRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
 
+            if (customerRate == null)
+                throw new DataIntegrityValidationException($"Rate is null on zone with id {zoneId} for customer with id {customerId}");
+
+            return customerRate.Rate;
+        }
         public decimal GetRoundedRate(decimal rate)
         {
             return _getRoundedRate(rate);
         }
-	}
+    }
 }
