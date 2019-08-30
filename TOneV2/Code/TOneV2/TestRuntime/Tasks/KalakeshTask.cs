@@ -15,23 +15,23 @@ namespace TestRuntime.Tasks
     {
         public void Execute()
         {
-            LastTimePeriod lastTimePeriod = new LastTimePeriod();
-            //lastTimePeriod.StartingFrom = StartingFrom.ExecutionTime;
-            //lastTimePeriod.StartingFrom = StartingFrom.Midnight;
-            lastTimePeriod.StartingFrom = StartingFrom.ExecutionTimeWithOffset;
-            lastTimePeriod.TimeUnit = TimeUnit.Day;
-            lastTimePeriod.TimeValue = 10;
-            lastTimePeriod.OffsetTimeUnit = TimeUnit.Day;
-            lastTimePeriod.OffsetValue = 10;
-            VRTimePeriodContext context = new VRTimePeriodContext();
-            context.EffectiveDate = DateTime.Now;
+            //LastTimePeriod lastTimePeriod = new LastTimePeriod();
+            ////lastTimePeriod.StartingFrom = StartingFrom.ExecutionTime;
+            ////lastTimePeriod.StartingFrom = StartingFrom.Midnight;
+            //lastTimePeriod.StartingFrom = StartingFrom.ExecutionTimeWithOffset;
+            //lastTimePeriod.TimeUnit = TimeUnit.Day;
+            //lastTimePeriod.TimeValue = 10;
+            //lastTimePeriod.OffsetTimeUnit = TimeUnit.Day;
+            //lastTimePeriod.OffsetValue = 10; 
+            //VRTimePeriodContext context = new VRTimePeriodContext();
+            //context.EffectiveDate = DateTime.Now;
 
-            lastTimePeriod.GetTimePeriod(context);
+            //lastTimePeriod.GetTimePeriod(context);
 
-            Console.Write("From: ");
-            Console.WriteLine(context.FromTime);
-            Console.Write("To: ");
-            Console.WriteLine(context.ToTime);
+            //Console.Write("From: ");
+            //Console.WriteLine(context.FromTime);
+            //Console.Write("To: ");
+            //Console.WriteLine(context.ToTime);
         }
     }
 }
