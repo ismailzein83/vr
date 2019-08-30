@@ -887,6 +887,9 @@
     <Content Include="Images\menu-icons\Business Entities.png" />
     <Content Include="Images\menu-icons\dispute-tile.png" />
     <Content Include="Images\menu-icons\dispute.png" />
+    <Content Include="Images\menu-icons\engineering-tile.png" />
+    <Content Include="Images\menu-icons\finance-tile.png" />
+    <Content Include="Images\menu-icons\license-tile.png" />
     <Content Include="Images\menu-icons\NOC-tile.png" />
     <Content Include="Images\menu-icons\NOC.png" />
     <Content Include="Images\menu-icons\operator declaration-tile.png" />
@@ -900,6 +903,8 @@
     <Content Include="Images\menu-icons\Routing.png" />
     <Content Include="Images\menu-icons\Sale Area-tile.png" />
     <Content Include="Images\menu-icons\Sale Area.png" />
+    <Content Include="Images\menu-icons\spectrum-tile.png" />
+    <Content Include="Images\menu-icons\systemServices-tile.png" />
     <Content Include="Images\menu-icons\Taxes Management.png" />
     <Content Include="Images\menu-icons\Taxes Management-tile.png" />
     <Content Include="Images\menu-icons\Traffic Monitoring.png" />
