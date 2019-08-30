@@ -820,12 +820,17 @@
     <Content Include="Images\default-tone-ra-iconheader.ico" />
     <Content Include="Images\default-tone-ra-login.png" />
     <Content Include="Images\default-tone-ra-logoonheader.png" />
+    <Content Include="Images\figure-icons\engineering.png" />
+    <Content Include="Images\figure-icons\finance.png" />
+    <Content Include="Images\figure-icons\license.png" />
     <Content Include="Images\figure-icons\sms.png" />
     <Content Include="Images\figure-icons\inbound-traffic.png" />
     <Content Include="Images\figure-icons\income.png" />
     <Content Include="Images\figure-icons\kpi.png" />
     <Content Include="Images\figure-icons\outbound-traffic.png" />
     <Content Include="Images\figure-icons\revenus.png" />
+    <Content Include="Images\figure-icons\spectrum.png" />
+    <Content Include="Images\figure-icons\system-services.png" />
     <Content Include="Images\figure-icons\top-operator.png" />
     <Content Include="Images\figure-icons\volume.png" />
     <Content Include="Images\flat-cabill-iconheader.ico" />
