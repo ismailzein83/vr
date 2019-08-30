@@ -1,4 +1,5 @@
 ﻿(function (appControllers) {
+
     'use strict';
 
     zooManagementController.$inject = ['$scope', 'Demo_Module_ZooService', 'UtilsService', 'VRUIUtilsService','ZooSizeEnum'];

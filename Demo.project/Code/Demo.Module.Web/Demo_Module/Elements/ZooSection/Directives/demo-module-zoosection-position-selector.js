@@ -1,8 +1,8 @@
-﻿app.directive('demoModuleSizeSelector', ['VRUIUtilsService', 'ZooSizeEnum','UtilsService',
-    function (VRUIUtilsService, ZooSizeEnum, UtilsService) {
+﻿app.directive('demoModuleZoosectionPositionSelector', ['VRUIUtilsService', 'ZooSectionPositionEnum','UtilsService',
+    function (VRUIUtilsService, ZooSectionPositionEnum, UtilsService) {
 
         'use strict';
-
+        
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -25,8 +25,8 @@
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var sizeSelector = new SizeSelector(ctrl, $scope, $attrs);
-                sizeSelector.initializeController();
+                var positionSelector = new PositionSelector(ctrl, $scope, $attrs);
+                positionSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -37,11 +37,11 @@
 
         function getTemplate(attrs) {
 
-            var label = 'Size';
+            var label = 'Position';
 
             var multipleselection = '';
             if (attrs.ismultipleselection != undefined) {
-                label = 'Sizes';
+                label = 'Positions';
                 multipleselection = 'ismultipleselection';
             }
 
@@ -52,17 +52,17 @@
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<span vr-disabled="ctrl.isdisabled">'
-                + '<vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" '
-                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Size" onselectitem="ctrl.onselectitem" '
+                + '<vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="description" datavaluefield="value"  isrequired="ctrl.isrequired" '
+                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Position" onselectitem="ctrl.onselectitem" '
                 + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' >'
                 + '</vr-select>'
                 + '</span>'
                 + '</vr-columns>';
         }
 
-        function SizeSelector(ctrl, $scope, attrs) {
+        function PositionSelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
-
+            
             var selectorAPI;
 
             function initializeController() {
@@ -85,9 +85,9 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    var zooSizesArray = UtilsService.getArrayEnum(ZooSizeEnum);
-                    for (var i = 0; i < zooSizesArray.length; i++) {
-                        ctrl.datasource.push(zooSizesArray[i]);
+                    var zooPositionsArray = UtilsService.getArrayEnum(ZooSectionPositionEnum);
+                    for (var i = 0; i < zooPositionsArray.length; i++) {
+                        ctrl.datasource.push(zooPositionsArray[i]);
                     }
 
                     if (selectedIds != undefined) {

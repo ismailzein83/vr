@@ -1,0 +1,34 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="Animals">
+            <vr-button type="Add" data-onclick="ctrl.addAnimal" standalone></vr-button>
+            <vr-validator validate="ctrl.isValid()">
+                <vr-datagrid datasource="ctrl.datasource"
+                             norowhighlightonclick="true"
+                             menuactions="gridMenuActions"
+                             maxheight="300px"
+                             on-ready="scopeModel.onGridReady"
+                             enabledraggablerow="true"
+                             ondeleterow="ctrl.removeFilter"
+                             rowdeleteicontitle="Delete Option"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting>
+                        <vr-textbox value="dataItem.Name" isrequired></vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Weight'" field="'Weight'" disablesorting>
+                        <vr-textbox value="dataItem.Weight" isrequired></vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridexpandablerow>
+                        <vr-tabs>
+                            <vr-tab header="'Definition'">
+                                <span vr-loader="dataItem.isAnimalSelectorLoading">
+                                    <demo-module-zoosection-type-animal on-ready="dataItem.onAnimalSelectorReady" normal-col-num="6" isrequired="true" hideremoveicon></demo-module-zoosection-type-animal>
+                                </span>
+                            </vr-tab>
+                        </vr-tabs>
+                    </vr-datagridexpandablerow>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-section>
+    </vr-columns>
+</vr-row>

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('demoModuleZooGrid', ['Demo_Module_ZooAPIService', 'VRNotificationService', 'Demo_Module_ZooService', 'ZooSizeEnum', 'UtilsService',
-    function zooManagementController(Demo_Module_ZooAPIService, VRNotificationService, Demo_Module_ZooService, ZooSizeEnum, UtilsService) {
+app.directive('demoModuleZooGrid', ['Demo_Module_ZooAPIService', 'VRNotificationService', 'Demo_Module_ZooService', 'ZooSizeEnum', 'UtilsService', 'VRUIUtilsService',
+    function (Demo_Module_ZooAPIService, VRNotificationService, Demo_Module_ZooService, ZooSizeEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -22,6 +22,7 @@ app.directive('demoModuleZooGrid', ['Demo_Module_ZooAPIService', 'VRNotification
             this.intializeController = intializeController;
 
             var gridAPI;
+            var gridDrillDownTabsObj;
 
             function intializeController() {
                 $scope.scopeModel = {};
@@ -29,6 +30,7 @@ app.directive('demoModuleZooGrid', ['Demo_Module_ZooAPIService', 'VRNotification
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownDefinitions(), gridAPI);
                     defineAPI();
                 };
 
@@ -38,9 +40,13 @@ app.directive('demoModuleZooGrid', ['Demo_Module_ZooAPIService', 'VRNotification
                             var zoos = response.Data;
                             var nbOfZoos = zoos.length;
 
-                            for (var i = 0; i < nbOfZoos; i++)
-                                zoos[i].sizeDescription = UtilsService.getEnumDescription(ZooSizeEnum, zoos[i].Size, 'value');
+                            for (var i = 0; i < nbOfZoos; i++) {
+                                var currentZoo = zoos[i];
+                                currentZoo.sizeDescription = UtilsService.getEnumDescription(ZooSizeEnum, currentZoo.Size, 'value');
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(currentZoo);
+                            }
                         }
+
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
@@ -58,11 +64,35 @@ app.directive('demoModuleZooGrid', ['Demo_Module_ZooAPIService', 'VRNotification
                 };
 
                 api.onZooAdded = function (zoo) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(zoo);
                     gridAPI.itemAdded(zoo);
                 };
 
                 if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
+            }
+
+            function buildDrillDownDefinitions() {
+                var drillDownDefinitions = [];
+                drillDownDefinitions.push(buildChildDrillDownDefinitions());
+                return drillDownDefinitions;
+            }
+
+            function buildChildDrillDownDefinitions() {
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = 'Section';
+                drillDownDefinition.directive = 'demo-module-zoosection-search';
+
+                drillDownDefinition.loadDirective = function (directiveAPI, zooItem) {
+                    zooItem.zooSectionGridAPI = directiveAPI;
+                    var payload = {
+                        zooId: zooItem.ZooId
+                    };
+                    return zooItem.zooSectionGridAPI.load(payload);
+                };
+
+                return drillDownDefinition;
             }
 
             function defineMenuActions() {

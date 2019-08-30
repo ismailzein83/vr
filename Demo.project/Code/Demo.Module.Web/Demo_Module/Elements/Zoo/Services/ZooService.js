@@ -14,6 +14,7 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onZooAdded = onZooAdded;
             };
+
             VRModalService.showModal('/Client/Modules/Demo_Module/Elements/Zoo/Views/ZooEditor.html', parameters, settings);
         }
 

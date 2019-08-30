@@ -12,6 +12,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, 'GetFilteredZoos'), input);
         }
 
+        function GetZoosInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, 'GetZoosInfo'), { filter: filter });
+        }
+
         function GetZooById(zooId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, 'GetZooById'), { zooId: zooId });
         }
@@ -26,6 +30,7 @@
 
         return {
             GetFilteredZoos: GetFilteredZoos,
+            GetZoosInfo: GetZoosInfo,
             GetZooById: GetZooById,
             AddZoo: AddZoo,
             UpdateZoo: UpdateZoo

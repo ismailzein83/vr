@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Demo_Module_ZooManagementController">
+﻿<vr-panel ng-controller="Demo_Module_ZooSectionManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -6,7 +6,10 @@
                     <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <demo-module-zoo-size-selector on-ready="scopeModel.onSizeSelectorReady" ismultipleselection></demo-module-zoo-size-selector>
+                    <demo-module-zoo-selector on-ready="scopeModel.onZooSelectorReady" ismultipleselection></demo-module-zoo-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-numeric value="scopeModel.maxNbOfAnimals" label="Max Number of animals" placeholder="Max Number of animals" minvalue="0"></vr-numeric>
                 </vr-columns>
             </vr-row>
         </div>
@@ -14,14 +17,12 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" data-onclick="scopeModel.addZoo"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addZooSection"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
-        <vr-row>
-            <vr-columns width="fullrow">
-                <demo-module-zoo-grid on-ready="scopeModel.onGridReady"></demo-module-zoo-grid>
-            </vr-columns>
-        </vr-row>
+        <vr-columns width="fullrow">
+            <demo-module-zoosection-grid on-ready="scopeModel.onGridReady"></demo-module-zoosection-grid>
+        </vr-columns>
     </vr-form>
 </vr-panel>

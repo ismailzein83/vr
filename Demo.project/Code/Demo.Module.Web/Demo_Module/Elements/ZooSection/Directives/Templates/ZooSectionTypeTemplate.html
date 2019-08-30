@@ -1,0 +1,32 @@
+﻿<vr-row>
+    <vr-columns colnum="{{ctrl.normalColNum}}">
+        <vr-select on-ready="scopeModel.onSelectorReady"
+                   datasource="scopeModel.templateConfigs"
+                   selectedvalues="scopeModel.selectedTemplateConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   label="Type"
+                   hideremoveicon
+                   isrequired="ctrl.isrequired">
+        </vr-select>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/3row" haschildcolumns>
+        <demo-module-zoosection-position-selector on-ready="scopeModel.onPositionSelectorReady" isrequired="true" ismultipleselection hideremoveicon></demo-module-zoosection-position-selector>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-numeric value="scopeModel.nbOfVisitors" label="Number of visitors" placeholder="Number of visitors" minvalue="0" isrequired></vr-numeric>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <label class="control-label vr-control-label">Has River ?</label>
+        <vr-switch value="scopeModel.hasRiver"></vr-switch>
+    </vr-columns>
+</vr-row>
+<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined"
+                     directive="scopeModel.selectedTemplateConfig.Editor"
+                     on-ready="scopeModel.onDirectiveReady"
+                     normal-col-num="{{ctrl.normalColNum}}"
+                     isrequired="ctrl.isrequired"
+                     customvalidate="ctrl.customvalidate">
+</vr-directivewrapper>
