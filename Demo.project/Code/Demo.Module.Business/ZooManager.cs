@@ -29,20 +29,33 @@ namespace Demo.Module.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allZoos.ToBigResult(input, filterExpression, ZooDetailMapper));
         }
 
-        public List<ZooInfo> GetZoosInfo()
+        public IEnumerable<ZooInfo> GetZoosInfo(ZooInfoFilter zooInfoFilter)
         {
             var allZoos = GetAllZoos();
 
             if (allZoos == null)
                 return null;
 
-            var zoosInfo = new List<ZooInfo>();
-            foreach (var zoo in allZoos)
+            Func<Zoo, bool> filterFunc = (zoo) =>
             {
-                zoosInfo.Add(ZooInfoMapper(zoo.Value));
-            }
+                if (zooInfoFilter != null)
+                {
+                    if (zooInfoFilter.Filters != null)
+                    {
+                        var context = new ZooInfoFilterContext { ZooId = zoo.ZooId };
 
-            return zoosInfo;
+                        foreach (var filter in zooInfoFilter.Filters)
+                        {
+                            if (!filter.IsMatch(context))
+                                return false;
+                        }
+                    }
+                }
+
+                return true;
+            };
+
+            return allZoos.MapRecords(ZooInfoMapper, filterFunc).OrderBy(zoo => zoo.Name);
         }
 
         public Zoo GetZooById(long zooId)

@@ -130,11 +130,13 @@
     <Compile Include="ZooSection\ZooSectionQuery.cs" />
     <Compile Include="ZooSection\ZooSectionDetail.cs" />
     <Compile Include="ZooSection\ZooSection.cs" />
+    <Compile Include="ZooSection\ZooSectionTypeAnimalConfig.cs" />
     <Compile Include="ZooSection\ZooSectionTypeConfig.cs" />
-    <Compile Include="ZooSection\ZooSectionTypeContext.cs" />
+    <Compile Include="ZooSection\ZooSectionTypeGetAnimalsNumberContext.cs" />
     <Compile Include="Zoo\Zoo.cs" />
     <Compile Include="Zoo\ZooDetail.cs" />
     <Compile Include="Zoo\ZooInfo.cs" />
+    <Compile Include="Zoo\ZooInfoFilter.cs" />
     <Compile Include="Zoo\ZooQuery.cs" />
   </ItemGroup>
   <ItemGroup />

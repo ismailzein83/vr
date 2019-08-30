@@ -24,11 +24,12 @@ namespace Demo.Module.Entities
 
     public interface IZooSectionTypeGetAnimalsNumberContext
     {
-        ZooSectionType Type { get; }
+
     }
 
     public abstract class ZooAnimal
     {
+        public abstract Guid ConfigId { get; }
         public string Name { get; set; }
         public decimal Weight { get; set; }
     }

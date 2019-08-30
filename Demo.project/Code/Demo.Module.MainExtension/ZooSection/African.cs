@@ -11,7 +11,7 @@ namespace Demo.Module.MainExtension.ZooSection
 
         public override int GetAnimalsNumber(IZooSectionTypeGetAnimalsNumberContext context)
         {
-            return Animals.Count;
+            return Animals != null ? Animals.Count : 0;
         }
     }
 }

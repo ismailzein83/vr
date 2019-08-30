@@ -22,16 +22,17 @@ namespace Demo.Module.Web.Controllers
 
         [HttpGet]
         [Route("GetZooById")]
-        public object GetZooById(long zooId)
+        public Zoo GetZooById(long zooId)
         {
             return _zooManager.GetZooById(zooId);
         }
 
         [HttpGet]
         [Route("GetZoosInfo")]
-        public IEnumerable<ZooInfo> GetZoosInfo()
+        public IEnumerable<ZooInfo> GetZoosInfo(string filter = null)
         {
-            return _zooManager.GetZoosInfo();
+            ZooInfoFilter zooInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<ZooInfoFilter>(filter) : null;
+            return _zooManager.GetZoosInfo(zooInfoFilter);
         }
 
         [HttpPost]
