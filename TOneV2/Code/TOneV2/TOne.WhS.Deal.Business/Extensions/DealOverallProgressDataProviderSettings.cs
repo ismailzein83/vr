@@ -302,7 +302,7 @@ namespace TOne.WhS.Deal.Business
                 {"RemainingPerDays", Decimal.Zero},
                 {"ExpectedDays", "No Traffic"},
                 {"Rate", rate},
-                {"EstimatedAmount",0},
+                {"EstimatedAmount",Decimal.Zero},
                 {"ReachedAmount", reachedAmount},
                 {"DealBED", dealInfo.DealBED},
                 {"DealEED", dealInfo.DealEED},
@@ -398,7 +398,7 @@ namespace TOne.WhS.Deal.Business
         public DealStatus Status { get; set; }
         public string GroupName { get; set; }
         public int CarrierAccountId { get; set; }
-        public int EstimatedVolume { get; set; }
+        public decimal EstimatedVolume { get; set; }
         public decimal Rate { get; set; }
         public decimal? ExtraVolumeRate { get; set; }
         public int? DealDays { get; set; }
