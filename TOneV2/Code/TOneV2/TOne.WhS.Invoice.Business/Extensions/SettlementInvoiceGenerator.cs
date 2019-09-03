@@ -282,6 +282,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         {
                                             settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += dueToSystemFullAmountSettlementInvoiceItemSummaryDetail;
                                             settlementInvoicedetail.DueToSystemFullAmount += dueToSystemFullAmountSettlementInvoicedetail;
+                                            settlementInvoiceDetailByCurrency.TotalFullAmount = dueToSystemFullAmountSettlementInvoicedetail;
                                         }
                                     }
                                     else
@@ -304,6 +305,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceDetailByCurrency.TotalAdjustmentAmount = invoiceItemDetails.AdjustmentAmount;
                                         settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
+                                        settlementInvoiceDetailByCurrency.TotalFullAmount = invoiceItemDetails.TotalFullAmount;
+
 
                                         settlementInvoicedetail.DueToSystemAmount += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoicedetail.DueToSystemAmountAfterCommission += invoiceItemDetails.AmountAfterCommissionWithTaxes;
@@ -546,6 +549,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         {
                                             settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount += dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail;
                                             settlementInvoicedetail.DueToCarrierFullAmount += dueToCarrierFullAmountSettlementInvoicedetail;
+                                            settlementInvoiceDetailByCurrency.TotalFullAmount = dueToCarrierFullAmountSettlementInvoicedetail;
                                         }
                                     }
                                     else
@@ -570,6 +574,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
                                         settlementInvoiceDetailByCurrency.TotalAdjustmentAmount = invoiceItemDetails.AdjustmentAmount;
+                                        settlementInvoiceDetailByCurrency.TotalFullAmount = invoiceItemDetails.TotalFullAmount;
 
                                         settlementInvoicedetail.DueToCarrierAmount += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoicedetail.DueToCarrierAmountAfterCommission += invoiceItemDetails.AmountAfterCommissionWithTaxes;

@@ -29,9 +29,21 @@ namespace TOne.WhS.Invoice.Entities
         public decimal OriginalAmount { get; set; }
         public decimal OriginalAmountWithCommission { get; set; }
         public int NumberOfCalls { get; set; }
-        public decimal  TotalDuration { get; set; }
+        public decimal TotalDuration { get; set; }
         public decimal TotalTrafficAmount { get; set; }
         public decimal TotalAdjustmentAmount { get; set; }
+
+        public decimal? totalFullAmount;
+        public decimal TotalFullAmount
+        {
+            get
+            {
+                if (totalFullAmount.HasValue)
+                    return totalFullAmount.Value;
+                return OriginalAmountWithCommission;
+            }
+            set { totalFullAmount = value; }
+        }
 
         public decimal TotalRecurringChargeAmount { get; set; }
     }
