@@ -166,6 +166,11 @@ namespace Vanrise.GenericData.Data.RDB
             return queryContext.ExecuteNonQuery() > 0;
 
         }
+
+        public void GenerateScript(List<DataRecordType> dataRecordTypes, Action<string, string> addEntityScript)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

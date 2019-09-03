@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.GenericData.Entities;
 
@@ -50,6 +51,37 @@ namespace Vanrise.GenericData.Data.SQL
         {
             ExecuteNonQuerySP("genericdata.sp_DataRecordType_SetCacheExpired");
         }
+        public void GenerateScript(List<DataRecordType> dataRecordTypes, Action<string, string> addEntityScript)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var dataRecordType in dataRecordTypes)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}','{4}','{5}')", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, Serializer.Serialize(dataRecordType.Fields), Serializer.Serialize(dataRecordType.ExtraFieldsEvaluator), Serializer.Serialize(dataRecordType.Settings));
+            }
+            string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[ParentID],[Fields],[ExtraFieldsEvaluator],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ParentID],[Fields],[ExtraFieldsEvaluator],[Settings]))
+merge	[genericdata].[DataRecordType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentID] = s.[ParentID],[Fields] = s.[Fields],[ExtraFieldsEvaluator] = s.[ExtraFieldsEvaluator],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ParentID],[Fields],[ExtraFieldsEvaluator],[Settings])
+	values(s.[ID],s.[Name],s.[ParentID],s.[Fields],s.[ExtraFieldsEvaluator],s.[Settings]);", scriptBuilder);
+            addEntityScript("[genericdata].[DataRecordType]", script);
+        }
+
         #endregion
 
         #region Mappers

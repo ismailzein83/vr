@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Data
@@ -14,5 +15,7 @@ namespace Vanrise.GenericData.Data
         bool AddDataRecordType(DataRecordType dataRecordType);
 
         void SetDataRecordTypeCacheExpired();
+
+        void GenerateScript(List<DataRecordType> dataRecordTypes, Action<string, string> addEntityScript);
     }
 }

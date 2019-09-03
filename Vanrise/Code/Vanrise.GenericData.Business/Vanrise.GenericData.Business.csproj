@@ -121,6 +121,7 @@
     <Compile Include="DataRecordFieldTypeTryResolveDifferencesContext.cs" />
     <Compile Include="DataRecordObject.cs" />
     <Compile Include="DataRecordTypeFieldFormulaCalculateValueContext.cs" />
+    <Compile Include="DataRecordTypeOverriddenConfiguration.cs" />
     <Compile Include="DataStorage\CreateTempStorageContext.cs" />
     <Compile Include="DataRecordFieldChoiceManager.cs" />
     <Compile Include="DataRecordFieldFormulaConvertFilterContext.cs" />
