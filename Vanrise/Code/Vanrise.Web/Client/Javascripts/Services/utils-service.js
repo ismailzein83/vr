@@ -1,9 +1,9 @@
 ﻿'use strict';
 (function (app) {
 
-    UtilsService.$inject = ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'DateTimeFormatEnum', 'ExcelConversionResultEnum'];
+    UtilsService.$inject = ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'DateTimeFormatEnum', 'ExcelConversionResultEnum', 'VRPromiseDebugService'];
 
-    function UtilsService($q, LogEntryTypeEnum, LabelColorsEnum, DateTimeFormatEnum, ExcelConversionResultEnum) {
+    function UtilsService($q, LogEntryTypeEnum, LabelColorsEnum, DateTimeFormatEnum, ExcelConversionResultEnum, VRPromiseDebugService) {
 
         "use strict";
 
@@ -341,7 +341,7 @@
             return resultPromiseDeferred.promise;
         }
 
-        function PromiseClass() {
+        function PromiseClass(promiseName) {
             var deferred = $q.defer();
 
             //var deferredPromise = deferred.promise;
@@ -354,6 +354,10 @@
             this.promise = deferred.promise;
             this.resolve = deferred.resolve;
             this.reject = deferred.reject;
+
+            if (promiseName != undefined) {
+                VRPromiseDebugService.registerPromise({ promise: this.promise, name: promiseName});
+            }
         }
 
         function linkExistingPromiseToPromiseDeferred(existingPromise, promiseDeferred) {
@@ -366,8 +370,8 @@
                 });
         }
 
-        function createPromiseDeferred() {
-            return new PromiseClass();
+        function createPromiseDeferred(promiseName) {
+            return new PromiseClass(promiseName);
         }
 
         function convertToPromiseIfUndefined(promiseOrUndefined) {
@@ -651,11 +655,11 @@
         function guid() {
             function s4() {
                 return Math.floor((1 + Math.random()) * 0x10000)
-                  .toString(16)
-                  .substring(1);
+                    .toString(16)
+                    .substring(1);
             }
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-              s4() + '-' + s4() + s4() + s4();
+                s4() + '-' + s4() + s4() + s4();
         }
 
 
@@ -911,7 +915,7 @@
                 var count;
                 function isInt(n) {
                     return typeof n === 'number' &&
-                       parseFloat(n) == parseInt(n, 10) && !isNaN(n);
+                        parseFloat(n) == parseInt(n, 10) && !isNaN(n);
                 }
                 var a = Math.abs(f1);
                 f1 = a, count = 1;
@@ -976,7 +980,7 @@
 
         function validateFileName(fileName) {
             if (fileName.includes('/') || fileName.includes('\\') || fileName.includes(':') || fileName.includes('*') || fileName.includes('?')
-            || fileName.includes('"') || fileName.includes('<') || fileName.includes('>') || fileName.includes('|')) {
+                || fileName.includes('"') || fileName.includes('<') || fileName.includes('>') || fileName.includes('|')) {
                 return 'A file name cannot contain any of the following characters: /, \\, :, *, ?, ", <, > and |.';
             }
             else {
