@@ -58,6 +58,9 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions">
+      <HintPath>..\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BELookupRuleManager.cs" />
