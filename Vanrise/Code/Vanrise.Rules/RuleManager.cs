@@ -148,6 +148,9 @@ namespace Vanrise.Rules
                     string serializedRule = null;
 
                     T existingRule = this.GetRule(rule.RuleId);
+                    if (existingRule == null)
+                        throw new VRBusinessException($"Update rule is denied for deleted rule '{rule.RuleId}'");
+
                     RuleChangedData<T> ruleChanged = this.GetRuleChanged(rule.RuleId);
 
                     bool ruleAdded = false;
