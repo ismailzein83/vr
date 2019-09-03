@@ -120,6 +120,7 @@
     <Compile Include="Billing\WorkflowInput\ServiceRemovalSubmitInput.cs" />
     <Compile Include="Billing\WorkflowInput\SOMRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\SubmitToPOSInput.cs" />
+    <Compile Include="Billing\WorkflowInput\SuspensionRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\TelephonyContractOnHoldInput.cs" />
     <Compile Include="Billing\WorkflowInput\UpdateContractAddressRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\WriteBusinessTransactionInput.cs" />
