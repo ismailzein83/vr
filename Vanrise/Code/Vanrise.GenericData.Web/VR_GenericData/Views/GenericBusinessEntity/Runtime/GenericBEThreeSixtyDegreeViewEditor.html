@@ -1,0 +1,14 @@
+﻿<div ng-show="false">
+    <div vr-modalcontent ng-controller="VR_GenericData_GenericBEThreeSixtyDegreeViewEditorController" vr-loader="scopeModel.isLoading" size="xsmall">
+        <vr-modalbody maxheight="'600px'">
+            <vr-genericdata-genericbusinessentity-360degree-viewer on-ready="scopeModel.onGenericBE360degreeViewerDirectiveReady"></vr-genericdata-genericbusinessentity-360degree-viewer>
+        </vr-modalbody>
+        <div>
+            <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                <div transclude-to="buttons">
+                    <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+                </div>
+            </vr-actionbar>
+        </div>
+    </div>
+</div>

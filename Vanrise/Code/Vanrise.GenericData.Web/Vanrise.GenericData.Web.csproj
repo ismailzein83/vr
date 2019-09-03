@@ -435,6 +435,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-statushistorysubview-runtime.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\Templates\GenericBusinessEntity360DegreeViewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\Templates\GenericBE360DegreeViewerTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\vr-genericdata-genericbusinessentity-360degree-viewer.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\vr-genericdata-genericbusinessentity-360degree-view.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBEFilterRuntimeRootContainerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityApprovalGrid.html" />
@@ -1159,8 +1161,12 @@
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericRowEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\SectionEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\SectionEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBEThreeSixtyDegreeManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBEThreeSixtyDegreeViewManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityBulkActionsEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityBulkActionEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBEThreeSixtyDegreeViewEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBEThreeSixtyDegreeViewEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorUploaderController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityErrorMessageEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityErrorMessageEditorController.js" />
