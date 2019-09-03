@@ -68,7 +68,9 @@ namespace Vanrise.GenericData.Data.RDB
                 ParentId = reader.GetNullableGuid(COL_ParentID),
                 Fields = Vanrise.Common.Serializer.Deserialize<List<DataRecordField>>(reader.GetString(COL_Fields)),
                 ExtraFieldsEvaluator = Vanrise.Common.Serializer.Deserialize<DataRecordTypeExtraField>(reader.GetString(COL_ExtraFieldsEvaluator)),
-                Settings = Vanrise.Common.Serializer.Deserialize<DataRecordTypeSettings>(reader.GetString(COL_Settings))
+                Settings = Vanrise.Common.Serializer.Deserialize<DataRecordTypeSettings>(reader.GetString(COL_Settings)),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
+                LastModifiedTime = reader.GetDateTime(COL_LastModifiedTime)
             };
         }
         #endregion

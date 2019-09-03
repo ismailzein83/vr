@@ -21,6 +21,10 @@ namespace Vanrise.GenericData.Entities
         public DataRecordTypeSettings Settings { get; set; }
 
         public DataRecordTypeExtraField ExtraFieldsEvaluator { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public DateTime LastModifiedTime { get; set; }
     }
 
     public class DataRecordTypeSettings

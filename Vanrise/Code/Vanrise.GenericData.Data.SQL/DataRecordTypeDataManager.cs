@@ -64,7 +64,9 @@ namespace Vanrise.GenericData.Data.SQL
                 ParentId = GetReaderValue<Guid?>(reader, "ParentID"),
                 Fields = Vanrise.Common.Serializer.Deserialize<List<DataRecordField>>(reader["Fields"] as string),
                 ExtraFieldsEvaluator = reader["ExtraFieldsEvaluator"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeExtraField>(reader["ExtraFieldsEvaluator"] as string) : null,
-                Settings = reader["Settings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeSettings>(reader["Settings"] as string) : null
+                Settings = reader["Settings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeSettings>(reader["Settings"] as string) : null,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                LastModifiedTime = GetReaderValue<DateTime>(reader, "LastModifiedTime")
             };
         }
 
