@@ -634,21 +634,16 @@ namespace TOne.WhS.Deal.Business
         public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
             var recurredDeals = new List<DealDefinition>();
-            if (!deal.Settings.EEDToStore.HasValue)
-            {
+            if (!deal.Settings.EEDToStore.HasValue)//we cannot reccur a deal without EED
                 return recurredDeals;
-                //we cannot reccur a deal without EED
-            }
 
             DateTime EEDToStore = deal.Settings.EEDToStore.Value;
             DateTime beginDealDate = deal.Settings.BeginDate;
-
             var dealLifeSpan = EEDToStore.Subtract(beginDealDate);
-
             TimeSpan offSet = deal.Settings.OffSet ?? new TimeSpan();
-
             DateTime endDealDate = deal.Settings.RealEED.Value.Add(offSet);
             var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month);
+            bool isLastDayOfMonth = EEDToStore.GetLastDayOfMonth().Day == EEDToStore.Day;
 
             for (int i = 0; i < recurringNumber; i++)
             {
@@ -663,8 +658,11 @@ namespace TOne.WhS.Deal.Business
                         break;
 
                     case RecurringType.Monthly:
-                        recurredDeal.Settings.BeginDate = deal.Settings.BeginDate.AddMonths((monthsDifference + 1) * (i + 1));
-                        recurredDeal.Settings.EEDToStore = deal.Settings.EEDToStore.Value.AddMonths((monthsDifference + 1) * (i + 1));
+                        int monthsToAdd = (monthsDifference + 1) * (i + 1);
+                        recurredDeal.Settings.BeginDate = deal.Settings.BeginDate.AddMonths(monthsToAdd);
+                        recurredDeal.Settings.EEDToStore = isLastDayOfMonth
+                                                            ? deal.Settings.EEDToStore.Value.AddMonths(monthsToAdd).GetLastDayOfMonth()
+                                                            : deal.Settings.EEDToStore.Value.AddMonths(monthsToAdd);
                         break;
                 }
 
