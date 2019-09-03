@@ -634,3 +634,26 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 ----------------------------------------------------------------------------------------------------
 end
+
+DECLARE @WhS_NOCGroupId int = (SELECT ID FROM sec.[Group] where [PSIdentifier] = 'WhS_NOC')
+DECLARE @WhS_BillingGroupId int = (SELECT ID FROM sec.[Group] where [PSIdentifier] = 'WhS_Billing')
+
+--[sec].[Permission]--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,@WhS_NOCGroupId,1,'7be1a6f6-38e3-46d0-930f-a870fe76a4b2','[{"Name":"View","Value":1}]'),
+(1,@WhS_BillingGroupId,1,'1de9d8e2-15ae-43ed-bbdb-01d8ce41f491','[{"Name":"View","Value":1}]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
+merge	[sec].[Permission] as t
+using	cte_data as s
+on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
+--when matched then
+--	update set
+--	[PermissionFlags] = s.[PermissionFlags]
+when not matched by target then
+	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
