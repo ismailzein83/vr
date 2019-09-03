@@ -158,7 +158,9 @@ as (select * from (values
 ('03F03D74-D44B-45BC-A2D3-79512D5D2C53','GenericBE_StatusHistory_Subview','Business Entity Status History','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-statushistorysubview-definition"}'),
 ('CCB477B6-B20F-4FCE-A8AD-27BD12EE60ED','Grid_GenericEditor_View','Grid Generic Editor View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-gridgenericeditorview-definition"}'),
 ('A0E3AC54-E002-495D-8F74-A49CF02FA099','GenericSendEmailAction','Generic Send Email Action','VR_Notification_VRActionDefinition','{"Editor":"vr-genericdata-datarecord-vractiondefinition-extendedsettings-genericsendemail"}'),
-('8c2d5923-cf6e-4c6c-b38f-ab74b2b98730','List Before Insert Handlers','List Before Insert Handlers','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"vr-genericdata-genericbe-beforeinserthandler-listhandlers"}')
+('8c2d5923-cf6e-4c6c-b38f-ab74b2b98730','List Before Insert Handlers','List Before Insert Handlers','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"vr-genericdata-genericbe-beforeinserthandler-listhandlers"}'),
+('2db9de98-6be2-4f5c-a4f9-470794e94740','Data Record Type','Data Record Type','VRCommon_OverriddenConfiguration','{"Editor":"vr-genericdata-overriddenconfiguration-recordtype"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
