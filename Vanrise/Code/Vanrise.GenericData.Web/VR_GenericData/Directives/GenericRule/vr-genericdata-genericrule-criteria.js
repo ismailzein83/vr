@@ -77,7 +77,7 @@
                             }
 
                             return {
-                                promises: [loadCriteriaObjectsPromise]
+                                promises: promises
                             };
                         }
                     };
