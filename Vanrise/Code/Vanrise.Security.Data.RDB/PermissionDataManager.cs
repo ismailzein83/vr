@@ -56,7 +56,7 @@ namespace Vanrise.Security.Data.RDB
                 HolderType = (HolderType)reader.GetInt(COL_HolderType),
                 HolderId = reader.GetString(COL_HolderId),
                 EntityType = (EntityType)reader.GetInt(COL_EntityType),
-                EntityId = reader.GetString(COL_EntityId),
+                EntityId = reader.GetString(COL_EntityId).ToLower(),
                 PermissionFlags = Common.Serializer.Deserialize<List<PermissionFlag>>(reader.GetString(COL_PermissionFlags))
             };
             return permission;
