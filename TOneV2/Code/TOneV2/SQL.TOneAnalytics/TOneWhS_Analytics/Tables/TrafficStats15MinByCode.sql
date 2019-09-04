@@ -65,3 +65,10 @@
     CONSTRAINT [IX_TrafficStats15MinByCode_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_TrafficStats15MinByCode_BatchStart]
+    ON [TOneWhS_Analytics].[TrafficStats15MinByCode]([BatchStart] ASC);
+
