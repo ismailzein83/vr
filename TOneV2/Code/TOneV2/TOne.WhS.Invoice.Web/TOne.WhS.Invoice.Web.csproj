@@ -274,12 +274,12 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Reports\ITPC\Old\CustomerInvoiceItemsReport.rdlc" />
-    <None Include="Reports\ITPC\Old\CustomerInvoiceReport.rdlc" />
-    <None Include="Reports\ITPC\Old\InvoiceItemsReportByCurrency.rdlc" />
-    <None Include="Reports\ITPC\Old\InvoiceReportByCurrency.rdlc" />
-    <None Include="Reports\ITPC\Old\ProfileInvoiceItemsReport.rdlc" />
-    <None Include="Reports\ITPC\Old\ProfileInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\ITPC\Old\CustomerInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\ITPC\Old\CustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\ITPC\Old\InvoiceItemsReportByCurrency.rdlc" />
+    <None Include="WhS_Invoice\Reports\ITPC\Old\InvoiceReportByCurrency.rdlc" />
+    <None Include="WhS_Invoice\Reports\ITPC\Old\ProfileInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\ITPC\Old\ProfileInvoiceReport.rdlc" />
     <None Include="Reports\Ringo\CustomerInvoiceItemsReport.rdlc" />
     <None Include="Reports\Ringo\CustomerInvoiceReport.rdlc" />
     <None Include="Reports\Ringo\InvoiceItemsReportByCurrency.rdlc" />
@@ -496,16 +496,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\ITPC\DefaultSupplierInvoiceReport.rdlc" />
+    <Content Include="WhS_Invoice\Reports\ITPC\DefaultSupplierInvoiceReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\ITPC\DefaultSupplierInvoiceItemsReport.rdlc" />
+    <Content Include="WhS_Invoice\Reports\ITPC\DefaultSupplierInvoiceItemsReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\ITPC\DefaultCustomerInvoiceReport.rdlc" />
+    <Content Include="WhS_Invoice\Reports\ITPC\DefaultCustomerInvoiceReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\ITPC\DefaultCustomerInvoiceItemsReport.rdlc">
+    <Content Include="WhS_Invoice\Reports\ITPC\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
