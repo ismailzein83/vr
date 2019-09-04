@@ -15,7 +15,10 @@
 
 
 
---Make sure to use SOM.PostDeployment.json
+
+
+--Make sure to use same .json file using DEVTOOLS under http://192.168.110.185:8037
+--Make sure that json file contains at least below existing data 
 
 
 
