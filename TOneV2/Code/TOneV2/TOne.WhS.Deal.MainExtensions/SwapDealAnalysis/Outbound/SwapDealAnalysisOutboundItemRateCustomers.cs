@@ -12,133 +12,133 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Deal.MainExtensions
 {
-	public class SwapDealAnalysisOutboundItemRateCustomers : SwapDealAnalysisOutboundItemRateCalcMethod
-	{
-		public CarrierFilterType CustomerFilterType { get; set; }
+    public class SwapDealAnalysisOutboundItemRateCustomers : SwapDealAnalysisOutboundItemRateCalcMethod
+    {
+        public CarrierFilterType CustomerFilterType { get; set; }
 
-		public IEnumerable<int> CustomerIds { get; set; }
+        public IEnumerable<int> CustomerIds { get; set; }
 
-		public ZoneRateEvaluationType RateEvaluationType { get; set; }
+        public ZoneRateEvaluationType RateEvaluationType { get; set; }
 
-		public override decimal? Execute(ISwapDealAnalysisOutboundRateCalcMethodContext context)
-		{
-			var codeZoneMatchManager = new CodeZoneMatchManager();
-			IEnumerable<SaleZoneDefintion> codeSaleZoneMatches = codeZoneMatchManager.GetSaleZonesMatchedToSupplierZones(context.SupplierZoneIds);
+        public override decimal? Execute(ISwapDealAnalysisOutboundRateCalcMethodContext context)
+        {
+            var codeZoneMatchManager = new CodeZoneMatchManager();
+            IEnumerable<SaleZoneDefintion> codeSaleZoneMatches = codeZoneMatchManager.GetSaleZonesMatchedToSupplierZones(context.SupplierZoneIds);
 
-			if (codeSaleZoneMatches == null || codeSaleZoneMatches.Count() == 0)
-				return null;
+            if (codeSaleZoneMatches == null || codeSaleZoneMatches.Count() == 0)
+                return null;
 
-			ZonesBySellingNumberPlan data = GetZonesBySellingNumberPlan(codeSaleZoneMatches);
-			IEnumerable<CarrierAccount> customers = GetCustomersByCountryIds(context.CountryIds);
+            ZonesBySellingNumberPlan data = GetZonesBySellingNumberPlan(codeSaleZoneMatches);
+            IEnumerable<int> customerIds = GetCustomerIdsOfSpecificCountries(context.CountryIds);
 
-			var rates = new List<decimal>();
-			var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
-			var customerSellingProductManager = new CustomerSellingProductManager();
+            if (customerIds == null)
+                return null;
 
-			foreach (CarrierAccount customer in customers)
-			{
-				List<long> saleZoneIds;
-				if (!data.TryGetValue(customer.SellingNumberPlanId.Value, out saleZoneIds))
-					continue;
+            var rates = new List<decimal>();
+            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
+            var customerSellingProductManager = new CustomerSellingProductManager();
+            var carrierAccountManager = new CarrierAccountManager();
 
-				int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customer.CarrierAccountId, DateTime.Now, false);
-				if (!sellingProductId.HasValue)
-					continue;
+            foreach (int customerId in customerIds)
+            {
+                int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerId, DateTime.Now, false);
+                if (!sellingProductId.HasValue)
+                    continue;
 
-				foreach (long saleZoneId in saleZoneIds)
-				{
-					SaleEntityZoneRate rate = rateLocator.GetCustomerZoneRate(customer.CarrierAccountId, sellingProductId.Value, saleZoneId);
-					if (rate != null && rate.Rate != null)
-						rates.Add(rate.Rate.Rate);
-				}
-			}
+                int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerId);
 
-			return GetCalculatedRate(rates);
-		}
+                if (!data.TryGetValue(sellingNumberPlanId, out List<long> saleZoneIds))
+                    continue;
 
-		#region Private Members
+                foreach (long saleZoneId in saleZoneIds)
+                {
+                    SaleEntityZoneRate rate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId.Value, saleZoneId);
+                    if (rate != null && rate.Rate != null)
+                        rates.Add(rate.Rate.Rate);
+                }
+            }
 
-		private class ZonesBySellingNumberPlan : Dictionary<int, List<long>>
-		{
+            return GetCalculatedRate(rates);
+        }
 
-		}
+        #region Private Members
 
-		private ZonesBySellingNumberPlan GetZonesBySellingNumberPlan(IEnumerable<SaleZoneDefintion> codeSaleZoneMatches)
-		{
-			var zonesBySellingNumberPlan = new ZonesBySellingNumberPlan();
+        private class ZonesBySellingNumberPlan : Dictionary<int, List<long>>
+        {
 
-			foreach (SaleZoneDefintion codeSaleZoneMatch in codeSaleZoneMatches)
-			{
-				List<long> saleZoneIds;
-				if (!zonesBySellingNumberPlan.TryGetValue(codeSaleZoneMatch.SellingNumberPlanId, out saleZoneIds))
-				{
-					saleZoneIds = new List<long>();
-					zonesBySellingNumberPlan.Add(codeSaleZoneMatch.SellingNumberPlanId, saleZoneIds);
-				}
-				if (!saleZoneIds.Contains(codeSaleZoneMatch.SaleZoneId))
-					saleZoneIds.Add(codeSaleZoneMatch.SaleZoneId);
-			}
+        }
 
-			return zonesBySellingNumberPlan;
-		}
+        private ZonesBySellingNumberPlan GetZonesBySellingNumberPlan(IEnumerable<SaleZoneDefintion> codeSaleZoneMatches)
+        {
+            var zonesBySellingNumberPlan = new ZonesBySellingNumberPlan();
 
-		private IEnumerable<CarrierAccount> GetCustomersByCountryIds(List<int> countryIds)
-		{
-			var carrierAccountManager = new CarrierAccountManager();
-			IEnumerable<CarrierAccount> allCustomers = carrierAccountManager.GetAllCustomers();
+            foreach (SaleZoneDefintion codeSaleZoneMatch in codeSaleZoneMatches)
+            {
+                List<long> saleZoneIds;
+                if (!zonesBySellingNumberPlan.TryGetValue(codeSaleZoneMatch.SellingNumberPlanId, out saleZoneIds))
+                {
+                    saleZoneIds = new List<long>();
+                    zonesBySellingNumberPlan.Add(codeSaleZoneMatch.SellingNumberPlanId, saleZoneIds);
+                }
+                if (!saleZoneIds.Contains(codeSaleZoneMatch.SaleZoneId))
+                    saleZoneIds.Add(codeSaleZoneMatch.SaleZoneId);
+            }
 
-			if (allCustomers == null)
-				throw new NullReferenceException("allCustomers");
+            return zonesBySellingNumberPlan;
+        }
 
-			Func<CarrierAccount, bool> filterFunc = null;
-			switch (CustomerFilterType)
-			{
-				case CarrierFilterType.Specific:
-					RequireCustomerIds();
-					filterFunc = (carrierAccount) => { return CustomerIds.Contains(carrierAccount.CarrierAccountId); };
-					break;
-				case CarrierFilterType.AllExcept:
-					RequireCustomerIds();
-					filterFunc = (carrierAccount) => { return !CustomerIds.Contains(carrierAccount.CarrierAccountId); };
-					break;
-			}
-			IEnumerable<CarrierAccount> customers = (filterFunc != null) ? allCustomers.FindAllRecords(filterFunc) : allCustomers;
-			IEnumerable<int> customerIds = customers.MapRecords(x => x.CarrierAccountId);
+        private IEnumerable<int> GetCustomerIdsOfSpecificCountries(List<int> countryIds)
+        {
+            var carrierAccountManager = new CarrierAccountManager();
+            IEnumerable<CarrierAccount> allCustomers = carrierAccountManager.GetAllCustomers();
 
-			if (customerIds == null)
-				throw new NullReferenceException("customerIds");
+            if (allCustomers == null)
+                throw new NullReferenceException("allCustomers");
 
-			var customerZoneManager = new CustomerZoneManager();
-			IEnumerable<int> customerIdsByCountryId = customerZoneManager.GetCustomerIdsByCountryIds(customerIds, countryIds);
+            Func<CarrierAccount, bool> filterFunc = null;
+            switch (CustomerFilterType)
+            {
+                case CarrierFilterType.Specific:
+                    RequireCustomerIds();
+                    filterFunc = (carrierAccount) => { return CustomerIds.Contains(carrierAccount.CarrierAccountId); };
+                    break;
+                case CarrierFilterType.AllExcept:
+                    RequireCustomerIds();
+                    filterFunc = (carrierAccount) => { return !CustomerIds.Contains(carrierAccount.CarrierAccountId); };
+                    break;
+            }
+            IEnumerable<CarrierAccount> filteredCustomers = (filterFunc != null) ? allCustomers.FindAllRecords(filterFunc) : allCustomers;
+            if (filteredCustomers == null)
+                throw new NullReferenceException("filteredCustomers");
 
-			if (customerIdsByCountryId == null)
-				throw new NullReferenceException("customerIdsByCountryId");
+            var customerCountryManager = new CustomerCountryManager();
+            IEnumerable<int> customerIds = customerCountryManager.GetCustomerIdsOfSpecificCountries(filteredCustomers, countryIds);
 
-			return customers.FindAllRecords(x => customerIdsByCountryId.Contains(x.CarrierAccountId));
-		}
+            return customerIds.Distinct();
+        }
 
-		private void RequireCustomerIds()
-		{
-			if (CustomerIds == null)
-				throw new NullReferenceException("CustomerIds");
-		}
+        private void RequireCustomerIds()
+        {
+            if (CustomerIds == null)
+                throw new NullReferenceException("CustomerIds");
+        }
 
-		private decimal? GetCalculatedRate(IEnumerable<decimal> rates)
-		{
-			if (rates.Count() == 0)
-				return null;
-			switch (RateEvaluationType)
-			{
-				case ZoneRateEvaluationType.AverageRate:
-					return rates.Average();
-				case ZoneRateEvaluationType.MaximumRate:
-					return rates.Max();
-				case ZoneRateEvaluationType.BasedOnTraffic:
-					throw new NotImplementedException("ZoneRateEvaluationType.BasedOnTraffic");
-			}
-			throw new Exception("RateEvaluationType");
-		}
+        private decimal? GetCalculatedRate(IEnumerable<decimal> rates)
+        {
+            if (rates.Count() == 0)
+                return null;
+            switch (RateEvaluationType)
+            {
+                case ZoneRateEvaluationType.AverageRate:
+                    return rates.Average();
+                case ZoneRateEvaluationType.MaximumRate:
+                    return rates.Max();
+                case ZoneRateEvaluationType.BasedOnTraffic:
+                    throw new NotImplementedException("ZoneRateEvaluationType.BasedOnTraffic");
+            }
+            throw new Exception("RateEvaluationType");
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

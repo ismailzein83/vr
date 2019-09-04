@@ -149,6 +149,34 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
+        public List<int> GetCustomerIdsOfSpecificCountries(IEnumerable<CarrierAccount> carrierAccounts, List<int> countryIds)
+        {
+            if (countryIds == null)
+                return null;
+
+            var customerCountries = GetAllCachedCustomerCountries();
+            if (customerCountries == null)
+                return null;
+
+            Func<CustomerCountry2, bool> filterFunc = (customerCountry) =>
+            {
+                return carrierAccounts.Any(customer => customer.CarrierAccountId == customerCountry.CustomerId);
+            };
+
+            var filterCustomerCountries = customerCountries.FindAllRecords(filterFunc);
+
+            if (filterCustomerCountries == null)
+                return null;
+
+            var customerIds = new List<int>();
+            foreach (var countryId in countryIds)
+            {
+                var customersCountry = filterCustomerCountries.Where(x => countryId == x.CountryId);
+                if (customersCountry != null)
+                    customerIds.AddRange(customersCountry.Select(cust => cust.CustomerId));
+            }
+            return customerIds;
+        }
         public Dictionary<int, DateTime> GetSoldCountryDatesByCountryId(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             var datesByCountry = new Dictionary<int, DateTime>();
@@ -311,7 +339,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public List<CustomerCountry2> GetCustomersCountriesEffectiveOrFuture(List<int> countriesIds, List<int> customersIds, DateTime effectiveOn)
         {
-            var cachedCustomerCountries = GetAllCachedCustomerCountries();
+            var cachedCustomerCountries = GetAllCachedCustomerCountriesByCustomerCountryId();
 
             Func<CustomerCountry2, bool> filterExpression = (x) =>
             {
@@ -350,7 +378,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerCountriesByCustomer", () =>
             {
-                var cachedCustomerCountries = GetAllCachedCustomerCountries();
+                var cachedCustomerCountries = GetAllCachedCustomerCountriesByCustomerCountryId();
 
                 var countriesByCustomer = new Dictionary<int, List<CustomerCountry2>>();
                 foreach (CustomerCountry2 customerCountry in cachedCustomerCountries.Values)
@@ -373,7 +401,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerCountriesByCustomerCountry", () =>
             {
-                var cachedCustomerCountries = GetAllCachedCustomerCountries();
+                var cachedCustomerCountries = GetAllCachedCustomerCountriesByCustomerCountryId();
 
                 var countriesByCustomer = new Dictionary<CustomerCountryDefinition, List<CustomerCountry2>>();
                 foreach (CustomerCountry2 customerCountry in cachedCustomerCountries.Values)
@@ -388,13 +416,22 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
-        private Dictionary<int, CustomerCountry2> GetAllCachedCustomerCountries()
+        private Dictionary<int, CustomerCountry2> GetAllCachedCustomerCountriesByCustomerCountryId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerCountries", () =>
             {
                 var dataManager = BEDataManagerFactory.GetDataManager<ICustomerCountryDataManager>();
                 IEnumerable<CustomerCountry2> allCustomerCountries = dataManager.GetAll();
                 return allCustomerCountries.ToDictionary(cc => cc.CustomerCountryId, cc => cc);
+            });
+        }
+        private IEnumerable<CustomerCountry2> GetAllCachedCustomerCountries()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCachedCustomerCountriesList", () =>
+            {
+                var dataManager = BEDataManagerFactory.GetDataManager<ICustomerCountryDataManager>();
+                IEnumerable<CustomerCountry2> allCustomerCountries = dataManager.GetAll();
+                return allCustomerCountries;
             });
         }
 
