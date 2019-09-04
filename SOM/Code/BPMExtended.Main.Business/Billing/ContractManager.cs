@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Terrasoft.Common;
 using Terrasoft.Core;
 using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
@@ -342,6 +343,10 @@ namespace BPMExtended.Main.Business
 
             esq.AddColumn("StServiceCode");
             esq.AddColumn("Id");
+
+
+            EntitySchemaQuery subEsq;
+            esq.AddColumn("Name", AggregationTypeStrict.Count, out subEsq);
 
             int requestType = (int)OperationType.LeasedLineTermination;
 
