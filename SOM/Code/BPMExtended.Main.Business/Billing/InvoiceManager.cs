@@ -78,7 +78,7 @@ namespace BPMExtended.Main.Business
             var document = new BSCSDocument();
             using (SOMClient client = new SOMClient())
             {
-                document = client.Get<BSCSDocument>(String.Format("api/SOM.ST/Billing/ReadBillDocument?DocumentCode={0}&DocumentRefOnly={1}", documentCode, documentRefOnly));
+                document = client.Get<BSCSDocument>(String.Format("api/SOM.ST/Billing/GetBillDocument?DocumentCode={0}&DocumentRefOnly={1}", documentCode, documentRefOnly));
             }
             return document;
         }

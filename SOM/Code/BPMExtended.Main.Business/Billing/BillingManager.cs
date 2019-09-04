@@ -526,7 +526,7 @@ namespace BPMExtended.Main.Business
             var paymentMethodsInfoItems = new List<PaymentMethodInfo>();
             using (SOMClient client = new SOMClient())
             {
-                List<PaymentMethodInfo> items = client.Get<List<PaymentMethodInfo>>(String.Format("api/SOM.ST/Billing/ReadPaymentMethods"));
+                List<PaymentMethodInfo> items = client.Get<List<PaymentMethodInfo>>(String.Format("api/SOM.ST/Billing/GetPaymentMethods"));
                 foreach (var item in items)
                 {
                     paymentMethodsInfoItems.Add(item);

@@ -33,7 +33,7 @@ namespace BPMExtended.Main.Business
             var item = new RatePlanChangeResponse();
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<RatePlanChangeResponse>(String.Format("api/SOM.ST/Billing/ReadProductChangeServices?ContractId={0}&NewRatePlanId={1}", contractId, newRatePlanId));
+                item = client.Get<RatePlanChangeResponse>(String.Format("api/SOM.ST/Billing/GetProductChangeServices?ContractId={0}&NewRatePlanId={1}", contractId, newRatePlanId));
 
             }
             return item;
@@ -148,7 +148,7 @@ namespace BPMExtended.Main.Business
             return contractServices;
         }
 
-        public List<ServiceDetail> GetCoreServices(string ratePlanId)
+        public List<ServiceDetail> GetCoreServices(string ratePlanId,string lob)
         {
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
@@ -156,10 +156,17 @@ namespace BPMExtended.Main.Business
 
             var businessEntityManager = new BusinessEntityManager();
             Packages packages = businessEntityManager.GetServicePackagesEntity();
-            packagesIds.Add(packages.Core);
-            packagesIds.Add(packages.Telephony);
 
-            //var corePackageName = packages.Core;
+            if (lob == "Line Subscription")
+            {
+                packagesIds.Add(packages.Core);
+                packagesIds.Add(packages.Telephony);
+            }
+            if (lob == "ADSL Subscription")
+            {
+                packagesIds.Add(packages.Core);
+                //packagesIds.Add(packages.XDSL);
+            }
 
            var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, packagesIds);
             return coreServices;
@@ -181,7 +188,8 @@ namespace BPMExtended.Main.Business
             }
             if (lob == "ADSL Subscription")
             {
-                excludedPackages.Add(packages.XDSL);
+                excludedPackages.Add(packages.Core);
+                //excludedPackages.Add(packages.XDSL);
             }
             
             CRMCustomerManager manager = new CRMCustomerManager();

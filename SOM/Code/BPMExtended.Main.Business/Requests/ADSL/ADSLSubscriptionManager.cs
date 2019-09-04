@@ -86,16 +86,28 @@ namespace BPMExtended.Main.Business
             List<DepositDocument> depositServices = new List<DepositDocument>();
             string linePathId, serviceResourceId = "";
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSL");
             esq.AddColumn("StCoreServices");
             esq.AddColumn("StServices");
             esq.AddColumn("StLinePathID");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StUserName");
             esq.AddColumn("StContact");
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StFloor");
+
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -107,6 +119,14 @@ namespace BPMExtended.Main.Business
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var city = entities[0].GetColumnValue("StCityName");
+                var floor = entities[0].GetColumnValue("StFloor");
+                var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
+                var street = entities[0].GetColumnValue("StStreet");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var province = entities[0].GetColumnValue("StProvinceName");
+                var town = entities[0].GetColumnValue("StTownName");
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var username = entities[0].GetColumnValue("StUserName");
 
                 CRMCustomerInfo info = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null);
 
@@ -151,21 +171,31 @@ namespace BPMExtended.Main.Business
                 }
 
                 //call api
-                SOMRequestInput<TelephonyContractOnHoldInput> somRequestInput = new SOMRequestInput<TelephonyContractOnHoldInput>
+                SOMRequestInput<ADSLContractOnHoldInput> somRequestInput = new SOMRequestInput<ADSLContractOnHoldInput>
                 {
-                    InputArguments = new TelephonyContractOnHoldInput
+                    InputArguments = new ADSLContractOnHoldInput
                     {
                         LinePathId = linePathId,//"11112222",
                         ServiceResource = serviceResourceId,
+                        UserName= username.ToString(),
                         City = city.ToString(),
+                        TelephonyContractId = contractId.ToString(),
+                        Building = buildingNumber.ToString(),
+                        Floor = floor.ToString(),
+                        Town = town.ToString(),
+                        StateProvince = province.ToString(),
+                        Street = street.ToString(),
+                        Region = area.ToString(),
                         CSO = info.csoId,
+                        SubType =  "XDSL",
+                        CountryId= "206",
                         RatePlanId = ratePlanId,
                         DepositServices = depositServices,
                         ContractServices = contractServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),
-                            RequestId = requestId.ToString(),
+                            //RequestId = requestId.ToString(),
                             CustomerId = info.CustomerId
                         }
                     }
@@ -174,7 +204,7 @@ namespace BPMExtended.Main.Business
 
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<TelephonyContractOnHoldInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_CreateContractOnHold/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLContractOnHoldInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateADSLContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

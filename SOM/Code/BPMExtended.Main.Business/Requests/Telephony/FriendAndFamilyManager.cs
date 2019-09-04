@@ -42,7 +42,7 @@ namespace BPMExtended.Main.Business
             FAFNumbersOutput result;
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<FAFNumbersOutput>(String.Format("api/SOM.ST/Billing/ReadFAFNumbers?ContractId={0}", contractId));
+                result = client.Get<FAFNumbersOutput>(String.Format("api/SOM.ST/Billing/GetFAFNumbers?ContractId={0}", contractId));
             }
 
             return result;
