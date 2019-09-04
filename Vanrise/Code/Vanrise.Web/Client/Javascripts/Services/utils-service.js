@@ -987,7 +987,35 @@
                 return null;
             }
         }
-        return ({
+
+        function sortTimes(times) {
+            times.sort(compareTimes);
+        }
+        function compareTimes(time1, time2) {
+            if (time1.Hour > time2.Hour)
+                return 1;
+            if (time1.Hour < time2.Hour)
+                return -1;
+
+            if (time1.Minute > time2.Minute)
+                return 1;
+            if (time1.Minute < time2.Minute)
+                return -1;
+
+            if (time1.Second > time2.Second)
+                return 1;
+            if (time1.Second < time2.Second)
+                return -1;
+
+            if (time1.MilliSecond > time2.MilliSecond)
+                return 1;
+            if (time1.MilliSecond < time2.MilliSecond)
+                return -1;
+
+            return 0;
+        }
+
+        return {
             replaceAll: replaceAll,
             waitMultipleAsyncOperations: waitMultipleAsyncOperations,
             getItemIndexByVal: getItemIndexByVal,
@@ -1056,8 +1084,9 @@
             getHtmlStringWidth: getHtmlStringWidth,
             getUnitCeildWidthNextStepValue: getUnitCeildWidthNextStepValue,
             validateFileName: validateFileName,
-            buildTitleForChangeEditor: buildTitleForChangeEditor
-        });
+            buildTitleForChangeEditor: buildTitleForChangeEditor,
+            sortTimes: sortTimes
+        };
     }
 
     app.service('UtilsService', UtilsService);
