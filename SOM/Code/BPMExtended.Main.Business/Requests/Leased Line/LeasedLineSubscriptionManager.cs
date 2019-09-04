@@ -25,10 +25,10 @@ namespace BPMExtended.Main.Business
 
         #region public
 
-        public SOMRequestOutput CreateTelephonyContractOnHold(Guid requestId, string coreServices, string optionalServices, string ratePlanId)
+        public SOMRequestOutput CreateLeasedLineContractOnHold(Guid requestId, string coreServices, string optionalServices, string ratePlanId)
         {
 
-            //Get Data from StLineSubscriptionRequest table
+            //Get Data from StLeasedLine table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output = new SOMRequestOutput();
@@ -38,7 +38,7 @@ namespace BPMExtended.Main.Business
             List<DepositDocument> depositServices = new List<DepositDocument>();
             string linePathId, serviceResourceId = "";
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLine");
             esq.AddColumn("StCoreServices");
             esq.AddColumn("StServices");
             esq.AddColumn("StLinePathID");
@@ -103,9 +103,9 @@ namespace BPMExtended.Main.Business
                 }
 
                 //call api
-                SOMRequestInput<TelephonyContractOnHoldInput> somRequestInput = new SOMRequestInput<TelephonyContractOnHoldInput>
+                SOMRequestInput<LeasedLineContractOnHoldInput> somRequestInput = new SOMRequestInput<LeasedLineContractOnHoldInput>
                 {
-                    InputArguments = new TelephonyContractOnHoldInput
+                    InputArguments = new LeasedLineContractOnHoldInput
                     {
                         LinePathId = linePathId,//"11112222",
                         ServiceResource = serviceResourceId,
@@ -126,7 +126,7 @@ namespace BPMExtended.Main.Business
 
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<TelephonyContractOnHoldInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateTelephonyContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LeasedLineContractOnHoldInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateLeaseLineContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -139,7 +139,7 @@ namespace BPMExtended.Main.Business
 
         public void PostLeasedLineRequestToOM(Guid requestId)
         {
-            //Get Data from StLineSubscriptionRequest table
+            //Get Data from StLeasedLine table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
@@ -199,6 +199,23 @@ namespace BPMExtended.Main.Business
             return random.Next(10)>5?"Fiber":"Copper";
         }
 
+        public int CheckLeasedLineContractOnHoldStatus(string processId)
+        {
+            int status;
+
+            using (SOMClient client = new SOMClient())
+            {
+                status = client.Get<int>(String.Format("api/SOM.ST/Common/CheckWorkflowStatus?processInstanceId={0}", processId));
+            }
+
+            return status;
+
+            //Array values = Enum.GetValues(typeof(ContacrtOnHoldStatus));
+            //Random random = new Random();
+            //int randomBar = (int)values.GetValue(random.Next(values.Length));
+            //return randomBar;
+
+        }
         #endregion
 
         #region Mappers

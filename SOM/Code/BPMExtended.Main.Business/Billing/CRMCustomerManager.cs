@@ -236,6 +236,7 @@ namespace BPMExtended.Main.Business
                 esq.AddColumn("StDocumentID");
                 esq.AddColumn("StCSO");
                 esq.AddColumn("StCSO.Id");
+                var csoBSCSIdcol = esq.AddColumn("StCSO.StCSOBSCSId");
                 esq.AddColumn("StCustomerId");
                 esq.AddColumn("StCustomerCategoryID");
                 esq.AddColumn("StCustomerCategoryName");
@@ -247,6 +248,7 @@ namespace BPMExtended.Main.Business
                 if (entities.Count > 0)
                 {
                     var csoId = entities[0].GetColumnValue("StCSOId");
+                    var csoBSCSId = entities[0].GetTypedColumnValue<string>(csoBSCSIdcol.Name);
                     var name = entities[0].GetColumnValue("Name");
                     var documentId = entities[0].GetColumnValue("StDocumentID");
                     var customerId = entities[0].GetColumnValue("StCustomerId");
@@ -260,7 +262,8 @@ namespace BPMExtended.Main.Business
                         DocumentID = documentId.ToString(),
                         CustomerCategoryID = customerCategoryId.ToString(),
                         CustomerCategoryName = customerCategoryName.ToString(),
-                        csoId = csoId.ToString()
+                        csoId = csoId.ToString(),
+                        csoBSCSId = csoBSCSId.ToString()
 
 
                     };
@@ -973,7 +976,7 @@ namespace BPMExtended.Main.Business
         public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO,
             string BankCode, string AccountNumber, string BankName, string IBAN, string country, string DefaultRatePlan, string nationality, string birthDate, string building, string career,
             string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
-            string street, string stateProvince, string language, string title
+            string street, string stateProvince, string language, string title, string town, string addressNotes
             )
         {
             IDManager manager = new IDManager();
@@ -987,12 +990,18 @@ namespace BPMExtended.Main.Business
             string countryNumber = GetCountryNumber(country);
             string documentType = GetDocumentType(documentTypeId);
             string nationalityNumber = GetNationalityNumber(nationality);
-            string customerTitle = GetCustomerTitle(title);
-            long customerLanguage = 0;
-            long.TryParse(GetCustomerLanguage(language), out customerLanguage);
+            string customerTitle = "";
+            if(title != "")
+            {
+                customerTitle = GetCustomerTitle(title);
+            }
 
-
-            CustomerCreationOutput output = new CustomerCreationOutput() ;
+            string  customerLanguage = "";
+            if(language !="")
+            {
+                customerLanguage = GetCustomerLanguage(language);
+            }
+            CustomerCreationOutput output = new CustomerCreationOutput();
             CreateCustomerInput input = new CreateCustomerInput
             {
                 AccountNumber = AccountNumber,
@@ -1006,10 +1015,10 @@ namespace BPMExtended.Main.Business
                 PaymentMethodId = PaymentMethodId,
                 CustomerId = CustomerId,
                 Country = countryNumber,
-                DefaultRatePlan = rateplan=="" ? "TM002": rateplan,
+                DefaultRatePlan = rateplan,
                 IBAN = IBAN,
                 Nationality = nationalityNumber,
-                //ValidFromDate = DateTime.Now,
+                ValidFromDate = DateTime.Now,
                 DebitAccountOwner = FirstName,
                 BankSwiftCode = "",
                 BillCycle = billcycle,
@@ -1029,8 +1038,10 @@ namespace BPMExtended.Main.Business
                 Street = street,
                 Language = customerLanguage,
                 PaymentResponsibility = true,
-                StateProvince= stateProvince,
-                Title=customerTitle
+                StateProvince = stateProvince,
+                Title = customerTitle,
+                Notes = addressNotes,
+                Town = town
             };
 
             using (var client = new SOMClient())
@@ -1361,7 +1372,7 @@ namespace BPMExtended.Main.Business
                         Street= street.ToString(),
                         Region = area.ToString(),
                         CountryId = "206",
-                        CSO = info.csoId,
+                        CSO = info.csoBSCSId,//info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
                         DepositServices = depositServices,

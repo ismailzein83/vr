@@ -10,6 +10,7 @@ namespace BPMExtended.Main.Entities
     {
         public string DocumentID { get; set; }
         public string csoId { get; set; }
+        public string csoBSCSId { get; set; }
         public string CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerCategoryID { get; set; }
