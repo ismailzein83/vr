@@ -76,6 +76,7 @@
     <Compile Include="Billing\WorkflowInput\AddOtherChargesRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLAlterSpeedRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLChangePasswordRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\ADSLContractOnHoldInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLForISPRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLLineMovingRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLPrintConfigurationRequestInput.cs" />
