@@ -395,6 +395,12 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("8340ad42-0c1e-4063-ba73-74b3cd917c2f")]
         Suspension = 46,
 
+        [Description("Revoke")]
+        [EntitySchemaName("StRevoke")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("5e803dda-f776-4ddd-a971-345d87a99d96")]
+        Revoke = 47,
+
     }
     public enum ContractStatus
     {
