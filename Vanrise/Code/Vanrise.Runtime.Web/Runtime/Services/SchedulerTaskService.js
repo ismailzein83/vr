@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SchedulerTaskService.$inject = ['VRModalService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
+    SchedulerTaskService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService', 'DayOfMonthTypeEnum'];
 
-    function SchedulerTaskService(VRModalService, UtilsService, VRCommon_ObjectTrackingService) {
+    function SchedulerTaskService(VRModalService, VRCommon_ObjectTrackingService, DayOfMonthTypeEnum) {
 
         var drillDownDefinitions = [];
 
@@ -74,13 +74,43 @@
             return drillDownDefinitions;
         }
 
+        function sortDays(days) {
+            days.sort(compareDays);
+        }
+        function compareDays(dayOfMonth1, dayOfMonth2) {
+
+            var day1;
+            var day2;
+
+            if (dayOfMonth1.DayOfMonthType == DayOfMonthTypeEnum.LastDay.value) {
+                day1 = Number.MAX_SAFE_INTEGER;
+            } else {
+                day1 = dayOfMonth1.SpecificDay;
+            }
+
+            if (dayOfMonth2.DayOfMonthType == DayOfMonthTypeEnum.LastDay.value) {
+                day2 = Number.MAX_SAFE_INTEGER;
+            } else {
+                day2 = dayOfMonth2.SpecificDay;
+            }
+
+            if (day1 > day2)
+                return 1;
+
+            if (day1 < day2)
+                return -1;
+
+            return 0;
+        }
+
         return {
             addTask: addTask,
             editTask: editTask,
             showAddTaskModal: showAddTaskModal,
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToSchedulerTaskService: registerObjectTrackingDrillDownToSchedulerTaskService
+            registerObjectTrackingDrillDownToSchedulerTaskService: registerObjectTrackingDrillDownToSchedulerTaskService,
+            sortDays: sortDays
         };
 
     }

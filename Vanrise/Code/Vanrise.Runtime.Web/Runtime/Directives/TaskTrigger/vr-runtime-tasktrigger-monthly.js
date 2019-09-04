@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrRuntimeTasktriggerMonthly', ['UtilsService', 'TimeSchedulerTypeEnum', 'DayOfMonthTypeEnum',
-    function (UtilsService, TimeSchedulerTypeEnum, DayOfMonthTypeEnum) {
+app.directive('vrRuntimeTasktriggerMonthly', ['UtilsService', 'TimeSchedulerTypeEnum', 'DayOfMonthTypeEnum', 'VR_Runtime_SchedulerTaskService',
+    function (UtilsService, TimeSchedulerTypeEnum, DayOfMonthTypeEnum, VR_Runtime_SchedulerTaskService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -37,12 +37,14 @@ app.directive('vrRuntimeTasktriggerMonthly', ['UtilsService', 'TimeSchedulerType
                     };
 
                     $scope.scopeModel.selectedDays.push(newDay);
+                    VR_Runtime_SchedulerTaskService.sortDays($scope.scopeModel.selectedDays);
                     $scope.scopeModel.selectedDayOfMonthTypeItem = undefined;
                     $scope.scopeModel.specificDay = undefined;
                 };
 
                 $scope.scopeModel.addTime = function () {
                     $scope.scopeModel.selectedTimes.push($scope.scopeModel.selectedTime);
+                    UtilsService.sortTimes($scope.scopeModel.selectedTimes);
                     $scope.scopeModel.selectedTime = undefined;
                 };
 
@@ -105,7 +107,7 @@ app.directive('vrRuntimeTasktriggerMonthly', ['UtilsService', 'TimeSchedulerType
 
                     return true;
                 };
- 
+
                 defineAPI();
             }
 
@@ -128,15 +130,15 @@ app.directive('vrRuntimeTasktriggerMonthly', ['UtilsService', 'TimeSchedulerType
 
                                 $scope.scopeModel.selectedDays.push(dayItem);
                             }
+                            VR_Runtime_SchedulerTaskService.sortDays($scope.scopeModel.selectedDays);
                         }
 
                         if (data.ScheduledTimesToRun != undefined) {
 
-                            console.log(data.ScheduledTimesToRun);
-
                             for (var i = 0; i < data.ScheduledTimesToRun.length; i++) {
                                 $scope.scopeModel.selectedTimes.push(data.ScheduledTimesToRun[i]);
                             }
+                            UtilsService.sortTimes($scope.scopeModel.selectedTimes);
                         }
                     }
                 };
