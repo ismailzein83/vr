@@ -181,10 +181,8 @@
             }
           
             function getDataRecordType() {
-                return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeSelectorApi.getSelectedIds()).then(function (response) {
+                return VR_GenericData_DataRecordTypeAPIService.GetDataRecordTypeToEdit(dataRecordTypeSelectorApi.getSelectedIds()).then(function (response) {
                     dataRecordTypeEntity = response;
-                    if (dataRecordTypeEntity != undefined)
-                      $scope.scopeModel.name = dataRecordTypeEntity.Name;
                 });
             }
         }
