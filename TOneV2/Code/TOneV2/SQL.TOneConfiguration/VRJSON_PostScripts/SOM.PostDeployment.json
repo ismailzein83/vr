@@ -1,0 +1,317 @@
+﻿{
+  "Scripts": [
+    {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "sec",
+      "TableName": "BusinessEntityModule",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "fac9d166-18b0-4907-aa6c-b6eb04f4350c",
+              "Name": "External System",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-04-04T12:45:13.493"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ParentId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "BreakInheritance",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "Id='FAC9D166-18B0-4907-AA6C-B6EB04F4350C'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "sec",
+      "TableName": "BusinessEntity",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "Id": "d1f22bce-cce7-4eb1-9c07-3d1225103338",
+              "Name": "Billing",
+              "Title": "Billing",
+              "ModuleId": "fac9d166-18b0-4907-aa6c-b6eb04f4350c",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"Invoke\",\"ViewLogs\"]",
+              "LastModifiedTime": "2019-04-04T15:37:44.143"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "Id",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Title",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ModuleId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "BreakInheritance",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "PermissionOptions",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "ModuleId='FAC9D166-18B0-4907-AA6C-B6EB04F4350C'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "runtime",
+      "TableName": "RuntimeNodeConfiguration",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "35b84392-5a95-4567-80ec-a3386d10e155",
+              "Name": "Default",
+              "Settings": "{\"$type\":\"Vanrise.Runtime.Entities.RuntimeNodeConfigurationSettings, Vanrise.Runtime.Entities\",\"Processes\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[Vanrise.Runtime.Entities.RuntimeProcessConfiguration, Vanrise.Runtime.Entities]], mscorlib\",\"0fd035c0-64d7-4d5a-9888-ac03e48c4096\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeProcessConfiguration, Vanrise.Runtime.Entities\",\"Name\":\"Scheduler Service Process\",\"Settings\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeProcessConfigurationSettings, Vanrise.Runtime.Entities\",\"IsEnabled\":true,\"NbOfInstances\":1,\"Services\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[Vanrise.Runtime.Entities.RuntimeServiceConfiguration, Vanrise.Runtime.Entities]], mscorlib\",\"30be260c-c77e-4861-8c03-653cc52f9791\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeServiceConfiguration, Vanrise.Runtime.Entities\",\"Name\":\"Scheduler Service\",\"Settings\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeServiceConfigurationSettings, Vanrise.Runtime.Entities\",\"RuntimeService\":{\"$type\":\"Vanrise.Runtime.SchedulerService, Vanrise.Runtime\",\"ServiceTypeUniqueName\":\"Vanrise.Runtime.SchedulerService, Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\"Interval\":\"00:00:01\"}}}}}},\"949323e6-04bb-4d88-a722-afc1bf19c751\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeProcessConfiguration, Vanrise.Runtime.Entities\",\"Name\":\"Business Process Regulator Service Process\",\"Settings\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeProcessConfigurationSettings, Vanrise.Runtime.Entities\",\"IsEnabled\":true,\"NbOfInstances\":1,\"Services\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[Vanrise.Runtime.Entities.RuntimeServiceConfiguration, Vanrise.Runtime.Entities]], mscorlib\",\"59e3194a-62bb-4e9d-b2a8-7b497f96f26a\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeServiceConfiguration, Vanrise.Runtime.Entities\",\"Name\":\"Business Process Regulator Service\",\"Settings\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeServiceConfigurationSettings, Vanrise.Runtime.Entities\",\"RuntimeService\":{\"$type\":\"Vanrise.BusinessProcess.BPRegulatorRuntimeService, Vanrise.BusinessProcess\",\"ServiceTypeUniqueName\":\"Vanrise.BusinessProcess.BPRegulatorRuntimeService, Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\",\"Interval\":\"00:00:01\"}}}}}},\"c337541d-1af7-44ed-8b27-d1a57d9d628f\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeProcessConfiguration, Vanrise.Runtime.Entities\",\"Name\":\"Business Process Services Process\",\"Settings\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeProcessConfigurationSettings, Vanrise.Runtime.Entities\",\"IsEnabled\":true,\"NbOfInstances\":3,\"Services\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[Vanrise.Runtime.Entities.RuntimeServiceConfiguration, Vanrise.Runtime.Entities]], mscorlib\",\"e4651be4-0191-450e-9786-9f52f2c3f974\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeServiceConfiguration, Vanrise.Runtime.Entities\",\"Name\":\"Business Process Service\",\"Settings\":{\"$type\":\"Vanrise.Runtime.Entities.RuntimeServiceConfigurationSettings, Vanrise.Runtime.Entities\",\"RuntimeService\":{\"$type\":\"Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess\",\"ServiceTypeUniqueName\":\"VR_BusinessProcess_BusinessProcessService\",\"Interval\":\"00:00:01\"}}}}}}}}",
+              "CreatedTime": "2018-04-18T12:00:00.47",
+              "CreatedBy": null,
+              "LastModifiedTime": "2018-04-18T12:00:00.47",
+              "LastModifiedBy": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "runtime",
+      "TableName": "RuntimeNode",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "742f43c2-3485-4da9-9cad-a6bd60cc91c1",
+              "RuntimeNodeConfigurationID": "35b84392-5a95-4567-80ec-a3386d10e155",
+              "Name": "Node 1",
+              "Settings": null,
+              "CreatedTime": "2018-04-18T12:00:12.117",
+              "CreatedBy": null,
+              "LastModifiedTime": "2018-04-18T12:00:12.117",
+              "LastModifiedBy": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "RuntimeNodeConfigurationID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "sec",
+      "TableName": "View",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.DeleteGeneratedScriptItem, Vanrise.DevTools.Business",
+        "IdentifierColumn": {
+          "ColumnName": "ID"
+        },
+        "KeyValues": [
+          "'C65ED28A-36D0-4047-BEC5-030D35B02308'",
+          "'66DE2441-8A96-41E7-94EA-9F8AF38A3515'",
+          "'604B2CB5-B839-4E51-8D13-3C1C84D05DEE'",
+          "'DCF8CA21-852C-41B9-9101-6990E545509D'",
+          "'A1CE55FE-6CF4-4F15-9BC2-8E1F8DF68561'",
+          "'25994374-CB99-475B-8047-3CDB7474A083'",
+          "'9F691B87-4936-4C4C-A757-4B3E12F7E1D9'",
+          "'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9'",
+          "'0F111ADC-B7F6-46A4-81BC-72FFDEB305EB'",
+          "'4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712'",
+          "'2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF'"
+        ],
+        "ConfigId": "411f4a51-1b9a-4221-9f16-1a05c1877eb2"
+      },
+      "Title": "Delete"
+    },
+    {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "common",
+      "TableName": "Setting",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.DeleteGeneratedScriptItem, Vanrise.DevTools.Business",
+        "IdentifierColumn": {
+          "ColumnName": "ID"
+        },
+        "KeyValues": [
+          "'4047054E-1CF4-4BE6-A005-6D4706757AD3'"
+        ],
+        "ConfigId": "411f4a51-1b9a-4221-9f16-1a05c1877eb2"
+      },
+      "Title": "Delete"
+    }
+  ]
+}
