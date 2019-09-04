@@ -444,27 +444,3 @@ on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and 
 when not matched by target then
 	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
-
-
---[common].[ExtensionConfiguration]-------------------------------------------------------------------
-begin
-set nocount on;
-;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('461B7474-9B19-4B90-AEAB-63BA37245E53','BSCSOnlineInterceptor','BSCS Online Interceptor','VR_HttpConnection_CallInterceptor'					,'{"Editor":"som-st-httpconnectioncallinterceptor-bscs"}'),
-('2A61A473-A949-4781-8D06-DCB170006A3B','BPMOnlineInterceptor','BPM Online Interceptor','VR_HttpConnection_CallInterceptor'						,'{"Editor":"som-st-httpconnectioncallinterceptor-bpm"}'),
-('6D0083C3-E7C9-483F-B87C-5CAF4CD6F4D7','EDAOnlineInterceptor','EDA Online Interceptor','VR_HttpConnection_CallInterceptor'						,'{"Editor":"som-st-httpconnectioncallinterceptor-eda"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[ConfigType],[Settings]))
-merge	[common].[ExtensionConfiguration] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
-----------------------------------------------------------------------------------------------------
-end

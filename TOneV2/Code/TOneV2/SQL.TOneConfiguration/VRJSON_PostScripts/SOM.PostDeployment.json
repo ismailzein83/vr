@@ -312,6 +312,98 @@
         "ConfigId": "411f4a51-1b9a-4221-9f16-1a05c1877eb2"
       },
       "Title": "Delete"
+    },
+    {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "common",
+      "TableName": "ExtensionConfiguration",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "6d0083c3-e7c9-483f-b87c-5caf4cd6f4d7",
+              "Name": "EDAOnlineInterceptor",
+              "Title": "EDA Online Interceptor",
+              "ConfigType": "VR_HttpConnection_CallInterceptor",
+              "Settings": "{\"Editor\":\"som-st-httpconnectioncallinterceptor-eda\"}",
+              "CreatedTime": "2019-07-22T14:06:06.493",
+              "LastModifiedTime": "2019-07-22T14:06:06.493"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "461b7474-9b19-4b90-aeab-63ba37245e53",
+              "Name": "BSCSOnlineInterceptor",
+              "Title": "BSCS Online Interceptor",
+              "ConfigType": "VR_HttpConnection_CallInterceptor",
+              "Settings": "{\"Editor\":\"som-st-httpconnectioncallinterceptor-bscs\"}",
+              "CreatedTime": "2019-02-25T17:21:42.903",
+              "LastModifiedTime": "2019-02-25T17:21:42.903"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "2a61a473-a949-4781-8d06-dcb170006a3b",
+              "Name": "BPMOnlineInterceptor",
+              "Title": "BPM Online Interceptor",
+              "ConfigType": "VR_HttpConnection_CallInterceptor",
+              "Settings": "{\"Editor\":\"som-st-httpconnectioncallinterceptor-bpm\"}",
+              "CreatedTime": "2019-01-24T14:11:51.94",
+              "LastModifiedTime": "2019-01-24T14:11:51.94"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Title",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ConfigType",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "Id IN ('461B7474-9B19-4B90-AEAB-63BA37245E53','2A61A473-A949-4781-8D06-DCB170006A3B','6D0083C3-E7C9-483F-B87C-5CAF4CD6F4D7')",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
     }
   ]
 }
