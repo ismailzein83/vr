@@ -274,12 +274,12 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Reports\ITPC\CustomerInvoiceItemsReport.rdlc" />
-    <None Include="Reports\ITPC\CustomerInvoiceReport.rdlc" />
-    <None Include="Reports\ITPC\InvoiceItemsReportByCurrency.rdlc" />
-    <None Include="Reports\ITPC\InvoiceReportByCurrency.rdlc" />
-    <None Include="Reports\ITPC\ProfileInvoiceItemsReport.rdlc" />
-    <None Include="Reports\ITPC\ProfileInvoiceReport.rdlc" />
+    <None Include="Reports\ITPC\Old\CustomerInvoiceItemsReport.rdlc" />
+    <None Include="Reports\ITPC\Old\CustomerInvoiceReport.rdlc" />
+    <None Include="Reports\ITPC\Old\InvoiceItemsReportByCurrency.rdlc" />
+    <None Include="Reports\ITPC\Old\InvoiceReportByCurrency.rdlc" />
+    <None Include="Reports\ITPC\Old\ProfileInvoiceItemsReport.rdlc" />
+    <None Include="Reports\ITPC\Old\ProfileInvoiceReport.rdlc" />
     <None Include="Reports\Ringo\CustomerInvoiceItemsReport.rdlc" />
     <None Include="Reports\Ringo\CustomerInvoiceReport.rdlc" />
     <None Include="Reports\Ringo\InvoiceItemsReportByCurrency.rdlc" />
@@ -492,6 +492,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Invoice\Reports\AT\SupplierCompareInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\ITPC\DefaultSupplierInvoiceReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\ITPC\DefaultSupplierInvoiceItemsReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\ITPC\DefaultCustomerInvoiceReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\ITPC\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
