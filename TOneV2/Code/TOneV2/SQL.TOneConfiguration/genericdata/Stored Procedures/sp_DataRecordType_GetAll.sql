@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT	[ID],[DevProjectID],[Name],ParentID,Fields, ExtraFieldsEvaluator, Settings
+	SELECT	[ID],[DevProjectID],[Name],ParentID,Fields, ExtraFieldsEvaluator, Settings, CreatedTime, LastModifiedTime
     FROM	[genericdata].DataRecordType WITH(NOLOCK) 
 	ORDER BY [Name]
 END
