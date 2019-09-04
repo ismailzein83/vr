@@ -381,7 +381,7 @@ namespace BPMExtended.Main.Business
             var promotionsItems = new List<PromotionDetail>();
             using (SOMClient client = new SOMClient())
             {
-                List<PromotionPackage> items = client.Get<List<PromotionPackage>>(String.Format("api/SOM.ST/Billing/ReadContractPromotions?ContractId={0}", contractId));
+                List<PromotionPackage> items = client.Get<List<PromotionPackage>>(String.Format("api/SOM.ST/Billing/GetContractPromotions?ContractId={0}", contractId));
                 if (items != null)
                 {
                     foreach (var item in items)
