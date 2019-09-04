@@ -135,11 +135,9 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('12221745-B7EC-4862-AD1D-28E6A500C49D','Inventory','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://192.168.110.195:8901"}'),
---('91E342C4-3AC0-42B6-8007-A57949F79155','BSCS to be removed','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://BscsUrl","Interceptor":{"$type":"SOM.ST.Business.BSCSOnlineInterceptor, SOM.ST.Business","UserName":"UserName","Password":"Password","ConfigId":"461b7474-9b19-4b90-aeab-63ba37245e53"}}'),
 ('56A5D484-180A-4D7B-A5EF-513C33ECDD52','Test_BSCS','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://localhost:8485","Interceptor":{"$type":"SOM.ST.Business.BSCSOnlineInterceptor, SOM.ST.Business","UserName":"ADMX","Password":"ADMX","ConfigId":"461b7474-9b19-4b90-aeab-63ba37245e53"}}'),
 ('E9159CBF-974F-4F0B-9D14-BC2414736DD4','BPM','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://192.168.25.30:9090","Interceptor":{"$type":"SOM.ST.Business.BPMOnlineInterceptor, SOM.ST.Business","ConfigId":"2a61a473-a949-4781-8d06-dcb170006a3b","UserName":"Supervisor","Password":"Supervisor","AuthenticationServiceURI":"/ServiceModel/AuthService.svc/Login"}}'),
 ('7421A486-9BC3-4E83-98D8-9B4D235AB801','EDA Simulator','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://localhost:61382/","Interceptor":{"$type":"SOM.ST.Business.EDAOnlineInterceptor, SOM.ST.Business","SessionId":"ASA","ConfigId":"6d0083c3-e7c9-483f-b87c-5caf4cd6f4d7"}}')
---('8D0E04EE-3917-4E3D-B0AB-EF56DA217745','XATA to be removed','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://InventoryUrl"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[common].[Connection] as t
@@ -152,7 +150,6 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 
-DELETE FROM [common].[Connection] WHERE ID IN ('91E342C4-3AC0-42B6-8007-A57949F79155','8D0E04EE-3917-4E3D-B0AB-EF56DA217745');
 
 --[SOM_Dev_Configuration].[bp].[VRWorkflow]---------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -400,8 +397,6 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Title],[FQTN],[VRWorkflowId],[Config])
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[VRWorkflowId],s.[Config]);
-
-DELETE FROM [bp].[BPDefinition] WHERE ID = '555CD0F8-64F8-4A35-B48F-B91E6DD8ED09';
 
 --[sec].[Group]--------------------------------------------------------------------------------
 BEGIN
