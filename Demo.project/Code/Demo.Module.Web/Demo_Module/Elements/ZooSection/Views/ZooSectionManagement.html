@@ -5,11 +5,11 @@
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <demo-module-zoo-selector on-ready="scopeModel.onZooSelectorReady" ismultipleselection></demo-module-zoo-selector>
+                <vr-columns width="normal" haschildcolumns>
+                    <demo-module-zoo-selector on-ready="scopeModel.onZooSelectorReady" ismultipleselection showaddbutton includeviewhandler></demo-module-zoo-selector>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-numeric value="scopeModel.maxNbOfAnimals" label="Max Number of animals" placeholder="Max Number of animals" minvalue="0"></vr-numeric>
+                    <vr-textbox value="scopeModel.maxNbOfAnimals" type="number" minvalue="0" decimalprecision="0" label="Max number of animals" ></vr-textbox>
                 </vr-columns>
             </vr-row>
         </div>

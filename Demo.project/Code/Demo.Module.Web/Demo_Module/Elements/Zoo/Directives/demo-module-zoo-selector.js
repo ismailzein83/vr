@@ -1,9 +1,8 @@
-﻿app.directive('demoModuleZooSelector', ['VRUIUtilsService', 'Demo_Module_ZooAPIService','UtilsService',
-    function (VRUIUtilsService, Demo_Module_ZooAPIService, UtilsService) {
+﻿'use strict';
 
-        'use strict';
-
-        var directiveDefinitionObject = {
+app.directive('demoModuleZooSelector', ['VRUIUtilsService', 'Demo_Module_ZooAPIService', 'UtilsService', 'Demo_Module_ZooService',
+    function (VRUIUtilsService, Demo_Module_ZooAPIService, UtilsService, Demo_Module_ZooService) {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '=',
@@ -50,11 +49,21 @@
                 hideremoveicon = 'hideremoveicon';
             }
 
+            var onAddClicked = '';
+            if (attrs.showaddbutton != undefined) {
+                onAddClicked = 'onaddclicked="scopeModel.addZoo"';
+            }
+
+            var onViewClicked = '';
+            if (attrs.includeviewhandler != undefined) {
+                onViewClicked = 'onviewclicked="scopeModel.viewZoo"';
+            }
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<span vr-disabled="ctrl.isdisabled">'
                 + '<vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="Name" datavaluefield="ZooId"  isrequired="ctrl.isrequired" '
                 + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Zoo" onselectitem="ctrl.onselectitem" '
-                + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' >'
+                + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' ' + onAddClicked + ' ' + onViewClicked + ' >'
                 + '</vr-select>'
                 + '</span>'
                 + '</vr-columns>';
@@ -71,6 +80,23 @@
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
+                };
+
+                $scope.scopeModel.addZoo = function () {
+                    var onZooAdded = function (zooObj) {
+                        ctrl.datasource.push(zooObj);
+
+                        if (attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(zooObj);
+                        else
+                            ctrl.selectedvalues = zooObj;
+                    };
+
+                    Demo_Module_ZooService.addZoo(onZooAdded);
+                };
+
+                $scope.scopeModel.viewZoo = function (zoo) {
+                    Demo_Module_ZooService.viewZoo(zoo.ZooId);
                 };
             }
 
@@ -105,10 +131,8 @@
                     return VRUIUtilsService.getIdSelectedIds('ZooId', attrs, ctrl);
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
             }
         }
-
-        return directiveDefinitionObject;
     }]);

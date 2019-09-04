@@ -1,9 +1,8 @@
-﻿app.directive('demoModuleZooSizeSelector', ['VRUIUtilsService', 'ZooSizeEnum','UtilsService',
-    function (VRUIUtilsService, ZooSizeEnum, UtilsService) {
+﻿'use strict';
 
-        'use strict';
-
-        var directiveDefinitionObject = {
+app.directive('demoModuleAnimalReptilenourrissementSelector', ['VRUIUtilsService', 'ReptileNourrissementEnum', 'UtilsService',
+    function (VRUIUtilsService, ReptileNourrissementEnum, UtilsService) {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '=',
@@ -25,8 +24,8 @@
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var sizeSelector = new SizeSelector(ctrl, $scope, $attrs);
-                sizeSelector.initializeController();
+                var nourrissementSelector = new NourrissementSelector(ctrl, $scope, $attrs);
+                nourrissementSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -37,11 +36,11 @@
 
         function getTemplate(attrs) {
 
-            var label = 'Size';
+            var label = 'Nourrissement';
 
             var multipleselection = '';
             if (attrs.ismultipleselection != undefined) {
-                label = 'Sizes';
+                label = 'Nourrissements';
                 multipleselection = 'ismultipleselection';
             }
 
@@ -53,16 +52,16 @@
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<span vr-disabled="ctrl.isdisabled">'
                 + '<vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="description" datavaluefield="value"  isrequired="ctrl.isrequired" '
-                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Size" onselectitem="ctrl.onselectitem" '
+                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Nourrissement" onselectitem="ctrl.onselectitem" '
                 + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' >'
                 + '</vr-select>'
                 + '</span>'
                 + '</vr-columns>';
         }
 
-        function SizeSelector(ctrl, $scope, attrs) {
+        function NourrissementSelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
-            
+
             var selectorAPI;
 
             function initializeController() {
@@ -78,6 +77,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
                     selectorAPI.clearDataSource();
 
                     var selectedIds;
@@ -85,24 +85,24 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    var zooSizesArray = UtilsService.getArrayEnum(ZooSizeEnum);
-                    for (var i = 0; i < zooSizesArray.length; i++) {
-                        ctrl.datasource.push(zooSizesArray[i]);
+                    var ReptileNourrissementArray = UtilsService.getArrayEnum(ReptileNourrissementEnum);
+                    for (var i = 0; i < ReptileNourrissementArray.length; i++) {
+                        ctrl.datasource.push(ReptileNourrissementArray[i]);
                     }
 
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
             }
         }
-
-        return directiveDefinitionObject;
     }]);

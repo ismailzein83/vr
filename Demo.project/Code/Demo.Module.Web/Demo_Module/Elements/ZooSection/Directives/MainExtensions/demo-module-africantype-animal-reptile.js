@@ -1,19 +1,15 @@
 ﻿'use strict';
 
-app.directive('demoModuleZoosectionTypeAnimalReptile', ['UtilsService','VRUIUtilsService',
+app.directive('demoModuleAfricantypeAnimalReptile', ['UtilsService','VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
-                normalColNum: '@',
-                label: '@',
-                customvalidate: '=',
-                isrequired: '='
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ZooSectionTypeAfrican($scope, ctrl, $attrs);
+                var ctor = new ReptileAnimal($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -21,7 +17,7 @@ app.directive('demoModuleZoosectionTypeAnimalReptile', ['UtilsService','VRUIUtil
             templateUrl: '/Client/Modules/Demo_Module/Elements/ZooSection/Directives/MainExtensions/Templates/ReptileAnimalTemplate.html'
         };
 
-        function ZooSectionTypeAfrican($scope, ctrl, $attrs) {
+        function ReptileAnimal($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var nourrisementSelectorAPI;
@@ -78,8 +74,8 @@ app.directive('demoModuleZoosectionTypeAnimalReptile', ['UtilsService','VRUIUtil
                         Nourrisement: nourrisementSelectorAPI.getSelectedIds()
                     };
                 };
-
-                if (ctrl.onReady != null)
+               
+                if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
             }
         }

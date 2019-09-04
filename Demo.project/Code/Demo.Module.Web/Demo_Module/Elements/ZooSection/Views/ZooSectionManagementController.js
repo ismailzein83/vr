@@ -8,7 +8,6 @@
 
         var gridAPI;
         var zooSelectorAPI;
-        var testAPI;
 
         defineScope();
         load();
@@ -24,11 +23,6 @@
             $scope.scopeModel.onZooSelectorReady = function (api) {
                 zooSelectorAPI = api;
                 zooSelectorAPI.load();
-            };
-
-            $scope.scopeModel.onAnimalTypeSelectorReady = function (api) {
-                testAPI = api;
-                testAPI.load();
             };
 
             $scope.scopeModel.search = function () {

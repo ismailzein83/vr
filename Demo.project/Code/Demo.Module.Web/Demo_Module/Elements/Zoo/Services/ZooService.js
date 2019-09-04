@@ -2,9 +2,9 @@
 
     'use strict';
 
-    zooService.$inject = ['VRModalService'];
+    zooService.$inject = ['VRModalService', 'UtilsService'];
 
-    function zooService(VRModalService) {
+    function zooService(VRModalService, UtilsService) {
 
         function addZoo(onZooAdded) {
 
@@ -32,9 +32,23 @@
             VRModalService.showModal('/Client/Modules/Demo_Module/Elements/Zoo/Views/ZooEditor.html', parameters, settings);
         }
 
+        function viewZoo(zooId) {
+            var parameters = {
+                zooId: zooId
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+
+            VRModalService.showModal('/Client/Modules/Demo_Module/Elements/Zoo/Views/ZooEditor.html', parameters, settings);
+        }
+
         return {
             addZoo: addZoo,
-            editZoo: editZoo
+            editZoo: editZoo,
+            viewZoo: viewZoo
         };
     }
 

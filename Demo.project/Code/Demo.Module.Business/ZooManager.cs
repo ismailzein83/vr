@@ -3,6 +3,7 @@ using Demo.Module.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -14,10 +15,10 @@ namespace Demo.Module.Business
 
         public IDataRetrievalResult<ZooDetail> GetFilteredZoos(DataRetrievalInput<ZooQuery> input)
         {
-            var allZoos = GetAllZoos();
+            var allZoos = GetCachedZoos();
             Func<Zoo, bool> filterExpression = (zoo) =>
             {
-                if (input.Query.Name != null && !zoo.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                if (!string.IsNullOrEmpty(input.Query.Name) && !zoo.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
 
                 if (input.Query.Sizes != null && !input.Query.Sizes.Contains(zoo.Size))
@@ -31,7 +32,7 @@ namespace Demo.Module.Business
 
         public IEnumerable<ZooInfo> GetZoosInfo(ZooInfoFilter zooInfoFilter)
         {
-            var allZoos = GetAllZoos();
+            var allZoos = GetCachedZoos();
 
             if (allZoos == null)
                 return null;
@@ -60,13 +61,13 @@ namespace Demo.Module.Business
 
         public Zoo GetZooById(long zooId)
         {
-            var allZoos = GetAllZoos();
+            var allZoos = GetCachedZoos();
             return allZoos != null ? allZoos.GetRecord(zooId) : null;
         }
 
         public string GetZooNameById(long zooId)
         {
-            var allZoos = GetAllZoos();
+            var allZoos = GetCachedZoos();
 
             if (allZoos == null)
                 return null;
@@ -87,6 +88,7 @@ namespace Demo.Module.Business
             bool insertActionSuccess = zooDataManager.Insert(zoo, out zooId);
             if (insertActionSuccess)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 zoo.ZooId = zooId;
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = this.ZooDetailMapper(zoo);
@@ -109,6 +111,7 @@ namespace Demo.Module.Business
             bool updateActionSuccess = zooDataManager.Update(zoo);
             if (updateActionSuccess)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = this.ZooDetailMapper(zoo);
             }
@@ -124,15 +127,33 @@ namespace Demo.Module.Business
 
         #region Private Methods
 
-        private Dictionary<long, Zoo> GetAllZoos()
+        private Dictionary<long, Zoo> GetCachedZoos()
         {
-            IZooDataManager zooDataManager = DemoModuleFactory.GetDataManager<IZooDataManager>();
-            List<Zoo> allZoos = zooDataManager.GetZoos();
-
-            return allZoos != null && allZoos.Count > 0 ? allZoos.ToDictionary(zoo => zoo.ZooId, zoo => zoo) : null;
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedZoos", () =>
+            {
+                IZooDataManager zooDataManager = DemoModuleFactory.GetDataManager<IZooDataManager>();
+                List<Zoo> zoos = zooDataManager.GetZoos();
+                return zoos != null && zoos.Count > 0 ? zoos.ToDictionary(zoo => zoo.ZooId, zoo => zoo) : null;
+            });
         }
 
         #endregion
+
+        #region Private Class
+
+        private class CacheManager: BaseCacheManager
+        {
+            IZooDataManager zooDataManager = DemoModuleFactory.GetDataManager<IZooDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired()
+            {
+                return zooDataManager.AreZoosUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+
 
         #region Mappers
 

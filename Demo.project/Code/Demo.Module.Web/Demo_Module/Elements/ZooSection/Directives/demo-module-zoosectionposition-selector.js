@@ -1,9 +1,8 @@
-﻿app.directive('demoModuleZoosectionPositionSelector', ['VRUIUtilsService', 'ZooSectionPositionEnum','UtilsService',
-    function (VRUIUtilsService, ZooSectionPositionEnum, UtilsService) {
+﻿'use strict';
 
-        'use strict';
-        
-        var directiveDefinitionObject = {
+app.directive('demoModuleZoosectionpositionSelector', ['VRUIUtilsService', 'ZooSectionPositionEnum', 'UtilsService',
+    function (VRUIUtilsService, ZooSectionPositionEnum, UtilsService) {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '=',
@@ -62,7 +61,7 @@
 
         function PositionSelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
-            
+
             var selectorAPI;
 
             function initializeController() {
@@ -78,6 +77,8 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+
                     selectorAPI.clearDataSource();
 
                     var selectedIds;
@@ -93,16 +94,16 @@
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
             }
         }
-
-        return directiveDefinitionObject;
     }]);

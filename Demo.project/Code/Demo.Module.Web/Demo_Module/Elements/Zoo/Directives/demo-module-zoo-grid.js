@@ -2,8 +2,7 @@
 
 app.directive('demoModuleZooGrid', ['Demo_Module_ZooAPIService', 'VRNotificationService', 'Demo_Module_ZooService', 'ZooSizeEnum', 'UtilsService', 'VRUIUtilsService',
     function (Demo_Module_ZooAPIService, VRNotificationService, Demo_Module_ZooService, ZooSizeEnum, UtilsService, VRUIUtilsService) {
-
-        var directiveDefinitionObject = {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '='
@@ -111,6 +110,4 @@ app.directive('demoModuleZooGrid', ['Demo_Module_ZooAPIService', 'VRNotification
                 Demo_Module_ZooService.editZoo(onZooUpdated, zoo.ZooId);
             }
         }
-
-        return directiveDefinitionObject;
     }]);

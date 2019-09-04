@@ -2,8 +2,7 @@
 
 app.directive('demoModuleZoosectionGrid', ['Demo_Module_ZooSectionAPIService', 'VRNotificationService', 'Demo_Module_ZooSectionService',
     function (Demo_Module_ZooSectionAPIService, VRNotificationService, Demo_Module_ZooSectionService) {
-
-        var directiveDefinitionObject = {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '='
@@ -22,7 +21,7 @@ app.directive('demoModuleZoosectionGrid', ['Demo_Module_ZooSectionAPIService', '
             this.initializeController = initializeController;
 
             var gridAPI;
-            var gridZooId;
+            var zooId;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -54,7 +53,7 @@ app.directive('demoModuleZoosectionGrid', ['Demo_Module_ZooSectionAPIService', '
 
                     if (payload != undefined) {
                         query = payload.query;
-                        gridZooId = payload.zooId;
+                        zooId = payload.zooId;
 
                         $scope.scopeModel.hideZooColumn = payload.hideZooColumn != undefined;
                     }
@@ -83,13 +82,11 @@ app.directive('demoModuleZoosectionGrid', ['Demo_Module_ZooSectionAPIService', '
                 };
 
                 var zooIdItem;
-                if (gridZooId != undefined) {
-                    zooIdItem = { ZooId: gridZooId };
+                if (zooId != undefined) {
+                    zooIdItem = { ZooId: zooId };
                 }
 
                 Demo_Module_ZooSectionService.editZooSection(onZooSectionUpdated, zooSection.ZooSectionId, zooIdItem);
             }
         }
-
-        return directiveDefinitionObject;
     }]);

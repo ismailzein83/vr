@@ -1,10 +1,7 @@
-﻿(function (app) {
+﻿'use strict';
 
-    'use strict';
-
-    ZooSectionTypeDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'Demo_Module_ZooSectionAPIService'];
-
-    function ZooSectionTypeDirective(UtilsService, VRUIUtilsService, Demo_Module_ZooSectionAPIService) {
+app.directive('demoModuleAfricantypeAnimal', ['UtilsService', 'VRUIUtilsService', 'Demo_Module_ZooSectionAPIService',
+    function (UtilsService, VRUIUtilsService, Demo_Module_ZooSectionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -16,24 +13,53 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ZooSectionType($scope, ctrl, $attrs);
+                var ctor = new AfricanTypeAnimal($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Demo_Module/Elements/ZooSection/Directives/Templates/ZooSectionTypeTemplate.html'
+            template: function (element, attrs) {
+                return getTemplate(attrs);
+            }
         };
 
-        function ZooSectionType($scope, ctrl, $attrs) {
+        function getTemplate(attrs) {
+
+            var hideremoveicon = '';
+            if (attrs.hideremoveicon != undefined) {
+                hideremoveicon = 'hideremoveicon';
+            }
+
+            var template =
+                '<vr-row>'
+                + '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                + ' <vr-select on-ready="scopeModel.onSelectorReady"'
+                + ' datasource="scopeModel.templateConfigs"'
+                + ' selectedvalues="scopeModel.selectedTemplateConfig"'
+                + ' datavaluefield="ExtensionConfigurationId"'
+                + ' datatextfield="Title"'
+                + 'label="Animal Type" '
+                + ' ' + hideremoveicon + ' '
+                + 'isrequired ="ctrl.isrequired"'
+                + ' >'
+                + '</vr-select>'
+                + ' </vr-columns>'
+                + '</vr-row>'
+
+                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
+                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate">'
+                + '</vr-directivewrapper>';
+
+            return template;
+        }
+
+        function AfricanTypeAnimal($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
 
             var directiveAPI;
             var directiveReadyDeferred;
-
-            var positionSelectorAPI;
-            var positionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -53,72 +79,43 @@
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
-
-                $scope.scopeModel.onPositionSelectorReady = function (api) {
-                    positionSelectorAPI = api;
-                    positionSelectorReadyDeferred.resolve();
-                };
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+                    var zooSectionTypeAnimalEntity;
+
                     selectorAPI.clearDataSource();
 
-                    var promises = [];
-
-                    var zooSectionTypeEntity;
-
                     if (payload != undefined) {
-                        zooSectionTypeEntity = payload.zooSectionTypeEntity;
+                        zooSectionTypeAnimalEntity = payload.zooSectionTypeAnimalEntity;
                     }
 
-                    var getZooSectionTypeConfigsPromise = getZooSectionTypeConfigs();
-                    promises.push(getZooSectionTypeConfigsPromise);
+                    var getZooSectionTypeAnimalConfigsPromise = getZooSectionTypeAnimalConfigs();
+                    promises.push(getZooSectionTypeAnimalConfigsPromise);
 
-                    var loadPositionSelectorPromise = loadPositionSelector();
-                    promises.push(loadPositionSelectorPromise);
-
-                    if (zooSectionTypeEntity != undefined) {
-                        $scope.scopeModel.hasRiver = zooSectionTypeEntity.HasRiver;
-                        $scope.scopeModel.nbOfVisitors = zooSectionTypeEntity.NbOfVisitors;
-
+                    if (zooSectionTypeAnimalEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    function getZooSectionTypeConfigs() {
-                        return Demo_Module_ZooSectionAPIService.GetZooSectionTypeConfigs().then(function (response) {
+                    function getZooSectionTypeAnimalConfigs() {
+                        return Demo_Module_ZooSectionAPIService.GetZooSectionTypeAnimalConfigs().then(function (response) {
                             if (response != null) {
 
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
 
-                                if (zooSectionTypeEntity != undefined) {
+                                if (zooSectionTypeAnimalEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, zooSectionTypeEntity.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, zooSectionTypeAnimalEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
-                    }
-
-                    function loadPositionSelector() {
-                        var positionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        positionSelectorReadyDeferred.promise.then(function () {
-                            var selectorPayload;
-
-                            if (zooSectionTypeEntity != undefined)
-                                selectorPayload = {
-                                    selectedIds: zooSectionTypeEntity.Positions
-                                };
-
-                            VRUIUtilsService.callDirectiveLoad(positionSelectorAPI, selectorPayload, positionLoadPromiseDeferred);
-                        });
-
-                        return positionLoadPromiseDeferred.promise;
                     }
 
                     function loadDirective() {
@@ -129,7 +126,7 @@
                             directiveReadyDeferred = undefined;
 
                             var directivePayload = {
-                                zooSectionTypeEntity: zooSectionTypeEntity
+                                zooSectionTypeAnimalEntity: zooSectionTypeAnimalEntity
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
@@ -146,20 +143,14 @@
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                            data.HasRiver = $scope.scopeModel.hasRiver;
-                            data.NbOfVisitors = $scope.scopeModel.nbOfVisitors;
-                            data.Positions = positionSelectorAPI.getSelectedIds();
                         }
                     }
 
                     return data;
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
             }
         }
-    }
-
-    app.directive('demoModuleZoosectionType', ZooSectionTypeDirective);
-})(app);
+    }]);

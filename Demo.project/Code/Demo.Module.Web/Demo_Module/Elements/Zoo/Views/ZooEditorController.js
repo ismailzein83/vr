@@ -124,7 +124,6 @@
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
-                $scope.scopeModel.isLoading = false;
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -143,7 +142,6 @@
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
-                $scope.scopeModel.isLoading = false;
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;

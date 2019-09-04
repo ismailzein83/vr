@@ -2,7 +2,7 @@
 
     'use strict';
 
-    zooManagementController.$inject = ['$scope', 'Demo_Module_ZooService', 'UtilsService', 'VRUIUtilsService','ZooSizeEnum'];
+    zooManagementController.$inject = ['$scope', 'Demo_Module_ZooService', 'UtilsService', 'VRUIUtilsService', 'ZooSizeEnum'];
 
     function zooManagementController($scope, Demo_Module_ZooService, UtilsService, VRUIUtilsService, ZooSizeEnum) {
 
@@ -44,7 +44,7 @@
         }
 
         function load() {
-            loadSizeSelector();
+            return loadSizeSelector();
         }
 
         function getFilter() {

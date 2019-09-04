@@ -5,13 +5,13 @@
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
                         <vr-columns width="1/3row">
-                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-textbox value="scopeModel.city" label="City" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModel.city" label="City" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/3row" haschildcolumns>
-                            <demo-module-zoo-size-selector on-ready="scopeModel.onSizeSelectorReady" isrequired="true" hideremoveicon></demo-module-zoo-size-selector>
+                            <demo-module-zoosize-selector on-ready="scopeModel.onSizeSelectorReady" isrequired="true" hideremoveicon></demo-module-zoosize-selector>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

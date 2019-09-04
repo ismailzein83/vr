@@ -3,6 +3,7 @@ using Demo.Module.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -17,18 +18,18 @@ namespace Demo.Module.Business
 
         public IDataRetrievalResult<ZooSectionDetail> GetFilteredZooSections(DataRetrievalInput<ZooSectionQuery> input)
         {
-            var allZooSections = GetAllZooSections();
+            var allZooSections = GetCachedZooSections();
             Func<ZooSection, bool> filterExpression = (zooSection) =>
             {
-                if (input.Query.Name != null && !zooSection.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                if (!string.IsNullOrEmpty(input.Query.Name) && !zooSection.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
 
                 if (input.Query.ZooIds != null && !input.Query.ZooIds.Contains(zooSection.ZooId))
                     return false;
 
-                if (input.Query.MaxNbOfAnimals != null && zooSection.Type != null)
+                if (input.Query.MaxNbOfAnimals.HasValue && zooSection.Type != null)
                 {
-                    if (input.Query.MaxNbOfAnimals < zooSection.Type.GetAnimalsNumber(new ZooSectionTypeGetAnimalsNumberContext()))
+                    if (input.Query.MaxNbOfAnimals.Value < zooSection.Type.GetAnimalsNumber(new ZooSectionTypeGetAnimalsNumberContext()))
                         return false;
                 }
 
@@ -40,7 +41,7 @@ namespace Demo.Module.Business
 
         public ZooSection GetZooSectionById(long zooSectionId)
         {
-            var allZooSections = GetAllZooSections();
+            var allZooSections = GetCachedZooSections();
             return allZooSections != null ? allZooSections.GetRecord(zooSectionId) : null;
         }
 
@@ -67,6 +68,7 @@ namespace Demo.Module.Business
             bool insertActionSuccess = zooSectionDataManager.Insert(zooSection, out zooSectionId);
             if (insertActionSuccess)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 zooSection.ZooSectionId = zooSectionId;
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = ZooSectionDetailMapper(zooSection);
@@ -89,6 +91,7 @@ namespace Demo.Module.Business
             bool updateActionSuccess = zooSectionDataManager.Update(zooSection);
             if (updateActionSuccess)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = ZooSectionDetailMapper(zooSection);
             }
@@ -104,12 +107,29 @@ namespace Demo.Module.Business
 
         #region Private Methods
 
-        private Dictionary<long, ZooSection> GetAllZooSections()
+        private Dictionary<long, ZooSection> GetCachedZooSections()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedZooSections", () =>
+            {
+                IZooSectionDataManager zooSectionDataManager = DemoModuleFactory.GetDataManager<IZooSectionDataManager>();
+                List<ZooSection> zooSections = zooSectionDataManager.GetZooSections();
+                return zooSections != null && zooSections.Count > 0 ? zooSections.ToDictionary(zooSection => zooSection.ZooSectionId, zooSection => zooSection) : null;
+            });
+        }
+
+        #endregion
+
+        #region Private Class
+
+        private class CacheManager : BaseCacheManager
         {
             IZooSectionDataManager zooSectionDataManager = DemoModuleFactory.GetDataManager<IZooSectionDataManager>();
-            List<ZooSection> allZooSections = zooSectionDataManager.GetZooSections();
+            object _updateHandle;
 
-            return allZooSections != null && allZooSections.Count > 0 ? allZooSections.ToDictionary(zooSection => zooSection.ZooSectionId, zooSection => zooSection) : null;
+            protected override bool ShouldSetCacheExpired()
+            {
+                return zooSectionDataManager.AreZooSectionsUpdated(ref _updateHandle);
+            }
         }
 
         #endregion

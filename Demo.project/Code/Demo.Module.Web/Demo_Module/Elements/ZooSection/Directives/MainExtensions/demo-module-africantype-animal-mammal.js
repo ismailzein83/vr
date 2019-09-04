@@ -1,19 +1,15 @@
 ﻿'use strict';
 
-app.directive('demoModuleZoosectionTypeAnimalMammal', ['UtilsService',
+app.directive('demoModuleAfricantypeAnimalMammal', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
-                normalColNum: '@',
-                label: '@',
-                customvalidate: '=',
-                isrequired: '='
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ZooSectionTypeAfrican($scope, ctrl, $attrs);
+                var ctor = new MammalAnimal($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -21,7 +17,7 @@ app.directive('demoModuleZoosectionTypeAnimalMammal', ['UtilsService',
             templateUrl: '/Client/Modules/Demo_Module/Elements/ZooSection/Directives/MainExtensions/Templates/MammalAnimalTemplate.html'
         };
 
-        function ZooSectionTypeAfrican($scope, ctrl, $attrs) {
+        function MammalAnimal($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -35,7 +31,7 @@ app.directive('demoModuleZoosectionTypeAnimalMammal', ['UtilsService',
                 var zooSectionTypeAnimalEntity;
 
                 api.load = function (payload) {
-                    var zooSectionTypeAnimalMammalLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var promises = [];
 
                     if (payload != undefined) {
                         zooSectionTypeAnimalEntity = payload.zooSectionTypeAnimalEntity;
@@ -45,9 +41,7 @@ app.directive('demoModuleZoosectionTypeAnimalMammal', ['UtilsService',
                         $scope.scopeModel.highestJump = zooSectionTypeAnimalEntity.HighestJump;
                     }
 
-                    zooSectionTypeAnimalMammalLoadPromiseDeferred.resolve();
-
-                    return zooSectionTypeAnimalMammalLoadPromiseDeferred.promise;
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -57,7 +51,7 @@ app.directive('demoModuleZoosectionTypeAnimalMammal', ['UtilsService',
                     };
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
             }
         }

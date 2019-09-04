@@ -1,19 +1,15 @@
 ﻿'use strict';
 
-app.directive('demoModuleZoosectionTypeSouthamerican', ['UtilsService',
+app.directive('demoModuleZoosectiontypeSouthamerican', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
-                normalColNum: '@',
-                label: '@',
-                customvalidate: '=',
-                isrequired: '='
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ZooSectionTypeSouthAmerican($scope, ctrl, $attrs);
+                var ctor = new SouthAmericanType($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -21,9 +17,9 @@ app.directive('demoModuleZoosectionTypeSouthamerican', ['UtilsService',
             templateUrl: '/Client/Modules/Demo_Module/Elements/ZooSection/Directives/MainExtensions/Templates/SouthAmericanSectionTypeTemplate.html'
         };
 
-        function ZooSectionTypeSouthAmerican($scope, ctrl, $attrs) {
+        function SouthAmericanType($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            
             function initializeController() {
                 $scope.scopeModel = {};
                 defineAPI();
@@ -31,11 +27,11 @@ app.directive('demoModuleZoosectionTypeSouthamerican', ['UtilsService',
 
             function defineAPI() {
                 var api = {};
-
+                
                 var zooSectionTypeEntity;
 
                 api.load = function (payload) {
-                    var zooSectionTypeSouthAmericanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var promises = [];
 
                     if (payload != undefined) {
                         zooSectionTypeEntity = payload.zooSectionTypeEntity;
@@ -45,9 +41,7 @@ app.directive('demoModuleZoosectionTypeSouthamerican', ['UtilsService',
                         $scope.scopeModel.nbOfAnimals = zooSectionTypeEntity.NbOfAnimals;
                     }
 
-                    zooSectionTypeSouthAmericanLoadPromiseDeferred.resolve();
-
-                    return zooSectionTypeSouthAmericanLoadPromiseDeferred.promise;
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -57,7 +51,7 @@ app.directive('demoModuleZoosectionTypeSouthamerican', ['UtilsService',
                     };
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
             }
         }

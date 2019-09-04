@@ -5,17 +5,17 @@
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row" haschildcolumns>
-                            <demo-module-zoo-selector on-ready="scopeModel.onZooSelectorReady" isrequired="true" isdisabled="scopeModel.disableZoo" hideremoveicon></demo-module-zoo-selector>
+                            <demo-module-zoo-selector on-ready="scopeModel.onZooSelectorReady" isrequired="true" isdisabled="scopeModel.disableZoo" hideremoveicon showaddbutton includeviewhandler></demo-module-zoo-selector>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">
                     <vr-row removeline>
                         <vr-columns width="fullrow" haschildcolumns>
-                            <demo-module-zoosection-type on-ready="scopeModel.onZooSectionTypeDirectiveReady" isrequired="true" normal-col-num="4"></demo-module-zoosection-type>
+                            <demo-module-zoosectiontype on-ready="scopeModel.onZooSectionTypeDirectiveReady" isrequired="true" normal-col-num="4"></demo-module-zoosectiontype>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

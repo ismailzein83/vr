@@ -1,5 +1,4 @@
 ﻿using Demo.Module.Entities;
-using System;
 using System.Collections.Generic;
 
 namespace Demo.Module.Data
@@ -9,5 +8,6 @@ namespace Demo.Module.Data
         List<Zoo> GetZoos();
         bool Insert(Zoo zoo, out long insertedId);
         bool Update(Zoo zoo);
+        bool AreZoosUpdated(ref object updateHandle);
     }
 }

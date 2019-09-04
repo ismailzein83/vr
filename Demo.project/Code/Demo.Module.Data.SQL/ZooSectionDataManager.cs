@@ -1,5 +1,4 @@
 ﻿using Demo.Module.Entities;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
 using Vanrise.Common;
@@ -7,20 +6,21 @@ using Vanrise.Data.SQL;
 
 namespace Demo.Module.Data.SQL
 {
-    class ZooSectionDataManager : BaseSQLDataManager, IZooSectionDataManager
+    public class ZooSectionDataManager : BaseSQLDataManager, IZooSectionDataManager
     {
         #region Properties/Ctor
 
         public ZooSectionDataManager() :
             base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoProject_DBConnStringKey"))
         {
+
         }
 
         #endregion
 
         #region Public Methods
 
-        public List<Entities.ZooSection> GetZooSections()
+        public List<ZooSection> GetZooSections()
         {
             return GetItemsSP("[dbo].[sp_ZooSection_GetAll]", ZooSectionMapper);
         }
@@ -45,6 +45,11 @@ namespace Demo.Module.Data.SQL
             int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_ZooSection_Update]", zooSection.ZooSectionId, zooSection.Name, zooSection.ZooId, Serializer.Serialize(zooSection.Type));
 
             return nbOfRecordsAffected > 0;
+        }
+
+        public bool AreZooSectionsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[dbo].[ZooSection]", ref updateHandle);
         }
 
         #endregion

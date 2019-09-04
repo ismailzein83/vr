@@ -1,9 +1,8 @@
-﻿app.directive('demoModuleZoosectionTypeAnimalReptileNourrisementSelector', ['VRUIUtilsService', 'ZooSectionTypeAnimalReptileNourrisementEnum', 'UtilsService',
-    function (VRUIUtilsService, ZooSectionTypeAnimalReptileNourrisementEnum, UtilsService) {
+﻿'use strict';
 
-        'use strict';
-        
-        var directiveDefinitionObject = {
+app.directive('demoModuleZoosizeSelector', ['VRUIUtilsService', 'ZooSizeEnum', 'UtilsService',
+    function (VRUIUtilsService, ZooSizeEnum, UtilsService) {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '=',
@@ -25,8 +24,8 @@
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var nourriseementSelector = new NourrisementSelector(ctrl, $scope, $attrs);
-                nourriseementSelector.initializeController();
+                var sizeSelector = new SizeSelector(ctrl, $scope, $attrs);
+                sizeSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -37,11 +36,11 @@
 
         function getTemplate(attrs) {
 
-            var label = 'Nourrisement';
+            var label = 'Size';
 
             var multipleselection = '';
             if (attrs.ismultipleselection != undefined) {
-                label = 'Nourrisements';
+                label = 'Sizes';
                 multipleselection = 'ismultipleselection';
             }
 
@@ -53,14 +52,14 @@
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<span vr-disabled="ctrl.isdisabled">'
                 + '<vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="description" datavaluefield="value"  isrequired="ctrl.isrequired" '
-                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Nourrisement" onselectitem="ctrl.onselectitem" '
+                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Size" onselectitem="ctrl.onselectitem" '
                 + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' >'
                 + '</vr-select>'
                 + '</span>'
                 + '</vr-columns>';
         }
 
-        function NourrisementSelector(ctrl, $scope, attrs) {
+        function SizeSelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
             
             var selectorAPI;
@@ -78,6 +77,8 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+
                     selectorAPI.clearDataSource();
 
                     var selectedIds;
@@ -85,24 +86,24 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    var zooSectionTypeAnimalReptileNourrisementArray = UtilsService.getArrayEnum(ZooSectionTypeAnimalReptileNourrisementEnum);
-                    for (var i = 0; i < zooSectionTypeAnimalReptileNourrisementArray.length; i++) {
-                        ctrl.datasource.push(zooSectionTypeAnimalReptileNourrisementArray[i]);
+                    var zooSizesArray = UtilsService.getArrayEnum(ZooSizeEnum);
+                    for (var i = 0; i < zooSizesArray.length; i++) {
+                        ctrl.datasource.push(zooSizesArray[i]);
                     }
 
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof ctrl.onReady == 'function')
                     ctrl.onReady(api);
             }
         }
-
-        return directiveDefinitionObject;
     }]);

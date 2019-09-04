@@ -19,7 +19,7 @@ namespace Demo.Module.Data.SQL
 
         #region Public Methods
 
-        public List<Entities.Zoo> GetZoos()
+        public List<Zoo> GetZoos()
         {
             return GetItemsSP("[dbo].[sp_Zoo_GetAll]", ZooMapper);
         }
@@ -45,6 +45,10 @@ namespace Demo.Module.Data.SQL
             return nbOfRecordsAffected > 0;
         }
 
+        public bool AreZoosUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[dbo].[Zoo]", ref updateHandle);
+        }
         #endregion
 
         #region Mappers

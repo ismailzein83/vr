@@ -2,7 +2,7 @@
 
 app.directive('demoModuleZoosectionSearch', ['Demo_Module_ZooSectionService',
     function (Demo_Module_ZooSectionService) {
-        var directiveDefinitionObject = {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '='
@@ -21,13 +21,13 @@ app.directive('demoModuleZoosectionSearch', ['Demo_Module_ZooSectionService',
             this.initializeController = initializeController;
 
             var gridAPI;
-            var gridZooId;
+            var zooId;
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.addZooSection = function () {
-                    var zooIdItem = { ZooId: gridZooId };
+                    var zooIdItem = { ZooId: zooId };
                     var onZooSectionAdded = function (obj) {
                         gridAPI.onZooSectionAdded(obj);
                     };
@@ -46,7 +46,7 @@ app.directive('demoModuleZoosectionSearch', ['Demo_Module_ZooSectionService',
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        gridZooId = payload.zooId;
+                        zooId = payload.zooId;
                     }
 
                     return gridAPI.load(getGridPayload());
@@ -62,12 +62,10 @@ app.directive('demoModuleZoosectionSearch', ['Demo_Module_ZooSectionService',
 
             function getGridPayload() {
                 return {
-                    query: { ZooIds: [gridZooId] },
-                    zooId: gridZooId,
+                    query: { ZooIds: [zooId] },
+                    zooId: zooId,
                     hideZooColumn: true
                 };
             }
         }
-
-        return directiveDefinitionObject;
     }]);

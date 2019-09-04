@@ -8,5 +8,6 @@ namespace Demo.Module.Data
         List<ZooSection> GetZooSections();
         bool Insert(ZooSection zooSection, out long insertedId);
         bool Update(ZooSection zooSection);
+        bool AreZooSectionsUpdated(ref object updateHandle);
     }
 }
