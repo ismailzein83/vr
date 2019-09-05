@@ -22,7 +22,6 @@
 
 //        function loadParameters() {
 //            var parameters = VRNavigationService.getParameters($scope);
-
 //            if (parameters != undefined) {
 //                dataRecordTypeId = parameters.dataRecordTypeId;
 //                businessEntityDefinitionId = parameters.businessEntityDefinitionId;
@@ -37,7 +36,6 @@
 //            $scope.BPDefinitionID = customActionSettings.BPDefinitionId;
 
 //            $scope.scopeModel.onBPDefinitionManualDirectiveReady = function (api) {
-//                console.log(api);
 //                bpDefinitionDirectiveApi = api;
 //                bpDefinitionDirectiveReadyPromiseDeferred.resolve();
 //            };
@@ -86,7 +84,6 @@
 //                return BusinessProcess_BPDefinitionAPIService.GetBPDefintion($scope.BPDefinitionID)
 //                    .then(function (response) {
 //                        $scope.bpDefinitionObj = response;
-//                        console.log(response);
 //                    }).catch(function (error) {
 //                        VRNotificationService.notifyExceptionWithClose(error, $scope);
 //                    });
