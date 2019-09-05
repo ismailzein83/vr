@@ -103,8 +103,10 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Subscription")]
         [EntitySchemaName("StADSL")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("6AB2B0E3-5201-4189-9838-CF4B4E4E17D9  ")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("8CD5BDC5-2551-4767-8166-5D334D5E0FD7")]
         ADSLSubscription = 5,
 
         //[LineOfBusiness(LineOfBusiness.ADSL)]

@@ -789,12 +789,15 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        public bool ReserveDSLAMPort(string portId)
+        public string ReserveDSLAMPort(string phoneNumber , string portId)
         {
             //TODO: reserve port 
-            return true;
-
-
+            string  pathId;
+            using (SOMClient client = new SOMClient())
+            {
+                pathId = client.Get<string>(String.Format("api/SOM.ST/Inventory/ReserveDSL?phoneNumber={0}&dslamPortId={1}", phoneNumber,portId));
+            }
+            return pathId;
         }
 
         public bool MultiplexerValidation(string phoneNumber)

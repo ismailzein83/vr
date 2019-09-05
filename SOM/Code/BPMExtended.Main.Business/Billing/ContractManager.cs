@@ -78,12 +78,12 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public List<ContractDetail> GetxDSLContracts(string customerId) // MYA: Uncomment and handle object client side
+        public List<ADSLContractDetail> GetxDSLContracts(string customerId) // MYA: Uncomment and handle object client side
         {
-            var xDSLontractDetails = new List<ContractDetail>();
+            var xDSLontractDetails = new List<ADSLContractDetail>();
             using (SOMClient client = new SOMClient())
             {
-                var items = client.Get<List<CustomerContract>>(String.Format("api/SOM.ST/Billing/GetCustomerDSLContracts?CustomerId={0}", customerId));
+                var items = client.Get<List<CustomerContract>>(String.Format("api/SOM.ST/Billing/GetCustomerADSLContracts?CustomerId={0}", customerId));
                 foreach (var item in items)
                 {
                     // var telephonyContractDetailItem = TelephonyContractToDetail(item);
@@ -765,12 +765,12 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        private ContractDetail xDSLCustomerContractToDetail(CustomerContract contract)
+        private ADSLContractDetail xDSLCustomerContractToDetail(CustomerContract contract)
         {
             int stat = 0;
             int.TryParse(contract.Status.ToString(), out stat);
 
-            return new ContractDetail
+            return new ADSLContractDetail
             {
                 ContractId = contract.Id,
                 Status = GetContractStatusByEnumValue(contract.Status.ToString()), //Check if API and Our conventions are the same

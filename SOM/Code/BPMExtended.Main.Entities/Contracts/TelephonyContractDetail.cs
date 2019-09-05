@@ -10,4 +10,5 @@ namespace BPMExtended.Main.Entities
     {
         public string PhoneNumber { get; set; }
     }
+
 }

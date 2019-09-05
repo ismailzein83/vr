@@ -195,7 +195,7 @@ namespace BPMExtended.Main.Business
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),
-                            //RequestId = requestId.ToString(),
+                            RequestId = requestId.ToString(),
                             CustomerId = info.CustomerId
                         }
                     }
@@ -224,7 +224,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSL");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StContact");
             esq.AddColumn("StContact.Id");
@@ -238,7 +238,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
@@ -250,7 +250,7 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
+                            ContractId = contractId.ToString(),
                             //ContactId = contactId.ToString(),
                             //AccountId = null,
                             RequestId = requestId.ToString(),
@@ -264,7 +264,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_CreateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

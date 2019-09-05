@@ -8,7 +8,7 @@ namespace BPMExtended.Main.Entities
 {
     public class Address
     {
-        public string Province { get; set; }
+        public string StateProvince { get; set; }
         public string City { get; set; }
         public string Region { get; set; }
         public string SubRegion { get; set; }
