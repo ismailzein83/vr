@@ -14,9 +14,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldChoicesType : DataRecordFieldType
     {
-        
+
         public override Guid ConfigId { get { return new Guid("eabc41a9-e332-4120-ac85-f0b7e53c0d0d"); } }
-        
+
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-choices-runtimeeditor"; } }
 
         List<Choice> _choices;
@@ -90,7 +90,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 throw new NullReferenceException("Choices");
 
             IEnumerable<long> selectedChoiceValues = FieldTypeHelper.ConvertFieldValueToList<long>(value);
-            
+
             if (selectedChoiceValues == null)
                 return GetChoiceText(Convert.ToInt32(value));
 
@@ -98,7 +98,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             foreach (int selectedChoiceValue in selectedChoiceValues)
                 descriptions.Add(GetChoiceText(selectedChoiceValue));
-            
+
             return String.Join(",", descriptions);
         }
 
@@ -150,7 +150,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         string GetChoiceText(int choiceValue)
         {
             Choice choice = Choices.FindRecord(itm => itm.Value == choiceValue);
-            if (choice == null) throw new NullReferenceException("choice");
+            if (choice == null && choiceValue == 0)
+                return null;
+
+            if (choice == null)
+                throw new NullReferenceException("choice");
+
             return choice.Text;
         }
 
@@ -182,7 +187,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (choice != null)
                 context.FieldValue = (long)choice.Value;
             else
-                context.ErrorMessage = string.Format("The description {0} does not exist.",context.FieldDescription.ToString());
+                context.ErrorMessage = string.Format("The description {0} does not exist.", context.FieldDescription.ToString());
         }
 
         List<Choice> GetChoices(Guid choiceDefinitionId)
@@ -201,20 +206,20 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     var allChoiceDefinitions = choiceDefinitionManager.GetCachedDataRecordFieldChoices();
                     allChoiceDefinitions.ThrowIfNull("allChoiceDefinitions");
                     Dictionary<Guid, List<Choice>> choices = new Dictionary<Guid, List<Choice>>();
-                    foreach(var choiceDefinition in allChoiceDefinitions.Values)
+                    foreach (var choiceDefinition in allChoiceDefinitions.Values)
                     {
                         choiceDefinition.Settings.ThrowIfNull("choiceDefinition.Settings", choiceDefinition.DataRecordFieldChoiceId);
                         choiceDefinition.Settings.Choices.ThrowIfNull("choiceDefinition.Settings.Choices", choiceDefinition.DataRecordFieldChoiceId);
                         choices.Add(choiceDefinition.DataRecordFieldChoiceId, choiceDefinition.Settings.Choices.Select(itm => new Choice
-                            {
-                                Text = itm.Text,
-                                Value = itm.Value
-                            }).ToList());
+                        {
+                            Text = itm.Text,
+                            Value = itm.Value
+                        }).ToList());
                     }
                     return choices;
                 });
         }
-        
+
         public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
         {
             FieldChoicesType fieldTypeAsChoicesType = fieldType as FieldChoicesType;
