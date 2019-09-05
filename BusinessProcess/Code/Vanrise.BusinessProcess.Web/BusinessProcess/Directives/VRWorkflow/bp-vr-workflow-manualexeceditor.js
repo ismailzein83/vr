@@ -50,7 +50,7 @@ app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService
                     var rootPromiseNode = {
                         promises: initialPromise,
                         getChildNode: function () {
-                            if (bpDefinitionObj && bpDefinitionObj.Configuration && bpDefinitionObj.Configuration.ManualEditorSettings && bpDefinitionObj.Configuration.ManualEditorSettings.Enable) {
+                            if (bpDefinitionObj && bpDefinitionObj.Configuration && bpDefinitionObj.Configuration.ManualEditorSettings && bpDefinitionObj.Configuration.ManualEditorSettings.Enable && bpDefinitionObj.Configuration.ManualEditorSettings.EditorSettings) {
                                 $scope.scopeModel.hasRuntimeEditor = true;
                                 var getVRWorkflowInputArgumentFieldsPromise = getVRWorkflowInputArgumentFields();
 
@@ -66,7 +66,7 @@ app.directive("bpVrWorkflowManualexeceditor", ['UtilsService', 'VRUIUtilsService
                             }
                             else {
                                 return {
-                                    promises: [],
+                                    promises: []
                                 };
                             }
                         }
