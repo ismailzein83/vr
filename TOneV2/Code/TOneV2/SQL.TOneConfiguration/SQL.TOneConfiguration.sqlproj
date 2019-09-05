@@ -995,5 +995,6 @@
     <None Include="Retail_Invoice.PostDeployment.sql" />
     <None Include="VRJSON_PostScripts\SOM.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\SomST.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\Mediation.PostDeployment.json" />
   </ItemGroup>
 </Project>
