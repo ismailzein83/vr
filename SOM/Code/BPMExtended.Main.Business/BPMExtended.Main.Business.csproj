@@ -103,6 +103,7 @@
     <Compile Include="MainProxy.cs" />
     <Compile Include="Request Flow Management\ADSLContractTakeOverFlowManagement.cs" />
     <Compile Include="Request Flow Management\LastMileChangeFlowManagement.cs" />
+    <Compile Include="Request Flow Management\RevokeFlowManagement.cs" />
     <Compile Include="Request Flow Management\SuspensionFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateCustomerCategoryFlowManagement.cs" />
     <Compile Include="Request Flow Management\AdministrativeComplaintFlowManagement.cs" />
@@ -157,8 +158,10 @@
     <Compile Include="Requests\Telephony\NetworkResetPasswordManager.cs" />
     <Compile Include="Requests\Telephony\OtherChargesManager.cs" />
     <Compile Include="Requests\Telephony\PABXManager.cs" />
+    <Compile Include="Requests\Telephony\RevokeManager.cs" />
     <Compile Include="Requests\Telephony\ServiceAdditionManager.cs" />
     <Compile Include="Requests\Telephony\ServiceRemovalManager.cs" />
+    <Compile Include="Requests\Telephony\SuspensionManager.cs" />
     <Compile Include="Requests\Telephony\UpdateContractAddressManager.cs" />
     <Compile Include="Requests\Telephony\TelephonyTechnicalComplaintManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />

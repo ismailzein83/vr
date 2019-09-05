@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.SOMAPI
 {
-   public class SuspensionRequestInput
+    public class RevokeRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
         public PaymentData PaymentData { get; set; }

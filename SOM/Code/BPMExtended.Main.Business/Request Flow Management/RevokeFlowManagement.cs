@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using Terrasoft.Core;
 
 namespace BPMExtended.Main.Business
 {
-    public class SuspensionFlowManagement
+    public class RevokeFlowManagement
     {
-        const string welcomeStep = "1ed175e4-dccc-445a-bf92-3e73d2ef0bff";
-        const string paymentStep = "c2777fc6-6453-468d-92e5-37ca16e81484";
-        const string attachmentstep = "2cfcc41f-89fa-4355-a5f8-cbdee8bd47c1";
-        const string submittedtoom = "373fe039-c668-4376-96a0-44d96f73c372";
-        const string completedStep = "8340ad42-0c1e-4063-ba73-74b3cd917c2f";
+        const string welcomeStep = "d6eeffac-8533-47f7-8a32-32f63223277f";
+        const string paymentStep = "b7129d59-96a0-4e95-ad9e-59ed425d0a4a";
+        const string attachmentstep = "b95e0860-c03a-443a-af09-28d9a1d3d9cd";
+        const string submittedtoom = "a4f00097-11cf-4b54-897d-6fde80bf2e1b";
+        const string completedStep = "5e803dda-f776-4ddd-a971-345d87a99d96";
         public string GetNextStep(string id, string currentStepId)
         {
 
