@@ -820,9 +820,15 @@
     <Content Include="Images\default-tone-ra-iconheader.ico" />
     <Content Include="Images\default-tone-ra-login.png" />
     <Content Include="Images\default-tone-ra-logoonheader.png" />
+    <Content Include="Images\figure-icons\active licenses.png" />
+    <Content Include="Images\figure-icons\active subcribers.png" />
+    <Content Include="Images\figure-icons\data users.png" />
     <Content Include="Images\figure-icons\engineering.png" />
+    <Content Include="Images\figure-icons\expired licenses.png" />
     <Content Include="Images\figure-icons\finance.png" />
     <Content Include="Images\figure-icons\license.png" />
+    <Content Include="Images\figure-icons\postpaid subcribers.png" />
+    <Content Include="Images\figure-icons\prepaid subcribers.png" />
     <Content Include="Images\figure-icons\sms.png" />
     <Content Include="Images\figure-icons\inbound-traffic.png" />
     <Content Include="Images\figure-icons\income.png" />
