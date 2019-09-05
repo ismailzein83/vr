@@ -267,11 +267,21 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public LeasedLineContractDetail GetLeasedLineContract(string contractId)
+        //public LeasedLineContractDetail GetLeasedLineContract(string contractId)
+        //{
+        //    return RatePlanMockDataGenerator.GetLeasedLineContract(contractId);
+        //}
+        public LeasedLineContractEntity GetLeasedLineContract(string contractId)
         {
-            return RatePlanMockDataGenerator.GetLeasedLineContract(contractId);
-        }
 
+            var ContractEntity = new LeasedLineContractEntity();
+            using (SOMClient client = new SOMClient())
+            {
+                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetLeaseLineContract?ContractId={0}", contractId));
+                ContractEntity = CustomerLeasedLineContractToEntity(item);
+            }
+            return ContractEntity;
+        }
         public List<LeasedLineContractDetail> GetLeasedLineContracts(string customerId)
         {
             //return RatePlanMockDataGenerator.GetLeasedLineContracts(customerId);
@@ -761,6 +771,27 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        private LeasedLineContractEntity CustomerLeasedLineContractToEntity(CustomerContract contract)
+        {
+            int stat = 0;
+            int.TryParse(contract.Status.ToString(), out stat);
+
+            var catalogManager = new CatalogManager();
+            string ratePlanName = catalogManager.GetRatePlanNameFromCatalog(contract.RateplanId);
+
+            return new LeasedLineContractEntity
+            {
+                ContractId = contract.Id,
+                ContractAddress = contract.ContractAddress,
+                ContractBalance = contract.CurrentBalance,
+                RatePlanId = contract.RateplanId,
+                RatePlanName = ratePlanName,
+                PathId = contract.LinePathId,
+                ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId,
+                IsBlocked = contract.IsBlocked,
+                StatusChangeDate = contract.LastStatusChangeDate == null || contract.LastStatusChangeDate == DateTime.MinValue ? "" : contract.LastStatusChangeDate.ToString("dd/MM/yyyy hh:mm")
+            };
+        }
         private TelephonyContractDetail CustomerContractToDetail(CustomerContract contract)
         {
             int stat = 0;

@@ -72,6 +72,7 @@
     <Compile Include="Account.cs" />
     <Compile Include="AddressData.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="Contracts\LeasedLineContractEntity.cs" />
     <Compile Include="CreditDebitNotesDetail.cs" />
     <Compile Include="CreditDebitNotes.cs" />
     <Compile Include="BusinessEntity\Year.cs" />
