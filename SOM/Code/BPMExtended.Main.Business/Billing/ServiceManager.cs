@@ -168,7 +168,11 @@ namespace BPMExtended.Main.Business
                 //packagesIds.Add(packages.XDSL);
             }
 
-           var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, packagesIds);
+            if (lob == "Leased Line")
+            {
+                packagesIds.Add(packages.Core);
+            }
+            var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, packagesIds);
             return coreServices;
         }
 

@@ -274,7 +274,19 @@ namespace BPMExtended.Main.Business
 
         public List<LeasedLineContractDetail> GetLeasedLineContracts(string customerId)
         {
-            return RatePlanMockDataGenerator.GetLeasedLineContracts(customerId);
+            //return RatePlanMockDataGenerator.GetLeasedLineContracts(customerId);
+            var leasedLineContractDetails = new List<LeasedLineContractDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                var items = client.Get<List<CustomerContract>>(String.Format("api/SOM.ST/Billing/GetCustomerLeaseLineContracts?customerId={0}", customerId));
+                foreach (var item in items)
+                {
+                    var leasedLineContractDetailItem = LeasedLineContractToDetail(item);
+                    leasedLineContractDetails.Add(leasedLineContractDetailItem);
+                }
+            }
+            return leasedLineContractDetails;
+
         }
         public List<LeasedLineContractDetail> GetLeasedLineContractsByNumber(string phoneNumber)
         {
@@ -762,6 +774,19 @@ namespace BPMExtended.Main.Business
                 ActivationDate = contract.ActivationDate,
                 //ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
                 //ContractStatusId = GetContractStatusByEnumValue(contract.Status.ToString())
+            };
+        }
+
+        private LeasedLineContractDetail LeasedLineContractToDetail(CustomerContract contract)
+        {
+            int stat = 0;
+            int.TryParse(contract.Status.ToString(), out stat);
+
+            return new LeasedLineContractDetail
+            {
+                ContractId = contract.Id,
+                Status = GetContractStatusByEnumValue(contract.Status.ToString()), //Check if API and Our conventions are the same
+                ActivationDate = contract.ActivationDate,
             };
         }
 

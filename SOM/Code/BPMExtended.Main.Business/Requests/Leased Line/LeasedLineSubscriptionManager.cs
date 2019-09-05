@@ -48,6 +48,17 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StFloor");
+
+            
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -59,25 +70,17 @@ namespace BPMExtended.Main.Business
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var city = entities[0].GetColumnValue("StCityName");
+                var floor = entities[0].GetColumnValue("StFloor");
+                var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
+                var street = entities[0].GetColumnValue("StStreet");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var province = entities[0].GetColumnValue("StProvinceName");
+                var town = entities[0].GetColumnValue("StTownName");
 
                 CRMCustomerInfo info = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null);
 
                 if (coreServices != "\"\"") listOfCoreServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
                 if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
-
-                /*  Dictionary<string, string> servicesDiscount = new CatalogManager().GetServicesDiscount();
-
-
-                  depositServices = (from item in listOfOptionalServices
-                                     where item.HasDeposit
-                                     select new DepositDocument() { Id = item.Id }).ToList();
-
-
-                  listOfOptionalServices = (from item in listOfOptionalServices
-                                            where item.HasDiscount
-                                            select new ServiceDetail() { Id = servicesDiscount[item.Id] }).ToList();*/
-
-
 
                 var items = listOfCoreServices.Concat(listOfOptionalServices);
 
@@ -107,18 +110,26 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new LeasedLineContractOnHoldInput
                     {
-                        LinePathId = linePathId,//"11112222",
+                        LinePathId = linePathId,
+                        SubType = "LeaseLine",
                         ServiceResource = serviceResourceId,
                         City = city.ToString(),
-                        CSO = info.csoId,
-                        RatePlanId = ratePlanId,
-                        DepositServices = depositServices,
+                        Building = buildingNumber.ToString(),
+                        Floor = floor.ToString(),
+                        Town = town.ToString(),
+                        StateProvince = province.ToString(),
+                        Street = street.ToString(),
+                        Region = area.ToString(),
+                        CountryId = "206",
+                        CSO = info.csoBSCSId,//info.csoId,
+                        RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
+                        DepositServices = depositServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),
                             RequestId = requestId.ToString(),
-                            CustomerId = info.CustomerId
+                            CustomerId = info.CustomerId //"CusId00026"
                         }
                     }
 
@@ -139,18 +150,13 @@ namespace BPMExtended.Main.Business
 
         public void PostLeasedLineRequestToOM(Guid requestId)
         {
-            //Get Data from StLeasedLine table
+            //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLine");
-            esq.AddColumn("StContractId");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StContractID");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -159,35 +165,31 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var contractId = entities[0].GetColumnValue("StContractID");
 
-                SOMRequestInput<LeasedLineRequestInput> somRequestInput = new SOMRequestInput<LeasedLineRequestInput>
+                SOMRequestInput<ActivateTelephonyContractInput> somRequestInput = new SOMRequestInput<ActivateTelephonyContractInput>
                 {
 
-                    InputArguments = new LeasedLineRequestInput
+                    InputArguments = new ActivateTelephonyContractInput
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            // AccountId = null,
-                            RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString()
                         }
                     }
 
                 };
 
+
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LeasedLineRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_CreateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
 
             }
 
