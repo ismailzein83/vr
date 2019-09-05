@@ -5,5 +5,13 @@
         </vr-textbox>
     </vr-columns>
     <vr-common-timeunit-selector on-ready="scopeModel.onTimeUnitReady" customlabel="" isrequired="true" hideremoveicon="true" normal-col-num="3"></vr-common-timeunit-selector>
-    <vr-common-startingfrom-selector on-ready="scopeModel.onStartingfromReady" isrequired="true" hideremoveicon="true" normal-col-num="3"></vr-common-startingfrom-selector>
+    <vr-common-startingfrom-selector on-ready="scopeModel.onStartingfromReady" selectedvalues="scopeModel.selectedStartingFrom"
+                                     isrequired="true" hideremoveicon="true" normal-col-num="3">
+    </vr-common-startingfrom-selector>
+</vr-row>
+<vr-row ng-if="scopeModel.selectedStartingFrom.value == scopeModel.executionTimeWithOffsetValue">
+    <vr-columns width="1/4row">
+        <vr-textbox value="scopeModel.offsetValue" type="number" decimalprecision="0" minvalue="0" label="Offset" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-common-timeunit-selector on-ready="scopeModel.onOffsetTimeUnitReady" customlabel="" isrequired="true" hideremoveicon="true" normal-col-num="3"></vr-common-timeunit-selector>
 </vr-row>

@@ -5,13 +5,15 @@
     TimePeriodDirective.$inject = ['VRCommon_VRTimePeriodAPIService', 'UtilsService', 'VRUIUtilsService'];
 
     function TimePeriodDirective(VRCommon_VRTimePeriodAPIService, UtilsService, VRUIUtilsService) {
+
         return {
             restrict: "E",
             scope: {
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -57,7 +59,7 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-
+                    
                     var promises = [];
                     var timePeriod;
 
@@ -113,7 +115,7 @@
                     }
                     return data;
                 };
-
+                
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
@@ -122,27 +124,34 @@
 
         function getTamplate(attrs) {
 
+            var isrequired = '';
+            var hideremoveicon = '';
+            if (attrs.isrequired != undefined && attrs.isrequired != 'false') {
+                isrequired = ' isrequired="true" ';
+                hideremoveicon = ' hideremoveicon ';
+            }
+
             var template =
-                  ' <vr-row>'
-                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
-                        + ' <vr-select on-ready="scopeModel.onSelectorReady"'
-                            + ' datasource="scopeModel.templateConfigs"'
-                            + ' selectedvalues="scopeModel.selectedTemplateConfig"'
-                            + ' datavaluefield="ExtensionConfigurationId"'
-                            + ' datatextfield="Title"'
-                            + ' isrequired="true"'
-                            + ' label="Time Period"'
-                            + ' hideremoveicon>'
-                        + '</vr-select>'
-                    + ' </vr-columns>'
+                ' <vr-row>'
+                + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
+                + ' <vr-select on-ready="scopeModel.onSelectorReady"'
+                + ' datasource="scopeModel.templateConfigs"'
+                + ' selectedvalues="scopeModel.selectedTemplateConfig"'
+                + ' datavaluefield="ExtensionConfigurationId"'
+                + ' datatextfield="Title"'
+                + isrequired
+                + hideremoveicon
+                + ' label="Time Period">'
+                + '</vr-select>'
+                + ' </vr-columns>'
                 + ' </vr-row>'
-                    + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"'
-                            + ' on-ready="scopeModel.onDirectiveReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
-                    + ' </vr-directivewrapper>';
+                + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"'
+                + ' on-ready="scopeModel.onDirectiveReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
+                + ' </vr-directivewrapper>';
+
             return template;
         }
     }
 
     app.directive('vrCommonTimeperiod', TimePeriodDirective);
-
 })(app);

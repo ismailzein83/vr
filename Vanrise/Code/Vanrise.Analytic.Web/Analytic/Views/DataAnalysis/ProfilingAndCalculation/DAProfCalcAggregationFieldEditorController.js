@@ -20,6 +20,8 @@
         var recordFilterDirectiveAPI;
         var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var timePeriodDirectiveAPI;
+        var timePeriodDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -51,6 +53,10 @@
                 recordFilterDirectiveAPI = api;
                 recordFilterDirectiveReadyDeferred.resolve();
             };
+            $scope.scopeModel.onTimePeriodDirectiveReady = function (api) {
+                timePeriodDirectiveAPI = api;
+                timePeriodDirectiveReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -68,21 +74,21 @@
             loadAllControls();
         }
 
-
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRecordAggregateSelective, loadTimeRangeFilterSelective, loadRecordFilterDirective]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRecordAggregateSelective, loadTimeRangeFilterSelective,
+                loadRecordFilterDirective, loadTimePeriodDirective]).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
 
             function setTitle() {
                 $scope.title = (isEditMode) ?
                     UtilsService.buildTitleForUpdateEditor((aggregationFieldEntity != undefined) ? aggregationFieldEntity.FieldName : null, 'Profiling and Calculation Aggregation Field') :
                     UtilsService.buildTitleForAddEditor('Profiling and Calculation Aggregation Field');
             }
-            function loadStaticData(){
-                if(aggregationFieldEntity == undefined) return;
+            function loadStaticData() {
+                if (aggregationFieldEntity == undefined) return;
 
                 $scope.scopeModel.fieldName = aggregationFieldEntity.FieldName;
                 $scope.scopeModel.fieldTitle = aggregationFieldEntity.FieldTitle;
@@ -131,7 +137,20 @@
 
                 return recordFilterDirectiveLoadDeferred.promise;
             }
+            function loadTimePeriodDirective() {
+                var timePeriodDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
+                timePeriodDirectiveReadyDeferred.promise.then(function () {
+
+                    var timePeriodDirectivePayload = {};
+                    if (aggregationFieldEntity != undefined && aggregationFieldEntity.TimePeriod != undefined) {
+                        timePeriodDirectivePayload.timePeriod = aggregationFieldEntity.TimePeriod;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(timePeriodDirectiveAPI, timePeriodDirectivePayload, timePeriodDirectiveLoadDeferred);
+                });
+
+                return timePeriodDirectiveLoadDeferred.promise;
+            }
         }
 
         function insert() {
@@ -150,8 +169,8 @@
             }
             $scope.modalContext.closeModal();
         }
-        
-        function builContext(){
+
+        function builContext() {
             return context;
         }
         function buildAggregationFieldObjectFromScope() {
@@ -160,6 +179,7 @@
                 FieldName: $scope.scopeModel.fieldName,
                 FieldTitle: $scope.scopeModel.fieldTitle,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
+                TimePeriod: timePeriodDirectiveAPI.getData(),
                 TimeRangeFilter: timeRangeFilterSelectiveAPI.getData(),
                 RecordAggregate: recordAggregateSelectiveAPI.getData()
             };
@@ -167,5 +187,4 @@
     }
 
     appControllers.controller('VR_Analytic_DAProfCalcAggregationFieldController', DAProfCalcAggregationFieldController);
-
 })(appControllers);
