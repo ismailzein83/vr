@@ -81,7 +81,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<SuspensionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitContractSuspension/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<SuspensionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitContractSuspensionFromCustomerCare/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -135,7 +135,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<SuspensionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeContractSuspension", somRequestInput);
+                    output = client.Post<SOMRequestInput<SuspensionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeContractSuspensionFromCustomerCare/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

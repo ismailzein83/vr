@@ -32,12 +32,11 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSuspension");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRevoke");
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-            esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StLinePathId");
 
 
@@ -51,7 +50,6 @@ namespace BPMExtended.Main.Business
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-                var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var linePathId = entities[0].GetColumnValue("StLinePathId");
 
 
@@ -71,7 +69,6 @@ namespace BPMExtended.Main.Business
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
-                        PhoneNumber = phoneNumber.ToString(),
                         LinePathId = linePathId.ToString()
                     }
 
@@ -95,7 +92,7 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSuspension");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRevoke");
             esq.AddColumn("StContractID");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
