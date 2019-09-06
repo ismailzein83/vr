@@ -21,8 +21,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
             codeBuilder.AppendLine("genericBusinessEntity.FieldValues.ThrowIfNull(\"genericBusinessEntity.FieldValues\");");
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var dataRecordTypeId = new GenericBusinessEntityDefinitionManager().GetGenericBEDataRecordTypeId(context.EntityDefinitionId);
-            var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(dataRecordTypeId);
-            var stringTypeOfdataRecordType  = CSharpCompiler.TypeToString(dataRecordRuntimeType);
+            var stringTypeOfdataRecordType  = dataRecordTypeManager.GetDataRecordRuntimeTypeAsString(dataRecordTypeId);
 
 
             codeBuilder.AppendLine($@"Dictionary<string, dynamic> fieldValues = new Dictionary<string, dynamic>();");

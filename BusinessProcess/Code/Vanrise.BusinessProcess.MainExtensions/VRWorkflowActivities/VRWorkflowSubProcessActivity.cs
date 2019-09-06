@@ -133,7 +133,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             {
                 foreach (var argument in vrWorkflow.Settings.Arguments)
                 {
-                    String argumentRuntimeType = CSharpCompiler.TypeToString(argument.Type.GetRuntimeType(null));
+                    String argumentRuntimeType = argument.Type.GetRuntimeTypeAsString(null);
                     VRWorkflowExpression inArgumentValue = this.InArguments != null ? this.InArguments.GetRecord(argument.Name) : null;
                     VRWorkflowExpression outArgumentValue = this.OutArguments != null ? this.OutArguments.GetRecord(argument.Name) : null;
 
@@ -186,6 +186,12 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             System.Activities.Activity activity = new Vanrise.BusinessProcess.Business.VRWorkflowManager().GetVRWorkflowActivity(VRWorkflowId);
             string activityType = CSharpCompiler.TypeToString(activity.GetType());
+
+            //var subProcessVRWorkflow = new Vanrise.BusinessProcess.Business.VRWorkflowManager().GetVRWorkflow(VRWorkflowId);
+            //subProcessVRWorkflow.ThrowIfNull("subProcessVRWorkflow", VRWorkflowId);
+
+            //string subProcessVRWorkflowClassName = subProcessVRWorkflow.Name.Replace(" ", "_").Replace("-", "_").Replace("(", "_").Replace(")", "_");
+            //string activityType = $"Vanrise.DynWorkflows.{subProcessVRWorkflowClassName}";
 
             StringBuilder codeBuilder = new StringBuilder(@"new Sequence
                                     {

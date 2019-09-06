@@ -121,7 +121,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     }
                 }");
 
-            String iterationVariableRuntimeType = CSharpCompiler.TypeToString(this.IterationVariableType.GetRuntimeType(null));
+            String iterationVariableRuntimeType = this.IterationVariableType.GetRuntimeTypeAsString(null);
 
             string nmSpaceName = context.GenerateUniqueNamespace("ForEach");
             string baseExecutionClassName = "ForEachBaseExecutionContext";

@@ -89,7 +89,7 @@ namespace Vanrise.BusinessProcess.Business
                     {
                         case VRWorkflowArgumentDirection.In:
                         case VRWorkflowArgumentDirection.InOut:
-                            string fieldRuntimeTypeAsString = CSharpCompiler.TypeToString(argument.Type.GetRuntimeType(null));
+                            string fieldRuntimeTypeAsString = argument.Type.GetRuntimeTypeAsString(null);
 
                             sb_InputArgumentClassPropertiesBuilder.Append(GetProperty(fieldRuntimeTypeAsString, argument.Name));
                             sb_InputArgumentClassPropertiesBuilder.AppendLine();

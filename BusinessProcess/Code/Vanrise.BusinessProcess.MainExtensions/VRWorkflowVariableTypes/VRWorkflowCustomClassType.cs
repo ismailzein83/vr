@@ -1,5 +1,6 @@
 ﻿using System;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
@@ -10,7 +11,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes
         public override Guid ConfigId { get { return new Guid("A6078B0f-EFa2-414F-8a25-549628DA1762"); } }
         public VRCustomClassType FieldType { get; set; }
 
-        public override Type GetRuntimeType(IVRWorkflowVariableTypeGetRuntimeTypeContext context)
+        private Type GetRuntimeType(IVRWorkflowVariableTypeGetRuntimeTypeContext context)
         {
             if (string.IsNullOrEmpty(this.FieldType.Namespace))
                 throw new NullReferenceException("FieldType.Namespace");
@@ -39,6 +40,26 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes
             }
 
             return outputType;
+        }
+
+        public override string GetRuntimeTypeAsString(IVRWorkflowVariableTypeGetRuntimeTypeAsStringContext context)
+        {
+            return CSharpCompiler.TypeToString(GetRuntimeType(null));
+            //if (string.IsNullOrEmpty(this.FieldType.AssemblyName) &&
+            //    new VRNamespaceManager().GetVRNamespaceByName(this.FieldType.Namespace) != null)
+            //    return $"{this.FieldType.Namespace}.{this.FieldType.ClassName}";
+            //else
+            //    return CSharpCompiler.TypeToString(GetRuntimeType(null));
+        }
+
+        public override bool IsValueType()
+        {
+            if (string.IsNullOrEmpty(this.FieldType.AssemblyName) 
+                && 
+                new VRNamespaceManager().GetVRNamespaceByName(this.FieldType.Namespace) != null)
+                return false;
+            else
+                return GetRuntimeType(null).IsValueType;
         }
 
         public override string GetRuntimeTypeDescription()

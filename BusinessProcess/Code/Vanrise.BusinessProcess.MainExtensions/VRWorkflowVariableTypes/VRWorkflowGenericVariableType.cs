@@ -13,14 +13,19 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes
 
         public Vanrise.GenericData.Entities.DataRecordFieldType FieldType { get; set; }
 
-        public override Type GetRuntimeType(IVRWorkflowVariableTypeGetRuntimeTypeContext context)
+        public override string GetRuntimeTypeAsString(IVRWorkflowVariableTypeGetRuntimeTypeAsStringContext context)
         {
-            return this.FieldType.GetRuntimeType();
+            return this.FieldType.GetRuntimeTypeAsString();
         }
 
         public override string GetRuntimeTypeDescription()
         {
             return FieldType.GetRuntimeTypeDescription();
+        }
+
+        public override bool IsValueType()
+        {
+            return this.FieldType.IsValueType();
         }
         public override GenericData.Entities.DataRecordFieldType GetFieldType()
         {

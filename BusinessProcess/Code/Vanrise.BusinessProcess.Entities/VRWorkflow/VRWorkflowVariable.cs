@@ -31,8 +31,7 @@ namespace Vanrise.BusinessProcess.Entities
                     isFirstVariable = false;
                 vrVariable.Name.ThrowIfNull("vrVariable.Name");
                 vrVariable.Type.ThrowIfNull("vrVariable.Type", vrVariable.Name);
-                Type variableRuntimeType = vrVariable.Type.GetRuntimeType(null);
-                codeBuilder.AppendFormat(@" new Variable<{0}>(""{1}"")", CSharpCompiler.TypeToString(variableRuntimeType), vrVariable.Name);
+                codeBuilder.AppendFormat(@" new Variable<{0}>(""{1}"")", vrVariable.Type.GetRuntimeTypeAsString(null), vrVariable.Name);
                 codeBuilder.AppendLine();
             }
             codeBuilder.AppendLine();

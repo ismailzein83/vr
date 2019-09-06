@@ -249,11 +249,11 @@ namespace Vanrise.BusinessProcess.Business
 
         public VRWorkflowCompilationOutput TryCompileWorkflow(VRWorkflow workflow)
         {
-            System.Activities.Activity activity;
+            Type activityType;
             Dictionary<Guid, List<string>> activitiesErrors;
             List<string> classMembersErrors;
 
-            bool compilationResult = TryCompileWorkflow(workflow, out activity, out activitiesErrors, out classMembersErrors);
+            bool compilationResult = TryCompileWorkflow(workflow, out activityType, out activitiesErrors, out classMembersErrors);
 
             if (compilationResult)
             {
@@ -302,18 +302,32 @@ namespace Vanrise.BusinessProcess.Business
         public System.Activities.Activity GetVRWorkflowActivity(Guid vrWorkflowId)
         {
             var cacheName = new GetVRWorkflowActivityCacheName { VRWorkflowId = vrWorkflowId };
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+            var activityType = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
               () =>
               {
                   var vrWorkflow = GetVRWorkflow(vrWorkflowId);
                   if (vrWorkflow == null)
                       throw new NullReferenceException(String.Format("vrWorkflow '{0}'", vrWorkflowId));
-                  Activity workflowActivity;
+
+                  //if(vrWorkflow.DevProjectId.HasValue)
+                  //{
+                  //    var devProjectManager = new VRDevProjectManager();
+                  //    System.Reflection.Assembly devProjectAssembly;
+                  //    if (devProjectManager.TryGetDevProjectAssembly(vrWorkflow.DevProjectId.Value, vrWorkflow.LastModifiedTime, out devProjectAssembly))
+                  //    {
+                  //        string workflowFullName = $"Vanrise.DynWorkflows.{GetWorkflowClassName(vrWorkflow)}";
+                  //        return devProjectAssembly.GetType(workflowFullName);
+                  //    }
+                  //}
+
+                  Type activityType_Local;
                   Dictionary<Guid, List<string>> activitiesErrors;
                   List<string> classMembersErrors;
 
-                  if (TryCompileWorkflow(vrWorkflow, out workflowActivity, out activitiesErrors, out classMembersErrors))
-                      return workflowActivity;
+                  if (TryCompileWorkflow(vrWorkflow, out activityType_Local, out activitiesErrors, out classMembersErrors))
+                  {
+                      return activityType_Local;
+                  }
                   else
                   {
                       StringBuilder errorsBuilder = new StringBuilder();
@@ -332,6 +346,8 @@ namespace Vanrise.BusinessProcess.Business
                           vrWorkflowId, errorsBuilder));
                   }
               });
+            activityType.ThrowIfNull("activityType", vrWorkflowId);
+            return Activator.CreateInstance(activityType).CastWithValidate<System.Activities.Activity>("activity", vrWorkflowId);
         }
 
         private struct GetVRWorkflowActivityCacheName
@@ -340,7 +356,7 @@ namespace Vanrise.BusinessProcess.Business
         }
 
 
-        public bool TryCompileWorkflow(VRWorkflow workflow, out System.Activities.Activity activity, out Dictionary<Guid, List<string>> activitiesErrors, out List<string> classMembersErrors)
+        public bool TryCompileWorkflow(VRWorkflow workflow, out Type activityType, out Dictionary<Guid, List<string>> activitiesErrors, out List<string> classMembersErrors)
         {
             StringBuilder codeBuilder = new StringBuilder(@" 
                 using System;
@@ -380,7 +396,7 @@ namespace Vanrise.BusinessProcess.Business
             var generateCodeContext = new VRWorkflowActivityGenerateWFActivityCodeContext(workflow.Settings.Arguments, GenerateInsertVisualEventCode);
             generateCodeContext.VRWorkflowActivityId = workflow.Settings.RootActivity.VRWorkflowActivityId;
             string rootActivityCode = workflow.Settings.RootActivity.Settings.GenerateWFActivityCode(generateCodeContext);
-            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.BusinessProcess.Business.VRWorkflowManager");
+            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.BusinessProcess.DynWorkflows");
 
             codeBuilder.Replace("#ROOTACTIVITY#", rootActivityCode);
             codeBuilder.Replace("#ClassMembersRegion#", ClassMemberRegionText);
@@ -400,7 +416,7 @@ namespace Vanrise.BusinessProcess.Business
                 StringBuilder argumentsCodeBuilder = new StringBuilder();
                 foreach (var argument in workflow.Settings.Arguments)
                 {
-                    string argumentRuntimeType = CSharpCompiler.TypeToString(argument.Type.GetRuntimeType(null));
+                    string argumentRuntimeType = argument.Type.GetRuntimeTypeAsString(null);
                     argumentsCodeBuilder.AppendLine(string.Concat("public ", argument.Direction.ToString(), "Argument<", argumentRuntimeType, "> ", argument.Name, " { get; set; }"));
                 }
                 codeBuilder.Replace("#ARGUMENTS#", argumentsCodeBuilder.ToString());
@@ -446,8 +462,7 @@ namespace Vanrise.BusinessProcess.Business
             List<string> errorMessages;
             if (CSharpCompiler.TryCompileClass(className, codeBuilder.ToString(), out compilationOutput))
             {
-                Type activityType = compilationOutput.OutputAssembly.GetType(fullTypeName);
-                activity = Activator.CreateInstance(activityType).CastWithValidate<System.Activities.Activity>("activity", workflow.VRWorkflowId);
+                activityType = compilationOutput.OutputAssembly.GetType(fullTypeName);                
                 errorMessages = null;
                 activitiesErrors = null;
                 classMembersErrors = null;
@@ -455,13 +470,125 @@ namespace Vanrise.BusinessProcess.Business
             }
             else
             {
-                activity = null;
+                activityType = null;
                 errorMessages = compilationOutput.ErrorMessages;
                 var errors = compilationOutput.Errors;
                 activitiesErrors = SplitErrorsByActivities(codeBuilder, errors, out classMembersErrors);
                 return false;
             }
         }
+
+        //public string BuildWorkflowClassDefinition(VRWorkflow workflow, string classNamespace, string className, bool addUsingStatementsToCode, out List<string> usingStatements)
+        //{
+        //    usingStatements = new List<string>();
+        //    usingStatements.Add("using System;");
+        //    usingStatements.Add("using System.Collections.Generic;");
+        //    usingStatements.Add("using System.Linq;");
+        //    usingStatements.Add("using Vanrise.Common;");
+        //    usingStatements.Add("using Vanrise.BusinessProcess;");
+        //    usingStatements.Add("using System.Activities;");
+        //    usingStatements.Add("using System.Activities.Statements;");
+        //    usingStatements.Add("using Microsoft.CSharp.Activities;");
+
+        //    StringBuilder codeBuilder = new StringBuilder(@" 
+        //        #USINGSTATEMENTS#                                        
+
+        //        #OTHERNAMESPACES#
+
+        //        namespace #NAMESPACE#
+        //        {
+        //            #region #ClassMembersRegion#
+        //            #ClassMembers#
+        //            #endregion
+
+        //            public class #CLASSNAME# : Activity
+        //            {
+        //                #ARGUMENTS#
+
+        //                public #CLASSNAME#()
+        //                {
+        //                    this.Implementation = () => #ROOTACTIVITY#;
+        //                }
+        //            }
+        //        }");
+
+        //    workflow.ThrowIfNull("workflow");
+        //    workflow.Settings.ThrowIfNull("workflow.Settings", workflow.VRWorkflowId);
+        //    workflow.Settings.RootActivity.ThrowIfNull("workflow.Settings.RootActivity", workflow.VRWorkflowId);
+        //    workflow.Settings.RootActivity.Settings.ThrowIfNull("workflow.Settings.RootActivity.Settings", workflow.VRWorkflowId);
+
+        //    var generateCodeContext = new VRWorkflowActivityGenerateWFActivityCodeContext(workflow.Settings.Arguments, GenerateInsertVisualEventCode);
+        //    generateCodeContext.VRWorkflowActivityId = workflow.Settings.RootActivity.VRWorkflowActivityId;
+        //    string rootActivityCode = workflow.Settings.RootActivity.Settings.GenerateWFActivityCode(generateCodeContext);
+        //    //string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.BusinessProcess.Business.VRWorkflowManager");
+
+        //    codeBuilder.Replace("#ROOTACTIVITY#", rootActivityCode);
+        //    codeBuilder.Replace("#ClassMembersRegion#", ClassMemberRegionText);
+
+        //    if (workflow.Settings.ClassMembers != null)
+        //    {
+        //        codeBuilder.Replace("#ClassMembers#", workflow.Settings.ClassMembers.ClassMembersCode);
+        //        generateCodeContext.AdditionalUsingStatements.Add(string.Format(@"#region {0}
+        //        using {1};
+        //        #endregion", ClassMemberRegionText, classNamespace));
+        //    }
+        //    else
+        //        codeBuilder.Replace("#ClassMembers#", "");
+
+        //    if (workflow.Settings.Arguments != null)
+        //    {
+        //        StringBuilder argumentsCodeBuilder = new StringBuilder();
+        //        foreach (var argument in workflow.Settings.Arguments)
+        //        {
+        //            string argumentRuntimeType = argument.Type.GetRuntimeTypeAsString(null);
+        //            argumentsCodeBuilder.AppendLine(string.Concat("public ", argument.Direction.ToString(), "Argument<", argumentRuntimeType, "> ", argument.Name, " { get; set; }"));
+        //        }
+        //        codeBuilder.Replace("#ARGUMENTS#", argumentsCodeBuilder.ToString());
+        //    }
+        //    else
+        //    {
+        //        codeBuilder.Replace("#ARGUMENTS#", "");
+        //    }
+
+        //    if (generateCodeContext.AdditionalUsingStatements != null)
+        //    {
+        //        //var additionalUsingStatementsCodeBuilder = new StringBuilder();
+        //        foreach (var otherNameSpaceCode in generateCodeContext.AdditionalUsingStatements)
+        //        {
+        //            // additionalUsingStatementsCodeBuilder.AppendLine(otherNameSpaceCode);
+        //            usingStatements.Add(otherNameSpaceCode);
+        //        }
+        //        //codeBuilder.Replace("#ADDITIONALUSINGSTATEMENTS#", additionalUsingStatementsCodeBuilder.ToString());
+        //    }
+        //    else
+        //    {
+        //        //codeBuilder.Replace("#ADDITIONALUSINGSTATEMENTS#", "");
+        //    }
+
+        //    if (addUsingStatementsToCode)
+        //        codeBuilder.Replace("#USINGSTATEMENTS#", string.Join("\n", usingStatements));
+        //    else
+        //        codeBuilder.Replace("#USINGSTATEMENTS#", "");
+
+        //    if (generateCodeContext.OtherNameSpaceCodes != null)
+        //    {
+        //        var otherNameSpacesCodeBuilder = new StringBuilder();
+        //        foreach (var otherNameSpaceCode in generateCodeContext.OtherNameSpaceCodes)
+        //        {
+        //            otherNameSpacesCodeBuilder.AppendLine(otherNameSpaceCode);
+        //        }
+        //        codeBuilder.Replace("#OTHERNAMESPACES#", otherNameSpacesCodeBuilder.ToString());
+        //    }
+        //    else
+        //    {
+        //        codeBuilder.Replace("#OTHERNAMESPACES#", "");
+        //    }
+
+        //    codeBuilder.Replace("#NAMESPACE#", classNamespace);
+        //    codeBuilder.Replace("#CLASSNAME#", className);
+
+        //    return codeBuilder.ToString();
+        //}
 
         string GenerateInsertVisualEventCode(GenerateInsertVisualEventCodeInput input)
         {
@@ -558,7 +685,7 @@ namespace Vanrise.BusinessProcess.Business
 
         #region Private Methods
 
-        private Dictionary<Guid, VRWorkflow> GetCachedVRWorkflows()
+        public Dictionary<Guid, VRWorkflow> GetCachedVRWorkflows()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRWorkflows",
                () =>
@@ -864,6 +991,11 @@ namespace Vanrise.BusinessProcess.Business
             public BPVisualItemDefinition VisualItemDefinition { get; set; }
         }
 
+        internal static string GetWorkflowClassName(VRWorkflow vrWorkflow)
+        {
+            return vrWorkflow.Name.Replace(" ", "_").Replace("-", "_").Replace("(", "_").Replace(")", "_");
+        }
+
         #endregion
 
         #region Mappers
@@ -917,4 +1049,31 @@ namespace Vanrise.BusinessProcess.Business
         public string Name { get; set; }
         public GenericData.Entities.DataRecordFieldType Type { get; set; }
     }
+
+    //public class VRWorkflowVRDevProjectCodeGenerator : VRDevProjectCodeGenerator
+    //{
+    //    public override void GenerateCode(IVRDevProjectCodeGeneratorGenerateCodeContext context)
+    //    {
+    //        var workflowManager = new VRWorkflowManager();            
+
+    //        foreach (var vrWorkflow in workflowManager.GetCachedVRWorkflows().Values)
+    //        {
+    //            if (vrWorkflow.DevProjectId == context.DevProjectId)
+    //            {
+    //                string className = VRWorkflowManager.GetWorkflowClassName(vrWorkflow);
+    //                //List<string> usingStatements;
+    //                //string classDefinition = workflowManager.BuildWorkflowClassDefinition(vrWorkflow, "Vanrise.DynWorkflows", className, false, out usingStatements);
+    //                //context.AddCode(classDefinition);
+    //                //foreach(var usingStatement in usingStatements)
+    //                //{
+    //                //    context.AddUsing(usingStatement);
+    //                //}
+
+    //                List<string> usingStatements;
+    //                string classDefinition = workflowManager.BuildWorkflowClassDefinition(vrWorkflow, "Vanrise.DynWorkflows", className, true, out usingStatements);
+    //                context.AddCodeFile(vrWorkflow.Name, classDefinition);
+    //            }
+    //        }
+    //    }
+    //}
 }

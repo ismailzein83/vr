@@ -158,10 +158,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         private static void ReplaceVariablePlaceHolders(StringBuilder variablePropertyCodeBuilder, string variableName, VRWorkflowVariableType variableType)
         {
             variablePropertyCodeBuilder.Replace("#VARIABLENAME#", variableName);
-            Type wfVariableRuntimeType = variableType.GetRuntimeType(null);
-            string wfVariableRuntimeTypeAsString = CSharpCompiler.TypeToString(wfVariableRuntimeType);
+            string wfVariableRuntimeTypeAsString = variableType.GetRuntimeTypeAsString(null);
             variablePropertyCodeBuilder.Replace("#VARIABLETYPE#", wfVariableRuntimeTypeAsString);
-            if (wfVariableRuntimeType.IsValueType)
+            if (variableType.IsValueType())
             {
                 variablePropertyCodeBuilder.Replace("#VARIABLEVALUETYPECAST#", string.Concat("(", wfVariableRuntimeTypeAsString, ")"));
                 variablePropertyCodeBuilder.Replace("#VARIABLEREFERENCETYPECAST#", "");

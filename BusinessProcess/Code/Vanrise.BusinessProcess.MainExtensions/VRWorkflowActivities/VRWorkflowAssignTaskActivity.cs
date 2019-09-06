@@ -243,10 +243,10 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             BPGenericTaskTypeSettings genericTaskTypeSettings = taskType.Settings.CastWithValidate<BPGenericTaskTypeSettings>("taskType.Settings", this.TaskTypeId);
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            Type dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(genericTaskTypeSettings.RecordTypeId);
-            dataRecordRuntimeType.ThrowIfNull("dataRecordRuntimeType", genericTaskTypeSettings.RecordTypeId);
+            string dataRecordRuntimeTypeAsString = dataRecordTypeManager.GetDataRecordRuntimeTypeAsString(genericTaskTypeSettings.RecordTypeId);
+            dataRecordRuntimeTypeAsString.ThrowIfNull("dataRecordRuntimeTypeAsString", genericTaskTypeSettings.RecordTypeId);
 
-            nmSpaceCodeBuilder.Replace("#TASKDATARECORDTYPERUNTIMETYPE#", CSharpCompiler.TypeToString(dataRecordRuntimeType));
+            nmSpaceCodeBuilder.Replace("#TASKDATARECORDTYPERUNTIMETYPE#", dataRecordRuntimeTypeAsString);
             nmSpaceCodeBuilder.Replace("#TASKTITLE#", this.DisplayName);
 
 

@@ -10,7 +10,9 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract Type GetRuntimeType(IVRWorkflowVariableTypeGetRuntimeTypeContext context);
+        public abstract string GetRuntimeTypeAsString(IVRWorkflowVariableTypeGetRuntimeTypeAsStringContext context);
+
+        public abstract bool IsValueType();
 
         public abstract string GetRuntimeTypeDescription();
         public virtual GenericData.Entities.DataRecordFieldType GetFieldType()
@@ -20,6 +22,11 @@ namespace Vanrise.BusinessProcess.Entities
     }
 
     public interface IVRWorkflowVariableTypeGetRuntimeTypeContext
+    {
+
+    }
+
+    public interface IVRWorkflowVariableTypeGetRuntimeTypeAsStringContext
     {
 
     }

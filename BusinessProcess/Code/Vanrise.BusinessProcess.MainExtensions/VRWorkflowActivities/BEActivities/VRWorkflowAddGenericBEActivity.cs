@@ -51,7 +51,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
                 codeBuilder.AppendLine(@"if(insertOutput.Result == Vanrise.Entities.InsertOperationResult.Succeeded)
                                          {");
 
-                codeBuilder.AppendLine($@"{this.EntityID.GetCode(null)} = ({CSharpCompiler.TypeToString(idField.Type.GetRuntimeType())})insertOutput.InsertedObject.FieldValues[""{idField.Name}""].Value;");
+                codeBuilder.AppendLine($@"{this.EntityID.GetCode(null)} = ({idField.Type.GetRuntimeTypeAsString()})insertOutput.InsertedObject.FieldValues[""{idField.Name}""].Value;");
 
                 codeBuilder.AppendLine(@"}");
             }
