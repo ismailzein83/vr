@@ -73,6 +73,7 @@
     <Folder Include="ICX_Data\Tables\" />
     <Folder Include="ICX_Data\Stored Procedures\" />
     <Folder Include="ICX_Data\User Defined Types\" />
+    <Folder Include="ICX_CDR\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ICX_CDR\Tables\BillingCDR_Main.sql" />
@@ -99,5 +100,7 @@
     <Build Include="ICX_CDR\Tables\BillingCDR_Interconnect.sql" />
     <Build Include="ICX_CDR\User Defined Types\InterconnectCDRType.sql" />
     <Build Include="ICX_CDR\User Defined Types\BillingCDR_InterconnectType.sql" />
+    <Build Include="ICX_CDR\Views\vw_ICXCDRProblems.sql" />
+    <Build Include="ICX_CDR\Views\vw_ICXCDRInvalidAndRaw.sql" />
   </ItemGroup>
 </Project>
