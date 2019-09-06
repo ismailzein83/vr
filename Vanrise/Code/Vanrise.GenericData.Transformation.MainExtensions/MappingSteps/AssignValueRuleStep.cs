@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             if (mappingRuleSettingsDefinition == null)
                 throw new NullReferenceException("mappingSettings");
 
-            Type ruleValueRuntimeType = mappingRuleSettingsDefinition.FieldType.GetNonNullableRuntimeType();
+            string ruleValueRuntimeTypeAsString = mappingRuleSettingsDefinition.FieldType.GetNonNullableRuntimeTypeAsString();
 
             string ruleTargetVariableName;
             base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
@@ -38,7 +38,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = ({1})Convert.ChangeType({2}.Settings.Value, typeof({1}));",
-                this.Target, CSharpCompiler.TypeToString(ruleValueRuntimeType), ruleVariableName);
+                this.Target, ruleValueRuntimeTypeAsString, ruleVariableName);
             if (!string.IsNullOrEmpty(this.RuleId))
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RuleId;", this.RuleId, ruleVariableName);
 

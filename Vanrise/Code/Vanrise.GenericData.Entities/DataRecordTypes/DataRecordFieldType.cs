@@ -34,6 +34,21 @@ namespace Vanrise.GenericData.Entities
 
         public abstract Type GetNonNullableRuntimeType();
 
+        public virtual string GetRuntimeTypeAsString()
+        {
+            return CSharpCompiler.TypeToString(GetRuntimeType());
+        }
+
+        public virtual string GetNonNullableRuntimeTypeAsString()
+        {
+            return CSharpCompiler.TypeToString(GetNonNullableRuntimeType());
+        }
+
+        public virtual bool IsValueType()
+        {
+            return GetRuntimeType().IsValueType;
+        }
+
         public abstract string GetRuntimeTypeDescription();
 
         public virtual bool AreEqual(Object newValue, Object oldValue)

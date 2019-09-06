@@ -129,9 +129,9 @@ namespace Vanrise.GenericData.RDBDataStorage
                     classDefinitionBuilder.Replace("#SetRDBBulkInsertColumnsFromRecordImplementation#", setRDBBulkInsertColumnsValuesBuilder.ToString());
                     classDefinitionBuilder.Replace("#SetRDBInsertColumnsToTempTableFromRecordImplementation#", setRDBInsertColumnsToTempTableFromRecordBuilder.ToString());
 
-                    Type dataRecordRuntimeType = recordTypeManager.GetDataRecordRuntimeType(dataRecordStorage.DataRecordTypeId);
-                    dataRecordRuntimeType.ThrowIfNull("dataRecordRuntimeType", dataRecordStorage.DataRecordTypeId);
-                    classDefinitionBuilder.Replace("#DATARECORD_RUNTIMETYPE#", CSharpCompiler.TypeToString(dataRecordRuntimeType));
+                    string dataRecordRuntimeTypeAsString = recordTypeManager.GetDataRecordRuntimeTypeAsString(dataRecordStorage.DataRecordTypeId);
+                    dataRecordRuntimeTypeAsString.ThrowIfNull("dataRecordRuntimeTypeAsString", dataRecordStorage.DataRecordTypeId);
+                    classDefinitionBuilder.Replace("#DATARECORD_RUNTIMETYPE#", dataRecordRuntimeTypeAsString);
 
                     string dynamicRecordMapper;
                     string dataRecordMapper;
@@ -322,7 +322,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                     readDeserializedValueBuilder.AppendLine(String.Format(@"var {0}DeserializedValue = s_{0}FieldType.DeserializeValue({0}Context);", matchField.Name));
                     dynamicRecordMapperBuilder.AppendLine(readDeserializedValueBuilder.ToString());
                     dataRecordMapperBuilder.AppendLine(readDeserializedValueBuilder.ToString());
-                    valueExpression = String.Format(@"{0}DeserializedValue != null? ({1}){0}DeserializedValue : null", matchField.Name, CSharpCompiler.TypeToString(matchField.Type.GetNonNullableRuntimeType()));                    
+                    valueExpression = String.Format(@"{0}DeserializedValue != null? ({1}){0}DeserializedValue : null", matchField.Name, matchField.Type.GetNonNullableRuntimeTypeAsString());                    
                 }
                 string fieldValueVariableName = $"{matchField.Name}_FieldValue";
                 dynamicRecordMapperBuilder.AppendLine($"var {fieldValueVariableName} = {valueExpression};");

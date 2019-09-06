@@ -21,19 +21,18 @@ namespace Vanrise.Common.Business
 
         private static System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            ///this should be uncommented later
-            //if (args.Name.StartsWith(CSharpCompiler.DEVPROJECT_ASSEMBLY_PREFIX) && args.Name.Contains(CSharpCompiler.DEVPROJECT_ASSEMBLY_SUFFIX))
-            //{
+            if (args.Name.StartsWith(CSharpCompiler.DEVPROJECT_ASSEMBLY_PREFIX) && args.Name.Contains(CSharpCompiler.DEVPROJECT_ASSEMBLY_SUFFIX))
+            {
                 var vrAssembly = new VRCompiledAssemblyManager().GetAssemblyByName(args.Name);
                 if (vrAssembly != null)
                     return System.Reflection.Assembly.Load(vrAssembly.AssemblyContent);
                 else
                     return null;
-            //}
-            //else
-            //{
-            //    return null;
-            //}
+            }
+            else
+            {
+                return null;
+            }
         }
 
         internal void AddAssembly(Guid assemblyId, string name, Guid devProjectId, byte[] assemblyContent, DateTime compiledTime)

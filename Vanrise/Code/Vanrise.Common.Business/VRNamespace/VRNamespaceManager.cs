@@ -13,6 +13,14 @@ namespace Vanrise.Common.Business
         static AssemblyObject assemblyObject = new AssemblyObject();
         VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
+        public const string USING_STATEMENTS = @"using System;
+            using System.Collections.Generic;
+            using System.IO;
+            using System.Data;
+            using System.Linq;
+            using Vanrise.Common;
+            using Vanrise.GenericData.Business;
+            using Vanrise.GenericData.Entities;";
 
         #region Public Methods
 
@@ -177,7 +185,7 @@ namespace Vanrise.Common.Business
 
         #region Private Methods
 
-        private Dictionary<Guid, VRNamespace> GetCachedVRNamespaces()
+        public Dictionary<Guid, VRNamespace> GetCachedVRNamespaces()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRNamespaces",
                () =>
@@ -203,7 +211,7 @@ namespace Vanrise.Common.Business
             return extensionConfigurationManager.GetExtensionConfigurations<VRDynamicCodeConfig>(VRDynamicCodeConfig.EXTENSION_TYPE);
         }
 
-        private string BuildClassDefinition(VRNamespace vrNamespace)
+        public string BuildClassDefinition(VRNamespace vrNamespace)
         {
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 namespace #NAMESPACE#
@@ -243,13 +251,35 @@ namespace Vanrise.Common.Business
         private Dictionary<string, Type> GetAssemblyClasses(Guid vrNamespaceId)
         {
             var vrNamespace = GetVRNamespace(vrNamespaceId);
-            var compiledNamespace = TryCompileNamespace(vrNamespace);
-            Dictionary<string, Type> assemblyClasses = new Dictionary<string, Type>();
-            if (compiledNamespace.Result)
+            vrNamespace.ThrowIfNull("vrNamespace", vrNamespaceId);
+
+            Assembly runtimeAssembly = null;
+
+            //if(vrNamespace.DevProjectId.HasValue)
+            //{
+            //    var devProjectManager = new VRDevProjectManager();
+                
+            //    if (devProjectManager.TryGetDevProjectAssembly(vrNamespace.DevProjectId.Value, DateTime.Parse("2000-01-01"), out runtimeAssembly))
+            //    {
+                    
+            //    }
+            //}
+
+            if(runtimeAssembly == null)
             {
-                foreach (Type type in compiledNamespace.OutputAssembly.GetTypes())
+                var compilationOutput = TryCompileNamespace(vrNamespace);
+                if(compilationOutput.Result)
                 {
-                    if (type.IsClass && type.IsPublic)
+                    runtimeAssembly = compilationOutput.OutputAssembly;
+                }
+            }
+
+            Dictionary<string, Type> assemblyClasses = new Dictionary<string, Type>();
+            if (runtimeAssembly != null)
+            {
+                foreach (Type type in runtimeAssembly.GetTypes())
+                {
+                    if (type.IsClass && type.IsPublic)// && type.Namespace == vrNamespace.Name)
                     {
                         assemblyClasses.Add(type.Name, type);
                     }
@@ -294,14 +324,7 @@ namespace Vanrise.Common.Business
 
         private bool TryCompileNamespace(IEnumerable<VRNamespace> vrNamespaces, string uniqueNamespaceName, out VRNamespaceCompilationOutput namespaceCompilationOutput)
         {
-            StringBuilder classDefinition = new StringBuilder(@"using System;
-            using System.Collections.Generic;
-            using System.IO;
-            using System.Data;
-            using System.Linq;
-            using Vanrise.Common;
-            using Vanrise.GenericData.Business;
-            using Vanrise.GenericData.Entities;");
+            StringBuilder classDefinition = new StringBuilder(USING_STATEMENTS);
 
             foreach (VRNamespace vrNamespace in vrNamespaces)
                 classDefinition.AppendLine(BuildClassDefinition(vrNamespace));
@@ -449,5 +472,22 @@ namespace Vanrise.Common.Business
         }
 
         #endregion
+    }
+
+    public class VRNamespaceVRDevProjectCodeGenerator : VRDevProjectCodeGenerator
+    {
+        public override void GenerateCode(IVRDevProjectCodeGeneratorGenerateCodeContext context)
+        {
+            var namespaceManager = new VRNamespaceManager();
+            foreach (var vrNamespace in namespaceManager.GetCachedVRNamespaces().Values)
+            {
+                if (vrNamespace.DevProjectId == context.DevProjectId)
+                {
+                    string classDefinition = namespaceManager.BuildClassDefinition(vrNamespace);
+                    string classDefinitionWithUsingStatements = string.Concat(VRNamespaceManager.USING_STATEMENTS, "\n\n\n", classDefinition);
+                    context.AddCodeFile(vrNamespace.Name.Replace(".", "_"), classDefinitionWithUsingStatements);
+                }
+            }
+        }
     }
 }

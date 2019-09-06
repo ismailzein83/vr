@@ -113,7 +113,7 @@ namespace Vanrise.GenericData.Transformation
                     string dataRecordRuntimeType;
                     if (recordType.DataRecordTypeId.HasValue)
                     {
-                        dataRecordRuntimeType = CSharpCompiler.TypeToString(dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId.Value));
+                        dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeTypeAsString(recordType.DataRecordTypeId.Value);
                         (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1} = new {0}();", dataRecordRuntimeType, recordType.RecordName));
                     }
                     else

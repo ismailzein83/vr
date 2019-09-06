@@ -69,7 +69,7 @@ namespace Vanrise.GenericData.Business
             dataRecordType.Settings.IdField.ThrowIfNull("dataRecordType.Settings.IdField");
             var idDataRecordField = dataRecordType.Fields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
             idDataRecordField.ThrowIfNull("idDataRecordField");
-            return CSharpCompiler.TypeToString(idDataRecordField.Type.GetRuntimeType());
+            return idDataRecordField.Type.GetRuntimeTypeAsString();
         }
         public DataRecordType GetDataRecordType(string dataRecordTypeName)
         {
@@ -253,6 +253,55 @@ namespace Vanrise.GenericData.Business
             if (dataRecordRuntimeType != null)
                 return Activator.CreateInstance(dataRecordRuntimeType);
             return null;
+        }
+
+        public string GetDataRecordRuntimeTypeAsString(Guid dataRecordTypeId)
+        {
+            string cacheName = String.Format("GetDataRecordRuntimeTypeAsString_{0}", dataRecordTypeId);
+            var runtimeTypeAsString = GetCacheManager().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    //DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
+                    //if (dataRecordType != null)
+                    //{
+                    //    if (dataRecordType.DevProjectId.HasValue)
+                    //        return $"Vanrise.DynDataRecordTypes.{GetDataRecordTypeClassName(dataRecordType)}";
+                    //    else
+                            return CSharpCompiler.TypeToString(GetDataRecordRuntimeType(dataRecordTypeId));
+                    //}
+                    //else
+                    //    return null;
+                });
+            if (runtimeTypeAsString == null)
+                throw new ArgumentException(String.Format("Cannot create runtime type (string) from Data Record Type Id '{0}'", dataRecordTypeId));
+            return runtimeTypeAsString;
+        }
+
+        public string GetDataRecordListRuntimeTypeAsString(Guid dataRecordTypeId)
+        {
+            string cacheName = String.Format("GetDataRecordListRuntimeTypeAsString_{0}", dataRecordTypeId);
+            var runtimeTypeAsString = GetCacheManager().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    //DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
+                    //if (dataRecordType != null)
+                    //{
+                    //    if (dataRecordType.DevProjectId.HasValue)
+                    //        return $"System.Collections.Generic.List<Vanrise.DynDataRecordTypes.{GetDataRecordTypeClassName(dataRecordType)}>";
+                    //    else
+                            return CSharpCompiler.TypeToString(GetDataRecordListRuntimeType(dataRecordTypeId));
+                    //}
+                    //else
+                    //    return null;
+                });
+            if (runtimeTypeAsString == null)
+                throw new ArgumentException(String.Format("Cannot create runtime type (string) from Data Record Type Id '{0}'", dataRecordTypeId));
+            return runtimeTypeAsString;
+        }
+
+        private string GetDataRecordTypeClassName(DataRecordType dataRecordType)
+        {
+            return dataRecordType.Name.Replace(" ", "_").Replace("-", "_").Replace("(", "_").Replace(")", "_");
         }
 
         public Type GetDataRecordRuntimeType(Guid dataRecordTypeId)
@@ -467,6 +516,16 @@ namespace Vanrise.GenericData.Business
 
         private Type GetOrCreateRuntimeType(DataRecordType dataRecordType)
         {
+            //if (dataRecordType.DevProjectId.HasValue)
+            //{
+            //    var devProjectManager = new VRDevProjectManager();
+            //    System.Reflection.Assembly devProjectAssembly;
+            //    if (devProjectManager.TryGetDevProjectAssembly(dataRecordType.DevProjectId.Value, dataRecordType.LastModifiedTime, out devProjectAssembly))
+            //    {
+            //        string dataRecordFullName = $"Vanrise.DynDataRecordTypes.{GetDataRecordTypeClassName(dataRecordType)}";
+            //        return devProjectAssembly.GetType(dataRecordFullName);
+            //    }
+            //}
             string fullTypeName;
             var classDefinition = BuildClassDefinition(dataRecordType, out fullTypeName);
 
@@ -490,15 +549,18 @@ namespace Vanrise.GenericData.Business
 
         private string BuildClassDefinition(DataRecordType dataRecordType, out string fullTypeName)
         {
+            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
+            string className = $"DataRecord_{dataRecordType.Name.Replace(" ", "_").Replace("-", "_")}";
+            var classDefinition = BuildClassDefinition(dataRecordType, classNamespace, className);
+            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+            return classDefinition;
+        }
+
+        internal string BuildClassDefinition(DataRecordType dataRecordType, string classNamespace, string className, bool withoutUsingStatements = false)
+        {
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
-                using System;
-                using System.Collections.Generic;
-                using System.IO;
-                using System.Data;
-                using System.Linq;
-                using Vanrise.Common;
-                using Vanrise.GenericData.Business;
-                using Vanrise.GenericData.Entities;
+
+                #USINGSTATEMENTS#                
 
                 namespace #NAMESPACE#
                 {
@@ -597,6 +659,23 @@ namespace Vanrise.GenericData.Business
                     }
                 }");
 
+            if (withoutUsingStatements)
+            {
+                classDefinitionBuilder.Replace("#USINGSTATEMENTS#", @"");
+            }
+            else
+            {
+                classDefinitionBuilder.Replace("#USINGSTATEMENTS#", @"
+                using System;
+                using System.Collections.Generic;
+                using System.IO;
+                using System.Data;
+                using System.Linq;
+                using Vanrise.Common;
+                using Vanrise.GenericData.Business;
+                using Vanrise.GenericData.Entities;");
+            }
+
             StringBuilder propertiesToSetSerializedBuilder = new StringBuilder();
             StringBuilder globalMembersDefinitionBuilder = new StringBuilder();
 
@@ -611,7 +690,7 @@ namespace Vanrise.GenericData.Business
 
             foreach (var field in dataRecordType.Fields)
             {
-                string fieldRuntimeTypeAsString = CSharpCompiler.TypeToString(field.Type.GetRuntimeType());
+                string fieldRuntimeTypeAsString = field.Type.GetRuntimeTypeAsString();
 
                 globalMembersDefinitionBuilder.AppendLine(GetGlobalMemberDefinitionScript(fieldRuntimeTypeAsString, field));
 
@@ -656,12 +735,9 @@ namespace Vanrise.GenericData.Business
             classDefinitionBuilder.Replace("#FIELDCOUNT#", fieldCount.ToString());
 
             classDefinitionBuilder.Replace("#RECORDTYPEID#", dataRecordType.DataRecordTypeId.ToString());
-
-            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
-            string className = $"DataRecord_{dataRecordType.Name.Replace(" ", "_").Replace("-","_")}";
+            
             classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
             classDefinitionBuilder.Replace("#CLASSNAME#", className);
-            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
             return classDefinitionBuilder.ToString();
         }
@@ -872,6 +948,42 @@ namespace Vanrise.GenericData.Business
                 }
             }
             return properties;
+        }
+    }
+
+    public class RecordTypeVRDevProjectCodeGenerator : VRDevProjectCodeGenerator
+    {
+        public override void GenerateCode(IVRDevProjectCodeGeneratorGenerateCodeContext context)
+        {
+            var dataRecordTypeManager = new DataRecordTypeManager();
+            foreach (var dataRecordType in dataRecordTypeManager.GetCachedDataRecordTypes().Values)
+            {
+                if (dataRecordType.DevProjectId == context.DevProjectId)
+                {
+                    string className = dataRecordType.Name.Replace(" ", "_").Replace("-", "_").Replace("(", "_").Replace(")", "_");
+                    string classDefinition = dataRecordTypeManager.BuildClassDefinition(dataRecordType, "Vanrise.DynDataRecordTypes", className);
+                    context.AddCodeFile(dataRecordType.Name, classDefinition);
+                }
+            }
+
+            //context.AddUsing("using System;");
+            //context.AddUsing("using System.Collections.Generic;");
+            //context.AddUsing("using System.IO;");
+            //context.AddUsing("using System.Data;");
+            //context.AddUsing("using System.Linq;");
+            //context.AddUsing("using Vanrise.Common;");
+            //context.AddUsing("using Vanrise.GenericData.Business;");
+            //context.AddUsing("using Vanrise.GenericData.Entities;");
+
+            //foreach (var dataRecordType in dataRecordTypeManager.GetCachedDataRecordTypes().Values)
+            //{
+            //    if (dataRecordType.DevProjectId == context.DevProjectId)
+            //    {
+            //        string className = dataRecordType.Name.Replace(" ", "_").Replace("-", "_").Replace("(", "_").Replace(")", "_");
+            //        string classDefinition = dataRecordTypeManager.BuildClassDefinition(dataRecordType, "Vanrise.DynDataRecordTypes", className, true);
+            //        context.AddCode(classDefinition);
+            //    }
+            //}
         }
     }
 }

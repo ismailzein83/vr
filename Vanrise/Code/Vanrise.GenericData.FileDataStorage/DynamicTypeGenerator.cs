@@ -175,9 +175,9 @@ namespace Vanrise.GenericData.FileDataStorage
                     }
                     classDefinitionBuilder.Replace("#FILLDYNAMICRECORDFROMSTRINGFIELDVALUES#", setFillDynamicRecordFromStringFieldValuesBuilder.ToString());
 
-                    Type dataRecordRuntimeType = recordTypeManager.GetDataRecordRuntimeType(dataRecordStorage.DataRecordTypeId);
-                    dataRecordRuntimeType.ThrowIfNull("dataRecordRuntimeType", dataRecordStorage.DataRecordTypeId);
-                    classDefinitionBuilder.Replace("#DATARECORD_RUNTIMETYPE#", CSharpCompiler.TypeToString(dataRecordRuntimeType));
+                    string dataRecordRuntimeTypeAsString = recordTypeManager.GetDataRecordRuntimeTypeAsString(dataRecordStorage.DataRecordTypeId);
+                    dataRecordRuntimeTypeAsString.ThrowIfNull("dataRecordRuntimeTypeAsString", dataRecordStorage.DataRecordTypeId);
+                    classDefinitionBuilder.Replace("#DATARECORD_RUNTIMETYPE#", dataRecordRuntimeTypeAsString);
                     
                     string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.FileDataStorage");
                     string className = "DynamicManager";

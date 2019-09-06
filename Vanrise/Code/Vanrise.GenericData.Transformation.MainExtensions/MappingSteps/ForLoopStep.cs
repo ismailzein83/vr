@@ -28,9 +28,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
                 if (arrayRecord.DataRecordTypeId.HasValue)
                 {
                     DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
-                    var arrayRuntimeType = recordTypeManager.GetDataRecordRuntimeType(arrayRecord.DataRecordTypeId.Value);
-                    if (arrayRuntimeType != null)
-                        variableType = CSharpCompiler.TypeToString(arrayRuntimeType);
+                    variableType = recordTypeManager.GetDataRecordRuntimeTypeAsString(arrayRecord.DataRecordTypeId.Value);
                 }
                 else if (!String.IsNullOrEmpty(arrayRecord.FullTypeName))
                     variableType = arrayRecord.FullTypeName;

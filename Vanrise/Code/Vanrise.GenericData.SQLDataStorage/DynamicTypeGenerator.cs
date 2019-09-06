@@ -211,13 +211,13 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                 if (!matchField.Type.StoreValueSerialized)
                 {
-                    builder.AppendLine(String.Format(@"dataRecord.{0} = GetReaderValue<{1}>(reader, ""{2}"");", matchField.Name, CSharpCompiler.TypeToString(matchField.Type.GetRuntimeType()), column.ColumnName));
+                    builder.AppendLine(String.Format(@"dataRecord.{0} = GetReaderValue<{1}>(reader, ""{2}"");", matchField.Name, matchField.Type.GetRuntimeTypeAsString(), column.ColumnName));
                 }
                 else
                 {
                     builder.AppendLine(String.Format(@"var {0}Context = new Vanrise.GenericData.Entities.DeserializeDataRecordFieldValueContext() {{ Value = reader[""{1}""]  as string }}; ", column.ValueExpression, column.ColumnName));
                     builder.AppendLine(String.Format(@"var {0}DeserializedValue = s_{0}FieldType.DeserializeValue({0}Context);", matchField.Name));
-                    builder.AppendLine(String.Format(@"dataRecord.{0} = {0}DeserializedValue!=null? ({1}){0}DeserializedValue : null;", matchField.Name, CSharpCompiler.TypeToString(matchField.Type.GetNonNullableRuntimeType())));
+                    builder.AppendLine(String.Format(@"dataRecord.{0} = {0}DeserializedValue!=null? ({1}){0}DeserializedValue : null;", matchField.Name, matchField.Type.GetNonNullableRuntimeTypeAsString()));
                 }
             }
             return builder.ToString();
@@ -253,7 +253,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 }
                 else
                 {
-                    dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof({1}));", column.ColumnName, CSharpCompiler.TypeToString(matchField.Type.GetNonNullableRuntimeType())));
+                    dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof({1}));", column.ColumnName, matchField.Type.GetNonNullableRuntimeTypeAsString()));
                     dtRowsBuilder.AppendLine(String.Format(@"dr[""{0}""] = record.{1} != null ? record.{1} : DBNull.Value;", column.ColumnName, column.ValueExpression));
                 }
             }

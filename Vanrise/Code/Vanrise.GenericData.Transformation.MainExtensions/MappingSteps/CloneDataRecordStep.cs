@@ -37,12 +37,10 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             if (sourceRecord.DataRecordTypeId.Value != targetRecord.DataRecordTypeId.Value)
                 throw new Exception(String.Format("'{0}' and '{1}' are of different dataRecordType", this.TargetRecordName));
 
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var runtimeType = dataRecordTypeManager.GetDataRecordRuntimeType(targetRecord.DataRecordTypeId.Value);
-            if (runtimeType == null)
-                throw new NullReferenceException("runtimeType");
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();           
 
-            string fullTypeName = CSharpCompiler.TypeToString(runtimeType);
+            string fullTypeName = dataRecordTypeManager.GetDataRecordRuntimeTypeAsString(targetRecord.DataRecordTypeId.Value);
+            fullTypeName.ThrowIfNull("fullTypeName");
 
             Dictionary<string, DataRecordField> dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(sourceRecord.DataRecordTypeId.Value);
             if (dataRecordTypeFields == null)

@@ -68,9 +68,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return GetNonNullableRuntimeType();
         }
 
+        public override string GetNonNullableRuntimeTypeAsString()
+        {
+            return new DataRecordTypeManager().GetDataRecordListRuntimeTypeAsString(this.DataRecordTypeId);
+        }
+
+        public override string GetRuntimeTypeAsString()
+        {
+            return GetNonNullableRuntimeTypeAsString();
+        }
+
+        public override bool IsValueType()
+        {
+            return false;
+        }
+
         public override string GetRuntimeTypeDescription()
         {
-            return Vanrise.Common.CSharpCompiler.TypeToString(GetRuntimeType());
+            return GetRuntimeTypeAsString();
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
