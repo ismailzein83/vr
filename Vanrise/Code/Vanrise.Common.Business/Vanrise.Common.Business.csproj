@@ -83,6 +83,7 @@
     <Compile Include="PageDirectiveHostViewSettings.cs" />
     <Compile Include="ThemeExtendedManager.cs" />
     <Compile Include="Filters\CommentBEDefinitionFilter.cs" />
+    <Compile Include="VRCompiledAssemblyManager.cs" />
     <Compile Include="VRIconPathManger.cs" />
     <Compile Include="LicenseManager.cs" />
     <Compile Include="CityManager.cs" />

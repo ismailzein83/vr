@@ -112,6 +112,8 @@
     <Compile Include="BusinessManagers\IGeneralSettingsManager.cs" />
     <Compile Include="BusinessManagers\ISecurityRequiredPermissionSetManager.cs" />
     <Compile Include="BusinessManagers\ITypeManager.cs" />
+    <Compile Include="BusinessManagers\IVRCompiledAssemblyManager.cs" />
+    <Compile Include="BusinessManagers\IVRDevProjectManager.cs" />
     <Compile Include="BusinessManagers\IVRNamespaceManager.cs" />
     <Compile Include="BusinessManagers\IVRActionLogger.cs" />
     <Compile Include="BusinessManagers\SecBusinessManagerFactory.cs" />

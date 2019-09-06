@@ -12,5 +12,7 @@ namespace Vanrise.Common.Data
         DateTimeRange GetDateTimeRange();
 
         bool CheckIfDefaultOrInvalid(DateTime? dateTime);
+
+        DateTime GetNowDBTime();
     }
 }

@@ -28,10 +28,16 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			return queryContext.GetDBDateTimeRange();
 		}
-		#endregion
 
-		#region Private Methods
-		private BaseRDBDataProvider GetDataProvider()
+        public DateTime GetNowDBTime()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.GetNowDBTime();
+        }
+        #endregion
+
+        #region Private Methods
+        private BaseRDBDataProvider GetDataProvider()
 		{
 			return RDBDataProviderFactory.CreateProvider("vrCommon", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}

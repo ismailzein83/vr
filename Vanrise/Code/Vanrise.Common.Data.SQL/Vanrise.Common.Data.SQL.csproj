@@ -81,8 +81,10 @@
     <Compile Include="UtilityDataManager.cs" />
     <Compile Include="VRBulkActionDraftDataManager.cs" />
     <Compile Include="VRCommentDataManager.cs" />
+    <Compile Include="VRCompiledAssemblyDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
     <Compile Include="VRComponentTypeDataManager.cs" />
+    <Compile Include="VRDevProjectDataManager.cs" />
     <Compile Include="VRDynamicAPIDataManager.cs" />
     <Compile Include="VRDynamicAPIModuleDataManager.cs" />
     <Compile Include="VREventHandlerDataManager.cs" />

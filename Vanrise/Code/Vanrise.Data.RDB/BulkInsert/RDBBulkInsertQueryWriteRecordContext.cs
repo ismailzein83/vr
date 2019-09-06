@@ -60,6 +60,11 @@ namespace Vanrise.Data.RDB
             _currentRecord.Value(value);
         }
 
+        public void Value(byte[] value)
+        {
+            _currentRecord.Value(value);
+        }
+
         public void Null()
         {
             _currentRecord.Null();

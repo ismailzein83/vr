@@ -411,6 +411,14 @@ namespace Vanrise.Data.RDB
             };
         }
 
+        public DateTime GetNowDBTime()
+        {
+            var queryContext = new RDBQueryContext(this.DataProvider);
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.SelectColumns().Expression("TimeNowAlias").DateNow();
+            return queryContext.ExecuteScalar().DateTimeValue;
+        }
+
         public bool CheckIfDefaultOrInvalidDBTime(DateTime? dateTime)
         {
             if (!dateTime.HasValue || dateTime.Value == default(DateTime))

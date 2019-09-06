@@ -826,6 +826,12 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 AppendValue(value.ToString());
             }
 
+            public override void Value(byte[] value)
+            {
+                //AppendValue(Convert.ToBase64String(value));
+                throw new NotImplementedException();
+            }
+
             public override void Null()
             {
                 Value("");

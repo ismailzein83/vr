@@ -11,6 +11,16 @@ namespace Vanrise.Common.Data.SQL
 {
     public class UtilityDataManager : BaseSQLDataManager, IUtilityDataManager
     {
+        #region Ctor/Properties
+
+        public UtilityDataManager()
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
+        {
+
+        }
+
+        #endregion
+
         public DateTimeRange GetDateTimeRange()
         {
             return base.GetSQLDateTimeRange();

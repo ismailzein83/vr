@@ -52,6 +52,8 @@
     <Compile Include="IErlangBCalculatorDataManager.cs" />
     <Compile Include="IProcessStateDataManager.cs" />
     <Compile Include="IVRCommentDataManager.cs" />
+    <Compile Include="IVRCompiledAssemblyDataManager.cs" />
+    <Compile Include="IVRDevProjectDataManager.cs" />
     <Compile Include="IVRDynamicAPIDataManager.cs" />
     <Compile Include="IVRDynamicAPIModuleDataManager.cs" />
     <Compile Include="IVRNamespaceDataManager.cs" />

@@ -107,6 +107,11 @@ namespace Vanrise.Data.SQL
             return sqlType;
         }
 
+        public DateTime GetNowDBTime()
+        {
+            return (DateTime)ExecuteScalarText("SELECT GETDATE()", null);
+        }
+        
         #endregion
 
         #region ExecuteNonQuery

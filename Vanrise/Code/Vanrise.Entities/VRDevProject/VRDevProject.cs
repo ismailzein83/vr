@@ -10,6 +10,13 @@ namespace Vanrise.Entities
     {
         public Guid VRDevProjectID { get; set; }
         public string Name { get; set; }
+
+        public Guid? AssemblyId { get; set; }
+
+        public string AssemblyName { get; set; }
+
+        public DateTime? AssemblyCompiledTime { get; set; }
+
         public DateTime? CreatedTime { get; set; }
         public DateTime? LastModifiedTime { get; set; }
     }
