@@ -148,7 +148,7 @@
                         }
 
                         function tryExtendFieldToGroup(criteriaField, loadPromises) {
-                            if (criteriaDefinitionGroups == undefined && criteriaDefinitionGroups.length == 0) {
+                            if (criteriaDefinitionGroups == undefined || criteriaDefinitionGroups.length == 0) {
                                 return false;
                             }
 
@@ -199,6 +199,7 @@
                                 }
                                 else {
                                     selectedCriteriaField.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
                                     selectedCriteriaField.isFieldDirectiveLoading = true;
                                     loadCritireaFieldDirective(selectedCriteriaField).then(function () {
                                         genericUIObj.resendCritireaFieldValues(selectedCriteriaField);
@@ -207,11 +208,28 @@
                                 }
                             };
 
+                            var onBeforeGroupCriteriaFieldSelectionChanged = function () {
+                                var criteriaGroup = UtilsService.getItemByVal($scope.scopeModel.criteriaObjects, criteriaDefinitionGroup.GroupId, 'groupId');
+                                var selectedField = criteriaGroup.groupObj.selectedField;
+                                if (selectedField == undefined) {
+                                    return;
+                                }
+
+                                if (selectedField.runtimeEditor.onFieldSelectionChangedPromiseDeferred != undefined) {
+                                    return;
+                                }
+
+                                if (selectedField.genericUIContext != undefined && selectedField.genericUIContext.notifyValueChanged != undefined) {
+                                    selectedField.genericUIContext.notifyValueChanged(undefined);
+                                }
+                            };
+
                             return {
                                 groupTitle: criteriaDefinitionGroup.GroupTitle,
                                 fields: [criteriaField],
                                 selectedField: isSelectedField ? criteriaField : undefined,
-                                onGroupCriteriaFieldSelectionChanged: onGroupCriteriaFieldSelectionChanged
+                                onGroupCriteriaFieldSelectionChanged: onGroupCriteriaFieldSelectionChanged,
+                                onBeforeGroupCriteriaFieldSelectionChanged: onBeforeGroupCriteriaFieldSelectionChanged
                             };
                         }
 

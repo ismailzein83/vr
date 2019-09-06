@@ -12,13 +12,16 @@
 
         function createGenericUIObj(fields) {
             return new genericUIObj(fields);
-        };
-
+        }
 
         function genericUIObj(criteriaFields) {
             var fields = criteriaFields;
             var fieldContexts;
+
             var fieldValuesObjs = [];
+            for (var i = 0; i < criteriaFields.length; i++) {
+                fieldValuesObjs.push({ fieldObj: criteriaFields[i], fieldValue: undefined });
+            }
 
             var isLoading = true;
             var pendingNotifications = [];
@@ -53,17 +56,17 @@
             };
 
             var resendCritireaFieldValues = function (selectedField) {
-                angular.forEach(fieldValuesObjs, function (currentFieldValuesObj) {
+                if (selectedField.genericUIContext != undefined && selectedField.genericUIContext.onvaluechanged != undefined && typeof (selectedField.genericUIContext.onvaluechanged) == "function") {
+                    angular.forEach(fieldValuesObjs, function (currentFieldValuesObj) {
 
-                    if (selectedField != currentFieldValuesObj.fieldObj) {
-                        var currentField = currentFieldValuesObj.fieldObj;
-                        var fieldValue = currentFieldValuesObj.fieldValue;
+                        if (selectedField != currentFieldValuesObj.fieldObj) {
+                            var currentField = currentFieldValuesObj.fieldObj;
+                            var fieldValue = currentFieldValuesObj.fieldValue;
 
-                        if (selectedField.genericUIContext != undefined && selectedField.genericUIContext.onvaluechanged != undefined && typeof (selectedField.genericUIContext.onvaluechanged) == "function") {
                             selectedField.genericUIContext.onvaluechanged(currentField, fieldValue);
                         }
-                    }
-                });
+                    });
+                }
             };
 
             function initialize() {
@@ -86,10 +89,7 @@
                     getFields: function () { return fields; },
                     notifyValueChanged: function (selectedvalue) {
                         var item = UtilsService.getItemByVal(fieldValuesObjs, relatedField, 'fieldObj');
-                        if (item != undefined)
-                            item = { fieldObj: relatedField, fieldValue: selectedvalue };
-                        else
-                            fieldValuesObjs.push({ fieldObj: relatedField, fieldValue: selectedvalue });
+                        item.fieldValue = selectedvalue;
 
                         angular.forEach(fields, function (currentField) {
                             if (currentField.genericUIContext != undefined && currentField.genericUIContext.onvaluechanged != undefined && typeof (currentField.genericUIContext.onvaluechanged) == "function") {
