@@ -30,12 +30,9 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
         {
             Guid updateBalanceRecordTypeId = new Guid("5dfd12ab-69bf-42fd-962f-ccf81261d934");
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var runtimeType = dataRecordTypeManager.GetDataRecordRuntimeType(updateBalanceRecordTypeId);
-            if (runtimeType == null)
-                throw new NullReferenceException("runtimeType");
-
-            string fullTypeName = CSharpCompiler.TypeToString(runtimeType);
-
+            
+            string fullTypeName = dataRecordTypeManager.GetDataRecordRuntimeTypeAsString(updateBalanceRecordTypeId);
+            fullTypeName.ThrowIfNull("fullTypeName");
 
             var financialAccountRuntimeDataVariableName = context.GenerateUniqueMemberName("accountfinancialInfo");
             context.AddCodeToCurrentInstanceExecutionBlock("Retail.BusinessEntity.Entities.FinancialAccountRuntimeData {0} = new Retail.BusinessEntity.Business.FinancialAccountManager().GetAccountFinancialInfo({1},{2},{3},{4});",
