@@ -856,6 +856,10 @@
     <Build Include="genericdata\Stored Procedures\sp_BusinessEntityHistoryStack_Delete.sql" />
     <Build Include="common\Stored Procedures\sp_VRDevProject_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_File_GetFilteredRecentFiles.sql" />
+    <Build Include="common\Tables\VRCompiledAssembly.sql" />
+    <Build Include="common\Stored Procedures\sp_VRCompiledAssembly_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRCompiledAssembly_GetEffectiveForDevProjects.sql" />
+    <Build Include="common\Stored Procedures\sp_VRCompiledAssembly_GetByName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
