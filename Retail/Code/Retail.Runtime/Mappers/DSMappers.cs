@@ -77,6 +77,8 @@ namespace Retail.Runtime
             return result;
         }
 
+        #region Inspkt
+
         public static Vanrise.Integration.Entities.MappingOutput MapC4CDRs_SQL(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
             LogVerbose("Started");
@@ -144,6 +146,91 @@ namespace Retail.Runtime
             LogVerbose("Finished");
             return result;
         }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapC4CDRs_CSV(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            var cdrs = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Record Analysis C4 CDR");
+
+            int maximumBatchSize = 50000;
+
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Record Analysis C4 CDR");
+
+            int rowCount = 0;
+
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            System.IO.StreamReader sr = importedData.StreamReader;
+
+            //Reading Headers Line
+            if (!sr.EndOfStream)
+                sr.ReadLine();
+
+            while (!sr.EndOfStream)
+            {
+                string cdrLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(cdrLine))
+                    continue;
+
+                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+
+                try
+                {
+                    string[] fields = cdrLine.Split(',');
+
+                    string attemptDateTimeAsString = fields[1];
+                    if (!string.IsNullOrEmpty(attemptDateTimeAsString))
+                    {
+                        DateTime attemptTime;
+                        if (attemptDateTimeAsString.Length < 23 || !DateTime.TryParseExact(attemptDateTimeAsString.Substring(0, 23), "yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out attemptTime))
+                            throw new Exception($"Invalid date format for AttemptTime '{attemptDateTimeAsString}'");
+                        cdr.AttemptDateTime = attemptTime;
+                    }
+
+                    cdr.InTrunk = fields[2];
+                    cdr.OutTrunk = fields[3];
+                    cdr.CGPN = fields[7];
+                    cdr.CDPN = fields[8];
+
+                    cdrs.Add(cdr);
+
+                    rowCount++;
+                    if (rowCount == maximumBatchSize)
+                        break;
+                }
+                catch (Exception ex)
+                {
+                    failedRecordIdentifiers.Add(rowCount);
+                }
+            }
+
+            if (cdrs.Count > 0)
+            {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
+                long currentCDRId = startingId;
+
+                foreach (var cdr in cdrs)
+                {
+                    cdr.Id = currentCDRId;
+                    currentCDRId++;
+                }
+
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of C4 CDRs", "Record Analysis C4 CDR");
+                mappedBatches.Add("Distribute C4 CDRs Stage", batch);
+            }
+            else
+            {
+                importedData.IsEmpty = true;
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
+        #endregion
 
         public static Vanrise.Integration.Entities.MappingOutput ImportCDRs_SFTP(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
@@ -224,7 +311,7 @@ namespace Retail.Runtime
             }
 
 
-            if (cdrs.Count > 0 )
+            if (cdrs.Count > 0)
             {
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of CDRs", "RetailBilling_CDR");
                 mappedBatches.Add("CDR Transformation Stage", batch);
@@ -241,6 +328,7 @@ namespace Retail.Runtime
             LogVerbose("Finished");
             return result;
         }
+
 
         private static void LogVerbose(string Message)
         {
