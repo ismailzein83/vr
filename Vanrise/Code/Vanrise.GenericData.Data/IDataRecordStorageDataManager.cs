@@ -16,5 +16,7 @@ namespace Vanrise.GenericData.Data
         bool UpdateDataRecordStorage(DataRecordStorage dataRecordStorage);
 
         bool AreDataRecordStoragesUpdated(ref object updateHandle);
+
+        void GenerateScript(List<DataRecordStorage> dataRecordStorages, Action<string, string> addEntityScript);
     }
 }

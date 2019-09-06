@@ -1,0 +1,32 @@
+﻿<vr-tab header="'Data Record Storage Settings'" localizedheader="'VRRes.DataRecordStorageSettings.VREnd'">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady"
+                                                    isrequired="true"
+                                                    customlabel="Data Record Storage"
+                                                    onselectionchanged="scopeModel.dataRecordStorageSelectionChanged"
+                                                    selectedvalues="scopeModel.dataRecordStorageSelectedValue">
+
+            </vr-genericdata-datarecordstorage-selector>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row" ng-if="scopeModel.dataRecordStorageSelectedValue != undefined">
+            <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+
+    <vr-row ng-if="scopeModel.dataRecordStorageSelectedValue != undefined">
+        <vr-columns width="1/2row">
+            <vr-switch value="scopeModel.isSettingsOverridden" label="Change Settings" onvaluechanged="scopeModel.isSettingsOverriddenValuechanged"></vr-switch>
+        </vr-columns>
+    </vr-row>
+    <vr-row ng-if="scopeModel.isSettingsOverridden">
+        <vr-columns width="fullrow">
+            <vr-genericdata-datarecordstorage-editor on-ready="scopeModel.onEditorDirectiveReady"></vr-genericdata-datarecordstorage-editor>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
+
+
+

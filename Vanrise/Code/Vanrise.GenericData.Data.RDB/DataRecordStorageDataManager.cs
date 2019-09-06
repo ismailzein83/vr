@@ -136,6 +136,11 @@ namespace Vanrise.GenericData.Data.RDB
             updateQuery.Where().EqualsCondition(COL_ID).Value(dataRecordStorage.DataRecordStorageId);
             return queryContext.ExecuteNonQuery() > 0;
         }
+
+        public void GenerateScript(List<DataRecordStorage> dataRecordStorages, Action<string, string> addEntityScript)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

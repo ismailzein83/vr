@@ -339,12 +339,15 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\Templates\PermanentfilterRecordfilter.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\vr-genericdata-datarecordstorage-permanentfilter-conditionfilter.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\vr-genericdata-datarecordstorage-permanentfilter-recordfilter.js" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBExpressionFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBJoinsTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\OverriddenConfigurationDataRecordStorage.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\RDBDataRecordStorageExpressionFieldSettingsSelective.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\RDBDataRecordStorageFilterTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\RDBDataRecordStorageJoinSettingsSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\RDBDataRecordStorageUniqueConstraintsTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-editor.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-permanentfilter-settings.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-expressionfields.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-filter.js" />
@@ -352,6 +355,7 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-uniqueconstraints.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbexpressionfieldsettings-selective.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbjoinsettings-selective.js" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-overriddenconfiguration-datarecordstorage.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\CRCGenericDesignEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\CustomActionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\AdditionalSettingEditorController.js" />
