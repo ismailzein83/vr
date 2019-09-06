@@ -267,8 +267,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                                             if (field.FieldType.BusinessEntityDefinitionId.toUpperCase() == "BA5A57BD-1F03-440F-A469-463A48762B8F") {
                                                 areSaleZonesRequired = true;
 
-                                                if (selectedValue == undefined)
+                                                if (selectedValue == undefined) {
+                                                    saleZoneSelectorCtrl.isdisabled = false;
+                                                    saleZoneSelectorCtrl.isSellingNumberPlanDisabled = false;
                                                     return;
+                                                }
 
                                                 if (selectedValue instanceof Array) {
                                                     switch (selectedValue.length) {
