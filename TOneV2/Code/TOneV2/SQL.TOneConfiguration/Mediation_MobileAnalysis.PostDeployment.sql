@@ -1,4 +1,53 @@
-﻿/*
+﻿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--Make sure to use same .json file using DEVTOOLS under http://192.168.110.185:8037
+--Make sure that json file contains at least below existing data 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 Post-Deployment Script Template							
 --------------------------------------------------------------------------------------
  This file contains SQL statements that will be appended to the build script.		
@@ -160,7 +209,8 @@ as (select * from (values
 ('7761FC9F-BBD2-4E68-A6AB-A256EE7E295B','Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B','B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68','{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","IgnoreSkippedIntervals":false},"StartEffDate":"2017-06-07T09:30:45.072"}',-1),
 ('44D83B88-DF94-422D-A200-0D3506781EBF','Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B','B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68','{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":5.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","IgnoreSkippedIntervals":false},"StartEffDate":"2019-01-02T16:01:41.227"}',-1),
 ('693702AA-68BB-43E9-8EF7-C6C3B6E19BB0','Rebuild Mobile CDR Indexes',0,1,'7FDB2D2B-E1B2-47D5-ACD5-234E391CA759','7A35F562-319B-47B3-8258-EC1A704A82EB','{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskActionArgument":{"$type":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments","BPDefinitionID":"fb302cf3-c28a-4a27-b6b4-cf50eef16cf1","ProcessInputArguments":{"$type":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.DatabaseJobProcessInput, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments","ConnectionStringAppSettingName":"Mediation_CDR_MobileAnalysis_DBConnStringKey","Query":"ALTER INDEX [IX_MobileCDR_SetupTime] ON [Mobile_EDR].[MobileCDR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)\n\nALTER INDEX [IX_MobileCDR_SetupTime_Id] ON [Mobile_EDR].[MobileCDR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)\n\nALTER INDEX [IX_MobileCDR_Id] ON [Mobile_EDR].[MobileCDR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)\n\nUPDATE STATISTICS  [Mobile_EDR].[MobileCDR]","ProcessName":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.DatabaseJobProcessInput","UserId":0},"RawExpressions":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib","ScheduleTime":"ScheduleTime"}},"StartEffDate":"2018-01-01T00:00:00"}',-1),
-('0A274BF3-F7AF-4E72-B6E3-FD6653359C1B','Delete Old Mobile CDRs',0,1,'7FDB2D2B-E1B2-47D5-ACD5-234E391CA759','7A35F562-319B-47B3-8258-EC1A704A82EB','{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskActionArgument":{"$type":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments","BPDefinitionID":"fb302cf3-c28a-4a27-b6b4-cf50eef16cf1","ProcessInputArguments":{"$type":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.DatabaseJobProcessInput, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments","ConnectionStringAppSettingName":"Mediation_CDR_MobileAnalysis_DBConnStringKey","Query":"Delete from [Mobile_EDR].[MobileCDR] where setup_time < DATEADD(day,-30,getdate())","ProcessName":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.DatabaseJobProcessInput","UserId":0},"RawExpressions":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib","ScheduleTime":"ScheduleTime"}},"StartEffDate":"2018-01-01T00:00:00"}',-1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+('0A274BF3-F7AF-4E72-B6E3-FD6653359C1B','Delete Old Mobile CDRs',0,1,'7FDB2D2B-E1B2-47D5-ACD5-234E391CA759','7A35F562-319B-47B3-8258-EC1A704A82EB','{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskActionArgument":{"$type":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments","BPDefinitionID":"fb302cf3-c28a-4a27-b6b4-cf50eef16cf1","ProcessInputArguments":{"$type":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.DatabaseJobProcessInput, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments","ConnectionStringAppSettingName":"Mediation_CDR_MobileAnalysis_DBConnStringKey","Query":"Delete from [Mobile_EDR].[MobileCDR] where setup_time < DATEADD(day,-30,getdate())","ProcessName":"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.DatabaseJobProcessInput","UserId":0},"RawExpressions":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib","ScheduleTime":"ScheduleTime"}},"StartEffDate":"2018-01-01T00:00:00"}',-1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId]))
 merge	[runtime].[ScheduleTask] as t
 using	cte_data as s
@@ -301,7 +351,24 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);
 
 
---[bp].[ProcessSynchronisation]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[IsEnabled],[Settings],[CreatedBy],[LastModifiedBy])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('F1883EDF-DDDF-448C-9061-D01E4BAB7CCF','Synchronize Mobile Mediation',1,'{"$type":"Vanrise.BusinessProcess.Entities.ProcessSynchronisationSettings, Vanrise.BusinessProcess.Entities","FirstProcessSynchronisationGroup":{"$type":"Vanrise.BusinessProcess.Entities.ProcessSynchronisationGroup, Vanrise.BusinessProcess.Entities","BPSynchronisationItems":{"$type":"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities]], mscorlib","$values":[{"$type":"Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities","BPDefinitionId":"fb302cf3-c28a-4a27-b6b4-cf50eef16cf1","TaskIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["0a274bf3-f7af-4e72-b6e3-fd6653359c1b","693702aa-68bb-43e9-8ef7-c6c3b6e19bb0"]}}]}},"SecondProcessSynchronisationGroup":{"$type":"Vanrise.BusinessProcess.Entities.ProcessSynchronisationGroup, Vanrise.BusinessProcess.Entities","BPSynchronisationItems":{"$type":"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities]], mscorlib","$values":[{"$type":"Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities","BPDefinitionId":"fb302cf3-c28a-4a27-b6b4-cf50eef16cf1","TaskIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["0a274bf3-f7af-4e72-b6e3-fd6653359c1b","693702aa-68bb-43e9-8ef7-c6c3b6e19bb0"]}},{"$type":"Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities","BPDefinitionId":"92082ee6-b150-46de-937b-1cf56b5ba453"},{"$type":"Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities","BPDefinitionId":"aad944e5-af00-480e-a318-23e835a123ff"}]},"ExecutionFlowSynchronisationItems":{"$type":"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.Entities.ExecutionFlowSynchronisationItem, Vanrise.BusinessProcess.Entities]], mscorlib","$values":[{"$type":"Vanrise.BusinessProcess.Entities.ExecutionFlowSynchronisationItem, Vanrise.BusinessProcess.Entities","ExecutionFlowDefinitionId":"6e57f3e7-44a3-4c22-b506-35fd52e10686"}]}}}',-1,-1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[IsEnabled],[Settings],[CreatedBy],[LastModifiedBy]))merge	[bp].[ProcessSynchronisation] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when not matched by target then	insert([ID],[Name],[IsEnabled],[Settings],[CreatedBy],[LastModifiedBy])	values(s.[ID],s.[Name],s.[IsEnabled],s.[Settings],s.[CreatedBy],s.[LastModifiedBy]);--[dataparser].[ParserType]-------------------------------------------------------------------------
+--[bp].[ProcessSynchronisation]-------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[IsEnabled],[Settings],[CreatedBy],[LastModifiedBy])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('F1883EDF-DDDF-448C-9061-D01E4BAB7CCF','Synchronize Mobile Mediation',1,'{"$type":"Vanrise.BusinessProcess.Entities.ProcessSynchronisationSettings, Vanrise.BusinessProcess.Entities","FirstProcessSynchronisationGroup":{"$type":"Vanrise.BusinessProcess.Entities.ProcessSynchronisationGroup, Vanrise.BusinessProcess.Entities","BPSynchronisationItems":{"$type":"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities]], mscorlib","$values":[{"$type":"Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities","BPDefinitionId":"fb302cf3-c28a-4a27-b6b4-cf50eef16cf1","TaskIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["0a274bf3-f7af-4e72-b6e3-fd6653359c1b","693702aa-68bb-43e9-8ef7-c6c3b6e19bb0"]}}]}},"SecondProcessSynchronisationGroup":{"$type":"Vanrise.BusinessProcess.Entities.ProcessSynchronisationGroup, Vanrise.BusinessProcess.Entities","BPSynchronisationItems":{"$type":"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities]], mscorlib","$values":[{"$type":"Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities","BPDefinitionId":"fb302cf3-c28a-4a27-b6b4-cf50eef16cf1","TaskIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["0a274bf3-f7af-4e72-b6e3-fd6653359c1b","693702aa-68bb-43e9-8ef7-c6c3b6e19bb0"]}},{"$type":"Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities","BPDefinitionId":"92082ee6-b150-46de-937b-1cf56b5ba453"},{"$type":"Vanrise.BusinessProcess.Entities.BPSynchronisationItem, Vanrise.BusinessProcess.Entities","BPDefinitionId":"aad944e5-af00-480e-a318-23e835a123ff"}]},"ExecutionFlowSynchronisationItems":{"$type":"System.Collections.Generic.List`1[[Vanrise.BusinessProcess.Entities.ExecutionFlowSynchronisationItem, Vanrise.BusinessProcess.Entities]], mscorlib","$values":[{"$type":"Vanrise.BusinessProcess.Entities.ExecutionFlowSynchronisationItem, Vanrise.BusinessProcess.Entities","ExecutionFlowDefinitionId":"6e57f3e7-44a3-4c22-b506-35fd52e10686"}]}}}',-1,-1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[IsEnabled],[Settings],[CreatedBy],[LastModifiedBy]))
+merge	[bp].[ProcessSynchronisation] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when not matched by target then
+	insert([ID],[Name],[IsEnabled],[Settings],[CreatedBy],[LastModifiedBy])
+	values(s.[ID],s.[Name],s.[IsEnabled],s.[Settings],s.[CreatedBy],s.[LastModifiedBy]);
+
+
+--[dataparser].[ParserType]-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[Settings])
