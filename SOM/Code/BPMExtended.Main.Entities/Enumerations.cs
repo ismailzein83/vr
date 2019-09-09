@@ -409,6 +409,14 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("5e803dda-f776-4ddd-a971-345d87a99d96")]
         Revoke = 47,
 
+        [Description("Telephony No Cabling")]
+        [EntitySchemaName("StTelephonyNoCabling")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("3257c859-885b-410e-a3a2-fe99e0723a62")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("ee43e28d-aa12-41a3-8c97-626dcaad95b0")]
+        TelephonyNoCabling = 48,
+
     }
     public enum ContractStatus
     {
