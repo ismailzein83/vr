@@ -135,8 +135,10 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Line Termination")]
         [EntitySchemaName("StADSLLineTermination")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("56D55B17-8962-4D80-9564-361AD127E6B5")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("639E4A4C-1752-42E3-83CD-85674B6E9903")]
         ADSLLineTermination = 9,
 
         //[LineOfBusiness(LineOfBusiness.Telephony)]
@@ -149,15 +151,19 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Alter Speed")]
         [EntitySchemaName("StADSLAlterSpeed")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("B0DBAD29-F63F-41E3-98FE-8EA06B57B9A7")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("33AF8121-E09C-4F57-AFA9-1FD79939580E")]
         ADSLAlterSpeed = 11,
 
         //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Change Password")]
         [EntitySchemaName("StADSLChangePassword")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("3F70A8B3-DAD2-4428-80C2-EABB8C19CD55")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("E326FAEA-C8F9-497E-85E0-3B92CFC32231")]
         ADSLChangePassword = 12,
 
         //[LineOfBusiness(LineOfBusiness.Telephony)]
