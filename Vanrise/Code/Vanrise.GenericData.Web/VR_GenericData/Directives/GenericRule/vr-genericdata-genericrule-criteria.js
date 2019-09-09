@@ -188,7 +188,7 @@
                             return false;
                         }
 
-                        function buildGroupObject(criteriaDefinitionGroup, criteriaField, isSelectedField) {
+                        function buildGroupObject(criteriaDefinitionGroup, criteriaField) {
 
                             var onGroupCriteriaFieldSelectionChanged = function (selectedCriteriaField) {
                                 if (selectedCriteriaField == undefined || selectedCriteriaField.runtimeEditor == undefined)
@@ -227,7 +227,7 @@
                             return {
                                 groupTitle: criteriaDefinitionGroup.GroupTitle,
                                 fields: [criteriaField],
-                                selectedField: isSelectedField ? criteriaField : undefined,
+                                selectedField: criteriaField,
                                 onGroupCriteriaFieldSelectionChanged: onGroupCriteriaFieldSelectionChanged,
                                 onBeforeGroupCriteriaFieldSelectionChanged: onBeforeGroupCriteriaFieldSelectionChanged
                             };
