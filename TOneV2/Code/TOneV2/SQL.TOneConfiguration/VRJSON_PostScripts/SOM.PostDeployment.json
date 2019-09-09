@@ -400,7 +400,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Id IN ('461B7474-9B19-4B90-AEAB-63BA37245E53','2A61A473-A949-4781-8D06-DCB170006A3B','6D0083C3-E7C9-483F-B87C-5CAF4CD6F4D7')",
+        "LastWhereCondition": "Name like '%OnlineInterceptor%'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
