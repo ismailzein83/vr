@@ -1,6 +1,62 @@
 ﻿{
   "Scripts": [
     {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "64fdbe16-5f03-47a7-b4c8-bd1f2fa2fef9",
+              "Name": "SOM",
+              "AssemblyID": null,
+              "CreatedTime": "2019-09-04T15:26:27.4",
+              "LastModifiedTime": "2019-09-04T15:26:27.4"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "AssemblyID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "Id='64fdbe16-5f03-47a7-b4c8-bd1f2fa2fef9'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
       "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
       "Schema": "bp",
