@@ -267,7 +267,7 @@ namespace Vanrise.HelperTools
             foreach (var directory in allDirectories)
             {
                 var orgDirectoryName = Path.GetFileName(directory);
-                var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden_"+ projectName) : orgDirectoryName;
+                var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden_" + projectName) : orgDirectoryName;
 
                 //create file if not exist in order to create root output file
                 if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql")))
@@ -324,6 +324,34 @@ namespace Vanrise.HelperTools
 
                     File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql"), fileContent.ToString());
                     File.Delete(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt"));
+                }
+
+
+                //convert remaining json files to SQL files
+
+                string[] allRemainingFiles = Directory.GetFiles(directory, "**.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".json")).ToArray();
+                foreach (var file in allRemainingFiles)
+                {
+                    StringBuilder fileContent = new StringBuilder();
+
+                    string addDicrectory = string.Format("{0}\\", directory);
+                    if (file.Contains("\\"))
+                    {
+                        addDicrectory = string.Empty;
+                    }
+                    if (File.Exists(string.Format("{0}{1}", addDicrectory, file)))
+                    {
+                        //convert .json to .sql then do append content
+                        var content = File.ReadAllText(string.Format("{0}{1}", addDicrectory, file));
+                        var tables = Serializer.Deserialize<GeneratedScriptItemTables>(content);
+                        Vanrise.DevTools.Business.VRGeneratedScriptColumnsManager scriptManager = new DevTools.Business.VRGeneratedScriptColumnsManager();
+                        content = scriptManager.GenerateQueries(new DevTools.Entities.GeneratedScriptItem { Type = DevTools.Entities.GeneratedScriptType.SQL, Tables = tables });
+
+                        fileContent.Append(content);
+
+                        File.WriteAllText(string.Format("{0}{1}{2}", addDicrectory, file.Replace(".json", ""), ".sql"), fileContent.ToString());
+                        File.Delete(string.Format("{0}{1}", addDicrectory, file));
+                    }
                 }
             }
         }
@@ -733,7 +761,7 @@ when not matched by target then
                 Directory.CreateDirectory(sqlFilesOutputPath);
             }
 
-            StringBuilder sbLogging = GenerateSQLDBScript("StandardLoggingStructure");            
+            StringBuilder sbLogging = GenerateSQLDBScript("StandardLoggingStructure");
             StringBuilder sbTransaction = GenerateSQLDBScript("StandardTransactionStructure");
             StringBuilder sbQueueing = GenerateSQLDBScript("StandardQueueingStructure");
 
@@ -744,7 +772,7 @@ when not matched by target then
             foreach (string project in lstLoggingTransaction)
             {
                 StringBuilder stProject = new StringBuilder();
-                
+
                 stProject.Append(sbLogging.ToString());
                 stProject.AppendLine("GO");
                 stProject.AppendLine(string.Format("USE [{0}]", "StandardLoggingStructure"));
