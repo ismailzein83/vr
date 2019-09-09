@@ -104,7 +104,7 @@ Demo_MarketView.PostDeployment.json
 Mediation
 Mediation_WHS.Common.PostDeployment.sql
 Mediation_Mobile.Common.PostDeployment.sql
-Mediation.PostDeployment.sql
+Mediation.PostDeployment.json
 
 Xbooster
 Xbooster.PostDeployment.sql
