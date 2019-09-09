@@ -25,13 +25,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, saleZoneSelectorCtrl) {
-
-                    }
-                };
-            },
             template: function (element, attrs) {
                 return getBeSaleZoneTemplate(attrs);
             }
