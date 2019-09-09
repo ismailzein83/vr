@@ -3,6 +3,62 @@
     {
       "ConnectionId": "005738a9-681a-4121-af2c-588ed636f8cd",
       "Schema": "common",
+      "TableName": "VRDevProject",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
+              "Name": "Mediation",
+              "AssemblyID": null,
+              "CreatedTime": "2019-09-05T09:17:55.717",
+              "LastModifiedTime": "2019-09-05T09:17:55.717"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "AssemblyID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "Id='AA3BEB6B-6A5C-4AB3-8831-A6686BB81406'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "005738a9-681a-4121-af2c-588ed636f8cd",
+      "Schema": "common",
       "TableName": "ExtensionConfiguration",
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
