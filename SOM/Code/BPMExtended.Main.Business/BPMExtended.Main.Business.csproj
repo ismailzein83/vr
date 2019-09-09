@@ -105,6 +105,7 @@
     <Compile Include="Request Flow Management\LastMileChangeFlowManagement.cs" />
     <Compile Include="Request Flow Management\RevokeFlowManagement.cs" />
     <Compile Include="Request Flow Management\SuspensionFlowManagement.cs" />
+    <Compile Include="Request Flow Management\TelephonyNoCablingManagement.cs" />
     <Compile Include="Request Flow Management\UpdateCustomerCategoryFlowManagement.cs" />
     <Compile Include="Request Flow Management\AdministrativeComplaintFlowManagement.cs" />
     <Compile Include="Request Flow Management\CreatePaymentPlanFlowManagement.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Requests\Telephony\ServiceAdditionManager.cs" />
     <Compile Include="Requests\Telephony\ServiceRemovalManager.cs" />
     <Compile Include="Requests\Telephony\SuspensionManager.cs" />
+    <Compile Include="Requests\Telephony\TelephonyNoCablingManager.cs" />
     <Compile Include="Requests\Telephony\UpdateContractAddressManager.cs" />
     <Compile Include="Requests\Telephony\TelephonyTechnicalComplaintManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
