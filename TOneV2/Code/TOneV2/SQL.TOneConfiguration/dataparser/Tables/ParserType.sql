@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [dataparser].[ParserType] (
     [ID]               UNIQUEIDENTIFIER NOT NULL,
+    [DevProjectID]     UNIQUEIDENTIFIER NULL,
     [Name]             NVARCHAR (255)   NOT NULL,
     [Settings]         NVARCHAR (MAX)   NULL,
     [timestamp]        ROWVERSION       NULL,
@@ -8,6 +9,8 @@
     CONSTRAINT [PK_ParserType] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_ParserType_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 
