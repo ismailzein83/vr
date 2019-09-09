@@ -1000,5 +1000,6 @@
     <None Include="VRJSON_PostScripts\SOM.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\SomST.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\Mediation.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\Mediation_Jazz.PostDeployment.json" />
   </ItemGroup>
 </Project>
