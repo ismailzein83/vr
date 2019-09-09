@@ -137,6 +137,7 @@
     <Content Include="product-icons\subcriber ra.png" />
     <Content Include="product-icons\subcriber.png" />
     <Content Include="product-icons\t-one.png" />
+    <Content Include="product-icons\TMC.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
