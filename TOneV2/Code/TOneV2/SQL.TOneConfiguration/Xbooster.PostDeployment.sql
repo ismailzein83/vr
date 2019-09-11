@@ -186,24 +186,7 @@ end
 
 --[bp].[BPTaskType]-------------------------30001 to 40000----------------------------------------------
 begin
-set nocount on;
-;with cte_data([ID],[Name],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('29CD0980-4565-4BFF-BD0F-5C829AFF1A01','CDRComparison.BP.Arguments.SettingTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/CDRComparison/Views/CDRComparisonSettingsTask.html", "AutoOpenTask":true}'),
-('58BD6835-A209-42FA-B8FB-60CF111BADA8','CDRComparison.BP.Arguments.CDRComparisonConfigTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/CDRComparison/Views/CDRComparisonConfigTask.html", "AutoOpenTask":true}'),
-('C408EEA7-E07E-4C37-B3CC-F4B5D6AD1693','CDRComparison.BP.Arguments.ComparisonResultTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/CDRComparison/Views/CDRComparisonResultTask.html", "AutoOpenTask":true}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
-merge	[bp].[BPTaskType] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
+set nocount on;;with cte_data([ID],[DevProjectID],[Name],[Title],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('29CD0980-4565-4BFF-BD0F-5C829AFF1A01',null,'CDRComparison.BP.Arguments.SettingTaskData','CDRComparison.BP.Arguments.SettingTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/CDRComparison/Views/CDRComparisonSettingsTask.html", "AutoOpenTask":true}'),('58BD6835-A209-42FA-B8FB-60CF111BADA8',null,'CDRComparison.BP.Arguments.CDRComparisonConfigTaskData','CDRComparison.BP.Arguments.CDRComparisonConfigTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/CDRComparison/Views/CDRComparisonConfigTask.html", "AutoOpenTask":true}'),('C408EEA7-E07E-4C37-B3CC-F4B5D6AD1693',null,'CDRComparison.BP.Arguments.ComparisonResultTaskData','CDRComparison.BP.Arguments.ComparisonResultTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/CDRComparison/Views/CDRComparisonResultTask.html", "AutoOpenTask":true}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[DevProjectID],[Name],[Title],[Settings]))merge	[bp].[BPTaskType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[DevProjectID] = s.[DevProjectID],[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]when not matched by target then	insert([ID],[DevProjectID],[Name],[Title],[Settings])	values(s.[ID],s.[DevProjectID],s.[Name],s.[Title],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 end
 

@@ -36,21 +36,21 @@ END
 ----------------------------------------------------------------------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([ID],[Name],[Settings])
+;with cte_data([ID],[DevProjectID],[Name],[Title],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('3D917365-FE65-4FAD-AAF8-19D7354E2A3D','Vanrise.NumberingPlan.BP.Arguments.PreviewTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/VR_NumberingPlan/Views/NumberingPlanPreview.html","AutoOpenTask":true}')
+('3D917365-FE65-4FAD-AAF8-19D7354E2A3D',null,'Vanrise.NumberingPlan.BP.Arguments.PreviewTaskData','Vanrise.NumberingPlan.BP.Arguments.PreviewTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/VR_NumberingPlan/Views/NumberingPlanPreview.html","AutoOpenTask":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
+)c([ID],[DevProjectID],[Name],[Title],[Settings]))
 merge	[bp].[BPTaskType] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
+	[DevProjectID] = s.[DevProjectID],[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
+	insert([ID],[DevProjectID],[Name],[Title],[Settings])
+	values(s.[ID],s.[DevProjectID],s.[Name],s.[Title],s.[Settings]);
 END
 
 

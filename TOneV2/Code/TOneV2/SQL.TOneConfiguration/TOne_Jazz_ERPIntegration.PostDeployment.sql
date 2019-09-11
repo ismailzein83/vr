@@ -208,24 +208,24 @@ when not matched by target then
 	insert([ID],[Name],[Title],[FQTN],[VRWorkflowId],[Config])
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[VRWorkflowId],s.[Config]);
 
---[TOneConfiguration].[bp].[BPTaskType]-------------------------------------------------------------
+--[bp].[BPTaskType]---------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[Settings])
+;with cte_data([ID],[DevProjectID],[Name],[Title],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('6D5F6793-F1E8-4CE6-9ADA-7A8AE8573168','TOne.WhS.Jazz.BP.Arguments.PreviewTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/WhS_Jazz/Elements/Views/JazzReportsPreviewTask.html","AutoOpenTask":true}')
+('6D5F6793-F1E8-4CE6-9ADA-7A8AE8573168',null,'TOne.WhS.Jazz.BP.Arguments.PreviewTaskData','TOne.WhS.Jazz.BP.Arguments.PreviewTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/WhS_Jazz/Elements/Views/JazzReportsPreviewTask.html","AutoOpenTask":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
+)c([ID],[DevProjectID],[Name],[Title],[Settings]))
 merge	[bp].[BPTaskType] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
+	[DevProjectID] = s.[DevProjectID],[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
+	insert([ID],[DevProjectID],[Name],[Title],[Settings])
+	values(s.[ID],s.[DevProjectID],s.[Name],s.[Title],s.[Settings]);
 
 
 
