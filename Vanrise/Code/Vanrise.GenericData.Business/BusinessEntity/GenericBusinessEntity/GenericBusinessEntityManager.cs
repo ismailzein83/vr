@@ -474,7 +474,7 @@ namespace Vanrise.GenericData.Business
 
                     result.Data = resultDetail;
                 }
-                VRActionLogger.Current.LogGetFilteredAction(new GenericBusinessEntityLoggableEntity(input.Query.BusinessEntityDefinitionId), input);
+                VRActionLogger.Current.LogGetFilteredAction(new GenericBusinessEntityLoggableEntity(businessEntityDefinitionId), input);
                 //   var vrCases =  storageDataManager.GetFilteredDataRecords()
                 //  return DataRetrievalManager.Instance.ProcessResult(input, vrCases.ToBigResult(input, filterExpression, VRCaseDetailMapper));
                 return result;
@@ -492,29 +492,38 @@ namespace Vanrise.GenericData.Business
                 }
                 else
                 {
-                    BigResult<GenericBusinessEntityDetail> result = connectionSettings.Post<DataRetrievalInput<GenericBusinessEntityQuery>, BigResult<GenericBusinessEntityDetail>>("/api/VR_GenericData/GenericBusinessEntity/GetFilteredGenericBusinessEntities", clonedInput, true);
-                    if (result != null && result.Data != null)
+                    var genericBusinessEntities = connectionSettings.Post<DataRetrievalInput<GenericBusinessEntityQuery>, BigResult<GenericBusinessEntityDetail>>("/api/VR_GenericData/GenericBusinessEntity/GetFilteredGenericBusinessEntities", clonedInput, true);
+                    BigResult<GenericBusinessEntityDetail> result = new BigResult<GenericBusinessEntityDetail>();
+                    if (genericBusinessEntities != null)
                     {
-                        var dataRecordTypeFields = _genericBEDefinitionManager.GetDataRecordTypeFieldsByBEDefinitionId(input.Query.BusinessEntityDefinitionId);
-                        foreach (var item in result.Data)
+                        result.ResultKey = genericBusinessEntities.ResultKey;
+                        result.TotalCount = genericBusinessEntities.TotalCount;
+                        List<GenericBusinessEntityDetail> resultDetail = new List<GenericBusinessEntityDetail>();
+                        if (genericBusinessEntities.Data != null)
                         {
-                            if (item.FieldValues != null)
-                            {
-                                foreach (var fieldValue in item.FieldValues)
-                                {
-                                    var dataRecordTypeField = dataRecordTypeFields.GetRecord(fieldValue.Key);
 
-                                    var styleDefinitionContext = new DataRecordFieldStyleDefinitionContext { FieldValue = fieldValue.Value.Value };
-                                    if (dataRecordTypeField.Type.TryGetStyleDefinitionId(styleDefinitionContext))
-                                        fieldValue.Value.StyleDefinitionId = styleDefinitionContext.StyleDefinitionId;
-                                    else
-                                        fieldValue.Value.StyleDefinitionId = null;
+                            var remoteGridDefinition = _genericBEDefinitionManager.GetGenericBEDefinitionGridDefinition(businessEntityDefinitionId);
+                            var remoteGenericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, true);
+                            var remoteGenericBeActions = _genericBEDefinitionManager.GetCachedGenericBEActionsByActionId(businessEntityDefinitionId);
+
+                            foreach (var genericbe in genericBusinessEntities.Data)
+                            {
+                                GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntity();
+                                if (genericbe.FieldValues != null)
+                                {
+                                    genericBusinessEntity.FieldValues = new Dictionary<string, object>();
+
+                                    foreach (var fieldValue in genericbe.FieldValues)
+                                    {
+                                        genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
+                                    }
                                 }
+                                resultDetail.Add(GenericBusinessEntityDetailMapper(businessEntityDefinitionId, genericBusinessEntity, remoteGenericBEDefinitionSetting, remoteGenericBeActions,remoteGridDefinition));
                             }
                         }
+                        result.Data = resultDetail;
                     }
-
-                    VRActionLogger.Current.LogGetFilteredAction(new GenericBusinessEntityLoggableEntity(input.Query.BusinessEntityDefinitionId), input);
+                    VRActionLogger.Current.LogGetFilteredAction(new GenericBusinessEntityLoggableEntity(businessEntityDefinitionId), input);
                     return result;
                 }
             }
