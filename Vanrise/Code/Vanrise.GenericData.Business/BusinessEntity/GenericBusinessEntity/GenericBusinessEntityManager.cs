@@ -518,7 +518,7 @@ namespace Vanrise.GenericData.Business
                                         genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
                                     }
                                 }
-                                resultDetail.Add(GenericBusinessEntityDetailMapper(businessEntityDefinitionId, genericBusinessEntity, remoteGenericBEDefinitionSetting, remoteGenericBeActions,remoteGridDefinition));
+                                resultDetail.Add(GenericBusinessEntityDetailMapper(businessEntityDefinitionId, genericBusinessEntity, remoteGenericBEDefinitionSetting, remoteGenericBeActions, remoteGridDefinition));
                             }
                         }
                         result.Data = resultDetail;
@@ -890,7 +890,7 @@ namespace Vanrise.GenericData.Business
             var dataRecordTypeFields = new DataRecordTypeManager().GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
             var excelFile = new VRExcelFile();
-            var excelSheet = new VRExcelSheet(); 
+            var excelSheet = new VRExcelSheet();
             var index = 0;
             if (genericBEDefinitionSetting != null && genericBEDefinitionSetting.ShowUpload && genericBEDefinitionSetting.UploadFields != null)
             {
@@ -901,13 +901,14 @@ namespace Vanrise.GenericData.Business
                         var dataRecordTypeField = dataRecordTypeFields.GetRecord(item.FieldName);
                         if (dataRecordTypeField != null)
                         {
-                           var containerConfig = new VRExcelContainerConfig ();
+                            var containerConfig = new VRExcelContainerConfig();
                             dataRecordTypeField.Type.SetContainerConfigCellExcelType(containerConfig);
-                           
-                            var columnConfig = new VRExcelColumnConfig {
+
+                            var columnConfig = new VRExcelColumnConfig
+                            {
                                 ColumnIndex = index,
-                                BGColor= containerConfig.BGColor,
-                                ExcelContainerConfigSettings=containerConfig.ExcelContainerConfigSettings,
+                                BGColor = containerConfig.BGColor,
+                                ExcelContainerConfigSettings = containerConfig.ExcelContainerConfigSettings,
                                 FontColor = containerConfig.FontColor,
                                 FontSize = containerConfig.FontSize,
                                 HorizontalAlignment = containerConfig.HorizontalAlignment,
@@ -918,7 +919,7 @@ namespace Vanrise.GenericData.Business
                             };
 
                             excelSheet.SetColumnConfig(columnConfig);
-                               var value = dataRecordTypeField.Title;
+                            var value = dataRecordTypeField.Title;
                             if (vrLocalizationManager.IsLocalizationEnabled())
                                 value = (!String.IsNullOrEmpty(item.TextResourceKey)) ? vrLocalizationManager.GetTranslatedTextResourceValue(item.TextResourceKey, item.FieldName) : dataRecordTypeField.Title;
                             excelSheet.AddCell(new VRExcelCell
@@ -1389,7 +1390,9 @@ namespace Vanrise.GenericData.Business
         {
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(fileID);
-            return file.Content;
+            if (file != null)
+                return file.Content;
+            return null;
         }
 
         public GenericBEAction GetGenericBEAction(Guid businessEntityDefinitionId, Guid actionId)

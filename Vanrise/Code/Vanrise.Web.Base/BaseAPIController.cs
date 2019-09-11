@@ -18,7 +18,7 @@ namespace Vanrise.Web.Base
             return GetWebResponse<T>(dataRetrievalInput, result, "ExcelReport");
         }
 
-        protected object GetWebResponse<T>(DataRetrievalInput dataRetrievalInput, IDataRetrievalResult<T> result, string resultFileName )
+        protected object GetWebResponse<T>(DataRetrievalInput dataRetrievalInput, IDataRetrievalResult<T> result, string resultFileName)
         {
             ExcelResult<T> excelResult = result as ExcelResult<T>;
             if (excelResult != null)
@@ -36,12 +36,12 @@ namespace Vanrise.Web.Base
             return GetExcelResponse(new ExcelResult() { ExcelFileStream = ms });
         }
         protected object GetExcelResponse(ExcelResult excelResult)
-        {         
-           return GetExcelResponse(excelResult, "ExcelReport");
+        {
+            return GetExcelResponse(excelResult, "ExcelReport");
         }
         protected object GetExcelResponse(ExcelResult excelResult, string resultFileName)
         {
-            var fileName = string.Format("{0}.xlsx",resultFileName);
+            var fileName = string.Format("{0}.xlsx", resultFileName);
             if (excelResult.ConversionResultType != null)
                 return excelResult;
             if (excelResult.ExcelFileContent != null)
@@ -49,7 +49,7 @@ namespace Vanrise.Web.Base
             else
                 return GetExcelResponse(excelResult.ExcelFileStream, fileName);
         }
-              
+
         protected object GetExcelResponse(Stream stream, string fileName)
         {
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
@@ -67,7 +67,8 @@ namespace Vanrise.Web.Base
         {
 
             MemoryStream stream = new System.IO.MemoryStream();
-            stream.Write(bytes, 0, bytes.Length);
+            if (bytes != null)
+                stream.Write(bytes, 0, bytes.Length);
             stream.Seek(0, System.IO.SeekOrigin.Begin);
             return GetExcelResponse(stream, fileName);
         }
