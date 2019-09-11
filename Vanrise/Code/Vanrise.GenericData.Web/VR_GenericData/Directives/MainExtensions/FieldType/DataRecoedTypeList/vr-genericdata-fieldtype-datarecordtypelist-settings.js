@@ -80,7 +80,7 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
 
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, directiveAPI, {context: directivePayload.context, dataRecordTypeId: directivePayload.dataRecordTypeId }, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, directiveAPI, { context: directivePayload.context, dataRecordTypeId: directivePayload.dataRecordTypeId, fieldType: directivePayload.fieldType }, setLoader, directiveReadyDeferred);
                 };
 
 
