@@ -942,7 +942,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordStorageSelectorAPI, {
                             DataRecordTypeId: selectedRecordTypeId,
-                            selectFirstItem: true
+                            selectFirstItem: true,
+                            showaddbutton: true,
                         }, setDataRecordStorageLoader);
 
                         var setDataRecordTypeRequiredParentLoader = function (value) {
