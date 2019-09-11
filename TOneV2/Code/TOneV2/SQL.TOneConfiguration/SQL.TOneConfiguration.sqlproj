@@ -1009,5 +1009,6 @@
     <None Include="VRJSON_PostScripts\TestCallAnalysis.PotDeployment.json" />
     <None Include="VRJSON_PostScripts\BusinessProcess.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\Generic.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\Analytic.PostDeployment.json" />
   </ItemGroup>
 </Project>
