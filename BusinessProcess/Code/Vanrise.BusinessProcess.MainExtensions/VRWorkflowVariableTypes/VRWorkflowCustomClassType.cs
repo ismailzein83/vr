@@ -54,11 +54,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes
 
         public override bool IsValueType()
         {
-            if (string.IsNullOrEmpty(this.FieldType.AssemblyName) 
-                && 
-                new VRNamespaceManager().GetVRNamespaceByName(this.FieldType.Namespace) != null)
-                return false;
-            else
+            //if (string.IsNullOrEmpty(this.FieldType.AssemblyName) 
+            //    && 
+            //    new VRNamespaceManager().GetVRNamespaceByName(this.FieldType.Namespace) != null)
+            //    return false;
+            //else
                 return GetRuntimeType(null).IsValueType;
         }
 
