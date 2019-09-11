@@ -348,6 +348,15 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 api.getData = function () {
                     var orderTypeEntity = orderTypeSelectorAPI.getData();
 
+                    //var customActions = customActionsDirectiveAPI.getData();
+                    //if (customActions != undefined) {
+                    //    var uploadCustomActions = customActions.filter(function (itm) {
+                    //        if (itm.Settings != undefined)
+                    //            return (itm.Settings.ActionTypeName == "UploadCustomAction");
+                    //        return null;
+                    //    });
+                    //}
+
                     return {
                         $type: "Vanrise.GenericData.Business.GenericBEDefinitionSettings, Vanrise.GenericData.Business",
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
@@ -374,6 +383,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         GenericBEActions: actionDefinitionGridAPI.getData(),
                         GenericBEBulkActions: bulkActionsDirectiveAPI.getData(),
                         CustomActions: customActionsDirectiveAPI.getData(),
+                        //CustomActions: customActions,
                         ExtendedSettings: extendedSettingsAPI.getData(),
                         OnBeforeInsertHandler: beforeInsertHandlerAPI.getData(),
                         OnAfterSaveHandler: afterSaveHandlerAPI.getData(),
@@ -387,6 +397,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         ShowUpload: $scope.scopeModel.showUploadButton,
                         CanBeViewedFromRelatedGenericBE: $scope.scopeModel.canBeViewedFromRelatedGenericBE,
                         UploadFields: ($scope.scopeModel.showUploadButton == true) ? uploadedFieldsGridAPI.getData() : null,
+                        //UploadFields: ($scope.scopeModel.showUploadButton == true || uploadCustomActions.length > 0) ? uploadedFieldsGridAPI.getData() : null,
                         AdditionalSettings: additionalSettingsGridAPI.getData(),
                         RequiredParentFieldName: dataRecordTypeRequiredParentFieldsSelectorAPI.getSelectedIds(),
                         IsRemoteSelector: $scope.scopeModel.isRemoteSelector,
@@ -402,12 +413,14 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 };
 
                 api.load = function (payload) {
+                    //var businessEntityDefinitionId;
                     var businessEntityDefinitionSettings;
                     var genericBEAddedValues;
                     vrConnectionId = undefined;
                     dataRecordStorageId = undefined;
                     var firstPromises = [];
                     if (payload != undefined) {
+                       // businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         businessEntityDefinitionSettings = payload.businessEntityDefinitionSettings;
                         genericBEAddedValues = payload.additionalData;
                         if (businessEntityDefinitionSettings != undefined) {
@@ -627,7 +640,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         customActionDefinitionGridReadyPromiseDeferred.promise.then(function () {
                             var payload = {
                                 context: getContext(),
-                                genericBECustomActions: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.CustomActions || undefined
+                                genericBECustomActions: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.CustomActions || undefined,
+                               // businessEntityDefinitionId: businessEntityDefinitionId
                             };
                             VRUIUtilsService.callDirectiveLoad(customActionsDirectiveAPI, payload, loadCustomActionDefinitionGridPromiseDeferred);
                         });
