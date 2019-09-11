@@ -329,6 +329,154 @@ namespace Retail.Runtime
             return result;
         }
 
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Qualitynet_Teles(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData importedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var cdrs = new List<dynamic>();
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDR");
+
+            System.IO.StreamReader sr = importedData.StreamReader;
+
+            string dateTimeFormat = "yyyyMMddHHmmssfff";
+
+            while (!sr.EndOfStream)
+            {
+                string currentLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(currentLine))
+                    continue;
+
+                string[] rowData = currentLine.Split(';');
+
+                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+
+                cdr.DataSource = dataSourceId;
+                cdr.FileName = importedData.Name;
+                cdr.Call_Id = rowData[0];
+
+                string attemptDateAsString = rowData[10];
+                if (string.IsNullOrEmpty(attemptDateAsString))
+                    throw new NullReferenceException("Attempt date can't be empty");
+
+                string attemptTimeAsString = rowData[11];
+                cdr.AttemptDateTime = DateTime.ParseExact(string.Concat(attemptDateAsString, !string.IsNullOrEmpty(attemptTimeAsString) ? attemptTimeAsString : "000000000"), dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture);
+
+                string connectDateAsString = rowData[14];
+                if (!string.IsNullOrEmpty(connectDateAsString))
+                {
+                    string connectTimeAsString = rowData[15];
+                    cdr.ConnectDateTime = DateTime.ParseExact(string.Concat(connectDateAsString, !string.IsNullOrEmpty(connectTimeAsString) ? connectTimeAsString : "000000000"), dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture);
+                }
+
+                string disconnectDateAsString = rowData[16];
+                if (!string.IsNullOrEmpty(disconnectDateAsString))
+                {
+                    string disconnectTimeAsString = rowData[17];
+                    cdr.DisconnectDateTime = DateTime.ParseExact(string.Concat(disconnectDateAsString, !string.IsNullOrEmpty(disconnectTimeAsString) ? disconnectTimeAsString : "000000000"), dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture);
+                }
+
+                cdr.OriginatorNumber = rowData[2];
+                cdr.TerminatorNumber = rowData[3];
+
+                string durationInMillisecondsAsString = rowData[8];
+                if (!string.IsNullOrEmpty(durationInMillisecondsAsString))
+                {
+                    if (decimal.TryParse(durationInMillisecondsAsString, out decimal durationInMilliseconds))
+                        cdr.DurationInSeconds = durationInMilliseconds / 1000;
+                }
+
+                cdr.ExtraFields = new Dictionary<string, string>();
+
+                string callStateAsString = rowData[1];
+                if (!string.IsNullOrEmpty(callStateAsString) && int.TryParse(callStateAsString, out int callStateAsInt))
+                    cdr.ExtraFields.Add("CallState", Convert.ToBoolean(callStateAsInt).ToString());
+
+                string inTrunkAsString = rowData[4];
+                if (!string.IsNullOrEmpty(inTrunkAsString))
+                    cdr.ExtraFields.Add("InTrunk", inTrunkAsString);
+
+                string inCircuitAsString = rowData[5];
+                if (!string.IsNullOrEmpty(inCircuitAsString))
+                    cdr.ExtraFields.Add("InCircuit", inCircuitAsString);
+
+                string outTrunkAsString = rowData[6];
+                if (!string.IsNullOrEmpty(outTrunkAsString))
+                    cdr.ExtraFields.Add("OutTrunk", outTrunkAsString);
+
+                string outCircuitAsString = rowData[7];
+                if (!string.IsNullOrEmpty(outCircuitAsString))
+                    cdr.ExtraFields.Add("OutCircuit", outCircuitAsString);
+
+                string outDuration2AsString = rowData[9];
+                if (!string.IsNullOrEmpty(outDuration2AsString))
+                    cdr.ExtraFields.Add("Duration2(ms)", outDuration2AsString);
+
+                string alertDateAsString = rowData[12];
+                if (!string.IsNullOrEmpty(alertDateAsString))
+                {
+                    string alertTimeAsString = rowData[13];
+                    cdr.ExtraFields.Add("AlertDateTime", DateTime.ParseExact(string.Concat(alertDateAsString, !string.IsNullOrEmpty(alertTimeAsString) ? alertTimeAsString : "000000000"), dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture).ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                }
+
+                string utcOffsetAsString = rowData[18];
+                if (!string.IsNullOrEmpty(utcOffsetAsString))
+                    cdr.ExtraFields.Add("UTCOffset", utcOffsetAsString);
+
+                string sipCallIdLegAAsString = rowData[19];
+                if (!string.IsNullOrEmpty(sipCallIdLegAAsString))
+                    cdr.ExtraFields.Add("SIPCallIdLegA", sipCallIdLegAAsString);
+
+                string sipCallIdLegBAsString = rowData[20];
+                if (!string.IsNullOrEmpty(sipCallIdLegBAsString))
+                    cdr.ExtraFields.Add("SIPCallIdLegB", sipCallIdLegBAsString);
+
+                string causeFromAsString = rowData[21];
+                if (!string.IsNullOrEmpty(causeFromAsString))
+                    cdr.ExtraFields.Add("CauseFrom", causeFromAsString);
+
+                string causeFromReleaseCodeAsString = rowData[22];
+                if (!string.IsNullOrEmpty(causeFromReleaseCodeAsString))
+                    cdr.ExtraFields.Add("CauseFromReleaseCode", causeFromReleaseCodeAsString);
+
+                string causeToReleaseCodeAsString = rowData[23];
+                if (!string.IsNullOrEmpty(causeToReleaseCodeAsString))
+                    cdr.ExtraFields.Add("CauseToReleaseCode", causeToReleaseCodeAsString);
+
+                string mediaErrorAsString = rowData[24];
+                if (!string.IsNullOrEmpty(mediaErrorAsString))
+                    cdr.ExtraFields.Add("MediaError", mediaErrorAsString);
+
+                string lastCallReroutedAsString = rowData[25];
+                if (!string.IsNullOrEmpty(lastCallReroutedAsString) && int.TryParse(lastCallReroutedAsString, out int lastCallReroutedAsInt))
+                    cdr.ExtraFields.Add("LastCallRerouted", Convert.ToBoolean(lastCallReroutedAsInt).ToString());
+
+                cdrs.Add(cdr);
+            }
+
+            if (cdrs.Count > 0)
+            {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
+                long currentCDRId = startingId;
+
+                foreach (var cdr in cdrs)
+                {
+                    cdr.ID = currentCDRId;
+                    currentCDRId++;
+                }
+
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
+                mappedBatches.Add("Distribute Raw CDRs Stage", batch);
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+
+            return result;
+        }
 
         private static void LogVerbose(string Message)
         {
