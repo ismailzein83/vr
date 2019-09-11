@@ -48,7 +48,7 @@
                 };
 
                 $scope.scopeModel.onFieldDeselected = function (item) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.fields, item.Name, "FieldPath");
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.fields, item.Name, "Name");
                     $scope.scopeModel.fields.splice(index, 1);
 
                     if (setFieldsNumber != undefined)
@@ -66,7 +66,9 @@
             }
 
             function prepareAddedField(item) {
-                var dataItem = {};
+                var dataItem = {
+                    Name: item.Name
+                };
 
                 dataItem.onFieldTypeGenericDesignEditorReady = function (api) {
                     dataItem.fieldTypeGenereicDesignEditorAPI = api;
@@ -160,7 +162,7 @@
                 var payload = field.payload;
 
                 var dataItem = {
-                    id: $scope.scopeModel.fields.length + 1,
+                    Name: payload.FieldPath
                 };
 
                 dataItem.onFieldTypeGenericDesignEditorReady = function (api) {
