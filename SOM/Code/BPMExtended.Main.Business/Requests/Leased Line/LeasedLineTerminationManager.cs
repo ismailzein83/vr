@@ -5,6 +5,8 @@ using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace BPMExtended.Main.Business
 {
@@ -28,6 +30,53 @@ namespace BPMExtended.Main.Business
             return random.Next(10) > 5 ? "Fiber" : "Copper";
         }
 
+        //public void PostLeasedLineTerminationToOM(Guid requestId)
+        //{
+        //    EntitySchemaQuery esq;
+        //    IEntitySchemaQueryFilterItem esqFirstFilter;
+        //    SOMRequestOutput output;
+
+        //    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLineTermination");
+        //    esq.AddColumn("StContractId");
+        //    esq.AddColumn("StLinePathId");
+
+        //    esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+        //    esq.Filters.Add(esqFirstFilter);
+
+        //    var entities = esq.GetEntityCollection(BPM_UserConnection);
+        //    if (entities.Count > 0)
+        //    {
+        //        var contractId = entities[0].GetColumnValue("StContractId");
+        //        var pathId = entities[0].GetColumnValue("StLinePathId");
+
+        //        SOMRequestInput<LeasedLineTerminationRequestInput> somRequestInput = new SOMRequestInput<LeasedLineTerminationRequestInput>
+        //        {
+
+        //            InputArguments = new LeasedLineTerminationRequestInput
+        //            {
+        //                CommonInputArgument = new CommonInputArgument()
+        //                {
+        //                    ContractId = contractId.ToString(),
+        //                    RequestId = requestId.ToString(),
+        //                },
+        //                 LinePathId= pathId.ToString()
+        //            }
+
+        //        };
+
+
+        //        //call api
+        //        using (var client = new SOMClient())
+        //        {
+        //            output = client.Post<SOMRequestInput<LeasedLineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_TerminateContract/StartProcess", somRequestInput);
+        //        }
+        //        var manager = new BusinessEntityManager();
+        //        manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+        //    }
+
+        //}
+
         public void PostLeasedLineTerminationToOM(Guid requestId)
         {
             EntitySchemaQuery esq;
@@ -35,8 +84,10 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLineTermination");
-            esq.AddColumn("StContractId");
-            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StReason");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -44,20 +95,30 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var pathId = entities[0].GetColumnValue("StLinePathId");
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var reason =  entities[0].GetColumnValue("StReason");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
-                SOMRequestInput<LeasedLineTerminationRequestInput> somRequestInput = new SOMRequestInput<LeasedLineTerminationRequestInput>
+
+                //ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
+
+                SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
 
-                    InputArguments = new LeasedLineTerminationRequestInput
+                    InputArguments = new LineTerminationRequestInput
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                         },
-                         LinePathId= pathId.ToString()
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        Reason = reason.ToString(),
                     }
 
                 };
@@ -66,7 +127,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LeasedLineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_TerminateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitLineTermination/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

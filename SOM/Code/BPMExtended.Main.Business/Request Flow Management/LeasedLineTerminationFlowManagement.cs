@@ -22,6 +22,7 @@ namespace BPMExtended.Main.Business
         }
 
         const string welcomeStep = "E89F9048-3ADB-413F-BEA3-B3962A37BBA4";
+        const string reasonStep = "C684A324-664E-4893-B03D-B5EDCD10B788";
         const string paymentStep = "7C9C8FA7-9BFB-4BC3-9196-1D69B26B633F";
         const string technicalStep = "352722D4-9AFC-4C93-8206-1C30434EFD63";
 
@@ -31,7 +32,8 @@ namespace BPMExtended.Main.Business
             string nextStepId = "";
             switch (currentStepId)
             {
-                case welcomeStep: nextStepId = paymentStep; break;
+                case welcomeStep: nextStepId = reasonStep; break;
+                case reasonStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
 

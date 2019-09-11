@@ -417,6 +417,14 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("ee43e28d-aa12-41a3-8c97-626dcaad95b0")]
         TelephonyNoCabling = 48,
 
+        [Description("BSCSSuspensionFromDunning")]
+        [EntitySchemaName("StBSCSSuspensionFromDunning")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("04AFF621-689F-47CD-8084-837B976D743E")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("2F9ECCE9-DFD7-4F15-9FED-61483A30534A")]
+        BSCSSuspensionFromDunning =49,
+
     }
     public enum ContractStatus
     {
