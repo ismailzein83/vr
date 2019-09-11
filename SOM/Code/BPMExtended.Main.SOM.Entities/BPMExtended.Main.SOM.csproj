@@ -79,8 +79,10 @@
     <Compile Include="Billing\WorkflowInput\ADSLContractOnHoldInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLForISPRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLLineMovingRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\ADSLLineTerminationRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLPrintConfigurationRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLSubscriptionRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\ADSLTakeOverInput.cs" />
     <Compile Include="Billing\WorkflowInput\BillOnDemandInput.cs" />
     <Compile Include="Billing\WorkflowInput\BillOnDemandInputArguments.cs" />
     <Compile Include="Billing\WorkflowInput\ChangeLeasedLineSpeedRequestInput.cs" />

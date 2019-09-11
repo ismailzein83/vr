@@ -10,6 +10,7 @@ namespace BPMExtended.Main.SOMAPI
     public class ADSLSubscriptionRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public PaymentData PaymentData { get; set; }
 
     }
 }

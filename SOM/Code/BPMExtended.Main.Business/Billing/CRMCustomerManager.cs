@@ -120,7 +120,7 @@ namespace BPMExtended.Main.Business
             var item = new Customer();
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<Customer>(String.Format("api/SOM.ST/Billing/ReadCustomer?CustomerId={0}", customerId));
+                item = client.Get<Customer>(String.Format("api/SOM.ST/Billing/GetCustomer?CustomerId={0}", customerId));
             }
             return item;
         }

@@ -34,9 +34,10 @@ namespace BPMExtended.Main.Business
             string serviceId;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLAlterSpeed");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StLinePathId");
             esq.AddColumn("StNewRatePlanId");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
@@ -50,6 +51,8 @@ namespace BPMExtended.Main.Business
             {
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var oldRatePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var pathdId = entities[0].GetColumnValue("StLinePathId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var newRatePlanId = entities[0].GetColumnValue("StNewRatePlanId");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
@@ -80,9 +83,11 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new ADSLAlterSpeedRequestInput
                     {
+                        LinePathId = pathdId.ToString(),
+                        NewRatePlan = newRatePlanId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
@@ -99,7 +104,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_AlterSpeed/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitXDSLAlterSpeed/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();
@@ -108,6 +113,96 @@ namespace BPMExtended.Main.Business
             }
 
         }
+
+
+        public void FinalizeXDSLAlterSpeed(Guid requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+            string serviceId;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLAlterSpeed");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StNewRatePlanId");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var oldRatePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var pathdId = entities[0].GetColumnValue("StLinePathId");
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var newRatePlanId = entities[0].GetColumnValue("StNewRatePlanId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                //fees
+                List<SaleService> feesServices = JsonConvert.DeserializeObject<List<SaleService>>(fees);
+
+                //Get ranks
+                int oldRank = new CatalogManager().GetRankByRatePlanId(oldRatePlanId.ToString());
+                int newRank = new CatalogManager().GetRankByRatePlanId(newRatePlanId.ToString());
+
+
+                if (oldRank < newRank)
+                {
+                    //get upgrade rank
+                    serviceId = new CatalogManager().GetUpgradSpeedServiceId();
+                    feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                }
+                else if (oldRank > newRank)
+                {
+                    //get downgrade rank
+                    serviceId = new CatalogManager().GetDowngradeSpeedServiceId();
+                    feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                }
+
+                SOMRequestInput<ADSLAlterSpeedRequestInput> somRequestInput = new SOMRequestInput<ADSLAlterSpeedRequestInput>
+                {
+
+                    InputArguments = new ADSLAlterSpeedRequestInput
+                    {
+                        LinePathId = pathdId.ToString(),
+                        NewRatePlan = newRatePlanId.ToString(),
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = feesServices,
+                            IsPaid = (bool)isPaid
+                        },
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeXDSLAlterSpeed/StartProcess", somRequestInput);
+                }
+
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+
+        }
+
         #endregion
     }
 }

@@ -172,9 +172,15 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public ADSLContractDetail GetADSLContract(string contractId)
+        public XDSLContract GetXDSLContract(string contractId)
         {
-            return RatePlanMockDataGenerator.GetADSLContract(contractId);
+            var xDSLContractEntity = new XDSLContract();
+            using (SOMClient client = new SOMClient())
+            {
+                xDSLContractEntity = client.Get<XDSLContract>(String.Format("api/SOM.ST/Billing/GetXDSLContract?contractId={0}", contractId));
+                xDSLContractEntity.Status = GetContractStatusByEnumValue(xDSLContractEntity.Status.ToString());
+            }
+            return xDSLContractEntity;
         }
 
         public List<ADSLContractDetail> GetADSLContracts(string customerId)
@@ -765,7 +771,7 @@ namespace BPMExtended.Main.Business
                 RatePlanName = ratePlanName,
                 PathId = contract.LinePathId,
                 PhoneNumber = contract.PhoneNumber,
-                ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId,
+                ContractStatusId = GetContractStatusByEnumValue(contract.Status.ToString()),
                 IsBlocked = contract.IsBlocked,
                 StatusChangeDate = contract.LastStatusChangeDate == null || contract.LastStatusChangeDate == DateTime.MinValue ? "" : contract.LastStatusChangeDate.ToString("dd/MM/yyyy hh:mm")
             };

@@ -32,9 +32,12 @@ namespace BPMExtended.Main.SOMAPI
         public DateTime? LastStatusChangeDate { get; set; }
     }
 
-    public class ADSLContract : CustomerContract
+    public class XDSLContract : CustomerContract
     {     
-        public string TelephonyContractId { get; set; }
+        public string TelephonyContract { get; set; }
+        public string UserName { get; set; }
+        public new string Status { get; set; }
+
     }
 
     public class TelephonyContractData

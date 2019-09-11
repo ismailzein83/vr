@@ -10,5 +10,7 @@ namespace BPMExtended.Main.SOMAPI
     public class ADSLChangePasswordRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public PaymentData PaymentData { get; set; }
+        public string LinePathId { get; set; }
     }
 }
