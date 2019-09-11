@@ -15,41 +15,42 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('FBFE2B36-12F6-40C1-8163-26CFE2D23501','Show warning','Show Warning'				,'VR_BP_BPBusinessRuleActionType','{ "Description":"Show warning", "Editor":"businessprocess-bp-business-rule-warning-item-action"}'),
-('715F7F90-2C23-4185-AEB8-EDA947DE3978','Stop execution','Stop Execution'			,'VR_BP_BPBusinessRuleActionType','{"Description":"Stop execution", "Editor":"businessprocess-bp-business-rule-stop-execution-action"}'),
-('BA3427FE-B8BE-4546-B433-CE0D8CE9FCB1','Exclude','Exclude'							,'VR_BP_BPBusinessRuleActionType','{ "Description":"Exclude", "Editor":"businessprocess-bp-business-rule-exclude-item-action"}'),
-('72C926F1-D019-408F-84AF-6613D2033473','Show information','Show Information'		,'VR_BP_BPBusinessRuleActionType','{"Description":"Show information","Editor":"businessprocess-bp-business-rule-information-action"}'),
+('FBFE2B36-12F6-40C1-8163-26CFE2D23501','Show warning','Show Warning'											,'VR_BP_BPBusinessRuleActionType','{ "Description":"Show warning", "Editor":"businessprocess-bp-business-rule-warning-item-action"}'),
+('715F7F90-2C23-4185-AEB8-EDA947DE3978','Stop execution','Stop Execution'										,'VR_BP_BPBusinessRuleActionType','{"Description":"Stop execution", "Editor":"businessprocess-bp-business-rule-stop-execution-action"}'),
+('BA3427FE-B8BE-4546-B433-CE0D8CE9FCB1','Exclude','Exclude'														,'VR_BP_BPBusinessRuleActionType','{ "Description":"Exclude", "Editor":"businessprocess-bp-business-rule-exclude-item-action"}'),
+('72C926F1-D019-408F-84AF-6613D2033473','Show information','Show Information'									,'VR_BP_BPBusinessRuleActionType','{"Description":"Show information","Editor":"businessprocess-bp-business-rule-information-action"}'),
 
 ('A30953F6-D62E-4755-BDDE-DF87C0716864','VRWorkflow_ArgumentVariableType_GenericVariableType','Generic Variable','BusinessProcess_VRWorkflowVariableTypeConfig','{"Editor":"businessprocess-vr-workflow-genericargumentvariabletype"}'),
 ('A6078B0F-EFA2-414F-8A25-549628DA1762','VRWorkflow_ArgumentVariableType_CustomClassType','Custom Class'		,'BusinessProcess_VRWorkflowVariableTypeConfig','{"Editor":"businessprocess-vr-workflow-customclasstype"}'),
+('0675F4DE-CB92-4F57-ADF2-00F5BA72E5F5','BPGenericTaskTypeSettings','Generic Task Type'							,'BusinessProcess_BP_BaseBPTaskTypeSettingsConfig','{"Editor":"bp-generictasktype-settings"}'),
+('7E158311-F841-4569-BF44-3F7F8B10CF90','BPTaskTypeSettings','Default Task Type'								,'BusinessProcess_BP_BaseBPTaskTypeSettingsConfig','{"Editor":"bp-tasktype-settings"}'),
 
-('82C21F82-3636-4174-BA83-11709140D959','VRWorkflowAssignActivity','Assign'						,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-assign"}'),
-('F8D16729-620A-4780-80DD-2C37F1ED6A3C','VRWorkflowCustomLogicActivity','Custom Code'			,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-customcode"}'),
-('A9C74099-C36E-45E6-8318-44C7B9A2B381','VRWorkflowCallHttpServiceActivity','Call Http Service'	,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-callhttpservice"}'),
-('FEABAAFD-C3E9-4DBB-AABF-45DB33D33517','VRWorkflowDelayActivity','Delay'						,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-delay"}'),
-('A0DE8C69-7427-4F95-9A4D-9ECD8658D7B2','VRWorkflowWriteTrackingMessageActivity','Log Message'	,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-writetrackingmessage"}'),
-('9292B3BE-256F-400F-9BC6-A0423FA0B30F','VRWorkflowSequenceActivity','Sequence'					,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-sequence"}'),
-('BA3A107D-20DA-4456-AC70-A2948DFE3725','VRWorkflowForEachActivity','ForEach'					,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-foreach"}'),
-('173258F8-2AC9-4214-BCE2-D3DB6D902423','VRWorkflowSubProcessActivity','Subprocess'				,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-subprocess"}'),
-('40B7E3E9-F8E0-4C2C-9ED7-F79CC4A68473','VRWorkflowIfElseActivity','If Else'					,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-ifelse"}'),
-('0675F4DE-CB92-4F57-ADF2-00F5BA72E5F5','BPGenericTaskTypeSettings','Generic Task Type','BusinessProcess_BP_BaseBPTaskTypeSettingsConfig','{"Editor":"bp-generictasktype-settings"}'),
-('7E158311-F841-4569-BF44-3F7F8B10CF90','BPTaskTypeSettings','Default Task Type','BusinessProcess_BP_BaseBPTaskTypeSettingsConfig','{"Editor":"bp-tasktype-settings"}'),
-('9C73540F-97E8-4F7A-BD02-594F6DD29741','BaseBPTaskTypeSettingsCustomObject','Base BP Task Type Settings','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"bp-basebptasktypesettings-customobject"}'),
-('A9445F70-1188-4F39-8135-419954E88A8B','VRWorkflowAssignTaskActivity','Human Activity','BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-assigntask"}'),
-('B55A355A-66BA-4036-AC47-261B80C93CA2','VRWorkflowSpecificUsersTaskAssignees','Specific Users','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-specificusers-taskassignees"}'),
-('F9C477A8-4374-4C58-A859-02F5A26EDCD7','VRWorkflowSpecificGroupsTaskAssignees','Specific Groups','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-specificgroups-taskassignees"}'),
-('D297A8B8-997D-4127-91FA-353238296940','VRWorkflowProcessInitiatorTaskAssignees','Process Initiator','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-processinitiator-taskassignees"}'),
-('36F6C817-A40F-4F8C-A2D6-9377EAF2169D','ExecuteBPGenericTaskTypeAction','Execute','BP_Generic_TaskType_ActionSettings','{"Editor":"businessprocess-generictasktype-actionsettings-execute"}'),
-('0AD405A3-9BCF-4796-9A1A-6CC2C3F9AAA3','OpenBPInstanceViewer','Open BP Instance Viewer','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-openbpinstanceviewer-action"}'),
-('0E9730F4-1197-456B-9261-E745FE4AFB3B','StartBPProcess_Generic','Start BP Process','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-genericbe-startbpprocess-action"}'),
-('68DEA8B2-8817-40EE-977D-4EE683CE5092','FilterGroupBPGenericTaskTypeActionFilterCondition','Filter Group','BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-filtergroup"}'),
-('9B435BE4-43CD-4942-B5D3-95C8927D6885','IsTakenBPGenericTaskTypeActionFilterCondition','Taken By','BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-istaken"}'),
 
-('a3080724-ca0f-45fa-893e-513d9857efb4','VRWorkflowUpdateBusinessEntityActivity','Update Business Entity','BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-updatebusinessentity" }'),
-('14b247ce-109f-4493-8979-57ca3dd090c3','VRWorkflowAddBusinessEntityActivity','Add Business Entity','BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-addbusinessentity" }'),
-('d92aeea3-2fca-4ccc-8beb-bb5c5181b1f0','VRWorkflowGetBusinessEntityActivity','Get Business Entity','BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-getbusinessentity" }'),
-('0defe6d7-d4c3-4e73-804a-ee6764cce57d','VRWorkflowWhileActivity','While','BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-while" }')
+('0AD405A3-9BCF-4796-9A1A-6CC2C3F9AAA3','OpenBPInstanceViewer','Open BP Instance Viewer'						,'VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-openbpinstanceviewer-action"}'),
+('0E9730F4-1197-456B-9261-E745FE4AFB3B','StartBPProcess_Generic','Start BP Process'								,'VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-genericbe-startbpprocess-action"}'),
+('9C73540F-97E8-4F7A-BD02-594F6DD29741','BaseBPTaskTypeSettingsCustomObject','Base BP Task Type Settings'		,'VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"bp-basebptasktypesettings-customobject"}'),
 
+('36F6C817-A40F-4F8C-A2D6-9377EAF2169D','ExecuteBPGenericTaskTypeAction','Execute'								,'BP_Generic_TaskType_ActionSettings','{"Editor":"businessprocess-generictasktype-actionsettings-execute"}'),
+('68DEA8B2-8817-40EE-977D-4EE683CE5092','FilterGroupBPGenericTaskTypeActionFilterCondition','Filter Group'		,'BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-filtergroup"}'),
+('9B435BE4-43CD-4942-B5D3-95C8927D6885','IsTakenBPGenericTaskTypeActionFilterCondition','Taken By'				,'BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-istaken"}'),
+
+('82C21F82-3636-4174-BA83-11709140D959','VRWorkflowAssignActivity','Assign'										,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-assign"}'),
+('F8D16729-620A-4780-80DD-2C37F1ED6A3C','VRWorkflowCustomLogicActivity','Custom Code'							,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-customcode"}'),
+('A9C74099-C36E-45E6-8318-44C7B9A2B381','VRWorkflowCallHttpServiceActivity','Call Http Service'					,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-callhttpservice"}'),
+('FEABAAFD-C3E9-4DBB-AABF-45DB33D33517','VRWorkflowDelayActivity','Delay'										,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-delay"}'),
+('A0DE8C69-7427-4F95-9A4D-9ECD8658D7B2','VRWorkflowWriteTrackingMessageActivity','Log Message'					,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-writetrackingmessage"}'),
+('9292B3BE-256F-400F-9BC6-A0423FA0B30F','VRWorkflowSequenceActivity','Sequence'									,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-sequence"}'),
+('BA3A107D-20DA-4456-AC70-A2948DFE3725','VRWorkflowForEachActivity','ForEach'									,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-foreach"}'),
+('173258F8-2AC9-4214-BCE2-D3DB6D902423','VRWorkflowSubProcessActivity','Subprocess'								,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-subprocess"}'),
+('40B7E3E9-F8E0-4C2C-9ED7-F79CC4A68473','VRWorkflowIfElseActivity','If Else'									,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-ifelse"}'),
+('A9445F70-1188-4F39-8135-419954E88A8B','VRWorkflowAssignTaskActivity','Human Activity'							,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-assigntask"}'),
+('B55A355A-66BA-4036-AC47-261B80C93CA2','VRWorkflowSpecificUsersTaskAssignees','Specific Users'					,'BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-specificusers-taskassignees"}'),
+('F9C477A8-4374-4C58-A859-02F5A26EDCD7','VRWorkflowSpecificGroupsTaskAssignees','Specific Groups'				,'BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-specificgroups-taskassignees"}'),
+('D297A8B8-997D-4127-91FA-353238296940','VRWorkflowProcessInitiatorTaskAssignees','Process Initiator'			,'BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-processinitiator-taskassignees"}'),
+('a3080724-ca0f-45fa-893e-513d9857efb4','VRWorkflowUpdateBusinessEntityActivity','Update Business Entity'		,'BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-updatebusinessentity" }'),
+('14b247ce-109f-4493-8979-57ca3dd090c3','VRWorkflowAddBusinessEntityActivity','Add Business Entity'				,'BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-addbusinessentity" }'),
+('d92aeea3-2fca-4ccc-8beb-bb5c5181b1f0','VRWorkflowGetBusinessEntityActivity','Get Business Entity'				,'BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-getbusinessentity" }'),
+('0defe6d7-d4c3-4e73-804a-ee6764cce57d','VRWorkflowWhileActivity','While'										,'BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-while" }')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
@@ -71,11 +72,8 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('1d10975d-5b1d-4ddc-bbf2-f8f9ba89ff5a','Management','Business Processes','#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement','b7d68911-9501-48f4-a3ed-8af7cdbb1a2b',NULL,NULL,NULL,'{"$type":"Vanrise.BusinessProcess.Entities.BPViewSettings, Vanrise.BusinessProcess.Entities","ViewTitleResourceKey":"Common.Management","ViewNameResourceKey":"Common.BusinessProcesses"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',2),
-
 ('E32BCE53-6433-4AF1-B4C2-3F1CB2A21F1F','Processes Synchronisation','Processes Synchronisation','#/view/BusinessProcess/Views/ProcessSynchronisation/ProcessSynchronisationManagement'	,'B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/ProcessSynchronisation/GetFilteredProcessesSynchronisations',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',6),
 --('b23b61c1-d5ae-44a9-bd6e-f3009166395b','My Tasks','Tasks','#/view/BusinessProcess/Views/BPTask/BPTaskMonitor','b7d68911-9501-48f4-a3ed-8af7cdbb1a2b','BusinessProcess_BP/BPTask/GetMyUpdatedTasks',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.MyTasks","ViewNameResourceKey":"Common.MyTasks"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',6),
-
-
 --('3C53D6DC-BBE7-49CA-A222-8211AF25DD31','Business Rules','Business Rules','#/view/BusinessProcess/Views/BPBusinessRule/BPBusinessRuleSetManagement'									,'1C7569FA-43C9-4853-AE4C-1152746A34FD','BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',110),
 ('BEEEEB03-8CB2-44F4-9769-A95B46D4F40D','BP Technical Definitions','BP Technical Definitions','#/view/BusinessProcess/Views/BPDefinition/BPTechnicalDefinitionManagement'				,'FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
 ('20CFA17A-1C79-4ABE-BF85-F40C42B03FAC','Workflows','Workflows','#/view/BusinessProcess/Views/VRWorkflow/VRWorkflowManagement'															,'FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9'		,'BusinessProcess_BP/VRWorkflow/GetFilteredVRWorkflows',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
