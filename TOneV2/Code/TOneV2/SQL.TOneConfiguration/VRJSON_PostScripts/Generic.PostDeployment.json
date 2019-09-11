@@ -2074,7 +2074,7 @@
             "ColumnName": "IsDeleted",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
