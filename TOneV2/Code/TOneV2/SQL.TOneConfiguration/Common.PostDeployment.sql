@@ -728,6 +728,33 @@ when not matched by target then
 	insert([ID],[Name],[DataRecordTypeID],[DataStoreID],[Settings],[State])
 	values(s.[ID],s.[Name],s.[DataRecordTypeID],s.[DataStoreID],s.[Settings],s.[State]);
 
+    --- [common].[VRDevProject]-------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+    begin
+                 
+    set nocount on;
+                 
+    ;with cte_data([ID],[Name],[AssemblyID],[CreatedTime],[LastModifiedTime])
+    as (select* from (values
+    --//////////////////////////////////////////////////////////////////////////////////////////////////
+        ('3fb1a9fc-2a00-499e-a3c6-f3d317f58d66','Common Projects',NULL,'2019-09-11 12:31:41.397','2019-09-11 12:31:41.397')
+    --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[AssemblyID],[CreatedTime],[LastModifiedTime]))
+merge[common].[VRDevProject] as t
+using  cte_data as s
+on            1=1 and t.[ID]=s.[ID]
+                  
+    when matched then
+    update set
+    [ID]=s.[ID] ,[Name]=s.[Name] ,[AssemblyID]=s.[AssemblyID] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
+    when not matched by target then
+    insert([ID],[Name],[AssemblyID],[CreatedTime],[LastModifiedTime])
+    values(s.[ID], s.[Name], s.[AssemblyID], s.[CreatedTime], s.[LastModifiedTime]);
+                  
+----------------------------------------------------------------------------------------------------
+end
+            ----------------------------------------------------------------------------------------------------
+
 --create user for online website to add users
 ----[sec].[User]--------------------------------------------------------------------------------
 --BEGIN
