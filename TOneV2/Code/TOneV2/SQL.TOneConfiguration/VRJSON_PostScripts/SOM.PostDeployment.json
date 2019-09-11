@@ -323,6 +323,7 @@
           {
             "FieldValues": {
               "ID": "6d0083c3-e7c9-483f-b87c-5caf4cd6f4d7",
+              "ModuleName": "SOM",
               "Name": "EDAOnlineInterceptor",
               "Title": "EDA Online Interceptor",
               "ConfigType": "VR_HttpConnection_CallInterceptor",
@@ -334,6 +335,7 @@
           {
             "FieldValues": {
               "ID": "461b7474-9b19-4b90-aeab-63ba37245e53",
+              "ModuleName": "SOM",
               "Name": "BSCSOnlineInterceptor",
               "Title": "BSCS Online Interceptor",
               "ConfigType": "VR_HttpConnection_CallInterceptor",
@@ -345,6 +347,7 @@
           {
             "FieldValues": {
               "ID": "2a61a473-a949-4781-8d06-dcb170006a3b",
+              "ModuleName": "SOM",
               "Name": "BPMOnlineInterceptor",
               "Title": "BPM Online Interceptor",
               "ConfigType": "VR_HttpConnection_CallInterceptor",
@@ -360,6 +363,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "ModuleName",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -400,7 +409,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Name like '%OnlineInterceptor%'",
+        "LastWhereCondition": "[ModuleName]='SOM'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"

@@ -66,6 +66,7 @@
           {
             "FieldValues": {
               "ID": "f1d57186-49ce-4bf9-b4b6-46ddce93e9ec",
+              "ModuleName": "Mediation",
               "Name": "Mediation_MediationOutputHandler_OtherMediation",
               "Title": "Other Mediation Handler",
               "ConfigType": "Mediation_MediationOutputHandler",
@@ -77,6 +78,7 @@
           {
             "FieldValues": {
               "ID": "14f0a218-77b5-4417-ab80-6a9386a7bb49",
+              "ModuleName": "Mediation",
               "Name": "Mediation_MediationOutputHandler_StoreRecords",
               "Title": "Store Records Handler",
               "ConfigType": "Mediation_MediationOutputHandler",
@@ -90,8 +92,14 @@
           {
             "ColumnName": "ID",
             "IncludeInInsert": true,
-            "IncludeInUpdate": false,
+            "IncludeInUpdate": true,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "ModuleName",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -132,7 +140,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Id IN ('F1D57186-49CE-4BF9-B4B6-46DDCE93E9EC', '14F0A218-77B5-4417-AB80-6A9386A7BB49')",
+        "LastWhereCondition": "[ModuleName]='Mediation'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
