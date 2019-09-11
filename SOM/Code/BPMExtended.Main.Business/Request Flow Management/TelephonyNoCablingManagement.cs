@@ -26,7 +26,7 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = choosePhoneNumberStep; break;
-                case choosePhoneNumberStep: nextStepId = addressStep; break;
+                case choosePhoneNumberStep: nextStepId = technicalStep; break;
                 case addressStep: nextStepId = ratePlanStep; break;
                 case ratePlanStep: nextStepId = createContractOnHoldStep; break;
                 case createContractOnHoldStep: nextStepId = paymentStep; break;

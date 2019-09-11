@@ -8,6 +8,10 @@ namespace BPMExtended.Main.Business
 {
     public class TelephonyNoCablingManager
     {
+        public bool IsPhonenumberExist(string phoneNumber)
+        {
+            return (phoneNumber.Equals("11111"));
+        }
 
     }
 }
