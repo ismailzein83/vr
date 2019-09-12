@@ -45,9 +45,11 @@ namespace ResolveInvoiceIssue
                     BackUpInvoiceTables();
                     var customerInvoiceTypeId = new Guid("EADC10C8-FFD7-4EE3-9501-0B2CE09029AD");
                     var supplierInvoiceTypeId = new Guid("5FD8DF00-71E8-4EDB-BBEC-108EE3CD66B3");
+                    var settlementInvoiceTypeId = new Guid("576ac720-4745-4a57-86b4-6b5709fe71c7");
+
                     var invoices = GetItemsText($"Select ID,Details,InvoiceTypeId From  VR_Invoice.Invoice where Details not like '%TotalInvoiceAmount\"%' and invoiceTypeId in ('{supplierInvoiceTypeId}','{customerInvoiceTypeId}')", InvoiceMapper, (cmd) => { });
 
-                    if (invoices != null)
+                    if (invoices != null && invoices.Count > 0)
                     {
                         int updatedSupplierInvoicesCount = 0;
                         int updatedcustomerInvoicesCount = 0;
@@ -99,12 +101,14 @@ namespace ResolveInvoiceIssue
                         Console.WriteLine("All invoices are already updated.");
                     }
 
+                    Console.WriteLine();
+
                     var invoiceItems = GetItemsText($"SELECT it.[ID] ID" +
                         $", InvoiceTypeID " +
                         $", it.[Details] Details " +
                         $"FROM VR_Invoice.InvoiceItem as it join VR_Invoice.Invoice as inv on it.InvoiceID = inv.ID where ItemSetName = 'GroupingByCurrency' AND it.Details not like '%TotalFullAmount\"%' and invoiceTypeId in ('{supplierInvoiceTypeId}','{customerInvoiceTypeId}')", InvoiceItemDetailMapper, (cmd) => { });
 
-                    if (invoiceItems != null)
+                    if (invoiceItems != null && invoiceItems.Count > 0)
                     {
                         int supplierInvoiceItems = 0;
                         int customerInvoiceItems = 0;
@@ -151,7 +155,105 @@ namespace ResolveInvoiceIssue
                     }
                     else
                     {
-                        Console.WriteLine("All invoice items are already updated.");
+                        Console.WriteLine("All customer and supplier invoice items are already updated.");
+                    }
+
+                    Console.WriteLine();
+
+                    var settlementInvoiceItems = GetItemsText($"SELECT it.[ID] ID" +
+                     $", InvoiceTypeID " +
+                     $", it.[Details] Details " +
+                     $"FROM VR_Invoice.InvoiceItem as it join VR_Invoice.Invoice as inv on it.InvoiceID = inv.ID where " +
+                     $"ItemSetName = 'SettlementInvoiceSummary' AND " +
+                     $"(it.Details not like '%DueToCarrierTotalTrafficAmount%' OR it.Details not like '%DueToSystemTotalTrafficAmount%' OR " +
+                     $"(it.Details like '%\"DueToCarrierTotalTrafficAmount\":0.0%' AND it.Details not like '%\"DueToCarrierAmountAfterCommissionWithTaxes\":0.0%' )  OR " +
+                     $"(it.Details like '%\"DueToSystemTotalTrafficAmount\":0.0%' AND it.Details not like '%\"DueToSystemAmountAfterCommissionWithTaxes\":0.0%' ) )" +
+                     $" and invoiceTypeId ='{settlementInvoiceTypeId}'", InvoiceItemDetailMapper, (cmd) => { });
+
+                    if (settlementInvoiceItems != null && settlementInvoiceItems.Count > 0)
+                    {
+                        var successfullyupdatedSettlementInvoiceItems = 0;
+                        var failedtoUpdateSettlementInvoiceItems = 0;
+
+                        Console.WriteLine("{0} settlement invoice items that needs investigation.", settlementInvoiceItems.Count);
+
+                        foreach (var settlementInvoiceItem in settlementInvoiceItems)
+                        {
+                            var settlementInvoiceDetail = Serializer.Deserialize<SettlementInvoiceItemSummaryDetail>(settlementInvoiceItem.Details);
+
+                            settlementInvoiceDetail.DueToSystemTotalTrafficAmount = settlementInvoiceDetail.DueToSystemAmountAfterCommissionWithTaxes - settlementInvoiceDetail.DueToSystemAmountRecurringCharges;
+                            settlementInvoiceDetail.DueToCarrierTotalTrafficAmount = settlementInvoiceDetail.DueToCarrierAmountAfterCommissionWithTaxes - settlementInvoiceDetail.DueToCarrierAmountRecurringCharges;
+
+                            if (settlementInvoiceDetail.DueToSystemTotalTrafficAmount == 0 && settlementInvoiceDetail.DueToCarrierTotalTrafficAmount == 0)
+                                continue;
+
+                            if (ExecuteNonQueryText($"Update VR_Invoice.InvoiceItem set Details = '{Serializer.Serialize(settlementInvoiceDetail)}' where ID = {settlementInvoiceItem.InvoiceItemId}", null) > 0)
+                            {
+                                successfullyupdatedSettlementInvoiceItems++;
+                                Console.WriteLine("InvoiceItemId {0} updated.", settlementInvoiceItem.InvoiceItemId);
+                            }
+                            else
+                            {
+                                failedtoUpdateSettlementInvoiceItems++;
+                                Console.WriteLine("InvoiceItemId {0} failed to updated.", settlementInvoiceItem.InvoiceItemId);
+                            }
+                        }
+                        Console.WriteLine($"{successfullyupdatedSettlementInvoiceItems} SettlementInvoiceItemSummaryDetail items are updated.");
+                        Console.WriteLine($"{failedtoUpdateSettlementInvoiceItems} SettlementInvoiceItemSummaryDetail items failed to update.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("All SettlementInvoiceItemSummaryDetail invoice items are already updated.");
+                    }
+
+                    Console.WriteLine();
+
+                    var settlementDetailsInvoiceItems = GetItemsText($"SELECT it.[ID] ID" +
+                    $", InvoiceTypeID " +
+                    $", it.[Details] Details " +
+                    $"FROM VR_Invoice.InvoiceItem as it join VR_Invoice.Invoice as inv on it.InvoiceID = inv.ID where " +
+                    $"ItemSetName = 'SettlementInvoiceByCurrency' AND " +
+                    $"it.Details like '%$type\":\"TOne.WhS.Invoice.Entities.SettlementInvoiceItemDetail%' AND" +
+                    $"(it.Details not like '%DueToCarrierTotalTrafficAmount%' OR it.Details not like '%DueToSystemTotalTrafficAmount%' OR " +
+                    $"(it.Details like '%\"DueToCarrierTotalTrafficAmount\":0.0%' AND it.Details not like '%\"DueToCarrierAmountAfterCommissionWithTaxes\":0.0%' )  OR " +
+                    $"(it.Details like '%\"DueToSystemTotalTrafficAmount\":0.0%' AND it.Details not like '%\"DueToSystemAmountAfterCommissionWithTaxes\":0.0%' ) )" +
+                    $" and invoiceTypeId ='{settlementInvoiceTypeId}'", InvoiceItemDetailMapper, (cmd) => { });
+
+                    if (settlementDetailsInvoiceItems != null && settlementDetailsInvoiceItems.Count > 0)
+                    {
+                        var successfullyupdatedSettlementInvoiceItems = 0;
+                        var failedtoUpdateSettlementInvoiceItems = 0;
+
+                        Console.WriteLine("{0} SettlementInvoiceItemDetail items that needs investigation.", settlementInvoiceItems.Count);
+
+                        foreach (var settlementDetailsInvoiceItem in settlementDetailsInvoiceItems)
+                        {
+                            var settlementInvoiceDetail = Serializer.Deserialize<SettlementInvoiceItemDetail>(settlementDetailsInvoiceItem.Details);
+                            settlementInvoiceDetail.DueToSystemTotalTrafficAmount = settlementInvoiceDetail.DueToSystemAmountAfterCommissionWithTaxes - settlementInvoiceDetail.DueToSystemAmountRecurringCharges;
+                            settlementInvoiceDetail.DueToCarrierTotalTrafficAmount = settlementInvoiceDetail.DueToCarrierAmountAfterCommissionWithTaxes - settlementInvoiceDetail.DueToCarrierAmountRecurringCharges;
+
+                            if (settlementInvoiceDetail.DueToSystemTotalTrafficAmount == 0 && settlementInvoiceDetail.DueToCarrierTotalTrafficAmount == 0)
+                                continue;
+
+                            if (ExecuteNonQueryText($"Update  VR_Invoice.InvoiceItem set Details = '{Serializer.Serialize(settlementInvoiceDetail)}' where ID = {settlementDetailsInvoiceItem.InvoiceItemId}", null) > 0)
+                            {
+                                successfullyupdatedSettlementInvoiceItems++;
+                                Console.WriteLine("InvoiceItemId {0} updated.", settlementDetailsInvoiceItem.InvoiceItemId);
+                            }
+                            else
+                            {
+                                failedtoUpdateSettlementInvoiceItems++;
+                                Console.WriteLine("InvoiceItemId {0} failed to updated.", settlementDetailsInvoiceItem.InvoiceItemId);
+                            }
+
+                        }
+
+                        Console.WriteLine($"{successfullyupdatedSettlementInvoiceItems} SettlementInvoiceItemDetail items are updated.");
+                        Console.WriteLine($"{failedtoUpdateSettlementInvoiceItems} SettlementInvoiceItemDetail items failed to update.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("All SettlementInvoiceItemDetail invoice items are already updated.");
                     }
 
                 }
