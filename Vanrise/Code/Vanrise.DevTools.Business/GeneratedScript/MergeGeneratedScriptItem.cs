@@ -169,7 +169,7 @@ namespace Vanrise.DevTools.Business
         public List<GeneratedScriptVariable> Variables { get; set; }
         public string LastWhereCondition { get; set; }
         public string LastJoinStatement { get; set; }
-
+        
         public bool IsIdentity { get; set; }
         private string MapRecord(object value)
         {
@@ -181,7 +181,7 @@ namespace Vanrise.DevTools.Business
             if (overriddenData != null)
                 value = overriddenData.Value;
 
-            if (value is null)
+            if (value is null || (value is string && value.ToString()=="*"))
                 return "NULL";
             if (value is int || value is float || value is decimal || value is long || value is double)
                 return string.Format("{0}", value);

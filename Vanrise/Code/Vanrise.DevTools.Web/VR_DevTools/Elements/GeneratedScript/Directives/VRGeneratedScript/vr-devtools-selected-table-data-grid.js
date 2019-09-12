@@ -29,7 +29,6 @@
             var columns;
             var includeOverriddenValues;
             var includeVariables;
-
             $scope.scopeModel = {};
             $scope.scopeModel.selectedTableData = [];
             $scope.scopeModel.selectedTableDataGridDS = [];
@@ -189,16 +188,26 @@
                             }
                             if (!executeQuery) {
                                 if (moveItems) {
-                                    if (filter.BulkActionFinalState.IsAllSelected) {
-                                        $scope.scopeModel.selectedTableDataGridDS.length=0;
-                                        for (var i = 0; i < originalTableData.length; i++) {
-                                            var dataRow = originalTableData[i];
+
+                                    $scope.scopeModel.selectedTableDataGridDS.length = 0;
+
+                                    for (var i = 0; i < originalTableData.length; i++) {
+                                        var rowExistsInTargetRows = false;
+                                        var dataRow = originalTableData[i];
+                                        for (var j = 0; j < filter.BulkActionFinalState.TargetItems.length; j++) {
+                                            if (filter.BulkActionFinalState.TargetItems[j].ItemId == dataRow.identifierKey) {
+                                                rowExistsInTargetRows = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if ((filter.BulkActionFinalState.IsAllSelected && !rowExistsInTargetRows) || (!filter.BulkActionFinalState.IsAllSelected && rowExistsInTargetRows)) {
                                             var exists = false;
                                             for (var k = 0; k < $scope.scopeModel.selectedTableData.length; k++) {
                                                 var selectedTableRow = $scope.scopeModel.selectedTableData[k];
                                                 if (compareIdentifierKeys(dataRow, selectedTableRow)) {
                                                     $scope.scopeModel.selectedTableData[k] = generateTargetRow(dataRow, selectedTableRow);
-                                                    exists = true; 
+                                                    exists = true;
                                                     break;
                                                 }
                                             }
@@ -206,35 +215,10 @@
                                                 $scope.scopeModel.selectedTableData.push(generateTargetRow(dataRow));
                                             }
                                         }
-                                        loadMoreSelectedRows();
-                                        loadPromiseDeferred.resolve();
                                     }
 
-                                    else if (filter.BulkActionFinalState.TargetItems.length != 0) {
-                                        return VR_Devtools_TableDataAPIService.GetSelectedTableData(filter).then(function (response) {
-                                            if (response) {
-
-                                                for (var i = 0; i < response.length; i++) {
-                                                    var dataRow = response[i];
-                                                    var exists = false;
-                                                    for (var k = 0; k < $scope.scopeModel.selectedTableData.length; k++) {
-                                                        var selectedTableRow = $scope.scopeModel.selectedTableData[k];
-                                                        if (compareIdentifierKeys(dataRow, selectedTableRow)) {
-                                                            exists = true; 
-                                                            $scope.scopeModel.selectedTableData[k] = generateTargetRow(dataRow, selectedTableRow); 
-                                                            break;
-                                                        }
-                                                    }
-                                                    if (!exists) {
-                                                        $scope.scopeModel.selectedTableData.push(generateTargetRow(dataRow));
-                                                    }
-                                                }
-                                            }
-                                            $scope.scopeModel.selectedTableDataGridDS.length = 0;
-                                            loadMoreSelectedRows();
-                                            loadPromiseDeferred.resolve();
-                                        });
-                                    }
+                                    loadMoreSelectedRows();
+                                    loadPromiseDeferred.resolve();
                                 }
                                 else {
                                     $scope.scopeModel.selectedTableDataGridDS.length = 0;
@@ -251,7 +235,7 @@
                                                 fieldValuesDescription[columnName] = selectedTableRow.DescriptionEntity[columnName];
                                                 if (fieldValues[columnName] == undefined) {
                                                     fieldValues[columnName] = null;
-                                                    fieldValuesDescription[columnName] = {value:"*"};
+                                                    fieldValuesDescription[columnName] = { value: "*" };
                                                 }
                                             }
                                             selectedTableRow.Entity.FieldValues = fieldValues;
