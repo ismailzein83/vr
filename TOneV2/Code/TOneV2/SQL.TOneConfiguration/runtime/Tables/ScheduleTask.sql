@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [runtime].[ScheduleTask] (
     [Id]               UNIQUEIDENTIFIER CONSTRAINT [DF__ScheduleTask__Id__46735417] DEFAULT (newid()) NOT NULL,
+    [DevProjectID]     UNIQUEIDENTIFIER NULL,
     [Name]             VARCHAR (255)    NOT NULL,
     [IsEnabled]        BIT              NOT NULL,
     [TaskType]         INT              NOT NULL,
@@ -12,6 +13,8 @@
     [timestamp]        ROWVERSION       NULL,
     CONSTRAINT [pk_ScheduleTask] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

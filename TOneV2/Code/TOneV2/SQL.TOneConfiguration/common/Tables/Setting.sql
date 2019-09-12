@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [common].[Setting] (
     [ID]               UNIQUEIDENTIFIER NOT NULL,
+    [DevProjectID]     UNIQUEIDENTIFIER NULL,
     [Name]             NVARCHAR (255)   NOT NULL,
     [Type]             NVARCHAR (255)   NOT NULL,
     [Category]         VARCHAR (255)    NOT NULL,
@@ -10,6 +11,8 @@
     [LastModifiedTime] DATETIME         CONSTRAINT [DF_Setting_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_common.Setting] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
