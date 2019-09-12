@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [sec].[BusinessEntity] (
     [Id]                UNIQUEIDENTIFIER NOT NULL,
+    [DevProjectID]      UNIQUEIDENTIFIER NULL,
     [Name]              NVARCHAR (255)   NOT NULL,
     [Title]             NVARCHAR (255)   NOT NULL,
     [ModuleId]          UNIQUEIDENTIFIER NOT NULL,
@@ -10,6 +11,8 @@
     CONSTRAINT [PK_BusinessEntity_1] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [IX_BusinessEntity_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 
