@@ -176,8 +176,8 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.LeasedLine)]
         [Description("Leased Line Termination")]
         [EntitySchemaName("StLeasedLineTermination")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("94CA2192-D445-47D8-80C5-BF26E462CFC6")]
         LeasedLineTermination = 14,
 
         //[LineOfBusiness(LineOfBusiness.GSHDSL)]
