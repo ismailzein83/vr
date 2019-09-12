@@ -28,8 +28,9 @@ namespace Vanrise.DevTools.Business
             new VRGeneratedScriptTable() { Name ="VRNamespace" },
             new VRGeneratedScriptTable() { Name ="VRNamespaceItem" },
             new VRGeneratedScriptTable() { Name ="VRDynamicAPIModule" },
-            new VRGeneratedScriptTable() { Name ="VRDynamicAPI" },
             new VRGeneratedScriptTable() { Name ="VRDynamicAPIModule" },
+            new VRGeneratedScriptTable() { Name ="VRDynamicAPI" },
+            new VRGeneratedScriptTable() { Name ="ParserType" },
             new VRGeneratedScriptTable() { Name = "DataStore" } ,
             new VRGeneratedScriptTable() { Name = "DataRecordType" },
             new VRGeneratedScriptTable() { Name ="DataRecordStorage" } ,
@@ -38,12 +39,17 @@ namespace Vanrise.DevTools.Business
             new VRGeneratedScriptTable() { Name ="DataTransformationDefinition" } ,
             new VRGeneratedScriptTable() { Name ="SummaryTransformationDefinition" } ,
             new VRGeneratedScriptTable() { Name ="GenericRuleDefinition" } ,
+            new VRGeneratedScriptTable() { Name ="VRNumberPrefixType" } ,
+            new VRGeneratedScriptTable() { Name ="VRNumberPrefix" } ,
             new VRGeneratedScriptTable() { Name ="ExecutionFlowDefinition" },
             new VRGeneratedScriptTable() { Name ="ExecutionFlow" },
+            new VRGeneratedScriptTable() { Name ="QueueActivatorConfig" },
             new VRGeneratedScriptTable() { Name ="ReprocessDefinition" },
+            new VRGeneratedScriptTable() { Name ="BusinessEntity" },
+            new VRGeneratedScriptTable() { Name ="BusinessEntityModule" },
             new VRGeneratedScriptTable() { Name ="Module" },
-            new VRGeneratedScriptTable() { Name ="View" },
-        };
+            new VRGeneratedScriptTable() { Name ="View" }
+        }; 
       public class VRGeneratedScriptDevProjectTableParameters
         {
             public Guid DevProjectId { get; set; }
@@ -80,6 +86,7 @@ namespace Vanrise.DevTools.Business
                     { "VRNamespaceItem",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNamespaceItem",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("common","VRNamespace","VRNamespaceId")}},
                     { "VRDynamicAPIModule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRDynamicAPIModule",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRDynamicAPI",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRDynamicAPI",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("common","VRDynamicAPIModule","ModuleId")}},
+                    { "ParserType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ParserType",Schema="dataparser",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataStore",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataStore",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataRecordType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataRecordType",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataRecordStorage",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataRecordStorage",Schema="genericdata",IdColumnName="ID",WhereCondition=string.Format("rec.DevProjectID = '{0}'",DevProjectId),JoinCondition=GetJoinCondition("genericdata","DataRecordType","DataRecordTypeID")}},
@@ -88,9 +95,14 @@ namespace Vanrise.DevTools.Business
                     { "GenericRuleDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="GenericRuleDefinition",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "BusinessEntityDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntityDefinition",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataRecordFieldChoice",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataRecordFieldChoice",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "VRNumberPrefixType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNumberPrefixType",Schema="genericdata",IdColumnName="Id",WhereCondition=WhereCondition}},
+                    { "VRNumberPrefix",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNumberPrefix",Schema="genericdata",IdColumnName="Id",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("genericdata","VRNumberPrefixType","Type")}},
                     { "ExecutionFlowDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ExecutionFlowDefinition",Schema="queue",IdColumnName="Id",WhereCondition=WhereCondition}},
                     { "ExecutionFlow",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ExecutionFlow",Schema="queue",IdColumnName="Id",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("queue","ExecutionFlowDefinition","ExecutionFlowDefinitionID")}},
+                    { "QueueActivatorConfig",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="QueueActivatorConfig",Schema="queue",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "ReprocessDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ReprocessDefinition",Schema="reprocess",IdColumnName="Id",WhereCondition=WhereCondition}},
+                    { "BusinessEntity",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntity",Schema="sec",IdColumnName="Id",WhereCondition=WhereCondition}},
+                    { "BusinessEntityModule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntityModule",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "Module",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Module",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "View",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="View",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                 };
