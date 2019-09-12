@@ -1268,6 +1268,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StServices");
             esq.AddColumn("StNumberToReserve");
             esq.AddColumn("StLinePathID");
+            esq.AddColumn("StAddressNotes");
             esq.AddColumn("StContact");
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
@@ -1300,6 +1301,7 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var phoneNumber = entities[0].GetColumnValue("StNumberToReserve");
+                var addressNotes = entities[0].GetColumnValue("StAddressNotes");
                 var floor = entities[0].GetColumnValue("StFloor");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
                 var street = entities[0].GetColumnValue("StStreet");
@@ -1372,6 +1374,7 @@ namespace BPMExtended.Main.Business
                         Street= street.ToString(),
                         Region = area.ToString(),
                         CountryId = "206",
+                        Notes = addressNotes.ToString(),
                         CSO = info.csoBSCSId,//info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
