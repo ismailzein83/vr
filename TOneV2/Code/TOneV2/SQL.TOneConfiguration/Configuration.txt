@@ -2,14 +2,14 @@
 Common.PostDeployment.sql
 Common.Localization.PostDeployment.sql
 Security.PostDeployment.sql
-BusinessProcess.PostDeployment.sql
+BusinessProcess.PostDeployment.json
 ExcelConversion.PostDeployment.sql
 Runtime.PostDeployment.sql
 Queueing.PostDeployment.sql
 Integration.PostDeployment.sql
-Generic.PostDeployment.sql
+Generic.PostDeployment.json
 Reprocess.PostDeployment.sql
-Analytic.PostDeployment.sql
+Analytic.PostDeployment.json
 VR_Rules.PostDeployment.sql
 Invoice.PostDeployment.sql
 VR_AccountBalance.PostDeployment.sql
