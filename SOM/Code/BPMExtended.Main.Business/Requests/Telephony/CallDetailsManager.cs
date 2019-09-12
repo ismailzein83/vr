@@ -40,7 +40,7 @@ namespace BPMExtended.Main.Business
             int monthVal = businessEntityManager.getMonthNumberByMonthName(month);
             int yearVal = Int32.Parse(year);
 
-            DateTime beginDate = new DateTime(yearVal, monthVal, 1);
+            DateTime beginDate = new DateTime(yearVal, monthVal, 1).Date;
             DateTime endDate = monthVal != 12 ? new DateTime(yearVal, monthVal + 1, 1) : new DateTime(yearVal + 1, 1, 1);
 
             using (SOMClient client = new SOMClient())
@@ -48,19 +48,19 @@ namespace BPMExtended.Main.Business
                 callDetailsEntityList = client.Get<List<CallDetails>>(String.Format("api/SOM.ST/Billing/GetCallDetails?ContractId={0}&BeginDate={1}&EndDate={2}&IsNational={3}&IsInternational={4}&isGSM={5} ", contractId, beginDate, endDate, isNational, isInternational, isGSM));
                
             }
-
+                
             var crmManager = new CRMCustomerManager();
             var cso = crmManager.GetCSOByContactIdOrAccountId(contactId, "");
 
             CallDetailRequest request = new CallDetailRequest()
             {
                 // BillCycle = billCycle,
-                CSO = cso != null ? cso.Name : "",
-                Date = beginDate.ToString(),
-                Name = contractId,
-                UserName = customerName,
+                CSO = cso != null ? "CSO: " + cso.Name : null,
+                Date = beginDate!=null? "Issue Date: "+ beginDate.ToString("dd/MM/yyyy") :null,
+                Name = contractId != null ? "Contract ID: " + contractId:null,
+                UserName = customerName!=null? "Customer Name: " + customerName:null,
                 Items = callDetailsEntityList,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber != null? "Phone Number: " + phoneNumber:null
             };
 
             return request;
@@ -320,11 +320,8 @@ namespace BPMExtended.Main.Business
             table1.Borders.Right.Width = 0.5;
             table1.Rows.LeftIndent = 0;
 
-            MigraDoc.DocumentObjectModel.Tables.Column column = table1.AddColumn("3cm");
+            MigraDoc.DocumentObjectModel.Tables.Column column = table1.AddColumn("5cm");
             column.Format.Alignment = ParagraphAlignment.Center;
-
-            column = table1.AddColumn("3cm");
-            column.Format.Alignment = ParagraphAlignment.Right;
 
             column = table1.AddColumn("3cm");
             column.Format.Alignment = ParagraphAlignment.Right;
@@ -349,7 +346,7 @@ namespace BPMExtended.Main.Business
             row.Cells[0].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[0].VerticalAlignment = VerticalAlignment.Bottom;
 
-            row.Cells[1].AddParagraph("Duration");
+            row.Cells[1].AddParagraph("Duration (min)");
             row.Cells[1].Format.Font.Bold = false;
             row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[1].VerticalAlignment = VerticalAlignment.Bottom;
@@ -364,15 +361,10 @@ namespace BPMExtended.Main.Business
             row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[3].VerticalAlignment = VerticalAlignment.Bottom;
 
-            row.Cells[4].AddParagraph("Amount");
+            row.Cells[4].AddParagraph("Amount (SYR)");
             row.Cells[4].Format.Font.Bold = false;
             row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[4].VerticalAlignment = VerticalAlignment.Bottom;
-
-            row.Cells[5].AddParagraph("Duration Unit");
-            row.Cells[5].Format.Font.Bold = false;
-            row.Cells[5].Format.Alignment = ParagraphAlignment.Left;
-            row.Cells[5].VerticalAlignment = VerticalAlignment.Bottom;
 
             table1.SetEdge(0, 0, 5, 1, Edge.Box, MigraDoc.DocumentObjectModel.BorderStyle.Single, 0.75, Color.Empty);
 
@@ -408,8 +400,6 @@ namespace BPMExtended.Main.Business
                 paragraph3 = row1.Cells[4].AddParagraph();
                 paragraph3.AddText(item.Amount.ToString());
 
-                paragraph3 = row1.Cells[5].AddParagraph();
-                paragraph3.AddText(item.DurationUnit.ToString());
 
                 table1.SetEdge(0, table1.Rows.Count - 1, 5, 1, Edge.Box, MigraDoc.DocumentObjectModel.BorderStyle.Single, 0.75);
             }
@@ -502,7 +492,7 @@ namespace BPMExtended.Main.Business
             {
                 Amount = callDetails.Amount,
                 Date = callDetails.CallDate,
-                Duration = callDetails.Duration,
+                Duration = callDetails.Duration / 60,
                 Number = callDetails.CalledNumber,
                 Place = callDetails.CallingNumber //To check Place
             };
