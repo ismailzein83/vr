@@ -20,11 +20,14 @@ namespace Vanrise.DevTools.Business
             new VRGeneratedScriptTable() { Name = "VRWorkflow" } ,
             new VRGeneratedScriptTable() { Name ="BPDefinition" },
             new VRGeneratedScriptTable() { Name ="BPTaskType" } ,
+            new VRGeneratedScriptTable() { Name ="ExtensionConfiguration" },
             new VRGeneratedScriptTable() { Name ="VRObjectTypeDefinition" },
             new VRGeneratedScriptTable() { Name ="MailMessageType" },
+            new VRGeneratedScriptTable() { Name="StatusDefinition"},
             new VRGeneratedScriptTable() { Name ="VRComponentType" },
             new VRGeneratedScriptTable() { Name ="VRNamespace" },
             new VRGeneratedScriptTable() { Name ="VRNamespaceItem" },
+            new VRGeneratedScriptTable() { Name ="VRDynamicAPIModule" },
             new VRGeneratedScriptTable() { Name ="VRDynamicAPI" },
             new VRGeneratedScriptTable() { Name ="VRDynamicAPIModule" },
             new VRGeneratedScriptTable() { Name = "DataStore" } ,
@@ -59,6 +62,7 @@ namespace Vanrise.DevTools.Business
                 JoinedWhereCondition = string.Format("rec.DevProjectID = '{0}'", devProjectId);
                 Tables = new Dictionary<string, VRGeneratedScriptDevProjectTableParameters>()
                 {
+                    { "VRDevProject",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRDevProject",Schema="common",IdColumnName="ID",WhereCondition=string.Format("ID = '{0}'", devProjectId)}},
                     { "AnalyticTable",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="AnalyticTable",Schema="Analytic",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "AnalyticItemConfig",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="AnalyticItemConfig",Schema="Analytic",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("Analytic","AnalyticTable","TableId")}},
                     { "AnalyticReport",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="AnalyticReport",Schema="Analytic",IdColumnName="ID",WhereCondition=WhereCondition}},
@@ -67,8 +71,10 @@ namespace Vanrise.DevTools.Business
                     { "VRWorkflow",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRWorkflow",Schema="bp",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "BPDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BPDefinition",Schema="bp",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "BPTaskType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BPTaskType",Schema="bp",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "ExtensionConfiguration",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ExtensionConfiguration",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRObjectTypeDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRObjectTypeDefinition",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "MailMessageType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="MailMessageType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "StatusDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="StatusDefinition",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("genericdata","BusinessEntityDefinition","BusinessEntityDefinitionID")}},
                     { "VRComponentType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRComponentType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRNamespace",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNamespace",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRNamespaceItem",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNamespaceItem",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("common","VRNamespace","VRNamespaceId")}},
@@ -89,7 +95,7 @@ namespace Vanrise.DevTools.Business
                     { "View",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="View",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                 };
             }
-
+            
             public Guid DevProjectId;
 
             public string WhereCondition;
@@ -139,7 +145,7 @@ namespace Vanrise.DevTools.Business
                 items = new List<GeneratedScriptItemTable>();
                 foreach (var table in tables.Tables)
                 {
-                    if (input.TableNames.Contains(table.Key))
+                    if (input.TableNames.Contains(table.Key) || table.Key== "VRDevProject")
                     {
                         VRGeneratedScriptTableDataManager generatedScriptTableDataManager = new VRGeneratedScriptTableDataManager();
                         var dataRows = generatedScriptTableDataManager.GetFilteredTableData(new VRGeneratedScriptTableDataQuery()

@@ -230,6 +230,7 @@ namespace Vanrise.DevTools.Business
 
                     variablesBuilder.Append(string.Format("Declare @{0}_{1} ", variable.Name.Replace(" ", String.Empty), variable.Id.ToString("N")));
                     variablesBuilder.Append(GetType(variable.Type, variable.Size, variable.Precision).ToString());
+                    variablesBuilder.Append("=");
                     variablesBuilder.Append(variable.Settings.GetSQLVariableSettings(context));
                     variablesBuilder.AppendLine();
                 }

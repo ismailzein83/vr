@@ -9,29 +9,44 @@
                     <vr-label>Identity</vr-label>
                     <vr-switch value="scopeModel.IsIdentity"></vr-switch>
                 </vr-columns>
+               
             </vr-row>
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-section title="Columns">
-                        <vr-validator validate="scopeModel.validateColumnsSelection()">
-                            <vr-datagrid datasource="ctrl.datasource"
-                                         enabledraggablerow="true"
-                                         hidegridmenu
-                                         ondeleterow="scopeModel.onDeleteColumn">
-                                <vr-datagridcolumn headertext="'Column'">
-                                    <vr-label>{{dataItem.data.ColumnName}}</vr-label>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Identifier'">
-                                    <vr-switch value="dataItem.data.IsIdentifier"></vr-switch>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Include In Insert'">
-                                    <vr-switch value="dataItem.data.IncludeInInsert"></vr-switch>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Include In Update'">
-                                    <vr-switch value="dataItem.data.IncludeInUpdate"></vr-switch>
-                                </vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-validator>
+                        <vr-row>
+                            <vr-columns colnum="2">
+                                <vr-label>Include All In Insert</vr-label>
+                                <vr-switch value="scopeModel.isIncludeAllInInsert" onvaluechanged="scopeModel.includeAllInInsert()"></vr-switch>
+                            </vr-columns>
+                            <vr-columns colnum="2">
+                                <vr-label>Include All In Update</vr-label>
+                                <vr-switch value="scopeModel.isIncludeAllInUpdate" onvaluechanged="scopeModel.includeAllInUpdate()"></vr-switch>
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-validator validate="scopeModel.validateColumnsSelection()">
+                                    <vr-datagrid datasource="ctrl.datasource"
+                                                 enabledraggablerow="true"
+                                                 hidegridmenu
+                                                 ondeleterow="scopeModel.onDeleteColumn">
+                                        <vr-datagridcolumn headertext="'Column'">
+                                            <vr-label>{{dataItem.data.ColumnName}}</vr-label>
+                                        </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Identifier'">
+                                            <vr-switch value="dataItem.data.IsIdentifier"></vr-switch>
+                                        </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Include In Insert'">
+                                            <vr-switch value="dataItem.data.IncludeInInsert"></vr-switch>
+                                        </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Include In Update'">
+                                            <vr-switch value="dataItem.data.IncludeInUpdate"></vr-switch>
+                                        </vr-datagridcolumn>
+                                    </vr-datagrid>
+                                </vr-validator>
+                            </vr-columns>
+                        </vr-row>
                     </vr-section>
                 </vr-columns>
             </vr-row>
@@ -48,37 +63,37 @@
             <vr-label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Where Condition:</vr-label>
             <vr-row removeline>
                 <vr-columns colnum="10">
-                    <vr-textarea value="scopeModel.sqlFilter"  hint="Example: Name like'name'"></vr-textarea>
+                    <vr-textarea value="scopeModel.sqlFilter" rows="2" hint="Example: Name like'name'"></vr-textarea>
                 </vr-columns>
                 <vr-columns colnum="1">
                     <vr-button type="Search" buttontitle="Execute Query" customlabel="Execute Query" standalone data-onclick="scopeModel.executeQuery" vr-disabled="scopeModel.disableExecuteQuery()"></vr-button>
                 </vr-columns>
             </vr-row>
             <vr-label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Join Statement:</vr-label>
-                <vr-row removeline>
-                    <vr-columns colnum="10">
-                        <vr-textarea value="scopeModel.sqlJoinStatement" hint="Example: Join [source].[data] as src on MainTable.SourceID=src.ID"></vr-textarea>
-                    </vr-columns>
-                </vr-row>
-                <vr-row removeline>
-                    <vr-columns colnum="5">
-                    </vr-columns>
-                </vr-row>
-                <vr-row removeline>
-                    <vr-columns colnum="6">
-                        <vr-section header="All Table Data">
-                            <vr-devtools-table-data-grid on-ready="scopeModel.onTableDataGridReady"></vr-devtools-table-data-grid>
-                        </vr-section>
-                    </vr-columns>
+            <vr-row removeline>
+                <vr-columns colnum="10">
+                    <vr-textarea value="scopeModel.sqlJoinStatement" rows="2" hint="Example: Join [source].[data] as src on MainTable.SourceID=src.ID"></vr-textarea>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns colnum="5">
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns colnum="6">
+                    <vr-section header="All Table Data">
+                        <vr-devtools-table-data-grid on-ready="scopeModel.onTableDataGridReady"></vr-devtools-table-data-grid>
+                    </vr-section>
+                </vr-columns>
 
-                    <vr-columns colnum="6">
-                        <vr-section header="Selected Table Data">
-                            <div removeline>
-                                <vr-devtools-selected-table-data-grid on-ready="scopeModel.onSelectedTableDataGridReady"></vr-devtools-selected-table-data-grid>
-                            </div>
-                        </vr-section>
-                    </vr-columns>
-                </vr-row>
+                <vr-columns colnum="6">
+                    <vr-section header="Selected Table Data">
+                        <div removeline>
+                            <vr-devtools-selected-table-data-grid on-ready="scopeModel.onSelectedTableDataGridReady"></vr-devtools-selected-table-data-grid>
+                        </div>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
         </vr-tab>
         <vr-tab header="'Variables'">
             <vr-row removeline>

@@ -9,7 +9,8 @@
                      enableautoexport="true"
                      getrowstyle="scopeModel.getRowStyle"
                      isdynamicrowstyle="true"
-                     alternativecolor="false">
+                     alternativecolor="false"
+                     maxheight="300px">
             <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x" field="'DescriptionEntity.'+ x!=undefined? 'DescriptionEntity.'+ x+'.value':''" getcolor="getStatusColor" isclickable="true" onclicked="scopeModel.editCell" isfielddynamic="true"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>

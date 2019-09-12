@@ -130,6 +130,20 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                     selectTableDataGridReadyPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.includeAllInInsert = function () {
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            ctrl.datasource[i].data.IncludeInInsert = $scope.scopeModel.isIncludeAllInInsert;
+                        }
+                    }
+                };
+                $scope.scopeModel.includeAllInUpdate = function () {
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            ctrl.datasource[i].data.IncludeInUpdate = $scope.scopeModel.isIncludeAllInUpdate;
+                        }
+                    }
+                };
                 $scope.scopeModel.validateColumnsSelection = function () {
                     var insertOrUpdateColumnExists = false;
                     identifierColumnExists = false;

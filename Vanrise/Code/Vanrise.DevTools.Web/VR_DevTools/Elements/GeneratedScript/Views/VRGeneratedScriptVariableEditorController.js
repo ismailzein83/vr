@@ -119,7 +119,7 @@
             var typeInfo = variableTypeDirectiveApi.getSelectedIds();
             return {
                 Entity: {
-                    Id: UtilsService.guid(),
+                    Id: variableEntity != undefined ? variableEntity.Id : UtilsService.guid(),
                     Name: $scope.scopeModel.variableName,
                     Type: typeInfo.Type,
                     Size: typeInfo.Size,
