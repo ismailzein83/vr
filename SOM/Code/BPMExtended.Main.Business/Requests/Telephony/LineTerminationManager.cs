@@ -64,6 +64,7 @@ namespace BPMExtended.Main.Business
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
                         },
                         PaymentData = new PaymentData()
                         {
@@ -132,6 +133,7 @@ namespace BPMExtended.Main.Business
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
                         },
                         PaymentData = new PaymentData()
                         {
