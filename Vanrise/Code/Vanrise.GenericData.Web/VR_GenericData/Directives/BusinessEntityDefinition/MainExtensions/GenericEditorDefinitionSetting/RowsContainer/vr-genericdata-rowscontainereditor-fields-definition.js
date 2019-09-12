@@ -31,9 +31,7 @@
                 $scope.scopeModel.datasource = [];
 
                 $scope.scopeModel.addField = function () {
-
-                    var dataItem= prepareFieldData(undefined, undefined);
-                    $scope.scopeModel.datasource.push(dataItem);
+                    prepareFieldData(undefined, undefined);
                     setFieldsNumber($scope.scopeModel.datasource.length);
                 };
 
@@ -99,8 +97,7 @@
 
                     fieldData.title = selectedFieldEditor.Title;
                 };
-
-                return fieldData;
+                $scope.scopeModel.datasource.push(fieldData);
             }
 
             function defineAPI() {
@@ -123,7 +120,7 @@
                                 fieldEditorDefinitionLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
                             promises.push(fieldObject.fieldEditorDefinitionLoadPromiseDeferred.promise);
-                            $scope.scopeModel.datasource.push(prepareFieldData(fieldObject));
+                            prepareFieldData(fieldObject);
                         }
                     }
                     return UtilsService.waitPromiseNode({ promises: promises });

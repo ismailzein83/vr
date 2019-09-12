@@ -38,6 +38,7 @@
             var directiveReadyDeferred;
             var directivePayload;
             var context;
+            var containerType;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -54,7 +55,8 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var directivepPayload = {
-                        context: getContext()
+                        context: getContext(),
+                        containerType: containerType
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivepPayload, setLoader, directiveReadyDeferred);
                 };
@@ -69,7 +71,6 @@
 
                     var promises = [];
                     var settings;
-                    var containerType;
 
                     if (payload != undefined) {
                         settings = payload.settings;
