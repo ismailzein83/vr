@@ -140,3 +140,35 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Settings]);
 
 
+
+	
+
+--- [sec].[BusinessEntity]-------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+begin
+                 
+set nocount on;
+                 
+;with cte_data([Id],[DevProjectID],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions],[LastModifiedTime])
+as (select* from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('eef690b6-4ceb-4ba1-b0cf-a13dc3b07caf',NULL,'VR_Localization','VR_Localization','7913acd9-38c5-43b3-9612-beff66606f22','False','["View","Add","Edit"]','2019-06-18 09:32:24.563')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[DevProjectID],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions],[LastModifiedTime]))
+merge[sec].[BusinessEntity] as t
+using  cte_data as s
+on            1=1 and t.[Id]=s.[Id]
+                  
+when matched then
+update set
+[Id]=s.[Id] ,[DevProjectID]=s.[DevProjectID] ,[Name]=s.[Name] ,[Title]=s.[Title] ,[ModuleId]=s.[ModuleId] ,[BreakInheritance]=s.[BreakInheritance] ,[PermissionOptions]=s.[PermissionOptions] ,[LastModifiedTime]=s.[LastModifiedTime] 
+when not matched by target then
+insert([Id],[DevProjectID],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions],[LastModifiedTime])
+values(s.[Id], s.[DevProjectID], s.[Name], s.[Title], s.[ModuleId], s.[BreakInheritance], s.[PermissionOptions], s.[LastModifiedTime]);
+                  
+----------------------------------------------------------------------------------------------------
+end
+----------------------------------------------------------------------------------------------------
+              
+
+
