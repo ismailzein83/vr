@@ -66,625 +66,625 @@
           {
             "FieldValues": {
               "ID": "8c5b1e66-20f0-4b26-bc4f-01060b3c3daa",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_MeasureStyle_Range",
               "Title": "Range Condition",
               "ConfigType": "Analytic_MeasureStyleRuleTemplates",
               "Settings": "{\"Editor\":\"vr-analytic-measurestyle-stylerulecondition-range\",\"RuntimeEditor\":\"\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "83ad690c-cf9f-49ca-bad0-07b7aa575bea",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic",
               "Title": "Analytic",
               "ConfigType": "VR_Security_ViewTypeConfig",
               "Settings": "{\"Editor\":\"/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticReportSettingsEditor.html\",\"EnableAdd\":true}",
               "CreatedTime": "2016-10-21T09:31:43.867",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "dc962a83-2fda-456f-9940-15e9be787d89",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_DARecordAggregate_SumAggregate",
               "Title": "Sum",
               "ConfigType": "Analytic_DARecordAggregate",
               "Settings": "{\"Editor\" : \"vr-analytic-sumaggregate\"}",
               "CreatedTime": "2016-09-05T11:50:36.96",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "9cc73443-2a1a-4405-a1ed-1de27b9dcb42",
-              "ModuleName": "Analytic",
               "Name": "Sequence",
               "Title": "Sequence",
               "ConfigType": "VR_Analytic_AutomatedReportFileNameParts",
               "Settings": "{\"Editor\":\"vr-analytic-automatedreportfilenamepart-sequence\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "5e32bb46-462e-44a0-b1f0-1f6da3bd9053",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_FilterGroupAnalyticTablePermanentFilter",
               "Title": "Filter Group",
               "ConfigType": "VR_Analytic_PermanentFilterSettings",
               "Settings": "{\"Editor\": \"vr-analytic-permanentfilter-recordfilter\" }",
               "CreatedTime": "2019-05-06T16:31:57.233",
-              "LastModifiedTime": "2019-05-06T16:31:57.233"
+              "LastModifiedTime": "2019-05-06T16:31:57.233",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "a194aac8-0675-4100-8a8b-1fbe4105fe09",
-              "ModuleName": "Analytic",
               "Name": "Date",
               "Title": "Date",
               "ConfigType": "VR_Analytic_AutomatedReportFileNameParts",
               "Settings": "{\"Editor\":\"vr-analytic-automatedreportfilenamepart-date\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "9ea37c6b-fa33-42c1-a9c9-228bef0878a3",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_TimeRangeFilter_LastPeriodFilter",
               "Title": "Last Period",
               "ConfigType": "Analytic_TimeRangeFilter",
               "Settings": "{\"Editor\" : \"vr-analytic-lastperiodfilter\"}",
               "CreatedTime": "2016-09-06T12:56:55.207",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "38974659-fb26-415e-82bc-2895e1d09238",
-              "ModuleName": "Analytic",
               "Name": "StandardReportGenerationFilter",
               "Title": "Standard",
               "ConfigType": "VR_Analytic_ReportGenerationAction_FilterConfig",
               "Settings": "{\"Editor\":\"vr-analytic-reportgeneration-filter-standard\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "a1cb1c46-0ffa-41b0-82b0-2cce407ad86c",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_RealTime_DefaultSearch",
               "Title": "Default Real Time Search",
               "ConfigType": "Analytic_RealTimeSearchSettings",
               "Settings": "{\"Editor\":\"vr-analytic-analyticreport-realtime-searchsettings-defaultsearch\",\"RuntimeEditor\":\"\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "10631f32-9116-4443-a73d-2d4b77111634",
-              "ModuleName": "Analytic",
               "Name": "Postgres Data Provider",
               "Title": "Postgres Data Provider",
               "ConfigType": "VR_Analytic_AnalyticDataProviderSettings",
               "Settings": "{\"Editor\":\"vr-analytic-postgres-dataprovider\"}",
               "CreatedTime": "2016-11-04T13:09:11.86",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "e2a332a2-74fa-4c42-a5d1-33fbda093946",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_ItemAction_OpenRecordSearch",
               "Title": "Open Record Search",
               "ConfigType": "Analytic_ItemActionTemplates",
               "Settings": "{\"Editor\":\"vr-analytic-analyticitemaction-openrecordsearch\"}",
               "CreatedTime": "2016-06-08T12:51:42.007",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "a0833f27-6718-40e1-bb69-344b0bd3cfaf",
-              "ModuleName": "Analytic",
               "Name": "MostRelevantAnalytic",
               "Title": "Most Relevant Analytic",
               "ConfigType": "VR_Analytic_FiguresTileQuerySettings",
               "Settings": "{\"Editor\":\"vr-analytic-mostrelevant-figurestilequery\"}",
               "CreatedTime": "2019-02-02T12:01:22.257",
-              "LastModifiedTime": "2019-02-02T12:01:22.257"
+              "LastModifiedTime": "2019-02-02T12:01:22.257",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "f38308ef-433a-48c6-891b-34847929fd5a",
-              "ModuleName": "Analytic",
               "Name": "FTP Action Type",
               "Title": "FTP",
               "ConfigType": "VR_Analytic_AutomatedReport_HandlerSettings_ActionType",
               "Settings": "{\"Editor\":\"vr-analytic-ftpactiontype-generatefileshandler\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "e1ecaa21-462b-4afd-b886-34a28a35a1fe",
-              "ModuleName": "Analytic",
               "Name": "Flat File Generator",
               "Title": "Flat File",
               "ConfigType": "VR_Analytic_FileGenerator_AutomatedReport",
               "Settings": "{\"Editor\":\"vr-analytic-flatfile-filegenerator\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "017eac3c-bde1-451a-a3c6-3fbf808115e6",
-              "ModuleName": "Analytic",
               "Name": "Specific Mapping",
               "Title": "Specific Mapping",
               "ConfigType": "VR_Analytic_MeasureMappingRuleSettings",
               "Settings": "{\"Editor\":\"vr-analytic-measuremappingrulesettings-specificmapping\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "bcffd15e-1a84-46e0-8bd6-45b36049e29e",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_TimeRangeFilter_PreviousPeriodFilter",
               "Title": "Previous Period",
               "ConfigType": "Analytic_TimeRangeFilter",
               "Settings": "{\"Editor\" : \"vr-analytic-previousperiodfilter\"}",
               "CreatedTime": "2016-09-06T15:11:40.177",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "bcc9ad0b-46ec-4ed1-b79f-47b4518f76b8",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_History_GenericSearch",
               "Title": "Generic Search Settings",
               "ConfigType": "Analytic_AnalyticHistoryReportSettings",
               "Settings": "{\"Editor\":\"vr-analytic-reportsearchsettings-genericsearch\",\"RuntimeEditor\":\"\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "482d20eb-78b0-4633-b6f3-4b93b2ed1190",
-              "ModuleName": "Analytic",
               "Name": "Report Generation Custom Code File Generator",
               "Title": "Custom Report",
               "ConfigType": "VR_Analytic_FileGenerator_AutomatedReport",
               "Settings": "{\"Editor\":\"vr-analytic-reportgenerationcustomcode-filegenerator\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "e5fb0790-5428-44b4-bb1f-4f79b69cd6ef",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_History",
               "Title": "History",
               "ConfigType": "Analytic_AnalyticReportConfigType",
               "Settings": "{\"Editor\":\"vr-analytic-analyticreport-history-definition\",\"RuntimeEditor\":\"vr-analytic-analyticreport-history-runtime\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "d050deb3-700e-437b-86d1-510a81c0c14c",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_WidgetSettings_Chart",
               "Title": "Chart",
               "ConfigType": "Analytic_AnalyticWidgetsSettings",
               "Settings": "{\"Editor\":\"vr-analytic-widgets-chart-definition\",\"RuntimeEditor\":\"vr-analytic-chart-toprecords\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "e9cc9a31-dd48-45f5-a849-5402cce3b7af",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_WidgetSettings_Gauge",
               "Title": "Gauge",
               "ConfigType": "Analytic_AnalyticWidgetsSettings",
               "Settings": "{\"Editor\":\"vr-analytic-widgets-gauge-definition\",\"RuntimeEditor\":\"vr-analytic-gauge-runtime\"}",
               "CreatedTime": "2019-02-12T19:01:26.01",
-              "LastModifiedTime": "2019-02-12T19:01:26.01"
+              "LastModifiedTime": "2019-02-12T19:01:26.01",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "d8b533f7-3375-4bd3-8d2c-65c137e7bd51",
-              "ModuleName": "Analytic",
               "Name": "Same Dimensions",
               "Title": "Same Dimensions",
               "ConfigType": "VR_Analytic_DimensionMappingRuleSettings",
               "Settings": "{\"Editor\":\"vr-analytic-dimension-same\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "1654683d-6168-47f4-b157-661a1fe88a95",
-              "ModuleName": "Analytic",
               "Name": "DownloadFileAction",
               "Title": "Download File Action",
               "ConfigType": "VR_Analytic_ReportGenerationAction_ReportAction",
               "Settings": "{\"Editor\":\"vr-analytic-reportgeneration-settings-reportaction-downloadaction\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "dd11c35d-3da8-4094-9492-678d243efe5a",
-              "ModuleName": "Analytic",
               "Name": "Rest API Data Provider",
               "Title": "Rest API Data Provider",
               "ConfigType": "VR_Analytic_AnalyticDataProviderSettings",
               "Settings": "{\"Editor\":\"vr-analytic-restapi-dataprovider\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "635b2ce2-f787-4f46-832e-69b78d422fd5",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_RealTime",
               "Title": "Real Time",
               "ConfigType": "Analytic_AnalyticReportConfigType",
               "Settings": "{\"Editor\":\"vr-analytic-analyticreport-realtime-definition\",\"RuntimeEditor\":\"vr-analytic-analyticreport-realtime-runtime\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "9eeba2c1-0ec9-4de0-b9e1-755a1d8ce0aa",
-              "ModuleName": "Analytic",
               "Name": "Data Record Source",
               "Title": "Data Record Source",
               "ConfigType": "VR_Analytic_DRSearchPageSubviewDefinitionSettingsConfig",
               "Settings": "{\"Editor\":\"vr-analytic-datarecordsource-subviewdefinitionsettings\"}",
               "CreatedTime": "2017-12-18T09:33:34.26",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "a5b07696-61b4-4371-b52c-770667e0eb05",
-              "ModuleName": "Analytic",
               "Name": "VR_AutomatedReportQueryDefinition_Settings",
               "Title": "Automated Report Query Definition",
               "ConfigType": "VR_Common_VRComponentType",
               "Settings": "{\"Editor\":\"vr-analytic-automatedreportquerydefinition-settings\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "dad39edb-65b1-4c40-935c-7e6339267055",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_DARecordAggregate_CountAggregate",
               "Title": "Count",
               "ConfigType": "Analytic_DARecordAggregate",
               "Settings": "{\"Editor\" : \"vr-analytic-countaggregate\"}",
               "CreatedTime": "2016-09-05T10:31:29.647",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "d7d6d580-40bd-42c6-abbb-7fa6b60a5462",
-              "ModuleName": "Analytic",
               "Name": "Send Email Action Type",
               "Title": "Send Email",
               "ConfigType": "VR_Analytic_AutomatedReport_HandlerSettings_ActionType",
               "Settings": "{\"Editor\":\"vr-analytic-sendemailactiontype-generatefileshandler\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "92b03e4e-37fb-48a1-acee-841135c30b5e",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_ReportGenerationCustomCode",
               "Title": "Report Generation Custom Code",
               "ConfigType": "VR_Common_VRComponentType",
               "Settings": "{\"Editor\":\"vr-analytic-reportgenerationcustomcode-settings\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "6531e07f-ca21-4579-9e38-86a7b835a221",
-              "ModuleName": "Analytic",
               "Name": "FTP Handler",
               "Title": "FTP",
               "ConfigType": "VR_Analytic_HandlerSettings_AutomatedReport",
               "Settings": "{\"Editor\":\"vr-analytic-ftphandler-automatedreporthandler\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "982b1256-3f3e-4ca6-9d23-8844b060062d",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_DARecordAggregate_DistinctCountAggregate",
               "Title": "Distinct Count",
               "ConfigType": "Analytic_DARecordAggregate",
               "Settings": "{\"Editor\" : \"vr-analytic-distinctcountaggregate\"}",
               "CreatedTime": "2016-09-05T11:49:39.19",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "1a67cef6-7472-4151-8a74-8af12d245e27",
-              "ModuleName": "Analytic",
               "Name": "OverallAnalytic",
               "Title": "Overall Analytic",
               "ConfigType": "VR_Analytic_FiguresTileQuerySettings",
               "Settings": "{\"Editor\":\"vr-analytic-overallanalytic-figurestilequery\"}",
               "CreatedTime": "2019-01-28T09:55:26.883",
-              "LastModifiedTime": "2019-01-28T09:55:26.883"
+              "LastModifiedTime": "2019-01-28T09:55:26.883",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "4e972a40-2887-412b-b192-8e4e9739631c",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_MeasureStyle_Compare",
               "Title": "Compare Condition",
               "ConfigType": "Analytic_MeasureStyleRuleTemplates",
               "Settings": "{\"Editor\":\"vr-analytic-measurestyle-stylerulecondition-compare\",\"RuntimeEditor\":\"\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "dbeffa6e-e75e-497f-8acf-8f15469d9b90",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_RealTime_Chart",
               "Title": "Real Time Chart",
               "ConfigType": "Analytic_RealTimeWidgetSettings",
               "Settings": "{\"Editor\":\"vr-analytic-realtime-widgets-chart-definition\",\"RuntimeEditor\":\"vr-analytic-realtime-chart-toprecords\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "c05375fd-4c3a-44b2-acee-a0edee56b488",
-              "ModuleName": "Analytic",
               "Name": "Send Email Handler",
               "Title": "Send Email",
               "ConfigType": "VR_Analytic_HandlerSettings_AutomatedReport",
               "Settings": "{\"Editor\":\"vr-analytic-sendemailhandler-automatedreporthandler\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "f139ca56-d602-4d91-9fc2-a14418d9831e",
-              "ModuleName": "Analytic",
               "Name": "Generate Files Handler",
               "Title": "Generate Files",
               "ConfigType": "VR_Analytic_HandlerSettings_AutomatedReport",
               "Settings": "{\"Editor\":\"vr-analytic-generatefileshandler-automatedreporthandler\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "1e93563d-cca6-48f4-bd34-a21b26a3b773",
-              "ModuleName": "Analytic",
               "Name": "Specific Dimension Mapping",
               "Title": "Specific Dimension Mapping",
               "ConfigType": "VR_Analytic_DimensionMappingRuleSettings",
               "Settings": "{\"Editor\":\"vr-analytic-dimensionmappingrulessettings-specificmapping\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "ce3ac24f-45c2-4965-b2aa-ab09da9b97f8",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_DARecordAggregate_MinAggregate",
               "Title": "Min",
               "ConfigType": "Analytic_DARecordAggregate",
               "Settings": "{\"Editor\" : \"vr-analytic-minaggregate\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "4ecc5dc2-5781-437a-af6c-acaedc3c4a5d",
-              "ModuleName": "Analytic",
               "Name": "Analytic Table Query Definition",
               "Title": "Analytic Table Query",
               "ConfigType": "VR_Analytic_QueryDefinitionSettings_AutomatedReport",
               "Settings": "{\"Editor\":\"vr-analytictablequerydefinition-automatedreport\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "9faae9b2-931e-4b3f-bda4-b0f3b7647488",
-              "ModuleName": "Analytic",
               "Name": "Advanced Excel File Generator",
               "Title": "Excel File",
               "ConfigType": "VR_Analytic_FileGenerator_AutomatedReport",
               "Settings": "{\"Editor\":\"vr-analytic-advancedexcel-filegenerator\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "82ff3b8a-0c39-4376-9602-b84a240fbf82",
-              "ModuleName": "Analytic",
               "Name": "VR_AnalyticReport",
               "Title": "Analytic Report",
               "ConfigType": "VR_Security_ViewTypeConfig",
               "Settings": "{\"Editor\":\"/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticReportViewEditor.html\",\"EnableAdd\":true}",
               "CreatedTime": "2016-10-21T09:31:58.86",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "76dc3174-8fb1-445b-a118-b9e86db46a5e",
-              "ModuleName": "Analytic",
               "Name": "Record Search Query Definition",
               "Title": "Record Search Query",
               "ConfigType": "VR_Analytic_QueryDefinitionSettings_AutomatedReport",
               "Settings": "{\"Editor\":\"vr-recordsearchquerydefinition-automatedreport\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "f50143c9-62b4-4a6f-8c94-b9eed7970dcf",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_DARecordAggregate_MaxAggregate",
               "Title": "Max",
               "ConfigType": "Analytic_DARecordAggregate",
               "Settings": "{\"Editor\" : \"vr-analytic-maxaggregate\"}",
               "CreatedTime": "2018-12-14T12:36:01.587",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "4f72f80c-3928-460f-aaf5-cc18a78c8265",
-              "ModuleName": "Analytic",
               "Name": "Memory Data Provider",
               "Title": "Memory Data Provider",
               "ConfigType": "VR_Analytic_AnalyticDataProviderSettings",
               "Settings": "{\"Editor\":\"vr-analytic-memory-dataprovider\"}",
               "CreatedTime": "2017-05-03T10:28:42.353",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "2e88b323-de47-4c6b-8ad5-cc941bb3611e",
-              "ModuleName": "Analytic",
               "Name": "RDB Data Provider",
               "Title": "RDB Data Provider",
               "ConfigType": "VR_Analytic_AnalyticDataProviderSettings",
               "Settings": " {\"Editor\":\"vr-analytic-rdb-dataprovider\"}",
               "CreatedTime": "2019-02-05T16:46:56.573",
-              "LastModifiedTime": "2019-02-05T16:46:56.573"
+              "LastModifiedTime": "2019-02-05T16:46:56.573",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "82aa89f6-4d19-4168-a499-cdd2875f1702",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_RecordSearch",
               "Title": "Record Search",
               "ConfigType": "Analytic_AnalyticReportConfigType",
               "Settings": "{\"Editor\":\"vr-analytic-analyticreport-recordsearch-definition\",\"RuntimeEditor\":\"vr-analytic-analyticreport-recordsearch-runtime\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "cadc9403-6668-48e9-b452-d398b62921ab",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_Report_RealTime_TimeVariation",
               "Title": "Time Variation",
               "ConfigType": "Analytic_RealTimeWidgetSettings",
               "Settings": "{\"Editor\":\"vr-analytic-realtime-widgets-timevariation-definition\",\"RuntimeEditor\":\"vr-analytic-realtime-chart-timevariation\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "76285a3e-c385-49c3-8833-dea21a40471e",
-              "ModuleName": "Analytic",
               "Name": "WidgetSettings",
               "Title": "Analytic Widget",
               "ConfigType": "VRCommon_VRTileExtendedSettings",
               "Settings": "{\"Editor\":\"vr-common-widgetsettings-definition\"}",
               "CreatedTime": "2019-02-01T13:22:14.537",
-              "LastModifiedTime": "2019-02-01T13:22:14.537"
+              "LastModifiedTime": "2019-02-01T13:22:14.537",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "3cba3f20-6535-4ebf-9704-df65ac605671",
-              "ModuleName": "Analytic",
               "Name": "Sql Data Provider",
               "Title": "Sql Data Provider",
               "ConfigType": "VR_Analytic_AnalyticDataProviderSettings",
               "Settings": "{\"Editor\":\"vr-analytic-sql-dataprovider\"}",
               "CreatedTime": "2016-11-04T13:09:11.86",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "7a2a35e2-543a-42c7-b97f-e05ee8d09a00",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_WidgetSettings_Grid",
               "Title": "Grid",
               "ConfigType": "Analytic_AnalyticWidgetsSettings",
               "Settings": "{\"Editor\":\"vr-analytic-widgets-grid-definition\",\"RuntimeEditor\":\"vr-analytic-datagrid-analyticrecords\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           },
           {
             "FieldValues": {
               "ID": "cd2afbd8-5c2f-4e50-8f36-f57c35a0c10f",
-              "ModuleName": "Analytic",
               "Name": "VR_Analytic_WidgetSettings_PieChart",
               "Title": "Pie Chart",
               "ConfigType": "Analytic_AnalyticWidgetsSettings",
               "Settings": "{\"Editor\":\"vr-analytic-widgets-piechart-definition\",\"RuntimeEditor\":\"vr-analytic-piechart-toprecords\"}",
               "CreatedTime": "2016-09-16T18:35:52.827",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb"
             }
           }
         ],
@@ -696,7 +696,7 @@
             "IsIdentifier": true
           },
           {
-            "ColumnName": "ModuleName",
+            "ColumnName": "DevProjectID",
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": false
@@ -740,7 +740,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "[ModuleName]='Analytic'",
+        "LastWhereCondition": "[DevProjectID]='433656c3-c4eb-40c2-aed9-4bccc4ce83fb'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"

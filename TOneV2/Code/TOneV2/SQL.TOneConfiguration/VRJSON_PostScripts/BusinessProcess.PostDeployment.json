@@ -66,373 +66,373 @@
           {
             "FieldValues": {
               "ID": "0675f4de-cb92-4f57-adf2-00f5ba72e5f5",
-              "ModuleName": "BusinessProcess",
               "Name": "BPGenericTaskTypeSettings",
               "Title": "Generic Task Type",
               "ConfigType": "BusinessProcess_BP_BaseBPTaskTypeSettingsConfig",
               "Settings": "{\"Editor\":\"bp-generictasktype-settings\"}",
               "CreatedTime": "2019-03-25T09:31:08.13",
-              "LastModifiedTime": "2019-03-25T09:31:08.13"
+              "LastModifiedTime": "2019-03-25T09:31:08.13",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "f9c477a8-4374-4c58-a859-02f5a26edcd7",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowSpecificGroupsTaskAssignees",
               "Title": "Specific Groups",
               "ConfigType": "BP_VR_Workflow_TaskAssignees_Setting",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflow-specificgroups-taskassignees\"}",
               "CreatedTime": "2019-03-26T14:53:32.53",
-              "LastModifiedTime": "2019-03-26T14:53:32.53"
+              "LastModifiedTime": "2019-03-26T14:53:32.53",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "82c21f82-3636-4174-ba83-11709140d959",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowAssignActivity",
               "Title": "Assign",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-assign\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "b55a355a-66ba-4036-ac47-261b80c93ca2",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowSpecificUsersTaskAssignees",
               "Title": "Specific Users",
               "ConfigType": "BP_VR_Workflow_TaskAssignees_Setting",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflow-specificusers-taskassignees\"}",
               "CreatedTime": "2019-03-25T10:25:27.373",
-              "LastModifiedTime": "2019-03-25T10:25:27.373"
+              "LastModifiedTime": "2019-03-25T10:25:27.373",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "fbfe2b36-12f6-40c1-8163-26cfe2d23501",
-              "ModuleName": "BusinessProcess",
               "Name": "Show warning",
               "Title": "Show Warning",
               "ConfigType": "VR_BP_BPBusinessRuleActionType",
               "Settings": "{ \"Description\":\"Show warning\", \"Editor\":\"businessprocess-bp-business-rule-warning-item-action\"}",
               "CreatedTime": "2016-10-19T10:19:37.64",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "f8d16729-620a-4780-80dd-2c37f1ed6a3c",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowCustomLogicActivity",
               "Title": "Custom Code",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-customcode\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "d297a8b8-997d-4127-91fa-353238296940",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowProcessInitiatorTaskAssignees",
               "Title": "Process Initiator",
               "ConfigType": "BP_VR_Workflow_TaskAssignees_Setting",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflow-processinitiator-taskassignees\"}",
               "CreatedTime": "2019-03-25T10:25:27.373",
-              "LastModifiedTime": "2019-03-25T10:25:27.373"
+              "LastModifiedTime": "2019-03-25T10:25:27.373",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "7e158311-f841-4569-bf44-3f7f8b10cf90",
-              "ModuleName": "BusinessProcess",
               "Name": "BPTaskTypeSettings",
               "Title": "Default Task Type",
               "ConfigType": "BusinessProcess_BP_BaseBPTaskTypeSettingsConfig",
               "Settings": "{\"Editor\":\"bp-tasktype-settings\"}",
               "CreatedTime": "2019-03-25T09:31:08.13",
-              "LastModifiedTime": "2019-03-25T09:31:08.13"
+              "LastModifiedTime": "2019-03-25T09:31:08.13",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "a9445f70-1188-4f39-8135-419954e88a8b",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowAssignTaskActivity",
               "Title": "Human Activity",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-assigntask\"}",
               "CreatedTime": "2019-03-25T09:31:08.13",
-              "LastModifiedTime": "2019-03-25T09:31:08.13"
+              "LastModifiedTime": "2019-03-25T09:31:08.13",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "a9c74099-c36e-45e6-8318-44c7b9a2b381",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowCallHttpServiceActivity",
               "Title": "Call Http Service",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-callhttpservice\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "feabaafd-c3e9-4dbb-aabf-45db33d33517",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowDelayActivity",
               "Title": "Delay",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-delay\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "68dea8b2-8817-40ee-977d-4ee683ce5092",
-              "ModuleName": "BusinessProcess",
               "Name": "FilterGroupBPGenericTaskTypeActionFilterCondition",
               "Title": "Filter Group",
               "ConfigType": "BP_Generic_TaskType_ActionFilterCondition",
               "Settings": "{\"Editor\":\"bp-generictasktypeactionfiltercondition-filtergroup\"}",
               "CreatedTime": "2019-04-02T12:18:00.067",
-              "LastModifiedTime": "2019-04-02T12:18:00.067"
+              "LastModifiedTime": "2019-04-02T12:18:00.067",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "a3080724-ca0f-45fa-893e-513d9857efb4",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowUpdateBusinessEntityActivity",
               "Title": "Update Business Entity",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{ \"Editor\": \"businessprocess-vr-workflowactivity-updatebusinessentity\" }",
               "CreatedTime": "2019-05-17T10:45:05.02",
-              "LastModifiedTime": "2019-05-17T10:45:05.02"
+              "LastModifiedTime": "2019-05-17T10:45:05.02",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "a6078b0f-efa2-414f-8a25-549628da1762",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflow_ArgumentVariableType_CustomClassType",
               "Title": "Custom Class",
               "ConfigType": "BusinessProcess_VRWorkflowVariableTypeConfig",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflow-customclasstype\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "14b247ce-109f-4493-8979-57ca3dd090c3",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowAddBusinessEntityActivity",
               "Title": "Add Business Entity",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{ \"Editor\": \"businessprocess-vr-workflowactivity-addbusinessentity\" }",
               "CreatedTime": "2019-03-12T10:19:00.08",
-              "LastModifiedTime": "2019-03-12T10:19:00.08"
+              "LastModifiedTime": "2019-03-12T10:19:00.08",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "9c73540f-97e8-4f7a-bd02-594f6dd29741",
-              "ModuleName": "BusinessProcess",
               "Name": "BaseBPTaskTypeSettingsCustomObject",
               "Title": "Base BP Task Type Settings",
               "ConfigType": "VR_GenericData_FieldCustomObjectTypeSettings",
               "Settings": "{\"Editor\":\"bp-basebptasktypesettings-customobject\"}",
               "CreatedTime": "2019-03-25T09:31:08.13",
-              "LastModifiedTime": "2019-03-25T09:31:08.13"
+              "LastModifiedTime": "2019-03-25T09:31:08.13",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "72c926f1-d019-408f-84af-6613d2033473",
-              "ModuleName": "BusinessProcess",
               "Name": "Show information",
               "Title": "Show Information",
               "ConfigType": "VR_BP_BPBusinessRuleActionType",
               "Settings": "{\"Description\":\"Show information\",\"Editor\":\"businessprocess-bp-business-rule-information-action\"}",
               "CreatedTime": "2016-10-19T10:19:37.64",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "0ad405a3-9bcf-4796-9a1a-6cc2c3f9aaa3",
-              "ModuleName": "BusinessProcess",
               "Name": "OpenBPInstanceViewer",
               "Title": "Open BP Instance Viewer",
               "ConfigType": "VR_GenericData_GenericBEActionDefinitionSettings",
               "Settings": "{\"Editor\":\"bp-instance-openbpinstanceviewer-action\"}",
               "CreatedTime": "2019-03-26T12:09:02.067",
-              "LastModifiedTime": "2019-03-26T12:09:02.067"
+              "LastModifiedTime": "2019-03-26T12:09:02.067",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "36f6c817-a40f-4f8c-a2d6-9377eaf2169d",
-              "ModuleName": "BusinessProcess",
               "Name": "ExecuteBPGenericTaskTypeAction",
               "Title": "Execute",
               "ConfigType": "BP_Generic_TaskType_ActionSettings",
               "Settings": "{\"Editor\":\"businessprocess-generictasktype-actionsettings-execute\"}",
               "CreatedTime": "2019-03-25T10:10:50.35",
-              "LastModifiedTime": "2019-03-25T10:10:50.35"
+              "LastModifiedTime": "2019-03-25T10:10:50.35",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "9b435be4-43cd-4942-b5d3-95c8927d6885",
-              "ModuleName": "BusinessProcess",
               "Name": "IsTakenBPGenericTaskTypeActionFilterCondition",
               "Title": "Taken By",
               "ConfigType": "BP_Generic_TaskType_ActionFilterCondition",
               "Settings": "{\"Editor\":\"bp-generictasktypeactionfiltercondition-istaken\"}",
               "CreatedTime": "2019-04-02T12:18:00.067",
-              "LastModifiedTime": "2019-04-02T12:18:00.067"
+              "LastModifiedTime": "2019-04-02T12:18:00.067",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "a0de8c69-7427-4f95-9a4d-9ecd8658d7b2",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowWriteTrackingMessageActivity",
               "Title": "Log Message",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-writetrackingmessage\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "9292b3be-256f-400f-9bc6-a0423fa0b30f",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowSequenceActivity",
               "Title": "Sequence",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-sequence\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "ba3a107d-20da-4456-ac70-a2948dfe3725",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowForEachActivity",
               "Title": "ForEach",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-foreach\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "d92aeea3-2fca-4ccc-8beb-bb5c5181b1f0",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowGetBusinessEntityActivity",
               "Title": "Get Business Entity",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{ \"Editor\": \"businessprocess-vr-workflowactivity-getbusinessentity\" }",
               "CreatedTime": "2019-03-12T10:19:00.08",
-              "LastModifiedTime": "2019-03-12T10:19:00.08"
+              "LastModifiedTime": "2019-03-12T10:19:00.08",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "ba3427fe-b8be-4546-b433-ce0d8ce9fcb1",
-              "ModuleName": "BusinessProcess",
               "Name": "Exclude",
               "Title": "Exclude",
               "ConfigType": "VR_BP_BPBusinessRuleActionType",
               "Settings": "{ \"Description\":\"Exclude\", \"Editor\":\"businessprocess-bp-business-rule-exclude-item-action\"}",
               "CreatedTime": "2016-10-19T10:19:18.807",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "173258f8-2ac9-4214-bce2-d3db6d902423",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowSubProcessActivity",
               "Title": "Subprocess",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-subprocess\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "a30953f6-d62e-4755-bdde-df87c0716864",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflow_ArgumentVariableType_GenericVariableType",
               "Title": "Generic Variable",
               "ConfigType": "BusinessProcess_VRWorkflowVariableTypeConfig",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflow-genericargumentvariabletype\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "0e9730f4-1197-456b-9261-e745fe4afb3b",
-              "ModuleName": "BusinessProcess",
               "Name": "StartBPProcess_Generic",
               "Title": "Start BP Process",
               "ConfigType": "VR_GenericData_GenericBEActionDefinitionSettings",
               "Settings": "{\"Editor\":\"bp-instance-genericbe-startbpprocess-action\"}",
               "CreatedTime": "2019-03-28T15:29:14.817",
-              "LastModifiedTime": "2019-03-28T15:29:14.817"
+              "LastModifiedTime": "2019-03-28T15:29:14.817",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "715f7f90-2c23-4185-aeb8-eda947de3978",
-              "ModuleName": "BusinessProcess",
               "Name": "Stop execution",
               "Title": "Stop Execution",
               "ConfigType": "VR_BP_BPBusinessRuleActionType",
               "Settings": "{\"Description\":\"Stop execution\", \"Editor\":\"businessprocess-bp-business-rule-stop-execution-action\"}",
               "CreatedTime": "2016-10-19T10:18:49.627",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "0defe6d7-d4c3-4e73-804a-ee6764cce57d",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowWhileActivity",
               "Title": "While",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{ \"Editor\": \"businessprocess-vr-workflowactivity-while\" }",
               "CreatedTime": "2019-03-12T10:19:00.08",
-              "LastModifiedTime": "2019-03-12T10:19:00.08"
+              "LastModifiedTime": "2019-03-12T10:19:00.08",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           },
           {
             "FieldValues": {
               "ID": "40b7e3e9-f8e0-4c2c-9ed7-f79cc4a68473",
-              "ModuleName": "BusinessProcess",
               "Name": "VRWorkflowIfElseActivity",
               "Title": "If Else",
               "ConfigType": "BP_VR_Workflow_Activity",
               "Settings": "{\"Editor\":\"businessprocess-vr-workflowactivity-ifelse\"}",
               "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": null
+              "LastModifiedTime": null,
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813"
             }
           }
         ],
@@ -444,7 +444,7 @@
             "IsIdentifier": true
           },
           {
-            "ColumnName": "ModuleName",
+            "ColumnName": "DevProjectID",
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": false
@@ -488,7 +488,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "[ModuleName] = 'BusinessProcess'",
+        "LastWhereCondition": "[DevProjectID]='512a75db-1c97-4d9e-949b-059aba855813'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
