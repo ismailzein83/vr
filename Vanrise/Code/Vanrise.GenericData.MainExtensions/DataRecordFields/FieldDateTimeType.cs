@@ -40,7 +40,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-datetime-viewereditor"; } }
 
-        public override string RuntimeViewSettingEditor { get { return "vr-genericdata-fieldtype-datetime-settings"; } }
+        public override string RuntimeViewSettingEditor { get { return this.DataType == FieldDateTimeDataType.DateTime || this.DataType == FieldDateTimeDataType.Date ? "vr-genericdata-fieldtype-datetime-settings" : null; } }
 
         public override bool ShowDefaultValue { get { return false; } }
 

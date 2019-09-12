@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
-    public abstract class ListRecordRuntimeViewType
+    public abstract class ListRecordRuntimeViewType : FieldTypeRuntimeViewSettings
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }

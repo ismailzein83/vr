@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'VR_GenericData_DateTimeDataTypeEnum',
-    function (UtilsService, VR_GenericData_DateTimeDataTypeEnum) {
+app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'VR_GenericData_DateTimeDataTypeEnum', 'VR_GenericData_DateTimeDefaultValueEnum', 'VR_GenericData_DateTimeValidationOperatorEnum', 'VR_GenericData_DateTimeValidationTargetEnum', 'VRDateTimeService',
+    function (UtilsService, VR_GenericData_DateTimeDataTypeEnum, VR_GenericData_DateTimeDefaultValueEnum, VR_GenericData_DateTimeValidationOperatorEnum, VR_GenericData_DateTimeValidationTargetEnum, VRDateTimeService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -29,6 +29,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
 
             var fieldName;
             var genericContext;
+            var validations;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -77,7 +78,11 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             function defineScopeForSingleMode() {
 
                 $scope.scopeModel.validateValue = function () {
-                    return customValidate();
+                    var customValdiateResult = customValidate();
+                    if (customValdiateResult != undefined)
+                        return customValdiateResult;
+
+                    return evaluateValidationsSetting();
                 };
 
                 $scope.scopeModel.onDateChanged = function () {
@@ -100,6 +105,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
 
                     var fieldType;
                     var fieldValue;
+                    var fieldViewSettings;
 
                     if (payload != undefined) {
                         $scope.scopeModel.label = payload.fieldTitle;
@@ -109,6 +115,15 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                         var dataTypes = UtilsService.getArrayEnum(VR_GenericData_DateTimeDataTypeEnum);
                         $scope.scopeModel.fieldType = UtilsService.getItemByVal(dataTypes, fieldType.DataType, 'value');
                         genericContext = payload.genericContext;
+                        fieldViewSettings = payload.fieldViewSettings;
+                    }
+
+                    if (fieldViewSettings != undefined) {
+                        if (genericContext != undefined && genericContext.isAddMode()) {
+                            $scope.scopeModel.value = getValueFromDefaultValueEnum(fieldViewSettings.DefaultValue);
+                        }
+
+                        validations = fieldViewSettings.Validations;
                     }
 
                     if (fieldValue != undefined) {
@@ -174,8 +189,11 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     }
                 }
                 else {
-                    if ($scope.scopeModel.fieldType.type != "time")
+                    if ($scope.scopeModel.fieldType.type != "time") {
                         $scope.scopeModel.value = fieldValue;
+
+
+                    }
                     else {
                         $scope.scopeModel.value = fieldValue;
                     }
@@ -207,7 +225,79 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             function customValidate() {
                 if (ctrl.customvalidate != undefined && typeof (ctrl.customvalidate) == 'function')
                     return ctrl.customvalidate();
+
                 return undefined;
+            }
+
+            function evaluateValidationsSetting() {
+                if ($scope.scopeModel.value == undefined || validations == undefined || validations.length == 0)
+                    return null;
+
+                for (var i = 0; i < validations.length; i++) {
+                    var currentValidation = validations[i];
+                    var validationOperatorObject = UtilsService.getEnum(VR_GenericData_DateTimeValidationOperatorEnum, 'value', currentValidation.ValidationOperator);
+                    var validationOperatorSyntax = validationOperatorObject.ifSyntax;
+                    var validationOperatorDescription = validationOperatorObject.description;
+                    var validationTarget = currentValidation.ValidationTarget;
+
+                    var valueToCompare;
+                    var fieldNameToCompare;
+
+                    switch (validationTarget) {
+                        case VR_GenericData_DateTimeValidationTargetEnum.Today.value: {
+                            valueToCompare = VRDateTimeService.getTodayDate();
+                            fieldNameToCompare = "Today";
+                            break;
+                        }
+
+                        case VR_GenericData_DateTimeValidationTargetEnum.Now.value: {
+                            valueToCompare = VRDateTimeService.getNowDateTime();
+                            fieldNameToCompare = "Now";
+                            break;
+                        }
+
+                        case VR_GenericData_DateTimeValidationTargetEnum.SpecificField.value: {
+                            var fields = genericContext.getFieldValues();
+                            var validationFieldName = currentValidation.FieldName;
+
+                            if (fields == undefined || fields[validationFieldName] == undefined)
+                                return null;
+
+                            valueToCompare = fields[validationFieldName];
+                            fieldNameToCompare = validationFieldName;
+                            break;
+                        }
+
+                        default: return null;
+                    }
+
+                    var firstValue = $scope.scopeModel.value;
+                    if (!(firstValue instanceof Date))
+                        firstValue = UtilsService.createDateFromString(firstValue);
+
+                    var secondValue = valueToCompare;
+                    if (!(secondValue instanceof Date))
+                        secondValue = UtilsService.createDateFromString(secondValue);
+
+                    if (!eval(firstValue.getTime() + validationOperatorSyntax + secondValue.getTime())) {
+                        return fieldName + " must be " + validationOperatorDescription + " " + fieldNameToCompare;
+                    }
+
+                    return null;
+                }
+
+                return null;
+            }
+
+            function getValueFromDefaultValueEnum(defaultValueEnum) {
+                if (ctrl.selectionmode != 'single' || defaultValueEnum == undefined)
+                    return undefined;
+
+                switch (defaultValueEnum) {
+                    case VR_GenericData_DateTimeDefaultValueEnum.Today.value: return VRDateTimeService.getTodayDate();
+                    case VR_GenericData_DateTimeDefaultValueEnum.Now.value: return VRDateTimeService.getNowDateTime();
+                    default: return undefined;
+                }
             }
         }
 
@@ -243,7 +333,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     }
                 }
                 return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType != undefined && scopeModel.label != undefined ">'
-                    + ' ' + labelTemplate + ' ' 
+                    + ' ' + labelTemplate + ' '
                     + '<vr-directivewrapper ' + hidelabel + ' directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" onvaluechanged="scopeModel.onDateChanged()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                     + '</vr-columns>';
             }

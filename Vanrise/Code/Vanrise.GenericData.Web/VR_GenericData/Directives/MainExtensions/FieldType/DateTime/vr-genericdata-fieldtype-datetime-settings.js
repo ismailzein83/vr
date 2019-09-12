@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordFieldTypeDateTimeSettingDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRUIUtilsService'];
+    DataRecordFieldTypeDateTimeSettingDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DateTimeDefaultValueEnum', 'VR_GenericData_DateTimeValidationOperatorEnum', 'VR_GenericData_DateTimeValidationTargetEnum'];
 
-    function DataRecordFieldTypeDateTimeSettingDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRUIUtilsService) {
+    function DataRecordFieldTypeDateTimeSettingDirective(UtilsService, VRUIUtilsService, VR_GenericData_DateTimeDefaultValueEnum, VR_GenericData_DateTimeValidationOperatorEnum, VR_GenericData_DateTimeValidationTargetEnum) {
         return {
             restrict: "E",
             scope:
@@ -14,7 +14,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
+                ctrl.datasource = [];
                 $scope.normalColNum = "4";
                 if (ctrl.normalColNum != undefined)
                     $scope.normalColNum = ctrl.normalColNum;
@@ -27,123 +27,197 @@
             compile: function (element, attrs) {
 
             },
-            template: function (element, attrs) {
-                return getDirectiveTemplate(attrs);
-            }
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DateTime/Templates/DatetimeFieldTypeSettingTemplate.html"
         };
-        function getDirectiveTemplate(attrs) {
-            var label = 'label="Runtime View Type"';
-            var removeLine = "";
-            if (attrs.hidelabel != undefined) {
-                label = "";
-                removeLine = "removeline";
-            }
 
-            return '<vr-row><vr-columns colnum="{{normalColNum}}">'
-                + '<vr-select on-ready="scopeModel.onSelectorReady"'
-                + 'datasource="scopeModel.runtimeViewTypesConfigs"'
-                + 'selectedvalues="scopeModel.selectedFieldTypeConfig"'
-                + 'datavaluefield="ExtensionConfigurationId"'
-                + 'datatextfield="Title" isrequired="ctrl.isrequired()"'
-                + label
-                + ' text="None"'
-                + '</vr-select>'
-                + '</vr-columns></vr-row>'
-                + ' <span  ng-if="scopeModel.selectedFieldTypeConfig != undefined" vr-loader="scopeModel.isLoadingDirective">'
-                + ' <vr-directivewrapper normal-col-num="{{normalColNum}}" directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onDirectiveReady" ></vr-directivewrapper>'
-                + '</span>';
-        }
         function RuntimeViewTypeSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var selectorAPI;
-
-            var directiveAPI;
-            var directiveReadyDeferred;
-            var directivePayload;
+            var gridAPI;
+            var gridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.runtimeViewTypesConfigs = [];
-                $scope.scopeModel.selectedFieldTypeConfig;
+                $scope.scopeModel.defaultValues = [];
+                $scope.scopeModel.operators = [];
+                $scope.scopeModel.validationTargets = [];
+                $scope.scopeModel.validations = [];
+                $scope.scopeModel.fields = [];
 
-                $scope.scopeModel.onSelectorReady = function (api) {
-                    selectorAPI = api;
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                $scope.scopeModel.hasValidationChanged = function () {
+                    $scope.scopeModel.validations.length = 0;
                 };
 
-                $scope.scopeModel.onDirectiveReady = function (api) {
-                    directiveAPI = api;
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
-                    };
-
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, directiveAPI, { context: directivePayload.context, dataRecordTypeId: directivePayload.dataRecordTypeId }, setLoader, directiveReadyDeferred);
+                $scope.scopeModel.addValidation = function () {
+                    extendItemToGrid();
                 };
+
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    gridReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onDeleteRow = function (deletedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.validations, deletedItem.tempId, 'tempId');
+                    $scope.scopeModel.validations.splice(index, 1);
+                };
+
+                $scope.scopeModel.isValid = function () {
+                    if ($scope.scopeModel.hasValidation && $scope.scopeModel.validations.length == 0)
+                        return "At least one Validation must be Added!";
+
+                    return null;
+                };
+
+                defineAPI();
             }
 
-            function getDirectiveAPI() {
+            function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var promises = [];
-                    var configId;
+                    var defaultValue;
+                    var validations;
+                    var context;
+                    var settings;
 
                     if (payload != undefined) {
-                        configId = payload.configId;
-                        ctrl.isrequired = payload.isEditorRequired;
-                        directivePayload = payload;
+                        settings = payload.settings;
+                        context = payload.context;
                     }
 
-                    var getFieldTypeConfigsPromise = getFieldTypeConfigs();
-                    promises.push(getFieldTypeConfigsPromise);
+                    if (settings != undefined) {
+                        defaultValue = settings.DefaultValue;
+                        validations = settings.Validations;
+                    }
 
-                    var loadDirectiveDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(loadDirectiveDeferred.promise);
+                    loadSelectorsDataSourcesFromEnums();
+                    setDefaultValueSelector();
+                    loadDateTimeFieldTypes();
 
-                    getFieldTypeConfigsPromise.then(function () {
-                        if (configId != undefined) {
-                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                            $scope.scopeModel.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModel.runtimeViewTypesConfigs, configId, 'ExtensionConfigurationId');
+                    if (validations != undefined && validations.length > 0) {
+                        promises.push(loadValidationsGrid());
+                    }
 
-                            directiveReadyDeferred.promise.then(function () {
-                                directiveReadyDeferred = undefined;
-                                VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, loadDirectiveDeferred);
-                            });
+                    function loadSelectorsDataSourcesFromEnums() {
+                        $scope.scopeModel.defaultValues = UtilsService.getArrayEnum(VR_GenericData_DateTimeDefaultValueEnum);
+                        $scope.scopeModel.operators = UtilsService.getArrayEnum(VR_GenericData_DateTimeValidationOperatorEnum);
+                        $scope.scopeModel.validationTargets = UtilsService.getArrayEnum(VR_GenericData_DateTimeValidationTargetEnum);
+                    }
+
+                    function setDefaultValueSelector() {
+                        if (defaultValue != undefined) {
+                            var selectedDefaultValue = UtilsService.getItemByVal($scope.scopeModel.defaultValues, defaultValue, "value");
+                            if (selectedDefaultValue != null) {
+                                $scope.scopeModel.selectedDefaultValue = selectedDefaultValue;
+                            }
                         }
-                        else {
-                            loadDirectiveDeferred.resolve();
+                    }
+
+                    function loadDateTimeFieldTypes() {
+                        var allFields = context.getFields();
+
+                        if (allFields == undefined || allFields.length == 0)
+                            return;
+
+                        for (var i = 0; i < allFields.length; i++) {
+                            var currentField = allFields[i];
+                            if (currentField.Type.ConfigId != "b8712417-83ab-4d4b-9ee1-109d20ceb909")
+                                continue;
+
+                            $scope.scopeModel.fields.push(currentField);
                         }
-                    });
+                    }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    function loadValidationsGrid() {
+                        $scope.scopeModel.hasValidation = true;
+                        var gridLoadPromises = [];
 
-                    function getFieldTypeConfigs() {
-                        return VR_GenericData_DataRecordFieldAPIService.GetListRecordRuntimeViewTypeConfigs().then(function (response) {
-                            if (response != null) {
-                                selectorAPI.clearDataSource();
-                                for (var i = 0; i < response.length; i++) {
-                                    $scope.scopeModel.runtimeViewTypesConfigs.push(response[i]);
-                                }
+                        gridReadyPromiseDeferred.promise.then(function () {
+                            for (var i = 0; i < validations.length; i++) {
+                                var currentValidation = validations[i];
+                                gridLoadPromises.push(extendItemToGrid(currentValidation));
                             }
                         });
+
+                        return UtilsService.waitMultiplePromises(gridLoadPromises);
                     }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    var data = null;
+                    if ($scope.scopeModel.selectedDefaultValue == undefined && !$scope.scopeModel.hasValidation)
+                        return undefined;
 
-                    if ($scope.scopeModel.selectedFieldTypeConfig != undefined) {
-                        data = directiveAPI.getData();
-                        data.ConfigId = $scope.scopeModel.selectedFieldTypeConfig.ExtensionConfigurationId;
+                    var data = {
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.DateTimeRuntimeViewSetting , Vanrise.GenericData.MainExtensions",
+                        DefaultValue: $scope.scopeModel.selectedDefaultValue != undefined ? $scope.scopeModel.selectedDefaultValue.value : undefined,
+                        Validations: $scope.scopeModel.hasValidation ? getValidationsFromGrid() : undefined
+                    };
+
+                    function getValidationsFromGrid() {
+                        if ($scope.scopeModel.validations.length == 0)
+                            return undefined;
+
+                        var validations = [];
+                        for (var i = 0; i < $scope.scopeModel.validations.length; i++) {
+                            var currentValidation = $scope.scopeModel.validations[i];
+                            validations.push({
+                                ValidationTarget: currentValidation.selectedTarget.value,
+                                ValidationOperator: currentValidation.selectedOperator.value,
+                                FieldName: currentValidation.selectedTarget.showFieldsSelector ? currentValidation.selectedField.FieldName : undefined
+                            });
+                        }
+
+                        return validations;
                     }
 
                     return data;
                 };
 
-                return api;
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
+                    ctrl.onReady(api);
+                }
+            }
+
+            function extendItemToGrid(validation) {
+                var extendValidationPromises = [];
+
+                var validationDataItem = { tempId: UtilsService.guid() };
+
+                if (validation != undefined) {
+                    if (validation.ValidationOperator != undefined) {
+                        var selectedOperator = UtilsService.getItemByVal($scope.scopeModel.operators, validation.ValidationOperator, "value");
+                        if (selectedOperator != null)
+                            validationDataItem.selectedOperator = selectedOperator;
+                    }
+
+                    if (validation.ValidationTarget != undefined) {
+                        var selectedTarget = UtilsService.getItemByVal($scope.scopeModel.validationTargets, validation.ValidationTarget, "value");
+                        if (selectedTarget != null) {
+                            validationDataItem.selectedTarget = selectedTarget;
+
+                            if (selectedTarget.showFieldsSelector) {
+                                var selectedField = UtilsService.getItemByVal($scope.scopeModel.fields, validation.FieldName, "FieldName");
+                                if (selectedField != null)
+                                    validationDataItem.selectedField = selectedField;
+                            }
+                        }
+                    }
+                }
+
+                validationDataItem.onSelectionTargetChanged = function (selectedTarget) {
+                    if (selectedTarget == undefined)
+                        return;
+
+                    if (!selectedTarget.showFieldsSelector)
+                        validationDataItem.selectedField = undefined;
+                };
+
+                $scope.scopeModel.validations.push(validationDataItem);
+                return UtilsService.waitMultiplePromises(extendValidationPromises);
             }
         }
     }
