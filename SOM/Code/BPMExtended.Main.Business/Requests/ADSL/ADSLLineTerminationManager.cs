@@ -118,7 +118,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLLineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitLineTermination/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLLineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/XDSLSubmitLineTermination/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();
