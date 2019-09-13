@@ -1,0 +1,326 @@
+﻿{
+  "Scripts": [
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AssemblyID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
+              "ID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Rules",
+              "AssemblyID": null,
+              "CreatedTime": "2019-09-12T16:18:03.853",
+              "LastModifiedTime": "2019-09-12T16:18:03.853"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "ID = 'abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "ExtensionConfiguration",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Title",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ConfigType",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "b285d8dd-b628-4df0-b28c-114ebb9bed5a",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Substring",
+              "Title": "Substring",
+              "ConfigType": "VR_Rules_NormalizeNumberAction",
+              "Settings": "{\"Editor\":\"vr-rules-normalizationnumbersettings-substring\"}",
+              "CreatedTime": "2016-09-19T18:39:23.713",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "f155fbf2-4f7e-444e-b197-16fdeafe4faa",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "SixtyOne",
+              "Title": "60/1",
+              "ConfigType": "VR_Rules_PricingRuleTariffSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-tariff-sixtyone\"}",
+              "CreatedTime": "2018-12-14T12:39:51.363",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "6dd13404-f488-4d59-a2a0-2135d3826b28",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Remove",
+              "Title": "Remove",
+              "ConfigType": "VR_Rules_NormalizeNumberAction",
+              "Settings": "{\"Editor\":\"vr-rules-normalizationnumbersettings-remove\"}",
+              "CreatedTime": "2017-08-07T15:04:50.99",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "8c340085-e102-4504-a49b-329480cc7605",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Percentage Tax",
+              "Title": "Percentage Tax",
+              "ConfigType": "VR_Rules_PricingRuleTaxAction",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-tax-percentage\"}",
+              "CreatedTime": "2016-09-19T18:24:11.987",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "e973cb63-4652-4e3d-9679-59b98de952cd",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "SixtySixty",
+              "Title": "60/60",
+              "ConfigType": "VR_Rules_PricingRuleTariffSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-tariff-sixtysixty\"}",
+              "CreatedTime": "2018-12-14T12:39:51.363",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "9b441d3f-1a1d-4060-8bb1-740cef377e0d",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Fixed Extra Charge",
+              "Title": "Fixed Extra Charge",
+              "ConfigType": "VR_Rules_PricingRuleExtraChargeSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-extracharge-fixed\"}",
+              "CreatedTime": "2016-09-19T18:24:11.987",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "53f5fb2a-0390-4821-a795-9146615cf584",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Fixed Rate Value",
+              "Title": "Fixed Rate Value",
+              "ConfigType": "VR_Rules_PricingRuleRateValueSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-ratevalue-fixed\"}",
+              "CreatedTime": "2016-09-19T18:21:43.45",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "35acc9c2-0675-4347-ba3e-a81025c1be12",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Custom",
+              "Title": "Custom",
+              "ConfigType": "VR_Rules_PricingRuleTariffSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-tariff-regular\"}",
+              "CreatedTime": "2016-09-19T18:20:26.2",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "9387367e-4bbc-4f8a-958f-af27effc7ec4",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Percentage Extra Charge",
+              "Title": "Percentage Extra Charge",
+              "ConfigType": "VR_Rules_PricingRuleExtraChargeSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-extracharge-percentage\"}",
+              "CreatedTime": "2016-09-19T18:24:11.987",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "8b86004a-754b-45c2-adb5-caeb220287b0",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Ceiling",
+              "Title": "Ceiling",
+              "ConfigType": "VR_Rules_PricingRuleTariffSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-tariff-ceiling\"}",
+              "CreatedTime": "2018-12-14T12:39:51.363",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "2b333f37-21b2-436c-92f5-cfaa9912b388",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "AddPrefix",
+              "Title": "AddPrefix",
+              "ConfigType": "VR_Rules_NormalizeNumberAction",
+              "Settings": "{\"Editor\":\"vr-rules-normalizationnumbersettings-addprefix\"}",
+              "CreatedTime": "2016-09-19T18:39:23.713",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "12a627f4-5e64-4957-b3f9-e0b890955037",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "ReplaceString",
+              "Title": "ReplaceString",
+              "ConfigType": "VR_Rules_NormalizeNumberAction",
+              "Settings": "{\"Editor\":\"vr-rules-normalizationnumbersettings-replacestring\"}",
+              "CreatedTime": "2016-09-19T18:39:23.713",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "d642aa26-c072-43ef-98f1-ee84f05f4069",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Days Of Week",
+              "Title": "Days Of Week",
+              "ConfigType": "VR_Rules_PricingRuleRateTypeSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-ratetype-daysofweek\"}",
+              "CreatedTime": "2016-09-19T18:22:43.97",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "f87ee98b-673f-4095-8658-f6aa7e3966d3",
+              "DevProjectID": "abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6",
+              "Name": "Specific",
+              "Title": "Specific",
+              "ConfigType": "VR_Rules_PricingRuleRateTypeSettings",
+              "Settings": "{\"Editor\":\"vr-rules-pricingrulesettings-ratetype-specific\"}",
+              "CreatedTime": "2016-09-19T18:22:43.97",
+              "LastModifiedTime": null
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "DevProjectID = 'abbe3c68-7d2e-4b33-a43f-2aa8f2a196a6'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    }
+  ]
+}

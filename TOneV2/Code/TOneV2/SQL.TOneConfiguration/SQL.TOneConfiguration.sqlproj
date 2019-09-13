@@ -1011,5 +1011,12 @@
     <None Include="VRJSON_PostScripts\BusinessProcess.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\Generic.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\Analytic.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\VR_Rules.json" />
+    <None Include="VRJSON_PostScripts\VR_BEBridge.json" />
+    <None Include="VRJSON_PostScripts\VR_NumberPrefix.json" />
+    <None Include="VRJSON_PostScripts\VR_NumberingPlan.json" />
+    <None Include="VRJSON_PostScripts\VR_Notification.json" />
+    <None Include="VRJSON_PostScripts\VR_MobileNetwork.json" />
+    <None Include="VRJSON_PostScripts\VR_AccountBalance.json" />
   </ItemGroup>
 </Project>

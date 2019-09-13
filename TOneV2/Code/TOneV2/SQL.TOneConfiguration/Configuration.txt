@@ -10,16 +10,16 @@ Integration.PostDeployment.sql
 Generic.PostDeployment.json
 Reprocess.PostDeployment.sql
 Analytic.PostDeployment.json
-VR_Rules.PostDeployment.sql
+VR_Rules.json
 Invoice.PostDeployment.sql
-VR_AccountBalance.PostDeployment.sql
-VR_Notification.PostDeployment.sql
+VR_AccountBalance.json
+VR_Notification.json
 User_Guides.PostDeployment.sql
 DataAnalysis.PostDeployment.sql
-VR_MobileNetwork.PostDeployment.sql
-VR_NumberingPlan.PostDeployment.sql
-VR_BEBridge.PostDeployment.sql
-VR_NumberPrefix.PostDeployment.sql
+VR_MobileNetwork.json
+VR_NumberingPlan.json
+VR_BEBridge.json
+VR_NumberPrefix.json
 Enumerations.sql
 
 TOne
