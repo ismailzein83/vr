@@ -360,12 +360,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= iif(Not(Parameters!NoRecurringCharges.Value) And Parameters!NoVoice.Value And Parameters!NoSMS.Value And parameters!NoDeals.Value, Parameters!CompanyProfileName.Value,
+                              <Value>= iif(Not(Parameters!NoRecurringCharges.Value) And Parameters!NoVoice.Value And Parameters!NoSMS.Value And parameters!NoDeals.Value, Parameters!Name.Value,
 "Facture du trafic d'interconnexion International " +
 iif(Parameters!NoVoice.Value,"", "Voix") + 
 iif(Len(Parameters!SMSServiceTypes.Value) = 0 OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value, "", ", ") + 
 iif(Len(Parameters!SMSServiceTypes.Value) = 0 OR Parameters!NoSMS.Value, "", Parameters!SMSServiceTypes.Value)
-+ " sortant du réseau de " + Parameters!Carrier.Value + ", entrant dans le réseau de " + Parameters!CompanyProfileName.Value)</Value>
++ " sortant du réseau de " + Parameters!Carrier.Value + ", entrant dans le réseau de " + Parameters!Name.Value)</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1224,7 +1224,7 @@ La facture doit être payée avant </Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Name.Value</Value>
+                              <Value>=Parameters!CompanyProfileName.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3148,7 +3148,7 @@ La facture doit être payée avant </Value>
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!Name.Value</Value>
+                  <Value>=Parameters!CompanyProfileName.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
