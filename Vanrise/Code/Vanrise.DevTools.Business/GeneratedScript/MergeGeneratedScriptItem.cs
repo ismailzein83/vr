@@ -193,7 +193,7 @@ namespace Vanrise.DevTools.Business
         {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append(@"
-                 #Note#
+                 --#Note#
                  --- [#Schema#].[#TableName#]-------------------------------------------------------------------
                  -----------------------------------------------------------------------------------------------
                  begin
