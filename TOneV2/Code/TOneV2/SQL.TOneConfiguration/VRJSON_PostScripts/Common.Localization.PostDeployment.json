@@ -5,7 +5,7 @@
       "Schema": "sec",
       "TableName": "Module",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -102,7 +102,7 @@
       "Schema": "sec",
       "TableName": "View",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -285,7 +285,7 @@
       "Schema": "genericdata",
       "TableName": "BusinessEntityDefinition",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -387,7 +387,7 @@
       "Schema": "genericdata",
       "TableName": "DataRecordStorage",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
@@ -499,7 +499,7 @@
       "Schema": "genericdata",
       "TableName": "DataRecordType",
       "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
             "FieldValues": {
