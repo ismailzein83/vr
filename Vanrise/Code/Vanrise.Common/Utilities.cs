@@ -745,6 +745,18 @@ namespace Vanrise.Common
                 return string.Format("{0}", fromDate.ToString(dateFormat));
         }
 
+        public static DateTimeRange GetQuarter(DateTime date)
+        {
+            int startingMonth = date.Month - (date.Month - 1) % 3;
+            DateTime startDate = new DateTime(date.Year, startingMonth, 1);
+
+            return new DateTimeRange()
+            {
+                From = startDate,
+                To = startDate.AddMonths(2).GetLastDayOfMonth()
+            };
+        }
+
         public static bool AreEquals(byte[] a1, byte[] a2)
         {
             if (a1 == null || a2 == null)
