@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-     public class RecurringChargePeriodSettingsContext : IRecurringChargePeriodSettingsContext
+    public class RecurringChargePeriodSettingsContext : IRecurringChargePeriodSettingsContext
     {
-         public DateTime FromDate { set;  get; }
-         public DateTime ToDate { set;  get; }
-         public List<RecurringChargePeriodOutput> Periods { set; get; }
+        public DateTime RecurringChargeBED { set; get; }
+        public DateTime FromDate { set; get; }
+        public DateTime ToDate { set; get; }
+        public List<RecurringChargePeriodOutput> Periods { set; get; }
     }
-     public class RecurringChargePeriodOutput
+
+    public class RecurringChargePeriodOutput
     {
         public DateTime From { get; set; }
         public DateTime To { get; set; }

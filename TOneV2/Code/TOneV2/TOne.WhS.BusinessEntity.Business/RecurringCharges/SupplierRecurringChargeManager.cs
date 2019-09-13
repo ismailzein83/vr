@@ -53,6 +53,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 var context = new RecurringChargePeriodSettingsContext()
                 {
+                    RecurringChargeBED = effectiveSupplierRecurringCharge.BED,
                     FromDate = fromDate > effectiveSupplierRecurringCharge.BED ? fromDate : effectiveSupplierRecurringCharge.BED,
                     ToDate = effectiveSupplierRecurringCharge.EED.HasValue && toDate > effectiveSupplierRecurringCharge.EED.Value ? effectiveSupplierRecurringCharge.EED.Value : toDate
                 };

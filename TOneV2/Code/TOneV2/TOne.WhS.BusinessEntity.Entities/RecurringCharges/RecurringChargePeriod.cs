@@ -17,6 +17,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     }
     public interface IRecurringChargePeriodSettingsContext
     {
+        DateTime RecurringChargeBED { get; }
         DateTime FromDate { get; }
         DateTime ToDate { get; }
         List<RecurringChargePeriodOutput> Periods { set; }

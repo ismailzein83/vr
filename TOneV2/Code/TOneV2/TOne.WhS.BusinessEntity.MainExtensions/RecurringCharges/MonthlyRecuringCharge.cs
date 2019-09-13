@@ -25,6 +25,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                     currentDateTime = currentDateTime.AddMonths(1).GetLastDayOfMonth();
 
                 DateTime fromDate = new DateTime(currentDateTime.Year, currentDateTime.Month, 1);
+
+                if (fromDate < context.RecurringChargeBED)
+                    fromDate = context.RecurringChargeBED;
+
                 DateTime toDate = fromDate.GetLastDayOfMonth();
 
                 periodsList.Add(new RecurringChargePeriodOutput
@@ -33,11 +37,12 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                     To = toDate,
                     RecurringChargeDate = currentDateTime
                 });
+
                 if (!InAdvance)
                     currentDateTime = fromDate.AddMonths(1).GetLastDayOfMonth();
             }
             context.Periods = periodsList;
         }
-       
+
     }
 }
