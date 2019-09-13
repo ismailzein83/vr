@@ -8,6 +8,7 @@ namespace Vanrise.Notification.Entities
 {
     public class VRAlertRuleTypeDetail
     {
+        public string DevProjectName { get; set; }
         public VRAlertRuleType Entity { get; set; }
     }
 }

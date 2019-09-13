@@ -9,5 +9,6 @@ namespace Vanrise.Notification.Entities
     public class VRAlertRuleTypeQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }
