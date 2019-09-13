@@ -199,7 +199,7 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
             }
 
             function updateCustomerMappingDescription() {
-                if (context == undefined)
+                if (isFirstLoad || context == undefined)
                     return;
 
                 if ($scope.scopeModel.customerMappingExists) {
