@@ -1,5 +1,5 @@
 ﻿<vr-panel vr-loader="scopeModel.isLoading">
-    <vr-tabs>
+    <vr-tabs on-ready="scopeModel.onTabsContainerReady">
         <vr-tab header="'Data Structure'">
             <vr-row>
                 <vr-devtools-columns-selector on-ready="scopeModel.onColumnsDirectiveReady" vr-loader="scopeModel.isColumnsDirectiveloading" label="Columns"

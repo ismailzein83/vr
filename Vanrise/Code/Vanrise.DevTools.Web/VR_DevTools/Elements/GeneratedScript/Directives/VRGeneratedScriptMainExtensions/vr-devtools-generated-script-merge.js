@@ -53,6 +53,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
             var variablesDataGridApi;
             var variablesGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var bulkActionDraftInstance;
+            var tabsContainerApi;
             var variables;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -82,6 +83,11 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                 $scope.scopeModel.clearAllColumns = function () {
                     ctrl.datasource.length = 0;
                 };
+
+                $scope.scopeModel.onTabsContainerReady = function (api) {
+                    tabsContainerApi = api;
+                };
+
                 $scope.scopeModel.onDataTabSelected = function () {
 
                     if (columnsDirectiveApi != undefined) {
@@ -105,11 +111,8 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                             moveItems: false
 
                         }).finally(function () {
-
                             $scope.scopeModel.isLoading = false;
-
                         });
-                        //}
                     }
                 };
 
@@ -516,7 +519,13 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
 
                         promises.push(loadSelectedDataRows(selectTableDataPayload));
 
-                        return UtilsService.waitMultiplePromises(promises);
+                        return UtilsService.waitPromiseNode({
+                            promises: promises,
+                            getChildNode: function () {
+                                tabsContainerApi.setTabSelected(1);
+                                return { promises: [] };
+                            }
+                        });
                     }
 
                     else {

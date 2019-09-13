@@ -193,7 +193,7 @@ namespace Vanrise.DevTools.Business
         {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append(@"
-                 --#Note#
+                 #Note#
                  --- [#Schema#].[#TableName#]-------------------------------------------------------------------
                  -----------------------------------------------------------------------------------------------
                  begin
@@ -241,7 +241,7 @@ namespace Vanrise.DevTools.Business
             {
                 if (valuesBuilder.Length > 0)
                 {
-                    
+
                     valuesBuilder.Append(",");
                     valuesBuilder.AppendLine();
                 }
@@ -264,14 +264,14 @@ namespace Vanrise.DevTools.Business
             }
 
             StringBuilder queryTypeBuilder = new StringBuilder();
-            if (Columns.Exists(x=>x.IncludeInUpdate))
+            if (Columns.Exists(x => x.IncludeInUpdate))
             {
                 queryTypeBuilder.Append(@"
                   when matched then
                  update set
                  #Update#");
 
-                queryTypeBuilder.Replace("#Update#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]=s.[{0}] ", x.ColumnName), x =>x.IncludeInUpdate)));
+                queryTypeBuilder.Replace("#Update#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]=s.[{0}] ", x.ColumnName), x => x.IncludeInUpdate)));
             }
             if (Columns.Exists(x => x.IncludeInInsert))
             {
@@ -280,17 +280,17 @@ namespace Vanrise.DevTools.Business
                  insert(#InsertColumns#)
                  values(#InsertColumnsValues#)");
 
-                queryTypeBuilder.Replace("#InsertColumns#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]", x.ColumnName),x=>x.IncludeInInsert)));
-                queryTypeBuilder.Replace("#InsertColumnsValues#", string.Join(", ", this.Columns.MapRecords(x => string.Format("s.[{0}]", x.ColumnName),x=>x.IncludeInInsert)));
+                queryTypeBuilder.Replace("#InsertColumns#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]", x.ColumnName), x => x.IncludeInInsert)));
+                queryTypeBuilder.Replace("#InsertColumnsValues#", string.Join(", ", this.Columns.MapRecords(x => string.Format("s.[{0}]", x.ColumnName), x => x.IncludeInInsert)));
             }
             queryTypeBuilder.Append(";");
             queryBuilder.Replace("#Variables#", variablesBuilder.ToString());
             queryBuilder.Replace("#Columns#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]", x.ColumnName))));
             queryBuilder.Replace("#Values#", valuesBuilder.ToString());
-            queryBuilder.Replace("#Note#", item.Note);
+            queryBuilder.Replace("#Note#", item.Note != null ? string.Format("--{0}", item.Note) : null);
             queryBuilder.Replace("#Schema#", item.Schema);
             queryBuilder.Replace("#TableName#", item.TableName);
-            queryBuilder.Replace("#IdentifierColumns#", string.Join(" and ", this.Columns.MapRecords(x => string.Format("t.[{0}]=s.[{0}]", x.ColumnName),x=>x.IsIdentifier)));
+            queryBuilder.Replace("#IdentifierColumns#", string.Join(" and ", this.Columns.MapRecords(x => string.Format("t.[{0}]=s.[{0}]", x.ColumnName), x => x.IsIdentifier)));
             queryBuilder.Replace("#QueryType#", queryTypeBuilder.ToString());
             queryBuilder.Replace("#IdentityOn#", identityOnBuilder.ToString());
             queryBuilder.Replace("#IdentityOff#", identityOffBuilder.ToString());
