@@ -117,8 +117,8 @@ CDRAnalysis.PostDeployment.sql
 CDRAnalysisBE.PostDeployment.sql
 
 SOM
-SOM.PostDeployment.sql
-SomST.PostDeployment.sql
+SOM.PostDeployment.json
+SomST.PostDeployment.json
 
 RA
 Retail_RA.PostDeployment.sql
