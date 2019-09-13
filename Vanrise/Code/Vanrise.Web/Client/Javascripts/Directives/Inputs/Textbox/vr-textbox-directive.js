@@ -26,23 +26,23 @@
                 if ($attrs.stopreadonly == undefined)
                     ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
                 var validationOptions = {};
-                if ($attrs.type === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Email.name)
+                if ($attrs.type === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Email.name || ctrl.type == TextboxTypeEnum.Email.name)
                     validationOptions.emailValidation = true;
-                if ($attrs.type === TextboxTypeEnum.LabeledEmail.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.LabeledEmail.name)
+                if ($attrs.type === TextboxTypeEnum.LabeledEmail.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.LabeledEmail.name || ctrl.type == TextboxTypeEnum.LabeledEmail.name)
                     validationOptions.labledEmailValidation = true;
-                if ($attrs.type === TextboxTypeEnum.Ip.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Ip.name)
+                if ($attrs.type === TextboxTypeEnum.Ip.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Ip.name || ctrl.type == TextboxTypeEnum.Ip.name)
                     validationOptions.ipValidation = true;
-                if ($attrs.type === TextboxTypeEnum.IpV6.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.IpV6.name)
+                if ($attrs.type === TextboxTypeEnum.IpV6.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.IpV6.name || ctrl.type == TextboxTypeEnum.IpV6.name)
                     validationOptions.ipV6Validation = true;
                 if ($attrs.refusepecialcharacter != undefined)
                     validationOptions.specialCharacterValidation = true;
-                if ($attrs.type === TextboxTypeEnum.FileName.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.FileName.name)
+                if ($attrs.type === TextboxTypeEnum.FileName.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.FileName.name || ctrl.type == TextboxTypeEnum.FileName.name)
                     validationOptions.filenameValidation = true;
                 if ($attrs.minlength != undefined) {
                     validationOptions.minlengthValidation = true;
                     validationOptions.minLength = ctrl.minlength;
                 }
-                else if ($attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
+                else if ($attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name || ctrl.type == TextboxTypeEnum.Number.name) {
                     validationOptions.numberValidation = true;
                     validationOptions.maxNumber = ctrl.maxvalue;
                     validationOptions.minNumber = ctrl.minvalue;
@@ -64,6 +64,9 @@
                     }
                 }();
 
+                ctrl.isPasswordInput = function () {
+                    return $attrs.type === TextboxTypeEnum.Password.name || ctrl.type == TextboxTypeEnum.Password.name || $scope.$parent.$eval(ctrl.type) == TextboxTypeEnum.Password.name;
+                };
                 ctrl.tabindex = "";
                 setTimeout(function () {
                     if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
@@ -260,7 +263,6 @@
                     }
                 };
             },
-
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
@@ -280,17 +282,7 @@
                 if (attrs.hidelabel != undefined)
                     labelTemplate = '';
 
-                var type = 'text';
-                var isolationFormStart = "";
-                var isolationFormEnd = "";
-                var autocomplete = "";
-                if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name) {
-                    type = 'password';
-                    isolationFormStart = "<form>";
-                    isolationFormEnd = "</form>";
-                    autocomplete = "autocomplete='new-password'";
-                }
-
+               
 
                 var keypress = '';
                 var keypressclass = '';
@@ -302,7 +294,8 @@
                 //    format = 'format="number"'; '+format+'
                 var textboxTemplate = '<div ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)">'
                     + '<vr-validator validate="ctrl.validate()" vr-input>'
-                    + isolationFormStart + ' <input  tabindex="{{ctrl.tabindex}}" ' + autocomplete + ' ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-focus="::ctrl.onFocusDirective($event)" ng-blur="::ctrl.onBlurDirective($event)"/>' + isolationFormEnd
+                    + ' <input  ng-if="::!ctrl.isPasswordInput()"  tabindex="{{ctrl.tabindex}}"  ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input ' + keypressclass + ' " data-autoclose="1" type="text" ng-keyup="::ctrl.onKeyUp($event)" ng-focus="::ctrl.onFocusDirective($event)" ng-blur="::ctrl.onBlurDirective($event)"/>'
+                    + ' <form ng-if="::ctrl.isPasswordInput()" tyepinput="{{ctrl.type}}"><input  tabindex="{{ctrl.tabindex}}" autocomplete="new-password" ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input ' + keypressclass + ' " data-autoclose="1" type="password" ng-keyup="::ctrl.onKeyUp($event)" ng-focus="::ctrl.onFocusDirective($event)" ng-blur="::ctrl.onBlurDirective($event)"/></form>'
                     + '</vr-validator>'
                     + '<span ng-if="(ctrl.hint!=undefined && ctrl.hint!=\'\')" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="::ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                     + '</div>';
