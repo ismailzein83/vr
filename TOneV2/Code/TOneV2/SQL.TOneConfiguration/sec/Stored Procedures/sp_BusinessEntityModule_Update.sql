@@ -7,6 +7,7 @@ CREATE PROCEDURE [sec].[sp_BusinessEntityModule_Update]
 	-- Add the parameters for the stored procedure here
 	@Id uniqueidentifier ,
 	@Name NVARCHAR(255),
+	@DevProjectId uniqueidentifier,
 	@ParentId uniqueidentifier,
 	@BreakInheritance bit
 AS
@@ -18,6 +19,7 @@ IF NOT EXISTS(select 1 from sec.[BusinessEntityModule] where Name = @Name and Id
 	UPDATE	sec.[BusinessEntityModule]
 		SET		Name = @Name,
 				ParentId=@ParentId,
+				DevProjectID=@DevProjectId,
 				BreakInheritance = @BreakInheritance,
 				LastModifiedTime = GETDATE()
 		WHERE	Id = @Id

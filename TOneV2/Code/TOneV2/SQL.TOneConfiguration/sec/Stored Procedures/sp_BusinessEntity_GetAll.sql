@@ -11,7 +11,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT	[Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]
+	SELECT	[Id],[Name],[Title],DevProjectID,[ModuleId],[BreakInheritance],[PermissionOptions]
     from	[sec].BusinessEntity WITH(NOLOCK) 
 	order by [Name]
 END

@@ -8,6 +8,7 @@ CREATE PROCEDURE [sec].[sp_BusinessEntity_Insert]
 	@Id uniqueidentifier,
 	@Name nvarchar(255),
 	@Title  nvarchar(255),
+	@DevProjectId uniqueidentifier,
 	@ModuleId uniqueidentifier,
 	@BreakInheritance bit,
 	@PermissionOptions varchar(255)
@@ -18,8 +19,8 @@ BEGIN
 	-- interfering with SELECT statements.
 IF NOT EXISTS(select 1 from sec.BusinessEntity where Name = @Name)
 	BEGIN	
-		INSERT INTO sec.BusinessEntity(ID,Name,Title,ModuleId,BreakInheritance,PermissionOptions) 
-		VALUES (@Id,@Name,@Title,@ModuleId,@BreakInheritance,@PermissionOptions)
+		INSERT INTO sec.BusinessEntity(ID,Name,Title,DevProjectID,ModuleId,BreakInheritance,PermissionOptions) 
+		VALUES (@Id,@Name,@Title,@DevProjectId,@ModuleId,@BreakInheritance,@PermissionOptions)
 	 -- Insert statements for procedure here
 	END
 END

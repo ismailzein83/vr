@@ -8,6 +8,7 @@ CREATE PROCEDURE [sec].[sp_BusinessEntity_Update]
 	@Id uniqueidentifier ,
 	@Name NVARCHAR(255),
 	@Title  nvarchar(255),
+	@DevProjectId uniqueidentifier,
 	@ModuleId uniqueidentifier,
 	@BreakInheritance bit,
 	@PermissionOptions varchar(255)
@@ -20,6 +21,7 @@ IF NOT EXISTS(select 1 from sec.[BusinessEntity] where Name = @Name and Id!=@Id)
 	UPDATE	sec.[BusinessEntity]
 		SET		Name = @Name,
 				Title = @Title,
+				DevProjectID=@DevProjectId,
 				ModuleId=@ModuleId,
 				BreakInheritance = @BreakInheritance,
 				PermissionOptions=@PermissionOptions,
