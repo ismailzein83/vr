@@ -3979,7 +3979,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Id in ('12221745-B7EC-4862-AD1D-28E6A500C49D','56A5D484-180A-4D7B-A5EF-513C33ECDD52', 'E9159CBF-974F-4F0B-9D14-BC2414736DD4', '7421A486-9BC3-4E83-98D8-9B4D235AB801')",
+        "LastWhereCondition": "DevProjectID = 'A8708EA2-ABD5-4C2C-8548-E8F1CAE6A1DC'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -4057,7 +4057,11 @@
           {
             "FieldValues": {
               "HolderType": 1,
-              "HolderId": "2",
+              "HolderId": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptVariableData,Vanrise.DevTools.Entities",
+                "VariableId": "9129fa82-5bfc-c4c6-758a-1df6518aa6f6",
+                "IsVariable": true
+              },
               "EntityType": 1,
               "EntityId": "d1f22bce-cce7-4eb1-9c07-3d1225103338",
               "PermissionFlags": "[{\"Name\":\"Invoke\",\"Value\":1},{\"Name\":\"ViewLogs\",\"Value\":1}]",
@@ -4118,7 +4122,7 @@
               "FilterValue": "'SOM_Billing'",
               "ConfigId": "1f5bddad-b1c2-4056-bec6-44233de11cf2"
             },
-            "$$hashKey": "object:38383"
+            "$$hashKey": "object:61262"
           }
         ],
         "LastWhereCondition": "EntityId='d1f22bce-cce7-4eb1-9c07-3d1225103338'",
