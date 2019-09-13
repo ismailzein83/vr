@@ -2,9 +2,9 @@
 
     "use strict";
 
-    TimeFormatEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','TimeFormateTemplatesEnum'];
+    TimeFormatEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'TimeFormateTemplatesEnum'];
 
-    function TimeFormatEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService,TimeFormateTemplatesEnum) {
+    function TimeFormatEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, TimeFormateTemplatesEnum) {
 
         var timeFormatValue;
         var context;
@@ -40,7 +40,7 @@
                 value: 3,
                 description: "Hour"
             }
-            ,
+                ,
             {
                 value: 4,
                 description: "Minute"
@@ -53,10 +53,10 @@
                 value: 6,
                 description: "Seconds Fraction"
             },
-             {
-                 value: 7,
-                 description: 'A.M. or P.M.'
-             }
+            {
+                value: 7,
+                description: 'A.M. or P.M.'
+            }
             ];
 
 
@@ -170,13 +170,13 @@
                 description: "f (ex: 1)",
                 expression: "f"
             }
-            , {
+                , {
                 value: 23,
                 timeValue: 7,
                 description: "tt (ex: PM)",
                 expression: "tt"
             }
-            , {
+                , {
                 value: 24,
                 timeValue: 7,
                 description: "t (ex: P)",
@@ -184,11 +184,11 @@
             }];
             $scope.showTimeParts = false;
             $scope.onTimeFormatSelectionChanged = function () {
-                    if ($scope.selectedTimeFormatTemplate != undefined && $scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value)
-                        $scope.showTimeParts = true;
-                    else
-                        $scope.showTimeParts = false;
-              
+                if ($scope.selectedTimeFormatTemplate != undefined && $scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value)
+                    $scope.showTimeParts = true;
+                else
+                    $scope.showTimeParts = false;
+
             };
 
             $scope.onTimeSelectionChanged = function () {
@@ -220,10 +220,10 @@
             };
 
             $scope.isFormatValueRequired = function () {
-                    if ($scope.selectedTimeFormatTemplate != undefined && $scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value && $scope.timeFormatValue == undefined)
-                        return true;
-                    else
-                        return false;
+                if ($scope.selectedTimeFormatTemplate != undefined && $scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value && $scope.timeFormatValue == undefined)
+                    return true;
+                else
+                    return false;
             };
         }
 
@@ -237,9 +237,9 @@
                     .catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     })
-                   .finally(function () {
-                       $scope.isLoading = false;
-                   });
+                    .finally(function () {
+                        $scope.isLoading = false;
+                    });
 
 
                 function setTitle() {
@@ -251,11 +251,9 @@
                 function loadTextAreaSection() {
                     if (timeFormatValue != undefined) {
                         var timeFormatTemplate = UtilsService.getEnum(TimeFormateTemplatesEnum, 'expression', timeFormatValue);
-                        if (timeFormatTemplate != undefined)
-                        {
+                        if (timeFormatTemplate != undefined) {
                             $scope.selectedTimeFormatTemplate = timeFormatTemplate;
-                        }else
-                        {
+                        } else {
                             $scope.selectedTimeFormatTemplate = TimeFormateTemplatesEnum.Custom;
                             $scope.timeFormatValue = timeFormatValue;
                         }
@@ -266,7 +264,7 @@
         }
 
         function buildTimeFormatObjFromScope() {
-            if ($scope.selectedTimeFormatTemplate.value != TimeFormateTemplatesEnum.Custom.value)
+            if ($scope.selectedTimeFormatTemplate != undefined && $scope.selectedTimeFormatTemplate.value != TimeFormateTemplatesEnum.Custom.value)
                 return $scope.selectedTimeFormatTemplate.expression;
             return $scope.timeFormatValue;
         }
