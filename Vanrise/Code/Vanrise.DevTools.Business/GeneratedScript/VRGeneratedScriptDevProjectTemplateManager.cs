@@ -67,6 +67,7 @@ namespace Vanrise.DevTools.Business
             public string TableName { get; set; }
             public string Schema { get; set; }
             public string IdColumnName { get; set; }
+            public List<string> ExcludedColumns { get; set; }
             public string WhereCondition { get; set; }
             public string JoinCondition { get; set; }
         }
@@ -87,7 +88,7 @@ namespace Vanrise.DevTools.Business
                     { "DataAnalysisItemDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataAnalysisItemDefinition",Schema="Analytic",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("Analytic","DataAnalysisDefinition","DataAnalysisDefinitionID")}},
                     { "VRWorkflow",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRWorkflow",Schema="bp",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "BPBusinessRuleDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BPBusinessRuleDefinition",Schema="bp",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "BPBusinessRuleAction",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BPBusinessRuleAction",Schema="bp",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("bp","BPBusinessRuleDefinition","BusinessRuleDefinitionId")}},
+                    { "BPBusinessRuleAction",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BPBusinessRuleAction",Schema="bp",IdColumnName="BusinessRuleDefinitionId",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("bp","BPBusinessRuleDefinition","BusinessRuleDefinitionId"),ExcludedColumns=new List<string>{ "ID"} }},
                     { "BPDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BPDefinition",Schema="bp",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "BPTaskType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BPTaskType",Schema="bp",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "ExtensionConfiguration",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ExtensionConfiguration",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
@@ -122,8 +123,8 @@ namespace Vanrise.DevTools.Business
                     { "BusinessEntity",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntity",Schema="sec",IdColumnName="Id",WhereCondition=WhereCondition}},
                     { "BusinessEntityModule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntityModule",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "Module",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Module",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "View",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="View",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "SystemAction",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="SystemAction",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "View",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="View",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition,ExcludedColumns=new List<string>{"IsDeleted" } }},
+                    { "SystemAction",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="SystemAction",Schema="sec",IdColumnName="Name",WhereCondition=WhereCondition,ExcludedColumns=new List<string>{"ID"}} },
                     { "BillingTransactionType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BillingTransactionType",Schema="VR_AccountBalance",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRAlertRuleType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRAlertRuleType",Schema="VRNotification",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRAlertRule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRAlertRule",Schema="VRNotification",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("VRNotification","VRAlertRuleType","RuleTypeId")}},
@@ -207,13 +208,40 @@ namespace Vanrise.DevTools.Business
                                 LastWhereCondition = table.Value.WhereCondition,
                                 LastJoinStatement = table.Value.JoinCondition,
                             };
-                            mergeGeneratedScriptItem.DataRows = dataRows.MapRecords(x => new GeneratedScriptItemTableRow() { FieldValues = x.FieldValues }).ToList();
 
+                            if (dataRows != null && dataRows.Count() > 0)
+                            {
+                                mergeGeneratedScriptItem.DataRows = new List<GeneratedScriptItemTableRow>();
+
+                                foreach (var row in dataRows)
+                                {
+                                    var tableRow = new GeneratedScriptItemTableRow();
+
+                                    if (row.FieldValues != null && row.FieldValues.Count > 0)
+                                    {
+                                        var tableRowFieldValues = new Dictionary<string, object>();
+
+                                        foreach (var value in row.FieldValues)
+                                        {
+                                            if (table.Value.ExcludedColumns == null || !table.Value.ExcludedColumns.Contains(value.Key))
+                                                tableRowFieldValues.Add(value.Key, value.Value);
+                                        }
+
+                                        tableRow.FieldValues = tableRowFieldValues;
+                                    }
+
+                                    mergeGeneratedScriptItem.DataRows.Add(tableRow);
+
+                                }
+                            }
+                  
                             mergeGeneratedScriptItem.Columns = new List<MergeGeneratedScriptItemColumn>();
                             VRGeneratedScriptColumnsManager generatedScriptColumnsManager = new VRGeneratedScriptColumnsManager();
+
                             var columnsInfo = generatedScriptColumnsManager.GetColumnsInfo(new VRGeneratedScriptColumnsInfoFilter() { ConnectionId = input.ConnectionId, SchemaName = table.Value.Schema, TableName = table.Value.TableName });
+
                             if (columnsInfo != null && columnsInfo.Count() > 0)
-                                mergeGeneratedScriptItem.Columns.AddRange(columnsInfo.MapRecords(x => new MergeGeneratedScriptItemColumn() { ColumnName = x.Name, IncludeInInsert = true, IncludeInUpdate = true, IsIdentifier = x.Name == table.Value.IdColumnName ? true : false }));
+                                mergeGeneratedScriptItem.Columns.AddRange(columnsInfo.MapRecords(x => new MergeGeneratedScriptItemColumn() { ColumnName = x.Name, IncludeInInsert = true, IncludeInUpdate = true, IsIdentifier = x.Name == table.Value.IdColumnName ? true : false }, x => table.Value.ExcludedColumns==null || !table.Value.ExcludedColumns.Contains(x.Name)));
 
                             item.Settings = mergeGeneratedScriptItem;
                             items.Add(item);

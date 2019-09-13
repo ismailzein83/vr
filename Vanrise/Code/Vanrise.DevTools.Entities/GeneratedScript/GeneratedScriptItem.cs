@@ -27,6 +27,7 @@ namespace Vanrise.DevTools.Entities
         public Guid ConnectionId { get; set; }
         public string Schema { get; set; }
         public string TableName { get; set; }
+        public string Note { get; set; }
         public GeneratedScriptItemTableSettings Settings { get; set; }
 
     }

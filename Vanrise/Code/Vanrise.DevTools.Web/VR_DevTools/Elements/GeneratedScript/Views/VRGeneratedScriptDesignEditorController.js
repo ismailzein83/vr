@@ -171,6 +171,7 @@
         function loadAllControls() {
 
             if (isEditMode) {
+                $scope.scopeModel.note = designEntity.Note;
                 connectionStringSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 schemaSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 tableSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -291,6 +292,7 @@
                     ConnectionId: connectionStringDirectiveApi.getSelectedIds(),
                     Schema: schemaDirectiveApi.getSelectedIds(),
                     TableName: tableDirectiveApi.getSelectedIds(),
+                    Note: $scope.scopeModel.note,
                     Settings: generatedScriptSettingsDirectiveApi.getData().data,
                     Title: generatedScriptSettingsDirectiveApi.getData().Title
                 }

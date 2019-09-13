@@ -193,6 +193,7 @@ namespace Vanrise.DevTools.Business
         {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append(@"
+                 #Note#
                  --- [#Schema#].[#TableName#]-------------------------------------------------------------------
                  -----------------------------------------------------------------------------------------------
                  begin
@@ -286,6 +287,7 @@ namespace Vanrise.DevTools.Business
             queryBuilder.Replace("#Variables#", variablesBuilder.ToString());
             queryBuilder.Replace("#Columns#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]", x.ColumnName))));
             queryBuilder.Replace("#Values#", valuesBuilder.ToString());
+            queryBuilder.Replace("#Note#", item.Note);
             queryBuilder.Replace("#Schema#", item.Schema);
             queryBuilder.Replace("#TableName#", item.TableName);
             queryBuilder.Replace("#IdentifierColumns#", string.Join(" and ", this.Columns.MapRecords(x => string.Format("t.[{0}]=s.[{0}]", x.ColumnName),x=>x.IsIdentifier)));
