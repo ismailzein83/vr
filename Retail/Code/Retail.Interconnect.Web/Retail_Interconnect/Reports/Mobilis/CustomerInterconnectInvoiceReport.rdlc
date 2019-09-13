@@ -498,7 +498,7 @@
                                 <TextRun>
                                   <Value>="Facture du trafic d'Interconnexion National "+
 iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)
-+" sortant du réseau de "+Parameters!AccountName.Value+", entrant dans le réseau de "+Parameters!CompanyProfileName.Value</Value>
++" sortant du réseau de "+Parameters!AccountName.Value+", entrant dans le réseau de "+Parameters!CompanyName.Value</Value>
                                   <Style>
                                     <FontStyle>Italic</FontStyle>
                                     <FontFamily>Verdana</FontFamily>
@@ -1538,7 +1538,7 @@ La facture doit être payée avant </Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!CompanyName.Value</Value>
+                                  <Value>=Parameters!CompanyProfileName.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -3165,7 +3165,7 @@ La facture doit être payée avant </Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Parameters!CompanyName.Value</Value>
+                      <Value>=Parameters!CompanyProfileName.Value</Value>
                       <Style>
                         <FontFamily>Verdana</FontFamily>
                         <FontSize>8pt</FontSize>
