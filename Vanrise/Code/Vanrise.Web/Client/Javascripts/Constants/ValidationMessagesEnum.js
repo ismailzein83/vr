@@ -9,6 +9,6 @@
     invalidPrec: "Decimal Precision must be ",
     invalidIp: "Invalid IP Address",
     invalidIpV6: "Invalid IP v6 Address",
-    invalidFileName: "File name can't contain / \\ : * ? ; < > \" ",
+    invalidFileName: "File name can't contain / \\ : * ? | < > \" ",
     invalidMinLength: "Value must be at least "
 });
