@@ -33,13 +33,13 @@ namespace Vanrise.Security.Data.SQL
         }
         public bool AddBusinessEntityModule(Entities.BusinessEntityModule moduleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_Insert", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.BreakInheritance);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_Insert", moduleObject.ModuleId, moduleObject.Name, moduleObject.DevProjectId, moduleObject.ParentId, moduleObject.BreakInheritance);
             return (recordesEffected > 0);
         }
 
         public bool UpdateBusinessEntityModule(Entities.BusinessEntityModule moduleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.BreakInheritance);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.DevProjectId,moduleObject.ParentId, moduleObject.BreakInheritance);
             return (recordesEffected > 0);
         }
 
@@ -59,7 +59,8 @@ namespace Vanrise.Security.Data.SQL
             {
                 ModuleId = GetReaderValue<Guid>(reader,"Id"),
                 Name = reader["Name"] as string,
-               // Title = reader["Title"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
+                // Title = reader["Title"] as string,
                 ParentId = GetReaderValue<Guid?>(reader, "ParentId"),
                 BreakInheritance = (bool)reader["BreakInheritance"],
                 PermissionOptions = new List<string>() { "View", "Add", "Edit", "Delete", "Full Control" }

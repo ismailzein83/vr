@@ -13,6 +13,7 @@ namespace Vanrise.Security.Data.RDB
         const string COL_Id = "Id";
         const string COL_Name = "Name";
         const string COL_Title = "Title";
+        public const string COL_DevProjectID = "DevProjectID";
         const string COL_ModuleId = "ModuleId";
         const string COL_BreakInheritance = "BreakInheritance";
         const string COL_PermissionOptions = "PermissionOptions";
@@ -24,6 +25,7 @@ namespace Vanrise.Security.Data.RDB
             columns.Add(COL_Id, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_ModuleId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_BreakInheritance, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
             columns.Add(COL_PermissionOptions, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
@@ -55,6 +57,7 @@ namespace Vanrise.Security.Data.RDB
                 EntityId = reader.GetGuid(COL_Id),
                 Name = reader.GetString(COL_Name),
                 Title = reader.GetString(COL_Title),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 ModuleId = reader.GetGuid(COL_ModuleId),
                 BreakInheritance = reader.GetBoolean(COL_BreakInheritance),
                 PermissionOptions = Common.Serializer.Deserialize<List<string>>(reader.GetString(COL_PermissionOptions))
@@ -74,6 +77,10 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_Id).Value(businessEntity.EntityId);
             insertQuery.Column(COL_Name).Value(businessEntity.Name);
             insertQuery.Column(COL_Title).Value(businessEntity.Title);
+
+            if (businessEntity.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(businessEntity.DevProjectId.Value);
+
             insertQuery.Column(COL_ModuleId).Value(businessEntity.ModuleId);
             insertQuery.Column(COL_BreakInheritance).Value(businessEntity.BreakInheritance);
             if (businessEntity.PermissionOptions != null)
@@ -119,6 +126,12 @@ namespace Vanrise.Security.Data.RDB
             ifNotExists.NotEqualsCondition(COL_Id).Value(businessEntity.EntityId);
             updateQuery.Column(COL_Name).Value(businessEntity.Name);
             updateQuery.Column(COL_Title).Value(businessEntity.Title);
+
+            if (businessEntity.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(businessEntity.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
             updateQuery.Column(COL_ModuleId).Value(businessEntity.ModuleId);
             updateQuery.Column(COL_BreakInheritance).Value(businessEntity.BreakInheritance);
             if (businessEntity.PermissionOptions != null)

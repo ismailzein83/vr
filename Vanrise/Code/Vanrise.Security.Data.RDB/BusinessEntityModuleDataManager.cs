@@ -16,6 +16,7 @@ namespace Vanrise.Security.Data.RDB
         static string TABLE_ALIAS = "module";
         const string COL_ID = "ID";
         const string COL_Name = "Name";
+        public const string COL_DevProjectID = "DevProjectID";
         const string COL_ParentId = "ParentId";
         const string COL_BreakInheritance = "BreakInheritance";
         const string COL_LastModifiedTime = "LastModifiedTime";
@@ -26,6 +27,7 @@ namespace Vanrise.Security.Data.RDB
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_ParentId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_BreakInheritance, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -56,6 +58,7 @@ namespace Vanrise.Security.Data.RDB
             {
                 ModuleId = reader.GetGuid(COL_ID),
                 Name = reader.GetString(COL_Name),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 ParentId = reader.GetNullableGuid(COL_ParentId),
                 BreakInheritance = reader.GetBoolean(COL_BreakInheritance),
                 PermissionOptions = new List<string>() { "View", "Add", "Edit", "Delete", "Full Control" }
@@ -75,6 +78,10 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.IfNotExists(TABLE_ALIAS).EqualsCondition(COL_Name).Value(moduleObject.Name);
             insertQuery.Column(COL_ID).Value(moduleObject.ModuleId);
             insertQuery.Column(COL_Name).Value(moduleObject.Name);
+
+            if (moduleObject.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(moduleObject.DevProjectId.Value);
+
             if (moduleObject.ParentId.HasValue)
                 insertQuery.Column(COL_ParentId).Value(moduleObject.ParentId.Value);
             insertQuery.Column(COL_BreakInheritance).Value(moduleObject.BreakInheritance);
@@ -118,6 +125,12 @@ namespace Vanrise.Security.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(moduleObject.Name);
             ifNotExists.NotEqualsCondition(COL_ID).Value(moduleObject.ModuleId);
             updateQuery.Column(COL_Name).Value(moduleObject.Name);
+
+            if (moduleObject.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(moduleObject.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
             if (moduleObject.ParentId.HasValue)
                 updateQuery.Column(COL_ParentId).Value(moduleObject.ParentId.Value);
             else

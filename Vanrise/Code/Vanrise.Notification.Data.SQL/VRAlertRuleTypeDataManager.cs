@@ -37,7 +37,7 @@ namespace Vanrise.Notification.Data.SQL
         public bool Insert(VRAlertRuleType vrAlertRuleTypeItem)
         {
             string serializedSettings = vrAlertRuleTypeItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrAlertRuleTypeItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRuleType_Insert", vrAlertRuleTypeItem.VRAlertRuleTypeId, vrAlertRuleTypeItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRuleType_Insert", vrAlertRuleTypeItem.VRAlertRuleTypeId, vrAlertRuleTypeItem.Name,vrAlertRuleTypeItem.DevProjectId, serializedSettings);
 
             if (affectedRecords > 0)
             {
@@ -50,7 +50,7 @@ namespace Vanrise.Notification.Data.SQL
         public bool Update(VRAlertRuleType vrAlertRuleTypeItem)
         {
             string serializedSettings = vrAlertRuleTypeItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrAlertRuleTypeItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRuleType_Update", vrAlertRuleTypeItem.VRAlertRuleTypeId, vrAlertRuleTypeItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRuleType_Update", vrAlertRuleTypeItem.VRAlertRuleTypeId, vrAlertRuleTypeItem.Name,vrAlertRuleTypeItem.DevProjectId, serializedSettings);
             return (affectedRecords > 0);
         }
 
@@ -96,6 +96,7 @@ when not matched by target then
             {
                 VRAlertRuleTypeId = (Guid) reader["ID"],
                 Name = reader["Name"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<VRAlertRuleTypeSettings>(reader["Settings"] as string) 
             };
             return vrAlertRuleType;

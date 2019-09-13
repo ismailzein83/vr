@@ -40,7 +40,7 @@ namespace Vanrise.Security.Data.SQL
             }
             object entityID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_Insert", businessEntity.EntityId, businessEntity.Name, businessEntity.Title, businessEntity.ModuleId, businessEntity.BreakInheritance, sertializedObject);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_Insert", businessEntity.EntityId, businessEntity.Name, businessEntity.Title, businessEntity.DevProjectId, businessEntity.ModuleId, businessEntity.BreakInheritance, sertializedObject);
 
             return (recordesEffected > 0);
         }
@@ -52,7 +52,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 sertializedObject = Vanrise.Common.Serializer.Serialize(businessEntity.PermissionOptions, true);
             }
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_Update", businessEntity.EntityId, businessEntity.Name,businessEntity.Title, businessEntity.ModuleId, businessEntity.BreakInheritance, sertializedObject);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_Update", businessEntity.EntityId, businessEntity.Name,businessEntity.Title, businessEntity.DevProjectId, businessEntity.ModuleId, businessEntity.BreakInheritance, sertializedObject);
             return (recordesEffected > 0);
         }
 
@@ -68,10 +68,12 @@ namespace Vanrise.Security.Data.SQL
 
         Entities.BusinessEntity EntityMapper(IDataReader reader)
         {
+            
             Entities.BusinessEntity module = new Entities.BusinessEntity
             {
                 EntityId = GetReaderValue<Guid>(reader,"Id"),
                 Name = reader["Name"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Title = reader["Title"] as string,
                 ModuleId =  GetReaderValue<Guid>(reader,"ModuleId"),
                 BreakInheritance = (bool)reader["BreakInheritance"],
