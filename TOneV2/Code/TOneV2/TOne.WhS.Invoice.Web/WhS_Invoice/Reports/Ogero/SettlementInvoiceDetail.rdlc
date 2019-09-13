@@ -525,7 +525,7 @@
         </TablixRowHierarchy>
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
-        <DataSetName>InvoiceMonths</DataSetName>
+        <DataSetName>VoiceInvoiceMonths</DataSetName>
         <Top>0.22349in</Top>
         <Left>0.1107in</Left>
         <Height>0.94119in</Height>
@@ -1054,7 +1054,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>RecurringChargeInvoiceMonths</DataSetName>
-        <Top>2.02446in</Top>
+        <Top>1.52446in</Top>
         <Left>0.11071in</Left>
         <Height>0.94119in</Height>
         <Width>7.52364in</Width>
@@ -1071,7 +1071,7 @@
         </Style>
       </Tablix>
       <Line Name="Line3">
-        <Top>7.56802cm</Top>
+        <Top>6.29802cm</Top>
         <Left>0.28126cm</Left>
         <Height>0cm</Height>
         <Width>19.11005cm</Width>
@@ -1248,7 +1248,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RecurringChargeItemsDetails</DataSetName>
-        <Top>7.62212cm</Top>
+        <Top>6.35212cm</Top>
         <Left>0.28122cm</Left>
         <Height>0.6cm</Height>
         <Width>19.11001cm</Width>
@@ -1890,7 +1890,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>AdjustmentInvoiceMonths</DataSetName>
-        <Top>8.90799cm</Top>
+        <Top>7.00299cm</Top>
         <Left>0.28126cm</Left>
         <Height>2.4cm</Height>
         <Width>19.10996cm</Width>
@@ -2045,7 +2045,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>AdjustmentInvoiceItemsDetails</DataSetName>
-        <Top>11.40037cm</Top>
+        <Top>9.49537cm</Top>
         <Left>0.28126cm</Left>
         <Height>0.6cm</Height>
         <Width>19.10996cm</Width>
@@ -2060,7 +2060,7 @@
         </Style>
       </Tablix>
       <Line Name="Line4">
-        <Top>11.34945cm</Top>
+        <Top>9.44445cm</Top>
         <Left>0.26763cm</Left>
         <Height>0cm</Height>
         <Width>19.11005cm</Width>
@@ -2076,7 +2076,7 @@
         </Style>
       </Line>
     </ReportItems>
-    <Height>12.00037cm</Height>
+    <Height>10.17475cm</Height>
     <Style />
   </Body>
   <Width>19.39131cm</Width>
@@ -2155,6 +2155,44 @@
         <Field Name="DueToCarrierNumberOfCalls">
           <DataField>DueToCarrierNumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
+        <rd:TableName>SettlementInvoiceItemDetail</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetSettlementInvoiceItemDetailRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.SettlementInvoiceItemDetail, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="VoiceInvoiceMonths">
+      <Query>
+        <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Month">
+          <DataField>Month</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="MonthDescription">
+          <DataField>MonthDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyId">
+          <DataField>CurrencyId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyIdDescription">
+          <DataField>CurrencyIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DueToCarrierTotalTrafficAmount">
+          <DataField>DueToCarrierTotalTrafficAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="DueToSystemTotalTrafficAmount">
+          <DataField>DueToSystemTotalTrafficAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>

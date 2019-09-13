@@ -2991,9 +2991,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox50</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(Round(Fields!DueToCarrierAmount.Value,3) &gt; 0,  False,True)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -3029,9 +3026,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox52</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(Round(Fields!DueToSystemAmount.Value,3) &gt; 0,  False,True)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -3064,7 +3058,7 @@
                 <TablixMember>
                   <Group Name="Details3" />
                   <Visibility>
-                    <Hidden>=IIf((CountRows("ItemsDetails") &gt; 0),False,True)</Hidden>
+                    <Hidden>=IIf(Round(Fields!DueToCarrierTotalTrafficAmount.Value,Parameters!NormalPrecisionValue.Value)&gt;0 OR Round(Fields!DueToSystemTotalTrafficAmount.Value,Parameters!NormalPrecisionValue.Value)&gt;0,False,True)</Hidden>
                   </Visibility>
                 </TablixMember>
               </TablixMembers>
