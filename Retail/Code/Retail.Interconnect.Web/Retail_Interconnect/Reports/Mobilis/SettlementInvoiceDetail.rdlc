@@ -625,7 +625,7 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <Top>0.64849in</Top>
-        <Left>0.1107in</Left>
+        <Left>0.2357in</Left>
         <Height>0.94119in</Height>
         <Width>7.52364in</Width>
         <Style>
@@ -782,7 +782,7 @@
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
         <Top>1.65912in</Top>
-        <Left>0.1107in</Left>
+        <Left>0.2357in</Left>
         <Height>0.25in</Height>
         <Width>7.52364in</Width>
         <ZIndex>1</ZIndex>
@@ -794,7 +794,7 @@
       </Tablix>
       <Line Name="Line2">
         <Top>4.07306cm</Top>
-        <Left>0.28119cm</Left>
+        <Left>0.59869cm</Left>
         <Height>0cm</Height>
         <Width>19.11005cm</Width>
         <ZIndex>2</ZIndex>
@@ -806,10 +806,10 @@
         </Style>
       </Line>
     </ReportItems>
-    <Height>5.14931cm</Height>
+    <Height>4.93764cm</Height>
     <Style />
   </Body>
-  <Width>19.47062cm</Width>
+  <Width>19.70874cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
