@@ -17,6 +17,7 @@ namespace Retail.BusinessEntity.Entities
     }
     public interface IFinancialRecurringChargePeriodSettingsContext
     {
+        DateTime RecurringChargeBED { get; }
         DateTime FromDate { get; }
         DateTime ToDate { get; }
         List<RecurringChargePeriodOutput> Periods { set; }

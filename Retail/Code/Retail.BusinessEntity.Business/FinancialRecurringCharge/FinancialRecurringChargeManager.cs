@@ -55,6 +55,7 @@ namespace Retail.BusinessEntity.Business
                 effectiveRecurringCharge.RecurringChargePeriod.Settings.ThrowIfNull("effectiveRecurringCharge.RecurringChargePeriod.Settings");
                 var context = new FinancialRecurringChargePeriodSettingsContext()
                 {
+                    RecurringChargeBED = effectiveRecurringCharge.BED,
                     FromDate = fromDate > effectiveRecurringCharge.BED ? fromDate : effectiveRecurringCharge.BED,
                     ToDate = effectiveRecurringCharge.EED.HasValue && toDate > effectiveRecurringCharge.EED.Value ? effectiveRecurringCharge.EED.Value : toDate
                 };

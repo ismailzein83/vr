@@ -8,6 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class FinancialRecurringChargePeriodSettingsContext : IFinancialRecurringChargePeriodSettingsContext
     {
+        public DateTime RecurringChargeBED { set; get; }
         public DateTime FromDate { set; get; }
         public DateTime ToDate { set; get; }
         public List<RecurringChargePeriodOutput> Periods { set; get; }
