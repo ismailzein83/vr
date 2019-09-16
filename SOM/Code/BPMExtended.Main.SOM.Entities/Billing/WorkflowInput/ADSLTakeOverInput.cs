@@ -12,7 +12,7 @@ namespace BPMExtended.Main.SOMAPI
         public CommonInputArgument CommonInputArgument { get; set; }
         public string NewCustomerId { get; set; }
         public string NewTelephonyContractId { get; set; }
-        public string NewLinePathId { get; set; }
+        public string LinePathId { get; set; }
         public string CSO { get; set; }
         public string NewUserName { get; set; }
         public string NewPassword { get; set; }

@@ -56,7 +56,7 @@ namespace BPMExtended.Main.Business
                         {
                             //ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
+                            CustomerId = customerId.ToString()
                         }
                     }
 
@@ -66,7 +66,57 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLLineMovingRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_LineMove/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLLineMovingRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitADSLLineMove/StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+
+        }
+
+        public void FinalizeADSLLineMovingToOM(Guid requestId)
+        {
+
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineMoving");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ADSLLineMovingRequestInput> somRequestInput = new SOMRequestInput<ADSLLineMovingRequestInput>
+                {
+
+                    InputArguments = new ADSLLineMovingRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLLineMovingRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeADSLLineMove/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

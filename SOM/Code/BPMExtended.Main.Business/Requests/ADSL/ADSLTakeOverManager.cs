@@ -44,6 +44,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StUserName");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
             esq.AddColumn("StPassword");
             esq.AddColumn("StSelectedCustomerId");
             esq.AddColumn("StNewLinePathId");
@@ -79,8 +81,8 @@ namespace BPMExtended.Main.Business
                     InputArguments = new ADSLTakeOverInput
                     {
                         NewUserName = userName.ToString(),
-                        NewCustomerId = customerId.ToString(),
-                        NewLinePathId = pathId.ToString(),
+                        NewCustomerId = newCustomerId.ToString(),
+                        LinePathId = pathId.ToString(),
                         NewPassword = password.ToString(),
                         CSO = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null).csoBSCSId,
                         NewTelephonyContractId = newTelephonyContractId.ToString(),
@@ -104,7 +106,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLTakeOverInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ADSLContractTakeOver/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLTakeOverInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/XDSLSubmitContractTakeOver/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -132,7 +134,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
-
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -158,10 +161,8 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new ADSLTakeOverInput
                     {
-                        NewUserName = userName.ToString(),
-                        NewCustomerId = customerId.ToString(),
-                        NewLinePathId = pathId.ToString(),
-                        NewPassword = password.ToString(),
+                        NewCustomerId = newCustomerId.ToString(),
+                        LinePathId = pathId.ToString(),
                         CSO = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null).csoBSCSId,
                         NewTelephonyContractId = newTelephonyContractId.ToString(),
                         PaymentData = new PaymentData()
@@ -184,7 +185,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLTakeOverInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ADSLContractTakeOver/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLTakeOverInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/XDSLFinalizeContractTakeOver/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

@@ -128,8 +128,10 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Line Moving")]
         [EntitySchemaName("StADSLLineMoving")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("9A9C358C-8A33-4580-A5BE-36126E805E3E")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("F3384A9D-A1D3-4F2C-8985-8987639522DE")]
         ADSLLineMoving = 8,
 
         //[LineOfBusiness(LineOfBusiness.ADSL)]
@@ -393,6 +395,8 @@ namespace BPMExtended.Main.Entities
 
         [Description("ADSL Take Over")]
         [EntitySchemaName("StADSLContractTakeOver")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("FB364A70-F0C4-4B0F-AE4A-6A38A9189C79")]
         [CompletedStep("StTypeId")]
         [CompletedStepId("1E0E1552-A872-4C70-8EC5-49E606FA09CD")]
         ADSLTakeOver = 45,

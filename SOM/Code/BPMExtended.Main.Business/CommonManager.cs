@@ -288,6 +288,7 @@ namespace BPMExtended.Main.Business
 
         public void UpdateDepositDocumentId(string requestId, List<DepositDocument> depositDocumentId)
         {
+
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             List<DepositDocument> listOfDeposites = new List<DepositDocument>();
@@ -310,12 +311,12 @@ namespace BPMExtended.Main.Business
                     listOfDeposites = JsonConvert.DeserializeObject<List<DepositDocument>>(deposites);
                 }
 
-                listOfDeposites.Concat(depositDocumentId);
+                List<DepositDocument> newDepositsList = listOfDeposites.Concat(depositDocumentId).ToList();
 
 
                 //update deposites
                 UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-                var update = new Update(connection, entityName).Set("StOperationAddedDeposites", Column.Parameter(JsonConvert.SerializeObject(listOfDeposites)))
+                var update = new Update(connection, entityName).Set("StOperationAddedDeposites", Column.Parameter(JsonConvert.SerializeObject(newDepositsList)))
                     .Where("Id").IsEqual(Column.Parameter(requestId));
                 update.Execute();
 
