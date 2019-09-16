@@ -50,6 +50,11 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
                         return error;
                     }
 
+                    error = validateMinMax();
+                    if (error != undefined) {
+                        return error;
+                    }
+
                     if ($scope.scopeModel.value == undefined || $scope.scopeModel.value == null || $scope.scopeModel.value == '') {
                         $scope.scopeModel.isAddButtonDisabled = true;
                         return null;
@@ -108,6 +113,11 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
                         genericContext = payload.genericContext;
+                    }
+
+                    if (fieldType != undefined) {
+                        $scope.scopeModel.minValue = fieldType.MinValue;
+                        $scope.scopeModel.maxValue = fieldType.MaxValue;
                     }
 
                     if (fieldValue != undefined) {
@@ -199,6 +209,20 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
             function customValidate() {
                 if (ctrl.customvalidate != undefined && typeof (ctrl.customvalidate) == 'function')
                     return ctrl.customvalidate();
+
+                return undefined;
+            }
+
+            function validateMinMax() {
+                if ($scope.scopeModel.value == undefined)
+                    return undefined;
+
+                if ($scope.scopeModel.maxValue != undefined && parseFloat($scope.scopeModel.value) > $scope.scopeModel.maxValue)
+                    return "Value must be less than " + $scope.scopeModel.maxValue;
+
+                if ($scope.scopeModel.minValue != undefined && parseFloat($scope.scopeModel.value) < $scope.scopeModel.minValue)
+                    return "Value must be greater than " + $scope.scopeModel.minValue;
+
                 return undefined;
             }
         }
@@ -234,8 +258,8 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
                 }
 
                 return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                    + '<vr-textbox ' + hidelabel +'  type="number" label="{{scopeModel.label}}" value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" '
-                    + 'customvalidate = "scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired" ></vr - textbox > '
+                    + '<vr-textbox ' + hidelabel + '  type="number" label="{{scopeModel.label}}" value="scopeModel.value" '
+                    + 'onblurtextbox="scopeModel.onFieldBlur" customvalidate = "scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired" ></vr-textbox> '
                     + '</vr-columns>';
             }
         }

@@ -120,6 +120,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
                 api.load = function (payload) {
                     $scope.scopeModel.values = [];
                     $scope.scopeModel.value = undefined;
+                    $scope.scopeModel.type = "text";
 
                     var fieldType;
                     var fieldValue;
@@ -136,13 +137,22 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
 
                         if (fieldType != undefined) {
                             $scope.scopeModel.hint = fieldType.Hint;
+                            $scope.scopeModel.isSingleText = true;
                             switch (fieldType.TextType) {
-                                case VR_GenericData_FieldTextTextTypeEnum.RichText.value: $scope.scopeModel.isRichText = true; break;
-                                case VR_GenericData_FieldTextTextTypeEnum.MultipleText.value: $scope.scopeModel.isMultipleText = true; break;
-                                default: $scope.scopeModel.isSingleText = true; break;
+                                case VR_GenericData_FieldTextTextTypeEnum.RichText.value: $scope.scopeModel.isRichText = true; $scope.scopeModel.isSingleText = false; break;
+                                case VR_GenericData_FieldTextTextTypeEnum.MultipleText.value: $scope.scopeModel.isMultipleText = true; $scope.scopeModel.isSingleText = false; break;
+                                case VR_GenericData_FieldTextTextTypeEnum.Email.value: $scope.scopeModel.type = "'email'"; break;
+                                case VR_GenericData_FieldTextTextTypeEnum.LabeledEmail.value: $scope.scopeModel.type = "'labeledemail'"; break;
+                                case VR_GenericData_FieldTextTextTypeEnum.IPv4.value: $scope.scopeModel.type = "'ip'"; break;
+                                case VR_GenericData_FieldTextTextTypeEnum.IPv6.value: $scope.scopeModel.type = "'ipv6'"; break;
+                                case VR_GenericData_FieldTextTextTypeEnum.FileName.value: $scope.scopeModel.type = "'filename'"; break;
+                                case VR_GenericData_FieldTextTextTypeEnum.Password.value: $scope.scopeModel.type = "'password'"; break;
+                                default: break;
                             }
                         }
                     }
+
+                    $scope.scopeModel.isPayloadParametersReady = true;
 
                     if (fieldValue != undefined) {
                         setFieldValue(ctrl, fieldValue);
@@ -249,12 +259,13 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', 'VR_Ge
                     + '<vr-textarea ' + hidelabel + ' value="scopeModel.value" label="{{scopeModel.label}}" rows="4" isrequired ="runtimeEditorCtrl.isrequired" ></vr-textarea>'
                     + '</vr-columns>'
                     + '<vr-columns ng-if="scopeModel.isSingleText" vr-loader="scopeModel.isSingleDirectiveLoading" colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                    + '<vr-textbox ' + hidelabel + ' type="text" label="{{scopeModel.label}}" hint="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" '
-                    + ' onvaluechanged="scopeModel.onValueChanged" customvalidate = "scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired"></vr-textbox> '
+                    + '<span ng-if="scopeModel.isPayloadParametersReady" ng-init="textType= scopeModel.type">'
+                    + '<vr-textbox ' + hidelabel + ' type="{{textType}}" label="{{scopeModel.label}}" hint="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" '
+                    + 'customvalidate = "scopeModel.validateValue()" onvaluechanged="scopeModel.onValueChanged"  isrequired = "runtimeEditorCtrl.isrequired"></vr-textbox> '
+                    + '</span>'
                     + '</vr-columns>';
-
             }
         }
-
+        //
         return directiveDefinitionObject;
     }]);

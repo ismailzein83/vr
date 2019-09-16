@@ -42,6 +42,13 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
                 defineAPI();
             };
 
+            ctrl.validateMaxValue = function () {
+                if (ctrl.minValue != undefined && ctrl.maxValue != undefined && ctrl.minValue >= ctrl.maxValue)
+                    return "Max Value should be > Min Value";
+
+                return null;
+            };
+
             ctrl.onPrecisionSelectorReady = function (api) {
                 precisionSelectorAPI = api;
             };
@@ -58,6 +65,8 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
                     dataTypeValue = payload.DataType;
                     ctrl.isNullable = payload.IsNullable;
                     dataPrecisionValue = payload.DataPrecision;
+                    ctrl.minValue = payload.MinValue;
+                    ctrl.maxValue = payload.MaxValue;
                 }
 
                 selectorAPI.clearDataSource();
@@ -78,7 +87,9 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
                     $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions",
                     DataType: ctrl.selectedNumberDataType.value,
                     IsNullable: ctrl.isNullable,
-                    DataPrecision: ctrl.selectedNumberDataPrecision != undefined ? ctrl.selectedNumberDataPrecision.value : undefined
+                    DataPrecision: ctrl.selectedNumberDataPrecision != undefined ? ctrl.selectedNumberDataPrecision.value : undefined,
+                    MinValue: ctrl.minValue,
+                    MaxValue: ctrl.maxValue
                 };
             };
 

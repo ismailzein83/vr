@@ -25,3 +25,9 @@
                hideremoveicon>
     </vr-select>
 </vr-columns>
+<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-textbox type="number" label="Min Value" value ="ctrl.minValue"></vr-textbox>
+</vr-columns>
+<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-textbox type="number" label="Max Value" customvalidate="ctrl.validateMaxValue()" value="ctrl.maxValue"></vr-textbox>
+</vr-columns>

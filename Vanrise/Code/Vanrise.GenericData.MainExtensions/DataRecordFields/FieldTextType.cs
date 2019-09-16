@@ -8,7 +8,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
-    public enum TextType { RichText = 0, MultipleText = 1 } // AS :  , Email = 2, LabeledEmail = 3, IPv4 = 4, IPv6 = 5, FileName = 6, Password = 7 }
+    public enum TextType { RichText = 0, MultipleText = 1, Email = 2, LabeledEmail = 3, IPv4 = 4, IPv6 = 5, FileName = 6, Password = 7 }
 
     public class FieldTextType : DataRecordFieldType
     {
@@ -36,7 +36,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 Size = 255
             };
         }
-            
+
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)
