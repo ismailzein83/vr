@@ -7,7 +7,7 @@ namespace SOM.ST.Business
     {
         public string SessionId { get; set; }
 
-        public override Guid ConfigId { get { return new Guid("461B7474-9B19-4B90-AEAB-63BA37245E53"); } }
+        public override Guid ConfigId { get { return new Guid("6D0083C3-E7C9-483F-B87C-5CAF4CD6F4D7"); } }
 
         private string HeaderText = @"
                 <soapenv:Header>
