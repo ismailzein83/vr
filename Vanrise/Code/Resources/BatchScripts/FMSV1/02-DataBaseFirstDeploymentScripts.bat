@@ -8,9 +8,9 @@ ECHO.
 ECHO FMSV1 DataBase First Deployment Scripts
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Common.PostDeployment.sql" 				/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\ExcelConversion.PostDeployment.sql" 		/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_ExcelConversion.json" 		/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Generic.json" 				/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Security.PostDeployment.sql" 			/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Security.json" 			/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Analytic.json" 			/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\FMSV1.PostDeployment.sql"			/y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" 						/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\FMSV1\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
