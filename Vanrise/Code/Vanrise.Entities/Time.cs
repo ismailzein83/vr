@@ -27,7 +27,7 @@ namespace Vanrise.Entities
         public Time(string time)
         {
             string[] dotParts = time.Split('.');
-            
+
             if (dotParts.Length >= 1)
             {
                 string[] timeArray = dotParts[0].Split(':');
@@ -92,6 +92,18 @@ namespace Vanrise.Entities
             this.Minute = timeSpan.Minutes;
             this.Second = timeSpan.Seconds;
             this.MilliSecond = timeSpan.Milliseconds;
+        }
+
+        public override bool Equals(object timeObj)
+        {
+            Time time = timeObj as Time;
+            if (time == null)
+                return false;
+
+            if (time.Hour != this.Hour || time.Minute != this.Minute || time.Second != this.Second || time.MilliSecond != this.MilliSecond)
+                return false;
+
+            return true;
         }
 
         #endregion
@@ -175,7 +187,7 @@ namespace Vanrise.Entities
         }
 
         public bool Equals(Time time)
-        { 
+        {
             return (time.Hour == Hour && time.Minute == Minute && time.Second == Second && time.MilliSecond == MilliSecond);
         }
 
@@ -203,6 +215,11 @@ namespace Vanrise.Entities
                 return true;
             else
                 return false;
+        }
+
+        public override string ToString()
+        {
+            return this.ToLongTimeString();
         }
 
         #endregion

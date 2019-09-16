@@ -151,7 +151,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            return BaseDataManager.GetTimeForBCP(this.Value) as string;
+            return $"'{BaseDataManager.GetTimeForBCP(this.Value) as string}'";
         }
     }
 

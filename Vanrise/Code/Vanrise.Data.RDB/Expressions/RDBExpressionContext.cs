@@ -176,6 +176,12 @@ namespace Vanrise.Data.RDB
                 Expression(new RDBFixedBytesExpression { Value = (byte[])value });
                 return;
             }
+            if (value is Vanrise.Entities.Time)
+            {
+                Expression(new RDBFixedTimeExpression { Value = (Vanrise.Entities.Time)value });
+                return;
+            }
+
             throw new NotSupportedException(string.Format("value type '{0}'", value.GetType()));
         }
 
@@ -214,7 +220,7 @@ namespace Vanrise.Data.RDB
 
         public RDBExpressionContext ConvertNumberToString(int? numberPrecision = null)
         {
-            return new RDBExpressionContext(_queryBuilderContext, (expression) => Expression(new RDBConvertNumberToStringExpression { Expression = expression, NumberPrecision= numberPrecision }), _tableAlias);
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => Expression(new RDBConvertNumberToStringExpression { Expression = expression, NumberPrecision = numberPrecision }), _tableAlias);
         }
 
         #region Aggregates
@@ -331,7 +337,7 @@ namespace Vanrise.Data.RDB
         internal RDBCaseExpressionWhenContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, List<RDBCaseWhenExpression> whens)
         {
             _queryBuilderContext = queryBuilderContext;
-            
+
             _tableAlias = tableAlias;
             _when = new RDBCaseWhenExpression();
             whens.Add(_when);

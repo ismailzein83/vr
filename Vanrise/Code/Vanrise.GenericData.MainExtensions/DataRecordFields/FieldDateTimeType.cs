@@ -437,7 +437,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     break;
 
                 case FieldDateTimeDataType.Hour:
-                    var hourValues = context.FilterValues.Select(value => new Time(value.ToString())).ToList();
+                    List<Time> hourValues = new List<Time>();
+                    foreach (var item in context.FilterValues)
+                    {
+                        Time timeObj = item as Time;
+                        if (timeObj != null)
+                            hourValues.Add(timeObj);
+                        else
+                            hourValues.Add(new Time(item.ToString()));
+                    }
+
                     recordFilters = GetDateTimeRecordFilters(context.FieldName, hourValues, DateTimeRecordFilterComparisonPart.Hour);
                     break;
 
