@@ -191,7 +191,7 @@
     <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_Insert.sql" />
     <Build Include="sec\Stored Procedures\sp_OrgChartLinkedEntity_GetLinkedOrgChartId.sql" />
     <Build Include="sec\Tables\UserGroup_2.sql" />
-    <Build Include="sec\Tables\Group_2.sql" />
+    <Build Include="sec\Tables\Group.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_Update_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_Insert_2.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_GetUserGroups_2.sql" />
@@ -1022,5 +1022,7 @@
     <None Include="VRJSON_PostScripts\VR_Reprocess.json" />
     <None Include="VRJSON_PostScripts\VR_Integration.json" />
     <None Include="VRJSON_PostScripts\VR_Queueing.json" />
+    <None Include="VRJSON_PostScripts\VR_ExcelConversion.json" />
+    <None Include="VRJSON_PostScripts\VR_Security.json" />
   </ItemGroup>
 </Project>

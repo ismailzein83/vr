@@ -1,0 +1,236 @@
+﻿{
+  "Scripts": [
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AssemblyID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
+              "ID": "6a8d23d5-d4d1-4523-9766-43ca136b1b52",
+              "Name": "VR_ExcelConversion",
+              "AssemblyID": null,
+              "CreatedTime": "2019-09-12T15:30:51.96",
+              "LastModifiedTime": "2019-09-12T15:30:51.96"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "ID = '6a8d23d5-d4d1-4523-9766-43ca136b1b52'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "ExtensionConfiguration",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "096b0021-49a1-44f6-b601-406372dc5038",
+              "DevProjectID": "6a8d23d5-d4d1-4523-9766-43ca136b1b52",
+              "Name": "Constant",
+              "Title": "Constant",
+              "ConfigType": "VR_ExcelConversion_ConcatenatedPart",
+              "Settings": "{\"Editor\":\"vr-excelconversion-concatenatedpart-constant\",\"Type\":1}",
+              "CreatedTime": "2016-09-20T09:19:35.403",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "9f9d16f5-9e8b-4d01-8109-6daabe59623f",
+              "DevProjectID": "6a8d23d5-d4d1-4523-9766-43ca136b1b52",
+              "Name": "Conditional Cell",
+              "Title": "Conditional Cell",
+              "ConfigType": "VR_ExcelConversion_FieldMapping",
+              "Settings": "{\"Editor\":\"vr-excelconversion-fieldmapping-conditionalcell\",\"hideCell\":true}",
+              "CreatedTime": "2017-07-05T10:08:56.827",
+              "LastModifiedTime": "2019-03-08T17:26:39.3"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "cb6f97c0-8112-4954-9c80-b02ab1a1c69c",
+              "DevProjectID": "6a8d23d5-d4d1-4523-9766-43ca136b1b52",
+              "Name": "Fixed Cell",
+              "Title": "Fixed Cell",
+              "ConfigType": "VR_ExcelConversion_FieldMapping",
+              "Settings": "{\"Editor\":\"vr-excelconversion-fieldmapping-fixedcell\"}",
+              "CreatedTime": "2016-09-01T17:17:03.96",
+              "LastModifiedTime": "2019-03-08T17:26:39.337"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "ab48ff16-7b04-42ff-8525-c68590a88799",
+              "DevProjectID": "6a8d23d5-d4d1-4523-9766-43ca136b1b52",
+              "Name": "Row Cell",
+              "Title": "Row Cell",
+              "ConfigType": "VR_ExcelConversion_FieldMapping",
+              "Settings": "{\"Editor\":\"vr-excelconversion-fieldmapping-cellfieldmapping\"}",
+              "CreatedTime": "2016-09-01T17:17:03.96",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "f0eeeaa9-4fa6-4917-b860-ca285b4761be",
+              "DevProjectID": "6a8d23d5-d4d1-4523-9766-43ca136b1b52",
+              "Name": "Constant Field",
+              "Title": "Constant Field",
+              "ConfigType": "VR_ExcelConversion_FieldMapping",
+              "Settings": "{\"Editor\":\"vr-excelconversion-fieldmapping-constantfieldmapping\"}",
+              "CreatedTime": "2017-10-13T11:48:42.92",
+              "LastModifiedTime": "2019-03-08T17:26:39.943"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "18280f63-b0f1-42c8-a3cb-d487f17a8236",
+              "DevProjectID": "6a8d23d5-d4d1-4523-9766-43ca136b1b52",
+              "Name": "Row Cell",
+              "Title": "Row Cell",
+              "ConfigType": "VR_ExcelConversion_ConcatenatedPart",
+              "Settings": "{\"Editor\":\"vr-excelconversion-concatenatedpart-cellfield\",\"Type\":0}",
+              "CreatedTime": "2016-09-20T09:19:35.403",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "17abfa66-d659-4e5c-b1c9-f7b408e8de00",
+              "DevProjectID": "6a8d23d5-d4d1-4523-9766-43ca136b1b52",
+              "Name": "Concatenate Text",
+              "Title": "Concatenate Text",
+              "ConfigType": "VR_ExcelConversion_FieldMapping",
+              "Settings": "{\"Editor\":\"vr-excelconversion-fieldmapping-concatenatefieldmapping\"}",
+              "CreatedTime": "2016-09-01T17:17:03.96",
+              "LastModifiedTime": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Title",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ConfigType",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = '6a8d23d5-d4d1-4523-9766-43ca136b1b52'",
+        "LastJoinStatement": null,
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    }
+  ]
+}

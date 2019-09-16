@@ -1,4 +1,53 @@
-﻿/*
+﻿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--Make sure to use same .json file using DEVTOOLS under http://192.168.110.185:8037
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 Post-Deployment Script Template							
 --------------------------------------------------------------------------------------
  This file contains SQL statements that will be appended to the build script.		
@@ -262,7 +311,7 @@ as (select * from (values
 ('147c1862-9b0c-4285-b415-00c9210fc691','Permissions','Permissions','#/view/Security/Views/Permission/BusinessEntityManagement','9b73765c-bdd7-487b-8d32-e386288db79b','VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',NULL,NULL,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities","ViewTitleResourceKey":"Common.Permissions","ViewNameResourceKey":"Common.Permissions"}','372ed3cb-4b7b-4464-9abf-59cd7b08bd23',10,null),
 ('628cf733-4e3d-4e68-981d-037cd0825389','Authentication Methods','Authentication Methods',NULL,'9b73765c-bdd7-487b-8d32-e386288db79b',NULL,NULL,NULL,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"00166bed-92c1-4a5d-8280-a048c8a0eb95"}]},"ViewTitleResourceKey":"Common.AuthenticationMethods","ViewNameResourceKey":"Common.AuthenticationMethods"}','b99b2b0a-9a80-49fc-b68f-c946e1628595',15,null),
 
-('241540BF-51E5-4D63-9806-EB212DADC3B3','Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement'																	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Sec/Tenants/GetFilteredTenants',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',50,1),
+--('241540BF-51E5-4D63-9806-EB212DADC3B3','Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement'																	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Sec/Tenants/GetFilteredTenants',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',50,1),
 
 ('5B11405B-F0E1-408C-BCF5-0AB328955B12','Views','Views','#/view/Security/Views/View/ViewManagement'																			,'A28351BA-A5D7-4651-913C-6C9E09B92AC1','VR_Sec/View/GetFilteredViews',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1,0),
 ('E4101095-F599-414F-8E8C-4790E9FF00FA','Menus','Menus','#/view/Security/Views/Menu/MenuManagement'																			,'A28351BA-A5D7-4651-913C-6C9E09B92AC1','VR_Sec/View/UpdateViewsRank',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5,0),
