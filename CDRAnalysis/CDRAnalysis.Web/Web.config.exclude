@@ -154,4 +154,12 @@
       </dependentAssembly>
     </assemblyBinding>
   </runtime>
+
+  <!--THIS SETTING PREVENTS SMTPEXCEPTION IN CASE OF MANY CONCURRENT EMAILS-->
+  <system.net>
+    <connectionManagement>
+      <add address="*" maxconnection="10000" />
+    </connectionManagement>
+  </system.net>
+  
 </configuration>
