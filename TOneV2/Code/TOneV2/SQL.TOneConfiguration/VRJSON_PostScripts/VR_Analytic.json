@@ -1,14 +1,24 @@
 ﻿{
   "Scripts": [
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "common",
       "TableName": "VRDevProject",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
+              "Name": "VR_Analytic",
+              "AssemblyID": null,
+              "CreatedTime": "2019-09-11T17:29:36.417",
+              "LastModifiedTime": "2019-09-11T17:29:36.417"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -46,23 +56,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
-              "Name": "Analytic",
-              "AssemblyID": null,
-              "CreatedTime": "2019-09-11T17:29:36.417",
-              "LastModifiedTime": "2019-09-11T17:29:36.417"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "ID = '433656c3-c4eb-40c2-aed9-4bccc4ce83fb'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },

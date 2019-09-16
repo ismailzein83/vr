@@ -1008,9 +1008,9 @@
     <None Include="VRJSON_PostScripts\Mediation_Namibia.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\Mediation_Ogero.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\TestCallAnalysis.PotDeployment.json" />
-    <None Include="VRJSON_PostScripts\BusinessProcess.PostDeployment.json" />
-    <None Include="VRJSON_PostScripts\Generic.PostDeployment.json" />
-    <None Include="VRJSON_PostScripts\Analytic.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\VR_BusinessProcess.json" />
+    <None Include="VRJSON_PostScripts\VR_Generic.json" />
+    <None Include="VRJSON_PostScripts\VR_Analytic.json" />
     <None Include="VRJSON_PostScripts\VR_Rules.json" />
     <None Include="VRJSON_PostScripts\VR_BEBridge.json" />
     <None Include="VRJSON_PostScripts\VR_NumberPrefix.json" />

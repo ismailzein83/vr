@@ -1,14 +1,24 @@
 ﻿{
   "Scripts": [
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "common",
       "TableName": "VRDevProject",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "Name": "VR_BusinessProcess",
+              "AssemblyID": null,
+              "CreatedTime": "2019-09-11T12:09:40.827",
+              "LastModifiedTime": "2019-09-11T12:09:40.827"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -46,23 +56,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "Name": "Business Process",
-              "AssemblyID": null,
-              "CreatedTime": "2019-09-11T12:09:40.827",
-              "LastModifiedTime": "2019-09-11T12:09:40.827"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "ID = '512a75db-1c97-4d9e-949b-059aba855813'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
@@ -932,14 +930,30 @@
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "runtime",
       "TableName": "ScheduleTask",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "Id": "374bcea5-d243-4595-9a27-a8c1fc36da1a",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "Name": "Custom Code (Sample)",
+              "IsEnabled": false,
+              "TaskType": 1,
+              "TriggerTypeId": "295b4fac-dbf9-456f-855e-60d0b176f86b",
+              "ActionTypeId": "7a35f562-319b-47b3-8258-ec1a704a82eb",
+              "TaskSettings": "{\"$type\":\"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities\",\"TaskActionArgument\":{\"$type\":\"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments\",\"BPDefinitionID\":\"1b724508-3927-4035-89a9-93ea19b28a98\",\"ProcessInputArguments\":{\"$type\":\"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.CustomCodeBPArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments\",\"Name\":\"Custom Code (Sample)\",\"TaskCode\":\"try{\\n\\tList<int> list = new List<int>() { 1, 2, 3 };\\nVRExcelFile file = new VRExcelFile();\\nVRExcelSheet sheet = new VRExcelSheet();\\nsheet.SheetName = \\\"First Result\\\";\\nfile.AddSheet(sheet);\\nint x = 0;\\nforeach (var i in list)\\n{\\n   \\n\\tVRExcelCell cell = new VRExcelCell()\\n\\t{\\n\\t\\tValue = i,\\n\\t\\tRowIndex = x,\\n\\t\\tColumnIndex = 0\\n\\t};\\n\\tx++;\\n\\tsheet.AddCell(cell);\\n}\\n\\nbyte[] content  = file.GenerateExcelFile() ;\\n\\nList<UtcMailMessageAttachment> attachments = new List<UtcMailMessageAttachment>();\\n\\nattachments.Add(new UtcMailMessageAttachment(){\\n\\tName = \\\"testExcel.xlsx\\\",\\n\\tContent = content\\n});\\n\\n\\n\\tUctMailMessage message  =  new UctMailMessage(){ \\n\\t\\t To = \\\"support@vanrise.com\\\",\\n\\t\\t Subject  = \\\"Custom Code (Sample)\\\",\\n\\t\\t Body = \\\"This is The Body\\\",\\n\\t\\t Attachments = attachments\\n\\t};\\n\\tcontext.SendMail(message);\\n}\\n\\ncatch(Exception ex){\\n\\tcontext.LogException(ex);\\n}\\ncontext.LogError(\\\"Custom code error log.\\\",null);\\n\\ncontext.LogWarning(\\\"Custom code warning log.\\\",null);\\n\\ncontext.LogInfo(\\\"Custom code task is done\\\", null);\",\"ProcessName\":\"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.CustomCodeBPArgument\",\"UserId\":0}},\"TaskTriggerArgument\":{\"$type\":\"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments\",\"Interval\":30.0,\"IntervalType\":0,\"TimerTriggerTypeFQTN\":\"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger\",\"IgnoreSkippedIntervals\":true},\"StartEffDate\":\"2018-04-11T15:41:25.053\"}",
+              "OwnerId": -1,
+              "CreatedTime": "2019-01-22T09:59:12.283",
+              "LastModifiedTime": "2019-01-22T09:59:12.283"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -1019,29 +1033,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "374bcea5-d243-4595-9a27-a8c1fc36da1a",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "Name": "Custom Code (Sample)",
-              "IsEnabled": false,
-              "TaskType": 1,
-              "TriggerTypeId": "295b4fac-dbf9-456f-855e-60d0b176f86b",
-              "ActionTypeId": "7a35f562-319b-47b3-8258-ec1a704a82eb",
-              "TaskSettings": "{\"$type\":\"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities\",\"TaskActionArgument\":{\"$type\":\"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments\",\"BPDefinitionID\":\"1b724508-3927-4035-89a9-93ea19b28a98\",\"ProcessInputArguments\":{\"$type\":\"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.CustomCodeBPArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments\",\"Name\":\"Custom Code (Sample)\",\"TaskCode\":\"try{\\n\\tList<int> list = new List<int>() { 1, 2, 3 };\\nVRExcelFile file = new VRExcelFile();\\nVRExcelSheet sheet = new VRExcelSheet();\\nsheet.SheetName = \\\"First Result\\\";\\nfile.AddSheet(sheet);\\nint x = 0;\\nforeach (var i in list)\\n{\\n   \\n\\tVRExcelCell cell = new VRExcelCell()\\n\\t{\\n\\t\\tValue = i,\\n\\t\\tRowIndex = x,\\n\\t\\tColumnIndex = 0\\n\\t};\\n\\tx++;\\n\\tsheet.AddCell(cell);\\n}\\n\\nbyte[] content  = file.GenerateExcelFile() ;\\n\\nList<UtcMailMessageAttachment> attachments = new List<UtcMailMessageAttachment>();\\n\\nattachments.Add(new UtcMailMessageAttachment(){\\n\\tName = \\\"testExcel.xlsx\\\",\\n\\tContent = content\\n});\\n\\n\\n\\tUctMailMessage message  =  new UctMailMessage(){ \\n\\t\\t To = \\\"support@vanrise.com\\\",\\n\\t\\t Subject  = \\\"Custom Code (Sample)\\\",\\n\\t\\t Body = \\\"This is The Body\\\",\\n\\t\\t Attachments = attachments\\n\\t};\\n\\tcontext.SendMail(message);\\n}\\n\\ncatch(Exception ex){\\n\\tcontext.LogException(ex);\\n}\\ncontext.LogError(\\\"Custom code error log.\\\",null);\\n\\ncontext.LogWarning(\\\"Custom code warning log.\\\",null);\\n\\ncontext.LogInfo(\\\"Custom code task is done\\\", null);\",\"ProcessName\":\"Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.CustomCodeBPArgument\",\"UserId\":0}},\"TaskTriggerArgument\":{\"$type\":\"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments\",\"Interval\":30.0,\"IntervalType\":0,\"TimerTriggerTypeFQTN\":\"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger\",\"IgnoreSkippedIntervals\":true},\"StartEffDate\":\"2018-04-11T15:41:25.053\"}",
-              "OwnerId": -1,
-              "CreatedTime": "2019-01-22T09:59:12.283",
-              "LastModifiedTime": "2019-01-22T09:59:12.283"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '512a75db-1c97-4d9e-949b-059aba855813'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
@@ -1381,14 +1377,47 @@
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "logging",
       "TableName": "LoggableEntity",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "7a63fc63-f681-4189-9712-30e0d42a3a97",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "UniqueName": "VR_BusinessProcess_BPDefinition",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities\",\"ViewHistoryItemClientActionName\":\"VR_BusinessProcess_BPDefinition_ViewHistoryItem\"}",
+              "CreatedTime": "2017-03-30T18:19:29.853",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "dee7d636-ccb1-4faf-a999-a92d81956e51",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "UniqueName": "BusinessProcess_ProcessSynchronisatio",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities\",\"ViewHistoryItemClientActionName\":\"BusinessProcess_BP_ProcessSynchronisation_ViewHistoryItem\"}",
+              "CreatedTime": "2019-09-11T12:07:48.793",
+              "LastModifiedTime": "2019-09-11T12:07:48.793"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "00c0d416-3067-4e05-b7a5-db710703f30d",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "UniqueName": "BusinessProcess_VR_Workflow",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities\",\"ViewHistoryItemClientActionName\":\"BusinessProcess_BP_VRWorkflow_ViewHistoryItem\"}",
+              "CreatedTime": "2018-08-30T10:12:46.04",
+              "LastModifiedTime": null
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -1433,48 +1462,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "7a63fc63-f681-4189-9712-30e0d42a3a97",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "UniqueName": "VR_BusinessProcess_BPDefinition",
-              "Settings": "{\"$type\":\"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities\",\"ViewHistoryItemClientActionName\":\"VR_BusinessProcess_BPDefinition_ViewHistoryItem\"}",
-              "CreatedTime": "2017-03-30T18:19:29.853",
-              "LastModifiedTime": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "dee7d636-ccb1-4faf-a999-a92d81956e51",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "UniqueName": "BusinessProcess_ProcessSynchronisatio",
-              "Settings": "{\"$type\":\"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities\",\"ViewHistoryItemClientActionName\":\"BusinessProcess_BP_ProcessSynchronisation_ViewHistoryItem\"}",
-              "CreatedTime": "2019-09-11T12:07:48.793",
-              "LastModifiedTime": "2019-09-11T12:07:48.793"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "00c0d416-3067-4e05-b7a5-db710703f30d",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "UniqueName": "BusinessProcess_VR_Workflow",
-              "Settings": "{\"$type\":\"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities\",\"ViewHistoryItemClientActionName\":\"BusinessProcess_BP_VRWorkflow_ViewHistoryItem\"}",
-              "CreatedTime": "2018-08-30T10:12:46.04",
-              "LastModifiedTime": null
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '512a75db-1c97-4d9e-949b-059aba855813'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
