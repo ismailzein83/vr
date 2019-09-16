@@ -315,7 +315,7 @@ namespace BPMExtended.Main.Business
             esq.Filters.Add(esqFirstFilter);
 
             var servicesEntities = esq.GetEntityCollection(BPM_UserConnection);
-            for (int i = 0; i < entities.Count; i++)
+            for (int i = 0; i < servicesEntities.Count; i++)
             {
                 string serviceId = servicesEntities[0].GetColumnValue("StServiceID").ToString();
                 servicesIds.Add(serviceId);
@@ -380,7 +380,7 @@ namespace BPMExtended.Main.Business
 
             esq.AddColumn("StNumberOfInvoices");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "25B26C43-B28F-4C1F-B745-992F9D2D55B4");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "204A6410-8947-4E88-AF4E-F705DF7A0984");
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
