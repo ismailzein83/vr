@@ -8,7 +8,6 @@
 
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
   </configSections>
-
   <vanriseLogging maxLogLevel="Information">
     <loggers>
       <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
@@ -176,4 +175,12 @@
       </dependentAssembly>
     </assemblyBinding>
   </runtime>
+
+  <!--THIS SETTING PREVENTS SMTPEXCEPTION IN CASE OF MANY CONCURRENT EMAILS-->
+  <system.net>
+    <connectionManagement>
+      <add address="*" maxconnection="10000" />
+    </connectionManagement>
+  </system.net>
+
 </configuration>

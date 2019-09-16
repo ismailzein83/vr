@@ -158,4 +158,12 @@
   <startup useLegacyV2RuntimeActivationPolicy="true">
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.2"/>
   </startup>
+  
+  <!--THIS SETTING PREVENTS SMTPEXCEPTION IN CASE OF MANY CONCURRENT EMAILS-->
+  <system.net>
+    <connectionManagement>
+      <add address="*" maxconnection="10000" />
+    </connectionManagement>
+  </system.net>
+  
 </configuration>
