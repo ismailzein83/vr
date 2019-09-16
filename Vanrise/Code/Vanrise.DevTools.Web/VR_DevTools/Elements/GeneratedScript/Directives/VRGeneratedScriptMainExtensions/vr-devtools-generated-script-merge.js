@@ -57,6 +57,10 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
             var variables;
             function initializeController() {
                 $scope.scopeModel = {};
+              
+                $scope.scopeModel.isIncludeAllInInsert = true;
+                $scope.scopeModel.isIncludeAllInUpdate = true;
+
                 $scope.scopeModel.selectedColumns = [];
                 ctrl.datasource = [];
 
@@ -148,8 +152,8 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                     }
                 };
                 $scope.scopeModel.validateColumnsSelection = function () {
-                    var insertOrUpdateColumnExists = false;
                     identifierColumnExists = false;
+          
                     if (ctrl.datasource.length > 0) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var item = ctrl.datasource[i].data;
@@ -158,17 +162,10 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                                 if (!item.IncludeInInsert)
                                     return 'Identifier Column Must Be Included In Insert Columns ';
                             }
-
-                            //if (item.IncludeInInsert || item.IncludeInUpdate)
-                            //    insertOrUpdateColumnExists = true; && !insertOrUpdateColumnExists
                         }
                     }
-                    //if (!identifierColumnExists)
-                    //    return 'You Should At Least Select One Identifier Column And One Insert Or Update Column ';
                     if (!identifierColumnExists)
                         return 'You Should At Least Select One Identifier Column';
-                    //else if (!insertOrUpdateColumnExists)
-                    //    return 'You Should At Least Select One Insert Or Update Column'
                     return null;
                 };
 
@@ -491,17 +488,46 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
 
                     promises.push(loadVariablesGridDirective());
                     if (isEditMode) {
+                        $scope.scopeModel.isIncludeAllInInsert = true;
+                        $scope.scopeModel.isIncludeAllInUpdate = true;
 
                         $scope.scopeModel.IsIdentity = entity.Settings.IsIdentity;
                         $scope.scopeModel.sqlFilter = entity.Settings.LastWhereCondition;
                         $scope.scopeModel.sqlJoinStatement = entity.Settings.LastJoinStatement;
                         var columnsNames = [];
+                        var allColumnsIncludedInInsert = true;
+                        var allColumnsNotIncludedInInsert = true;
+                        var allColumnsIncludedInUpdate = true;
+                        var allColumnsNotIncludedInUpdate = true;
 
                         for (var k = 0; k < entity.Settings.Columns.length; k++) {
                             var data = entity.Settings.Columns[k];
+
+                            if (!data.IncludeInInsert)
+                                allColumnsIncludedInInsert = false;
+                            else
+                                allColumnsNotIncludedInInsert = false;
+
+                            if (!data.IncludeInUpdate)
+                                allColumnsIncludedInUpdate = false;
+                            else
+                                allColumnsNotIncludedInUpdate = false;
+
                             ctrl.datasource.push({ data: data });
                             columnsNames.push(data.ColumnName);
                         }
+
+                        if (allColumnsIncludedInInsert)
+                            $scope.scopeModel.isIncludeAllInInsert = true;
+
+                        else if (allColumnsNotIncludedInInsert)
+                            $scope.scopeModel.isIncludeAllInInsert = false;
+
+                        if (allColumnsIncludedInUpdate)
+                            $scope.scopeModel.isIncludeAllInUpdate = true;
+
+                        else if (allColumnsNotIncludedInUpdate)
+                            $scope.scopeModel.isIncludeAllInUpdate = false;
 
                         var columnsPayload = {
                             filter: entity.filter,

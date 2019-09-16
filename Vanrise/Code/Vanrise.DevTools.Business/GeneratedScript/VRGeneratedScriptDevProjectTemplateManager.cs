@@ -59,6 +59,7 @@ namespace Vanrise.DevTools.Business
             new VRGeneratedScriptTable() { Name ="BusinessEntityModule" },
             new VRGeneratedScriptTable() { Name ="Module" },
             new VRGeneratedScriptTable() { Name ="View" },
+            new VRGeneratedScriptTable() { Name ="Group" },
             new VRGeneratedScriptTable() { Name ="SystemAction" },
             new VRGeneratedScriptTable() { Name ="BillingTransactionType" },
             new VRGeneratedScriptTable() { Name ="VRAlertRuleType" },
@@ -72,6 +73,7 @@ namespace Vanrise.DevTools.Business
             public string Schema { get; set; }
             public string IdColumnName { get; set; }
             public List<string> ExcludedColumns { get; set; }
+            public bool IncludeOnlyInInsert { get; set; }
             public string WhereCondition { get; set; }
             public string JoinCondition { get; set; }
         }
@@ -99,7 +101,7 @@ namespace Vanrise.DevTools.Business
                     { "Connection",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Connection",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "ExtensionConfiguration",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ExtensionConfiguration",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRObjectTypeDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRObjectTypeDefinition",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "MailMessageTemplate",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="MailMessageTemplate",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "MailMessageTemplate",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="MailMessageTemplate",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition,IncludeOnlyInInsert=true}},
                     { "MailMessageType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="MailMessageType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "StatusDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="StatusDefinition",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("genericdata","BusinessEntityDefinition","BusinessEntityDefinitionID")}},
                     { "VRComponentType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRComponentType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
@@ -107,7 +109,7 @@ namespace Vanrise.DevTools.Business
                     { "VRNamespaceItem",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNamespaceItem",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("common","VRNamespace","VRNamespaceId")}},
                     { "VRDynamicAPIModule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRDynamicAPIModule",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRDynamicAPI",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRDynamicAPI",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("common","VRDynamicAPIModule","ModuleId")}},
-                    { "Setting",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Setting",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "Setting",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Setting",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition,IncludeOnlyInInsert=true}},
                     { "ParserType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ParserType",Schema="dataparser",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataStore",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataStore",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataRecordType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataRecordType",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
@@ -132,6 +134,7 @@ namespace Vanrise.DevTools.Business
                     { "BusinessEntityModule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntityModule",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "Module",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Module",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "View",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="View",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition,ExcludedColumns=new List<string>{"IsDeleted" } }},
+                    { "Group",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Group",Schema="sec",IdColumnName="PSIdentifier",WhereCondition=WhereCondition,IncludeOnlyInInsert=true}},
                     { "SystemAction",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="SystemAction",Schema="sec",IdColumnName="Name",WhereCondition=WhereCondition,ExcludedColumns=new List<string>{"ID"}} },
                     { "BillingTransactionType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BillingTransactionType",Schema="VR_AccountBalance",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRAlertRuleType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRAlertRuleType",Schema="VRNotification",IdColumnName="ID",WhereCondition=WhereCondition}},
@@ -249,7 +252,7 @@ namespace Vanrise.DevTools.Business
                             var columnsInfo = generatedScriptColumnsManager.GetColumnsInfo(new VRGeneratedScriptColumnsInfoFilter() { ConnectionId = input.ConnectionId, SchemaName = table.Value.Schema, TableName = table.Value.TableName });
 
                             if (columnsInfo != null && columnsInfo.Count() > 0)
-                                mergeGeneratedScriptItem.Columns.AddRange(columnsInfo.MapRecords(x => new MergeGeneratedScriptItemColumn() { ColumnName = x.Name, IncludeInInsert = true, IncludeInUpdate = true, IsIdentifier = x.Name == table.Value.IdColumnName ? true : false }, x => table.Value.ExcludedColumns==null || !table.Value.ExcludedColumns.Contains(x.Name)));
+                                mergeGeneratedScriptItem.Columns.AddRange(columnsInfo.MapRecords(x => new MergeGeneratedScriptItemColumn() { ColumnName = x.Name, IncludeInInsert = true, IncludeInUpdate = !table.Value.IncludeOnlyInInsert, IsIdentifier = x.Name == table.Value.IdColumnName ? true : false }, x => table.Value.ExcludedColumns==null || !table.Value.ExcludedColumns.Contains(x.Name)));
 
                             item.Settings = mergeGeneratedScriptItem;
                             items.Add(item);
