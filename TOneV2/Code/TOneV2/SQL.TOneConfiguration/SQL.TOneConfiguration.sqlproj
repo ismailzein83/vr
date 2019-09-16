@@ -1024,5 +1024,7 @@
     <None Include="VRJSON_PostScripts\VR_Queueing.json" />
     <None Include="VRJSON_PostScripts\VR_ExcelConversion.json" />
     <None Include="VRJSON_PostScripts\VR_Security.json" />
+    <None Include="VRJSON_PostScripts\VR_DataAnalysis.json" />
+    <None Include="VRJSON_PostScripts\VR_Localizalion.json" />
   </ItemGroup>
 </Project>

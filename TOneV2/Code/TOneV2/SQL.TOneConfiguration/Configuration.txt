@@ -1,6 +1,6 @@
 ﻿Common
 Common.PostDeployment.sql
-Common.Localization.PostDeployment.sql
+VR_Localizalion.json
 VR_Security.json
 VR_BusinessProcess.json
 VR_ExcelConversion.json
@@ -15,7 +15,7 @@ Invoice.PostDeployment.sql
 VR_AccountBalance.json
 VR_Notification.json
 User_Guides.PostDeployment.sql
-DataAnalysis.PostDeployment.sql
+VR_DataAnalysis.json
 VR_MobileNetwork.json
 VR_NumberingPlan.json
 VR_BEBridge.json
