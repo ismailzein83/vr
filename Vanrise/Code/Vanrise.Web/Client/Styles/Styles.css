@@ -2697,6 +2697,7 @@ vr-section[notopspace] > .panel-vr {
 .vr-datagrid {
     font-size: 12px;
     width: 100%;
+    margin-top: 10px;
     border-bottom: 1px solid #DDD;
     /*to fixe menu-grid action position side effects*/
 }
