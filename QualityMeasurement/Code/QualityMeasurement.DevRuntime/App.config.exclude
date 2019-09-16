@@ -65,5 +65,13 @@
         <bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.0.0.0" />
       </dependentAssembly>
     </assemblyBinding>
-  </runtime> 
+  </runtime>
+
+  <!--THIS SETTING PREVENTS SMTPEXCEPTION IN CASE OF MANY CONCURRENT EMAILS-->
+  <system.net>
+    <connectionManagement>
+      <add address="*" maxconnection="10000" />
+    </connectionManagement>
+  </system.net>
+  
 </configuration>
