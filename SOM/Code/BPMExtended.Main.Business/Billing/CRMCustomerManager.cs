@@ -1307,10 +1307,10 @@ namespace BPMExtended.Main.Business
                 var street = entities[0].GetColumnValue("StStreet");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var subTypeId = entities[0].GetColumnValue("StSubTypesId");
-                var city = entities[0].GetColumnValue("StCityName");
-                var area = entities[0].GetColumnValue("StAreaName");
-                var province = entities[0].GetColumnValue("StProvinceName");
-                var town = entities[0].GetColumnValue("StTownName");
+                    var city = entities[0].GetColumnValue("StCityName");
+                    var area = entities[0].GetColumnValue("StAreaName");
+                    var province = entities[0].GetColumnValue("StProvinceName");
+                    var town = entities[0].GetColumnValue("StTownName");
                 var subTypeName = entities[0].GetTypedColumnValue<string>(subType.Name);
 
 

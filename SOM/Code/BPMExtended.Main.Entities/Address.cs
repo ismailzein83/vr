@@ -15,7 +15,7 @@ namespace BPMExtended.Main.Entities
         public string Street { get; set; }
         public string Building { get; set; }
         public string Floor{ get; set; }
-
+        public string CountryId { get; set; }
         public string Sequence { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }

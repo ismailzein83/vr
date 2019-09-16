@@ -10,11 +10,14 @@ namespace BPMExtended.Main.SOMAPI
     public class ADSLLineMovingRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public PaymentData PaymentData { get; set; }
         public string OldTelephonyContractId { get; set; }
         public string NewTelephonyContractId { get; set; }
+        public string ContractId { get; set; }
+        public string AddressSequence { get; set; }
+        public string RequestId { get; set; }
         public string OldDSLAM { get; set; }
         public string NewDSLAM { get; set; }
-        PaymentData PaymentData { get; set; }
         public Address Address { get; set; }
 
     }

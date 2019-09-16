@@ -383,7 +383,7 @@ namespace BPMExtended.Main.Business
                 row1.Cells[2].VerticalAlignment = VerticalAlignment.Center;
                 row1.Cells[3].VerticalAlignment = VerticalAlignment.Center;
                 row1.Cells[4].VerticalAlignment = VerticalAlignment.Center;
-                row1.Cells[5].VerticalAlignment = VerticalAlignment.Center;
+                //row1.Cells[5].VerticalAlignment = VerticalAlignment.Center;
 
                 paragraph3 = row1.Cells[0].AddParagraph();
                 paragraph3.AddText(item.CallDate.ToString());
@@ -441,8 +441,8 @@ namespace BPMExtended.Main.Business
                 row1.Cells[4].VerticalAlignment = VerticalAlignment.Center;
                 row1.Cells[4].MergeDown = 1;
 
-                row1.Cells[5].VerticalAlignment = VerticalAlignment.Center;
-                row1.Cells[5].MergeDown = 1;
+                //row1.Cells[5].VerticalAlignment = VerticalAlignment.Center;
+                //row1.Cells[5].MergeDown = 1;
 
 
                 paragraph = row1.Cells[0].AddParagraph();
@@ -460,8 +460,8 @@ namespace BPMExtended.Main.Business
                 paragraph = row1.Cells[4].AddParagraph();
                 paragraph.AddText(item.Amount.ToString());
 
-                paragraph = row1.Cells[5].AddParagraph();
-                paragraph.AddText(item.DurationUnit.ToString());
+                //paragraph = row1.Cells[5].AddParagraph();
+                //paragraph.AddText(item.DurationUnit.ToString());
 
                 this.table.SetEdge(0, this.table.Rows.Count - 2, 5, 1, Edge.Box, MigraDoc.DocumentObjectModel.BorderStyle.Single, 0.75);
             }
