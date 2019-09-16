@@ -9,7 +9,7 @@ ECHO TelecomCRM DataBase First Deployment Scripts
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_BusinessProcess.json" 				/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Common.PostDeployment.sql" 						/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Common.Localization.PostDeployment.sql" 			/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Localizalion.json" 			/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_ExcelConversion.json" 				/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Generic.json" 						/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Runtime.json" 						/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
@@ -18,7 +18,7 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Rul
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Analytic.json" 					/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Notification.json" 				/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_BEBridge.json" 					/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\DataAnalysis.PostDeployment.sql" 				/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_DataAnalysis.json" 				/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TelecomCRM.PostDeployment.sql" 					/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\CommonEntities_CommonEntities.PostDeployment.json" 	/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\CommonEntities_BankEntities.PostDeployment.json" 	/y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
