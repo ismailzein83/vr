@@ -7,16 +7,16 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO.
 ECHO NetworkRental DataBase First Deployment Scripts
 
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\BusinessProcess.PostDeployment.json" 							/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_BusinessProcess.json" 							/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Common.PostDeployment.sql" 									/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\ExcelConversion.PostDeployment.sql" 							/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Generic.PostDeployment.json" 									/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Generic.json" 									/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Integration.json" 								/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Queueing.json" 								/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Runtime.json" 									/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Security.PostDeployment.sql" 								/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Rules.json" 								/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Analytic.PostDeployment.json" 								/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Analytic.json" 								/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_AccountBalance.json" 						/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Notification.json" 							/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_BEBridge.json" 								/y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
