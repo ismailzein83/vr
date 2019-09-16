@@ -1018,5 +1018,9 @@
     <None Include="VRJSON_PostScripts\VR_Notification.json" />
     <None Include="VRJSON_PostScripts\VR_MobileNetwork.json" />
     <None Include="VRJSON_PostScripts\VR_AccountBalance.json" />
+    <None Include="VRJSON_PostScripts\VR_Runtime.json" />
+    <None Include="VRJSON_PostScripts\VR_Reprocess.json" />
+    <None Include="VRJSON_PostScripts\VR_Integration.json" />
+    <None Include="VRJSON_PostScripts\VR_Queueing.json" />
   </ItemGroup>
 </Project>
