@@ -18,7 +18,7 @@ namespace TOne.WhS.Sales.Business
         {
             _getZoneDraft = getZoneDraft;
         }
-
+        public object CustomObject { get; set; }
         public SalePriceListOwnerType OwnerType { get; set; }
         public int OwnerId { get; set; }
         public BulkActionCorrectedData CorrectedData { get; set; }

@@ -40,23 +40,15 @@ app.directive('vrWhsSalesBulkactionTypeImportcustomertargetmatch', ['WhS_Sales_R
                 $scope.scopeModel = {};
                 $scope.scopeModel.rateCalculationMethods = [];
                 $scope.scopeModel.headerRowExists = true;
-                cacheObjectName = UtilsService.guid();
 
                 $scope.scopeModel.onFileChanged = function (obj) {
-                    cacheObjectName = UtilsService.guid();
                     if (obj != undefined) {
                         $scope.scopeModel.file = { fileId: obj.fileId, fileName: obj.fileName };
                         WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
                     }
                 };
 
-                $scope.scopeModel.onSwitchValueChanged = function () {
-                    cacheObjectName = UtilsService.guid();
-                };
-
-                $scope.scopeModel.onRateCalculationMethodChanged = function () {
-                    cacheObjectName = UtilsService.guid();
-                };
+               
 
                 $scope.scopeModel.onRateCalculationMethodSelectorReady = function (api) {
                     rateCalculationMethodSelectorAPI = api;
@@ -117,7 +109,6 @@ app.directive('vrWhsSalesBulkactionTypeImportcustomertargetmatch', ['WhS_Sales_R
                     var data = {
                         $type: 'TOne.WhS.Sales.MainExtensions.ImportCustomerTargetMatchBulkActionType, TOne.WhS.Sales.MainExtensions',
                         HeaderRowExists: $scope.scopeModel.headerRowExists,
-                        CacheObjectName: cacheObjectName,//UtilsService.guid(),
                         RateCalculationMethod: (directiveAPI != undefined) ? directiveAPI.getData() : null,
                     };
                     if ($scope.scopeModel.file != undefined) {

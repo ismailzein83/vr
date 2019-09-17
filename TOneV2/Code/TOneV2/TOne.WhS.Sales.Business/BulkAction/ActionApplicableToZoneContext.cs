@@ -66,7 +66,7 @@ namespace TOne.WhS.Sales.Business
             return UtilitiesManager.GetCostCalculationMethodIndex(_costCalculationMethods, costCalculationMethodConfigId);
         }
         #endregion
-
+        public object CustomObject { get; set; }
         public SalePriceListOwnerType OwnerType { get; set; }
 
         public int OwnerId { get; set; }

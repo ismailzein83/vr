@@ -23,6 +23,7 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
             this.initializeController = initializeController;
             var pageSize = 15;
             var invalidImportedRows;
+            var bulkActionContext;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -32,7 +33,12 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
                 $scope.scopeModel.onGridReady = function (api) {
                     defineAPI();
                 };
-
+                $scope.checkIncludedData = function () {
+                    if (getIncludedZoneRates().length > 0)
+                        bulkActionContext.toggleApplyButton(true);
+                    else
+                        bulkActionContext.toggleApplyButton(false);
+                };
                 $scope.scopeModel.loadMoreGridData = function () {
                     loadMoreGridData($scope.scopeModel.invalidImportedRows, invalidImportedRows);
                 };
@@ -44,6 +50,8 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
                         if (invalidImportedRows[i].Status == WhS_Sales_CustomerTargetMatchImportedRowStatus.InvalidDueExpectedRateViolation.value)
                             invalidImportedRows[i].Include = value;
                     }
+                    bulkActionContext.toggleApplyButton(value);
+
                 };
             }
             function defineAPI() {
@@ -56,6 +64,7 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
 
                     if (payload != undefined) {
                         bulkActionValidationResult = payload.bulkActionValidationResult;
+                        bulkActionContext = payload.bulkActionContext;
                     }
 
                     if (bulkActionValidationResult != undefined) {
@@ -88,9 +97,10 @@ app.directive('vrWhsSalesBulkactionValidationresultCustomertargetmatchimport', [
 
                 if (gridArrayLength < sourceArray.length) {
                     for (var i = gridArrayLength; i < sourceArray.length && i < gridArrayLength + pageSize; i++) {
-                        sourceArray[i].CanBeIncluded = sourceArray[i].Status == WhS_Sales_CustomerTargetMatchImportedRowStatus.InvalidDueExpectedRateViolation.value;
+                        var dataItem = sourceArray[i];
+                        dataItem.CanBeIncluded = dataItem.Status == WhS_Sales_CustomerTargetMatchImportedRowStatus.InvalidDueExpectedRateViolation.value;
                         gridArray.push({
-                            Entity: sourceArray[i]
+                            Entity: dataItem
                         });
                     }
                 }

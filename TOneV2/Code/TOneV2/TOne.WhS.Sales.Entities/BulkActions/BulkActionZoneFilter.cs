@@ -33,6 +33,6 @@ namespace TOne.WhS.Sales.Entities
         List<CostCalculationMethod> CostCalculationMethods { get; }
 
         Func<Dictionary<long, ZoneItem>> GetContextZoneItems { get; set; }
-
+        object CustomObject { get; set; }
     }
 }

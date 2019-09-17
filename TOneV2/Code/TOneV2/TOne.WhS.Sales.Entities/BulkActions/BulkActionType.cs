@@ -64,6 +64,7 @@ namespace TOne.WhS.Sales.Entities
         SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
 
         DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue);
+        object CustomObject { get; set; }
     }
 
     public interface IZoneValidationContext
@@ -77,6 +78,8 @@ namespace TOne.WhS.Sales.Entities
         BulkActionValidationResult ValidationResult { get; set; }
 
         decimal GetRoundedRate(decimal rate);
+
+        object CustomObject { get; set; }
     }
 
     public interface IActionApplicableToZoneContext
@@ -106,6 +109,7 @@ namespace TOne.WhS.Sales.Entities
         ZoneItem GetContextZoneItem(long zoneId);
 
         int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+        object CustomObject { get; set; }
     }
 
     public interface IPreApplyBulkActionToZoneItemContext
@@ -133,6 +137,7 @@ namespace TOne.WhS.Sales.Entities
 
         decimal GetRoundedRate(decimal rate);
         SaleRate GetCustomerNormalRate(int customerId, long zoneId, DateTime effectiveDate);
+        object CustomObject { get; set; }
     }
 
     public interface IApplyBulkActionToZoneDraftContext
@@ -151,6 +156,7 @@ namespace TOne.WhS.Sales.Entities
         int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
         SaleRate GetCustomerNormalRate(int customerId, long zoneId, DateTime effectiveDate);
         decimal GetRoundedRate(decimal rate);
+        object CustomObject { get; set; }
     }
 
     public interface IApplyBulkActionToDefaultDraftContext
@@ -167,5 +173,6 @@ namespace TOne.WhS.Sales.Entities
         int IncreasedRateDayOffset { get; }
         int DecreasedRateDayOffset { get; }
         ZoneChanges GetZoneDraft(long zoneId);
+        object CustomObject { get; set; }
     }
 }

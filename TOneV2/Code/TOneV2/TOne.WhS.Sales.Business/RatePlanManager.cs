@@ -141,7 +141,8 @@ namespace TOne.WhS.Sales.Business
                     DraftData = draft,
                     SaleZones = saleZones,
                     CostCalculationMethods = input.CostCalculationMethods,
-                    GetContextZoneItems = getContextZoneItems
+                    GetContextZoneItems = getContextZoneItems,
+                    CustomObject = input.CustomObject
                 };
 
                 applicableZoneIds = input.BulkActionFilter.GetApplicableZoneIds(applicableZoneIdsContext);
@@ -668,22 +669,19 @@ namespace TOne.WhS.Sales.Business
 
             // Filter and page the sale zones
             IEnumerable<long> applicableZoneIds = null;
-
+            var applicableZoneContext = new ApplicableZoneIdsContext(getSellingProductZoneRate, getCustomerZoneRate);
             if (input.BulkAction != null)
             {
                 if (input.Filter.BulkActionFilter == null)
                     throw new Vanrise.Entities.MissingArgumentValidationException("input.Filter.BulkActionFilter");
 
-                var applicableZoneContext = new ApplicableZoneIdsContext(getSellingProductZoneRate, getCustomerZoneRate)
-                {
-                    OwnerType = input.OwnerType,
-                    OwnerId = input.OwnerId,
-                    SaleZones = saleZones,
-                    DraftData = draft,
-                    BulkAction = input.BulkAction,
-                    CostCalculationMethods = input.CostCalculationMethods,
-                    GetContextZoneItems = getContextZoneItems
-                };
+                applicableZoneContext.OwnerType = input.OwnerType;
+                applicableZoneContext.OwnerId = input.OwnerId;
+                applicableZoneContext.SaleZones = saleZones;
+                applicableZoneContext.DraftData = draft;
+                applicableZoneContext.BulkAction = input.BulkAction;
+                applicableZoneContext.CostCalculationMethods = input.CostCalculationMethods;
+                applicableZoneContext.GetContextZoneItems = getContextZoneItems;
                 applicableZoneIds = input.Filter.BulkActionFilter.GetApplicableZoneIds(applicableZoneContext);
             }
 
@@ -735,6 +733,7 @@ namespace TOne.WhS.Sales.Business
                 CurrentRateLocator = currentRateLocator,
                 IncludeBlockedSuppliers = input.IncludeBlockedSuppliers,
                 AdditionalCountryIds = (additionalCountryBEDsByCountryId == null) ? null : additionalCountryBEDsByCountryId.Select(item => item.Key),
+                CustomObject = applicableZoneContext.CustomObject
             };
 
             return BuildZoneItems(ratePlanZoneCreationInput);
@@ -1022,6 +1021,7 @@ namespace TOne.WhS.Sales.Business
                         RoutingProductReader = zoneRoutingProductReader,
                         CurrentRateLocator = currentRateLocator,
                         AdditionalCountryIds = (additionalCountryBEDsByCountryId == null) ? null : additionalCountryBEDsByCountryId.Select(item => item.Key),
+                        CustomObject = applicableZoneIdsContext.CustomObject
                     };
 
                     zoneItems = BuildZoneItems(ratePlanZoneCreationInput);
@@ -1399,7 +1399,7 @@ namespace TOne.WhS.Sales.Business
             }
             return result;
         }
-   
+
         private IEnumerable<ZoneItem> BuildZoneItems(RatePlanZoneCreationInput input)
         {
 
@@ -1495,6 +1495,7 @@ namespace TOne.WhS.Sales.Business
                 return decimal.Round(rate, longPrecisionValue);
             };
             DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
+            object customObject = input.CustomObject;
             foreach (SaleZone saleZone in input.SaleZones)
             {
                 var zoneItem = new ZoneItem()
@@ -1524,6 +1525,7 @@ namespace TOne.WhS.Sales.Business
                         NewRateDayOffset = pricingSettings.NewRateDayOffset.Value,
                         IncreasedRateDayOffset = pricingSettings.IncreasedRateDayOffset.Value,
                         DecreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value,
+                        CustomObject = customObject,
                     };
                     input.BulkAction.ApplyBulkActionToZoneItem(applyBulkActionToZoneItemContext);
                 }
@@ -1712,6 +1714,7 @@ namespace TOne.WhS.Sales.Business
             public SaleEntityZoneRateLocator CurrentRateLocator { get; set; }
             public bool IncludeBlockedSuppliers { get; set; }
             public IEnumerable<int> AdditionalCountryIds { get; set; }
+            public object CustomObject { get; set; }
         }
 
         public void SetNumberPrecisionValues(out int normalPrecisionValue, out int longPrecisionValue)

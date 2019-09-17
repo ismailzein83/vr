@@ -52,7 +52,8 @@ namespace TOne.WhS.Sales.Business
                 CountryBEDsByCountryId = customData.CountryBEDsByCountryId,
                 CountryEEDsByCountryId = customData.CountryEEDsByCountryId,
                 CostCalculationMethods = applicableSaleZoneFilterContext.CostCalculationMethods,
-                GetContextZoneItems = customData.GetContextZoneItems
+                GetContextZoneItems = customData.GetContextZoneItems,
+                CustomObject = customData.CustomObject
             };
 
             return !UtilitiesManager.IsActionApplicableToZone(IsActionApplicableToZoneInput);
@@ -77,7 +78,7 @@ namespace TOne.WhS.Sales.Business
             public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
             public Dictionary<int, DateTime> CountryEEDsByCountryId { get; set; }
             public Func<Dictionary<long, ZoneItem>> GetContextZoneItems { get; set; }
-
+            public object CustomObject { get; set; }
             public CustomData(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, int? routingDatabaseId, Guid? policyConfigId, int? numberOfOptions, int? currencyId, List<CostCalculationMethod> costCalculationMethods)
             {
                 _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());

@@ -254,7 +254,8 @@
                         bulkActionValidationResult: bulkActionValidationResult,
                         bulkAction: bulkActionContext.getSelectedBulkAction(),
                         pricingSettings: pricingSettings,
-                        longPrecision: longPrecision
+                        longPrecision: longPrecision,
+                        bulkActionContext: bulkActionContext
                     };
                     VRUIUtilsService.callDirectiveLoad(validationDirectiveAPI, validationDirectivePayload, validationDirectiveLoadDeferred);
                 });
@@ -367,6 +368,9 @@
             bulkActionContext.requireEvaluation = function () {
                 $scope.scopeModel.isApplyButtonDisabled = true;
             };
+            bulkActionContext.toggleApplyButton = function (value) {
+                $scope.scopeModel.isApplyButtonDisabled = !value;
+            }
         }
     }
 

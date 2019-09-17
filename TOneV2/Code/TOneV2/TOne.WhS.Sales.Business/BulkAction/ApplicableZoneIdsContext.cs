@@ -21,6 +21,7 @@ namespace TOne.WhS.Sales.Business
         }
 
         public SalePriceListOwnerType OwnerType { get; set; }
+        public object CustomObject { get; set; }
         public int OwnerId { get; set; }
         public IEnumerable<SaleZone> SaleZones { get; set; }
         public Changes DraftData { get; set; }

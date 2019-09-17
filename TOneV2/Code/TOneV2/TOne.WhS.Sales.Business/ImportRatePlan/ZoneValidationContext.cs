@@ -24,7 +24,7 @@ namespace TOne.WhS.Sales.Business
         }
 
         public long ZoneId { get; set; }
-
+        public object CustomObject { get; set; }
         public ZoneItem GetContextZoneItem(long zoneId)
         {
             Dictionary<long, ZoneItem> contextZoneItems = _getContextZoneItems();

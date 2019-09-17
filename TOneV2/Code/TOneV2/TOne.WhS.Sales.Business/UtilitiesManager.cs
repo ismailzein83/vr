@@ -93,16 +93,19 @@ namespace TOne.WhS.Sales.Business
             if (input.Draft != null && input.Draft.ZoneChanges != null)
                 zoneDraft = input.Draft.ZoneChanges.FindRecord(x => x.ZoneId == input.SaleZone.SaleZoneId);
 
-            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId,input.GetContextZoneItems, input.CostCalculationMethods)
+            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId, input.GetContextZoneItems, input.CostCalculationMethods)
             //var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId)
             {
                 OwnerType = input.OwnerType,
                 OwnerId = input.OwnerId,
                 SaleZone = input.SaleZone,
-                ZoneDraft = zoneDraft                
+                ZoneDraft = zoneDraft,
+                CustomObject = input.CustomObject
             };
-
-            return input.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
+           
+            var result =  input.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
+            input.CustomObject = actionApplicableToZoneContext.CustomObject;
+            return result;
         }
 
         public static Dictionary<int, DateTime> GetDatesByCountry(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
@@ -422,7 +425,6 @@ namespace TOne.WhS.Sales.Business
         public BulkActionType BulkAction { get; set; }
 
         public Changes Draft { get; set; }
-
         public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
 
         public Dictionary<int, DateTime> CountryEEDsByCountryId { get; set; }
@@ -439,7 +441,8 @@ namespace TOne.WhS.Sales.Business
 
         public List<CostCalculationMethod> CostCalculationMethods { get; set; }
 
-        public Func<Dictionary<long,ZoneItem>> GetContextZoneItems { get; set; }
+        public Func<Dictionary<long, ZoneItem>> GetContextZoneItems { get; set; }
+        public object CustomObject { get; set; }
     }
 
     #endregion

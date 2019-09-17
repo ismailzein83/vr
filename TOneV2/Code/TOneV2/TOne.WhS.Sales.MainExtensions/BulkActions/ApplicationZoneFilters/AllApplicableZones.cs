@@ -46,11 +46,12 @@ namespace TOne.WhS.Sales.MainExtensions
                     CountryBEDsByCountryId = countryBEDsByCountryId,
                     CountryEEDsByCountryId = countryEEDsByCountryId,
                     CostCalculationMethods = context.CostCalculationMethods,
-                    GetContextZoneItems = context.GetContextZoneItems
+                    GetContextZoneItems = context.GetContextZoneItems,
+                    CustomObject = context.CustomObject
                 };
-
                 if (UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
                     applicableZoneIds.Add(saleZone.SaleZoneId);
+                context.CustomObject = isActionApplicableToZoneInput.CustomObject;
             }
 
             return applicableZoneIds;

@@ -13,7 +13,7 @@
                  hidegridmenu
                  ng-if="!scopeModel.errorMessage">
         <vr-datagridcolumn headertext="'Include'" widthfactor="10" columnindex="0" invisibleheader disablesorting="true" ng-if="!hideSelectedColumn" fixedwidth="'30'">
-            <vr-check ng-if="dataItem.Entity.CanBeIncluded" value="dataItem.Entity.Include"></vr-check>
+            <vr-check ng-if="dataItem.Entity.CanBeIncluded" value="dataItem.Entity.Include" onvaluechanged ="viewScope.checkIncludedData"></vr-check>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Row Index'" field="'Entity.RowIndex'" type="'Text'" disablesorting></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Zone'" field="'Entity.ImportedRow.Zone'" type="'Text'" disablesorting></vr-datagridcolumn>

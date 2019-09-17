@@ -437,6 +437,9 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                     };
                     if (bulkActionContext != undefined) {
                         selectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
+                        selectorPayload.costCalculationMethods = bulkActionContext.costCalculationMethods;
+                        selectorPayload.currencyId = bulkActionContext.currencyId;
+                        selectorPayload.routingDatabaseId = bulkActionContext.routingDatabaseId;
                     }
                     return selectorPayload;
                 }

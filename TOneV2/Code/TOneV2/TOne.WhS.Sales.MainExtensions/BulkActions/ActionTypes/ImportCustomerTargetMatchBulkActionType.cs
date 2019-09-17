@@ -30,24 +30,34 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public int OwnerId { get; set; }
 
-        public Guid CacheObjectName { get; set; }
         public override void ValidateZone(IZoneValidationContext context)
         {
             if (context.ValidationResult == null)
             {
                 var validationResult = new CustomerTargetMatchImportBulkActionValidationResult();
-
-                CustomerTargetMatchImportedDataValidationResult cachedValidationData = GetOrCreateObject(context.GetContextZoneItem, context.GetCostCalculationMethodIndex);
-                if (cachedValidationData.FileIsEmpty)
+                if (context.CustomObject == null)
+                {
+                    context.CustomObject = new RatePlanManager().ValidateTargetMatchImportedData(new TargetMatchImportedDataInput()
+                    {
+                        FileId = FileId,
+                        HeaderRowExists = HeaderRowExists,
+                        OwnerId = OwnerId,
+                        RateCalculationMethod = RateCalculationMethod,
+                        GetZoneItem = context.GetContextZoneItem,
+                        GetCostCalculationMethodIndex = context.GetCostCalculationMethodIndex
+                    });
+                }
+                var customerTargetMatchImportedDataValidationResult = context.CustomObject as CustomerTargetMatchImportedDataValidationResult;
+                if (customerTargetMatchImportedDataValidationResult.FileIsEmpty)
                 {
                     validationResult.InvalidDataExists = true;
                     validationResult.ErrorMessage = "Imported file is empty";
                 }
-                if (cachedValidationData.InvalidDataByRowIndex != null && cachedValidationData.InvalidDataByRowIndex.Values != null && cachedValidationData.InvalidDataByRowIndex.Values.Count > 0)
+                if (customerTargetMatchImportedDataValidationResult.InvalidDataByRowIndex != null && customerTargetMatchImportedDataValidationResult.InvalidDataByRowIndex.Values != null && customerTargetMatchImportedDataValidationResult.InvalidDataByRowIndex.Values.Count > 0)
                 {
                     validationResult.InvalidDataExists = true;
 
-                    foreach (CustomerTargetMatchInvalidImportedRow invalidImportedRow in cachedValidationData.InvalidDataByRowIndex.Values)
+                    foreach (CustomerTargetMatchInvalidImportedRow invalidImportedRow in customerTargetMatchImportedDataValidationResult.InvalidDataByRowIndex.Values)
                     {
                         validationResult.InvalidImportedRows.Add(invalidImportedRow);
 
@@ -68,20 +78,32 @@ namespace TOne.WhS.Sales.MainExtensions
         }
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
-            CustomerTargetMatchImportedDataValidationResult cachedValidationData = GetOrCreateObject(context.GetContextZoneItem, context.GetCostCalculationMethodIndex);
-            return cachedValidationData.ApplicableZoneIds.Contains(context.SaleZone.SaleZoneId);
+            if (context.CustomObject == null)
+            {
+                context.CustomObject = new RatePlanManager().ValidateTargetMatchImportedData(new TargetMatchImportedDataInput()
+                {
+                    FileId = FileId,
+                    HeaderRowExists = HeaderRowExists,
+                    OwnerId = OwnerId,
+                    RateCalculationMethod = RateCalculationMethod,
+                    GetZoneItem = context.GetContextZoneItem,
+                    GetCostCalculationMethodIndex = context.GetCostCalculationMethodIndex
+                });
+            }
+            var customerTargetMatchImportedDataValidationResult = context.CustomObject as CustomerTargetMatchImportedDataValidationResult;
+            return customerTargetMatchImportedDataValidationResult.ApplicableZoneIds.Contains(context.SaleZone.SaleZoneId);
         }
         public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
         {
             IEnumerable<DraftRateToChange> zoneDraftNewRates = context.ZoneDraft?.NewRates;
             string targetVolume;
-            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate, context.GetContextZoneItem, context.GetCostCalculationMethodIndex, out targetVolume);
+            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate, context.GetContextZoneItem, context.GetCostCalculationMethodIndex,context.CustomObject, out targetVolume);
             context.ZoneItem.TargetVolume = targetVolume;
         }
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
         {
             string targetVolume;
-            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate, context.GetZoneItem, context.GetCostCalculationMethodIndex, out targetVolume);
+            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate, context.GetZoneItem, context.GetCostCalculationMethodIndex,context.CustomObject, out targetVolume);
             context.ZoneDraft.TargetVolume = targetVolume;
         }
         public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
@@ -119,11 +141,11 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #endregion
 
-        private CustomerTargetMatchImportedDataValidationResult GetOrCreateObject(Func<long, ZoneItem> getZoneItem, Func<Guid, int?> getCostCalculationMethodIndex)
+        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate, Func<long, ZoneItem> getZoneItem, Func<Guid, int?> getCostCalculationMethodIndex,object customObject, out string targetVolume)
         {
-            return _cacheManager.GetOrCreateObject(CacheObjectName, () =>
+            if(customObject == null)
             {
-                return new RatePlanManager().ValidateTargetMatchImportedData(new TargetMatchImportedDataInput()
+                customObject = new RatePlanManager().ValidateTargetMatchImportedData(new TargetMatchImportedDataInput()
                 {
                     FileId = FileId,
                     HeaderRowExists = HeaderRowExists,
@@ -132,13 +154,10 @@ namespace TOne.WhS.Sales.MainExtensions
                     GetZoneItem = getZoneItem,
                     GetCostCalculationMethodIndex = getCostCalculationMethodIndex
                 });
-            });
-        }
+            }
 
-        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate, Func<long, ZoneItem> getZoneItem, Func<Guid, int?> getCostCalculationMethodIndex, out string targetVolume)
-        {
-            CustomerTargetMatchImportedDataValidationResult cachedValidationData = GetOrCreateObject(getZoneItem, getCostCalculationMethodIndex);
-            CustomerTargetMatchImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
+            var customerTargetMatchImportedDataValidationResult = customObject as CustomerTargetMatchImportedDataValidationResult;
+            CustomerTargetMatchImportedRow importedRow = customerTargetMatchImportedDataValidationResult.ValidDataByZoneId.GetRecord(zoneId);
             targetVolume = null;
             if (importedRow == null)
                 return zoneDraftNewRates;

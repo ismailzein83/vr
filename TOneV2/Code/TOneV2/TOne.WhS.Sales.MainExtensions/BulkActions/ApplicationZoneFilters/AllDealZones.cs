@@ -46,11 +46,13 @@ namespace TOne.WhS.Sales.MainExtensions
                     GetCustomerZoneRate = getCustomerZoneRate,
                     CountryBEDsByCountryId = countryBEDsByCountryId,
                     CountryEEDsByCountryId = countryEEDsByCountryId,
-                    GetContextZoneItems = context.GetContextZoneItems
+                    GetContextZoneItems = context.GetContextZoneItems,
+                    CustomObject = context.CustomObject
                 };
                 var effectiveDate = saleZone.BED > DateTime.Today ? saleZone.BED : DateTime.Today;
                 if (dealDefinitionManager.IsZoneIncludedInEffectiveDeal(context.OwnerId, saleZone.SaleZoneId, effectiveDate, true).HasValue && UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
                     applicableZoneIds.Add(saleZone.SaleZoneId);
+                context.CustomObject = isActionApplicableToZoneInput.CustomObject;
             }
 
             return applicableZoneIds;
