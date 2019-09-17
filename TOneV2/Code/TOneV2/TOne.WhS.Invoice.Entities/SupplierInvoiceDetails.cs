@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Invoice.Entities
@@ -15,7 +12,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal Duration { get; set; }
         public CommissionType? CommissionType { get; set; }
         public decimal? Commission { get; set; }
-		public decimal? Adjustment { get; set; }
+        public decimal? Adjustment { get; set; }
         public bool DisplayComission { get; set; }
         public string PartnerType { get; set; }
         public Decimal TotalAmount { get; set; }
@@ -41,15 +38,22 @@ namespace TOne.WhS.Invoice.Entities
         public List<AttachementFile> AttachementFiles { get; set; }
         public Decimal TotalReccurringChargesAfterTax { get; set; }
         public Decimal TotalReccurringCharges { get; set; }
-        public Decimal TotalInvoiceAmount { get; set; }
+
+        Decimal? totalInvoiceAmount;
+        public Decimal TotalInvoiceAmount
+        {
+            get { return totalInvoiceAmount.HasValue ? totalInvoiceAmount.Value : TotalAmountAfterCommission; }
+            set { totalInvoiceAmount = value; }
+        }
+
         public decimal TotalInvoiceAmountBeforeTax { get; set; }
         public bool NoVoice { get; set; }
         public bool NoSMS { get; set; }
         public bool NoRecurringCharges { get; set; }
         public bool NoDeals { get; set; }
-
     }
-    public class SupplierInvoiceDetails: BaseInvoiceDetails
+
+    public class SupplierInvoiceDetails : BaseInvoiceDetails
     {
         public decimal CostAmount { get; set; }
         public Decimal OriginalCostAmount { get; set; }
@@ -63,7 +67,6 @@ namespace TOne.WhS.Invoice.Entities
             return null;
         }
     }
-
 
     public class AttachementFile
     {
