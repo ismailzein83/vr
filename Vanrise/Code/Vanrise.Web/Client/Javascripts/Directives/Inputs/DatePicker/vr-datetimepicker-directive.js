@@ -224,7 +224,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         }
                         else if ($attrs.type == "yearMonth") {
                             selectedDate.setDate(1);
-                            var date = new Date(selectedDate.setHours(unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
+                            var date = new Date(selectedDate.setHours(unspecifiedHour, unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
                             $scope.ctrl.value = date;
                         }
                         else if ($attrs.type == "longDateTime") {
@@ -418,15 +418,15 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             var endTemplate = '</div>';
 
             var labelTemplate = '';
-			var n = 0;
+            var n = 0;
 
-			var label = attrs.label;
-			if (attrs.localizedlabel != undefined && VRLocalizationService.isLocalizationEnabled()) {
-			   label = VRLocalizationService.getResourceValue(attrs.localizedlabel, label);
-			}
+            var label = attrs.label;
+            if (attrs.localizedlabel != undefined && VRLocalizationService.isLocalizationEnabled()) {
+                label = VRLocalizationService.getResourceValue(attrs.localizedlabel, label);
+            }
 
-			if (label != undefined)
-			  labelTemplate = '<vr-label>' + label + '</vr-label>';
+            if (label != undefined)
+                labelTemplate = '<vr-label>' + label + '</vr-label>';
 
             var icontemplate = "";
             if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime' || attrs.type == 'yearMonth') {
