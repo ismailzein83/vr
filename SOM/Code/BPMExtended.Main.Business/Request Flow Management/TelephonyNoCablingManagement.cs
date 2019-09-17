@@ -32,9 +32,7 @@ namespace BPMExtended.Main.Business
                 case createContractOnHoldStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = printStep; break;
                 case printStep: nextStepId = attachmentstep; break;
-                case attachmentstep: nextStepId = technicalStep; break;
-                case technicalStep: nextStepId = submittedtoomStep; break;
-                case submittedtoomStep: nextStepId = completedStep; break;
+                case attachmentstep: nextStepId = submittedtoomStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;

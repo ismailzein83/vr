@@ -552,6 +552,13 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public string GetDeviceTypeIdentifierByPathId(string pathId)
+        {
+
+            return GetDeviceTypeByName(new InventoryManager().GetTechnicalDetailsByPath(pathId).DEV_TYPE).Identifier;
+
+        }
+
         public DeviceType GetDeviceTypeByName(string deviceTypeName)
         {
             EntitySchemaQuery esq;
