@@ -7,13 +7,13 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO DevTool DataBase First Deployment Scripts
 
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Common.PostDeployment.sql" /y /v /z /i /Q /R												"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Generic.json" /y /v /z /i /Q /R											"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Security.json" /y /v /z /i /Q /R											"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Analytic.json" /y /v /z /i /Q /R											"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_ExcelConversion.json" 		/y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Notification.json" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\DevTools_PostScriptGenerator.PostDeployment.json" /y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" /y /v /z /i /Q /R														"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneTransaction\BusinessProcess.PostDeployment.sql" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Transaction\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneLogging\Script.PostDeployment.sql" /y /v /z /i /Q /R													"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Logging\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Common.PostDeployment.sql" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Generic.json" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Security.json" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Analytic.json" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_ExcelConversion.json" 		/y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\VR_Notification.json" /y /v /z /i /Q /R					"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\DevTools.json" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" /y /v /z /i /Q /R											"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneTransaction\BusinessProcess.PostDeployment.sql" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Transaction\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneLogging\Script.PostDeployment.sql" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\DevTool\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Logging\"
