@@ -3911,6 +3911,7 @@
           {
             "FieldValues": {
               "ID": "12221745-b7ec-4862-ad1d-28e6a500c49d",
+              "DevProjectID": "a8708ea2-abd5-4c2c-8548-e8f1cae6a1dc",
               "Name": "Inventory XATKA",
               "Settings": "{\"$type\":\"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business\",\"ConfigId\":\"071d54d2-463b-4404-8219-45fcd539ff01\",\"BaseURL\":\"http://192.168.110.195:8901\"}",
               "CreatedTime": "2018-12-13T14:48:30.167",
@@ -3920,6 +3921,7 @@
           {
             "FieldValues": {
               "ID": "56a5d484-180a-4d7b-a5ef-513c33ecdd52",
+              "DevProjectID": "a8708ea2-abd5-4c2c-8548-e8f1cae6a1dc",
               "Name": "Test_BSCS",
               "Settings": "{\"$type\":\"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business\",\"ConfigId\":\"071d54d2-463b-4404-8219-45fcd539ff01\",\"BaseURL\":\"http://localhost:8485\",\"Interceptor\":{\"$type\":\"SOM.ST.Business.BSCSOnlineInterceptor, SOM.ST.Business\",\"UserName\":\"ADMX\",\"Password\":\"ADMX\",\"ConfigId\":\"461b7474-9b19-4b90-aeab-63ba37245e53\"}}",
               "CreatedTime": "2019-03-22T09:56:49.253",
@@ -3929,6 +3931,7 @@
           {
             "FieldValues": {
               "ID": "7421a486-9bc3-4e83-98d8-9b4d235ab801",
+              "DevProjectID": "a8708ea2-abd5-4c2c-8548-e8f1cae6a1dc",
               "Name": "EDA Simulator",
               "Settings": "{\"$type\":\"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business\",\"ConfigId\":\"071d54d2-463b-4404-8219-45fcd539ff01\",\"BaseURL\":\"http://localhost:61382/\",\"Interceptor\":{\"$type\":\"SOM.ST.Business.EDAOnlineInterceptor, SOM.ST.Business\",\"SessionId\":\"ASA\",\"ConfigId\":\"6d0083c3-e7c9-483f-b87c-5caf4cd6f4d7\"}}",
               "CreatedTime": "2019-07-24T12:27:41.647",
@@ -3938,6 +3941,7 @@
           {
             "FieldValues": {
               "ID": "e9159cbf-974f-4f0b-9d14-bc2414736dd4",
+              "DevProjectID": "a8708ea2-abd5-4c2c-8548-e8f1cae6a1dc",
               "Name": "BPM",
               "Settings": "{\"$type\":\"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business\",\"ConfigId\":\"071d54d2-463b-4404-8219-45fcd539ff01\",\"BaseURL\":\"http://192.168.25.30:9090\",\"Interceptor\":{\"$type\":\"SOM.ST.Business.BPMOnlineInterceptor, SOM.ST.Business\",\"ConfigId\":\"2a61a473-a949-4781-8d06-dcb170006a3b\",\"UserName\":\"Supervisor\",\"Password\":\"Supervisor\",\"AuthenticationServiceURI\":\"/ServiceModel/AuthService.svc/Login\"}}",
               "CreatedTime": "2019-03-11T10:02:43.567",
@@ -3951,6 +3955,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": false,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -3994,6 +4004,7 @@
           {
             "FieldValues": {
               "PSIdentifier": "SOM_Billing",
+              "DevProjectID": "a8708ea2-abd5-4c2c-8548-e8f1cae6a1dc",
               "Name": "Billing",
               "Description": null,
               "Settings": "{\"$type\":\"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business\",\"ConfigId\":\"be6619ae-687f-45e3-bd7b-90d1db4626b6\",\"MemberIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib\",\"$values\":[]}}",
@@ -4008,6 +4019,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": false,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -4042,7 +4059,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "[PSIdentifier] = 'SOM_Billing'",
+        "LastWhereCondition": "DevProjectID = 'A8708EA2-ABD5-4C2C-8548-E8F1CAE6A1DC' AND [PSIdentifier] = 'SOM_Billing'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"

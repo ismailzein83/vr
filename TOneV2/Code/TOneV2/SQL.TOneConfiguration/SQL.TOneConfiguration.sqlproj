@@ -145,6 +145,7 @@
     <Folder Include="VRJSON_PostScripts" />
     <Folder Include="VRJSON_PostScripts\Mediation" />
     <Folder Include="VRJSON_PostScripts\Common" />
+    <Folder Include="VRJSON_PostScripts\SOM" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -995,8 +996,6 @@
     <None Include="VRJSON_PostScripts\Retail_RecordAnalysis.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\NP_SimSMSG.PostDeployment.json" />
     <None Include="Retail_Invoice.PostDeployment.sql" />
-    <None Include="VRJSON_PostScripts\SOM.PostDeployment.json" />
-    <None Include="VRJSON_PostScripts\SomST.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\TestCallAnalysis.PotDeployment.json" />
     <None Include="VRJSON_PostScripts\Mediation\Mediation.json" />
     <None Include="VRJSON_PostScripts\Mediation\Jazz.json" />
@@ -1027,5 +1026,7 @@
     <None Include="VRJSON_PostScripts\Common\VR_Reprocess.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Rules.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Runtime.json" />
+    <None Include="VRJSON_PostScripts\SOM\ST.json" />
+    <None Include="VRJSON_PostScripts\SOM\SOM.json" />
   </ItemGroup>
 </Project>
