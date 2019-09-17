@@ -155,17 +155,68 @@ namespace BPMExtended.Main.Business
             //}
         }
 
-        public void CreateRequest(string contactId)
+        public string CreateRequest(string contactId)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StBSCSSuspensionFromDunning");
-            Entity workorder = schema.CreateEntity(BPM_UserConnection);
+            Entity entity = schema.CreateEntity(BPM_UserConnection);
 
-            Guid workOrderId = Guid.NewGuid();
+            Guid entityId = Guid.NewGuid();
 
-            workorder.SetColumnValue("Id", workOrderId);
-            workorder.SetColumnValue("StName", "Suspension for: " + contactId);
-            workorder.SetColumnValue("StTypeId", "B0F39A64-6B4A-4350-BFEA-D6ED5461C691"); 
-            workorder.Save();
+            entity.SetColumnValue("Id", entityId);
+            entity.SetColumnValue("StName", "Suspension for: " + contactId);
+            entity.SetColumnValue("StTypeId", "B0F39A64-6B4A-4350-BFEA-D6ED5461C691");
+            entity.Save();
+
+            string operationtype = OperationType.BSCSSuspensionFromDunning.GetHashCode().ToString();
+            string StageId = ReadStageId("B0F39A64-6B4A-4350-BFEA-D6ED5461C691");
+            string newStatusId = "BD71348E-A796-4F8E-AA40-7A9A8855AC77";
+            string operationId = "C1096BFD-222B-4AAA-A016-32E50D7CCAF5";
+
+            string sequenceNumber = CreateRequestInRequestHeader(operationId, entityId.ToString(), operationtype, StageId, newStatusId, "true");
+            return sequenceNumber;
+        }
+
+
+        public string ReadStageId(string StageId)
+        {
+
+            Guid Id = new Guid() ;
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequeststage");
+            var IdCol = esq.AddColumn("Id");
+
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStageId", StageId));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                Id = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);
+            }
+            return Id.ToString();
+        }
+        public string CreateRequestInRequestHeader(string operation,string requestId,string requestType, string stage, string status, string systemOrder)
+        {
+            EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
+            Entity entity = schema.CreateEntity(BPM_UserConnection);
+
+            Guid entityId = Guid.NewGuid();
+            string sequenceNumber = "";
+            IDManager manager = new IDManager();
+            sequenceNumber = manager.GetRequestNextId();
+
+
+            entity.SetColumnValue("Id", entityId);
+            entity.SetColumnValue("StOperationId", operation);
+            entity.SetColumnValue("StRequestId", requestId);
+            entity.SetColumnValue("StRequestType", requestType);
+            entity.SetColumnValue("StSequenceNumber", sequenceNumber);
+            entity.SetColumnValue("StStageId", stage);
+            entity.SetColumnValue("StStatusId", status);
+            entity.SetColumnValue("StIsSystemOrder", systemOrder);
+            entity.Save();
+            return sequenceNumber;
         }
         #endregion
     }

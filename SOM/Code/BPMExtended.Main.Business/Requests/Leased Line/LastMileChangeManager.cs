@@ -45,6 +45,24 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+
+            esq.AddColumn("StCountry");
+            esq.AddColumn("StCountry.Id");
+            esq.AddColumn("StCity");
+            esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StFloor");
+
+
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -57,6 +75,15 @@ namespace BPMExtended.Main.Business
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
+                
+                var floor = entities[0].GetColumnValue("StFloor");
+                var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
+                var street = entities[0].GetColumnValue("StStreet");
+                var city = entities[0].GetColumnValue("StCityName");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var province = entities[0].GetColumnValue("StProvinceName");
+                var town = entities[0].GetColumnValue("StTownName");
+                var country = entities[0].GetColumnValue("StCountryName");
 
                 //check if one of the services is a vpn sevice
                 List <CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());
@@ -101,6 +128,17 @@ namespace BPMExtended.Main.Business
                             Fees = feesServices,
                             IsPaid = (bool)isPaid
                         },
+                        Address = new Address()
+                        {
+                            CountryId = "206",
+                            Building = buildingNumber.ToString(),
+                            City=city.ToString(),
+                            Floor = floor.ToString(),
+                            Region = area.ToString(),
+                            StateProvince = province.ToString(),
+                            Street =street.ToString(),
+                            Town = town.ToString()
+                        }
                     }
 
                 };
@@ -108,7 +146,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LastMileChangeRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_CreateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LastMileChangeRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitLastMileChange/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
