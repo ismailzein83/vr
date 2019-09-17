@@ -6,13 +6,14 @@
 CREATE PROCEDURE [dataparser].[sp_ParserType_Update]
 	@ID uniqueidentifier,
 	@Name NVARCHAR(255),
+	@DevProjectId uniqueidentifier,
 	@Settings NVARCHAR(MAX)
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM [dataparser].[ParserType] WHERE ID != @ID and Name = @Name)
 	BEGIN
 		update [dataparser].[ParserType]
-		set  Name = @Name, Settings = @Settings, LastModifiedTime = GETDATE()
+		set  Name = @Name,DevProjectID=@DevProjectId, Settings = @Settings, LastModifiedTime = GETDATE()
 		where  ID = @ID
 	END
 END

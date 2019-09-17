@@ -7,6 +7,6 @@ CREATE PROCEDURE [dataparser].[sp_ParserType_GetAll]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SELECT	p.ID, p.Name, p.Settings
+	SELECT	p.ID, p.Name,p.DevProjectID ,p.Settings
 	FROM	[dataparser].[ParserType] as p WITH(NOLOCK) 
 END
