@@ -33,14 +33,14 @@ namespace Vanrise.DataParser.Data.SQL
         public bool Insert(ParserType parserType)
         {
             string serializedSettings = parserType.Settings != null ? Vanrise.Common.Serializer.Serialize(parserType.Settings) : null;
-            int recordsEffected = ExecuteNonQuerySP("[dataparser].[sp_ParserType_Insert]", parserType.ParserTypeId, parserType.Name, serializedSettings);
+            int recordsEffected = ExecuteNonQuerySP("[dataparser].[sp_ParserType_Insert]", parserType.ParserTypeId, parserType.Name, parserType.DevProjectId, serializedSettings);
             return (recordsEffected > 0);
         }
 
         public bool Update(Entities.ParserType parserType)
         {
             string serializedSettings = parserType.Settings != null ? Vanrise.Common.Serializer.Serialize(parserType.Settings) : null;
-            int recordsEffected = ExecuteNonQuerySP("[dataparser].[sp_ParserType_Update]", parserType.ParserTypeId, parserType.Name, serializedSettings);
+            int recordsEffected = ExecuteNonQuerySP("[dataparser].[sp_ParserType_Update]", parserType.ParserTypeId, parserType.Name, parserType.DevProjectId, serializedSettings);
             return (recordsEffected > 0);
         }
 
@@ -54,6 +54,7 @@ namespace Vanrise.DataParser.Data.SQL
             {
                 ParserTypeId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<ParserTypeSettings>(reader["Settings"] as string)
             };
         }

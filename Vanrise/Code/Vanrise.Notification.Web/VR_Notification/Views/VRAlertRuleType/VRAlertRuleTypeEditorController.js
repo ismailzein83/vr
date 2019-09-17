@@ -20,6 +20,9 @@
         var editPermissionAPI;
         var editPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var selectorAPI;
 
         var vrAlertRuleTypeId;
@@ -49,7 +52,10 @@
             $scope.scopeModel.onSettingsSelectorReady = function (api) {
                 selectorAPI = api;
             };
-
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -108,9 +114,21 @@
                 vrAlertRuleTypeSettings = response.Settings;
             });
         }
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (vrAlertRuleTypeEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: vrAlertRuleTypeEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRuleTypeSection, loadViewRequiredPermission, loadAddRequiredPermission, loadEditRequiredPermission]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRuleTypeSection, loadViewRequiredPermission, loadAddRequiredPermission, loadEditRequiredPermission, loadDevProjectSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -249,6 +267,7 @@
             return {
                 VRAlertRuleTypeId: vrAlertRuleTypeEntity != undefined ? vrAlertRuleTypeEntity.VRAlertRuleTypeId : undefined,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: buildAlertTypeSettings()
             };
         }

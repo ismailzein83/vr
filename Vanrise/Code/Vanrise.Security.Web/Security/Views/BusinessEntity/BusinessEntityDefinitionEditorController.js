@@ -11,6 +11,9 @@
         var moduleId;
         var businessEntityDefinitionEntity;
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -37,6 +40,12 @@
             };
 
             $scope.scopeModal.permissionOptions = [];
+
+
+            $scope.scopeModal.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
 
             $scope.scopeModal.addPermissionOption = function () {
                 $scope.scopeModal.permissionOptions.push($scope.scopeModal.permissionOption);
@@ -89,7 +98,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -124,10 +133,25 @@
             return false;
         }
 
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (businessEntityDefinitionEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: businessEntityDefinitionEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
+
         function buildBusinessEntityDefinitionObjFromScope() {
             var businessEntityDefinitionObject = {
                 EntityId: entityId,
                 Name: $scope.scopeModal.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Title: $scope.scopeModal.titleValue,
                 ModuleId: businessEntityDefinitionEntity != undefined ? businessEntityDefinitionEntity.ModuleId :  moduleId,
                 BreakInheritance: businessEntityDefinitionEntity != undefined?businessEntityDefinitionEntity.BreakInheritance:0,

@@ -14,6 +14,8 @@ namespace Vanrise.Security.Business
 {
     public class BusinessEntityManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Fields / Constructors
 
         BusinessEntityModuleManager _beModuleManager;
@@ -164,9 +166,15 @@ namespace Vanrise.Security.Business
         #region Mapper
         BusinessEntityDetail BusinessEntityDetailMapper(BusinessEntity businessEntity)
         {
+            string devProjectName = null;
+            if (businessEntity.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(businessEntity.DevProjectId.Value);
+            }
             return new BusinessEntityDetail
             {
-                Entity = businessEntity
+                Entity = businessEntity,
+                DevProjectName=devProjectName
             };
         }
 

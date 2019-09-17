@@ -2,13 +2,17 @@
 
     'use strict';
 
-    BusinessEntityModuleEditorController.$inject = ['$scope', 'VR_Sec_BusinessEntityModuleAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VR_Sec_MenuAPIService'];
+    BusinessEntityModuleEditorController.$inject = ['$scope', 'VR_Sec_BusinessEntityModuleAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function BusinessEntityModuleEditorController($scope, VR_Sec_BusinessEntityModuleAPIService, VRNotificationService, VRNavigationService, UtilsService, VR_Sec_MenuAPIService) {
+    function BusinessEntityModuleEditorController($scope, VR_Sec_BusinessEntityModuleAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
         $scope.scopeModal = {};
         $scope.scopeModal.isEditMode;
         var businessEntityModuleId;
         var businessEntityModuleEntity;
+
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var parentId;
         var menuItems = [];
         loadParameters();
@@ -27,6 +31,11 @@
         }
 
         function defineScope() {
+
+            $scope.scopeModal.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
 
             $scope.scopeModal.save = function () {
                 if ($scope.scopeModal.isEditMode)
@@ -70,7 +79,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -94,10 +103,25 @@
             $scope.scopeModal.name = businessEntityModuleEntity.Name;
         }
 
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (businessEntityModuleEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: businessEntityModuleEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
+
         function buildModuleObjFromScope() {
             var moduleObject = {
                 ModuleId: businessEntityModuleId,
                 Name: $scope.scopeModal.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 ParentId: businessEntityModuleEntity != undefined ? businessEntityModuleEntity.ParentId : parentId,
                 BreakInheritance: businessEntityModuleEntity != undefined ? businessEntityModuleEntity.BreakInheritance : undefined,
             };

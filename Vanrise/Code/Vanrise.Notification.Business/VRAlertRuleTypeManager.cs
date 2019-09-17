@@ -14,6 +14,8 @@ namespace Vanrise.Notification.Business
 {
     public class VRAlertRuleTypeManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         public VRAlertRuleType GetVRAlertRuleType(Guid vrAlertRuleTypeId)
@@ -46,7 +48,16 @@ namespace Vanrise.Notification.Business
         public IDataRetrievalResult<VRAlertRuleTypeDetail> GetFilteredVRAlertRuleTypes(DataRetrievalInput<VRAlertRuleTypeQuery> input)
         {
             var allVRAlertRuleTypes = GetCachedVRAlertRuleTypes();
-            Func<VRAlertRuleType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<VRAlertRuleType, bool> filterExpression = (x) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.DevProjectIds != null && (!x.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(x.DevProjectId.Value)))
+                    return false;
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(VRAlertRuleTypeLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRAlertRuleTypes.ToBigResult(input, filterExpression, VRAlertRuleTypeDetailMapper));
         }
@@ -111,6 +122,9 @@ namespace Vanrise.Notification.Business
         {
             Func<VRAlertRuleType, bool> filterExpression = (alertRuleType) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(alertRuleType.DevProjectId))
+                    return false;
+
                 if (filter != null)
                 {
                     if (filter.Filters != null)
@@ -226,9 +240,15 @@ namespace Vanrise.Notification.Business
 
         public VRAlertRuleTypeDetail VRAlertRuleTypeDetailMapper(VRAlertRuleType vrAlertRuleType)
         {
+            string devProjectName = null;
+            if (vrAlertRuleType.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(vrAlertRuleType.DevProjectId.Value);
+            }
             VRAlertRuleTypeDetail vrAlertRuleTypeDetail = new VRAlertRuleTypeDetail()
             {
-                Entity = vrAlertRuleType
+                Entity = vrAlertRuleType,
+                DevProjectName=devProjectName
             };
             return vrAlertRuleTypeDetail;
         }

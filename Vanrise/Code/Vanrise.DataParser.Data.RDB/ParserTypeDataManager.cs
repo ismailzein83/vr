@@ -15,6 +15,7 @@ namespace Vanrise.DataParser.Data.RDB
 
         const string COL_ID = "ID";
         const string COL_Name = "Name";
+        const string COL_DevProjectID = "DevProjectID";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
@@ -24,6 +25,7 @@ namespace Vanrise.DataParser.Data.RDB
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -72,6 +74,9 @@ namespace Vanrise.DataParser.Data.RDB
             insertQuery.Column(COL_ID).Value(parserType.ParserTypeId);
             insertQuery.Column(COL_Name).Value(parserType.Name);
 
+            if (parserType.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(parserType.DevProjectId.Value);
+
             if (parserType.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Serializer.Serialize(parserType.Settings));
 
@@ -90,6 +95,11 @@ namespace Vanrise.DataParser.Data.RDB
             notExistsCondition.EqualsCondition(COL_Name).Value(parserType.Name);
 
             updateQuery.Column(COL_Name).Value(parserType.Name);
+
+            if (parserType.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(parserType.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
 
             if (parserType.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(parserType.Settings));
@@ -120,7 +130,8 @@ namespace Vanrise.DataParser.Data.RDB
             ParserType parserType = new ParserType
             {
                 ParserTypeId = reader.GetGuid(COL_ID),
-                Name = reader.GetString(COL_Name)
+                Name = reader.GetString(COL_Name),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID)
             };
 
             string serializedSettings = reader.GetString(COL_Settings);

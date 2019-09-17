@@ -8,6 +8,9 @@
 
         var gridAPI;
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -29,6 +32,10 @@
             $scope.hasAddVRAlertRuleTypePermission = function () {
                 return VR_Notification_VRAlertRuleTypeAPIService.HasAddVRAlertRuleTypePermission();
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -37,12 +44,30 @@
         }
 
         function load() {
-
+            $scope.isLoading = true;
+            loadAllControls();
+        }
+        function loadAllControls() {
+            return UtilsService.waitPromiseNode({ promises: [loadDevProjectSelector()] })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
         }
 
         function buildGridQuery() {
             return {
                 Name: $scope.name,
+                DevProjectIds: devProjectDirectiveApi != undefined ? devProjectDirectiveApi.getSelectedIds() : undefined
             };
         }
     }

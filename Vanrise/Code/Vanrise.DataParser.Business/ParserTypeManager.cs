@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.DataParser.Data;
 using Vanrise.DataParser.Entities;
 using Vanrise.Entities;
@@ -9,7 +10,9 @@ using Vanrise.Entities;
 namespace Vanrise.DataParser.Business
 {
     public class ParserTypeManager
-    { 
+    {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         public IDataRetrievalResult<ParserTypeDetail> GetFilteredParserTypes(Vanrise.Entities.DataRetrievalInput<ParserTypeQuery> input)
@@ -17,7 +20,15 @@ namespace Vanrise.DataParser.Business
             var allParserTypes = GetCachedParserTypes();
 
             Func<ParserType, bool> filterExpression = (parserType) =>
-                 (input.Query.Name == null || parserType.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(parserType.DevProjectId))
+                    return false;
+                if (input.Query.Name != null && !parserType.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.DevProjectIds != null && (!parserType.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(parserType.DevProjectId.Value)))
+                    return false;
+                return true;
+            };
 
             return DataRetrievalManager.Instance.ProcessResult(input, allParserTypes.ToBigResult(input, filterExpression,ParserTypeDetailMapper));
         }
@@ -114,8 +125,18 @@ namespace Vanrise.DataParser.Business
 
         public ParserTypeDetail ParserTypeDetailMapper(ParserType parserType)
         {
-            ParserTypeDetail parserTypeDetail = new ParserTypeDetail();
-            parserTypeDetail.Entity = parserType;
+            string devProjectName = null;
+            if (parserType.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(parserType.DevProjectId.Value);
+            }
+
+            ParserTypeDetail parserTypeDetail = new ParserTypeDetail()
+            {
+                Entity = parserType,
+                DevProjectName = devProjectName
+            };
+
             return parserTypeDetail;
         }
 

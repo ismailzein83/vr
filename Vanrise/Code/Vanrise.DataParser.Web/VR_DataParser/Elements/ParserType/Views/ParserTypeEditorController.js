@@ -10,6 +10,9 @@
         var parserTypeEntity;
         var parserTypeExtendedSettingsSelectorAPI;
         var parserTypeExtendedSettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -25,15 +28,23 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
+
             $scope.saveParserType = function () {
                 if (isEditMode)
                     return updateParserType();
                 else
                     return insertParserType();
             };
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+
             $scope.scopeModel.onParserTypeExtendedSettingsSelectorReady = function (api) {
                 parserTypeExtendedSettingsSelectorAPI = api;
                 parserTypeExtendedSettingsSelectorReadyPromiseDeferred.resolve();
@@ -61,9 +72,21 @@
                 parserTypeEntity = parserType;
             });
         }
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (parserTypeEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: parserTypeEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadParserTypeExtendedSettingsSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadParserTypeExtendedSettingsSelector, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -103,6 +126,7 @@
             var obj = {
                 ParserTypeId: parserTypeId,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: {
                     UseRecordType: $scope.scopeModel.useRecordType,
                     ExtendedSettings: parserTypeExtendedSettingsSelectorAPI.getData()

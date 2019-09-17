@@ -9,5 +9,6 @@ namespace Vanrise.DataParser.Entities
   public  class ParserTypeQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }
