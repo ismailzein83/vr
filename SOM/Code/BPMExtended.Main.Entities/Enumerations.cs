@@ -185,8 +185,10 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.GSHDSL)]
         [Description("GSHDSL Subscription")]
         [EntitySchemaName("StGSHDSL")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("4A64F6DD-F60A-4D7D-ABB8-CC1AE8D501F6")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("2B0CDA46-E3DF-449B-A4A1-C677781CF4B9")]
         GSHDSLSubscription = 15,
 
         //[LineOfBusiness(LineOfBusiness.GSHDSL)]

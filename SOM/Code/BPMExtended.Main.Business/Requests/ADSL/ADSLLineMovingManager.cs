@@ -53,6 +53,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StTown.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
+            esq.AddColumn("StIsSameSwitch");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -74,13 +75,14 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
+                bool isSameSwitch = (bool)entities[0].GetColumnValue("StIsSameSwitch");
 
                 SOMRequestInput<ADSLLineMovingRequestInput> somRequestInput = new SOMRequestInput<ADSLLineMovingRequestInput>
                 {
 
                     InputArguments = new ADSLLineMovingRequestInput
                     {
-                        NewDSLAM = newDSLAMPort.ToString(),
+                        NewDSLAM = isSameSwitch? "425": newDSLAMPort.ToString(),
                         OldDSLAM = "425",
                         AddressSequence = new ContractManager().GetTelephonyContract(newContractId.ToString()).ContractAddress.Sequence,
                         Address = new Address

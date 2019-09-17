@@ -335,11 +335,17 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public bool generateInvoice(string customerId , string contractId)
+        public bool generateInvoice(string customerId , string contractId , bool simulate)
         {
             //TODO: generate Invoice 
+            bool result;
 
-            return true;
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/BillOnDemand?customerId ={0}&contractId={1}&simulate={2}", customerId , contractId , simulate));
+            }
+
+            return result;
         }
 
 

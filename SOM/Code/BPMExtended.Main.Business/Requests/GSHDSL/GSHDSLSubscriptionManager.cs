@@ -23,7 +23,7 @@ namespace BPMExtended.Main.Business
 
         #region public
 
-        public string HasPendingRequestInWaitingList(string switchId)
+        public string HasPendingRequestInWaitingList(string switchId , string division)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFilter, esqFilter2;
@@ -31,7 +31,8 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGSHDSL");
             esq.AddColumn("Id");
 
-            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSwitchId", switchId);
+            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSwitchDeviceId", switchId);
+            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGSHDSLDivision", division);
             esqFilter2 = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStep.Id", "ED5E126A-3336-47E6-9138-2788FF96B78A");
 
             esq.Filters.Add(esqFilter);
