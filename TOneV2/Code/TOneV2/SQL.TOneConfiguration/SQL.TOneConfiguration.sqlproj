@@ -992,7 +992,7 @@
     <None Include="VRJSON_PostScripts\VR_CommonEntities.json" />
     <None Include="VRJSON_PostScripts\VR_BankEntities.json" />
     <None Include="VRJSON_PostScripts\Demo_MarketView.PostDeployment.json" />
-    <None Include="VRJSON_PostScripts\DevTools_PostScriptGenerator.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\DevTools.json" />
     <None Include="VRJSON_PostScripts\Retail_NIMForDIDs.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\Retail_RecordAnalysis.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\NP_SimSMSG.PostDeployment.json" />
