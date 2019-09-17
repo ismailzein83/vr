@@ -518,9 +518,15 @@ namespace Vanrise.GenericData.Data.RDB
             switch (comparisonPart)
             {
                 case DateTimeRecordFilterComparisonPart.DateTime:
-                case DateTimeRecordFilterComparisonPart.DateOnly:
-                case DateTimeRecordFilterComparisonPart.YearMonth:
                     return (DateTime)value;
+
+                case DateTimeRecordFilterComparisonPart.DateOnly:
+                    var convertedDateOnlyValue = Convert.ToDateTime(value);
+                    return convertedDateOnlyValue.Date;
+
+                case DateTimeRecordFilterComparisonPart.YearMonth:
+                    var convertedYearMonthValue = Convert.ToDateTime(value);
+                    return new DateTime(convertedYearMonthValue.Year, convertedYearMonthValue.Month, 1);
 
                 case DateTimeRecordFilterComparisonPart.TimeOnly:
                     return Vanrise.Common.Utilities.AppendTimeToDateTime((Vanrise.Entities.Time)value, DateTime.Now);
@@ -529,7 +535,7 @@ namespace Vanrise.GenericData.Data.RDB
                     return Vanrise.Common.Utilities.AppendTimeToDateTime((Vanrise.Entities.Time)value, DateTime.Now);
 
                 case DateTimeRecordFilterComparisonPart.YearWeek:
-                    return Vanrise.Common.Utilities.GetMonday((DateTime)value);
+                    return Vanrise.Common.Utilities.GetMonday((DateTime)value).Date;
 
                 default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", comparisonPart));
             }

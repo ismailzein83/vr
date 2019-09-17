@@ -417,7 +417,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     break;
 
                 case FieldDateTimeDataType.Date:
-                    var dateValues = context.FilterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    var dateValues = new List<DateTime>();
+                    foreach (var filterValue in context.FilterValues)
+                    {
+                        var convertedValue = Convert.ToDateTime(filterValue);
+                        dateValues.Add(convertedValue.Date);
+                    }
+
                     recordFilters = GetDateTimeRecordFilters(context.FieldName, dateValues, DateTimeRecordFilterComparisonPart.DateOnly);
                     break;
 
@@ -427,12 +433,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     break;
 
                 case FieldDateTimeDataType.YearMonth:
-                    var yearMonthDateTimeValues = context.FilterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    var yearMonthDateTimeValues = new List<DateTime>();
+                    foreach (var filterValue in context.FilterValues)
+                    {
+                        var convertedValue = Convert.ToDateTime(filterValue);
+                        yearMonthDateTimeValues.Add(new DateTime(convertedValue.Year, convertedValue.Month, 1));
+                    }
+
                     recordFilters = GetDateTimeRecordFilters(context.FieldName, yearMonthDateTimeValues, DateTimeRecordFilterComparisonPart.YearMonth);
                     break;
 
                 case FieldDateTimeDataType.YearWeek:
-                    var yearWeekDateTimeValues = context.FilterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    var yearWeekDateTimeValues = new List<DateTime>();
+                    foreach (var filterValue in context.FilterValues)
+                    {
+                        var convertedValue = Convert.ToDateTime(filterValue);
+                        yearWeekDateTimeValues.Add(Vanrise.Common.Utilities.GetMonday(convertedValue).Date);
+                    }
+
                     recordFilters = GetDateTimeRecordFilters(context.FieldName, yearWeekDateTimeValues, DateTimeRecordFilterComparisonPart.YearWeek);
                     break;
 
