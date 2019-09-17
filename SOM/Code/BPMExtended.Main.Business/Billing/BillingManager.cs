@@ -23,6 +23,7 @@ using System.Diagnostics;
 using System.IO;
 using SOM.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using System.Xml.Serialization;
 
 namespace BPMExtended.Main.Business
 {
@@ -535,6 +536,18 @@ namespace BPMExtended.Main.Business
             return paymentMethodsInfoItems;
 
         }
+        public static string SerializeToString(object obj)
+        {
+            XmlSerializer serializer = new XmlSerializer(obj.GetType());
+
+            using (StringWriter writer = new StringWriter())
+            {
+                serializer.Serialize(writer, obj);
+
+                return writer.ToString();
+            }
+        }
+
 
         public bool GetCollectionStatus(string invoiceId)
         {
