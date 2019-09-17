@@ -2,6 +2,62 @@
   "Scripts": [
     {
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "222481ab-751f-421c-a8bf-0104ba35b80f",
+              "Name": "Inspect (Record Analysis)",
+              "AssemblyID": null,
+              "CreatedTime": "2019-04-11T14:54:53.533",
+              "LastModifiedTime": "2019-04-11T14:54:53.533"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "AssemblyID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "ID = '222481ab-751f-421c-a8bf-0104ba35b80f'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "Analytic",
       "TableName": "DataAnalysisDefinition",
       "Settings": {
@@ -2126,7 +2182,6 @@
               "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities\",\"RuleDefinitionIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"e8168f19-04b2-4f43-94a7-b3f7e1eff54d\"]}}",
               "Type": "729be766-f3d7-4bcc-9678-cccf57bd4aad",
               "Rank": 14,
-              "IsDeleted": null,
               "CreatedTime": "2019-02-18T17:44:22.397",
               "LastModifiedTime": "2019-06-27T12:29:26.047"
             }
@@ -2154,7 +2209,6 @@
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"7c9bed54-7e1f-46d9-a738-f0588b8244ad\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Rank": null,
-              "IsDeleted": null,
               "CreatedTime": "2019-08-14T19:10:33.663",
               "LastModifiedTime": "2019-08-20T17:55:51.11"
             }
@@ -2182,7 +2236,6 @@
               "Settings": "{\"$type\":\"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities\",\"VRNotificationTypeId\":\"f9d2063b-9cf6-4bab-be7a-124d0c66fa99\"}]}}",
               "Type": "a196c40a-30b5-4297-b7b0-4344c41ce5a2",
               "Rank": 2,
-              "IsDeleted": null,
               "CreatedTime": "2019-02-15T14:48:01.617",
               "LastModifiedTime": "2019-06-27T12:29:26.21"
             }
@@ -2210,7 +2263,6 @@
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"9e7ecdc0-e19b-43d2-9edb-ddc7bbc0f764\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Rank": 13,
-              "IsDeleted": null,
               "CreatedTime": "2019-02-07T13:55:03.637",
               "LastModifiedTime": "2019-06-27T12:29:25.97"
             }
@@ -2238,7 +2290,6 @@
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"aac65f3f-c7de-4230-8bab-a5a1a83086fe\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Rank": 14,
-              "IsDeleted": null,
               "CreatedTime": "2019-02-13T16:40:01.683",
               "LastModifiedTime": "2019-06-27T12:29:25.97"
             }
@@ -2266,7 +2317,6 @@
               "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities\",\"RuleDefinitionIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"c87f19cc-7fc8-4592-b54c-d80c89dfc79c\"]}}",
               "Type": "729be766-f3d7-4bcc-9678-cccf57bd4aad",
               "Rank": null,
-              "IsDeleted": null,
               "CreatedTime": "2019-08-15T16:04:45.467",
               "LastModifiedTime": "2019-08-16T18:13:59.303"
             }
@@ -2294,7 +2344,6 @@
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"99411ea4-9d16-42ed-ae38-4b51b1b0864e\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Rank": 10,
-              "IsDeleted": null,
               "CreatedTime": "2019-02-18T10:38:51.6",
               "LastModifiedTime": "2019-06-27T12:29:25.963"
             }
@@ -2322,7 +2371,6 @@
               "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities\",\"RuleDefinitionIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"498feb6b-adbc-4141-a5b9-d319505aec94\",\"b9e2edef-abdb-4136-8c6c-20138129b664\",\"f106252f-5fca-448b-bbe7-07dda75ce0eb\"]}}",
               "Type": "729be766-f3d7-4bcc-9678-cccf57bd4aad",
               "Rank": 17,
-              "IsDeleted": null,
               "CreatedTime": "2019-02-18T17:51:54.387",
               "LastModifiedTime": "2019-06-27T12:29:26.05"
             }
@@ -2341,7 +2389,6 @@
               "Settings": "{\"$type\":\"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities\",\"TypeId\":\"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef\",\"AnalyticReportId\":\"1981e47f-80ac-429c-b835-567afe0262c3\"}",
               "Type": "82ff3b8a-0c39-4376-9602-b84a240fbf82",
               "Rank": null,
-              "IsDeleted": null,
               "CreatedTime": "2019-09-04T18:44:22.12",
               "LastModifiedTime": "2019-09-04T18:44:22.12"
             }
@@ -2434,13 +2481,6 @@
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "IsDeleted",
-            "IsIdentifier": false,
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "CreatedTime",
             "IsIdentifier": false,
             "IncludeInInsert": true,
@@ -2472,6 +2512,7 @@
           {
             "FieldValues": {
               "Id": "dff7cd89-3e39-455d-aada-1c368d0a5f46",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4Interconnection",
               "Title": "C4 Interconnection",
               "ModuleId": "d9666aea-9517-4dc5-a3d2-d074b2b99a1c",
@@ -2483,6 +2524,7 @@
           {
             "FieldValues": {
               "Id": "3859aa94-f59e-4e95-9132-1cdb41a5d5c2",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4InterconnectionIdentification",
               "Title": "C4 Interconnection Identification",
               "ModuleId": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
@@ -2494,6 +2536,7 @@
           {
             "FieldValues": {
               "Id": "f4ccb15d-2a23-43f3-b439-2f87350041f5",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4SaleExtraCharges",
               "Title": "C4 Sale Extra Charges",
               "ModuleId": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
@@ -2505,6 +2548,7 @@
           {
             "FieldValues": {
               "Id": "5971528e-be95-41f3-8f60-3f4f59c356a4",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4Command",
               "Title": "C4 Command",
               "ModuleId": "d9666aea-9517-4dc5-a3d2-d074b2b99a1c",
@@ -2516,6 +2560,7 @@
           {
             "FieldValues": {
               "Id": "75feee60-609d-4a13-89c6-87f9228407c6",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4SaleTariff",
               "Title": "C4 Sale Tariff",
               "ModuleId": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
@@ -2527,6 +2572,7 @@
           {
             "FieldValues": {
               "Id": "1948e039-9ba0-4ef6-8c5c-e35c94b11c24",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4Normalization",
               "Title": "C4 Normalization",
               "ModuleId": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
@@ -2538,6 +2584,7 @@
           {
             "FieldValues": {
               "Id": "77ad5d97-4db6-4538-b446-e7463e4f7c87",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4SaleRateTypes",
               "Title": "C4 Sale Rate Types",
               "ModuleId": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
@@ -2549,6 +2596,7 @@
           {
             "FieldValues": {
               "Id": "57f8daac-39f5-4288-8217-ed0b2c38c3e0",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4Switches",
               "Title": "C4 Switch",
               "ModuleId": "d9666aea-9517-4dc5-a3d2-d074b2b99a1c",
@@ -2560,6 +2608,7 @@
           {
             "FieldValues": {
               "Id": "dd5fdda0-3a11-433d-846b-fbc18d1a246d",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4Probes",
               "Title": "C4 Probe",
               "ModuleId": "d9666aea-9517-4dc5-a3d2-d074b2b99a1c",
@@ -2571,6 +2620,7 @@
           {
             "FieldValues": {
               "Id": "7b008239-70e3-451e-91a1-fd0ea26019c0",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4SaleRates",
               "Title": "C4 Sale Rates",
               "ModuleId": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
@@ -2586,6 +2636,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -2626,7 +2682,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "name like '%RecordAnalysis_%'",
+        "LastWhereCondition": "DevProjectID = '222481ab-751f-421c-a8bf-0104ba35b80f'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -2641,6 +2697,7 @@
           {
             "FieldValues": {
               "ID": "42bcef1e-af75-4091-bd27-09984abc8598",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4SwitchInterconnectionCustomObjectSettings",
               "Title": "C4 Switch Interconnection Settings",
               "ConfigType": "VR_GenericData_FieldCustomObjectTypeSettings",
@@ -2652,6 +2709,7 @@
           {
             "FieldValues": {
               "ID": "40ff1961-ec19-44ab-a738-0f32e54f5164",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4SwitchInterconnection",
               "Title": "C4 Switch Interconnection",
               "ConfigType": "VR_GenericData_GenericBEOnBeforeInsertHandlerSettings",
@@ -2663,6 +2721,7 @@
           {
             "FieldValues": {
               "ID": "1928e07b-54ab-4778-8f1e-21d56f62181e",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_BlockOriginationNumberAction",
               "Title": "Block Origination Number",
               "ConfigType": "VR_Notification_VRActionDefinition",
@@ -2674,6 +2733,7 @@
           {
             "FieldValues": {
               "ID": "ec22c4f8-bf0c-4bd0-be0a-34bf4210de3c",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4ProbeCustomObjectSettings",
               "Title": "C4 Probe Settings",
               "ConfigType": "VR_GenericData_FieldCustomObjectTypeSettings",
@@ -2685,6 +2745,7 @@
           {
             "FieldValues": {
               "ID": "44581097-a3a0-45b4-adae-559e51fbf01c",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_BlockInboundTrunkAction",
               "Title": "Block Inbound Trunk",
               "ConfigType": "VR_Notification_VRActionDefinition",
@@ -2696,6 +2757,7 @@
           {
             "FieldValues": {
               "ID": "3ebd6d0d-6018-4158-a7b0-79f3f8b79f7e",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_BlockInInterconnectionAction",
               "Title": "Block In Interconnection",
               "ConfigType": "VR_Notification_VRActionDefinition",
@@ -2707,6 +2769,7 @@
           {
             "FieldValues": {
               "ID": "c205294a-1b68-473d-8ec8-af364e1a52a8",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_BlockDestinationNumberAction",
               "Title": "Block Destination Number",
               "ConfigType": "VR_Notification_VRActionDefinition",
@@ -2718,6 +2781,7 @@
           {
             "FieldValues": {
               "ID": "d5d7b8a3-3004-46fc-a22d-b060b9bd40d2",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4Switch_Huawei",
               "Title": "Huawei",
               "ConfigType": "RecordAnalysis_C4SwitchSettings",
@@ -2729,6 +2793,7 @@
           {
             "FieldValues": {
               "ID": "58091c7a-b48f-4683-baa1-cc00d4518364",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "RecordAnalysis_C4SwitchCustomObjectSettings",
               "Title": "C4 Switch Settings",
               "ConfigType": "VR_GenericData_FieldCustomObjectTypeSettings",
@@ -2744,6 +2809,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -2784,7 +2855,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "name like '%RecordAnalysis_%'",
+        "LastWhereCondition": "DevProjectID = '222481ab-751f-421c-a8bf-0104ba35b80f'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -2799,6 +2870,7 @@
           {
             "FieldValues": {
               "ID": "e3936cc4-4471-4fa0-9e58-c4fd03a88a9a",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": {
                 "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
                 "IsOverridden": true,
@@ -2816,6 +2888,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -2844,7 +2922,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "name like '%C4 Traffic Analysis%'",
+        "LastWhereCondition": "DevProjectID = '222481ab-751f-421c-a8bf-0104ba35b80f'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -2873,7 +2951,8 @@
                 "Value": "{\"$type\":\"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities\",\"AdapterArgument\":{\"$type\":\"Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.DBAdapterArgument, Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments\",\"ConnectionString\":\"Server=192.168.110.185;Database=TestCDRs;User ID=Development;Password=dev!123\",\"Query\":\"SELECT #TopRows# [Id]\\n      ,[AttemptDateTime]      \\n      ,[AlertDateTime]\\n      ,[ConnectDateTime]\\n      ,[DisconnectDateTime]\\n      ,[DurationInSeconds]\\n      ,[IN_TRUNK]\\n      ,[OUT_TRUNK]     \\n      --,[IN_IP]\\n      --,[OUT_IP]     \\n      ,[CGPN]\\n      ,[CDPN]      \\n      ,[CAUSE_FROM_RELEASE_CODE]\\n      ,[CAUSE_TO_RELEASE_CODE]\\n      ,[IsRerouted]\\n      --,[OriginationPointCode]\\n      --,[DestinationPointCode]\\n  FROM [dbo].[C4CDR]\\nWhere  \\n(Id> ISNULL(@RangeStart, 0))\\nAND (Id<= ISNULL(@RangeEnd, 9999999999999999))\\nORDER BY Id\",\"IdentifierColumnName\":\"Id\",\"NumberOfParallelReader\":3,\"NumberOffSet\":100000,\"MaxParallelRuntimeInstances\":3,\"CommandTimeoutInSeconds\":0},\"MapperCustomCode\":\"LogVerbose(\\\"Started\\\");\\n\\n            List<dynamic> cdrs = new List<dynamic>();\\n            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();\\n            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(\\\"Record Analysis C4 CDR\\\");\\n\\n            int maximumBatchSize = 50000;\\n            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType(\\\"Record Analysis C4 CDR\\\");\\n\\n            var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));\\n\\n            IDataReader reader = importedData.Reader;\\n\\n            int rowCount = 0;\\n            while (reader.Read())\\n            {\\n                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;\\n                cdr.SwitchId = 8;\\n                cdr.AttemptDateTime = (DateTime)reader[\\\"AttemptDateTime\\\"];\\n                cdr.AlertDateTime = Utils.GetReaderValue<DateTime?>(reader, \\\"AlertDateTime\\\");\\n                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, \\\"ConnectDateTime\\\");\\n                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, \\\"DisconnectDateTime\\\");\\n                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, \\\"DurationInSeconds\\\");\\n                cdr.InTrunk = reader[\\\"IN_TRUNK\\\"] as string;\\n                cdr.OutTrunk = reader[\\\"OUT_TRUNK\\\"] as string;\\n                //cdr.InTrunk = reader[\\\"IN_IP\\\"] as string;\\n                //cdr.OutTrunk = reader[\\\"OUT_IP\\\"] as string;\\n                cdr.CGPN = reader[\\\"CGPN\\\"] as string;\\n                cdr.CDPN = reader[\\\"CDPN\\\"] as string;\\n                cdr.IsRerouted = reader[\\\"IsRerouted\\\"] != DBNull.Value ? ((reader[\\\"IsRerouted\\\"] as string) == \\\"Y\\\") : false;\\n                cdr.CauseFromReleaseCode = reader[\\\"CAUSE_FROM_RELEASE_CODE\\\"] as string;\\n                cdr.CauseToReleaseCode = reader[\\\"CAUSE_TO_RELEASE_CODE\\\"] as string;\\n                //cdr.OriginationPointCode = reader[\\\"OriginationPointCode\\\"] as string;\\n                //cdr.DestinationPointCode = reader[\\\"DestinationPointCode\\\"] as string;\\n\\n                cdrs.Add(cdr);\\n                importedData.LastImportedId = reader[\\\"Id\\\"];\\n\\n                rowCount++;\\n                if (rowCount == maximumBatchSize)\\n                    break;\\n            }\\n\\n            if (cdrs.Count > 0)\\n            {\\n                long startingId;\\n                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);\\n                long currentCDRId = startingId;\\n\\n                foreach (var cdr in cdrs)\\n                {\\n                    cdr.Id = currentCDRId;\\n                    currentCDRId++;\\n                }\\n\\n                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, \\\"#RECORDSCOUNT# of CDRs\\\", \\\"Record Analysis C4 CDR\\\");\\n                mappedBatches.Add(\\\"Distribute CDRs Stage\\\", batch);\\n            }\\n            else\\n            {\\n                importedData.IsEmpty = true;\\n            }\\n\\n            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\\n            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;\\n            LogVerbose(\\\"Finished\\\");\\n            return result;\",\"ExecutionFlowId\":\"719eef03-7032-4c15-878d-05bd967f6582\"}"
               },
               "LastModifiedTime": "2019-02-19T14:26:47.557",
-              "CreatedTime": "2019-02-18T20:52:12.067"
+              "CreatedTime": "2019-02-18T20:52:12.067",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f"
             }
           }
         ],
@@ -2883,6 +2962,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -2929,7 +3014,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Name like '%C4%'",
+        "LastWhereCondition": "DevProjectID = '222481ab-751f-421c-a8bf-0104ba35b80f'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -2944,6 +3029,7 @@
           {
             "FieldValues": {
               "Id": "15fd611e-6517-48cb-b8aa-8a2fed5cf1f4",
+              "DevProjectID": "222481ab-751f-421c-a8bf-0104ba35b80f",
               "Name": "Data Source Task",
               "IsEnabled": false,
               "TaskType": 0,
@@ -2962,6 +3048,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -3020,7 +3112,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "ID = '15fd611e-6517-48cb-b8aa-8a2fed5cf1f4'",
+        "LastWhereCondition": "DevProjectID = '222481ab-751f-421c-a8bf-0104ba35b80f'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
