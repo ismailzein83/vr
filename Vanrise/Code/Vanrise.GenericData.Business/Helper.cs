@@ -165,6 +165,9 @@ namespace Vanrise.GenericData.Business
                 var fieldValue = kvp.Key;
                 var description = kvp.Value;
 
+                if (fieldValue.GetType() == typeof(Guid))
+                    fieldValue = fieldValue.ToString();
+
                 List<ISetRecordDescription> recordGroupedValues = recordsByValue.GetRecord(fieldValue);
                 recordGroupedValues.ThrowIfNull("recordGroupedValues", fieldValue);
 
