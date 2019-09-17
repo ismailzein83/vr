@@ -39,7 +39,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         CarrierCompanyBillingContact = 22,
         OriginalAmount = 23,
         CompanyFax = 24,
-        CompanyProfileName = 25
+        CompanyProfileName = 25,
+        Note = 26
     }
 
     public enum CarrierInvoiceType { Customer = 1, Supplier = 2, Settlement = 3 }
@@ -182,6 +183,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             if (carrierProfile.Settings.TaxSetting != null && carrierProfile.Settings.TaxSetting.VATId != null)
                                 AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerVatID, carrierProfile.Settings.TaxSetting.VATId, true);
                         }
+
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Note,context.Invoice.Note,true);
 
                         return rdlcReportParameters;
 
