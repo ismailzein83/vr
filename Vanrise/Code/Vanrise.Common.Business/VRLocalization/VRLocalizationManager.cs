@@ -154,7 +154,7 @@ namespace Vanrise.Common.Business
 						Resource = resource,
 						TranslationsByLanguageId = translationsByLanguageId
 					};
-					resourcesWithTranslations.Add(resource.ResourceKey, resourceWithTranslation);
+					//resourcesWithTranslations.Add(resource.ResourceKey, resourceWithTranslation);
 					resourcesWithTranslations.Add($"{s_moduleManager.GetVRModuleName(resource.ModuleId)}.{resource.ResourceKey}", resourceWithTranslation);
 				}
 			}
