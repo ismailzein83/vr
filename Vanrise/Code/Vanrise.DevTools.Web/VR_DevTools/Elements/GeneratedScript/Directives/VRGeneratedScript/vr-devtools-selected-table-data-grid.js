@@ -103,6 +103,7 @@
                 };
 
                 function generateTargetRow(sourceRow, selectedTableRow) {
+
                     if (selectedTableRow == undefined)
                         selectedTableRow = {
                             Entity: {
@@ -116,14 +117,26 @@
                         if ((selectedTableRow.Entity.FieldValues[columnName] == undefined || selectedTableRow.Entity.FieldValues[columnName].$type == undefined) ||
                             (selectedTableRow.Entity.FieldValues[columnName] != undefined && selectedTableRow.Entity.FieldValues[columnName].$type != undefined && selectedTableRow.Entity.FieldValues[columnName].$type.includes("GeneratedScriptOverriddenData") && includeOverriddenValues) ||
                             (selectedTableRow.Entity.FieldValues[columnName] != undefined && selectedTableRow.Entity.FieldValues[columnName].$type != undefined && selectedTableRow.Entity.FieldValues[columnName].$type.includes("GeneratedScriptVariableData") && includeVariables)) {
-
                             selectedTableRow.Entity.FieldValues[columnName] = sourceRow.FieldValues[columnName];
                             selectedTableRow.DescriptionEntity[columnName] = {
                                 value: sourceRow.FieldValues[columnName]
                             };
                         }
                     }
-                    return selectedTableRow;
+                    var finalRow = {
+                        Entity: {
+                            FieldValues: {}
+                        },
+                        DescriptionEntity: {}
+                    };
+
+                    for (var k = 0; k < columns.length; k++) {
+                        var columnName = columns[k];
+
+                        finalRow.Entity.FieldValues[columnName] = selectedTableRow.Entity.FieldValues[columnName];
+                        finalRow.DescriptionEntity[columnName] = selectedTableRow.DescriptionEntity[columnName];
+                    } 
+                    return finalRow;
                 }
               
                 function getDirectiveApi() {

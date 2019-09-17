@@ -113,7 +113,7 @@ namespace Vanrise.DevTools.Business
                     { "ParserType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ParserType",Schema="dataparser",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataStore",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataStore",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataRecordType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataRecordType",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "DataRecordStorage",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataRecordStorage",Schema="genericdata",IdColumnName="ID",WhereCondition=string.Format("rec.DevProjectID = '{0}'",DevProjectId),JoinCondition=GetJoinCondition("genericdata","DataRecordType","DataRecordTypeID")}},
+                    { "DataRecordStorage",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataRecordStorage",Schema="genericdata",IdColumnName="ID",WhereCondition=string.Format("rec.DevProjectID = '{0}'",DevProjectId),JoinCondition=GetJoinCondition("genericdata","DataRecordType","DataRecordTypeID"),ExcludedColumns=new List<string>{"State"} } },
                     { "DataTransformationDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataTransformationDefinition",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "SummaryTransformationDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="SummaryTransformationDefinition",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "GenericRuleDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="GenericRuleDefinition",Schema="genericdata",IdColumnName="ID",WhereCondition=WhereCondition}},
@@ -167,17 +167,21 @@ namespace Vanrise.DevTools.Business
             {
                 if (settings.ConnectionString != null)
                     templateDataManager.Connection_String = settings.ConnectionString;
+
                 else if (settings.ConnectionStringAppSettingName != null)
                     templateDataManager.Connection_String = settings.ConnectionStringAppSettingName;
+
                 else
                     templateDataManager.Connection_String = settings.ConnectionStringName;
             }
+
             List<VRDevProject> allProjects = templateDataManager.GetDevProjects();
 
             Func<VRDevProject, bool> filterFunc = (project) =>
             {
                 return true;
             };
+
             return allProjects.MapRecords(VRDevProjectInfoMapper, filterFunc);
         }
         public List<VRGeneratedScriptTable> GetDevProjectTableNames()
