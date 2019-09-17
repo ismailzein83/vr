@@ -67,6 +67,7 @@
     <Compile Include="InvoiceComparisonSMSResult.cs" />
     <Compile Include="InvoiceComparisonSMSInput.cs" />
     <Compile Include="InvoiceComparisonVRTempPayload.cs" />
+    <Compile Include="InvoiceDealItemDetailsContext.cs" />
     <Compile Include="RDLCCustomerSMSInvoiceItemDetails.cs" />
     <Compile Include="CustomerSMSInvoiceItemDetails.cs" />
     <Compile Include="InvoiceBySaleCurrencyItemDetails.cs" />

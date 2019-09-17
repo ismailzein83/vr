@@ -34,7 +34,7 @@ namespace TOne.WhS.Deal.Business
 
                 if (volCommitmentDealSettings.DealType != dealType)
                     continue;
-                if (volCommitmentDealSettings.Status != DealStatus.Active)
+                if (volCommitmentDealSettings.Status == DealStatus.Draft)
                     continue;
                 if (!volCommitmentDealSettings.RealEED.HasValue)
                     continue;
@@ -77,7 +77,7 @@ namespace TOne.WhS.Deal.Business
             VRActionLogger.Current.LogGetFilteredAction(VolCommitmentDealLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDefinitionDetailMapper), handler);
         }
-
+        
         public InsertDealOperationOutput<RecurredDealItem> RecurDeal(int dealId, int recurringNumber, RecurringType recurringType)
         {
             InsertDealOperationOutput<RecurredDealItem> insertOperationOutput = new InsertDealOperationOutput<RecurredDealItem>

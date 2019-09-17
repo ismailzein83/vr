@@ -27,6 +27,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         InvoiceGenerationManager _invoiceGenerationManager = new InvoiceGenerationManager();
         CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
+        #region Public Methods
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
             var financialAccount = _financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
@@ -319,6 +320,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
         }
 
+        #endregion
+
+        #region Private Methods
         private void AddAdjustmentToSupplierCurrency(List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceByCostCurrencyItemDetails, int currency, DateTime fromDate, DateTime toDate, decimal value)
         {
             string month = Vanrise.Common.Utilities.GetPeriod(fromDate, toDate, "MMMM - yyyy");
@@ -825,113 +829,187 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
         }
 
-        private List<SupplierInvoiceDealItemDetails> GetDealItemSetNames(List<int> carrierAccountsIds, DateTime fromDateBeforeShift, DateTime fromDate, DateTime toDate, TimeSpan? offsetValue, string dimensionName, int financialAccountId, DateTime issueDate, int currencyId, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private DateTime? GetDate(DateTime? firstDate, DateTime? secondDate, Func<DateTime, DateTime, DateTime> getDate)
         {
-            VolCommitmentDealManager volCommitmentDealManager = new VolCommitmentDealManager();
-            DateTime? minBED = null;
-            DateTime? maxEED = null;
-            var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(VolCommitmentDealType.Buy, carrierAccountsIds, fromDate, toDate.Date.AddDays(1), out minBED, out maxEED);
+            if (!firstDate.HasValue)
+                return secondDate;
 
-            if (effectiveVolCommitmentDeals != null && effectiveVolCommitmentDeals.Count() > 0 && minBED.HasValue && maxEED.HasValue)
+            if (!secondDate.HasValue)
+                return firstDate;
+
+            return getDate(firstDate.Value, secondDate.Value);
+        }
+
+        private List<SupplierInvoiceDealItemDetails> GetDealItemSetNames(List<int> carrierAccountIds, DateTime fromDateBeforeShift, DateTime fromDate, DateTime toDate, TimeSpan? offsetValue, string dimensionName, int financialAccountId, DateTime issueDate, int currencyId, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        {
+            DateTime? effectiveVolCommitmentDealsMinBED = null;
+            DateTime? effectiveVolCommitmentDealsMaxEED = null;
+
+            var effectiveVolCommitmentDeals = new VolCommitmentDealManager().GetEffectiveVolCommitmentDeals(VolCommitmentDealType.Buy, carrierAccountIds, fromDate, toDate.Date.AddDays(1), out effectiveVolCommitmentDealsMinBED, out effectiveVolCommitmentDealsMaxEED);
+
+            DateTime? effectiveSwapDealsMinBED = null;
+            DateTime? effectiveSwapDealsMaxEED = null;
+            var effectiveSwapDeals = new SwapDealManager().GetEffectiveSwapDeals(carrierAccountIds, fromDate, toDate.Date.AddDays(1), out effectiveSwapDealsMinBED, out effectiveSwapDealsMaxEED);
+
+            bool hasEffectiveDeals = (effectiveVolCommitmentDeals != null && effectiveVolCommitmentDeals.Count > 0) || (effectiveSwapDeals != null && effectiveSwapDeals.Count > 0);
+
+            DateTime? minBED = GetDate(effectiveVolCommitmentDealsMinBED, effectiveSwapDealsMinBED, Utilities.Min);
+            DateTime? maxEED = GetDate(effectiveVolCommitmentDealsMaxEED, effectiveSwapDealsMaxEED, Utilities.Max);
+
+            if (!hasEffectiveDeals || !minBED.HasValue || !maxEED.HasValue)
+                return null;
+
+            List<string> dealMeasures = new List<string> { "CostNet_OrigCurr", "NumberOfCalls", "CostDuration", "CostNetNotNULL" };
+            List<string> dealDimensions = new List<string> { "CostDealZoneGroupNb", "CostDealTierNb", "CostDeal", "CostDealRateTierNb", "CostCurrency" };
+            var allDealItemSetNames = _invoiceGenerationManager.GetInvoiceVoiceMappedRecords(dealDimensions, dealMeasures, dimensionName, financialAccountId, minBED.Value, maxEED.Value, null, offsetValue, (analyticRecord) =>
             {
-                List<string> dealMeasures = new List<string> { "CostNet_OrigCurr", "NumberOfCalls", "CostDuration", "CostNetNotNULL" };
-                List<string> dealDimensions = new List<string> { "CostDealZoneGroupNb", "CostDealTierNb", "CostDeal", "CostDealRateTierNb", "CostCurrency" };
-                var allDealItemSetNames = _invoiceGenerationManager.GetInvoiceVoiceMappedRecords(dealDimensions, dealMeasures, dimensionName, financialAccountId, minBED.Value, maxEED.Value, null, offsetValue, (analyticRecord) =>
-                {
-                    return DealItemSetNameMapper(analyticRecord);
-                });
+                return DealItemSetNameMapper(analyticRecord);
+            });
 
-                if (allDealItemSetNames == null)
-                    allDealItemSetNames = new List<SupplierInvoiceDealItemDetails>();
+            if (allDealItemSetNames == null)
+                allDealItemSetNames = new List<SupplierInvoiceDealItemDetails>();
 
-                var dealItemSetNames = new List<SupplierInvoiceDealItemDetails>();
-                foreach (var effectiveDeal in effectiveVolCommitmentDeals)
+            var dealItemSetNames = new List<SupplierInvoiceDealItemDetails>();
+
+            if (effectiveVolCommitmentDeals != null && effectiveVolCommitmentDeals.Count > 0)
+            {
+                foreach (var effectiveVolCommitmentDeal in effectiveVolCommitmentDeals)
                 {
-                    var effectiveDealSettings = effectiveDeal.Value;
-                    if (effectiveDealSettings.Items != null && effectiveDealSettings.Items.Count > 0)
+                    var effectiveVolCommitmentDealSettings = effectiveVolCommitmentDeal.Value;
+                    if (effectiveVolCommitmentDealSettings.Items == null || effectiveVolCommitmentDealSettings.Items.Count == 0)
+                        continue;
+
+                    for (int i = 0; i < effectiveVolCommitmentDealSettings.Items.Count; i++)
                     {
-                        for (int i = 0; i < effectiveDealSettings.Items.Count; i++)
+                        var dealGroup = effectiveVolCommitmentDealSettings.Items[i];
+                        if (dealGroup.Tiers == null || dealGroup.Tiers.Count == 0)
+                            continue;
+
+                        var tier = dealGroup.Tiers.First();
+                        if (!tier.UpToVolume.HasValue || tier.EvaluatedRate == null)
+                            continue;
+
+                        var invoiceDealItemDetailsContext = new InvoiceDealItemDetailsContext
                         {
-                            var dealGroup = effectiveDealSettings.Items[i];
-                            if (dealGroup.Tiers != null && dealGroup.Tiers.Count > 0)
-                            {
-                                var tier = dealGroup.Tiers.First();
-                                var dealItemSet = allDealItemSetNames.FindRecord(x => x.CostDeal == effectiveDeal.Key && dealGroup.ZoneGroupNumber == x.CostDealZoneGroupNb);
-                                if (tier.UpToVolume.HasValue && tier.EvaluatedRate != null)
-                                {
-                                    var fixedSupplierRateEvaluator = tier.EvaluatedRate.CastWithValidate<FixedSupplierRateEvaluator>("fixedSupplierRateEvaluator");
-                                    var expectedAmount = tier.UpToVolume.Value * fixedSupplierRateEvaluator.Rate;
-                                    if (dealItemSet != null)
-                                    {
-                                        if (expectedAmount > dealItemSet.OriginalAmount && effectiveDealSettings.CurrencyId == dealItemSet.CurrencyId)
-                                        {
-                                            var originalAmount = expectedAmount - dealItemSet.OriginalAmount;
-                                            decimal originalAmountAfterTax = originalAmount;
-                                            if (taxItemDetails != null)
-                                            {
-                                                foreach (var taxItemDetail in taxItemDetails)
-                                                {
-                                                    originalAmountAfterTax += ((originalAmount * Convert.ToDecimal(taxItemDetail.Value)) / 100);
-                                                }
-                                            }
+                            AllSupplierDealItemSetNames = allDealItemSetNames,
+                            EffectiveDealId = effectiveVolCommitmentDeal.Key,
+                            ZoneGroupName = dealGroup.Name,
+                            ZoneGroupNumber = dealGroup.ZoneGroupNumber,
+                            Rate = tier.EvaluatedRate.CastWithValidate<FixedSupplierRateEvaluator>("FixedSupplierRateEvaluator").Rate,
+                            Volume = tier.UpToVolume.Value,
+                            DealCurrencyId = effectiveVolCommitmentDealSettings.CurrencyId,
+                            BeginDate = effectiveVolCommitmentDealSettings.RealBED,
+                            EndDate = effectiveVolCommitmentDealSettings.RealEED,
+                            FromDateBeforeShift = fromDateBeforeShift,
+                            IssueDate = issueDate,
+                            CurrencyId = currencyId,
+                            TaxItemDetails = taxItemDetails
+                        };
 
-                                            dealItemSetNames.Add(new SupplierInvoiceDealItemDetails()
-                                            {
-                                                OriginalAmount = originalAmount,
-                                                Duration = tier.UpToVolume.Value - (dealItemSet.Duration / 60),
-                                                NumberOfCalls = dealItemSet.NumberOfCalls,
-                                                CostDeal = dealItemSet.CostDeal,
-                                                CostDealRateTierNb = dealItemSet.CostDealRateTierNb,
-                                                CostDealTierNb = dealItemSet.CostDealTierNb,
-                                                CostDealZoneGroupName = dealGroup.Name,
-                                                CostDealZoneGroupNb = dealItemSet.CostDealZoneGroupNb,
-                                                CurrencyId = dealItemSet.CurrencyId,
-                                                Amount = _currencyExchangeRateManager.ConvertValueToCurrency(originalAmount, dealItemSet.CurrencyId, currencyId, issueDate),
-                                                ToDate = effectiveDealSettings.EEDToStore.Value,
-                                                FromDate = fromDateBeforeShift >= effectiveDealSettings.BeginDate ? fromDateBeforeShift : effectiveDealSettings.BeginDate,
-                                                OriginalAmountAfterTax = originalAmountAfterTax,
-                                                CostRate = fixedSupplierRateEvaluator.Rate
-                                            });
-                                        }
-                                    }
-                                    else
-                                    {
-                                        decimal originalAmountAfterTax = expectedAmount;
-                                        if (taxItemDetails != null)
-                                        {
-                                            foreach (var taxItemDetail in taxItemDetails)
-                                            {
-                                                originalAmountAfterTax += ((expectedAmount * Convert.ToDecimal(taxItemDetail.Value)) / 100);
-                                            }
-                                        }
-
-                                        dealItemSetNames.Add(new SupplierInvoiceDealItemDetails()
-                                        {
-                                            OriginalAmount = expectedAmount,
-                                            Duration = tier.UpToVolume.Value,
-                                            CostDeal = effectiveDeal.Key,
-                                            CostDealRateTierNb = 1,
-                                            CostDealTierNb = 1,
-                                            CostDealZoneGroupNb = dealGroup.ZoneGroupNumber,
-                                            CostDealZoneGroupName = dealGroup.Name,
-                                            CurrencyId = effectiveDealSettings.CurrencyId,
-                                            Amount = _currencyExchangeRateManager.ConvertValueToCurrency(expectedAmount, effectiveDealSettings.CurrencyId, currencyId, issueDate),
-                                            ToDate = effectiveDealSettings.EEDToStore.Value,
-                                            FromDate = fromDateBeforeShift >= effectiveDealSettings.BeginDate ? fromDateBeforeShift : effectiveDealSettings.BeginDate,
-                                            OriginalAmountAfterTax = originalAmountAfterTax,
-                                            CostRate = fixedSupplierRateEvaluator.Rate
-                                        });
-                                    }
-                                }
-                            }
-                        }
+                        dealItemSetNames.AddRange(GetSupplierInvoiceDealItemDetails(invoiceDealItemDetailsContext));
                     }
                 }
-
-                return dealItemSetNames;
             }
 
-            return null;
+            if (effectiveSwapDeals != null && effectiveSwapDeals.Count > 0)
+            {
+                foreach (var effectiveSwapDeal in effectiveSwapDeals)
+                {
+                    var effectiveSwapDealSettings = effectiveSwapDeal.Value;
+                    if (effectiveSwapDealSettings.Outbounds == null || effectiveSwapDealSettings.Outbounds.Count == 0)
+                        continue;
+
+                    for (int i = 0; i < effectiveSwapDealSettings.Outbounds.Count; i++)
+                    {
+                        var dealGroup = effectiveSwapDealSettings.Outbounds[i];
+
+                        var invoiceDealItemDetailsContext = new InvoiceDealItemDetailsContext
+                        {
+                            AllSupplierDealItemSetNames = allDealItemSetNames,
+                            EffectiveDealId = effectiveSwapDeal.Key,
+                            ZoneGroupName = dealGroup.Name,
+                            ZoneGroupNumber = dealGroup.ZoneGroupNumber,
+                            Rate = dealGroup.Rate,
+                            Volume = dealGroup.Volume,
+                            DealCurrencyId = effectiveSwapDealSettings.CurrencyId,
+                            BeginDate = effectiveSwapDealSettings.RealBED,
+                            EndDate = effectiveSwapDealSettings.RealEED,
+                            FromDateBeforeShift = fromDateBeforeShift,
+                            IssueDate = issueDate,
+                            CurrencyId = currencyId,
+                            TaxItemDetails = taxItemDetails
+                        };
+
+                        dealItemSetNames.AddRange(GetSupplierInvoiceDealItemDetails(invoiceDealItemDetailsContext));
+                    }
+                }
+            }
+
+            return dealItemSetNames;
+        }
+
+        private List<SupplierInvoiceDealItemDetails> GetSupplierInvoiceDealItemDetails(InvoiceDealItemDetailsContext getInvoiceDealItemDetailsContext)
+        {
+            var dealItemSetNames = new List<SupplierInvoiceDealItemDetails>();
+            var dealItemSet = getInvoiceDealItemDetailsContext.AllSupplierDealItemSetNames.FindRecord(x => x.CostDeal == getInvoiceDealItemDetailsContext.EffectiveDealId && getInvoiceDealItemDetailsContext.ZoneGroupNumber == x.CostDealZoneGroupNb);
+
+            var expectedAmount = getInvoiceDealItemDetailsContext.Volume * getInvoiceDealItemDetailsContext.Rate;
+            if (dealItemSet != null)
+            {
+                if (expectedAmount <= dealItemSet.OriginalAmount || getInvoiceDealItemDetailsContext.DealCurrencyId != dealItemSet.CurrencyId)
+                    return null;
+
+                var originalAmount = expectedAmount - dealItemSet.OriginalAmount;
+                decimal originalAmountAfterTax = originalAmount;
+                if (getInvoiceDealItemDetailsContext.TaxItemDetails != null)
+                {
+                    foreach (var taxItemDetail in getInvoiceDealItemDetailsContext.TaxItemDetails)
+                        originalAmountAfterTax += ((originalAmount * Convert.ToDecimal(taxItemDetail.Value)) / 100);
+                }
+                dealItemSetNames.Add(new SupplierInvoiceDealItemDetails()
+                {
+                    OriginalAmount = originalAmount,
+                    Duration = getInvoiceDealItemDetailsContext.Volume - (dealItemSet.Duration / 60),
+                    NumberOfCalls = dealItemSet.NumberOfCalls,
+                    CostDeal = dealItemSet.CostDeal,
+                    CostDealRateTierNb = dealItemSet.CostDealRateTierNb,
+                    CostDealTierNb = dealItemSet.CostDealTierNb,
+                    CostDealZoneGroupName = getInvoiceDealItemDetailsContext.ZoneGroupName,
+                    CostDealZoneGroupNb = dealItemSet.CostDealZoneGroupNb,
+                    CurrencyId = dealItemSet.CurrencyId,
+                    Amount = _currencyExchangeRateManager.ConvertValueToCurrency(originalAmount, dealItemSet.CurrencyId, getInvoiceDealItemDetailsContext.CurrencyId, getInvoiceDealItemDetailsContext.IssueDate                    ),
+                    ToDate = getInvoiceDealItemDetailsContext.EndDate.Value,
+                    FromDate = getInvoiceDealItemDetailsContext.FromDateBeforeShift >= getInvoiceDealItemDetailsContext.BeginDate ? getInvoiceDealItemDetailsContext.FromDateBeforeShift : getInvoiceDealItemDetailsContext.BeginDate,
+                    OriginalAmountAfterTax = originalAmountAfterTax,
+                    CostRate = getInvoiceDealItemDetailsContext.Rate
+                });
+            }
+            else
+            {
+                decimal originalAmountAfterTax = expectedAmount;
+                if (getInvoiceDealItemDetailsContext.TaxItemDetails != null)
+                {
+                    foreach (var taxItemDetail in getInvoiceDealItemDetailsContext.TaxItemDetails)
+                        originalAmountAfterTax += ((expectedAmount * Convert.ToDecimal(taxItemDetail.Value)) / 100);
+                }
+                dealItemSetNames.Add(new SupplierInvoiceDealItemDetails()
+                {
+                    OriginalAmount = expectedAmount,
+                    Duration = getInvoiceDealItemDetailsContext.Volume,
+                    CostDeal = getInvoiceDealItemDetailsContext.EffectiveDealId,
+                    CostDealRateTierNb = 1,
+                    CostDealTierNb = 1,
+                    CostDealZoneGroupNb = getInvoiceDealItemDetailsContext.ZoneGroupNumber,
+                    CostDealZoneGroupName = getInvoiceDealItemDetailsContext.ZoneGroupName,
+                    CurrencyId = getInvoiceDealItemDetailsContext.DealCurrencyId,
+                    Amount = _currencyExchangeRateManager.ConvertValueToCurrency(expectedAmount, getInvoiceDealItemDetailsContext.DealCurrencyId, getInvoiceDealItemDetailsContext.CurrencyId, getInvoiceDealItemDetailsContext.IssueDate),
+                    ToDate = getInvoiceDealItemDetailsContext.EndDate.Value,
+                    FromDate = getInvoiceDealItemDetailsContext.FromDateBeforeShift >= getInvoiceDealItemDetailsContext.BeginDate ? getInvoiceDealItemDetailsContext.FromDateBeforeShift : getInvoiceDealItemDetailsContext.BeginDate,
+                    OriginalAmountAfterTax = originalAmountAfterTax,
+                    CostRate = getInvoiceDealItemDetailsContext.Rate
+                });
+            }
+            return dealItemSetNames;
         }
 
         private SupplierInvoiceDealItemDetails DealItemSetNameMapper(AnalyticRecord analyticRecord)
@@ -955,5 +1033,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return null;
         }
+        #endregion
     }
 }

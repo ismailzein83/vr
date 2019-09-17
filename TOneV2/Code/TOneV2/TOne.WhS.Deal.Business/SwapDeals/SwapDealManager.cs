@@ -19,6 +19,44 @@ namespace TOne.WhS.Deal.Business
     {
         #region Public Methods
 
+        public Dictionary<int, SwapDealSettings> GetEffectiveSwapDeals(List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, out DateTime? minBED, out DateTime? maxEED)
+        {
+            var cachedSwapDeals = new SwapDealManager().GetCachedSwapDeals();
+            minBED = null;
+            maxEED = null;
+            if (cachedSwapDeals == null || cachedSwapDeals.Count() == 0 || carrierAccountIds == null || carrierAccountIds.Count == 0)
+                return null;
+
+            Dictionary<int, SwapDealSettings> effectiveSwapDeals = new Dictionary<int, SwapDealSettings>();
+
+            foreach (var deal in cachedSwapDeals)
+            {
+                if (deal.Settings == null)
+                    continue;
+
+                var swapDealSettings = deal.Settings.CastWithValidate<SwapDealSettings>("deal.Settings");
+
+                if (swapDealSettings.Status == DealStatus.Draft)
+                    continue;
+                if (!swapDealSettings.RealEED.HasValue)
+                    continue;
+                if (!carrierAccountIds.Contains(swapDealSettings.CarrierAccountId))
+                    continue;
+                if (!swapDealSettings.SendOrPay)
+                    continue;
+
+                if (swapDealSettings.RealEED.Value <= toDate && swapDealSettings.RealEED.Value >= fromDate)
+                {
+                    effectiveSwapDeals.Add(deal.DealId, swapDealSettings);
+                    if (!minBED.HasValue || swapDealSettings.RealBED < minBED)
+                        minBED = swapDealSettings.RealBED;
+                    if (!maxEED.HasValue || swapDealSettings.RealEED.Value > maxEED)
+                        maxEED = swapDealSettings.RealEED.Value;
+                }
+            }
+            return effectiveSwapDeals;
+        }
+
         public IEnumerable<DealDefinition> GetSwapDealsEffectiveAfterDate(DateTime effectiveAfter)
         {
             List<DealDefinition> dealDefinitions = new List<DealDefinition>();

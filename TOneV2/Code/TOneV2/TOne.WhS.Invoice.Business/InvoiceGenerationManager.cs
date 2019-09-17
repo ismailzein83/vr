@@ -201,16 +201,15 @@ namespace TOne.WhS.Invoice.Business
 
         private List<T> PrepareItemSetNames<T>(IEnumerable<AnalyticRecord> analyticRecords, Func<AnalyticRecord, T> mapper) where T : class
         {
-            List<T> itemSetNames = null;
-            if (analyticRecords != null)
+            if (analyticRecords == null)
+                return null;
+
+            List<T> itemSetNames = new List<T>();
+            foreach (var analyticRecord in analyticRecords)
             {
-                itemSetNames = new List<T>();
-                foreach (var analyticRecord in analyticRecords)
-                {
-                    var mappedItem = mapper(analyticRecord);
-                    if (mappedItem != null)
-                        itemSetNames.Add(mapper(analyticRecord));
-                }
+                var mappedItem = mapper(analyticRecord);
+                if (mappedItem != null)
+                    itemSetNames.Add(mappedItem);
             }
             return itemSetNames;
         }
