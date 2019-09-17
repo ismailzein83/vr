@@ -166,4 +166,4 @@ Retail_RetailBilling_common.PostDeployment.sql
 Retail_RetailBilling.PostDeployment.json
 
 DevTools
-DevTools_PostScriptGenerator.PostDeployment.json
+DevTools.json
