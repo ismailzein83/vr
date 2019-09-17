@@ -497,7 +497,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultCustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultCustomerInvoiceReport3.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultSupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultSupplierInvoiceReport.rdlc" />
   </ItemGroup>
