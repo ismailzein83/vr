@@ -99,10 +99,10 @@ CarrierPortal.SupplierPricelist.PostDeployment.sql
 
 CP_WHS
 CarrierPortal.TOnePortal.PostDeployment.sql
-Demo_MarketView.PostDeployment.json
+MarketView.json
 
 Mediation
-Mediation.PostDeployment.json
+Mediation.json
 
 Xbooster
 Xbooster.PostDeployment.sql

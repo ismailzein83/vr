@@ -66,7 +66,7 @@
           {
             "FieldValues": {
               "ID": "f1d57186-49ce-4bf9-b4b6-46ddce93e9ec",
-              "ModuleName": "Mediation",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
               "Name": "Mediation_MediationOutputHandler_OtherMediation",
               "Title": "Other Mediation Handler",
               "ConfigType": "Mediation_MediationOutputHandler",
@@ -78,7 +78,7 @@
           {
             "FieldValues": {
               "ID": "14f0a218-77b5-4417-ab80-6a9386a7bb49",
-              "ModuleName": "Mediation",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
               "Name": "Mediation_MediationOutputHandler_StoreRecords",
               "Title": "Store Records Handler",
               "ConfigType": "Mediation_MediationOutputHandler",
@@ -96,7 +96,7 @@
             "IsIdentifier": true
           },
           {
-            "ColumnName": "ModuleName",
+            "ColumnName": "DevProjectID",
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": false
@@ -140,7 +140,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "[ModuleName]='Mediation'",
+        "LastWhereCondition": "DevProjectID = 'aa3beb6b-6a5c-4ab3-8831-a6686bb81406'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -154,6 +154,7 @@
         "DataRows": [
           {
             "FieldValues": {
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
               "Name": "Mediation_Generic/MediationDefinition/GetFilteredMediationDefinitions",
               "RequiredPermissions": "VR_SystemConfiguration: View",
               "LastModifiedTime": null
@@ -161,6 +162,7 @@
           },
           {
             "FieldValues": {
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
               "Name": "Mediation_Generic/MediationDefinition/UpdateMediationDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: Edit",
               "LastModifiedTime": null
@@ -168,6 +170,7 @@
           },
           {
             "FieldValues": {
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
               "Name": "Mediation_Generic/MediationDefinition/AddMediationDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: Add",
               "LastModifiedTime": null
@@ -176,9 +179,15 @@
         ],
         "Columns": [
           {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
             "ColumnName": "Name",
             "IncludeInInsert": true,
-            "IncludeInUpdate": false,
+            "IncludeInUpdate": true,
             "IsIdentifier": true
           },
           {
@@ -196,7 +205,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "name like '%Mediation%'",
+        "LastWhereCondition": "DevProjectID = 'aa3beb6b-6a5c-4ab3-8831-a6686bb81406'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -229,13 +238,31 @@
       "Title": "Delete"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "005738a9-681a-4121-af2c-588ed636f8cd",
       "Schema": "sec",
       "TableName": "View",
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "afd3c5eb-1745-4aec-82dd-83ffbde81900",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
+              "Name": "Mediation Definitions",
+              "Title": "Mediation Definitions",
+              "Url": "#/view/Mediation_Generic/Views/MediationDefinition/MediationDefinitionManagement",
+              "Module": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "ActionNames": "Mediation_Generic/MediationDefinition/GetFilteredMediationDefinitions",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 60,
+              "CreatedTime": null,
+              "LastModifiedTime": null
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -323,13 +350,6 @@
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "IsDeleted",
-            "IsIdentifier": false,
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "CreatedTime",
             "IsIdentifier": false,
             "IncludeInInsert": true,
@@ -343,33 +363,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "afd3c5eb-1745-4aec-82dd-83ffbde81900",
-              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
-              "Name": "Mediation Definitions",
-              "Title": "Mediation Definitions",
-              "Url": "#/view/Mediation_Generic/Views/MediationDefinition/MediationDefinitionManagement",
-              "Module": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "ActionNames": "Mediation_Generic/MediationDefinition/GetFilteredMediationDefinitions",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 60,
-              "IsDeleted": false,
-              "CreatedTime": null,
-              "LastModifiedTime": null
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = 'aa3beb6b-6a5c-4ab3-8831-a6686bb81406'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
@@ -383,6 +381,7 @@
           {
             "FieldValues": {
               "Id": "dc444b19-8c84-4e7f-89a0-0a6344dab783",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
               "Name": "Mediation_CDRRules",
               "Title": "Mediation_CDRRules",
               "ModuleId": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
@@ -394,6 +393,7 @@
           {
             "FieldValues": {
               "Id": "3add847f-311e-43ff-917b-38ebb1152a4b",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
               "Name": "BusinessProcess_BP_Mediation",
               "Title": "Mediation",
               "ModuleId": "04493174-83f0-44d6-bbe4-dbeb8b57875a",
@@ -409,6 +409,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": false,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -449,19 +455,32 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Name like '%Mediation%'",
+        "LastWhereCondition": "DevProjectID = 'aa3beb6b-6a5c-4ab3-8831-a6686bb81406'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "005738a9-681a-4121-af2c-588ed636f8cd",
       "Schema": "bp",
       "TableName": "BPDefinition",
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "aad944e5-af00-480e-a318-23e835a123ff",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
+              "Name": "Mediation.Generic.BP.Arguments.MediationProcessInput",
+              "Title": "Mediation",
+              "FQTN": "Mediation.Generic.BP.MediationProcess, Mediation.Generic.BP",
+              "VRWorkflowId": null,
+              "Config": "{\"$type\":\"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities\",\"MaxConcurrentWorkflows\":1,\"ManualExecEditor\":\"mediation-generic-mediationprocess-manual\",\"ScheduledExecEditor\":\"mediation-generic-mediationprocess\",\"IsPersistable\":false,\"HasChildProcesses\":false,\"HasBusinessRules\":false,\"NotVisibleInManagementScreen\":false,\"ExtendedSettings\":{\"$type\":\"Mediation.Generic.Business.MediationBPDefinitionSettings, Mediation.Generic.Business\"},\"Security\":{\"$type\":\"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities\",\"View\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3ADD847F-311E-43FF-917B-38EBB1152A4B\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"View\"]}}]}},\"StartNewInstance\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3ADD847F-311E-43FF-917B-38EBB1152A4B\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"StartInstance\"]}}]}},\"ScheduleTask\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3ADD847F-311E-43FF-917B-38EBB1152A4B\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"ScheduleTask\"]}}]}}}}",
+              "CreatedTime": "2016-08-26T18:32:48.02",
+              "LastModifiedTime": "2018-12-17T19:49:49.41"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -527,37 +546,42 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "aad944e5-af00-480e-a318-23e835a123ff",
-              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
-              "Name": "Mediation.Generic.BP.Arguments.MediationProcessInput",
-              "Title": "Mediation",
-              "FQTN": "Mediation.Generic.BP.MediationProcess, Mediation.Generic.BP",
-              "VRWorkflowId": null,
-              "Config": "{\"$type\":\"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities\",\"MaxConcurrentWorkflows\":1,\"ManualExecEditor\":\"mediation-generic-mediationprocess-manual\",\"ScheduledExecEditor\":\"mediation-generic-mediationprocess\",\"IsPersistable\":false,\"HasChildProcesses\":false,\"HasBusinessRules\":false,\"NotVisibleInManagementScreen\":false,\"ExtendedSettings\":{\"$type\":\"Mediation.Generic.Business.MediationBPDefinitionSettings, Mediation.Generic.Business\"},\"Security\":{\"$type\":\"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities\",\"View\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3ADD847F-311E-43FF-917B-38EBB1152A4B\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"View\"]}}]}},\"StartNewInstance\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3ADD847F-311E-43FF-917B-38EBB1152A4B\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"StartInstance\"]}}]}},\"ScheduleTask\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3ADD847F-311E-43FF-917B-38EBB1152A4B\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"ScheduleTask\"]}}]}}}}",
-              "CreatedTime": "2016-08-26T18:32:48.02",
-              "LastModifiedTime": "2018-12-17T19:49:49.41"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = 'aa3beb6b-6a5c-4ab3-8831-a6686bb81406'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "005738a9-681a-4121-af2c-588ed636f8cd",
       "Schema": "genericdata",
       "TableName": "DataStore",
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "b092fc56-5d9d-4a41-b385-0bfb24c72cba",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
+              "Name": "CDR File Store",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.FileDataStorage.FileDataStoreSettings, Vanrise.GenericData.FileDataStorage\",\"ConfigId\":\"DB1224D0-CC3D-481D-9163-E4E7C5231D00\",\"ConnectionStringName\":\"Mediation_CDR_DBConnString\"}",
+              "CreatedTime": "2016-06-14T12:17:22.457",
+              "LastModifiedTime": "2019-01-02T15:46:58.417"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "f83a615a-6514-4b9d-9e10-5c5ec4234069",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
+              "Name": "CDR Store",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage\",\"ConfigId\":\"2aeec2de-ec44-4698-aaef-8e9dbf669d1e\",\"ConnectionStringName\":\"Mediation_CDR_DBConnString\",\"IsRemoteDataStore\":false}",
+              "CreatedTime": "2017-05-17T17:05:08.653",
+              "LastModifiedTime": "2019-01-18T12:41:20.057"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -602,34 +626,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "b092fc56-5d9d-4a41-b385-0bfb24c72cba",
-              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
-              "Name": "CDR File Store",
-              "Settings": "{\"$type\":\"Vanrise.GenericData.FileDataStorage.FileDataStoreSettings, Vanrise.GenericData.FileDataStorage\",\"ConfigId\":\"DB1224D0-CC3D-481D-9163-E4E7C5231D00\",\"ConnectionStringName\":\"Mediation_CDR_DBConnString\"}",
-              "CreatedTime": "2016-06-14T12:17:22.457",
-              "LastModifiedTime": "2019-01-02T15:46:58.417"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "f83a615a-6514-4b9d-9e10-5c5ec4234069",
-              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
-              "Name": "CDR Store",
-              "Settings": "{\"$type\":\"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage\",\"ConfigId\":\"2aeec2de-ec44-4698-aaef-8e9dbf669d1e\",\"ConnectionStringName\":\"Mediation_CDR_DBConnString\",\"IsRemoteDataStore\":false}",
-              "CreatedTime": "2017-05-17T17:05:08.653",
-              "LastModifiedTime": "2019-01-18T12:41:20.057"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = 'aa3beb6b-6a5c-4ab3-8831-a6686bb81406'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
@@ -643,6 +644,7 @@
           {
             "FieldValues": {
               "ID": "6309e517-3006-47bd-8eb4-8741feac673b",
+              "DevProjectID": "aa3beb6b-6a5c-4ab3-8831-a6686bb81406",
               "Name": "Mediation Staging Records Queue Activator",
               "Details": "{ \"QueueActivatorConfigId\": \"6309e517-3006-47bd-8eb4-8741feac673b\" , \"Name\": \" Mediation Staging Records Queue Activator\" ,\"Title\" : \" Mediation Staging Records Queue Activator\", \"Editor\" :\"mediation-generic-queueactivator-storestagingrecords\"}",
               "CreatedTime": "2016-11-02T18:57:12.987",
@@ -656,6 +658,12 @@
             "IncludeInInsert": true,
             "IncludeInUpdate": false,
             "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
           },
           {
             "ColumnName": "Name",
@@ -684,7 +692,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Name like '%Mediation%'",
+        "LastWhereCondition": "DevProjectID = 'aa3beb6b-6a5c-4ab3-8831-a6686bb81406'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
