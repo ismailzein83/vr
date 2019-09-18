@@ -8,5 +8,6 @@ BEGIN
 	SELECT	COUNT(*)
 	FROM	[TOneWhS_SPL].SupplierZoneRate_Preview WITH(NOLOCK)
 	WHERE	ProcessInstanceID = @ProcessInstanceID_IN 
-	and zoneeed is null
+	and zoneeed is null 
+	and ImportedRate is not null
 END
