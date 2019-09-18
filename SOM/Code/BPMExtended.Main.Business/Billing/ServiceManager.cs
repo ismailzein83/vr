@@ -461,6 +461,20 @@ namespace BPMExtended.Main.Business
             }
             return isServiceContracted;
         }
+        public List<PackageInfo> GetAllPackages()
+        {
+            List <PackageInfo> packages= new List<PackageInfo>();
+            //packages.Add(new PackageInfo { Id = 1, Description = "aaa" });
+            //packages.Add(new PackageInfo { Id = 2, Description = "bbb" });
+            //packages.Add(new PackageInfo { Id = 3, Description = "ccc" });
+            //packages.Add(new PackageInfo { Id = 4, Description = "ddd" });
+            //packages.Add(new PackageInfo { Id = 5, Description = "eee" });
+            using (SOMClient client = new SOMClient())
+            {
+                packages = client.Get<List<PackageInfo>>(String.Format("api/SOM.ST/Billing/GetAllPackages"));
+            }
+            return packages;
+        }
 
         #endregion
 
