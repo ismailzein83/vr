@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
@@ -14,24 +10,44 @@ namespace Demo.Module.Entities
         public TeamSettings Settings { get; set; }
     }
 
-    public class TeamSettings
+    public abstract class TeamSettings
     {
+        public abstract Guid ConfigId { get; }
+
         public string City { get; set; }
 
         public string Stadium { get; set; }
 
-        public TeamType TeamType { get; set; }
-    }
-
-    public abstract class TeamType
-    {
-        public abstract Guid ConfigId { get; }
-
         public abstract string GetDescription();
     }
 
-    public abstract class Player
+    public class Player
     {
+        public string Name { get; set; }
 
+        public int Age { get; set; }
+
+        public PlayerType Type { get; set; }
+    }
+
+    public abstract class PlayerType
+    {
+        public abstract Guid ConfigId { get; }
+
+        public string Nationality { get; set; } 
+    }
+
+    public class ProfessionalPlayer : PlayerType
+    {
+        public override Guid ConfigId => throw new NotImplementedException();
+
+        public int YearsOfExperience { get; set; }
+
+        public int Salary { get; set; }
+    }
+
+    public class BeginnerPlayer : PlayerType
+    {
+        public override Guid ConfigId => throw new NotImplementedException();
     }
 }

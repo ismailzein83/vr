@@ -3,7 +3,7 @@ using System;
 
 namespace Demo.Module.MainExtension.Team
 {
-    public class SmallTeamType : TeamType
+    public class SmallTeamType : TeamSettings
     {
         public override Guid ConfigId => throw new NotImplementedException();
 
