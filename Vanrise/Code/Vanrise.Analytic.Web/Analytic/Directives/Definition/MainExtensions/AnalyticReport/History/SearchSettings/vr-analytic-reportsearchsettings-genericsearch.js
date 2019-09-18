@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ReportsearchsettingsGenericsearch.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AdvancedFilterFieldsRelationType', 'VRLocalizationService'];
+    ReportsearchsettingsGenericsearch.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AdvancedFilterFieldsRelationType', 'VR_Analytic_AdvancedFilterMeasuresRelationType', 'VRLocalizationService'];
 
-    function ReportsearchsettingsGenericsearch(UtilsService, VRUIUtilsService, VR_Analytic_AdvancedFilterFieldsRelationType, VRLocalizationService) {
+    function ReportsearchsettingsGenericsearch(UtilsService, VRUIUtilsService, VR_Analytic_AdvancedFilterFieldsRelationType, VR_Analytic_AdvancedFilterMeasuresRelationType, VRLocalizationService) {
         return {
             restrict: "E",
             scope: {
@@ -36,6 +36,9 @@
             var advancedFilterDimensionSelectorAPI;
             var advancedFilterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var advancedFilterMeasureSelectorAPI;
+            var advancedFilterMeasureReadyDeferred = UtilsService.createPromiseDeferred();
+
             var tableSelectorAPI;
             var tableSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -45,11 +48,15 @@
                 $scope.scopeModel.groupingDimensions = [];
                 $scope.scopeModel.filterDimensions = [];
                 $scope.scopeModel.showAdvancedFilterFields = false;
+                $scope.scopeModel.showAdvancedFilterMeasures = false;
+
                 $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
 
                 //$scope.scopeModel.advancedFilterFields = [];
                 $scope.scopeModel.advancedFilterFieldsRelationTypeDS = UtilsService.getArrayEnum(VR_Analytic_AdvancedFilterFieldsRelationType);
-                $scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues =
+                $scope.scopeModel.advancedFilterMeasuresRelationTypeDS = UtilsService.getArrayEnum(VR_Analytic_AdvancedFilterMeasuresRelationType);
+
+                $scope.scopeModel.selectedAdvancedFilterFieldsRelationType =
                     UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, VR_Analytic_AdvancedFilterFieldsRelationType.AllFields.value, "value");
 
                 $scope.scopeModel.onGroupingDimensionSelectorDirectiveReady = function (api) {
@@ -71,19 +78,46 @@
                     advancedFilterDimensionReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged = function (selectedItem) {
+                $scope.scopeModel.onAdvancedFilterMeasureSelectorDirectiveReady = function (api) {
+                    advancedFilterMeasureSelectorAPI = api;
+                    advancedFilterMeasureReadyDeferred.resolve();
+                };
 
-                    if (selectedItem != undefined) {
-                        if (selectedItem.value == VR_Analytic_AdvancedFilterFieldsRelationType.AllFields.value) {
-                            setTimeout(function () {
-                                $scope.scopeModel.showAdvancedFilterFields = false;
-                            });
-                        }
-                        else {
-                            setTimeout(function () {
-                                $scope.scopeModel.showAdvancedFilterFields = true;
-                            });
-                        }
+                $scope.scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem == undefined)
+                        return;
+
+                    if (selectedItem.value == VR_Analytic_AdvancedFilterFieldsRelationType.AllFields.value) {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterFields = false;
+                            $scope.scopeModel.selectedAdvancedFilterDimensions = [];
+                        });
+                    }
+                    else {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterFields = true;
+                        });
+                    }
+                };
+                $scope.scopeModel.onAdvancedFilterMeasuresRelationTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem == undefined) {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterMeasures = false;
+                            $scope.scopeModel.selectedAdvancedFilterMeasures = [];
+                        });
+                        return;
+                    }
+
+                    if (selectedItem.value == VR_Analytic_AdvancedFilterMeasuresRelationType.AllMeasures.value) {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterMeasures = false;
+                            $scope.scopeModel.selectedAdvancedFilterMeasures = [];
+                        });
+                    }
+                    else {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterMeasures = true;
+                        });
                     }
                 };
 
@@ -163,9 +197,9 @@
                     return "At least one dimension should be selected.";
                 };
                 //$scope.scopeModel.isValidAdvancedFilterFields = function () {
-                //    if ($scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues == undefined)
+                //    if ($scope.scopeModel.selectedAdvancedFilterFieldsRelationType == undefined)
                 //        return null;
-                //    if ($scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues.value == VR_Analytic_AdvancedFilterFieldsRelationType.AllFields.value) {
+                //    if ($scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value == VR_Analytic_AdvancedFilterFieldsRelationType.AllFields.value) {
                 //        return null;
                 //    }
                 //    else {
@@ -192,6 +226,7 @@
                         var selectedGroupingIds;
                         var selectedFilterIds;
                         var selectedAdvancedFilterFieldIds;
+                        var selectedAdvancedFilterMeasureIds;
 
                         if (payload.searchSettings != undefined) {
                             $scope.scopeModel.isRequiredGroupingDimensions = payload.searchSettings.IsRequiredGroupingDimensions;
@@ -212,7 +247,6 @@
                                 for (var i = 0; i < filters.length; i++) {
                                     var filterDimension = filters[i];
                                     selectedFilterIds.push(filterDimension.DimensionName);
-
                                 }
                             }
 
@@ -221,10 +255,14 @@
                             }
 
                             if (payload.searchSettings.AdvancedFilters != undefined) {
-                                $scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues =
-                                    UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, payload.searchSettings.AdvancedFilters.FieldsRelationType, "value");
+                                var advancedFilters = payload.searchSettings.AdvancedFilters;
+                                $scope.scopeModel.selectedAdvancedFilterFieldsRelationType =
+                                    UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, advancedFilters.FieldsRelationType, "value");
 
-                                if ($scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues.value == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
+                                $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType =
+                                    UtilsService.getItemByVal($scope.scopeModel.advancedFilterMeasuresRelationTypeDS, advancedFilters.MeasuresRelationType, "value");
+
+                                if ($scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
                                     selectedAdvancedFilterFieldIds = [];
                                     for (var i = 0; i < payload.searchSettings.AdvancedFilters.AvailableFields.length; i++) {
                                         var advancedFilterDimension = payload.searchSettings.AdvancedFilters.AvailableFields[i];
@@ -234,6 +272,15 @@
                                         //    Title: advancedFilterDimension.FieldTitle
                                         //};
                                         //$scope.scopeModel.advancedFilterFields.push(dataItem);
+                                    }
+                                }
+
+                                if ($scope.scopeModel.selectedAdvancedFilterMeasuresRelationType != undefined && $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType.value == VR_Analytic_AdvancedFilterMeasuresRelationType.SpecificMeasures.value) {
+                                    selectedAdvancedFilterMeasureIds = [];
+
+                                    for (var i = 0; i < payload.searchSettings.AdvancedFilters.AvailableMeasures.length; i++) {
+                                        var advancedFilterMeasure = payload.searchSettings.AdvancedFilters.AvailableMeasures[i];
+                                        selectedAdvancedFilterMeasureIds.push(advancedFilterMeasure.FieldName);
                                     }
                                 }
                             }
@@ -268,6 +315,16 @@
                             VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
                         });
                         promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
+
+                        var advancedFilterMeasureLoadDeferred = UtilsService.createPromiseDeferred();
+                        advancedFilterMeasureReadyDeferred.promise.then(function () {
+                            var payloadAdvancedFilterMeasureDirective = {
+                                filter: { TableIds: tableIds },
+                                selectedIds: selectedAdvancedFilterMeasureIds
+                            };
+                            VRUIUtilsService.callDirectiveLoad(advancedFilterMeasureSelectorAPI, payloadAdvancedFilterMeasureDirective, advancedFilterMeasureLoadDeferred);
+                        });
+                        promises.push(advancedFilterMeasureLoadDeferred.promise);
 
                         var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadTableSelectorPromiseDeferred.promise);
@@ -320,7 +377,7 @@
                         };
 
                         return UtilsService.waitPromiseNode(rootPromiseNode);
-                    } 
+                    }
                 };
 
                 api.getData = function getData() {
@@ -354,14 +411,26 @@
                     }
 
                     var advancedFilters = {};
-                    advancedFilters.FieldsRelationType = $scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues.value;
-                    if ($scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues.value == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
+                    advancedFilters.FieldsRelationType = $scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value;
+                    advancedFilters.MeasuresRelationType = $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType != undefined ? $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType.value : undefined;
+                    
+                    if ($scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
                         advancedFilters.AvailableFields = [];
                         for (var i = 0; i < $scope.scopeModel.selectedAdvancedFilterDimensions.length; i++) {
                             var advancedFilterField = $scope.scopeModel.selectedAdvancedFilterDimensions[i];
                             advancedFilters.AvailableFields.push({
                                 FieldName: advancedFilterField.Name,
                                 //FieldTitle: advancedFilterField.Title
+                            });
+                        }
+                    }
+
+                    if ($scope.scopeModel.selectedAdvancedFilterMeasuresRelationType != undefined && $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType.value == VR_Analytic_AdvancedFilterMeasuresRelationType.SpecificMeasures.value) {
+                        advancedFilters.AvailableMeasures = [];
+                        for (var i = 0; i < $scope.scopeModel.selectedAdvancedFilterMeasures.length; i++) {
+                            var advancedFilterMeasure = $scope.scopeModel.selectedAdvancedFilterMeasures[i];
+                            advancedFilters.AvailableMeasures.push({
+                                FieldName: advancedFilterMeasure.Name,
                             });
                         }
                     }

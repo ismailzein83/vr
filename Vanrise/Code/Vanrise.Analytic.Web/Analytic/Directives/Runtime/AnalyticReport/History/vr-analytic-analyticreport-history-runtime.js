@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_GenericData_DataRecordTypeService', 'ColumnWidthEnum', 'PeriodEnum', 'VRDateTimeService', 'VR_Analytic_AdvancedFilterFieldsRelationType','VR_Analytic_AnalyticTableAPIService'];
+    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_GenericData_DataRecordTypeService', 'ColumnWidthEnum', 'PeriodEnum', 'VRDateTimeService', 'VR_Analytic_AdvancedFilterFieldsRelationType', 'VR_Analytic_AnalyticTableAPIService','VR_Analytic_AdvancedFilterMeasuresRelationType'];
 
-    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum, VRDateTimeService, VR_Analytic_AdvancedFilterFieldsRelationType, VR_Analytic_AnalyticTableAPIService) {
+    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum, VRDateTimeService, VR_Analytic_AdvancedFilterFieldsRelationType, VR_Analytic_AnalyticTableAPIService, VR_Analytic_AdvancedFilterMeasuresRelationType) {
 
         return {
             restrict: "E",
@@ -81,21 +81,34 @@
                         $scope.scopeModel.expression = expression;
                     };
 
-                    var checkAvailableFieldNames = false;
-                    var availableFieldNames;
+                    var checkAvailableDimensionNames = false;
+                    var availableDimensionNames;
+
+                    var checkAvailableMeasureNames = false;
+                    var availableMeasureNames;
+
                     if (settings && settings.SearchSettings && settings.SearchSettings.AdvancedFilters) {
                         var advancedFilters = settings.SearchSettings.AdvancedFilters;
+
                         if (advancedFilters.FieldsRelationType == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
-                            checkAvailableFieldNames = true;
-                            availableFieldNames = UtilsService.getPropValuesFromArray(advancedFilters.AvailableFields, "FieldName");
+                            checkAvailableDimensionNames = true;
+                            if (advancedFilters.AvailableFields != undefined && advancedFilters.AvailableFields.length > 0)
+                                availableDimensionNames = UtilsService.getPropValuesFromArray(advancedFilters.AvailableFields, "FieldName");
+                        }
+
+                        if (advancedFilters.MeasuresRelationType != VR_Analytic_AdvancedFilterMeasuresRelationType.AllMeasures.value) {
+                            checkAvailableMeasureNames = true;
+                            if (advancedFilters.AvailableMeasures != undefined && advancedFilters.AvailableMeasures.length > 0)
+                                availableMeasureNames = UtilsService.getPropValuesFromArray(advancedFilters.AvailableMeasures, "FieldName");
                         }
                     }
+
 
                     var fields = [];
                     for (var i = 0; i < dimensions.length; i++) {
                         var dimension = dimensions[i];
 
-                        if (checkAvailableFieldNames && !availableFieldNames.includes(dimension.Name))
+                        if (checkAvailableDimensionNames && (availableDimensionNames == undefined || !availableDimensionNames.includes(dimension.Name)))
                             continue;
 
                         fields.push({
@@ -104,6 +117,20 @@
                             Type: dimension.Config.FieldType,
                         });
                     }
+
+                    for (var i = 0; i < measures.length; i++) {
+                        var measure = measures[i];
+
+                        if (checkAvailableMeasureNames && (availableMeasureNames == undefined || !availableMeasureNames.includes(measure.Name)))
+                            continue;
+
+                        fields.push({
+                            FieldName: measure.Name,
+                            FieldTitle: measure.Title,
+                            Type: measure.Config.FieldType,
+                        });
+                    }
+
                     VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onDimensionFilterAdded);
                 };
 

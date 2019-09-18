@@ -32,6 +32,8 @@ namespace Vanrise.Analytic.Entities
         List<DimensionFilter> DBFilters { get; }
 
         RecordFilterGroup DBFilterGroup { get; }
+
+        List<string> RecordFilterMeasures { set; }
     }
 
     public interface IGetRemoteAnalyticDataProviderContext

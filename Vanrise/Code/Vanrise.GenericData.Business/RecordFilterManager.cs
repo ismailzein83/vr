@@ -177,38 +177,90 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        public RecordFilterGroup ReBuildRecordFilterGroupWithExcludedFields(RecordFilterGroup recordFilter, List<string> fieldsToExclude)
+        public RecordFilterGroup ReBuildRecordFilterGroupWithIncludedFields(RecordFilterGroup recordFilter, List<string> fieldsToInclude)
         {
+            if (recordFilter == null || recordFilter.Filters == null || fieldsToInclude == null || fieldsToInclude.Count == 0)
+                return null;
+
             RecordFilterGroup newFilterGroup = new RecordFilterGroup
             {
                 Filters = new List<RecordFilter>(),
                 LogicalOperator = recordFilter.LogicalOperator
             };
-            if (recordFilter.Filters != null)
+
+            foreach (var childFilter in recordFilter.Filters)
             {
-                foreach (var childFilter in recordFilter.Filters)
+                RecordFilterGroup childFilterGroup = childFilter as RecordFilterGroup;
+                if (childFilterGroup != null)
                 {
-                    RecordFilterGroup childFilterGroup = childFilter as RecordFilterGroup;
-                    if (childFilterGroup != null)
+                    newFilterGroup.Filters.Add(ReBuildRecordFilterGroupWithIncludedFields(childFilterGroup, fieldsToInclude));
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(childFilter.FieldName) && !fieldsToInclude.Contains(childFilter.FieldName))
                     {
-                        newFilterGroup.Filters.Add(ReBuildRecordFilterGroupWithExcludedFields(childFilterGroup, fieldsToExclude));
+                        newFilterGroup.Filters.Add(new AlwaysTrueRecordFilter());
                     }
                     else
                     {
-                        if (childFilter.FieldName != null && fieldsToExclude.Contains(childFilter.FieldName))
-                        {
-                            newFilterGroup.Filters.Add(new AlwaysTrueRecordFilter());
-                        }
-                        else
-                        {
-                            newFilterGroup.Filters.Add(childFilter);
-                        }
+                        newFilterGroup.Filters.Add(childFilter);
                     }
                 }
             }
+
             return newFilterGroup;
         }
 
+        public RecordFilterGroup ReBuildRecordFilterGroupWithExcludedFields(RecordFilterGroup recordFilter, List<string> fieldsToExclude)
+        {
+            return ReBuildRecordFilterGroupWithExcludedFields(recordFilter, fieldsToExclude, out List<string> excludedFields);
+        }
+
+        public RecordFilterGroup ReBuildRecordFilterGroupWithExcludedFields(RecordFilterGroup recordFilter, List<string> fieldsToExclude, out List<string> excludedFields)
+        {
+            excludedFields = null;
+
+            if (recordFilter == null || recordFilter.Filters == null)
+                return null;
+
+            if (fieldsToExclude == null || fieldsToExclude.Count == 0)
+                return recordFilter;
+
+            RecordFilterGroup newFilterGroup = new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>(),
+                LogicalOperator = recordFilter.LogicalOperator
+            };
+
+            excludedFields = new List<string>();
+
+            foreach (var childFilter in recordFilter.Filters)
+            {
+                RecordFilterGroup childFilterGroup = childFilter as RecordFilterGroup;
+                if (childFilterGroup != null)
+                {
+                    List<string> childExcludedFields;
+                    newFilterGroup.Filters.Add(ReBuildRecordFilterGroupWithExcludedFields(childFilterGroup, fieldsToExclude, out childExcludedFields));
+
+                    if (childExcludedFields != null && childExcludedFields.Count > 0)
+                        excludedFields.AddRange(childExcludedFields);
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(childFilter.FieldName) && fieldsToExclude.Contains(childFilter.FieldName))
+                    {
+                        excludedFields.Add(childFilter.FieldName);
+                        newFilterGroup.Filters.Add(new AlwaysTrueRecordFilter());
+                    }
+                    else
+                    {
+                        newFilterGroup.Filters.Add(childFilter);
+                    }
+                }
+            }
+
+            return newFilterGroup;
+        }
 
         #region Private Classes
 

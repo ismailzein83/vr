@@ -14,6 +14,8 @@ namespace Vanrise.Analytic.Business
 {
     public class AnalyticManager
     {
+        static RecordFilterManager s_recordFilterManager = new RecordFilterManager();
+
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
@@ -371,19 +373,34 @@ namespace Vanrise.Analytic.Business
             IEnumerable<DBAnalyticRecord> dbRecords = dataManager.GetAnalyticRecords(getAnalyticRecordsContext);
 
             var allDBDimensions = getAnalyticRecordsContext.AllQueryDBDimensions;
-            List<string> allDimensionNamesList = new List<string>();
+            var recordFilterMeasures = getAnalyticRecordsContext.RecordFilterMeasures;
+
+            HashSet<string> allDimensionNames = new HashSet<string>();
 
             if (query.DimensionFields != null)
-                allDimensionNamesList.AddRange(query.DimensionFields);
+                allDimensionNames.Union(query.DimensionFields);
+
             if (query.ParentDimensions != null)
-                allDimensionNamesList.AddRange(query.ParentDimensions);
-            HashSet<string> allDimensionNames = new HashSet<string>(allDimensionNamesList);
+                allDimensionNames.Union(query.ParentDimensions);
+
+            List<string> allMeasureNames = new List<string>();
+
+            if (query.MeasureFields != null && query.MeasureFields.Count > 0)
+                allMeasureNames.AddRange(query.MeasureFields);
+
+            if (recordFilterMeasures != null && recordFilterMeasures.Count > 0)
+                allMeasureNames.AddRange(recordFilterMeasures);
+
+            allMeasureNames = allMeasureNames.Distinct().ToList();
+
             if (dbRecords != null)
             {
                 Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = query.MeasureStyleRules != null && query.MeasureStyleRules.Count > 0 ? BuildMeasureStyleRulesDictionary(query.MeasureStyleRules) : BuildMeasureStyleRulesDictionary(analyticTableManager.GetMergedMeasureStyles(query.TableId));
                 FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, allDBDimensions, query.Filters, query.FilterGroup, fromUIReport);
-                var records = ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
-                    query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, fromUIReport, out summaryRecord, out resultSubTables);
+
+                var records = ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames, allMeasureNames, recordFilterMeasures, measureStyleRulesDictionary,
+                    query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, fromUIReport, out summaryRecord, out resultSubTables);
+
                 if (dontApplyOrdering || !query.OrderType.HasValue)
                 {
                     return records;
@@ -732,8 +749,9 @@ namespace Vanrise.Analytic.Business
         }
 
         private List<AnalyticRecord> ApplyFinalGroupingAndFiltering(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<DBAnalyticRecord> dbRecords,
-            List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
-            List<DimensionFilter> dimensionFilters, List<AnalyticQuerySubTable> querySubTables, RecordFilterGroup filterGroup, bool withSummary, bool fromUIReport, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
+            List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> allMeasureNames,List<string> recordFilterMeasures, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
+            List<DimensionFilter> dimensionFilters, List<AnalyticQuerySubTable> querySubTables, RecordFilterGroup filterGroup, bool withSummary, bool fromUIReport,
+            out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
             Dictionary<string, DBAnalyticRecord> groupedRecordsByDimensionsKey = new Dictionary<string, DBAnalyticRecord>();
             DBAnalyticRecord summaryDBRecord = null;
@@ -743,10 +761,15 @@ namespace Vanrise.Analytic.Business
             if (querySubTables != null)
                 InitializeSubTablesInProcessObjects(querySubTables, buildSummaryRecord, ref subTablesDBRecords, ref subTablesSummaryDBRecords);
 
+            var newFilterGroup = filterGroup.VRDeepCopy();
+            if (newFilterGroup != null && recordFilterMeasures != null && recordFilterMeasures.Count > 0)
+                newFilterGroup = s_recordFilterManager.ReBuildRecordFilterGroupWithExcludedFields(filterGroup, recordFilterMeasures);
+
             foreach (var dbRecord in dbRecords)
             {
-                if (!ApplyFilters(analyticTableQueryContext, dbRecord, dimensionFilters, filterGroup))
+                if (!ApplyFilters(analyticTableQueryContext, dbRecord, dimensionFilters, newFilterGroup))
                     continue;
+
                 string recordGroupingKey = GetDimensionGroupingKey(requestedDimensionNames, dbRecord);
                 DBAnalyticRecord matchRecord;
                 if (!groupedRecordsByDimensionsKey.TryGetValue(recordGroupingKey, out matchRecord))
@@ -758,11 +781,16 @@ namespace Vanrise.Analytic.Business
                 {
                     UpdateAggregateValues(analyticTableQueryContext, matchRecord, dbRecord);
                 }
+
                 foreach (var groupingValue in matchRecord.GroupingValuesByDimensionName)
                 {
+                    DBAnalyticRecordGroupingValue dbAnalyticRecordGroupingValue = groupingValue.Value;
+                    string dimensionName = groupingValue.Key;
+
                     if (groupingValue.Value.AllValues == null)
                         groupingValue.Value.AllValues = new List<dynamic>();
-                    groupingValue.Value.AllValues.Add(dbRecord.GroupingValuesByDimensionName[groupingValue.Key].Value);
+
+                    dbAnalyticRecordGroupingValue.AllValues.Add(dbRecord.GroupingValuesByDimensionName[dimensionName].Value);
                 }
                 if (buildSummaryRecord)
                 {
@@ -785,6 +813,7 @@ namespace Vanrise.Analytic.Business
                 if (querySubTables != null)
                     ReflectDBRecordToSubTablesDBRecords(dbRecord, analyticTableQueryContext, recordGroupingKey, querySubTables, subTablesDBRecords, subTablesSummaryDBRecords, buildSummaryRecord);
             }
+
             List<AnalyticRecord> analyticRecords = new List<AnalyticRecord>();
             HashSet<DateTime> timeForMissingData = null;
             if (analyticTableQueryContext.TimeGroupingUnit.HasValue)
@@ -817,16 +846,21 @@ namespace Vanrise.Analytic.Business
             foreach (var dbRecordEntry in groupedRecordsByDimensionsKey)
             {
                 string recordGroupingKey = dbRecordEntry.Key;
-                bool allMeasuresAreNull = true;
-                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecordEntry.Value, requestedDimensionNames, fieldTypesByFieldNameForGetDescriptionByIds, dataRecordFieldsByName, groupedValuesForGetDescriptionByIdsDict,
-                    allDimensionNames, measureNames, measureStyleRulesDictionary, false, null, recordGroupingKey, null, fromUIReport, out allMeasuresAreNull);
+                DBAnalyticRecord dbAnalyticRecord = dbRecordEntry.Value;
+
+                bool allMeasuresAreNull;
+                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbAnalyticRecord, requestedDimensionNames, fieldTypesByFieldNameForGetDescriptionByIds,
+                    dataRecordFieldsByName, groupedValuesForGetDescriptionByIdsDict, allDimensionNames, allMeasureNames, measureStyleRulesDictionary, false, null, recordGroupingKey, null, fromUIReport, out allMeasuresAreNull);
+
+                if (!ApplyFilters(analyticTableQueryContext, analyticRecord, filterGroup, requestedDimensionNames, recordFilterMeasures))
+                    continue;
+
                 if (querySubTables != null)
                     AddSubTablesMeasuresToRecord(analyticRecord, recordGroupingKey, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesRecordsByParentGroupingKey, subTablesOrderedDimensionKeys);
 
                 if (analyticTableQueryContext.TimeGroupingUnit.HasValue)
-                {
                     timeForMissingData.Remove(analyticRecord.Time.Value);
-                }
+
                 if (analyticTableQueryContext.TopRecords.HasValue)
                 {
                     if (!allMeasuresAreNull)
@@ -844,7 +878,7 @@ namespace Vanrise.Analytic.Business
             {
                 foreach (var dateTime in timeForMissingData)
                 {
-                    AnalyticRecord analyticRecord = CreateAnalyticRecordFilledWithDefaultValues(analyticTableQueryContext, measureNames, measureStyleRulesDictionary, dateTime);
+                    AnalyticRecord analyticRecord = CreateAnalyticRecordFilledWithDefaultValues(analyticTableQueryContext, allMeasureNames, measureStyleRulesDictionary, dateTime);
                     analyticRecords.Add(analyticRecord);
                 }
             }
@@ -852,7 +886,7 @@ namespace Vanrise.Analytic.Business
             if (withSummary && summaryDBRecord != null)
             {
                 bool allSummaryMeasuresAreNull;
-                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summaryDBRecord, null, null, null, null, allDimensionNames, measureNames, measureStyleRulesDictionary,
+                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summaryDBRecord, null, null, null, null, allDimensionNames, allMeasureNames, measureStyleRulesDictionary,
                     true, null, null, null, fromUIReport, out allSummaryMeasuresAreNull);
                 if (querySubTables != null)
                     AddSubTablesMeasuresToSummaryRecord(summaryRecord, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesSummaryRecordsByGroupingKey, subTablesOrderedDimensionKeys);
@@ -968,8 +1002,9 @@ namespace Vanrise.Analytic.Business
                     {
                         bool subTableAllMeasuresAreNull;
                         AnalyticRecord subTableAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subtableDBRecord.Record, null, null, null, null,
-                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, false, subTableIndex, subtableDBRecord.ParentRecordGroupingKey, subtableDBRecord.GroupingKey, fromUIReport,
-                    out subTableAllMeasuresAreNull);//no need to fill dimensions values for sub table records 
+                            allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, false, subTableIndex, subtableDBRecord.ParentRecordGroupingKey, subtableDBRecord.GroupingKey, fromUIReport,
+                            out subTableAllMeasuresAreNull);//no need to fill dimensions values for sub table records 
+
                         var subTableAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
                         {
                             GroupingKey = subtableDBRecord.GroupingKey,
@@ -983,6 +1018,7 @@ namespace Vanrise.Analytic.Business
                     SubTableAnalyticRecordInProcessByGroupingKey subTableSummaryRecordsByGroupingKey = new SubTableAnalyticRecordInProcessByGroupingKey();
                     subTablesSummaryRecordsByGroupingKey.Add(subTableSummaryRecordsByGroupingKey);
                     var subTableSummaryRecords = new List<SubTableAnalyticRecordInProcess>();
+
                     var dataRecordFieldsByName = CreateDataRecordFieldsByName(analyticTableQueryContext, querySubTable.Dimensions);
 
                     Dictionary<string, DataRecordFieldType> fieldTypesByFieldNameForGetDescriptionByIds = null;
@@ -990,7 +1026,6 @@ namespace Vanrise.Analytic.Business
                         fieldTypesByFieldNameForGetDescriptionByIds = Vanrise.GenericData.Business.Helper.GetFieldTypesByFieldNameForDescriptionByIds(dataRecordFieldsByName.Values.ToList());
 
                     var groupedValuesForGetDescriptionByIdsDict = new Dictionary<string, GroupedValuesForGetDescriptionByIds>();
-
                     foreach (var subTableSummaryDBRecord in subTableSummaryDBRecords.Values)
                     {
                         bool subTableSummaryAllMeasuresAreNull;
@@ -1005,9 +1040,6 @@ namespace Vanrise.Analytic.Business
                         subTableSummaryRecordsByGroupingKey.Add(subTableSummaryAnalyticRecordInProcess.GroupingKey, subTableSummaryAnalyticRecordInProcess);
                         subTableSummaryRecords.Add(subTableSummaryAnalyticRecordInProcess);
                     }
-
-                    Vanrise.GenericData.Business.Helper.FillDescriptionsForGroupedValues(groupedValuesForGetDescriptionByIdsDict);
-
                     if (!querySubTable.OrderType.HasValue)
                     {
                         subTableSummaryRecords = GetOrderedAnalyticRecords(analyticTableQueryContext, AnalyticQueryOrderType.ByAllDimensions, querySubTable.Dimensions, querySubTable.Measures, querySubTable.AdvancedOrderOptions, subTableSummaryRecords, recordInProcexcc => recordInProcexcc.Record).ToList();
@@ -1176,11 +1208,11 @@ namespace Vanrise.Analytic.Business
         {
             if (filterGroup != null)
             {
-                var recordFilterManager = new RecordFilterManager();
                 var recordFilterContext = new RecordFilterGenericFieldMatchContext(analyticTableQueryContext, dbRecord);
-                if (!recordFilterManager.IsFilterGroupMatch(filterGroup, recordFilterContext))
+                if (!s_recordFilterManager.IsFilterGroupMatch(filterGroup, recordFilterContext))
                     return false;
             }
+
             if (dimensionFilters != null)
             {
                 foreach (var dimFilter in dimensionFilters)
@@ -1206,6 +1238,29 @@ namespace Vanrise.Analytic.Business
                     }
                 }
             }
+
+            return true;
+        }
+
+        private bool ApplyFilters(IAnalyticTableQueryContext analyticTableQueryContext, AnalyticRecord record, RecordFilterGroup filterGroup, List<string> requestedDimensionNames, 
+            List<string> recordFilterMeasures)
+        {
+            if (filterGroup == null || recordFilterMeasures == null || recordFilterMeasures.Count == 0)
+                return true;
+
+            List<string> fieldsToInclude = recordFilterMeasures.VRDeepCopy();
+
+            if (requestedDimensionNames != null && requestedDimensionNames.Count > 0)
+                fieldsToInclude.AddRange(requestedDimensionNames.ToList());
+
+            var finalFilterGroup = s_recordFilterManager.ReBuildRecordFilterGroupWithIncludedFields(filterGroup, fieldsToInclude);
+            if (finalFilterGroup != null)
+            {
+                var recordFilterContext = new RecordFilterGenericFieldMatchContext(analyticTableQueryContext, record, requestedDimensionNames);
+                if (!s_recordFilterManager.IsFilterGroupMatch(finalFilterGroup, recordFilterContext))
+                    return false;
+            }
+
             return true;
         }
 
@@ -1254,8 +1309,8 @@ namespace Vanrise.Analytic.Business
         }
 
         private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, List<string> dimensionNames,
-           Dictionary<string, DataRecordFieldType> fieldTypesByFieldNameForGetDescriptionByIds, Dictionary<string, DataRecordField> dataRecordFieldsByName, Dictionary<string, GroupedValuesForGetDescriptionByIds> groupedValuesForGetDescriptionByIdsDict,
-           HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
+            Dictionary<string, DataRecordFieldType> fieldTypesByFieldNameForGetDescriptionByIds, Dictionary<string, DataRecordField> dataRecordFieldsByName, Dictionary<string, GroupedValuesForGetDescriptionByIds> groupedValuesForGetDescriptionByIdsDict,
+            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
             bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey, bool fromUIReport, out bool allMeasuresAreNull)
         {
             StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
@@ -1471,17 +1526,6 @@ namespace Vanrise.Analytic.Business
         {
             IAnalyticTableQueryContext _queryContext;
 
-            static RecordFilterManager s_recordFilterManager = new RecordFilterManager();
-            public AnalyticDataManagerGetAnalyticRecordsContext(IAnalyticTableQueryContext queryContext, AnalyticQuery query)
-            {
-                _queryContext = queryContext;
-                this.Query = query;
-                this.AllQueryDBDimensions = GetIncludedDBDimensionNames(queryContext, query.DimensionFields, query.MeasureFields);
-                this.AllQueryDBAggregates = GetIncludedDBAggregateNames(queryContext, query.MeasureFields);
-                this.DBFilters = GetDBFilters(query.Filters);
-                this.DBFilterGroup = GetDBFilterGroup(query.FilterGroup);
-            }
-
             public AnalyticQuery Query { get; private set; }
 
             public HashSet<string> AllQueryDBDimensions { get; private set; }
@@ -1492,9 +1536,36 @@ namespace Vanrise.Analytic.Business
 
             public RecordFilterGroup DBFilterGroup { get; private set; }
 
+            public List<string> RecordFilterMeasures { get; set; }
+
+
+            public AnalyticDataManagerGetAnalyticRecordsContext(IAnalyticTableQueryContext queryContext, AnalyticQuery query)
+            {
+                _queryContext = queryContext;
+
+                this.Query = query;
+                this.DBFilters = GetDBFilters(query.Filters);
+                this.DBFilterGroup = GetDBFilterGroup(query.FilterGroup, out List<string> recordFilterMeasures);
+                this.RecordFilterMeasures = recordFilterMeasures;
+
+                List<string> allMeasureNames = new List<string>();
+
+                if (query.MeasureFields != null && query.MeasureFields.Count > 0)
+                    allMeasureNames.AddRange(query.MeasureFields);
+
+                if (RecordFilterMeasures != null && RecordFilterMeasures.Count > 0)
+                    allMeasureNames.AddRange(RecordFilterMeasures);
+
+                allMeasureNames = allMeasureNames.Distinct().ToList();
+
+                this.AllQueryDBDimensions = GetIncludedDBDimensionNames(queryContext, query.DimensionFields, allMeasureNames);
+                this.AllQueryDBAggregates = GetIncludedDBAggregateNames(queryContext, allMeasureNames);
+            }
+
             private HashSet<string> GetIncludedDBDimensionNames(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, List<string> measureNames)
             {
                 HashSet<string> dbDimensions = new HashSet<string>();
+
                 if (requestedDimensionNames != null)
                 {
                     foreach (var dimensionName in requestedDimensionNames)
@@ -1502,6 +1573,7 @@ namespace Vanrise.Analytic.Business
                         AddDBDimensions(analyticTableQueryContext, dimensionName, dbDimensions);
                     }
                 }
+
                 if (measureNames != null)
                 {
                     foreach (var measureName in measureNames)
@@ -1516,6 +1588,7 @@ namespace Vanrise.Analytic.Business
                         }
                     }
                 }
+
                 //retrieving dimensions from DimensionFilters and FilterGroup
                 var filterDimensions = analyticTableQueryContext.GetDimensionNamesFromQueryFilters();
                 if (filterDimensions != null)
@@ -1583,24 +1656,43 @@ namespace Vanrise.Analytic.Business
                 return dbFilters;
             }
 
-            private RecordFilterGroup GetDBFilterGroup(RecordFilterGroup filterGroup)
+            private RecordFilterGroup GetDBFilterGroup(RecordFilterGroup filterGroup, out List<string> filterGroupMeasures)
             {
-                RecordFilterGroup dbFilterGroup = null;
-                if (filterGroup != null)
+                filterGroupMeasures = null;
+                if (filterGroup == null)
+                    return null;
+
+                List<string> fieldsToExclude = new List<string>();
+
+                if (_queryContext.Dimensions != null)
                 {
-                    List<string> nonDBDimensionNames = _queryContext.Dimensions.Values.Where(dimConfig => string.IsNullOrEmpty(dimConfig.Config.SQLExpression)).Select(dimConfig => dimConfig.Name).ToList();
-                    if (nonDBDimensionNames.Count == 0)
-                    {
-                        dbFilterGroup = filterGroup;
-                    }
-                    else
-                    {
-                        dbFilterGroup = s_recordFilterManager.ReBuildRecordFilterGroupWithExcludedFields(filterGroup, nonDBDimensionNames);
-                    }
+                    IEnumerable<string> nonDBDimensionNames = _queryContext.Dimensions.Values.Where(dimConfig => string.IsNullOrEmpty(dimConfig.Config.SQLExpression)).Select(dimConfig => dimConfig.Name);
+                    fieldsToExclude.AddRange(nonDBDimensionNames);
                 }
+
+                if (_queryContext.Measures != null && _queryContext.Measures.Count > 0)
+                    fieldsToExclude.AddRange(_queryContext.Measures.MapRecords(x => x.Name));
+
+                RecordFilterGroup dbFilterGroup = null;
+
+                if (fieldsToExclude.Count == 0)
+                {
+                    dbFilterGroup = filterGroup;
+                }
+                else
+                {
+                    List<string> excludedFields;
+                    dbFilterGroup = s_recordFilterManager.ReBuildRecordFilterGroupWithExcludedFields(filterGroup, fieldsToExclude, out excludedFields);
+
+                    IEnumerable<string> _filterGroupMeasures = _queryContext.Measures.MapRecords(measure => measure.Value.Name, measure => excludedFields != null && excludedFields.Contains(measure.Value.Name));
+                    if (_filterGroupMeasures != null)
+                        filterGroupMeasures = _filterGroupMeasures.ToList();
+                }
+
                 return dbFilterGroup;
             }
         }
+
         private class AnalyticRecordRequestHandler : BigDataRequestHandler<AnalyticQuery, AnalyticRecord, AnalyticRecord>
         {
             AnalyticRecord _summaryRecord;
@@ -1801,41 +1893,102 @@ namespace Vanrise.Analytic.Business
         private class RecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
         {
             IAnalyticTableQueryContext _analyticTableQueryContext;
-            DBAnalyticRecord _dbRecord;
+            Dictionary<string, AnalyticItemData> _records;
 
             public RecordFilterGenericFieldMatchContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord)
             {
-                if (analyticTableQueryContext == null)
-                    throw new ArgumentNullException("analyticTableQueryContext");
-                if (dbRecord == null)
-                    throw new ArgumentNullException("dbRecord");
+                analyticTableQueryContext.ThrowIfNull("analyticTableQueryContext");
+                dbRecord.ThrowIfNull("dbRecord");
+
                 _analyticTableQueryContext = analyticTableQueryContext;
-                _dbRecord = dbRecord;
+                _records = new Dictionary<string, AnalyticItemData>();
+
+                if (dbRecord.GroupingValuesByDimensionName != null && dbRecord.GroupingValuesByDimensionName.Count > 0)
+                {
+                    foreach (var value in dbRecord.GroupingValuesByDimensionName)
+                    {
+                        _records.Add(value.Key, new AnalyticItemData()
+                        {
+                            FieldName = value.Key,
+                            FieldValue = value.Value.Value,
+                            ItemType = AnalyticItemType.Dimension
+                        });
+                    }
+                }
             }
+
+            public RecordFilterGenericFieldMatchContext(IAnalyticTableQueryContext analyticTableQueryContext, AnalyticRecord record, List<string> dimensionNames)
+            {
+                analyticTableQueryContext.ThrowIfNull("analyticTableQueryContext");
+                record.ThrowIfNull("record");
+
+                _analyticTableQueryContext = analyticTableQueryContext;
+                _records = new Dictionary<string, AnalyticItemData>();
+
+                if (record.DimensionValues != null && record.DimensionValues.Length > 0)
+                {
+                    int dimIndex = 0;
+
+                    foreach (var dimension in record.DimensionValues)
+                    {
+                        _records.Add(dimensionNames[dimIndex], new AnalyticItemData()
+                        {
+                            FieldName = dimensionNames[dimIndex],
+                            FieldValue = dimension.Value,
+                            ItemType = AnalyticItemType.Dimension
+                        });
+                        dimIndex++;
+                    }
+                }
+
+                if (record.MeasureValues != null && record.MeasureValues.Count > 0)
+                {
+                    foreach (var measure in record.MeasureValues)
+                    {
+                        _records.Add(measure.Key, new AnalyticItemData()
+                        {
+                            FieldName = measure.Key,
+                            FieldValue = measure.Value.Value,
+                            ItemType = AnalyticItemType.Measure
+                        });
+                    }
+                }
+            }
+
             public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
             {
-                //string[] fieldParts = fieldName.Split('_');
-                //if(fieldParts[0] == "Dimension")
-                //{
-                string dimensionName = fieldName;// fieldParts[1];
-                var dimensionConfig = _analyticTableQueryContext.GetDimensionConfig(dimensionName);
-                fieldType = dimensionConfig.Config.FieldType;
-                DBAnalyticRecordGroupingValue dimensionValue;
-                if (!_dbRecord.GroupingValuesByDimensionName.TryGetValue(dimensionName, out dimensionValue))
-                    throw new NullReferenceException(String.Format("dimensionValue. dimensionName '{0}'", dimensionName));
-                return dimensionValue.Value;
-                //}
-                //else
-                //{
-                //    string measureName = fieldParts[1];
-                //    var measureConfig = _analyticTableQueryContext.GetMeasureConfig(measureName);
-                //    fieldType = measureConfig.Config.FieldType;
-                //    Object measureValue;
-                //    if (!_record.MeasureValues.TryGetValue(measureName, out measureValue))
-                //        throw new NullReferenceException(String.Format("measureValue. measure name '{0}'", measureName));
-                //    return measureValue;
-                //}
+                fieldType = null;
+
+                AnalyticItemData analyticItemData;
+                if (!_records.TryGetValue(fieldName, out analyticItemData))
+                    throw new NullReferenceException(String.Format("fieldValue. fieldName '{0}'", fieldName));
+
+                switch (analyticItemData.ItemType)
+                {
+                    case AnalyticItemType.Dimension:
+                        string dimensionName = fieldName;
+                        var dimensionConfig = _analyticTableQueryContext.GetDimensionConfig(dimensionName);
+                        fieldType = dimensionConfig.Config.FieldType;
+
+                        return analyticItemData.FieldValue;
+
+                    case AnalyticItemType.Measure:
+                        string measureName = fieldName;
+                        var measureConfig = _analyticTableQueryContext.GetMeasureConfig(measureName);
+                        fieldType = measureConfig.Config.FieldType;
+
+                        return analyticItemData.FieldValue;
+                }
+
+                return null;
             }
+        }
+
+        private class AnalyticItemData
+        {
+            public string FieldName { get; set; }
+            public object FieldValue { get; set; }
+            public AnalyticItemType ItemType { get; set; }
         }
 
         private class SubTableDBAnalyticRecordInProcess

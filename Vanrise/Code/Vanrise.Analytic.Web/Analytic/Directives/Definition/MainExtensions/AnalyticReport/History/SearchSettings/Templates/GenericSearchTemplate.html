@@ -75,15 +75,29 @@
         <vr-section title="Advanced Filters">
             <vr-row>
                 <vr-columns colnum="4">
-                    <vr-select datasource="scopeModel.advancedFilterFieldsRelationTypeDS" onselectionchanged="scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged"
-                               selectedvalues="scopeModel.advancedFilterFieldsRelationTypeSelectedValues" datavaluefield="value" datatextfield="description" label="Type" hideremoveicon>
+                    <vr-select datasource="scopeModel.advancedFilterFieldsRelationTypeDS"
+                               selectedvalues="scopeModel.selectedAdvancedFilterFieldsRelationType"
+                               onselectionchanged="scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged"
+                               datavaluefield="value" datatextfield="description" label="Fields Type" hideremoveicon>
                     </vr-select>
                 </vr-columns>
                 <span ng-show="scopeModel.showAdvancedFilterFields">
                     <vr-analytic-dimension-selector on-ready="scopeModel.onAdvancedFilterDimensionSelectorDirectiveReady" selectedvalues="scopeModel.selectedAdvancedFilterDimensions"
                                                     onselectitem="scopeModel.onSelectAdvancedFilterDimensionItem" ondeselectitem="scopeModel.onDeselectAdvancedFilterDimensionItem"
-                                                    normal-col-num="4" hideselectedvaluessection ismultipleselection>
+                                                    normal-col-num="4" isrequired="scopeModel.showAdvancedFilterFields" hideselectedvaluessection ismultipleselection>
                     </vr-analytic-dimension-selector>
+                </span>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="4">
+                    <vr-select datasource="scopeModel.advancedFilterMeasuresRelationTypeDS" onselectionchanged="scopeModel.onAdvancedFilterMeasuresRelationTypeSelectionChanged"
+                               selectedvalues="scopeModel.selectedAdvancedFilterMeasuresRelationType" datavaluefield="value" datatextfield="description" label="Measures Type">
+                    </vr-select>
+                </vr-columns>
+                <span ng-show="scopeModel.showAdvancedFilterMeasures">
+                    <vr-analytic-measure-selector on-ready="scopeModel.onAdvancedFilterMeasureSelectorDirectiveReady" selectedvalues="scopeModel.selectedAdvancedFilterMeasures"
+                                                  normal-col-num="4" isrequired="scopeModel.showAdvancedFilterMeasures" hideselectedvaluessection ismultipleselection>
+                    </vr-analytic-measure-selector>
                 </span>
             </vr-row>
             <!--<vr-row>
@@ -118,11 +132,9 @@
                     <vr-switch value="scopeModel.showLegend" label="Show Legend"></vr-switch>
                 </vr-columns>
                 <vr-columns colnum="4">
-                    <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady"  ondeselectitem="scopeModel.onTableDeselect" selectedvalues="scopeModel.selectedTables"  onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
+                    <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" ondeselectitem="scopeModel.onTableDeselect" selectedvalues="scopeModel.selectedTables" onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
                 </vr-columns>
             </vr-row>
         </vr-section>
     </vr-columns>
 </vr-row>
-
-

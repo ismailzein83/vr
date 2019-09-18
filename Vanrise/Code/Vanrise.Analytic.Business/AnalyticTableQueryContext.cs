@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.Analytic.Business
 {
@@ -147,19 +149,23 @@ namespace Vanrise.Analytic.Business
             if (_measureExternalSourceResults == null)
                 _measureExternalSourceResults = new Dictionary<string, AnalyticMeasureExternalSourceResult>();
 
-            AnalyticMeasureExternalSourceResult rslt;
-            if (!_measureExternalSourceResults.TryGetValue(sourceName, out rslt))
+            AnalyticMeasureExternalSourceResult result;
+            if (!_measureExternalSourceResults.TryGetValue(sourceName, out result))
             {
                 var externalSource = GetMeasureExternalSourceConfig(sourceName);
+
+                var analyticQuery = _query.VRDeepCopy();
+                analyticQuery.FilterGroup = new RecordFilterManager().ReBuildRecordFilterGroupWithExcludedFields(analyticQuery.FilterGroup, _measures.MapRecords(x => x.Key).ToList());
+
                 var measureExternalSourceContext = new AnalyticMeasureExternalSourceContext
                 {
-                    AnalyticQuery = _query
+                    AnalyticQuery = analyticQuery
                 };
-                rslt = externalSource.Config.ExtendedSettings.Execute(measureExternalSourceContext);
-                _measureExternalSourceResults.Add(sourceName, rslt);
+                result = externalSource.Config.ExtendedSettings.Execute(measureExternalSourceContext);
+                _measureExternalSourceResults.Add(sourceName, result);
             }
 
-            return rslt;
+            return result;
         }
 
         public T GetOrCreateCachedObjectBasedOnItemConfig<T>(object cacheName, Func<T> createObject)
@@ -174,6 +180,7 @@ namespace Vanrise.Analytic.Business
         private void FillDimensionNamesFromQueryFilters()
         {
             List<string> dimensionNames = new List<string>();
+
             if (_query.Filters != null && _query.Filters.Count > 0)
                 dimensionNames.AddRange(_query.Filters.Select(itm => itm.Dimension));
 
@@ -189,9 +196,14 @@ namespace Vanrise.Analytic.Business
             {
                 RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
                 if (childFilterGroup != null)
+                {
                     FillDimensionNamesFromFilterGroup(dimensionNames, childFilterGroup);
+                }
                 else
-                    dimensionNames.Add(filter.FieldName);
+                {
+                    if (_dimensions.Any(dimension => dimension.Value.Name == filter.FieldName))
+                        dimensionNames.Add(filter.FieldName);
+                }
             }
         }
 

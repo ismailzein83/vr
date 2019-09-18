@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Analytic\Constants\AccessLevel.js" />
+    <Content Include="Analytic\Constants\AdvancedFilterMeasuresRelationTypeEnum.js" />
     <Content Include="Analytic\Constants\AdvancedFilterFieldsRelationTypeEnum.js" />
     <Content Include="Analytic\Constants\AnalyticMeasureUnitEnum.js" />
     <Content Include="Analytic\Constants\AnalyticQueryHandlerValidatorResultEnum.js" />
