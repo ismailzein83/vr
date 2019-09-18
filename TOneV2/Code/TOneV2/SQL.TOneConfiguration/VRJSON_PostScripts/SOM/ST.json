@@ -2977,6 +2977,22 @@
     },
     {
       "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
+      "Schema": "bp",
+      "TableName": "BPDefinition",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.DeleteGeneratedScriptItem, Vanrise.DevTools.Business",
+        "IdentifierColumn": {
+          "ColumnName": "ID"
+        },
+        "KeyValues": [
+          "'1f4cd94d-293f-4b39-8968-a4166a86eb37'"
+        ],
+        "ConfigId": "411f4a51-1b9a-4221-9f16-1a05c1877eb2"
+      },
+      "Title": "Delete"
+    },
+    {
+      "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
       "Schema": "common",
       "TableName": "VRNamespace",
       "Settings": {
