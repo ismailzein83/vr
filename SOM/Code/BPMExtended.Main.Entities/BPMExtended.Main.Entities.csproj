@@ -87,6 +87,7 @@
     <Compile Include="Contracts\TelephonyContractInfo.cs" />
     <Compile Include="BPTrackingMessageDetail.cs" />
     <Compile Include="DeviceType.cs" />
+    <Compile Include="PackageInfo.cs" />
     <Compile Include="PromotionDetail.cs" />
     <Compile Include="InvoiceEntity.cs" />
     <Compile Include="SOMProcessInstanceLog.cs" />
