@@ -35,13 +35,13 @@ namespace Vanrise.BEBridge.Data.SQL
         {
             string serializedSettings = beReceiveDefinition.Settings != null ? Serializer.Serialize(beReceiveDefinition.Settings) : null;
             int affectedRecords = ExecuteNonQuerySP("[VR_BEBridge].[sp_BEReceiveDefinition_Update]",
-                beReceiveDefinition.BEReceiveDefinitionId, beReceiveDefinition.Name, serializedSettings);
+                beReceiveDefinition.BEReceiveDefinitionId, beReceiveDefinition.Name, beReceiveDefinition.DevProjectId, serializedSettings);
             return (affectedRecords > 0);
         }
         public bool Insert(BEReceiveDefinition beReceiveDefinition)
         {
             string serializedSettings = beReceiveDefinition.Settings != null ? Serializer.Serialize(beReceiveDefinition.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("[VR_BEBridge].[sp_BEReceiveDefinition_Insert]", beReceiveDefinition.BEReceiveDefinitionId, beReceiveDefinition.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("[VR_BEBridge].[sp_BEReceiveDefinition_Insert]", beReceiveDefinition.BEReceiveDefinitionId, beReceiveDefinition.Name, beReceiveDefinition.DevProjectId, serializedSettings);
             return affectedRecords > 0;
         }
         #endregion
@@ -53,6 +53,7 @@ namespace Vanrise.BEBridge.Data.SQL
             {
                 BEReceiveDefinitionId = GetReaderValue<Guid>(reader, "ID"),
                 Name = reader["Name"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Settings = reader["Settings"] != DBNull.Value ? Serializer.Deserialize<BEReceiveDefinitionSettings>(reader["Settings"] as string) : null
             };
         }

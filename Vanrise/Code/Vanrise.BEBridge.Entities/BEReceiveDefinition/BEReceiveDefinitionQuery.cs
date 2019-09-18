@@ -9,5 +9,6 @@ namespace Vanrise.BEBridge.Entities
     public class BEReceiveDefinitionQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

@@ -13,6 +13,8 @@ namespace Vanrise.BEBridge.Entities
 
         public string Name { get; set; }
 
+        public Guid? DevProjectId { get; set; }
+
         public BEReceiveDefinitionSettings Settings { get; set; }
 
     }

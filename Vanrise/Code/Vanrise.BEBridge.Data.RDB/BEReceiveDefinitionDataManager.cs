@@ -15,6 +15,7 @@ namespace Vanrise.BEBridge.Data.RDB
         static string TABLE_ALIAS = "definition";
         const string COL_ID = "ID";
         const string COL_Name = "Name";
+        const string COL_DevProjectID = "DevProjectID";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
@@ -24,6 +25,7 @@ namespace Vanrise.BEBridge.Data.RDB
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -52,6 +54,7 @@ namespace Vanrise.BEBridge.Data.RDB
             {
                 BEReceiveDefinitionId = reader.GetGuid(COL_ID),
                 Name = reader.GetString(COL_Name),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Settings = Common.Serializer.Deserialize<BEReceiveDefinitionSettings>(reader.GetString(COL_Settings))
             };
         }
@@ -81,6 +84,10 @@ namespace Vanrise.BEBridge.Data.RDB
             insertQuery.IfNotExists(TABLE_ALIAS).EqualsCondition(COL_Name).Value(statusDefinitionItem.Name);
             insertQuery.Column(COL_ID).Value(statusDefinitionItem.BEReceiveDefinitionId);
             insertQuery.Column(COL_Name).Value(statusDefinitionItem.Name);
+
+            if (statusDefinitionItem.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(statusDefinitionItem.DevProjectId.Value);
+
             if (statusDefinitionItem.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Common.Serializer.Serialize(statusDefinitionItem.Settings));
             return queryContext.ExecuteNonQuery() > 0;
@@ -95,6 +102,12 @@ namespace Vanrise.BEBridge.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(beReceiveDefinition.Name);
             ifNotExists.NotEqualsCondition(COL_ID).Value(beReceiveDefinition.BEReceiveDefinitionId);
             updateQuery.Column(COL_Name).Value(beReceiveDefinition.Name);
+
+            if (beReceiveDefinition.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(beReceiveDefinition.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
             if (beReceiveDefinition.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Common.Serializer.Serialize(beReceiveDefinition.Settings));
             else

@@ -20,6 +20,9 @@
         var startInstancePermissionAPI;
         var startInstancePermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -42,7 +45,7 @@
             }
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTSourceReaderDefinitions, loadBESyncSettings , loadViewRequiredPermission , loadStartInstanceRequiredPermission]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTSourceReaderDefinitions, loadBESyncSettings, loadViewRequiredPermission, loadStartInstanceRequiredPermission, loadDevProjectSelector]).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -85,6 +88,7 @@
             return {
                 BEReceiveDefinitionId: receveiveDEfinitionEntity != undefined ? receveiveDEfinitionEntity.BEReceiveDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: settings
             };
         }
@@ -173,6 +177,19 @@
             return startInstancePermissionLoadDeferred.promise;
         }
 
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (receveiveDEfinitionEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: receveiveDEfinitionEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.save = function () {
@@ -204,6 +221,11 @@
             $scope.scopeModel.onStartInstanceRequiredPermissionReady = function (api) {
                 startInstancePermissionAPI = api; 
                 startInstancePermissionReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             //$scope.scopeModel.onScheduleTaskRequiredPermissionReady = function (api) {
             //    scheduleTaskPermissionAPI = api;

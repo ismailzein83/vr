@@ -10,5 +10,6 @@ namespace Vanrise.BEBridge.Entities
     {
         public BEReceiveDefinition Entity { get; set; }
         public string Description { get; set; }
+        public string DevProjectName { get; set; }
     }
 }

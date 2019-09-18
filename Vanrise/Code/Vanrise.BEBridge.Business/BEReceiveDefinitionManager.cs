@@ -19,6 +19,7 @@ namespace Vanrise.BEBridge.Business
         #region Ctor/Fields
 
         static SecurityManager s_securityManager = new SecurityManager();
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
         #endregion
         #region Public Methods
@@ -33,10 +34,10 @@ namespace Vanrise.BEBridge.Business
             Func<BEReceiveDefinition, bool> filterExpression = null;
             if (filter != null)
             {
-
-
                 filterExpression = (beReceiveDefinition) =>
                 {
+                    if (Utilities.ShouldHideItemHavingDevProjectId(beReceiveDefinition.DevProjectId))
+                        return false;
 
                     if (filter.Filters != null && !CheckIfFilterIsMatch(beReceiveDefinition, filter.Filters))
                         return false;
@@ -49,7 +50,19 @@ namespace Vanrise.BEBridge.Business
         public IDataRetrievalResult<BEReceiveDefinitionDetail> GetFilteredBeReceiveDefinitions(DataRetrievalInput<BEReceiveDefinitionQuery> input)
         {
             var receiveDefinitions = GetCachedBEReceiveDefinitions().Values.ToList();
-            Func<BEReceiveDefinition, bool> filterExpression = x => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())));
+            Func<BEReceiveDefinition, bool> filterExpression = x =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                if (input.Query.DevProjectIds != null && (!x.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(x.DevProjectId.Value)))
+                    return false;
+
+                return true;
+            };
             return DataRetrievalManager.Instance.ProcessResult(input, receiveDefinitions.ToBigResult(input, filterExpression, BeReceiveDefinitionDetailMapper));
         }
         public BEReceiveDefinition GetReceiveDefinition(Guid receiveDefinitionId)
@@ -182,10 +195,16 @@ namespace Vanrise.BEBridge.Business
 
         public BEReceiveDefinitionDetail BeReceiveDefinitionDetailMapper(BEReceiveDefinition beReceiveDefinition)
         {
+            string devProjectName = null;
+            if (beReceiveDefinition.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(beReceiveDefinition.DevProjectId.Value);
+            }
             BEReceiveDefinitionDetail beReceiveDefinitionDetail = new BEReceiveDefinitionDetail
             {
                 Entity = beReceiveDefinition,
-                Description = ""
+                Description = "",
+                DevProjectName= devProjectName
             };
             return beReceiveDefinitionDetail;
         }
