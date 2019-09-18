@@ -85,6 +85,10 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 var country = entities[0].GetColumnValue("StCountryName");
 
+                ContractManager mngr = new ContractManager();
+                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString());
+                var sequence = contractAddressOutput.Address.Sequence.ToString();
+
                 //check if one of the services is a vpn sevice
                 List <CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());
                 List<SaleService> vpnServices = new CatalogManager().GetVPNDivisionServices();
@@ -137,7 +141,8 @@ namespace BPMExtended.Main.Business
                             Region = area.ToString(),
                             StateProvince = province.ToString(),
                             Street =street.ToString(),
-                            Town = town.ToString()
+                            Town = town.ToString(),
+                            Sequence= sequence
                         }
                     }
 

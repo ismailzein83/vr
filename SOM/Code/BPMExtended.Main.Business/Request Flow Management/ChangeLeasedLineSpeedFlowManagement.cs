@@ -16,7 +16,7 @@ namespace BPMExtended.Main.Business
         public string GetNextStep(string id, string currentStepId)
         {
             string nextStepId = "";
-            switch (currentStepId.ToLower())
+            switch (currentStepId)
             {
                 case welcomeStep: nextStepId = changeRatePlanStep; break;
                 case changeRatePlanStep: nextStepId = technicalStep; break;
