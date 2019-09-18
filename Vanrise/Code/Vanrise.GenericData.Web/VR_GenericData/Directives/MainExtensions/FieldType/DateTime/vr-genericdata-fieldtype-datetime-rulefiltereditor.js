@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData_DateTimeRecordFilterOperatorEnum', 'VR_GenericData_DateTimeRecordFilterComparisonPartEnum', 'UtilsService', 'VRUIUtilsService', 'VRDateTimeService',
-    function (VR_GenericData_DateTimeRecordFilterOperatorEnum, VR_GenericData_DateTimeRecordFilterComparisonPartEnum, UtilsService, VRUIUtilsService, VRDateTimeService) {
+app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData_DateTimeRecordFilterOperatorEnum', 'VR_GenericData_DateTimeRecordFilterComparisonPartEnum', 'UtilsService', 'VRUIUtilsService',
+    function (VR_GenericData_DateTimeRecordFilterOperatorEnum, VR_GenericData_DateTimeRecordFilterComparisonPartEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -48,7 +48,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
 
                     var dateFilterPayload = {
                         fieldType: selectedDataRecordField != undefined ? selectedDataRecordField.Type : undefined,
-                        fieldValue: filterObj != undefined ? filterObj.Value : undefined,
+                        //fieldValue: filterObj != undefined ? filterObj.Value : undefined,
                         fieldTitle: ($scope.selectedFilter != undefined && $scope.selectedFilter.showSecondDateTimePicker) ? 'From' :
                                      isTimeComparisonPart($scope.selectedComparisonPart) ? 'Time' : 'Date'
                     };
@@ -57,12 +57,13 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dateFilterEditorAPI, dateFilterPayload, setLoader, dateFilterReadyDeferred);
                 };
+
                 $scope.onDate2FilterEditorReady = function (api) {
                     date2FilterEditorAPI = api;
 
                     var date2FilterPayload = {
                         fieldType: selectedDataRecordField != undefined ? selectedDataRecordField.Type : undefined,
-                        fieldValue: filterObj != undefined ? filterObj.Value2 : undefined,
+                        //fieldValue: filterObj != undefined ? filterObj.Value2 : undefined,
                         fieldTitle: 'To'
                     };
                     var setLoader = function (value) {
@@ -98,6 +99,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                         }
                     }
                 };
+
                 $scope.onComparisonPartSelectionChanged = function (selectedComparisonPart) {
 
                     if (selectedComparisonPart != undefined) {
@@ -278,4 +280,3 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
 
         return directiveDefinitionObject;
     }]);
-
