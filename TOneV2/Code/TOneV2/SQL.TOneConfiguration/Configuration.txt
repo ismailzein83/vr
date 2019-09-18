@@ -11,7 +11,7 @@ VR_Generic.json
 VR_Reprocess.json
 VR_Analytic.json
 VR_Rules.json
-Invoice.PostDeployment.sql
+VR_Invoice.json
 VR_AccountBalance.json
 VR_Notification.json
 User_Guides.PostDeployment.sql
@@ -24,10 +24,10 @@ Enumerations.sql
 
 TOne
 TOne.PostDeployment.sql
-Deals.PostDeployment.sql
-TOneV1Transition.PostDeployment.sql
-WhS_AccountBalance.PostDeployment.sql
-DataAnalysis.TOne.PostDeployment.sql
+WhS_Deal.json
+TOneV1Transition.json
+WhS_AccountBalance.json
+DataAnalysis_TOne.json
 
 TOneV2.Jazz
 TOne_Jazz.PostDeployment.sql

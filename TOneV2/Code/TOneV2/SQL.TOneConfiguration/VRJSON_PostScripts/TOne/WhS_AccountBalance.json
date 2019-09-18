@@ -1,0 +1,481 @@
+﻿{
+  "Scripts": [
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AssemblyID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
+              "ID": "3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa",
+              "Name": "WhS_AccountBalance",
+              "AssemblyID": null,
+              "CreatedTime": "2019-09-16T10:12:44.533",
+              "LastModifiedTime": "2019-09-16T10:12:44.533"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "ID = '3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "common",
+      "TableName": "ExtensionConfiguration",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "ee2c731e-a5f7-481e-b350-7771c8a0f3bc",
+              "DevProjectID": "3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa",
+              "Name": "TOne Account Balance",
+              "Title": "TOne Account Balance",
+              "ConfigType": "VR_AccountBalance_NotificationTypeExtendedSettingsConfig",
+              "Settings": "{\"Editor\":\"whs-accountbalance-notificationtype-settings\"}",
+              "CreatedTime": "2017-04-12T11:48:34.733",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "b49238ac-54e2-4f3f-8c91-c864b7389566",
+              "DevProjectID": "3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa",
+              "Name": "VR_Notification_GenericFinancialAccountBalanceType_Settings",
+              "Title": "Financial Account Balance Notification",
+              "ConfigType": "VR_AccountBalance_NotificationTypeExtendedSettingsConfig",
+              "Settings": "{\"Editor\" : \"vr-accountbalance-financialaccountbalancenotificationtype\"}",
+              "CreatedTime": "2019-09-18T10:10:10.37",
+              "LastModifiedTime": "2019-09-18T10:10:10.37"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Title",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ConfigType",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = '3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa'",
+        "LastJoinStatement": null,
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "sec",
+      "TableName": "View",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "9ed29ae9-1a08-49dd-b083-242078bbbe71",
+              "DevProjectID": "3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa",
+              "Name": "Financial Alerts",
+              "Title": "Financial Alerts",
+              "Url": null,
+              "Module": "2fbf14b9-fba8-4926-96f2-10e9846f55a4",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities\",\"VRNotificationTypeId\":\"d307a418-81c0-424c-9b2b-5890de5a69cb\"}]}}",
+              "Type": "a196c40a-30b5-4297-b7b0-4344c41ce5a2",
+              "Rank": 30,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-05-14T12:34:06.153"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Title",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Url",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Module",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ActionNames",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Audience",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Content",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Type",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Rank",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = '3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa'",
+        "LastJoinStatement": null,
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "VRNotification",
+      "TableName": "VRAlertRuleType",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "24056159-1454-47d5-82ba-5017943a2a42",
+              "DevProjectID": "3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa",
+              "Name": "Customer Prepaid",
+              "Settings": "{\"$type\":\"Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleTypeSettings, Vanrise.AccountBalance.Business\",\"ConfigId\":\"ba79cb79-d058-4382-88fc-db1c154b5374\",\"NotificationTypeId\":\"d307a418-81c0-424c-9b2b-5890de5a69cb\",\"AccountTypeId\":\"5488a9a2-0200-4895-b6ed-13f35c94d54c\",\"ThresholdExtensionType\":\"WhS_AccountBalance_AlertThreshold_PrePaid\",\"Behavior\":{\"$type\":\"Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleBehavior, Vanrise.AccountBalance.Business\"},\"SettingEditor\":\"vr-notification-vrbalancealertrule-settings\",\"CriteriaDefinition\":{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleDefinitionCriteria, Vanrise.GenericData.Entities\",\"Fields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities\",\"FieldName\":\"Financial Account\",\"Title\":\"Financial Account\",\"FieldType\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"2e16c3d4-837b-4433-b80e-7c02f6d71467\",\"BusinessEntityDefinitionId\":\"ca290901-8259-4a2d-82af-1b5fefb5e40d\",\"IsNullable\":false,\"OrderType\":1},\"RuleStructureBehaviorType\":0,\"Priority\":1,\"ShowInBasicSearch\":false,\"IgnoreCase\":false,\"ValueObjectName\":\"Account\",\"ValuePropertyName\":\"FinancialAccountId\"}]}},\"Objects\":{\"$type\":\"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities\",\"Account\":{\"$type\":\"Vanrise.Entities.VRObjectVariable, Vanrise.Entities\",\"ObjectName\":\"Account\",\"VRObjectTypeDefinitionId\":\"60e921b7-1440-4ceb-ae6c-04881649c5cd\"}},\"Security\":{\"$type\":\"Vanrise.Notification.Entities.AlertRuleTypeSecurity, Vanrise.Notification.Entities\",\"ViewPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"View Rules\"]}}]}},\"AddPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"Add Rules\"]}}]}},\"EditPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"Edit Rules\"]}}]}}}}",
+              "CreatedTime": "2017-04-10T16:40:52.053",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "7c0870f8-4ab1-405d-a9f1-a4b41bce58d1",
+              "DevProjectID": "3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa",
+              "Name": "Netting",
+              "Settings": "{\"$type\":\"Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleTypeSettings, Vanrise.AccountBalance.Business\",\"ConfigId\":\"ba79cb79-d058-4382-88fc-db1c154b5374\",\"NotificationTypeId\":\"d307a418-81c0-424c-9b2b-5890de5a69cb\",\"AccountTypeId\":\"87709be7-082a-46c2-840b-9f380f3ec2f8\",\"ThresholdExtensionType\":\"WhS_AccountBalance_AlertThreshold_PostPaid\",\"Behavior\":{\"$type\":\"Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleBehavior, Vanrise.AccountBalance.Business\"},\"SettingEditor\":\"vr-notification-vrbalancealertrule-settings\",\"CriteriaDefinition\":{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleDefinitionCriteria, Vanrise.GenericData.Entities\",\"Fields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities\",\"FieldName\":\"FinancialAccount\",\"Title\":\"Financial Account\",\"FieldType\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"2e16c3d4-837b-4433-b80e-7c02f6d71467\",\"BusinessEntityDefinitionId\":\"16661e6b-f227-4a8a-a5f5-50ccc52cc15b\",\"IsNullable\":false,\"OrderType\":1},\"RuleStructureBehaviorType\":0,\"Priority\":1,\"ShowInBasicSearch\":false,\"IgnoreCase\":false,\"ValueObjectName\":\"Account\",\"ValuePropertyName\":\"FinancialAccountId\"}]}},\"Objects\":{\"$type\":\"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities\",\"Account\":{\"$type\":\"Vanrise.Entities.VRObjectVariable, Vanrise.Entities\",\"ObjectName\":\"Account\",\"VRObjectTypeDefinitionId\":\"60e921b7-1440-4ceb-ae6c-04881649c5cd\"}},\"Security\":{\"$type\":\"Vanrise.Notification.Entities.AlertRuleTypeSecurity, Vanrise.Notification.Entities\",\"ViewPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"View Rules\"]}}]}},\"AddPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"Add Rules\"]}}]}},\"EditPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"Edit Rules\"]}}]}}}}",
+              "CreatedTime": "2017-04-18T13:25:20.1",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "0c7a8eb1-e905-4cb5-bffc-d9bb08939788",
+              "DevProjectID": "3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa",
+              "Name": "Customer Postpaid",
+              "Settings": "{\"$type\":\"Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleTypeSettings, Vanrise.AccountBalance.Business\",\"ConfigId\":\"ba79cb79-d058-4382-88fc-db1c154b5374\",\"NotificationTypeId\":\"d307a418-81c0-424c-9b2b-5890de5a69cb\",\"AccountTypeId\":\"ebc69b46-d23b-4ada-99f1-b597e7be76b3\",\"ThresholdExtensionType\":\"WhS_AccountBalance_AlertThreshold_PostPaid\",\"Behavior\":{\"$type\":\"Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleBehavior, Vanrise.AccountBalance.Business\"},\"SettingEditor\":\"vr-notification-vrbalancealertrule-settings\",\"CriteriaDefinition\":{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleDefinitionCriteria, Vanrise.GenericData.Entities\",\"Fields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities\",\"FieldName\":\"FinancialAccount\",\"Title\":\"Financial Account\",\"FieldType\":{\"$type\":\"Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"2e16c3d4-837b-4433-b80e-7c02f6d71467\",\"BusinessEntityDefinitionId\":\"89bc46ef-28f0-43ac-9f4a-d3f9c2ea2ef1\",\"IsNullable\":false,\"OrderType\":1},\"RuleStructureBehaviorType\":0,\"Priority\":1,\"ShowInBasicSearch\":false,\"IgnoreCase\":false,\"ValueObjectName\":\"Account\",\"ValuePropertyName\":\"FinancialAccountId\"}]}},\"Objects\":{\"$type\":\"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities\",\"Account\":{\"$type\":\"Vanrise.Entities.VRObjectVariable, Vanrise.Entities\",\"ObjectName\":\"Account\",\"VRObjectTypeDefinitionId\":\"60e921b7-1440-4ceb-ae6c-04881649c5cd\"}},\"Security\":{\"$type\":\"Vanrise.Notification.Entities.AlertRuleTypeSecurity, Vanrise.Notification.Entities\",\"ViewPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"View Rules\"]}}]}},\"AddPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"Add Rules\"]}}]}},\"EditPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"Edit Rules\"]}}]}}}}",
+              "CreatedTime": "2017-04-10T15:35:22.807",
+              "LastModifiedTime": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = '3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa'",
+        "LastJoinStatement": null,
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "common",
+      "TableName": "VRComponentType",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "d307a418-81c0-424c-9b2b-5890de5a69cb",
+              "DevProjectID": "3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa",
+              "Name": "Account Balance Notification",
+              "ConfigID": "fdd73530-067f-4160-ab71-7852303c785c",
+              "Settings": "{\"$type\":\"Vanrise.Notification.Entities.VRNotificationTypeSettings, Vanrise.Notification.Entities\",\"VRComponentTypeConfigId\":\"fdd73530-067f-4160-ab71-7852303c785c\",\"VRAlertLevelDefinitionId\":\"48fc148c-299a-4717-bd03-401bb79c082e\",\"ExtendedSettings\":{\"$type\":\"Vanrise.AccountBalance.Business.AccountBalanceNotificationTypeSettings, Vanrise.AccountBalance.Business\",\"ConfigId\":\"0fc411d1-90fd-417c-bfdf-ec0c35b1a666\",\"SearchRuntimeEditor\":\"vr-accountbalance-notification-searcheditor\",\"BodyRuntimeEditor\":\"vr-accountbalance-notification-bodyeditor\",\"AccountColumnHeader\":\"Financial Account\",\"ShowAccountTypeColumn\":false,\"AccountBalanceNotificationTypeExtendedSettings\":{\"$type\":\"TOne.WhS.AccountBalance.Business.TOneAccountBalanceNotificationTypeSettings, TOne.WhS.AccountBalance.Business\",\"ConfigId\":\"ee2c731e-a5f7-481e-b350-7771c8a0f3bc\",\"NotificationQueryEditor\":\"whs-accountbalance-notificationtype-searcheditor\"}},\"Security\":{\"$type\":\"Vanrise.Notification.Entities.VRNotificationTypeSecurity, Vanrise.Notification.Entities\",\"ViewRequiredPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"3d6b033d-07a5-4f90-bf81-b295c95a27a7\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"View Alerts\"]}}]}},\"HideRequiredPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}}",
+              "CreatedTime": "2017-04-06T10:27:46.35",
+              "LastModifiedTime": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ConfigID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = '3eb1d9b4-45ca-4d77-ba51-1c3b138fe4aa'",
+        "LastJoinStatement": null,
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    }
+  ]
+}

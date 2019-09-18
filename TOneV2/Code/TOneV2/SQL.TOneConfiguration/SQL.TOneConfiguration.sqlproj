@@ -146,6 +146,7 @@
     <Folder Include="VRJSON_PostScripts\Mediation" />
     <Folder Include="VRJSON_PostScripts\Common" />
     <Folder Include="VRJSON_PostScripts\SOM" />
+    <Folder Include="VRJSON_PostScripts\TOne" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -1028,5 +1029,12 @@
     <None Include="VRJSON_PostScripts\Common\VR_Runtime.json" />
     <None Include="VRJSON_PostScripts\SOM\ST.json" />
     <None Include="VRJSON_PostScripts\SOM\SOM.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_Invoice.json" />
+    <None Include="VRJSON_PostScripts\TOne\WhS_AccountBalance.json" />
+    <None Include="VRJSON_PostScripts\TOne\DataAnalysis_TOne.json" />
+    <None Include="VRJSON_PostScripts\TOne\WhS_Deal.json" />
+    <None Include="VRJSON_PostScripts\TOne\TOneV1Transition.json" />
+    <None Include="VRJSON_PostScripts\TOne\WhS_AutoImportSPL.json" />
+    <None Include="VRJSON_PostScripts\TOne\WhS_AccountManager.json" />
   </ItemGroup>
 </Project>
