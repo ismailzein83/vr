@@ -63,7 +63,7 @@ namespace Vanrise.DevTools.Business
             new VRGeneratedScriptTable() { Name ="SystemAction" },
             new VRGeneratedScriptTable() { Name ="BillingTransactionType" },
             new VRGeneratedScriptTable() { Name ="VRAlertRuleType" },
-            new VRGeneratedScriptTable() { Name ="VRAlertRule" },
+            //new VRGeneratedScriptTable() { Name ="VRAlertRule" },
             new VRGeneratedScriptTable() { Name ="VRAlertLevel" },
         }; 
       public class VRGeneratedScriptDevProjectTableParameters
@@ -88,8 +88,8 @@ namespace Vanrise.DevTools.Business
                 {
                     { "VRDevProject",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRDevProject",Schema="common",IdColumnName="ID",WhereCondition=string.Format("ID = '{0}'", devProjectId)}},
                     { "AnalyticTable",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="AnalyticTable",Schema="Analytic",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "AnalyticItemConfig",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="AnalyticItemConfig",Schema="Analytic",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("Analytic","AnalyticTable","TableId")}},
                     { "AnalyticReport",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="AnalyticReport",Schema="Analytic",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "AnalyticItemConfig",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="AnalyticItemConfig",Schema="Analytic",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("Analytic","AnalyticTable","TableId")}},
                     { "DataAnalysisDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataAnalysisDefinition",Schema="Analytic",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "DataAnalysisItemDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="DataAnalysisItemDefinition",Schema="Analytic",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("Analytic","DataAnalysisDefinition","DataAnalysisDefinitionID")}},
                     { "VRWorkflow",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRWorkflow",Schema="bp",IdColumnName="ID",WhereCondition=WhereCondition}},
@@ -101,8 +101,8 @@ namespace Vanrise.DevTools.Business
                     { "Connection",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Connection",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "ExtensionConfiguration",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ExtensionConfiguration",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRObjectTypeDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRObjectTypeDefinition",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "MailMessageTemplate",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="MailMessageTemplate",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition,IncludeOnlyInInsert=true}},
                     { "MailMessageType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="MailMessageType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "MailMessageTemplate",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="MailMessageTemplate",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition,IncludeOnlyInInsert=true}},
                     { "StatusDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="StatusDefinition",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("genericdata","BusinessEntityDefinition","BusinessEntityDefinitionID")}},
                     { "VRComponentType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRComponentType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRNamespace",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNamespace",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
@@ -130,15 +130,15 @@ namespace Vanrise.DevTools.Business
                     { "SchedulerTaskActionType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="SchedulerTaskActionType",Schema="runtime",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "SchedulerTaskTriggerType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="SchedulerTaskTriggerType",Schema="runtime",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "ScheduleTask",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="ScheduleTask",Schema="runtime",IdColumnName="Id",WhereCondition=WhereCondition}},
-                    { "BusinessEntity",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntity",Schema="sec",IdColumnName="Id",WhereCondition=WhereCondition}},
                     { "BusinessEntityModule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntityModule",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "BusinessEntity",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BusinessEntity",Schema="sec",IdColumnName="Id",WhereCondition=WhereCondition}},
                     { "Module",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Module",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "View",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="View",Schema="sec",IdColumnName="ID",WhereCondition=WhereCondition,ExcludedColumns=new List<string>{"IsDeleted" } }},
                     { "Group",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="Group",Schema="sec",IdColumnName="PSIdentifier",WhereCondition=WhereCondition,IncludeOnlyInInsert=true}},
                     { "SystemAction",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="SystemAction",Schema="sec",IdColumnName="Name",WhereCondition=WhereCondition,ExcludedColumns=new List<string>{"ID"}} },
                     { "BillingTransactionType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="BillingTransactionType",Schema="VR_AccountBalance",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRAlertRuleType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRAlertRuleType",Schema="VRNotification",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "VRAlertRule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRAlertRule",Schema="VRNotification",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("VRNotification","VRAlertRuleType","RuleTypeId")}},
+                    //{ "VRAlertRule",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRAlertRule",Schema="VRNotification",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("VRNotification","VRAlertRuleType","RuleTypeId")}},
                     { "VRAlertLevel",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRAlertLevel",Schema="VRNotification",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("genericdata","BusinessEntityDefinition","BusinessEntityDefinitionID")}},
                 };
             }
