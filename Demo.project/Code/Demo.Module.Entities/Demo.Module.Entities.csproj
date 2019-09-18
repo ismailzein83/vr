@@ -81,7 +81,11 @@
     <Compile Include="Employee\EmployeeSettingsConfig.cs" />
     <Compile Include="Factory\Factory.cs" />
     <Compile Include="Factory\FactoryTypeConfig.cs" />
+    <Compile Include="League\LeagueQuery.cs" />
     <Compile Include="League\League.cs" />
+    <Compile Include="League\LeagueDetails.cs" />
+    <Compile Include="League\LeagueInfo.cs" />
+    <Compile Include="League\LeagueInfoFilter.cs" />
     <Compile Include="Manufactory\Manufactory.cs" />
     <Compile Include="Manufactory\ManufactoryDetail.cs" />
     <Compile Include="Manufactory\ManufactoryInfo.cs" />
@@ -122,6 +126,7 @@
     <Compile Include="OldEntities\Master\Master.cs" />
     <Compile Include="OldEntities\Master\MasterDetails.cs" />
     <Compile Include="OldEntities\Master\MasterQuery.cs" />
+    <Compile Include="Player\Player.cs" />
     <Compile Include="Product\SoftwareOperatingSystemConfig.cs" />
     <Compile Include="Product\Product.cs" />
     <Compile Include="Product\ProductDetail.cs" />
@@ -141,7 +146,12 @@
     <Compile Include="Zoo\ZooInfoFilter.cs" />
     <Compile Include="Zoo\ZooQuery.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Demo.BestPractices.Entities\Demo.BestPractices.Entities.csproj">
+      <Project>{F6E779C0-8292-4E15-AF3B-C713666402F1}</Project>
+      <Name>Demo.BestPractices.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

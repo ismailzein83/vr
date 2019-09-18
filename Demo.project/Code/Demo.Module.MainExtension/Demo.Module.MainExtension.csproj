@@ -70,6 +70,8 @@
     <Compile Include="OldEntities\PageDefinition\SubViews\RowDataSubView.cs" />
     <Compile Include="OperatingSystem\Linux.cs" />
     <Compile Include="OperatingSystem\Windows.cs" />
+    <Compile Include="Player\BeginnerPlayer.cs" />
+    <Compile Include="Player\ProfessionalPlayer.cs" />
     <Compile Include="Product\Hardware.cs" />
     <Compile Include="Product\Software.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
