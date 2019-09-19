@@ -95,7 +95,8 @@ namespace BPMExtended.Main.Business
                 InvoiceCode = item.DocumentCode,
                 InvoiceAccount = item.BillingAccountCode,
                 OpenAmount = Convert.ToString(item.OpenAmount),
-                Amount = Convert.ToString(item.Amount)
+                Amount = Convert.ToString(item.Amount),
+                PhoneNumber = item.DirectoryNumber
             };
         }
 

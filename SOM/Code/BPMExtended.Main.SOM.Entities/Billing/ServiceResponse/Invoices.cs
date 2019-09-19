@@ -12,5 +12,8 @@ namespace BPMExtended.Main.SOMAPI
         public decimal Amount { get; set; }
         public decimal OpenAmount { get; set; }
         public string DocumentCode { get; set; }
+        public string LinePath { get; set; }
+        public string DirectoryNumber { get; set; }
+        public string ContractId { get; set; }
     }
 }
