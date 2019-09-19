@@ -502,9 +502,8 @@ namespace Vanrise.GenericData.Business
                         if (genericBusinessEntities.Data != null)
                         {
 
-                            var remoteGridDefinition = _genericBEDefinitionManager.GetGenericBEDefinitionGridDefinition(businessEntityDefinitionId);
-                            var remoteGenericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, true);
-                            var remoteGenericBeActions = _genericBEDefinitionManager.GetCachedGenericBEActionsByActionId(businessEntityDefinitionId);
+                            var gridDefinition = _genericBEDefinitionManager.GetGenericBEDefinitionGridDefinition(businessEntityDefinitionId);
+                            var genericBeActions = _genericBEDefinitionManager.GetCachedGenericBEActionsByActionId(businessEntityDefinitionId);
 
                             foreach (var genericbe in genericBusinessEntities.Data)
                             {
@@ -518,7 +517,7 @@ namespace Vanrise.GenericData.Business
                                         genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
                                     }
                                 }
-                                resultDetail.Add(GenericBusinessEntityDetailMapper(businessEntityDefinitionId, genericBusinessEntity, remoteGenericBEDefinitionSetting, remoteGenericBeActions, remoteGridDefinition));
+                                resultDetail.Add(GenericBusinessEntityDetailMapper(businessEntityDefinitionId, genericBusinessEntity, genericBEDefinitionSetting, genericBeActions, gridDefinition));
                             }
                         }
                         result.Data = resultDetail;
