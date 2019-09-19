@@ -33,7 +33,7 @@ namespace Retail.Billing.Business
             var entityToAddFieldValues = new System.Collections.Generic.Dictionary<string, object>();
             var historyFieldValues = new System.Collections.Generic.Dictionary<string, object>();
 
-            FillFieldValuesFromAddContractInput(input, bet, entityToAddFieldValues, historyFieldValues);
+            FillFieldValuesForAdd(input, bet, entityToAddFieldValues, historyFieldValues);
 
             long contractId = InsertContract(entityToAddFieldValues);
             InsertContractHistory(contractId, historyFieldValues);
@@ -55,7 +55,7 @@ namespace Retail.Billing.Business
             var entityToUpdateFieldValues = new System.Collections.Generic.Dictionary<string, object>();
             var historyFieldValues = new System.Collections.Generic.Dictionary<string, object>();
 
-            FillFieldValuesFromUpdateContractInput(input, existingContract, bet, entityToUpdateFieldValues, historyFieldValues);
+            FillFieldValuesForUpdate(input, existingContract, bet, entityToUpdateFieldValues, historyFieldValues);
 
             var contractHistoryEntitiesToSetEET = GetContractHistoryToSetEET(input.ContractId, bet);
 
@@ -115,7 +115,7 @@ namespace Retail.Billing.Business
             s_genericBEManager.AddGenericBusinessEntity(contractHistoryToAdd);
         }
 
-        private void FillFieldValuesFromAddContractInput(AddContractInput input, DateTime bet,
+        private void FillFieldValuesForAdd(AddContractInput input, DateTime bet,
             Dictionary<string, object> entityToAddFieldValues, Dictionary<string, object> historyFieldValues)
         {
             entityToAddFieldValues.Add("ContractType", input.ContractTypeId);
@@ -128,15 +128,15 @@ namespace Retail.Billing.Business
             historyFieldValues.Add("BillingAccount", input.BillingAccountId);
             historyFieldValues.Add("RatePlan", input.RatePlanId);
             historyFieldValues.Add("MainResourceName", input.MainResourceName);
-            historyFieldValues.Add("Status", s_StatusId_New);
+            historyFieldValues.Add("Status", s_StatusId_New);            
             historyFieldValues.Add("BET", bet);
 
-            FillExtraFieldValuesFromAddContractInput(
-                new ContractManagerFillExtraFieldValuesFromAddContractInputContext(input, bet, entityToAddFieldValues, historyFieldValues)
+            FillExtraFieldValuesForAdd(
+                new ContractManagerFillExtraFieldValuesForAddContext(input, bet, entityToAddFieldValues, historyFieldValues)
                 );
         }
 
-        private void FillFieldValuesFromUpdateContractInput(UpdateContractInput input,
+        private void FillFieldValuesForUpdate(UpdateContractInput input,
             Vanrise.GenericData.Entities.GenericBusinessEntity existingContract, DateTime bet,
             Dictionary<string, object> entityToUpdateFieldValues, Dictionary<string, object> historyFieldValues)
         {
@@ -201,8 +201,8 @@ namespace Retail.Billing.Business
             historyFieldValues.Add("StatusReason", statusReasonId);
             historyFieldValues.Add("BET", bet);
 
-            FillExtraFieldValuesFromUpdateContractInput(
-                new ContractManagerFillExtraFieldValuesFromUpdateContractInputContext(input, existingContract, bet, entityToUpdateFieldValues, historyFieldValues)
+            FillExtraFieldValuesForUpdate(
+                new ContractManagerFillExtraFieldValuesForUpdateContext(input, existingContract, bet, entityToUpdateFieldValues, historyFieldValues)
                 );
         }
 
@@ -269,11 +269,11 @@ namespace Retail.Billing.Business
 
         #region Virtual Methods
 
-        public virtual void FillExtraFieldValuesFromAddContractInput(IContractManagerFillExtraFieldValuesFromAddContractInputContext context)
+        public virtual void FillExtraFieldValuesForAdd(IContractManagerFillExtraFieldValuesForAddContext context)
         {
         }
 
-        public virtual void FillExtraFieldValuesFromUpdateContractInput(IContractManagerFillExtraFieldValuesFromUpdateContractInputContext context)
+        public virtual void FillExtraFieldValuesForUpdate(IContractManagerFillExtraFieldValuesForUpdateContext context)
         {
 
         }
@@ -282,9 +282,9 @@ namespace Retail.Billing.Business
 
         #region Private Classes
 
-        public class ContractManagerFillExtraFieldValuesFromAddContractInputContext : IContractManagerFillExtraFieldValuesFromAddContractInputContext
+        public class ContractManagerFillExtraFieldValuesForAddContext : IContractManagerFillExtraFieldValuesForAddContext
         {
-            public ContractManagerFillExtraFieldValuesFromAddContractInputContext(AddContractInput input, DateTime bet,
+            public ContractManagerFillExtraFieldValuesForAddContext(AddContractInput input, DateTime bet,
             Dictionary<string, object> entityToAddFieldValues, Dictionary<string, object> historyFieldValues)
             {
                 this.Input = input;
@@ -302,9 +302,9 @@ namespace Retail.Billing.Business
             public Dictionary<string, object> HistoryFieldValues { get; private set; }
         }
 
-        public class ContractManagerFillExtraFieldValuesFromUpdateContractInputContext : IContractManagerFillExtraFieldValuesFromUpdateContractInputContext
+        public class ContractManagerFillExtraFieldValuesForUpdateContext : IContractManagerFillExtraFieldValuesForUpdateContext
         {
-            public ContractManagerFillExtraFieldValuesFromUpdateContractInputContext(UpdateContractInput input,
+            public ContractManagerFillExtraFieldValuesForUpdateContext(UpdateContractInput input,
             Vanrise.GenericData.Entities.GenericBusinessEntity existingContract, DateTime bet,
             Dictionary<string, object> entityToUpdateFieldValues, Dictionary<string, object> historyFieldValues)
             {

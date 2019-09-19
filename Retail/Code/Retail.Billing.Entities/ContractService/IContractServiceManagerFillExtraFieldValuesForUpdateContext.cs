@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Retail.Billing.Entities
 {
-    public interface IContractManagerFillExtraFieldValuesFromUpdateContractInputContext
+    public interface IContractServiceManagerFillExtraFieldValuesForUpdateContext
     {
-        UpdateContractInput Input { get; }
+        UpdateContractServiceInput Input { get; }
 
-        Vanrise.GenericData.Entities.GenericBusinessEntity ExistingContract { get; }
+        Vanrise.GenericData.Entities.GenericBusinessEntity ExistingContractService { get; }
 
         DateTime BET { get; }
 

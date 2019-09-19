@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace Retail.Billing.Entities
 {
-    public interface IContractManagerFillExtraFieldValuesFromAddContractInputContext
+    public interface IContractManagerFillExtraFieldValuesForUpdateContext
     {
-        AddContractInput Input { get; }
+        UpdateContractInput Input { get; }
+
+        Vanrise.GenericData.Entities.GenericBusinessEntity ExistingContract { get; }
 
         DateTime BET { get; }
 
-        Dictionary<string, object> EntityToAddFieldValues { get; }
+        Dictionary<string, object> EntityToUpdateFieldValues { get; }
 
         Dictionary<string, object> HistoryFieldValues { get; }
     }
