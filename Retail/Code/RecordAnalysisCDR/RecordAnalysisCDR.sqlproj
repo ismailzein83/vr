@@ -72,5 +72,9 @@
     <Build Include="RecordAnalysis\User Defined Types\C4CDRType.sql" />
     <Build Include="RecordAnalysis\User Defined Types\C4MappedCDRType.sql" />
     <Build Include="Security\RecordAnalysis.sql" />
+    <Build Include="RecordAnalysis\Tables\C4BadCDRs.sql" />
+    <Build Include="Security\VANRISE_wissam.ajamy.sql" />
+    <Build Include="Security\VANRISE_development.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
 </Project>

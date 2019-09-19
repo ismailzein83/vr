@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [RecordAnalysis].[C4CDR] (
-    [Id]                   BIGINT          NULL,
+    [Id]                   BIGINT          NOT NULL,
     [AttemptDateTime]      DATETIME        NULL,
     [AlertDateTime]        DATETIME        NULL,
     [ConnectDateTime]      DATETIME        NULL,
@@ -17,6 +17,8 @@
     [OriginationPointCode] VARCHAR (50)    NULL,
     [DestinationPointCode] VARCHAR (50)    NULL
 );
+
+
 
 
 
