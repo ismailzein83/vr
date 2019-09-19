@@ -22,3 +22,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_C4CDR_AttemptDateTime]
+    ON [RecordAnalysis].[C4CDR]([AttemptDateTime] ASC);
+

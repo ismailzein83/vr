@@ -22,3 +22,10 @@
     [QueueItemId]         BIGINT          NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_C4BadCDRs_AttemptDateTime]
+    ON [RecordAnalysis].[C4BadCDRs]([AttemptDateTime] ASC);
+
