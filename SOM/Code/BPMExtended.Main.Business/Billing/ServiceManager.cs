@@ -168,6 +168,12 @@ namespace BPMExtended.Main.Business
                 //packagesIds.Add(packages.XDSL);
             }
 
+            if (lob == "GSHDSL")
+            {
+                packagesIds.Add(packages.Core);
+                //packagesIds.Add(packages.XDSL);
+            }
+
             if (lob == "Leased Line")
             {
                 packagesIds.Add(packages.Core);
@@ -195,7 +201,12 @@ namespace BPMExtended.Main.Business
                 excludedPackages.Add(packages.Core);
                 //excludedPackages.Add(packages.XDSL);
             }
-            
+            if (lob == "GSHDSL")
+            {
+                excludedPackages.Add(packages.Core);
+                //excludedPackages.Add(packages.XDSL);
+            }
+
             CRMCustomerManager manager = new CRMCustomerManager();
             bool isForeigner = false;
 

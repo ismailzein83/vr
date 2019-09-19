@@ -32,6 +32,7 @@ namespace BPMExtended.Main.Business
         const string addressStep = "25C17DAA-A88C-49EA-80EA-E592A9062C2C";
 
         const string servicesStep = "4E7683D1-6A0F-47FB-9310-5438328C3659";
+        const string createContractStep = "75D1C37F-A470-4AF8-828D-5AB590FB27D9";
         const string paymentStep = "0AD7DC9D-2F75-449D-A6CD-6D78F4EFEDF7";
 
         const string printContractStep = "545FFAEC-162A-43A9-AAB6-67C68D9C8BB9";
@@ -60,11 +61,12 @@ namespace BPMExtended.Main.Business
                     else if (isNetworkTeam) nextStepId = technicalStep;
                     else nextStepId = addressStep;
                     break;
-                case waitingListStep: nextStepId = addressStep; break;
+                case waitingListStep: nextStepId = freeTechnicalStep; break;
                 case addressStep: nextStepId = credentialsStep; break;
                 case credentialsStep: nextStepId = printCredentialsStep; break;
                 case printCredentialsStep: nextStepId = servicesStep; break;
-                case servicesStep: nextStepId = paymentStep; break;
+                case servicesStep: nextStepId = createContractStep; break;
+                case createContractStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = printContractStep; break;
                 case printContractStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = technicalStep; break;
