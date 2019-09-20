@@ -508,6 +508,14 @@
     <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
     </Reference>
