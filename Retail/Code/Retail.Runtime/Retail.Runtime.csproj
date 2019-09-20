@@ -438,6 +438,12 @@
     <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.BP.Activities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.BP.Activities.dll</HintPath>
     </Reference>
