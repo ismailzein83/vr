@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class Time
+    public class Time : IComparable
     {
         #region Properties/Ctor
 
@@ -220,6 +220,56 @@ namespace Vanrise.Entities
         public override string ToString()
         {
             return this.ToLongTimeString();
+        }
+
+        #endregion
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            var target = obj as Time;
+
+            if (target == null)
+                return 1;
+
+            if (this.Hour > target.Hour)
+            {
+                return 1;
+            }
+            else if (this.Hour < target.Hour)
+            {
+                return -1;
+            }
+
+            if (this.Minute > target.Minute)
+            {
+                return 1;
+            }
+            else if (this.Minute < target.Minute)
+            {
+                return -1;
+            }
+
+            if (this.Second > target.Second)
+            {
+                return 1;
+            }
+            else if (this.Second < target.Second)
+            {
+                return -1;
+            }
+
+            if (this.MilliSecond > target.MilliSecond)
+            {
+                return 1;
+            }
+            else if (this.MilliSecond < target.MilliSecond)
+            {
+                return -1;
+            }
+
+            return 0;
         }
 
         #endregion
