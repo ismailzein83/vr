@@ -61,5 +61,8 @@
     [CostDealZoneGroupNb]            INT              NULL,
     [CostDealTierNb]                 INT              NULL,
     [CostDealRateTierNb]             INT              NULL,
-    [CostDealDurInSec]               DECIMAL (20, 4)  NULL);
+    [CostDealDurInSec]               DECIMAL (20, 4)  NULL,
+    [ZeroDuration]                   BIT              NULL);
+
+
 

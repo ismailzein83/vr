@@ -61,8 +61,11 @@
     [CostDealDurInSec]               DECIMAL (20, 4)  NULL,
     [ReleaseCode]                    VARCHAR (50)     NULL,
     [ReleaseSource]                  VARCHAR (10)     NULL,
+    [ZeroDuration]                   BIT              NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
