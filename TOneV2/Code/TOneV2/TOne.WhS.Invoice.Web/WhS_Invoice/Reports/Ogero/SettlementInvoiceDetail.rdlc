@@ -531,7 +531,7 @@
         <Height>0.94119in</Height>
         <Width>7.52364in</Width>
         <Visibility>
-          <Hidden>=iif(CountRows("InvoiceMonths")&lt;=0,true,false)</Hidden>
+          <Hidden>=iif(CountRows("VoiceInvoiceMonths")&lt;=0,true,false)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -548,7 +548,7 @@
         <Width>19.11005cm</Width>
         <ZIndex>1</ZIndex>
         <Visibility>
-          <Hidden>=iif(CountRows("InvoiceMonths")&lt;=0,true,false)</Hidden>
+          <Hidden>=iif(CountRows("VoiceInvoiceMonths")&lt;=0,true,false)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -1430,7 +1430,7 @@
         <Width>19.11001cm</Width>
         <ZIndex>5</ZIndex>
         <Visibility>
-          <Hidden>=iif(CountRows("InvoiceMonths")&lt;=0,true,false)</Hidden>
+          <Hidden>=iif(CountRows("VoiceInvoiceMonths")&lt;=0,true,false)</Hidden>
         </Visibility>
         <Style>
           <Border>
