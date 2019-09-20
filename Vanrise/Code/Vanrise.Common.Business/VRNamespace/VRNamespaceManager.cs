@@ -173,7 +173,7 @@ namespace Vanrise.Common.Business
             Dictionary<string, MethodInfo> methods = new Dictionary<string, MethodInfo>();
             if (classType != null)
             {
-                MethodInfo[] methodInfos = classType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                MethodInfo[] methodInfos = classType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
                 if (methodInfos != null && methodInfos.Length > 0)
                 {
                     return methodInfos.ToDictionary(key => key.Name, value => value);
