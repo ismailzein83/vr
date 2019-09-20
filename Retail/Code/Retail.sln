@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -299,6 +299,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.Ogero", "Retail.Ogero", "{44D39FF5-7C02-4446-83F0-C86E5A561CCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Ogero.Business", "Retail.Ogero.Business\Retail.Ogero.Business.csproj", "{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetworkProvision", "NetworkProvision", "{D7E98035-84EC-440C-8DEE-53602D374531}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Entities", "NetworkProvision.Entities\NetworkProvision.Entities.csproj", "{878424C9-A62D-4AD2-84BE-3C56989384C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Business", "NetworkProvision.Business\NetworkProvision.Business.csproj", "{39F45AF7-987B-493B-88D1-4B4165EA9AE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Data", "NetworkProvision.Data\NetworkProvision.Data.csproj", "{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -828,6 +836,18 @@ Global
 		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{878424C9-A62D-4AD2-84BE-3C56989384C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{878424C9-A62D-4AD2-84BE-3C56989384C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{878424C9-A62D-4AD2-84BE-3C56989384C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{878424C9-A62D-4AD2-84BE-3C56989384C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39F45AF7-987B-493B-88D1-4B4165EA9AE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39F45AF7-987B-493B-88D1-4B4165EA9AE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39F45AF7-987B-493B-88D1-4B4165EA9AE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39F45AF7-987B-493B-88D1-4B4165EA9AE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -974,14 +994,18 @@ Global
 		{BDE86CAA-5682-4C81-B21D-552F89DDEA7A} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
 		{44D39FF5-7C02-4446-83F0-C86E5A561CCE} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
 		{6EF9B143-40DA-4EF9-8F13-BFE72BA0C2FE} = {44D39FF5-7C02-4446-83F0-C86E5A561CCE}
+		{D7E98035-84EC-440C-8DEE-53602D374531} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{878424C9-A62D-4AD2-84BE-3C56989384C4} = {D7E98035-84EC-440C-8DEE-53602D374531}
+		{39F45AF7-987B-493B-88D1-4B4165EA9AE1} = {D7E98035-84EC-440C-8DEE-53602D374531}
+		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC} = {D7E98035-84EC-440C-8DEE-53602D374531}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 123
+		SccNumberOfProjects = 126
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = Retail.sln
@@ -1471,5 +1495,17 @@ Global
 		SccProjectTopLevelParentUniqueName122 = Retail.sln
 		SccProjectName122 = Retail.Ogero.Business
 		SccLocalPath122 = Retail.Ogero.Business
+		SccProjectUniqueName123 = NetworkProvision.Entities\\NetworkProvision.Entities.csproj
+		SccProjectTopLevelParentUniqueName123 = Retail.sln
+		SccProjectName123 = NetworkProvision.Entities
+		SccLocalPath123 = NetworkProvision.Entities
+		SccProjectUniqueName124 = NetworkProvision.Business\\NetworkProvision.Business.csproj
+		SccProjectTopLevelParentUniqueName124 = Retail.sln
+		SccProjectName124 = NetworkProvision.Business
+		SccLocalPath124 = NetworkProvision.Business
+		SccProjectUniqueName125 = NetworkProvision.Data\\NetworkProvision.Data.csproj
+		SccProjectTopLevelParentUniqueName125 = Retail.sln
+		SccProjectName125 = NetworkProvision.Data
+		SccLocalPath125 = NetworkProvision.Data
 	EndGlobalSection
 EndGlobal
