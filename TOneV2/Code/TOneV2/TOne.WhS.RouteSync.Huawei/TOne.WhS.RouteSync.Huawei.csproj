@@ -82,35 +82,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\HuaweiFTPLogger.cs" />
-    <Compile Include="Business\RouteCaseManager.cs" />
-    <Compile Include="Business\RouteManager.cs" />
-    <Compile Include="Business\RouteSucceededManager.cs" />
-    <Compile Include="Business\SwitchLoggerManager.cs" />
-    <Compile Include="Business\WhSRouteSyncHuaweiManager.cs" />
+    <Compile Include="Huawei\Business\HuaweiFTPLogger.cs" />
+    <Compile Include="Huawei\Business\RouteCaseManager.cs" />
+    <Compile Include="Huawei\Business\RouteManager.cs" />
+    <Compile Include="Huawei\Business\RouteSucceededManager.cs" />
+    <Compile Include="Huawei\Business\SwitchLoggerManager.cs" />
+    <Compile Include="Huawei\Business\WhSRouteSyncHuaweiManager.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Controller\HuaweiSwitchLoggerController.cs" />
-    <Compile Include="Data\IDataManager.cs" />
-    <Compile Include="Data\IRouteCaseDataManager.cs" />
-    <Compile Include="Data\IRouteDataManager.cs" />
-    <Compile Include="Data\IRouteSucceededDataManager.cs" />
-    <Compile Include="Data\IWhSRouteSyncHuaweiDataManager.cs" />
-    <Compile Include="Data\RouteSyncHuaweiDataManagerFactory.cs" />
-    <Compile Include="Entities\CarrierMapping.cs" />
-    <Compile Include="Entities\Context\RouteCaseContext.cs" />
-    <Compile Include="Entities\Context\RouteContext.cs" />
-    <Compile Include="Entities\Context\WhSRouteSyncHuaweiContext.cs" />
-    <Compile Include="Entities\Enums.cs" />
-    <Compile Include="Entities\HuaweiCommands.cs" />
-    <Compile Include="Entities\HuaweiConvertedRoutesPayload.cs" />
-    <Compile Include="Entities\HuaweiSSHCommunication.cs" />
-    <Compile Include="Entities\HuaweiSwitchRouteSynchronizerSettings.cs" />
-    <Compile Include="Entities\RouteCase.cs" />
-    <Compile Include="Entities\SwitchLogger.cs" />
-    <Compile Include="Entities\SwitchLoggerConfig.cs" />
-    <Compile Include="Entities\HuaweiConvertedRoute.cs" />
+    <Compile Include="Huawei\Controller\HuaweiSwitchLoggerController.cs" />
+    <Compile Include="Huawei\Data\IDataManager.cs" />
+    <Compile Include="Huawei\Data\IRouteCaseDataManager.cs" />
+    <Compile Include="Huawei\Data\IRouteDataManager.cs" />
+    <Compile Include="Huawei\Data\IRouteSucceededDataManager.cs" />
+    <Compile Include="Huawei\Data\IWhSRouteSyncHuaweiDataManager.cs" />
+    <Compile Include="Huawei\Data\RouteSyncHuaweiDataManagerFactory.cs" />
+    <Compile Include="Huawei\Entities\CarrierMapping.cs" />
+    <Compile Include="SoftX3000\Entities\CarrierMapping.cs" />
+    <Compile Include="Huawei\Entities\Context\RouteCaseContext.cs" />
+    <Compile Include="Huawei\Entities\Context\RouteContext.cs" />
+    <Compile Include="Huawei\Entities\Context\WhSRouteSyncHuaweiContext.cs" />
+    <Compile Include="Huawei\Entities\Enums.cs" />
+    <Compile Include="Huawei\Entities\HuaweiCommands.cs" />
+    <Compile Include="Huawei\Entities\HuaweiConvertedRoutesPayload.cs" />
+    <Compile Include="Huawei\Entities\HuaweiSSHCommunication.cs" />
+    <Compile Include="Huawei\Entities\HuaweiSwitchRouteSynchronizerSettings.cs" />
+    <Compile Include="Huawei\Entities\RouteCase.cs" />
+    <Compile Include="Huawei\Entities\SwitchLogger.cs" />
+    <Compile Include="Huawei\Entities\SwitchLoggerConfig.cs" />
+    <Compile Include="Huawei\Entities\HuaweiConvertedRoute.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="HuaweiSWSync.cs" />
+    <Compile Include="SoftX3000\HuaweiSoftX3000SWSync.cs" />
+    <Compile Include="Huawei\HuaweiSWSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +131,11 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SoftX3000\Business\" />
+    <Folder Include="SoftX3000\Controller\" />
+    <Folder Include="SoftX3000\Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
