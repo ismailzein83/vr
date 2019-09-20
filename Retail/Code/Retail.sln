@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -307,6 +307,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Business", "NetworkProvision.Business\NetworkProvision.Business.csproj", "{39F45AF7-987B-493B-88D1-4B4165EA9AE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Data", "NetworkProvision.Data\NetworkProvision.Data.csproj", "{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Billing.MainExtensions", "Retail.Billing.MainExtensions\Retail.Billing.MainExtensions.csproj", "{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -848,6 +850,10 @@ Global
 		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -998,12 +1004,13 @@ Global
 		{878424C9-A62D-4AD2-84BE-3C56989384C4} = {D7E98035-84EC-440C-8DEE-53602D374531}
 		{39F45AF7-987B-493B-88D1-4B4165EA9AE1} = {D7E98035-84EC-440C-8DEE-53602D374531}
 		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC} = {D7E98035-84EC-440C-8DEE-53602D374531}
+		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E} = {BE797DB1-98AD-4594-B6FB-6F172802D4E0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 126
+		SccNumberOfProjects = 127
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1507,5 +1514,9 @@ Global
 		SccProjectTopLevelParentUniqueName125 = Retail.sln
 		SccProjectName125 = NetworkProvision.Data
 		SccLocalPath125 = NetworkProvision.Data
+		SccProjectUniqueName126 = Retail.Billing.MainExtensions\\Retail.Billing.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName126 = Retail.sln
+		SccProjectName126 = Retail.Billing.MainExtensions
+		SccLocalPath126 = Retail.Billing.MainExtensions
 	EndGlobalSection
 EndGlobal
