@@ -82,37 +82,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Huawei\Business\HuaweiFTPLogger.cs" />
-    <Compile Include="Huawei\Business\RouteCaseManager.cs" />
-    <Compile Include="Huawei\Business\RouteManager.cs" />
-    <Compile Include="Huawei\Business\RouteSucceededManager.cs" />
-    <Compile Include="Huawei\Business\SwitchLoggerManager.cs" />
-    <Compile Include="Huawei\Business\WhSRouteSyncHuaweiManager.cs" />
+    <Compile Include="MSoftX3000\Business\HuaweiFTPLogger.cs" />
+    <Compile Include="MSoftX3000\Business\RouteCaseManager.cs" />
+    <Compile Include="MSoftX3000\Business\RouteManager.cs" />
+    <Compile Include="MSoftX3000\Business\RouteSucceededManager.cs" />
+    <Compile Include="MSoftX3000\Business\SwitchLoggerManager.cs" />
+    <Compile Include="MSoftX3000\Business\WhSRouteSyncHuaweiManager.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Huawei\Controller\HuaweiSwitchLoggerController.cs" />
-    <Compile Include="Huawei\Data\IDataManager.cs" />
-    <Compile Include="Huawei\Data\IRouteCaseDataManager.cs" />
-    <Compile Include="Huawei\Data\IRouteDataManager.cs" />
-    <Compile Include="Huawei\Data\IRouteSucceededDataManager.cs" />
-    <Compile Include="Huawei\Data\IWhSRouteSyncHuaweiDataManager.cs" />
-    <Compile Include="Huawei\Data\RouteSyncHuaweiDataManagerFactory.cs" />
-    <Compile Include="Huawei\Entities\CarrierMapping.cs" />
+    <Compile Include="MSoftX3000\Controller\HuaweiSwitchLoggerController.cs" />
+    <Compile Include="MSoftX3000\Data\IDataManager.cs" />
+    <Compile Include="MSoftX3000\Data\IRouteCaseDataManager.cs" />
+    <Compile Include="MSoftX3000\Data\IRouteDataManager.cs" />
+    <Compile Include="MSoftX3000\Data\IRouteSucceededDataManager.cs" />
+    <Compile Include="MSoftX3000\Data\IWhSRouteSyncHuaweiDataManager.cs" />
+    <Compile Include="MSoftX3000\Data\RouteSyncHuaweiDataManagerFactory.cs" />
+    <Compile Include="MSoftX3000\Entities\CarrierMapping.cs" />
     <Compile Include="SoftX3000\Entities\CarrierMapping.cs" />
-    <Compile Include="Huawei\Entities\Context\RouteCaseContext.cs" />
-    <Compile Include="Huawei\Entities\Context\RouteContext.cs" />
-    <Compile Include="Huawei\Entities\Context\WhSRouteSyncHuaweiContext.cs" />
-    <Compile Include="Huawei\Entities\Enums.cs" />
-    <Compile Include="Huawei\Entities\HuaweiCommands.cs" />
-    <Compile Include="Huawei\Entities\HuaweiConvertedRoutesPayload.cs" />
-    <Compile Include="Huawei\Entities\HuaweiSSHCommunication.cs" />
-    <Compile Include="Huawei\Entities\HuaweiSwitchRouteSynchronizerSettings.cs" />
-    <Compile Include="Huawei\Entities\RouteCase.cs" />
-    <Compile Include="Huawei\Entities\SwitchLogger.cs" />
-    <Compile Include="Huawei\Entities\SwitchLoggerConfig.cs" />
-    <Compile Include="Huawei\Entities\HuaweiConvertedRoute.cs" />
+    <Compile Include="MSoftX3000\Entities\Context\RouteCaseContext.cs" />
+    <Compile Include="MSoftX3000\Entities\Context\RouteContext.cs" />
+    <Compile Include="MSoftX3000\Entities\Context\WhSRouteSyncHuaweiContext.cs" />
+    <Compile Include="MSoftX3000\Entities\Enums.cs" />
+    <Compile Include="MSoftX3000\Entities\HuaweiCommands.cs" />
+    <Compile Include="MSoftX3000\Entities\HuaweiConvertedRoutesPayload.cs" />
+    <Compile Include="MSoftX3000\Entities\HuaweiSSHCommunication.cs" />
+    <Compile Include="MSoftX3000\Entities\HuaweiSwitchRouteSynchronizerSettings.cs" />
+    <Compile Include="MSoftX3000\Entities\RouteCase.cs" />
+    <Compile Include="MSoftX3000\Entities\SwitchLogger.cs" />
+    <Compile Include="MSoftX3000\Entities\SwitchLoggerConfig.cs" />
+    <Compile Include="MSoftX3000\Entities\HuaweiConvertedRoute.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="SoftX3000\HuaweiSoftX3000SWSync.cs" />
-    <Compile Include="Huawei\HuaweiSWSync.cs" />
+    <Compile Include="MSoftX3000\HuaweiSWSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
