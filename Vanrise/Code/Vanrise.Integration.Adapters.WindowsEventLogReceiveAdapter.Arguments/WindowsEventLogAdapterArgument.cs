@@ -12,6 +12,8 @@ namespace Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments
         public string Password { get; set; }
         public string HostName { get; set; }
         public string Domain { get; set; }
+        public int BatchSize { get; set; }
+        public DateTime? InitialStartDate { get; set; }
 
         #endregion
     }

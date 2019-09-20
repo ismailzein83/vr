@@ -29,7 +29,7 @@ namespace Vanrise.Integration.Entities
 
         public bool IsFile { get { return false; } }
 
-        public bool IsMultipleReadings { get { return true; } }
+        public bool IsMultipleReadings { get { return false; } }
 
         public void OnDisposed()
         {
@@ -40,5 +40,11 @@ namespace Vanrise.Integration.Entities
     {
         public string Description { get; set; }
         public DateTime? TimeCreated { get; set; }
+        public string MachineName { get; set; }
+        public string LevelDisplayName { get; set; }
+        public string TaskDisplayName { get; set; }
+        public string ProviderName { get; set; }
+        public string DescriptionXml { get; set; }
+
     }
 }

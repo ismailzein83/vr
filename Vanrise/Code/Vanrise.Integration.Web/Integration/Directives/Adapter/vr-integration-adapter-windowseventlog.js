@@ -43,7 +43,9 @@ function (UtilsService) {
                     HostName: $scope.hostName,
                     UserName: $scope.userName,
                     Password: $scope.password,
-                    Sources: $scope.sources
+                    Sources: $scope.sources,
+                    BatchSize: $scope.batchSize,
+                    InitialStartDate: $scope.initialStartDate
                 };
                 return obj;
             };
@@ -64,10 +66,10 @@ function (UtilsService) {
                         $scope.userName = argumentData.UserName;
                         $scope.password = argumentData.Password;
                         $scope.sources = argumentData.Sources;
+                        $scope.batchSize = argumentData.BatchSize;
+                        $scope.initialStartDate = argumentData.InitialStartDate;
                     }
                     var adapterState = payload.adapterState;
-                    if (adapterState != undefined) {
-                    }
                 }
 
             };

@@ -35,60 +35,134 @@ namespace Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter
                 securedPassword.AppendChar(ch);
             }
             securedPassword.MakeReadOnly();
-            EventLogSession eventLogSession = new EventLogSession(windowsEventLogAdapterArgument.HostName, windowsEventLogAdapterArgument.Domain, windowsEventLogAdapterArgument.UserName, securedPassword, SessionAuthentication.Default);
-            foreach (var source in windowsEventLogAdapterArgument.Sources)
+            using (EventLogSession eventLogSession = new EventLogSession(windowsEventLogAdapterArgument.HostName, windowsEventLogAdapterArgument.Domain, windowsEventLogAdapterArgument.UserName, securedPassword, SessionAuthentication.Default))
             {
-                var sourceState = windowsEventLogAdapterState.EventStateBySource.GetOrCreateItem(source);
-               
-                var startTime = sourceState.LastEventTime;
-                var endTime = DateTime.Now;
-                long lastId = sourceState.LastEventId;
-
-                var querySelect = string.Format("*[System[TimeCreated[@SystemTime >= '{0}']]] and *[System[TimeCreated[@SystemTime <= '{1}']]] and *[System[EventID > '{2}']]", startTime.ToString("o"), endTime.ToString("o"), lastId);
-                var eventLogQuery = new EventLogQuery("Application", PathType.LogName, querySelect);
-                eventLogQuery.Session = eventLogSession;
-
-                EventLogReader reader = new EventLogReader(eventLogQuery);
-
-                var count = 0;
-
-                List<WindowsEventLog> newEvents = new List<WindowsEventLog>();
-
-                while (count <= reader.BatchSize)
+                foreach (var source in windowsEventLogAdapterArgument.Sources)
                 {
-                    var readerdata = reader.ReadEvent();
-                    if (readerdata != null)
+                    var sourceState = windowsEventLogAdapterState.EventStateBySource.GetOrCreateItem(source);
+
+                    var startTime = sourceState.LastEventTime;
+                    if (startTime == DateTime.MinValue && windowsEventLogAdapterArgument.InitialStartDate.HasValue)
+                        startTime = windowsEventLogAdapterArgument.InitialStartDate.Value;
+                    long lastId = sourceState.LastEventId;
+                    DateTime maxDate = sourceState.LastEventTime;
+
+                    var querySelect = string.Format("*[System[TimeCreated[@SystemTime >= '{0}']]] and *[System[EventID > '{1}']]", startTime.ToString("o"), lastId);
+                    var eventLogQuery = new EventLogQuery(source, PathType.LogName, querySelect);
+                    eventLogQuery.Session = eventLogSession;
+                    int batchSize = windowsEventLogAdapterArgument.BatchSize;
+                    using (EventLogReader reader = new EventLogReader(eventLogQuery))
                     {
-                        string message = readerdata.FormatDescription();
-                        if(readerdata.RecordId.HasValue)
-                          lastId = readerdata.RecordId.Value;
-                        newEvents.Add(new WindowsEventLog
+                        List<WindowsEventLog> newEvents = new List<WindowsEventLog>();
+
+                        EventRecord readerdata = null;
+                        do
                         {
-                            TimeCreated = readerdata.TimeCreated,
-                            Description = readerdata.FormatDescription()
-                        });
+                            readerdata = reader.ReadEvent();
+                            if (readerdata != null)
+                            {
+                                DateTime? timeCreated = null;
+                                string description = null;
+                                string xml = null;
+                                string machineName = null;
+                                string levelDisplayName = null;
+                                string taskDisplayName = null;
+                                string providerName = null;
+
+                                try
+                                {
+                                    timeCreated = readerdata.TimeCreated;
+                                    if (timeCreated.HasValue)
+                                        maxDate = timeCreated.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    base.LogError("Cannot read property 'TimeCreated', Reason:'{0}'", ex.Message);
+                                }
+                                try
+                                {
+                                    if (readerdata.RecordId.HasValue)
+                                        lastId = readerdata.RecordId.Value;
+                                }
+                                catch (Exception ex)
+                                {
+                                    base.LogError("Cannot read property 'RecordId', Reason:'{0}'",  ex.Message);
+                                }
+
+                                try
+                                {
+                                    if (readerdata.UserId != null)
+                                    {
+                                        description = readerdata.FormatDescription();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    base.LogError("Cannot read property 'FormatDescription', Reason:'{0}'", ex.Message);
+                                }
+
+                                try
+                                {
+                                    xml = readerdata.ToXml();
+                                }
+                                catch (Exception ex)
+                                {
+                                    base.LogError("Cannot read property 'ToXml', Reason:'{0}'", ex.Message);
+                                }
+
+
+                                try
+                                {
+                                    machineName = readerdata.MachineName;
+                                    levelDisplayName = readerdata.LevelDisplayName;
+                                    taskDisplayName = readerdata.TaskDisplayName;
+                                    providerName = readerdata.ProviderName;
+                                }
+                                catch(Exception ex)
+                                {
+                                    base.LogError("Cannot read properties from event logs, Reason:'{0}'", ex.Message);
+                                }
+
+                                newEvents.Add(new WindowsEventLog
+                                {
+                                    TimeCreated = timeCreated,
+                                    Description = description,
+                                    MachineName = machineName,
+                                    LevelDisplayName = levelDisplayName,
+                                    TaskDisplayName= taskDisplayName,
+                                    ProviderName = providerName,
+                                    DescriptionXml = xml
+                                });
+                            }
+
+                            batchSize--;
+                            if(batchSize == 0)
+                            {
+                                if (newEvents.Count > 0)
+                                {
+                                    context.OnDataReceived(new WidowsEventLogImportedData
+                                    {
+                                        Events = newEvents
+                                    });
+                                    windowsEventLogAdapterState = SaveOrGetAdapterState(context, windowsEventLogAdapterArgument, windowsEventLogAdapterState.EventStateBySource);
+                                }
+                                batchSize = windowsEventLogAdapterArgument.BatchSize;
+                            }
+                            sourceState.LastEventTime = maxDate;
+                            sourceState.LastEventId = lastId;
+                        }
+                        while (readerdata != null);
+                        if (newEvents.Count > 0)
+                        {
+                            context.OnDataReceived(new WidowsEventLogImportedData
+                            {
+                                Events = newEvents
+                            });
+                            windowsEventLogAdapterState = SaveOrGetAdapterState(context, windowsEventLogAdapterArgument, windowsEventLogAdapterState.EventStateBySource);
+                        }
                     }
-                   
-                    count++;
                 }
-
-                if (newEvents.Count > 0)
-                {
-                    context.OnDataReceived(new WidowsEventLogImportedData
-                    {
-                        Events = newEvents
-                    });
-                }
-
-                sourceState.LastEventTime = endTime;
-                sourceState.LastEventId = lastId;
-            }
-
-            eventLogSession.Dispose();
-
-            windowsEventLogAdapterState = SaveOrGetAdapterState(context, windowsEventLogAdapterArgument, windowsEventLogAdapterState.EventStateBySource);
-
-            base.LogVerbose("Establishing SFTP Connection");
+            }            
         }
 
         #region Private Functions
