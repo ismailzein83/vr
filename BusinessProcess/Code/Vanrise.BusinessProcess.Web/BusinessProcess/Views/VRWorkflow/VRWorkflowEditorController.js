@@ -89,7 +89,7 @@
                         savePromise.then(function () {
                             promiseDeferred.resolve();
                         }).catch(function (error) {
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                            VRNotificationService.notifyException(error, $scope);
                             promiseDeferred.reject();
                         });
                     }
@@ -97,7 +97,7 @@
                         promiseDeferred.resolve();
                     }
                 }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    VRNotificationService.notifyException(error, $scope);
                     promiseDeferred.reject();
                 });
 
