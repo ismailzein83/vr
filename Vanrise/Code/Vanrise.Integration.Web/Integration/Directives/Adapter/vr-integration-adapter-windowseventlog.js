@@ -67,7 +67,6 @@ function (UtilsService) {
                     }
                     var adapterState = payload.adapterState;
                     if (adapterState != undefined) {
-                        $scope.lastImportedId = adapterState.LastImportedId;
                     }
                 }
 

@@ -68,6 +68,7 @@ namespace Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter
                             Description = readerdata.FormatDescription()
                         });
                     }
+                   
                     count++;
                 }
 
