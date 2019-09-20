@@ -13,7 +13,7 @@ namespace Retail.Billing.Entities
 
     #region Implementations (need to be moved to MainExtensions)
 
-    public class RetailBillingCustomCodeChargeType : RetailBillingChargeType
+    public class RetailBillingCustomCodeChargeType : RetailBillingChargeTypeExtendedSettings
     {
         public override Guid ConfigId => new Guid("049FB2B2-DB88-4F04-8B8B-69688D4CAB5A");
 
@@ -25,6 +25,8 @@ namespace Retail.Billing.Entities
         public string ChargeSettingsGenericEditor { get; set; }
 
         public string PricingLogic { get; set; }
+
+        public override string RuntimeEditor => throw new NotImplementedException();
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {
@@ -42,7 +44,7 @@ namespace Retail.Billing.Entities
         public Dictionary<string, Object> FieldValues { get; set; }
     }
 
-    public class RetailBillingAnalyticQueryChargeType : RetailBillingChargeType
+    public class RetailBillingAnalyticQueryChargeType : RetailBillingChargeTypeExtendedSettings
     {
         public override Guid ConfigId => new Guid("E611AADC-30EE-488A-894D-526EB922793A");
 
@@ -53,6 +55,8 @@ namespace Retail.Billing.Entities
         public string AmountMeasureName { get; set; }
 
         public string CurrencyMeasureName { get; set; }
+
+        public override string RuntimeEditor => throw new NotImplementedException();
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {
