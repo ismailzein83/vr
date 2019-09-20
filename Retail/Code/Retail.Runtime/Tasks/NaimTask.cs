@@ -1,12 +1,8 @@
-﻿using Retail.Ringo.ProxyAPI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
-using Vanrise.Common.Business;
-using Vanrise.Voucher.Business;
+using Retail.Billing.Entities;
 
 namespace Retail.Runtime.Tasks
 {
@@ -14,6 +10,78 @@ namespace Retail.Runtime.Tasks
     {
         public void Execute()
         {
+
+            string FilterGroup = "", FirstName = "اسماعيل",  MiddleName = "احمد", LastName = "زين", MotherName = "سلوى";
+            decimal CustomerId = 6;
+
+            Vanrise.GenericData.Entities.RecordFilterGroup recordFilterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup()
+            {
+                LogicalOperator = Vanrise.GenericData.Entities.RecordQueryLogicalOperator.And,
+                Filters = new System.Collections.Generic.List<Vanrise.GenericData.Entities.RecordFilter>() { }
+            };
+
+            Vanrise.GenericData.Entities.RecordFilterGroup subRecordFilterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup()
+            {
+                LogicalOperator = Vanrise.GenericData.Entities.RecordQueryLogicalOperator.Or,
+                Filters = new System.Collections.Generic.List<Vanrise.GenericData.Entities.RecordFilter>() { }
+            };
+
+
+            var parentsFilters = new Vanrise.GenericData.Entities.StringListRecordFilter()
+            {
+                FieldName = "FirstName",
+                CompareOperator = Vanrise.GenericData.Entities.ListRecordFilterOperator.In,
+                Values = new System.Collections.Generic.List<string>() { FirstName, MiddleName, MotherName }
+            };
+
+            var paternalSiblingsOrChildrenFilters = new Vanrise.GenericData.Entities.StringListRecordFilter()
+            {
+                FieldName = "MiddleName",
+                CompareOperator = Vanrise.GenericData.Entities.ListRecordFilterOperator.In,
+                Values = new System.Collections.Generic.List<string>() { FirstName, MiddleName }
+            };
+
+                      subRecordFilterGroup.Filters.Add(Vanrise.GenericData.Business.Helper.ConvertToRecordFilter("FirstName", new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType(), parentsFilters));
+            subRecordFilterGroup.Filters.Add(Vanrise.GenericData.Business.Helper.ConvertToRecordFilter("MiddleName", new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType(), paternalSiblingsOrChildrenFilters));
+
+            recordFilterGroup.Filters.Add(subRecordFilterGroup);
+
+            recordFilterGroup.Filters.Add(new Vanrise.GenericData.Entities.StringRecordFilter()
+            {
+                FieldName = "LastName",
+                CompareOperator = Vanrise.GenericData.Entities.StringRecordFilterOperator.Equals,
+                Value = LastName
+            });
+            recordFilterGroup.Filters.Add(new Vanrise.GenericData.Entities.NonEmptyRecordFilter()
+            {
+                FieldName = "DunningStatus"
+            });
+            recordFilterGroup.Filters.Add(new Vanrise.GenericData.Entities.NumberListRecordFilter()
+            {
+                FieldName = "ID",
+                CompareOperator = Vanrise.GenericData.Entities.ListRecordFilterOperator.NotIn,
+                Values = new System.Collections.Generic.List<decimal>() { CustomerId }
+            });
+            FilterGroup = Vanrise.Common.Serializer.Serialize(recordFilterGroup);
+
+
+
+            var entities = new Vanrise.GenericData.Business.GenericBusinessEntityManager().GetAllGenericBusinessEntities(new System.Guid("cd136747-8961-4794-a5c6-a78bb948a8e6"), null, recordFilterGroup);
+
+
+
+
+            //var s = billingContractServiceManager.GetBillingContractServices(recordFilterGroup);
+            //List<BillingRatePlanService> billingRatePlanServices = new List<BillingRatePlanService>();
+
+            //foreach (var na in s)
+            //{
+            //    var billingRatePlanService = billingRatePlanServiceManager.GetBillingRatePlanServiceByRatePlanAndService(na.RatePlanId, na.ServiceID);
+            //    if (billingRatePlanService != null)
+            //        billingRatePlanServices.Add(billingRatePlanService);
+            //}
+            var nnsms = 0;
+
             //var runtimeServices = new List<Vanrise.Runtime.Entities.RuntimeService>();
 
             //// BP Services
@@ -64,7 +132,7 @@ namespace Retail.Runtime.Tasks
 
 
             //  var retailInvoiceSettings = new Retail.BusinessEntity.Business.ConfigManager().GetRetailTaxesDefinitions();
-            int a;
+            int tta = 0;
 
 
         }
