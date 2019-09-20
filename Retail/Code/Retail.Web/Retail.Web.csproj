@@ -973,6 +973,10 @@
       <Project>{f0f463c2-64f4-48dc-95ae-fd7f6bca4ac3}</Project>
       <Name>Retail.Billing.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Billing.MainExtensions\Retail.Billing.MainExtensions.csproj">
+      <Project>{ff3da5f6-df08-4282-a82c-15fe13ab796e}</Project>
+      <Name>Retail.Billing.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Billing.Web\Retail.Billing.Web.csproj">
       <Project>{952a19a2-0b1b-44f1-a119-5151d32a86dc}</Project>
       <Name>Retail.Billing.Web</Name>

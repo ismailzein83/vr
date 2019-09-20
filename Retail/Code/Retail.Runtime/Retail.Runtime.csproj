@@ -764,6 +764,10 @@
       <Project>{f0f463c2-64f4-48dc-95ae-fd7f6bca4ac3}</Project>
       <Name>Retail.Billing.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Billing.MainExtensions\Retail.Billing.MainExtensions.csproj">
+      <Project>{ff3da5f6-df08-4282-a82c-15fe13ab796e}</Project>
+      <Name>Retail.Billing.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.BP.Activities\Retail.BusinessEntity.BP.Activities.csproj">
       <Project>{5ecd4fc8-3080-43e8-ad80-581289f30509}</Project>
       <Name>Retail.BusinessEntity.BP.Activities</Name>
