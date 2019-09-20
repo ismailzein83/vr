@@ -1056,6 +1056,86 @@ namespace TestRuntime
             LogVerbose("Finished");
             return result;
         }
+         
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_SQL_NokiaSiemens(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        {
+            List<dynamic> cdrs = new List<dynamic>();
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
+
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDR");
+
+            int rowCount = 0;
+            int maximumBatchSize = 50000;
+
+            var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
+            IDataReader reader = importedData.Reader;
+
+            while (reader.Read())
+            {
+                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+
+                cdr.Tag = reader["SessionID"] as string;
+                cdr.IDonSwitch = (int)reader["ID"];
+                cdr.AttemptDateTime = (DateTime)reader["AttemptDateTime"];
+                cdr.AlertDateTime = Utils.GetReaderValue<DateTime?>(reader, "AlertDateTime");
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, "DurationInSeconds");
+                cdr.InTrunk = reader["IN_TRUNK"] as string;
+                cdr.InCarrier = reader["IN_CARRIER"] as string;
+                cdr.OutTrunk = reader["OUT_TRUNK"] as string;
+                cdr.OutCarrier = reader["OUT_CARRIER"] as string;
+                cdr.CGPN = reader["CGPN"] as string;
+                cdr.CDPN = reader["CDPN"] as string;
+                cdr.CauseFromReleaseCode = reader["CAUSE_FROM_RELEASE_CODE"] as string;
+                cdr.CauseFrom = reader["CAUSE_FROM"] as string;
+                cdr.CauseToReleaseCode = reader["CAUSE_TO_RELEASE_CODE"] as string;
+
+                string extraFields = reader["EXTRA_FIELDS"] as string;
+                if (!string.IsNullOrEmpty(extraFields))
+                {
+                    var extraFieldKVP = extraFields.Split(':');
+
+                    cdr.ExtraFields = new Dictionary<string, string>();
+                    cdr.ExtraFields[extraFieldKVP[0]] = extraFieldKVP[1];
+                }
+
+                cdrs.Add(cdr);
+                importedData.LastImportedId = reader["ID"];
+
+                rowCount++;
+                if (rowCount == maximumBatchSize)
+                    break;
+            }
+
+            if (cdrs.Count > 0)
+            {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
+
+                long currentId = startingId;
+                foreach (var cdr in cdrs)
+                {
+                    cdr.Id = currentId;
+                    currentId++;
+                }
+
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
+                mappedBatches.Add("Distribute Raw CDRs Stage", batch);
+            }
+            else
+            {
+                importedData.IsEmpty = true;
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+
+            return result;
+        }
 
         private static void LogVerbose(string Message)
         {
