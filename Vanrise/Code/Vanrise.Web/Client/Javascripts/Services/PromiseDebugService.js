@@ -9,6 +9,12 @@
         var registeredPromises = [];
 
         function registerPromise(promiseObj) {
+            //var createPromiseLocation = getCreatePromiseLocation();
+            //if (createPromiseLocation == undefined)
+            //    return;
+
+            //if (promiseObj.name == undefined)
+            //    promiseObj.name = "Promise(" + createPromiseLocation + ")";
 
             registeredPromises.push(promiseObj);
 
@@ -41,6 +47,28 @@
                     resolvedVerbose(resolvedPromises, pendingPromisesName, "color: green", "color: red");
                 }
             });
+        }
+
+        function getCreatePromiseLocation() {
+            var stackString = Error().stack.toString();
+            var indexOfModulePath = stackString.search("/Modules/");
+            if (indexOfModulePath == -1)
+                return undefined;
+
+            var modulePath = stackString.substring(indexOfModulePath);
+            var indexOfParanthese = modulePath.indexOf(")");
+            if (indexOfParanthese == -1)
+                return undefined;
+
+            modulePath = modulePath.substring(0, indexOfParanthese);
+            var lastIndexOfSlash = modulePath.lastIndexOf("/");
+            var lastIndexOf2Points = modulePath.lastIndexOf(":");
+
+            if (lastIndexOfSlash == -1 || lastIndexOf2Points == -1)
+                return undefined;
+
+            modulePath = modulePath.substring(lastIndexOfSlash + 1, lastIndexOf2Points);
+            return modulePath;
         }
 
         function registredVerbose(registredPromiseName, color) {

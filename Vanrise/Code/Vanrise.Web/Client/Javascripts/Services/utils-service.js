@@ -356,8 +356,11 @@
             this.reject = deferred.reject;
 
             if (promiseName != undefined) {
-                VRPromiseDebugService.registerPromise({ promise: this.promise, name: promiseName});
+                VRPromiseDebugService.registerPromise({ promise: this.promise, name: promiseName });
             }
+            //else {
+            //    VRPromiseDebugService.registerPromise({ promise: this.promise, name: undefined });
+            //}
         }
 
         function linkExistingPromiseToPromiseDeferred(existingPromise, promiseDeferred) {

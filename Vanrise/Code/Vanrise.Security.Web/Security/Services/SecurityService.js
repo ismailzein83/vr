@@ -82,12 +82,12 @@ app.service('SecurityService', ['$rootScope', 'Sec_CookieService', 'UtilsService
         }
 
         function HasPermissionToActions(systemActionNames) {
-            var dummyPromise = UtilsService.createPromiseDeferred();
             if (Sec_CookieService.getUserToken() && location.pathname != '' && location.pathname.indexOf('/Security/Login') < 0) {
                 return VR_Sec_SecurityAPIService.HasPermissionToActions(systemActionNames);
 
             }
             else {
+                var dummyPromise = UtilsService.createPromiseDeferred();
                 dummyPromise.resolve(false);
                 return dummyPromise.promise;
             }
