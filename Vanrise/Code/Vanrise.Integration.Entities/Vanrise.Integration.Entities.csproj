@@ -82,6 +82,7 @@
     <Compile Include="Receive\ImportedDataTypes\ExcelFileImportedData.cs" />
     <Compile Include="Receive\ImportedDataTypes\IImportedData.cs" />
     <Compile Include="Receive\ImportedDataTypes\StreamReaderImportedData.cs" />
+    <Compile Include="Receive\ImportedDataTypes\WidowsEventLogImportedData.cs" />
     <Compile Include="Receive\MappedBatchItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Receive\ImportedDataTypes\TextImportedData.cs" />

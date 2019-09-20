@@ -107,6 +107,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Integration\Directives\Adapter\Templates\AdapterWindowsEventLogTemplate.html" />
+    <Content Include="Integration\Directives\Adapter\vr-integration-adapter-windowseventlog.js" />
     <Content Include="Integration\Directives\DataSource\vr-integration-importedbatch-executionstatus-selector.js" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\Templates\SizeBasedFileDelayCheckerTemplate.html" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\Templates\TimeBasedFileDelayCheckerTemplate.html" />

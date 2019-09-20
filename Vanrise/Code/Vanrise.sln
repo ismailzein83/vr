@@ -481,6 +481,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MobileNetwork", "MobileNetw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.MobileNetwork.Web", "Vanrise.MobileNetwork.Web\Vanrise.MobileNetwork.Web.csproj", "{C0A37425-62F1-4198-BED2-ED5F38D6078A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter", "Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter\Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.csproj", "{E75DA416-7BA8-4952-BFD2-2B345438567F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments", "Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments\Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments.csproj", "{3796DB0E-4EC4-4036-A350-D669E54939B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2265,6 +2269,30 @@ Global
 		{C0A37425-62F1-4198-BED2-ED5F38D6078A}.Release|x64.Build.0 = Release|Any CPU
 		{C0A37425-62F1-4198-BED2-ED5F38D6078A}.Release|x86.ActiveCfg = Release|Any CPU
 		{C0A37425-62F1-4198-BED2-ED5F38D6078A}.Release|x86.Build.0 = Release|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Debug|x64.Build.0 = Debug|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Debug|x86.Build.0 = Debug|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Release|x64.ActiveCfg = Release|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Release|x64.Build.0 = Release|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Release|x86.ActiveCfg = Release|Any CPU
+		{E75DA416-7BA8-4952-BFD2-2B345438567F}.Release|x86.Build.0 = Release|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Debug|x64.Build.0 = Debug|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Debug|x86.Build.0 = Debug|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Release|x64.ActiveCfg = Release|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Release|x64.Build.0 = Release|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Release|x86.ActiveCfg = Release|Any CPU
+		{3796DB0E-4EC4-4036-A350-D669E54939B7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2482,12 +2510,14 @@ Global
 		{06ADBD08-530D-4387-A107-CDC33C96E715} = {0A9E0DE2-DA6F-417D-BEFD-B31E866F8865}
 		{945B0865-4588-489C-AF05-7F09C88872DF} = {0A9E0DE2-DA6F-417D-BEFD-B31E866F8865}
 		{C0A37425-62F1-4198-BED2-ED5F38D6078A} = {0A9E0DE2-DA6F-417D-BEFD-B31E866F8865}
+		{E75DA416-7BA8-4952-BFD2-2B345438567F} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
+		{3796DB0E-4EC4-4036-A350-D669E54939B7} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A6C2049-65DE-477B-B7A1-CD4DBAC577AF}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 207
+		SccNumberOfProjects = 209
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -3315,5 +3345,13 @@ Global
 		SccProjectTopLevelParentUniqueName206 = Vanrise.sln
 		SccProjectName206 = Vanrise.MobileNetwork.Web
 		SccLocalPath206 = Vanrise.MobileNetwork.Web
+		SccProjectUniqueName207 = Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter\\Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.csproj
+		SccProjectTopLevelParentUniqueName207 = Vanrise.sln
+		SccProjectName207 = Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter
+		SccLocalPath207 = Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter
+		SccProjectUniqueName208 = Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments\\Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments.csproj
+		SccProjectTopLevelParentUniqueName208 = Vanrise.sln
+		SccProjectName208 = Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments
+		SccLocalPath208 = Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments
 	EndGlobalSection
 EndGlobal
