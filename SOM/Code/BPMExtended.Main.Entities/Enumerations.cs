@@ -431,6 +431,11 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("2F9ECCE9-DFD7-4F15-9FED-61483A30534A")]
         BSCSSuspensionFromDunning =49,
 
+        [Description("Bill On Demand Operation")]
+        [EntitySchemaName("StBillOnDemandOperation")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("ee43e28d-aa12-41a3-8c97-626dcaad95b0")]
+        BillOnDemandOperation = 50,
     }
     public enum ContractStatus
     {
