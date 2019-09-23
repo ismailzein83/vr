@@ -973,19 +973,20 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO,
+        public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CSO,
             string BankCode, string AccountNumber, string BankName, string IBAN, string country, string DefaultRatePlan, string nationality, string birthDate, string building, string career,
             string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
-            string street, string stateProvince, string language, string title, string town, string addressNotes
+            string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId
             )
         {
             IDManager manager = new IDManager();
-            CustomerId = manager.GetCustomerNextId();
+            string customerId = manager.GetCustomerNextId();
             DateTime dob = DateTime.MinValue;
             DateTime.TryParse(birthDate, out dob);
 
             string cso = GetCSOId(CSO);
             string billcycle = GetDefaultBillCycle();
+            string externalCustomerId = new CatalogManager().GetExternalCustomerSetId(segmentId);
             string rateplan = GetDefaultRatePlan();
             string countryNumber = GetCountryNumber(country);
             string documentType = GetDocumentType(documentTypeId);
@@ -1004,50 +1005,52 @@ namespace BPMExtended.Main.Business
             CustomerCreationOutput output = new CustomerCreationOutput();
             CreateCustomerInput input = new CreateCustomerInput
             {
-                AccountNumber = AccountNumber,
-                BankCode = BankCode,
-                BankName = BankName,
-                City = City,
-                CSO = cso,
+                CustomerId = customerId,
                 CustomerCategoryId = CustomerCategoryId,
-                FirstName = FirstName,
-                LastName = LastName,
-                PaymentMethodId = PaymentMethodId,
-                CustomerId = CustomerId,
-                Country = countryNumber,
                 DefaultRatePlan = rateplan,
-                IBAN = IBAN,
-                Nationality = nationalityNumber,
-                ValidFromDate = DateTime.Now,
-                DebitAccountOwner = FirstName,
-                BankSwiftCode = "",
-                BillCycle = billcycle,
-                BirthDate = dob,
-                Building = building,
-                Career = career,
-                DocumentId = documentId,
-                DocumentTypeId = documentType,
-                Email = email,
-                FaxNumber = faxNumber,
-                Floor = floor,
-                HomePhone = homePhone,
+                Title = customerTitle,
+                FirstName = FirstName,
                 MiddleName = middleName,
-                MobilePhone = mobilePhone,
+                LastName = LastName,
                 MotherName = motherName,
+                BirthDate = dob,
+                Career = career,
+                Language = customerLanguage,
+                Nationality = nationalityNumber,
+                ExternalCustomerSetId = externalCustomerId,
+                Country = countryNumber,
+                StateProvince = stateProvince,
+                City = City,
+                Town = town,
                 Region = region,
                 Street = street,
-                Language = customerLanguage,
+                Building = building,
+                Floor = floor,
+                AddressNotes = addressNotes,
+                HomePhone = homePhone,
+                FaxNumber = faxNumber,
+                MobilePhone = mobilePhone,
+                BusinessPhone = businessPhone,
+                Email = email,
+                CSO = cso,
                 PaymentResponsibility = true,
-                StateProvince = stateProvince,
-                Title = customerTitle,
-                Notes = addressNotes,
-                Town = town
+                PaymentMethodId = PaymentMethodId,
+                BillCycle = billcycle,
+                BankCode = BankCode,
+                BankName = BankName,
+                AccountNumber = AccountNumber,
+                DebitAccountOwner = FirstName,
+                IBAN = IBAN,
+                BankSwiftCode = "",
+                DocumentId = documentId,
+                DocumentTypeId = documentType,
+                ValidFromDate = DateTime.Now,
             };
 
             using (var client = new SOMClient())
             {
                 output = client.Post<CreateCustomerInput, CustomerCreationOutput>("api/SOM.ST/Billing/CreateCustomer", input);
-                output.CustomerSequenceId = CustomerId;
+                output.CustomerSequenceId = customerId;
             }
             return output;
         }
@@ -1273,6 +1276,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StCountry");
+            esq.AddColumn("StCountry.Id");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
             esq.AddColumn("StArea");
@@ -1281,6 +1286,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StProvince.Id");
             esq.AddColumn("StTown");
             esq.AddColumn("StTown.Id");
+            esq.AddColumn("StLocation");
+            esq.AddColumn("StLocation.Id");
             esq.AddColumn("StStreet");
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
@@ -1307,10 +1314,12 @@ namespace BPMExtended.Main.Business
                 var street = entities[0].GetColumnValue("StStreet");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var subTypeId = entities[0].GetColumnValue("StSubTypesId");
-                    var city = entities[0].GetColumnValue("StCityName");
+                var countryId = entities[0].GetColumnValue("StCountryId");
+                var city = entities[0].GetColumnValue("StCityName");
                     var area = entities[0].GetColumnValue("StAreaName");
                     var province = entities[0].GetColumnValue("StProvinceName");
                     var town = entities[0].GetColumnValue("StTownName");
+                var locationType = entities[0].GetColumnValue("StLocationName");
                 var subTypeName = entities[0].GetTypedColumnValue<string>(subType.Name);
 
 
@@ -1362,7 +1371,7 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new TelephonyContractOnHoldInput
                     {
-                        LinePathId = linePathId,//"11112222",
+                        LinePathId = linePathId,
                         PhoneNumber = phoneNumber.ToString(),
                         SubType = subTypeName,//new CommonManager().GetSubTypeIdentifier(subTypeId.ToString()),
                         ServiceResource = serviceResourceId,
@@ -1373,17 +1382,18 @@ namespace BPMExtended.Main.Business
                         StateProvince = province.ToString(),
                         Street= street.ToString(),
                         Region = area.ToString(),
-                        CountryId = "206",
+                        CountryId = GetCountryNumber(countryId.ToString()),
+                        LocationType = locationType.ToString(),
                         Notes = addressNotes.ToString(),
-                        CSO = info.csoBSCSId,//info.csoId,
-                        RatePlanId = ratePlanId,//ratePlanId.ToString(),
+                        CSO = info.csoBSCSId,
+                        RatePlanId = ratePlanId,
                         ContractServices = contractServices,
                         DepositServices = depositServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),
                             RequestId = requestId.ToString(),
-                            CustomerId = info.CustomerId //"CusId00026"
+                            CustomerId = info.CustomerId 
                         }
                     }
 

@@ -496,6 +496,26 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public string GetExternalCustomerSetId(string segmentId)
+        {
+            string externalCustomerSetID = null;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSegments");
+            esq.AddColumn("StExternalCustomerSetID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", segmentId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                externalCustomerSetID = entities[0].GetTypedColumnValue<string>("StExternalCustomerSetID");
+            }
+
+            return externalCustomerSetID;
+        }
+
         public List<SaleService> GetADSLFeesForTelephonyContractTakeOver()
         {
             List<SaleService> fees = new List<SaleService>();

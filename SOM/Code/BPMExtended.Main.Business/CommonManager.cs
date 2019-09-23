@@ -145,9 +145,9 @@ namespace BPMExtended.Main.Business
             return name;
         }
 
-        public AddressData GetAddressData(string city , string province , string area, string town)
+        public AddressData GetAddressData(string city , string province , string area, string town, string locationType)
         {
-            Guid cityId=Guid.Empty, provinceId= Guid.Empty, areaId= Guid.Empty, townId= Guid.Empty;
+            Guid cityId=Guid.Empty, provinceId= Guid.Empty, areaId= Guid.Empty, townId= Guid.Empty, locationTypeId = Guid.Empty;
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             EntityCollection entities;
@@ -163,6 +163,19 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 cityId = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);
+            }
+
+            //Location Type
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLocationType");
+            var IdColLocationType = esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", locationType);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                locationTypeId = entities[0].GetTypedColumnValue<Guid>(IdColLocationType.Name);
             }
 
             //province
@@ -211,6 +224,7 @@ namespace BPMExtended.Main.Business
                 AreaId = areaId,
                 ProvinceId = provinceId,
                 TownId = townId,
+                LocationTypeId = locationTypeId
             };
         }
 

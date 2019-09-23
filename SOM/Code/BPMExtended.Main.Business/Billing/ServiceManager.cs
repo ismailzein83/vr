@@ -27,7 +27,7 @@ namespace BPMExtended.Main.Business
         #region Public
 
 
-        public RatePlanChangeResponse ReadProductChangeServices(string contractId , string newRatePlanId)
+        public RatePlanChangeResponse ReadProductChangeServices(string contractId, string newRatePlanId)
         {
 
             var item = new RatePlanChangeResponse();
@@ -45,7 +45,7 @@ namespace BPMExtended.Main.Business
             var servicesInfoItems = new List<ServiceInfo>();
             using (SOMClient client = new SOMClient())
             {
-                List<ServiceDefinition> items= client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetServicesDefinition"));
+                List<ServiceDefinition> items = client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetServicesDefinition"));
                 foreach (var item in items)
                 {
                     var serviceInfoItem = ServiceDefinitionToInfoMapper(item);
@@ -148,7 +148,7 @@ namespace BPMExtended.Main.Business
             return contractServices;
         }
 
-        public List<ServiceDetail> GetCoreServices(string ratePlanId,string lob)
+        public List<ServiceDetail> GetCoreServices(string ratePlanId, string lob)
         {
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
@@ -182,7 +182,7 @@ namespace BPMExtended.Main.Business
             return coreServices;
         }
 
-        public List<ServiceDetail> GetOptionalServices(string ratePlanId , string switchId, string contactId,string lob)
+        public List<ServiceDetail> GetOptionalServices(string ratePlanId, string switchId, string contactId, string lob)
         {
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
@@ -210,10 +210,10 @@ namespace BPMExtended.Main.Business
             CRMCustomerManager manager = new CRMCustomerManager();
             bool isForeigner = false;
 
-            if(contactId!=null && contactId != ""&& lob =="Line Subscription")
+            if (contactId != null && contactId != "" && lob == "Line Subscription")
                 isForeigner = manager.IsContactForeigner(new Guid(contactId));
 
-            var services = GetServicesDetailByRateplanAndPackages(ratePlanId, switchId, excludedPackages,isForeigner);
+            var services = GetServicesDetailByRateplanAndPackages(ratePlanId, switchId, excludedPackages, isForeigner);
             return services;
         }
         public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, List<string> packagesIds)
@@ -228,7 +228,7 @@ namespace BPMExtended.Main.Business
             using (SOMClient client = new SOMClient())
             {
                 List<ServiceDefinition> items = client.Post<ServiceInput, List<ServiceDefinition>>("api/SOM.ST/Billing/GetServicesByRateplanAndPackages", serviceInput);
-               // List<ServiceDefinition> items = client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetServicesByRateplanAndPackage?ratePlanId=TM006&packageId=SP005"));
+                // List<ServiceDefinition> items = client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetServicesByRateplanAndPackage?ratePlanId=TM006&packageId=SP005"));
                 foreach (var item in items)
                 {
                     var serviceDetailItem = ServiceDefinitionToDetailMapper(item);
@@ -238,10 +238,11 @@ namespace BPMExtended.Main.Business
             return servicesDetailItems;
         }
 
-        public List<ServiceDetail> GetServicesDetailByRateplanAndPackages(string rateplanId,string switchId, List<string> packages,bool isForeigner)
+        public List<ServiceDetail> GetServicesDetailByRateplanAndPackages(string rateplanId, string switchId, List<string> packages, bool isForeigner)
         {
             var servicesDetailItems = new List<ServiceDetail>();
             var filteredServicesDetailItems = new List<ServiceDetail>();
+            var foreignerFilteredServicesDetailItems = new List<ServiceDetail>();
 
             var multiplePackagesServiceInput = new MultiplePackagesServiceInput()
             {
@@ -249,7 +250,7 @@ namespace BPMExtended.Main.Business
                 SwitchId = switchId,
                 ExcludedPackages = packages
             };
-            
+
             using (SOMClient client = new SOMClient())
             {
                 List<ServiceDefinition> items = client.Post<MultiplePackagesServiceInput, List<ServiceDefinition>>("api/SOM.ST/Billing/GetRatePlanServices", multiplePackagesServiceInput);
@@ -263,9 +264,10 @@ namespace BPMExtended.Main.Business
                 List<string> specialServicesIds = new CatalogManager().GetSpecialServicesIds();
 
                 //filter the optional services (servicesDetailItems - special services)
+                //filteredServicesDetailItems = servicesDetailItems.FindAllRecords(item => !specialServicesIds.Contains(item.Id)).ToList();
                 filteredServicesDetailItems = (from item in servicesDetailItems
                                                where !specialServicesIds.Contains(item.Id)
-                                                select item).ToList();
+                                               select item).ToList();
 
                 if (isForeigner)
                 {
@@ -281,22 +283,26 @@ namespace BPMExtended.Main.Business
                     {
                         serviceIds.Add(entity.GetTypedColumnValue<string>(Idcol.Name));
                     }
-                    filteredServicesDetailItems.Clear();
-                    filteredServicesDetailItems = (from item in filteredServicesDetailItems
-                                                   where !serviceIds.Contains(item.Id)
-                                                   select item).ToList();
+                    //filteredServicesDetailItems.Clear();
+                    foreignerFilteredServicesDetailItems = (from item in filteredServicesDetailItems
+                                                            where !serviceIds.Contains(item.Id)
+                                                            select item).ToList();
                 }
 
-               /* Dictionary<string, string> servicesDiscount = new CatalogManager().GetServicesDiscount();
+                /* Dictionary<string, string> servicesDiscount = new CatalogManager().GetServicesDiscount();
 
-                for (int index=0;index < filteredServicesDetailItems.Count;index++)
-                {
-                    ServiceDetail item = filteredServicesDetailItems.ElementAt(index);
+                 for (int index=0;index < filteredServicesDetailItems.Count;index++)
+                 {
+                     ServiceDetail item = filteredServicesDetailItems.ElementAt(index);
 
-                    if (servicesDiscount.ContainsKey(item.Id)) { item.CanDiscount = true; }
-                }*/
+                     if (servicesDiscount.ContainsKey(item.Id)) { item.CanDiscount = true; }
+                 }*/
             }
+
+            if (isForeigner)
+                return foreignerFilteredServicesDetailItems;
             return filteredServicesDetailItems;
+
         }
         public List<ServiceDetail> AddForeignerServicesToSelectedServices(string optionalServices)
         {
@@ -313,7 +319,7 @@ namespace BPMExtended.Main.Business
             entities = esq.GetEntityCollection(BPM_UserConnection);
             foreach (Entity entity in entities)
             {
-                ServiceDetail det = new ServiceDetail() { Id = entity.GetTypedColumnValue<string>(Idcol.Name), PackageId=""};
+                ServiceDetail det = new ServiceDetail() { Id = entity.GetTypedColumnValue<string>(Idcol.Name), PackageId = "" };
                 listOfOptionalServices.Add(det);
             }
 
@@ -330,7 +336,7 @@ namespace BPMExtended.Main.Business
             var servicesDetailItems = new List<ServiceDetail>();
             using (SOMClient client = new SOMClient())
             {
-                List<ServiceDefinition> items = client.Post< ExcludePackagesServiceInput,List<ServiceDefinition>>("api/SOM.ST/Billing/GetRatePlanServices", excludePackagesServiceInput);
+                List<ServiceDefinition> items = client.Post<ExcludePackagesServiceInput, List<ServiceDefinition>>("api/SOM.ST/Billing/GetRatePlanServices", excludePackagesServiceInput);
                 foreach (var item in items)
                 {
                     var serviceDetailItem = ServiceDefinitionToDetailMapper(item);
@@ -474,7 +480,7 @@ namespace BPMExtended.Main.Business
         }
         public List<PackageInfo> GetAllPackages()
         {
-            List <PackageInfo> packages= new List<PackageInfo>();
+            List<PackageInfo> packages = new List<PackageInfo>();
             //packages.Add(new PackageInfo { Id = 1, Description = "aaa" });
             //packages.Add(new PackageInfo { Id = 2, Description = "bbb" });
             //packages.Add(new PackageInfo { Id = 3, Description = "ccc" });
@@ -509,8 +515,8 @@ namespace BPMExtended.Main.Business
                 PackageId = item.PackageId,
                 Name = item.Name,
                 NeedsProvisioning = item.NeedsProvisioning,
-                IsNetwork =item.IsNetwork,
-                IsServiceResource=item.IsServiceResource
+                IsNetwork = item.IsNetwork,
+                IsServiceResource = item.IsServiceResource
             };
         }
 

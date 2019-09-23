@@ -322,11 +322,11 @@ namespace BPMExtended.Main.Business
 
         }
         #region New Methods
-        public List<RatePlanInfo> GetRatePlansInfo(string subTypeId, string customerCategoryId)
+        public List<RatePlanInfo> GetRatePlansInfo(string subTypeId, string customerCategoryId , string division)
         {
             var ratePlans = new List<RatePlanInfo>();
 
-            var catalogId = GetRatePlanCatalogId(subTypeId, customerCategoryId);
+            var catalogId = GetRatePlanCatalogId(subTypeId, customerCategoryId , division);
 
             Guid StRatePlanCatalogId = new Guid(catalogId.ToUpper());
             var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlansInCatalog");
@@ -356,13 +356,14 @@ namespace BPMExtended.Main.Business
         }
 
         #region Private
-        private string GetRatePlanCatalogId(string subTypeId, string customerCategoryId)
+        private string GetRatePlanCatalogId(string subTypeId, string customerCategoryId, string division)
         {
             Guid ratePlanCatalogId = new Guid() ;
 
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             IEntitySchemaQueryFilterItem esqSecondFilter;
+            IEntitySchemaQueryFilterItem esqThirdFilter;
 
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlanCatalog");
@@ -371,6 +372,11 @@ namespace BPMExtended.Main.Business
             esq.Filters.Add(esqFirstFilter);
             esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryId", customerCategoryId);
             esq.Filters.Add(esqSecondFilter);
+            if (division != null)
+            {
+                esqThirdFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSubTypeDivision", division);
+                esq.Filters.Add(esqThirdFilter);
+            }
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)

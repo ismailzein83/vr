@@ -23,6 +23,8 @@ namespace BPMExtended.Main.Entities
         public string StreetNb { get; set; }
         public string State { get; set; }
         public string Town { get; set; }
+        public string LocationType { get; set; }
+        public string Notes { get; set; }
 
 
 

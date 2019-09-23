@@ -12,5 +12,6 @@ namespace BPMExtended.Main.Entities
         public Guid ProvinceId { get; set; }
         public Guid AreaId { get; set; }
         public Guid TownId { get; set; }
+        public Guid LocationTypeId { get; set; }
     }
 }

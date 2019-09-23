@@ -34,6 +34,7 @@ namespace BPMExtended.Main.SOMAPI
         public string Career { get; set; }
         public string Language { get; set; }
         public string Nationality { get; set; }
+        public string ExternalCustomerSetId { get; set; }
         public string Country { get; set; }
         public string Region { get; set; }
         public string StateProvince { get; set; }
@@ -45,6 +46,7 @@ namespace BPMExtended.Main.SOMAPI
         public string HomePhone { get; set; }
         public string FaxNumber { get; set; }
         public string MobilePhone { get; set; }
+        public string BusinessPhone { get; set; }
         public string Email { get; set; }
         public string CSO { get; set; }
         public bool PaymentResponsibility { get; set; }
@@ -60,7 +62,7 @@ namespace BPMExtended.Main.SOMAPI
         public string DocumentTypeId { get; set; }
         public DateTime ValidFromDate { get; set; }
         public bool IsEmployee { get; set; }
-        public string Notes { get; set; }
+        public string AddressNotes { get; set; }
     }
 
 

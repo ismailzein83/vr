@@ -66,7 +66,7 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGSHDSL");
             esq.AddColumn("StCoreServices");
             esq.AddColumn("StServices");
-            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StLinePathId");
             esq.AddColumn("StContractID");
             esq.AddColumn("StUserName");
             esq.AddColumn("StContact");
@@ -94,7 +94,7 @@ namespace BPMExtended.Main.Business
             {
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
-                string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
+                string pathId = entities[0].GetColumnValue("StLinePathId").ToString();
                 var city = entities[0].GetColumnValue("StCityName");
                 var floor = entities[0].GetColumnValue("StFloor");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
@@ -186,7 +186,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGSHDSL");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
 
 
@@ -196,7 +196,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
 
                 SOMRequestInput<GSHDSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<GSHDSLSubscriptionRequestInput>
@@ -206,9 +206,9 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
+                            CustomerId = customerId.ToString()
                         }
                     }
 
@@ -218,7 +218,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<GSHDSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Billing_SubmitActivateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<GSHDSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitActivateContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -235,7 +235,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGSHDSL");
-            esq.AddColumn("StContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
 
 
@@ -245,7 +245,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
 
                 SOMRequestInput<GSHDSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<GSHDSLSubscriptionRequestInput>
@@ -255,9 +255,9 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
+                            CustomerId = customerId.ToString()
                         }
                     }
 
@@ -267,7 +267,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<GSHDSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Billing_ActivateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<GSHDSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
