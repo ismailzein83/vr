@@ -1568,7 +1568,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        private Dictionary<Object, GenericBusinessEntity> GetCachedGenericBEByTitleField(Guid businessEntityDefinitionId)
+        private Dictionary<string, GenericBusinessEntity> GetCachedGenericBEByTitleField(Guid businessEntityDefinitionId)
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, true);
             if (genericBEDefinitionSetting.DataRecordStorageId.HasValue)
@@ -1577,9 +1577,9 @@ namespace Vanrise.GenericData.Business
                 if (!dataRecordStorage.Settings.EnableUseCaching)
                     throw new Exception($"Caching not enabled for Data Record Storage {genericBEDefinitionSetting.DataRecordStorageId.Value}");
 
-                return GetCachedOrCreate<Dictionary<Object, GenericBusinessEntity>>("GetCachedGenericBEByTitleField", businessEntityDefinitionId, () =>
+                return GetCachedOrCreate<Dictionary<string, GenericBusinessEntity>>("GetCachedGenericBEByTitleField", businessEntityDefinitionId, () =>
                 {
-                    Dictionary<object, GenericBusinessEntity> resultByTitleFieldName = new Dictionary<object, GenericBusinessEntity>();
+                    Dictionary<string, GenericBusinessEntity> resultByTitleFieldName = new Dictionary<string, GenericBusinessEntity>();
 
                     var dataRecordFields = _genericBEDefinitionManager.GetDataRecordTypeFieldsByBEDefinitionId(businessEntityDefinitionId);
                     if (dataRecordFields == null)
@@ -1603,8 +1603,8 @@ namespace Vanrise.GenericData.Business
                     {
                         var titleValue = record.FieldValues.GetRecord(genericBEDefinitionSetting.TitleFieldName);
                         var titleDescription = titleField.Type.GetDescription(titleValue);
-                        if (!resultByTitleFieldName.ContainsKey(titleDescription))
-                            resultByTitleFieldName.Add(titleDescription, DataRecordStorageToGenericBEMapper(record));
+                        if (titleDescription != null && !resultByTitleFieldName.ContainsKey(titleDescription.ToLower()))
+                            resultByTitleFieldName.Add(titleDescription.ToLower(), DataRecordStorageToGenericBEMapper(record));
                     }
 
                     return resultByTitleFieldName.Count > 0 ? resultByTitleFieldName : null;
@@ -1820,8 +1820,7 @@ namespace Vanrise.GenericData.Business
                 context.ErrorMessage = $"No data exist for this entity.";
                 return;
             }
-
-            var genericBE = cachedGenericBEByTitleField.GetRecord(context.FieldDescription);
+            var genericBE = cachedGenericBEByTitleField.GetRecord(context.FieldDescription != null ? context.FieldDescription.ToString().ToLower() : null);
             if (genericBE != null)
             {
                 var idDataRecordField = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(context.BusinessEntityDefinitionId);
