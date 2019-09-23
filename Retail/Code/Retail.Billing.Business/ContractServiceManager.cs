@@ -98,7 +98,7 @@ namespace Retail.Billing.Business
 
         #region Public Methods
 
-        private AddContractServiceActionOutput AddContractServiceAction(AddContractServiceActionInput input)
+        public AddContractServiceActionOutput AddContractServiceAction(AddContractServiceActionInput input)
         {
             var itemToAdd = new Vanrise.GenericData.Entities.GenericBusinessEntityToAdd
             {
