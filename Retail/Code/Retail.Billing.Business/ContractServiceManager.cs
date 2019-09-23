@@ -42,7 +42,7 @@ namespace Retail.Billing.Business
             };
         }
 
-        public CloseContractResourceOutput CloseContract(CloseContractResourceInput input)
+        public CloseContractResourceOutput CloseContractResource(CloseContractResourceInput input)
         {
             var itemToUpdate = new Vanrise.GenericData.Entities.GenericBusinessEntityToUpdate
             {
