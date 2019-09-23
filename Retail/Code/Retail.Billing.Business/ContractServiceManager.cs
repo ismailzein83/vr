@@ -8,6 +8,176 @@ using Vanrise.Common;
 
 namespace Retail.Billing.Business
 {
+    public class ContractResourceManager
+    {
+        static Guid s_BusinessEntityDefinitionId_ContractResource = new Guid("1754de8b-c2d8-446d-be09-d4196c224a66");
+
+        static Vanrise.GenericData.Business.GenericBusinessEntityManager s_genericBEManager = new Vanrise.GenericData.Business.GenericBusinessEntityManager();
+
+        public AddContractResourceOutput AddContractResource(AddContractResourceInput input)
+        {
+            var item = new Vanrise.GenericData.Entities.GenericBusinessEntityToAdd
+            {
+                BusinessEntityDefinitionId = s_BusinessEntityDefinitionId_ContractResource,
+                FieldValues = new Dictionary<string, object>()
+            };
+
+            item.FieldValues.Add("Contract", input.ContractId);
+            item.FieldValues.Add("Name", input.Name);
+            item.FieldValues.Add("Type", input.ResourceTypeId);
+            item.FieldValues.Add("BET", input.BET);
+            if (input.EET.HasValue)
+                item.FieldValues.Add("EET", input.EET.Value);
+
+            var insertOutput = s_genericBEManager.AddGenericBusinessEntity(item);
+
+            if (insertOutput.Result != Vanrise.Entities.InsertOperationResult.Succeeded)
+                throw new Exception($"Add Contract Resource Failed while inserting the record into the ContractResource Table. Result is: '{insertOutput.Result.ToString()}'. Error Message: '{insertOutput.Message}'");
+
+            var itemId = (long)insertOutput.InsertedObject.FieldValues["ID"].Value;
+
+            return new AddContractResourceOutput
+            {
+                ContractResourceId = itemId
+            };
+        }
+
+        public CloseContractResourceOutput CloseContract(CloseContractResourceInput input)
+        {
+            var itemToUpdate = new Vanrise.GenericData.Entities.GenericBusinessEntityToUpdate
+            {
+                BusinessEntityDefinitionId = s_BusinessEntityDefinitionId_ContractResource,
+                GenericBusinessEntityId = input.ContractResourceId,
+                FieldValues = new Dictionary<string, object>()
+            };
+
+            itemToUpdate.FieldValues.Add("EET", input.CloseTime);
+
+            s_genericBEManager.UpdateGenericBusinessEntity(itemToUpdate);
+
+            return new CloseContractResourceOutput();
+        }
+    }
+
+    public class AddContractResourceInput
+    {
+        public long ContractId { get; set; }
+
+        public string Name { get; set; }
+
+        public Guid ResourceTypeId { get; set; }
+
+        public DateTime BET { get; set; }
+
+        public DateTime? EET { get; set; }
+    }
+
+    public class AddContractResourceOutput
+    {
+        public long ContractResourceId { get; set; }
+    }
+
+    public class CloseContractResourceInput
+    {
+        public long ContractResourceId { get; set; }
+
+        public DateTime CloseTime { get; set; }
+    }
+
+    public class CloseContractResourceOutput
+    {
+
+    }
+
+    public class ContractServiceActionManager
+    {
+        static Guid s_BusinessEntityDefinitionId_ContractServiceAction = new Guid("fe15c487-b948-4f22-82e3-6c50c608c51d");
+
+        static Vanrise.GenericData.Business.GenericBusinessEntityManager s_genericBEManager = new Vanrise.GenericData.Business.GenericBusinessEntityManager();
+
+
+        #region Public Methods
+
+        private AddContractServiceActionOutput AddContractServiceAction(AddContractServiceActionInput input)
+        {
+            var itemToAdd = new Vanrise.GenericData.Entities.GenericBusinessEntityToAdd
+            {
+                BusinessEntityDefinitionId = s_BusinessEntityDefinitionId_ContractServiceAction,
+                FieldValues = new System.Collections.Generic.Dictionary<string, object>()
+            };
+
+            itemToAdd.FieldValues.Add("ContractService", input.ContractServiceId);
+            itemToAdd.FieldValues.Add("ActionType", input.ActionTypeId);
+            itemToAdd.FieldValues.Add("ChargeTime", input.ChargeTime);            
+            itemToAdd.FieldValues.Add("PaidCash", input.PaidCash);
+
+            if (input.OverriddenCharge.HasValue)
+                itemToAdd.FieldValues.Add("OverriddenCharge", input.ChargeTime);
+
+            if (input.OldServiceOptionId.HasValue)
+                itemToAdd.FieldValues.Add("OldServiceOption", input.OldServiceOptionId.Value);
+
+            if (input.NewServiceOptionId.HasValue)
+                itemToAdd.FieldValues.Add("NewServiceOption", input.NewServiceOptionId.Value);
+
+            if (input.OldServiceOptionActivationFee.HasValue)
+                itemToAdd.FieldValues.Add("OldServiceOptionActivationFee", input.OldServiceOptionActivationFee.Value);
+
+            if (input.NewServiceOptionActivationFee.HasValue)
+                itemToAdd.FieldValues.Add("NewServiceOptionActivationFee", input.NewServiceOptionActivationFee.Value);
+
+            if (input.OldSpeedInMbps.HasValue)
+                itemToAdd.FieldValues.Add("OldSpeedInMbps", input.OldSpeedInMbps.Value);
+
+            if (input.NewSpeedInMbps.HasValue)
+                itemToAdd.FieldValues.Add("NewSpeedInMbps", input.NewSpeedInMbps.Value);
+
+            var insertOutput = s_genericBEManager.AddGenericBusinessEntity(itemToAdd);
+
+            if (insertOutput.Result != Vanrise.Entities.InsertOperationResult.Succeeded)
+                throw new Exception($"Add Contract Service Action Failed while inserting the record into the ContractServiceAction Table. Result is: '{insertOutput.Result.ToString()}'. Error Message: '{insertOutput.Message}'");
+
+            var itemId = (long)insertOutput.InsertedObject.FieldValues["ID"].Value;
+
+            return new AddContractServiceActionOutput
+            {
+                ServiceContractActionId = itemId
+            };
+        }
+
+        #endregion
+    }
+
+    public class AddContractServiceActionInput
+    {
+        public long ContractServiceId { get; set; }
+
+        public Guid ActionTypeId { get; set; }
+
+        public Decimal? OverriddenCharge { get; set; }
+
+        public DateTime? ChargeTime { get; set; }
+
+        public bool PaidCash { get; set; }
+
+        public Guid? OldServiceOptionId { get; set; }
+
+        public Guid? NewServiceOptionId { get; set; }
+
+        public decimal? OldServiceOptionActivationFee { get; set; }
+
+        public decimal? NewServiceOptionActivationFee { get; set; }
+
+        public decimal? OldSpeedInMbps { get; set; }
+
+        public decimal? NewSpeedInMbps { get; set; }
+    }
+
+    public class AddContractServiceActionOutput
+    {
+        public long ServiceContractActionId { get; set; }
+    }
+    
     public class ContractServiceManager
     {
         #region Variables
