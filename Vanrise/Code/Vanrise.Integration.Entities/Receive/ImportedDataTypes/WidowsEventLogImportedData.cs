@@ -45,6 +45,7 @@ namespace Vanrise.Integration.Entities
         public string TaskDisplayName { get; set; }
         public string ProviderName { get; set; }
         public string DescriptionXml { get; set; }
+        public long? RecordId { get; set; }
 
     }
 }

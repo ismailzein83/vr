@@ -61,6 +61,7 @@ namespace Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter
                             readerdata = reader.ReadEvent();
                             if (readerdata != null)
                             {
+                                long? recordId = null;
                                 DateTime? timeCreated = null;
                                 string description = null;
                                 string xml = null;
@@ -81,6 +82,7 @@ namespace Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter
                                 }
                                 try
                                 {
+                                    recordId = readerdata.RecordId;
                                     if (readerdata.RecordId.HasValue)
                                         lastId = readerdata.RecordId.Value;
                                 }
@@ -131,7 +133,8 @@ namespace Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter
                                     LevelDisplayName = levelDisplayName,
                                     TaskDisplayName= taskDisplayName,
                                     ProviderName = providerName,
-                                    DescriptionXml = xml
+                                    DescriptionXml = xml,
+                                    RecordId = recordId
                                 });
                             }
 
