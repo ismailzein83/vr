@@ -180,6 +180,19 @@ namespace Vanrise.MobileNetwork.Business
                 return cachedMobileNetworks.ToDictionary(item => item.NetworkName, item => item);
             });
         }
+
+        public Dictionary<string, Vanrise.MobileNetwork.Entities.MobileNetwork> GetCachedMobileNetworksByLowerName()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMobileNetworksByLowerName", BeDefinitionId, () =>
+            {
+                var cachedMobileNetworksByName = GetCachedMobileNetworksByName();
+                if (cachedMobileNetworksByName == null || cachedMobileNetworksByName.Count == 0)
+                    return null;
+
+                return cachedMobileNetworksByName.ToDictionary(item => item.Key.ToLower(), item => item.Value);
+            });
+        }
         #endregion
 
         #region Private Methods
