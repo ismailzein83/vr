@@ -56,6 +56,7 @@
     <Compile Include="IVRDevProjectDataManager.cs" />
     <Compile Include="IVRDynamicAPIDataManager.cs" />
     <Compile Include="IVRDynamicAPIModuleDataManager.cs" />
+    <Compile Include="IVRHttpConnectionLogDataManager.cs" />
     <Compile Include="IVRNamespaceDataManager.cs" />
     <Compile Include="IRegionDataManager.cs" />
     <Compile Include="IGenericLKUPItemDataManager.cs" />

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using Vanrise.Common.Data;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -17,6 +19,18 @@ namespace Vanrise.Common.Business
 
         public string BaseURL { get; set; }
 
+        public bool EnableLogging { get; set; }
+
+        public bool EnableParametersLogging { get; set; }
+
+        public bool EnableRequestHeaderLogging { get; set; }
+
+        public bool EnableRequestLogging { get; set; }
+
+        public bool EnableResponseHeaderLogging { get; set; }
+
+        public bool EnableResponseLogging { get; set; }
+
         public List<VRHttpHeader> Headers { get; set; }
 
         public List<VRWorkflowRetrySettings> WorkflowRetrySettings { get; set; }
@@ -26,9 +40,22 @@ namespace Vanrise.Common.Business
         public virtual bool TrySendRequest(string actionPath, VRHttpMethod httpMethod, VRHttpMessageFormat messageFormat, Dictionary<string, string> urlParameters,
             Dictionary<string, string> headers, string body, Action<VRHttpResponse> onResponseReceived, bool throwIfError, Action<VRHttpFault> onError)
         {
+            IVRHttpConnectionLogDataManager vRHttpConnectionLogDataManager = CommonDataManagerFactory.GetDataManager<IVRHttpConnectionLogDataManager>();
+
             bool isSucceeded = false;
             VRHttpResponse response = null;
             VRHttpFault fault = null;
+
+            string loggingUrlParameters = EnableParametersLogging ? Serializer.Serialize(urlParameters) : null;
+            string loggingRequestHeader = EnableRequestHeaderLogging ? Serializer.Serialize(headers) : null;
+            string loggingRequestBody = EnableRequestLogging ? body : null;
+            DateTime requestTime = DateTime.Now;
+            string loggingResponseHeader = null;
+            string loggingResponse = null;
+            DateTime? responseTime = null;
+            HttpStatusCode? responseStatusCode = null;
+            Exception exception = null;
+
             try
             {
                 using (var client = new System.Net.Http.HttpClient(new HttpClientHandler { UseCookies = false }))
@@ -46,6 +73,9 @@ namespace Vanrise.Common.Business
                             var context = new VRHttpConnectionInterceptRequestContext() { Client = client, Connection = this, Body = body, HttpRequestMessage = request };
                             this.Interceptor.InterceptRequest(context);
                             body = context.Body;
+
+                            loggingRequestHeader = EnableRequestHeaderLogging ? Serializer.Serialize(request.Headers) : null;
+                            loggingRequestBody = EnableRequestLogging ? body : null;
                         }
 
                         if (!String.IsNullOrEmpty(body))
@@ -56,6 +86,12 @@ namespace Vanrise.Common.Business
                             responseTask.Wait();
                             System.Net.Http.HttpResponseMessage responseMessage = responseTask.Result;
                             string responseString = responseMessage.Content.ReadAsStringAsync().Result;
+
+                            responseTime = DateTime.Now;
+                            loggingResponseHeader = EnableResponseHeaderLogging ? Serializer.Serialize(responseMessage.Headers) : null;
+                            loggingResponse = EnableResponseLogging ? responseString : null;
+                            responseStatusCode = responseMessage.StatusCode;
+
                             if (responseTask.Exception == null && responseMessage.IsSuccessStatusCode)
                             {
                                 isSucceeded = true;
@@ -64,13 +100,28 @@ namespace Vanrise.Common.Business
                             else
                             {
                                 fault = new VRHttpFault(responseTask.Exception, responseString, responseMessage.StatusCode, messageFormat);
+                                exception = fault.Exception;
                             }
                         }
                     }
                 }
+                if (EnableLogging)
+                {
+                    vRHttpConnectionLogDataManager.Insert(ConfigId, BaseURL, actionPath, loggingUrlParameters,
+                      loggingRequestHeader, loggingRequestBody, requestTime,
+                      loggingResponseHeader, loggingResponse, responseTime, responseStatusCode,
+                      isSucceeded, Serializer.Serialize(exception));
+                }
             }
             catch (Exception ex)
             {
+                if (EnableLogging)
+                {
+                    vRHttpConnectionLogDataManager.Insert(ConfigId, BaseURL, actionPath, loggingUrlParameters,
+                      loggingRequestHeader, loggingRequestBody, requestTime,
+                      loggingResponseHeader, loggingResponse, responseTime, responseStatusCode,
+                      isSucceeded, Serializer.Serialize(ex));
+                }
                 onError(new VRHttpFault(ex));
                 if (throwIfError)
                     throw;

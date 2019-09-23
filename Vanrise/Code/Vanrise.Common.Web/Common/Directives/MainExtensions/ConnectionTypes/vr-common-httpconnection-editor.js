@@ -39,7 +39,6 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService', 'VRUIUtilsService
                     headerGridAPIReadyPromiseDeferred.resolve();
                 };
 
-
                 $scope.scopeModel.onSettingGridReady = function (api) {
                     settingsGridAPI = api;
                     settingsGridAPIReadyPromiseDeferred.resolve();
@@ -64,6 +63,7 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService', 'VRUIUtilsService
                     $scope.scopeModel.settings.push(dataItem);
 
                 };
+
                 $scope.scopeModel.isNameValid = function () {
                     if ($scope.scopeModel.headers.length == 0)
                         return;
@@ -87,6 +87,12 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService', 'VRUIUtilsService
                     $scope.scopeModel.settings.splice($scope.scopeModel.settings.indexOf(dataItem), 1);
                 };
 
+                $scope.scopeModel.onEnableLoggingValueChanged = function () {
+                    if (!$scope.scopeModel.enableLogging) {
+                        resetLoggingSwitches();
+                    }
+                };
+
                 UtilsService.waitMultiplePromises([settingsGridAPIReadyPromiseDeferred.promise, headerGridAPIReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
@@ -98,6 +104,14 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService', 'VRUIUtilsService
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.baseURL = payload.data.BaseURL;
+
+                        $scope.scopeModel.enableLogging = payload.data.EnableLogging;
+                        $scope.scopeModel.enableParametersLogging = payload.data.EnableParametersLogging;
+                        $scope.scopeModel.enableRequestHeaderLogging = payload.data.EnableRequestHeaderLogging;
+                        $scope.scopeModel.enableRequestLogging = payload.data.EnableRequestLogging;
+                        $scope.scopeModel.enableResponseHeaderLogging = payload.data.EnableResponseHeaderLogging;
+                        $scope.scopeModel.enableResponseLogging = payload.data.EnableResponseLogging;
+
                         if (payload.data.Headers != undefined)
                             $scope.scopeModel.headers = payload.data.Headers;
 
@@ -144,6 +158,14 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService', 'VRUIUtilsService
                     return {
                         $type: "Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business",
                         BaseURL: $scope.scopeModel.baseURL,
+
+                        EnableLogging: $scope.scopeModel.enableLogging,
+                        EnableParametersLogging: $scope.scopeModel.enableParametersLogging,
+                        EnableRequestHeaderLogging: $scope.scopeModel.enableRequestHeaderLogging,
+                        EnableRequestLogging: $scope.scopeModel.enableRequestLogging,
+                        EnableResponseHeaderLogging: $scope.scopeModel.enableResponseHeaderLogging,
+                        EnableResponseLogging: $scope.scopeModel.enableResponseLogging,
+
                         Headers: headers,
                         WorkflowRetrySettings: settings,
                         Interceptor: (httpconnectioncallinterceptorSelectiveAPI != null) ? httpconnectioncallinterceptorSelectiveAPI.getData() : null
@@ -152,6 +174,14 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService', 'VRUIUtilsService
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function resetLoggingSwitches() {
+                $scope.scopeModel.enableParametersLogging = false;
+                $scope.scopeModel.enableRequestHeaderLogging = false;
+                $scope.scopeModel.enableRequestLogging = false;
+                $scope.scopeModel.enableResponseHeaderLogging = false;
+                $scope.scopeModel.enableResponseLogging = false;
             }
         }
     }]);
