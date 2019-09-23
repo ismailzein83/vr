@@ -124,7 +124,12 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 SMSRates = new List<SupplierSMSRateChangeToUpdate>()
             };
 
-            var mobileNetworksByName = new MobileNetworkManager().GetCachedMobileNetworksByName();
+            var mobileNetworksByLowerName = new MobileNetworkManager().GetCachedMobileNetworksByLowerName();
+            if (mobileNetworksByLowerName == null || mobileNetworksByLowerName.Count == 0)
+            {
+                uploadOutput.ErrorMessage = "Any Mobile Network is defined";
+                return uploadOutput;
+            }
 
             int outputResultColumnIndex = outputWorksheet.Cells.MaxColumn - 1;
             int outputErrorMessageColumnIndex = outputWorksheet.Cells.MaxColumn;
@@ -165,7 +170,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 }
 
                 MobileNetwork mobileNetwork;
-                if (!mobileNetworksByName.TryGetValue(importedMobileNetwork, out mobileNetwork))
+                if (!mobileNetworksByLowerName.TryGetValue(importedMobileNetwork.ToLower(), out mobileNetwork))
                 {
                     SetMessageToOutputWorksheetRow(outputWorksheet, i, outputResultColumnIndex, "Failed", outputErrorMessageColumnIndex, "Invalid Mobile Network Name", outputCellStyle);
                     uploadOutput.NumberOfItemsFailed++;
