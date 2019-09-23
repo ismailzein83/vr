@@ -31,6 +31,7 @@ function (UtilsService) {
 
         function initializeController() {
             defineAPI();
+            $scope.batchSize = 50000;
         }
 
         function defineAPI() {
