@@ -113,8 +113,13 @@
             var rootPromiseNode = {
                 promises: initialPromises,
                 getChildNode: function () {
+                    var asyncOperations = [setTitle];
+
+                    if ($scope.bpDefinitionObj.Configuration != undefined && $scope.bpDefinitionObj.Configuration.ManualExecEditor != undefined)
+                        asyncOperations.push(loadBPDefinition);
+
                     return {
-                        promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadBPDefinition])]
+                        promises: [UtilsService.waitMultipleAsyncOperations(asyncOperations)]
                     };
                 }
             };
