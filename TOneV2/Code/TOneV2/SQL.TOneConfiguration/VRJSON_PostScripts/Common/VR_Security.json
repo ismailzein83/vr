@@ -1920,7 +1920,6 @@
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "d799dc5e-8d52-44b5-8e92-5ea83baf4963",
               "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
@@ -1928,7 +1927,7 @@
               "Type": "VR_Sec_Settings",
               "Category": "General",
               "Settings": "{\"Editor\" : \"vr-sec-settings-editor\"}",
-              "Data": "{\"$type\":\"Vanrise.Security.Entities.SecuritySettings, Vanrise.Security.Entities\",\"MailMessageTemplateSettings\":{\"$type\":\"Vanrise.Security.Entities.MailMessageTemplateSettings, Vanrise.Security.Entities\",\"NewUserId\":\"d9b56fc2-eb3e-4340-8918-159a281b95bc\",\"ResetPasswordId\":\"10264fe7-99d5-4f6a-8e8c-44a0702f392e\",\"ForgotPasswordId\":\"e21cd125-61f0-4091-a03e-200cfe33f6e3\"},\"PasswordSettings\":{\"$type\":\"Vanrise.Security.Entities.PasswordSettings, Vanrise.Security.Entities\",\"PasswordLength\":6,\"MaxPasswordLength\":8,\"MaximumUserLoginTries\":0,\"UserPasswordHistoryCount\":2,\"MinutesToLock\":0,\"PasswordAgeInDays\":100,\"PasswordExpirationDaysToNotify\":99},\"APISettings\":{\"$type\":\"Vanrise.Security.Entities.APISettings, Vanrise.Security.Entities\",\"ExactExceptionMessage\":true},\"SendEmailNewUser\":false,\"SendEmailOnResetPasswordByAdmin\":true,\"SessionExpirationInMinutes\":1300000}",
+              "Data": "{\"$type\":\"Vanrise.Security.Entities.SecuritySettings, Vanrise.Security.Entities\",\"MailMessageTemplateSettings\":{\"$type\":\"Vanrise.Security.Entities.MailMessageTemplateSettings, Vanrise.Security.Entities\",\"NewUserId\":\"d9b56fc2-eb3e-4340-8918-159a281b95bc\",\"ResetPasswordId\":\"10264fe7-99d5-4f6a-8e8c-44a0702f392e\",\"ForgotPasswordId\":\"e21cd125-61f0-4091-a03e-200cfe33f6e3\"},\"SecurityProviderSettings\":{\"$type\":\"Vanrise.Security.Entities.SecurityProviderConfigurationSettings, Vanrise.Security.Entities\",\"DefaultSecurityProviderId\":\"9554069b-795e-4bb1-bff3-9af0f47fc0ff\"},\"PasswordSettings\":{\"$type\":\"Vanrise.Security.Entities.PasswordSettings, Vanrise.Security.Entities\",\"PasswordLength\":6,\"MaxPasswordLength\":15,\"MaximumUserLoginTries\":10,\"UserPasswordHistoryCount\":5,\"MinutesToLock\":5,\"FailedInterval\":\"00:05:00\",\"PasswordComplexity\":2,\"PasswordAgeInDays\":30,\"PasswordExpirationDaysToNotify\":5},\"APISettings\":{\"$type\":\"Vanrise.Security.Entities.APISettings, Vanrise.Security.Entities\",\"ExactExceptionMessage\":false},\"SendEmailNewUser\":false,\"SendEmailOnResetPasswordByAdmin\":false,\"SessionExpirationInMinutes\":180}",
               "IsTechnical": false,
               "LastModifiedTime": null
             }
