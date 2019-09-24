@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="BatchScripts\CentralLog\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\DevTool\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\DevTool\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Common\CarrierPortalSource\Client-list-of-excluded-files.txt" />
@@ -527,6 +528,15 @@
     <None Include="BatchScripts\Inspkt\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Inspkt\All.bat" />
     <None Include="BatchScripts\NtegraV2\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\CentralLog\01-Runtime.bat" />
+    <None Include="BatchScripts\CentralLog\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\CentralLog\03-WebSite.bat" />
+    <None Include="BatchScripts\CentralLog\05-CompressFiles.bat" />
+    <None Include="BatchScripts\CentralLog\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\CentralLog\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\CentralLog\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\CentralLog\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\CentralLog\All.bat" />
     <None Include="BatchScripts\Retail.Billing\01-Runtime.bat" />
     <None Include="BatchScripts\Retail.Billing\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.Billing\03-WebSite.bat" />
