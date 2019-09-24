@@ -21,3 +21,4 @@ appcmd add vdir /app.name:Mediation.Web/ /path:/Client/Modules/VR_Notification /
 appcmd add vdir /app.name:Mediation.Web/ /path:/Client/Modules/Mediation_Generic /physicalPath:C:\TFS\Mediation\Code\Mediation.Generic.Web\Mediation_Generic
 appcmd add vdir /app.name:Mediation.Web/ /path:/Client/Modules/VR_DataParser /physicalPath:C:\TFS\Vanrise\Code\Vanrise.DataParser.Web\VR_DataParser
 appcmd add vdir /app.name:Mediation.Web/ /path:/Client/Modules/Mediation_Huawei /physicalPath:C:\TFS\Mediation\Code\Mediation.Huawei.Web\Mediation_Huawei
+appcmd add vdir /app.name:Mediation.Web/ /path:/Client/Modules/Analytic /physicalPath:C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
