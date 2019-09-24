@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RetailBillingChargeTypeManager.cs" />
     <Compile Include="BillingRatePlanServiceManager.cs" />
     <Compile Include="BillingContractServiceManager.cs" />
     <Compile Include="BillingInvoicePartnerSettings.cs" />

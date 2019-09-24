@@ -72,6 +72,7 @@
     <Compile Include="CustomerMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailBEChargeCalculateChargeContext.cs" />
+    <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeExtendedSettingsConfig.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingChargeType.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeExtendedSettings.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeSettings.cs" />
