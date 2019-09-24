@@ -1,5 +1,6 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAP;
 using BPMExtended.Main.SOMAPI;
 using Newtonsoft.Json;
 using System;
@@ -72,7 +73,7 @@ namespace BPMExtended.Main.Business
                             IsPaid = (bool)isPaid
                         },
                         PhoneNumber = phoneNumber.ToString(),
-                        LinePathId=linePathId.ToString()
+                        LinePathId = linePathId.ToString()
                     }
 
                 };
@@ -143,6 +144,21 @@ namespace BPMExtended.Main.Business
             }
 
         }
+        public void CancelContractSuspensionRequest(Guid requestId)
+        {
+            SOMRequestOutput output;
+            SOMRequestInput<CancelSuspensionRequestInput> somRequestInput = new SOMRequestInput<CancelSuspensionRequestInput>
+            {
+                InputArguments = { RequestId = requestId.ToString() }
+            };
+            using (var client = new SOMClient())
+            {
+                output = client.Post<SOMRequestInput<CancelSuspensionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CancellingContractSuspensionFromCustomerCare/StartProcess", somRequestInput);
+            }
+            var manager = new BusinessEntityManager();
+            manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+        }
+
 
     }
 }

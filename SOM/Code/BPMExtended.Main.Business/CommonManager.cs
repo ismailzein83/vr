@@ -468,5 +468,53 @@ namespace BPMExtended.Main.Business
             }
             return requestIds;
         }
+        public string GetEntityNameByRequestId(string requestId)
+        {
+            
+            string operationId = GetOperationByRequestId(requestId);
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string entityName = "";
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestsTypes");
+            esq.AddColumn("StEntityName");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", operationId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                entityName = entities[0].GetColumnValue("StEntityName").ToString();
+
+            }
+            return entityName;
+        }
+
+        public string GetOperationByRequestId(string requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string operationId = "";
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("StOperation");
+            esq.AddColumn("StOperation.Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                operationId = entities[0].GetColumnValue("StOperationId").ToString();
+
+            }
+            return operationId;
+        }
     }
 }

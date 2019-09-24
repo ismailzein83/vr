@@ -51,15 +51,15 @@ namespace BPMExtended.Main.Business
         public List<CustomerRequestHeaderDetail> GetRecentRequestHeaders(int nbOfRecords, BPMCustomerType customerType, Guid accountOrContactId, long? lessThanSequenceNb)
         {
             List<SOMRequestHeader> somRequests = null;
-            using(SOMClient client = new SOMClient())
+            using (SOMClient client = new SOMClient())
             {
                 string entityId = BuildSOMEntityIdFromCustomer(customerType, accountOrContactId);
                 somRequests = client.Get<List<SOMRequestHeader>>(String.Format("api/SOM_Main/SOMRequest/GetRecentSOMRequestHeaders?entityId={0}&nbOfRecords={1}&lessThanSequenceNb={2}", entityId, nbOfRecords, lessThanSequenceNb));
             }
             List<CustomerRequestHeaderDetail> customerRequests = new List<CustomerRequestHeaderDetail>();
-            if(somRequests != null)
+            if (somRequests != null)
             {
-                foreach(var req in somRequests)
+                foreach (var req in somRequests)
                 {
                     var customerReq = new CustomerRequestHeaderDetail
                     {
@@ -82,12 +82,12 @@ namespace BPMExtended.Main.Business
         public List<CustomerRequestLogDetail> GetRequestLogs(Guid requestId, int nbOfRecords, long? lessThanId)
         {
             List<SOMRequestLog> somLogs = null;
-            using(SOMClient client = new SOMClient())
+            using (SOMClient client = new SOMClient())
             {
                 somLogs = client.Get<List<SOMRequestLog>>(string.Format("api/SOM_Main/SOMRequest/GetSOMRequestLogs?somRequestId={0}&nbOfRecords={1}&lessThanId={2}", requestId, nbOfRecords, lessThanId));
             }
             List<CustomerRequestLogDetail> logs = new List<CustomerRequestLogDetail>();
-            foreach(var somLog in somLogs)
+            foreach (var somLog in somLogs)
             {
                 var log = new CustomerRequestLogDetail
                 {
@@ -123,7 +123,7 @@ namespace BPMExtended.Main.Business
         {
             return new BPTrackingMessageDetail()
             {
-                Id= bpTrackingMessage.Id,
+                Id = bpTrackingMessage.Id,
                 ProcessInstanceId = bpTrackingMessage.ProcessInstanceId,
                 ParentProcessId = bpTrackingMessage.ParentProcessId,
                 //Severity = bpTrackingMessage.Severity,
@@ -217,12 +217,12 @@ namespace BPMExtended.Main.Business
                 TechnicalStepFieldName = Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode).fieldName;
                 string requestsTypeId = GetRequestType(EntityName);
                 string recordName = GetEntityName(EntityName, requestId);
-                workOrderId = initiateWorkOrder(requestId,requestsTypeId,WorkOrderType,recordName);
+                workOrderId = initiateWorkOrder(requestId, requestsTypeId, WorkOrderType, recordName);
 
                 //update request
-                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-                 recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName(EntityName);
-                 recordEntity = recordSchema.CreateEntity(UserConnection);
+                UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName(EntityName);
+                recordEntity = recordSchema.CreateEntity(UserConnection);
 
                 var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, EntityName);
                 eSQ.RowCount = 1;
@@ -249,14 +249,14 @@ namespace BPMExtended.Main.Business
                 var items = esq.GetEntityCollection(BPM_UserConnection);
                 if (items.Count > 0)
                 {
-                     stageId = items[0].GetTypedColumnValue<Guid>(IdCol.Name).ToString();
+                    stageId = items[0].GetTypedColumnValue<Guid>(IdCol.Name).ToString();
 
                 }
 
                 //update request header table
                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-                 recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
-                 recordEntity = recordSchema.CreateEntity(UserConnection);
+                recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
+                recordEntity = recordSchema.CreateEntity(UserConnection);
 
                 esq = new EntitySchemaQuery(UserConnection.EntitySchemaManager, "StRequestHeader");
                 esq.RowCount = 1;
@@ -282,7 +282,7 @@ namespace BPMExtended.Main.Business
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
-            string recordName= "";
+            string recordName = "";
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
             esq.AddColumn("StName");
@@ -322,7 +322,7 @@ namespace BPMExtended.Main.Business
             }
             return requestTypeId;
         }
-        private string initiateWorkOrder(string requestId, string requestTypeId,string workOrderType, string recordName)
+        private string initiateWorkOrder(string requestId, string requestTypeId, string workOrderType, string recordName)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StWorkOrder");
             Entity workorder = schema.CreateEntity(BPM_UserConnection);
@@ -331,8 +331,8 @@ namespace BPMExtended.Main.Business
             string workOrderName = new CommonManager().GetWorkOrderTypeName(workOrderType);
 
             workorder.SetColumnValue("Id", workOrderId);
-            workorder.SetColumnValue("StName", workOrderName+"Step for: " + recordName);
-            workorder.SetColumnValue("StDescription", workOrderName+"Step for: " + recordName);
+            workorder.SetColumnValue("StName", workOrderName + "Step for: " + recordName);
+            workorder.SetColumnValue("StDescription", workOrderName + "Step for: " + recordName);
             workorder.SetColumnValue("StRequestID", requestId);
             workorder.SetColumnValue("StStatusId", "7470FB2F-4701-488D-99B2-F7A71400CB9E");
             workorder.SetColumnValue("StRequestTypeId", requestTypeId);
@@ -340,6 +340,41 @@ namespace BPMExtended.Main.Business
             workorder.Save();
 
             return workOrderId.ToString();
+        }
+
+        public void ChangePendingCustomerReturnToProgress()
+        {
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            IEntitySchemaQueryFilterItem esqSecondFilter;
+            IEntitySchemaQueryFilterItem esqThirdFilter;
+
+
+            var recordSchema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
+            var recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
+
+            var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            DateTime date = DateTime.Today;
+            DateTime date1=date.AddDays(-45);
+            eSQ.AddAllSchemaColumns();
+            esqFirstFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.LessOrEqual, "StLastPendingCustomerReturn", date1);
+            esqSecondFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StMarkAsCancelled", false);
+            esqThirdFilter= eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", "9b7ba6fb-d4c2-4ae7-b940-2119c7bd460a");
+
+            eSQ.Filters.Add(esqFirstFilter);
+            eSQ.Filters.Add(esqSecondFilter);
+            eSQ.Filters.Add(esqThirdFilter);
+
+            var collections = eSQ.GetEntityCollection(BPM_UserConnection);
+            if (collections != null)
+            {
+                foreach (var collec in collections)
+                {
+                    recordEntity = collec;
+                    recordEntity.SetColumnValue("StMarkAsCancelled", true);
+                    recordEntity.Save();
+                }
+            }
+
         }
         #endregion
 
@@ -361,7 +396,7 @@ namespace BPMExtended.Main.Business
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
 
-           
+
 
             if (entities.Count > 0)
             {
@@ -371,13 +406,46 @@ namespace BPMExtended.Main.Business
                 SchemaName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)reqcode).schemaName;
                 CompletedStepId = Utilities.GetEnumAttribute<OperationType, CompletedStepIdAttribute>((OperationType)reqcode).CompletedStepId;
                 CompletedStep = Utilities.GetEnumAttribute<OperationType, CompletedStepAttribute>((OperationType)reqcode).CompletedStep;
-                TechnicalStep = technicalStepField==null?null: Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode).fieldName;
+                TechnicalStep = technicalStepField == null ? null : Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode).fieldName;
 
-                UpdateRequestStatus(requestId, SchemaName,CompletedStepId,CompletedStep, TechnicalStep);
+                UpdateRequestStatus(requestId, SchemaName, CompletedStepId, CompletedStep, TechnicalStep);
             }
             return "";
         }
 
+        public string SetRequestAsCancelled(string requestId)
+        {
+            CancelRequestHeader(requestId);
+            SetRequestObjectTypeAsEndProcess(requestId);
+            return "";
+        }
+
+
+        public void SetRequestObjectTypeAsEndProcess(string requestId)
+        {
+            CommonManager commonManager = new CommonManager();
+            var entityName = commonManager.GetEntityNameByRequestId(requestId);
+
+            var recordSchema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName(entityName);
+            var recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
+
+            var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
+            var collection = eSQ.GetEntityCollection(BPM_UserConnection);
+
+            if (collection!=null)
+            {
+                if (collection.Count > 0)
+                {
+                    recordEntity = collection[0];
+                    recordEntity.SetColumnValue("StTypeId", "8340AD42-0C1E-4063-BA73-74B3CD917C2F");
+                }
+                recordEntity.Save();
+            }
+
+        }
         public string CancelRequestHeader(string requestId)
         {
             var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
@@ -431,7 +499,7 @@ namespace BPMExtended.Main.Business
         }
 
 
-        private void UpdateRequestStatus(string requestId, string SchemaName, string CompletedStepId,string CompletedStep, string TechnicalStep)
+        private void UpdateRequestStatus(string requestId, string SchemaName, string CompletedStepId, string CompletedStep, string TechnicalStep)
         {
             //TODO : Update gshdsl object
             var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
@@ -447,7 +515,7 @@ namespace BPMExtended.Main.Business
             {
                 recordEntity = collection[0];
                 recordEntity.SetColumnValue(CompletedStep, CompletedStepId);
-                if(TechnicalStep != null) recordEntity.SetColumnValue(TechnicalStep, null);
+                if (TechnicalStep != null) recordEntity.SetColumnValue(TechnicalStep, null);
             }
             recordEntity.Save();
         }
@@ -458,12 +526,12 @@ namespace BPMExtended.Main.Business
         {
             Guid requestId = Guid.NewGuid();
             CreateSOMRequestInput somRequestInput = new CreateSOMRequestInput
-             {
-                 SOMRequestId = requestId,
-                 EntityId = BuildSOMEntityIdFromCustomer(customerType, accountOrContactId),
-                 RequestTitle = requestTitle,
-                 Settings = new SOMRequestSettings { ExtendedSettings = requestSettings }
-             };
+            {
+                SOMRequestId = requestId,
+                EntityId = BuildSOMEntityIdFromCustomer(customerType, accountOrContactId),
+                RequestTitle = requestTitle,
+                Settings = new SOMRequestSettings { ExtendedSettings = requestSettings }
+            };
 
             CreateSOMRequestOutput output = null;
 
@@ -472,7 +540,7 @@ namespace BPMExtended.Main.Business
                 //s_dataManager.Insert(requestId, requestSettings.ConfigId, customerObjectType, accountOrContactId, requestTitle, CustomerRequestStatus.New);//insert request in BPM after making sure connection to SOM succeeds
                 //try
                 //{
-                    output = client.Post<CreateSOMRequestInput, CreateSOMRequestOutput>("api/SOM_Main/SOMRequest/CreateSOMRequest", somRequestInput);
+                output = client.Post<CreateSOMRequestInput, CreateSOMRequestOutput>("api/SOM_Main/SOMRequest/CreateSOMRequest", somRequestInput);
                 //}
                 //catch
                 //{
@@ -530,7 +598,7 @@ namespace BPMExtended.Main.Business
             var entity = esqResult.GetEntity(connection, contactId);
             object retVal = entity.GetColumnValue("Name");
 
-            return retVal != null ? retVal.ToString() : null;            
+            return retVal != null ? retVal.ToString() : null;
         }
 
         private void UpdateContactCustomerId(Guid contactId, string customerId)

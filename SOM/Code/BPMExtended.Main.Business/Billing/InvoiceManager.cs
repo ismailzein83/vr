@@ -63,87 +63,87 @@ namespace BPMExtended.Main.Business
             //            return invoices;
 
             var invoicesDetailItems = new List<InvoiceDetail>();
-            invoicesDetailItems.Add(new InvoiceDetail
-            {
-                CustomerID = "aaaa",
-                InvoiceCode = "aaaa",
-                InvoiceId = "aaaa",
-                InvoiceNumber = "aaaa",
-                BillCycle = "aaaa",
-                DueDate = "aaaa",
-                Resource = "aaaa",
-                InvoiceAccount = "aaaa",
-                Amount = "aaaa",
-                OpenAmount = "aaaa",
-                PhoneNumber = "aaaa",
-                URL = "aaaa",
-                CollectionStatus = true,
-                InvoiceInstallmentFlag = true,
-                FinancialDisputes = true
-            });
-            invoicesDetailItems.Add(new InvoiceDetail
-            {
-                CustomerID = "bbbb",
-                InvoiceCode = "bbbbb",
-                InvoiceId = "bbbbbb",
-                InvoiceNumber = "bbbbbb",
-                BillCycle = "bbbbbb",
-                DueDate = "bbbbbb",
-                Resource = "bbbbb",
-                InvoiceAccount = "bbbbb",
-                Amount = "bbbbb",
-                OpenAmount = "bbbbb",
-                PhoneNumber = "bbbbb",
-                URL = "bbbbbb",
-                CollectionStatus = true,
-                InvoiceInstallmentFlag = true,
-                FinancialDisputes = true
-            });
-            invoicesDetailItems.Add(new InvoiceDetail
-            {
-                CustomerID = "cccc",
-                InvoiceCode = "cccc",
-                InvoiceId = "cccc",
-                InvoiceNumber = "ccccc",
-                BillCycle = "ccccc",
-                DueDate = "ccccc",
-                Resource = "cccccc",
-                InvoiceAccount = "cccccc",
-                Amount = "ccccc",
-                OpenAmount = "ccccc",
-                PhoneNumber = "ccccc",
-                URL = "ccccccc",
-                CollectionStatus = false,
-                InvoiceInstallmentFlag = false,
-                FinancialDisputes = false
-            });
-            invoicesDetailItems.Add(new InvoiceDetail
-            {
-                CustomerID = "ddddd",
-                InvoiceCode = "ddddd",
-                InvoiceId = "ddddd",
-                InvoiceNumber = "ddddd",
-                BillCycle = "ddddd",
-                DueDate = "ddddd",
-                Resource = "ddddd",
-                InvoiceAccount = "ddddd",
-                Amount = "ddddd",
-                OpenAmount = "ddddd",
-                PhoneNumber = "ddddd",
-                URL = "ddddd",
-                CollectionStatus = true,
-                InvoiceInstallmentFlag = true,
-                FinancialDisputes = true
-            });
-            //using (SOMClient client = new SOMClient())
+            //invoicesDetailItems.Add(new InvoiceDetail
             //{
-            //    List<Invoice> items = client.Get<List<Invoice>>(String.Format("api/SOM.ST/Billing/GetCustomerInvoices?CustomerId={0}", customerId));
-            //    foreach (var item in items)
-            //    {
-            //        var detailItem = InvoiceToDetailMapper(item);
-            //        invoicesDetailItems.Add(detailItem);
-            //    }
-            //}
+            //    CustomerID = "aaaa",
+            //    InvoiceCode = "aaaa",
+            //    InvoiceId = "aaaa",
+            //    InvoiceNumber = "aaaa",
+            //    BillCycle = "aaaa",
+            //    DueDate = "aaaa",
+            //    Resource = "aaaa",
+            //    InvoiceAccount = "aaaa",
+            //    Amount = "aaaa",
+            //    OpenAmount = "aaaa",
+            //    PhoneNumber = "aaaa",
+            //    URL = "aaaa",
+            //    CollectionStatus = true,
+            //    InvoiceInstallmentFlag = true,
+            //    FinancialDisputes = true
+            //});
+            //invoicesDetailItems.Add(new InvoiceDetail
+            //{
+            //    CustomerID = "bbbb",
+            //    InvoiceCode = "bbbbb",
+            //    InvoiceId = "bbbbbb",
+            //    InvoiceNumber = "bbbbbb",
+            //    BillCycle = "bbbbbb",
+            //    DueDate = "bbbbbb",
+            //    Resource = "bbbbb",
+            //    InvoiceAccount = "bbbbb",
+            //    Amount = "bbbbb",
+            //    OpenAmount = "bbbbb",
+            //    PhoneNumber = "bbbbb",
+            //    URL = "bbbbbb",
+            //    CollectionStatus = true,
+            //    InvoiceInstallmentFlag = true,
+            //    FinancialDisputes = true
+            //});
+            //invoicesDetailItems.Add(new InvoiceDetail
+            //{
+            //    CustomerID = "cccc",
+            //    InvoiceCode = "cccc",
+            //    InvoiceId = "cccc",
+            //    InvoiceNumber = "ccccc",
+            //    BillCycle = "ccccc",
+            //    DueDate = "ccccc",
+            //    Resource = "cccccc",
+            //    InvoiceAccount = "cccccc",
+            //    Amount = "ccccc",
+            //    OpenAmount = "ccccc",
+            //    PhoneNumber = "ccccc",
+            //    URL = "ccccccc",
+            //    CollectionStatus = false,
+            //    InvoiceInstallmentFlag = false,
+            //    FinancialDisputes = false
+            //});
+            //invoicesDetailItems.Add(new InvoiceDetail
+            //{
+            //    CustomerID = "ddddd",
+            //    InvoiceCode = "ddddd",
+            //    InvoiceId = "ddddd",
+            //    InvoiceNumber = "ddddd",
+            //    BillCycle = "ddddd",
+            //    DueDate = "ddddd",
+            //    Resource = "ddddd",
+            //    InvoiceAccount = "ddddd",
+            //    Amount = "ddddd",
+            //    OpenAmount = "ddddd",
+            //    PhoneNumber = "ddddd",
+            //    URL = "ddddd",
+            //    CollectionStatus = true,
+            //    InvoiceInstallmentFlag = true,
+            //    FinancialDisputes = true
+            //});
+            using (SOMClient client = new SOMClient())
+            {
+                List<Invoice> items = client.Get<List<Invoice>>(String.Format("api/SOM.ST/Billing/GetCustomerSimulatedInvoices?CustomerId={0}", customerId));
+                foreach (var item in items)
+                {
+                    var detailItem = InvoiceToDetailMapper(item);
+                    invoicesDetailItems.Add(detailItem);
+                }
+            }
             return invoicesDetailItems;
         }
 
