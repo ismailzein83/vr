@@ -12,7 +12,7 @@ xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release" /y /v /z /i /Q /R					
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\App.config.CentralLog.exclud" /y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\CentralLog\Runtime\%YYYYMMDD%\CentralLog.Runtime.exe.config*"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\CentralLog\Runtime\%YYYYMMDD%\"
 del /s /q /f																				"\\192.168.110.185\Fixes\WebSite\CentralLog\Runtime\%YYYYMMDD%\*.pdb"
-del /s /q /f																				"\\192.168.110.185\Fixes\WebSite\CentralLog\Runtime\%YYYYMMDD%\Retail.*"
+del /s /q /f																				"\\192.168.110.185\Fixes\WebSite\CentralLog\Runtime\%YYYYMMDD%\Retail.*.dll"
 del /s /q /f																				"\\192.168.110.185\Fixes\WebSite\CentralLog\Runtime\%YYYYMMDD%\Vanrise.AccountManager.*"
 del /s /q /f																				"\\192.168.110.185\Fixes\WebSite\CentralLog\Runtime\%YYYYMMDD%\Vanrise.AccountBalance.*"
 del /s /q /f																				"\\192.168.110.185\Fixes\WebSite\CentralLog\Runtime\%YYYYMMDD%\Vanrise.Invoice.*"
