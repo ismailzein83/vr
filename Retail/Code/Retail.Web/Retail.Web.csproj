@@ -850,6 +850,9 @@
     <Content Include="Images\flat-cabill-iconheader.ico" />
     <Content Include="Images\flat-cabill-login.png" />
     <Content Include="Images\flat-cabill-logoonheader.png" />
+    <Content Include="Images\flat-CentralLog-iconheader.ico" />
+    <Content Include="Images\flat-CentralLog-login.png" />
+    <Content Include="Images\flat-CentralLog-logoonheader.png" />
     <Content Include="Images\flat-fzero-iconheader.ico" />
     <Content Include="Images\flat-fzero-login.png" />
     <Content Include="Images\flat-fzero-logoonheader.png" />
