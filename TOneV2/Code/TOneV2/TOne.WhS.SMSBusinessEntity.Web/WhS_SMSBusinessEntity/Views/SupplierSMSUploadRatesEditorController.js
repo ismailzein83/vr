@@ -5,6 +5,8 @@
     function GenericBusinessEntityEditorUploaderController($scope, VRNavigationService, VRUIUtilsService, UtilsService, WhS_SMSBusinessEntity_SupplierSMSRateChangesAPIService, VRNotificationService) {
         var fileId;
         var supplierInfo;
+        var currencyObj;
+        var effectiveDate;
         var definitionTitle;
 
         loadParameters();
@@ -16,18 +18,23 @@
 
             if (parameters != undefined) {
                 supplierInfo = parameters.supplierInfo;
+                currencyObj = parameters.currencyObj;
+                effectiveDate = parameters.effectiveDate;
             }
         }
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.effectiveDate = getShortDate(effectiveDate);
+            $scope.scopeModel.currency = currencyObj.Symbol;
 
             $scope.scopeModel.uploadSupplierSMSRates = function () {
                 fileId = $scope.scopeModel.document.fileId;
                 var input = {
                     FileId: fileId,
                     SupplierID: supplierInfo.CarrierAccountId,
-                    CurrencyId: supplierInfo.CurrencyId
+                    CurrencyId: currencyObj.CurrencyId,
+                    EffectiveDate: effectiveDate
                 };
 
                 return WhS_SMSBusinessEntity_SupplierSMSRateChangesAPIService.UploadSMSRateChanges(input).then(function (response) {
@@ -38,9 +45,16 @@
                             $scope.scopeModel.isUploadingComplete = true;
                             $scope.scopeModel.addedItems = response.NumberOfItemsAdded;
                             $scope.scopeModel.failedItems = response.NumberOfItemsFailed;
+
+                            if ($scope.scopeModel.addedItems > 0 && $scope.onSupplierSMSRateChangesUploaded != undefined) {
+                                var uploadResult = {
+                                    processDraftID: response.ProcessDraftID,
+                                    pendingChangesCount: response.PendingChangesCount
+                                };
+                                $scope.onSupplierSMSRateChangesUploaded(uploadResult);
+                            }
                         }
-                        else
-                        {
+                        else {
                             VRNotificationService.showPromptWarning(response.ErrorMessage);
                         }
                     }
@@ -82,6 +96,26 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+        }
+
+        function getShortDate(date) {
+            var dateString = '';
+            if (date && date instanceof Date && !isNaN(date)) {
+                dateString += date.getFullYear();
+
+                var month = "" + (parseInt(date.getMonth()) + 1);
+                if (month.length == 1)
+                    dateString += "-0" + month;
+                else
+                    dateString += "-" + month;
+
+                var day = "" + (parseInt(date.getDate()));
+                if (day.length == 1)
+                    dateString += "-0" + day;
+                else
+                    dateString += "-" + day;
+            }
+            return dateString;
         }
     }
 

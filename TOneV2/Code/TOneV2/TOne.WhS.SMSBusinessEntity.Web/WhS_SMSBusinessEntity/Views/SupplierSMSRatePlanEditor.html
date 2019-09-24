@@ -5,9 +5,15 @@
                 <vr-columns width="1/3row">
                     <vr-datetimepicker type="date" value="scopeModel.effectiveDate" label="Effective Date" onvaluechanged="scopeModel.onEffectiveDateChanged()" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="2/3row">
+                <vr-columns width="1/3row" haschildcolumns>
+                    <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady"
+                                                 onselectionchanged="scopeModel.onCurrencySelectionChanged"
+                                                 isrequired="true" hideremoveicon normal-col-num="12">
+                    </vr-common-currency-selector>
+                </vr-columns>
+                <vr-columns width="1/3row">
                     <div style="position:absolute;right:15px;">
-                        <vr-label > 
+                        <vr-label>
                             <span ng-class="scopeModel.pendingChangesColor" style="font-size: 13px;">Pending Changes : {{scopeModel.nbPendingChanges}}</span>
                         </vr-label>
                     </div>
@@ -24,9 +30,8 @@
                     </vr-choices>
                 </vr-columns>
             </vr-row>
-
             <vr-row>
-                <vr-columns colnum="12">
+                <vr-columns colnum="12" vr-loader="scopeModel.isGridLoading">
                     <vr-datagrid datasource="scopeModel.datasource"
                                  on-ready="scopeModel.onGridReady"
                                  getrowstyle="scopeModel.getGridRowColor"
@@ -34,8 +39,8 @@
                                  pagingtype="'PagingOnScroll'">
                         <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" widthfactor="10" disablesorting></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Current Rate'" type="'number'" widthfactor="5" disablesorting>
-                            {{dataItem.CurrentRate}}
+                        <vr-datagridcolumn headertext="'Current Rate'" widthfactor="5" disablesorting>
+                            {{dataItem.CurrentRate | number : viewScope.scopeModel.longPrecision}}
                             <vr-span ng-if="(dataItem.FutureRate != undefined)" style="cursor: pointer; text-decoration: underline" ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</vr-span>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'New Rate'" widthfactor="4" disablesorting>
@@ -51,6 +56,7 @@
 
             <div transclude-to="buttons">
                 <vr-button type="Apply" formname="formSupplierSMSRateEditor" ng-if="scopeModel.nbPendingChanges > 0" haspermission="scopeModel.hasApplyChangesPermission" data-onclick="scopeModel.applyChanges"></vr-button>
+                <vr-button type="Upload" formname="formSupplierSMSRateEditor" haspermission="scopeModel.hasSaveChangesPermission" data-onclick="scopeModel.uploadSupplierRateChanges"></vr-button>
                 <vr-button type="CancelChanges" ng-if="scopeModel.isSupplierSMSRateDraftExist" haspermission="scopeModel.hasCancelDraftPermission" data-onclick="scopeModel.cancelSupplierDraft"></vr-button>
                 <vr-button type="Close" formname="formSupplierSMSRateEditor" haspermission="scopeModel.hasSaveChangesPermission" data-onclick="scopeModel.close"></vr-button>
             </div>

@@ -20,7 +20,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SupplierSMSRateDetail> GetFilteredSupplierSMSRate(DataRetrievalInput<SupplierSMSRateQuery> input)
         {
-            return BigDataManager.Instance.RetrieveData(input, new SupplierSMSRateRequestHandler());
+            return BigDataManager.Instance.RetrieveData(input, new SupplierSMSRateRequestHandler() { IsSystemCurrency = input.Query.IsSystemCurrency });
         }
 
         public Vanrise.Entities.IDataRetrievalResult<SMSCostDetail> GetFilteredSMSCostDetails(DataRetrievalInput<SMSCostQuery> input)
@@ -141,8 +141,21 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
         private class SupplierSMSRateRequestHandler : BigDataRequestHandler<SupplierSMSRateQuery, SupplierSMSRateItem, SupplierSMSRateDetail>
         {
+            public bool IsSystemCurrency { get; set; }
+            Currency _systemCurrency;
+            DateTime _now;
+
             SupplierSMSRateManager _manager = new SupplierSMSRateManager();
             MobileNetworkManager _mobileNetworkManager = new MobileNetworkManager();
+            SupplierSMSPriceListManager _supplierSMSPriceListManager = new SupplierSMSPriceListManager();
+            CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            CurrencyManager _currencyManager = new CurrencyManager();
+
+            public SupplierSMSRateRequestHandler()
+            {
+                _systemCurrency = _currencyManager.GetSystemCurrency();
+                _now = DateTime.Now;
+            }
 
             public override SupplierSMSRateDetail EntityDetailMapper(SupplierSMSRateItem entity)
             {
@@ -177,16 +190,65 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 MobileNetwork mobileNetwork = _mobileNetworkManager.GetMobileNetworkById(mobileNetworkID);
                 mobileNetwork.ThrowIfNull("mobileNetwork", mobileNetworkID);
 
+                var currentPriceList = _supplierSMSPriceListManager.GetSupplierSMSPriceListByID(currentRate.PriceListID);
+                currentPriceList.ThrowIfNull("currentPriceList", currentRate.PriceListID);
+
+                decimal currentRateValue;
+                string currentRateCurrencySymbol;
+                if (!IsSystemCurrency)
+                {
+                    currentRateValue = currentRate.Rate;
+                    currentRateCurrencySymbol = _currencyManager.GetCurrencySymbol(currentPriceList.CurrencyID);
+                }
+                else
+                {
+                    currentRateValue = _currencyExchangeRateManager.ConvertValueToCurrency(currentRate.Rate, currentPriceList.CurrencyID, _systemCurrency.CurrencyId, _now);
+                    currentRateCurrencySymbol = _systemCurrency.Symbol;
+                }
+
                 return new SupplierSMSRateDetail()
                 {
                     ID = currentRate.ID,
                     MobileCountryName = new MobileCountryManager().GetMobileCountryName(mobileNetwork.MobileCountryId),
                     MobileNetworkName = mobileNetwork.NetworkName,
-                    Rate = currentRate.Rate,
+                    Rate = currentRateValue,
+                    CurrencySymbol = currentRateCurrencySymbol,
                     MobileNetworkID = mobileNetworkID,
                     BED = currentRate.BED,
                     EED = currentRate.EED,
-                    FutureRate = futureRate != null ? new SMSFutureRate() { Rate = futureRate.Rate, BED = futureRate.BED, EED = futureRate.EED } : null
+                    FutureRate = BuildSMSFutureRate(futureRate)
+                };
+            }
+
+            private SMSFutureRate BuildSMSFutureRate(SupplierSMSRate futureRate)
+            {
+                if (futureRate == null)
+                    return null;
+
+                var futurePriceList = _supplierSMSPriceListManager.GetSupplierSMSPriceListByID(futureRate.PriceListID);
+                futurePriceList.ThrowIfNull("futurePriceList", futureRate.PriceListID);
+
+                var futurePriceListCurrencySymbol = _currencyManager.GetCurrencySymbol(futurePriceList.CurrencyID);
+
+                decimal futureRateValue;
+                string futureRateCurrencySymbol;
+                if (!IsSystemCurrency)
+                {
+                    futureRateValue = futureRate.Rate;
+                    futureRateCurrencySymbol = futurePriceListCurrencySymbol;
+                }
+                else
+                {
+                    futureRateValue = _currencyExchangeRateManager.ConvertValueToCurrency(futureRate.Rate, futurePriceList.CurrencyID, _systemCurrency.CurrencyId, _now);
+                    futureRateCurrencySymbol = _systemCurrency.Symbol;
+                }
+
+                return new SMSFutureRate()
+                {
+                    Rate = futureRateValue,
+                    CurrencySymbol = futureRateCurrencySymbol,
+                    BED = futureRate.BED,
+                    EED = futureRate.EED
                 };
             }
 
@@ -235,6 +297,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Mobile Network", Width = 45 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate", Width = 25 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency", Width = 25 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", Width = 45, CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", Width = 45, CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
@@ -249,6 +312,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                         row.Cells.Add(new ExportExcelCell { Value = record.MobileCountryName });
                         row.Cells.Add(new ExportExcelCell { Value = record.MobileNetworkName });
                         row.Cells.Add(new ExportExcelCell { Value = record.Rate.ToString() });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CurrencySymbol });
                         row.Cells.Add(new ExportExcelCell { Value = record.BED });
                         row.Cells.Add(new ExportExcelCell { Value = record.EED });
 
@@ -273,7 +337,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
         private class SMSCostRequestHandler : BigDataRequestHandler<SMSCostQuery, SMSCost, SMSCostDetail>
         {
-            SupplierSMSRateDataManager _manager = new SupplierSMSRateDataManager();
+            SupplierSMSRateDataManager _dataManager = new SupplierSMSRateDataManager();
             MobileNetworkManager _mobileNetworkManager = new MobileNetworkManager();
             MobileCountryManager _mobileCountryManager = new MobileCountryManager();
             CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
@@ -289,7 +353,11 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 foreach (var costOption in entity.CostOptions)
                 {
                     string supplierName = _carrierAccountManager.GetCarrierAccountName(costOption.SupplierId);
-                    smsCostOptions.Add(new SMSCostOptionDetail() { SupplierName = supplierName, SupplierRate = costOption.SupplierRate });
+                    smsCostOptions.Add(new SMSCostOptionDetail()
+                    {
+                        SupplierName = supplierName,
+                        SupplierRate = costOption.SupplierRate
+                    });
                 }
 
                 return new SMSCostDetail()
@@ -304,7 +372,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             {
                 if (input != null && input.Query != null)
                 {
-                    var supplierSMSRates = _manager.GetSupplierSMSRatesEffectiveOn(input.Query.EffectiveDate);
+                    var supplierSMSRates = _dataManager.GetSupplierSMSRatesEffectiveOn(input.Query.EffectiveDate);
                     if (supplierSMSRates == null || supplierSMSRates.Count == 0)
                         return null;
 

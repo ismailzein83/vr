@@ -11,6 +11,8 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
 
         public List<int> MobileCountryIds { get; set; }
 
-        public List<int> MobileNetworkIds{ get; set; }
+        public List<int> MobileNetworkIds { get; set; }
+
+        public bool IsSystemCurrency { get; set; }
     }
 }

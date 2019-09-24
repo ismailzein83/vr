@@ -5,6 +5,7 @@
     function GenericBusinessEntityEditorUploaderController($scope, VRNavigationService, UtilsService, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRNotificationService) {
         var fileId;
         var customerInfo;
+        var effectiveDate;
 
         loadParameters();
         defineScope();
@@ -15,6 +16,7 @@
 
             if (parameters != undefined) {
                 customerInfo = parameters.customerInfo;
+                effectiveDate = parameters.effectiveDate;
             }
         }
 
@@ -26,7 +28,8 @@
                 var input = {
                     FileId: fileId,
                     CustomerID: customerInfo.CarrierAccountId,
-                    CurrencyId: customerInfo.CurrencyId
+                    CurrencyId: customerInfo.CurrencyId,
+                    EffectiveDate: effectiveDate
                 };
 
                 return WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.UploadSMSRateChanges(input).then(function (response) {
@@ -37,6 +40,15 @@
                             $scope.scopeModel.isUploadingComplete = true;
                             $scope.scopeModel.addedItems = response.NumberOfItemsAdded;
                             $scope.scopeModel.failedItems = response.NumberOfItemsFailed;
+
+                            if ($scope.scopeModel.addedItems > 0 && $scope.onSaleSMSRateChangesUploaded != undefined) {
+                                var uploadResult = {
+                                    processDraftID: response.ProcessDraftID,
+                                    pendingChangesCount: response.PendingChangesCount
+                                };
+                                $scope.onSaleSMSRateChangesUploaded(uploadResult);
+                            }
+
                         }
                         else {
                             VRNotificationService.showPromptWarning(response.ErrorMessage);

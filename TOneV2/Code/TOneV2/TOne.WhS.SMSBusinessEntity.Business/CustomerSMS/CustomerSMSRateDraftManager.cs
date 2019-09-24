@@ -95,6 +95,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             int customerId = input.CustomerID;
             int currencyId = input.CurrencyId;
             long fileId = input.FileId;
+            DateTime effectiveDate = input.EffectiveDate;
 
             Style outputCellStyle;
             Worksheet worksheet = GetExcelWorkSheet(fileId);
@@ -114,12 +115,13 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             }
 
             var draftData = GetDraftData(new CustomerDraftDataInput { CustomerID = customerId });
+            uploadOutput.PendingChangesCount = draftData.PendingChanges;
 
             CustomerSMSRateDraftToUpdate customerSMSRateDraftToUpdate = new CustomerSMSRateDraftToUpdate()
             {
                 CurrencyId = currencyId,
                 CustomerID = customerId,
-                EffectiveDate = draftData.DraftEffectiveDate.HasValue ? draftData.DraftEffectiveDate.Value : DateTime.Today,
+                EffectiveDate = effectiveDate,
                 ProcessDraftID = draftData.ProcessDraftID,
                 SMSRates = new List<CustomerSMSRateChangeToUpdate>()
             };
@@ -204,6 +206,8 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                     return uploadOutput;
                 }
 
+                draftData = GetDraftData(new CustomerDraftDataInput { CustomerID = customerId });
+                uploadOutput.PendingChangesCount = draftData.PendingChanges;
                 uploadOutput.ProcessDraftID = draftStateResult.ProcessDraftID;
             }
 

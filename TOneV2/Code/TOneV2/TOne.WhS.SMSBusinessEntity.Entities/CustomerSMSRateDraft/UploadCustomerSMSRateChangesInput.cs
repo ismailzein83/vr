@@ -9,5 +9,7 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
         public int CustomerID { get; set; }
 
         public int CurrencyId { get; set; }
+
+        public DateTime EffectiveDate { get; set; }
     }
 }

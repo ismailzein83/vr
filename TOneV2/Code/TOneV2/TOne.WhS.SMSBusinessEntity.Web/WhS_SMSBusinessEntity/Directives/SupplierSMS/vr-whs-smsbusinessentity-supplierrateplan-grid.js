@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.directive("vrWhsSmsbusinessentitySupplierrateplanGrid", ["VRNotificationService", "WhS_SMSBusinessEntity_SupplierSMSRateAPIService", "WhS_SMSBusinessEntity_SupplierRatePlanService", "UtilsService", function (VRNotificationService, WhS_SMSBusinessEntity_SupplierSMSRateAPIService, WhS_SMSBusinessEntity_SupplierRatePlanService, UtilsService) {
+app.directive("vrWhsSmsbusinessentitySupplierrateplanGrid", ["VRNotificationService", "WhS_SMSBusinessEntity_SupplierSMSRateAPIService", "WhS_SMSBusinessEntity_SupplierRatePlanService", "UtilsService","UISettingsService", function (VRNotificationService, WhS_SMSBusinessEntity_SupplierSMSRateAPIService, WhS_SMSBusinessEntity_SupplierRatePlanService, UtilsService, UISettingsService) {
         return {
             restrict: "E",
             scope: {
@@ -25,6 +25,8 @@ app.directive("vrWhsSmsbusinessentitySupplierrateplanGrid", ["VRNotificationServ
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.datasource = [];
+                $scope.scopeModel.longPrecision = UISettingsService.getLongPrecision();
+
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                 };

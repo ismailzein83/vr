@@ -19,9 +19,6 @@
         var supplierSelectorAPI;
         var supplierSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var currencySelectorAPI;
-        var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -32,7 +29,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.isLoading = true;
             $scope.scopeModel.isLoadingMobileNetworkSelector = false;
-
+            
             $scope.scopeModel.searchSupplierSMSRates = function () {
                 $scope.scopeModel.isLoading = true;
                 var promises = [];
@@ -54,7 +51,6 @@
             $scope.scopeModel.addSupplierRates = function () {
                 return hasRunningProcessesForSupplier().then(function (response) {
                     if (!response.hasRunningProcesses) {
-
                         var onSupplierSMSRatesApplied = function () {
                             resetSupplierSMSRates();
                         };
@@ -64,32 +60,9 @@
                 });
             };
 
-            $scope.scopeModel.uploadSupplierRates = function () {
-                return hasRunningProcessesForSupplier().then(function (response) {
-                    if (!response.hasRunningProcesses) {
-                        var onSaleSMSRatesUploaded = function () {
-                            $scope.scopeModel.isSupplierSMSRateDraftExist = true;
-                            $scope.scopeModel.isSupplierSMSRateLoaded = false;
-                        };
-
-                        WhS_SMSBusinessEntity_SupplierRatePlanService.uploadSMSRates(selectedSupplier, onSaleSMSRatesUploaded);
-                    }
-                });
-            };
-
             $scope.scopeModel.onSupplierChanged = function (supplier) {
                 if (supplier != undefined) {
                     selectedSupplier = supplier;
-
-                    var currencyPayload = {
-                        selectedIds: selectedSupplier.CurrencyId
-                    };
-
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoading = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencySelectorAPI, currencyPayload, setLoader, undefined);
-
                     resetSupplierSMSRates();
                 }
             };
@@ -124,11 +97,6 @@
             $scope.scopeModel.onSupplierSelectorReady = function (api) {
                 supplierSelectorAPI = api;
                 supplierSelectorReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onCurrencySelectorReady = function (api) {
-                currencySelectorAPI = api;
-                currencySelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -193,6 +161,7 @@
             return {
                 SupplierID: selectedSupplier.CarrierAccountId,
                 EffectiveDate: $scope.scopeModel.effectiveDate,
+                IsSystemCurrency: $scope.scopeModel.isSystemCurrency,
                 MobileCountryIds: mobileCountrySelectorAPI.getSelectedIds(),
                 MobileNetworkIds: mobileNetworkSelectorAPI.getSelectedIds()
             };

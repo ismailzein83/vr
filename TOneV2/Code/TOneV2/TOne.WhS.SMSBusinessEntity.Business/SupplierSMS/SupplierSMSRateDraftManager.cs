@@ -39,7 +39,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
                 Dictionary<int, SupplierSMSRateItem> mobileNetworkRates = new SupplierSMSRateManager().GetEffectiveMobileNetworkRates(input.SupplierID, DateTime.Now);
 
-                SetSMSRateDetails(supplierSMSRateChangesDetails, SupplierSMSRateChanges, mobileNetworkRates);
+                SetSMSRateDetails(supplierSMSRateChangesDetails, SupplierSMSRateChanges, mobileNetworkRates, input.CurrencyId);
                 return supplierSMSRateChangesDetails;
             }
 
@@ -77,7 +77,8 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 ProcessDraftID = processDraft != null && processDraft.Changes != null ? processDraft.ID : (long?)null,
                 DraftEffectiveDate = supplierSMSRateDraft != null ? supplierSMSRateDraft.EffectiveDate : default(DateTime?),
                 CountryLetters = new MobileNetworkManager().GetDistinctMobileCountryLetters(),
-                PendingChanges = supplierSMSRateDraft != null && supplierSMSRateDraft.SMSRates != null ? supplierSMSRateDraft.SMSRates.Count : 0
+                PendingChanges = supplierSMSRateDraft != null && supplierSMSRateDraft.SMSRates != null ? supplierSMSRateDraft.SMSRates.Count : 0,
+                CurrencyId = supplierSMSRateDraft != null ? supplierSMSRateDraft.CurrencyId : (int?)null
             };
         }
 
@@ -94,6 +95,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
         {
             int supplierId = input.SupplierID;
             int currencyId = input.CurrencyId;
+            DateTime effectiveDate = input.EffectiveDate;
             long fileId = input.FileId;
 
             Style outputCellStyle;
@@ -103,7 +105,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             var uploadOutput = new UploadSupplierSMSRateChangesLog
             {
                 NumberOfItemsAdded = 0,
-                NumberOfItemsFailed = 0,
+                NumberOfItemsFailed = 0
             };
 
             string errorMessage;
@@ -114,12 +116,13 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             }
 
             var draftData = GetDraftData(new SupplierDraftDataInput { SupplierID = supplierId });
+            uploadOutput.PendingChangesCount = draftData.PendingChanges;
 
             SupplierSMSRateDraftToUpdate supplierSMSRateDraftToUpdate = new SupplierSMSRateDraftToUpdate()
             {
                 CurrencyId = currencyId,
                 SupplierID = supplierId,
-                EffectiveDate = draftData.DraftEffectiveDate.HasValue ? draftData.DraftEffectiveDate.Value : DateTime.Today,
+                EffectiveDate = effectiveDate,
                 ProcessDraftID = draftData.ProcessDraftID,
                 SMSRates = new List<SupplierSMSRateChangeToUpdate>()
             };
@@ -205,6 +208,8 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                     return uploadOutput;
                 }
 
+                draftData = GetDraftData(new SupplierDraftDataInput { SupplierID = supplierId });
+                uploadOutput.PendingChangesCount = draftData.PendingChanges;
                 uploadOutput.ProcessDraftID = draftStateResult.ProcessDraftID;
             }
 
@@ -252,11 +257,15 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             return null;
         }
 
-        private void SetSMSRateDetails(List<SupplierSMSRateChangesDetail> supplierSMSRateChangesDetails, Dictionary<int, SupplierSMSRateChange> supplierSMSRateChanges, Dictionary<int, SupplierSMSRateItem> supplierSMSRates)
+        private void SetSMSRateDetails(List<SupplierSMSRateChangesDetail> supplierSMSRateChangesDetails, Dictionary<int, SupplierSMSRateChange> supplierSMSRateChanges, Dictionary<int, SupplierSMSRateItem> supplierSMSRates, int destinationCurrencyId)
         {
             DateTime dateTime = DateTime.Now;
             bool haveChanges = (supplierSMSRateChanges != null);
             bool haveRates = (supplierSMSRates != null);
+
+            var supplierSMSPriceListManager = new SupplierSMSPriceListManager();
+            var currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            var currencyManager = new CurrencyManager();
 
             foreach (SupplierSMSRateChangesDetail supplierSMSRateChangesDetail in supplierSMSRateChangesDetails)
             {
@@ -274,9 +283,32 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
                     if (supplierEffectiveSMSRate != null)
                     {
+                        var currentRate = supplierEffectiveSMSRate.CurrentRate;
+                        if (currentRate != null)
+                        {
+                            var currentPriceList = supplierSMSPriceListManager.GetSupplierSMSPriceListByID(currentRate.PriceListID);
+                            currentPriceList.ThrowIfNull("currentPriceList", currentRate.PriceListID);
+
+                            supplierSMSRateChangesDetail.CurrentRate = currencyExchangeRateManager.ConvertValueToCurrency(currentRate.Rate, currentPriceList.CurrencyID, destinationCurrencyId, dateTime);
+                        }
+
                         var futureRate = supplierEffectiveSMSRate.FutureRate;
-                        supplierSMSRateChangesDetail.CurrentRate = supplierEffectiveSMSRate.CurrentRate != null ? supplierEffectiveSMSRate.CurrentRate.Rate : (decimal?)null;
-                        supplierSMSRateChangesDetail.FutureRate = futureRate != null ? new SMSFutureRate() { Rate = futureRate.Rate, BED = futureRate.BED, EED = futureRate.EED } : null;
+                        if (futureRate != null)
+                        {
+                            var futurePriceList = supplierSMSPriceListManager.GetSupplierSMSPriceListByID(futureRate.PriceListID);
+                            futurePriceList.ThrowIfNull("futurePriceList", futureRate.PriceListID);
+
+                            var futurePriceListCurrency = currencyManager.GetCurrency(futurePriceList.CurrencyID);
+                            futurePriceListCurrency.ThrowIfNull("futurePriceListCurrency", futurePriceList.CurrencyID);
+
+                            supplierSMSRateChangesDetail.FutureRate = new SMSFutureRate()
+                            {
+                                Rate = currencyExchangeRateManager.ConvertValueToCurrency(futureRate.Rate, futurePriceList.CurrencyID, destinationCurrencyId, dateTime),
+                                CurrencySymbol = futurePriceListCurrency.Symbol,
+                                BED = futureRate.BED,
+                                EED = futureRate.EED
+                            };
+                        }
                     }
                 }
             }
@@ -290,18 +322,21 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             if (supplierDraftToUpdate == null)
                 return supplierSMSRateChanges;
 
+            var currencyId = supplierDraftToUpdate.CurrencyId;
+
             if (supplierSMSRateChanges == null || supplierSMSRateChanges.SMSRates == null || supplierSMSRateChanges.SMSRates.Count == 0)
             {
                 return new SupplierSMSRateDraft()
                 {
                     SupplierID = supplierDraftToUpdate.SupplierID,
-                    CurrencyId = supplierDraftToUpdate.CurrencyId,
+                    CurrencyId = currencyId,
                     EffectiveDate = supplierDraftToUpdate.EffectiveDate,
                     SMSRates = BuildSupplierSMSRateChangesMapper(supplierDraftToUpdate.SMSRates),
                     Status = ProcessStatus.Draft
                 };
             }
 
+            supplierSMSRateChanges.CurrencyId = currencyId;
             supplierSMSRateChanges.EffectiveDate = supplierDraftToUpdate.EffectiveDate;
             supplierSMSRateChanges.Status = ProcessStatus.Draft;
 

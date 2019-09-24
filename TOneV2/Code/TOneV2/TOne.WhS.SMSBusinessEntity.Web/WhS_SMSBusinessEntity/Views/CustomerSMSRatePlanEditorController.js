@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerSMSRatePlanEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService', 'VRDateTimeService', 'WhS_SMSBusinessEntity_CustomerRatePlanService', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum', 'LabelColorsEnum'];
+    customerSMSRatePlanEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService', 'VRDateTimeService', 'WhS_SMSBusinessEntity_CustomerRatePlanService', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum', 'LabelColorsEnum', 'UISettingsService'];
 
-    function customerSMSRatePlanEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRDateTimeService, WhS_SMSBusinessEntity_CustomerRatePlanService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum, LabelColorsEnum) {
+    function customerSMSRatePlanEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRDateTimeService, WhS_SMSBusinessEntity_CustomerRatePlanService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum, LabelColorsEnum, UISettingsService) {
 
         var customerInfo;
         var processDraftID;
@@ -36,6 +36,7 @@
             $scope.scopeModel.countryLetters = [];
             $scope.scopeModel.nbPendingChanges = 0;
             $scope.scopeModel.pendingChangesColor = LabelColorsEnum.Info.color;
+            $scope.scopeModel.longPrecision = UISettingsService.getLongPrecision();
 
             $scope.scopeModel.loadMoreData = function () {
                 $scope.scopeModel.isLoading = true;
@@ -137,6 +138,25 @@
                             VRNotificationService.notifyException(error, $scope);
                         });
                     }
+                });
+            };
+
+            $scope.scopeModel.uploadCustomerRateChanges = function () {
+                var saveDraftPromise = onSaveOrApplyClicked();
+
+                var onSaleSMSRateChangesUploaded = function (uploadResult) {
+                    $scope.scopeModel.isGridLoading = true;
+                    $scope.scopeModel.nbPendingChanges = uploadResult.pendingChangesCount;
+                    processDraftID = uploadResult.processDraftID;
+                    $scope.scopeModel.isCustomerSMSRateDraftExist = true;
+                    isEffectiveDateChanged = false;
+                    modifiedSmsRates.length = 0;
+                    loadCountryItems().then(function () {
+                        $scope.scopeModel.isGridLoading = false;
+                    });
+                };
+                saveDraftPromise.then(function () {
+                    WhS_SMSBusinessEntity_CustomerRatePlanService.uploadSMSRateChanges(customerInfo, $scope.scopeModel.effectiveDate, onSaleSMSRateChangesUploaded);
                 });
             };
 

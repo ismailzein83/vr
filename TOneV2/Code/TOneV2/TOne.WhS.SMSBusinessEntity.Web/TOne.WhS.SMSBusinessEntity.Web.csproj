@@ -108,6 +108,8 @@
     <Content Include="WhS_SMSBusinessEntity\Services\APIServices\SupplierSMS\SupplierSMSRateChangesAPIService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\SupplierSMSRatePlanService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\CustomerSMSRatePlanService.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\FutureSMSSupplierRate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\FutureSMSSupplierRateController.js" />
     <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSUploadRatesEditor.html" />
     <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSUploadRatesEditor.html" />
     <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSUploadRatesEditorController.js" />
@@ -126,8 +128,8 @@
     <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSRatePlanEditor.html" />
     <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSRatePlan.html" />
     <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSRatePlanController.js" />
-    <Content Include="WhS_SMSBusinessEntity\Views\FutureSMSRate.html" />
-    <Content Include="WhS_SMSBusinessEntity\Views\FutureSMSRateController.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\FutureSMSCustomerRate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\FutureSMSCustomerRateController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />

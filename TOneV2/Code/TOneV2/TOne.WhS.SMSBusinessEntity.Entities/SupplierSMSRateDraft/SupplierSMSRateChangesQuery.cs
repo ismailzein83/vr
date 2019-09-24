@@ -6,6 +6,8 @@
 
         public int SupplierID { get; set; }
 
+        public int CurrencyId { get; set; }
+
         public SupplierSMSRateChangesFilter Filter { get; set; }
     }
 

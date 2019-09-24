@@ -8,6 +8,7 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
         public long FileID { get; set; }
         public int NumberOfItemsAdded { get; set; }
         public int NumberOfItemsFailed { get; set; }
+        public int PendingChangesCount { get; set; }
         public String ErrorMessage { get; set; }
     }
 }

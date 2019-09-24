@@ -26,7 +26,7 @@
             </vr-row>
 
             <vr-row>
-                <vr-columns colnum="12">
+                <vr-columns colnum="12" vr-loader="scopeModel.isGridLoading">
                     <vr-datagrid datasource="scopeModel.datasource"
                                  on-ready="scopeModel.onGridReady"
                                  getrowstyle="scopeModel.getGridRowColor"
@@ -34,8 +34,8 @@
                                  pagingtype="'PagingOnScroll'">
                         <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" widthfactor="10" disablesorting></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Current Rate'" type="'number'" widthfactor="5" disablesorting>
-                            {{dataItem.CurrentRate}}
+                        <vr-datagridcolumn headertext="'Current Rate'" widthfactor="5" disablesorting>
+                            {{dataItem.CurrentRate | number : viewScope.scopeModel.longPrecision}}
                             <vr-span ng-if="(dataItem.FutureRate != undefined)" style="cursor: pointer; text-decoration: underline" ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</vr-span>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'New Rate'" widthfactor="4" disablesorting>
@@ -50,6 +50,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Apply" formname="formCustomerSMSRateEditor" ng-if="scopeModel.nbPendingChanges > 0" haspermission="scopeModel.hasApplyChangesPermission" data-onclick="scopeModel.applyChanges"></vr-button>
+                <vr-button type="Upload" formname="formCustomerSMSRateEditor" haspermission="scopeModel.hasSaveChangesPermission" data-onclick="scopeModel.uploadCustomerRateChanges"></vr-button>
                 <vr-button type="CancelChanges" ng-if="scopeModel.isCustomerSMSRateDraftExist" haspermission="scopeModel.hasCancelDraftPermission" data-onclick="scopeModel.cancelCustomerDraft"></vr-button>
                 <vr-button type="Close" formname="formCustomerSMSRateEditor" haspermission="scopeModel.hasSaveChangesPermission" data-onclick="scopeModel.close"></vr-button>
             </div>

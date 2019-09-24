@@ -19,15 +19,17 @@
             VRModalService.showModal("/Client/Modules/WhS_SMSBusinessEntity/Views/SupplierSMSRatePlanEditor.html", parameters, modalSettings);
         }
 
-        function uploadSMSRates(selectedSupplier, onSaleSMSRatesUploaded) {
+        function uploadSMSRateChanges(supplierInfo, currencyObj, effectiveDate, onSupplierSMSRateChangesUploaded) {
             var parameters = {
-                supplierInfo: selectedSupplier
+                supplierInfo: supplierInfo,
+                currencyObj: currencyObj,
+                effectiveDate: effectiveDate
             };
 
             var modalSettings = {
                 onScopeReady: function (modalScope) {
-                    modalScope.title = "Upload SMS Rates for Supplier '" + selectedSupplier.Name + "'";
-                    modalScope.onSaleSMSRatesUploaded = onSaleSMSRatesUploaded;
+                    modalScope.title = "Upload SMS Rates for Supplier '" + supplierInfo.Name + "'";
+                    modalScope.onSupplierSMSRateChangesUploaded = onSupplierSMSRateChangesUploaded;
                 }
             };
             VRModalService.showModal("/Client/Modules/WhS_SMSBusinessEntity/Views/SupplierSMSUploadRatesEditor.html", parameters, modalSettings);
@@ -41,12 +43,12 @@
 
             var settings = {};
 
-            VRModalService.showModal("/Client/Modules/WhS_SMSBusinessEntity/Views/FutureSMSRate.html", parameters, settings);
+            VRModalService.showModal("/Client/Modules/WhS_SMSBusinessEntity/Views/FutureSMSSupplierRate.html", parameters, settings);
         }
 
         return {
             addSMSRates: addSMSRates,
-            uploadSMSRates: uploadSMSRates,
+            uploadSMSRateChanges: uploadSMSRateChanges,
             viewFutureSMSRate: viewFutureSMSRate
         };
     }
