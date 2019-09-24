@@ -369,11 +369,23 @@
             "FieldValues": {
               "ID": -1,
               "SecurityProviderId": "9554069b-795e-4bb1-bff3-9af0f47fc0ff",
-              "Name": "Dev User",
-              "Password": "stQLj+WtOxk3pKp54Myts5ODqPp448I=",
-              "Email": "dev@vanrise.com",
+              "Name": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "Support"
+              },
+              "Password": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "FY5vaAn+kWWvh6cgCgfysC0R+27O0Do="
+              },
+              "Email": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "support@vanrise.com"
+              },
               "TenantId": 1,
-              "LastLogin": "2019-09-16T15:02:06.87",
+              "LastLogin": "2019-09-24T12:16:15.893",
               "Description": null,
               "TempPassword": null,
               "TempPasswordValidTill": null,
@@ -385,7 +397,7 @@
               "CreatedTime": "2017-03-23T17:04:37.467",
               "CreatedBy": null,
               "LastModifiedBy": -1,
-              "LastModifiedTime": "2019-09-16T15:02:06.87",
+              "LastModifiedTime": "2019-09-24T12:16:15.893",
               "PasswordChangeTime": null
             }
           },
@@ -397,7 +409,7 @@
               "Password": "9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=",
               "Email": "admin@vanrise.com",
               "TenantId": 1,
-              "LastLogin": "2019-09-16T15:10:37.633",
+              "LastLogin": "2019-09-24T16:35:25.537",
               "Description": null,
               "TempPassword": null,
               "TempPasswordValidTill": null,
@@ -409,7 +421,7 @@
               "CreatedTime": null,
               "CreatedBy": null,
               "LastModifiedBy": 1,
-              "LastModifiedTime": "2019-09-16T15:10:37.633",
+              "LastModifiedTime": "2019-09-24T16:35:25.537",
               "PasswordChangeTime": null
             }
           }
