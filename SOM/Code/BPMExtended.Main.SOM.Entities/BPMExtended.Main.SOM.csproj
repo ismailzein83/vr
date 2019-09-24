@@ -85,6 +85,7 @@
     <Compile Include="Billing\WorkflowInput\ADSLTakeOverInput.cs" />
     <Compile Include="Billing\WorkflowInput\BillOnDemandInput.cs" />
     <Compile Include="Billing\WorkflowInput\BillOnDemandInputArguments.cs" />
+    <Compile Include="Billing\WorkflowInput\CancelSuspensionRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ChangeLeasedLineSpeedRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ChangePhoneNumberRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ChangeRatePlanRequestInput.cs" />
