@@ -2408,6 +2408,227 @@
         "IsIdentity": false
       },
       "Title": "Merge"
+    },
+    {
+      "ConnectionId": "1e7f142e-e3db-4c87-bfaf-87d396ddda5a",
+      "Schema": "CentralLog",
+      "TableName": "EventNodeType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "6da6f03b-ad97-46bc-90ce-10ab162596c5",
+              "Name": "Windows Event Node",
+              "CreatedTime": "2019-09-23T11:54:10.97",
+              "CreatedBy": -1,
+              "LastModifiedTime": "2019-09-23T11:54:10.97",
+              "LastModifiedBy": -1
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "1e7f142e-e3db-4c87-bfaf-87d396ddda5a",
+      "Schema": "CentralLog",
+      "TableName": "EventType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "8f519b65-1d9e-4106-878b-24496b6b935c",
+              "Name": "Windows",
+              "CreatedTime": "2019-09-23T11:46:41.137",
+              "CreatedBy": -1,
+              "LastModifiedTime": "2019-09-23T11:46:41.137",
+              "LastModifiedBy": -1
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "fb947581-d91c-42d5-9adb-fa8599373090",
+              "Name": "Application",
+              "CreatedTime": "2019-09-23T11:46:37.1",
+              "CreatedBy": -1,
+              "LastModifiedTime": "2019-09-23T11:46:37.1",
+              "LastModifiedBy": -1
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "integration",
+      "TableName": "DataSource",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "e31d8662-a3a2-4cbc-a9a3-63f977b6bf15",
+              "DevProjectID": null,
+              "Name": "Events Logs",
+              "AdapterID": "f8cc3a19-e3cd-4253-a5dc-5ed5ee1b1932",
+              "AdapterState": "null",
+              "TaskId": "fed42476-d979-47e2-b2bd-c8812c827de3",
+              "Settings": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "{\"$type\":\"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities\",\"AdapterArgument\":{\"$type\":\"Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments.WindowsEventLogAdapterArgument, Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter.Arguments\",\"Sources\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"Application\",\"Security\",\"System\"]},\"UserName\":\"xxx\",\"Password\":\"xxx\",\"HostName\":\"xxx\",\"Domain\":\"vanrise.local\",\"BatchSize\":500,\"InitialStartDate\":\"2019-09-22T00:00:00\",\"MaxParallelRuntimeInstances\":1},\"MapperCustomCode\":\"LogVerbose(\\\"Started\\\");\\n            var events = new List<dynamic>();\\n\\n            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();\\n            Type logEventRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(\\\"CentralLogging_LogEvent\\\");\\n\\n            var importedData = ((Vanrise.Integration.Entities.WidowsEventLogImportedData)(data));\\n            if(importedData.Events != null)\\n            {\\n                  foreach(var newEvent in importedData.Events)\\n                 {\\n                        dynamic eventObj= Activator.CreateInstance(logEventRuntimeType) as dynamic;\\n                        eventObj.Message = newEvent.Description;\\n                        eventObj.EventTime= newEvent.TimeCreated;\\n                        eventObj.DataSource = dataSourceId;\\n                        eventObj.EventType= new Guid(\\\"8f519b65-1d9e-4106-878b-24496b6b935c\\\");\\n                        eventObj.Node= 1;\\n                       eventObj.SourceID = newEvent.RecordId.HasValue? string.Format(\\\"{0}\\\",newEvent.RecordId.Value):null;\\n\\n                      if(newEvent.LevelDisplayName != null)\\n                      {\\n                           switch(newEvent.LevelDisplayName)\\n                           {\\n                                case \\\"Information\\\": eventObj.EventLevel = new Guid(\\\"7ccbd58b-b0dc-475d-83e8-f819312c8add\\\");\\n                                break;\\n                                case  \\\"Warning\\\":      eventObj.EventLevel = new Guid(\\\"b9577da5-de8c-44d7-ba33-a9f4ff6e8946\\\");\\n                                break;\\n                                case  \\\"Error\\\":      eventObj.EventLevel = new Guid(\\\"1ea2f810-d87e-4745-93ce-f6d867857857\\\");\\n                                break;\\n                                case  \\\"Critical\\\":   eventObj.EventLevel = new Guid(\\\"c4343b6e-e912-44e4-be19-6cdc62d363f3\\\");\\n                                break;\\n                            }\\n                      }\\n                      \\n\\n                        eventObj.Details= newEvent.DescriptionXml;\\n                        eventObj.ExtraFields= new Dictionary<string,string>();\\n                        eventObj.ExtraFields.Add(\\\"TaskDisplayName\\\",newEvent.TaskDisplayName);\\n                        eventObj.ExtraFields.Add(\\\"ProviderName\\\",newEvent.ProviderName);\\n                        eventObj.ExtraFields.Add(\\\"MachineName\\\",newEvent.MachineName);\\n\\n                        events.Add(eventObj);\\n                  }\\n              }\\n\\n            if (events.Count > 0)\\n            {\\n                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(events, \\\"#RECORDSCOUNT# of Events\\\", \\\"CentralLogging_LogEvent\\\");\\n                mappedBatches.Add(\\\"Distribute Event Logs\\\", batch);\\n            }\\n            else\\n            {\\n                importedData.IsEmpty = true;\\n            }\\n\\n            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\\n            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;\\n            LogVerbose(\\\"Finished\\\");\\n            return result;\",\"ExecutionFlowId\":\"1c914b71-86a6-44dd-92f4-f704714316d7\"}"
+              },
+              "LastModifiedTime": "2019-09-20T12:24:25.4",
+              "CreatedTime": "2019-09-20T12:24:25.4"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "AdapterID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "AdapterState",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "TaskId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
     }
   ]
 }
