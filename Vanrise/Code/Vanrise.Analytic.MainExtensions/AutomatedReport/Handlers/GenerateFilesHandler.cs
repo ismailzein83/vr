@@ -12,7 +12,6 @@ using Vanrise.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 {
-
     public class GenerateFilesHandler : VRAutomatedReportHandlerSettings
     {
         public override Guid ConfigId
@@ -34,7 +33,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                     else
                         context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to generate is {0} files.", totalAttachments);
                 }
-               
+
                 AdvancedExcelFileGeneratorManager fileGeneratorManager = new AdvancedExcelFileGeneratorManager();
 
                 foreach (var generator in this.AttachementGenerators)
@@ -65,7 +64,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 }
                 ActionType.Execute(new GenerateFilesActionTypeContext { GeneratedFileItems = generatedFileItems, HandlerContext = context });
             }
-           
+
         }
         public override void OnAfterSaveAction(IVRAutomatedReportHandlerSettingsOnAfterSaveActionContext context)
         {
@@ -93,7 +92,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         }
 
     }
-   
+
     public class FTPActionType : GenerateFilesActionType
     {
         public override Guid ConfigId
@@ -111,7 +110,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 int totalFiles = context.GeneratedFileItems.Count;
                 int filesDone = 0;
                 int filesLeft = totalFiles;
-                if (context.HandlerContext.EvaluatorContext!=null)
+                if (context.HandlerContext.EvaluatorContext != null)
                 {
                     if (totalFiles == 1)
                         context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to transfer to directory {0} using FTP is 1 file.", this.FTPCommunicatorSettings.Directory);
@@ -148,6 +147,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
 
     }
+
     public class SendEmailActionType : GenerateFilesActionType
     {
         public override Guid ConfigId
@@ -175,6 +175,21 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 if (context.HandlerContext.EvaluatorContext != null)
                     context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("An e-mail has been sent to {0}.", this.To);
             }
+        }
+    }
+
+    public class MultipleActionsActionType : GenerateFilesActionType
+    {
+        public override Guid ConfigId
+        {
+            get { return new Guid("47409013-A4A4-4C60-A730-F30A8CBDCCCD"); }
+
+        }
+        public List<GenerateFilesActionType> Actions { get; set; }
+
+        public override void Execute(IGenerateFilesActionTypeContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }
