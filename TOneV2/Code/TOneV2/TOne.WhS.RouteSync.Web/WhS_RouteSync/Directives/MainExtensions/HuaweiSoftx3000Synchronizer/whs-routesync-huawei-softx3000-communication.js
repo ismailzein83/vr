@@ -2,9 +2,9 @@
 
     'use strict';
 
-    whsRoutesyncHuaweiCommunication.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_RouteSync_HuaweiSwitchLoggerAPIService'];
+    whsRoutesyncHuaweiSoftX3000Communication.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_RouteSync_HuaweiSwitchLoggerAPIService'];
 
-    function whsRoutesyncHuaweiCommunication(UtilsService, VRUIUtilsService, WhS_RouteSync_HuaweiSwitchLoggerAPIService) {
+    function whsRoutesyncHuaweiSoftX3000Communication(UtilsService, VRUIUtilsService, WhS_RouteSync_HuaweiSwitchLoggerAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -12,15 +12,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new HuaweiCommunicationCtor($scope, ctrl, $attrs);
+                var ctor = new HuaweiSoftX3000CommunicationCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSynchronizer/Templates/HuaweiCommunicationTemplate.html"
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSoftX3000Synchronizer/Templates/HuaweiSoftX3000CommunicationTemplate.html"
         };
 
-        function HuaweiCommunicationCtor($scope, ctrl, $attrs) {
+        function HuaweiSoftX3000CommunicationCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var loggerGridAPI;
@@ -34,14 +34,14 @@
                 $scope.scopeModel.switchSSHCommunications = [];
                 $scope.scopeModel.switchLoggers = [];
 
-                $scope.scopeModel.onSSHGridReady = function (api) {
-                    sshGridAPI = api;
-                    sshGridReadyDeferred.resolve();
-                };
-
                 $scope.scopeModel.onLoggerGridReady = function (api) {
                     loggerGridAPI = api;
                     loggerGridReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onSSHGridReady = function (api) {
+                    sshGridAPI = api;
+                    sshGridReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.validateLoggers = function () {
@@ -90,11 +90,11 @@
 
                     var loadSwitchSSHCommunicationsPromise = getLoadSwitchSSHCommunicationsPromise();
                     loadSwitchSSHCommunicationsPromise.then(function () {
+
                         var loggerItem = {
                             isActive: false,
                             api: undefined
                         };
-
                         extendLoggerItem(loggerItem, logger);
                         $scope.scopeModel.switchLoggers.push(loggerItem);
                     });
@@ -225,7 +225,7 @@
                                 Port: switchSSHCommunicationItem.sslPort,
                                 Username: switchSSHCommunicationItem.sslUsername,
                                 Password: switchSSHCommunicationItem.sslPassword,
-                                InterfaceIP: switchSSHCommunicationItem.sslInterfaceIP   
+                                InterfaceIP: switchSSHCommunicationItem.sslInterfaceIP
                             }
                         }];
                     }
@@ -245,5 +245,5 @@
         }
     }
 
-    app.directive('whsRoutesyncHuaweiCommunication', whsRoutesyncHuaweiCommunication);
+    app.directive('whsRoutesyncHuaweiSoftx3000Communication', whsRoutesyncHuaweiSoftX3000Communication);
 })(app);

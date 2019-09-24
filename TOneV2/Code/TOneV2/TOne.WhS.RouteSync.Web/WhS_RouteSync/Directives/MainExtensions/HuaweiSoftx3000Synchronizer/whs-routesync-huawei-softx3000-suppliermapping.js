@@ -1,7 +1,10 @@
-﻿'use strict';
+﻿(function () {
 
-app.directive('whsRoutesyncHuaweiSuppliermapping', ['UtilsService',
-    function (UtilsService) {
+    'use strict';
+
+    whsRoutesyncHuaweiSoftX3000Suppliermapping.$inject = ['UtilsService']
+
+    function whsRoutesyncHuaweiSoftX3000Suppliermapping(UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -9,19 +12,18 @@ app.directive('whsRoutesyncHuaweiSuppliermapping', ['UtilsService',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new HuaweiSupplierMappingDirectiveCtor($scope, ctrl, $attrs);
+                var ctor = new HuaweiSoftX3000SupplierMappingDirectiveCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSynchronizer/Templates/HuaweiSupplierMappingTemplate.html'
+            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSoftX3000Synchronizer/Templates/HuaweiSoftX3000SupplierMappingTemplate.html'
         };
 
-        function HuaweiSupplierMappingDirectiveCtor($scope, ctrl, $attrs) {
+        function HuaweiSoftX3000SupplierMappingDirectiveCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var context;
-            var isRouteNameValid = true;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -29,17 +31,6 @@ app.directive('whsRoutesyncHuaweiSuppliermapping', ['UtilsService',
                 $scope.scopeModel.isSupplierMappingExists = function () {
                     $scope.scopeModel.supplierMappingExists = isMappingExists();
                     updateSupplierDescriptions();
-                };
-
-                $scope.scopeModel.isRouteNameValid = function () {
-
-                    var routeNameValidationMsg = getRouteNameValidationMsg();
-                    isRouteNameValid = routeNameValidationMsg == null;
-
-                    var isSupplierMappingValid = isSupplierMappingValidFunc();
-
-                    context.updateErrorDescription(isRouteNameValid && isSupplierMappingValid, false);
-                    return routeNameValidationMsg;
                 };
 
                 defineAPI();
@@ -58,8 +49,7 @@ app.directive('whsRoutesyncHuaweiSuppliermapping', ['UtilsService',
 
                         supplierMapping = payload.supplierMapping;
                         if (supplierMapping != undefined) {
-                            $scope.scopeModel.routeName = supplierMapping.RouteName;
-                            $scope.scopeModel.isup = supplierMapping.ISUP;
+                            $scope.scopeModel.srt = supplierMapping.SRT;
                         }
                     }
 
@@ -77,13 +67,10 @@ app.directive('whsRoutesyncHuaweiSuppliermapping', ['UtilsService',
             }
 
             function isMappingExists() {
-                var isup = $scope.scopeModel.isup;
-                var routeName = $scope.scopeModel.routeName;
+                var srt = $scope.scopeModel.srt;
+                var isSRTFilled = srt != undefined && srt != "";
 
-                var isISUPFilled = isup != undefined && isup != "";
-                var isRNFilled = routeName != undefined && routeName != "";
-
-                if (isISUPFilled || isRNFilled) {
+                if (isSRTFilled) {
                     return true;
                 } else {
                     return false;
@@ -103,12 +90,9 @@ app.directive('whsRoutesyncHuaweiSuppliermapping', ['UtilsService',
                 if (context == undefined)
                     return;
 
-                var routeNameValidationMsg = getRouteNameValidationMsg();
-                isRouteNameValid = routeNameValidationMsg == null;
-
-                var isSupplierMappingValid = isSupplierMappingValidFunc();
-
-                context.updateErrorDescription(isRouteNameValid && isSupplierMappingValid, false);
+                var validatationMessage = $scope.validationContext.validate();
+                var isValid = validatationMessage == null;
+                context.updateErrorDescription(isValid, true);
             }
 
             function updateSupplierMappingDescription() {
@@ -123,38 +107,16 @@ app.directive('whsRoutesyncHuaweiSuppliermapping', ['UtilsService',
             }
 
             function getSupplierMappingEntity() {
-                var routeName = $scope.scopeModel.routeName;
-                var isup = $scope.scopeModel.isup;
-
-                if ((routeName == undefined || routeName == "") && (isup == undefined || isup == ""))
+                var srt = $scope.scopeModel.srt;
+                if (srt == undefined || srt == "")
                     return null;
 
                 return {
-                    RouteName: routeName,
-                    ISUP: isup
+                    SRT: srt
                 };
             }
-
-            function getRouteNameValidationMsg() {
-                if (!$scope.scopeModel.supplierMappingExists)
-                    return null;
-
-                if (context == undefined || context.isRouteNameValid == undefined || typeof (context.isRouteNameValid) != 'function')
-                    return null;
-
-                return context.isRouteNameValid($scope.scopeModel.routeName);
-            }
-
-            function isSupplierMappingValidFunc() {
-                if (!$scope.scopeModel.supplierMappingExists)
-                    return true;
-
-                var routeName = $scope.scopeModel.routeName;
-                var isup = $scope.scopeModel.isup;
-                if (routeName != undefined && routeName != "" && isup != undefined && isup != "")
-                    return true;
-
-                return false;
-            }
         }
-    }]);
+    }
+
+    app.directive('whsRoutesyncHuaweiSoftx3000Suppliermapping', whsRoutesyncHuaweiSoftX3000Suppliermapping);
+})(app);

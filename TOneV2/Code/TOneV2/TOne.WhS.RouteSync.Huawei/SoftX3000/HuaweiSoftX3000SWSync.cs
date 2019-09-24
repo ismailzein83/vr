@@ -17,8 +17,6 @@ namespace TOne.WhS.RouteSync.Huawei.SoftX3000
 
         public List<Huawei.Entities.HuaweiSSHCommunication> SwitchCommunicationList { get; set; }
 
-        public Dictionary<string, string> OverriddenRSSNsInRSName { get; set; }
-
         public List<Huawei.Entities.SwitchLogger> SwitchLoggerList { get; set; }
 
         private Dictionary<int, CustomerMapping> _customerMappingsByRSSC;
@@ -88,7 +86,50 @@ namespace TOne.WhS.RouteSync.Huawei.SoftX3000
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
         {
-            throw new NotImplementedException();
+            if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
+                return true;
+
+            HashSet<int> allRSSCs = new HashSet<int>();
+            HashSet<int> duplicatedRSSCs = new HashSet<int>();
+
+            HashSet<int> allSRTs = new HashSet<int>();
+            HashSet<int> duplicatedSRTs = new HashSet<int>();
+            
+            foreach (var carrierMappingKvp in this.CarrierMappings)
+            {
+                CarrierMapping carrierMapping = carrierMappingKvp.Value;
+
+                CustomerMapping customerMapping = carrierMapping.CustomerMapping;
+                if (customerMapping != null)
+                {
+                    var isRSSCDuplicated = allRSSCs.Contains(customerMapping.RSSC);
+                    if (!isRSSCDuplicated)
+                        allRSSCs.Add(customerMapping.RSSC);
+                    else
+                        duplicatedRSSCs.Add(customerMapping.RSSC);
+                }
+
+                SupplierMapping supplierMapping = carrierMapping.SupplierMapping;
+                if (supplierMapping != null)
+                {
+                    var isSRTDuplicated = allSRTs.Contains(supplierMapping.SRT);
+                    if (!isSRTDuplicated)
+                        allSRTs.Add(supplierMapping.SRT);
+                    else
+                        duplicatedSRTs.Add(supplierMapping.SRT);
+                }
+            }
+
+            List<string> validationMessages = new List<string>();
+
+            if (duplicatedRSSCs.Count > 0)
+                validationMessages.Add(string.Format("Duplicated RSSCs: {0}", string.Join(", ", duplicatedRSSCs)));
+
+            if (duplicatedSRTs.Count > 0)
+                validationMessages.Add(string.Format("Duplicated SRTs: {0}", string.Join(", ", duplicatedSRTs)));
+
+            context.ValidationMessages = validationMessages.Count > 0 ? validationMessages : null;
+            return validationMessages.Count == 0;
         }
 
         #endregion

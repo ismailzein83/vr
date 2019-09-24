@@ -1,7 +1,10 @@
-﻿'use strict';
+﻿(function (app) {
 
-app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum', 'WhS_BE_CarrierAccountActivationStatusEnum',
-    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CarrierAccountActivationStatusEnum) {
+    'use strict';
+
+    whsRoutesyncCarrieraccountmappingHuaweiSoftX3000Grid.$inject = ['VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum', 'WhS_BE_CarrierAccountActivationStatusEnum'];
+
+    function whsRoutesyncCarrieraccountmappingHuaweiSoftX3000Grid(VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CarrierAccountActivationStatusEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -9,19 +12,18 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new HuaweiCarrierAccountMappingGridCtor($scope, ctrl, $attrs);
+                var ctor = new HuaweiSoftX3000CarrierAccountMappingGridCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/CarrierAccountMapping/Templates/CarrierAccountMappingHuaweiGridTemplate.html'
+            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/CarrierAccountMapping/Templates/CarrierAccountMappingHuaweiSoftX3000GridTemplate.html'
         };
 
-        function HuaweiCarrierAccountMappingGridCtor($scope, ctrl, $attrs) {
+        function HuaweiSoftX3000CarrierAccountMappingGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var carrierMappings;
-            var context;
 
             var gridAPI;
 
@@ -29,6 +31,7 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 $scope.scopeModel = {};
                 $scope.scopeModel.carrierAccountMappings = [];
                 $scope.scopeModel.carrierAccountMappingsGridDS = [];
+
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -48,27 +51,26 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                     return false;
                 };
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
                     if (payload != undefined) {
                         carrierMappings = payload.carrierMappings;
-                        context = payload.context;
                     }
 
-                    var promises = [];
-
-                    var huaweiCarrierAccountMappingsGridLoadPromise = getHuaweiCarrierAccountMappingsGridLoadPromise();
-                    promises.push(huaweiCarrierAccountMappingsGridLoadPromise);
+                    var huaweiSoftX3000CarrierAccountMappingsGridLoadPromise = getHuaweiSoftX3000CarrierAccountMappingsGridLoadPromise();
+                    promises.push(huaweiSoftX3000CarrierAccountMappingsGridLoadPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-
                     var results = {};
+
                     for (var i = 0; i < $scope.scopeModel.carrierAccountMappings.length; i++) {
                         var carrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
                         if (carrierAccountMapping == undefined)
@@ -113,22 +115,17 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                     return results;
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
             }
 
-            function getHuaweiCarrierAccountMappingsGridLoadPromise() {
+            function getHuaweiSoftX3000CarrierAccountMappingsGridLoadPromise() {
+                var loadHuaweiSoftX3000CarrierAccountMappingsGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                var loadHuaweiCarrierAccountMappingsGridPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                var carrierAccountfilter = {
-                    ActivationStatuses: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value, WhS_BE_CarrierAccountActivationStatusEnum.Testing.value]
-                };
-
+                var carrierAccountfilter = { ActivationStatuses: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value, WhS_BE_CarrierAccountActivationStatusEnum.Testing.value] };
                 var serilizedCarrierAccountFilter = UtilsService.serializetoJson(carrierAccountfilter);
 
                 WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serilizedCarrierAccountFilter).then(function (response) {
-
                     if (response != undefined) {
                         for (var i = 0; i < response.length; i++) {
                             var currentCarrierAccountInfo = response[i];
@@ -147,15 +144,14 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                     }
 
                     loadMoreCarrierMappings();
-                    loadHuaweiCarrierAccountMappingsGridPromiseDeferred.resolve();
+                    loadHuaweiSoftX3000CarrierAccountMappingsGridPromiseDeferred.resolve();
                 }).catch(function (error) {
-                    loadHuaweiCarrierAccountMappingsGridPromiseDeferred.reject(error);
+                    loadHuaweiSoftX3000CarrierAccountMappingsGridPromiseDeferred.reject(error);
                 });
 
-                return loadHuaweiCarrierAccountMappingsGridPromiseDeferred.promise;
+                return loadHuaweiSoftX3000CarrierAccountMappingsGridPromiseDeferred.promise;
             }
             function loadMoreCarrierMappings() {
-
                 var pageInfo = gridAPI.getPageInfo();
                 var itemsLength = pageInfo.toRow;
 
@@ -176,7 +172,6 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 gridAPI.addItemsToSource(items);
             }
             function defineCarrierAccountMappingTabs(carrierAccountMapping) {
-
                 var drillDownTabs = [];
 
                 if (showCustomerMapping(carrierAccountMapping)) {
@@ -192,7 +187,7 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 function buildCustomerMappingDrillDownTab() {
                     var drillDownTab = {};
                     drillDownTab.title = "In";
-                    drillDownTab.directive = "whs-routesync-huawei-customermapping";
+                    drillDownTab.directive = "whs-routesync-huawei-softx3000-customermapping";
 
                     drillDownTab.loadDirective = function (customerMappingGridAPI, carrierAccountMapping) {
                         carrierAccountMapping.customerMappingGridAPI = customerMappingGridAPI;
@@ -201,7 +196,6 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
 
                     function buildCustomerMappingPayload(carrierAccountMapping) {
                         var customerMappingPayload = {};
-                        //customerMappingPayload.carrierAccountId = carrierAccountMapping.CarrierAccountId;
                         customerMappingPayload.customerMapping = carrierAccountMapping.CustomerMapping;
                         customerMappingPayload.context = buildCustomerMappingDirectiveContext(carrierAccountMapping);
                         return customerMappingPayload;
@@ -212,7 +206,7 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 function buildSupplierMappingDrillDownTab() {
                     var drillDownTab = {};
                     drillDownTab.title = "Out";
-                    drillDownTab.directive = "whs-routesync-huawei-suppliermapping";
+                    drillDownTab.directive = "whs-routesync-huawei-softx3000-suppliermapping";
 
                     drillDownTab.loadDirective = function (supplierMappingGridAPI, carrierAccountMapping) {
                         carrierAccountMapping.supplierMappingGridAPI = supplierMappingGridAPI;
@@ -221,7 +215,6 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
 
                     function buildSupplierMappingQuery(carrierAccountMapping) {
                         var supplierMappingQuery = {};
-                        //supplierMappingQuery.carrierAccountId = carrierAccountMapping.CarrierAccountId;
                         supplierMappingQuery.supplierMapping = carrierAccountMapping.SupplierMapping;
                         supplierMappingQuery.context = buildSupplierMappingDirectiveContext(carrierAccountMapping);
                         return supplierMappingQuery;
@@ -252,7 +245,7 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 if (carrierAccountMapping.CustomerMapping != undefined) {
                     var customerMapping = carrierAccountMapping.CustomerMapping;
 
-                    var isCustomerMappingExists = customerMapping != undefined && customerMapping.RSSN != undefined && customerMapping.CSC != "" && customerMapping.DNSet != "";
+                    var isCustomerMappingExists = customerMapping != undefined && customerMapping.RSSC != undefined && customerMapping.DNSet != "";
                     if (isCustomerMappingExists) {
                         carrierAccountMapping.CustomerMappingDescription = buildCustomerMappingDescription(customerMapping);
                     } else {
@@ -263,7 +256,7 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 if (carrierAccountMapping.SupplierMapping != undefined) {
                     var supplierMapping = carrierAccountMapping.SupplierMapping;
 
-                    var isSupplierMappingExists = supplierMapping != undefined && supplierMapping.RouteName != undefined && supplierMapping.ISUP != "";
+                    var isSupplierMappingExists = supplierMapping != undefined && supplierMapping.SRT != "";
                     if (isSupplierMappingExists) {
                         carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMapping);
                     } else {
@@ -275,11 +268,10 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 if (customerMapping == undefined)
                     return "";
 
-                var rssnDescription = customerMapping.RSSN != undefined ? customerMapping.RSSN : "";
-                var cscName = customerMapping.CSCName != undefined ? customerMapping.CSCName : "";
+                var rsscDescription = customerMapping.RSSC != undefined ? customerMapping.RSSC : "";
                 var dnSetDescription = customerMapping.DNSet != undefined ? customerMapping.DNSet : "";
 
-                return "RSSN: " + rssnDescription + "; CSC Name: '" + cscName + "'; DN Set: " + dnSetDescription;
+                return "RSSC: " + rsscDescription + "; DN Set: " + dnSetDescription;
             }
             function buildCustomerMappingDirectiveContext(carrierAccountMapping) {
                 var context = {
@@ -296,10 +288,9 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 if (supplierMapping == undefined)
                     return "";
 
-                var routeName = supplierMapping.RouteName != undefined ? supplierMapping.RouteName : "";
-                var isup = supplierMapping.ISUP != undefined ? supplierMapping.ISUP : "";
+                var srt = supplierMapping.SRT != undefined ? supplierMapping.SRT : "";
 
-                return "Route Name: '" + routeName + "'; ISUP: '" + isup + "'";
+                return "SRT: " + srt;
             }
             function buildSupplierMappingDirectiveContext(carrierAccountMapping) {
                 var suppliercontext = {
@@ -308,32 +299,19 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                     },
                     updateSupplierMappingDescription: function (supplierMapping) {
                         carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMapping);
-                    },
-                    isRouteNameValid: function (routeName) {
-                        if (routeName == undefined || routeName == "" || context == undefined)
-                            return null;
-
-                        var minRNLength = context.getMinRNLength();
-                        if (minRNLength == undefined)
-                            return null;
-
-                        var routeNameWithoutEmptySpace = UtilsService.replaceAll(routeName, " ", "");
-                        if (routeNameWithoutEmptySpace.length >= minRNLength)
-                            return null;
-
-                        return 'Length should be greater than ' + minRNLength;
                     }
                 };
                 return suppliercontext;
             }
             function updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping) {
-
                 if (fromCustomerMapping) {
                     carrierAccountMapping.isCustomerMappingInvalid = !isValid;
                 } else {
                     carrierAccountMapping.isSupplierMappingInvalid = !isValid;
                 }
             }
-
         }
-    }]);
+    }
+
+    app.directive('whsRoutesyncCarrieraccountmappingHuaweiSoftx3000Grid', whsRoutesyncCarrieraccountmappingHuaweiSoftX3000Grid);
+})(app);

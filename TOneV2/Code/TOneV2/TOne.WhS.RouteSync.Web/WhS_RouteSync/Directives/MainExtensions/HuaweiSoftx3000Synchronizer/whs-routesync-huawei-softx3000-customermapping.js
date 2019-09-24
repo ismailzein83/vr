@@ -1,7 +1,10 @@
-﻿'use strict';
+﻿(function (app) {
 
-app.directive('whsRoutesyncHuaweiCustomermapping', ['UtilsService',
-    function (UtilsService) {
+    'use strict';
+
+    whsRoutesyncHuaweiSoftX3000Customermapping.$inject = ['UtilsService'];
+
+    function whsRoutesyncHuaweiSoftX3000Customermapping(UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -9,22 +12,21 @@ app.directive('whsRoutesyncHuaweiCustomermapping', ['UtilsService',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new HuaweiCustomerMappingDirectiveCtor($scope, ctrl, $attrs);
+                var ctor = new HuaweiSoftX3000CustomerMappingDirectiveCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSynchronizer/Templates/HuaweiCustomerMappingTemplate.html'
+            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSoftX3000Synchronizer/Templates/HuaweiSoftX3000CustomerMappingTemplate.html'
         };
 
-        function HuaweiCustomerMappingDirectiveCtor($scope, ctrl, $attrs) {
+        function HuaweiSoftX3000CustomerMappingDirectiveCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            
             var context;
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.customerMappingExists = false;
 
                 $scope.scopeModel.isCustomerMappingExists = function () {
                     $scope.scopeModel.customerMappingExists = isMappingExists();
@@ -38,17 +40,15 @@ app.directive('whsRoutesyncHuaweiCustomermapping', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-
                     var promises = [];
-
                     var customerMapping;
 
                     if (payload != undefined) {
                         context = payload.context;
                         customerMapping = payload.customerMapping;
+
                         if (customerMapping != undefined) {
-                            $scope.scopeModel.rssn = customerMapping.RSSN;
-                            $scope.scopeModel.cscName = customerMapping.CSCName;
+                            $scope.scopeModel.rssc = customerMapping.RSSC;
                             $scope.scopeModel.dnSet = customerMapping.DNSet;
                         }
                     }
@@ -67,15 +67,13 @@ app.directive('whsRoutesyncHuaweiCustomermapping', ['UtilsService',
             }
 
             function isMappingExists() {
-                var rssn = $scope.scopeModel.rssn;
-                var cscName = $scope.scopeModel.cscName;
+                var rssc = $scope.scopeModel.rssc;
                 var dnSet = $scope.scopeModel.dnSet;
 
-                var isRSSNFilled = rssn != undefined && rssn != "";
-                var isCSCNameFilled = cscName != undefined && cscName != "";
+                var isRSSCFilled = rssc != undefined && rssc != "";
                 var isDNsetFilled = dnSet != undefined && dnSet != "";
 
-                if (isRSSNFilled || isCSCNameFilled || isDNsetFilled) {
+                if (isRSSCFilled || isDNsetFilled) {
                     return true;
                 } else {
                     return false;
@@ -112,18 +110,16 @@ app.directive('whsRoutesyncHuaweiCustomermapping', ['UtilsService',
             }
 
             function getCustomerMappingEntity() {
-                var rssn = $scope.scopeModel.rssn;
-                var cscName = $scope.scopeModel.cscName;
-                var dnSet = $scope.scopeModel.dnSet;
-
-                if ((rssn == undefined || rssn == "") && (cscName == undefined || cscName == "") && (dnSet == undefined || dnSet == ""))
+                if ($scope.scopeModel.rssc == undefined && $scope.scopeModel.dnSet == undefined)
                     return null;
 
                 return {
-                    RSSN: $scope.scopeModel.rssn,
-                    CSCName: $scope.scopeModel.cscName,
+                    RSSC: $scope.scopeModel.rssc,
                     DNSet: $scope.scopeModel.dnSet
                 };
             }
         }
-    }]);
+    }
+
+    app.directive('whsRoutesyncHuaweiSoftx3000Customermapping', whsRoutesyncHuaweiSoftX3000Customermapping);
+})(app);

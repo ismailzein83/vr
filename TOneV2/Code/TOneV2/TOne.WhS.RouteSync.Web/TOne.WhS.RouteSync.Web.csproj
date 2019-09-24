@@ -156,10 +156,12 @@
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingCataleyaGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingFreeRadiusGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingHuaweiGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingHuaweiSoftX3000GridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelesIdbGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelestaxGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-cataleya-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-freeradius-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-huawei-softx3000-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-mvts-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-huawei-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
@@ -222,6 +224,14 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiuspostgres-datamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\Templates\FreeRadiusSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\whs-routesync-freeradius-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\Templates\HuaweiSoftX3000CommunicationTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\Templates\HuaweiSoftX3000CustomerMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\Templates\HuaweiSoftX3000SupplierMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\Templates\HuaweiSoftX3000SWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\whs-routesync-huawei-softx3000-communication.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\whs-routesync-huawei-softx3000-customermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\whs-routesync-huawei-softx3000-suppliermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\whs-routesync-huawei-softx3000-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\Templates\HuaweiSwitchFTPLoggerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\whs-routesync-huaweiswitchlogger-ftp.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiSettingsTemplate.html" />
