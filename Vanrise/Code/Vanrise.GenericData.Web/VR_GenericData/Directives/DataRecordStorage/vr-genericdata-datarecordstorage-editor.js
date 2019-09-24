@@ -32,7 +32,7 @@
             this.initializeController = initializeController;
 
             var isEditMode;
-            var dataRecordStorageId;
+
             var dataRecordStorageEntity;
             var datasources = [];
             
@@ -233,10 +233,8 @@
                             $scope.scopeModel.hideName = payload.hideName;
                         dataRecordStorageEntity = payload.dataRecordStorageEntity;
                         isEditMode = (dataRecordStorageEntity != undefined);
-
                     }
                     if (isEditMode) {
-                        dataRecordStorageId = dataRecordStorageEntity.DataRecordStorageId;
                         dataStoreSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         dataRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                     }
@@ -246,7 +244,7 @@
                 directiveAPI.getData = function () {
 
                     var obj = {
-                        DataRecordStorageId: dataRecordStorageId,
+                        DataRecordStorageId: dataRecordStorageEntity != undefined ? dataRecordStorageEntity.DataRecordStorageId : undefined,
                         Name: $scope.scopeModel.name,
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         DataStoreId: dataStoreSelectorAPI.getSelectedIds(),
@@ -280,12 +278,6 @@
                     getChildNode: function () {
                         return {
                             promises: [loadSettingsDirectiveOnPageLoad()],
-                            getChildNode: function () {
-                                dataRecordStorageEntity = undefined;
-                                return {
-                                    promises: [loadSettingsDirectiveOnPageLoad()]
-                                };
-                            }
                         };
 
                     }
