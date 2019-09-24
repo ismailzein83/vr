@@ -238,6 +238,10 @@
     <Reference Include="Vanrise.Data.MySQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.MySQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data.RDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
