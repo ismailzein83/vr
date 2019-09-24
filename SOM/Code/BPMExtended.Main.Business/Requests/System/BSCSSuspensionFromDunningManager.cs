@@ -155,7 +155,7 @@ namespace BPMExtended.Main.Business
             //}
         }
 
-        public string CreateRequest(string contactId)
+        public string CreateRequest(string contractId)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StBSCSSuspensionFromDunning");
             Entity entity = schema.CreateEntity(BPM_UserConnection);
@@ -163,8 +163,9 @@ namespace BPMExtended.Main.Business
             Guid entityId = Guid.NewGuid();
 
             entity.SetColumnValue("Id", entityId);
-            entity.SetColumnValue("StName", "Suspension for: " + contactId);
+            entity.SetColumnValue("StName", "Suspension for: " + contractId);
             entity.SetColumnValue("StTypeId", "B0F39A64-6B4A-4350-BFEA-D6ED5461C691");
+            entity.SetColumnValue("StContractID", contractId);
             entity.Save();
 
             string operationtype = OperationType.BSCSSuspensionFromDunning.GetHashCode().ToString();
@@ -172,7 +173,7 @@ namespace BPMExtended.Main.Business
             string newStatusId = "BD71348E-A796-4F8E-AA40-7A9A8855AC77";
             string operationId = "C1096BFD-222B-4AAA-A016-32E50D7CCAF5";
 
-            string sequenceNumber = CreateRequestInRequestHeader(operationId, entityId.ToString(), operationtype, StageId, newStatusId, "true");
+            string sequenceNumber = CreateRequestInRequestHeader(contractId,operationId, entityId.ToString(), operationtype, StageId, newStatusId, "true");
             return sequenceNumber;
         }
 
@@ -196,7 +197,7 @@ namespace BPMExtended.Main.Business
             }
             return Id.ToString();
         }
-        public string CreateRequestInRequestHeader(string operation,string requestId,string requestType, string stage, string status, string systemOrder)
+        public string CreateRequestInRequestHeader(string contractId,string operation,string requestId,string requestType, string stage, string status, string systemOrder)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
             Entity entity = schema.CreateEntity(BPM_UserConnection);
@@ -214,6 +215,7 @@ namespace BPMExtended.Main.Business
             entity.SetColumnValue("StSequenceNumber", sequenceNumber);
             entity.SetColumnValue("StStageId", stage);
             entity.SetColumnValue("StStatusId", status);
+            entity.SetColumnValue("StContractID", contractId);
             entity.SetColumnValue("StIsSystemOrder", systemOrder);
             entity.Save();
             return sequenceNumber;
