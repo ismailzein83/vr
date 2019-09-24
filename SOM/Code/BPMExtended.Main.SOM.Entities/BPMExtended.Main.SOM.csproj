@@ -92,6 +92,7 @@
     <Compile Include="Billing\WorkflowInput\ContractAdditionalServicesInput.cs" />
     <Compile Include="Billing\WorkflowInput\ContractAvailableServicesInput.cs" />
     <Compile Include="Billing\WorkflowInput\ContractTakeOverRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\CreateLargeMemberCustomerInput.cs" />
     <Compile Include="Billing\WorkflowInput\CreatePABXRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\CreateSwitchAccountInput.cs" />
     <Compile Include="Billing\WorkflowInput\CustomerAddressInput.cs" />

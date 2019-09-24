@@ -104,6 +104,24 @@ namespace BPMExtended.Main.Business
                 else
                 {
                     //account
+                    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "AccountFile");
+                    esq.AddColumn("Id");
+
+                    esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Account.Id", accountId);
+                    esq.Filters.Add(esqFirstFilter);
+                    entities = esq.GetEntityCollection(BPM_UserConnection);
+
+                    if (entities.Count > 0)
+                    {
+                        msg = "Attachment exist";
+                        status = ResultStatus.Success;
+                    }
+                    else
+                    {
+                        msg = "Please Add Attachments";
+                        status = ResultStatus.Error;
+                    }
+
                 }
 
             }
@@ -1050,6 +1068,88 @@ namespace BPMExtended.Main.Business
             using (var client = new SOMClient())
             {
                 output = client.Post<CreateCustomerInput, CustomerCreationOutput>("api/SOM.ST/Billing/CreateCustomer", input);
+                output.CustomerSequenceId = customerId;
+            }
+            return output;
+        }
+
+        public CustomerCreationOutput CreateAccount(string parentCustomerId, string CustomerCategoryId, string levelId, string companyName, string branch,string companyId,string FirstName, string LastName, string CSO,
+         string BankCode, string AccountNumber, string BankName, string IBAN, string country, string nationality, string birthDate, string building, string career,string City,
+         string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
+         string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId, string PaymentMethodId
+         )
+        {
+            IDManager manager = new IDManager();
+            string customerId = manager.GetCustomerNextId();
+            DateTime dob = DateTime.MinValue;
+            DateTime.TryParse(birthDate, out dob);
+
+            string cso = GetCSOId(CSO);
+            string billcycle = GetDefaultBillCycle();
+            string externalCustomerId = new CatalogManager().GetExternalCustomerSetId(segmentId);
+            string rateplan = GetDefaultRatePlan();
+            string countryNumber = GetCountryNumber(country);
+            string documentType = GetDocumentType(documentTypeId);
+            string nationalityNumber = GetNationalityNumber(nationality);
+            string customerTitle = "";
+            if (title != "")
+            {
+                customerTitle = GetCustomerTitle(title);
+            }
+
+            string customerLanguage = "";
+            if (language != "")
+            {
+                customerLanguage = GetCustomerLanguage(language);
+            }
+            CustomerCreationOutput output = new CustomerCreationOutput();
+            CreateLargeMemberCustomerInput input = new CreateLargeMemberCustomerInput
+            {
+                CustomerId = customerId,
+                CustomerCategoryId = CustomerCategoryId,
+                DefaultRatePlan = rateplan,
+                Title = customerTitle,
+                FirstName = FirstName,
+                MiddleName = middleName,
+                LastName = LastName,
+                MotherName = motherName,
+                BirthDate = dob,
+                Career = career,
+                Language = customerLanguage,
+                Nationality = nationalityNumber,
+                ExternalCustomerSetId = externalCustomerId,
+                Country = countryNumber,
+                StateProvince = stateProvince,
+                City = City,
+                Town = town,
+                Region = region,
+                Street = street,
+                Building = building,
+                Floor = floor,
+                AddressNotes = addressNotes,
+                HomePhone = homePhone,
+                FaxNumber = faxNumber,
+                MobilePhone = mobilePhone,
+                BusinessPhone = businessPhone,
+                Email = email,
+                CSO = cso,
+                PaymentResponsibility = true,
+                PaymentMethodId = PaymentMethodId,
+                BillCycle = billcycle,
+                BankCode = BankCode,
+                BankName = BankName,
+                AccountNumber = AccountNumber,
+                DebitAccountOwner = FirstName,
+                IBAN = IBAN,
+                BankSwiftCode = "",
+                DocumentId = documentId,
+                DocumentTypeId = documentType,
+                ValidFromDate = DateTime.Now,
+            };
+
+            using (var client = new SOMClient())
+            {
+                output = client.Post<CreateLargeMemberCustomerInput, CustomerCreationOutput>("api/SOM.ST/Billing/CreateLargeCustomer", input);
                 output.CustomerSequenceId = customerId;
             }
             return output;
