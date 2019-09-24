@@ -9,7 +9,8 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 
 namespace Vanrise.Common.Web.Controllers
-{    
+{
+    [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "CompanySettings")]
     public class VRCommon_CompanySettingsController : BaseAPIController
     {
