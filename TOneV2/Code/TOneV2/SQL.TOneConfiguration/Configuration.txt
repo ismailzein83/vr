@@ -16,6 +16,7 @@ VR_AccountBalance.json
 VR_Notification.json
 User_Guides.PostDeployment.sql
 VR_DataAnalysis.json
+VR_CentralLog.json
 VR_MobileNetwork.json
 VR_NumberingPlan.json
 VR_BEBridge.json

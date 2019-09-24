@@ -1037,5 +1037,6 @@
     <None Include="VRJSON_PostScripts\TOne\WhS_AutoImportSPL.json" />
     <None Include="VRJSON_PostScripts\TOne\WhS_AccountManager.json" />
     <None Include="VRJSON_PostScripts\TOne\ST.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_CentralLog.json" />
   </ItemGroup>
 </Project>
