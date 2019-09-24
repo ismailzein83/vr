@@ -10,6 +10,13 @@
     [ExtraFields]   NVARCHAR (MAX)   NULL,
     [EventLevelID]  UNIQUEIDENTIFIER NULL,
     [ApplicationID] INT              NULL,
-    CONSTRAINT [PK__LogEvent__3214EC277F60ED59] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_LogEvent] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_LogEvent_EventTime]
+    ON [CentralLogEVT].[LogEvent]([EventTime] ASC);
 

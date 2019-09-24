@@ -10,3 +10,10 @@
     CONSTRAINT [PK__LogEventStatistic_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_LogEventStatistic_BatchStart]
+    ON [CentralLogAnal].[LogEventStatistic]([BatchStart] ASC);
+
