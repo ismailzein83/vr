@@ -2,17 +2,21 @@
 
     "use strict";
 
-    customerSMSRatePlanEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService', 'VRDateTimeService', 'WhS_SMSBusinessEntity_CustomerRatePlanService', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum', 'LabelColorsEnum', 'UISettingsService'];
+    customerSMSRatePlanEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService', 'VRDateTimeService', 'WhS_SMSBusinessEntity_CustomerRatePlanService', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum', 'LabelColorsEnum', 'UISettingsService','VRUIUtilsService'];
 
-    function customerSMSRatePlanEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRDateTimeService, WhS_SMSBusinessEntity_CustomerRatePlanService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum, LabelColorsEnum, UISettingsService) {
+    function customerSMSRatePlanEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRDateTimeService, WhS_SMSBusinessEntity_CustomerRatePlanService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum, LabelColorsEnum, UISettingsService, VRUIUtilsService) {
 
         var customerInfo;
         var processDraftID;
+        var currencyId;
 
         var allCountryLetters = "All";
         var modifiedSmsRates = [];
 
         var isEffectiveDateChanged = false;
+
+        var currencySelectorAPI;
+        var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred("currencySelectorReadyDeferred");
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -156,7 +160,7 @@
                     });
                 };
                 saveDraftPromise.then(function () {
-                    WhS_SMSBusinessEntity_CustomerRatePlanService.uploadSMSRateChanges(customerInfo, $scope.scopeModel.effectiveDate, onSaleSMSRateChangesUploaded);
+                    WhS_SMSBusinessEntity_CustomerRatePlanService.uploadSMSRateChanges(customerInfo, currencySelectorAPI.getSelectedValues(), $scope.scopeModel.effectiveDate, onSaleSMSRateChangesUploaded);
                 });
             };
 
@@ -175,6 +179,11 @@
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onCurrencySelectorReady = function (api) {
+                currencySelectorAPI = api;
+                currencySelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.close = function () {
@@ -210,13 +219,31 @@
                 var rootPromiseNode = {
                     promises: [gridReadyDeferred.promise, loadDraftDataPromiseDeferred],
                     getChildNode: function () {
-                        var letter = $scope.scopeModel.countryLetters.length > 0 ? $scope.scopeModel.countryLetters[0] : undefined;
-                        var loadDraftDataPromiseDeferred = loadAllDataGrid(letter);
+                        var loadCurrencySelectorPromise = loadCurrencySelector();
                         return {
-                            promises: [loadDraftDataPromiseDeferred]
+                            promises: [loadCurrencySelectorPromise],
+                            getChildNode: function () {
+                                var letter = $scope.scopeModel.countryLetters.length > 0 ? $scope.scopeModel.countryLetters[0] : undefined;
+                                var loadAllDataGridPromise = loadAllDataGrid(letter);
+                                return {
+                                    promises: [loadAllDataGridPromise]
+                                };
+                            }
                         };
                     }
                 };
+
+                function loadCurrencySelector() {
+                    var loadCurrencySelectorDeferred = UtilsService.createPromiseDeferred("loadCurrencySelectorDeferred");
+
+                    currencySelectorReadyDeferred.promise.then(function () {
+                        var currencyPayload = { selectedIds: currencyId };
+
+                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencyPayload, loadCurrencySelectorDeferred);
+                    })
+
+                    return loadCurrencySelectorDeferred.promise;
+                }
 
                 function loadDraftData() {
                     return WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.GetDraftData(getDraftDataQuery()).then(function (response) {
@@ -230,7 +257,7 @@
                                 $scope.scopeModel.selectedCountryLetterIndex = 0;
                             }
                             $scope.scopeModel.nbPendingChanges = response.PendingChanges != undefined ? response.PendingChanges : 0;
-
+                            currencyId = response.CurrencyId != undefined ? response.CurrencyId : customerInfo.CurrencyId;
 
                             processDraftID = response.ProcessDraftID;
                             $scope.scopeModel.isCustomerSMSRateDraftExist = (processDraftID != undefined);

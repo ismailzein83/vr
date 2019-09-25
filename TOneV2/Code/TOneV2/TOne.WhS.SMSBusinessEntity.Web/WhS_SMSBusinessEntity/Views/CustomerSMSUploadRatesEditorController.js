@@ -5,6 +5,7 @@
     function GenericBusinessEntityEditorUploaderController($scope, VRNavigationService, UtilsService, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRNotificationService) {
         var fileId;
         var customerInfo;
+        var currencyObj;
         var effectiveDate;
 
         loadParameters();
@@ -17,18 +18,22 @@
             if (parameters != undefined) {
                 customerInfo = parameters.customerInfo;
                 effectiveDate = parameters.effectiveDate;
+                currencyObj = parameters.currencyObj;
+
             }
         }
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.effectiveDate = getShortDate(effectiveDate);
+            $scope.scopeModel.currency = currencyObj.Symbol;
 
             $scope.scopeModel.uploadCustomerSMSRates = function () {
                 fileId = $scope.scopeModel.document.fileId;
                 var input = {
                     FileId: fileId,
                     CustomerID: customerInfo.CarrierAccountId,
-                    CurrencyId: customerInfo.CurrencyId,
+                    CurrencyId: currencyObj.CurrencyId,
                     EffectiveDate: effectiveDate
                 };
 
@@ -92,6 +97,29 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+        }
+
+        function getShortDate(date) {
+            var dateString = '';
+            if (date && date instanceof Date && !isNaN(date)) {
+                dateString += date.getFullYear();
+
+                var month = "" + (parseInt(date.getMonth()) + 1);
+                if (month.length == 1)
+                    dateString += "-0" + month;
+                else
+                    dateString += "-" + month;
+
+                var day = "" + (parseInt(date.getDate()));
+                if (day.length == 1)
+                    dateString += "-0" + day;
+                else
+                    dateString += "-" + day;
+            }
+            else {
+                return getShortDate(UtilsService.createDateFromString(date));
+            }
+            return dateString;
         }
     }
 

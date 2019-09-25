@@ -5,7 +5,10 @@
                 <vr-columns width="1/3row">
                     <vr-datetimepicker type="date" value="scopeModel.effectiveDate" label="Effective Date" onvaluechanged="scopeModel.onEffectiveDateChanged()" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="2/3row">
+                <vr-columns width="1/3row" haschildcolumns>
+                    <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" vr-disabled="true" normal-col-num="12"></vr-common-currency-selector>
+                </vr-columns>
+                <vr-columns width="1/3row">
                     <div style="position:absolute;right:15px;">
                         <vr-label>
                             <span ng-class="scopeModel.pendingChangesColor" style="font-size: 13px;">Pending Changes : {{scopeModel.nbPendingChanges}}</span>

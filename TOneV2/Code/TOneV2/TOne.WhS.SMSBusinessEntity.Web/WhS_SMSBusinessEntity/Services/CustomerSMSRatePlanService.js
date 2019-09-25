@@ -19,10 +19,11 @@
             VRModalService.showModal("/Client/Modules/WhS_SMSBusinessEntity/Views/CustomerSMSRatePlanEditor.html", parameters, modalSettings);
         }
 
-        function uploadSMSRateChanges(selectedCustomer, effectiveDate, onSaleSMSRateChangesUploaded) {
+        function uploadSMSRateChanges(selectedCustomer, currencyObj, effectiveDate, onSaleSMSRateChangesUploaded) {
             var parameters = {
                 customerInfo: selectedCustomer,
-                effectiveDate: effectiveDate
+                effectiveDate: effectiveDate,
+                currencyObj: currencyObj
             };
 
             var modalSettings = {

@@ -115,6 +115,9 @@
                 else
                     dateString += "-" + day;
             }
+            else {
+                return getShortDate(UtilsService.createDateFromString(date));
+            }
             return dateString;
         }
     }
