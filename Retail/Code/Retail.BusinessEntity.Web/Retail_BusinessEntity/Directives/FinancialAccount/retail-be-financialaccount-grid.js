@@ -47,12 +47,7 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
                         if (response != undefined && response.Data != null) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var financialAccount = response.Data[i];
-
-                                var gridDrillDownTabDefinitions = getGridDrillDownTabDefinitions(financialAccount);
-                                gridDrillDownTabManager = VRUIUtilsService.defineGridDrillDownTabs(gridDrillDownTabDefinitions, gridAPI, undefined);
-
-                                if (financialAccount.BalanceAccountTypeId != undefined)
-                                    gridDrillDownTabManager.setDrillDownExtensionObject(financialAccount);
+                                Retail_BE_FinancialAccountService.defineFinancialAccountTabs(financialAccount, gridAPI, useRecurringChargeModule, accountBEDefinitionId);
                             }
                         }
                         onResponseReady(response);
@@ -90,6 +85,7 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
                 };
 
                 api.onFinancialAccountAdded = function (addedFinancialAccount) {
+                    Retail_BE_FinancialAccountService.defineFinancialAccountTabs(addedFinancialAccount, gridAPI, useRecurringChargeModule, accountBEDefinitionId);
                     gridAPI.itemAdded(addedFinancialAccount);
                 };
 
@@ -108,101 +104,10 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
                 var onFinancialAccountUpdated = function (updatedFinancialAccount) {
                     if (context != undefined && context.checkAllowAddFinancialAccount != undefined) 
                         context.checkAllowAddFinancialAccount();
-                    if (updatedFinancialAccount.BalanceAccountTypeId != undefined)
-                        gridDrillDownTabManager.setDrillDownExtensionObject(financialAccount);
-                    gridDrillDownTabManager.setDrillDownExtensionObject(updatedFinancialAccount);
+                    Retail_BE_FinancialAccountService.defineFinancialAccountTabs(updatedFinancialAccount, gridAPI, useRecurringChargeModule, accountBEDefinitionId);
                     gridAPI.itemUpdated(updatedFinancialAccount);
                 };
                 Retail_BE_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated, accountBEDefinitionId, accountId, financialAccount.SequenceNumber);
             }
-
-            function getGridDrillDownTabDefinitions(financialAccount) {
-                var drillDownTabDefinitions = [];
-                var transactionTab = {
-                    title: "Financial Transactions",
-                    directive: "vr-accountbalance-billingtransaction-search",
-                    loadDirective: function (billingTransactionSearchAPI, financialAccount) {
-                        financialAccount.billingTransactionSearchAPI = billingTransactionSearchAPI;
-                        var billingTransactionSearchPayload = {
-                            accountBEDefinitionId: accountBEDefinitionId,
-                            AccountsIds: [financialAccount.FinancialAccountId],
-                            AccountTypeId: financialAccount.BalanceAccountTypeId
-                        };
-                        return billingTransactionSearchAPI.loadDirective(billingTransactionSearchPayload);
-                    }
-                };
-
-                drillDownTabDefinitions.push(transactionTab);
-                if (financialAccount.Classifications != undefined && financialAccount.Classifications.length > 0 && useRecurringChargeModule) {
-                    for (var i = 0; i < financialAccount.Classifications.length; i++) {
-                        var classification = financialAccount.Classifications[i];
-                        defineRecurringChargeDrillDownTabs(classification);
-                    }
-                }
-
-
-                function defineRecurringChargeDrillDownTabs(classification) {
-                    var recurringChargeDrillDownTab = {};
-
-                    recurringChargeDrillDownTab.title = classification + " Recurring Charges";
-                    recurringChargeDrillDownTab.directive = "vr-genericdata-genericbusinessentity-management";
-                    recurringChargeDrillDownTab.haspermission = function () {
-                        var businessEntityDefinitionId = "dd2cbb22-0fc8-4ad2-bdcd-cb63a3e5dea8";
-                        return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveViewAccess(businessEntityDefinitionId);
-                    };
-                    recurringChargeDrillDownTab.loadDirective = function (genericBusinessEntityAPI, financialAccount) {
-                        var financialAccountId = financialAccount.FinancialAccountId;
-                        var currencyId;
-                        function getAccountCurrency() {
-                            return Retail_BE_FinancialAccountAPIService.GetAccountCurrency(accountBEDefinitionId, financialAccountId).then(function (response) {
-                                currencyId = response;
-                            });
-                        }
-                        var rootPromiseNode = {
-                            promises: [getAccountCurrency()],
-                            getChildNode: function () {
-                                var genericBusinessEntityPayload = {
-                                    businessEntityDefinitionId: "DD2CBB22-0FC8-4AD2-BDCD-CB63A3E5DEA8",
-                                    fieldValues: {
-                                        FinancialAccountId: {
-                                            value: financialAccountId,
-                                            isHidden: true,
-                                            isDisabled: false
-                                        },
-                                        Classification: {
-                                            value: classification,
-                                            isHidden: true,
-                                            isDisabled: false
-                                        },
-                                        CurrencyId: {
-                                            value: currencyId,
-                                            isDisabled: false,
-                                            isHidden: false
-                                        }
-                                    },
-                                    filterValues: {
-                                        FinancialAccountId: {
-                                            value: financialAccountId,
-                                            isHidden: true,
-                                            isDisabled: false
-                                        },
-                                        Classification: {
-                                            value: classification,
-                                            isHidden: true,
-                                            isDisabled: false
-                                        }
-                                    }
-                                };
-                                return {
-                                    promises: [genericBusinessEntityAPI.load(genericBusinessEntityPayload)]
-                                };
-                            }
-                        };
-                        return UtilsService.waitPromiseNode(rootPromiseNode);
-                };
-                drillDownTabDefinitions.push(recurringChargeDrillDownTab);
-            }
-            return drillDownTabDefinitions;
-        }
     }
 }]);

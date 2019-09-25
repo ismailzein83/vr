@@ -109,7 +109,7 @@ namespace Retail.BusinessEntity.Business
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToInsert.AccountBEDefinitionId);
 
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToInsert.FinancialAccount);
+                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToInsert.FinancialAccount, financialAccountToInsert.AccountId);
                 }
                 else
                 {
@@ -146,7 +146,7 @@ namespace Retail.BusinessEntity.Business
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToEdit.AccountBEDefinitionId);
 
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
+                    updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount, financialAccountToEdit.AccountId);
                 }
                 else
                 {
@@ -931,11 +931,12 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
             return financialAccountDetail;
         }
     
-        private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
+        private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount, long? accountId = null)
         {
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             return new FinancialAccountDetail
             {
+                FinancialAccountId = accountId.HasValue? GetFinancialAccountId(accountId.Value, financialAccount.SequenceNumber) :null,
                 SequenceNumber = financialAccount.SequenceNumber,
                 BED = financialAccount.BED,
                 EED = financialAccount.EED,
