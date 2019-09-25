@@ -1042,7 +1042,8 @@ namespace TOne.WhS.Sales.Business
                 OwnerType = input.OwnerType,
                 NewRateDayOffset = pricingSettings.NewRateDayOffset.Value,
                 IncreasedRateDayOffset = pricingSettings.IncreasedRateDayOffset.Value,
-                DecreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value
+                DecreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value,
+                CustomObject = applicableZoneIdsContext.CustomObject
             };
 
             var newDraft = new Changes()
