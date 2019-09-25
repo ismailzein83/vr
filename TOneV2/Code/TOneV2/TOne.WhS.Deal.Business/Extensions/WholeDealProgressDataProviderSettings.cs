@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Vanrise.Common;
 using TOne.WhS.Deal.Entities;
 using System.Collections.Generic;
@@ -24,42 +25,62 @@ namespace TOne.WhS.Deal.Business
             IEnumerable<DealDefinition> deals = swapDealManager.GetSwapDealsBetweenDate(context.FromTime.Value, context.ToTime.Value);
 
             DateTime minDealBED = DateTime.Now;
-            List<int> dealIds = new List<int>();
+
+            var dealProgressByDealId = new Dictionary<int, DealProgress>();
             foreach (var deal in deals)
             {
-                dealIds.Add(deal.DealId);
+                if (!dealProgressByDealId.TryGetValue(deal.DealId, out var dealProgress))
+                {
+                    dealProgress = new DealProgress
+                    {
+                        DealID = deal.DealId,
+                        DealBED = deal.Settings.RealBED,
+                        DealEED = deal.Settings.RealEED
+                    };
+                    DealGetZoneGroupsContext zoneGroupContext = new DealGetZoneGroupsContext(deal.DealId, DealZoneGroupPart.Both, true);
+                    deal.Settings.GetZoneGroups(zoneGroupContext);
+
+                    var dealSetting = (SwapDealSettings)deal.Settings;
+
+                    dealProgress.SaleVolume = dealSetting.Inbounds.Sum(item => item.Volume);
+                    dealProgress.CostVolume = dealSetting.Outbounds.Sum(item => item.Volume);
+                    dealProgressByDealId.Add(deal.DealId, dealProgress);
+                }
                 minDealBED = minDealBED < deal.Settings.BeginDate ? minDealBED : deal.Settings.BeginDate;
             }
 
             var dealDetailedProgressManager = new DealDetailedProgressManager();
-            IEnumerable<DealDetailedProgress> dealDetailProgresses = dealDetailedProgressManager.GetDealsDetailedProgress(dealIds, minDealBED, context.ToTime.Value);
+            IEnumerable<DealDetailedProgress> dealDetailProgresses = dealDetailedProgressManager.GetDealsDetailedProgress(dealProgressByDealId.Keys.ToList(), minDealBED, context.ToTime.Value);
 
-            var dealDefinitionManager = new DealDefinitionManager();
-            var dealProgressByDealIds = new Dictionary<int, DealProgress>();
             foreach (var dealDetailProgress in dealDetailProgresses)
             {
+                if (!dealDetailProgress.TierNb.HasValue) //Deal does not have any extra volume rate by there is traffic related to this zone
+                    continue;
+
                 var dealId = dealDetailProgress.DealId;
-                if (!dealProgressByDealIds.TryGetValue(dealId, out var dealProgress))
-                {
-                    DealDefinition dealDefinition = dealDefinitionManager.GetDeal(dealId);
-                    dealProgress = new DealProgress
-                    {
-                        DealID = dealId,
-                        DealBED = dealDefinition.Settings.RealBED,
-                        DealEED = dealDefinition.Settings.RealEED
-                    };
-                    dealProgressByDealIds.Add(dealId, dealProgress);
-                }
+                var dealProgress = dealProgressByDealId.GetRecord(dealId);
+
+                if (dealProgress == null)
+                    continue;
 
                 if (dealDetailProgress.IsSale)
                     dealProgress.SaleProgressInMinutes += dealDetailProgress.ReachedDurationInSeconds / 60;
                 else
                     dealProgress.CostProgressInMinutes += dealDetailProgress.ReachedDurationInSeconds / 60;
-                 
+
+                dealProgress.SaleProgressPercentage = dealProgress.SaleProgressInMinutes >= dealProgress.SaleVolume
+                                                        ? 100
+                                                        : (dealProgress.SaleProgressInMinutes * 100) / dealProgress.SaleVolume;
+
+                dealProgress.CostProgressPercentage = dealProgress.CostProgressInMinutes >= dealProgress.SaleVolume
+                                                        ? 100
+                                                        : (dealProgress.CostProgressInMinutes * 100) / dealProgress.CostVolume;
                 dealProgress.SaleCostProgressDifference = dealProgress.SaleProgressInMinutes - dealProgress.CostProgressInMinutes;
+
+                dealProgress.SaleCostProgressDifferencePercentage = dealProgress.SaleProgressPercentage - dealProgress.CostProgressPercentage;
             }
 
-            foreach (var dataRecord in dealProgressByDealIds.Values)
+            foreach (var dataRecord in dealProgressByDealId.Values)
             {
                 context.OnRecordLoaded(DataRecordObjectMapper(dataRecord), DateTime.Now);
             }
@@ -72,8 +93,11 @@ namespace TOne.WhS.Deal.Business
                 {"DealBED", dealProgress.DealBED},
                 {"DealEED", dealProgress.DealEED},
                 {"SaleProgressInMinutes", dealProgress.SaleProgressInMinutes},
+                {"SaleProgressPercentage", dealProgress.SaleProgressPercentage},
                 {"CostProgressInMinutes", dealProgress.CostProgressInMinutes},
-                { "DealProgress",dealProgress.SaleCostProgressDifference}
+                {"CostProgressPercentage", dealProgress.CostProgressPercentage},
+                { "DealProgress",dealProgress.SaleCostProgressDifference},
+                { "DealProgressPercentage",dealProgress.SaleCostProgressDifferencePercentage}
             };
             return new DataRecordObject(new Guid("c87d22db-f35a-42e2-b22d-0d376f0e6898"), swapDealObject);
         }
@@ -84,8 +108,13 @@ namespace TOne.WhS.Deal.Business
             public DateTime DealBED { get; set; }
             public DateTime? DealEED { get; set; }
             public decimal SaleProgressInMinutes { get; set; }
+            public decimal SaleProgressPercentage { get; set; }
             public decimal CostProgressInMinutes { get; set; }
+            public decimal CostProgressPercentage { get; set; }
             public decimal SaleCostProgressDifference { get; set; }
+            public decimal SaleCostProgressDifferencePercentage { get; set; }
+            public int SaleVolume { get; set; }
+            public int CostVolume { get; set; }
         }
     }
 }
