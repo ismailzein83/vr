@@ -1089,7 +1089,7 @@ namespace BPMExtended.Main.Business
             string externalCustomerId = new CatalogManager().GetExternalCustomerSetId(segmentId);
             string rateplan = GetDefaultRatePlan();
             string countryNumber = GetCountryNumber(country);
-            string documentType = GetDocumentType(documentTypeId);
+            string documentType = "";// GetDocumentType(documentTypeId);
             string nationalityNumber = GetNationalityNumber(nationality);
             string customerTitle = "";
             if (title != "")
