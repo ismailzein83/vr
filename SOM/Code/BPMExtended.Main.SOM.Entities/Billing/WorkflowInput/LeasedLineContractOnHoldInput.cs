@@ -22,6 +22,8 @@ namespace BPMExtended.Main.SOMAPI
         public string Region { get; set; }
         public string StateProvince { get; set; }
         public string ServiceResource { get; set; }
+        public string Notes { get; set; }
+        public string LocationType { get; set; }
 
         public string PhoneNumber { get; set; }
 

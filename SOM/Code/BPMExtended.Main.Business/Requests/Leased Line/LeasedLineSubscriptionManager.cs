@@ -57,8 +57,11 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StStreet");
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
+            esq.AddColumn("StAddressNotes");
+            esq.AddColumn("StLocation");
+            esq.AddColumn("StLocation.Id");
 
-            
+
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -76,6 +79,8 @@ namespace BPMExtended.Main.Business
                 var area = entities[0].GetColumnValue("StAreaName");
                 var province = entities[0].GetColumnValue("StProvinceName");
                 var town = entities[0].GetColumnValue("StTownName");
+                var locationType = entities[0].GetColumnValue("StLocationName");
+                var addressNotes = entities[0].GetColumnValue("StAddressNotes");
 
                 CRMCustomerInfo info = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null);
 
@@ -125,6 +130,8 @@ namespace BPMExtended.Main.Business
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
                         DepositServices = depositServices,
+                        LocationType = locationType.ToString(),
+                        Notes = addressNotes.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),

@@ -124,7 +124,7 @@ namespace BPMExtended.Main.Common
                 newWord = newWord.Replace("آ", correctChar);
 
                 /* ة ta marbouta*/
-                newWord = newWord.Replace("ه" + " ", "ة" + " ");
+                newWord = newWord.Replace("ة" + " ", "ه" + " ");
 
                 /*  يء  ya2 hamzah  */
                 newWord = newWord.Replace("ي" + "ء" + " ", "ى" + " ");
