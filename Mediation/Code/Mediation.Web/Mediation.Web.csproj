@@ -155,8 +155,34 @@
     <Reference Include="TimeZoneConverter">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\TimeZoneConverter.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.Postgres">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.Postgres.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.RDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
@@ -584,10 +610,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="appSettings.config" />
-    <Content Include="ConnectionStrings.config" />
+    <Content Include="appSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\Mediation.pubxml" />
-    <None Include="Web.config.exclud" />
+    <None Include="Web.config.exclud">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
