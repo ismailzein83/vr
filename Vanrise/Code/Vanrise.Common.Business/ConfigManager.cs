@@ -24,14 +24,34 @@ namespace Vanrise.Common.Business
 
         public int GetSystemCurrencyId()
         {
+            int currencyId;
+            if(TryGetSystemCurrencyId(out currencyId))
+            {
+                return currencyId;
+            }
+            else
+            {
+                throw new NullReferenceException("systemCurrency");
+            }
+        }
+
+        public bool TryGetSystemCurrencyId(out int currencyId)
+        {
             SettingManager settingManager = new SettingManager();
             CurrencySettingData systemCurrency = settingManager.GetSetting<CurrencySettingData>(Constants.BaseCurrencySettingType);
 
-            if (systemCurrency == null)
-                throw new NullReferenceException("systemCurrency");
-
-            return systemCurrency.CurrencyId;
+            if (systemCurrency != null)
+            {
+                currencyId = systemCurrency.CurrencyId;
+                return true;
+            }
+            else
+            {
+                currencyId = 0;
+                return false;
+            }
         }
+
         public int GetSessionLockTimeOutInSeconds()
         {
             SettingManager settingManager = new SettingManager();

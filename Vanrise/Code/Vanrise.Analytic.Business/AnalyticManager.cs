@@ -41,8 +41,11 @@ namespace Vanrise.Analytic.Business
 
                 if (!input.Query.CurrencyId.HasValue)
                 {
-                    CurrencyManager currencyManager = new CurrencyManager();
-                    input.Query.CurrencyId = currencyManager.GetSystemCurrency().CurrencyId;
+                    int systemCurrencyId;
+                    if(new Vanrise.Common.Business.ConfigManager().TryGetSystemCurrencyId(out systemCurrencyId))
+                    {
+                        input.Query.CurrencyId = systemCurrencyId;
+                    }                    
                 }
 
                 if (input.SortByColumnName != null)
