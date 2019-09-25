@@ -331,7 +331,14 @@ namespace BPMExtended.Main.Business
         public bool isUserNameUnique(string userName)
         {
             //TODO: call BSCS to validate the username
-            return true;
+            bool result;
+
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/IsUsernameAvailable?username ={0}", userName));
+            }
+
+            return result;
         }
 
 

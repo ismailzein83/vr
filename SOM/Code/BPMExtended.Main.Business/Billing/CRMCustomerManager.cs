@@ -1105,8 +1105,13 @@ namespace BPMExtended.Main.Business
             CustomerCreationOutput output = new CustomerCreationOutput();
             CreateLargeMemberCustomerInput input = new CreateLargeMemberCustomerInput
             {
+                ParentCustomerId = parentCustomerId,
                 CustomerId = customerId,
                 CustomerCategoryId = CustomerCategoryId,
+                LevelId = levelId,
+				CompanyName= companyName,
+				Branch= branch,
+				CompanyId= companyId,
                 DefaultRatePlan = rateplan,
                 Title = customerTitle,
                 FirstName = FirstName,
