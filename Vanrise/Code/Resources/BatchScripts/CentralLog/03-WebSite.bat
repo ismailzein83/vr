@@ -11,6 +11,7 @@ xcopy "C:\Publish\Vanrise.Web.Host" /S /E /R /y /v /i /z /Q															"\\192
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\CentralLog\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.CentralLog.exclud" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\CentralLog\%YYYYMMDD%\Web.config*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\CentralLog\%YYYYMMDD%\Images\menu-icons\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\figure-icons" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\CentralLog\%YYYYMMDD%\Images\figure-icons\"
 ::by default load flat theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-CentralLog-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\CentralLog\%YYYYMMDD%\Images\logoonheader.png*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-CentralLog-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\CentralLog\%YYYYMMDD%\Images\login.png*"
