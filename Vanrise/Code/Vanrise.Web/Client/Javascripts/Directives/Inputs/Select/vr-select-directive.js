@@ -1071,17 +1071,13 @@
                             if (!ctrl.selectedSectionVisible())
                                 ctrl.selectedValuespageSize = ctrl.initialSelectedValuespageSize;
                             var dataSourceArray = ctrl.getdatasource();
-                            var isRemote = ctrl.isRemoteLoad();
                             var len = dataSourceArray.length;
-                            if (!isRemote)
-                                ctrl.selectedvalues.length = 0;
+
                             for (var i = 0; i < len; i++) {
                                 var item = dataSourceArray[i];
-                                if (isRemote) {
-                                    var index = baseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
-                                    if (index >= 0)
-                                        continue;
-                                }
+                                var index = baseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
+                                if (index >= 0)
+                                    continue;
                                 if (!ctrl.getObjectDisabled(item) && !ctrl.getObjectDisabledSelect(item)) {
                                     ctrl.selectedvalues.push(item);
                                     if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
@@ -1188,11 +1184,11 @@
 
     }
 
-    vrSelectDirective.$inject =['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope', 'VRLocalizationService', 'VRModalService', 'MobileService'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope', 'VRLocalizationService', 'VRModalService', 'MobileService'];
 
     app.directive('vrSelect', vrSelectDirective);
 
-}) (app);
+})(app);
 
 
 
