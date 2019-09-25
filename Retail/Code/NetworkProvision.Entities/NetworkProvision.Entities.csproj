@@ -45,15 +45,25 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenerateCommandHandler.cs" />
+    <Compile Include="GenerateCommandHandlerCustomCode.cs" />
+    <Compile Include="NetworkElement.cs" />
+    <Compile Include="NetworkElementType.cs" />
+    <Compile Include="NetworkElementTypeProvisionHandler.cs" />
+    <Compile Include="NetworkProvisionGenerateCommandHandlerTypeSettings.cs" />
+    <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHanderType.cs" />
+    <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHandlerTypeExtendedSettings.cs" />
+    <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHandlerTypeExtendedSettingsConfig.cs" />
+    <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHandlerTypeSettings.cs" />
+    <Compile Include="NPGenerateCommandHandlerExtendedSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NetworkProvision.Business\NetworkProvision.Business.csproj">
-      <Project>{39F45AF7-987B-493B-88D1-4B4165EA9AE1}</Project>
-      <Name>NetworkProvision.Business</Name>
-    </ProjectReference>
+    <Compile Include="ProvisionAction.cs" />
+    <Compile Include="ProvisionHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

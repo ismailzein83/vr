@@ -48,6 +48,9 @@
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
@@ -59,7 +62,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionHandlerApiDiscovery.cs" />
+    <Compile Include="ActionHandlerManager.cs" />
+    <Compile Include="NetworkProvisionHandlerType\CustomCodeNetworkProvisionHandlerType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetworkProvision.Data\NetworkProvision.Data.csproj">
+      <Project>{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC}</Project>
+      <Name>NetworkProvision.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkProvision.Entities\NetworkProvision.Entities.csproj">
+      <Project>{878424C9-A62D-4AD2-84BE-3C56989384C4}</Project>
+      <Name>NetworkProvision.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Data\Retail.BusinessEntity.Data.csproj">
+      <Project>{45BEE1A0-30FD-405D-B476-C3B2D0B2A21F}</Project>
+      <Name>Retail.BusinessEntity.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
