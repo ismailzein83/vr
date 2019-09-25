@@ -13,6 +13,7 @@ using Terrasoft.Core;
 using System.Web;
 using Terrasoft.Core.DB;
 using BPMExtended.Main.SOMAPI;
+using Terrasoft.Core.Process;
 
 namespace BPMExtended.Main.Business
 {
@@ -353,12 +354,12 @@ namespace BPMExtended.Main.Business
             var recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
 
             var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
-            DateTime date = DateTime.Today;
-            DateTime date1=date.AddDays(-45);
+            DateTime dateNow = DateTime.Today;
+            DateTime lastPendingDate= dateNow.AddDays(-45);
             eSQ.AddAllSchemaColumns();
-            esqFirstFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.LessOrEqual, "StLastPendingCustomerReturn", date1);
+            esqFirstFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.LessOrEqual, "StLastPendingCustomerReturn", lastPendingDate);
             esqSecondFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StMarkAsCancelled", false);
-            esqThirdFilter= eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", "9b7ba6fb-d4c2-4ae7-b940-2119c7bd460a");
+            esqThirdFilter= eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", Constant.PENDING_CUSTOMER_RETURN_STATUS);
 
             eSQ.Filters.Add(esqFirstFilter);
             eSQ.Filters.Add(esqSecondFilter);
@@ -425,24 +426,42 @@ namespace BPMExtended.Main.Business
         {
             CommonManager commonManager = new CommonManager();
             var entityName = commonManager.GetEntityNameByRequestId(requestId);
+            var completedStep = commonManager.GetCompletedStepIdByEntityName(entityName);
+            var requestStageId = commonManager.GetRequestStageIdByStepId(completedStep);
 
             var recordSchema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName(entityName);
             var recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
 
             var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
-            eSQ.RowCount = 1;
             eSQ.AddAllSchemaColumns();
             eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
-            var collection = eSQ.GetEntityCollection(BPM_UserConnection);
+            var collections = eSQ.GetEntityCollection(BPM_UserConnection);
 
-            if (collection!=null)
+            if (collections!=null)
             {
-                if (collection.Count > 0)
+                if (collections.Count > 0)
                 {
-                    recordEntity = collection[0];
-                    recordEntity.SetColumnValue("StTypeId", "8340AD42-0C1E-4063-BA73-74B3CD917C2F");
+                    recordEntity = collections[0];
+                    recordEntity.SetColumnValue("StTypeId", completedStep);
+                    recordEntity.Save();
                 }
-                recordEntity.Save();
+            }
+
+             recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
+
+            eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId));
+            collections = eSQ.GetEntityCollection(BPM_UserConnection);
+
+            if (collections != null)
+            {
+                if (collections.Count > 0)
+                {
+                    recordEntity = collections[0];
+                    recordEntity.SetColumnValue("StStageId", requestStageId);
+                    recordEntity.Save();
+                }
             }
 
         }
@@ -456,16 +475,17 @@ namespace BPMExtended.Main.Business
             eSQ.RowCount = 1;
             eSQ.AddAllSchemaColumns();
             eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId));
-            var collection = eSQ.GetEntityCollection(UserConnection);
+            var collections = eSQ.GetEntityCollection(UserConnection);
 
-            if (collection.Count > 0)
+            if (collections!=null)
             {
-                if (collection.Count > 0)
+                if (collections.Count > 0)
                 {
-                    recordEntity = collection[0];
-                    recordEntity.SetColumnValue("StStatusId", "87486F6C-FD2B-498D-8E4A-90935299058E");
+                    recordEntity = collections[0];
+                    recordEntity.SetColumnValue("StStatusId", Constant.CANCELLED_STATUS);
+                    recordEntity.SetColumnValue("StMarkAsCancelled",false);
+                    recordEntity.Save();
                 }
-                recordEntity.Save();
             }
             return "";
         }

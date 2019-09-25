@@ -149,7 +149,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
             SOMRequestInput<CancelSuspensionRequestInput> somRequestInput = new SOMRequestInput<CancelSuspensionRequestInput>
             {
-                InputArguments = { RequestId = requestId.ToString() }
+                InputArguments =new CancelSuspensionRequestInput { RequestId = requestId.ToString() }
             };
             using (var client = new SOMClient())
             {

@@ -86,9 +86,27 @@ namespace BPMExtended.Main.Business
         }
         public string AbortRequest(string requestId)
         {
-            var customerRequestManager = new CustomerRequestManager();
-            customerRequestManager.SetRequestCompleted(requestId);
-            customerRequestManager.CancelRequestHeader(requestId);
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            var recordSchema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
+            var recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
+
+            var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            eSQ.AddAllSchemaColumns();
+            esqFirstFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+
+            eSQ.Filters.Add(esqFirstFilter);
+
+            var collections = eSQ.GetEntityCollection(BPM_UserConnection);
+            if (collections != null)
+            {
+                foreach (var collec in collections)
+                {
+                    recordEntity = collec;
+                    recordEntity.SetColumnValue("StMarkAsCancelled", true);
+                    recordEntity.Save();
+                }
+            }
             return "";
         }
 
@@ -492,6 +510,52 @@ namespace BPMExtended.Main.Business
 
             }
             return entityName;
+        }
+
+        public string GetCompletedStepIdByEntityName(string entityName)
+        {
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string completedStepId = null;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestsTypes");
+            esq.AddColumn("StCompletedStepId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StEntityName", entityName);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                completedStepId = entities[0].GetColumnValue("StCompletedStepId").ToString();
+
+            }
+            return completedStepId;
+        }
+
+        public Guid GetRequestStageIdByStepId(string stepId)
+        {
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            Guid requestStageId = Guid.Empty;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequeststage");
+            var IdCol = esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStageId", stepId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                requestStageId = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);
+
+            }
+            return requestStageId;
         }
 
         public string GetOperationByRequestId(string requestId)
