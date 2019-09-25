@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_ActionTypeEditorController" size="medium" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formActionType">
+            <vr-directivewrapper ng-if="scopeModel.actionTypeTemplateConfig != undefined"
+                                 directive="scopeModel.actionTypeTemplateConfig.Editor"
+                                 on-ready="scopeModel.onDirectiveReady"
+                                 isrequired="true">
+            </vr-directivewrapper>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formActionType" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

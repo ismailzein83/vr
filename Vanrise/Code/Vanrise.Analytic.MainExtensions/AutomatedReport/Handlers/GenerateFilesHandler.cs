@@ -182,14 +182,20 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
     {
         public override Guid ConfigId
         {
-            get { return new Guid("47409013-A4A4-4C60-A730-F30A8CBDCCCD"); }
+            get { return new Guid("0B801CC2-13CE-4994-8527-878A5277FA2B"); }
 
         }
         public List<GenerateFilesActionType> Actions { get; set; }
 
         public override void Execute(IGenerateFilesActionTypeContext context)
         {
-            throw new NotImplementedException();
+            if (Actions != null && Actions.Count > 0)
+            {
+                foreach (var action in Actions)
+                {
+                    action.Execute(context);
+                }
+            }
         }
     }
 }

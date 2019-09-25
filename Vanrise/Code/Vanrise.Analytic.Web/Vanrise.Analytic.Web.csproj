@@ -216,6 +216,7 @@
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\FTPActionTypeGenerateFilesHandlerTempate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\FTPHandlerAutomatedReport.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\GenerateFilesHandlerAutomatedReport.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\MultipleActionsHandlerAutomatedReport.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\SendEmailActionTypeGenerateFilesHandlerTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\SendEmailHandlerAutomatedReport.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\AutomatedReportHandlerEditor.html" />
@@ -226,6 +227,7 @@
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-ftpactiontype-generatefileshandler.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-ftphandler-automatedreporthandler.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-generatefileshandler-automatedreporthandler.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-multipleactionsactiontype-generatefileshandler.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-sendemailactiontype-generatefileshandler.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-sendemailhandler-automatedreporthandler.js" />
     <Content Include="Analytic\Directives\AutomatedReport\FileGenerator\vr-analytic-automatedreporthandler-filegenerator.js" />
@@ -467,6 +469,7 @@
     <Content Include="Analytic\Services\APIServices\MeasureStyleRuleAPIService.js" />
     <Content Include="Analytic\Services\APIServices\ReportGenerationCustomCodeAPIService.js" />
     <Content Include="Analytic\Services\APIServices\ReportTypeAPIService.js" />
+    <Content Include="Analytic\Services\MultipleActionsActionTypeService.js" />
     <Content Include="Analytic\Services\ReportGenerationCustomCodeService.js" />
     <Content Include="Analytic\Services\ReportTypeService.js" />
     <Content Include="Analytic\Services\VRReportGenerationActionService.js" />
@@ -505,6 +508,8 @@
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
     <Content Include="Analytic\Services\AdvancedExcelFileGeneratorService.js" />
     <Content Include="Analytic\Services\AutomatedReportHandlerService.js" />
+    <Content Include="Analytic\Views\ActionType\ActionTypeEditor.html" />
+    <Content Include="Analytic\Views\ActionType\ActionTypeEditorController.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditor.html" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditorController.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionManagement.html" />
