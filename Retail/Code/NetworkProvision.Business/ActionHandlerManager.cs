@@ -22,7 +22,6 @@ namespace NetworkProvision.Business
             string networkElementTypeIdAsString = string.Empty;
             if (networkElementTypeObject != null)
                 networkElementTypeObject.ToString();
-            Guid
             return "";
         }
         public bool ExecuteActionProvision(Dictionary<string, object> input)
