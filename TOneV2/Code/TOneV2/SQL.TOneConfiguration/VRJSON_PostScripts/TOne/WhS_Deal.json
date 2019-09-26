@@ -3630,6 +3630,62 @@
         "IsIdentity": false
       },
       "Title": "Merge"
+    },
+    {
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "common",
+      "TableName": "MailMessageTemplate",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "d0fcba2e-5a19-4908-94ed-6c35973b2b84",
+              "DevProjectID": "02ed43e1-6af6-40e5-b78f-33c207cf97a6",
+              "Name": "Whole Swap Deal Progress Default Template",
+              "MessageTypeID": "3b7bddaa-000f-42f6-99cd-b47944b46a2e",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities\",\"From\":{\"$type\":\"Vanrise.Entities.VRExpression, Vanrise.Entities\"},\"To\":{\"$type\":\"Vanrise.Entities.VRExpression, Vanrise.Entities\",\"ExpressionString\":\"default@To.com\"},\"CC\":{\"$type\":\"Vanrise.Entities.VRExpression, Vanrise.Entities\"},\"BCC\":{\"$type\":\"Vanrise.Entities.VRExpression, Vanrise.Entities\"},\"Subject\":{\"$type\":\"Vanrise.Entities.VRExpression, Vanrise.Entities\",\"ExpressionString\":\"Default Subject\"},\"Body\":{\"$type\":\"Vanrise.Entities.VRExpression, Vanrise.Entities\",\"ExpressionString\":\"<div>Deafault Body</div>\"}}"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "MessageTypeID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID='02ED43E1-6AF6-40E5-B78F-33C207CF97A6'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
     }
   ]
 }
