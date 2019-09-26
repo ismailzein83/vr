@@ -415,11 +415,16 @@ namespace Vanrise.NumberingPlan.Business
 
         public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
-            var allZones = GetCachedSaleZones();
+            var masterSellingNumberPlan = new SellingNumberPlanManager().GetMasterSellingNumberPlan();
+            if (masterSellingNumberPlan == null)
+                return null;
+
+            var allZones = GetSaleZonesEffectiveAfter(masterSellingNumberPlan.SellingNumberPlanId,DateTime.Now);
             if (allZones == null)
                 return null;
             else
-                return allZones.Values.Select(itm => itm as dynamic).ToList();
+                return allZones.Select(itm => itm as dynamic).ToList();
+
         }
 
         public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
