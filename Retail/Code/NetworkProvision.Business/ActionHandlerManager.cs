@@ -9,7 +9,7 @@ namespace NetworkProvision.Business
 {
     public class ActionHandlerManager
     {
-        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+        /*static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
 
         CacheManager GetCacheManager()
         {
@@ -182,6 +182,7 @@ namespace NetworkProvision.Business
             }
         }
         #endregion
+        */
     }
 
     public interface IExecuteActionProvisionContext
