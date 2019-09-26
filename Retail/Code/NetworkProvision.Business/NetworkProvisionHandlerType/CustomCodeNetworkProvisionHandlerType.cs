@@ -1,13 +1,13 @@
 ﻿using System;
 using NetworkProvision.Entities;
 
-namespace NetworkProvision.Business.NetworkProvisionHandlerType
+namespace NetworkProvision.Business
 {
     public class CustomCodeNetworkProvisionHandlerType : NetworkProvisionHandlerTypeExtendedSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId => new Guid("41442404-2C88-4646-9F92-9ADE92A972D5");
 
-        public override string RuntimeEditor => throw new NotImplementedException();
+        public override string RuntimeEditor => "networkprovision-handlertype-extendedsettings-customcode-runtime";
 
         public string NamespaceMembers { get; set; }
 
