@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using Retail.BusinessEntity.Data;
+﻿using System.Reflection;
 using Vanrise.Common;
 
 namespace NetworkProvision.Data
@@ -10,7 +8,7 @@ namespace NetworkProvision.Data
         static ObjectFactory s_objectFactory;
         static NetworkProvisionDataManagerFactory()
         {
-            s_objectFactory = new ObjectFactory(Assembly.Load("Retail.BusinessEntity.Data.SQL"));
+            s_objectFactory = new ObjectFactory(Assembly.Load("NetworkProvision.Data.SQL"));
         }
 
         public static T GetDataManager<T>() where T : class, IDataManager

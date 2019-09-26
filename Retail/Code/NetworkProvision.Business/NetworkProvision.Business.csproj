@@ -65,6 +65,7 @@
     <Compile Include="ActionHandlerApiDiscovery.cs" />
     <Compile Include="ActionHandlerManager.cs" />
     <Compile Include="NetworkProvisionHandlerType\CustomCodeNetworkProvisionHandlerType.cs" />
+    <Compile Include="NetworkProvisionHandlerTypeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

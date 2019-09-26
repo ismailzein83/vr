@@ -1,5 +1,4 @@
 ﻿using System;
-using Retail.BusinessEntity.Data;
 
 namespace NetworkProvision.Data
 {

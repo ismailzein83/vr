@@ -56,7 +56,7 @@
     <Compile Include="NetworkElementType.cs" />
     <Compile Include="NetworkElementTypeProvisionHandler.cs" />
     <Compile Include="NetworkProvisionGenerateCommandHandlerTypeSettings.cs" />
-    <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHanderType.cs" />
+    <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHandlerType.cs" />
     <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHandlerTypeExtendedSettings.cs" />
     <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHandlerTypeExtendedSettingsConfig.cs" />
     <Compile Include="NetworkProvisionHandlerType\NetworkProvisionHandlerTypeSettings.cs" />
