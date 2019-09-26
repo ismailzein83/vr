@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{615CA9F4-1953-44EC-9479-FEF66990455E}</ProjectGuid>
+    <ProjectGuid>{295B3760-4294-4E59-8A7E-A12FC2EB9A26}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -57,6 +57,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -71,7 +74,43 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NetworkProvision\Constants\ModuleConfig.js" />
+    <Content Include="NetworkProvision\Elements\HandlerType\Directives\MainExtensions\CustomCode\networkprovision-handlertype-extendedsettings-customcode-runtime.js" />
+    <Content Include="NetworkProvision\Elements\HandlerType\Directives\MainExtensions\CustomCode\networkprovision-handlertype-extendedsettings-customcode.js" />
+    <Content Include="NetworkProvision\Elements\HandlerType\Directives\MainExtensions\CustomCode\Templates\CustomCodeHandlerTypeRuntimeTemplate.html" />
+    <Content Include="NetworkProvision\Elements\HandlerType\Directives\MainExtensions\CustomCode\Templates\CustomCodeHandlerTypeTemplate.html" />
+    <Content Include="NetworkProvision\Elements\HandlerType\Directives\networkprovision-handlertype-extendedsettings.js" />
+    <Content Include="NetworkProvision\Elements\HandlerType\Directives\networkprovision-handlertype-settings.js" />
+    <Content Include="NetworkProvision\Elements\HandlerType\Directives\Templates\NetworkProvisionHandlerTypeSettingsTemplate.html" />
+    <Content Include="NetworkProvision\Elements\HandlerType\Services\NetworkProvision_HandlerTypeAPIService.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\NetworkProvisionHandlerTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkProvision.Business\NetworkProvision.Business.csproj">
+      <Project>{39f45af7-987b-493b-88d1-4b4165ea9ae1}</Project>
+      <Name>NetworkProvision.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkProvision.Entities\NetworkProvision.Entities.csproj">
+      <Project>{878424c9-a62d-4ad2-84be-3c56989384c4}</Project>
+      <Name>NetworkProvision.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -86,7 +125,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>57384</DevelopmentServerPort>
+          <DevelopmentServerPort>54025</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:56367/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

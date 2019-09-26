@@ -310,11 +310,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Data", "Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Billing.MainExtensions", "Retail.Billing.MainExtensions\Retail.Billing.MainExtensions.csproj", "{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Web", "NetworkProvision.Web\NetworkProvision.Web.csproj", "{615CA9F4-1953-44EC-9479-FEF66990455E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Data.SQL", "NetworkProvision.Data.SQL\NetworkProvision.Data.SQL.csproj", "{D33B75B8-0ED9-477A-A77D-947C4173DC24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Data.RDB", "NetworkProvision.Data.RDB\NetworkProvision.Data.RDB.csproj", "{8D0CBFF6-724D-4E96-8687-4FCDFA8917E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Web", "NetworkProvision.Web\NetworkProvision.Web.csproj", "{295B3760-4294-4E59-8A7E-A12FC2EB9A26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -860,10 +860,6 @@ Global
 		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{615CA9F4-1953-44EC-9479-FEF66990455E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{615CA9F4-1953-44EC-9479-FEF66990455E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{615CA9F4-1953-44EC-9479-FEF66990455E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{615CA9F4-1953-44EC-9479-FEF66990455E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D33B75B8-0ED9-477A-A77D-947C4173DC24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D33B75B8-0ED9-477A-A77D-947C4173DC24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D33B75B8-0ED9-477A-A77D-947C4173DC24}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -872,6 +868,10 @@ Global
 		{8D0CBFF6-724D-4E96-8687-4FCDFA8917E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D0CBFF6-724D-4E96-8687-4FCDFA8917E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D0CBFF6-724D-4E96-8687-4FCDFA8917E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{295B3760-4294-4E59-8A7E-A12FC2EB9A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{295B3760-4294-4E59-8A7E-A12FC2EB9A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{295B3760-4294-4E59-8A7E-A12FC2EB9A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{295B3760-4294-4E59-8A7E-A12FC2EB9A26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1023,9 +1023,9 @@ Global
 		{39F45AF7-987B-493B-88D1-4B4165EA9AE1} = {D7E98035-84EC-440C-8DEE-53602D374531}
 		{E476C199-5FF5-487E-9B33-C0E5C8F3A4BC} = {D7E98035-84EC-440C-8DEE-53602D374531}
 		{FF3DA5F6-DF08-4282-A82C-15FE13AB796E} = {BE797DB1-98AD-4594-B6FB-6F172802D4E0}
-		{615CA9F4-1953-44EC-9479-FEF66990455E} = {D7E98035-84EC-440C-8DEE-53602D374531}
 		{D33B75B8-0ED9-477A-A77D-947C4173DC24} = {D7E98035-84EC-440C-8DEE-53602D374531}
 		{8D0CBFF6-724D-4E96-8687-4FCDFA8917E2} = {D7E98035-84EC-440C-8DEE-53602D374531}
+		{295B3760-4294-4E59-8A7E-A12FC2EB9A26} = {D7E98035-84EC-440C-8DEE-53602D374531}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
@@ -1539,17 +1539,17 @@ Global
 		SccProjectTopLevelParentUniqueName126 = Retail.sln
 		SccProjectName126 = Retail.Billing.MainExtensions
 		SccLocalPath126 = Retail.Billing.MainExtensions
-		SccProjectUniqueName127 = NetworkProvision.Web\\NetworkProvision.Web.csproj
+		SccProjectUniqueName127 = NetworkProvision.Data.SQL\\NetworkProvision.Data.SQL.csproj
 		SccProjectTopLevelParentUniqueName127 = Retail.sln
-		SccProjectName127 = NetworkProvision.Web
-		SccLocalPath127 = NetworkProvision.Web
-		SccProjectUniqueName128 = NetworkProvision.Data.SQL\\NetworkProvision.Data.SQL.csproj
+		SccProjectName127 = NetworkProvision.Data.SQL
+		SccLocalPath127 = NetworkProvision.Data.SQL
+		SccProjectUniqueName128 = NetworkProvision.Data.RDB\\NetworkProvision.Data.RDB.csproj
 		SccProjectTopLevelParentUniqueName128 = Retail.sln
-		SccProjectName128 = NetworkProvision.Data.SQL
-		SccLocalPath128 = NetworkProvision.Data.SQL
-		SccProjectUniqueName129 = NetworkProvision.Data.RDB\\NetworkProvision.Data.RDB.csproj
+		SccProjectName128 = NetworkProvision.Data.RDB
+		SccLocalPath128 = NetworkProvision.Data.RDB
+		SccProjectUniqueName129 = NetworkProvision.Web\\NetworkProvision.Web.csproj
 		SccProjectTopLevelParentUniqueName129 = Retail.sln
-		SccProjectName129 = NetworkProvision.Data.RDB
-		SccLocalPath129 = NetworkProvision.Data.RDB
+		SccProjectName129 = NetworkProvision.Web
+		SccLocalPath129 = NetworkProvision.Web
 	EndGlobalSection
 EndGlobal
