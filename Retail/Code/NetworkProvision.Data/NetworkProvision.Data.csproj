@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IActionHandlerDataManager.cs" />
+    <Compile Include="IDataManager.cs" />
     <Compile Include="NetworkProvisionDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
