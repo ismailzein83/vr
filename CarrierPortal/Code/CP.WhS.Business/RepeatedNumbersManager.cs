@@ -16,6 +16,7 @@ namespace CP.WhS.Business
         public IDataRetrievalResult<RepeatedNumberDetail> GetFilteredBlockedAttempts(DataRetrievalInput<ClientRepeatedNumberQuery> query)
         {
             var connectionSettings = new PortalConnectionManager().GetWhSConnectionSettings();
+
             var cdrType = CDRType.All;
             if (query.Query.CDRType == ClientCDRType.Failed)
                 cdrType = CDRType.Failed;

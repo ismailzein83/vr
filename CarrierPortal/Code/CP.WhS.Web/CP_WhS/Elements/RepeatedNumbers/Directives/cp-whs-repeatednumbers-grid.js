@@ -25,7 +25,7 @@ app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', '
             var PhoneNumberType;
             var payloadPeriod;
             var sourceName;
-
+            var accountType;
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -40,6 +40,15 @@ app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', '
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return CP_WhS_RepeatedNumbersAPIService.GetFilteredRepeatedNumbers(dataRetrievalInput).then(function (response) {
+                        if (response != undefined && response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                if (accountType == CP_WhS_AccountViewTypeEnum.Customer.value) {
+                                    response.Data[i].CarrierName = response.Data[i].CustomerName;
+                                } else {
+                                    response.Data[i].CarrierName = response.Data[i].SupplierName;
+                                }
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -64,7 +73,7 @@ app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', '
                         toDate = query.To;
                         payloadPeriod = query.Period;
                     }
-                    $scope.showCustomer = query.Filter.CustomerIds != undefined;
+                    accountType = query.Filter.AccountType;
                     return gridAPI.retrieveData(query);
                 };
 
