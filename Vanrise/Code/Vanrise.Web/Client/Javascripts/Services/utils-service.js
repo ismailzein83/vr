@@ -344,6 +344,8 @@
         function PromiseClass(promiseName) {
             var deferred = $q.defer();
 
+
+
             //var deferredPromise = deferred.promise;
 
             //this.promise2 = {
@@ -355,12 +357,7 @@
             this.resolve = deferred.resolve;
             this.reject = deferred.reject;
 
-            if (promiseName != undefined) {
-                VRPromiseDebugService.registerPromise({ promise: this.promise, name: promiseName });
-            }
-            //else {
-            //    VRPromiseDebugService.registerPromise({ promise: this.promise, name: undefined });
-            //}
+            VRPromiseDebugService.registerPromise({ promise: this.promise, name: promiseName });
         }
 
         function linkExistingPromiseToPromiseDeferred(existingPromise, promiseDeferred) {
