@@ -5,7 +5,7 @@ namespace NetworkProvision.Entities
 {
     public class NetworkProvisionHandlerTypeExtendedSettingsConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Retail_NetworkProvisionType_ExtendedSettings";
+        public const string EXTENSION_TYPE = "NetworkProvision_HandlerType_ExtendedSettings";
 
         public string DefinitionEditor { get; set; }
     }
