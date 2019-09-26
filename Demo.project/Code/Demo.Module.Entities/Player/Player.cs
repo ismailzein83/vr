@@ -8,17 +8,16 @@ namespace Demo.Module.Entities
 {
     public class Player
     {
+        public int ID { get; set; }
         public string Name { get; set; }
-
-        public int Age { get; set; }
-
+        public DateTime DOB { get; set; }
+        public int Number { get; set; }
         public PlayerType Type { get; set; }
     }
 
     public abstract class PlayerType
     {
         public abstract Guid ConfigID { get; }
-
         public string Nationality { get; set; }
     }
 }

@@ -61,8 +61,10 @@
     <Compile Include="ICityDataManager.cs" />
     <Compile Include="ICompanyDataManager.cs" />
     <Compile Include="ICountryDataManager.cs" />
+    <Compile Include="ILeagueDataManager.cs" />
     <Compile Include="IManufactoryDataManager.cs" />
     <Compile Include="IProductDataManager.cs" />
+    <Compile Include="ITeamDataManager.cs" />
     <Compile Include="IZooDataManager.cs" />
     <Compile Include="IZooSectionDataManager.cs" />
     <Compile Include="OldEntities\ICDRDataManager.cs" />

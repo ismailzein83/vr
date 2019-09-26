@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="scopeModel.teams"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="TeamID" enableautoexport="true">
+
+    <vr-datagridcolumn headertext="'ID'" field="'TeamID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'League Name'" field="'LeagueName'" type="'Text'"  ng-show="!scopeModel.hideLeagueColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

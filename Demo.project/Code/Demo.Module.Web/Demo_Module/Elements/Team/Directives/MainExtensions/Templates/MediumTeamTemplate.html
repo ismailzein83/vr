@@ -1,0 +1,31 @@
+﻿<vr-columns width="fullrow">
+    <vr-section header="Players">
+        <vr-button type="Add" data-onclick="scopeModel.addPlayerField" standalone></vr-button>
+        <vr-validator validate="scopeModel.isValid()">
+            <vr-datagrid on-ready="scopeModel.onGridReady"
+                         datasource="scopeModel.datasource"
+                         menuactions="gridMenuActions"
+                         ondeleterow="scopeModel.removeFilter"
+                         enabledraggablerow="true"
+                         showexpand="scopeModel.showExpand" maxheight="300px"
+                         rowdeleteicontitle="Delete Player" norowhighlightonclick="true" hidegridmenu>
+
+                <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting>
+                    <vr-textbox value="dataItem.Name" isrequired></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Number'" field="'Number'" disablesorting>
+                    <vr-textbox value="dataItem.Number" type="number" isrequired></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Date Of Birth'" field="'dob'" disablesorting>
+                    <vr-datetimepicker value="dataItem.dob" type="date" isrequired></vr-datetimepicker>
+                </vr-datagridcolumn>
+
+                <vr-datagridexpandablerow>
+                    <span vr-loader="dataItem.isPlayerTypeSelectorLoading">
+                        <demo-module-player-playertype on-ready="dataItem.onPlayerTypeDirectiveReady" isrequired="true"></demo-module-player-playertype>
+                    </span>
+                </vr-datagridexpandablerow>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-section>
+</vr-columns>

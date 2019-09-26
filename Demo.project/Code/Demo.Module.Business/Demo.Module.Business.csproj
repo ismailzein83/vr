@@ -102,6 +102,7 @@
     <Compile Include="CityManager.cs" />
     <Compile Include="CompanyManager.cs" />
     <Compile Include="CountryManager.cs" />
+    <Compile Include="LeagueManager.cs" />
     <Compile Include="ManufactoryManager.cs" />
     <Compile Include="OldEntites\CDRManager.cs" />
     <Compile Include="OldEntites\ColorManager.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="OldEntites\MasterManager.cs" />
     <Compile Include="ProductManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TeamManager.cs" />
     <Compile Include="ZooSectionManager.cs" />
     <Compile Include="ZooManager.cs" />
   </ItemGroup>

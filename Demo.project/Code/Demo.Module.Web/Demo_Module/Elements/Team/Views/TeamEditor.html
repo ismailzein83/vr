@@ -1,0 +1,27 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_TeamEditorController" vr-loader="scopeModel.isLoading" width="'50'">
+    <vr-modalbody>
+        <vr-form name="formLeagueEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                            <demo-module-league-selector on-ready="scopeModel.onLeagueSelectorReady" isdisabled="scopeModel.disableLeague" isrequired="true" normal-col-num="6"></demo-module-league-selector>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                   <demo-module-team-teamsettings on-ready="scopeModel.onTeamSettingsDirectiveReady"  normal-col-num="6" isrequired="true"></demo-module-team-teamsettings>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formLeagueEditor" data-onclick="scopeModel.saveTeam"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

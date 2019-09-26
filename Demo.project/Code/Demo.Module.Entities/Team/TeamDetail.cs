@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
-    public class LeagueDetails
+    public class TeamDetail
     {
-        public int LeagueId { get; set; }
+        public int TeamID { get; set; }
         public string Name { get; set; }
+        public string LeagueName { get; set; }
         public string Description { get; set; }
     }
 }

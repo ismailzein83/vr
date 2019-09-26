@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="scopeModel.leagues"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="LeagueID" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'LeagueID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Country'" field="'Description'" type="'Text'"></vr-datagridcolumn>
+
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

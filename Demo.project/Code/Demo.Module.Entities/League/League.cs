@@ -15,7 +15,7 @@ namespace Demo.Module.Entities
 
         public string GetDescription()
         {
-            return "Country: " + Country;
+            return Country;
         }
     }
 }

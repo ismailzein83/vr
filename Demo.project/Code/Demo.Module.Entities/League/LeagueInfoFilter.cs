@@ -18,11 +18,11 @@ namespace Demo.Module.Entities
 
     public interface ILeagueInfoFilterContext
     {
-        int LeagueId { get; set; }
+        int LeagueID { get; set; }
     }
 
     public class LeagueInfoFilterContext : ILeagueInfoFilterContext
     {
-        public int LeagueId { get; set; }
+        public int LeagueID { get; set; }
     }
 }
