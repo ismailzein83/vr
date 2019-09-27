@@ -2694,12 +2694,18 @@ vr-section[notopspace] > .panel-vr {
     cursor: w-resize;
 }
 
+
+
 .vr-datagrid {
     font-size: 12px;
     width: 100%;
     margin-top: 10px;
     border-bottom: 1px solid #DDD;
     /*to fixe menu-grid action position side effects*/
+}
+
+vr-datagrid[aligntop] > vr-datagridrows > .vr-datagrid {
+    margin-top: 0px;
 }
 
 vr-datagrid[hideheader="true"] .vr-datagrid {
