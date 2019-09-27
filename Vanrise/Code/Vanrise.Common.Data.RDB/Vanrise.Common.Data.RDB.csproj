@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReceivedRequestLogDataManager.cs" />
     <Compile Include="BigDataServiceDataManager.cs" />
     <Compile Include="CacheRefreshDataManager.cs" />
     <Compile Include="CityDataManager.cs" />

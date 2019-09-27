@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IReceivedRequestLogDataManager.cs" />
     <Compile Include="ICacheRefreshDataManager.cs" />
     <Compile Include="IDataEncryptionKeyDataManager.cs" />
     <Compile Include="IDBReplicationDataManager.cs" />
