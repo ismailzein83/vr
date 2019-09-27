@@ -2824,12 +2824,12 @@
   </Page>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="VanriseEntities">
+    <DataSource Name="TOneWhSInvoiceEntities1">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>5cc14ae4-d1a4-45da-9afc-549a6fe722f3</rd:DataSourceID>
+      <rd:DataSourceID>dccf0262-4670-4b85-997c-bde0441adcf0</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
