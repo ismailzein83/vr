@@ -2008,9 +2008,6 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
-                        <BottomBorder>
-                          <Width>=iif(RowNumber("")=CountRows(""),"1.25pt","1pt")</Width>
-                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
