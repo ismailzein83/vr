@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
@@ -12,53 +9,69 @@ namespace Vanrise.GenericData.Business
     {
         static Guid beDefinitionId = new Guid("992C93A5-0D90-41CD-8501-7235B4CAB09E");
 
-        public Guid? GetNumberPrefixTypeId(string number)
+        public Guid? GetNumberPrefixTypeId(string number, bool exactMatch)
         {
             if (string.IsNullOrEmpty(number))
                 return null;
 
-            Dictionary<string, VRNumberPrefix> numberPrefixes = GetCachedNumberPrefixes();
-            if (numberPrefixes == null)
-                return null;
-
-            StringCodeIterator stringCodeIterator = new StringCodeIterator(numberPrefixes.Keys);
-            string matchingNumberPrefix = stringCodeIterator.GetLongestMatch(number);
-            if (string.IsNullOrEmpty(matchingNumberPrefix))
+            Dictionary<string, VRNumberPrefix> numberPrefixes = GetCachedNumberPrefixes(exactMatch);
+            if (numberPrefixes == null || numberPrefixes.Count == 0)
                 return null;
 
             VRNumberPrefix vrNumberPrefix;
-            if (!numberPrefixes.TryGetValue(matchingNumberPrefix, out vrNumberPrefix))
-                throw new Exception($"numberPrefixes does not contain number: '{matchingNumberPrefix}'");
+
+            if (!exactMatch)
+            {
+                StringCodeIterator stringCodeIterator = new StringCodeIterator(numberPrefixes.Keys);
+                string matchingNumberPrefix = stringCodeIterator.GetLongestMatch(number);
+                if (string.IsNullOrEmpty(matchingNumberPrefix))
+                    return null;
+
+                if (!numberPrefixes.TryGetValue(matchingNumberPrefix, out vrNumberPrefix))
+                    throw new Exception($"numberPrefixes does not contain number: '{matchingNumberPrefix}'");
+            }
+            else
+            {
+                if (!numberPrefixes.TryGetValue(number, out vrNumberPrefix))
+                    return null;
+            }
 
             return vrNumberPrefix.Type;
         }
 
-        private Dictionary<string, VRNumberPrefix> GetCachedNumberPrefixes()
+        private Dictionary<string, VRNumberPrefix> GetCachedNumberPrefixes(bool exactMatch)
         {
+            string cacheName = exactMatch ? "GetCachedShortNumbers" : "GetCachedNumberPrefixes";
+
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedNumberPrefixes", beDefinitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate(cacheName, beDefinitionId, () =>
             {
-                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(beDefinitionId);
                 Dictionary<string, VRNumberPrefix> results = new Dictionary<string, VRNumberPrefix>();
 
-                if (genericBusinessEntities != null)
-                {
-                    foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
-                    {
-                        if (genericBusinessEntity.FieldValues == null)
-                            continue;
+                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(beDefinitionId);
+                if (genericBusinessEntities == null)
+                    return results;
 
-                        VRNumberPrefix vrNumberPrefix = new VRNumberPrefix()
-                        {
-                            ID = (int)genericBusinessEntity.FieldValues.GetRecord("Id"),
-                            Number = genericBusinessEntity.FieldValues.GetRecord("Number") as string,
-                            Type = (Guid)genericBusinessEntity.FieldValues.GetRecord("Type")
-                        };
-                        results.Add(vrNumberPrefix.Number, vrNumberPrefix);
-                    }
+                foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+                {
+                    if (genericBusinessEntity.FieldValues == null)
+                        continue;
+
+                    bool isExact = (bool)genericBusinessEntity.FieldValues.GetRecord("IsExact");
+                    if (isExact != exactMatch)
+                        continue;
+
+                    VRNumberPrefix vrNumberPrefix = new VRNumberPrefix()
+                    {
+                        ID = (int)genericBusinessEntity.FieldValues.GetRecord("Id"),
+                        Number = genericBusinessEntity.FieldValues.GetRecord("Number") as string,
+                        Type = (Guid)genericBusinessEntity.FieldValues.GetRecord("Type"),
+                        IsExact = isExact
+                    };
+                    results.Add(vrNumberPrefix.Number, vrNumberPrefix);
                 }
 
-                return results.Count > 0 ? results : null;
+                return results;
             });
         }
     }
