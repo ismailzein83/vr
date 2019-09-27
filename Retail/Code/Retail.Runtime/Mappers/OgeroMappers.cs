@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Retail.Ogero.Business;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using Vanrise.GenericData.Business;
 using Vanrise.Integration.Entities;
 
 namespace Retail.Runtime.Mappers
@@ -20,23 +22,27 @@ namespace Retail.Runtime.Mappers
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = importedData.Reader;
 
-            var dsFieldNames = new Dictionary<Retail.Ogero.Business.DSFieldName, string>();
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.ANumber, "ANumber");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.BNumber, "BNumber");
-
             var trunkValues = new Dictionary<Retail.Ogero.Business.TrunkType, string>();
             trunkValues.Add(Retail.Ogero.Business.TrunkType.MTC, "LC");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Alfa, "FT");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Ogero, "Ogero");
 
+            var services = new List<string>() { "B21B", "C21C" };
+
             while (reader.Read())
             {
-                string cgpn;
-                string cdpn;
-                string inTrunk;
-                string outTrunk;
+                string cgpn = reader["ANumber"] as string;
+                if (!string.IsNullOrEmpty(cgpn) && cgpn.StartsWith("00"))
+                    continue;
 
-                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(reader, dsFieldNames, false, trunkValues, out cgpn, out cdpn, out inTrunk, out outTrunk);
+                string cdpn = reader["BNumber"] as string;
+                if (!string.IsNullOrEmpty(cdpn) && (cdpn.StartsWith("00") || (cdpn.Length >= 4 && services.Contains(cdpn.Substring(0, 4)))))
+                    continue;
+
+                string inTrunk = null;
+                string outTrunk = null;
+
+                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk);
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -109,25 +115,27 @@ namespace Retail.Runtime.Mappers
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = importedData.Reader;
 
-            var dsFieldNames = new Dictionary<Retail.Ogero.Business.DSFieldName, string>();
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.ANumber, "ANumber");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.BNumber, "BNumber");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.InTrunk, "IncomingRoute");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.OutTrunk, "OutgoingRoute");
-
             var trunkValues = new Dictionary<Retail.Ogero.Business.TrunkType, string>();
             trunkValues.Add(Retail.Ogero.Business.TrunkType.MTC, "LC");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Alfa, "FT");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Ogero, "Ogero");
 
+            var internationalTrunks = new List<string>() { "JU099", "JD099", "RB099" };
+
             while (reader.Read())
             {
-                string cgpn;
-                string cdpn;
-                string inTrunk;
-                string outTrunk;
+                string cgpn = reader["ANumber"] as string;
+                string cdpn = reader["BNumber"] as string;
+                string inTrunk = reader["IncomingRoute"] as string;
+                string outTrunk = reader["OutgoingRoute"] as string;
 
-                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(reader, dsFieldNames, true, trunkValues, out cgpn, out cdpn, out inTrunk, out outTrunk);
+                if (!string.IsNullOrEmpty(cgpn) && cgpn.StartsWith("00") && !string.IsNullOrEmpty(inTrunk) && internationalTrunks.Contains(inTrunk.Trim()))
+                    continue;
+
+                if (!string.IsNullOrEmpty(cdpn) && cdpn.StartsWith("00") && !string.IsNullOrEmpty(outTrunk) && internationalTrunks.Contains(outTrunk.Trim()))
+                    continue;
+
+                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk);
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -196,25 +204,29 @@ namespace Retail.Runtime.Mappers
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = importedData.Reader;
 
-            var dsFieldNames = new Dictionary<Retail.Ogero.Business.DSFieldName, string>();
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.ANumber, "CallingPartyNumber");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.BNumber, "CalledPartyNumber");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.InTrunk, "IncomingTrunkGroupNumberCIC");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.OutTrunk, "OutgoingTrunkGroupNumberCIC");
-
             var trunkValues = new Dictionary<Retail.Ogero.Business.TrunkType, string>();
             trunkValues.Add(Retail.Ogero.Business.TrunkType.MTC, "LC");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Alfa, "FT");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Ogero, "Ogero");
 
+            var internationalTrunks = new List<string> { "JU049", "JD049", "RB049" };
+
             while (reader.Read())
             {
-                string cgpn;
-                string cdpn;
-                string inTrunk;
-                string outTrunk;
+                string inTrunk = reader["IncomingTrunkGroupNumberCIC"] as string;
+                int callingNADI = Utils.GetReaderValue<int>(reader, "CallingNADI");
+                if (callingNADI == 4 && !string.IsNullOrEmpty(inTrunk) && internationalTrunks.Contains(inTrunk.Trim()))
+                    continue;
 
-                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(reader, dsFieldNames, true, trunkValues, out cgpn, out cdpn, out inTrunk, out outTrunk);
+                string outTrunk = reader["OutgoingTrunkGroupNumberCIC"] as string;
+                int calledNADI = Utils.GetReaderValue<int>(reader, "CalledNADI");
+                if (calledNADI == 4 && !string.IsNullOrEmpty(outTrunk) && internationalTrunks.Contains(outTrunk.Trim()))
+                    continue;
+
+                string cgpn = reader["CallingPartyNumber"] as string;
+                string cdpn = reader["CalledPartyNumber"] as string;
+
+                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk);
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -282,12 +294,6 @@ namespace Retail.Runtime.Mappers
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = importedData.Reader;
 
-            var dsFieldNames = new Dictionary<Retail.Ogero.Business.DSFieldName, string>();
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.ANumber, "CallingNumber");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.BNumber, "CalledNumber");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.InTrunk, "MSCIncomingRoute");
-            dsFieldNames.Add(Retail.Ogero.Business.DSFieldName.OutTrunk, "MSCOutgoingRoute");
-
             var trunkValues = new Dictionary<Retail.Ogero.Business.TrunkType, string>();
             trunkValues.Add(Retail.Ogero.Business.TrunkType.MTC, "TO");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Alfa, "FT");
@@ -295,12 +301,12 @@ namespace Retail.Runtime.Mappers
 
             while (reader.Read())
             {
-                string cgpn;
-                string cdpn;
-                string inTrunk;
-                string outTrunk;
+                string cgpn = reader["CallingNumber"] as string;
+                string cdpn = reader["CalledNumber"] as string;
+                string inTrunk = reader["MSCIncomingRoute"] as string;
+                string outTrunk = reader["MSCOutgoingRoute"] as string;
 
-                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(reader, dsFieldNames, true, trunkValues, out cgpn, out cdpn, out inTrunk, out outTrunk);
+                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk);
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
