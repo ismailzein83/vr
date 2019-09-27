@@ -114,9 +114,16 @@
         }
 
         function buildActionObjectFromScope() {
-            var actionObject = directiveAPI.getData();
-            actionObject.ConfigId = actionTypeTemplateConfig.ExtensionConfigurationId;
-            actionObject.ActionType = actionTypeTemplateConfig.Title;
+            var actionObject;
+
+            if (directiveAPI != undefined)
+                actionObject = directiveAPI.getData();
+
+            if (actionObject != undefined && actionTypeTemplateConfig != undefined) {
+                actionObject.ConfigId = actionTypeTemplateConfig.ExtensionConfigurationId;
+                actionObject.ActionType = actionTypeTemplateConfig.Title;
+            }
+
             return actionObject;
         }
     }
