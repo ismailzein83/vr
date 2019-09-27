@@ -443,6 +443,12 @@
     <None Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="WhS_Invoice\Reports\ST\DefaultSupplierInvoiceItemsByCurrencyReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="WhS_Invoice\Reports\ST\DefaultSupplierInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="WhS_Invoice\Reports\Vtel\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </None>
@@ -500,6 +506,13 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultSupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultSupplierInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\ST\DefaultCustomerInvoiceItemsByCurrencyReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\ST\DefaultCustomerInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\ST\SettlementInvoiceReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
