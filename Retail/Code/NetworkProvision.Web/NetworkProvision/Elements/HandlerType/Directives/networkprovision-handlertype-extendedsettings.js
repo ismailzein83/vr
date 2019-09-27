@@ -126,7 +126,7 @@ app.directive('networkprovisionHandlertypeExtendedsettings', ['NetworkProvision_
         }
 
         function getTamplate(attrs) {
-            var label = 'Handler Type';
+            var label = 'label="Handler Type"';
             if (attrs.hidelabel != undefined) {
                 label = '';
             }

@@ -1,1 +1,15 @@
-﻿
+﻿<vr-row>
+    <vr-validator validate="scopeModel.customCodeHasErrorsValidator()">
+        <vr-columns width="1/2row">
+            <vr-textarea value="scopeModel.customCode" label="Code" rows="20"></vr-textarea>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textarea value="scopeModel.namespaceMembers" label="Namespace Members" rows="20"></vr-textarea>
+        </vr-columns>
+    </vr-validator>
+</vr-row>
+<vr-row>
+    <vr-columns colnum="1">
+        <b><a style="cursor:pointer;font-size:14px" ng-click="scopeModel.tryCompileCustomCode()">Compile</a></b>
+    </vr-columns>
+</vr-row> 

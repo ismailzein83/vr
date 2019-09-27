@@ -12,9 +12,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(NetworkProvision_ModuleConfig.moduleName, controllerName, 'GetHandlerTypeExtendedSettingsConfigs'));
         }
 
-        return ({
+        function TryCompileCustomCode(customCodeObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(NetworkProvision_ModuleConfig.moduleName, controllerName, 'TryCompileCustomCode'), customCodeObj);
+        }
+
+        return {
             GetHandlerTypeExtendedSettingsConfigs: GetHandlerTypeExtendedSettingsConfigs,
-        });
+            TryCompileCustomCode: TryCompileCustomCode
+        };
     }
 
     appControllers.service('NetworkProvision_HandlerTypeAPIService', handlerTypeAPIService);

@@ -1,5 +1,5 @@
-﻿using System;
-using NetworkProvision.Entities;
+﻿using NetworkProvision.Entities;
+using System;
 
 namespace NetworkProvision.Business
 {
