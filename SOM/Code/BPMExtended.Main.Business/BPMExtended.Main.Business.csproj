@@ -108,6 +108,7 @@
     <Compile Include="Request Flow Management\RevokeFlowManagement.cs" />
     <Compile Include="Request Flow Management\SuspensionFlowManagement.cs" />
     <Compile Include="Request Flow Management\TelephonyNoCablingManagement.cs" />
+    <Compile Include="Request Flow Management\UpdateAccountFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateCustomerCategoryFlowManagement.cs" />
     <Compile Include="Request Flow Management\AdministrativeComplaintFlowManagement.cs" />
     <Compile Include="Request Flow Management\CreatePaymentPlanFlowManagement.cs" />

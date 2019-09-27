@@ -335,7 +335,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/IsUsernameAvailable?username ={0}", userName));
+                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/IsUsernameAvailable?username={0}", userName));
             }
 
             return result;
@@ -349,7 +349,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/BillOnDemand?customerId ={0}&contractId={1}&simulate={2}", customerId , contractId , simulate));
+                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/BillOnDemand?customerId={0}&contractId={1}&simulate={2}", customerId , contractId , simulate));
             }
 
             return result;
@@ -362,7 +362,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/BillOnDemand?customerId ={0}&contractId={1}&simulate={2}", customerId, contractId, simulate));
+                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/BillOnDemand?customerId={0}&contractId={1}&simulate={2}", customerId, contractId, simulate));
             }
 
             return result;

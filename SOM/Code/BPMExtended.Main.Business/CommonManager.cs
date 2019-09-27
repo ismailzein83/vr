@@ -31,18 +31,20 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             EntityCollection entities;
-            Contact customerInfo;
+            Contact contactInfo = new Contact();
+            Account accountInfo = new Account();
 
             //TODO:check if contact or account
 
-            customerInfo = GetContact(contactId); 
+            if (contactId !=null) contactInfo = GetContact(contactId);
+            else accountInfo = GetAccount(accountId);
 
             // check categories catalog
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
             esq.AddColumn("Id");
             esq.AddColumn("StSkipBalanceCheck");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryID", customerInfo.CustomerCategoryID);
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryID", contactId != null? contactInfo.CustomerCategoryID : accountInfo.CustomerCategoryID);
             esq.Filters.Add(esqFirstFilter);
 
             entities = esq.GetEntityCollection(BPM_UserConnection);
@@ -61,9 +63,9 @@ namespace BPMExtended.Main.Business
                 //check customer balance
                 using (SOMClient client = new SOMClient())
                 {
-                    decimal? balance = client.Get<decimal?>(String.Format("api/SOM.ST/Billing/GetCustomerBalance?CustomerId={0}", customerInfo.CustomerId));
+                    decimal? balance = client.Get<decimal?>(String.Format("api/SOM.ST/Billing/GetCustomerBalance?CustomerId={0}", contactId != null ? contactInfo.CustomerId : accountInfo.CustomerId));
 
-                    if (balance == 0 || balance == null)
+                    if (balance == 0 || balance < 0)
                     {
                         msgCode = Constant.VALIDATION_BALANCE_VALID;
                         status = ResultStatus.Success;                        
@@ -315,7 +317,45 @@ namespace BPMExtended.Main.Business
 
         public Account GetAccount(string accountId)
         {
-            return null;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            Account account = null;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Account");
+            esq.AddColumn("Name");
+            esq.AddColumn("StCSO");
+            esq.AddColumn("StCSO.Id");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StCustomerCode");
+            esq.AddColumn("StCustomerCategoryID");
+            esq.AddColumn("StCustomerCategoryName");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", accountId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var csoId = entities[0].GetColumnValue("StCSOId");
+                var name = entities[0].GetColumnValue("Name");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var customerCode = entities[0].GetColumnValue("StCustomerCode");
+                var customerCategoryId = entities[0].GetColumnValue("StCustomerCategoryID");
+                var customerCategoryName = entities[0].GetColumnValue("StCustomerCategoryName");
+
+                account = new Account()
+                {
+                    CustomerId = customerId.ToString(),
+                    CustomerName = name.ToString(),
+                    CustomerCategoryID = customerCategoryId.ToString(),
+                    CustomerCategoryName = customerCategoryName.ToString(),
+                    CSOId = csoId.ToString(),
+                    CustomerCode = customerCode.ToString()
+
+
+                };
+            }
+            return account;
         }
 
         public void UpdateDepositDocumentId(string requestId, List<DepositDocument> depositDocumentId)
