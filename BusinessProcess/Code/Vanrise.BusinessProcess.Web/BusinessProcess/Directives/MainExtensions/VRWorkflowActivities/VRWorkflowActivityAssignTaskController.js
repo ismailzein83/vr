@@ -494,7 +494,7 @@
                 if (objValue != undefined)
                     columns.push({
                         FieldName: column.fieldName,
-                        Value: objValue,
+                        To: objValue,
                     });
             }
             return columns;
