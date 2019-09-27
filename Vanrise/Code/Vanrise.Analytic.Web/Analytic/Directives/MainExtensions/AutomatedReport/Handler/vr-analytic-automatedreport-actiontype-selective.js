@@ -129,6 +129,11 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
             var currentContext = context;
             if (currentContext == undefined)
                 currentContext = {};
+
+            currentContext.reloadActionType = function () {
+                return directiveAPI.reload();
+            };
+
             return currentContext;
         }
     }
@@ -139,7 +144,7 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
         }
         var template =
             '<vr-row>'
-                + '<vr-columns width="1/2row" colnum="{{ctrl.normalColNum}}">'
+                + '<vr-columns width="1/3row" colnum="{{ctrl.normalColNum}}">'
                     + ' <vr-select on-ready="scopeModel.onActionTypeSelectiveReady"'
                         + ' datasource="scopeModel.templateConfigs"'
                         + ' selectedvalues="scopeModel.selectedTemplateConfig"'

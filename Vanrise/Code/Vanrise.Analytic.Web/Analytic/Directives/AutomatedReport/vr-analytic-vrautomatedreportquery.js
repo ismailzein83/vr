@@ -36,7 +36,7 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
             $scope.scopeModel.columns = [];
 
             var gridAPI;
-
+       
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
             };
@@ -44,9 +44,16 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
 
                 var onQueryAdded = function (obj) {
                     $scope.scopeModel.columns.push(obj);
-                    if (context != undefined && context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
-                        context.setQueryChanges(getColumns());
+           
+                    if (context != undefined) {
+                        if (context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
+                            context.setQueryChanges(getColumns());
+                        }
+                        if (context.reloadActionType != undefined && typeof (context.reloadActionType) == 'function') {
+                            context.reloadActionType();
+                        }
                     }
+                    
                 };
                 VRAnalytic_AutomatedReportProcessScheduledService.addQuery(onQueryAdded, getContext());
             };
@@ -55,8 +62,13 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.columns, dataItem.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
                 if (index > -1) {
                     $scope.scopeModel.columns.splice(index, 1);
-                    if (context != undefined && context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
-                        context.setQueryChanges(getColumns());
+                    if (context != undefined) {
+                        if (context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
+                            context.setQueryChanges(getColumns());
+                        }
+                        if (context.reloadActionType != undefined && typeof (context.reloadActionType) == 'function') {
+                            context.reloadActionType();
+                        }
                     }
                 }
             };
@@ -100,7 +112,7 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
             };
 
             api.load = function (payload) {
-                                
+                
                 if (payload != undefined) {
                     context = payload.context;
                     var queries = payload.Queries;
@@ -149,8 +161,14 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
             var onQueryUpdated = function (obj) {
                 var index = $scope.scopeModel.columns.indexOf(object);
                 $scope.scopeModel.columns[index] = obj;
-                if (context != undefined && context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
-                    context.setQueryChanges(getColumns());
+            
+                if (context != undefined) {
+                    if (context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
+                        context.setQueryChanges(getColumns());
+                    }
+                    if (context.reloadActionType != undefined && typeof (context.reloadActionType) == 'function') {
+                        context.reloadActionType();
+                    }
                 }
             };
             VRAnalytic_AutomatedReportProcessScheduledService.editQuery(object, onQueryUpdated, getContext());
@@ -165,8 +183,6 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
             };
             return currentContext;
         };        
-
-       
     }
 
     return directiveDefinitionObject;
