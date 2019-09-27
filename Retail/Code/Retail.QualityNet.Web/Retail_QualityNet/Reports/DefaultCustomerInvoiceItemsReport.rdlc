@@ -161,12 +161,12 @@
                       <TablixBody>
                         <TablixColumns>
                           <TablixColumn>
-                            <Width>2.78946cm</Width>
+                            <Width>1.09821in</Width>
                           </TablixColumn>
                         </TablixColumns>
                         <TablixRows>
                           <TablixRow>
-                            <Height>0.98557cm</Height>
+                            <Height>0.38802in</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -201,7 +201,7 @@
                             </TablixCells>
                           </TablixRow>
                           <TablixRow>
-                            <Height>0.98557cm</Height>
+                            <Height>0.38802in</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -264,12 +264,12 @@
                       <TablixBody>
                         <TablixColumns>
                           <TablixColumn>
-                            <Width>2.71009cm</Width>
+                            <Width>1.06696in</Width>
                           </TablixColumn>
                         </TablixColumns>
                         <TablixRows>
                           <TablixRow>
-                            <Height>0.98557cm</Height>
+                            <Height>0.38802in</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -304,7 +304,7 @@
                             </TablixCells>
                           </TablixRow>
                           <TablixRow>
-                            <Height>0.98557cm</Height>
+                            <Height>0.38802in</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -365,12 +365,12 @@
                       <TablixBody>
                         <TablixColumns>
                           <TablixColumn>
-                            <Width>2.31816cm</Width>
+                            <Width>0.91266in</Width>
                           </TablixColumn>
                         </TablixColumns>
                         <TablixRows>
                           <TablixRow>
-                            <Height>0.98557cm</Height>
+                            <Height>0.38802in</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -405,7 +405,7 @@
                             </TablixCells>
                           </TablixRow>
                           <TablixRow>
-                            <Height>0.98557cm</Height>
+                            <Height>0.38802in</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -466,12 +466,12 @@
                       <TablixBody>
                         <TablixColumns>
                           <TablixColumn>
-                            <Width>3.34702cm</Width>
+                            <Width>1.31772in</Width>
                           </TablixColumn>
                         </TablixColumns>
                         <TablixRows>
                           <TablixRow>
-                            <Height>0.98557cm</Height>
+                            <Height>0.38802in</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -506,7 +506,7 @@
                             </TablixCells>
                           </TablixRow>
                           <TablixRow>
-                            <Height>0.98557cm</Height>
+                            <Height>0.38802in</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -2739,10 +2739,11 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
+        <DataSetName>InvoiceHeader</DataSetName>
         <Top>0.11333in</Top>
         <Left>0.13417in</Left>
         <Height>2.57449in</Height>
-        <Width>8.16514in</Width>
+        <Width>8.16513in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2822,6 +2823,51 @@
     <Style />
   </Page>
   <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="VanriseEntities">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>5cc14ae4-d1a4-45da-9afc-549a6fe722f3</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="InvoiceHeader">
+      <Query>
+        <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="TotalNumberOfCalls">
+          <DataField>TotalNumberOfCalls</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SaleAmount">
+          <DataField>SaleAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Duration">
+          <DataField>Duration</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SaleCurrency">
+          <DataField>SaleCurrency</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TotalAmount">
+          <DataField>TotalAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
+        <rd:TableName>CustomerInvoiceDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
   <ReportParameters>
     <ReportParameter Name="Image">
       <DataType>String</DataType>
