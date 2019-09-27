@@ -316,6 +316,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Data.RDB",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvision.Web", "NetworkProvision.Web\NetworkProvision.Web.csproj", "{295B3760-4294-4E59-8A7E-A12FC2EB9A26}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.QualityNet", "Retail.QualityNet", "{70F55BB9-A6F5-42E8-98A2-9BE890596C6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.QualityNet.Web", "Retail.QualityNet.Web\Retail.QualityNet.Web.csproj", "{BCB6E104-379A-48F4-9A42-83F7C04BD6E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.QualityNet.Entities", "Retail.QualityNet.Entities\Retail.QualityNet.Entities.csproj", "{79DDD2A3-E477-458F-B7C8-0BC2B8566F06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.QualityNet.Business", "Retail.QualityNet.Business\Retail.QualityNet.Business.csproj", "{B4029102-E09B-4ABB-B66A-4957CD4E2873}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -872,6 +880,18 @@ Global
 		{295B3760-4294-4E59-8A7E-A12FC2EB9A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{295B3760-4294-4E59-8A7E-A12FC2EB9A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{295B3760-4294-4E59-8A7E-A12FC2EB9A26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB6E104-379A-48F4-9A42-83F7C04BD6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB6E104-379A-48F4-9A42-83F7C04BD6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB6E104-379A-48F4-9A42-83F7C04BD6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB6E104-379A-48F4-9A42-83F7C04BD6E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79DDD2A3-E477-458F-B7C8-0BC2B8566F06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79DDD2A3-E477-458F-B7C8-0BC2B8566F06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79DDD2A3-E477-458F-B7C8-0BC2B8566F06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79DDD2A3-E477-458F-B7C8-0BC2B8566F06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4029102-E09B-4ABB-B66A-4957CD4E2873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4029102-E09B-4ABB-B66A-4957CD4E2873}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4029102-E09B-4ABB-B66A-4957CD4E2873}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4029102-E09B-4ABB-B66A-4957CD4E2873}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1026,14 +1046,18 @@ Global
 		{D33B75B8-0ED9-477A-A77D-947C4173DC24} = {D7E98035-84EC-440C-8DEE-53602D374531}
 		{8D0CBFF6-724D-4E96-8687-4FCDFA8917E2} = {D7E98035-84EC-440C-8DEE-53602D374531}
 		{295B3760-4294-4E59-8A7E-A12FC2EB9A26} = {D7E98035-84EC-440C-8DEE-53602D374531}
+		{70F55BB9-A6F5-42E8-98A2-9BE890596C6C} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{BCB6E104-379A-48F4-9A42-83F7C04BD6E3} = {70F55BB9-A6F5-42E8-98A2-9BE890596C6C}
+		{79DDD2A3-E477-458F-B7C8-0BC2B8566F06} = {70F55BB9-A6F5-42E8-98A2-9BE890596C6C}
+		{B4029102-E09B-4ABB-B66A-4957CD4E2873} = {70F55BB9-A6F5-42E8-98A2-9BE890596C6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 130
+		SccNumberOfProjects = 133
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = Retail.sln
@@ -1551,5 +1575,17 @@ Global
 		SccProjectTopLevelParentUniqueName129 = Retail.sln
 		SccProjectName129 = NetworkProvision.Web
 		SccLocalPath129 = NetworkProvision.Web
+		SccProjectUniqueName130 = Retail.QualityNet.Web\\Retail.QualityNet.Web.csproj
+		SccProjectTopLevelParentUniqueName130 = Retail.sln
+		SccProjectName130 = Retail.QualityNet.Web
+		SccLocalPath130 = Retail.QualityNet.Web
+		SccProjectUniqueName131 = Retail.QualityNet.Entities\\Retail.QualityNet.Entities.csproj
+		SccProjectTopLevelParentUniqueName131 = Retail.sln
+		SccProjectName131 = Retail.QualityNet.Entities
+		SccLocalPath131 = Retail.QualityNet.Entities
+		SccProjectUniqueName132 = Retail.QualityNet.Business\\Retail.QualityNet.Business.csproj
+		SccProjectTopLevelParentUniqueName132 = Retail.sln
+		SccProjectName132 = Retail.QualityNet.Business
+		SccLocalPath132 = Retail.QualityNet.Business
 	EndGlobalSection
 EndGlobal

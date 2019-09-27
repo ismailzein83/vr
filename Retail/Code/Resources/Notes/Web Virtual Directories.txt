@@ -44,3 +44,4 @@ appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/TestCallAnalysis /ph
 appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/RecordAnalysis /physicalPath:C:\TFS\Retail\Code\RecordAnalysis.Web\RecordAnalysis
 appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_Billing /physicalPath:C:\TFS\Retail\Code\Retail.Billing.Web\Retail_Billing
 appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_NIM /physicalPath:C:\TFS\Retail\Code\Retail.NIM.Web\Retail_NIM
+appcmd add vdir /app.name:Retail.Web/ /path:/Client/Modules/Retail_QualityNet /physicalPath:C:\TFS\Retail\Code\Retail.QualityNet.Web\Retail_QualityNet

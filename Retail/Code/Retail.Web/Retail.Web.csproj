@@ -1196,6 +1196,18 @@
       <Project>{6ef9b143-40da-4ef9-8f13-bfe72ba0c2fe}</Project>
       <Name>Retail.Ogero.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.QualityNet.Business\Retail.QualityNet.Business.csproj">
+      <Project>{b4029102-e09b-4abb-b66a-4957cd4e2873}</Project>
+      <Name>Retail.QualityNet.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.QualityNet.Entities\Retail.QualityNet.Entities.csproj">
+      <Project>{79ddd2a3-e477-458f-b7c8-0bc2b8566f06}</Project>
+      <Name>Retail.QualityNet.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.QualityNet.Web\Retail.QualityNet.Web.csproj">
+      <Project>{bcb6e104-379a-48f4-9a42-83f7c04bd6e3}</Project>
+      <Name>Retail.QualityNet.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.RA.Business\Retail.RA.Business.csproj">
       <Project>{87cd3228-cc6d-4dd7-8f3d-3f1f9b8567e9}</Project>
       <Name>Retail.RA.Business</Name>
