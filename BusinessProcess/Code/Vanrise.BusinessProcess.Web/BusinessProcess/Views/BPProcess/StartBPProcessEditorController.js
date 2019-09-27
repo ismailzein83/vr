@@ -131,21 +131,18 @@
             var createProcessInput;
             if (bpDefinitionDirectiveApi != undefined) {
                 createProcessInput = bpDefinitionDirectiveApi.getData();
+            }
 
-                if (createProcessInput == undefined)
-                    createProcessInput = {};
+            if (createProcessInput == undefined)
+                createProcessInput = {};
 
-                if (createProcessInput.InputArguments == undefined)
-                    createProcessInput.InputArguments = {};
-
-                if (genericBEActionSettings.InputArgumentsMapping != undefined) {
-                    for (var i = 0; i < genericBEActionSettings.InputArgumentsMapping.length; i++) {
-                        var inputArgumentMapped = genericBEActionSettings.InputArgumentsMapping[i];
-                        createProcessInput.InputArguments[inputArgumentMapped.InputArgumentName] = genericBusinessEntity.FieldValues[inputArgumentMapped.MappedFieldName].Value;
-                    }
+            if (createProcessInput.InputArguments == undefined)
+                createProcessInput.InputArguments = {};
+            if (genericBEActionSettings.InputArgumentsMapping != undefined) {
+                for (var i = 0; i < genericBEActionSettings.InputArgumentsMapping.length; i++) {
+                    var inputArgumentMapped = genericBEActionSettings.InputArgumentsMapping[i];
+                    createProcessInput.InputArguments[inputArgumentMapped.InputArgumentName] = genericBusinessEntity.FieldValues[inputArgumentMapped.MappedFieldName].Value;
                 }
-
-
             }
             return createProcessInput;
         }
