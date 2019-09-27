@@ -156,6 +156,34 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public int? GetPendingDaysBeforeCancellingRequest() {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string pendindDays = String.Empty;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("Id");
+            esq.AddColumn("StCancelRequestAfter");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "72F3DDE4-C52B-4978-BB59-BA2B3A92ED9C");
+
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                pendindDays = (string)entity.GetColumnValue("StCancelRequestAfter");
+
+            }
+            if (String.IsNullOrEmpty(pendindDays))
+            return null;
+            return  int.Parse(pendindDays);
+        }
+
         public string GetRatePlanNameFromCatalog(string rateplanId)
         {
             string ratePlanName = null;

@@ -345,37 +345,41 @@ namespace BPMExtended.Main.Business
 
         public void ChangePendingCustomerReturnToProgress()
         {
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            IEntitySchemaQueryFilterItem esqSecondFilter;
-            IEntitySchemaQueryFilterItem esqThirdFilter;
-
-
-            var recordSchema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
-            var recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
-
-            var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
-            DateTime dateNow = DateTime.Today;
-            DateTime lastPendingDate= dateNow.AddDays(-45);
-            eSQ.AddAllSchemaColumns();
-            esqFirstFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.LessOrEqual, "StLastPendingCustomerReturn", lastPendingDate);
-            esqSecondFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StMarkAsCancelled", false);
-            esqThirdFilter= eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", Constant.PENDING_CUSTOMER_RETURN_STATUS);
-
-            eSQ.Filters.Add(esqFirstFilter);
-            eSQ.Filters.Add(esqSecondFilter);
-            eSQ.Filters.Add(esqThirdFilter);
-
-            var collections = eSQ.GetEntityCollection(BPM_UserConnection);
-            if (collections != null)
+            CatalogManager catalogManager = new CatalogManager();
+            int? pendingDays = catalogManager.GetPendingDaysBeforeCancellingRequest();
+            if (pendingDays.HasValue)
             {
-                foreach (var collec in collections)
+                IEntitySchemaQueryFilterItem esqFirstFilter;
+                IEntitySchemaQueryFilterItem esqSecondFilter;
+                IEntitySchemaQueryFilterItem esqThirdFilter;
+
+
+                var recordSchema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
+                var recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
+
+                var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+                DateTime dateNow = DateTime.Today;
+                DateTime lastPendingDate = dateNow.AddDays(-pendingDays.Value);
+                eSQ.AddAllSchemaColumns();
+                esqFirstFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.LessOrEqual, "StLastPendingCustomerReturn", lastPendingDate);
+                esqSecondFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StMarkAsCancelled", false);
+                esqThirdFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", Constant.PENDING_CUSTOMER_RETURN_STATUS);
+
+                eSQ.Filters.Add(esqFirstFilter);
+                eSQ.Filters.Add(esqSecondFilter);
+                eSQ.Filters.Add(esqThirdFilter);
+
+                var collections = eSQ.GetEntityCollection(BPM_UserConnection);
+                if (collections != null)
                 {
-                    recordEntity = collec;
-                    recordEntity.SetColumnValue("StMarkAsCancelled", true);
-                    recordEntity.Save();
+                    foreach (var collec in collections)
+                    {
+                        recordEntity = collec;
+                        recordEntity.SetColumnValue("StMarkAsCancelled", true);
+                        recordEntity.Save();
+                    }
                 }
             }
-
         }
         #endregion
 
