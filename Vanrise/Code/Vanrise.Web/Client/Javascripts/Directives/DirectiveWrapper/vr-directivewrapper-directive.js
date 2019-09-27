@@ -19,7 +19,9 @@ app.directive('vrDirectivewrapper', ['$compile', '$injector', function ($compile
                         iElem.off();
                         directiveWatch();
                     });
-                    var directiveWatch =  $scope.$watch(iAttrs.directive, function () {
+                    var valueToWatch = iAttrs.valuetowatch != undefined ? iAttrs.valuetowatch : iAttrs.directive;
+
+                    var directiveWatch = $scope.$watch(valueToWatch, function () {
                         var directive = $scope.$eval(iAttrs.directive);
                         if (directive != undefined) {
                             if (!$injector.has(attrs.$normalize(directive) + 'Directive'))
