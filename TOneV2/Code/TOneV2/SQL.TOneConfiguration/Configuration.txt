@@ -1,5 +1,12 @@
 ﻿Common
-Common.PostDeployment.sql
+VR_Common.json
+VR_Bank.json
+VR_Countries.json
+VR_Currency.json
+VR_ExclusiveSession.json
+VR_GoogleAnalytics.json
+VR_RateType.json
+VR_TimeZone.json
 VR_Localizalion.json
 VR_Security.json
 VR_BusinessProcess.json

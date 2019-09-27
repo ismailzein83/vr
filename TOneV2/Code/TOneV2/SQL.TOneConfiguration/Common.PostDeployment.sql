@@ -1,4 +1,53 @@
-﻿/*
+﻿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--Make sure to use same .json file using DEVTOOLS under http://192.168.110.185:8037
+--this file is split into these files VR_Bank.json, VR_Common.json, VR_Countries.json, VR_Currency.json, VR_ExclusiveSession.json, VR_GoogleAnalytics.json, VR_RateType.json, VR_TimeZone.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 Post-Deployment Script Template							
 --------------------------------------------------------------------------------------
  This file contains SQL statements that will be appended to the build script.		

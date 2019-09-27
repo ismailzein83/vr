@@ -1038,5 +1038,13 @@
     <None Include="VRJSON_PostScripts\TOne\WhS_AccountManager.json" />
     <None Include="VRJSON_PostScripts\TOne\ST.json" />
     <None Include="VRJSON_PostScripts\Common\VR_CentralLog.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_Countries.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_RateType.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_TimeZone.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_Currency.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_Bank.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_ExclusiveSession.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_GoogleAnalytics.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_Common.json" />
   </ItemGroup>
 </Project>
