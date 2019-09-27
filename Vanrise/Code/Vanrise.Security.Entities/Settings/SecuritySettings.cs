@@ -92,6 +92,8 @@ namespace Vanrise.Security.Entities
                 _sessionExpirationInMinutes = value;
             }
         }
+
+        public ReceivedRequestLogSettings LogSettings { get; set; }
     }
 
 }

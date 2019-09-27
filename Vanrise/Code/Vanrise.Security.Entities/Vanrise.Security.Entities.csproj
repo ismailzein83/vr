@@ -103,6 +103,7 @@
     <Compile Include="SecurityProvider\SecurityProviderSettings.cs" />
     <Compile Include="Settings\MailMessageTemplateSettings.cs" />
     <Compile Include="Settings\PasswordSettings.cs" />
+    <Compile Include="Settings\ReceivedRequestLogSettings.cs" />
     <Compile Include="Settings\SecuritySettings.cs" />
     <Compile Include="SystemAction\SystemAction.cs" />
     <Compile Include="Tenant\Tenant.cs" />
