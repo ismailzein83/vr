@@ -842,14 +842,30 @@
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "Module",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "a7e56800-22dc-40c3-b143-454b3291772d",
+              "Name": "Analytics Management",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "Icon": null,
+              "Rank": 3,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-09-27T16:08:41.89",
+              "RenderedAsView": null
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -936,42 +952,95 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "a7e56800-22dc-40c3-b143-454b3291772d",
-              "Name": "Analytics Management",
-              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "Icon": null,
-              "Rank": 10,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.877",
-              "RenderedAsView": null
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '433656c3-c4eb-40c2-aed9-4bccc4ce83fb'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "View",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "1faa2b35-b804-4ad7-9d98-0f933cd36150",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
+              "Name": "Tables",
+              "Title": "Analytic Table",
+              "Url": "#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticTableManagement",
+              "Module": "a7e56800-22dc-40c3-b143-454b3291772d",
+              "ActionNames": "VR_Analytic/AnalyticTable/GetFilteredAnalyticTables",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 2,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-09-27T16:08:41.89"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "3de2e950-f619-4c54-a999-507bf2e0cd39",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
+              "Name": "Reports",
+              "Title": "Analytic Report",
+              "Url": "#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticReportManagement",
+              "Module": "a7e56800-22dc-40c3-b143-454b3291772d",
+              "ActionNames": "VR_Analytic/AnalyticReport/GetFilteredAnalyticReports",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 3,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-09-27T16:08:41.89"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d69aafd7-6630-43a1-aa57-548ea0e9c1ee",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
+              "Name": "Data Analysis Definitions",
+              "Title": "Data Analysis Definitions",
+              "Url": "#/view/Analytic/Views/DataAnalysis/DataAnalysisDefinition/DataAnalysisDefinitionManagement",
+              "Module": "a7e56800-22dc-40c3-b143-454b3291772d",
+              "ActionNames": "VR_Analytic/DataAnalysisDefinition/GetFilteredDataAnalysisDefinitions",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 4,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-09-27T16:08:41.893"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "adbb44fe-5470-413c-a5f6-8ae8c585fa31",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
+              "Name": "Report Generation",
+              "Title": "Report Generation",
+              "Url": "#/view/Analytic/Views/VRReportGeneration/VRReportGenerationManagement",
+              "Module": "eb303a61-929a-4d33-bf50-18f40308bc86",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Analytic.Business.VRReportGenerationViewSettings, Vanrise.Analytic.Business\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 35,
+              "CreatedTime": "2019-09-11T17:40:43.99",
+              "LastModifiedTime": "2019-09-27T16:08:42.337"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -1072,88 +1141,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "1faa2b35-b804-4ad7-9d98-0f933cd36150",
-              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
-              "Name": "Tables",
-              "Title": "Analytic Table",
-              "Url": "#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticTableManagement",
-              "Module": "a7e56800-22dc-40c3-b143-454b3291772d",
-              "ActionNames": "VR_Analytic/AnalyticTable/GetFilteredAnalyticTables",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 2,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.877"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "3de2e950-f619-4c54-a999-507bf2e0cd39",
-              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
-              "Name": "Reports",
-              "Title": "Analytic Report",
-              "Url": "#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticReportManagement",
-              "Module": "a7e56800-22dc-40c3-b143-454b3291772d",
-              "ActionNames": "VR_Analytic/AnalyticReport/GetFilteredAnalyticReports",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 3,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.877"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "d69aafd7-6630-43a1-aa57-548ea0e9c1ee",
-              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
-              "Name": "Data Analysis Definitions",
-              "Title": "Data Analysis Definitions",
-              "Url": "#/view/Analytic/Views/DataAnalysis/DataAnalysisDefinition/DataAnalysisDefinitionManagement",
-              "Module": "a7e56800-22dc-40c3-b143-454b3291772d",
-              "ActionNames": "VR_Analytic/DataAnalysisDefinition/GetFilteredDataAnalysisDefinitions",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 4,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.877"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "adbb44fe-5470-413c-a5f6-8ae8c585fa31",
-              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
-              "Name": "Report Generation",
-              "Title": "Report Generation",
-              "Url": "#/view/Analytic/Views/VRReportGeneration/VRReportGenerationManagement",
-              "Module": "eb303a61-929a-4d33-bf50-18f40308bc86",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Analytic.Business.VRReportGenerationViewSettings, Vanrise.Analytic.Business\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 150,
-              "CreatedTime": "2019-09-11T17:40:43.99",
-              "LastModifiedTime": "2019-09-11T17:40:43.99"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '433656c3-c4eb-40c2-aed9-4bccc4ce83fb'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
