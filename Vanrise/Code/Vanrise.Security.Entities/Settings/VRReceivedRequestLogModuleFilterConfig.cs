@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Vanrise.Security.Entities.Settings
+namespace Vanrise.Security.Entities
 {
     public class VRReceivedRequestLogModuleFilterConfig: ExtensionConfiguration
     {
