@@ -17,32 +17,26 @@ namespace Retail.Ogero.Business
 
         static VRNumberPrefixManager s_NumberPrefixManager = new VRNumberPrefixManager();
 
-        public static bool IncludeCDR(IDataReader reader, Dictionary<DSFieldName, string> dsFieldNames, bool getTrunksFromReader, Dictionary<TrunkType, string> trunkValues,
-            out string cgpn, out string cdpn, out string inTrunk, out string outTrunk)
+        public static bool IncludeCDR(Dictionary<TrunkType, string> trunkValues, ref string cgpn, ref string cdpn, ref string inTrunk, ref string outTrunk)
         {
-            string oldInTrunk = null;
-            string oldOutTrunk = null;
+            RemovePrefix(ref cgpn, "961", 10);
+            RemovePrefix(ref cdpn, "961", 10);
 
-            if (getTrunksFromReader)
+            Guid? cgpnPrefixType = null;
+            Guid? cdpnPrefixType = null;
+
+            if (IsANumberValid(cgpn))
             {
-                oldInTrunk = reader[dsFieldNames[DSFieldName.InTrunk]] as string;
-                oldOutTrunk = reader[dsFieldNames[DSFieldName.OutTrunk]] as string;
+                inTrunk = GetTrunkValue(cgpn, inTrunk, trunkValues, false, out cgpnPrefixType);
+                AddPrefix(ref cgpn, "0", cgpnPrefixType);
             }
 
-            cgpn = reader[dsFieldNames[DSFieldName.ANumber]] as string;
-            cdpn = reader[dsFieldNames[DSFieldName.BNumber]] as string;
-
-            RemovePrefix(ref cgpn, "961");
-            RemovePrefix(ref cdpn, "961");
-
-            Guid? cgpnPrefixType;
-            Guid? cdpnPrefixType;
-
-            inTrunk = GetTrunkValue(cgpn, oldInTrunk, trunkValues, out cgpnPrefixType);
-            outTrunk = GetTrunkValue(cdpn, oldOutTrunk, trunkValues, out cdpnPrefixType);
-
-            AddPrefix(ref cgpn, "0", cgpnPrefixType);
-            AddPrefix(ref cdpn, "0", cdpnPrefixType);
+            bool isBNumberShortNumber;
+            if (IsBNumberValid(cdpn, out isBNumberShortNumber))
+            {
+                outTrunk = GetTrunkValue(cdpn, outTrunk, trunkValues, isBNumberShortNumber, out cdpnPrefixType);
+                AddPrefix(ref cdpn, "0", cdpnPrefixType);
+            }
 
             if (cgpnPrefixType.HasValue && cdpnPrefixType.HasValue)
             {
@@ -53,13 +47,65 @@ namespace Retail.Ogero.Business
                     return false;
             }
 
-            if (cdpnPrefixType.HasValue && cdpn.Length > 8 && cdpn.StartsWith("0") && !cdpn.StartsWith("03") && s_mobileOperatorNumberPrefixes.Contains(cdpnPrefixType.Value))
+            if (cdpnPrefixType.HasValue && cdpn.Length > 8 && cdpn.StartsWith("0") && !cdpn.StartsWith("03") && !cdpn.StartsWith("010") && s_mobileOperatorNumberPrefixes.Contains(cdpnPrefixType.Value))
                 cdpn = cdpn.Substring(1);
 
             return true;
         }
 
-        private static string GetTrunkValue(string number, string oldTrunkValue, Dictionary<TrunkType, string> trunkValues, out Guid? numberPrefixType)
+        private static bool IsANumberValid(string aNumber)
+        {
+            if (string.IsNullOrEmpty(aNumber))
+                return false;
+
+            if (aNumber.Length > 8 || aNumber.Length < 7)
+                return false;
+
+            if (aNumber.Length == 7)
+            {
+                if (aNumber.StartsWith("0"))
+                    return false;
+
+                return true;
+            }
+
+            //ANumber Length is 8
+            if (aNumber.StartsWith("0"))
+                return true;
+
+            if (aNumber.StartsWith("3"))
+                return false;
+
+            Guid? aNumberPrefixType = s_NumberPrefixManager.GetNumberPrefixTypeId(aNumber, false);
+            if (!aNumberPrefixType.HasValue || !s_mobileOperatorNumberPrefixes.Contains(aNumberPrefixType.Value))
+                return false;
+
+            return true;
+        }
+
+        private static bool IsBNumberValid(string bNumber, out bool isBNumberShortNumber)
+        {
+            isBNumberShortNumber = false;
+
+            if (string.IsNullOrEmpty(bNumber))
+                return false;
+
+            if (bNumber.Length >= 7)
+                return true;
+
+            if (bNumber.Length == 6)
+                return false;
+
+            if (bNumber.Length >= 3 && bNumber.Length <= 5)
+            {
+                isBNumberShortNumber = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static string GetTrunkValue(string number, string oldTrunkValue, Dictionary<TrunkType, string> trunkValues, bool isExactMatch, out Guid? numberPrefixType)
         {
             if (!string.IsNullOrEmpty(oldTrunkValue))
             {
@@ -75,7 +121,7 @@ namespace Retail.Ogero.Business
                 }
                 else
                 {
-                    Guid? tempNumberPrefixType = s_NumberPrefixManager.GetNumberPrefixTypeId(number);
+                    Guid? tempNumberPrefixType = s_NumberPrefixManager.GetNumberPrefixTypeId(number, isExactMatch);
                     if (tempNumberPrefixType.HasValue && tempNumberPrefixType.Value == s_ogeroPrefixType)
                         numberPrefixType = s_ogeroPrefixType;
                     else
@@ -85,7 +131,7 @@ namespace Retail.Ogero.Business
                 return oldTrunkValue;
             }
 
-            numberPrefixType = s_NumberPrefixManager.GetNumberPrefixTypeId(number);
+            numberPrefixType = s_NumberPrefixManager.GetNumberPrefixTypeId(number, isExactMatch);
             if (numberPrefixType.HasValue)
             {
                 if (numberPrefixType.Value == s_mtcPrefixType)
@@ -101,9 +147,12 @@ namespace Retail.Ogero.Business
             return "Unknown";
         }
 
-        private static void RemovePrefix(ref string number, string prefix)
+        private static void RemovePrefix(ref string number, string prefix, int? minLength)
         {
             if (string.IsNullOrEmpty(number))
+                return;
+
+            if (minLength.HasValue && number.Length < minLength.Value)
                 return;
 
             if (number.StartsWith(prefix))
@@ -119,14 +168,6 @@ namespace Retail.Ogero.Business
                 (!s_mobileOperatorNumberPrefixes.Contains(numberPrefix.Value) || s_missingZeroNumberPrefixes.Contains(number.Substring(0, 2))))
                 number = string.Concat(prefix, number);
         }
-    }
-
-    public enum DSFieldName
-    {
-        ANumber = 0,
-        BNumber = 1,
-        InTrunk = 2,
-        OutTrunk = 3
     }
 
     public enum TrunkType
