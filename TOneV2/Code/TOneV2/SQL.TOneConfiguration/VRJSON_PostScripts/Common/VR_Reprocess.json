@@ -73,22 +73,21 @@
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "696f8d6e-3798-44c4-8dad-598ec4aeb875",
               "DevProjectID": "61be6341-eaf0-4106-9f28-ed202727bcd8",
               "Name": "Reprocess Definitions",
               "Title": "Reprocess Definitions",
               "Url": "#/view/Reprocess/Views/ReprocessDefinition/ReprocessDefinitionManagement",
-              "Module": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
               "ActionNames": "Reprocess/ReprocessDefinition/GetFilteredReprocessDefinitions",
               "Audience": null,
               "Content": null,
               "Settings": null,
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 25,
+              "Rank": 6,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.88"
+              "LastModifiedTime": "2019-09-27T16:08:41.92"
             }
           }
         ],

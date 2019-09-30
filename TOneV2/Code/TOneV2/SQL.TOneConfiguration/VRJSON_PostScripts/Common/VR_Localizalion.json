@@ -75,7 +75,6 @@
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "98ff7a9d-7843-4700-9131-c96c6db87836",
               "Name": "Localization",
@@ -84,10 +83,10 @@
               "DefaultViewId": null,
               "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
               "Icon": null,
-              "Rank": 3,
+              "Rank": 8,
               "AllowDynamic": false,
               "Settings": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.87",
+              "LastModifiedTime": "2019-09-27T16:08:41.92",
               "RenderedAsView": null
             }
           }
@@ -195,12 +194,11 @@
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "9ed6d4b5-ed97-48b5-9d48-1b21df197175",
               "DevProjectID": "97904d6c-150f-4654-b59e-b3c7751e6ec7",
-              "Name": "Module",
-              "Title": "Module",
+              "Name": "Modules",
+              "Title": "Modules",
               "Url": null,
               "Module": "98ff7a9d-7843-4700-9131-c96c6db87836",
               "ActionNames": null,
@@ -208,18 +206,17 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"07faa80a-a482-41b2-a7db-b0fe0bf32e0f\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 10,
+              "Rank": 3,
               "CreatedTime": "2019-04-10T10:59:04.553",
-              "LastModifiedTime": "2019-08-09T17:06:38.873"
+              "LastModifiedTime": "2019-09-27T16:08:41.92"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "4543ef53-a680-41d5-a5a1-2fba1410d3e5",
               "DevProjectID": "97904d6c-150f-4654-b59e-b3c7751e6ec7",
-              "Name": "Text Resource Translation",
-              "Title": "Text Resource Translation",
+              "Name": "Text Resource Translations",
+              "Title": "Text Resource Translations",
               "Url": null,
               "Module": "98ff7a9d-7843-4700-9131-c96c6db87836",
               "ActionNames": null,
@@ -227,18 +224,17 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"d059c743-f131-40bf-bd90-53884eb10325\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 20,
+              "Rank": 5,
               "CreatedTime": "2019-04-10T11:47:13.907",
-              "LastModifiedTime": "2019-08-09T17:06:38.873"
+              "LastModifiedTime": "2019-09-27T16:08:41.923"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "e66e0c32-33a1-4261-a578-a4fcfde01150",
               "DevProjectID": "97904d6c-150f-4654-b59e-b3c7751e6ec7",
-              "Name": "Text Resource",
-              "Title": "Text Resource",
+              "Name": "Text Resources",
+              "Title": "Text Resources",
               "Url": null,
               "Module": "98ff7a9d-7843-4700-9131-c96c6db87836",
               "ActionNames": null,
@@ -246,18 +242,17 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"abe7cdc6-90cc-4b09-a4dc-f52fa2323781\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 15,
+              "Rank": 4,
               "CreatedTime": "2019-04-10T11:21:58.507",
-              "LastModifiedTime": "2019-08-09T17:06:38.873"
+              "LastModifiedTime": "2019-09-27T16:08:41.92"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "b60b499e-5ecb-41b9-b7c1-ddcc29cab9d5",
               "DevProjectID": "97904d6c-150f-4654-b59e-b3c7751e6ec7",
-              "Name": "Language",
-              "Title": "Language",
+              "Name": "Languages",
+              "Title": "Languages",
               "Url": null,
               "Module": "98ff7a9d-7843-4700-9131-c96c6db87836",
               "ActionNames": null,
@@ -265,9 +260,9 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"b72a7d06-76c2-4462-9696-3c84375e04e4\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 5,
+              "Rank": 2,
               "CreatedTime": "2019-04-10T09:35:03.193",
-              "LastModifiedTime": "2019-08-09T17:06:38.873"
+              "LastModifiedTime": "2019-09-27T16:08:41.92"
             }
           }
         ],

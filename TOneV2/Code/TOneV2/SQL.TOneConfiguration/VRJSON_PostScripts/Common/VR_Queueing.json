@@ -65,14 +65,86 @@
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "View",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "844da1dd-e5cf-42f2-a14d-39219237ef4b",
+              "DevProjectID": "11c70b76-4fa8-4271-beb8-6b741d9a92bf",
+              "Name": "Queues",
+              "Title": "Queues",
+              "Url": "#/view/Queueing/Views/QueueInstance/QueueInstanceManagement",
+              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
+              "ActionNames": "VR_Queueing/QueueInstance/GetFilteredQueueInstances",
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.Queues\",\"ViewNameResourceKey\":\"Common.Queues\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 4,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-09-27T16:08:42.043"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "f6d44233-74bd-4103-b4a6-39b8ac300185",
+              "DevProjectID": "11c70b76-4fa8-4271-beb8-6b741d9a92bf",
+              "Name": "Queue Items",
+              "Title": "Queue Items",
+              "Url": "#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement",
+              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
+              "ActionNames": "VR_Queueing/QueueItemHeader/GetFilteredQueueItemHeader",
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.QueueItems\",\"ViewNameResourceKey\":\"Common.QueueItems\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 5,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-09-27T16:08:42.043"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "3ee0bb0a-c14a-4325-8449-ad7a148cf088",
+              "DevProjectID": "11c70b76-4fa8-4271-beb8-6b741d9a92bf",
+              "Name": "Execution Flows",
+              "Title": "Execution Flows",
+              "Url": "#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement",
+              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
+              "ActionNames": "VR_Queueing/ExecutionFlow/GetFilteredExecutionFlows",
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.ExecutionFlows\",\"ViewNameResourceKey\":\"Common.ExecutionFlows\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 3,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-09-27T16:08:42.043"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "8d33039e-fd2d-476b-a122-c7bbb238d201",
+              "DevProjectID": "11c70b76-4fa8-4271-beb8-6b741d9a92bf",
+              "Name": "Execution Flow Definitions",
+              "Title": "Execution Flow Definitions",
+              "Url": "#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement",
+              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
+              "ActionNames": "VR_Queueing/ExecutionFlowDefinition/GetFilteredExecutionFlowDefinitions",
+              "Audience": null,
+              "Content": null,
+              "Settings": "0",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 5,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-09-27T16:08:41.917"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -173,92 +245,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "844da1dd-e5cf-42f2-a14d-39219237ef4b",
-              "DevProjectID": "11c70b76-4fa8-4271-beb8-6b741d9a92bf",
-              "Name": "Queues",
-              "Title": "Queues",
-              "Url": "#/view/Queueing/Views/QueueInstance/QueueInstanceManagement",
-              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
-              "ActionNames": "VR_Queueing/QueueInstance/GetFilteredQueueInstances",
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.Queues\",\"ViewNameResourceKey\":\"Common.Queues\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 4,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:39.06"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "f6d44233-74bd-4103-b4a6-39b8ac300185",
-              "DevProjectID": "11c70b76-4fa8-4271-beb8-6b741d9a92bf",
-              "Name": "Queue Items",
-              "Title": "Queue Items",
-              "Url": "#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement",
-              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
-              "ActionNames": "VR_Queueing/QueueItemHeader/GetFilteredQueueItemHeader",
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.QueueItems\",\"ViewNameResourceKey\":\"Common.QueueItems\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 6,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:39.06"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "3ee0bb0a-c14a-4325-8449-ad7a148cf088",
-              "DevProjectID": "11c70b76-4fa8-4271-beb8-6b741d9a92bf",
-              "Name": "Execution Flows",
-              "Title": "Execution Flows",
-              "Url": "#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement",
-              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
-              "ActionNames": "VR_Queueing/ExecutionFlow/GetFilteredExecutionFlows",
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.ExecutionFlows\",\"ViewNameResourceKey\":\"Common.ExecutionFlows\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 3,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:39.057"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "8d33039e-fd2d-476b-a122-c7bbb238d201",
-              "DevProjectID": "11c70b76-4fa8-4271-beb8-6b741d9a92bf",
-              "Name": "Execution Flow Definitions",
-              "Title": "Execution Flow Definitions",
-              "Url": "#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement",
-              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
-              "ActionNames": "VR_Queueing/ExecutionFlowDefinition/GetFilteredExecutionFlowDefinitions",
-              "Audience": null,
-              "Content": null,
-              "Settings": "0",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 2,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.887"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '11c70b76-4fa8-4271-beb8-6b741d9a92bf'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
