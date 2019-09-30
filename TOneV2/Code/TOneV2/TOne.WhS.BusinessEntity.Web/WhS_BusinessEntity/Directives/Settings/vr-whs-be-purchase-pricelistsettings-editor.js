@@ -39,7 +39,7 @@ app.directive('vrWhsBePurchasePricelistsettingsEditor', ['UtilsService', 'VRUIUt
                 ctrl.onselectionchanged = function () {
                     if (ctrl.selecteSendEmailOption != undefined)
                         ctrl.isPricelistTemplateRequired = ctrl.selecteSendEmailOption.value == WhS_BE_PurchaseSendEmailEnum.No;
-                }
+                };
                 defineAPI();
             }
 
