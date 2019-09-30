@@ -222,6 +222,7 @@
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
     <Content Include="Common\Services\APIServices\PageDirectiveHostAPIService.js" />
+    <Content Include="Common\Services\APIServices\ReceivedRequestLogAPIService.js" />
     <Content Include="Common\Services\APIServices\VRDevProjectAPIService.js" />
     <Content Include="Common\Services\APIServices\ThemeExtendedAPIService.js" />
     <Content Include="Common\Services\APIServices\VRIconPathAPIService.js" />
@@ -264,6 +265,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ReceivedRequestLogController.cs" />
     <Compile Include="Controllers\VRDevProjectController.cs" />
     <Compile Include="Controllers\ThemeExtendedController.cs" />
     <Compile Include="Controllers\VRIconPathController.cs" />
