@@ -33,7 +33,7 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region Public
-        public CallDetailRequest GetCallDetails(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM, string phoneNumber, string customerName, string contactId)
+        public CallDetailRequest GetCallDetails(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM, string phoneNumber, string customerName, string contactId, string accountId)
         {
             List<CallDetails> callDetailsEntityList = new List<CallDetails>();
             var businessEntityManager = new BusinessEntityManager();
@@ -50,7 +50,7 @@ namespace BPMExtended.Main.Business
             }
                 
             var crmManager = new CRMCustomerManager();
-            var cso = crmManager.GetCSOByContactIdOrAccountId(contactId, "");
+            var cso = crmManager.GetCSOByContactIdOrAccountId(contactId, accountId);
 
             CallDetailRequest request = new CallDetailRequest()
             {
@@ -65,7 +65,7 @@ namespace BPMExtended.Main.Business
 
             return request;
         }
-        public PDFDocument CreateDocument(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM, string phoneNumber, string customerName, string contactId)
+        public PDFDocument CreateDocument(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM, string phoneNumber, string customerName, string contactId, string accountId)
         {
             PDFDocument documnt = new PDFDocument();
             // Create a new MigraDoc document
@@ -75,7 +75,7 @@ namespace BPMExtended.Main.Business
             this.document.Info.Author = "ST";
 
 
-            CallDetailRequest request = GetCallDetails(contractId, year, month, isNational, isInternational, isGSM, phoneNumber, customerName, contactId);
+            CallDetailRequest request = GetCallDetails(contractId, year, month, isNational, isInternational, isGSM, phoneNumber, customerName, contactId, accountId);
 
             var catalogManager = new CatalogManager();
             int numberOfRecordsPerPage = catalogManager.GetNumberOfRecordsPerPage();

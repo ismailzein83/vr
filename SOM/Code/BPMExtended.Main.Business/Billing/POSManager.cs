@@ -32,8 +32,9 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SubmitToPOSResponse item=null;
             bool depositFlag;
-            string contractId=null,contactId;
-            Contact contact;
+            string contractId=null,contactId,accountId;
+            Contact contact = new Contact();
+            Account account = new Account();
             EntityCollection entities;
             List<SaleService> services = new List<SaleService>();
 
@@ -54,6 +55,7 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager,  new CRMCustomerManager().GetEntityNameByRequestId(requestId));
             var stContact = esq.AddColumn("StContact.Id");
+            var stAccount = esq.AddColumn("StAccount.Id");
             esq.AddColumn("StDepositFlag");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -62,19 +64,26 @@ namespace BPMExtended.Main.Business
              entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                contactId = entities[0].GetTypedColumnValue<string>(stContact.Name).ToString();             
+                contactId = entities[0].GetTypedColumnValue<string>(stContact.Name).ToString();
+                accountId = entities[0].GetTypedColumnValue<string>(stAccount.Name).ToString();
                 depositFlag = (bool)entities[0].GetColumnValue("StDepositFlag");
-                contact = new CommonManager().GetContact(contactId);
+
+                if(contactId != null && contactId != "")
+                    contact = new CommonManager().GetContact(contactId);
+                else
+                    account = new CommonManager().GetAccount(accountId);
+
 
                 if (fees != "" && fees != null && fees != "[]")
                 {
                     services = JsonConvert.DeserializeObject<List<SaleService>>(fees);
                 }
 
+
                 var somRequestInput = new SubmitToPOSInput()
                 {
                     ContractId = contractId,
-                    CustomerCode = new CRMCustomerManager().GetCustomerInfo(contact.CustomerId).CustomerCode,
+                    CustomerCode = contactId!=null && contactId != "" ?  new CRMCustomerManager().GetCustomerInfo(contact.CustomerId).CustomerCode : new CRMCustomerManager().GetCustomerInfo(account.CustomerId).CustomerCode,
                     DepositFlag = depositFlag,
                     Services = services.Where(s=>s.UpFront==true).ToList()//filter the fees by upfront (just send the fees that have the UpFront == true)
                 };
@@ -96,12 +105,14 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             EntityCollection entities;
-            Contact contact;
+            Contact contact = new Contact();
+            Account account = new Account();
             bool item=false;
-            string contactId;
+            string contactId, accountId,customerId;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, new CRMCustomerManager().GetEntityNameByRequestId(requestId));
             var stContact = esq.AddColumn("StContact.Id");
+            var stAccount = esq.AddColumn("StAccount.Id");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -110,11 +121,16 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 contactId = entities[0].GetTypedColumnValue<string>(stContact.Name).ToString();
-                contact = new CommonManager().GetContact(contactId);
+                accountId = entities[0].GetTypedColumnValue<string>(stAccount.Name).ToString();
+
+                if (contactId != null && contactId != "")
+                    customerId = new CommonManager().GetContact(contactId).CustomerId;
+                else
+                    customerId = new CommonManager().GetAccount(accountId).CustomerId;
 
                 using (SOMClient client = new SOMClient())
                 {
-                    item = client.Get<bool>(String.Format("api/SOM.ST/Billing/ValidatePayment?CaseId={0}&CustomerCode={1}", caseId, new CRMCustomerManager().GetCustomerInfo(contact.CustomerId).CustomerCode));
+                    item = client.Get<bool>(String.Format("api/SOM.ST/Billing/ValidatePayment?CaseId={0}&CustomerCode={1}", caseId, new CRMCustomerManager().GetCustomerInfo(customerId).CustomerCode));
                 }
             }          
             return item;

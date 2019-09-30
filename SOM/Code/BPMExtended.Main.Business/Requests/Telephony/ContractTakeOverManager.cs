@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Web;
 using BPMExtended.Main.Common;
@@ -35,12 +35,15 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyContractTakeOver");
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
-            var newCustomer =  esq.AddColumn("StTargetContact.StCustomerId");
+            var newCustomerContact =  esq.AddColumn("StTargetContact.StCustomerId");
+            var newCustomerAccount = esq.AddColumn("StTargetAccount.StCustomerId");
             esq.AddColumn("StNewUserName");
             esq.AddColumn("StPassword");
             esq.AddColumn("StOldUserName");
             esq.AddColumn("StContact");
             esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StLinePathId");
@@ -55,8 +58,10 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
+                var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
-                var newCustomerId = entities[0].GetTypedColumnValue<string>(newCustomer.Name);
+                var newCustomerContactId = entities[0].GetTypedColumnValue<string>(newCustomerContact.Name);
+                var newCustomerIdAccount = entities[0].GetTypedColumnValue<string>(newCustomerAccount.Name);
                 var newUserName = entities[0].GetColumnValue("StNewUserName");
                 var divisionName = entities[0].GetColumnValue("StDivisionName");
                 var password = entities[0].GetColumnValue("StPassword");
@@ -67,7 +72,7 @@ namespace BPMExtended.Main.Business
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
                 var contactId = entities[0].GetColumnValue("StContactId");
 
-                CRMCustomerInfo info = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null);
+                CRMCustomerInfo info = contactId != null ? new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null) : new CRMCustomerManager().GetCRMCustomerInfo(null, accountId.ToString());
 
                 SOMRequestInput<ContractTakeOverRequestInput> somRequestInput = new SOMRequestInput<ContractTakeOverRequestInput>
                 {
@@ -88,7 +93,7 @@ namespace BPMExtended.Main.Business
                         NewUserName = newUserName.ToString(),
                         NewPassword = password.ToString(),
                         OldUserName= oldUserName.ToString(),
-                        NewCustomerId = newCustomerId.ToString(),
+                        NewCustomerId = newCustomerContactId !=null && newCustomerContactId != "" ? newCustomerContactId.ToString() : newCustomerIdAccount.ToString(),
                         LinePathId = linePathId.ToString(),
                         ADSLContractId = adslContractId.ToString(),
                         CSO = info.csoId

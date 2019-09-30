@@ -436,6 +436,12 @@ namespace BPMExtended.Main.Entities
         [CompletedStep("StTypeId")]
         [CompletedStepId("ee43e28d-aa12-41a3-8c97-626dcaad95b0")]
         BillOnDemandOperation = 50,
+
+        [Description("Update Account")]
+        [EntitySchemaName("StUpdateAccount")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("9129190F-6B33-43DC-B404-3198273D3962")]
+        UpdateAccount = 51,
     }
     public enum ContractStatus
     {

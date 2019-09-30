@@ -879,6 +879,83 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void UpdateAccount(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdateAccount");
+            esq.AddColumn("StFirstName");
+            esq.AddColumn("StLastName");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StAddressID");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StFloorNumber");
+            esq.AddColumn("StMiddleName");
+            esq.AddColumn("StAddressID");
+            esq.AddColumn("StCity");
+            esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StBuildingNumber");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var lastName = entities[0].GetColumnValue("StFirstName");
+                var firstName = entities[0].GetColumnValue("StLastName");
+                var middleName = entities[0].GetColumnValue("StMiddleName");
+                var addressId = entities[0].GetColumnValue("StAddressID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var street = entities[0].GetColumnValue("StStreet");
+                var building = entities[0].GetColumnValue("StBuildingNumber");
+                var floor = entities[0].GetColumnValue("StFloorNumber");
+                var city = entities[0].GetColumnValue("StCityName");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var province = entities[0].GetColumnValue("StProvinceName");
+
+                SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
+                {
+                    InputArguments = new CustomerAddressInput
+                    {
+                        City = city.ToString(),
+                        Building = building.ToString(),
+                        Floor = floor.ToString(),
+                        MiddleName = middleName.ToString(),
+                        StateProvince = province.ToString(),
+                        Region = area.ToString(),
+                        FirstName = firstName.ToString(),
+                        LastName = lastName.ToString(),
+                        AddressSeq = long.Parse(addressId.ToString()),
+                        Street = street.ToString(),
+                        Country = "206",
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            CustomerId = customerId.ToString(),
+                            RequestId = requestId.ToString()
+                        }
+                    }
+
+                };
+
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<CustomerAddressInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
+                }
+
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+            }
+
+        }
+
         public void UpdatePaymentArrangement(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table

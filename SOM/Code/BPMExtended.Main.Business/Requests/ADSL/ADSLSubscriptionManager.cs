@@ -128,7 +128,7 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var username = entities[0].GetColumnValue("StUserName");
 
-                CRMCustomerInfo info = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null);
+                CRMCustomerInfo info = contactId != null ? new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null) : new CRMCustomerManager().GetCRMCustomerInfo(null, accountId.ToString());
 
                 if (coreServices != "\"\"") listOfCoreServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
                 if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
@@ -194,7 +194,8 @@ namespace BPMExtended.Main.Business
                         ContractServices = contractServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            ContactId = contactId.ToString(),
+                            ContactId = contactId != null ? contactId.ToString() : null,
+                            AccountId = accountId != null ? accountId.ToString() : null,
                             RequestId = requestId.ToString(),
                             CustomerId = info.CustomerId
                         }

@@ -82,7 +82,7 @@ namespace BPMExtended.Main.Business
                 var locationType = entities[0].GetColumnValue("StLocationName");
                 var addressNotes = entities[0].GetColumnValue("StAddressNotes");
 
-                CRMCustomerInfo info = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null);
+                CRMCustomerInfo info = contactId != null ? new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null) : new CRMCustomerManager().GetCRMCustomerInfo(null, accountId.ToString());
 
                 if (coreServices != "\"\"") listOfCoreServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
                 if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
@@ -134,7 +134,8 @@ namespace BPMExtended.Main.Business
                         Notes = addressNotes.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            ContactId = contactId.ToString(),
+                            ContactId = contactId != null ? contactId.ToString() : null,
+                            AccountId = accountId != null ? accountId.ToString() : null,
                             RequestId = requestId.ToString(),
                             CustomerId = info.CustomerId //"CusId00026"
                         }
