@@ -9,18 +9,18 @@ namespace Vanrise.GenericData.Business
     {
         static Guid beDefinitionId = new Guid("992C93A5-0D90-41CD-8501-7235B4CAB09E");
 
-        public Guid? GetNumberPrefixTypeId(string number, bool exactMatch)
+        public Guid? GetNumberPrefixTypeId(string number, bool isExactMatch = false)
         {
             if (string.IsNullOrEmpty(number))
                 return null;
 
-            Dictionary<string, VRNumberPrefix> numberPrefixes = GetCachedNumberPrefixes(exactMatch);
+            Dictionary<string, VRNumberPrefix> numberPrefixes = GetCachedNumberPrefixes(isExactMatch);
             if (numberPrefixes == null || numberPrefixes.Count == 0)
                 return null;
 
             VRNumberPrefix vrNumberPrefix;
 
-            if (!exactMatch)
+            if (!isExactMatch)
             {
                 StringCodeIterator stringCodeIterator = new StringCodeIterator(numberPrefixes.Keys);
                 string matchingNumberPrefix = stringCodeIterator.GetLongestMatch(number);
@@ -39,9 +39,9 @@ namespace Vanrise.GenericData.Business
             return vrNumberPrefix.Type;
         }
 
-        private Dictionary<string, VRNumberPrefix> GetCachedNumberPrefixes(bool exactMatch)
+        private Dictionary<string, VRNumberPrefix> GetCachedNumberPrefixes(bool isExactMatch)
         {
-            string cacheName = exactMatch ? "GetCachedShortNumbers" : "GetCachedNumberPrefixes";
+            string cacheName = isExactMatch ? "GetCachedShortNumbers" : "GetCachedNumberPrefixes";
 
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             return genericBusinessEntityManager.GetCachedOrCreate(cacheName, beDefinitionId, () =>
@@ -58,7 +58,7 @@ namespace Vanrise.GenericData.Business
                         continue;
 
                     bool isExact = (bool)genericBusinessEntity.FieldValues.GetRecord("IsExact");
-                    if (isExact != exactMatch)
+                    if (isExact != isExactMatch)
                         continue;
 
                     VRNumberPrefix vrNumberPrefix = new VRNumberPrefix()
