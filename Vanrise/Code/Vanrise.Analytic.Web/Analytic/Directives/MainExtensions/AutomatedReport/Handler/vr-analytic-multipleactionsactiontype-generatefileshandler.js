@@ -6,7 +6,7 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -32,14 +32,14 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                 $scope.scopeModel.onActionTypeSelectorReady = function (api) {
                     actionTypeSelectorAPI = api;
                     defineAPI();
-                }
+                };
 
                 $scope.scopeModel.isAddActionButtonDisabled = function () {
                     if ($scope.scopeModel.selectedTemplateConfig != undefined)
                         return false;
                     else
                         return true;
-                }
+                };
 
                 $scope.scopeModel.addAction = function () {
                     var onActionAdded = function (action) {
@@ -47,20 +47,20 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                     };
 
                     VR_Analytic_MultipleActionsActionTypeService.addAction($scope.scopeModel.selectedTemplateConfig, onActionAdded);
-                }
+                };
 
                 $scope.scopeModel.removeAction = function (action) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, action.rowIndex, 'rowIndex');
                     if (index > -1)
                         $scope.scopeModel.datasource.splice(index, 1);
-                }
+                };
 
                 $scope.scopeModel.isValid = function () {
                     if ($scope.scopeModel.datasource == undefined || $scope.scopeModel.datasource.length == 0)
                         return 'You should add at least one Action';
 
                     return null;
-                }
+                };
 
                 $scope.gridMenuActions = [{
                     name: 'Edit',
@@ -106,7 +106,7 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
 
                         if (actions != undefined) {
                             for (var i = 0; i < actions.length; i++) {
-                                var currentAction = actions[i]
+                                var currentAction = actions[i];
                                 addActionActionTypeField(currentAction);
                                 $scope.scopeModel.datasource.push(currentAction);
                             }
@@ -126,7 +126,7 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                     return {
                         $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.MultipleActionsActionType, Vanrise.Analytic.MainExtensions",
                         Actions: actions
-                    }
+                    };
                 };
 
                 if (ctrl.onReady != undefined)
@@ -161,4 +161,4 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
         }
 
         return directiveDefinitionObject;
-    }])
+    }]);
