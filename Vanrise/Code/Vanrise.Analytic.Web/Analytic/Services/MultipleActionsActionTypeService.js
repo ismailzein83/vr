@@ -3,9 +3,10 @@
 app.service('VR_Analytic_MultipleActionsActionTypeService', ['VRModalService',
     function (VRModalService) {
 
-        function addAction(actionTypeTemplateConfig, onActionAdded) {
+        function addAction(actionTypeTemplateConfig, context, onActionAdded) {
 
             var parameters = {
+                context: context,
                 actionTypeTemplateConfig: actionTypeTemplateConfig
             };
 
@@ -17,11 +18,12 @@ app.service('VR_Analytic_MultipleActionsActionTypeService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/Analytic/Views/ActionType/ActionTypeEditor.html', parameters, settings);
         };
 
-        function editAction(actionTypeEntity, actionTypeTemplateConfig, onActionUpdated) {
+        function editAction(actionTypeEntity, actionTypeTemplateConfig, context, onActionUpdated) {
 
             var parameters = {
-                actionTypeTemplateConfig: actionTypeTemplateConfig,
-                actionTypeEntity: actionTypeEntity
+                context: context,
+                actionTypeEntity: actionTypeEntity,
+                actionTypeTemplateConfig: actionTypeTemplateConfig
             };
 
             var settings = {};

@@ -7,8 +7,9 @@
     function actionTypeEditorController($scope, VRNavigationService, VRNotificationService, VRUIUtilsService, UtilsService) {
 
         var isEditMode;
-        var actionTypeTemplateConfig;
+        var context;
         var actionTypeEntity;
+        var actionTypeTemplateConfig;
 
         var directiveAPI;
         var directiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -21,8 +22,9 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                actionTypeTemplateConfig = parameters.actionTypeTemplateConfig;
+                context = parameters.context;
                 actionTypeEntity = parameters.actionTypeEntity;
+                actionTypeTemplateConfig = parameters.actionTypeTemplateConfig;
             }
 
             isEditMode = (actionTypeEntity != undefined);
@@ -76,12 +78,11 @@
                 var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 directiveReadyDeferred.promise.then(function () {
-                    var payload;
-
+                    var payload = {
+                        context: context
+                    };
                     if (actionTypeEntity != undefined) {
-                        payload = {
-                            actionType: actionTypeEntity
-                        };
+                        payload.actionType = actionTypeEntity;
                     }
 
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadPromiseDeferred);

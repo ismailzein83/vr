@@ -21,6 +21,7 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
         function MultipleActionsActionType($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var context;
             var actionTypeSelectorAPI;
 
             function initializeController() {
@@ -46,7 +47,7 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                         $scope.scopeModel.datasource.push(action);
                     };
 
-                    VR_Analytic_MultipleActionsActionTypeService.addAction($scope.scopeModel.selectedTemplateConfig, onActionAdded);
+                    VR_Analytic_MultipleActionsActionTypeService.addAction($scope.scopeModel.selectedTemplateConfig, getContext(), onActionAdded);
                 };
 
                 $scope.scopeModel.removeAction = function (action) {
@@ -77,8 +78,12 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                     var promises = [];
                     var actions = [];
 
-                    if (payload != undefined && payload.actionType != undefined) {
-                        actions = payload.actionType.Actions;
+                    if (payload != undefined) {
+                        context = payload.context;
+
+                        if (payload.actionType != undefined) {
+                            actions = payload.actionType.Actions;
+                        }
                     }
 
                     var getAutomatedReportActionTypesTemplateConfigsPromise = getAutomatedReportHandlerTemplateConfigs();
@@ -140,7 +145,7 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                 };
 
                 var actionTemplateConfigs = getActionTemplateConfigs(actionObject);
-                VR_Analytic_MultipleActionsActionTypeService.editAction(actionObject, actionTemplateConfigs, onActionUpdated);
+                VR_Analytic_MultipleActionsActionTypeService.editAction(actionObject, actionTemplateConfigs, getContext(), onActionUpdated);
             }
 
             function getActionTemplateConfigs(actionObject) {
@@ -157,6 +162,16 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                         action.ActionType = $scope.scopeModel.templateConfigs[i].Title;
                     }
                 }
+            }
+
+            function getContext() {
+                var currentContext = context;
+
+                if (currentContext == undefined) {
+                    currentContext = {};
+                }
+
+                return currentContext;
             }
         }
 
