@@ -105,7 +105,6 @@
     <Compile Include="Settings\PasswordSettings.cs" />
     <Compile Include="Settings\ReceivedRequestLogSettings.cs" />
     <Compile Include="Settings\SecuritySettings.cs" />
-    <Compile Include="Settings\VRReceivedRequestLogModuleFilterConfig.cs" />
     <Compile Include="SystemAction\SystemAction.cs" />
     <Compile Include="Tenant\Tenant.cs" />
     <Compile Include="Tenant\TenantDetail.cs" />

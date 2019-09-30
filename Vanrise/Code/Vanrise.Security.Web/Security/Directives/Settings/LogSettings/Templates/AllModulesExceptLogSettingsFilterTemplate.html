@@ -1,0 +1,15 @@
+﻿<vr-columns colnum="12" haschildcolumns>
+    <vr-columns colnum="4">
+        <vr-textbox type="text" label="Module Name" value="scopeModel.moduleName" customvalidate="scopeModel.validateValue()"></vr-textbox>
+    </vr-columns>
+    <vr-columns withemptyline>
+        <vr-button type="Add" data-onclick="scopeModel.addModule" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>
+    </vr-columns>
+    <vr-row>
+        <vr-columns colnum="12">
+            <vr-validator validate="scopeModel.validateModules()">
+                <vr-datalist maxitemsperrow="3" datasource="scopeModel.modules" autoremoveitem="true">{{dataItem}}</vr-datalist>
+            </vr-validator>
+        </vr-columns>
+    </vr-row>
+</vr-columns>

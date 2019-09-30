@@ -41,6 +41,8 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             var mailMessageTemplateSelectorAPI;
             var mailMessageTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var loggingModuleFilterAPI;
+            var loggingModuleFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             $scope.scopeModel = {};
             $scope.scopeModel.onPasswordComplexitySelectorReady = function (api) {
@@ -84,6 +86,27 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 return false;
             };
 
+            $scope.scopeModel.onLoggingModuleFilterReady = function (api) {
+                loggingModuleFilterAPI = api;
+                loggingModuleFilterReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onEnableLoggingValueChanged = function () {
+                if ($scope.scopeModel.enableLogging) {
+                    loggingModuleFilterReadyPromiseDeferred.promise.then(function () {
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingLoggingModuleFilterDirective = value;
+                        };
+                        var payload = {};
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, loggingModuleFilterAPI, payload, setLoader);
+                    });
+                }
+                else {
+                    resetLoggingSwitches();
+                    loggingModuleFilterAPI = undefined;
+                    loggingModuleFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                }
+            };
 
             function initializeController() {
                 passwordComplexityReadyPromiseDeferred.promise.then(function () {
@@ -99,6 +122,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     var mailMessageTemplateSettingsPayload;
                     var passwordSettingsPayload;
                     var apiSettingsPayload;
+                    var loggingModuleFilter;
                     if (payload != undefined && payload.data != undefined) {
                         mailMessageTemplateSettingsPayload = payload.data.MailMessageTemplateSettings;
                         passwordSettingsPayload = payload.data.PasswordSettings;
@@ -119,6 +143,16 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                             $scope.scopeModel.sendNotification = passwordSettingsPayload.NotificationMailTemplateId != undefined;
                             $scope.scopeModel.passwordAgeInDays = passwordSettingsPayload.PasswordAgeInDays;
                             $scope.scopeModel.expirationDaysToNotify = passwordSettingsPayload.PasswordExpirationDaysToNotify;
+                        }
+                        var logSettings = payload.data.LogSettings;
+                        if (logSettings != undefined) {
+                            $scope.scopeModel.enableLogging = logSettings.EnableLogging;
+                            $scope.scopeModel.enableParametersLogging = logSettings.EnableParametersLogging;
+                            $scope.scopeModel.enableRequestHeaderLogging = logSettings.EnableRequestHeaderLogging;
+                            $scope.scopeModel.enableRequestBodyLogging = logSettings.EnableRequestBodyLogging;
+                            $scope.scopeModel.enableResponseHeaderLogging = logSettings.EnableResponseHeaderLogging;
+                            $scope.scopeModel.enableResponseBodyLogging = logSettings.EnableResponseBodyLogging;
+                            loggingModuleFilter = logSettings.Filter;
                         }
                     }
 
@@ -161,7 +195,17 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     });
                     promises.push(mailMessageTemplateSelectorLoadPromiseDeferred.promise);
 
-
+                    //Loading Logging Module Filter
+                    if ($scope.scopeModel.enableLogging) {
+                        var loggingModuleFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        loggingModuleFilterReadyPromiseDeferred.promise.then(function () {
+                            var payload = {
+                                moduleFilterSettings: loggingModuleFilter
+                            };
+                            VRUIUtilsService.callDirectiveLoad(loggingModuleFilterAPI, payload, loggingModuleFilterLoadPromiseDeferred);
+                        });
+                        promises.push(loggingModuleFilterLoadPromiseDeferred.promise);
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -188,7 +232,16 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         APISettings: apiSettingsAPI.getData(),
                         SendEmailNewUser: mailMessageTemplateSettingsAPI.getSendEmailNewUser(),
                         SendEmailOnResetPasswordByAdmin: mailMessageTemplateSettingsAPI.getSendEmailOnResetPasswordByAdmin(),
-                        SessionExpirationInMinutes: $scope.scopeModel.sessionExpirationInMinutes
+                        SessionExpirationInMinutes: $scope.scopeModel.sessionExpirationInMinutes,
+                        LogSettings: {
+                            EnableLogging: $scope.scopeModel.enableLogging,
+                            EnableParametersLogging: $scope.scopeModel.enableParametersLogging,
+                            EnableRequestHeaderLogging: $scope.scopeModel.enableRequestHeaderLogging,
+                            EnableRequestBodyLogging: $scope.scopeModel.enableRequestBodyLogging,
+                            EnableResponseHeaderLogging: $scope.scopeModel.enableResponseHeaderLogging,
+                            EnableResponseBodyLogging: $scope.scopeModel.enableResponseBodyLogging,
+                            Filter: $scope.scopeModel.enableLogging ? loggingModuleFilterAPI.getData() : undefined
+                        }
                     };
                 };
 
@@ -196,6 +249,14 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function resetLoggingSwitches() {
+                $scope.scopeModel.enableParametersLogging = false;
+                $scope.scopeModel.enableRequestHeaderLogging = false;
+                $scope.scopeModel.enableRequestBodyLogging = false;
+                $scope.scopeModel.enableResponseHeaderLogging = false;
+                $scope.scopeModel.enableResponseBodyLogging = false;
             }
         }
     }]);

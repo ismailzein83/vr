@@ -20,18 +20,45 @@ namespace Vanrise.Security.Entities
     public abstract class ModuleFilterSettings
     {
         public abstract Guid ConfigId { get; }
+        public abstract bool IsModuleApplicable(IModuleFilterApplicableContext context);
     }
 
-    public class AllModuleExcept : ModuleFilterSettings
+    public interface IModuleFilterApplicableContext
+    {
+        string ModuleName { get; }
+    }
+
+    public class ModuleFilterApplicableContext : IModuleFilterApplicableContext
+    {
+        public string ModuleName { get; set; }
+    }
+
+    public class AllModulesExcept : ModuleFilterSettings
     {
         public override Guid ConfigId { get { return new Guid("18E1ADF1-7B1E-4A4C-8C56-E7EFC1306FB1"); } }
 
         public List<string> ExcludedModules { get; set; }
+
+        public override bool IsModuleApplicable(IModuleFilterApplicableContext context)
+        {
+            if (context == null)
+                throw new NullReferenceException("Context");
+
+            return ExcludedModules.Contains(context.ModuleName) ? false : true; 
+        }
     }
 
     public class SpecificModule : ModuleFilterSettings
     {
         public override Guid ConfigId { get { return new Guid("ED560AFD-9292-4D8E-8F95-29AAEFDA013C"); } }
         public List<string> IncludedModules { get; set; }
+
+        public override bool IsModuleApplicable(IModuleFilterApplicableContext context)
+        {
+            if (context == null)
+                throw new NullReferenceException("Context");
+
+            return IncludedModules.Contains(context.ModuleName) ? true : false;
+        }
     }
 }

@@ -63,7 +63,42 @@
                 <vr-columns width="1/2row">
                     <vr-textbox type="number" decimalprecision="0" label="Session Expiration (min)" value="scopeModel.sessionExpirationInMinutes" isrequired="true" minvalue="3"></vr-textbox>
                 </vr-columns>
-            </vr-row>            
+            </vr-row>
+        </vr-tab>
+        <vr-tab header="'Logging'">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-switch value="scopeModel.enableLogging" label="Enable Logging" onvaluechanged="scopeModel.onEnableLoggingValueChanged"></vr-switch>
+                </vr-columns>
+            </vr-row>
+            <vr-fieldset header="Request" level="2" ng-show="scopeModel.enableLogging">
+                <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.enableParametersLogging" label="Parameters"></vr-switch>
+                    </vr-columns>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.enableRequestHeaderLogging" label="Request Header"></vr-switch>
+                    </vr-columns>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.enableRequestBodyLogging" label="Request Body"></vr-switch>
+                    </vr-columns>
+                </vr-row>
+            </vr-fieldset>
+            <vr-fieldset header="Response" ng-show="scopeModel.enableLogging">
+                <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.enableResponseHeaderLogging" label="Response Header"></vr-switch>
+                    </vr-columns>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.enableResponseBodyLogging" label="Response Body"></vr-switch>
+                    </vr-columns>
+                </vr-row>
+            </vr-fieldset>
+            <vr-fieldset header="Filter" ng-if="scopeModel.enableLogging">
+                <div vr-loader="scopeModel.isLoadingLoggingModuleFilterDirective">
+                    <vr-sec-logsettings-modulefilter-selective on-ready="scopeModel.onLoggingModuleFilterReady" normal-col-num="4"></vr-sec-logsettings-modulefilter-selective>
+                </div>
+            </vr-fieldset>
         </vr-tab>
     </vr-tabs>
 </vr-columns>

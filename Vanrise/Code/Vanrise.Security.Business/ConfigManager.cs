@@ -117,6 +117,12 @@ namespace Vanrise.Security.Business
             return GetSecurityProviderSettings().DefaultSecurityProviderId;
         }
 
+        public ReceivedRequestLogSettings GetReceivedRequestLogSettings()
+        {
+            ReceivedRequestLogSettings receivedRequestLogSettings = GetSecuritySettings().LogSettings;
+            receivedRequestLogSettings.ThrowIfNull("receivedRequestLogSettings");
+            return receivedRequestLogSettings;
+        }
         #endregion
 
 

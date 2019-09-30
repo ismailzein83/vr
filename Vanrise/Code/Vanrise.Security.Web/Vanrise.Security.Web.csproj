@@ -169,6 +169,11 @@
     <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-settings.js" />
     <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-selector.js" />
     <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovidersettings-staticeditor.js" />
+    <Content Include="Security\Directives\Settings\LogSettings\Templates\AllModulesExceptLogSettingsFilterTemplate.html" />
+    <Content Include="Security\Directives\Settings\LogSettings\Templates\SpecificModuleLogSettingsFilterTemplate.html" />
+    <Content Include="Security\Directives\Settings\LogSettings\vr-sec-logsettings-modulefilter-allmodulesexcept.js" />
+    <Content Include="Security\Directives\Settings\LogSettings\vr-sec-logsettings-modulefilter-selective.js" />
+    <Content Include="Security\Directives\Settings\LogSettings\vr-sec-logsettings-modulefilter-specificmodule.js" />
     <Content Include="Security\Directives\Settings\Templates\APISettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\SecuritySettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\MailMessageTemplateSettingsTemplate.html" />
