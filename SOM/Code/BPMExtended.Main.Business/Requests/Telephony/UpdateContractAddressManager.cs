@@ -68,6 +68,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StTown.Id");
             esq.AddColumn("StProvince");
             esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StLocation");
+            esq.AddColumn("StLocation.Id");
             esq.AddColumn("StStreet");
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
@@ -88,6 +90,7 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 var area = entities[0].GetColumnValue("StAreaName");
                 var province = entities[0].GetColumnValue("StProvinceName");
+                var locationType = entities[0].GetColumnValue("StLocationName");
                 var floor = entities[0].GetColumnValue("StFloor");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
                 var fees = entities[0].GetColumnValue("StOperationAddedFees");
@@ -112,6 +115,7 @@ namespace BPMExtended.Main.Business
                         Region = area.ToString(),
                         Town = town.ToString(),
                         ServiceId = serviceId.ToString(),
+                        LocationType = locationType.ToString(),
                         Street = street.ToString(),
                         Action = action,
                         PaymentData = new PaymentData()

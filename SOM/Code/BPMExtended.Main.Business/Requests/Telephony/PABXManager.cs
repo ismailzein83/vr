@@ -44,6 +44,7 @@ namespace BPMExtended.Main.Business
                 items = client.Get<List<TelephonyContractInfo>>(String.Format("api/SOM.ST/Billing/GetValidPabxPhoneNumbers?ContractId={0}&PABXServiceId={1}&CustomerId={2}", contractId, pabxServiceId,customerId));
             }
 
+            if(items !=null)
             if(items.Count > 0)
             {
 
