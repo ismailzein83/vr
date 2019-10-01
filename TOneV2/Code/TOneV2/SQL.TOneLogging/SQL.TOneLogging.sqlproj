@@ -130,6 +130,8 @@
     <Build Include="bp\Tables\BPVisualEvent.sql" />
     <Build Include="bp\Stored Procedures\sp_BPVisualEvent_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPVisualEvent_GetAfterId.sql" />
+    <Build Include="logging\Tables\ReceivedRequestLog.sql" />
+    <Build Include="logging\Stored Procedures\sp_ReceivedRequestLog_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
