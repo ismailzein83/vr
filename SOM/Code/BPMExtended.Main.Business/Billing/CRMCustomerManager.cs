@@ -619,7 +619,7 @@ namespace BPMExtended.Main.Business
 
             if (requestId != null && requestId!="")
             {
-                esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+                esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StSequenceNumber", requestId);
                 esq.Filters.Add(esqSecondFilter);
             }
 
