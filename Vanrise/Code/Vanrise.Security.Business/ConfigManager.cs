@@ -120,7 +120,7 @@ namespace Vanrise.Security.Business
         public ReceivedRequestLogSettings GetReceivedRequestLogSettings()
         {
             ReceivedRequestLogSettings receivedRequestLogSettings = GetSecuritySettings().LogSettings;
-            receivedRequestLogSettings.ThrowIfNull("receivedRequestLogSettings");
+            //receivedRequestLogSettings.ThrowIfNull("receivedRequestLogSettings");
             return receivedRequestLogSettings;
         }
         #endregion
