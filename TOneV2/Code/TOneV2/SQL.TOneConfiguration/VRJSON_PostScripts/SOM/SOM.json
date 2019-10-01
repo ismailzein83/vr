@@ -123,7 +123,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "fac9d166-18b0-4907-aa6c-b6eb04f4350c",
               "DevProjectID": "64fdbe16-5f03-47a7-b4c8-bd1f2fa2fef9",
               "Name": "External System",
@@ -141,14 +140,26 @@
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "d57da763-0a6f-4299-b5a8-b4b845d510b7",
       "Schema": "sec",
       "TableName": "BusinessEntity",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "Id": "d1f22bce-cce7-4eb1-9c07-3d1225103338",
+              "DevProjectID": "64fdbe16-5f03-47a7-b4c8-bd1f2fa2fef9",
+              "Name": "Billing_System",
+              "Title": "Billing System",
+              "ModuleId": "fac9d166-18b0-4907-aa6c-b6eb04f4350c",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"Invoke\",\"ViewLogs\"]",
+              "LastModifiedTime": "2019-04-04T15:37:44.143"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -207,26 +218,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "d1f22bce-cce7-4eb1-9c07-3d1225103338",
-              "DevProjectID": "64fdbe16-5f03-47a7-b4c8-bd1f2fa2fef9",
-              "Name": "Billing",
-              "Title": "Billing",
-              "ModuleId": "fac9d166-18b0-4907-aa6c-b6eb04f4350c",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"Invoke\",\"ViewLogs\"]",
-              "LastModifiedTime": "2019-04-04T15:37:44.143"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '64fdbe16-5f03-47a7-b4c8-bd1f2fa2fef9'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
