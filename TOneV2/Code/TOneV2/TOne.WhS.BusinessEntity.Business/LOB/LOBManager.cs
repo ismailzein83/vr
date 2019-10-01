@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
@@ -14,12 +11,29 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         static Guid _definitionID = new Guid("B546AFAF-EFE5-4923-927C-463DF21A491B");
 
-        public LOB GetLOB(Guid LOBID)
+        public IEnumerable<LOBInfo> GetLOBInfo(LOBInfoFilter filter)
         {
-            return GetCachedLOB().GetRecord(LOBID);
+            Func<LOB, bool> filterExpression = (lobEntity) =>
+            {
+                return true;
+            };
+            return GetCachedLOBs().MapRecords(LOBInfoMapper, filterExpression);
         }
 
-        private Dictionary<Guid, LOB> GetCachedLOB()
+        private LOBInfo LOBInfoMapper(LOB lob)
+        {
+            if (lob == null)
+                return null;
+
+            return new LOBInfo()
+            {
+                LOBID = lob.LOBID,
+                Name = !string.IsNullOrEmpty(lob.Name) ? lob.Name : null
+            };
+
+        }
+
+        private Dictionary<Guid, LOB> GetCachedLOBs()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedLOB", _definitionID, () =>
@@ -47,7 +61,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                 }
                 return result;
-            });                       
+            });
         }
+
     }
 }

@@ -156,6 +156,7 @@
     <Compile Include="Controllers\ANumberSaleCodeController.cs" />
     <Compile Include="Controllers\FaultTicketController.cs" />
     <Compile Include="Controllers\CustomerSoldZonesController.cs" />
+    <Compile Include="Controllers\LOBController.cs" />
     <Compile Include="Controllers\OtherRatesPreviewController.cs" />
     <Compile Include="Controllers\PortalAccountController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />
@@ -378,6 +379,7 @@
     <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\InvoiceFileNamePart\Templates\ProfileFieldFileNameTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\InvoiceFileNamePart\whs-be-invoicetype-filename-carrierprofile.js" />
+    <Content Include="WhS_BusinessEntity\Directives\LOB\vr-whs-be-lob-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\Templates\ANumberSupplierCodeGridDefinitionViewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\Templates\ANumberSaleCodeGridDefinitionViewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\whs-be-anumber-suppliercodegridview-definition.js" />
@@ -686,6 +688,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\FaultTicketAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\LOBAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\OtherRatesPreviewAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\OtherSaleRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\PortalAccountAPIService.js" />
