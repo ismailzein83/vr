@@ -79,6 +79,9 @@
     <Compile Include="Carriers\CarrierProfile\CarrierProfilePortalAccount.cs" />
     <Compile Include="CodeList\CodeListResolver.cs" />
     <Compile Include="InsertCarrierAccountOperationOutput.cs" />
+    <Compile Include="LOB\LOB.cs" />
+    <Compile Include="LOB\LOBFilter.cs" />
+    <Compile Include="LOB\LOBInfo.cs" />
     <Compile Include="ModuleName.cs" />
     <Compile Include="PointOfInterconnect\PointOfInterconnectRecordFilter.cs" />
     <Compile Include="PortalAccountEditorObject.cs" />

@@ -201,6 +201,7 @@
     <Compile Include="FinancialAccount\WHSFinancialAccountManager.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountStaticBEManager.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="LOB\LOBManager.cs" />
     <Compile Include="PointOfInterconnect\PointOfInterconnectManager.cs" />
     <Compile Include="PointOfInterconnect\PointOfInterconnectTrunksObjectTypeSettings.cs" />
     <Compile Include="PortalAccountManager.cs" />
