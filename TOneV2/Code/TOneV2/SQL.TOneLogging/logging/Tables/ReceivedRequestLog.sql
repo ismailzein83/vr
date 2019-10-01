@@ -15,6 +15,14 @@
     [ResponseBody]       NVARCHAR (MAX) NULL,
     [UserId]             INT            NULL,
     [StartDateTime]      DATETIME       NULL,
-    [EndDateTime]        DATETIME       NULL
+    [EndDateTime]        DATETIME       NULL,
+    CONSTRAINT [PK_ReceivedRequestLog] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_ReceivedRequestLog_StartDateTime]
+    ON [logging].[ReceivedRequestLog]([StartDateTime] ASC);
 
