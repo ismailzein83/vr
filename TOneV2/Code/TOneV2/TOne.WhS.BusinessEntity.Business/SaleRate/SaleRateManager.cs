@@ -677,7 +677,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             {
                                 row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
                             }
-                            row.Cells.Add(new ExportExcelCell { Value = record.Rate });
+                            else row.Cells.Add(new ExportExcelCell { Value = record.Rate });
                         }
                         sheet.Rows.Add(row);
                     }
