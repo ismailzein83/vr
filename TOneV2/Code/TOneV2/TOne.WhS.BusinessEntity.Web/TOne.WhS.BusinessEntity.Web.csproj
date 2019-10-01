@@ -233,6 +233,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PortalCarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PurchaseSendEmailEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SalePricelistPeriodEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SupplierPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CustomerTicketDetailsFieldPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ExclusiveSessionTargetIdPrefixEnum.js" />
@@ -525,6 +526,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\vr-whs-be-salerate-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CustomerSoldZones\Templates\CustomerSoldZonesGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CustomerSoldZones\vr-whs-be-customersoldzones-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Scheduled\Templates\SalePricelistNotificationScheduledTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Scheduled\whs-salepricelist-notification-scheduled.js" />
     <Content Include="WhS_BusinessEntity\Directives\ScheduleTask\Templates\SalePricelistEmailSenderTaskTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ScheduleTask\vr-whs-be-salepricelistemailsendertask.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\AutoImportSPLSettingsTemplate.html" />
@@ -783,6 +786,8 @@
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePriceListNotificationPreview.html" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePriceListNotificationPreviewController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\TemporarySalePriceListsEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistFilePreview.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistFilePreviewController.js" />

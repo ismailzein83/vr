@@ -1,0 +1,16 @@
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-whs-be-customer-selector on-ready="onCustomerSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedCustomer"
+                                     ismultipleselection></vr-whs-be-customer-selector>
+
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select label="Period"
+                   datasource="periods"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   selectedvalues="selectedPeriod"
+                   isrequired="true">
+        </vr-select>
+    </vr-columns>
+</vr-row>

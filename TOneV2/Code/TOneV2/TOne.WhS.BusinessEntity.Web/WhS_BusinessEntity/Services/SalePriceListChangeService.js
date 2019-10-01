@@ -10,7 +10,8 @@
             salePricelistFilePreview: salePricelistFilePreview,
             sendEmail: sendEmail,
             showSendPricelistsConfirmation: showSendPricelistsConfirmation,
-            openCheckPriceListPreview: openCheckPriceListPreview
+            openCheckPriceListPreview: openCheckPriceListPreview,
+            pricelistNotificationPreview: pricelistNotificationPreview
         });
 
         function previewPriceList(priceListId, onSalePriceListPreviewClosed, shouldOpenEmailPage) {
@@ -39,13 +40,21 @@
             var modalSettings = {};
             vrModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SalePricelist/SalePricelistFilePreview.html', modalParameters, modalSettings);
         }
+        function pricelistNotificationPreview(pricelistId) {
+            var modalParameters = {
+                pricelistId: pricelistId
+            };
+            var modalSettings = {};
+
+            vrModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SalePricelist/SalePriceListNotificationPreview.html', modalParameters, modalSettings);
+        }
         function sendEmail(emailResponse, onSalePriceListSendingEmail) {
 
             var parametrs =
-                    {
-                        evaluatedEmail: emailResponse.EvaluatedTemplate,
-                        saleVrFiles: emailResponse.SalePricelistVrFiles
-                    };
+            {
+                evaluatedEmail: emailResponse.EvaluatedTemplate,
+                saleVrFiles: emailResponse.SalePricelistVrFiles
+            };
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
@@ -56,7 +65,7 @@
 
         function showSendPricelistsConfirmation(customers) {
             var parameters = {
-            customers: customers,
+                customers: customers,
             };
 
             var modalSettings = {};
@@ -66,14 +75,14 @@
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onCancelSendSalePricelist = function () {
                     modalScope.modalContext.closeModal();
-                    var response={
+                    var response = {
                         decision: false
-                };
+                    };
                     deferred.resolve(response);
                 };
                 modalScope.onContinueSendSalePricelist = function () {
                     modalScope.modalContext.closeModal();
-                        var response={
+                    var response = {
                         decision: true
                     };
                     deferred.resolve(response);

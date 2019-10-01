@@ -17,5 +17,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string PriceListTypeName { get; set; }
         public string PricelistSourceName { get; set; }
         public string UserName { get; set; }
+        public string Notification { get; set; }
     }
 }

@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,12 +47,32 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetMaxSaleRateTimeStamp.cs" />
     <Compile Include="GetMaxSupplierRateTimeStamp.cs" />
     <Compile Include="GetNextOpenOrCloseSaleRateTime.cs" />
     <Compile Include="GetNextOpenOrCloseSupplierRateTime.cs" />
+    <Compile Include="InsertPricelistNotificationToDB.cs" />
+    <Compile Include="GetSalePricelistNotifications.cs" />
+    <Compile Include="SendSalePricelistEmail.cs" />
+    <Compile Include="PreparePricelistFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

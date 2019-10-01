@@ -67,6 +67,7 @@
     <Compile Include="ANumberSaleCodeDataManager.cs" />
     <Compile Include="CarrierAccountStatusHistoryDataManager.cs" />
     <Compile Include="CustomerBillingRecurringChargeDataManager.cs" />
+    <Compile Include="SalePricelistNotificationDataManager.cs" />
     <Compile Include="SupplierBillingRecurringChargeDataManager.cs" />
     <Compile Include="ZoneCodeGroupDataManager.cs" />
     <Compile Include="CodeGroupDataManager.cs" />

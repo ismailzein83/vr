@@ -24,7 +24,18 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
+        public SalePriceList GetLatestPricelist(int customerId)
+        {
+            var cachedPricelists = GetCachedSalePriceLists();
+            var customerPricelists = cachedPricelists.Values.FindAllRecords(itm => itm.OwnerId == customerId
+                                                                             && itm.OwnerType == SalePriceListOwnerType.Customer);
 
+            if (customerPricelists == null || customerPricelists.Count() == 0)
+                return null;
+
+            var orderedCustomerPricelists = customerPricelists.OrderByDescending(p => p.CreatedTime);
+            return orderedCustomerPricelists.Last();
+        }
         public void SavePriceList(ISalePricelistFileContext context)
         {
             List<NewPriceList> newPriceLists = new List<NewPriceList>();
@@ -283,7 +294,6 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SalePriceListExportExcelHandler()
             };
-
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceLists.ToBigResult(input, filterExpression, SalePricelistDetailMapper), resultProcessingHandler);
         }
         public SalePriceList GetPriceList(int priceListId)
@@ -317,12 +327,6 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListOwnerType customerOwnerType = SalePriceListOwnerType.Customer;
 
             return allSalePriceLists.Values.FindAllRecords(itm => itm.ProcessInstanceId == processInstanceId && itm.OwnerType == customerOwnerType);
-        }
-        public IEnumerable<SalePriceList> GetCustomerSalePriceListsById(long customerId)
-        {
-            Dictionary<int, SalePriceList> allSalePriceLists = GetCachedSalePriceLists();
-            SalePriceListOwnerType customerOwnerType = SalePriceListOwnerType.Customer;
-            return allSalePriceLists.Values.FindAllRecords(itm => itm.OwnerId == customerId && itm.OwnerType == customerOwnerType);
         }
         public bool IsSalePriceListDeleted(int priceListId)
         {
@@ -796,12 +800,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return salePlZoneNotifications;
         }
 
-        private List<SalePLZoneNotification> FilterSalePlZoneNotification(int customerId, List<SalePLZoneNotification> salePlZoneNotifications)
+        private List<SalePLZoneNotification> FilterSalePlZoneNotification(int customerId, List<SalePLZoneNotification> salePlZoneNotifications, RateChangeType? overrideRateChangeType = null)
         {
             // this function returns a new set of notification filtered by code based on IncludeClosedEntitiesStatus
             // if OnlyFirstTime we will show the ended codes only the first time = > in changes
             // if UntilClosureDate we will show ended codes until EED< DateTime.Now
             //if Never closed codes are not included in the pricelist sheet
+            //this function also override rate change type
 
             List<SalePLZoneNotification> filteredZoneNotifications = new List<SalePLZoneNotification>();
             var closedCodeOption = _carrierAccountManager.GetCustomerIncludeClosedEntitiesStatus(customerId);
@@ -833,7 +838,10 @@ namespace TOne.WhS.BusinessEntity.Business
                         Rate = salePlZoneNotification.Rate,
                         Increment = salePlZoneNotification.Increment
                     };
-
+                    if (overrideRateChangeType.HasValue)
+                    {
+                        filteredZoneNotification.Rate.RateChangeType = overrideRateChangeType.Value;
+                    }
                     filteredZoneNotification.Codes.AddRange(filteredCodeNotifications);
                     foreach (KeyValuePair<int, SalePLOtherRateNotification> kvp in salePlZoneNotification.OtherRateByRateTypeId)
                     {
@@ -1504,7 +1512,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Private Members
-        private IEnumerable<SalePricelistVRFile> PreparePriceListVrFiles(SalePriceList salePriceList, SalePriceListType salePriceListType, int salePricelistTemplateId, out SalePriceListType overriddenListType)
+        public IEnumerable<SalePricelistVRFile> PreparePriceListVrFiles(SalePriceList salePriceList, SalePriceListType salePriceListType, int salePricelistTemplateId, out SalePriceListType overriddenListType, RateChangeType? overrideRateChangeType = null)
         {
             var carrierAccountManager = new CarrierAccountManager();
             var salePriceListChangeManager = new SalePriceListChangeManager();
@@ -1544,7 +1552,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (var zoneNotification in customerZoneNotificationsByCurrencyId)
             {
-                var filteredNotification = FilterSalePlZoneNotification(salePriceList.OwnerId, zoneNotification.Value);
+                var filteredNotification = FilterSalePlZoneNotification(salePriceList.OwnerId, zoneNotification.Value, overrideRateChangeType);
                 VRFile vrFile = GetPriceListFile(customer.CarrierAccountId, filteredNotification, salePriceListContext.EffectiveDate,
                     overriddenListType, salePricelistTemplateId, zoneNotification.Key);
 
@@ -1823,7 +1831,9 @@ namespace TOne.WhS.BusinessEntity.Business
             UserManager userManager = new UserManager();
             pricelistDetail.UserName = userManager.GetUserName(priceList.UserId);
             pricelistDetail.CurrencyName = GetCurrencyName(priceList.CurrencyId);
-
+           int? notificationCount= new SalePricelistNotificationManager().GetSalePricelistNotificationCount(priceList.PriceListId);
+            if (notificationCount.HasValue)
+                pricelistDetail.Notification = $"{notificationCount.Value} Pricelist Notification(s)";
             return pricelistDetail;
         }
 

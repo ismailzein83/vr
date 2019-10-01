@@ -1,0 +1,21 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_SalePriceListNotificationPreviewController" vr-loader="isLoadingFilter" size="small">
+    <vr-modalbody>
+        <vr-form name="formSPreview">
+            <vr-datagrid datasource="ctrl.datasource"
+                         on-ready="onGridReady"
+                         pagingtype="'PagingOnScroll'"
+                         enableautoexport="true" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.defaultSortDirection">
+                <vr-datagridcolumn headertext="'ID'" field="'FileId'" type="'Text'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'File Name'" field="'FileName'" type="'Text'" onclicked="downloadPricelist" isclickable="true"></vr-datagridcolumn>
+
+            </vr-datagrid>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

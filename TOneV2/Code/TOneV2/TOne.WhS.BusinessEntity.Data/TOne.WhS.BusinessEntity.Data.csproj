@@ -59,6 +59,7 @@
     <Compile Include="IANumberSupplierCodeDataManager.cs" />
     <Compile Include="ICarrierAccountStatusHistoryDataManager.cs" />
     <Compile Include="ICustomerBillingRecurringChargeDataManager.cs" />
+    <Compile Include="ISalePricelistNotificationDataManager.cs" />
     <Compile Include="ISupplierBillingRecurringChargeDataManager.cs" />
     <Compile Include="IZoneCodeGroupDataManager.cs" />
     <Compile Include="ICodeGroupDataManager.cs" />

@@ -216,6 +216,7 @@
     <Compile Include="SalePriceListChange\OtherRatesPreviewManager.cs" />
     <Compile Include="SalePriceListChange\QueryHandlers\OtherRatesPreviewHandler.cs" />
     <Compile Include="SalePriceListTemplate\Context\MappedCellContext.cs" />
+    <Compile Include="SalePriceList\SalePricelistNotificationManager.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRateHistoryLocator.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRateHistoryReader.cs" />
     <Compile Include="SaleRate\History\ProductZoneRateHistoryLocator.cs" />

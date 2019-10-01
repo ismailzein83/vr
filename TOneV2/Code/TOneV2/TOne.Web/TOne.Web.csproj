@@ -1112,6 +1112,14 @@
       <Project>{c8a2cad2-1a81-4ead-8b24-5bd45b477e8b}</Project>
       <Name>TOne.WhS.BusinessEntity.APIEntities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Arguments\TOne.WhS.BusinessEntity.BP.Arguments.csproj">
+      <Project>{a8f7466d-c7bd-4ce9-ac64-e07339c0ac46}</Project>
+      <Name>TOne.WhS.BusinessEntity.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.BP\TOne.WhS.BusinessEntity.BP.csproj">
+      <Project>{dc4fca80-a859-465a-b348-6d4131554d02}</Project>
+      <Name>TOne.WhS.BusinessEntity.BP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
       <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
       <Name>TOne.WhS.BusinessEntity.Business</Name>

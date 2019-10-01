@@ -19,5 +19,10 @@
     <vr-datagridcolumn headertext="'Sent'" field="'Entity.IsSent'" disablesorting="true" fixedwidth="'30'">
         <vr-icon icontype="dataItem.Entity.IsSent"></vr-icon>
     </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Notification'" type="'Text'">
+        <vr-label isvalue="true">
+            <a href="" ng-click="dataItem.onNotificationClick()" style="white-space: pre;display:inline-block;overflow:hidden;width: 100%;text-overflow:ellipsis">{{dataItem.Notification}}</a>
+        </vr-label>
+    </vr-datagridcolumn>
 
 </vr-datagrid>

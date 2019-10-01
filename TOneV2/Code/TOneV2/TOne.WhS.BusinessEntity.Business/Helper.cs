@@ -125,6 +125,17 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
             }
         }
+        public static bool IsInCurrentPeriodRange(DateTime dateToCeck, Period period)
+        {
+            DateTime currentDate = DateTime.Now;
+
+            switch (period)
+            {
+                case Period.Monthly:
+                    return currentDate.Month == dateToCeck.Month;
+            }
+            return false;
+        }
     }
 
 }

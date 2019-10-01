@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.BP.Arguments
 {
@@ -12,11 +13,5 @@ namespace TOne.WhS.BusinessEntity.BP.Arguments
         {
             return String.Format("#BPDefinitionTitle#");
         }
-    }
-    public enum Period
-    {
-        Daily = 0,
-        Monthly = 1,
-        Yearly = 2
     }
 }

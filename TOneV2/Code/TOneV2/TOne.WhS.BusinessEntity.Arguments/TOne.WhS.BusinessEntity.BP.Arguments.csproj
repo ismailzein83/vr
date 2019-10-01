@@ -52,5 +52,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalePricelistEmailSenderProcessInput .cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754D-484C-48F7-9284-BE9B6B9D5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

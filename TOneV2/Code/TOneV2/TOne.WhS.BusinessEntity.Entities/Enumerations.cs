@@ -41,4 +41,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         SupplierPostpaid = 3,
         Netting = 4
     }
+    public enum Period
+    {
+        Monthly = 0
+    }
 }
