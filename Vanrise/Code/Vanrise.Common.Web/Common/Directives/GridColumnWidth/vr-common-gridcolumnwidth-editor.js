@@ -12,7 +12,7 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                 showplaceholder: '@',
             },
             controller: function ($scope, $element, $attrs) {
-                var ctrl = this;              
+                var ctrl = this;
                 $scope.selectorColNum = 8;
                 $scope.textboxColNum = 4;
                 $scope.hintColNum = 1;
@@ -132,24 +132,24 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                 fixedWidthPlaceHolder = 'placeholder="Fixed Width Value"';
                 listViewWidthPlaceHolder = 'placeholder="List Width Value"';
             }
-            return '<vr-common-gridwidthfactor-selector ' + usedingridcell + '  normal-col-num="{{selectorColNum}}"' + showplaceholder+'  on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
-                   + hidelabel
-                   + ' ></vr-common-gridwidthfactor-selector>'
-                + '<vr-columns colnum="{{textboxColNum}}"' + withchild + hidelabel + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue">'
-                + '<vr-textbox type="number" ' + fixedWidthPlaceHolder+"'"
-                    + fixedLabel +
-                   '  value="scopeModel.fixedWidth" decimalprecision="0" isrequired="scopeModel.widthOption.value == scopeModel.fixedWidthValue "></vr-textbox>'
-                   + '</vr-columns>'
-                + '<vr-columns colnum="{{hintColNum}}"  ' + withchild + hidelabel + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue && showHint " >'
-                        + '<vr-hint value="Fixed Width"></vr-hint>'
-                   + '</vr-columns>'
-                + '<vr-columns colnum="{{textboxColNum}}"' + withchild + hidelabel+ '>'
-                   + '<vr-textbox type="number" '
+            return '<vr-common-gridwidthfactor-selector ' + usedingridcell + '  normal-col-num="{{selectorColNum}}"' + showplaceholder + '  on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
+                + hidelabel
+                + ' ></vr-common-gridwidthfactor-selector>'
+                + '<vr-columns colnum="{{textboxColNum}}"' + withchild + ' ' + hidelabel + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue">'
+                + '<vr-textbox type="number" ' + fixedWidthPlaceHolder + "'"
+                + fixedLabel +
+                '  value="scopeModel.fixedWidth" decimalprecision="0" isrequired="scopeModel.widthOption.value == scopeModel.fixedWidthValue "></vr-textbox>'
+                + '</vr-columns>'
+                + '<vr-columns colnum="{{hintColNum}}"  ' + withchild + ' ' + hidelabel + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue && showHint " >'
+                + '<vr-hint value="Fixed Width"></vr-hint>'
+                + '</vr-columns>'
+                + '<vr-columns colnum="{{textboxColNum}}"' + withchild + ' ' + hidelabel + '>'
+                + '<vr-textbox type="number" '
                 + listViewLabel +
-                'value="scopeModel.listViewWidth" ' + listViewWidthPlaceHolder+' decimalprecision = "0" ></vr - textbox > '
-                   + '</vr-columns>'
-                + '<vr-columns colnum="{{hintColNum}}"' + withchild + hidelabel+ ' ng-show="showHint">'
-                        + '<vr-hint value="List View Width"></vr-hint>'
-                   + '</vr-columns>' ;
+                'value="scopeModel.listViewWidth" ' + listViewWidthPlaceHolder + ' decimalprecision = "0" ></vr - textbox > '
+                + '</vr-columns>'
+                + '<vr-columns colnum="{{hintColNum}}"' + withchild + ' ' + hidelabel + ' ng-show="showHint">'
+                + '<vr-hint value="List View Width"></vr-hint>'
+                + '</vr-columns>';
         }
     }]);
