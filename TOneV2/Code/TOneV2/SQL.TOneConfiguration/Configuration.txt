@@ -9,6 +9,7 @@ VR_RateType.json
 VR_TimeZone.json
 VR_Localizalion.json
 VR_Security.json
+VR_OrganizationalCharts.json
 VR_BusinessProcess.json
 VR_ExcelConversion.json
 VR_Runtime.json

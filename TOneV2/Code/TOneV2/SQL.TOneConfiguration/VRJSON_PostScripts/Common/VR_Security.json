@@ -1371,7 +1371,6 @@
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "147c1862-9b0c-4285-b415-00c9210fc691",
               "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
@@ -1384,13 +1383,12 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.Permissions\",\"ViewNameResourceKey\":\"Common.Permissions\"}",
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 10,
+              "Rank": 4,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:39.04"
+              "LastModifiedTime": "2019-09-27T16:08:42.02"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "628cf733-4e3d-4e68-981d-037cd0825389",
               "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
@@ -1403,13 +1401,12 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"00166bed-92c1-4a5d-8280-a048c8a0eb95\"}]},\"ViewTitleResourceKey\":\"Common.AuthenticationMethods\",\"ViewNameResourceKey\":\"Common.AuthenticationMethods\"}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 15,
+              "Rank": 5,
               "CreatedTime": "2018-06-13T13:02:41.95",
-              "LastModifiedTime": "2019-08-09T17:06:39.04"
+              "LastModifiedTime": "2019-09-27T16:08:42.023"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "5b11405b-f0e1-408c-bcf5-0ab328955b12",
               "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
@@ -1422,13 +1419,12 @@
               "Content": null,
               "Settings": null,
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 1,
+              "Rank": 2,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.863"
+              "LastModifiedTime": "2019-09-27T16:08:41.887"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "6d39ddc2-e5eb-46c3-a926-37d59a9fd1ad",
               "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
@@ -1441,13 +1437,12 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.Groups\",\"ViewNameResourceKey\":\"Common.Groups\"}",
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 1,
+              "Rank": 2,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:39.04"
+              "LastModifiedTime": "2019-09-27T16:08:42.02"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "e4101095-f599-414f-8e8c-4790e9ff00fa",
               "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
@@ -1460,32 +1455,12 @@
               "Content": null,
               "Settings": null,
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 5,
+              "Rank": 3,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.863"
+              "LastModifiedTime": "2019-09-27T16:08:41.887"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "dcf8ca21-852c-41b9-9101-6990e545509d",
-              "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
-              "Name": "Organizational Charts",
-              "Title": "Organizational Charts",
-              "Url": "#/view/Security/Views/OrgChart/OrgChartManagement",
-              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
-              "ActionNames": "VR_Sec/Users/GetFilteredUsers",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 115,
-              "CreatedTime": "2018-10-18T16:24:05.76",
-              "LastModifiedTime": "2019-08-09T17:06:38.907"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "7afed44f-6470-47c7-b6e8-b1652d17eb6d",
               "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
@@ -1498,13 +1473,12 @@
               "Content": null,
               "Settings": null,
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 15,
+              "Rank": 4,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.863"
+              "LastModifiedTime": "2019-09-27T16:08:41.89"
             }
           },
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "17b7d7f7-0a1e-4ac1-b2a9-cc71755e3216",
               "DevProjectID": "eb7d64cd-5d7a-4b3f-a039-778aeb8ad327",
@@ -1517,9 +1491,9 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.Users\",\"ViewNameResourceKey\":\"Common.Users\"}",
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 5,
+              "Rank": 3,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:39.04"
+              "LastModifiedTime": "2019-09-27T16:08:42.02"
             }
           }
         ],
