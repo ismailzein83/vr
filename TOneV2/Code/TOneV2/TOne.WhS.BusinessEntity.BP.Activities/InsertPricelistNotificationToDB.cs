@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.BP.Activities
     {
         public int PricelistId { get; set; }
         public int CustomerId { get; set; }
+        public long FileId { get; set; }
     }
     public class InsertPricelistLoggerOutput
     {
@@ -17,12 +18,15 @@ namespace TOne.WhS.BusinessEntity.BP.Activities
     {
         [RequiredArgument]
         public InArgument<int> PricelistId { get; set; }
+        [RequiredArgument]
         public InArgument<int> CustomerId { get; set; }
+        [RequiredArgument]
+        public InArgument<long> FileId { get; set; }
 
         protected override InsertPricelistLoggerOutput DoWorkWithResult(InsertPricelistLoggerInput inputArgument, AsyncActivityHandle handle)
         {
             var emailSenderManager = new SalePricelistNotificationManager();
-            emailSenderManager.Insert(inputArgument.PricelistId, inputArgument.CustomerId);
+            emailSenderManager.Insert(inputArgument.CustomerId, inputArgument.PricelistId,inputArgument.FileId);
 
             return new InsertPricelistLoggerOutput { };
         }
@@ -32,7 +36,8 @@ namespace TOne.WhS.BusinessEntity.BP.Activities
             return new InsertPricelistLoggerInput
             {
                 PricelistId = this.PricelistId.Get(context),
-                CustomerId = this.CustomerId.Get(context)
+                CustomerId = this.CustomerId.Get(context),
+                FileId = this.FileId.Get(context)
             };
         }
 

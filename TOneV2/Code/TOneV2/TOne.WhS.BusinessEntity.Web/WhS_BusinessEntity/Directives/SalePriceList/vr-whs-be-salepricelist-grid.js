@@ -110,11 +110,7 @@ app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationServic
                             if (response != undefined && response.Data != null) {
                                 setSelectAllValue();
                                 for (var i = 0; i < response.Data.length; i++) {
-                                    var dataItem = response.Data[i];
-                                    dataItem.isSelected = selectAllValue;
-                                    dataItem.onNotificationClick = function () {
-                                        WhS_BE_SalePriceListChangeService.automatedPricelistPreview(dataItem.Entity.PriceListId);
-                                    };
+                                    extendDataItem(response.Data[i]);
                                 }
                             }
                             onResponseReady(response);
@@ -122,6 +118,12 @@ app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationServic
                         .catch(function (error) {
                             vrNotificationService.notifyExceptionWithClose(error, $scope);
                         });
+                };
+            }
+            function extendDataItem(dataItem) {
+                dataItem.isSelected = selectAllValue;
+                dataItem.onNotificationClick = function () {
+                    WhS_BE_SalePriceListChangeService.pricelistNotificationPreview(dataItem.Entity.PriceListId, dataItem.Entity.OwnerId);
                 };
             }
             function defineMenuActions() {

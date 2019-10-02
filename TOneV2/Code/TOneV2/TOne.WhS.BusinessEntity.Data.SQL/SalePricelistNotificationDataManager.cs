@@ -18,14 +18,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region public Methods
 
-        public bool Insert(int pricelistId,int ownerId)
+        public bool Insert(int customerId, int pricelistId, long fileId)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePricelistNotification_Insert", pricelistId,ownerId);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePricelistNotification_Insert", customerId, pricelistId, fileId);
             return recordsEffected > 0;
         }
         public IEnumerable<SalePricelistNotification> GetSalePricelistNotifications()
         {
-            return GetItemsSP("TOneWhS_BE.sp_SalePricelistNotification_Get", SalePricelistNotificationMapper);
+            return GetItemsSP("TOneWhS_BE.sp_SalePricelistNotification_GetAll", SalePricelistNotificationMapper);
         }
 
         public Dictionary<int, int> GetNotificationCountByPricelistId()
@@ -47,12 +47,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return base.IsDataUpdated("TOneWhS_BE.SalePricelistNotification", ref updateHandle);
         }
 
-        public IEnumerable<SalePricelistNotification> GetLastSalePricelistNotification(IEnumerable<int> customerIds)
+        public IEnumerable<SalePricelistNotification> GetLastSalePricelistNotifications(IEnumerable<int> customerIds)
         {
             string customerIdsStr = "";
             if (customerIds != null && customerIds.Count() > 0)
                 customerIdsStr = String.Join(",", customerIds.ToArray());
             return GetItemsSP("TOneWhS_BE.sp_SalePricelistNotification_GetLastNotification", SalePricelistNotificationMapper, customerIdsStr);
+        }
+        public IEnumerable<SalePricelistNotification> GetSalePricelistNotifictaions(int pricelistId)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SalePricelistNotification_Get", SalePricelistNotificationMapper, pricelistId);
         }
         #endregion
 
@@ -61,9 +65,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return new SalePricelistNotification
             {
-                Id = (int)reader["ID"],
                 CustomerID = (int)reader["CustomerID"],
                 PricelistId = (int)reader["PricelistId"],
+                FileId = (long)reader["FileID"],
                 EmailCreationDate = GetReaderValue<DateTime>(reader, "EmailCreationDate"),
             };
         }

@@ -39,14 +39,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredCustomerRatePreviews(input), "Customer Rate Previews");
         }
 
-         [HttpPost]
-         [Route("GetFilteredRoutingProductPreviews")]
+        [HttpPost]
+        [Route("GetFilteredRoutingProductPreviews")]
         public object GetFilteredRoutingProductPreviews(Vanrise.Entities.DataRetrievalInput<RoutingProductPreviewQuery> input)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
             return GetWebResponse(input, manager.GetFilteredRoutingProductPreviews(input), "Routing Product Previews");
         }
-        
+
         [HttpPost]
         [Route("GetFilteredSalePriceListCodeChanges")]
         public object GetFilteredSalePriceListCodeChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
@@ -116,8 +116,8 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             VRFile vrFile = fileManager.GetFile(fileId);
             return GetExcelResponse(vrFile.Content, vrFile.Name);
         }
-         [HttpGet]
-         [Route("DoCustomerTemporaryPricelistsExists")]
+        [HttpGet]
+        [Route("DoCustomerTemporaryPricelistsExists")]
         public bool DoesCustomerTemporaryPriceListsExists(long processInstanceId)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
@@ -165,6 +165,20 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SalePriceListInput salePriceListInput = new SalePriceListInput { PriceListId = pricelistId, PricelistTemplateId = customerPriceListTemplateId, PriceListTypeId = (int)customerPriceListType };
 
             return GenerateAndEvaluateSalePriceListEmail(salePriceListInput);
+        }
+        [HttpGet]
+        [Route("GetSalePricelistNotifictaion")]
+        public IEnumerable<SalePricelistNotificationDetail> GetSalePricelistNotifictaion(int priceListId)
+        {
+            SalePricelistNotificationManager manager = new SalePricelistNotificationManager();
+            return manager.GetSalePricelistNotification(priceListId);
+        }
+        [HttpGet]
+        [Route("GetCustomerName")]
+        public string GetCustomerName(int customerId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetCarrierAccountName(customerId);
         }
     }
 }

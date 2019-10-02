@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.BP.Activities
             var salePricelistNotificationsByCustomerId = new Dictionary<int, SalePricelistNotification>();
             foreach (var pricelist in salePricelistNotifications)
             {
-                if (salePricelistNotificationsByCustomerId.ContainsKey(pricelist.CustomerID))
+                if (!salePricelistNotificationsByCustomerId.ContainsKey(pricelist.CustomerID))
                     salePricelistNotificationsByCustomerId.Add(pricelist.CustomerID, pricelist);
             }
             return salePricelistNotificationsByCustomerId;

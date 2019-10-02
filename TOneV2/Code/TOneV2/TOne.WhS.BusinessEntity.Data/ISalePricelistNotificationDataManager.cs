@@ -6,10 +6,11 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISalePricelistNotificationDataManager : IDataManager
     {
-        bool Insert(int pricelitsId, int customerId);
+        bool Insert(int customerId, int pricelitsId, long fileId);
         IEnumerable<SalePricelistNotification> GetSalePricelistNotifications();
         Dictionary<int, int> GetNotificationCountByPricelistId();
         bool AreSalePriceListNotificationUpdated(ref object updateHandle);
-        IEnumerable<SalePricelistNotification> GetLastSalePricelistNotification(IEnumerable<int> customerIds);
+        IEnumerable<SalePricelistNotification> GetLastSalePricelistNotifications(IEnumerable<int> customerIds);
+        IEnumerable<SalePricelistNotification> GetSalePricelistNotifictaions(int pricelistId);
     }
 }

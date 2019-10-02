@@ -1,11 +1,12 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    salePriceListNotificationPreview.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    salePriceListNotificationPreview.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_SalePriceListChangeAPIService'];
 
-    function salePriceListNotificationPreview($scope, utilsService, vrNotificationService, vrNavigationService) {
+    function salePriceListNotificationPreview($scope, utilsService, vrNotificationService, vrNavigationService, WhS_BE_SalePriceListChangeAPIService) {
         var pricelistId;
-
+        var customerId;
+        var ownerName;
 
         loadParameters();
         defineScope();
@@ -13,7 +14,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.notififcationsDataSource = [];
             $scope.downloadPricelist = function (dataItem) {
                 WhS_BE_SalePriceListChangeAPIService.DownloadSalePriceList(dataItem.FileId).then(function (bufferArrayRespone) {
                     utilsService.downloadFile(bufferArrayRespone.data, bufferArrayRespone.headers);
@@ -22,22 +23,33 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+
+            WhS_BE_SalePriceListChangeAPIService.getSalePricelistNotifictaion(pricelistId).then(function (response) {
+                $scope.scopeModel.notififcationsDataSource = response;
+            });
+
         }
 
         function loadParameters() {
             var parameters = vrNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                pricelistId = param.pricelistId;
+                pricelistId = parameters.pricelistId;
+                customerId = parameters.customerId;
             }
         }
 
         function setTitle() {
-            $scope.title = 'Sale Pricelist Notififcation For PricelistId ' + pricelistId;
+            $scope.title = 'Email Notification For ' + ownerName;
         }
-
+        function GetCustomerName() {
+            return WhS_BE_SalePriceListChangeAPIService.GetCustomerName(customerId)
+                .then(function (response) {
+                    ownerName = response;
+                });
+        }
         function loadAllControls() {
             $scope.isLoadingFilter = true;
-            return utilsService.waitMultipleAsyncOperations([])
+            return utilsService.waitMultipleAsyncOperations([GetCustomerName])
                 .then(function () {
                     setTitle();
                 })
@@ -49,5 +61,5 @@
                 });
         }
     }
-    appControllers.controller('WhS_BE_SalePriceListNotificationPreview', salePriceListNotificationPreview);
+    appControllers.controller('WhS_BE_SalePriceListNotificationPreviewController', salePriceListNotificationPreview);
 })(appControllers);

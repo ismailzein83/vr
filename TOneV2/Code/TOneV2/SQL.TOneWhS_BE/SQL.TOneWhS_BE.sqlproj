@@ -669,5 +669,11 @@
     <Build Include="TOneWhS_AM\Tables\AccountManagerAssignment.sql" />
     <Build Include="TOneWhS_AM\Tables\AccountManager.sql" />
     <Build Include="Security\TOneWhS_AM.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistNotification.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_GetLastNotification.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_GetByPlID.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_Get.sql" />
   </ItemGroup>
 </Project>

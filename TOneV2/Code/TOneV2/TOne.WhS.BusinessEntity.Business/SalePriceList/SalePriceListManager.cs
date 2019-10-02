@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
 
             var orderedCustomerPricelists = customerPricelists.OrderByDescending(p => p.CreatedTime);
-            return orderedCustomerPricelists.Last();
+            return orderedCustomerPricelists.First();
         }
         public void SavePriceList(ISalePricelistFileContext context)
         {
@@ -1831,9 +1831,9 @@ namespace TOne.WhS.BusinessEntity.Business
             UserManager userManager = new UserManager();
             pricelistDetail.UserName = userManager.GetUserName(priceList.UserId);
             pricelistDetail.CurrencyName = GetCurrencyName(priceList.CurrencyId);
-           int? notificationCount= new SalePricelistNotificationManager().GetSalePricelistNotificationCount(priceList.PriceListId);
+            int? notificationCount = new SalePricelistNotificationManager().GetSalePricelistNotificationCount(priceList.PriceListId);
             if (notificationCount.HasValue)
-                pricelistDetail.Notification = $"{notificationCount.Value} Pricelist Notification(s)";
+                pricelistDetail.Notification = $"{notificationCount.Value} Email Notification(s)";
             return pricelistDetail;
         }
 

@@ -3,22 +3,46 @@ using Vanrise.Common;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SalePricelistNotificationManager
     {
         #region public Methods
-        public bool Insert(int pricelitsId, int customerId)
+        public bool Insert(int customerId, int pricelitsId, long fileId)
         {
             ISalePricelistNotificationDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePricelistNotificationDataManager>();
-            return dataManager.Insert(pricelitsId, customerId);
+            return dataManager.Insert(customerId, pricelitsId, fileId);
         }
         public IEnumerable<SalePricelistNotification> GetSalePricelistNotifications()
         {
             ISalePricelistNotificationDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePricelistNotificationDataManager>();
             return dataManager.GetSalePricelistNotifications();
         }
+        public IEnumerable<SalePricelistNotificationDetail> GetSalePricelistNotification(int pricelistId)
+        {
+            var salePricelistNotificationDetails = new List<SalePricelistNotificationDetail>();
+            ISalePricelistNotificationDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePricelistNotificationDataManager>();
+            var notifications = dataManager.GetSalePricelistNotifictaions(pricelistId);
+            var fileManager = new VRFileManager();
+
+            foreach (var notification in notifications)
+            {
+                var pricelistDetail = new SalePricelistNotificationDetail
+                {
+                    EmailCreationDate = notification.EmailCreationDate,
+                    FileId = notification.FileId
+                };
+                var file = fileManager.GetFile(notification.FileId);
+                if (file != null)
+                    pricelistDetail.FileName = file.Name;
+                salePricelistNotificationDetails.Add(pricelistDetail);
+            }
+            return salePricelistNotificationDetails;
+        }
+
+
         public int? GetSalePricelistNotificationCount(int pricelistId)
         {
             Dictionary<int, int> cachedNotificationCounts = GetCachedNotificationCountByPricelistId();
@@ -31,7 +55,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SalePricelistNotification> GetLastSalePricelistNotification(IEnumerable<int> customerIds)
         {
             ISalePricelistNotificationDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePricelistNotificationDataManager>();
-            return dataManager.GetLastSalePricelistNotification(customerIds);
+            return dataManager.GetLastSalePricelistNotifications(customerIds);
         }
         #endregion
 

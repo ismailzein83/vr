@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.BusinessEntity.BP.SalePricelistEmailSender"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.BusinessEntity.BP.SalePricelistNotification"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -15,7 +15,7 @@
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Input" Type="InArgument(twbba:SalePricelistEmailSenderProcessInput)" />
+    <x:Property Name="Input" Type="InArgument(twbba:SalePricelistNotificationProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.BusinessEntity.BP.SalePricelistEmailSender_1</sap2010:WorkflowViewState.IdRef>
@@ -68,13 +68,6 @@
       <Variable x:TypeArguments="scg:Dictionary(x:Int32, twbe:SalePricelistNotification)" Name="SalePricelistNotificationByCustomerId" />
       <Variable x:TypeArguments="twbe:SalePricelistNotification" Name="salePricelistNotification" />
     </Sequence.Variables>
-    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
-      <vbw:WriteTrackingMessage.Message>
-        <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">$"Start sending pricelist within {Input.Period} period."</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Message>
-    </vbw:WriteTrackingMessage>
     <twbba1:GetSalePricelistNotifications Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSalePricelistNotifications_1">
       <twbba1:GetSalePricelistNotifications.CustomerIds>
         <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
@@ -87,7 +80,7 @@
         </OutArgument>
       </twbba1:GetSalePricelistNotifications.SalePricelistNotificationsByCustomerId>
     </twbba1:GetSalePricelistNotifications>
-    <ForEach x:TypeArguments="x:Int32">
+    <ForEach x:TypeArguments="x:Int32" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
       <ForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.CustomerIds</mca:CSharpValue>
@@ -97,11 +90,11 @@
         <ActivityAction.Argument>
           <DelegateInArgument x:TypeArguments="x:Int32" Name="customerId" />
         </ActivityAction.Argument>
-        <Sequence>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_14">
           <Sequence.Variables>
             <Variable x:TypeArguments="twbe:SalePriceList" Name="CustomerPricelist" />
           </Sequence.Variables>
-          <Assign>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
             <Assign.To>
               <OutArgument x:TypeArguments="x:String">
                 <mca:CSharpReference x:TypeArguments="x:String">CustomerName</mca:CSharpReference>
@@ -112,9 +105,15 @@
                 <mca:CSharpValue x:TypeArguments="x:String">new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetCarrierAccountName(customerId)</mca:CSharpValue>
               </InArgument>
             </Assign.Value>
-            <sap2010:WorkflowViewState.IdRef>Assign_5</sap2010:WorkflowViewState.IdRef>
           </Assign>
-          <Assign>
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">$"Sending pricelist notification for customer {CustomerName} on {Input.Period} basis."</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
+          </vbw:WriteTrackingMessage>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_6">
             <Assign.To>
               <OutArgument x:TypeArguments="twbe:SalePriceList">
                 <mca:CSharpReference x:TypeArguments="twbe:SalePriceList">CustomerPricelist</mca:CSharpReference>
@@ -125,20 +124,19 @@
                 <mca:CSharpValue x:TypeArguments="twbe:SalePriceList">new TOne.WhS.BusinessEntity.Business.SalePriceListManager().GetLatestPricelist(customerId)</mca:CSharpValue>
               </InArgument>
             </Assign.Value>
-            <sap2010:WorkflowViewState.IdRef>Assign_6</sap2010:WorkflowViewState.IdRef>
           </Assign>
-          <If>
+          <If sap2010:WorkflowViewState.IdRef="If_9">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
                 <mca:CSharpValue x:TypeArguments="x:Boolean">CustomerPricelist!=null</mca:CSharpValue>
               </InArgument>
             </If.Condition>
             <If.Then>
-              <Sequence>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_13">
                 <Sequence.Variables>
                   <Variable x:TypeArguments="x:Boolean" Name="IsNotificationExist" />
                 </Sequence.Variables>
-                <Assign>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_7">
                   <Assign.To>
                     <OutArgument x:TypeArguments="twbe:SalePricelistNotification">
                       <mca:CSharpReference x:TypeArguments="twbe:SalePricelistNotification">salePricelistNotification</mca:CSharpReference>
@@ -149,34 +147,32 @@
                       <mca:CSharpValue x:TypeArguments="twbe:SalePricelistNotification">SalePricelistNotificationByCustomerId.ContainsKey(customerId) ? SalePricelistNotificationByCustomerId[customerId]:null</mca:CSharpValue>
                     </InArgument>
                   </Assign.Value>
-                  <sap2010:WorkflowViewState.IdRef>Assign_7</sap2010:WorkflowViewState.IdRef>
                 </Assign>
-                <If>
+                <If sap2010:WorkflowViewState.IdRef="If_8">
                   <If.Condition>
                     <InArgument x:TypeArguments="x:Boolean">
                       <mca:CSharpValue x:TypeArguments="x:Boolean">salePricelistNotification!=null &amp;&amp; TOne.WhS.BusinessEntity.Business.Helper.IsInCurrentPeriodRange(salePricelistNotification.EmailCreationDate, Input.Period)</mca:CSharpValue>
                     </InArgument>
                   </If.Condition>
                   <If.Then>
-                    <vbw:WriteTrackingMessage Severity="{x:Null}">
+                    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_9">
                       <vbw:WriteTrackingMessage.Message>
                         <InArgument x:TypeArguments="x:String">
-                          <mca:CSharpValue x:TypeArguments="x:String">$"Customer mail not sent, latest pricelist exist with creation date {salePricelistNotification.EmailCreationDate}"</mca:CSharpValue>
+                          <mca:CSharpValue x:TypeArguments="x:String">$"An email had not been sent because a notification was already issued on: {CustomerPricelist.CreatedTime.ToString("yyy-MM-dd HH:mm:ss")}"</mca:CSharpValue>
                         </InArgument>
                       </vbw:WriteTrackingMessage.Message>
-                      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_9</sap2010:WorkflowViewState.IdRef>
                     </vbw:WriteTrackingMessage>
                   </If.Then>
                   <If.Else>
-                    <If>
+                    <If sap2010:WorkflowViewState.IdRef="If_7">
                       <If.Condition>
                         <InArgument x:TypeArguments="x:Boolean">
                           <mca:CSharpValue x:TypeArguments="x:Boolean">!TOne.WhS.BusinessEntity.Business.Helper.IsInCurrentPeriodRange(CustomerPricelist.CreatedTime, Input.Period)</mca:CSharpValue>
                         </InArgument>
                       </If.Condition>
                       <If.Then>
-                        <Sequence>
-                          <twbba1:PreparePricelistFile Status="{x:Null}">
+                        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_12">
+                          <twbba1:PreparePricelistFile Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PreparePricelistFile_3">
                             <twbba1:PreparePricelistFile.SalePriceList>
                               <InArgument x:TypeArguments="twbe:SalePriceList">
                                 <mca:CSharpValue x:TypeArguments="twbe:SalePriceList">CustomerPricelist</mca:CSharpValue>
@@ -187,23 +183,22 @@
                                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SalePricelistVRFile)">SalePricelistVRFiles</mca:CSharpReference>
                               </OutArgument>
                             </twbba1:PreparePricelistFile.SalePricelistVRFiles>
-                            <sap2010:WorkflowViewState.IdRef>PreparePricelistFile_3</sap2010:WorkflowViewState.IdRef>
                           </twbba1:PreparePricelistFile>
-                          <If>
+                          <If sap2010:WorkflowViewState.IdRef="If_6">
                             <If.Condition>
                               <InArgument x:TypeArguments="x:Boolean">
                                 <mca:CSharpValue x:TypeArguments="x:Boolean">SalePricelistVRFiles!=null &amp;&amp; SalePricelistVRFiles.Count()&gt;0</mca:CSharpValue>
                               </InArgument>
                             </If.Condition>
                             <If.Then>
-                              <Sequence>
+                              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_11">
                                 <Sequence.Variables>
                                   <Variable x:TypeArguments="scg:List(x:Int32)" Name="CustomerIds" />
                                 </Sequence.Variables>
-                                <TryCatch>
+                                <TryCatch sap2010:WorkflowViewState.IdRef="TryCatch_3">
                                   <TryCatch.Try>
-                                    <Sequence>
-                                      <twbba1:SendSalePricelistEmail Status="{x:Null}">
+                                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
+                                      <twbba1:SendSalePricelistEmail Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SendSalePricelistEmail_3">
                                         <twbba1:SendSalePricelistEmail.CustomerPricelist>
                                           <InArgument x:TypeArguments="twbe:SalePriceList">
                                             <mca:CSharpValue x:TypeArguments="twbe:SalePriceList">CustomerPricelist</mca:CSharpValue>
@@ -214,37 +209,43 @@
                                             <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SalePricelistVRFile)">SalePricelistVRFiles</mca:CSharpValue>
                                           </InArgument>
                                         </twbba1:SendSalePricelistEmail.SalePricelistVRFiles>
-                                        <sap2010:WorkflowViewState.IdRef>SendSalePricelistEmail_3</sap2010:WorkflowViewState.IdRef>
                                       </twbba1:SendSalePricelistEmail>
-                                      <twbba1:InsertPricelistNotificationToDB CustomerId="{x:Null}" Status="{x:Null}">
+                                      <twbba1:InsertPricelistNotificationToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="InsertPricelistNotificationToDB_2">
+                                        <twbba1:InsertPricelistNotificationToDB.CustomerId>
+                                          <InArgument x:TypeArguments="x:Int32">
+                                            <mca:CSharpValue x:TypeArguments="x:Int32">customerId</mca:CSharpValue>
+                                          </InArgument>
+                                        </twbba1:InsertPricelistNotificationToDB.CustomerId>
+                                        <twbba1:InsertPricelistNotificationToDB.FileId>
+                                          <InArgument x:TypeArguments="x:Int64">
+                                            <mca:CSharpValue x:TypeArguments="x:Int64">SalePricelistVRFiles.First().FileId</mca:CSharpValue>
+                                          </InArgument>
+                                        </twbba1:InsertPricelistNotificationToDB.FileId>
                                         <twbba1:InsertPricelistNotificationToDB.PricelistId>
                                           <InArgument x:TypeArguments="x:Int32">
                                             <mca:CSharpValue x:TypeArguments="x:Int32">CustomerPricelist.PriceListId</mca:CSharpValue>
                                           </InArgument>
                                         </twbba1:InsertPricelistNotificationToDB.PricelistId>
-                                        <sap2010:WorkflowViewState.IdRef>InsertPricelistNotificationToDB_2</sap2010:WorkflowViewState.IdRef>
                                       </twbba1:InsertPricelistNotificationToDB>
-                                      <vbw:WriteTrackingMessage Severity="{x:Null}">
+                                      <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_10">
                                         <vbw:WriteTrackingMessage.Message>
                                           <InArgument x:TypeArguments="x:String">
-                                            <mca:CSharpValue x:TypeArguments="x:String">$"Email sent successfully for {CustomerName}"</mca:CSharpValue>
+                                            <mca:CSharpValue x:TypeArguments="x:String">$"An email was successfully sent for {CustomerName} on {System.DateTime.Now.ToString("yyy-MM-dd HH:mm:ss")}"</mca:CSharpValue>
                                           </InArgument>
                                         </vbw:WriteTrackingMessage.Message>
-                                        <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_10</sap2010:WorkflowViewState.IdRef>
                                       </vbw:WriteTrackingMessage>
-                                      <sap2010:WorkflowViewState.IdRef>Sequence_10</sap2010:WorkflowViewState.IdRef>
                                     </Sequence>
                                   </TryCatch.Try>
                                   <TryCatch.Catches>
-                                    <Catch x:TypeArguments="s:Exception">
+                                    <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_3">
                                       <ActivityAction x:TypeArguments="s:Exception">
                                         <ActivityAction.Argument>
                                           <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
                                         </ActivityAction.Argument>
-                                        <vbw:WriteTrackingMessage>
+                                        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_11">
                                           <vbw:WriteTrackingMessage.Message>
                                             <InArgument x:TypeArguments="x:String">
-                                              <mca:CSharpValue x:TypeArguments="x:String">$"Email was not sent to '{CustomerName}'. Exception Details: {exception.Message}"</mca:CSharpValue>
+                                              <mca:CSharpValue x:TypeArguments="x:String">$"An email was not sent to '{CustomerName}'. Exception Details: {exception.Message}"</mca:CSharpValue>
                                             </InArgument>
                                           </vbw:WriteTrackingMessage.Message>
                                           <vbw:WriteTrackingMessage.Severity>
@@ -252,64 +253,50 @@
                                               <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Error</mca:CSharpValue>
                                             </InArgument>
                                           </vbw:WriteTrackingMessage.Severity>
-                                          <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_11</sap2010:WorkflowViewState.IdRef>
                                         </vbw:WriteTrackingMessage>
                                       </ActivityAction>
-                                      <sap2010:WorkflowViewState.IdRef>Catch`1_3</sap2010:WorkflowViewState.IdRef>
                                     </Catch>
                                   </TryCatch.Catches>
-                                  <sap2010:WorkflowViewState.IdRef>TryCatch_3</sap2010:WorkflowViewState.IdRef>
                                 </TryCatch>
-                                <sap2010:WorkflowViewState.IdRef>Sequence_11</sap2010:WorkflowViewState.IdRef>
                               </Sequence>
                             </If.Then>
-                            <sap2010:WorkflowViewState.IdRef>If_6</sap2010:WorkflowViewState.IdRef>
                           </If>
-                          <sap2010:WorkflowViewState.IdRef>Sequence_12</sap2010:WorkflowViewState.IdRef>
                         </Sequence>
                       </If.Then>
                       <If.Else>
-                        <vbw:WriteTrackingMessage Severity="{x:Null}">
+                        <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_12">
                           <vbw:WriteTrackingMessage.Message>
                             <InArgument x:TypeArguments="x:String">
-                              <mca:CSharpValue x:TypeArguments="x:String">$"Customer mail not sent, latest pricelist created on: {CustomerPricelist.CreatedTime.ToString("yyy-MM-dd HH:mm:ss")} "</mca:CSharpValue>
+                              <mca:CSharpValue x:TypeArguments="x:String">$"Customer email not sent, latest pricelist exist with creation date {salePricelistNotification.EmailCreationDate.ToString("yyyy-MM-dd HH:mm:ss")}"</mca:CSharpValue>
                             </InArgument>
                           </vbw:WriteTrackingMessage.Message>
-                          <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_12</sap2010:WorkflowViewState.IdRef>
                         </vbw:WriteTrackingMessage>
                       </If.Else>
-                      <sap2010:WorkflowViewState.IdRef>If_7</sap2010:WorkflowViewState.IdRef>
                     </If>
                   </If.Else>
-                  <sap2010:WorkflowViewState.IdRef>If_8</sap2010:WorkflowViewState.IdRef>
                 </If>
-                <sap2010:WorkflowViewState.IdRef>Sequence_13</sap2010:WorkflowViewState.IdRef>
               </Sequence>
             </If.Then>
             <If.Else>
-              <vbw:WriteTrackingMessage Severity="{x:Null}">
+              <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_13">
                 <vbw:WriteTrackingMessage.Message>
                   <InArgument x:TypeArguments="x:String">
                     <mca:CSharpValue x:TypeArguments="x:String">$"No pricelist exists for customer: {CustomerName}"</mca:CSharpValue>
                   </InArgument>
                 </vbw:WriteTrackingMessage.Message>
-                <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_13</sap2010:WorkflowViewState.IdRef>
               </vbw:WriteTrackingMessage>
             </If.Else>
-            <sap2010:WorkflowViewState.IdRef>If_9</sap2010:WorkflowViewState.IdRef>
           </If>
-          <sap2010:WorkflowViewState.IdRef>Sequence_14</sap2010:WorkflowViewState.IdRef>
         </Sequence>
       </ActivityAction>
-      <sap2010:WorkflowViewState.IdRef>ForEach`1_1</sap2010:WorkflowViewState.IdRef>
     </ForEach>
-    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkJ1c2luZXNzRW50aXR5LkJQXFNhbGVQcmljZWxpc3RFbWFpbFNlbmRlci54YW1sMj8DswIOAgEBRwVNIAMBggJOBVksAwHzAVoFsQIPAgECSgtKgQEDAYMCUQtRagMB+wFWC1alAQMB9AFdC11qAwHsAWQJrgIUAgEDaAt0FAMB2QF1C4EBFAMBxgGCAQusAhACAQRwEXCtAQMB4wFrEWtjAwHaAX0RfbMBAwHQAXgReHIDAccBhQERhQFnAgEFiQEPnwIaAgEYogIPqQIqAgEOjQERmQEaAwGxAZoBEZ0CFgIBGaUCFaUChgECAQ+VAReVAeEBAwG8AZABF5ABjAEDAbIBnQEXnQH6AQIBGqEBFagBMAMBpgGrARWaAhoCASSkARukAcsBAwGnAa4BG64BxgECASWyARmNAiQCATqQAhmXAjQCAS+zARu/ATkDAZEBwAEbiwIgAgE7kwIfkwLUAQIBMLsBIbsBnAEDAZwBtgEhtgF6AwGSAcMBIcMBpwECATzHAR+IAioCAUbLASGGAiwCAUfNASXsATACAWH0ASmAAkQCAUjOASfaAUcCAXrbASfiAVACAW7jASfqAUICAWL8AS/8AaMBAgFV9wEv9wG+AQIBSdYBLdYBoAEDAYYB0QEt0QGGAQIBe94BLd4BhwECAW/mAS3mAZgBAgFj</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkJ1c2luZXNzRW50aXR5LkJQXFNhbGVQcmljZWxpc3ROb3RpZmljYXRpb24ueGFtbDQ/A6YCDgIBAUcFUiwDAZMCUwWkAg8CAQJKC0pqAwGbAk8LT6UBAwGUAlYLVmoDAYwCXQmiAhQCAQNhC2wUAwH5AW0LcyYDAe8BdAt/FAMB3AGAAQuhAhACAQRpEWmtAQMBgwJkEWRjAwH6AXARcKUBAwHwAXwRfLMBAwHmAXcRd3IDAd0BgwERgwFnAgEFhwEPlgIaAgEYmQIPnwIqAgEOiwERlgEaAwHHAZcBEZUCFgIBGZwCFZwChgECAQ+TAReTAeEBAwHSAY4BF44BjAEDAcgBmgEXmgH6AQIBGp4BFaQBMAMBvAGnARWTAhoCASShARuhAeMBAwG9AaoBG6oBxgECASWuARmIAiQCATqLAhmRAjQCAS+vARu6ATkDAacBuwEbhwIgAgE7jgIfjgLwAQIBMLcBIbcBnAEDAbIBsgEhsgF6AwGoAb4BIb4BpwECATzCAR+FAioCAUbGASGEAiwCAUfIASXtATACAWH1ASmAAkQCAUjJASfUAUcDAZAB1QEn5QFQAgFu5gEn7AFCAgFi/QEv/QGjAQIBVfgBL/gBwQECAUnRAS3RAaABAwGcAcwBLcwBhgEDAZEB2AEt2AF0AwGFAeIBLeIBhwECAXrdAS3dAY0BAgFv6QEt6QHXAQIBYw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="763,22" />
       <sap2010:ViewStateData Id="GetSalePricelistNotifications_1" sap:VirtualizedContainerService.HintSize="763,22" />
       <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="711,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="711,22" />
       <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="711,62" />
       <sap2010:ViewStateData Id="Assign_7" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_9" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -333,7 +320,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TryCatch_3" sap:VirtualizedContainerService.HintSize="418,498">
+      <sap2010:ViewStateData Id="TryCatch_3" sap:VirtualizedContainerService.HintSize="418,502">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -341,14 +328,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="440,622">
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="440,626">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="565,772">
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="565,778">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -356,7 +343,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="587,958">
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="587,964">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -365,7 +352,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_12" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="200,52">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -373,8 +360,8 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="464,210" />
-      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="486,436">
+      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="464,212" />
+      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="486,438">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -382,23 +369,23 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_13" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="711,586" />
-      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="733,914">
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="711,590" />
+      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="733,980">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="763,1064" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1312">
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="763,1131" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1317">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.BusinessEntity.BP.SalePricelistEmailSender_1" sap:VirtualizedContainerService.HintSize="825,1392" />
+      <sap2010:ViewStateData Id="TOne.WhS.BusinessEntity.BP.SalePricelistEmailSender_1" sap:VirtualizedContainerService.HintSize="825,1397" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -29,6 +29,11 @@
                 priceListId: priceListId
             });
         }
+        function GetCustomerName(customerId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetCustomerName"), {
+                customerId: customerId
+            });
+        }
 
         function GetPricelistSalePricelistVRFile(pricelistInput) {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetPricelistSalePricelistVRFile"), {
@@ -76,6 +81,13 @@
 
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, 'GetFilteredRoutingProductPreviews'), input);
         }
+
+        function getSalePricelistNotifictaion(priceListId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetSalePricelistNotifictaion"), {
+                priceListId: priceListId
+            });
+        }
+
         return ({
             GetFilteredSalePriceListCodeChanges: GetFilteredSalePriceListCodeChanges,
             GetFilteredSalePriceListRateChanges: GetFilteredSalePriceListRateChanges,
@@ -92,7 +104,9 @@
             GetFilteredRoutingProductPreviews: GetFilteredRoutingProductPreviews,
             GetSalePricelistCodes: GetSalePricelistCodes,
             GetFilteredTemporarySalePriceLists: GetFilteredTemporarySalePriceLists,
-            DoCustomerTemporaryPricelistsExists: DoCustomerTemporaryPricelistsExists
+            DoCustomerTemporaryPricelistsExists: DoCustomerTemporaryPricelistsExists,
+            getSalePricelistNotifictaion: getSalePricelistNotifictaion,
+            GetCustomerName: GetCustomerName
         });
     }
 

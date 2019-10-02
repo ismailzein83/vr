@@ -1,15 +1,12 @@
 ﻿<div vr-modalcontent ng-controller="WhS_BE_SalePriceListNotificationPreviewController" vr-loader="isLoadingFilter" size="small">
     <vr-modalbody>
-        <vr-form name="formSPreview">
-            <vr-datagrid datasource="ctrl.datasource"
-                         on-ready="onGridReady"
+            <vr-datagrid datasource="scopeModel.notififcationsDataSource"
                          pagingtype="'PagingOnScroll'"
-                         enableautoexport="true" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.defaultSortDirection">
+                         enableautoexport="true" >
                 <vr-datagridcolumn headertext="'ID'" field="'FileId'" type="'Text'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'File Name'" field="'FileName'" type="'Text'" onclicked="downloadPricelist" isclickable="true"></vr-datagridcolumn>
-
+                <vr-datagridcolumn headertext="'Email Creation Date'" field="'EmailCreationDate'" type="'Datetime'"></vr-datagridcolumn>
             </vr-datagrid>
-        </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">

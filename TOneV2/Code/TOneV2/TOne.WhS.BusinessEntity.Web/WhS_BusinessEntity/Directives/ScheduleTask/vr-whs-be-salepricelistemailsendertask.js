@@ -37,7 +37,7 @@ app.directive("vWhsBeSalepricelistemailsendertask", ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: 'TOne.WhS.BusinessEntity.BP.Arguments.SalePricelistEmailSenderProcessInput, TOne.WhS.BusinessEntity.BP.Arguments'
+                        $type: 'TOne.WhS.BusinessEntity.BP.Arguments.SalePricelistNotificationProcessInput, TOne.WhS.BusinessEntity.BP.Arguments'
                     };
                 };
 

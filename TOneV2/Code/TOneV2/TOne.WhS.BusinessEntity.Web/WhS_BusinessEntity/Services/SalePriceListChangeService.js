@@ -40,9 +40,10 @@
             var modalSettings = {};
             vrModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SalePricelist/SalePricelistFilePreview.html', modalParameters, modalSettings);
         }
-        function pricelistNotificationPreview(pricelistId) {
+        function pricelistNotificationPreview(pricelistId, customerId) {
             var modalParameters = {
-                pricelistId: pricelistId
+                pricelistId: pricelistId,
+                customerId: customerId
             };
             var modalSettings = {};
 

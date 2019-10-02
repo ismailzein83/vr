@@ -79,7 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="SalePricelistEmailSender.xaml">
+    <XamlAppDef Include="SalePricelistNotification.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
