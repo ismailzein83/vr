@@ -59,7 +59,19 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                 $scope.scopeModel.isValid = function () {
                     if ($scope.scopeModel.datasource == undefined || $scope.scopeModel.datasource.length == 0)
                         return 'You should add at least one Action';
-
+                    var errorCounter = 0;
+                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                        var action = $scope.scopeModel.datasource[i];
+                      
+                        if (action.reload && action.isReloadImplemented) {
+                            action.Notes = 'This action must be checked';
+                            errorCounter++;
+                        }
+                        else {
+                            action.Notes = '';
+                        }
+                    }
+                    if (errorCounter > 0) return "Check existing actions.";
                     return null;
                 };
 
@@ -132,6 +144,13 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                         $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.MultipleActionsActionType, Vanrise.Analytic.MainExtensions",
                         Actions: actions
                     };
+                };
+
+                api.reload = function () {
+                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                        var action = $scope.scopeModel.datasource[i];
+                        action.reload = true;
+                    }
                 };
 
                 if (ctrl.onReady != undefined)
