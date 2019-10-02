@@ -10,6 +10,7 @@ namespace Vanrise.Entities
     {
         MasterLayoutMenuOption _menuOption = MasterLayoutMenuOption.FullMenu;
         bool _expandedMenu = true;
+        bool _hideSupportIcon = false;
         public MasterLayoutMenuOption MenuOption
         {
             get
@@ -33,7 +34,17 @@ namespace Vanrise.Entities
                 _expandedMenu = value;
             }
         }
-
+        public bool HideSupportIcon
+        {
+            get
+            {
+                return _hideSupportIcon;
+            }
+            set
+            {
+                _hideSupportIcon = value;
+            }
+        }
         public bool IsBreadcrumbVisible { get; set; }
 
         public bool ShowApplicationTiles { get; set; }
