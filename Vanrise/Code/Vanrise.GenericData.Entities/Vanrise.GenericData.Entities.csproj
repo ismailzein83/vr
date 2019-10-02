@@ -312,6 +312,7 @@
     <Compile Include="SummaryTransformation\SummaryTransformationDefinition.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationDefinition.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationDefinitionSettings.cs" />
+    <Compile Include="VRNumberPrefixType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
