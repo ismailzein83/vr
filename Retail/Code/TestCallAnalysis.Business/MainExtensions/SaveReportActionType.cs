@@ -7,7 +7,7 @@ using Vanrise.GenericData.Business;
 
 namespace TestCallAnalysis.Business
 {
-    public enum ReportType { ReportType1 = 1, ReportType2 = 2, ReportType3 = 3 }
+    public enum ReportType { ReportTypeA = 1, ReportTypeB = 2, ReportTypeC = 3 }
     public class SaveReportActionType : GenerateFilesActionType
     {
         static Guid TCAnalReportDataRecordStorage = new Guid("45B7E9F3-D783-4A6A-B6C4-7BE1AA62A679");

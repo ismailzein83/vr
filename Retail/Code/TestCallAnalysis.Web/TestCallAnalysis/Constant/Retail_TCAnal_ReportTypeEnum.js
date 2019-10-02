@@ -1,5 +1,5 @@
 ﻿app.constant('Retail_TCAnal_ReportTypeEnum', {
-    ReportType1: { value: 1, description: "ReportType 1" },
-    ReportType2: { value: 2, description: "ReportType 2"},
-    ReportType3: { value: 3, description: "ReportType 3"}
+    ReportTypeA: { value: 1, description: "ReportType A" },
+    ReportTypeB: { value: 2, description: "ReportType B"},
+    ReportTypeC: { value: 3, description: "ReportType C"}
 });
