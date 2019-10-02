@@ -15,7 +15,7 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/MultipleActionsHandlerAutomatedReport.html'
+            templateUrl: '/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/MultipleActionsActionTypeGenerateFilesHandlerTemplate.html'
         };
 
         function MultipleActionsActionType($scope, ctrl, $attrs) {
@@ -45,6 +45,7 @@ app.directive('vrAnalyticMultipleactionsactiontypeGeneratefileshandler', ['Utils
                 $scope.scopeModel.addAction = function () {
                     var onActionAdded = function (action) {
                         $scope.scopeModel.datasource.push(action);
+                        $scope.scopeModel.selectedTemplateConfig = undefined;
                     };
 
                     VR_Analytic_MultipleActionsActionTypeService.addAction($scope.scopeModel.selectedTemplateConfig, getContext(), onActionAdded);
