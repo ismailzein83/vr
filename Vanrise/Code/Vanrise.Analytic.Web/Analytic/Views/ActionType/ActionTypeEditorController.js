@@ -119,18 +119,20 @@
 
             if (directiveAPI != undefined)
                 actionObject = directiveAPI.getData();
-            
-            if (actionObject != undefined && actionTypeTemplateConfig != undefined) {
-                actionObject.ConfigId = actionTypeTemplateConfig.ExtensionConfigurationId;
-                actionObject.ActionType = actionTypeTemplateConfig.Title;
+
+            if (actionObject != undefined) {
+                if (actionTypeTemplateConfig != undefined) {
+                    actionObject.ConfigId = actionTypeTemplateConfig.ExtensionConfigurationId;
+                    actionObject.ActionType = actionTypeTemplateConfig.Title;
+                }
+
                 actionObject.reload = false;
 
-                if (directiveAPI.reload != undefined && typeof (directiveAPI.reload) == 'function')
+                if (directiveAPI != undefined && directiveAPI.reload != undefined && typeof (directiveAPI.reload) == 'function')
                     actionObject.isReloadImplemented = true;
                 else
                     actionObject.isReloadImplemented = false;
             }
-
             return actionObject;
         }
     }
