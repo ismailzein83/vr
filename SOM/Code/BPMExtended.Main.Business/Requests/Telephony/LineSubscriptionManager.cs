@@ -176,6 +176,20 @@ namespace BPMExtended.Main.Business
             }
         }
 
+        public void CancelLineSubscriptionRequest(Guid requestId)
+        {
+            //SOMRequestOutput output;
+            //SOMRequestInput<CancelSuspensionRequestInput> somRequestInput = new SOMRequestInput<CancelSuspensionRequestInput>
+            //{
+            //    InputArguments = new CancelSuspensionRequestInput { RequestId = requestId.ToString() }
+            //};
+            //using (var client = new SOMClient())
+            //{
+            //    output = client.Post<SOMRequestInput<CancelSuspensionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CancellingContractSuspensionFromCustomerCare/StartProcess", somRequestInput);
+            //}
+            //var manager = new BusinessEntityManager();
+            //manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+        }
         #endregion
     }
 }
