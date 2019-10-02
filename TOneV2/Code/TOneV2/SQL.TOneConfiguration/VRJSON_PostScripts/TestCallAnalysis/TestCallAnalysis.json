@@ -842,20 +842,19 @@
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "ID": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "ID": "d2d6c1bf-5461-42fd-9680-88ae3f9c69ae",
               "Name": "Rules",
               "DevProjectID": "8f18f7ca-5561-4307-8f8a-f82761ba3d5b",
               "Url": null,
               "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/other.png",
-              "Rank": 14,
+              "ParentId": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "Icon": null,
+              "Rank": 5,
               "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Rules\"}",
-              "LastModifiedTime": "2019-08-09T17:06:39.19",
-              "RenderedAsView": null
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\"}",
+              "LastModifiedTime": "2019-09-27T16:08:42.26",
+              "RenderedAsView": true
             }
           }
         ],
@@ -2228,8 +2227,7 @@
               "Title": "Profile",
               "Name": "TCAnal_Profile",
               "Details": "{\"$type\":\"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities\",\"AccountPartDefinitionId\":\"c455a41d-19db-4a47-9c5c-c035338f7ad7\",\"Name\":\"TCAnal_Profile\",\"Title\":\"Profile\",\"Settings\":{\"$type\":\"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfileDefinition, Retail.BusinessEntity.MainExtensions\",\"ConfigId\":\"1aff2bf7-1f15-4e0b-accf-457edf36a342\",\"IncludeArabicName\":true,\"ContactTypes\":{\"$type\":\"System.Collections.Generic.List`1[[Retail.BusinessEntity.MainExtensions.AccountParts.CompanyProfileContactType, Retail.BusinessEntity.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Retail.BusinessEntity.MainExtensions.AccountParts.CompanyProfileContactType, Retail.BusinessEntity.MainExtensions\",\"Name\":\"Main\",\"Title\":\"Main\"}]}}}",
-              "CreatedTime": "2019-03-01T16:37:11.687",
-              "LastModifiedTime": null
+              "CreatedTime": "2019-03-01T16:37:11.687"
             }
           },
           {
@@ -2239,8 +2237,7 @@
               "Title": "Personal Info",
               "Name": "Personal Info",
               "Details": "{\"$type\":\"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities\",\"AccountPartDefinitionId\":\"a46abf18-deec-4f78-9178-f433790b5aeb\",\"Name\":\"Personal Info\",\"Title\":\"Personal Info\",\"Settings\":{\"$type\":\"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartPersonalInfoDefinition, Retail.BusinessEntity.MainExtensions\",\"ConfigId\":\"3900317c-b982-4d8b-bd0d-01215ac1f3d9\"}}",
-              "CreatedTime": "2016-08-17T18:55:45.29",
-              "LastModifiedTime": null
+              "CreatedTime": "2016-08-17T18:55:45.29"
             }
           },
           {
@@ -2250,8 +2247,7 @@
               "Title": "Country Codes",
               "Name": "TCAnal_CountryCodesPart",
               "Details": "{\"$type\":\"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities\",\"AccountPartDefinitionId\":\"22144c7d-42b7-4503-a665-fd547856bb43\",\"Name\":\"TCAnal_CountryCodesPart\",\"Title\":\"Country Codes\",\"Settings\":{\"$type\":\"TestCallAnalysis.Business.CountryCodesPartDefinition, TestCallAnalysis.Business\",\"ConfigId\":\"51d18fdd-336c-4713-8258-304149b775fc\"}}",
-              "CreatedTime": "2019-01-16T13:32:10.04",
-              "LastModifiedTime": null
+              "CreatedTime": "2019-01-16T13:32:10.04"
             }
           }
         ],
@@ -2288,12 +2284,6 @@
           },
           {
             "ColumnName": "CreatedTime",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "LastModifiedTime",
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": false
@@ -2456,8 +2446,7 @@
               "Title": "Regulator",
               "AccountBEDefinitionID": "d4028716-97aa-4664-8eaa-35b99603b2e7",
               "Settings": "{\"$type\":\"Retail.BusinessEntity.Entities.AccountTypeSettings, Retail.BusinessEntity.Entities\",\"ShowConcatenatedName\":false,\"CanBeRootAccount\":true,\"PartDefinitionSettings\":{\"$type\":\"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities\",\"AvailabilitySettings\":0,\"RequiredSettings\":0,\"PartDefinitionId\":\"c455a41d-19db-4a47-9c5c-c035338f7ad7\"}]},\"InitialStatusId\":\"172181b4-5e7b-40fa-93ad-62db6e5f09cd\"}",
-              "CreatedTime": "2018-08-27T16:47:16.78",
-              "LastModifiedTime": null
+              "CreatedTime": "2018-08-27T16:47:16.78"
             }
           },
           {
@@ -2467,8 +2456,7 @@
               "Title": "Operator",
               "AccountBEDefinitionID": "d4028716-97aa-4664-8eaa-35b99603b2e7",
               "Settings": "{\"$type\":\"Retail.BusinessEntity.Entities.AccountTypeSettings, Retail.BusinessEntity.Entities\",\"ShowConcatenatedName\":false,\"CanBeRootAccount\":true,\"SupportedParentAccountTypeIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"465fd343-958e-4cf6-b349-9ad88cc15758\"]},\"PartDefinitionSettings\":{\"$type\":\"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities\",\"AvailabilitySettings\":0,\"RequiredSettings\":0,\"PartDefinitionId\":\"c455a41d-19db-4a47-9c5c-c035338f7ad7\"}]},\"InitialStatusId\":\"172181b4-5e7b-40fa-93ad-62db6e5f09cd\"}",
-              "CreatedTime": "2018-08-27T16:47:47.58",
-              "LastModifiedTime": null
+              "CreatedTime": "2018-08-27T16:47:47.58"
             }
           }
         ],
@@ -2505,12 +2493,6 @@
           },
           {
             "ColumnName": "CreatedTime",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "LastModifiedTime",
             "IncludeInInsert": true,
             "IncludeInUpdate": true,
             "IsIdentifier": false
