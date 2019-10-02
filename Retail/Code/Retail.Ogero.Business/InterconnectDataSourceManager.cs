@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using Vanrise.GenericData.Business;
 
 namespace Retail.Ogero.Business
@@ -17,13 +16,13 @@ namespace Retail.Ogero.Business
 
         static VRNumberPrefixManager s_NumberPrefixManager = new VRNumberPrefixManager();
 
-        public static bool IncludeCDR(Dictionary<TrunkType, string> trunkValues, ref string cgpn, ref string cdpn, ref string inTrunk, ref string outTrunk)
+        public static bool IncludeCDR(Dictionary<TrunkType, string> trunkValues, ref string cgpn, ref string cdpn, ref string inTrunk, ref string outTrunk, out Guid? cgpnPrefixType, out Guid? cdpnPrefixType)
         {
             RemovePrefix(ref cgpn, "961", 10);
             RemovePrefix(ref cdpn, "961", 10);
 
-            Guid? cgpnPrefixType = null;
-            Guid? cdpnPrefixType = null;
+            cgpnPrefixType = null;
+            cdpnPrefixType = null;
 
             if (IsANumberValid(cgpn))
             {
