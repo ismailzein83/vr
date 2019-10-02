@@ -379,6 +379,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 $rootScope.showModuleTiles = obj.ShowModuleTiles;
                 $rootScope.toTilesView = obj.TilesMode;
                 $rootScope.toModuleTilesView = obj.ModuleTilesMode;
+                $rootScope.hideSupportIcon = obj.HideSupportIcon;
                 $rootScope.evalApplicationViewToggle();
                 if ($scope.isMobile) {
                     obj.MenuOption = MasterLayoutMenuOptionEnum.FullMenu.value;

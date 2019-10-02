@@ -74,6 +74,7 @@ function (UtilsService, VRUIUtilsService, MasterLayoutMenuOptionEnum) {
 
                     $scope.scopeModel.tilesMode = payload.data.TilesMode;
                     $scope.scopeModel.moduleTilesMode = payload.data.ModuleTilesMode;
+                    $scope.scopeModel.hideSupportIcon = payload.data.HideSupportIcon;
                 }
 
                 menuOptionSelectorReadyDeferred.promise.then(function () {
@@ -95,7 +96,8 @@ function (UtilsService, VRUIUtilsService, MasterLayoutMenuOptionEnum) {
                     ShowApplicationTiles: $scope.scopeModel.showApplicationTiles,
                     ShowModuleTiles: $scope.scopeModel.showModuleTiles,
                     TilesMode: $scope.scopeModel.tilesMode,
-                    ModuleTilesMode: $scope.scopeModel.moduleTilesMode
+                    ModuleTilesMode: $scope.scopeModel.moduleTilesMode,
+                    HideSupportIcon: $scope.scopeModel.hideSupportIcon
                 };
             };
 
