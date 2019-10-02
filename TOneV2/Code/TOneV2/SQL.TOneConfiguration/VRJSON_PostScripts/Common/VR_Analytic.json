@@ -773,6 +773,18 @@
               "CreatedTime": "2016-09-16T18:35:52.827",
               "LastModifiedTime": null
             }
+          },
+          {
+            "FieldValues": {
+              "ID": "0b801cc2-13ce-4994-8527-878a5277fa2b",
+              "DevProjectID": "433656c3-c4eb-40c2-aed9-4bccc4ce83fb",
+              "Name": "Multiple Actions Action Type",
+              "Title": "Multiple Actions",
+              "ConfigType": "VR_Analytic_AutomatedReport_HandlerSettings_ActionType",
+              "Settings": "{\"Editor\":\"vr-analytic-multipleactionsactiontype-generatefileshandler\"}",
+              "CreatedTime": "2019-09-23T15:01:26.673",
+              "LastModifiedTime": "2019-09-23T15:01:26.673"
+            }
           }
         ],
         "Columns": [
