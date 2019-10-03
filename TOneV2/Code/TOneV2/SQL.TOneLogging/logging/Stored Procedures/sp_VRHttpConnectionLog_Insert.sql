@@ -14,7 +14,7 @@
 	@Exception			nvarchar(MAX)
 AS
 BEGIN
-	INSERT INTO [TOneWFTracking].[logging].[VRHttpConnectionLog]
+	INSERT INTO [logging].[VRHttpConnectionLog]
 	   ([VRHttpConnectionId]
        ,[BaseURL]
        ,[Path]

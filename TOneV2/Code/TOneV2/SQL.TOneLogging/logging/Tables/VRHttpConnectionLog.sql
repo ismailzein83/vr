@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [logging].[VRHttpConnectionLog] (
-    [Id]                 BIGINT           NOT NULL,
+    [Id]                 BIGINT           IDENTITY (1, 1) NOT NULL,
     [VRHttpConnectionId] UNIQUEIDENTIFIER NULL,
     [BaseURL]            NVARCHAR (MAX)   NULL,
     [Path]               NVARCHAR (MAX)   NULL,
@@ -15,6 +15,8 @@
     [Exception]          NVARCHAR (MAX)   NULL,
     CONSTRAINT [PK_VRHttpConnectionLog] PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 GO
