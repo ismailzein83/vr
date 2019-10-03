@@ -90,7 +90,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     context.Value = GetCodeRateChange(context.CustomerId, context.RateChangeType, context.CodeChangeType);
                     break;
                 case CodeOnEachRowBEFieldType.EffectiveDate:
-                    context.Value = GetEffectiveDate(context.CodeBED, context.RateBED);
+                    context.Value =context.HighestBED;
                     break;
                 case CodeOnEachRowBEFieldType.CodeGroup:
                     context.Value = new CodeGroupManager().GetMatchCodeGroup(context.Code).Code;
@@ -111,10 +111,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
             }
         }
-        private DateTime? GetEffectiveDate(DateTime? codeBED, DateTime? rateBED)
-        {
-            return codeBED > rateBED ? codeBED : rateBED;
-        }
+ 
         private string GetCodeRateChange(int customerId, RateChangeType rateChangeType, CodeChange codeChangeType)
         {
             var codeChangeTypeDescriptions = new CarrierAccountManager().GetCustomerCodeChangeTypeSettings(customerId);

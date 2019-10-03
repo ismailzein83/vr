@@ -6,100 +6,124 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-	public class CodeOnEachRowMappedTable : MappedTable
-	{
-		public override Guid ConfigId
-		{
-			get { return new Guid("4EBE3013-2A48-41BD-97D6-57286759B907"); }
-		}
+    public class CodeOnEachRowMappedTable : MappedTable
+    {
+        public override Guid ConfigId
+        {
+            get { return new Guid("4EBE3013-2A48-41BD-97D6-57286759B907"); }
+        }
 
-		public override IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat, int customerId)
-		{
-			List<SalePricelistTemplateTableRow> sheet = new List<SalePricelistTemplateTableRow>();
-			int currentRowIndex = this.FirstRowIndex;
+        public override IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat, int customerId)
+        {
+            List<SalePricelistTemplateTableRow> sheet = new List<SalePricelistTemplateTableRow>();
+            int currentRowIndex = this.FirstRowIndex;
 
-			foreach (SalePLZoneNotification zone in zoneNotificationList)
-			{
-				foreach (var code in zone.Codes)
-				{
-					IEnumerable<CodeOnEachRowMappedColumn> concreteMappedColumns = this.MappedColumns.Select(item => item as CodeOnEachRowMappedColumn);
-					sheet.Add(GetRowData(concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat, customerId));
-				}
+            foreach (SalePLZoneNotification zone in zoneNotificationList)
+            {
+                var highestBED = GetCodeRateBED(zone);
+                foreach (var code in zone.Codes)
+                {
+                    IEnumerable<CodeOnEachRowMappedColumn> concreteMappedColumns = this.MappedColumns.Select(item => item as CodeOnEachRowMappedColumn);
+                    sheet.Add(GetRowData(concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat, customerId, highestBED));
+                }
 
-			}
-			return sheet;
-		}
+            }
+            return sheet;
+        }
 
-		private SalePricelistTemplateTableRow GetRowData(IEnumerable<CodeOnEachRowMappedColumn> mappedCols, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat, int customerId)
-		{
-			var row = new SalePricelistTemplateTableRow
-			{
-				RowCells = new List<SalePriceListTemplateTableCell>(),
-			};
+        private DateTime GetCodeRateBED(SalePLZoneNotification salePLZoneNotification)
+        {
+            var rate = salePLZoneNotification.Rate;
+            if (rate.RateChangeType != RateChangeType.NotChanged)
+                return rate.BED;
+            else return GetMaxRateCodesBED(rate, salePLZoneNotification.Codes);
+        }
+        private DateTime GetMaxRateCodesBED(SalePLRateNotification rate, List<SalePLCodeNotification> codes)
+        {
+            DateTime rateBED = rate.BED;
 
-			foreach (CodeOnEachRowMappedColumn mappedCol in mappedCols)
-			{
-				row.RowCells.Add(GetCellData(mappedCol, zone, code, rate, rowIndex, dateTimeFormat, customerId));
-			}
-			return row;
-		}
+            if (codes == null || codes.Count == 0)
+                return rateBED;
+
+            DateTime maxCodeBED = DateTime.Now;
+            foreach (var code in codes)
+            {
+                maxCodeBED = maxCodeBED < code.BED ? code.BED : maxCodeBED;
+            }
+
+            return rateBED > maxCodeBED ? rateBED : maxCodeBED;
+        }
+        private SalePricelistTemplateTableRow GetRowData(IEnumerable<CodeOnEachRowMappedColumn> mappedCols, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat, int customerId, DateTime highestBED)
+        {
+            var row = new SalePricelistTemplateTableRow
+            {
+                RowCells = new List<SalePriceListTemplateTableCell>(),
+            };
+
+            foreach (CodeOnEachRowMappedColumn mappedCol in mappedCols)
+            {
+                row.RowCells.Add(GetCellData(mappedCol, zone, code, rate, rowIndex, dateTimeFormat, customerId, highestBED));
+            }
+            return row;
+        }
 
 
-		private SalePriceListTemplateTableCell GetCellData(CodeOnEachRowMappedColumn mappedCol, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat, int customerId)
-		{
-			if (zone == null)
-				throw new ArgumentNullException("zone");
+        private SalePriceListTemplateTableCell GetCellData(CodeOnEachRowMappedColumn mappedCol, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat, int customerId, DateTime highestBED)
+        {
+            if (zone == null)
+                throw new ArgumentNullException("zone");
 
-			var mappedValueContext = new CodeOnEachRowMappedValueContext
-			{
-				Zone = zone.ZoneName,
-				ZoneId = zone.ZoneId,
-				CustomerId = customerId,
-				OtherRateByRateTypeId = zone.OtherRateByRateTypeId
-			};
+            var mappedValueContext = new CodeOnEachRowMappedValueContext
+            {
+                Zone = zone.ZoneName,
+                ZoneId = zone.ZoneId,
+                CustomerId = customerId,
+                OtherRateByRateTypeId = zone.OtherRateByRateTypeId,
+                HighestBED = highestBED
+            };
 
-			if (code != null)
-			{
-				mappedValueContext.Code = code.Code;
-				mappedValueContext.CodeBED = code.BED;
-				mappedValueContext.CodeEED = code.EED;
-				mappedValueContext.CodeChangeType = code.CodeChange;
-			}
+            if (code != null)
+            {
+                mappedValueContext.Code = code.Code;
+                mappedValueContext.CodeBED = code.BED;
+                mappedValueContext.CodeEED = code.EED;
+                mappedValueContext.CodeChangeType = code.CodeChange;
+            }
 
-			var rateDates = new List<DateTime>();
+            var rateDates = new List<DateTime>();
 
-			if (rate != null)
-			{
-				mappedValueContext.Rate = rate.Rate;
-				mappedValueContext.RateBED = rate.BED;
-				rateDates.Add(rate.BED);
-				mappedValueContext.RateEED = rate.EED;
-				mappedValueContext.ServicesIds = rate.ServicesIds;
-				mappedValueContext.RateChangeType = rate.RateChangeType;
-				mappedValueContext.CurrencyId = rate.CurrencyId;
-				mappedValueContext.Increment = zone.Increment;
+            if (rate != null)
+            {
+                mappedValueContext.Rate = rate.Rate;
+                mappedValueContext.RateBED = rate.BED;
+                rateDates.Add(rate.BED);
+                mappedValueContext.RateEED = rate.EED;
+                mappedValueContext.ServicesIds = rate.ServicesIds;
+                mappedValueContext.RateChangeType = rate.RateChangeType;
+                mappedValueContext.CurrencyId = rate.CurrencyId;
+                mappedValueContext.Increment = zone.Increment;
                 mappedValueContext.Note = rate.Note;
 
             }
-			if(zone.OtherRateByRateTypeId != null && zone.OtherRateByRateTypeId.Count>0)
-			{
-			foreach (var otherRateKvp in zone.OtherRateByRateTypeId)
-					rateDates.Add(otherRateKvp.Value.BED);
-			}
-			if(rateDates!=null && rateDates.Any())
-				mappedValueContext.RateBED = rateDates.Max();
+            if (zone.OtherRateByRateTypeId != null && zone.OtherRateByRateTypeId.Count > 0)
+            {
+                foreach (var otherRateKvp in zone.OtherRateByRateTypeId)
+                    rateDates.Add(otherRateKvp.Value.BED);
+            }
+            if (rateDates != null && rateDates.Any())
+                mappedValueContext.RateBED = rateDates.Max();
 
-			mappedCol.MappedValue.Execute(mappedValueContext);
+            mappedCol.MappedValue.Execute(mappedValueContext);
 
-			if (mappedValueContext.Value is DateTime)
-				mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(dateTimeFormat);
+            if (mappedValueContext.Value is DateTime)
+                mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(dateTimeFormat);
 
-			return (new SalePriceListTemplateTableCell
-			{
-				ColumnIndex = mappedCol.ColumnIndex,
-				Value = mappedValueContext.Value,
+            return (new SalePriceListTemplateTableCell
+            {
+                ColumnIndex = mappedCol.ColumnIndex,
+                Value = mappedValueContext.Value,
                 IsNumber = mappedValueContext.IsNumber
             });
-		}
-	}
+        }
+    }
 }

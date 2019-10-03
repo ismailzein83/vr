@@ -26,5 +26,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public long? ZoneId { get; set; }
         public bool IsNumber { get; set; }
         public string Note { get; set; }
+        public DateTime HighestBED { get; set; }
     }
 }
