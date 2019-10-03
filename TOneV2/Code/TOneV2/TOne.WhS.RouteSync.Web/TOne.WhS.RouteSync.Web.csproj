@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\EricssonController.cs" />
     <Compile Include="Controllers\FreeRadiusController.cs" />
     <Compile Include="Controllers\IdbDataManagerSettingsController.cs" />
     <Compile Include="Controllers\RouteSyncDefinitionController.cs" />
@@ -201,6 +202,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationrange.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-destinationrange.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationcodes.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\EricssonAPIService.js" />
     <Content Include="WhS_RouteSync\Views\NationalCountryCodes\NationalCountryCodesEditorController.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\SpecialRouting\Templates\EricssonSpecialroutingServicelanguageTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\SpecialRouting\Templates\EricssonSpecialroutingTypeSelectiveTemplate.html" />

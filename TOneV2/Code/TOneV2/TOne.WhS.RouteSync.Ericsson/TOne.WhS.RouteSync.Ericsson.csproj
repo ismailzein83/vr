@@ -94,6 +94,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\EricssonManager.cs" />
     <Compile Include="Business\EricssonManualRoutesManager.cs" />
     <Compile Include="Business\BranchRouteSettingsManager.cs" />
     <Compile Include="Business\CustomerMappingManager.cs" />
