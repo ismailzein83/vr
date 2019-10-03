@@ -160,6 +160,14 @@ namespace Vanrise.Analytic.Business
             return connectionSettings.Get<IEnumerable<AnalyticTableInfo>>(string.Format("/api/VR_Analytic/AnalyticTable/GetAnalyticTablesInfo?filter={0}", serializedFilter));
         }
 
+        public bool IsDynamicCodeSupported(Guid analyticTableId)
+        {
+            AnalyticTable analyticTable = GetAnalyticTableById(analyticTableId);
+            analyticTable.ThrowIfNull("analyticTable", analyticTableId);
+            analyticTable.Settings.ThrowIfNull("analyticTable.Settings", analyticTableId);
+            analyticTable.Settings.DataProvider.ThrowIfNull("analyticTable.Settings.DataProvider", analyticTableId);
+            return analyticTable.Settings.DataProvider.IsDynamicCodeSupported();
+        }
         public AnalyticTable GetAnalyticTableById(Guid analyticTableId)
         {
             var analyticTables = GetCachedAnalyticTables();

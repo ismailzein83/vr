@@ -15,6 +15,10 @@ namespace Vanrise.Analytic.Business
                 return VRConnectionId;
             }
         }
+        public override bool IsDynamicCodeSupported()
+        {
+            return false;
+        }
         public Guid RemoteAnalyticTableId { get; set; }
 
         public VRRestAPIAnalyticQueryInterceptor VRRestAPIAnalyticQueryInterceptor { get; set; }

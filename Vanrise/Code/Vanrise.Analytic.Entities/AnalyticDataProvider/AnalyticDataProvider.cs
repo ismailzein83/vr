@@ -9,7 +9,10 @@ namespace Vanrise.Analytic.Entities
         public abstract Guid ConfigId { get; }
         public virtual Guid? ConnectionId { get; }
         public abstract IAnalyticDataManager CreateDataManager(IAnalyticTableQueryContext queryContext);
-
+        public virtual bool IsDynamicCodeSupported()
+        {
+            return true;
+        }
         public virtual IRemoteAnalyticDataProvider GetRemoteAnalyticDataProvider(IGetRemoteAnalyticDataProviderContext context)
         {
             return null;

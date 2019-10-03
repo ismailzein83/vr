@@ -100,6 +100,7 @@ namespace Vanrise.Analytic.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
+                    AnalyticTableManager analyticTableManager = new AnalyticTableManager();
                     var measureConfigs = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, AnalyticItemType.Measure);
                     Dictionary<string, AnalyticMeasure> analyticMeasures = new Dictionary<string, AnalyticMeasure>();
                     foreach (var itemConfig in measureConfigs)
@@ -116,7 +117,8 @@ namespace Vanrise.Analytic.Business
                         };
                         analyticMeasures.Add(itemConfig.Name, measure);
                     }
-                    DynamicTypeGenerator.BuildMeasureEvaluators(tableId, analyticMeasures.Values);
+                    if(analyticTableManager.IsDynamicCodeSupported(tableId))
+                      DynamicTypeGenerator.BuildMeasureEvaluators(tableId, analyticMeasures.Values);
                     return analyticMeasures;
                 });
 
