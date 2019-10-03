@@ -20,6 +20,7 @@ namespace TOne.WhS.RouteSync.Ericsson
         public string BO { get; set; }
         public int RCNumber { get; set; }
         public EricssonRouteType RouteType { get; set; }
+        public string NextBTable { get; set; }
 
         public override string GetCustomer()
         {
@@ -97,5 +98,29 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         public bool IsARoute { get; set; }
 
+    }
+
+
+    public class NextBTableConvertedRouteWithCommand
+    {
+        public List<string> Commands { get; set; }
+        public NextBTableConvertedRoute Route { get; set; }
+    }
+
+    public class NextBTableConvertedRoute : ConvertedRouteWithCode
+    {
+        public string BO { get; set; }
+        public int RCNumber { get; set; }
+        public bool Synced { get; set; }
+
+        public override string GetCustomer()
+        {
+            return this.BO;
+        }
+
+        public override string GetRouteOptionsIdentifier()
+        {
+            return this.RCNumber.ToString();
+        }
     }
 }
