@@ -1,8 +1,7 @@
-﻿using Retail.Ogero.Business;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Vanrise.GenericData.Business;
+using Vanrise.Common;
 using Vanrise.Integration.Entities;
 
 namespace Retail.Runtime.Mappers
@@ -21,6 +20,8 @@ namespace Retail.Runtime.Mappers
 
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = importedData.Reader;
+
+            var numberPrefixTypesByID = new Vanrise.GenericData.Business.VRNumberPrefixTypeManager().GetNumberPrefixTypes();
 
             var trunkValues = new Dictionary<Retail.Ogero.Business.TrunkType, string>();
             trunkValues.Add(Retail.Ogero.Business.TrunkType.MTC, "LC");
@@ -42,7 +43,10 @@ namespace Retail.Runtime.Mappers
                 string inTrunk = null;
                 string outTrunk = null;
 
-                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk);
+                Guid? cgpnPrefixType;
+                Guid? cdpnPrefixType;
+
+                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk, out cgpnPrefixType, out cdpnPrefixType);
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -69,6 +73,10 @@ namespace Retail.Runtime.Mappers
                     cdr.CDPN = cdpn;
                     cdr.InTrunk = inTrunk;
                     cdr.OutTrunk = outTrunk;
+
+                    cdr.ExtraFields = new Dictionary<string, string>();
+                    cdr.ExtraFields.Add("SourceOperator", cgpnPrefixType.HasValue ? numberPrefixTypesByID.GetRecord(cgpnPrefixType.Value).Name : null);
+                    cdr.ExtraFields.Add("DestinationOperator", cdpnPrefixType.HasValue ? numberPrefixTypesByID.GetRecord(cdpnPrefixType.Value).Name : null);
 
                     cdrs.Add(cdr);
 
@@ -115,6 +123,8 @@ namespace Retail.Runtime.Mappers
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = importedData.Reader;
 
+            var numberPrefixTypesByID = new Vanrise.GenericData.Business.VRNumberPrefixTypeManager().GetNumberPrefixTypes();
+
             var trunkValues = new Dictionary<Retail.Ogero.Business.TrunkType, string>();
             trunkValues.Add(Retail.Ogero.Business.TrunkType.MTC, "LC");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Alfa, "FT");
@@ -135,7 +145,10 @@ namespace Retail.Runtime.Mappers
                 if (!string.IsNullOrEmpty(cdpn) && cdpn.StartsWith("00") && !string.IsNullOrEmpty(outTrunk) && internationalTrunks.Contains(outTrunk.Trim()))
                     continue;
 
-                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk);
+                Guid? cgpnPrefixType;
+                Guid? cdpnPrefixType;
+
+                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk, out cgpnPrefixType, out cdpnPrefixType);
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -158,6 +171,10 @@ namespace Retail.Runtime.Mappers
                     cdr.FileName = reader["FileName"] as string;
                     cdr.InTrunk = inTrunk;
                     cdr.OutTrunk = outTrunk;
+
+                    cdr.ExtraFields = new Dictionary<string, string>();
+                    cdr.ExtraFields.Add("SourceOperator", cgpnPrefixType.HasValue ? numberPrefixTypesByID.GetRecord(cgpnPrefixType.Value).Name : null);
+                    cdr.ExtraFields.Add("DestinationOperator", cdpnPrefixType.HasValue ? numberPrefixTypesByID.GetRecord(cdpnPrefixType.Value).Name : null);
 
                     cdrs.Add(cdr);
 
@@ -204,6 +221,8 @@ namespace Retail.Runtime.Mappers
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = importedData.Reader;
 
+            var numberPrefixTypesByID = new Vanrise.GenericData.Business.VRNumberPrefixTypeManager().GetNumberPrefixTypes();
+
             var trunkValues = new Dictionary<Retail.Ogero.Business.TrunkType, string>();
             trunkValues.Add(Retail.Ogero.Business.TrunkType.MTC, "LC");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Alfa, "FT");
@@ -226,7 +245,10 @@ namespace Retail.Runtime.Mappers
                 string cgpn = reader["CallingPartyNumber"] as string;
                 string cdpn = reader["CalledPartyNumber"] as string;
 
-                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk);
+                Guid? cgpnPrefixType;
+                Guid? cdpnPrefixType;
+
+                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk, out cgpnPrefixType, out cdpnPrefixType);
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -249,6 +271,10 @@ namespace Retail.Runtime.Mappers
                     cdr.CDPN = cdpn;
                     cdr.OutTrunk = outTrunk;
                     cdr.InTrunk = inTrunk;
+
+                    cdr.ExtraFields = new Dictionary<string, string>();
+                    cdr.ExtraFields.Add("SourceOperator", cgpnPrefixType.HasValue ? numberPrefixTypesByID.GetRecord(cgpnPrefixType.Value).Name : null);
+                    cdr.ExtraFields.Add("DestinationOperator", cdpnPrefixType.HasValue ? numberPrefixTypesByID.GetRecord(cdpnPrefixType.Value).Name : null);
 
                     cdrs.Add(cdr);
 
@@ -294,6 +320,8 @@ namespace Retail.Runtime.Mappers
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = importedData.Reader;
 
+            var numberPrefixTypesByID = new Vanrise.GenericData.Business.VRNumberPrefixTypeManager().GetNumberPrefixTypes();
+
             var trunkValues = new Dictionary<Retail.Ogero.Business.TrunkType, string>();
             trunkValues.Add(Retail.Ogero.Business.TrunkType.MTC, "TO");
             trunkValues.Add(Retail.Ogero.Business.TrunkType.Alfa, "FT");
@@ -306,7 +334,10 @@ namespace Retail.Runtime.Mappers
                 string inTrunk = reader["MSCIncomingRoute"] as string;
                 string outTrunk = reader["MSCOutgoingRoute"] as string;
 
-                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk);
+                Guid? cgpnPrefixType;
+                Guid? cdpnPrefixType;
+
+                bool includeCDR = Retail.Ogero.Business.InterconnectDataSourceManager.IncludeCDR(trunkValues, ref cgpn, ref cdpn, ref inTrunk, ref outTrunk, out cgpnPrefixType, out cdpnPrefixType);
                 if (includeCDR)
                 {
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
@@ -330,6 +361,10 @@ namespace Retail.Runtime.Mappers
                     cdr.InIP = reader["OrigIOI"] as string;
                     cdr.OutIP = reader["TermIOI"] as string;
                     cdr.FileName = reader["FileName"] as string;
+
+                    cdr.ExtraFields = new Dictionary<string, string>();
+                    cdr.ExtraFields.Add("SourceOperator", cgpnPrefixType.HasValue ? numberPrefixTypesByID.GetRecord(cgpnPrefixType.Value).Name : null);
+                    cdr.ExtraFields.Add("DestinationOperator", cdpnPrefixType.HasValue ? numberPrefixTypesByID.GetRecord(cdpnPrefixType.Value).Name : null);
 
                     cdrs.Add(cdr);
 
