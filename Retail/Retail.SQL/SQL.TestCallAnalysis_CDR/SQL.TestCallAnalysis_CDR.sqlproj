@@ -65,6 +65,7 @@
     <Folder Include="TCAnal_CDR\Tables\" />
     <Folder Include="TCAnal_CDR\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="TCAnal_CDR\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TCAnal_CDR\Tables\MappedCDR.sql" />
@@ -80,5 +81,10 @@
     <Build Include="TCAnal_CDR\User Defined Types\MappedCDRType.sql" />
     <Build Include="Security\TCAnal_CDR.sql" />
     <Build Include="TCAnal_CDR\Tables\InvalidCDR.sql" />
+    <Build Include="TCAnal_CDR\Tables\ReportRecords.sql" />
+    <Build Include="TCAnal_CDR\Tables\Report.sql" />
+    <Build Include="TCAnal_CDR\Views\vw_SentReportRecordsTypeC.sql" />
+    <Build Include="TCAnal_CDR\Views\vw_SentReportRecordsTypeB.sql" />
+    <Build Include="TCAnal_CDR\Views\vw_SentReportRecordsTypeA.sql" />
   </ItemGroup>
 </Project>
