@@ -10,6 +10,8 @@ namespace TOne.WhS.BusinessEntity.Business
     public class LOBManager
     {
         static Guid _definitionID = new Guid("B546AFAF-EFE5-4923-927C-463DF21A491B");
+        
+        #region Public Methods
 
         public IEnumerable<LOBInfo> GetLOBInfo(LOBInfoFilter filter)
         {
@@ -20,18 +22,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedLOBs().MapRecords(LOBInfoMapper, filterExpression);
         }
 
-        private LOBInfo LOBInfoMapper(LOB lob)
+        public string GetLOBName(Guid lobId)
         {
-            if (lob == null)
-                return null;
-
-            return new LOBInfo()
-            {
-                LOBID = lob.LOBID,
-                Name = !string.IsNullOrEmpty(lob.Name) ? lob.Name : null
-            };
-
+            LOB lob = GetCachedLOBs().GetRecord(lobId);
+            return (lob != null) ? lob.Name : null;
         }
+
+        #endregion
+
+        #region Private Methods
 
         private Dictionary<Guid, LOB> GetCachedLOBs()
         {
@@ -50,19 +49,34 @@ namespace TOne.WhS.BusinessEntity.Business
 
                         LOB lob = new LOB()
                         {
-                            LOBID = (Guid)genericBusinessEntity.FieldValues.GetRecord("LOBID"),
+                            LOBId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
                         };
-                        result.Add(lob.LOBID, lob);
+                        result.Add(lob.LOBId, lob);
                     }
                 }
                 return result;
             });
         }
 
+        #endregion
+
+        #region Mappers
+        private LOBInfo LOBInfoMapper(LOB lob)
+        {
+            return new LOBInfo()
+            {
+                LOBId = lob.LOBId,
+                Name =  lob.Name
+            };
+
+        }
+        #endregion
+
+        
     }
 }

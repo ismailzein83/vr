@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 app.directive("vrWhsBeLobSelector", ["WhS_BE_LOBAPIService", "VRUIUtilsService",
-    function (WhS_BE_LOBAPIService,  VRUIUtilsService) {
+    function (WhS_BE_LOBAPIService, VRUIUtilsService) {
         "use strict";
 
         var directiveDefinitionObject = {
@@ -36,10 +36,10 @@ app.directive("vrWhsBeLobSelector", ["WhS_BE_LOBAPIService", "VRUIUtilsService",
         };
 
         function getTemplate(attrs) {
-            var label = "LOB";
+            var label = "Line Of Business";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
-                label = "LOBs";
+                label = "Lines Of Business";
                 multipleselection = "ismultipleselection";
             }
 
@@ -47,14 +47,12 @@ app.directive("vrWhsBeLobSelector", ["WhS_BE_LOBAPIService", "VRUIUtilsService",
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
 
-            return '<vr-columns colnum="{{normalColNum}}">'
-                + '<span vr-disabled="isdisabled">'
-                + '<vr-select  on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="Name" datavaluefield="LOBID" isrequired="ctrl.isrequired" '
-                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="LOB" onselectitem="onselectitem" '
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                + '<vr-select  on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="Name" datavaluefield="LOBId" isrequired="ctrl.isrequired" '
+                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Line Of Business" onselectitem="onselectitem" '
                 + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' >'
                 + '</vr-select>'
-                + '</span>'
-                + '</vr-columns >';
+                + '</vr-columns>';
         }
 
 
@@ -76,12 +74,12 @@ app.directive("vrWhsBeLobSelector", ["WhS_BE_LOBAPIService", "VRUIUtilsService",
                 var api = {};
 
                 api.load = function (payload) {
-                    selectorAPI.clearDataSource();
-
                     var selectedIds;
+                    var selectIfSingleItem;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        selectIfSingleItem = payload.selectifsingleitem;
                     }
 
                     return WhS_BE_LOBAPIService.GetLOBInfo().then(function (response) {
@@ -91,14 +89,20 @@ app.directive("vrWhsBeLobSelector", ["WhS_BE_LOBAPIService", "VRUIUtilsService",
                             }
 
                             if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'LOBID', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'LOBId', attrs, ctrl);
+                            } else if (selectedIds == undefined && selectIfSingleItem == true) {
+                                selectorAPI.selectIfSingleItem();
                             }
                         }
                     });
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('LOBID', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('LOBId', attrs, ctrl);
+                };
+
+                api.hasSingleItem = function () {
+                    return ctrl.datasource.length == 1;
                 };
 
                 if (ctrl.onReady != null)
