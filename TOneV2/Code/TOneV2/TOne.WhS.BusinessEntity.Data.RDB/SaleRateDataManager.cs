@@ -24,6 +24,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_Change = "Change";
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_Note = "Note";
 
         static SaleRateDataManager()
         {
@@ -40,7 +41,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
                 {COL_Change, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
                 {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
+                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
+                {COL_Note, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}}
             };
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -614,7 +616,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
                 RateChange = (RateChangeType)reader.GetInt(COL_Change),
-                CurrencyId = reader.GetNullableInt(COL_CurrencyID)
+                CurrencyId = reader.GetNullableInt(COL_CurrencyID),
+                Note = reader.GetString(COL_Note)
             };
         }
 
@@ -658,6 +661,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectColumns.Column(COL_Change, COL_Change);
             selectColumns.Expression(SaleRateBackupDataManager.COL_StateBackupID).Value(stateBackupId);
             selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+            selectColumns.Column(COL_Note, COL_Note);
 
             var joinContext = selectQuery.Join();
             var saleZoneDataManager = new SaleZoneDataManager();
@@ -689,6 +693,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectColumns.Column(COL_Change, COL_Change);
             selectColumns.Expression(SaleRateBackupDataManager.COL_StateBackupID).Value(stateBackupId);
             selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+            selectColumns.Column(COL_Note, COL_Note);
 
             var joinContext = selectQuery.Join();
             string priceListTableAlias = "spl";
@@ -747,6 +752,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectColumns.Column(COL_SourceID, COL_SourceID);
             selectColumns.Column(COL_Change, COL_Change);
             selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+            selectColumns.Column(COL_Note, COL_Note);
 
             var joinContext = selectQuery.Join();
             var saleZoneDataManager = new SaleZoneDataManager();
