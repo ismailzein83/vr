@@ -7,6 +7,7 @@
     function settingsEditorController($scope, VRCommon_VRComponentTypeAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var isEditMode;
+        var context = {};
 
         var vrComponentTypeId;
         var componentTypeEntity;
@@ -24,16 +25,16 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
             if (parameters != undefined && parameters != null) {
                 vrComponentTypeId = parameters.vrComponentTypeId;
                 extensionConfigurationId = parameters.extensionConfigId;
-
             }
+
             isEditMode = (vrComponentTypeId != undefined);
         }
 
         function defineScope() {
-
             $scope.scopeModel = {};
             $scope.scopeModel.ExtensionConfigurationEditor;
 
@@ -46,12 +47,25 @@
                 devProjectDirectiveApi = api;
                 devProjectPromiseReadyDeferred.resolve();
             };
+
             $scope.saveComponentType = function () {
-                if (isEditMode) {
-                    return updateComponentType();
+                $scope.scopeModel.isLoading = true;
+
+                if (context != undefined && context.beforeSaveHandler != undefined && typeof (context.beforeSaveHandler) == "function") {
+
+                    context.beforeSaveHandler().then(function (response) {
+                        if (response) {
+                            saveComponentType();
+                        }
+                        else {
+                            $scope.scopeModel.isLoading = false;
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
                 }
                 else {
-                    return insertComponentType();
+                    saveComponentType();
                 }
             };
 
@@ -109,12 +123,12 @@
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadComponentTypeEditor, loadDevProjectSelector])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.scopeModel.isLoading = false;
-              });
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
         }
 
         function loadComponentTypeEditor() {
@@ -123,7 +137,8 @@
 
                 var payLoad = {
                     componentType: componentTypeEntity,
-                    extensionConfigId: extensionConfigurationId
+                    extensionConfigId: extensionConfigurationId,
+                    context: context
                 };
                 VRUIUtilsService.callDirectiveLoad(componentTypeEditorAPI, payLoad, loadComponentTypeEditorPromiseDeferred);
             });
@@ -132,7 +147,7 @@
         function loadDevProjectSelector() {
             var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
             devProjectPromiseReadyDeferred.promise.then(function () {
-                var payloadDirective; 
+                var payloadDirective;
                 if (componentTypeEntity != undefined) {
                     payloadDirective = {
                         selectedIds: componentTypeEntity.DevProjectId
@@ -164,7 +179,6 @@
         }
 
         function updateComponentType() {
-            $scope.scopeModel.isLoading = true;
             var componentTypeValidatedPromise = UtilsService.createPromiseDeferred();
             if (componentTypeEditorAPI != undefined && componentTypeEditorAPI.validate != undefined && typeof (componentTypeEditorAPI.validate) == 'function') {
                 componentTypeEditorAPI.validate().then(function () {
@@ -182,23 +196,22 @@
                 var settingObject = buildComponentTypeObjFromScope();
                 settingObject.VRComponentTypeId = componentTypeEntity.VRComponentTypeId;
                 VRCommon_VRComponentTypeAPIService.UpdateVRComponentType(settingObject)
-                .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("Component Type", response, "Name")) {
-                        if ($scope.onVRComponentTypeUpdated != undefined)
-                            $scope.onVRComponentTypeUpdated(response.UpdatedObject);
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
+                    .then(function (response) {
+                        if (VRNotificationService.notifyOnItemUpdated("Component Type", response, "Name")) {
+                            if ($scope.onVRComponentTypeUpdated != undefined)
+                                $scope.onVRComponentTypeUpdated(response.UpdatedObject);
+                            $scope.modalContext.closeModal();
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
             });
             return componentTypeValidatedPromise.promise;
         }
 
         function insertComponentType() {
-            $scope.scopeModel.isLoading = true;
             var componentTypeValidatedPromise = UtilsService.createPromiseDeferred();
             if (componentTypeEditorAPI != undefined && componentTypeEditorAPI.validate != undefined && typeof (componentTypeEditorAPI.validate) == 'function') {
                 componentTypeEditorAPI.validate().then(function () {
@@ -230,6 +243,15 @@
             });
             return componentTypeValidatedPromise.promise;
 
+        }
+
+        function saveComponentType() {
+            if (isEditMode) {
+                return updateComponentType();
+            }
+            else {
+                return insertComponentType();
+            }
         }
     }
 
