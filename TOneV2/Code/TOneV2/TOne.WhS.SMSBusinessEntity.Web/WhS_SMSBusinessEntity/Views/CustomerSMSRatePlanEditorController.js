@@ -240,7 +240,7 @@
                         var currencyPayload = { selectedIds: currencyId };
 
                         VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencyPayload, loadCurrencySelectorDeferred);
-                    })
+                    });
 
                     return loadCurrencySelectorDeferred.promise;
                 }
