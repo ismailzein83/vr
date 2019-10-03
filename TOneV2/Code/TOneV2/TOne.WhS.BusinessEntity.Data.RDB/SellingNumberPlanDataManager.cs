@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static string TABLE_NAME = "TOneWhS_BE_SellingNumberPlan";
         const string COL_ID = "ID";
         const string COL_Name = "Name";
+        const string COL_LOBId = "LOBID";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_CreatedBy = "CreatedBy";
         const string COL_LastModifiedBy = "LastModifiedBy";
@@ -20,6 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_LOBId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier});
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_CreatedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
@@ -67,6 +69,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             notExistsCondition.EqualsCondition(COL_Name).Value(sellingNumberPlan.Name);
 
             updateQuery.Column(COL_Name).Value(sellingNumberPlan.Name);
+            updateQuery.Column(COL_LOBId).Value(sellingNumberPlan.LOBId);
 
             if (sellingNumberPlan.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(sellingNumberPlan.LastModifiedBy.Value);
@@ -89,6 +92,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             notExistsCondition.EqualsCondition(COL_Name).Value(sellingNumberPlan.Name);
 
             insertQuery.Column(COL_Name).Value(sellingNumberPlan.Name);
+
+            insertQuery.Column(COL_LOBId).Value(sellingNumberPlan.LOBId);
 
             if (sellingNumberPlan.CreatedBy.HasValue)
                 insertQuery.Column(COL_CreatedBy).Value(sellingNumberPlan.CreatedBy.Value);
@@ -131,6 +136,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
                 LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime)
             };
+
+            var lobId = reader.GetNullableGuid(COL_LOBId);
+            if (lobId.HasValue)
+            {
+                sellingNumberPlan.LOBId = lobId.Value;
+            }
             return sellingNumberPlan;
         }
         #endregion

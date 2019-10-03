@@ -15,6 +15,10 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SellingNumberPlanManager : BaseBusinessEntityManager, ISellingNumberPlanManager
     {
+        #region Local Variables
+        LOBManager _lobManager = new LOBManager();
+        #endregion
+
         #region Public Methods
         public IEnumerable<SellingNumberPlan> GetAllSellingNumberPlans()
         {
@@ -25,9 +29,18 @@ namespace TOne.WhS.BusinessEntity.Business
             return allSellingNumberPlans.Values;
         }
 
-        public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans()
+        public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans(SellingNumberPlanInfoFilter filter)
         {
-            return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper).OrderBy(x => x.Name);
+            Func<SellingNumberPlan, bool> filterExpression = (sellingNumberPlanEntity) =>
+            {
+                if(filter != null)
+                {
+                    if (filter.LOBId != null && !sellingNumberPlanEntity.LOBId.Equals(filter.LOBId))
+                        return false;
+                }
+                return true;
+            };
+            return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public SellingNumberPlan GetSellingNumberPlanHistoryDetailbyHistoryId(int sellingNumberPlanHistoryId)
@@ -39,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SellingNumberPlan GetSellingNumberPlan(int numberPlanId, bool isViewedFromUI)
         {
-            var sellingNumberPlan= GetCachedSellingNumberPlans().GetRecord(numberPlanId);
+            var sellingNumberPlan = GetCachedSellingNumberPlans().GetRecord(numberPlanId);
 
             if (sellingNumberPlan != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(SellingNumberPlanLoggableEntity.Instance, sellingNumberPlan);
@@ -47,13 +60,22 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public SellingNumberPlan GetSellingNumberPlan(int numberPlanId)
         {
-            return  GetSellingNumberPlan(numberPlanId, false);
+            return GetSellingNumberPlan(numberPlanId, false);
         }
 
         public IDataRetrievalResult<SellingNumberPlanDetail> GetFilteredSellingNumberPlans(DataRetrievalInput<SellingNumberPlanQuery> input)
         {
             var allSellingNumberPlans = GetCachedSellingNumberPlans();
-            Func<SellingNumberPlan, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<SellingNumberPlan, bool> filterExpression = (sellingNumberPlanEntity) =>
+            {
+                if (!string.IsNullOrEmpty(input.Query.Name) && !sellingNumberPlanEntity.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                if (input.Query.LOBIds != null && !input.Query.LOBIds.Contains(sellingNumberPlanEntity.LOBId))
+                    return false;
+
+                return true;
+            };
 
             ResultProcessingHandler<SellingNumberPlanDetail> handler = new ResultProcessingHandler<SellingNumberPlanDetail>()
             {
@@ -142,7 +164,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return string.Empty;
         }
-       
+
         public SellingNumberPlan GetMasterSellingNumberPlan()
         {
             var allNumberPlans = GetCachedSellingNumberPlans();
@@ -155,7 +177,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region ISellingNumberPlanManager Memebers
-       
+
         public string GetSellingNumberPlanName(int sellingNumberPlanId)
         {
             SellingNumberPlan sellingNumberPlan = GetSellingNumberPlan(sellingNumberPlanId);
@@ -165,7 +187,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return null;
         }
-       
+
         #endregion
 
         #region Validation Methods
@@ -295,7 +317,8 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             SellingNumberPlanDetail sellingNumberPlanDetail = new SellingNumberPlanDetail()
             {
-                Entity = sellingNumberPlan
+                Entity = sellingNumberPlan,
+                LOBName = _lobManager.GetLOBName(sellingNumberPlan.LOBId)
             };
             return sellingNumberPlanDetail;
         }

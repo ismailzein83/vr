@@ -2,11 +2,14 @@
 
     "use strict";
 
-    SellingNumberPlanManagementController.$inject = ['$scope', 'WhS_BE_SellingNumberPlanService', 'WhS_BE_SellingNumberPlanAPIService'];
+    SellingNumberPlanManagementController.$inject = ['$scope', 'WhS_BE_SellingNumberPlanService', 'WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function SellingNumberPlanManagementController($scope, WhS_BE_SellingNumberPlanService, WhS_BE_SellingNumberPlanAPIService) {
+    function SellingNumberPlanManagementController($scope, WhS_BE_SellingNumberPlanService, WhS_BE_SellingNumberPlanAPIService, UtilsService, VRUIUtilsService) {
         var gridAPI;
         var filter = {};
+
+        var lobSelectorAPI;
+        var lobSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -24,6 +27,11 @@
                 }
             };
 
+            $scope.onLOBSelectorReady = function (api) {
+                lobSelectorAPI = api;
+                lobSelectorReadyDeferred.resolve();
+            };
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(filter);
@@ -33,12 +41,15 @@
         }
 
         function load() {
-            //$scope.isGettingData = true;
-
+            $scope.isGettingData = true;
+            loadLOBSelector().finally(function () {
+                $scope.isGettingData = false;
+            });
         }
         function setFilterObject() {
             filter = {
-                Name: $scope.name
+                Name: $scope.name,
+                LOBIds: lobSelectorAPI.getSelectedIds()
             };
         }
 
@@ -48,6 +59,16 @@
                     gridAPI.onSellingNumberPlanAdded(sellingNumberPlanObj);
             };
             WhS_BE_SellingNumberPlanService.addSellingNumberPlan(onSellingNumberPlanAdded);
+        }
+
+        function loadLOBSelector() {
+            var lobSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            lobSelectorReadyDeferred.promise.then(function () {
+                var lobSelectorPayload;
+
+                VRUIUtilsService.callDirectiveLoad(lobSelectorAPI, lobSelectorPayload, lobSelectorLoadPromiseDeferred);
+            });
+            return lobSelectorLoadPromiseDeferred.promise;
         }
 
     }

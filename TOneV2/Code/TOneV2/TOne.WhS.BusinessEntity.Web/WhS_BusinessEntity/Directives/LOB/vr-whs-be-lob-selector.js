@@ -47,7 +47,7 @@ app.directive("vrWhsBeLobSelector", ["WhS_BE_LOBAPIService", "VRUIUtilsService",
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            return '<vr-columns ng-hide="scopeModel.hasSingleItem" colnum="{{ctrl.normalColNum}}">'
                 + '<vr-select  on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="Name" datavaluefield="LOBId" isrequired="ctrl.isrequired" '
                 + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Line Of Business" onselectitem="onselectitem" '
                 + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' >'
@@ -63,6 +63,7 @@ app.directive("vrWhsBeLobSelector", ["WhS_BE_LOBAPIService", "VRUIUtilsService",
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.hasSingleItem;
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -94,6 +95,8 @@ app.directive("vrWhsBeLobSelector", ["WhS_BE_LOBAPIService", "VRUIUtilsService",
                                 selectorAPI.selectIfSingleItem();
                             }
                         }
+
+                        $scope.scopeModel.hasSingleItem = api.hasSingleItem();
                     });
                 };
 

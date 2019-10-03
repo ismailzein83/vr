@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SellingNumberPlanQuery
+    public class SellingNumberPlanInfoFilter
     {
-        public string Name { get; set; }
-        public List<Guid> LOBIds { get; set; }
+        public Guid? LOBId { get; set; }
     }
 }

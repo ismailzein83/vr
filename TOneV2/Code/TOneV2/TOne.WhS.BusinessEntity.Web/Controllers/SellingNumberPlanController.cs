@@ -12,10 +12,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     {
         [HttpGet]
         [Route("GetSellingNumberPlans")]
-        public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans()
+        public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans(string filter = null)
         {
+            SellingNumberPlanInfoFilter sellingNumberPlanInfoFilter = string.IsNullOrEmpty(filter) ? null : Vanrise.Common.Serializer.Deserialize<SellingNumberPlanInfoFilter>(filter);
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
-            return manager.GetSellingNumberPlans();
+            return manager.GetSellingNumberPlans(sellingNumberPlanInfoFilter);
         }
 
         [HttpGet]
@@ -23,12 +24,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SellingNumberPlan GetSellingNumberPlan(int sellingNumberPlanId)
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
-            return manager.GetSellingNumberPlan(sellingNumberPlanId,true);
+            return manager.GetSellingNumberPlan(sellingNumberPlanId, true);
         }
 
-        
-             [HttpGet]
-             [Route("GetSellingNumberPlanHistoryDetailbyHistoryId")]
+
+        [HttpGet]
+        [Route("GetSellingNumberPlanHistoryDetailbyHistoryId")]
         public SellingNumberPlan GetSellingNumberPlanHistoryDetailbyHistoryId(int sellingNumberPlanHistoryId)
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();

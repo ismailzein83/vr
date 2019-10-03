@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-   public class SellingNumberPlanDetail
+    public class SellingNumberPlanDetail
     {
-       public SellingNumberPlan Entity { get; set; }        
+        public SellingNumberPlan Entity { get; set; }
+
+        public string LOBName { get; set; }
     }
 }

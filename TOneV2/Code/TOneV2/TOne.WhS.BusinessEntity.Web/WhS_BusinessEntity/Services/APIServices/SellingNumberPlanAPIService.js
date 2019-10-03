@@ -6,8 +6,10 @@
     function SellingNumberPlanAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
         var controllerName = "SellingNumberPlan";
 
-        function GetSellingNumberPlans() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSellingNumberPlans"));
+        function GetSellingNumberPlans(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSellingNumberPlans"), {
+                filter: filter
+            });
         }
 
         function GetSellingNumberPlan(sellingNumberPlanId) {
