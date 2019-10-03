@@ -91,6 +91,7 @@
     <Compile Include="SalePriceList\SalePricelistNotification.cs" />
     <Compile Include="SaleRate\OtherSaleRateQuery.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
+    <Compile Include="SellingNumberPlan\SellingNumberPlanInfoFilter.cs" />
     <Compile Include="Settings\AutoImportSPLSettings.cs" />
     <Compile Include="BaseOtherRatesPreviewQueryHandler.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
