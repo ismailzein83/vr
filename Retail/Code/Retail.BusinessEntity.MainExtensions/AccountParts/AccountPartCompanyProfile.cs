@@ -109,13 +109,13 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
             {
                 List<string> namePart = FieldName.Split('_').ToList();
                 var contact = this.Contacts.GetRecord(namePart[0]);
-                return contact != null && contact.PhoneNumbers != null ? string.Join(",", contact.PhoneNumbers) : null;
+                return (contact != null && contact.PhoneNumbers != null && contact.PhoneNumbers.Count > 0) ? string.Join(",", contact.PhoneNumbers) : null;
             }
             if (FieldName.Contains("MobileNumbers"))
             {
                 List<string> namePart = FieldName.Split('_').ToList();
                 var contact = this.Contacts.GetRecord(namePart[0]);
-                return contact != null && contact.MobileNumbers != null ? string.Join(",", contact.MobileNumbers) : null;
+                return (contact != null && contact.MobileNumbers != null && contact.MobileNumbers.Count > 0) ? string.Join(",", contact.MobileNumbers) : null;
             }
             if (FieldName.Contains("Title"))
             {
