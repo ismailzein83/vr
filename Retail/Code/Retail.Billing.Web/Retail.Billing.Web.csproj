@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RetailBillingCustomCodeChargeTypeController.cs" />
     <Compile Include="Controllers\RetailBillingChargeTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Retail_Billing\Elements\Reports\Reporting.aspx.cs">
@@ -160,19 +161,27 @@
   <ItemGroup>
     <Content Include="Retail_Billing\Constants\CustomerMessagesTypeEnum.js" />
     <Content Include="Retail_Billing\Constants\ModuleConfig.js" />
-    <Content Include="Retail_Billing\Elements\Directives\ChargeType\Definition\MainExtensions\retail-billing-chargetype-extendedsettings-customcode.js" />
-    <Content Include="Retail_Billing\Elements\Directives\ChargeType\Definition\MainExtensions\Templates\CustomCodeChargeTypeTemplate.html" />
-    <Content Include="Retail_Billing\Elements\Directives\ChargeType\Definition\retail-billing-chargetype-extendedsettings.js" />
-    <Content Include="Retail_Billing\Elements\Directives\ChargeType\Definition\retail-billing-chargetype-settings.js" />
-    <Content Include="Retail_Billing\Elements\Directives\ChargeType\Definition\Templates\BillingChargeTypeSettingsTemplate.html" />
-    <Content Include="Retail_Billing\Elements\Directives\ChargeType\Runtime\MainExtensions\retail-billing-chargetype-extendedsettings-customcode-runtime.js" />
-    <Content Include="Retail_Billing\Elements\Directives\ChargeType\Runtime\MainExtensions\Templates\CustomCodeChargeTypeTemplateRuntime.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\retail-billing-chargetype-extendedsettings-customcode.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\Templates\CustomCodeChargeTypeTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\retail-billing-charge-customobjectsettings.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\retail-billing-chargetype-selector.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\retail-billing-chargetype-extendedsettings.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\retail-billing-chargetype-settings.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\Templates\RetailBillingChargeCustomObjectSettingsTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\Templates\BillingChargeTypeSettingsTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\MainExtensions\retail-billing-chargetype-extendedsettings-customcode-runtime.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\MainExtensions\Templates\CustomCodeChargeTypeRuntimeTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\retail-billing-charge-customobject.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\retail-billing-charge.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\Templates\RetailBillingChargeCustomObjectTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\Templates\RetailBillingChargeTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\retail-billing-datasourcesettings-customermessages.js" />
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\Templates\CustomerMessagesTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\retail-billing-invoicetypesettings.js" />
     <Content Include="Retail_Billing\Elements\Directives\Templates\BillingInvoiceTypeSettingsTemplate.html" />
     <Content Include="Retail_Billing\Elements\Reports\Reporting.aspx" />
-    <Content Include="Retail_Billing\Elements\Services\APIServices\ChargeTypeDefinitionAPIService.js" />
+    <Content Include="Retail_Billing\Elements\Services\APIServices\CustomCodeChargeTypeAPIService.js" />
+    <Content Include="Retail_Billing\Elements\Services\APIServices\ChargeTypeAPIService.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Billing\Elements\Reports\BillingInvoiceReport.rdlc">

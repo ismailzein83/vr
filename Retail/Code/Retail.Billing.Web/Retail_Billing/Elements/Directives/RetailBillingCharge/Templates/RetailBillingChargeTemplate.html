@@ -1,0 +1,13 @@
+﻿<vr-columns colnum="12" haschildcolumns>
+    <vr-columns colnum="4" haschildcolumns>
+        <retail-billing-chargetype-selector on-ready="scopeModel.onChargeTypeSelectorReady" selectedvalues="scopeModel.selectedChargeType"
+                                            isrequired="true">
+        </retail-billing-chargetype-selector>
+    </vr-columns>
+</vr-columns>
+
+<vr-columns colnum="12" medium-spacing>
+    <vr-directivewrapper ng-if="scopeModel.selectedChargeType != undefined" valuetowatch="scopeModel.selectedChargeType.RetailBillingChargeTypeId" directive="scopeModel.selectedChargeType.RuntimeEditor"
+                         on-ready="scopeModel.onDirectiveReady" vr-loader="scopeModel.isDirectiveLoading">
+    </vr-directivewrapper>
+</vr-columns>            

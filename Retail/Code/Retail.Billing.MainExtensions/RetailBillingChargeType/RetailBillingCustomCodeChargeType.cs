@@ -1,5 +1,6 @@
 ﻿using Retail.Billing.Entities;
 using System;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 {
@@ -9,10 +10,7 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public Guid? ChargeSettingsRecordTypeId { get; set; }
 
-        /// <summary>
-        /// needs to be of type GenericData GenericEditor
-        /// </summary>
-        public string ChargeSettingsGenericEditor { get; set; }
+        public VRGenericEditorDefinitionSetting ChargeSettingsGenericEditorSettings { get; set; }
 
         public string PricingLogic { get; set; }
 

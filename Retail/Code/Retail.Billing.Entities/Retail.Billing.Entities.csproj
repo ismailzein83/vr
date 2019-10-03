@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RetailBillingChargeType\RetailBillingCompilationOutput.cs" />
     <Compile Include="BillingInvoiceDetails.cs" />
     <Compile Include="BillingInvoiceItem.cs" />
     <Compile Include="BillingRatePlanService.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeExtendedSettingsConfig.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingChargeType.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeExtendedSettings.cs" />
+    <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeInfo.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeSettings.cs" />
     <Compile Include="RetailBillingCharge\RetailBillingCharge.cs" />
   </ItemGroup>

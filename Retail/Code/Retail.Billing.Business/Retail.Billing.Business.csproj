@@ -90,7 +90,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RetailBillingChargeTypeManager.cs" />
+    <Compile Include="RetailBillingChargeType\CustomCode\IRetailBillingCustomCodeChargeTypeEvaluator.cs" />
+    <Compile Include="RetailBillingChargeType\CustomCode\RetailBillingCustomCodeChargeTypeManager.cs" />
+    <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeManager.cs" />
     <Compile Include="BillingRatePlanServiceManager.cs" />
     <Compile Include="BillingContractServiceManager.cs" />
     <Compile Include="BillingInvoicePartnerSettings.cs" />
