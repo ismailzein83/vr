@@ -961,7 +961,7 @@ namespace BPMExtended.Main.Business
             //string connectors = deviceID + "," + mDFPortID + ",COPPER_LINK|" + primaryPort + "," + secondaryPort + ",COPPER_LINK";
             string deviceID = GetDeviceID(phoneNumberID);
             string  item = "";
-            pathType = "PSTN";//just temporary because the line type 'ISDN' is not working 
+            //pathType = "PSTN";//just temporary because the line type 'ISDN' is not working 
             using (SOMClient client = new SOMClient())
             {
                 item = client.Get<string>(String.Format("api/SOM.ST/Inventory/ReserveNumber?phoneNumber=" + phoneNumber + "&pathType=" + pathType + "&phoneNumberID=" + phoneNumberID + "&deviceID=" + deviceID + "&mDFPortID=" + mDFPortID + "&dPPortID=" + dPPortID + "&primaryPort=" + primaryPort + "&secondaryPort=" + secondaryPort));
