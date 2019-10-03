@@ -106,6 +106,7 @@
     <Compile Include="Controller\EricssonSwitchLoggerController.cs" />
     <Compile Include="Data\ICustomerMappingDataManager.cs" />
     <Compile Include="Data\ICodeGroupRouteDataManager.cs" />
+    <Compile Include="Data\INextBTableRouteDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
     <Compile Include="Data\RouteSyncEricssonDataManagerFactory.cs" />
     <Compile Include="Data\IDataManager.cs" />
