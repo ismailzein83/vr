@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnalyticreportRealtimeDefaultsearch.$inject = ["UtilsService", 'VRUIUtilsService','VRLocalizationService'];
+    AnalyticreportRealtimeDefaultsearch.$inject = ["UtilsService", 'VRUIUtilsService', 'VRLocalizationService', 'VR_Analytic_AdvancedFilterFieldsRelationType', 'VR_Analytic_AdvancedFilterMeasuresRelationType'];
 
-    function AnalyticreportRealtimeDefaultsearch(UtilsService, VRUIUtilsService, VRLocalizationService) {
+    function AnalyticreportRealtimeDefaultsearch(UtilsService, VRUIUtilsService, VRLocalizationService, VR_Analytic_AdvancedFilterFieldsRelationType, VR_Analytic_AdvancedFilterMeasuresRelationType) {
         return {
             restrict: "E",
             scope: {
@@ -24,10 +24,19 @@
             templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/AnalyticReport/RealTime/SearchSettings/Templates/DefaultRealTimeReportSearchTemplate.html"
 
         };
+
         function DefaultRealTimeReportSearch($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var filterDimensionSelectorAPI;
             var filterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var advancedFilterDimensionSelectorAPI;
+            var advancedFilterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var advancedFilterMeasureSelectorAPI;
+            var advancedFilterMeasureReadyDeferred = UtilsService.createPromiseDeferred();
+
             var localizationTextResourceSelectorAPI;
             var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -35,7 +44,15 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.timeInterval = 15;
                 $scope.scopeModel.filterDimensions = [];
+                $scope.scopeModel.showAdvancedFilterFields = false;
+                $scope.scopeModel.showAdvancedFilterMeasures = false;
+
                 $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
+
+                $scope.scopeModel.advancedFilterFieldsRelationTypeDS = UtilsService.getArrayEnum(VR_Analytic_AdvancedFilterFieldsRelationType);
+                $scope.scopeModel.advancedFilterMeasuresRelationTypeDS = UtilsService.getArrayEnum(VR_Analytic_AdvancedFilterMeasuresRelationType);
+
+                $scope.scopeModel.selectedAdvancedFilterFieldsRelationType = UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, VR_Analytic_AdvancedFilterFieldsRelationType.AllFields.value, "value");
 
                 $scope.scopeModel.onFilterDimensionSelectorDirectiveReady = function (api) {
                     filterDimensionSelectorAPI = api;
@@ -45,6 +62,55 @@
                 $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
                     localizationTextResourceSelectorAPI = api;
                     localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onAdvancedFilterDimensionSelectorDirectiveReady = function (api) {
+                    advancedFilterDimensionSelectorAPI = api;
+                    advancedFilterDimensionReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onAdvancedFilterMeasureSelectorDirectiveReady = function (api) {
+                    advancedFilterMeasureSelectorAPI = api;
+                    advancedFilterMeasureReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem == undefined)
+                        return;
+
+                    if (selectedItem.value == VR_Analytic_AdvancedFilterFieldsRelationType.AllFields.value) {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterFields = false;
+                            $scope.scopeModel.selectedAdvancedFilterDimensions = [];
+                        });
+                    }
+                    else {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterFields = true;
+                        });
+                    }
+                };
+
+                $scope.scopeModel.onAdvancedFilterMeasuresRelationTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem == undefined) {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterMeasures = false;
+                            $scope.scopeModel.selectedAdvancedFilterMeasures = [];
+                        });
+                        return;
+                    }
+
+                    if (selectedItem.value == VR_Analytic_AdvancedFilterMeasuresRelationType.AllMeasures.value) {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterMeasures = false;
+                            $scope.scopeModel.selectedAdvancedFilterMeasures = [];
+                        });
+                    }
+                    else {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterMeasures = true;
+                        });
+                    }
                 };
 
                 $scope.scopeModel.onSelectFilterDimensionItem = function (dimension) {
@@ -78,7 +144,7 @@
                 defineAPI();
             }
 
-     
+
             function addSelectedFilterDimension(gridDimension) {
 
                 var textResourcePayload;
@@ -92,7 +158,7 @@
                     textResourcePayload = { selectedValue: gridDimension.payload.TitleResourceKey };
 
                 }
-              
+
                 dataItem.onTextResourceSelectorReady = function (api) {
                     dataItem.textResourceSeletorAPI = api;
                     gridDimension.textResourceReadyPromiseDeferred.resolve();
@@ -110,30 +176,59 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.tableIds != undefined) {
-                        var promises = [];
-                        var tableIds = payload.tableIds;
-                        var selectedFilterIds;
-                        if (payload.searchSettings != undefined)
-                        {
-                            $scope.scopeModel.timeInterval = payload.searchSettings.TimeIntervalInMin;
-                            if (payload.searchSettings.Filters != undefined && payload.searchSettings.Filters.length > 0) {
+                    var promises = [];
 
+                    if (payload != undefined && payload.tableIds != undefined) {
+                        var tableIds = payload.tableIds;
+
+                        var selectedFilterIds;
+                        var selectedAdvancedFilterFieldIds;
+                        var selectedAdvancedFilterMeasureIds;
+
+                        if (payload.searchSettings != undefined) {
+                            $scope.scopeModel.timeInterval = payload.searchSettings.TimeIntervalInMin;
+
+                            if (payload.searchSettings.Filters != undefined && payload.searchSettings.Filters.length > 0) {
                                 selectedFilterIds = [];
-                                for (var i = 0 ; i < payload.searchSettings.Filters.length; i++) {
+                                for (var i = 0; i < payload.searchSettings.Filters.length; i++) {
                                     var filterDimension = payload.searchSettings.Filters[i];
+
                                     var dimensionGridField = {
                                         payload: filterDimension,
                                         textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                         textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                     };
                                     selectedFilterIds.push(filterDimension.DimensionName);
+
                                     if ($scope.scopeModel.isLocalizationEnabled)
                                         promises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
                                     addSelectedFilterDimension(dimensionGridField);
                                 }
                             }
+
+                            if (payload.searchSettings.AdvancedFilters != undefined) {
+                                var advancedFilters = payload.searchSettings.AdvancedFilters;
+                                $scope.scopeModel.selectedAdvancedFilterFieldsRelationType = UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, advancedFilters.FieldsRelationType, "value");
+                                $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType = UtilsService.getItemByVal($scope.scopeModel.advancedFilterMeasuresRelationTypeDS, advancedFilters.MeasuresRelationType, "value");
+
+                                if ($scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
+                                    selectedAdvancedFilterFieldIds = [];
+                                    for (var i = 0; i < advancedFilters.AvailableFields.length; i++) {
+                                        var advancedFilterDimension = advancedFilters.AvailableFields[i];
+                                        selectedAdvancedFilterFieldIds.push(advancedFilterDimension.FieldName);
+                                    }
+                                }
+
+                                if ($scope.scopeModel.selectedAdvancedFilterMeasuresRelationType != undefined && $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType.value == VR_Analytic_AdvancedFilterMeasuresRelationType.SpecificMeasures.value) {
+                                    selectedAdvancedFilterMeasureIds = [];
+                                    for (var i = 0; i < advancedFilters.AvailableMeasures.length; i++) {
+                                        var advancedFilterMeasure = advancedFilters.AvailableMeasures[i];
+                                        selectedAdvancedFilterMeasureIds.push(advancedFilterMeasure.FieldName);
+                                    }
+                                }
+                            }
                         }
+
                         var loadFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         filterDimensionReadyDeferred.promise.then(function () {
                             var payloadFilterDirective = {
@@ -144,9 +239,29 @@
                             VRUIUtilsService.callDirectiveLoad(filterDimensionSelectorAPI, payloadFilterDirective, loadFilterDirectivePromiseDeferred);
                         });
                         promises.push(loadFilterDirectivePromiseDeferred.promise);
+
+                        var loadAdvancedFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        advancedFilterDimensionReadyDeferred.promise.then(function () {
+                            var payloadAdvancedFilterDirective = {
+                                filter: { TableIds: tableIds },
+                                selectedIds: selectedAdvancedFilterFieldIds
+                            };
+                            VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
+                        });
+                        promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
+
+                        var advancedFilterMeasureLoadDeferred = UtilsService.createPromiseDeferred();
+                        advancedFilterMeasureReadyDeferred.promise.then(function () {
+                            var payloadAdvancedFilterMeasureDirective = {
+                                filter: { TableIds: tableIds },
+                                selectedIds: selectedAdvancedFilterMeasureIds
+                            };
+                            VRUIUtilsService.callDirectiveLoad(advancedFilterMeasureSelectorAPI, payloadAdvancedFilterMeasureDirective, advancedFilterMeasureLoadDeferred);
+                        });
+                        promises.push(advancedFilterMeasureLoadDeferred.promise);
+
                         return UtilsService.waitMultiplePromises(promises);
                     }
-
                 };
 
                 api.getData = getData;
@@ -157,23 +272,47 @@
 
                 function getData() {
                     var filterDimensions;
-                    if($scope.scopeModel.filterDimensions  !=undefined && $scope.scopeModel.filterDimensions.length>0)
-                    {
-                        filterDimensions=[];
-                        for(var i=0; i<$scope.scopeModel.filterDimensions.length; i++)
-                        {
+                    if ($scope.scopeModel.filterDimensions != undefined && $scope.scopeModel.filterDimensions.length > 0) {
+                        filterDimensions = [];
+                        for (var i = 0; i < $scope.scopeModel.filterDimensions.length; i++) {
                             var filterDimension = $scope.scopeModel.filterDimensions[i];
                             filterDimensions.push({
-                                DimensionName:filterDimension.Name,
+                                DimensionName: filterDimension.Name,
                                 Title: filterDimension.Title,
                                 IsRequired: filterDimension.IsRequired,
                                 TitleResourceKey: filterDimension.textResourceSeletorAPI != undefined ? filterDimension.textResourceSeletorAPI.getSelectedValues() : filterDimension.oldTitleResourceKey
                             });
                         }
                     }
+
+                    var advancedFilters = {};
+                    advancedFilters.FieldsRelationType = $scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value;
+                    advancedFilters.MeasuresRelationType = $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType != undefined ? $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType.value : undefined;
+
+                    if ($scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
+                        advancedFilters.AvailableFields = [];
+                        for (var i = 0; i < $scope.scopeModel.selectedAdvancedFilterDimensions.length; i++) {
+                            var advancedFilterField = $scope.scopeModel.selectedAdvancedFilterDimensions[i];
+                            advancedFilters.AvailableFields.push({
+                                FieldName: advancedFilterField.Name
+                            });
+                        }
+                    }
+
+                    if ($scope.scopeModel.selectedAdvancedFilterMeasuresRelationType != undefined && $scope.scopeModel.selectedAdvancedFilterMeasuresRelationType.value == VR_Analytic_AdvancedFilterMeasuresRelationType.SpecificMeasures.value) {
+                        advancedFilters.AvailableMeasures = [];
+                        for (var i = 0; i < $scope.scopeModel.selectedAdvancedFilterMeasures.length; i++) {
+                            var advancedFilterMeasure = $scope.scopeModel.selectedAdvancedFilterMeasures[i];
+                            advancedFilters.AvailableMeasures.push({
+                                FieldName: advancedFilterMeasure.Name,
+                            });
+                        }
+                    }
+
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.RealTimeReport.SearchSettings.DefaultRealTimeReportSearch, Vanrise.Analytic.MainExtensions ",
                         Filters: filterDimensions,
+                        AdvancedFilters: advancedFilters,
                         TimeIntervalInMin: $scope.scopeModel.timeInterval
                     };
                     return data;

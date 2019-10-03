@@ -470,7 +470,7 @@
                 if (gridDimension.payload != undefined) {
                     dataItem.Name = gridDimension.payload.DimensionName;
                     dataItem.Title = gridDimension.payload.Title != undefined ? gridDimension.payload.Title : gridDimension.payload.DimensionName;
-                    dataItem.IsSelected = gridDimension.payload.IsRequired;
+                    dataItem.IsSelected = gridDimension.payload.IsSelected;
                     dataItem.oldTitleResourceKey = gridDimension.payload.TitleResourceKey;
                     textResourcePayload = { selectedValue: gridDimension.payload.TitleResourceKey };
                 }

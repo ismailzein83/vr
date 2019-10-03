@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRTimerService', 'VR_Analytic_TimeGroupingUnitEnum', 'VR_GenericData_DataRecordTypeService', 'VR_Analytic_SinceTimeEnum', 'ColumnWidthEnum', 'VR_Analytic_TimeUnitEnum', 'VRDateTimeService'];
+    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRTimerService', 'VR_Analytic_TimeGroupingUnitEnum', 'VR_GenericData_DataRecordTypeService', 'VR_Analytic_SinceTimeEnum', 'ColumnWidthEnum', 'VR_Analytic_TimeUnitEnum', 'VRDateTimeService', 'VR_Analytic_AdvancedFilterFieldsRelationType', 'VR_Analytic_AdvancedFilterMeasuresRelationType'];
 
-    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum, VR_GenericData_DataRecordTypeService, VR_Analytic_SinceTimeEnum, ColumnWidthEnum, VR_Analytic_TimeUnitEnum, VRDateTimeService) {
+    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum, VR_GenericData_DataRecordTypeService, VR_Analytic_SinceTimeEnum, ColumnWidthEnum, VR_Analytic_TimeUnitEnum, VRDateTimeService, VR_Analytic_AdvancedFilterFieldsRelationType, VR_Analytic_AdvancedFilterMeasuresRelationType) {
         return {
             restrict: "E",
             scope: {
@@ -20,6 +20,7 @@
             templateUrl: "/Client/Modules/Analytic/Directives/Runtime/AnalyticReport/RealTime/Templates/RealTimeAnalyticReportRuntimeTemplates.html"
 
         };
+
         function RealTimeAnalyticReport($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
@@ -64,9 +65,35 @@
                         filterObj = filter;
                         $scope.scopeModel.expression = expression;
                     };
+
+                    var checkAvailableDimensionNames = false;
+                    var availableDimensionNames;
+
+                    var checkAvailableMeasureNames = false;
+                    var availableMeasureNames;
+
+                    if (settings && settings.SearchSettings && settings.SearchSettings.AdvancedFilters) {
+                        var advancedFilters = settings.SearchSettings.AdvancedFilters;
+
+                        if (advancedFilters.FieldsRelationType == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
+                            checkAvailableDimensionNames = true;
+                            if (advancedFilters.AvailableFields != undefined && advancedFilters.AvailableFields.length > 0)
+                                availableDimensionNames = UtilsService.getPropValuesFromArray(advancedFilters.AvailableFields, "FieldName");
+                        }
+
+                        if (advancedFilters.MeasuresRelationType != VR_Analytic_AdvancedFilterMeasuresRelationType.AllMeasures.value) {
+                            checkAvailableMeasureNames = true;
+                            if (advancedFilters.AvailableMeasures != undefined && advancedFilters.AvailableMeasures.length > 0)
+                                availableMeasureNames = UtilsService.getPropValuesFromArray(advancedFilters.AvailableMeasures, "FieldName");
+                        }
+                    }
+
                     var fields = [];
                     for (var i = 0; i < dimensions.length; i++) {
                         var dimension = dimensions[i];
+
+                        if (checkAvailableDimensionNames && (availableDimensionNames == undefined || !availableDimensionNames.includes(dimension.Name)))
+                            continue;
 
                         fields.push({
                             FieldName: dimension.Name,
@@ -74,8 +101,23 @@
                             Type: dimension.Config.FieldType,
                         });
                     }
+
+                    for (var i = 0; i < measures.length; i++) {
+                        var measure = measures[i];
+
+                        if (checkAvailableMeasureNames && (availableMeasureNames == undefined || !availableMeasureNames.includes(measure.Name)))
+                            continue;
+
+                        fields.push({
+                            FieldName: measure.Name,
+                            FieldTitle: measure.Title,
+                            Type: measure.Config.FieldType,
+                        });
+                    }
+
                     VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onFilterAdded);
                 };
+
                 $scope.scopeModel.resetFilter = function () {
                     $scope.scopeModel.expression = undefined;
                     filterObj = null;

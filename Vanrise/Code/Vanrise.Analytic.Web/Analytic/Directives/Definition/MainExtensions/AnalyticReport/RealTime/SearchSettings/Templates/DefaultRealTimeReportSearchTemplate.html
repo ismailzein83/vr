@@ -3,12 +3,13 @@
         <vr-textbox label="Time Interval (Min)" value="scopeModel.timeInterval" typeof="number"></vr-textbox>
     </vr-columns>
 </vr-row>
-<vr-row >
+
+<vr-row>
     <vr-columns width="fullrow">
         <vr-section title="Filters">
             <vr-row>
                 <vr-analytic-dimension-selector on-ready="scopeModel.onFilterDimensionSelectorDirectiveReady" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedFilterDimensions" onselectitem="    scopeModel.onSelectFilterDimensionItem" ondeselectitem="    scopeModel.onDeselectFilterDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
-                <vr-columns width="2/3row" >
+                <vr-columns width="2/3row">
                     <vr-validator validate="scopeModel.isValidFilterDimensions()">
                         <vr-datagrid datasource="scopeModel.filterDimensions"
                                      on-ready="onGridReady" ondeleterow="scopeModel.removeFilterDimension" hidegridmenu enabledraggablerow="true" norowhighlightonclick="'true'">
@@ -27,6 +28,40 @@
                         </vr-datagrid>
                     </vr-validator>
                 </vr-columns>
+            </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Advanced Filters">
+            <vr-row>
+                <vr-columns colnum="4">
+                    <vr-select datasource="scopeModel.advancedFilterFieldsRelationTypeDS"
+                               selectedvalues="scopeModel.selectedAdvancedFilterFieldsRelationType"
+                               onselectionchanged="scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged"
+                               datavaluefield="value" datatextfield="description" label="Fields Type" hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+                <span ng-show="scopeModel.showAdvancedFilterFields">
+                    <vr-analytic-dimension-selector on-ready="scopeModel.onAdvancedFilterDimensionSelectorDirectiveReady" selectedvalues="scopeModel.selectedAdvancedFilterDimensions"
+                                                    onselectitem="scopeModel.onSelectAdvancedFilterDimensionItem" ondeselectitem="scopeModel.onDeselectAdvancedFilterDimensionItem"
+                                                    normal-col-num="4" isrequired="scopeModel.showAdvancedFilterFields" hideselectedvaluessection ismultipleselection>
+                    </vr-analytic-dimension-selector>
+                </span>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="4">
+                    <vr-select datasource="scopeModel.advancedFilterMeasuresRelationTypeDS" onselectionchanged="scopeModel.onAdvancedFilterMeasuresRelationTypeSelectionChanged"
+                               selectedvalues="scopeModel.selectedAdvancedFilterMeasuresRelationType" datavaluefield="value" datatextfield="description" label="Measures Type">
+                    </vr-select>
+                </vr-columns>
+                <span ng-show="scopeModel.showAdvancedFilterMeasures">
+                    <vr-analytic-measure-selector on-ready="scopeModel.onAdvancedFilterMeasureSelectorDirectiveReady" selectedvalues="scopeModel.selectedAdvancedFilterMeasures"
+                                                  normal-col-num="4" isrequired="scopeModel.showAdvancedFilterMeasures" hideselectedvaluessection ismultipleselection>
+                    </vr-analytic-measure-selector>
+                </span>
             </vr-row>
         </vr-section>
     </vr-columns>
