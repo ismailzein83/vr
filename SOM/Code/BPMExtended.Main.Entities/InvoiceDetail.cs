@@ -8,6 +8,18 @@ namespace BPMExtended.Main.Entities
 {
     public class InvoiceDetail
     {
+        public string ContractId { get; set; }
+        public string CustomerId { get; set; }
+        public string InvoiceCode { get; set; }
+        public string InvoiceDate { get; set; }
+        public string DueDate { get; set; }
+        public string OriginalAmount { get; set; }
+        public string OpenAmount { get; set; }
+        public string BillDispute { get; set; }
+        public string CurrencyCode { get; set; }
+    }
+    public class BillOnDemandInvoiceDetail
+    {
         public string CustomerID { get; set; }
         public string InvoiceCode { get; set; }
         public string InvoiceId { get; set; }

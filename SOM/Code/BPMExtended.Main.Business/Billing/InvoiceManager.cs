@@ -6,11 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BPMExtended.Main.SOMAPI;
+using Terrasoft.Core.Entities;
+using Terrasoft.Core;
+using System.Web;
 
 namespace BPMExtended.Main.Business
 {
     public class InvoiceManager
     {
+        #region User Connection
+        public UserConnection BPM_UserConnection
+        {
+            get
+            {
+                return (UserConnection)HttpContext.Current.Session["UserConnection"];
+            }
+        }
+        #endregion
 
         #region Public
         public InvoiceEntity GetInvoiceById(string invoiceId)
@@ -23,18 +35,16 @@ namespace BPMExtended.Main.Business
             }
             return item;
         }
-        public List<InvoiceDetail> GetInvoices(string customerId)
+        public List<InvoiceDetail> GetInvoices(string customerId, int? invoicesDaysBack)
         {
-            //TODO:Get invoices
-            // List<InvoiceDetail> invoices =  RatePlanMockDataGenerator.GetInvoices(customerId);
+            DateTime fromDate;
+            if (invoicesDaysBack.HasValue)
 
-            //foreach (InvoiceDetail invoice in invoices)
-            //{
-            //    invoice.CollectionStatus = GetCollectionStatus(invoice.InvoiceCode);
-            //    invoice.InvoiceInstallmentFlag = GetInvoiceInstallmentFlag(invoice.InvoiceId);
-            //    invoice.FinancialDisputes = GetFinancialDisputes(invoice.InvoiceId);
-            //}
-            //            return invoices;
+                fromDate = DateTime.Today.AddDays(-invoicesDaysBack.Value);
+
+            else
+
+                fromDate = GetInvoicesFromDate();
 
             var invoicesDetailItems = new List<InvoiceDetail>();
             using (SOMClient client = new SOMClient())
@@ -49,98 +59,17 @@ namespace BPMExtended.Main.Business
             return invoicesDetailItems;
         }
 
-        public List<InvoiceDetail> BillOnDemandInvoice(string customerId)
+        public List<BillOnDemandInvoiceDetail> BillOnDemandInvoice(string customerId)
         {
-            //TODO:Get invoices
-            // List<InvoiceDetail> invoices =  RatePlanMockDataGenerator.GetInvoices(customerId);
 
-            //foreach (InvoiceDetail invoice in invoices)
-            //{
-            //    invoice.CollectionStatus = GetCollectionStatus(invoice.InvoiceCode);
-            //    invoice.InvoiceInstallmentFlag = GetInvoiceInstallmentFlag(invoice.InvoiceId);
-            //    invoice.FinancialDisputes = GetFinancialDisputes(invoice.InvoiceId);
-            //}
-            //            return invoices;
+            var invoicesDetailItems = new List<BillOnDemandInvoiceDetail>();
 
-            var invoicesDetailItems = new List<InvoiceDetail>();
-            //invoicesDetailItems.Add(new InvoiceDetail
-            //{
-            //    CustomerID = "aaaa",
-            //    InvoiceCode = "aaaa",
-            //    InvoiceId = "aaaa",
-            //    InvoiceNumber = "aaaa",
-            //    BillCycle = "aaaa",
-            //    DueDate = "aaaa",
-            //    Resource = "aaaa",
-            //    InvoiceAccount = "aaaa",
-            //    Amount = "aaaa",
-            //    OpenAmount = "aaaa",
-            //    PhoneNumber = "aaaa",
-            //    URL = "aaaa",
-            //    CollectionStatus = true,
-            //    InvoiceInstallmentFlag = true,
-            //    FinancialDisputes = true
-            //});
-            //invoicesDetailItems.Add(new InvoiceDetail
-            //{
-            //    CustomerID = "bbbb",
-            //    InvoiceCode = "bbbbb",
-            //    InvoiceId = "bbbbbb",
-            //    InvoiceNumber = "bbbbbb",
-            //    BillCycle = "bbbbbb",
-            //    DueDate = "bbbbbb",
-            //    Resource = "bbbbb",
-            //    InvoiceAccount = "bbbbb",
-            //    Amount = "bbbbb",
-            //    OpenAmount = "bbbbb",
-            //    PhoneNumber = "bbbbb",
-            //    URL = "bbbbbb",
-            //    CollectionStatus = true,
-            //    InvoiceInstallmentFlag = true,
-            //    FinancialDisputes = true
-            //});
-            //invoicesDetailItems.Add(new InvoiceDetail
-            //{
-            //    CustomerID = "cccc",
-            //    InvoiceCode = "cccc",
-            //    InvoiceId = "cccc",
-            //    InvoiceNumber = "ccccc",
-            //    BillCycle = "ccccc",
-            //    DueDate = "ccccc",
-            //    Resource = "cccccc",
-            //    InvoiceAccount = "cccccc",
-            //    Amount = "ccccc",
-            //    OpenAmount = "ccccc",
-            //    PhoneNumber = "ccccc",
-            //    URL = "ccccccc",
-            //    CollectionStatus = false,
-            //    InvoiceInstallmentFlag = false,
-            //    FinancialDisputes = false
-            //});
-            //invoicesDetailItems.Add(new InvoiceDetail
-            //{
-            //    CustomerID = "ddddd",
-            //    InvoiceCode = "ddddd",
-            //    InvoiceId = "ddddd",
-            //    InvoiceNumber = "ddddd",
-            //    BillCycle = "ddddd",
-            //    DueDate = "ddddd",
-            //    Resource = "ddddd",
-            //    InvoiceAccount = "ddddd",
-            //    Amount = "ddddd",
-            //    OpenAmount = "ddddd",
-            //    PhoneNumber = "ddddd",
-            //    URL = "ddddd",
-            //    CollectionStatus = true,
-            //    InvoiceInstallmentFlag = true,
-            //    FinancialDisputes = true
-            //});
             using (SOMClient client = new SOMClient())
             {
                 List<Invoice> items = client.Get<List<Invoice>>(String.Format("api/SOM.ST/Billing/GetCustomerSimulatedInvoices?CustomerId={0}", customerId));
                 foreach (var item in items)
                 {
-                    var detailItem = InvoiceToDetailMapper(item);
+                    var detailItem = BillOnDemandInvoiceToDetailMapper(item);
                     invoicesDetailItems.Add(detailItem);
                 }
             }
@@ -189,13 +118,74 @@ namespace BPMExtended.Main.Business
         #region Mappers
 
         public InvoiceDetail InvoiceToDetailMapper(Invoice item)
-        {//Invoice Code, Bill Cycle, phone Number , InvoiceAmount, open amount, Invoice URL
+        {
             return new InvoiceDetail
+            {
+                ContractId = item.ContractId,
+                InvoiceCode = item.DocumentCode,
+                InvoiceDate = Convert.ToString(item.EntryDate),
+                DueDate = Convert.ToString(item.DueDate),
+                OriginalAmount = Convert.ToString(item.OriginalAmount),
+                OpenAmount = Convert.ToString(item.OpenAmount),
+                BillDispute = GetBillDisputeByEnumValue(item.BillDispute),
+                CurrencyCode = item.Currency,
+            };
+        }
+        public string GetBillDisputeByEnumValue(int enumValue)
+        {
+            string contractStatusDescription = null;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StBillDispute");
+
+            esq.AddColumn("StValue");
+            esq.AddColumn("Description");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StValue", enumValue);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                contractStatusDescription = entities[0].GetColumnValue("Description").ToString();
+            }
+
+            return contractStatusDescription;
+        }
+        public DateTime GetInvoicesFromDate()
+        {
+            int invoicesDaysBack = 0;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            DateTime invoiceFromDate = DateTime.Today;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+
+            esq.AddColumn("Id");
+            esq.AddColumn("StInvoicesDaysBack");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "C26F08FF-3A2D-48D4-8EC7-21F59C66BCAF");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                invoicesDaysBack = (int)entities[0].GetColumnValue("StInvoicesDaysBack");
+            }
+            if (invoicesDaysBack > 0)
+                invoiceFromDate.AddDays(-invoicesDaysBack);
+            else
+                invoiceFromDate.AddDays(-10);
+            return invoiceFromDate;
+        }
+        public BillOnDemandInvoiceDetail BillOnDemandInvoiceToDetailMapper(Invoice item)
+        {
+            return new BillOnDemandInvoiceDetail
             {
                 InvoiceCode = item.DocumentCode,
                 InvoiceAccount = item.BillingAccountCode,
                 OpenAmount = Convert.ToString(item.OpenAmount),
-                Amount = Convert.ToString(item.Amount),
+                Amount = Convert.ToString(item.OriginalAmount),
                 PhoneNumber = item.DirectoryNumber
             };
         }
@@ -204,14 +194,14 @@ namespace BPMExtended.Main.Business
         {
             return new InvoiceEntity
             {
-                Id = item.Id,
-                CustomerId = item.CustomerId,
-                BillingAccountCode = item.BillingAccountCode,
-                EntryDate = item.EntryDate != null ? item.EntryDate.ToString("MM/dd/yyyy HH:mm") : null,
-                DueDate = item.DueDate != null ? item.DueDate.ToString("MM/dd/yyyy HH:mm") : null,
-                Amount = Convert.ToString(item.Amount),
+                ContractId = item.ContractId,
+                InvoiceCode = item.DocumentCode,
+                InvoiceDate = Convert.ToString(item.EntryDate),
+                DueDate = Convert.ToString(item.DueDate),
+                OriginalAmount = Convert.ToString(item.OriginalAmount),
                 OpenAmount = Convert.ToString(item.OpenAmount),
-                DocumentCode = item.DocumentCode
+                BillDispute = GetBillDisputeByEnumValue(item.BillDispute),
+                CurrencyCode = item.Currency,
             };
         }
 
