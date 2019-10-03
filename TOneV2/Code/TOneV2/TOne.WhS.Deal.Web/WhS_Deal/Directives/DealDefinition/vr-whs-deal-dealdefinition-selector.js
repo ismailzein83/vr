@@ -69,7 +69,9 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
 
                 api.load = function (payload) {
                     ctrl.datasource.length = 0;
-                    ctrl.selectedvalues.length = 0;
+                    if (ctrl.selectedvalues != undefined)
+                        ctrl.selectedvalues.length = 0;
+
                     ctrl.label = $attrs.ismultipleselection != undefined ? "Deals" : "Deal";
 
                     var filter;
@@ -88,7 +90,7 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                         filter = {};
 
                     if (selectedIds != undefined)
-                        filter.SelectedDealDefinitionIds = selectedIds;
+                        filter.SelectedDealDefinitionIds = $attrs.ismultipleselection != undefined ? selectedIds : [selectedIds];
 
                     var serializedFilter = {};
                     if (filter != undefined) {
@@ -137,7 +139,7 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
         function getTemplate(attrs) {
 
             var label = '';
-            if (attrs.hidelabel == undefined) 
+            if (attrs.hidelabel == undefined)
                 label = 'label="{{ctrl.label}}"';
 
             var customlabel = '';
