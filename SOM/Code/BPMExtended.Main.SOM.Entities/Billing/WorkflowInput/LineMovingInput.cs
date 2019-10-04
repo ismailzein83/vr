@@ -13,6 +13,7 @@ namespace BPMExtended.Main.SOMAPI
         public string OldLinePathId { get; set; }
         public string NewLinePathId { get; set; }
         public bool SameSwitch { get; set; }
+        public Address ContractAddress { get; set; }
         public PaymentData PaymentData { get; set; }
     }
 }
