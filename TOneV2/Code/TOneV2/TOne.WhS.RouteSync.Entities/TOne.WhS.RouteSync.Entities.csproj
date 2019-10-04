@@ -58,6 +58,7 @@
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="BusinessManagers\IRouteSyncDefinitionManager.cs" />
+    <Compile Include="CodeCharge\CodeChargeEvaluator.cs" />
     <Compile Include="Context\IApplyDifferentialRoutesContext.cs" />
     <Compile Include="Context\ISwapTableContext.cs" />
     <Compile Include="FTPLogger\FTPLoggerEntities.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="RouteSyncDefinition\RouteSyncDefinitionQuery.cs" />
     <Compile Include="Settings\RouteSyncSettings.cs" />
     <Compile Include="Settings\RouteSyncTechnicalSettings.cs" />
+    <Compile Include="NumberLength\NumberLengthEvaluator.cs" />
     <Compile Include="SwitchCommandLog\SwitchCommandLog.cs" />
     <Compile Include="Switch\SwitchInfoGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
