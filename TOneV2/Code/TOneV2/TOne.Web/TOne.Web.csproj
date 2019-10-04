@@ -819,6 +819,9 @@
     <Content Include="images\flat-Ogero-iconheader.ico" />
     <Content Include="images\flat-Ogero-login.png" />
     <Content Include="images\flat-Ogero-logoonheader.png" />
+    <Content Include="images\flat-PATool-iconheader.ico" />
+    <Content Include="images\flat-PATool-login.png" />
+    <Content Include="images\flat-PATool-logoonheader.png" />
     <Content Include="images\menu-icons\CDR Compare Tool-tile.png" />
     <Content Include="images\menu-icons\CDR Compare Tool.png" />
     <Content Include="images\menu-icons\Deals Module-tile.png" />
