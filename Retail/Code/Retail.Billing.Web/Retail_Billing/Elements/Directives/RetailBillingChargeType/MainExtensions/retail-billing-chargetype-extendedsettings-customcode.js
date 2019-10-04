@@ -188,7 +188,7 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcode", ["UtilsServic
                             promises.push(getChargeSettingsRecordTypeFields(extendedSettings.ChargeSettingsRecordTypeId));
                         }
 
-                        if (extendedSettings.ChargeSettingsRecordTypeId != undefined) {
+                        if (extendedSettings.TargetRecordTypeId != undefined) {
                             promises.push(getTargetRecordTypeFields(extendedSettings.TargetRecordTypeId));
                         }
                     };

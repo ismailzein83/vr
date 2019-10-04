@@ -75,7 +75,9 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
 
                     if (payload != undefined) {
                         charge = payload.charge;
-                        retailBillingChargeTypeId = payload.RetailBillingChargeTypeId;
+
+                        if (charge != undefined)
+                            retailBillingChargeTypeId = charge.RetailBillingChargeTypeId;
 
                         if (retailBillingChargeTypeId != undefined) {
                             promises.push(getRetailBillingChargeType(retailBillingChargeTypeId));
