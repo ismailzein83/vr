@@ -98,6 +98,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="BatchScripts\CentralLog\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\PATool\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\PATool\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\DevTool\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\DevTool\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Common\CarrierPortalSource\Client-list-of-excluded-files.txt" />
@@ -364,6 +366,15 @@
     <None Include="BatchScripts\CDRAnalysis\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\CDRAnalysis\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CDRAnalysis\All.bat" />
+    <None Include="BatchScripts\PATool\01-Runtime.bat" />
+    <None Include="BatchScripts\PATool\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\PATool\03-WebSite.bat" />
+    <None Include="BatchScripts\PATool\05-CompressFiles.bat" />
+    <None Include="BatchScripts\PATool\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\PATool\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\PATool\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\PATool\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\PATool\All.bat" />
     <None Include="BatchScripts\DevTool\01-Runtime.bat" />
     <None Include="BatchScripts\DevTool\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\DevTool\03-WebSite.bat" />
