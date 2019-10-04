@@ -42,10 +42,10 @@ namespace Vanrise.Analytic.Business
                 if (!input.Query.CurrencyId.HasValue)
                 {
                     int systemCurrencyId;
-                    if(new Vanrise.Common.Business.ConfigManager().TryGetSystemCurrencyId(out systemCurrencyId))
+                    if (new Vanrise.Common.Business.ConfigManager().TryGetSystemCurrencyId(out systemCurrencyId))
                     {
                         input.Query.CurrencyId = systemCurrencyId;
-                    }                    
+                    }
                 }
 
                 if (input.SortByColumnName != null)
@@ -1411,6 +1411,11 @@ namespace Vanrise.Analytic.Business
                         {
                             Vanrise.GenericData.Business.Helper.GroupFieldValuesForGetDescriptionByIds(fieldTypesByFieldNameForGetDescriptionByIds, dimName, dimensionValue.Value, dimensionValue, groupedValuesForGetDescriptionByIdsDict);
                         }
+                    }
+                    else
+                    {
+                        var dimensionType = dataRecordFieldsByName.GetRecord(dimName).Type;
+                        dimensionValue.Name = dimensionType.GetDescriptionForNullValue(null);
                     }
 
                     analyticRecord.DimensionValues[dimIndex] = dimensionValue;

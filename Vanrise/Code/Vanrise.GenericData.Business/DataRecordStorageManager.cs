@@ -1199,7 +1199,10 @@ namespace Vanrise.GenericData.Business
                 {
                     dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
                     if (value == null)
+                    {
+                        fldValueDetail.Description = fld.Type.GetDescriptionForNullValue(null);
                         continue;
+                    }
 
                     fldValueDetail.Value = value;
 

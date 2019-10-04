@@ -136,6 +136,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return String.Concat(String.Join(",", entityDescriptions), entityDescriptions.Count != fullCount ? String.Format(" ...... ({0} selected)", fullCount) : "");
             }
         }
+
+        public override string GetDescriptionForNullValue(IDataRecordFieldTypeGetDescriptionForNullValueContext context)
+        {
+            return new BusinessEntityDefinitionManager().GetBusinessEntityNullDisplayText(this.BusinessEntityDefinitionId);
+        }
+
         public override string GenerateValueCode(object value)
         {
             if (value == null)

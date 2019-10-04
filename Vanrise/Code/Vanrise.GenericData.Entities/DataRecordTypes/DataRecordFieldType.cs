@@ -88,6 +88,8 @@ namespace Vanrise.GenericData.Entities
 
         public abstract string GetDescription(Object value);
 
+        public virtual string GetDescriptionForNullValue(IDataRecordFieldTypeGetDescriptionForNullValueContext context) { return null; }
+
         public virtual bool CanGetDescriptionByIds(IDataRecordFieldTypeCanGetDescriptionByIdsContext context)
         {
             return false;
@@ -424,6 +426,14 @@ namespace Vanrise.GenericData.Entities
     }
 
     public class DataRecordFieldTypeHasThreeSixtyDegreeViewContext : IDataRecordFieldTypeHasThreeSixtyDegreeViewContext
+    {
+    }
+
+    public interface IDataRecordFieldTypeGetDescriptionForNullValueContext
+    {
+    }
+
+    public class DataRecordFieldTypeGetDescriptionForNullValueContext : IDataRecordFieldTypeGetDescriptionForNullValueContext
     {
     }
 }
