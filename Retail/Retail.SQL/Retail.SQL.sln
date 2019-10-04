@@ -51,6 +51,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.VR.CentralLogging.Event
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.VR.CentralLogging.Analytic", "SQL.VR.CentralLogging.Analytic\SQL.VR.CentralLogging.Analytic.sqlproj", "{5A1716FB-7AB9-4FA5-937C-0D418F8A900F}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.PATool", "SQL.PATool\SQL.PATool.sqlproj", "{57DC3B1F-14B9-40B0-8DA0-DD144B0ED5D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +173,12 @@ Global
 		{5A1716FB-7AB9-4FA5-937C-0D418F8A900F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A1716FB-7AB9-4FA5-937C-0D418F8A900F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A1716FB-7AB9-4FA5-937C-0D418F8A900F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{57DC3B1F-14B9-40B0-8DA0-DD144B0ED5D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57DC3B1F-14B9-40B0-8DA0-DD144B0ED5D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57DC3B1F-14B9-40B0-8DA0-DD144B0ED5D2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{57DC3B1F-14B9-40B0-8DA0-DD144B0ED5D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57DC3B1F-14B9-40B0-8DA0-DD144B0ED5D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57DC3B1F-14B9-40B0-8DA0-DD144B0ED5D2}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,7 +205,7 @@ Global
 		SolutionGuid = {6368FAF0-4E49-43BC-A244-28822B5F68CE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 20
+		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -271,5 +279,8 @@ Global
 		SccProjectTopLevelParentUniqueName19 = Retail.SQL.sln
 		SccProjectName19 = SQL.VR.CentralLogging.Analytic
 		SccLocalPath19 = SQL.VR.CentralLogging.Analytic
+		SccProjectUniqueName20 = SQL.PATool\\SQL.PATool.sqlproj
+		SccProjectName20 = SQL.PATool
+		SccLocalPath20 = SQL.PATool
 	EndGlobalSection
 EndGlobal
