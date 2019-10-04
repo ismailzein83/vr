@@ -314,14 +314,13 @@
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "DataRows": [
           {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "b243f2c2-c124-447f-8a31-799237b72099",
               "DevProjectID": "8f18f7ca-5561-4307-8f8a-f82761ba3d5b",
               "Name": "TestCallAnalysisCDR_RDB",
-              "Settings": "{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage\",\"ConfigId\":\"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8\",\"ConnectionStringName\":\"TestCallAnalysisCDRDBConnString\",\"ConnectionStringAppSettingName\":\"TestCallAnalysis_DBConnStringKey\",\"IsRemoteDataStore\":false}",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage\",\"ConfigId\":\"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8\",\"ConnectionStringName\":\"TestCallAnalysisCDRDBConnString\",\"IsRemoteDataStore\":false}",
               "CreatedTime": "2019-02-21T12:33:44.49",
-              "LastModifiedTime": "2019-03-29T14:41:29.367"
+              "LastModifiedTime": "2019-10-03T19:19:57.16"
             }
           }
         ],
@@ -1774,6 +1773,17 @@
               "CreatedTime": "2019-01-22T14:42:46.49",
               "LastModifiedTime": "2019-01-22T14:42:46.49"
             }
+          },
+          {
+            "FieldValues": {
+              "ID": "2884e0f4-6fb0-4cc2-8f18-ee73184ab9ab",
+              "Name": "Save Report Action Type",
+              "Title": "Save Report",
+              "ConfigType": "VR_Analytic_AutomatedReport_HandlerSettings_ActionType",
+              "Settings": " {\"Editor\":\"retail-tcanl-savereportactiontype-generatefileshandler\"}",
+              "CreatedTime": "2019-09-24T09:31:54.133",
+              "LastModifiedTime": "2019-09-24T09:31:54.133"
+            }
           }
         ],
         "Columns": [
@@ -1822,7 +1832,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Name like '%TCAnal%' OR  [Settings] Like '%testcallanalysis%'",
+        "LastWhereCondition": "Name like '%TCAnal%' OR  [Settings] Like '%testcallanalysis%' or DevProjectID = '8f18f7ca-5561-4307-8f8a-f82761ba3d5b'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -2615,7 +2625,6 @@
           "'21aacdc8-4da8-4a84-974a-54cfed0b1efb'",
           "'98a2b340-14ea-418c-95be-6e69a14d87c9'",
           "'dd5beb84-aaa3-4777-af2f-a20bacba5c07'",
-          "'3fdb4499-aa32-4f21-b5fa-bbf59f621479'",
           "'4d3cf378-c8ee-4e13-860c-643fa4775220'"
         ],
         "ConfigId": "411f4a51-1b9a-4221-9f16-1a05c1877eb2"
@@ -2633,7 +2642,6 @@
         },
         "KeyValues": [
           "'26aa64f9-67c3-4bf6-be94-6d59030b9be3'",
-          "'e435ae79-4382-472d-9f9d-d65053882d93'",
           "'554149f4-6361-4e32-8b3c-dc2a30084c77'"
         ],
         "ConfigId": "411f4a51-1b9a-4221-9f16-1a05c1877eb2"
@@ -2949,6 +2957,76 @@
         "Variables": [],
         "LastWhereCondition": "rec.DevProjectID = '8f18f7ca-5561-4307-8f8a-f82761ba3d5b'",
         "LastJoinStatement": "JOIN Analytic.AnalyticTable rec on MainTable.TableId = rec.ID",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRComponentType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "0c67cb9e-aa3a-4c0d-a5ab-d8b357f613d7",
+              "DevProjectID": "8f18f7ca-5561-4307-8f8a-f82761ba3d5b",
+              "Name": "Test Call Analysis Cases",
+              "ConfigID": "a5b07696-61b4-4371-b52c-770667e0eb05",
+              "Settings": "{\"$type\":\"Vanrise.Analytic.Entities.VRAutomatedReportQueryDefinitionSettings, Vanrise.Analytic.Entities\",\"VRComponentTypeConfigId\":\"a5b07696-61b4-4371-b52c-770667e0eb05\",\"ExtendedSettings\":{\"$type\":\"Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionSettings, Vanrise.Analytic.MainExtensions\",\"ConfigId\":\"76dc3174-8fb1-445b-a118-b9e86db46a5e\",\"DataRecordTypeId\":\"2f68517f-d4e8-4dff-bab9-8c464fa80f02\",\"DataRecordStorages\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionDataRecordStorage, Vanrise.Analytic.MainExtensions]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionDataRecordStorage, Vanrise.Analytic.MainExtensions\",\"DataRecordStorageId\":\"7ce030ed-a5eb-4d1f-b655-2d55b96ee7be\",\"IsSelected\":true}]},\"RuntimeEditor\":\"vr-analytic-recordsearchquerydefinitionsettings-runtimeeditor\"}}",
+              "CreatedTime": "2019-09-30T12:24:47.96",
+              "LastModifiedTime": "2019-09-30T12:24:47.96"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ConfigID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = '8f18f7ca-5561-4307-8f8a-f82761ba3d5b'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
