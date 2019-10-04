@@ -1070,7 +1070,7 @@
                                 return;
                             if (!ctrl.selectedSectionVisible())
                                 ctrl.selectedValuespageSize = ctrl.initialSelectedValuespageSize;
-                            var dataSourceArray = ctrl.getdatasource();
+                            var dataSourceArray = ctrl.filtername && !ctrl.isRemoteLoad() ? $scope.effectiveDataSource : ctrl.getdatasource();
                             var len = dataSourceArray.length;
 
                             for (var i = 0; i < len; i++) {
