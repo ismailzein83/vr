@@ -7,13 +7,13 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO PA WebSite
 
-xcopy "C:\Publish\Vanrise.Web.Host" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\PA\list-of-excluded-files.txt
+xcopy "C:\Publish\Vanrise.Web.Host" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\PATool\list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Web.config.PA.exclud" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Web.config*"
 ::by default load flat theme
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-DevTool-logoonheader.png" /S /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Images\logoonheader.png*"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-DevTool-login.png" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Images\login.png*"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-tone-iconheader.ico" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Images\iconheader.ico*"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-PATool-logoonheader.png" /S /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Images\logoonheader.png*"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-PATool-login.png" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Images\login.png*"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-PATool-iconheader.ico" /S /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Images\iconheader.ico*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-01.png" 		 /S /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Client\Images\01.png*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-02.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Client\Images\02.png*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-member.png" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\PA\%YYYYMMDD%\Client\Images\member.png*"
