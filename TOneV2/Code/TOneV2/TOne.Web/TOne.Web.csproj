@@ -867,6 +867,9 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Web.config.CloudXPoint.exclud" />
+    <Content Include="Web.config.PA.exclud">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="WebBI.config.exclud" />
     <None Include="Web.config.CentralAuth.exclud">
       <SubType>Designer</SubType>

@@ -148,6 +148,7 @@
     <Folder Include="VRJSON_PostScripts\SOM" />
     <Folder Include="VRJSON_PostScripts\TOne" />
     <Folder Include="VRJSON_PostScripts\TestCallAnalysis" />
+    <Folder Include="VRJSON_PostScripts\PA" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -1048,6 +1049,6 @@
     <None Include="VRJSON_PostScripts\Common\VR_Common.json" />
     <None Include="VRJSON_PostScripts\Common\VR_OrganizationalCharts.json" />
     <None Include="VRJSON_PostScripts\TestCallAnalysis\TestCallAnalysis.json" />
-    <None Include="VRJSON_PostScripts\Retail_PATool.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\PA\PATool.json" />
   </ItemGroup>
 </Project>
