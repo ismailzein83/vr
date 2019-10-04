@@ -1,1 +1,15 @@
-﻿
+﻿<div vr-modalcontent ng-controller="WhS_RouteSync_NationalCountryCodesEditorController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formNationalCountryCodesEditor">
+            <vr-textarea value="scopeModel.nationalCountryCodes" rows="15" label="National Country Codes"></vr-textarea>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formNationalCountryCodesEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div> 

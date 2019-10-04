@@ -33,6 +33,19 @@
             return "WhS_RouteSync_RouteSyncDefinition";
         }
 
+        function editNationalCountryCodes(nationalCountryCodes, onNationalCountryCodesUpdated) {
+            var parameters = {
+                nationalCountryCodes: nationalCountryCodes
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onNationalCountryCodesUpdated = onNationalCountryCodesUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_RouteSync/Views/NationalCountryCodes/NationalCountryCodesEditor.html', parameters, settings);
+        }
+
         function registerObjectTrackingDrillDownToRouteSyncDefinition() {
             var drillDownDefinition = {};
 
@@ -64,6 +77,7 @@
         return {
             addRouteSyncDefinition: addRouteSyncDefinition,
             editRouteSyncDefinition: editRouteSyncDefinition,
+            editNationalCountryCodes: editNationalCountryCodes,
             registerObjectTrackingDrillDownToRouteSyncDefinition: registerObjectTrackingDrillDownToRouteSyncDefinition,
             getDrillDownDefinition: getDrillDownDefinition
         };
