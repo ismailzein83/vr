@@ -183,6 +183,7 @@
     <Compile Include="CustomerSoldZonesManager\CustomerSoldZonesManager.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\CarrierAccountMemoryAnalyticDataManager.cs" />
+    <Compile Include="Extensions\SaleRateDataProviderSettings.cs" />
     <Compile Include="FaultTicketManager.cs" />
     <Compile Include="FaultTickets\CustomerFaultTicketBeforeInsertHandler.cs" />
     <Compile Include="FaultTickets\SupplierFaultTicketBeforeInsertHandler.cs" />

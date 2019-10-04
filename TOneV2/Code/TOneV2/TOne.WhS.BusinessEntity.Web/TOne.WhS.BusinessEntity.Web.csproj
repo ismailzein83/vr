@@ -347,6 +347,8 @@
     <Content Include="WhS_BusinessEntity\Directives\ExclusiveSessionTypes\Templates\SupplierExclusiveSessionTypeEditorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ExclusiveSessionTypes\whs-be-saleareaexclusivesessiontype-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\ExclusiveSessionTypes\whs-be-supplierexclusivesessiontype-editor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Extensions\Templates\SaleRateBusinessObjectDataProviderSettingsTemplat.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Extensions\vr-whs-salerate-businessobject-dataprovidersettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPostpaid\Templates\CustomerPostpaidDefinitionSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPostpaid\Templates\CustomerPostpaidSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPostpaid\whs-be-financialaccountdefinitionsettings-customerpostpaid.js" />
