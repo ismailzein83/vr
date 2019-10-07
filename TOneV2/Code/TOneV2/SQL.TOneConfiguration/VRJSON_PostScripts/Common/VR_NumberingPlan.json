@@ -935,7 +935,7 @@
             "FieldValues": {
               "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "e7855563-9173-47f0-a8e7-4c47cd2a1f42",
-              "Name": "Voice Entites",
+              "Name": "Voice Entities",
               "DevProjectID": "bead874b-f164-4abb-a95f-6be3f18b79fa",
               "Url": null,
               "DefaultViewId": null,

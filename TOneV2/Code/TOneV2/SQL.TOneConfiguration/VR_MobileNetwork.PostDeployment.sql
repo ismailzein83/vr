@@ -66,7 +66,7 @@ Post-Deployment Script Template
 --;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
 --as (select * from (values
 ----//////////////////////////////////////////////////////////////////////////////////////////////////
---('001536D5-A0D7-4A2B-8CF8-A62735E184DB','SMS Entites'			,null,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,4,1,null)
+--('001536D5-A0D7-4A2B-8CF8-A62735E184DB','SMS Entities'			,null,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,4,1,null)
 ----\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 --)c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings]))
 --merge	[sec].[Module] as t

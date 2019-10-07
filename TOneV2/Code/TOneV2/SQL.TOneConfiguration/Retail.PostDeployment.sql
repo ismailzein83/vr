@@ -185,7 +185,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('E7855563-9173-47F0-A8E7-4C47CD2A1F42','Voice Entites'			,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,3,1),
+('E7855563-9173-47F0-A8E7-4C47CD2A1F42','Voice Entities'			,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,3,1),
 ('E70468BE-4793-466B-9B83-BAF2535D64D2','Network Elements'		,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,4,0),
 ('66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Pricing Management'	,null,null,'/images/menu-icons/Sale Area.png',30,1),
 ('7C025B42-ABCE-45A9-A429-0B197E3743DE','Revenue Audit'			,null,null,'/images/menu-icons/Revenue Auditing.png',100,0),

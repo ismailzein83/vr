@@ -199,7 +199,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 --('E7855563-9173-47F0-A8E7-4C47CD2A1F42','Numbering Plan','Numbering Plan',null,'/Client/Images/menu-icons/Business Entities.png',11,1),
-('e7855563-9173-47f0-a8e7-4c47cd2a1f42','Voice Entites',null,'e73c4aba-fd03-4137-b047-f3fb4f7eed03',null,3,0)
+('e7855563-9173-47f0-a8e7-4c47cd2a1f42','Voice Entities',null,'e73c4aba-fd03-4137-b047-f3fb4f7eed03',null,3,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
