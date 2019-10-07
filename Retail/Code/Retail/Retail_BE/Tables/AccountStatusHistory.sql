@@ -7,8 +7,11 @@
     [StatusChangedDate]     DATETIME         NOT NULL,
     [IsDeleted]             BIT              NULL,
     [CreatedTime]           DATETIME         CONSTRAINT [DF_AccountStatusHistory_CreatedTime] DEFAULT (getdate()) NOT NULL,
+    [LastModifiedTime]      DATETIME         NULL,
     CONSTRAINT [IX_AccountStatusHistory_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

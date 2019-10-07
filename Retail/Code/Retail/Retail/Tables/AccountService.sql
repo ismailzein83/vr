@@ -8,9 +8,12 @@
     [StatusID]                UNIQUEIDENTIFIER NULL,
     [ExecutedActionsData]     NVARCHAR (MAX)   NULL,
     [CreatedTime]             DATETIME         CONSTRAINT [DF_AccountService_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime]        DATETIME         NULL,
     [timestamp]               ROWVERSION       NULL,
     CONSTRAINT [PK_AccountService] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

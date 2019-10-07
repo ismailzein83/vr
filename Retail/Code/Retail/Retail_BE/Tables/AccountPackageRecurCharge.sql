@@ -10,9 +10,12 @@
     [ChargeAmount]          DECIMAL (24, 10) NOT NULL,
     [CurrencyID]            INT              NOT NULL,
     [TransactionTypeID]     UNIQUEIDENTIFIER NULL,
+    [LastModifiedTime]      DATETIME         NULL,
     [CreatedTime]           DATETIME         CONSTRAINT [DF_AccountPackageRecurCharge_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_AccountPackageRecurCharge] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
