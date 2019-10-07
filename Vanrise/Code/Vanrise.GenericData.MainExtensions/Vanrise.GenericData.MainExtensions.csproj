@@ -125,6 +125,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEGridCondition\FilterGroupGenericBEGridCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\ListGenericBEOnBeforeInsertHandler.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\SetGenericBEFixedValuesBeforeSaveHandler.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\SetLoggedInUserIdBeforeSaveHandler.cs" />
     <Compile Include="GenericBusinessEntity\GenericBESaveConditions\ConditionGroupSaveCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\BasicAdvancedFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\FilterGroupFilterDefinitionSettings.cs" />
