@@ -1722,6 +1722,30 @@
               "CreatedTime": "2018-11-29T10:27:20.04",
               "LastModifiedTime": null
             }
+          },
+          {
+            "FieldValues": {
+              "ID": "d0b33c05-7078-4731-9688-4724f73699dd",
+              "DevProjectID": "079044d8-3cf1-4af3-8eeb-34b10cc20012",
+              "Name": "SetLoggedInUserID",
+              "Title": "Set Logged In User ID",
+              "ConfigType": "VR_GenericData_GenericBEOnBeforeInsertHandlerSettings",
+              "Settings": "{\"Editor\":\"vr-genericdata-genericbe-beforeinserthandler-loggedinuserid\"}",
+              "CreatedTime": "2019-10-07T14:17:56.067",
+              "LastModifiedTime": "2019-10-07T14:17:56.067"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "db531799-ad7b-45d8-b9fe-475a30488b00",
+              "DevProjectID": "079044d8-3cf1-4af3-8eeb-34b10cc20012",
+              "Name": "SetLoggedInUserID",
+              "Title": "Set Logged In User ID",
+              "ConfigType": "VR_GenericData_GenericBEOnBeforeGetFilteredHandlerSettings",
+              "Settings": "{\"Editor\":\"vr-genericdata-genericbe-beforegetfilteredhandler-loggedinuserid\"}",
+              "CreatedTime": "2019-10-07T16:13:48.91",
+              "LastModifiedTime": "2019-10-07T16:13:48.91"
+            }
           }
         ],
         "Columns": [
