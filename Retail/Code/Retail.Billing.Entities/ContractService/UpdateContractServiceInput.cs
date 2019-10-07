@@ -20,4 +20,48 @@ namespace Retail.Billing.Entities
 
         public DateTime BET { get; set; }
     }
+
+    public class UpdateContractServiceInternetPackageInput
+    {
+        public long ContractServiceId { get; set; }
+
+        public Guid ServiceTypeOptionId { get; set; }
+
+        public decimal? SpeedInMbps { get; set; }
+
+        public int? SpeedType { get; set; }
+
+        public int? PackageLimitInGB { get; set; }
+    }
+
+    public class UpdateContractServiceInternetPackageOutput
+    {
+    }
+
+
+    public class UpdateContractServiceSpecialNumberInput
+    {
+        public long ContractServiceId { get; set; }
+
+        public Guid ServiceTypeOptionId { get; set; }
+
+        public Guid SpecialNumberCategoryId { get; set; }
+    }
+
+    public class UpdateContractServiceSpecialNumberOutput
+    {
+    }  
+
+    public class UpdateContractServiceStatusInput
+    {
+        public long ContractServiceId { get; set; }
+
+        public Guid StatusId { get; set; }
+
+        public Guid? StatusReasonId { get; set; }
+    }
+
+    public class UpdateContractServiceStatusOutput
+    {
+    }
 }

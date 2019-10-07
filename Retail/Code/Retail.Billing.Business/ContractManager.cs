@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.Billing.Business
 {
@@ -21,6 +23,8 @@ namespace Retail.Billing.Business
         static Guid s_StatusId_Inactive = new Guid("557a93b0-d305-422f-9267-1562868984fa");
 
         static Vanrise.GenericData.Business.GenericBusinessEntityManager s_genericBEManager = new Vanrise.GenericData.Business.GenericBusinessEntityManager();
+        static GenericBusinessEntityDefinitionManager s_genericBEDefinitionManager = new GenericBusinessEntityDefinitionManager();
+        static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
 
         #endregion
 
@@ -81,8 +85,44 @@ namespace Retail.Billing.Business
             return new UpdateContractOutput();
         }
 
+        public UpdateContractInternetPackageOutput UpdateContractInternetPackage(UpdateContractInternetPackageInput input)
+        {
+            var fieldValues = new Dictionary<string, object>();
+
+            AddSpeedInMbpsFieldToFieldValues(fieldValues, input.SpeedInMbps);
+            AddSpeedTypeFieldToFieldValues(fieldValues, input.SpeedType);
+            AddPackageLimitInGBFieldToFieldValues(fieldValues, input.PackageLimitInGB);
+
+            UpdateContract(input.ContractId, fieldValues, default(DateTime));
+
+            return new UpdateContractInternetPackageOutput();
+        }
+
+        public UpdateContractResourceNameOutput UpdateContractResourceName(UpdateContractResourceNameInput input)
+        {
+            var fieldValues = new Dictionary<string, object>();
+
+            AddResourceNameFieldToFieldValues(fieldValues, input.ResourceName);
+
+            UpdateContract(input.ContractId, fieldValues, default(DateTime));
+
+            return new UpdateContractResourceNameOutput();
+        }
+
+        public UpdateContractStatusOutput UpdateContractStatus(UpdateContractStatusInput input)
+        {
+            var fieldValues = new Dictionary<string, object>();
+
+            AddStatusFieldToFieldValues(fieldValues, input.StatusId);
+            AddStatusReasonFieldToFieldValues(fieldValues, input.StatusReasonId);
+
+            UpdateContract(input.ContractId, fieldValues, default(DateTime));
+
+            return new UpdateContractStatusOutput();
+        }
+
         #endregion
-        
+
         #region Private Methods
 
         private long InsertContract(Dictionary<string, object> entityToAddFieldValues)
@@ -115,6 +155,68 @@ namespace Retail.Billing.Business
             s_genericBEManager.AddGenericBusinessEntity(contractHistoryToAdd);
         }
 
+        private void UpdateContract(long contractId, Dictionary<string, object> fieldValues, DateTime bet)
+        {
+            if (bet == default(DateTime))
+                bet = DateTime.Now;
+
+            var existingContractEntity = s_genericBEManager.GetGenericBusinessEntity(contractId, s_BusinessEntityDefinitionId_Contract);
+
+            existingContractEntity.ThrowIfNull("existingContractEntity", contractId);
+
+            Guid statusId;
+            Object statusIdAsObj;
+            if (fieldValues.TryGetValue("Status", out statusIdAsObj))
+            {
+                statusId = (Guid)statusIdAsObj;
+                if (statusId == s_StatusId_Active && existingContractEntity.FieldValues["ActivationTime"] == null)
+                    fieldValues.Add("ActivationTime", bet);
+
+                if (statusId == s_StatusId_Inactive && existingContractEntity.FieldValues["DeactivationTime"] == null)
+                    fieldValues.Add("DeactivationTime", bet);
+            }
+            else
+            {
+                statusId = (Guid)existingContractEntity.FieldValues["Status"];
+            }
+            
+            Dictionary<string, object> historyFieldValues = new Dictionary<string, object>();
+
+            var historyFields = GetHistoryFields();
+            foreach (var field in historyFields)
+            {
+                object fieldValue;
+                if (fieldValues.TryGetValue(field.Key, out fieldValue)
+                    || existingContractEntity.FieldValues.TryGetValue(field.Key, out fieldValue))
+                {
+                    historyFieldValues.Add(field.Key, fieldValue);
+                }
+            }
+
+            historyFieldValues.Add("BET", bet);
+
+            List<Vanrise.GenericData.Entities.GenericBusinessEntityToUpdate> contractServiceHistoryEntitiesToSetEET = GetContractHistoryToSetEET(contractId, bet);
+
+            var contractToUpdate = new Vanrise.GenericData.Entities.GenericBusinessEntityToUpdate
+            {
+                BusinessEntityDefinitionId = s_BusinessEntityDefinitionId_Contract,
+                GenericBusinessEntityId = contractId,
+                FieldValues = fieldValues
+            };
+
+            s_genericBEManager.UpdateGenericBusinessEntity(contractToUpdate);
+
+            if (contractServiceHistoryEntitiesToSetEET != null)
+            {
+                foreach (var contractHistoryEntityToSetEET in contractServiceHistoryEntitiesToSetEET)
+                {
+                    s_genericBEManager.UpdateGenericBusinessEntity(contractHistoryEntityToSetEET);
+                }
+            }
+
+            InsertContractHistory(contractId, historyFieldValues);
+        }
+
         private void FillFieldValuesForAdd(AddContractInput input, DateTime bet,
             Dictionary<string, object> entityToAddFieldValues, Dictionary<string, object> historyFieldValues)
         {
@@ -130,6 +232,54 @@ namespace Retail.Billing.Business
             historyFieldValues.Add("MainResourceName", input.MainResourceName);
             historyFieldValues.Add("Status", s_StatusId_New);            
             historyFieldValues.Add("BET", bet);
+
+            if (input.TechnologyId.HasValue)
+            {
+                entityToAddFieldValues.Add("Technology", input.TechnologyId.Value);
+                historyFieldValues.Add("Technology", input.TechnologyId.Value);
+            }
+
+            if (input.SpecialNumberCategoryId.HasValue)
+            {
+                entityToAddFieldValues.Add("SpecialNumberCategory", input.SpecialNumberCategoryId.Value);
+                historyFieldValues.Add("SpecialNumberCategory", input.SpecialNumberCategoryId.Value);
+            }
+
+            if (input.HasTelephony.HasValue)
+            {
+                entityToAddFieldValues.Add("HasTelephony", input.HasTelephony.Value);
+                historyFieldValues.Add("HasTelephony", input.HasTelephony.Value);
+            }
+
+            if (input.HasInternet.HasValue)
+            {
+                entityToAddFieldValues.Add("HasInternet", input.HasInternet.Value);
+                historyFieldValues.Add("HasInternet", input.HasInternet.Value);
+            }
+
+            if (input.SpeedInMbps.HasValue)
+            {
+                entityToAddFieldValues.Add("SpeedInMbps", input.SpeedInMbps.Value);
+                historyFieldValues.Add("SpeedInMbps", input.SpeedInMbps.Value);
+            }
+
+            if (input.SpeedType.HasValue)
+            {
+                entityToAddFieldValues.Add("SpeedType", input.SpeedType.Value);
+                historyFieldValues.Add("SpeedType", input.SpeedType.Value);
+            }
+
+            if (input.PackageLimitInGB.HasValue)
+            {
+                entityToAddFieldValues.Add("PackageLimitInGB", input.PackageLimitInGB.Value);
+                historyFieldValues.Add("PackageLimitInGB", input.PackageLimitInGB.Value);
+            }
+
+            if (input.NbOfLinks.HasValue)
+            {
+                entityToAddFieldValues.Add("NbOfLinks", input.NbOfLinks.Value);
+                historyFieldValues.Add("NbOfLinks", input.NbOfLinks.Value);
+            }
 
             FillExtraFieldValuesForAdd(
                 new ContractManagerFillExtraFieldValuesForAddContext(input, bet, entityToAddFieldValues, historyFieldValues)
@@ -263,6 +413,61 @@ namespace Retail.Billing.Business
             }
 
             return contractHistoriesToUpdate;
+        }
+
+        Dictionary<string, DataRecordField> GetHistoryFields()
+        {
+            var historyDataRecordTypeId = s_genericBEDefinitionManager.GetGenericBEDataRecordTypeId(s_BusinessEntityDefinitionId_ContractHistory);
+            var historyFields = s_dataRecordTypeManager.GetDataRecordTypeFields(historyDataRecordTypeId);
+
+            historyFields.ThrowIfNull("historyFields", s_BusinessEntityDefinitionId_ContractHistory);
+
+            return historyFields;
+        }
+
+        private void AddBillingAccountFieldToFieldValues(Dictionary<string, object> fieldValues, long? billingAccountId)
+        {
+            fieldValues.Add("BillingAccount", billingAccountId);
+        }
+
+        private void AddStatusFieldToFieldValues(Dictionary<string, object> fieldValues, Guid statusId)
+        {
+            fieldValues.Add("Status", statusId);
+        }
+
+        private void AddStatusReasonFieldToFieldValues(Dictionary<string, object> fieldValues, Guid? statusReasonId)
+        {
+            fieldValues.Add("StatusReason", statusReasonId);
+        }
+
+        private void AddResourceNameFieldToFieldValues(Dictionary<string, object> fieldValues, string resourceName)
+        {
+            fieldValues.Add("ResourceName", resourceName);
+        }
+
+        private void AddTechnologyFieldToFieldValues(Dictionary<string, object> fieldValues, Guid? technologyId)
+        {
+            fieldValues.Add("Technology", technologyId);
+        }
+
+        private void AddSpecialNumberCategoryFieldToFieldValues(Dictionary<string, object> fieldValues, Guid? specialNumberCategoryId)
+        {
+            fieldValues.Add("SpecialNumberCategory", specialNumberCategoryId);
+        }
+
+        private void AddSpeedInMbpsFieldToFieldValues(Dictionary<string, object> fieldValues, decimal? speedInMbps)
+        {
+            fieldValues.Add("SpeedInMbps", speedInMbps);
+        }
+
+        private void AddSpeedTypeFieldToFieldValues(Dictionary<string, object> fieldValues, int? speedType)
+        {
+            fieldValues.Add("SpeedType", speedType);
+        }
+
+        private void AddPackageLimitInGBFieldToFieldValues(Dictionary<string, object> fieldValues, int? packageLimitInGB)
+        {
+            fieldValues.Add("PackageLimitInGB", packageLimitInGB);
         }
 
         #endregion

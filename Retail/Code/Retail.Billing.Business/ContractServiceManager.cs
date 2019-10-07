@@ -5,15 +5,108 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.Billing.Business
 {
+    public class RatePlanManager
+    {
+        static Random s_random = new Random();
+        public GetRatePlanPricesOutput GetRatePlanPrices(int ratePlanId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CalculateServiceActionsPricesOutput CalculateServiceActionsPrices(CalculateActionsPricesInput input)
+        {
+            CalculateServiceActionsPricesOutput output = new CalculateServiceActionsPricesOutput { ActionPrices = new List<EvaluatedServiceActionPrice>() };
+
+            foreach(var actionToEvaluatePrice in input.Actions)
+            {
+                var actionPrice = new EvaluatedServiceActionPrice
+                {
+                    InitialCharge = s_random.Next(),
+                    PaymentInAdvance = s_random.Next(),
+                    Deposit = s_random.Next()
+                };
+                output.ActionPrices.Add(actionPrice);
+            }
+
+            return output;
+        }
+    }
+
+    public class GetRatePlanPricesOutput
+    {
+        public List<GetRatePlanPricesOutputItem> Items { get; set; }
+    }
+
+    public class GetRatePlanPricesOutputItem
+    {
+        public Guid ServiceTypeId { get; set; }
+
+        public string InitialFee { get; set; }
+
+        public string RecurringFee { get; set; }
+
+        public string PaymentInAdvance { get; set; }
+
+        public string Deposit { get; set; }
+    }
+
+    public class CalculateActionsPricesInput
+    {
+        public int RatePlanId { get; set; }
+
+        public List<ServiceActionToEvaluatePrice> Actions { get; set; }
+    }
+
+    public class ServiceActionToEvaluatePrice
+    {
+        public Guid ActionTypeId { get; set; }
+
+        public long? ContractServiceId { get; set; }
+
+        /// <summary>
+        /// ContractServiceId or ContractService should be supplied. 
+        /// ContractService should be supplied only if it a new service that is not created yet
+        /// </summary>
+        public ContractService ContractService { get; set; }
+
+        public Guid? OldServiceOptionId { get; set; }
+
+        public Guid? NewServiceOptionId { get; set; }
+
+        public decimal? OldServiceOptionActivationFee { get; set; }
+
+        public decimal? NewServiceOptionActivationFee { get; set; }
+
+        public int? OldSpeedInMbps { get; set; }
+
+        public int? NewSpeedInMbps { get; set; }
+    }
+
+    public class CalculateServiceActionsPricesOutput
+    {
+        public List<EvaluatedServiceActionPrice> ActionPrices { get; set; }
+    }
+
+    public class EvaluatedServiceActionPrice
+    {
+        public decimal InitialCharge { get; set; }
+
+        public decimal PaymentInAdvance { get; set; }
+
+        public decimal Deposit { get; set; }
+    }
+
     public class ContractResourceManager
     {
         static Guid s_BusinessEntityDefinitionId_ContractResource = new Guid("1754de8b-c2d8-446d-be09-d4196c224a66");
 
         static Vanrise.GenericData.Business.GenericBusinessEntityManager s_genericBEManager = new Vanrise.GenericData.Business.GenericBusinessEntityManager();
-
+        
         public AddContractResourceOutput AddContractResource(AddContractResourceInput input)
         {
             var item = new Vanrise.GenericData.Entities.GenericBusinessEntityToAdd
@@ -78,11 +171,14 @@ namespace Retail.Billing.Business
 
             itemToAdd.FieldValues.Add("ContractService", input.ContractServiceId);
             itemToAdd.FieldValues.Add("ActionType", input.ActionTypeId);
-            itemToAdd.FieldValues.Add("ChargeTime", input.ChargeTime);            
+
+            var chargeTime = input.ChargeTime.HasValue ? input.ChargeTime.Value : DateTime.Now;
+            itemToAdd.FieldValues.Add("ChargeTime", chargeTime);   
+            
             itemToAdd.FieldValues.Add("PaidCash", input.PaidCash);
 
             if (input.OverriddenCharge.HasValue)
-                itemToAdd.FieldValues.Add("OverriddenCharge", input.ChargeTime);
+                itemToAdd.FieldValues.Add("OverriddenCharge", input.OverriddenCharge);
 
             if (input.OldServiceOptionId.HasValue)
                 itemToAdd.FieldValues.Add("OldServiceOption", input.OldServiceOptionId.Value);
@@ -130,6 +226,8 @@ namespace Retail.Billing.Business
         public static Guid s_StatusId_Inactive = new Guid("f0acd3fd-c310-4a90-8015-832126cf786d");
 
         static Vanrise.GenericData.Business.GenericBusinessEntityManager s_genericBEManager = new Vanrise.GenericData.Business.GenericBusinessEntityManager();
+        static GenericBusinessEntityDefinitionManager s_genericBEDefinitionManager = new GenericBusinessEntityDefinitionManager();
+        static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
 
         #endregion
 
@@ -191,6 +289,84 @@ namespace Retail.Billing.Business
             return new UpdateContractServiceOutput();
         }
 
+        public List<ContractService> GetContractServices(long contractId)
+        {
+            var filterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup { Filters = new System.Collections.Generic.List<Vanrise.GenericData.Entities.RecordFilter>() };
+
+            filterGroup.Filters.Add(new Vanrise.GenericData.Entities.ObjectListRecordFilter
+            {
+                FieldName = "Contract",
+                Values = new System.Collections.Generic.List<object> { contractId }
+            });
+
+            var contractServiceEntities = s_genericBEManager.GetAllGenericBusinessEntities(
+                s_BusinessEntityDefinitionId_ContractService,
+                null,
+                filterGroup);
+
+            var contractServices = new List<ContractService>();
+
+            if(contractServiceEntities != null)
+            {
+                foreach(var contractServiceEntity in contractServiceEntities)
+                {
+                    ContractService contractService = ContractServiceMapper(contractServiceEntity);
+
+                    contractServices.Add(contractService);
+                }
+            }
+
+            return contractServices;
+        }
+
+        public UpdateContractServiceInternetPackageOutput UpdateContractServiceInternetPackage(UpdateContractServiceInternetPackageInput input)
+        {            
+            var fieldValues = new Dictionary<string, object>();
+
+            AddOptionFieldToFieldValues(fieldValues, input.ServiceTypeOptionId);
+            AddSpeedInMbpsFieldToFieldValues(fieldValues, input.SpeedInMbps);
+            AddSpeedTypeFieldToFieldValues(fieldValues, input.SpeedType);
+            AddPackageLimitInGBFieldToFieldValues(fieldValues, input.PackageLimitInGB);
+
+            UpdateContractService(input.ContractServiceId, fieldValues, default(DateTime));
+
+            return new UpdateContractServiceInternetPackageOutput();
+        }
+
+        public UpdateContractServiceSpecialNumberOutput UpdateContractServiceSpecialNumber(UpdateContractServiceSpecialNumberInput input)
+        {
+            var fieldValues = new Dictionary<string, object>();
+
+            AddOptionFieldToFieldValues(fieldValues, input.ServiceTypeOptionId);
+            AddSpecialNumberCategoryFieldToFieldValues(fieldValues, input.SpecialNumberCategoryId);
+
+            UpdateContractService(input.ContractServiceId, fieldValues, default(DateTime));
+
+            return new UpdateContractServiceSpecialNumberOutput();
+        }
+
+        public UpdateContractServiceStatusOutput UpdateContractServiceStatus(UpdateContractServiceStatusInput input)
+        {
+            var fieldValues = new Dictionary<string, object>();
+
+            AddStatusFieldToFieldValues(fieldValues, input.StatusId);
+            AddStatusReasonFieldToFieldValues(fieldValues, input.StatusReasonId);
+
+            UpdateContractService(input.ContractServiceId, fieldValues, default(DateTime));
+
+            return new UpdateContractServiceStatusOutput();
+        }
+
+        Dictionary<string, DataRecordField> GetHistoryFields()
+        {
+            var historyDataRecordTypeId = s_genericBEDefinitionManager.GetGenericBEDataRecordTypeId(s_BusinessEntityDefinitionId_ContractServiceHistory);
+            var historyFields = s_dataRecordTypeManager.GetDataRecordTypeFields(historyDataRecordTypeId);
+
+            historyFields.ThrowIfNull("historyFields", s_BusinessEntityDefinitionId_ContractServiceHistory);
+
+            return historyFields;
+        }
+        
         #endregion
 
         #region Private Methods
@@ -209,6 +385,79 @@ namespace Retail.Billing.Business
                 throw new Exception($"Add Contract Service Failed while inserting the record into the ContractService Table. Result is: '{insertContractServiceOutput.Result.ToString()}'. Error Message: '{insertContractServiceOutput.Message}'");
 
             return (long)insertContractServiceOutput.InsertedObject.FieldValues["ID"].Value;
+        }
+
+        private void UpdateContractService(long contractServiceId, Dictionary<string, object> fieldValues, DateTime bet)
+        {
+            if (bet == default(DateTime))
+                bet = DateTime.Now;
+
+            var existingContractServiceEntity = s_genericBEManager.GetGenericBusinessEntity(contractServiceId, s_BusinessEntityDefinitionId_ContractService);
+
+            existingContractServiceEntity.ThrowIfNull("existingContractServiceEntity", contractServiceId);
+
+            Guid statusId;
+            Object statusIdAsObj;
+            if (fieldValues.TryGetValue("Status", out statusIdAsObj))
+            {
+                statusId = (Guid)statusIdAsObj;
+                if (statusId == s_StatusId_Active && existingContractServiceEntity.FieldValues["ActivationTime"] == null)
+                    fieldValues.Add("ActivationTime", bet);
+
+                if (statusId == s_StatusId_Inactive && existingContractServiceEntity.FieldValues["DeactivationTime"] == null)
+                    fieldValues.Add("DeactivationTime", bet);
+            }
+            else
+            {
+                statusId = (Guid)existingContractServiceEntity.FieldValues["Status"];
+            }
+
+            Guid? chargeableRecurringTypeId;
+            if (statusId == s_StatusId_Active)
+                chargeableRecurringTypeId = new Guid("87fd7d04-84fc-4250-a4c3-2c7d1f52f212");
+            else if (statusId == s_StatusId_Suspended)
+                chargeableRecurringTypeId = new Guid("b5ff8ef1-52f6-497a-889f-ccb2dce73f27");
+            else
+                chargeableRecurringTypeId = null;
+
+            fieldValues.Add("ChargeableRecurringType", chargeableRecurringTypeId);
+
+
+            Dictionary<string, object> historyFieldValues = new Dictionary<string, object>();
+
+            var historyFields = GetHistoryFields();
+            foreach(var field in historyFields)
+            {
+                object fieldValue;
+                if(fieldValues.TryGetValue(field.Key, out fieldValue) 
+                    || existingContractServiceEntity.FieldValues.TryGetValue(field.Key, out fieldValue))
+                {
+                    historyFieldValues.Add(field.Key, fieldValue);
+                }
+            }
+
+            historyFieldValues.Add("BET", bet);
+
+            List<Vanrise.GenericData.Entities.GenericBusinessEntityToUpdate> contractServiceHistoryEntitiesToSetEET = GetContractServiceHistoryToSetEET(contractServiceId, bet);
+
+            var contractServiceToUpdate = new Vanrise.GenericData.Entities.GenericBusinessEntityToUpdate
+            {
+                BusinessEntityDefinitionId = s_BusinessEntityDefinitionId_ContractService,
+                GenericBusinessEntityId = contractServiceId,
+                FieldValues = fieldValues
+            };
+
+            s_genericBEManager.UpdateGenericBusinessEntity(contractServiceToUpdate);
+
+            if (contractServiceHistoryEntitiesToSetEET != null)
+            {
+                foreach (var contractHistoryEntityToSetEET in contractServiceHistoryEntitiesToSetEET)
+                {
+                    s_genericBEManager.UpdateGenericBusinessEntity(contractHistoryEntityToSetEET);
+                }
+            }
+
+            InsertContractServiceHistory(contractServiceId, historyFieldValues);
         }
 
         private void InsertContractServiceHistory(long contractServiceId, Dictionary<string, object> historyFieldValues)
@@ -241,6 +490,42 @@ namespace Retail.Billing.Business
                 entityToAddFieldValues.Add("BillingAccount", input.BillingAccountId.Value);
                 historyFieldValues.Add("BillingAccount", input.BillingAccountId.Value);
             }
+
+            if (input.TechnologyId.HasValue)
+            {
+                entityToAddFieldValues.Add("Technology", input.TechnologyId.Value);
+                historyFieldValues.Add("Technology", input.TechnologyId.Value);
+            }
+
+            if (input.SpecialNumberCategoryId.HasValue)
+            {
+                entityToAddFieldValues.Add("SpecialNumberCategory", input.SpecialNumberCategoryId.Value);
+                historyFieldValues.Add("SpecialNumberCategory", input.SpecialNumberCategoryId.Value);
+            }
+
+            if (input.SpeedInMbps.HasValue)
+            {
+                entityToAddFieldValues.Add("SpeedInMbps", input.SpeedInMbps.Value);
+                historyFieldValues.Add("SpeedInMbps", input.SpeedInMbps.Value);
+            }
+
+            if (input.SpeedType.HasValue)
+            {
+                entityToAddFieldValues.Add("SpeedType", input.SpeedType.Value);
+                historyFieldValues.Add("SpeedType", input.SpeedType.Value);
+            }
+
+            if (input.PackageLimitInGB.HasValue)
+            {
+                entityToAddFieldValues.Add("PackageLimitInGB", input.PackageLimitInGB.Value);
+                historyFieldValues.Add("PackageLimitInGB", input.PackageLimitInGB.Value);
+            }
+
+            //if (input.SpecialNumberCategoryId.HasValue)
+            //{
+            //    entityToAddFieldValues.Add("SpecialNumberCategory", input.SpecialNumberCategoryId.Value);
+            //    historyFieldValues.Add("SpecialNumberCategory", input.SpecialNumberCategoryId.Value);
+            //}
 
             entityToAddFieldValues.Add("Status", s_StatusId_New);
             historyFieldValues.Add("Status", s_StatusId_New);
@@ -367,6 +652,70 @@ namespace Retail.Billing.Business
             }
 
             return contractServiceHistoriesToUpdate;
+        }
+
+        private ContractService ContractServiceMapper(Vanrise.GenericData.Entities.GenericBusinessEntity contractServiceEntity)
+        {
+            return new ContractService
+            {
+                ContractServiceId = (long)contractServiceEntity.FieldValues["ID"],
+                ContractId = (long)contractServiceEntity.FieldValues["Contract"],
+                ServiceTypeId = (Guid)contractServiceEntity.FieldValues["ServiceType"],
+                ServiceTypeOptionId = (Guid?)contractServiceEntity.FieldValues["ServiceTypeOption"],
+                BillingAccountId = (long?)contractServiceEntity.FieldValues["BillingAccount"],
+                StatusId = (Guid)contractServiceEntity.FieldValues["Status"],
+                StatusReasonId = (Guid?)contractServiceEntity.FieldValues["StatusReason"],
+                TechnologyId = (Guid?)contractServiceEntity.FieldValues["Technology"],
+                SpecialNumberCategoryId = (Guid?)contractServiceEntity.FieldValues["SpecialNumberCategory"],
+                SpeedInMbps = (decimal?)contractServiceEntity.FieldValues["SpeedInMbps"],
+                SpeedType = (int?)contractServiceEntity.FieldValues["SpeedType"],
+                PackageLimitInGB = (int?)contractServiceEntity.FieldValues["PackageLimitInGB"]
+            };
+        }
+
+        private void AddOptionFieldToFieldValues(Dictionary<string, object> fieldValues, Guid serviceTypeOptionId)
+        {
+            fieldValues.Add("ServiceTypeOption", serviceTypeOptionId);
+        }
+
+        private void AddBillingAccountFieldToFieldValues(Dictionary<string, object> fieldValues, long? billingAccountId)
+        {
+            fieldValues.Add("BillingAccount", billingAccountId);
+        }
+
+        private void AddStatusFieldToFieldValues(Dictionary<string, object> fieldValues, Guid statusId)
+        {
+            fieldValues.Add("Status", statusId);
+        }
+
+        private void AddStatusReasonFieldToFieldValues(Dictionary<string, object> fieldValues, Guid? statusReasonId)
+        {
+            fieldValues.Add("StatusReason", statusReasonId);
+        }
+
+        private void AddTechnologyFieldToFieldValues(Dictionary<string, object> fieldValues, Guid? technologyId)
+        {
+            fieldValues.Add("Technology", technologyId);
+        }
+
+        private void AddSpecialNumberCategoryFieldToFieldValues(Dictionary<string, object> fieldValues, Guid? specialNumberCategoryId)
+        {
+            fieldValues.Add("SpecialNumberCategory", specialNumberCategoryId);
+        }
+
+        private void AddSpeedInMbpsFieldToFieldValues(Dictionary<string, object> fieldValues, decimal? speedInMbps)
+        {
+            fieldValues.Add("SpeedInMbps", speedInMbps);
+        }
+
+        private void AddSpeedTypeFieldToFieldValues(Dictionary<string, object> fieldValues, int? speedType)
+        {
+            fieldValues.Add("SpeedType", speedType);
+        }
+
+        private void AddPackageLimitInGBFieldToFieldValues(Dictionary<string, object> fieldValues, int? packageLimitInGB)
+        {
+            fieldValues.Add("PackageLimitInGB", packageLimitInGB);
         }
 
         #endregion
