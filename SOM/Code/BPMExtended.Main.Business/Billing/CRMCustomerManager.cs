@@ -935,7 +935,7 @@ namespace BPMExtended.Main.Business
                         AddressSeq = long.Parse(addressId.ToString()),
                         Street = street.ToString(),
                         AddressNotes = notes.ToString(),
-                        Birthdate = birthDate.ToString("dd/MM/YYYY"),
+                        Birthdate = birthDate.ToString("dd/MM/yyyy"),
                         BusinessPhone = businessPhone.ToString(),
                         Career = career.ToString(),
                         DocumentIdType = documentIdType.ToString(),
