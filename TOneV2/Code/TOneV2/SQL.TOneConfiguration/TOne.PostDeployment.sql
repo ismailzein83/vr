@@ -553,6 +553,8 @@ as (select * from (values
 
 ('22DF0200-FAEE-4780-AA72-88A5A360B9DB','Call Quality Rules','Call Quality Rules',null																			,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["6f588c27-a57c-4193-ab7d-dc8ca534aa89","cc144290-f2cd-4a71-af6d-d2adf087570d"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',null),
 ('33D81D2C-70D4-481B-B16C-598E991161DD','Call Quality Summary','Call Quality Summary',null																		,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"52b283be-5977-47ff-ad6f-cbac81e858b6"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',null)
+
+('0674E516-7B8A-49F7-ACC2-D27A61FEC94B','Supplier Traffic Percentage','Supplier Traffic Percentage',null														,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"8626be7a-578c-4003-925e-d6444d7c0cd2"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
