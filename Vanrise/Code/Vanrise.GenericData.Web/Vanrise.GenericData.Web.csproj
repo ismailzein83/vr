@@ -727,8 +727,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\vr-genericdata-fieldtype-attachment-differenceeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\Templates\BooleanFieldTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-fieldtype-boolean-viewereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\Templates\RequiredParentFieldTemplate-NotUsed.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\Templates\BusinessEntityTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-fieldtype-businessentity-viewereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-requiredparentfield-runtimeeditor-NotUsed.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\Templates\CustomObjectTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\Templates\CustomObjectFieldTypeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject-rulefiltereditor.js" />
