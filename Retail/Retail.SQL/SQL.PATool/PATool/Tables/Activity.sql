@@ -13,6 +13,9 @@
     [LastModifiedTime]      DATETIME         NULL,
     [LastModifiedBy]        INT              NULL,
     [Name]                  NVARCHAR (255)   NULL,
+    [UserID]                INT              NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

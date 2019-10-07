@@ -75,5 +75,6 @@
     <Build Include="PATool\Tables\Product.sql" />
     <Build Include="PATool\Tables\Project.sql" />
     <Build Include="Security\PATool.sql" />
+    <Build Include="PATool\Tables\ProjectProduct.sql" />
   </ItemGroup>
 </Project>
