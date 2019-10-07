@@ -1380,6 +1380,18 @@ namespace BPMExtended.Main.Business
             return output;
         }
 
+        public CustomerCreationOutput CreateOfficialAccount(OfficialAccountInput officialAccountInput) {
+            CustomerCreationOutput output = new CustomerCreationOutput();
+            IDManager manager = new IDManager();
+            string customerId = manager.GetCustomerNextId();
+            //using (var client = new SOMClient())
+            //{
+            //    output = client.Post<OfficialAccountInput, CustomerCreationOutput>("api/SOM.ST/Billing/CreateOfficialCustomer", officialAccountInput);
+            //    output.CustomerSequenceId = customerId;
+            //}
+            return output;
+        }
+
         public string GetCSOId(string Id)
         {
 

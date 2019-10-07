@@ -57,6 +57,7 @@
     <Compile Include="Billing\ServiceResponse\FAFNumbersOutput.cs" />
     <Compile Include="Billing\ServiceResponse\GetContractAddressOutput.cs" />
     <Compile Include="Billing\ServiceResponse\Invoices.cs" />
+    <Compile Include="Billing\ServiceResponse\OfficialAccountInput.cs" />
     <Compile Include="Billing\ServiceResponse\PaymentPlan.cs" />
     <Compile Include="Billing\ServiceResponse\Payment.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerContact.cs" />
