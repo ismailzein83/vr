@@ -20,7 +20,7 @@ namespace Mediation.Runtime.Tasks
             #endregion
 
             #region DataParserTesterTask
-            //DataParserTesterTask.DataParserTesterTask_Main();
+            DataParserTesterTask.DataParserTesterTask_Main();
             #endregion
 
             #region RuntimeTask
