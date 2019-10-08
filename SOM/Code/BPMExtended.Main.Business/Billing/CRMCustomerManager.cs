@@ -1429,7 +1429,11 @@ namespace BPMExtended.Main.Business
         public CustomerCreationOutput CreateOfficialAccount(OfficialAccountInput officialAccountInput) {
             CustomerCreationOutput output = new CustomerCreationOutput();
             IDManager manager = new IDManager();
+            CommonManager commonManager = new CommonManager();
+            Contact contact = commonManager.GetContact(officialAccountInput.ContactId);
             string customerId = manager.GetCustomerNextId();
+            officialAccountInput.DocumentId = contact.DocumentID;
+            officialAccountInput.DocumentIdType = contact.DocumentIdTypeId;
 
             officialAccountInput.CSO = GetCSOId(officialAccountInput.CSO);
             officialAccountInput.BillCycle = GetDefaultBillCycle();
