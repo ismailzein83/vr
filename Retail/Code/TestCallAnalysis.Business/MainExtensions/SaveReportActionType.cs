@@ -19,6 +19,7 @@ namespace TestCallAnalysis.Business
         }
 
         public ReportType ReportType { get; set; }
+        public int OperatorId { get; set; }
         public Guid ReportQueryId { get; set; }
         public string ListName { get; set; }
         public string RecordId { get; set; }
@@ -53,6 +54,7 @@ namespace TestCallAnalysis.Business
             }
 
             Dictionary<string, Object> fieldReportValues = new Dictionary<string, object>();
+            fieldReportValues.Add("OperatorId", OperatorId);
             fieldReportValues.Add("Type", (int)this.ReportType);
             fieldReportValues.Add("FileIds", attachementEntity);
             fieldReportValues.Add("SentTime", DateTime.Now);

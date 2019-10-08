@@ -2,14 +2,20 @@
     <vr-columns colnum="4">
         <vr-select on-ready="scopeModel.onReportTypeSelectorReady"
                    datatextfield="description"
-                   datavaluefield="value" 
+                   datavaluefield="value"
                    datasource="scopeModel.reportTypes"
                    selectedvalues="scopeModel.selectedReportType"
                    label="Report Type"
-                   isrequired="true" 
+                   isrequired="true"
                    hideremoveicon>
         </vr-select>
     </vr-columns>
+    <retail-be-account-selector on-ready="scopeModel.onOperatorSelectorReady"
+                                selectedvalues="scopeModel.selectedOperator"
+                                customlabel="Operator"
+                                isrequired="true"
+                                normal-col-num="4">
+    </retail-be-account-selector>
 </vr-row>
 <vr-row>
     <vr-columns colnum="4">

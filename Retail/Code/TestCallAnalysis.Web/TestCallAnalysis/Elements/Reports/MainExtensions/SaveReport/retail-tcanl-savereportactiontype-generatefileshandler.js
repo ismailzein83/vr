@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsService", "VRUIUtilsService", "Retail_TCAnal_ReportTypeEnum",
-    function (UtilsService, VRUIUtilsService, Retail_TCAnal_ReportTypeEnum) {
+app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsService", "VRUIUtilsService", "Retail_TCAnal_ReportTypeEnum", "Retail_BE_AccountBEAPIService",
+    function (UtilsService, VRUIUtilsService, Retail_TCAnal_ReportTypeEnum, Retail_BE_AccountBEAPIService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -23,6 +23,9 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
             var reportTypeSelectorAPI;
             var reportTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var operatorSelectorAPI;
+            var operatorSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var queryNameSelectorAPI;
             var queryNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -36,11 +39,12 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
             var actionType;
 
             function initializeController() {
-                var promises = [reportTypeSelectorReadyPromiseDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise, queryFieldsSelectorReadyDeferred.promise];
+                var promises = [reportTypeSelectorReadyPromiseDeferred.promise, operatorSelectorReadyPromiseDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise, queryFieldsSelectorReadyDeferred.promise];
 
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.reportTypes = [];
+                $scope.scopeModel.operators = [];
                 $scope.scopeModel.queries = [];
                 $scope.scopeModel.listNames = [];
                 $scope.scopeModel.fields = [];
@@ -48,6 +52,11 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
                 $scope.scopeModel.onReportTypeSelectorReady = function (api) {
                     reportTypeSelectorAPI = api;
                     reportTypeSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onOperatorSelectorReady = function (api) {
+                    operatorSelectorAPI = api;
+                    operatorSelectorReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onQueryNameSelectorReady = function (api) {
@@ -78,7 +87,7 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
                                 $scope.scopeModel.selectedListName = UtilsService.getItemByVal($scope.scopeModel.listNames, actionType.ListName, 'value');
                                 actionType.ListName = undefined;
                             }
-                            else 
+                            else
                                 listNameSelectorAPI.selectIfSingleItem();
                         }).finally(function () {
                             $scope.scopeModel.isLoadingListNames = false;
@@ -93,7 +102,7 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
                             }
                             else
                                 queryFieldsSelectorAPI.selectIfSingleItem();
-                            
+
                         }).finally(function () {
                             $scope.scopeModel.isLoadingQueryFields = false;
                         });
@@ -119,6 +128,7 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
                     $scope.scopeModel.reportTypes = UtilsService.getArrayEnum(Retail_TCAnal_ReportTypeEnum);
 
                     initialPromises.push(loadQueries());
+                    initialPromises.push(loadOperatorSelector());
                     var rootPromiseNode = {
                         promises: initialPromises,
                         getChildNode: function () {
@@ -128,9 +138,9 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
                                 $scope.scopeModel.selectedReportType = UtilsService.getItemByVal($scope.scopeModel.reportTypes, actionType.ReportType, 'value');
                                 $scope.scopeModel.selectedQuery = UtilsService.getItemByVal($scope.scopeModel.queries, payload.actionType.ReportQueryId, 'value');
                             }
-                            else 
+                            else
                                 queryNameSelectorAPI.selectIfSingleItem();
-                                
+
                             return {
                                 promises: directivePromises
                             };
@@ -144,6 +154,7 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
                     return {
                         $type: "TestCallAnalysis.Business.SaveReportActionType, TestCallAnalysis.Business",
                         ReportType: $scope.scopeModel.selectedReportType.value,
+                        OperatorId: $scope.scopeModel.selectedOperator.AccountId,
                         ReportQueryId: $scope.scopeModel.selectedQuery.value,
                         ListName: $scope.scopeModel.selectedListName.value,
                         RecordId: $scope.scopeModel.selectedQueryField.value
@@ -206,6 +217,23 @@ app.directive("retailTcanlSavereportactiontypeGeneratefileshandler", ["UtilsServ
                     queryLoadPromise.resolve();
                 });
                 return queryLoadPromise.promise;
+            }
+
+            function loadOperatorSelector() {
+                var loadOperatorSelectorPromise = UtilsService.createPromiseDeferred();
+
+                operatorSelectorReadyPromiseDeferred.promise.then(function () {
+                    var payload = {
+                        businessEntityDefinitionId: 'd4028716-97aa-4664-8eaa-35b99603b2e7'
+                    };
+
+                    if (actionType != undefined)
+                        payload.selectedIds = actionType.OperatorId;
+
+                    VRUIUtilsService.callDirectiveLoad(operatorSelectorAPI, payload, loadOperatorSelectorPromise);
+                });
+
+                return loadOperatorSelectorPromise.promise;
             }
 
             function loadListNames(selectedQueryId) {
