@@ -1388,11 +1388,20 @@ namespace BPMExtended.Main.Business
             CustomerCreationOutput output = new CustomerCreationOutput();
             IDManager manager = new IDManager();
             string customerId = manager.GetCustomerNextId();
-            //using (var client = new SOMClient())
-            //{
-            //    output = client.Post<OfficialAccountInput, CustomerCreationOutput>("api/SOM.ST/Billing/CreateOfficialCustomer", officialAccountInput);
-            //    output.CustomerSequenceId = customerId;
-            //}
+
+            officialAccountInput.CSO = GetCSOId(officialAccountInput.CSO);
+            officialAccountInput.BillCycle = GetDefaultBillCycle();
+            officialAccountInput.ExternalCustomerSetId = new CatalogManager().GetExternalCustomerSetId(officialAccountInput.ExternalCustomerSetId);
+            officialAccountInput.DefaultRatePlan = GetDefaultRatePlan();
+            officialAccountInput.Country = GetCountryNumber(officialAccountInput.Country);
+            officialAccountInput.Nationality = GetNationalityNumber(officialAccountInput.Nationality);
+            string documentType = "";// GetDocumentType(documentTypeId);
+
+            using (var client = new SOMClient())
+            {
+                output = client.Post<OfficialAccountInput, CustomerCreationOutput>("api/SOM.ST/Billing/CreateOfficialCustomer", officialAccountInput);
+                output.CustomerSequenceId = customerId;
+            }
             return output;
         }
 
