@@ -433,6 +433,7 @@ namespace BPMExtended.Main.Business
             var entityName = commonManager.GetEntityNameByRequestId(requestId);
             var completedStep = commonManager.GetCompletedStepIdByEntityName(entityName);
             var requestStageId = commonManager.GetRequestStageIdByStepId(completedStep);
+            var stepColumnName = commonManager.GetStepColumnNameByRequestId(requestId);
 
             var recordSchema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName(entityName);
             var recordEntity = recordSchema.CreateEntity(BPM_UserConnection);
@@ -447,7 +448,7 @@ namespace BPMExtended.Main.Business
                 if (collections.Count > 0)
                 {
                     recordEntity = collections[0];
-                    recordEntity.SetColumnValue("StTypeId", completedStep);
+                    recordEntity.SetColumnValue(stepColumnName, completedStep);
                     recordEntity.Save();
                 }
             }
