@@ -422,6 +422,7 @@ namespace BPMExtended.Main.Business
         {
             CancelRequestHeader(requestId);
             SetRequestObjectTypeAsEndProcess(requestId);
+            new CRMCustomerManager().CancelRecordInWaitingListPoolIfExist(requestId);
             return "";
         }
 

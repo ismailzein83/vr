@@ -267,6 +267,48 @@ namespace BPMExtended.Main.Business
             return csoName;
         }
 
+        public void WaitingListPoolRemoveProcess(string recordId)
+        {
+            string requestId = "";
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StWaitingListPool");
+            esq.AddColumn("StRequestId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", recordId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                requestId = (string)entities[0].GetColumnValue("StRequestId");
+                new CommonManager().AbortRequest(requestId);
+            }
+        }
+
+        public void CancelRecordInWaitingListPoolIfExist(string requestId)
+        {
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StWaitingListPool");
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StWaitingListPool");
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId));
+            var collections = eSQ.GetEntityCollection(UserConnection);
+
+            if (collections != null)
+            {
+                if (collections.Count > 0)
+                {
+                    recordEntity = collections[0];
+                    recordEntity.SetColumnValue("StStatusId", Constant.REMOVED_STATUS);
+                    recordEntity.Save();
+                }
+            }
+        }
+
         public CRMCustomerInfo GetCRMCustomerInfo(string contactId, string accountId)
         {
             EntitySchemaQuery esq;
