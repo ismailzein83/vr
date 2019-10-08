@@ -1277,6 +1277,364 @@ namespace Mediation.Runtime
 
         #endregion
 
+        #region Maroc
+
+        public static MappingOutput MapCDR_File_Maroc_Ericsson_TTFile(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            List<dynamic> normalRecords = new List<dynamic>();
+            List<dynamic> multiLegRecords = new List<dynamic>();
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Maroc_Ericsson_CDR");
+
+            var lengthToRead = 137;
+
+            System.IO.StreamReader sr = importedData.StreamReader;
+            string currentLine = sr.ReadLine();
+            if (!string.IsNullOrEmpty(currentLine))
+            {
+                currentLine = currentLine.Replace("\0", "");
+
+                while (true)
+                {
+                    if (currentLine.Length < lengthToRead)
+                        break;
+
+                    string cdrAsString = currentLine.Substring(0, lengthToRead);
+                    dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+
+                    cdr.DataSourceId = dataSourceId;
+                    cdr.FileName = importedData.Name;
+
+                    string recordType = cdrAsString.Substring(0, 2);
+                    if (!string.IsNullOrWhiteSpace(recordType))
+                        cdr.RecordType = recordType.Trim();
+
+                    cdr.CallStatus = cdrAsString.Substring(2, 1);
+                    cdr.CauseForOutput = cdrAsString.Substring(3, 1);
+
+                    string aSubsNumber = cdrAsString.Substring(4, 12);
+                    if (!string.IsNullOrWhiteSpace(aSubsNumber))
+                        cdr.ASubsNumber = aSubsNumber.Trim();
+
+                    string bSubsNumber = cdrAsString.Substring(16, 18);
+                    if (!string.IsNullOrWhiteSpace(bSubsNumber))
+                        cdr.BSubsNumber = bSubsNumber.Trim();
+
+                    string aCategorie = cdrAsString.Substring(34, 2);
+                    if (!string.IsNullOrWhiteSpace(aCategorie))
+                        cdr.ACategorie = aCategorie.Trim();
+
+                    string bCategorie = cdrAsString.Substring(36, 2);
+                    if (!string.IsNullOrWhiteSpace(bCategorie))
+                        cdr.BCategorie = bCategorie.Trim();
+
+                    cdr.ChargedParty = cdrAsString.Substring(38, 1);
+
+                    string dateStart = cdrAsString.Substring(39, 6);
+                    if (!string.IsNullOrWhiteSpace(dateStart))
+                    {
+                        int year;
+                        if (!int.TryParse(dateStart.Substring(0, 2), out year))
+                            throw new Exception(String.Format("DateStart '{0}' contains invalid Year value", dateStart));
+
+                        year += 2000;
+
+                        int month;
+                        if (!int.TryParse(dateStart.Substring(2, 2), out month))
+                            throw new Exception(String.Format("DateStart '{0}' contains invalid Month value", dateStart));
+
+                        int day;
+                        if (!int.TryParse(dateStart.Substring(4, 2), out day))
+                            throw new Exception(String.Format("DateStart '{0}' contains invalid Day value", dateStart));
+
+                        cdr.DateStart = new DateTime(year, month, day);
+                    }
+
+                    string timeStart = cdrAsString.Substring(45, 6);
+                    if (!string.IsNullOrWhiteSpace(timeStart))
+                    {
+                        int startHour;
+                        if (!int.TryParse(timeStart.Substring(0, 2), out startHour))
+                            throw new Exception(String.Format("TimeStart '{0}' contains invalid Hour value", timeStart));
+
+                        int startMinute;
+                        if (!int.TryParse(timeStart.Substring(2, 2), out startMinute))
+                            throw new Exception(String.Format("TimeStart '{0}' contains invalid Minute value", timeStart));
+
+                        int startSecond;
+                        if (!int.TryParse(timeStart.Substring(4, 2), out startSecond))
+                            throw new Exception(String.Format("TimeStart '{0}' contains invalid Second value", timeStart));
+
+                        cdr.TimeStart = new Time(startHour, startMinute, startSecond, 0);
+                    }
+
+
+                    string chargeableDuration = cdrAsString.Substring(51, 6);
+                    if (!string.IsNullOrWhiteSpace(timeStart))
+                    {
+                        int startHour;
+                        if (!int.TryParse(chargeableDuration.Substring(0, 2), out startHour))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Hour value", chargeableDuration));
+
+                        int startMinute;
+                        if (!int.TryParse(chargeableDuration.Substring(2, 2), out startMinute))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Minute value", chargeableDuration));
+
+                        int startSecond;
+                        if (!int.TryParse(chargeableDuration.Substring(4, 2), out startSecond))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Second value", chargeableDuration));
+
+                        cdr.ChargeableDuration = new Time(startHour, startMinute, startSecond, 0);
+
+                        cdr.ChargeableDurationInSeconds = (int)new TimeSpan(startHour, startMinute, startSecond).TotalSeconds;
+                    }
+
+                    var timeRegister = cdrAsString.Substring(57, 6);
+                    cdr.TimeRegister = string.IsNullOrEmpty(timeRegister) ? default(int?) : int.Parse(timeRegister);
+
+                    var interruptTime = cdrAsString.Substring(63, 6);
+                    cdr.InterruptTime = string.IsNullOrEmpty(interruptTime) ? default(int?) : int.Parse(interruptTime);
+
+                    cdr.FaultCode = cdrAsString.Substring(69, 5);
+
+                    var reroutIndic = cdrAsString.Substring(74, 1);
+                    cdr.ReroutIndic = string.IsNullOrEmpty(reroutIndic) ? default(int?) : int.Parse(reroutIndic);
+
+                    cdr.ExchangeId = cdrAsString.Substring(75, 15);
+
+                    var recordNumber = cdrAsString.Substring(90, 2);
+                    cdr.RecordNumber = string.IsNullOrEmpty(recordNumber) ? default(int?) : int.Parse(recordNumber);
+
+                    string outgRoute = cdrAsString.Substring(92, 7);
+                    if (!string.IsNullOrWhiteSpace(outgRoute))
+                        cdr.OutgRoute = outgRoute.Trim();
+
+                    string incRoute = cdrAsString.Substring(99, 7);
+                    if (!string.IsNullOrWhiteSpace(incRoute))
+                        cdr.IncRoute = incRoute.Trim();
+
+                    cdr.TariffClass = cdrAsString.Substring(106, 3);
+                    cdr.TariffSwitchInd = cdrAsString.Substring(109, 1);
+                    cdr.SceIndicator = cdrAsString.Substring(110, 1);
+                    cdr.Price = cdrAsString.Substring(111, 8);
+                    cdr.PulseIndic = cdrAsString.Substring(119, 1);
+                    cdr.NbMeterPulse = cdrAsString.Substring(120, 6);
+
+                    var recordSize = cdrAsString.Substring(126, 3);
+                    cdr.RecordSize = string.IsNullOrEmpty(recordSize) ? default(int?) : int.Parse(recordSize);
+
+                    string callIdNumber = cdrAsString.Substring(129, 8);
+                    if (!string.IsNullOrWhiteSpace(callIdNumber))
+                        cdr.CallIdNumber = callIdNumber.Trim();
+
+                    if (cdr.CauseForOutput == "0" || cdr.CauseForOutput == "4")
+                        normalRecords.Add(cdr);
+                    else
+                        multiLegRecords.Add(cdr);
+
+                    currentLine = currentLine.Remove(0, lengthToRead);
+                }
+            }
+
+            if (normalRecords.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(normalRecords, "#RECORDSCOUNT# of Raw CDRs", "Maroc_Ericsson_CDR");
+                mappedBatches.Add("CDRTransformationStage", batch);
+            }
+
+            if (multiLegRecords.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(multiLegRecords, "#RECORDSCOUNT# of Raw CDRs", "Maroc_Ericsson_CDR");
+                mappedBatches.Add("MediationStage", batch);
+            }
+
+            MappingOutput result = new MappingOutput();
+            result.Result = MappingResult.Valid;
+            return result;
+        }
+
+        public static MappingOutput MapCDR_File_Maroc_Ericsson_SequenceFile(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            List<dynamic> normalRecords = new List<dynamic>();
+            List<dynamic> multiLegRecords = new List<dynamic>();
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Maroc_Ericsson_CDR");
+
+            var lengthToRead = 137;
+            var headerLength = 27;
+
+            System.IO.StreamReader sr = importedData.StreamReader;
+            string currentLine = sr.ReadToEnd();
+            if (!string.IsNullOrEmpty(currentLine) && currentLine.Length > headerLength)
+            {
+                currentLine = currentLine.Remove(0, headerLength);
+                currentLine = currentLine.Replace("\0", "");
+
+                while (true)
+                {
+                    if (currentLine.Length < lengthToRead)
+                        break;
+
+                    string cdrAsString = currentLine.Substring(0, lengthToRead);
+
+                    dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+
+                    cdr.DataSourceId = dataSourceId;
+                    cdr.FileName = importedData.Name;
+
+                    string recordType = cdrAsString.Substring(0, 2);
+                    if (!string.IsNullOrWhiteSpace(recordType))
+                        cdr.RecordType = recordType.Trim();
+
+                    cdr.CallStatus = cdrAsString.Substring(2, 1);
+                    cdr.CauseForOutput = cdrAsString.Substring(3, 1);
+
+                    string aSubsNumber = cdrAsString.Substring(4, 12);
+                    if (!string.IsNullOrWhiteSpace(aSubsNumber))
+                        cdr.ASubsNumber = aSubsNumber.Trim();
+
+                    string bSubsNumber = cdrAsString.Substring(16, 18);
+                    if (!string.IsNullOrWhiteSpace(bSubsNumber))
+                        cdr.BSubsNumber = bSubsNumber.Trim();
+
+                    string aCategorie = cdrAsString.Substring(34, 2);
+                    if (!string.IsNullOrWhiteSpace(aCategorie))
+                        cdr.ACategorie = aCategorie.Trim();
+
+                    string bCategorie = cdrAsString.Substring(36, 2);
+                    if (!string.IsNullOrWhiteSpace(bCategorie))
+                        cdr.BCategorie = bCategorie.Trim();
+
+                    cdr.ChargedParty = cdrAsString.Substring(38, 1);
+
+                    string dateStart = cdrAsString.Substring(39, 6);
+                    if (!string.IsNullOrWhiteSpace(dateStart))
+                    {
+                        int year;
+                        if (!int.TryParse(dateStart.Substring(0, 2), out year))
+                            throw new Exception(String.Format("DateStart '{0}' contains invalid Year value", dateStart));
+
+                        year += 2000;
+
+                        int month;
+                        if (!int.TryParse(dateStart.Substring(2, 2), out month))
+                            throw new Exception(String.Format("DateStart '{0}' contains invalid Month value", dateStart));
+
+                        int day;
+                        if (!int.TryParse(dateStart.Substring(4, 2), out day))
+                            throw new Exception(String.Format("DateStart '{0}' contains invalid Day value", dateStart));
+
+                        cdr.DateStart = new DateTime(year, month, day);
+                    }
+
+                    string timeStart = cdrAsString.Substring(45, 6);
+                    if (!string.IsNullOrWhiteSpace(timeStart))
+                    {
+                        int startHour;
+                        if (!int.TryParse(timeStart.Substring(0, 2), out startHour))
+                            throw new Exception(String.Format("TimeStart '{0}' contains invalid Hour value", timeStart));
+
+                        int startMinute;
+                        if (!int.TryParse(timeStart.Substring(2, 2), out startMinute))
+                            throw new Exception(String.Format("TimeStart '{0}' contains invalid Minute value", timeStart));
+
+                        int startSecond;
+                        if (!int.TryParse(timeStart.Substring(4, 2), out startSecond))
+                            throw new Exception(String.Format("TimeStart '{0}' contains invalid Second value", timeStart));
+
+                        cdr.TimeStart = new Time(startHour, startMinute, startSecond, 0);
+                    }
+
+                    string chargeableDuration = cdrAsString.Substring(51, 6);
+                    if (!string.IsNullOrWhiteSpace(timeStart))
+                    {
+                        int startHour;
+                        if (!int.TryParse(chargeableDuration.Substring(0, 2), out startHour))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Hour value", chargeableDuration));
+
+                        int startMinute;
+                        if (!int.TryParse(chargeableDuration.Substring(2, 2), out startMinute))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Minute value", chargeableDuration));
+
+                        int startSecond;
+                        if (!int.TryParse(chargeableDuration.Substring(4, 2), out startSecond))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Second value", chargeableDuration));
+
+                        cdr.ChargeableDuration = new Time(startHour, startMinute, startSecond, 0);
+
+                        cdr.ChargeableDurationInSeconds = (int)new TimeSpan(startHour, startMinute, startSecond).TotalSeconds;
+                    }
+
+                    var timeRegister = cdrAsString.Substring(57, 6);
+                    cdr.TimeRegister = string.IsNullOrEmpty(timeRegister) ? default(int?) : int.Parse(timeRegister);
+
+                    var interruptTime = cdrAsString.Substring(63, 6);
+                    cdr.InterruptTime = string.IsNullOrEmpty(interruptTime) ? default(int?) : int.Parse(interruptTime);
+
+                    cdr.FaultCode = cdrAsString.Substring(69, 5);
+
+                    var reroutIndic = cdrAsString.Substring(74, 1);
+                    cdr.ReroutIndic = string.IsNullOrEmpty(reroutIndic) ? default(int?) : int.Parse(reroutIndic);
+
+                    cdr.ExchangeId = cdrAsString.Substring(75, 15);
+
+                    var recordNumber = cdrAsString.Substring(90, 2);
+                    cdr.RecordNumber = string.IsNullOrEmpty(recordNumber) ? default(int?) : int.Parse(recordNumber);
+
+                    string outgRoute = cdrAsString.Substring(92, 7);
+                    if (!string.IsNullOrWhiteSpace(outgRoute))
+                        cdr.OutgRoute = outgRoute.Trim();
+
+                    string incRoute = cdrAsString.Substring(99, 7);
+                    if (!string.IsNullOrWhiteSpace(incRoute))
+                        cdr.IncRoute = incRoute.Trim();
+
+                    cdr.TariffClass = cdrAsString.Substring(106, 3);
+                    cdr.TariffSwitchInd = cdrAsString.Substring(109, 1);
+                    cdr.SceIndicator = cdrAsString.Substring(110, 1);
+                    cdr.Price = cdrAsString.Substring(111, 8);
+                    cdr.PulseIndic = cdrAsString.Substring(119, 1);
+                    cdr.NbMeterPulse = cdrAsString.Substring(120, 6);
+
+                    var recordSize = cdrAsString.Substring(126, 3);
+                    cdr.RecordSize = string.IsNullOrEmpty(recordSize) ? default(int?) : int.Parse(recordSize);
+
+                    string callIdNumber = cdrAsString.Substring(129, 8);
+                    if (!string.IsNullOrWhiteSpace(callIdNumber))
+                        cdr.CallIdNumber = callIdNumber.Trim();
+
+                    if (cdr.CauseForOutput == "0" || cdr.CauseForOutput == "4")
+                        normalRecords.Add(cdr);
+                    else
+                        multiLegRecords.Add(cdr);
+
+                    currentLine = currentLine.Remove(0, lengthToRead);
+                }
+            }
+
+            if (normalRecords.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(normalRecords, "#RECORDSCOUNT# of Raw CDRs", "Maroc_Ericsson_CDR");
+                mappedBatches.Add("CDRTransformationStage", batch);
+            }
+
+            if (multiLegRecords.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(multiLegRecords, "#RECORDSCOUNT# of Raw CDRs", "Maroc_Ericsson_CDR");
+                mappedBatches.Add("MediationStage", batch);
+            }
+
+            MappingOutput result = new MappingOutput();
+            result.Result = MappingResult.Valid;
+            return result;
+        }
+
+        #endregion
+
         #region MobileAnalysis 
 
         public static MappingOutput MapCDR_File_MobileAnalysis_Ericsson(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
