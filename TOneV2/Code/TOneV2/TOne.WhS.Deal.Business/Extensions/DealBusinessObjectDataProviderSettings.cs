@@ -24,19 +24,13 @@ namespace TOne.WhS.Deal.Business
 
         public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)
         {
-            if (!context.FromTime.HasValue)
-                throw new NullReferenceException("context.FromTime");
-
-            if (!context.ToTime.HasValue)
-                throw new NullReferenceException("context.ToTime");
-
             var saleProgressByDealId = new SwapDealnfoByDealId();
             var costProgressByDealId = new SwapDealnfoByDealId();
             var dealDetailedProgressManager = new DealDetailedProgressManager();
             var swapDealManager = new SwapDealManager();
             var minDealBED = DateTime.Now;
 
-            IEnumerable<DealDefinition> deals = swapDealManager.GetSwapDealsEffectiveAfterDate(context.FromTime.Value);
+            IEnumerable<DealDefinition> deals = swapDealManager.GetSwapDealsEffectiveAfterDate(DateTime.Today.Date);
 
             if (deals == null)
                 return;
