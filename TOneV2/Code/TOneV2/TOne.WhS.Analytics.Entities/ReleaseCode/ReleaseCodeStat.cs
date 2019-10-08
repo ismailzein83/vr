@@ -8,7 +8,7 @@ namespace TOne.WhS.Analytics.Entities
 {
     public class ReleaseCodeStat
     {
-        public int SwitchId { get; set; }
+        public int? SwitchId { get; set; }
         public string ReleaseCode { get; set; }
         public string ReleaseSource { get; set; }
 

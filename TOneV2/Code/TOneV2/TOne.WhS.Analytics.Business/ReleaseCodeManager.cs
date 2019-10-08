@@ -35,11 +35,13 @@ namespace TOne.WhS.Analytics.Business
 
         public ReleaseCodeStatDetail ReleaseCodeDetailMapper(ReleaseCodeStat releaseCode)
         {
-            
+
             string supplierName = _carrierAccountManager.GetCarrierAccountName(releaseCode.SupplierId);
-            string switchName = _switchManager.GetSwitchName(releaseCode.SwitchId);
+            string switchName = null;
+            if (releaseCode.SwitchId.HasValue)
+                switchName = _switchManager.GetSwitchName(releaseCode.SwitchId.Value);
             string zoneName = _saleZoneManager.GetSaleZoneName(releaseCode.MasterPlanZoneId);
-            string releaseCodeDescription = _switchReleaseCauseManager.GetReleaseCodeDescription(releaseCode.ReleaseCode,releaseCode.SwitchId);
+            string releaseCodeDescription = _switchReleaseCauseManager.GetReleaseCodeDescription(releaseCode.ReleaseCode, releaseCode.SwitchId);
             ReleaseCodeStatDetail releaseCodeDetail = new ReleaseCodeStatDetail
             {
                 Entity = releaseCode,

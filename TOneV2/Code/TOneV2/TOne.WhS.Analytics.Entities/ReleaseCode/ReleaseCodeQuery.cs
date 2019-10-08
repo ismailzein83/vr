@@ -8,6 +8,7 @@ namespace TOne.WhS.Analytics.Entities
 {
     public class ReleaseCodeQuery
     {
+        public bool ExcludeSwitchFromGrouping { get; set; }
         public ReleaseCodeFilter Filter { get; set; }
         public DateTime From { get; set; }
         public DateTime? To { get; set; }

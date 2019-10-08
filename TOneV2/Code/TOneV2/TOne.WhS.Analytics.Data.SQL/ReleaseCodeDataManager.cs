@@ -50,7 +50,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             query = input.Query;
             //codes = salecodesIds;
             List<ReleaseCodeStat> releaseCodes = new List<ReleaseCodeStat>();
-            ExecuteReaderText(GetQuery(input.Query.Filter), (reader) =>
+            ExecuteReaderText(GetQuery(input.Query.Filter, input.Query.ExcludeSwitchFromGrouping), (reader) =>
             {
 
                 while (reader.Read())
@@ -63,7 +63,10 @@ namespace TOne.WhS.Analytics.Data.SQL
                     while (reader.Read())
                     {
                         ReleaseCodeStat releaseCode = new ReleaseCodeStat();
-                        releaseCode.SwitchId = GetReaderValue<int>(reader, "SwitchId");
+                        if(!input.Query.ExcludeSwitchFromGrouping)
+                        {
+                           releaseCode.SwitchId = GetReaderValue<int>(reader, "SwitchId");
+                        }
                         releaseCode.ReleaseCode = reader["ReleaseCode"] as string;
                         releaseCode.ReleaseSource = reader["ReleaseSource"] as string;
                         releaseCode.Attempt = GetReaderValue<int>(reader, "Attempt");
@@ -109,7 +112,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Private Methods
 
-        private string GetQuery(ReleaseCodeFilter filter)
+        private string GetQuery(ReleaseCodeFilter filter,bool excludeSwitchFromGrouping)
         {
             string aliasTableName = "newtable";
             StringBuilder selectColumnBuilder = new StringBuilder();
@@ -119,17 +122,19 @@ namespace TOne.WhS.Analytics.Data.SQL
             string invalidCDRTableAppendedFilter = string.Format("{0}.[Type] != 6", invalidCDRTableAlias);
 
             string queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2} UNION ALL {3}",
-                        GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex),
-                        GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, invalidCDRTableAppendedFilter),
-                        GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex),
-                        GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex));
+                        GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, excludeSwitchFromGrouping),
+                        GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, excludeSwitchFromGrouping, invalidCDRTableAppendedFilter),
+                        GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, excludeSwitchFromGrouping),
+                        GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex, excludeSwitchFromGrouping));
 
             StringBuilder queryBuilder = new StringBuilder(String.Format(@"  SELECT *
                                                                 INTO #RESULT FROM (#Query#) {0}
                                                                 SELECT SUM(Attempt) AS TotalAttempts FROM #RESULT
                                                                 SELECT #SELECTCOLUMNPART# FROM #RESULT  GROUP BY #GROUPBYPART# ", aliasTableName));
-            selectColumnBuilder.Append(String.Format(@"    SwitchId,
-                                                            ReleaseCode,
+
+
+
+            selectColumnBuilder.Append(String.Format(@"    ReleaseCode,
                                                             ReleaseSource,
                                                             SUM(Attempt)  Attempt,
                                                             SUM(SuccessfulAttempts) SuccessfulAttempts,
@@ -137,7 +142,13 @@ namespace TOne.WhS.Analytics.Data.SQL
 			                                                Max(LastAttempt) LastAttempt,
                                                             SUM(DurationsInMinutes) AS DurationsInMinutes  "));
             AddSelectColumnToGenaralQuery(selectColumnBuilder);
-            groupByBuilder.Append(String.Format(@"SwitchId,ReleaseCode,ReleaseSource"));
+            groupByBuilder.Append(String.Format(@"ReleaseCode,ReleaseSource"));
+            if (!excludeSwitchFromGrouping)
+            {
+                groupByBuilder.Append(String.Format(@",SwitchId"));
+                selectColumnBuilder.Append(String.Format(@",SwitchId "));
+
+            }
             AddGroupingToGenaralQuery(groupByBuilder);
 
             queryBuilder.Replace("#SELECTCOLUMNPART#", selectColumnBuilder.ToString());
@@ -147,7 +158,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             queryBuilder.Replace("#Query#", queryData);
             return queryBuilder.ToString();
         }
-        private string GetSingleQuery(string tableName, string alias, ReleaseCodeFilter filter, string tableIndex, string appendedFilter = null)
+        private string GetSingleQuery(string tableName, string alias, ReleaseCodeFilter filter, string tableIndex, bool excludeSwitchFromGrouping, string appendedFilter = null)
         {
             StringBuilder queryBuilder = new StringBuilder();
             StringBuilder selectQueryPart = new StringBuilder();
@@ -168,14 +179,20 @@ namespace TOne.WhS.Analytics.Data.SQL
             if (query.To.HasValue)
                 whereBuilder.AppendFormat("AND {0}.AttemptDateTime<= @ToDate  ", alias);
 
-            groupByBuilder.Append(String.Format(@"{0}.SwitchId, {0}.ReleaseCode,{0}.ReleaseSource", alias));
-            selectQueryPart.Append(String.Format(@"         {0}.SwitchId,
-                                                            {0}.ReleaseCode,{0}.ReleaseSource,
+            groupByBuilder.Append(String.Format(@"{0}.ReleaseCode,{0}.ReleaseSource", alias));
+            selectQueryPart.Append(String.Format(@"         {0}.ReleaseCode,{0}.ReleaseSource,
                                                             COUNT(*)  Attempt,
                                                             SUM( CASE WHEN {0}.DurationInSeconds > 0 THEN 1 ELSE 0 END) SuccessfulAttempts,
 			                                                Min({0}.AttemptDateTime) FirstAttempt,	
 			                                                Max({0}.AttemptDateTime) LastAttempt,
                                                             SUM({0}.DurationInSeconds)/60. AS DurationsInMinutes  ", alias, tableIndex));
+
+            if(!excludeSwitchFromGrouping)
+            {
+                groupByBuilder.Append(String.Format(@",{0}.SwitchId", alias));
+                selectQueryPart.Append(String.Format(@",{0}.SwitchId", alias));
+            }
+
 
             AddSelectColumnToQuery(selectQueryPart, alias);
             AddGroupingToQuery(groupByBuilder, alias);
