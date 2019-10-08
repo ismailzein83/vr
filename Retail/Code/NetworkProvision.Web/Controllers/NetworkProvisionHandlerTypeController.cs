@@ -8,7 +8,7 @@ namespace NetworkProvision.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "HandlerType")]
     [JSONWithTypeAttribute]
-    public class NetworkProvisionController : BaseAPIController
+    public class NetworkProvisionHandlerTypeController : BaseAPIController
     {
         NetworkProvisionHandlerTypeManager _manager = new NetworkProvisionHandlerTypeManager();
 

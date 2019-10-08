@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\NetworkProvisionController.cs" />
+    <Compile Include="Controllers\NetworkProvisionHandlerTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
