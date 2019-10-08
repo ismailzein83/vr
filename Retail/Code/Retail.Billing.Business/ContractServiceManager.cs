@@ -82,9 +82,9 @@ namespace Retail.Billing.Business
 
         public decimal? NewServiceOptionActivationFee { get; set; }
 
-        public int? OldSpeedInMbps { get; set; }
+        public decimal? OldSpeedInMbps { get; set; }
 
-        public int? NewSpeedInMbps { get; set; }
+        public decimal? NewSpeedInMbps { get; set; }
     }
 
     public class CalculateServiceActionsPricesOutput
