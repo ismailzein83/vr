@@ -15,5 +15,6 @@ namespace BPMExtended.Main.Entities
         public string CustomerCode { get; set; }
         public string CustomerCategoryID { get; set; }
         public string CustomerCategoryName { get; set; }
+        public string DocumentIdTypeId { get; set;  }
     }
 }
