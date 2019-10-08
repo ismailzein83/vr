@@ -1433,7 +1433,7 @@ namespace BPMExtended.Main.Business
             Contact contact = commonManager.GetContact(officialAccountInput.ContactId);
             string customerId = manager.GetCustomerNextId();
             officialAccountInput.DocumentId = contact.DocumentID;
-            officialAccountInput.DocumentIdType = contact.DocumentIdTypeId;
+            officialAccountInput.DocumentIdType = GetDocumentType(contact.DocumentIdTypeId);
 
             officialAccountInput.CSO = GetCSOId(officialAccountInput.CSO);
             officialAccountInput.BillCycle = GetDefaultBillCycle();
@@ -1441,7 +1441,6 @@ namespace BPMExtended.Main.Business
             officialAccountInput.DefaultRatePlan = GetDefaultRatePlan();
             officialAccountInput.Country = GetCountryNumber(officialAccountInput.Country);
             officialAccountInput.Nationality = GetNationalityNumber(officialAccountInput.Nationality);
-            string documentType = "";// GetDocumentType(documentTypeId);
 
             using (var client = new SOMClient())
             {
