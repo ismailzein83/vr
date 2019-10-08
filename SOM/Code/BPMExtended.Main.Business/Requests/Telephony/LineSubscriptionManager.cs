@@ -178,6 +178,7 @@ namespace BPMExtended.Main.Business
 
         public void CancelLineSubscriptionRequest(Guid requestId)
         {
+            new CustomerRequestManager().SetRequestAsCancelled(requestId.ToString());
             //SOMRequestOutput output;
             //SOMRequestInput<CancelSuspensionRequestInput> somRequestInput = new SOMRequestInput<CancelSuspensionRequestInput>
             //{
