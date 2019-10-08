@@ -155,7 +155,7 @@ namespace BPMExtended.Main.Business
             //}
         }
 
-        public string CreateRequest(string contractId)
+        public BSCSSuspensionFromDunningOutput CreateRequest(string contractId)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StBSCSSuspensionFromDunning");
             Entity entity = schema.CreateEntity(BPM_UserConnection);
@@ -174,7 +174,7 @@ namespace BPMExtended.Main.Business
             string operationId = "C1096BFD-222B-4AAA-A016-32E50D7CCAF5";
 
             string sequenceNumber = CreateRequestInRequestHeader(contractId,operationId, entityId.ToString(), operationtype, StageId, newStatusId, "true");
-            return sequenceNumber;
+            return new BSCSSuspensionFromDunningOutput(){RequestId = entityId.ToString(), SequenceNumber=sequenceNumber};
         }
 
 

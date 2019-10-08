@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="AddressData.cs" />
+    <Compile Include="BSCSSuspensionFromDunningOutput.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="Contracts\LeasedLineContractEntity.cs" />
     <Compile Include="CreditDebitNotesDetail.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="PackageInfo.cs" />
     <Compile Include="PromotionDetail.cs" />
     <Compile Include="InvoiceEntity.cs" />
+    <Compile Include="RequestHeaderInfo.cs" />
     <Compile Include="SOMProcessInstanceLog.cs" />
     <Compile Include="ServiceHistoryRecordDetail.cs" />
     <Compile Include="ServiceHistoryRecord .cs" />

@@ -543,7 +543,32 @@ namespace BPMExtended.Main.Business
             }
             recordEntity.Save();
         }
+        public RequestHeaderInfo GetRequestHeaderInfo(string requestId)
+        {
+            RequestHeaderInfo result = new RequestHeaderInfo();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            var contactCol = esq.AddColumn("StContact.Id");
+            var accountCol = esq.AddColumn("StAccount.Id");
+            var contractCol = esq.AddColumn("StContractID");
+            var Id = esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFirstFilter);
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                string contactId = entities[0].GetTypedColumnValue<string>(contactCol.Name).ToString();
+                string accountId = entities[0].GetTypedColumnValue<string>(accountCol.Name).ToString();
+                string contractId = entities[0].GetTypedColumnValue<string>(contractCol.Name).ToString();
+                result.AccountId = accountId;
+                result.ContactId = contactId;
+                result.ContractId = contractId;
+            }
+            return result;
+        }
         #region Private Methods
 
         private CreateCustomerRequestOutput CreateSOMRequest(BPMCustomerType customerType, Guid accountOrContactId, string requestTitle, SOMRequestExtendedSettings requestSettings)
