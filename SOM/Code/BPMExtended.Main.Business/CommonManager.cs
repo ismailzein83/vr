@@ -468,7 +468,7 @@ namespace BPMExtended.Main.Business
                 accounts.Add(new Account()
                 {
                     CustomerId = customerId.ToString(),
-                    //CustomerName = name.ToString()
+                    CustomerName = name.ToString()
                 });
             }
             return accounts;

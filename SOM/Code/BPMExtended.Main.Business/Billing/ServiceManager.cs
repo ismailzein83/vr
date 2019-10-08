@@ -300,8 +300,10 @@ namespace BPMExtended.Main.Business
             }
 
             if (isForeigner)
-                return foreignerFilteredServicesDetailItems;
-            return filteredServicesDetailItems;
+                return foreignerFilteredServicesDetailItems.OrderBy(x => x.PackageId).ToList();
+                // return foreignerFilteredServicesDetailItems;
+
+            return filteredServicesDetailItems.OrderBy(x => x.PackageId).ToList();
 
         }
         public List<ServiceDetail> AddForeignerServicesToSelectedServices(string optionalServices)

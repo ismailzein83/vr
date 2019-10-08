@@ -33,6 +33,14 @@ namespace BPMExtended.Main.Business
             return validContacts;//return filteredContacts;
         }
 
+        public List<Account> GetFilteredActiveAccounts(string customerId)
+        {
+            //List<Contact> activeContacts = new CommonManager().GetActiveContacts().Where(item =>item.CustomerId != customerId).ToList();
+            List<Account> validAccounts = new CommonManager().GetValidAccounts();
+            //List<Contact> filteredContacts = activeContacts.Where(b => validContacts.Any(a => a.CustomerId == b.CustomerId)).ToList();
+            return validAccounts;//return filteredContacts;
+        }
+
         public void PostADSLTakeOverToOM(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table
