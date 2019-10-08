@@ -73,6 +73,10 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.Ogero.CDR", "Medi
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.Multinet.CDR", "Mediation.Multinet.CDR\Mediation.Multinet.CDR.sqlproj", "{3D82B367-A54E-42C0-94A8-868144BBF2B3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mobilis", "Mobilis", "{03FBDB46-AB2F-4FB3-96B7-8EB80782B010}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Mobilis.Business", "Mediation.Mobilis.Business\Mediation.Mobilis.Business.csproj", "{D5EF6603-DBE0-4278-98D6-A45C824F7662}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -203,6 +207,10 @@ Global
 		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D5EF6603-DBE0-4278-98D6-A45C824F7662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5EF6603-DBE0-4278-98D6-A45C824F7662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5EF6603-DBE0-4278-98D6-A45C824F7662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5EF6603-DBE0-4278-98D6-A45C824F7662}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,14 +246,16 @@ Global
 		{ADE522B4-1554-4910-B9CE-286C55E9BEA8} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
 		{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
 		{3D82B367-A54E-42C0-94A8-868144BBF2B3} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
+		{03FBDB46-AB2F-4FB3-96B7-8EB80782B010} = {E82A6672-DA4F-41B1-8696-C5CC1D4B1812}
+		{D5EF6603-DBE0-4278-98D6-A45C824F7662} = {03FBDB46-AB2F-4FB3-96B7-8EB80782B010}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3381E55-55EE-41E5-BE13-0133A3628F42}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 28
+		SccNumberOfProjects = 29
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = Mediation.sln
@@ -355,5 +365,9 @@ Global
 		SccProjectTopLevelParentUniqueName27 = Mediation.sln
 		SccProjectName27 = Mediation.Multinet.CDR
 		SccLocalPath27 = Mediation.Multinet.CDR
+		SccProjectUniqueName28 = Mediation.Mobilis.Business\\Mediation.Mobilis.Business.csproj
+		SccProjectTopLevelParentUniqueName28 = Mediation.sln
+		SccProjectName28 = Mediation.Mobilis.Business
+		SccLocalPath28 = Mediation.Mobilis.Business
 	EndGlobalSection
 EndGlobal

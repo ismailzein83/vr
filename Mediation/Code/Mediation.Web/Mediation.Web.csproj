@@ -673,6 +673,10 @@
       <Project>{0d919e35-b040-48bc-9d99-636ab9639261}</Project>
       <Name>Mediation.Huawei.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mediation.Mobilis.Business\Mediation.Mobilis.Business.csproj">
+      <Project>{d5ef6603-dbe0-4278-98d6-a45c824f7662}</Project>
+      <Name>Mediation.Mobilis.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Teles.Business\Mediation.Teles.Business.csproj">
       <Project>{8dde7260-624a-4e06-ab69-de5fa7742a5d}</Project>
       <Name>Mediation.Teles.Business</Name>

@@ -637,6 +637,10 @@
       <Project>{c7b1f600-c09a-4ba4-99f3-a45fd8ebfda8}</Project>
       <Name>Mediation.Huawei.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mediation.Mobilis.Business\Mediation.Mobilis.Business.csproj">
+      <Project>{d5ef6603-dbe0-4278-98d6-a45c824f7662}</Project>
+      <Name>Mediation.Mobilis.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Teles.Business\Mediation.Teles.Business.csproj">
       <Project>{8dde7260-624a-4e06-ab69-de5fa7742a5d}</Project>
       <Name>Mediation.Teles.Business</Name>
