@@ -66,6 +66,7 @@
     <Compile Include="CompositeRecordCondition\Runtime\FieldComparisonCondition.cs" />
     <Compile Include="CompositeRecordCondition\Runtime\RecordFilterCompositeCondition.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="CustomObject\RecordFilterCustomObjectTypeSettings.cs" />
     <Compile Include="DataRecordFieldFormulas\CompareToConstantFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\DateTimeRoundFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\EncryptedCalculatedFieldFormula.cs" />
@@ -236,9 +237,7 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataRecord\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
