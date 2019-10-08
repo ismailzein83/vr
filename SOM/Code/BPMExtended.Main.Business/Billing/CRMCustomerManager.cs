@@ -279,6 +279,7 @@ namespace BPMExtended.Main.Business
                 //PostLineSubscriptionToOM(new Guid("CAA17BBE-5D7B-4127-92B9-021417B0AC50"));
                 esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
                 esq.AddColumn("Name");
+                var phonecol = esq.AddColumn("MobilePhone");
                 esq.AddColumn("StDocumentID");
                 esq.AddColumn("StCSO");
                 esq.AddColumn("StCSO.Id");
@@ -300,6 +301,7 @@ namespace BPMExtended.Main.Business
                     var customerId = entities[0].GetColumnValue("StCustomerId");
                     var customerCategoryId = entities[0].GetColumnValue("StCustomerCategoryID");
                     var customerCategoryName = entities[0].GetColumnValue("StCustomerCategoryName");
+                    var phone = entities[0].GetTypedColumnValue<string>(phonecol.Name);
 
                     customerInfo = new CRMCustomerInfo()
                     {
@@ -309,7 +311,8 @@ namespace BPMExtended.Main.Business
                         CustomerCategoryID = customerCategoryId.ToString(),
                         CustomerCategoryName = customerCategoryName.ToString(),
                         csoId = csoId.ToString(),
-                        csoBSCSId = csoBSCSId.ToString()
+                        csoBSCSId = csoBSCSId.ToString(),
+                        PhoneNumber = phone
 
 
                     };
@@ -359,6 +362,7 @@ namespace BPMExtended.Main.Business
             return customerInfo;
 
         }
+        
 
         public OutputResult ValidateRequest(string contactId, string accountId)
         {
