@@ -392,5 +392,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             where.EqualsCondition(COL_CreatedByInvoiceID).Value(invoiceId);
         }
 
+        public IEnumerable<BillingTransaction> GetPaymentTransactionsForInvoiceId(Guid accountTypeId, long invoiceId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

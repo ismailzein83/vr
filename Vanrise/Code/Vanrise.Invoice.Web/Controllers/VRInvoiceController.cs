@@ -117,6 +117,17 @@ namespace Vanrise.Invoice.Web.Controllers
            
             return manager.SetInvoiceLocked(invoiceId, setLocked);
         }
+
+        [HttpPost]
+        [Route("UpdateInvoiceStatus")]
+        public object UpdateInvoiceStatus(UpdateInvoiceStatusInput input)
+        {
+            InvoiceManager manager = new InvoiceManager();
+
+            //if (!manager.DosesUserHaveActionAccess(InvoiceActionType.UpdateInvoiceNote, invoiceId, invoiceActionId))
+            //    return GetUnauthorizedResponse();
+            return manager.UpdateInvoiceStatus(input.InvoiceId, input.StatusId);
+        }
         [HttpGet]
         [Route("GetInvoiceDetail")]
         public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)
@@ -252,5 +263,12 @@ namespace Vanrise.Invoice.Web.Controllers
         public Guid InvoiceGenerationIdentifier { get; set; }
         public List<InvoiceGenerationDraftToEdit> ChangedItems { get; set; }
         public InvoiceGapAction InvoiceGapAction { get; set; }
+    }
+
+    public class UpdateInvoiceStatusInput
+    {
+        public long InvoiceId { get; set; }
+
+        public Guid StatusId { get; set; }
     }
 }

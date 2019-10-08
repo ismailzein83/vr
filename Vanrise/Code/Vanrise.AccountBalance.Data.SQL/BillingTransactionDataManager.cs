@@ -158,7 +158,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 billingTransaction.Reference,
                 billingTransaction.SourceId,
                 (billingTransaction.Settings != null) ? Vanrise.Common.Serializer.Serialize(billingTransaction.Settings) : null,
-                invoiceId
+                invoiceId,
+                billingTransaction.PaymentToInvoiceId
             );
 
             if (affectedRecords > 0)
@@ -201,6 +202,12 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemSP("[VR_AccountBalance].[sp_BillingTransaction_GetLast]", BillingTransactionMapper, accountTypeId, accountId);
         }
+
+        public IEnumerable<BillingTransaction> GetPaymentTransactionsForInvoiceId(Guid accountTypeId, long invoiceId)
+        {
+            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetPaymentTransactionsForInvoiceId]", BillingTransactionMapper, accountTypeId, invoiceId);
+        }
+
         #endregion
 
         #region Mappers
@@ -224,7 +231,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 SourceId = reader["SourceId"] as string,
                 Settings = (settingsAsString != null) ? Vanrise.Common.Serializer.Deserialize<BillingTransactionSettings>(settingsAsString) : null,
                 IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
-                IsSubtractedFromBalance = GetReaderValue<bool>(reader, "IsSubtractedFromBalance")
+                IsSubtractedFromBalance = GetReaderValue<bool>(reader, "IsSubtractedFromBalance"),
+                PaymentToInvoiceId = GetReaderValue<long?>(reader, "PaymentToInvoiceID")
             };
         }
 

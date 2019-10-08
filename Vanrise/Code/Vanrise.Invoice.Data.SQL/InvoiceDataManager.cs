@@ -47,6 +47,12 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceNote", invoiceId, invoiceNote);
             return (affectedRows > -1);
         }
+
+        public bool UpdateInvoiceStatus(long invoiceId, Guid statusId)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceStatus", invoiceId, statusId);
+            return (affectedRows > -1);
+        }
         public bool SetInvoiceLocked(long invoiceId, DateTime? lockedDate)
         {
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceLock", invoiceId, lockedDate);
@@ -455,6 +461,7 @@ namespace Vanrise.Invoice.Data.SQL
                 ApprovedBy = GetReaderValue<int?>(reader, "ApprovedBy"),
                 ApprovedTime = GetReaderValue<DateTime?>(reader, "ApprovedTime"),
                 NeedApproval = GetReaderValue<bool?>(reader, "NeedApproval"),
+                StatusId = GetReaderValue<Guid?>(reader, "StatusID")
             };
             return invoice;
         }
@@ -537,6 +544,6 @@ namespace Vanrise.Invoice.Data.SQL
             }
         }
 
-        const string InvoiceSELECTCOLUMNS = @" ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,SplitInvoiceGroupId,IssueDate,DueDate,Details,PaidDate,UserId,CreatedTime,LockDate,Notes,IsAutomatic, SourceId,Settings,InvoiceSettingID,SentDate,SettlementInvoiceId,ApprovedBy,ApprovedTime,NeedApproval ";
+        const string InvoiceSELECTCOLUMNS = @" ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,SplitInvoiceGroupId,IssueDate,DueDate,Details,PaidDate,UserId,CreatedTime,LockDate,Notes,IsAutomatic, SourceId,Settings,InvoiceSettingID,SentDate,SettlementInvoiceId,ApprovedBy,ApprovedTime,NeedApproval,StatusID ";
     }
 }

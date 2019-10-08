@@ -25,6 +25,15 @@ namespace Vanrise.AccountBalance.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetPaymentTransactionsForInvoiceId")]
+        public object GetPaymentTransactionsForInvoiceId(Guid accountTypeId, long invoiceId)
+        {
+            if (!DoesUserHaveViewAccess(accountTypeId))
+                return GetUnauthorizedResponse();
+            return _billingTransactionManager.GetPaymentTransactionsForInvoiceId(accountTypeId, invoiceId);
+        }
+
+        [HttpGet]
         [Route("DoesUserHaveViewAccess")]
         public bool  DoesUserHaveViewAccess(Guid accountTypeId)
         {

@@ -453,6 +453,18 @@ namespace Vanrise.Invoice.Business
             }
             return false;
         }
+        public bool UpdateInvoiceStatus(long invoiceId, Guid statusId)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            if (dataManager.UpdateInvoiceStatus(invoiceId, statusId))
+            {
+                var invoice = GetInvoice(invoiceId);
+                invoice.ThrowIfNull("invoice", invoiceId);
+                VRActionLogger.Current.LogObjectCustomAction(new InvoiceLoggableEntity(invoice.InvoiceTypeId), "Update Status", true, invoice, null);
+                return true;
+            }
+            return false;
+        }
 
         public UpdateOperationOutput<InvoiceDetail> UpdateInvoice(Invoice.Entities.Invoice invoice)
         {

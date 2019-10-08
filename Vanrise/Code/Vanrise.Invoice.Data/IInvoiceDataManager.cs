@@ -21,6 +21,7 @@ namespace Vanrise.Invoice.Data
         bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
         bool SetInvoiceLocked(long invoiceId, DateTime? lockedDate);
         bool UpdateInvoiceNote(long invoiceId, string invoiceNote);
+        bool UpdateInvoiceStatus(long invoiceId, Guid statusId);
         void LoadInvoicesAfterImportedId(Guid invoiceTypeId, long lastImportedId, Action<Entities.Invoice> onInvoiceReady);
         IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes);
         IEnumerable<InvoiceByPartnerInfo> GetLastInvoicesByPartners(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes);

@@ -261,6 +261,11 @@ namespace Vanrise.AccountBalance.Business
                 return transactions;
             }
         }
+        public IEnumerable<BillingTransaction> GetPaymentTransactionsForInvoiceId(Guid accountTypeId, long invoiceId)
+        {
+            IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+            return dataManager.GetPaymentTransactionsForInvoiceId(accountTypeId, invoiceId);
+        }
 
         public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypes, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate)
         {

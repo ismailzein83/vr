@@ -47,6 +47,7 @@ namespace Vanrise.Invoice.Business
                 invoiceFieldValues.Add("Notes", invoice.Note);
                 invoiceFieldValues.Add("SentDate", invoice.SentDate);
                 invoiceFieldValues.Add("User", invoice.UserId);
+                invoiceFieldValues.Add("Status", invoice.StatusId);
 
                 var fileId = invoice.Settings != null ? invoice.Settings.FileId : null;
                 invoiceFieldValues.Add("FileId", fileId);

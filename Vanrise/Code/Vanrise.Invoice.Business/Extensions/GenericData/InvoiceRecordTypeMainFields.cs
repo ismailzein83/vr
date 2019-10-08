@@ -42,6 +42,12 @@ namespace Vanrise.Invoice.Business
             });
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
+                Name = "Status",
+                Title = "Status",
+                Type = new FieldBusinessEntityType { BusinessEntityDefinitionId = new Guid("4886689a-ac8b-4285-978f-c64477e8dad2"), IsNullable = true }
+            });
+            extraFields.Add(new GenericData.Entities.DataRecordField
+            {
                 Name = "IssueDate",
                 Title = "Issue Date",
                 Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.Date }

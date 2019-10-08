@@ -37,6 +37,8 @@ namespace Vanrise.Invoice.Entities
         public int? ApprovedBy { get; set; }
         public bool? NeedApproval { get; set; }
 
+        public Guid? StatusId { get; set; }
+
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()
         {

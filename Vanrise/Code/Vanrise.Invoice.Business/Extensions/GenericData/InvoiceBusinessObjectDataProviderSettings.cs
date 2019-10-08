@@ -59,10 +59,31 @@ namespace Vanrise.Invoice.Business
             return _dataRecordType;
         }
 
+        static HashSet<string> s_fieldsToIncludeInInvoiceDBQuery = new HashSet<string>
+        {
+            "ID",
+            "Partner",
+            "SerialNumber",
+            "IssueDate",
+            "DueDate",
+            "FromDate",
+            "ToDate",
+            "PaidDate",
+            "CreatedTime",
+            "ApprovedBy",
+            "ApprovedTime",
+            "IsAutomatic",
+            "NeedApproval",
+            "Notes",
+            "SentDate",
+            "User",
+            "Status",
+        };
+
         RecordFilterGroup PrepareFilterGroupToSendToDataManager(RecordFilterGroup recordFilter)
         {
             DataRecordType invoiceRecordType = GetDataRecordTypeWithValidate();
-            List<string> fieldsToExcludeFromDBQuery = invoiceRecordType.Fields.Select(itm => itm.Name).ToList();
+            List<string> fieldsToExcludeFromDBQuery = invoiceRecordType.Fields.Select(itm => itm.Name).Where(fldName => !s_fieldsToIncludeInInvoiceDBQuery.Contains(fldName)).ToList();
             return s_recordFilterManager.ReBuildRecordFilterGroupWithExcludedFields(recordFilter, fieldsToExcludeFromDBQuery);
         }
     }

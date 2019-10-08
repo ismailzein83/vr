@@ -912,5 +912,10 @@ namespace Vanrise.Invoice.Data.RDB
             joinCondition.EqualsCondition(invoiceAlias, COL_ID).Column(bulkActionDraftAlias, InvoiceBulkActionsDraftDataManager.COL_InvoiceId);
             AddConditionInvoiceNotDeleted(joinCondition, invoiceAlias);
         }
+
+        public bool UpdateInvoiceStatus(long invoiceId, Guid statusId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

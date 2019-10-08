@@ -25,6 +25,8 @@ namespace Vanrise.AccountBalance.Entities
         public bool IsDeleted { get; set; }
         public bool IsSubtractedFromBalance { get; set; }
         public string SourceId { get; set; }
+
+        public long? PaymentToInvoiceId { get; set; }
     }
 
     public class BillingTransactionSettings

@@ -21,5 +21,7 @@ namespace Vanrise.AccountBalance.Data
         BillingTransaction GetLastBillingTransaction(Guid accountTypeId, string accountId);
         bool HasBillingTransactionData(Guid accountTypeId);
         BillingTransaction GetBillingTransactionById(long billingTransactionId);
+
+        IEnumerable<BillingTransaction> GetPaymentTransactionsForInvoiceId(Guid accountTypeId, long invoiceId);
     }
 }
