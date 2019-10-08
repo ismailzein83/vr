@@ -75,6 +75,7 @@ namespace CP.WhS.Business
                 input.Query.Filter.Dimession = query.Query.Filter.Dimession;
                 input.Query.Filter.CountryIds = query.Query.Filter.CountryIds;
                 input.Query.Filter.MasterSaleZoneIds = query.Query.Filter.MasterSaleZoneIds;
+                input.Query.ExcludeSwitchFromGrouping = true;
             }
             var clonedInput = Utilities.CloneObject<DataRetrievalInput<ReleaseCodeQuery>>(input);
             clonedInput.IsAPICall = true;
