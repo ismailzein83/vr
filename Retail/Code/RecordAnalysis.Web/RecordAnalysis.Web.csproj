@@ -99,10 +99,10 @@
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockDestinationNumber\rec-anal-actiondefinition-c4switch-blockdestinationnumber.js" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockDestinationNumber\Templates\BlockDestinationNumberActionDefinition.html" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockDestinationNumber\Templates\BlockDestinationNumberAction.html" />
-    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInBoundTrunk\rec-anal-action-c4switch-blockinboundtrunk.js" />
-    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInBoundTrunk\rec-anal-actiondefinition-c4switch-blockinboundtrunk.js" />
-    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInBoundTrunk\Templates\BlockInBoundTrunkAction.html" />
-    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInBoundTrunk\Templates\BlockInBoundTrunkActionDefinition.html" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInIP\rec-anal-action-c4switch-blockinip.js" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInIP\rec-anal-actiondefinition-c4switch-blockinip.js" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInIP\Templates\BlockInIPAction.html" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInIP\Templates\BlockInIPActionDefinition.html" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInInterconnection\rec-anal-actiondefinition-c4switch-blockininterconnection.js" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockOriginationNumber\rec-anal-action-c4switch-blockoriginationnumber.js" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockOriginationNumber\rec-anal-actiondefinition-c4switch-blockoriginationnumber.js" />

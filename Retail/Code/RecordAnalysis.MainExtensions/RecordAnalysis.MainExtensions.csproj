@@ -70,8 +70,8 @@
     <Compile Include="C4SwitchInterconnection\C4SwitchInterconnectionSettingsCustomObjectTypeSettings.cs" />
     <Compile Include="C4Switch\VRActions\BlockDestinationNumber\BlockDestinationNumberAction.cs" />
     <Compile Include="C4Switch\VRActions\BlockDestinationNumber\BlockDestinationNumberDefinitionSettings.cs" />
-    <Compile Include="C4Switch\VRActions\BlockInBoundTrunk\BlockInBoundTrunkAction.cs" />
-    <Compile Include="C4Switch\VRActions\BlockInBoundTrunk\BlockInBoundTrunkDefinitionSettings.cs" />
+    <Compile Include="C4Switch\VRActions\BlockInIP\BlockInIPAction.cs" />
+    <Compile Include="C4Switch\VRActions\BlockInIP\BlockInIPDefinitionSettings.cs" />
     <Compile Include="C4Switch\VRActions\BlockInInterconnection\BlockInInterconnectionAction.cs" />
     <Compile Include="C4Switch\VRActions\BlockOriginationNumber\BlockOriginationNumberAction.cs" />
     <Compile Include="C4Switch\VRActions\BlockOriginationNumber\BlockOriginationNumberDefinitionSettings.cs" />

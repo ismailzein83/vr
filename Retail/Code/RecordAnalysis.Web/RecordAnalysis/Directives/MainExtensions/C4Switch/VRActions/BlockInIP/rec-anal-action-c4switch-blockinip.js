@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('recAnalActionC4switchBlockinboundtrunk', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('recAnalActionC4switchBlockinip', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -11,16 +11,16 @@ app.directive('recAnalActionC4switchBlockinboundtrunk', ['UtilsService', 'VRUIUt
 
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var blockInboundTrunkAction = new BlockInboundTrunk($scope, ctrl, $attrs);
-            blockInboundTrunkAction.initializeController();
+            var blockInIPAction = new BlockInIP($scope, ctrl, $attrs);
+            blockInIPAction.initializeController();
         },
 
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/VRActions/BlockInBoundTrunk/Templates/BlockInboundTrunkAction.html"
+        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/VRActions/BlockInIP/Templates/BlockInIPAction.html"
     };
 
-    function BlockInboundTrunk($scope, ctrl, $attrs) {
+    function BlockInIP($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
 
@@ -42,8 +42,8 @@ app.directive('recAnalActionC4switchBlockinboundtrunk', ['UtilsService', 'VRUIUt
 
             api.getData = function () {
                 return {
-                    $type: 'RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInBoundTrunk.BlockInBoundTrunkAction, RecordAnalysis.MainExtensions',
-                    ActionName: "Block Inbound Trunk"
+                    $type: 'RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInIP.BlockInIPAction, RecordAnalysis.MainExtensions',
+                    ActionName: "Block In IP"
                 };
             };
 
