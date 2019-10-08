@@ -47,7 +47,7 @@ namespace Vanrise.Integration.Adapters.WindowsEventLogReceiveAdapter
                     long lastId = sourceState.LastEventId;
                     DateTime maxDate = sourceState.LastEventTime;
 
-                    var querySelect = string.Format("*[System[TimeCreated[@SystemTime >= '{0}']]] and *[System[EventID > '{1}']]", startTime.ToString("o"), lastId);
+                    var querySelect = string.Format("*[System[TimeCreated[@SystemTime >= '{0}']]] or ( *[System[TimeCreated[@SystemTime >= '{0}']]] and *[System[EventID > '{1}']])", startTime.ToString("o"), lastId);
                     var eventLogQuery = new EventLogQuery(source, PathType.LogName, querySelect);
                     eventLogQuery.Session = eventLogSession;
                     int batchSize = windowsEventLogAdapterArgument.BatchSize;
