@@ -5,7 +5,7 @@ namespace Vanrise.GenericData.MainExtensions.CustomObject
 {
     public class RecordFilterCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("628115B1-E669-454F-B581-010A02C4E765"); } }
 
         public Guid DataRecordTypeID { get; set; }
 
