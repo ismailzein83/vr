@@ -10,5 +10,6 @@ namespace Vanrise.Analytic.Entities
     {
         public byte[] FileContent { get; set; }
         public string FileExtension { get; set; }
+        public bool FileIsEmpty { get; set; }
     }
 }

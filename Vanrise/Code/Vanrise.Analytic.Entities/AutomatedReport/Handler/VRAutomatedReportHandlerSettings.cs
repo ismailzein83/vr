@@ -9,6 +9,8 @@ namespace Vanrise.Analytic.Entities
     public abstract class VRAutomatedReportHandlerSettings
     {
         public abstract Guid ConfigId { get; }
+        public bool DontExecuteIfEmpty { get; set; }
+
         public virtual void OnAfterSaveAction(IVRAutomatedReportHandlerSettingsOnAfterSaveActionContext context)
         {
 

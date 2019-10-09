@@ -69,6 +69,7 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
                     context = payload.context;
                 }
                 if (settings != undefined) {
+                    $scope.scopeModel.dontExecuteIfEmpty = settings.DontExecuteIfEmpty; 
                     var loadDirectivePromise = loadDirective();
                     promises.push(loadDirectivePromise);
                 }
@@ -112,6 +113,7 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
                     data = directiveAPI.getData();
                     if (data != undefined) {
                         data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                        data.DontExecuteIfEmpty = $scope.scopeModel.dontExecuteIfEmpty;
                     }
                 }
                 return data;
@@ -149,7 +151,10 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
                         + ' ' + hideremoveicon + ' '
                        + 'isrequired >'
                     + '</vr-select>'
-                + ' </vr-columns>'
+            + ' </vr-columns>'
+            + ' <vr-columns colnum="1">'
+            + '<vr-switch value="scopeModel.dontExecuteIfEmpty" label="Don\'t Execute If Empty"></vr-switch>'
+            + '</vr-columns>'
             + '</vr-row>'
             + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
                     + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired >'

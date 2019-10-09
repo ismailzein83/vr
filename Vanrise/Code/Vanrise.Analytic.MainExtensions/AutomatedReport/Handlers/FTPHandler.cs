@@ -59,9 +59,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                         };
                         var generatedFileOutput = fileGeneratorManager.GenerateFileOutput(generator, generateFileContext);
 
-                        if (generatedFileOutput != null)
+                        if (generatedFileOutput != null && (!generatedFileOutput.GeneratedFile.FileIsEmpty || !DontExecuteIfEmpty))
                         {
-                           
                             generatedFileOutput.GeneratedFile.ThrowIfNull("generatedFileOutput.GeneratedFile");
                             MemoryStream stream = new MemoryStream(generatedFileOutput.GeneratedFile.FileContent);
                             string errorMessage = null;

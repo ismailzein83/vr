@@ -37,6 +37,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService) {
                     context = payload.context;
                     if (payload.actionType != undefined) {
                         $scope.scopeModel.to = payload.actionType.To;
+                        $scope.scopeModel.cc = payload.actionType.CC;
                         $scope.scopeModel.subject = payload.actionType.Subject;
                         $scope.scopeModel.body = payload.actionType.Body;
                     }
@@ -49,6 +50,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService) {
                 return {
                     $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.SendEmailActionType, Vanrise.Analytic.MainExtensions",
                     To: $scope.scopeModel.to,
+                    CC: $scope.scopeModel.cc,
                     Subject: $scope.scopeModel.subject,
                     Body: $scope.scopeModel.body,
                 };

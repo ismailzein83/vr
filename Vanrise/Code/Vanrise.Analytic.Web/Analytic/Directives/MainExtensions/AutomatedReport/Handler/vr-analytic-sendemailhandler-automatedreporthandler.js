@@ -45,6 +45,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                     context = payload.context;
                     if (payload.settings != undefined) {
                         $scope.scopeModel.to = payload.settings.To;
+                        $scope.scopeModel.cc = payload.settings.CC;
                         $scope.scopeModel.subject = payload.settings.Subject;
                         $scope.scopeModel.body = payload.settings.Body;
                         attachmentGenerators = payload.settings.AttachementGenerators;
@@ -77,6 +78,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                 return {
                     $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.SendEmailHandler,Vanrise.Analytic.MainExtensions",
                     To: $scope.scopeModel.to,
+                    CC: $scope.scopeModel.cc,
                     Subject: $scope.scopeModel.subject,
                     Body: $scope.scopeModel.body,
                     AttachementGenerators: fileGeneratorGridAPI.getData(),

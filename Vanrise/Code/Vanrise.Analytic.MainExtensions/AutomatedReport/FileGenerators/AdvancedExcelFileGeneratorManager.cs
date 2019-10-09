@@ -68,8 +68,9 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     FileName =  string.Format("{0}.zip", fileName),
                     GeneratedFile = new VRAutomatedReportGeneratedFile
                     {
-                        FileContent = zippedFileContent
-                    }
+                        FileContent = zippedFileContent,
+                        FileIsEmpty = generatedFile.FileIsEmpty
+                    },
                 };
             }
 

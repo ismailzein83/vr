@@ -18,6 +18,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         {
             get { return new Guid("F139CA56-D602-4D91-9FC2-A14418D9831E"); }
         }
+
         public override void Execute(IVRAutomatedReportHandlerExecuteContext context)
         {
             if (this.AttachementGenerators != null && this.AttachementGenerators.Count > 0 && ActionType != null)
@@ -45,7 +46,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                         HandlerContext = context
                     };
                     var generatedFileOutput = fileGeneratorManager.GenerateFileOutput(generator, generateFileContext);
-                    if (generatedFileOutput != null)
+                    if (generatedFileOutput != null && (!generatedFileOutput.GeneratedFile.FileIsEmpty || !DontExecuteIfEmpty))
                     {
                         if (context.EvaluatorContext != null)
                         {
@@ -155,6 +156,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
             get { return new Guid("D7D6D580-40BD-42C6-ABBB-7FA6B60A5462"); }
         }
         public string To { get; set; }
+        public string CC { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
         public override void Execute(IGenerateFilesActionTypeContext context)
@@ -171,7 +173,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                     };
                     attachements.Add(attachment);
                 }
-                new VRMailManager().SendMail(this.To, null, null, this.Subject, this.Body, attachements);
+                new VRMailManager().SendMail(this.To, this.CC, null, this.Subject, this.Body, attachements);
                 if (context.HandlerContext.EvaluatorContext != null)
                     context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("An e-mail has been sent to {0}.", this.To);
             }

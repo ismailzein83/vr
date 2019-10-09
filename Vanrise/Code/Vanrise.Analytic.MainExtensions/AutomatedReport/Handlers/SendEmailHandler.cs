@@ -21,7 +21,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
         public string To { get; set; }
 
-        //public string CC { get; set; }
+        public string CC { get; set; }
 
         //public string BCC { get; set; }
 
@@ -67,8 +67,9 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                     {
                         HandlerContext = context
                     };
+                    
                     var generatedFileOutput = fileGeneratorManager.GenerateFileOutput(generator, generateFileContext);
-                    if (generatedFileOutput != null)
+                    if (generatedFileOutput != null && (!generatedFileOutput.GeneratedFile.FileIsEmpty || !DontExecuteIfEmpty))
                     {
                         if (context.EvaluatorContext != null)
                         {
@@ -85,9 +86,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                         attachements.Add(attachment);
                     }
                 }
-                new VRMailManager().SendMail(this.To, null, null, this.Subject, this.Body, attachements);
-                if (context.EvaluatorContext != null)
-                    context.EvaluatorContext.WriteInformationBusinessTrackingMsg("An e-mail has been sent to {0}.", this.To);
+                if (attachements.Count > 0)
+                {
+                    new VRMailManager().SendMail(this.To, this.CC, null, this.Subject, this.Body, attachements);
+                    if (context.EvaluatorContext != null)
+                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("An e-mail has been sent to {0}.", this.To);
+                }
             }
         }
 
