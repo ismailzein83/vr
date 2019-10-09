@@ -3332,7 +3332,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/Settings/GetDistinctSettingCategories",
               "RequiredPermissions": "VRCommon_Settings: View",
@@ -3342,7 +3341,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/Settings/GetFilteredSettings",
               "RequiredPermissions": "VRCommon_Settings: View",
@@ -3352,7 +3350,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/Settings/GetSetting",
               "RequiredPermissions": "VRCommon_Settings: View",
@@ -3362,7 +3359,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/Settings/UpdateSetting",
               "RequiredPermissions": "VRCommon_Settings: Edit",
@@ -3372,7 +3368,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageTemplate/AddMailMessageTemplate",
               "RequiredPermissions": "VRCommon_VRMailMessageTemplate: Add",
@@ -3382,7 +3377,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates",
               "RequiredPermissions": "VRCommon_VRMailMessageTemplate: View",
@@ -3392,7 +3386,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageTemplate/GetMailMessageTemplate",
               "RequiredPermissions": "VRCommon_VRMailMessageTemplate: View",
@@ -3402,7 +3395,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageTemplate/UpdateMailMessageTemplate",
               "RequiredPermissions": "VRCommon_VRMailMessageTemplate: Edit",
@@ -3412,7 +3404,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageType/AddMailMessageType",
               "RequiredPermissions": "VR_SystemConfiguration: Add",
@@ -3422,7 +3413,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageType/GetFilteredMailMessageTypes",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -3432,7 +3422,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageType/GetMailMessageType",
               "RequiredPermissions": null,
@@ -3442,7 +3431,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageType/GetMailMessageTypesInfo",
               "RequiredPermissions": null,
@@ -3452,7 +3440,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRMailMessageType/UpdateMailMessageType",
               "RequiredPermissions": "VR_SystemConfiguration: Edit",
@@ -3462,7 +3449,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRObjectTypeDefinition/AddVRObjectTypeDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: Add",
@@ -3472,7 +3458,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -3482,7 +3467,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRObjectTypeDefinition/GetVRObjectTypeDefinition",
               "RequiredPermissions": null,
@@ -3492,7 +3476,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRObjectTypeDefinition/GetVRObjectTypeDefinitionsInfo",
               "RequiredPermissions": null,
@@ -3502,7 +3485,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRObjectTypeDefinition/UpdateVRObjectTypeDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: Edit",
@@ -3512,7 +3494,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StyleDefinition/GetFilteredStyleDefinitions",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -3522,7 +3503,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StyleDefinition/GetStyleDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -3532,7 +3512,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StyleDefinition/AddStyleDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: Add",
@@ -3542,7 +3521,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StyleDefinition/UpdateStyleDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: Edit",
@@ -3552,7 +3530,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StyleDefinition/GetStyleFormatingExtensionConfigs",
               "RequiredPermissions": null,
@@ -3562,7 +3539,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StyleDefinition/GetStyleDefinitionsInfo",
               "RequiredPermissions": null,
@@ -3572,7 +3548,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/UserActionAudit/GetFilteredUserActionAudits",
               "RequiredPermissions": "VRCommon_System_Log: View Action Audit",
@@ -3582,7 +3557,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/LogEntry/GetFilteredLogs",
               "RequiredPermissions": "VRCommon_System_Log: View General Logs",
@@ -3592,7 +3566,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/Settings/GetFilteredTechnicalSettings",
               "RequiredPermissions": "VR_SystemConfiguration:  View",
@@ -3602,7 +3575,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/Settings/GetTechnicalSetting",
               "RequiredPermissions": "VR_SystemConfiguration:  View",
@@ -3612,7 +3584,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/Settings/UpdateTechnicalSetting",
               "RequiredPermissions": "VR_SystemConfiguration:  Edit",
@@ -3622,7 +3593,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRConnection/GetFilteredVRConnections",
               "RequiredPermissions": "VRCommon_VRConnection: View",
@@ -3632,7 +3602,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRConnection/GetVRConnection",
               "RequiredPermissions": "VRCommon_VRConnection: View",
@@ -3642,7 +3611,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRConnection/AddVRConnection",
               "RequiredPermissions": "VRCommon_VRConnection: Add",
@@ -3652,7 +3620,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRConnection/UpdateVRConnection",
               "RequiredPermissions": "VRCommon_VRConnection: Edit",
@@ -3662,7 +3629,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRConnection/GetVRConnectionInfos",
               "RequiredPermissions": null,
@@ -3672,7 +3638,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRConnection/GetVRConnectionConfigTypes",
               "RequiredPermissions": null,
@@ -3682,7 +3647,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -3692,7 +3656,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRApplicationVisibility/GetVRApplicationVisibilityEditorRuntime",
               "RequiredPermissions": null,
@@ -3702,7 +3665,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRApplicationVisibility/AddVRApplicationVisibility",
               "RequiredPermissions": "VR_SystemConfiguration: Add",
@@ -3712,7 +3674,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRApplicationVisibility/UpdateVRApplicationVisibility",
               "RequiredPermissions": "VR_SystemConfiguration: Edit",
@@ -3722,7 +3683,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRApplicationVisibility/GetVRApplicationVisibiltiesInfo",
               "RequiredPermissions": null,
@@ -3732,7 +3692,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRApplicationVisibility/GetVRModuleVisibilityExtensionConfigs",
               "RequiredPermissions": null,
@@ -3742,7 +3701,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRApplicationVisibility/GetVRApplicationVisibilitiesInfo",
               "RequiredPermissions": null,
@@ -3752,7 +3710,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StatusDefinition/GetFilteredStatusDefinitions",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -3762,7 +3719,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StatusDefinition/AddStatusDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: Add",
@@ -3772,7 +3728,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StatusDefinition/UpdateStatusDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: Edit",
@@ -3782,7 +3737,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StatusDefinition/GetStatusDefinition",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -3792,7 +3746,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/StatusDefinition/GetStatusDefinitionsInfo",
               "RequiredPermissions": null,
@@ -3802,7 +3755,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRComponentType/GetFilteredVRComponentTypes",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -3812,7 +3764,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRComponentType/GetVRComponentType",
               "RequiredPermissions": null,
@@ -3822,7 +3773,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRComponentType/AddVRComponentType",
               "RequiredPermissions": "VR_SystemConfiguration: Add",
@@ -3832,7 +3782,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRComponentType/UpdateVRComponentType",
               "RequiredPermissions": "VR_SystemConfiguration: Edit",
@@ -3842,7 +3791,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRComponentType/GetVRComponentTypeExtensionConfigs",
               "RequiredPermissions": null,
@@ -3852,7 +3800,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRComponentType/GetVRComponentTypeExtensionConfigById",
               "RequiredPermissions": null,
@@ -3862,7 +3809,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/SMSMessageTemplate/AddSMSMessageTemplate",
               "RequiredPermissions": "VR_System_Administration: Manage",
@@ -3872,7 +3818,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates",
               "RequiredPermissions": "VR_System_Administration: View",
@@ -3882,7 +3827,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/SMSMessageTemplate/UpdateSMSMessageTemplate",
               "RequiredPermissions": "VR_System_Administration: Manage",
@@ -3892,7 +3836,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRNamespace/AddVRNamespace",
               "RequiredPermissions": "VR_SystemConfiguration:Add",
@@ -3902,7 +3845,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRNamespace/GetFilteredVRNamespaces",
               "RequiredPermissions": "VR_SystemConfiguration:View",
@@ -3912,7 +3854,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRNamespace/GetVRNamespace",
               "RequiredPermissions": "VR_SystemConfiguration:View",
@@ -3922,7 +3863,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRNamespace/UpdateVRNamespace",
               "RequiredPermissions": "VR_SystemConfiguration:Edit",
@@ -3932,7 +3872,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRDynamicAPI/AddVRDynamicAPI",
               "RequiredPermissions": "VRDynamicAPI: Add",
@@ -3942,7 +3881,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRDynamicAPI/GetFilteredVRDynamicAPIs",
               "RequiredPermissions": "VRDynamicAPI: View",
@@ -3952,7 +3890,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRDynamicAPI/UpdateVRDynamicAPI",
               "RequiredPermissions": "VRDynamicAPI: Edit",
@@ -3962,7 +3899,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRDynamicAPIModule/AddVRDynamicAPIModule",
               "RequiredPermissions": "VRDynamicAPIModule: Add",
@@ -3972,7 +3908,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules",
               "RequiredPermissions": "VRDynamicAPIModule: View",
@@ -3982,7 +3917,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRDynamicAPIModule/UpdateVRDynamicAPIModule",
               "RequiredPermissions": "VRDynamicAPIModule: Edit",
@@ -3992,7 +3926,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRNamespaceItem/AddVRNamespaceItem",
               "RequiredPermissions": "VR_SystemConfiguration: Add",
@@ -4002,7 +3935,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRNamespaceItem/GetFilteredVRNamespaceItems",
               "RequiredPermissions": "VR_SystemConfiguration: View",
@@ -4012,7 +3944,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCommon/VRNamespaceItem/UpdateVRNamespaceItem",
               "RequiredPermissions": "VR_SystemConfiguration: Edit",
@@ -4024,6 +3955,287 @@
         "LastWhereCondition": "DevProjectID = '3fb1a9fc-2a00-499e-a3c6-f3d317f58d66'",
         "LastJoinStatement": null,
         "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AssemblyID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
+              "ID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VR_Common",
+              "AssemblyID": null,
+              "CreatedTime": "2019-09-11T12:31:41.397",
+              "LastModifiedTime": "2019-09-11T12:31:41.397"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "ID = '3fb1a9fc-2a00-499e-a3c6-f3d317f58d66'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "StyleDefinition",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "ed3aed64-deb0-4f28-847c-0a08f43e1c97",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Orange",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"label label-warning-1\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2018-12-24T12:47:13.123",
+              "LastModifiedTime": "2019-02-27T12:13:13.907"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "0f4d5cc8-2683-4214-be96-15ca51cacbf6",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "AttemptsColumns",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"yellow-column-grid\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2018-03-22T16:50:31.473",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "b1e70897-eaf0-47dc-bad3-20d1f65fce42",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "BoldLabel",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"bold-label\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2018-07-25T12:40:10.783",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "912ab01a-0bb2-4750-9546-241db8119562",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "CostColumns",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"green-column-grid\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2018-03-22T16:50:31.473",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "61a682f3-e00c-4b31-b2f5-26dd5f5e4c2f",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Red",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"label label-danger\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2016-07-26T14:56:29.233",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "907f265f-cf52-4c90-a219-56bcfa18f65b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "RedText",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"red-font\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2018-12-24T12:36:25.763",
+              "LastModifiedTime": "2018-12-24T12:36:25.763"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "2cb88d75-7eb6-4e6d-86fc-625eeca8e52b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "GreenText",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"green-font\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2018-12-24T12:36:45.747",
+              "LastModifiedTime": "2018-12-24T12:36:45.747"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "fac30bbc-68b1-4e8e-b5de-93015285c012",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Green",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"label label-success\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2016-07-21T12:24:01.94",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "1e644b07-528a-47b5-a40a-a9e8a0fc868a",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Blue",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"label label-primary\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2016-07-21T12:28:13.257",
+              "LastModifiedTime": "2019-02-27T12:12:14.55"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "a19a7842-a160-4bcc-b71a-b6270abace4f",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "SaleColumns",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"blue-column-grid\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2018-03-22T16:50:31.473",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "a5616f24-e508-4ab1-90eb-ba72074872a0",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Blue Aqua",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"label label-info\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2019-02-27T12:17:32.253",
+              "LastModifiedTime": "2019-02-27T12:17:32.253"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "f3fee864-02ef-4c0b-a68d-d9aeb5bac07e",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "gray",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"label label-default\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2016-07-21T15:42:36.347",
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "a6f96839-2922-4cee-b0f6-f026f8bd8c11",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Yellow",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"label label-warning\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2016-07-21T14:40:23.31",
+              "LastModifiedTime": "2019-02-27T12:13:07.15"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "e4237254-509c-4495-a700-fc8d6379a0a4",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "KPIsColumns",
+              "Settings": "{\"$type\":\"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities\",\"StyleFormatingSettings\":{\"$type\":\"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions\",\"ClassName\":\"red-column-grid\",\"UniqueName\":\"VR_AccountBalance_StyleFormating_CSSClass\",\"ConfigId\":\"c1c2f3b8-9707-4fd1-b871-c4018fd77b04\"}}",
+              "CreatedTime": "2018-03-22T16:50:31.473",
+              "LastModifiedTime": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = '3fb1a9fc-2a00-499e-a3c6-f3d317f58d66'",
+        "LastJoinStatement": null,
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     }
