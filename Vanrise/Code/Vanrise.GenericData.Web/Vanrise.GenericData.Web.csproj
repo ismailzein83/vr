@@ -335,6 +335,10 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\CustomObject\Definition\Templates\CustomObjectRecordFilterDefinitionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\CustomObject\Definition\vr-genericdata-customobject-recordfilter-definition.js" />
+    <Content Include="VR_GenericData\Directives\CustomObject\Runtime\CustomObjectRecordFilterRuntimeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\CustomObject\Runtime\vr-genericdata-customobject-recordfilter-runtime.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\Templates\PermanentFilterConditionFilter.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\Templates\PermanentfilterRecordfilter.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\vr-genericdata-datarecordstorage-permanentfilter-conditionfilter.js" />
