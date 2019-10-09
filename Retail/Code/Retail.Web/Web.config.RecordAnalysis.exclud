@@ -31,6 +31,8 @@
 
     <add name="RecordAnalysisCDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_CDR;User ID=sa;Password=" />
     
+    <add name="RecordAnalysisC5CDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_C5CDR;User ID=sa;Password=" />
+    
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
   <appSettings>
