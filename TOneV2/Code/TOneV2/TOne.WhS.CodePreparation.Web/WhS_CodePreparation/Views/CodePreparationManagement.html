@@ -2,11 +2,13 @@
 	<vr-form validationcontext="filterGroupValid" vr-loader="isLoading">
 		<div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
 			<vr-row removeline>
-				<vr-validation-group validationcontext="SearchGroup">
-					<span vr-loader="isLoadingSellingNumberPlan">
-						<vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="onSellingNumberPlanSelectorChanged" selectedvalues="selectedSellingNumberPlan" showaddbutton></vr-whs-be-sellingnumberplan-selector>
-					</span>
-				</vr-validation-group>
+                <vr-validation-group validationcontext="SearchGroup">
+
+                    <vr-whs-be-lob-selector on-ready="onLOBSelectorReady" onselectionchanged="onLOBSelectionChanged" normal-col-num="2" isrequired="true" hideremoveicon></vr-whs-be-lob-selector>
+                    <span vr-loader="isLoadingSellingNumberPlan">
+                        <vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="onSellingNumberPlanSelectorChanged" selectedvalues="selectedSellingNumberPlan" showaddbutton></vr-whs-be-sellingnumberplan-selector>
+                    </span>
+                </vr-validation-group>
 			</vr-row>
 		</div>
 	</vr-form>

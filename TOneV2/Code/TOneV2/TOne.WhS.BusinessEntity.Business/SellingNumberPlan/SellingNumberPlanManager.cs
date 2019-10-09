@@ -33,9 +33,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             Func<SellingNumberPlan, bool> filterExpression = (sellingNumberPlanEntity) =>
             {
-                if(filter != null)
+                if (filter != null)
                 {
-                    if (filter.LOBId != null && !sellingNumberPlanEntity.LOBId.Equals(filter.LOBId))
+                    if (filter.LOBId.HasValue && !sellingNumberPlanEntity.LOBId.Equals(filter.LOBId.Value))
                         return false;
                 }
                 return true;

@@ -7,9 +7,12 @@
 	function CodePreparationManagementController($window, $scope, WhS_CP_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService, WhS_CP_NewCPOutputResultEnum, WhS_CP_ZoneItemDraftStatusEnum, WhS_CP_ZoneItemStatusEnum, WhS_CP_ValidationOutput, WhS_CP_CodePrepService, WhS_BE_SellingNumberPlanAPIService, WhS_CP_NumberingPlanDefinitionEnum, BusinessProcess_BPInstanceService, VRCommon_VRExclusiveSessionTypeService, VRCommon_VRExclusiveSessionTypeAPIService, WhS_BE_ExclusiveSessionTypeIdEnum, WhS_BE_ExclusiveSessionTargetIdPrefixEnum) {
 
 		//#region Global Variables
+        var lobSelectorAPI;
+        var lobSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 		var sellingNumberPlanDirectiveAPI;
-		var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 		var treeAPI;
 		var codesGridAPI;
 		var countries = [];
@@ -53,6 +56,17 @@
 				};
 				return WhS_CP_CodePrepAPIService.UploadCodePreparationSheet(filter.sellingNumberPlanId, onCodePreparationUpdated);
 			};
+
+            $scope.onLOBSelectorReady = function (api) {
+                lobSelectorAPI = api;
+                lobSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onLOBSelectionChanged = function (selectedLOB) {
+                if (selectedLOB != undefined) {
+                    loadSellingNumberPlans();
+                }
+            };
 
 			$scope.onSellingNumberPlanSelectorReady = function (api) {
 				sellingNumberPlanDirectiveAPI = api;
@@ -247,20 +261,33 @@
 		function load() {
 			$scope.isLoadingFilter = true;
 
-			UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans]).catch(function (error) {
+            UtilsService.waitMultipleAsyncOperations([loadLOBSelector]).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
 			}).finally(function () {
 				$scope.isLoadingFilter = false;
 			});
 		}
 
+        function loadLOBSelector() {
+            var lobSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            lobSelectorReadyDeferred.promise.then(function () {
+                var lobSelectorPayload;
 
+                VRUIUtilsService.callDirectiveLoad(lobSelectorAPI, lobSelectorPayload, lobSelectorLoadPromiseDeferred);
+            });
+            return lobSelectorLoadPromiseDeferred.promise;
+        }
 
 		function loadSellingNumberPlans() {
 			var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
 			sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-
-				VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, { selectifsingleitem: true }, loadSNPPromiseDeferred);
+                var sellingNumberPlanPayload = {
+                    filter: {
+                        LOBId: lobSelectorAPI.getSelectedIds()
+                    },
+                    selectifsingleitem: true
+                };
+                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSNPPromiseDeferred);
 			});
 
 			return loadSNPPromiseDeferred.promise;
