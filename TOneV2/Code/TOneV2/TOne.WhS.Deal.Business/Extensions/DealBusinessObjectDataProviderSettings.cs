@@ -121,7 +121,7 @@ namespace TOne.WhS.Deal.Business
             }
 
             List<int> dealIds = deals.Select(deal => deal.DealId).ToList();
-            IEnumerable<DealDetailedProgress> dealsDetailedProgresses = dealDetailedProgressManager.GetDealsDetailedProgress(dealIds, minDealBED, context.ToTime.Value);
+            IEnumerable<DealDetailedProgress> dealsDetailedProgresses = dealDetailedProgressManager.GetDealsDetailedProgress(dealIds, minDealBED, DateTime.Now.Date);
 
             foreach (var dealProgress in dealsDetailedProgresses)
             {
