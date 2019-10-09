@@ -249,7 +249,7 @@ namespace Vanrise.Fzero.Services.Report
 
                     if (!ftpType.HasValue || ftpType.Value == (int)FTPTypeEnum.FTP)
                     {
-                        Rebex.Net.FtpWebRequest ftpWebRequest = (Rebex.Net.FtpWebRequest)Rebex.Net.FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName.Replace(".tmp", ".txt")));
+                        var ftpWebRequest = Rebex.Net.FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName.Replace(".tmp", ".txt")));
                         ftpWebRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
                         //   ftpWebRequest..KeepAlive = false;
                         ftpWebRequest.Timeout = 20000;
