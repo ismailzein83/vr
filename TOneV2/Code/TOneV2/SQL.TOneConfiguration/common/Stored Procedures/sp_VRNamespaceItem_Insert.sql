@@ -13,7 +13,7 @@ CREATE PROCEDURE [common].[sp_VRNamespaceItem_Insert]
 	@LastModifiedBy int 
 AS
 BEGIN
-IF NOT EXISTS(SELECT 1 FROM common.VRNamespaceItem WHERE Name = @Name)
+IF NOT EXISTS(SELECT 1 FROM common.VRNamespaceItem WHERE VRNamespaceId = @vrNamespaceId AND Name = @Name)
 	BEGIN
 		INSERT INTO common.VRNamespaceItem (ID, VRNamespaceId, Name, Settings, CreatedBy, LastModifiedBy)
 		VALUES (@ID, @vrNamespaceId, @Name,@Settings, @CreatedBy , @LastModifiedBy)

@@ -12,7 +12,7 @@ CREATE PROCEDURE [common].[sp_VRNamespaceItem_Update]
 	@LastModifiedBy int
 AS
 BEGIN
-IF NOT EXISTS(SELECT 1 FROM common.VRNamespaceItem WHERE ID != @ID and Name = @Name)
+IF NOT EXISTS(SELECT 1 FROM common.VRNamespaceItem WHERE ID != @ID and VRNamespaceId = @vrNamespaceId AND Name = @Name)
 	BEGIN
 		update common.VRNamespaceItem
 		set  VRNamespaceId = @vrNamespaceId, Name = @Name, Settings = @Settings, LastModifiedBy = @LastModifiedBy, LastModifiedTime = getdate()
