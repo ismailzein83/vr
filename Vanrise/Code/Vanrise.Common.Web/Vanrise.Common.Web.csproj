@@ -241,6 +241,8 @@
     <Content Include="Common\Services\VRDynamicAPIService.js" />
     <Content Include="Common\Services\TextPatternBuilderService.js" />
     <Content Include="Common\Services\VRNamespaceItemService.js" />
+    <Content Include="Common\Views\NewFeaturesPage.html" />
+    <Content Include="Common\Views\NewFeaturesPageController.js" />
     <Content Include="Common\Views\PageDirectiveHost\PageDirectiveHostManagement.html" />
     <Content Include="Common\Views\PageDirectiveHost\PageDirectiveHostManagementController.js" />
     <Content Include="Common\Views\VRDashboard\VRDashboardManagement.html" />

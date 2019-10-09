@@ -1,0 +1,51 @@
+﻿<vr-panel ng-controller="Common_NewFeaturesController">
+
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-section header="Node Editor">
+                <vr-form name="formNodeEditor">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="nodeName" label="Node Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-select label="Node Type " datasource="nodeCategories" hideremoveicon datatextfield="categoryName" datavaluefield="categoryId" selectedvalues="selectedNodeType" hidefilterbox isrequired="true"></vr-select>
+                        </vr-columns>
+                    </vr-row>
+                </vr-form>
+
+                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                    <div transclude-to="buttons">
+                        <vr-button type="Add" formname="formNodeEditor" data-onclick="addDiagramNode"></vr-button>
+                    </div>
+                </vr-actionbar>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-section header="Link Editor">
+                <vr-form name="formLinkEditor">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-select label="From Node" datasource="nodeDataArray" hideremoveicon datatextfield="Name" datavaluefield="Id" selectedvalues="fromselectedNode" hidefilterbox isrequired="true"></vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-select label="To Node" datasource="nodeDataArray" hideremoveicon datatextfield="Name" datavaluefield="Id" selectedvalues="toselectedNode" hidefilterbox isrequired="true"></vr-select>
+                        </vr-columns>
+                    </vr-row>
+                </vr-form>
+
+                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                    <div transclude-to="buttons">
+                        <vr-button type="Add" formname="formLinkEditor" data-onclick="addDiagramLink"></vr-button>
+                    </div>
+                </vr-actionbar>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+
+    <vr-row>
+        <vr-columns colnum="12">
+            <vr-diagram on-ready="onDiagramReady" nodes="nodeDataArray"></vr-diagram>
+        </vr-columns>      
+    </vr-row>
+</vr-panel>
