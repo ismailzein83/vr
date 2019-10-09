@@ -29,7 +29,8 @@ BEGIN
 			SentDate,
 			inv.ApprovedBy,
 			inv.ApprovedTime,
-			inv.NeedApproval
+			inv.NeedApproval,
+			inv.StatusID
 	FROM	VR_Invoice.Invoice inv with(nolock)
 	join @PartnerInvoiceTypeTable pit on  inv.InvoiceTypeID = pit.InvoiceTypeID AND inv.PartnerID = pit.PartnerId 
 	where DueDate <= GETDATE() AND ISNULL(IsDeleted,0) = 0 AND ISNULL(IsDraft, 0) = 0

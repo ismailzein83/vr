@@ -17,8 +17,11 @@
     [IsDeleted]               BIT              NULL,
     [IsSubtractedFromBalance] BIT              NULL,
     [SourceID]                NVARCHAR (255)   NULL,
+    [PaymentToInvoiceID]      BIGINT           NULL,
     CONSTRAINT [PK_BillingTransaction] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

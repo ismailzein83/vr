@@ -12,7 +12,7 @@ CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_GetByAccount]
 
 AS
 BEGIN
-	SELECT	bt.[ID],bt.AccountID,bt.AccountTypeID, TransactionTypeID,Amount,bt.CurrencyId,TransactionTime,Notes,Reference,IsBalanceUpdated,ClosingPeriodId, SourceID, Settings, bt.IsDeleted, IsSubtractedFromBalance
+	SELECT	bt.[ID],bt.AccountID,bt.AccountTypeID, TransactionTypeID,Amount,bt.CurrencyId,TransactionTime,Notes,Reference,IsBalanceUpdated,ClosingPeriodId, SourceID, Settings, bt.IsDeleted, IsSubtractedFromBalance, bt.PaymentToInvoiceID
 	FROM VR_AccountBalance.BillingTransaction bt with(nolock)
 	Inner Join [VR_AccountBalance].LiveBalance vrlb
 	    on vrlb.AccountTypeID = bt.AccountTypeID and 

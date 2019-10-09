@@ -51,7 +51,8 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@In
 			vrIn.SplitInvoiceGroupId,
 			vrIn.ApprovedBy,
 			vrIn.ApprovedTime,
-			vrIn.NeedApproval
+			vrIn.NeedApproval,
+			vrIn.StatusID
 			into #InvoicesResult
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	Inner Join VR_Invoice.InvoiceAccount vrInAcc 

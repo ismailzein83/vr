@@ -19,6 +19,7 @@ BEGIN
       ,[IsDeleted]
       ,[IsSubtractedFromBalance]
       ,[SourceID]
+	  ,[PaymentToInvoiceID]
 	from [VR_AccountBalance].BillingTransaction with(nolock)
 	where AccountTypeID = @AccountTypeID 
 	and 

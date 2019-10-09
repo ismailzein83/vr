@@ -15,10 +15,11 @@ CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_Insert]
 	@SourceId nvarchar(255),
 	@Settings nvarchar(max),
 	@CreatedByInvoiceId bigint = null,
+	@PaymentToInvoiceID bigint,
 	@ID INT OUT
 AS
 BEGIN
-	INSERT INTO VR_AccountBalance.BillingTransaction (AccountID, AccountTypeID, Amount, CurrencyId, TransactionTypeId, TransactionTime, Notes, Reference, SourceID, Settings, CreatedByInvoiceID)
-	VALUES (@AccountID, @AccountTypeID, @Amount, @CurrencyId, @TransactionTypeId, @TransactionTime, @Notes, @Reference, @SourceID, @Settings, @CreatedByInvoiceId)
+	INSERT INTO VR_AccountBalance.BillingTransaction (AccountID, AccountTypeID, Amount, CurrencyId, TransactionTypeId, TransactionTime, Notes, Reference, SourceID, Settings, CreatedByInvoiceID, PaymentToInvoiceID)
+	VALUES (@AccountID, @AccountTypeID, @Amount, @CurrencyId, @TransactionTypeId, @TransactionTime, @Notes, @Reference, @SourceID, @Settings, @CreatedByInvoiceId, @PaymentToInvoiceID)
 	SET @ID = SCOPE_IDENTITY()
 END

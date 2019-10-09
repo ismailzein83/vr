@@ -25,7 +25,7 @@ BEGIN
 		select Convert(uniqueidentifier, ParsedString) from [VR_AccountBalance].[ParseStringList](@AccountTypeIds)
 
 
-		SELECT		bt.[ID],bt.AccountID,bt.AccountTypeID, bt.TransactionTypeID,bt.Amount,bt.CurrencyId,bt.TransactionTime,bt.Notes,bt.Reference,bt.IsBalanceUpdated,bt.ClosingPeriodId, SourceID, bt.Settings, bt.IsDeleted, bt.IsSubtractedFromBalance
+		SELECT		bt.[ID],bt.AccountID,bt.AccountTypeID, bt.TransactionTypeID,bt.Amount,bt.CurrencyId,bt.TransactionTime,bt.Notes,bt.Reference,bt.IsBalanceUpdated,bt.ClosingPeriodId, SourceID, bt.Settings, bt.IsDeleted, bt.IsSubtractedFromBalance, bt.PaymentToInvoiceID
 		FROM	[VR_AccountBalance].BillingTransaction bt  with(nolock)
 		
         WHERE	isnull(bt.IsDeleted, 0) = 0

@@ -24,7 +24,8 @@ BEGIN
 			SentDate,
 			inv.ApprovedBy,
 			inv.ApprovedTime,
-			inv.NeedApproval
+			inv.NeedApproval,
+			inv.StatusID
 	FROM	[VR_Invoice].InvoiceBulkActionDraft ibad  with(nolock)
 	JOIN  	VR_Invoice.Invoice inv with(nolock)
 	ON      inv.ID = ibad.InvoiceId   

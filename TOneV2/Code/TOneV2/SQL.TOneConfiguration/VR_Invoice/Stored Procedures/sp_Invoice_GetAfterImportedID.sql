@@ -32,7 +32,8 @@ BEGIN
 			SplitInvoiceGroupId,
 			ApprovedBy,
 			ApprovedTime,
-			NeedApproval
+			NeedApproval,
+			StatusID
 	FROM	VR_Invoice.Invoice with(nolock)
 	where	(InvoiceTypeId = @InvoiceTypeId) 
 			AND (@LastImportedId is Null or ID > @LastImportedId)

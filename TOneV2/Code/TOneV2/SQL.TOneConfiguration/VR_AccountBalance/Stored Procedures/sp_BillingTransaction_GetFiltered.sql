@@ -23,7 +23,7 @@ BEGIN
 		INSERT INTO @TransactionTypeIdsTable (TransactionTypeID)
 		select Convert(uniqueidentifier, ParsedString) from [VR_AccountBalance].[ParseStringList](@TransactionTypeIds)
 
-		SELECT	bt.[ID],bt.AccountID,bt.AccountTypeID, bt.TransactionTypeID,bt.Amount,bt.CurrencyId,bt.TransactionTime,bt.Notes,bt.Reference,bt.IsBalanceUpdated,bt.ClosingPeriodId, SourceID, bt.Settings, bt.IsDeleted, bt.IsSubtractedFromBalance
+		SELECT	bt.[ID],bt.AccountID,bt.AccountTypeID, bt.TransactionTypeID,bt.Amount,bt.CurrencyId,bt.TransactionTime,bt.Notes,bt.Reference,bt.IsBalanceUpdated,bt.ClosingPeriodId, SourceID, bt.Settings, bt.IsDeleted, bt.IsSubtractedFromBalance, bt.PaymentToInvoiceID
 		FROM	[VR_AccountBalance].BillingTransaction bt  with(nolock)
 		left Join [VR_AccountBalance].LiveBalance vrlb
 	    on vrlb.AccountTypeID = bt.AccountTypeID and 
