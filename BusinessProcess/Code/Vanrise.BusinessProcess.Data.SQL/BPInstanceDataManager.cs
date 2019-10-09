@@ -104,7 +104,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             queryBuilder.Append(" SELECT TOP 1 StatusUpdatedTime as MaxGlobalStatusUpdatedTime, ID as GlobalId FROM [BP].[BPInstance] WITH(NOLOCK) order by StatusUpdatedTime desc, ID desc ");
             queryBuilder.AppendLine();
 
-            queryBuilder.AppendFormat("SELECT TOP({0}) {1} INTO #TEMP FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
+            queryBuilder.AppendFormat("SELECT TOP({0}) {1} FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
             List<string> filters = BuildFilters(definitionsId, parentId, entityIds, grantedPermissionSetIds);
 
             if (taskId.HasValue)
@@ -116,8 +116,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             queryBuilder.Append(" ORDER BY bp.[ID] DESC");
 
             queryBuilder.AppendLine();
-
-            queryBuilder.Append(" SELECT * FROM #TEMP ");
 
             DateTime? maxStatusUpdatedTime_local = null;
             long? id_local = null;
@@ -178,7 +176,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder();
 
-            queryBuilder.AppendFormat("SELECT TOP({0}) {1} INTO #TEMP FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
+            queryBuilder.AppendFormat("SELECT TOP({0}) {1} FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
             List<string> filters = BuildFilters(definitionsId, parentId, entityIds, grantedPermissionSetIds);
             filters.Add(" (bp.[StatusUpdatedTime] > @StatusUpdatedTime OR (bp.[StatusUpdatedTime] = @StatusUpdatedTime AND bp.ID > @BPInstanceId))");
 
@@ -190,8 +188,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             queryBuilder.Append(" ORDER BY bp.[StatusUpdatedTime], bp.ID ");
 
             queryBuilder.AppendLine();
-
-            queryBuilder.Append(" SELECT * FROM #TEMP ");
 
             object lastUpdateHandle_local = lastUpdateHandle;
 

@@ -17,7 +17,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
             StringBuilder codeBuilder = new StringBuilder();
             codeBuilder.AppendLine("var genericBEManager = new Vanrise.GenericData.Business.GenericBusinessEntityManager();");
             codeBuilder.AppendLine($@"var genericBusinessEntity = genericBEManager.GetGenericBusinessEntity({context.EntityIdCode}, new Guid(""{context.EntityDefinitionId}""));");
-            codeBuilder.AppendLine("genericBusinessEntity.ThrowIfNull(\"genericBusinessEntity\");");
+            codeBuilder.AppendLine($"genericBusinessEntity.ThrowIfNull(\"genericBusinessEntity\", $\"EntityId: '{{{context.EntityIdCode}}}' EntityDefinitionId: '{context.EntityDefinitionId}'\");");
             codeBuilder.AppendLine("genericBusinessEntity.FieldValues.ThrowIfNull(\"genericBusinessEntity.FieldValues\");");
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var dataRecordTypeId = new GenericBusinessEntityDefinitionManager().GetGenericBEDataRecordTypeId(context.EntityDefinitionId);
