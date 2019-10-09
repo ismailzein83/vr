@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.GenericData.Entities.GenericRules;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -15,21 +12,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-customobject-viewereditor"; } }
 
-        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
-        {
-            return new RDBDataRecordFieldAttribute
-            {
-                RdbDataType = RDBDataType.NVarchar
-            };
-        }
+        public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-customobject-runtimeeditor"; } }
+
+        public override bool StoreValueSerialized { get { return true; } }
 
         public bool IsNullable { get; set; }
 
         public FieldCustomObjectTypeSettings Settings { get; set; }
-
-        public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-customobject-runtimeeditor"; } }
-
-        public override bool StoreValueSerialized { get { return true; } }
 
         Type _runtimeType;
         public override Type GetRuntimeType()
@@ -63,12 +52,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return _nonNullableRuntimeType;
         }
+
         public override void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
         {
             context.HeaderCell.ThrowIfNull("context.HeaderCell");
             var headerCell = context.HeaderCell;
             headerCell.CellType = ExcelCellType.Text;
         }
+
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (this.Settings != null)
@@ -85,6 +76,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 });
             return null;
         }
+
         public override void GetValueByDescription(IGetValueByDescriptionContext context)
         {
             if (this.Settings != null)
@@ -141,6 +133,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
         }
 
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.NVarchar
+            };
+        }
+
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
             return this.Settings.ParseNonNullValueToFieldType(originalValue);
@@ -160,5 +160,4 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return Serializer.Serialize(fieldTypeAsCustomObjectType.Settings) == Serializer.Serialize(this.Settings);
         }
     }
-
 }
