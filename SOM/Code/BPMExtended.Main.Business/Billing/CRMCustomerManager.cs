@@ -303,7 +303,7 @@ namespace BPMExtended.Main.Business
                 if (collections.Count > 0)
                 {
                     recordEntity = collections[0];
-                    recordEntity.SetColumnValue("StWaitingListPoolstatusId", "8466C99AD-A47E-4F96-A540-4F62DFCB9746");
+                    recordEntity.SetColumnValue("StWaitingListPoolstatusId", Constant.REMOVED_STATUS);
                     recordEntity.Save();
                 }
             }
