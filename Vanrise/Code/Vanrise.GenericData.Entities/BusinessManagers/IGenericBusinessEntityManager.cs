@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Entities
         R GetCachedOrCreate<R>(Object cacheName, Guid businessEntityDefinitionId, CacheExpirationChecker cacheExpirationChecker, Func<R> createObject);
         List<GenericBusinessEntity> GetAllGenericBusinessEntities(Guid businessEntityDefinitionId, List<string> neededColumns = null, RecordFilterGroup filterGroup = null);
         InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd);
-        //void SetCacheExpired(Guid businessEntityDefinitionId);
+        void SetCacheExpired(Guid businessEntityDefinitionId);
         UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntityToUpdate);
         GenericBusinessEntityDetail GetGenericBusinessEntityDetail(Object genericBusinessEntityId, Guid businessEntityDefinitionId);
 		bool DoesUserHaveActionAccess(string actionKind, Guid BusinessEntityDefinitionId, Guid businessEntityActionTypeId);

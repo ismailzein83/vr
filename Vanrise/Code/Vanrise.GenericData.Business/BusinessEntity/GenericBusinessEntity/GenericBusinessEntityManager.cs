@@ -62,11 +62,11 @@ namespace Vanrise.GenericData.Business
             return GetCacheManager().IsCacheExpired(dataRecordStorageId, ref lastCheckTime);
         }
 
-        //public void SetCacheExpired(Guid businessEntityDefinitionId)
-        //{
-        //    var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
-        //    GetCacheManager().SetCacheExpired(dataRecordStorageId);
-        //}
+        public void SetCacheExpired(Guid businessEntityDefinitionId)
+        {
+            var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
+            GetCacheManager().SetCacheExpired(dataRecordStorageId);
+        }
 
         public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityInfoFilter filter, string searchValue = null)
         {
@@ -1906,7 +1906,9 @@ namespace Vanrise.GenericData.Business
                 foreach (var dataRecord in dataRecords)
                 {
                     var fieldValues = dataRecord.FieldValues;
-                    descriptionByIds.Add(fieldValues.GetRecord(idFieldName), fieldValues.GetRecord(fieldTitle).ToString());
+                    Object titleAsObject = fieldValues.GetRecord(fieldTitle);
+                    string title = titleAsObject != null ? titleAsObject.ToString() : null;
+                    descriptionByIds.Add(fieldValues.GetRecord(idFieldName), title);
                 }
 
                 return descriptionByIds;

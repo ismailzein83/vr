@@ -285,6 +285,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridgenericeditorviewRunt
                         var entity = row.Entity;
                         var rowValues = row.oldValues != undefined ? row.oldValues : {};
 
+                        if (rowValues["$type"] != undefined)
+                            rowValues["$type"] = undefined;
+
                         for (var j = 0; j < entity.length; j++) {
                             var fieldInRow = entity[j]; 
                             if (fieldInRow.directiveAPI != undefined) {
