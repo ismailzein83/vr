@@ -747,6 +747,26 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NetworkProvision.Business\NetworkProvision.Business.csproj">
+      <Project>{39f45af7-987b-493b-88d1-4b4165ea9ae1}</Project>
+      <Name>NetworkProvision.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkProvision.Data.RDB\NetworkProvision.Data.RDB.csproj">
+      <Project>{8d0cbff6-724d-4e96-8687-4fcdfa8917e2}</Project>
+      <Name>NetworkProvision.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkProvision.Data.SQL\NetworkProvision.Data.SQL.csproj">
+      <Project>{d33b75b8-0ed9-477a-a77d-947c4173dc24}</Project>
+      <Name>NetworkProvision.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkProvision.Data\NetworkProvision.Data.csproj">
+      <Project>{e476c199-5ff5-487e-9b33-c0e5c8f3a4bc}</Project>
+      <Name>NetworkProvision.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkProvision.Entities\NetworkProvision.Entities.csproj">
+      <Project>{878424c9-a62d-4ad2-84be-3c56989384c4}</Project>
+      <Name>NetworkProvision.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RecordAnalysis.Business\RecordAnalysis.Business.csproj">
       <Project>{90627a1f-5042-4080-9453-b39ee40e11f3}</Project>
       <Name>RecordAnalysis.Business</Name>

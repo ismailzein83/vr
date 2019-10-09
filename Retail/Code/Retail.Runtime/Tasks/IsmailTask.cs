@@ -26,6 +26,7 @@ using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
 using Vanrise.GenericData.Business;
+using Vanrise.Common.Business;
 
 namespace Retail.Runtime.Tasks
 {
@@ -58,7 +59,31 @@ namespace Retail.Runtime.Tasks
         //}
         public void Execute()
         {
-            
+           //// Vanrise.BusinessProcess.Business.VRWorkflowManager wfManager = new VRWorkflowManager();
+           //// Vanrise.Security.Business.SecurityContext.Current.SetContextUserId(-1);
+
+           //// var namespaceManager = new VRNamespaceManager();
+           ////var types = namespaceManager.GetVRNamespaceClassesInfo(new Guid("2cb68564-4d8a-480f-9a36-c764bcef81b6"));
+           //// namespaceManager.GetVRNamespaceClassesInfo(new Guid("2cb68564-4d8a-480f-9a36-c764bcef81b6"));
+           //// namespaceManager.GetVRNamespaceClassesInfo(new Guid("2cb68564-4d8a-480f-9a36-c764bcef81b6"));
+           //// namespaceManager.GetVRNamespaceClassesInfo(new Guid("2cb68564-4d8a-480f-9a36-c764bcef81b6"));
+
+           //// var devProjectId = new Guid("C00D5580-520C-4A49-A872-21197337070C");
+
+           //// var devProjectManager = new VRDevProjectManager();
+
+           //// //System.Reflection.Assembly assembly;
+           //// //devProjectManager.TryGetDevProjectAssembly(devProjectId, DateTime.Today, out assembly);
+           //// //devProjectManager.TryGetDevProjectAssembly(devProjectId, DateTime.Today, out assembly);
+
+           //// CSharpCompilationOutput output;
+           //// devProjectManager.TryCompileDevProject(devProjectId, out output);
+           //// var dataRecordTypeManager = new DataRecordTypeManager();
+           //// foreach (var dataRecordType in dataRecordTypeManager.GetCachedDataRecordTypes().Values.Where(itm => itm.DevProjectId == devProjectId))
+           //// {
+           ////     string dataRecordFullName = $"Vanrise.DynDataRecordTypes.{dataRecordType.Name.Replace(" ", "_").Replace("-", "_").Replace("(", "_").Replace(")", "_")}";
+           ////     var dataRecordRuntimeType = output.OutputAssembly.GetType(dataRecordFullName);
+           //// }
             //Type t = Type.GetType("CRMFixedOper.InventorySwitchAvailableNumbersBusinessObject");
             //var obj = Activator.CreateInstance(t);
             //TestJSONConvertor();
