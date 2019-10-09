@@ -91,6 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DepositManager.cs" />
+    <Compile Include="InstallmentItemManager.cs" />
+    <Compile Include="InstallmentManager.cs" />
     <Compile Include="RetailBillingChargeType\CustomCode\IRetailBillingCustomCodeChargeTypeEvaluator.cs" />
     <Compile Include="RetailBillingChargeType\CustomCode\RetailBillingCustomCodeChargeTypeManager.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeManager.cs" />
