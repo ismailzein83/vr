@@ -101,7 +101,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
             return new VRAutomatedReportGeneratedFile()
             {
-                FileContent = !fileIsEmpty? GenerateExcel(advancedExcelWorkBook): null,
+                FileContent =  GenerateExcel(advancedExcelWorkBook),
                 FileExtension = SaveAsPDF ? "pdf" : "xlsx",
                 FileIsEmpty = fileIsEmpty
             };
