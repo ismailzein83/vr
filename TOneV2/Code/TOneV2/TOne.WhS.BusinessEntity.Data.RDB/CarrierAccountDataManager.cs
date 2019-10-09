@@ -30,6 +30,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_LastModifiedBy = "LastModifiedBy";
         const string COL_LastModifiedTime = "LastModifiedTime";
 
+        const string COL_LOBId = "LOBID";
         internal const string COL_SellingNumberPlanID = "SellingNumberPlanID";
 
         static CarrierAccountDataManager()
@@ -43,6 +44,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             columns.Add(COL_CustomerSettings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CarrierAccountSettings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_ExtendedSettings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_LOBId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier});
             columns.Add(COL_SellingNumberPlanID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_SellingProductID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
@@ -107,6 +109,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             if (carrierAccount.CarrierAccountSettings != null)
                 insertQuery.Column(COL_CarrierAccountSettings).Value(Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+
+            if (carrierAccount.LOBId !=null)
+                insertQuery.Column(COL_LOBId).Value(carrierAccount.LOBId);
 
             if (carrierAccount.SellingNumberPlanId.HasValue)
                 insertQuery.Column(COL_SellingNumberPlanID).Value(carrierAccount.SellingNumberPlanId.Value);
@@ -206,7 +211,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         private CarrierAccount CarrierAccountMapper(IRDBDataReader reader)
         {
-            return new CarrierAccount
+            CarrierAccount carrierAccount = new CarrierAccount
             {
                 CarrierAccountId = reader.GetInt(COL_ID),
                 CarrierProfileId = reader.GetInt(COL_CarrierProfileID),
@@ -225,6 +230,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CarrierAccountSettings = Serializer.Deserialize<CarrierAccountSettings>(reader.GetString(COL_CarrierAccountSettings)),
                 ExtendedSettings = Serializer.Deserialize<Dictionary<string, Object>>(reader.GetString(COL_ExtendedSettings))
             };
+            var lobId = reader.GetNullableGuid(COL_LOBId);
+            if (lobId.HasValue)
+            {
+                carrierAccount.LOBId = lobId.Value;
+            }
+            return carrierAccount;
         }
 
         #endregion

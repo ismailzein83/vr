@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum', 'WhS_BE_SaleAreaSettingsContextEnum', 'VRDateTimeService', 'WhS_BE_ToneModuleService', 'WhS_BE_PurchaseSendEmailEnum','WhS_BE_PurchaseSettingsContextEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum', 'WhS_BE_SaleAreaSettingsContextEnum', 'VRDateTimeService', 'WhS_BE_ToneModuleService', 'WhS_BE_PurchaseSendEmailEnum', 'WhS_BE_PurchaseSettingsContextEnum'];
 
     function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService, WhS_BE_RoutingStatusEnum, WhS_BE_SaleAreaSettingsContextEnum, VRDateTimeService, WhS_BE_ToneModuleService, WhS_BE_PurchaseSendEmailEnum, WhS_BE_PurchaseSettingsContextEnum) {
 
@@ -21,6 +21,11 @@
 
         var companySettingsSelectorAPI;
         var companySettingSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
+        var lobSelectorAPI;
+        var lobSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var lobSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
         // Supplier Bank Details
         var supplierBankDetailsEditorAPI;
@@ -72,6 +77,8 @@
         var supplierSmsServiceTypeSelectorAPI;
         var supplierSmsServiceTypeSelectorReadyDeferred;
 
+
+
         var isEditMode;
         var context;
         var isViewHistoryMode;
@@ -102,6 +109,7 @@
             $scope.scopeModel.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode;
             $scope.scopeModel.disableCarrierAccountType = isEditMode;
             $scope.scopeModel.disableSellingNumberPlan = isEditMode;
+            $scope.scopeModel.disableLOB = isEditMode;
             $scope.scopeModel.showZoneServiceConfig = false;
             $scope.scopeModel.showSMSServiceType = false;
 
@@ -216,6 +224,25 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerTimeZoneSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerTimeZoneSelectorAPI, undefined, setLoader, customerTimeZoneSelectorReadyDeferred);
             };
+
+            $scope.scopeModel.onLOBSelectorReady = function (api) {
+                lobSelectorAPI = api;
+                lobSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onLOBSelectionChanged = function (selectedLOB) {
+                if (isCustomer()) {
+                    var sellingNumberPlanSelectorPayload = {
+                        filter: {
+                            LOBId: selectedLOB.LOBId
+                        },
+                        selectifsingleitem: (!isEditMode) ? true : false
+                    };
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlanSelector = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanSelectorAPI, sellingNumberPlanSelectorPayload, setLoader, sellingNumberPlanSelectorReadyDeferred);
+                }
+            };
+
             $scope.scopeModel.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlanSelector = value; };
@@ -520,7 +547,7 @@
         }
 
         function loadDefinitionTab() {
-            return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCarrierProfileSelector, loadCarrierActivationStatusSelector, loadCarrierAccountTypeSelector, loadCurrencySelector, loadCompanySettingSelector]);
+            return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCarrierProfileSelector, loadCarrierActivationStatusSelector, loadCarrierAccountTypeSelector, loadCurrencySelector, loadCompanySettingSelector, loadLOBSelector]);
         }
         function loadStaticData() {
             if (!isEditMode && !isViewHistoryMode) {
@@ -635,10 +662,11 @@
             var loadCustomerTimeZoneSelectorPromise = loadCustomerTimeZoneSelector();
             promises.push(loadCustomerTimeZoneSelectorPromise);
 
-            var loadSellingNumberPlanSelectorPromise = loadSellingNumberPlanSelector();
-            promises.push(loadSellingNumberPlanSelectorPromise);
 
             if (carrierAccountEntity != undefined) {
+                var loadSellingNumberPlanSelectorPromise = loadSellingNumberPlanSelector();
+                promises.push(loadSellingNumberPlanSelectorPromise);
+
                 var loadSellingProductSelectorPromise = loadSellingProductSelector();
                 promises.push(loadSellingProductSelectorPromise);
 
@@ -658,7 +686,7 @@
 
             var loadPriceListSettingsPromise = loadPriceListSettings();
             promises.push(loadPriceListSettingsPromise);
-            
+
             var loadPricingSettingsPromise = loadPricingSettings();
             promises.push(loadPricingSettingsPromise);
 
@@ -683,15 +711,33 @@
 
             return customerTimeZoneSelectorLoadDeferred.promise;
         }
+
+        function loadLOBSelector() {
+            lobSelectorReadyDeferred.promise.then(function () {
+                var lobSelectorPayload = {
+                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.LOBId : undefined,
+                    selectifsingleitem: true
+                };
+
+                VRUIUtilsService.callDirectiveLoad(lobSelectorAPI, lobSelectorPayload, lobSelectorLoadPromiseDeferred);
+            });
+            return lobSelectorLoadPromiseDeferred.promise;
+        }
+
         function loadSellingNumberPlanSelector() {
             var sellingNumberPlanSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            sellingNumberPlanSelectorReadyDeferred.promise.then(function () {
+            UtilsService.waitMultiplePromises([sellingNumberPlanSelectorReadyDeferred.promise, lobSelectorLoadPromiseDeferred.promise]).then(function () {
                 sellingNumberPlanSelectorReadyDeferred = undefined;
                 var sellingNumberPlanSelectorPayload = {
-                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.SellingNumberPlanId : undefined,
-                    selectifsingleitem: (!isEditMode) ? true : false
+                    selectifsingleitem: (!isEditMode) ? true : false,
                 };
+                if (carrierAccountEntity != undefined) {
+                    sellingNumberPlanSelectorPayload.filter = {
+                        LOBId: carrierAccountEntity.LOBId
+                    };
+                    sellingNumberPlanSelectorPayload.selectedIds = carrierAccountEntity.SellingNumberPlanId;
+                }
                 VRUIUtilsService.callDirectiveLoad(sellingNumberPlanSelectorAPI, sellingNumberPlanSelectorPayload, sellingNumberPlanSelectorLoadDeferred);
             });
 
@@ -988,6 +1034,7 @@
                     CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
                     NominalCapacity: $scope.scopeModel.nominalCapacity,
                     IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch,
+                    LOBId: lobSelectorAPI.getSelectedIds(),
                 },
                 SupplierSettings: {
                     DefaultServices: zoneServiceConfigSelectorAPI != undefined ? getSelectedDefaultServices() : null,

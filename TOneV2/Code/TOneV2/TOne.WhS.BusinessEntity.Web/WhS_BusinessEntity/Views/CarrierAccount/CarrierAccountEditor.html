@@ -44,6 +44,10 @@
                             <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
                         </vr-columns>
 
+                        <span vr-disabled="scopeModel.disableLOB">
+                            <vr-whs-be-lob-selector on-ready="scopeModel.onLOBSelectorReady" onselectionchanged="scopeModel.onLOBSelectionChanged" selectedvalues="selectedLOB" isrequired="true"  normal-col-num="6" hideremoveicon></vr-whs-be-lob-selector>
+                        </span>
+
                         <vr-columns width="1/2row">
                             <vr-switch value="scopeModel.isInterconnectSwitch" label="Interconnect Switch"></vr-switch>
                         </vr-columns>

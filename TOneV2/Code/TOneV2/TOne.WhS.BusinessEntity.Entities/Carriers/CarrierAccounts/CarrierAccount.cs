@@ -19,6 +19,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CarrierAccountSupplierSettings SupplierSettings { get; set; }
         public CarrierAccountCustomerSettings CustomerSettings { get; set; }
         public string SourceId { get; set; }
+
+        Guid _lobId = LOB.DefaultLOBId;
+        public Guid LOBId { get { return _lobId; } set { _lobId = value; } }
         public DateTime CreatedTime { get; set; }
         public int? CreatedBy { get; set; }
         public int? LastModifiedBy { get; set; }

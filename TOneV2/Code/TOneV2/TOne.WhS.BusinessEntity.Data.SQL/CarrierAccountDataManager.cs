@@ -31,6 +31,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 carrierAccount.NameSuffix,
                 carrierAccount.CarrierProfileId,
                 carrierAccount.AccountType,
+                carrierAccount.LOBId,
                 carrierAccount.SellingNumberPlanId,
                 carrierAccount.SellingProductId,
                 Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
@@ -128,6 +129,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
                 LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };
+            var lobId= GetReaderValue<Guid?>(reader, "LOBID");
+            if (lobId.HasValue)
+            {
+                carrierAccount.LOBId = lobId.Value;
+            }
             carrierAccount.ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, Object>;
             return carrierAccount;
         }
