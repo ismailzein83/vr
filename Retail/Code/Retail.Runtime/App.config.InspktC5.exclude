@@ -30,8 +30,8 @@
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_Transaction;User ID=sa;Password=" />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_Logging;User ID=sa;Password=" />
 
-    <add name="RecordAnalysisCDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_CDR;User ID=development;Password=dev!123;" />
-    
+    <add name="RecordAnalysisC5CDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_C5CDR;User ID=development;Password=dev!123;" />
+   
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
 

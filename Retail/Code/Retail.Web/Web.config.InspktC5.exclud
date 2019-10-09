@@ -29,8 +29,8 @@
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_Transaction;User ID=sa;Password=" />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_Logging;User ID=sa;Password=" />
 
-    <add name="RecordAnalysisCDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_CDR;User ID=sa;Password=" />
-    
+    <add name="RecordAnalysisC5CDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_C5CDR;User ID=sa;Password=" />
+
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
   <appSettings>
@@ -74,7 +74,7 @@
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     <add key="RecordAnalysisDBConnStringKey"                    value="ConfigurationDBConnString"/>
-    
+
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
   </appSettings>
@@ -154,5 +154,5 @@
       <add address="*" maxconnection="10000" />
     </connectionManagement>
   </system.net>
-  
+
 </configuration>

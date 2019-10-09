@@ -1375,6 +1375,9 @@
     <None Include="Web.config.NR.exclud">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Web.config.InspktC5.exclud">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.config.SMS-WHS.exclud">
       <SubType>Designer</SubType>
     </None>
