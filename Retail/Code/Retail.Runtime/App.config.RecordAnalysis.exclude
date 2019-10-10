@@ -70,6 +70,9 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString" />    
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="RecordAnalysisDBConnStringKey"                    value="ConfigurationDBConnString"/>
+
+    <add key="RecordAnalysisC5CDRConnStringKey"                 value="RecordAnalysisCDRDBConnString"/>
+    <add key="RecordAnalysisC4CDRConnStringKey"                 value="RecordAnalysisCDRDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">

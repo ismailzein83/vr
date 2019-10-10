@@ -74,7 +74,10 @@
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     <add key="RecordAnalysisDBConnStringKey"                    value="ConfigurationDBConnString"/>
-    
+
+    <add key="RecordAnalysisC5CDRConnStringKey"                 value="RecordAnalysisCDRDBConnString"/>
+    <add key="RecordAnalysisC4CDRConnStringKey"                 value="RecordAnalysisCDRDBConnString"/>
+
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
   </appSettings>

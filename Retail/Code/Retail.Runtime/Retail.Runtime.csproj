@@ -710,9 +710,6 @@
     <None Include="App.config.CentralLog.exclud">
       <SubType>Designer</SubType>
     </None>
-    <None Include="App.config.InspktC5.exclude">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="App.config.Retail.Billing.exclude">
       <SubType>Designer</SubType>
     </None>
