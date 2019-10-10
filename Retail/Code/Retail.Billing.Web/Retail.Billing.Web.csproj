@@ -182,6 +182,9 @@
     <Content Include="Retail_Billing\Elements\Reports\Reporting.aspx" />
     <Content Include="Retail_Billing\Elements\Services\APIServices\CustomCodeChargeTypeAPIService.js" />
     <Content Include="Retail_Billing\Elements\Services\APIServices\ChargeTypeAPIService.js" />
+    <Content Include="Retail_Billing\Elements\Services\CustomCodeChargeTypeService.js" />
+    <Content Include="Retail_Billing\Elements\Views\CustomCodePricingLogicEditorTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Views\CustomCodePricingLogicEditor.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Billing\Elements\Reports\BillingInvoiceReport.rdlc">
