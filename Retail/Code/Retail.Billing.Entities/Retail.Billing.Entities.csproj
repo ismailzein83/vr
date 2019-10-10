@@ -55,6 +55,10 @@
   <ItemGroup>
     <Compile Include="Deposit\AddDepositInput.cs" />
     <Compile Include="Deposit\AddDepositOutput.cs" />
+    <Compile Include="DiscountRuleCondition\DiscountRuleCondition.cs" />
+    <Compile Include="DiscountRuleTargetType\DiscountRuleTargetType.cs" />
+    <Compile Include="DiscountRuleTargetType\DiscountRuleTargetTypeExtendedSettings.cs" />
+    <Compile Include="DiscountRuleTargetType\DiscountRuleTargetTypeSettings.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingCompilationOutput.cs" />
     <Compile Include="BillingInvoiceDetails.cs" />
     <Compile Include="BillingInvoiceItem.cs" />
