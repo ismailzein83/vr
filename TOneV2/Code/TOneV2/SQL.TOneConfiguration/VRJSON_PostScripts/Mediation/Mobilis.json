@@ -1798,6 +1798,170 @@
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
+    },
+    {
+      "ConnectionId": "005738a9-681a-4121-af2c-588ed636f8cd",
+      "Schema": "sec",
+      "TableName": "View",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "c6eaf38a-f68e-4459-b924-16b187914936",
+              "DevProjectID": "08cddaf4-db5d-4057-9543-81c91bbeeabf",
+              "Name": "Switch Trunk  Identification",
+              "Title": "Switch Trunk  Identification",
+              "Url": null,
+              "Module": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities\",\"RuleDefinitionIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"ffbf9592-57e0-497e-9d16-4b38d27a8a87\"]}}",
+              "Type": "729be766-f3d7-4bcc-9678-cccf57bd4aad",
+              "Rank": null,
+              "IsDeleted": null,
+              "CreatedTime": "2019-10-01T15:41:01.38",
+              "LastModifiedTime": "2019-10-01T15:41:01.38"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "42451cb3-f8c1-476f-a722-b59ecc073a29",
+              "DevProjectID": "08cddaf4-db5d-4057-9543-81c91bbeeabf",
+              "Name": "Mobilis Huawei R13 CDR Normalization",
+              "Title": "Mobilis Huawei R13 CDR Normalization",
+              "Url": null,
+              "Module": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities\",\"RuleDefinitionIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"18379d91-1e2b-4c62-abe2-d54a4c048997\"]}}",
+              "Type": "729be766-f3d7-4bcc-9678-cccf57bd4aad",
+              "Rank": null,
+              "IsDeleted": null,
+              "CreatedTime": "2019-10-04T16:06:33.293",
+              "LastModifiedTime": "2019-10-04T16:06:33.293"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "0483f463-7a9d-4170-93ca-c075c22d528d",
+              "DevProjectID": "08cddaf4-db5d-4057-9543-81c91bbeeabf",
+              "Name": "Mobilis Ericsson R13 CDR Normalization",
+              "Title": "Mobilis Ericsson R13 CDR Normalization",
+              "Url": null,
+              "Module": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities\",\"RuleDefinitionIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"da04b4de-bb5f-4b0d-bac7-79e0caff2080\"]}}",
+              "Type": "729be766-f3d7-4bcc-9678-cccf57bd4aad",
+              "Rank": null,
+              "IsDeleted": null,
+              "CreatedTime": "2019-10-03T10:42:29.33",
+              "LastModifiedTime": "2019-10-03T10:42:29.33"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Title",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Url",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Module",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ActionNames",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Audience",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Content",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Type",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Rank",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "IsDeleted",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID in ('08CDDAF4-DB5D-4057-9543-81C91BBEEABF')",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
     }
   ]
 }
