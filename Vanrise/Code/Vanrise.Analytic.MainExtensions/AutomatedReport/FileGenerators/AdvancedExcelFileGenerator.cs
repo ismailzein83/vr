@@ -14,6 +14,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using System.Collections;
 using Vanrise.GenericData.Entities;
+using Aspose.Cells.Rendering;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 {
@@ -1057,12 +1058,24 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             }
             MemoryStream memoryStream = new MemoryStream();
 
+            tableDefinitionsWorkbook.CalculateFormula();
+            //if (SaveAsPDF)
+            //{
+            //    PdfSaveOptions saveOptions = new PdfSaveOptions();
+            //    saveOptions.CalculateFormula = true;
+            //    saveOptions.Compliance = PdfCompliance.PdfA1b;
+            //    tableDefinitionsWorkbook.Save(memoryStream, saveOptions);
+            //}
+            //else
+            //{
+            //    tableDefinitionsWorkbook.Save(memoryStream, SaveFormat.Xlsx);
+            //}
+
             var saveFormat = SaveFormat.Xlsx;
             if (SaveAsPDF)
                 saveFormat = SaveFormat.Pdf;
-            
-            tableDefinitionsWorkbook.Save(memoryStream, saveFormat);
 
+            tableDefinitionsWorkbook.Save(memoryStream, saveFormat);
             return memoryStream.ToArray();
         }
         private Style GetCellStyle(Style style, bool setBorder, int fontSize, bool isBold, TextAlignmentType alignment, ExportExcelHeaderCell headerCell)
