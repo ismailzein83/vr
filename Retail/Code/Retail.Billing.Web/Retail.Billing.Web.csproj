@@ -178,6 +178,8 @@
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\retail-billing-datasourcesettings-customermessages.js" />
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\Templates\CustomerMessagesTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\retail-billing-invoicetypesettings.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRuleTargetType\retail-billing-discountrule-targettype-settings.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRuleTargetType\Templates\DiscountRuleTargetTypeSettingsTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\Templates\BillingInvoiceTypeSettingsTemplate.html" />
     <Content Include="Retail_Billing\Elements\Reports\Reporting.aspx" />
     <Content Include="Retail_Billing\Elements\Services\APIServices\CustomCodeChargeTypeAPIService.js" />
