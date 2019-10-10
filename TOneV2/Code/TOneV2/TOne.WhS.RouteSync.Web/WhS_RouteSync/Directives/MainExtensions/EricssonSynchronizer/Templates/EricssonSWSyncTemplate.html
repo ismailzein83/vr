@@ -32,9 +32,13 @@
                 <vr-textbox value="scopeModel.percentagePrefix" label="Percentage Prefix" type="text"></vr-textbox>
             </vr-columns>
         </vr-row>
-        <vr-section header="Branch Routes">
-            <whs-routesync-ericssonbranchroutesettings on-ready="scopeModel.onBranchRouteSettingsReady"></whs-routesync-ericssonbranchroutesettings>
-        </vr-section>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-section header="Branch Routes">
+                    <whs-routesync-ericssonbranchroutesettings on-ready="scopeModel.onBranchRouteSettingsReady"></whs-routesync-ericssonbranchroutesettings>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
     </vr-tab>
     <vr-tab header="'Carrier Mapping'">
         <vr-row>
@@ -49,6 +53,43 @@
         </vr-section>
         <vr-section header="Special Routing" collapsible>
             <whs-routesync-ericsson-specialroutes on-ready="scopeModel.onSpecialRoutingReady"></whs-routesync-ericsson-specialroutes>
+        </vr-section>
+    </vr-tab>
+    <vr-tab header="'Reserved BTables'">
+        <vr-section header="BTable" collapsible>
+            <vr-row removeline>
+                <vr-validator validate="scopeModel.validateReservedBTables()">
+                    <vr-columns>
+                        <vr-textbox value="scopeModel.reservedBTable" label="BTable" type="number" minvalue="0" maxvalue="100" decimalprecision="0"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns withemptyline>
+                        <vr-button type="Add" data-onclick="scopeModel.addReservedBTable" standalone vr-disabled="!scopeModel.isReservedBTableValid()"></vr-button>
+                    </vr-columns>
+                </vr-validator>
+            </vr-row>
+            <vr-datalist maxitemsperrow="12" datasource="scopeModel.reservedBTables" autoremoveitem="true">
+                <vr-label>{{dataItem}}</vr-label>
+            </vr-datalist>
+        </vr-section>
+        <vr-section header="BTable Range" collapsible>
+            <vr-row removeline>
+                <vr-validator validate="scopeModel.validateReservedBTableRanges()">
+                    <vr-columns>
+                        <vr-textbox value="scopeModel.reservedBTableRangeFrom" label="From" type="number" minvalue="0" maxvalue="100" decimalprecision="0"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns>
+                        <vr-textbox value="scopeModel.reservedBTableRangeTo" label="To" type="number" minvalue="0" maxvalue="100" decimalprecision="0"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns withemptyline>
+                        <vr-button type="Add" data-onclick="scopeModel.addReservedBTableRange" standalone vr-disabled="!scopeModel.isReservedBTableRangeValid()"></vr-button>
+                    </vr-columns>
+                </vr-validator>
+            </vr-row>
+            <vr-datalist maxitemsperrow="6" datasource="scopeModel.reservedBTableRanges" autoremoveitem="true">
+                <vr-label>From: {{dataItem.From}}</vr-label>
+                &emsp;&emsp;&emsp;&emsp;
+                <vr-label>To: {{dataItem.To}}</vr-label>
+            </vr-datalist>
         </vr-section>
     </vr-tab>
 </vr-tabs>

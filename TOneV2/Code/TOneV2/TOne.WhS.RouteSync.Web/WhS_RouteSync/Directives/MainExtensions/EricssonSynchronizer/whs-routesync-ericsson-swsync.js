@@ -40,6 +40,8 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.reservedBTables = [];
+                $scope.scopeModel.reservedBTableRanges = [];
 
                 $scope.scopeModel.onManualRoutesReady = function (api) {
                     manualRouteSettingsAPI = api;
@@ -72,6 +74,119 @@
                     return null;
                 };
 
+
+                $scope.scopeModel.addReservedBTable = function () {
+                    $scope.scopeModel.reservedBTables.push($scope.scopeModel.reservedBTable);
+                    $scope.scopeModel.reservedBTable = undefined;
+                };
+
+                $scope.scopeModel.isReservedBTableValid = function () {
+                    if (!isBetweenZeroAndOneHundred($scope.scopeModel.reservedBTable))
+                        return false;
+
+                    return ($scope.scopeModel.validateReservedBTables() == undefined);
+                };
+
+                $scope.scopeModel.validateReservedBTables = function () {
+
+                    if (isNewBTableExists())
+                        return "BTable already exists";
+
+                    if (isNewBTableBelongsToExistingBTableRange())
+                        return "BTable belongs to an existing BTable range";
+
+                    function isNewBTableExists() {
+                        if ($scope.scopeModel.reservedBTables != undefined) {
+                            for (var i = 0; i < $scope.scopeModel.reservedBTables.length; i++) {
+
+                                if ($scope.scopeModel.reservedBTable == $scope.scopeModel.reservedBTables[i])
+                                    return true;
+                            }
+                        }
+                        return false;
+                    }
+
+                    function isNewBTableBelongsToExistingBTableRange() {
+                        if ($scope.scopeModel.reservedBTableRanges != undefined) {
+                            for (var i = 0; i < $scope.scopeModel.reservedBTableRanges.length; i++) {
+                                var item = $scope.scopeModel.reservedBTableRanges[i];
+
+                                if (parseInt($scope.scopeModel.reservedBTable) >= parseInt(item.From) && parseInt($scope.scopeModel.reservedBTable) <= parseInt(item.To))
+                                    return true;
+                            }
+                        }
+                        return false;
+                    }
+                };
+
+
+                $scope.scopeModel.addReservedBTableRange = function () {
+                    var reservedBTableRange = {
+                        From: $scope.scopeModel.reservedBTableRangeFrom,
+                        To: $scope.scopeModel.reservedBTableRangeTo
+                    };
+
+                    $scope.scopeModel.reservedBTableRanges.push(reservedBTableRange);
+                    $scope.scopeModel.reservedBTableRangeFrom = undefined;
+                    $scope.scopeModel.reservedBTableRangeTo = undefined;
+                };
+
+                $scope.scopeModel.isReservedBTableRangeValid = function () {
+                    if (!isBetweenZeroAndOneHundred($scope.scopeModel.reservedBTableRangeFrom) || !isBetweenZeroAndOneHundred($scope.scopeModel.reservedBTableRangeTo))
+                        return false;
+
+                    return ($scope.scopeModel.validateReservedBTableRanges() == undefined);
+                };
+
+                $scope.scopeModel.validateReservedBTableRanges = function () {
+
+                    if (parseInt($scope.scopeModel.reservedBTableRangeFrom) >= parseInt($scope.scopeModel.reservedBTableRangeTo))
+                        return "To value should be greater than From value.";
+
+                    if (isNewRangeOverlappeWithExistingRange())
+                        return "BTable range overlapped with existing one.";
+
+                    if (isNewBTableRangeContainsExistingBTable())
+                        return "BTable range contains an existing BTable.";
+
+                    function isNewRangeOverlappeWithExistingRange() {
+                        if ($scope.scopeModel.reservedBTableRanges != undefined) {
+                            for (var i = 0; i < $scope.scopeModel.reservedBTableRanges.length; i++) {
+                                var item = $scope.scopeModel.reservedBTableRanges[i];
+
+                                if (parseInt($scope.scopeModel.reservedBTableRangeFrom) >= parseInt(item.From) && parseInt($scope.scopeModel.reservedBTableRangeFrom) <= parseInt(item.To)) //From In
+                                    return true;
+
+                                if (parseInt($scope.scopeModel.reservedBTableRangeTo) >= parseInt(item.From) && parseInt($scope.scopeModel.reservedBTableRangeTo) <= parseInt(item.To)) //To In
+                                    return true;
+
+                                if (parseInt($scope.scopeModel.reservedBTableRangeFrom) <= parseInt(item.From) && parseInt($scope.scopeModel.reservedBTableRangeTo) >= parseInt(item.To)) //Range Inside
+                                    return true;
+                            }
+                        }
+                        return false;
+                    }
+
+                    function isNewBTableRangeContainsExistingBTable() {
+                        if ($scope.scopeModel.reservedBTables != undefined) {
+                            for (var i = 0; i < $scope.scopeModel.reservedBTables.length; i++) {
+                                var item = $scope.scopeModel.reservedBTables[i];
+
+                                if ($scope.scopeModel.reservedBTableRangeFrom == item)
+                                    return true;
+
+                                if ($scope.scopeModel.reservedBTableRangeTo == item)
+                                    return true;
+
+                                if (parseInt($scope.scopeModel.reservedBTableRangeFrom) <= parseInt(item) && parseInt($scope.scopeModel.reservedBTableRangeTo) >= parseInt(item))
+                                    return true;
+                            }
+                        }
+                        return false;
+                    }
+                };
+
+
                 defineAPI();
             }
             function defineAPI() {
@@ -103,6 +218,10 @@
                             sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
                             switchLoggerList = ericssonSWSync.SwitchLoggerList;
                             carrierMappings = ericssonSWSync.CarrierMappings;
+                            if (ericssonSWSync.ReservedBTables != undefined)
+                                $scope.scopeModel.reservedBTables = ericssonSWSync.ReservedBTables;
+                            if (ericssonSWSync.ReservedBTableRanges != undefined)
+                                $scope.scopeModel.reservedBTableRanges = ericssonSWSync.ReservedBTableRanges;
                         }
                     }
                     //Loading Switch Communication
@@ -216,6 +335,8 @@
                         FirstRCNumber: $scope.scopeModel.firstRCNumber,
                         BranchRouteSettings: (branchRouteSettingsAPI != undefined) ? branchRouteSettingsAPI.getData() : null,
                         ManualRouteSettings: getManualRoutesSettings(),
+                        ReservedBTables: $scope.scopeModel.reservedBTables,
+                        ReservedBTableRanges: $scope.scopeModel.reservedBTableRanges,
                         ESR: $scope.scopeModel.esr,
                         CC: $scope.scopeModel.cc,
                         PercentagePrefix: $scope.scopeModel.percentagePrefix
@@ -226,6 +347,10 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+            }
+
+            function isBetweenZeroAndOneHundred(value) {
+                return (value >= 0 && value <= 100);
             }
         }
     }
