@@ -53,18 +53,24 @@ function PromiseDebugService() {
         });
     }
 
-    function getDebuggerState() {
-        return sessionStorage.getItem("VRPromiseDebuggerState");
-    }
-
     function enableDebugger() {
         sessionStorage.setItem("VRPromiseDebuggerState", true);
-        console.debug("%cPromise Debugger Enabled!", "color: green");
+        return "Promise Debugger Enabled! Check Verbose/Debug Message Level to monitor promises.";
     }
 
     function disableDebugger() {
         sessionStorage.setItem("VRPromiseDebuggerState", false);
-        console.debug("%cPromise Debugger Disabled!", "color: red");
+        return "Promise Debugger Disabled!";
+    }
+
+    function disableLoader() {
+        $('.loading-circles').css({display: 'none'});
+        $('.divLoading').removeClass('divLoading');
+        return "Loader Disabled!";
+    }
+
+    function getDebuggerState() {
+        return sessionStorage.getItem("VRPromiseDebuggerState");
     }
 
     function getCreatePromiseLocation() {
@@ -92,12 +98,46 @@ function PromiseDebugService() {
         return modulePath;
     }
 
+    //function getCreatePromiseLocation() {
+    //    var stackString = Error().stack.toString();
+    //    var indexOfModulePath = stackString.search("/Modules/");
+    //    if (indexOfModulePath == -1)
+    //        return undefined;
+
+    //    var indexOfStartParanth = getHTTPIndex(stackString, indexOfModulePath);
+
+    //    var modulePath = stackString.substring(indexOfStartParanth);
+    //    var indexOfParantheseOrNewLine = modulePath.indexOf(")");  // For Chrome
+    //    if (indexOfParantheseOrNewLine == -1) {
+    //        indexOfParantheseOrNewLine = modulePath.indexOf("\n"); // For Firefox
+    //        if (indexOfParantheseOrNewLine == -1)
+    //            return undefined;
+    //    }
+
+    //    modulePath = modulePath.substring(0, indexOfParantheseOrNewLine);
+
+    //    return modulePath;
+    //}
+
+    //function getHTTPIndex(stackString, index) {
+    //    if (stackString.length < index) {
+    //        return undefined;
+    //    }
+
+    //    for (var i = index; i > 1; i--) {
+    //        if (stackString[i] == "(" || stackString[i] == "@" || (stackString[i] == "t" && stackString[i - 1] == "a"))
+    //            return i + 1;
+    //    }
+
+    //    return undefined;
+    //}
+
     function registredVerbose(registredPromiseName, color) {
         console.debug("Registred: %c" + registredPromiseName, color);
     }
 
     function resolvedVerbose(resolvedPromisesName, pendingPromisesName, resolvedColor, pendingColor) {
-        console.debug("Resolved: %c" + resolvedPromisesName + "  %c|  Pending: %c" + pendingPromisesName, resolvedColor, "color: black", pendingColor);
+        console.debug("Resolved: %c" + resolvedPromisesName + "  %c|  Pending: %c" + pendingPromisesName.join(", "), resolvedColor, "color: black", pendingColor);
     }
 
     function allResolvedVerbose(lastResolvedPromiseName, color) {
@@ -107,7 +147,8 @@ function PromiseDebugService() {
     return ({
         registerPromise: registerPromise,
         enableDebugger: enableDebugger,
-        disableDebugger: disableDebugger
+        disableDebugger: disableDebugger,
+        disableLoader: disableLoader
     });
 }
 
