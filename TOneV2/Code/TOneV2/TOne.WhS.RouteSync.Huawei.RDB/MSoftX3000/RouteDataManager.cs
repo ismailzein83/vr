@@ -243,10 +243,11 @@ namespace TOne.WhS.RouteSync.Huawei.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TableNames[RouteTableName]);
-            updateQuery.Column(COL_RSName).Column("updatedRoutes", COL_RSName);
 
             var joinStatement = updateQuery.Join("routes");
             var joinContext = joinStatement.Join(RouteUpdated_TABLE_NAME, "updatedRoutes");
+            updateQuery.Column(COL_RSName).Column("updatedRoutes", COL_RSName);
+
             joinContext.JoinType(RDBJoinType.Inner);
             var joinCondition = joinContext.On();
             joinCondition.EqualsCondition("updatedRoutes", COL_RSSN, "routes", COL_RSSN);

@@ -59,10 +59,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteCaseDataManager.cs" />
-    <Compile Include="RouteDataManager.cs" />
-    <Compile Include="RouteSucceededDataManager.cs" />
-    <Compile Include="WhSRouteSyncHuaweiDataManager.cs" />
+    <Compile Include="MSoftX3000\RouteCaseDataManager.cs" />
+    <Compile Include="MSoftX3000\RouteDataManager.cs" />
+    <Compile Include="MSoftX3000\RouteSucceededDataManager.cs" />
+    <Compile Include="MSoftX3000\WhSRouteSyncHuaweiDataManager.cs" />
+    <Compile Include="SoftX3000\RouteCaseDataManager.cs" />
+    <Compile Include="SoftX3000\RouteDataManager.cs" />
+    <Compile Include="SoftX3000\RouteSucceededDataManager.cs" />
+    <Compile Include="SoftX3000\RouteOptionsDataManager.cs" />
+    <Compile Include="SoftX3000\WhSRouteSyncHuaweiDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
