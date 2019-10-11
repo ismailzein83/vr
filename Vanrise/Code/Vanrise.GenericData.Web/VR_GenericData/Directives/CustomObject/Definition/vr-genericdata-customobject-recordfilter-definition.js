@@ -30,7 +30,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.normalColNum = ctrl.normalColNum; console.log(ctrl.normalColNum)
+                $scope.scopeModel.normalColNum = ctrl.normalColNum;
                 $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
                     dataRecordTypeSelectorReadyPromiseDeferred.resolve();
