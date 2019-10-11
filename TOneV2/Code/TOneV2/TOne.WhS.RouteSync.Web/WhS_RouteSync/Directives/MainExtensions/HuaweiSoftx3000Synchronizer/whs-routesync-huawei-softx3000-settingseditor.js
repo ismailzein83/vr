@@ -59,5 +59,5 @@
         }
     }
 
-    app.directive('whsRoutesyncHuaweisoftx3000settingsEditor', HuaweiSoftX3000SWSyncHuaweiSettings);
+    app.directive('whsRoutesyncHuaweisoftx3000Settingseditor', HuaweiSoftX3000SWSyncHuaweiSettings);
 })(app);
