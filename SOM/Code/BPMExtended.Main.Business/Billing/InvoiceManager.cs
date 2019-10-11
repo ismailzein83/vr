@@ -38,7 +38,7 @@ namespace BPMExtended.Main.Business
         public List<InvoiceDetail> GetInvoices(string customerId, int? invoicesDaysBack)
         {
             DateTime fromDate;
-            if (invoicesDaysBack.HasValue)
+            if (invoicesDaysBack.HasValue && invoicesDaysBack >0)
 
                 fromDate = DateTime.Today.AddDays(-invoicesDaysBack.Value);
 
@@ -187,9 +187,8 @@ namespace BPMExtended.Main.Business
                 OpenAmount = Convert.ToString(item.OpenAmount),
                 Amount = Convert.ToString(item.OriginalAmount),
                 PhoneNumber = item.DirectoryNumber,
-                DueDate=item.DueDate.ToString(),
-                CustomerID=item.CustomerId,
-
+                DueDate = item.DueDate.ToString(),
+                CustomerID = item.CustomerId
             };
         }
 

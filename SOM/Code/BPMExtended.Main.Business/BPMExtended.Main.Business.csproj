@@ -104,6 +104,7 @@
     <Compile Include="Request Flow Management\ADSLContractTakeOverFlowManagement.cs" />
     <Compile Include="Request Flow Management\BillOnDemandRequestFlowManagement.cs" />
     <Compile Include="Request Flow Management\BSCSSuspensionFromDunningFlowManagement.cs" />
+    <Compile Include="Request Flow Management\IndividualToCustomerFlowManagement.cs" />
     <Compile Include="Request Flow Management\LastMileChangeFlowManagement.cs" />
     <Compile Include="Request Flow Management\RevokeFlowManagement.cs" />
     <Compile Include="Request Flow Management\SuspensionFlowManagement.cs" />
