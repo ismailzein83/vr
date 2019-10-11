@@ -1,116 +1,110 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
 
-    var directiveDefinitionObject = {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-            selectionmode: '@',
-            normalColNum: '@',
-            isrequired: '='
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            $scope.scopeModel = {};
-            var ctor = new customobjectCtor(ctrl, $scope, $attrs);
-            ctor.initializeController();
-        },
-        controllerAs: 'runtimeEditorCtrl',
-        bindToController: true,
-        compile: function (element, attrs) {
-            return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
+app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
-                }
-            };
-        },
-        template: function (element, attrs) {
-            return getDirectiveTemplate(attrs);
-        }
-    };
-
-	function customobjectCtor(ctrl, $scope, $attrs) {
-
-        function initializeController() {
-            $scope.scopeModel = {};
-            defineAPI();
-        }
-
-
-        function defineAPI() {
-            var api = {};
-            var directiveAPI;
-            var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            api.load = function (payload) {
-                var fieldType;
-                var innerSectionPromises = [];
-                
-
-                if (payload != undefined) {
-                    $scope.scopeModel.fieldTitle = payload.fieldTitle;
-                    fieldType = payload.fieldType;
-                }
-
-                if (fieldType != undefined && fieldType.Settings!=undefined) {
-
-                    if ($scope.selector == undefined) {
-                        $scope.selector = {
-                            directive:fieldType.Settings.SelectorUIControl
-                        };
-                    }
-                    $scope.selector.onDirectiveReady = function (api) {
-                        directiveAPI = api;
-                        directiveReadyPromiseDeferred.resolve();
-                    };
-
-                    var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    innerSectionPromises.push(directiveLoadPromiseDeferred.promise);
-                    $scope.selector.onselectionchanged = function (selectedvalue) {
-                       
-                    };
-
-                    directiveReadyPromiseDeferred.promise.then(function () {
-                        var payloadDirective = {
-                            fieldTitle: $scope.scopeModel.fieldTitle,
-                            fieldValue: payload != undefined ? payload.fieldValue : undefined
-                        };
-                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, directiveLoadPromiseDeferred);
-                    });
-                }
-                return UtilsService.waitMultiplePromises(innerSectionPromises);
-            };
-
-            api.getData = function () {
-                return directiveAPI.getData();
-            };
-            api.setOnlyViewMode = function () {
-                UtilsService.setContextReadOnly($scope);
-            };
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
-        }
-
-        this.initializeController = initializeController;
-    }
-
-    function getDirectiveTemplate(attrs) {
-        if (attrs.selectionmode == 'single') { 
-            return getSingleSelectionModeTemplate();
-        }
-     
-        function getSingleSelectionModeTemplate() {
-            var multipleselection = "";
-
-            if (attrs.selectionmode == "dynamic" || attrs.selectionmode == "multiple") {
-                multipleselection = "ismultipleselection";
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+                selectionmode: '@',
+                normalColNum: '@',
+                isrequired: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new customObjectCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: 'runtimeEditorCtrl',
+            bindToController: true,
+            template: function (element, attrs) {
+                return getDirectiveTemplate(attrs);
             }
-          
-            return '<vr-directivewrapper ng-if="selector.directive != undefined" directive="selector.directive" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
-                    + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>';
+        };
+
+        function customObjectCtor(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
+
+            var directiveAPI;
+            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+            function initializeController() {
+                $scope.scopeModel = {};
+
+                defineAPI();
+            }
+
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+
+                    var promises = [];
+
+                    var fieldType;
+                    var fieldValue;
+
+                    if (payload != undefined) {
+                        fieldType = payload.fieldType;
+                        fieldValue = payload.fieldValue;
+
+                        $scope.scopeModel.fieldTitle = payload.fieldTitle;
+                    }
+
+                    if (fieldType != undefined && fieldType.Settings != undefined) {
+
+                        if ($scope.selector == undefined) {
+                            $scope.selector = { directive: fieldType.Settings.SelectorUIControl };
+                        }
+
+                        $scope.selector.onDirectiveReady = function (api) {
+                            directiveAPI = api;
+                            directiveReadyDeferred.resolve();
+                        };
+
+                        var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(directiveLoadPromiseDeferred.promise);
+
+                        directiveReadyDeferred.promise.then(function () {
+
+                            var directivePayload = {
+                                fieldTitle: $scope.scopeModel.fieldTitle,
+                                fieldValue: fieldValue,
+                                fieldType: fieldType
+                            };
+                            VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadPromiseDeferred);
+                        });
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
+                api.getData = function () {
+                    return directiveAPI.getData();
+                };
+
+                api.setOnlyViewMode = function () {
+                    UtilsService.setContextReadOnly($scope);
+                };
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
         }
-    }
 
-    return directiveDefinitionObject;
-}]);
+        function getDirectiveTemplate(attrs) {
 
+            if (attrs.selectionmode == 'single') {
+                return getSingleSelectionModeTemplate();
+            }
+
+            function getSingleSelectionModeTemplate() {
+
+                return '<vr-directivewrapper ng-if="selector.directive != undefined" directive="selector.directive" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
+                     + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>';
+            }
+        }
+
+        return directiveDefinitionObject;
+    }]);

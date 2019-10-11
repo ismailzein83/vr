@@ -28,12 +28,13 @@
         function CustomObjectSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var context;
+
             var selectorAPI;
 
             var directiveAPI;
             var directiveReadyDeferred;
-            var directivePayload;
-            var context;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -55,18 +56,18 @@
 
             function defineAPI() {
                 var api = {};
-                var serviceSettings;
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
-                    var promises = [];
                     var settings;
 
                     if (payload != undefined) {
                         settings = payload.settings;
                         context = payload.context;
                     }
+
+                    var promises = [];
 
                     if (settings != undefined) {
                         var loadDirectivePromise = loadDirective();
@@ -96,6 +97,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
+
                             var directivePayload = {
                                 context: getContext()
                             };
@@ -127,6 +129,7 @@
                     ctrl.onReady(api);
                 }                
             }
+
             function getContext() {
                 return context;
             }
@@ -137,8 +140,7 @@
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
             var template =
-                '<vr-row>'
-                    + '<vr-columns colnum="{{customObjectCtrl.normalColNum}}">'
+                     '<vr-columns colnum="{{customObjectCtrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
@@ -149,7 +151,6 @@
                             + 'hideremoveicon>'
                         + '</vr-select>'
                     + ' </vr-columns>'
-                + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
                         + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{customObjectCtrl.normalColNum}}" isrequired="customObjectCtrl.isrequired" customvalidate="customObjectCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
@@ -158,5 +159,4 @@
     }
 
     app.directive('vrGenericdataFieldtypeCustomobjectSettings', customObjectSettingsDirective);
-
 })(app);
