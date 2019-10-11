@@ -242,7 +242,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-trunktrunkgroup.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-trunktrunkgroupbackup.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericssonsettings-editor.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-settingseditor.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-manualroutes.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusPostgresDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiuspostgres-datamanager.js" />

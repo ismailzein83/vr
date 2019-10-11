@@ -2,9 +2,9 @@
 
     'use strict';
 
-    EricssonSWSyncEricssonSettings.$inject = ["UtilsService", 'VRUIUtilsService'];
+    EricssonSWSyncSettingsEditor.$inject = ["UtilsService"];
 
-    function EricssonSWSyncEricssonSettings(UtilsService, VRUIUtilsService) {
+    function EricssonSWSyncSettingsEditor(UtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -12,7 +12,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new EricssonSWSyncEricssonSettingsrCtor($scope, ctrl, $attrs);
+                var ctor = new EricssonSWSyncSettingsEditorCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "Ctrl",
@@ -20,9 +20,8 @@
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/EricssonSynchronizer/Templates/EricssonRouteSyncSetting.html"
         };
 
-        function EricssonSWSyncEricssonSettingsrCtor($scope, ctrl, $attrs) {
+        function EricssonSWSyncSettingsEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -30,6 +29,7 @@
                 $scope.scopeModel.faultCodeValue = undefined;
                 $scope.scopeModel.disableAddButton = true;
                 $scope.scopeModel.numberOfRetries = 1;
+
                 $scope.scopeModel.onFaultCodeValueChange = function (value) {
 
                     if (value == undefined) {
@@ -72,7 +72,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
 
                     if (payload != undefined) {
                         $scope.scopeModel.numberOfRetries = payload.settings.NumberOfRetries;
@@ -81,7 +80,11 @@
 
                         }
                     }
+
+                    var promises = [];
+                    return UtilsService.waitMultiplePromises(promises);
                 };
+
                 api.getData = function () {
                     var data = {
                         $type: "TOne.WhS.RouteSync.Ericsson.EricssonSwitchRouteSynchronizerSettings, TOne.WhS.RouteSync.Ericsson",
@@ -98,6 +101,5 @@
         }
     }
 
-    app.directive('whsRoutesyncEricssonsettingsEditor', EricssonSWSyncEricssonSettings);
-
+    app.directive('whsRoutesyncEricssonSettingseditor', EricssonSWSyncSettingsEditor);
 })(app);
