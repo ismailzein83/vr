@@ -1746,6 +1746,18 @@
               "CreatedTime": "2019-10-07T16:13:48.91",
               "LastModifiedTime": "2019-10-07T16:13:48.91"
             }
+          },
+          {
+            "FieldValues": {
+              "ID": "628115b1-e669-454f-b581-010a02c4e765",
+              "DevProjectID": "079044d8-3cf1-4af3-8eeb-34b10cc20012",
+              "Name": "RecordFilterCustomObjectTypeSettings",
+              "Title": "Record Filter",
+              "ConfigType": "VR_GenericData_FieldCustomObjectTypeSettings",
+              "Settings": "{\"Editor\":\"vr-genericdata-customobject-recordfilter-definition\"}",
+              "CreatedTime": "2019-10-09T09:22:09.81",
+              "LastModifiedTime": "2019-10-09T09:22:09.81"
+            }
           }
         ],
         "Columns": [
@@ -1834,7 +1846,7 @@
               "Rank": 5,
               "AllowDynamic": false,
               "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.903",
+              "LastModifiedTime": "2019-10-07T17:48:07.567",
               "RenderedAsView": null
             }
           }
@@ -1956,7 +1968,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 8,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.91"
+              "LastModifiedTime": "2019-10-07T17:48:07.573"
             }
           },
           {
@@ -1974,7 +1986,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 10,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.91"
+              "LastModifiedTime": "2019-10-07T17:48:07.577"
             }
           },
           {
@@ -1992,7 +2004,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 2,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.903"
+              "LastModifiedTime": "2019-10-07T17:48:07.567"
             }
           },
           {
@@ -2010,7 +2022,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 7,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.91"
+              "LastModifiedTime": "2019-10-07T17:48:07.573"
             }
           },
           {
@@ -2028,7 +2040,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 6,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.91"
+              "LastModifiedTime": "2019-10-07T17:48:07.57"
             }
           },
           {
@@ -2046,7 +2058,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 9,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.91"
+              "LastModifiedTime": "2019-10-07T17:48:07.577"
             }
           },
           {
@@ -2064,7 +2076,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 5,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.907"
+              "LastModifiedTime": "2019-10-07T17:48:07.57"
             }
           },
           {
@@ -2082,7 +2094,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 11,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.91"
+              "LastModifiedTime": "2019-10-07T17:48:07.58"
             }
           },
           {
@@ -2100,7 +2112,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 3,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.907"
+              "LastModifiedTime": "2019-10-07T17:48:07.567"
             }
           },
           {
@@ -2118,7 +2130,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 4,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.907"
+              "LastModifiedTime": "2019-10-07T17:48:07.57"
             }
           }
         ],
