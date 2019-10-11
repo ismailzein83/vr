@@ -210,6 +210,8 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationrange.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-destinationrange.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationcodes.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\Templates\HuaweiSoftX3000RouteSyncSetting.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSoftX3000Synchronizer\whs-routesync-huawei-softx3000settings-editor.js" />
     <Content Include="WhS_RouteSync\Directives\NumberLength\MainExtensions\Templates\NumberLengthFixedTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\NumberLength\MainExtensions\Templates\NumberLengthInternationalTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\NumberLength\MainExtensions\whs-routesync-numberlength-fixed.js" />

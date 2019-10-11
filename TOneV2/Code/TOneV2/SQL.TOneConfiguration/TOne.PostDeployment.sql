@@ -160,14 +160,15 @@ as (select * from (values
 ('BDC22FEB-14E1-4F0D-8C3E-EF54A5A36312','WhS_Sales_BulkActionZoneFilterType_All','All','WhS_Sales_BulkActionZoneFilterType'						,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-all","ShowForSellingProduct":true}'),
 ('06637B7A-D40A-43D2-9930-20031BBA2108','WhS_Sales_BulkActionZoneFilterType_Allexept','All Except','WhS_Sales_BulkActionZoneFilterType'			,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-allexept","ShowForSellingProduct":true}'),
 
-('6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320','WhS_RouteSync_SwitchRouteSynchronizer_MVTSRadius','MVTS Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'			,'{"Editor":"whs-routesync-mvtsradius-swsync"}'),
-('64152327-5DB5-47AE-9569-23D38BCB18CC','WhS_RouteSync_SwitchRouteSynchronizer_IVSwitch','IVSwitch Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'			,'{"Editor":"whs-routesync-ivswitch-swsync"}'),
-('423064C2-ACE8-4D70-8CFF-CDAA1461DBBE','WhS_RouteSync_SwitchRouteSynchronizer_TelesRadius','Teles Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'			,'{"Editor":"whs-routesync-telesradius-swsync"}'),
-('29135479-8150-4E23-9A0D-A42AF69A13AE','WhS_RouteSync_SwitchRouteSynchronizer_TelesIdb','Teles Idb Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-telesidb-swsync"}'),
-('99B59E02-1305-49E5-9342-1B4E08C91439','WhS_RouteSync_SwitchRouteSynchronizer_FreeRadius','Free Radius Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-freeradius-swsync"}'),
-('376687E2-268D-4DFA-AA39-3205C3CD18E5','WhS_RouteSync_SwitchRouteSynchronizer_Huawei','Huawei Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'				,'{"Editor":"whs-routesync-huawei-swsync", "SettingsEditor":"whs-routesync-huaweisettings-editor"}'),
-('94739CBC-00A7-4CEB-9285-B4CB35D7D003','WhS_RouteSync_SwitchRouteSynchronizer_Ericsson','Ericsson Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'			,'{"Editor":"whs-routesync-ericsson-swsync","SettingsEditor":"whs-routesync-ericssonsettings-editor"}'),
-('D770F53B-057F-4BB8-BF20-883A2DBC510B','WhS_RouteSync_SwitchRouteSynchronizer_Cataleya','Cataleya Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'			,'{"Editor":"whs-routesync-cataleya-swsync"}'),
+('6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320','WhS_RouteSync_SwitchRouteSynchronizer_MVTSRadius','MVTS Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'						,'{"Editor":"whs-routesync-mvtsradius-swsync"}'),
+('64152327-5DB5-47AE-9569-23D38BCB18CC','WhS_RouteSync_SwitchRouteSynchronizer_IVSwitch','IVSwitch Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'						,'{"Editor":"whs-routesync-ivswitch-swsync"}'),
+('423064C2-ACE8-4D70-8CFF-CDAA1461DBBE','WhS_RouteSync_SwitchRouteSynchronizer_TelesRadius','Teles Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'						,'{"Editor":"whs-routesync-telesradius-swsync"}'),
+('29135479-8150-4E23-9A0D-A42AF69A13AE','WhS_RouteSync_SwitchRouteSynchronizer_TelesIdb','Teles Idb Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'					,'{"Editor":"whs-routesync-telesidb-swsync"}'),
+('99B59E02-1305-49E5-9342-1B4E08C91439','WhS_RouteSync_SwitchRouteSynchronizer_FreeRadius','Free Radius Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'				,'{"Editor":"whs-routesync-freeradius-swsync"}'),
+('376687E2-268D-4DFA-AA39-3205C3CD18E5','WhS_RouteSync_SwitchRouteSynchronizer_Huawei','Huawei Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'							,'{"Editor":"whs-routesync-huawei-swsync", "SettingsEditor":"whs-routesync-huaweisettings-editor"}'),
+('2574530b-b9fd-44e2-bd0c-d1f46db80e68','WhS_RouteSync_SwitchRouteSynchronizer_HuaweiSoftX3000','Huawei SoftX3000 Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-huawei-softx3000-swsync", "SettingsEditor":"whs-routesync-huaweisoftx3000settings-editor"}'),
+('94739CBC-00A7-4CEB-9285-B4CB35D7D003','WhS_RouteSync_SwitchRouteSynchronizer_Ericsson','Ericsson Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'						,'{"Editor":"whs-routesync-ericsson-swsync","SettingsEditor":"whs-routesync-ericssonsettings-editor"}'),
+('D770F53B-057F-4BB8-BF20-883A2DBC510B','WhS_RouteSync_SwitchRouteSynchronizer_Cataleya','Cataleya Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'						,'{"Editor":"whs-routesync-cataleya-swsync"}'),
 
 ('366AB5D3-5083-420D-B5CE-5313DA025106','Whs_RouteSync_RadiusDataManager_SQL','MVTS SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-mvtsradius-sqldatamanager"}'),
 ('09ED9252-AF87-447D-9C40-738CF222C64E','Whs_RouteSync_RadiusDataManager_SQL','Teles SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-telesradius-sqldatamanager"}'),
@@ -310,7 +311,7 @@ as (select * from (values
 ('23fa8a42-8e96-4f26-96bb-dab1e50b9534','Customer Fault Ticket Validation','Customer Fault Ticket Validation','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"whs-be-customerfaultticket-onbeforesavehandler"}'),
 
 ('f16718b8-8f3b-4455-8440-71a8dfd8f782','WhS_Sales_BulkActionType_BED','Modify BED','WhS_Sales_BulkActionType','{"Editor":"vr-whs-sales-bulkaction-type-bed-allzones","ValidationResultDirective":"vr-whs-sales-bulkaction-validationresult-bed","IsApplicableToSellingProduct":false,"IsApplicableToCustomer":true,"CanApplyZoneFilter":true,"DefaultBulkActionZoneFilterConfigId":"BDC22FEB-14E1-4F0D-8C3E-EF54A5A36312"}'),
-
+ 
 ('E9B480FE-BE8F-4F1F-8D00-A3DF8EE74F7F', 'WhS_RouteSync_NumberLengthEvaluator_Fixed','Fixed','WhS_RouteSync_NumberLengthEvaluator','{"Editor":"whs-routesync-numberlength-fixed"}'),
 ('FAE24FC0-F549-41F7-8D3C-A581B63F7AFB', 'WhS_RouteSync_NumberLengthEvaluator_International','From International Number Length','WhS_RouteSync_NumberLengthEvaluator','{"Editor":"whs-routesync-numberlength-international"}'),
 ('E03E24AE-1985-455B-B843-1ED6A52DA9CE', 'WhS_RouteSync_CodeChargeEvaluator_Fixed','Fixed','WhS_RouteSync_CodeChargeEvaluator','{"Editor":"whs-routesync-codecharge-fixed"}'),
