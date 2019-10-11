@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HuaweiSoftX3000SWSyncHuaweiSettings.$inject = ['UtilsService'];
+    HuaweiSoftX3000SWSyncSettingsEditor.$inject = ['UtilsService'];
 
-    function HuaweiSoftX3000SWSyncHuaweiSettings(UtilsService) {
+    function HuaweiSoftX3000SWSyncSettingsEditor(UtilsService) {
 
         return {
             restrict: "E",
@@ -13,7 +13,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new HuaweiSoftX3000SWSyncHuaweiSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new HuaweiSoftX3000SWSyncSettingsEditorCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "Ctrl",
@@ -21,7 +21,7 @@
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSoftX3000Synchronizer/Templates/HuaweiSoftX3000RouteSyncSetting.html"
         };
 
-        function HuaweiSoftX3000SWSyncHuaweiSettingsCtor($scope, ctrl, $attrs) {
+        function HuaweiSoftX3000SWSyncSettingsEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -59,5 +59,5 @@
         }
     }
 
-    app.directive('whsRoutesyncHuaweisoftx3000Settingseditor', HuaweiSoftX3000SWSyncHuaweiSettings);
+    app.directive('whsRoutesyncHuaweisoftx3000Settingseditor', HuaweiSoftX3000SWSyncSettingsEditor);
 })(app);
