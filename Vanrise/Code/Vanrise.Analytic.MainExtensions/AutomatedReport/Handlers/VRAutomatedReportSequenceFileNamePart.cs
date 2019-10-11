@@ -10,12 +10,13 @@ using Vanrise.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 {
-    public enum DateCounterType { Yearly = 0 }
+    public enum DateCounterType { Yearly = 0, Daily = 1 }
     public class VRAutomatedReportSequenceFileNamePart : VRConcatenatedPartSettings<IVRAutomatedReportFileNamePartConcatenatedPartContext>
     {
         public override Guid ConfigId { get { return new Guid("9CC73443-2A1A-4405-A1ED-1DE27B9DCB42"); } }
         public DateCounterType? DateCounterType { get; set; }
         public int PaddingLeft { get; set; }
+        public string Identifier { get; set; }
         public override string GetPartText(IVRAutomatedReportFileNamePartConcatenatedPartContext context)
         {
             long initialSequenceValue = 1;
@@ -24,6 +25,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 StringBuilder sequenceKey = new StringBuilder();
                 StringBuilder sequenceGroup = new StringBuilder();
                 sequenceGroup.Append("OVERALL");
+                if (!string.IsNullOrEmpty(Identifier))
+                    sequenceGroup.Append("_" + Identifier);
 
                 VRSequenceManager manager = new VRSequenceManager();
                 if (this.DateCounterType.HasValue)
@@ -37,9 +40,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                         case Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.DateCounterType.Yearly:
                             sequenceKey.Append(string.Format("{0}_{1}", DateTime.Today.Year, DateTime.Today.Year + 1));
                             break;
+                        case Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.DateCounterType.Daily:
+                            sequenceKey.Append(string.Format("{0}_{1}", DateTime.Today, DateTime.Today.AddDays(1)));
+                            break;
                     }
                 }
-                var sequenceNumber = manager.GetNextSequenceValue(sequenceGroup.ToString(),context.TaskId.Value, sequenceKey.ToString(), initialSequenceValue);
+                var sequenceNumber = manager.GetNextSequenceValue(sequenceGroup.ToString(), context.TaskId.Value, sequenceKey.ToString(), initialSequenceValue);
                 return sequenceNumber.ToString().PadLeft(this.PaddingLeft, '0');
             }
             else
