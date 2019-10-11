@@ -2,9 +2,10 @@
 
     'use strict';
 
-    HuaweiSWSyncHuaweiSettings.$inject = ["UtilsService", 'VRUIUtilsService'];
+    HuaweiSWSyncSettingsEditor.$inject = ["UtilsService"];
 
-    function HuaweiSWSyncHuaweiSettings(UtilsService, VRUIUtilsService) {
+    function HuaweiSWSyncSettingsEditor(UtilsService) {
+
         return {
             restrict: "E",
             scope: {
@@ -12,7 +13,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new HuaweiSWSyncHuaweiSettingsrCtor($scope, ctrl, $attrs);
+                var ctor = new HuaweiSWSyncSettingsEditorCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "Ctrl",
@@ -20,24 +21,27 @@
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSynchronizer/Templates/HuaweiRouteSyncSetting.html"
         };
 
-        function HuaweiSWSyncHuaweiSettingsrCtor($scope, ctrl, $attrs) {
+        function HuaweiSWSyncSettingsEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.numberOfRetries = 1;
+
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
 
                     if (payload != undefined) {
                         $scope.scopeModel.numberOfTries = payload.settings.NumberOfTries;
                     }
+
+                    var promises = [];
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -55,6 +59,5 @@
         }
     }
 
-    app.directive('whsRoutesyncHuaweisettingsEditor', HuaweiSWSyncHuaweiSettings);
-
+    app.directive('whsRoutesyncHuaweiSettingseditor', HuaweiSWSyncSettingsEditor);
 })(app);

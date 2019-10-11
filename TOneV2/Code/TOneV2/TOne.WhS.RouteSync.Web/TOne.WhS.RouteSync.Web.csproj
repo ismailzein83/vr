@@ -269,7 +269,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-customermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-communication.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-swsync.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huaweisettings-editor.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-settingseditor.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\Templates\TelesPostgresIdbSWDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\whs-routesync-telesidb-postgresdatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\BuiltInIVSwitchSWSyncTemplate.html" />
