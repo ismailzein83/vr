@@ -238,7 +238,7 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGSHDSL");
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
-
+            esq.AddColumn("StLinePathId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -248,12 +248,14 @@ namespace BPMExtended.Main.Business
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var linePathId = entities[0].GetColumnValue("StLinePathId");
 
                 SOMRequestInput<GSHDSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<GSHDSLSubscriptionRequestInput>
                 {
 
                     InputArguments = new GSHDSLSubscriptionRequestInput
                     {
+                        LinePathId = linePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),

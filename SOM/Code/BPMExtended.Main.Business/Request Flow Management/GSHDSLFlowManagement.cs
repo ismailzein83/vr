@@ -43,6 +43,7 @@ namespace BPMExtended.Main.Business
         const string waitingListStep = "ED5E126A-3336-47E6-9138-2788FF96B78A";
         const string reservePhoneNumberStep = "004A1891-960D-4D0B-9995-BE3DF680D2B8";
         const string technicalStep = "4A64F6DD-F60A-4D7D-ABB8-CC1AE8D501F6";
+        const string submitToOMStep = "DEF0E171-327E-4E4C-9A62-CE0FA825E060";
 
         const string completedStep = "2B0CDA46-E3DF-449B-A4A1-C677781CF4B9";
 
@@ -69,7 +70,7 @@ namespace BPMExtended.Main.Business
                 case createContractStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = printContractStep; break;
                 case printContractStep: nextStepId = attachmentStep; break;
-                case attachmentStep: nextStepId = technicalStep; break;
+                case attachmentStep: nextStepId = submitToOMStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;

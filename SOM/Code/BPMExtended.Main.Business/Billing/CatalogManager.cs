@@ -156,6 +156,35 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public string GetADSLUserNameDomain()
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string domain = null;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("Id");
+            esq.AddColumn("StDomain");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "4D5297E3-1681-4672-8F64-22EC9E478065");
+
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                domain = (string)entity.GetColumnValue("StDomain");
+
+            }
+
+            return domain;
+
+        }
+
         public int? GetPendingDaysBeforeCancellingRequest() {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;

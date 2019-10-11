@@ -181,6 +181,15 @@ namespace BPMExtended.Main.Business
             }
             return item;
         }
+        public List<Domain> GetAllDomains()
+        {
+            List<Domain> items = null;
+            using (SOMClient client = new SOMClient())
+            {
+                items = client.Get<List<Domain>>(String.Format("api/SOM.ST/Inventory/GetAllDomains"));
+            }
+            return items;
+        }
 
         public string GetPhoneCategory(string phoneNumber)
         {
@@ -224,6 +233,28 @@ namespace BPMExtended.Main.Business
                 Name = r.Name
             }).ToList();
             //return InventoryMockDataGenerator.GetDSLAMFreePorts();
+        }
+
+        public List<DSLAMPortInfo> GetSwitchFreePorts(string phoneNumber)
+        {
+            TechnicalDetails item = null;   
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM.ST/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
+            }
+
+            string switchId = item.SwitchId;
+            List<PortInfo> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM.ST/Inventory/GetSwitchFreePorts?switchId={0}", switchId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new DSLAMPortInfo
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
         }
 
         public SubType GetSubTypeByDeviceTypeName(string deviceTypeName)
@@ -478,7 +509,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                client.Get<string>(String.Format("api/SOM.ST/Inventory/AddNodeToPath?PhoneNumberId={0}&PathID={1}", phoneNumberId, pathID));
+                client.Get<string>(String.Format("api/SOM.ST/Inventory/AddNodeToPath?NodeId={0}&PathID={1}", phoneNumberId, pathID));
             }
 
         }
@@ -789,15 +820,46 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        public string ReserveDSLAMPort(string phoneNumber , string portId)
+        public string ReserveDSLAMPort(string phoneNumber , string portId) //rename to ReserveDSLPort
         {
             //TODO: reserve port 
             string  pathId;
             using (SOMClient client = new SOMClient())
             {
-                pathId = client.Get<string>(String.Format("api/SOM.ST/Inventory/ReserveDSL?phoneNumber={0}&dslamPortId={1}", phoneNumber,portId));
+                pathId = client.Get<string>(String.Format("api/SOM.ST/Inventory/ReserveDSL?phoneNumber={0}&port={1}", phoneNumber,portId));
             }
             return pathId;
+        }
+
+        public bool UpdateXDSLUsername(string linepathId, string username)
+        {
+            //TODO: reserve port 
+            bool isUpdated = false;
+            using (SOMClient client = new SOMClient())
+            {
+                isUpdated = client.Get<bool>(String.Format("api/SOM.ST/Inventory/UpdateXDSLUsername?linepathId={0}&username={1}", linepathId, username));
+            }
+            return isUpdated;
+        }
+
+        public bool AddDomain(string domainName, string domainDesc)
+        {
+            bool isAdded = false;
+            using (SOMClient client = new SOMClient())
+            {
+                isAdded = client.Get<bool>(String.Format("api/SOM.ST/Inventory/AddDomain?domainName={0}&domainDesc={1}", domainName, domainDesc));
+            }
+            return isAdded;
+        }
+
+        public bool IsSwitchMSANAndHasFreeCombo(string switchId)
+        {
+            bool isSwitchHasFreeCombos = false;
+            using (SOMClient client = new SOMClient())
+            {
+                isSwitchHasFreeCombos = client.Get<bool>(String.Format("api/SOM.ST/Inventory/IsSwitchHasFreeCombos?switchId={0}", switchId));
+            }
+            return isSwitchHasFreeCombos;
         }
 
         public bool MultiplexerValidation(string phoneNumber)

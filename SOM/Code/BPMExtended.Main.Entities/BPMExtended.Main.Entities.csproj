@@ -89,6 +89,7 @@
     <Compile Include="BPTrackingMessageDetail.cs" />
     <Compile Include="CustomerAddress.cs" />
     <Compile Include="DeviceType.cs" />
+    <Compile Include="Domain.cs" />
     <Compile Include="PackageInfo.cs" />
     <Compile Include="PromotionDetail.cs" />
     <Compile Include="InvoiceEntity.cs" />
