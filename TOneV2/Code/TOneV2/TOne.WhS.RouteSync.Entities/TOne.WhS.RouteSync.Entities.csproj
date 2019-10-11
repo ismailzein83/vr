@@ -60,6 +60,7 @@
     <Compile Include="BusinessManagers\IRouteSyncDefinitionManager.cs" />
     <Compile Include="CodeCharge\CodeChargeEvaluator.cs" />
     <Compile Include="CodeCharge\CodeChargeEvaluatorConfig.cs" />
+    <Compile Include="CodeData\CodeData.cs" />
     <Compile Include="Context\IApplyDifferentialRoutesContext.cs" />
     <Compile Include="Context\ISwapTableContext.cs" />
     <Compile Include="FTPLogger\FTPLoggerEntities.cs" />

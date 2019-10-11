@@ -12,8 +12,7 @@ namespace TOne.WhS.RouteSync.Entities
         public List<string> Output { get; set; }
     }
 
-    #region Route Case
-    public interface ILogRouteCasesContext
+    public interface ILogBaseContext
     {
         List<CommandResult> CommandResults { get; }
 
@@ -22,56 +21,55 @@ namespace TOne.WhS.RouteSync.Entities
         ExecutionStatus ExecutionStatus { get; }
     }
 
-    public class LogRouteCasesContext : ILogRouteCasesContext
+    public class LogBaseContext : ILogBaseContext
     {
         public List<CommandResult> CommandResults { get; set; }
 
         public DateTime ExecutionDateTime { get; set; }
 
         public ExecutionStatus ExecutionStatus { get; set; }
+    }
+
+    #region Route Options
+    public interface ILogRouteOptionsContext : ILogBaseContext
+    {
+    }
+
+    public class LogRouteOptionsContext : LogBaseContext, ILogRouteOptionsContext
+    {
+    }
+    #endregion
+
+    #region Route Case
+    public interface ILogRouteCasesContext : ILogBaseContext
+    {
+    }
+
+    public class LogRouteCasesContext : LogBaseContext, ILogRouteCasesContext
+    {
     }
     #endregion
 
     #region Carrier Mapping
-    public interface ILogCarrierMappingsContext
+
+    public interface ILogCarrierMappingsContext : ILogBaseContext
     {
-        List<CommandResult> CommandResults { get; }
-
-        DateTime ExecutionDateTime { get; }
-
-        ExecutionStatus ExecutionStatus { get; }
     }
 
-    public class LogCarrierMappingsContext : ILogCarrierMappingsContext
+    public class LogCarrierMappingsContext : LogBaseContext, ILogCarrierMappingsContext
     {
-        public List<CommandResult> CommandResults { get; set; }
-
-        public DateTime ExecutionDateTime { get; set; }
-
-        public ExecutionStatus ExecutionStatus { get; set; }
+       
     }
     #endregion
 
     #region Routes
-    public interface ILogRoutesContext
+    public interface ILogRoutesContext : ILogBaseContext
     {
-        List<CommandResult> CommandResults { get; }
-
-        DateTime ExecutionDateTime { get; }
-
-        ExecutionStatus ExecutionStatus { get; }
-
         string CustomerIdentifier { get; }
     }
 
-    public class LogRoutesContext : ILogRoutesContext
+    public class LogRoutesContext : LogBaseContext, ILogRoutesContext
     {
-        public List<CommandResult> CommandResults { get; set; }
-
-        public DateTime ExecutionDateTime { get; set; }
-
-        public ExecutionStatus ExecutionStatus { get; set; }
-
         public string CustomerIdentifier { get; set; }
     }
     #endregion
