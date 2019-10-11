@@ -82,6 +82,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MSoftX3000\Helper.cs" />
     <Compile Include="MSoftX3000\Business\HuaweiFTPLogger.cs" />
     <Compile Include="MSoftX3000\Business\RouteCaseManager.cs" />
     <Compile Include="MSoftX3000\Business\RouteManager.cs" />
@@ -97,6 +98,23 @@
     <Compile Include="MSoftX3000\Data\IWhSRouteSyncHuaweiDataManager.cs" />
     <Compile Include="MSoftX3000\Data\RouteSyncHuaweiDataManagerFactory.cs" />
     <Compile Include="MSoftX3000\Entities\CarrierMapping.cs" />
+    <Compile Include="SoftX3000\Business\HuaweiFTPLogger.cs" />
+    <Compile Include="SoftX3000\Business\RouteCaseManager.cs" />
+    <Compile Include="SoftX3000\Business\RouteManager.cs" />
+    <Compile Include="SoftX3000\Business\RouteOptionsManager.cs" />
+    <Compile Include="SoftX3000\Business\RouteSucceededManager.cs" />
+    <Compile Include="SoftX3000\Business\SwitchLoggerManager.cs" />
+    <Compile Include="SoftX3000\Business\WhSRouteSyncHuaweiManager.cs" />
+    <Compile Include="SoftX3000\Data\IDataManager.cs" />
+    <Compile Include="SoftX3000\Data\IRouteCaseDataManager.cs" />
+    <Compile Include="SoftX3000\Data\IRouteDataManager.cs" />
+    <Compile Include="SoftX3000\Data\IRouteSucceededDataManager.cs" />
+    <Compile Include="SoftX3000\Data\IWhSRouteSyncHuaweiDataManager.cs" />
+    <Compile Include="SoftX3000\Data\RouteSyncHuaweiDataManagerFactory.cs" />
+    <Compile Include="SoftX3000\Data\IRouteOptionsDataManager.cs" />
+    <Compile Include="SoftX3000\Entities\RouteAnalysis.cs" />
+    <Compile Include="SoftX3000\Entities\RouteCaseOptions.cs" />
+    <Compile Include="SoftX3000\Entities\SwitchSettings.cs" />
     <Compile Include="SoftX3000\Entities\CarrierMapping.cs" />
     <Compile Include="MSoftX3000\Entities\Context\RouteCaseContext.cs" />
     <Compile Include="MSoftX3000\Entities\Context\RouteContext.cs" />
@@ -110,7 +128,20 @@
     <Compile Include="MSoftX3000\Entities\SwitchLogger.cs" />
     <Compile Include="MSoftX3000\Entities\SwitchLoggerConfig.cs" />
     <Compile Include="MSoftX3000\Entities\HuaweiConvertedRoute.cs" />
-    <Compile Include="Helper.cs" />
+    <Compile Include="SoftX3000\Entities\Context\RouteCaseContext.cs" />
+    <Compile Include="SoftX3000\Entities\Context\RouteContext.cs" />
+    <Compile Include="SoftX3000\Entities\Context\RouteOptionsContext.cs" />
+    <Compile Include="SoftX3000\Entities\Context\WhSRouteSyncHuaweiContext.cs" />
+    <Compile Include="SoftX3000\Entities\Enums.cs" />
+    <Compile Include="SoftX3000\Entities\HuaweiSoftX3000Commands.cs" />
+    <Compile Include="SoftX3000\Entities\HuaweiConvertedRoute.cs" />
+    <Compile Include="SoftX3000\Entities\HuaweiConvertedRoutesPayload.cs" />
+    <Compile Include="SoftX3000\Entities\HuaweiSSHCommunication.cs" />
+    <Compile Include="SoftX3000\Entities\HuaweiSwitchRouteSynchronizerSettings.cs" />
+    <Compile Include="SoftX3000\Entities\RouteCase.cs" />
+    <Compile Include="SoftX3000\Entities\SwitchLogger.cs" />
+    <Compile Include="SoftX3000\Entities\SwitchLoggerConfig.cs" />
+    <Compile Include="SoftX3000\Helper.cs" />
     <Compile Include="SoftX3000\HuaweiSoftX3000SWSync.cs" />
     <Compile Include="MSoftX3000\HuaweiSWSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,6 +151,10 @@
       <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
       <Name>TOne.WhS.BusinessEntity.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
       <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>
       <Name>TOne.WhS.RouteSync.Business</Name>
@@ -128,14 +163,16 @@
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.MainExtensions\TOne.WhS.RouteSync.MainExtensions.csproj">
+      <Project>{eb35e768-5037-4d5a-890f-f6c7270bb8a5}</Project>
+      <Name>TOne.WhS.RouteSync.MainExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SoftX3000\Business\" />
     <Folder Include="SoftX3000\Controller\" />
-    <Folder Include="SoftX3000\Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

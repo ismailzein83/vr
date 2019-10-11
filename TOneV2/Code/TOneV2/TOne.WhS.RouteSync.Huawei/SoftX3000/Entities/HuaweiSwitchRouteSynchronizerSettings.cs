@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TOne.WhS.RouteSync.Entities;
+
+namespace TOne.WhS.RouteSync.Huawei.SoftX3000.Entities
+{
+    public class HuaweiSwitchRouteSynchronizerSettings : RouteSynchronizerSwitchSettings
+    {
+        public int NumberOfTries { get; set; }
+    }
+}

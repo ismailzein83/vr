@@ -1,0 +1,41 @@
+﻿using System;
+using TOne.WhS.RouteSync.Business;
+using TOne.WhS.RouteSync.Entities;
+using TOne.WhS.RouteSync.Huawei.SoftX3000.Entities;
+using Vanrise.Common;
+
+namespace TOne.WhS.RouteSync.Huawei.SoftX3000.Business
+{
+    public class HuaweiFTPLogger : SwitchLogger
+    {
+        public override Guid ConfigId { get { return new Guid("6F5E6051-DDAB-411C-88F5-C8927417FD3C"); } }
+
+        public FTPCommunicatorSettings FTPCommunicatorSettings { get; set; }
+
+        public override void LogRouteOptions(ILogRouteOptionsContext context)
+        {
+            string errorMessage;
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "RouteOptions", this.FTPCommunicatorSettings, context.ExecutionDateTime, context.ExecutionStatus, out errorMessage);
+        }
+
+        public override void LogRouteCases(ILogRouteCasesContext context)
+        {
+            string errorMessage;
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "RouteCase", this.FTPCommunicatorSettings, context.ExecutionDateTime, context.ExecutionStatus, out errorMessage);
+        }
+
+        public override void LogRoutes(ILogRoutesContext context)
+        {
+            string errorMessage;
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, string.Format("RouteRSSN{0}", context.CustomerIdentifier), this.FTPCommunicatorSettings, context.ExecutionDateTime, context.ExecutionStatus, out errorMessage);
+        }
+
+        public override void LogCommands(ILogCommandsContext context)
+        {
+            string errorMessage;
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "CommandExecution_Log", this.FTPCommunicatorSettings, context.ExecutionDateTime, null, out errorMessage);
+        }
+
+        
+    }
+}
