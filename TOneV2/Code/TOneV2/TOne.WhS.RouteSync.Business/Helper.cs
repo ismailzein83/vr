@@ -43,6 +43,32 @@ namespace TOne.WhS.RouteSync.Business
             return MergeSwitchSyncOutputItems(items);
         }
 
+        public static CodeData GetCodeData(string code, NumberLengthEvaluator numberLengthEvaluator, CodeChargeEvaluator codeChargeEvaluator)
+        {
+            code.ThrowIfNull("code");
+            if (numberLengthEvaluator == null && codeChargeEvaluator == null)
+                throw new Exception("NumberLengthEvaluator and CodeChargeEvaluator are Null");
+
+            CodeData codeData = new CodeData() { Code = code };
+
+            if (numberLengthEvaluator != null)
+            {
+                NumberLengthEvaluateContext numberLengthEvaluateContext = new NumberLengthEvaluateContext() { Code = code };
+                numberLengthEvaluator.Evaluate(numberLengthEvaluateContext);
+                codeData.MinCodeLength = numberLengthEvaluateContext.MinCodeLength;
+                codeData.MaxCodeLength = numberLengthEvaluateContext.MaxCodeLength;
+            }
+
+            if (codeChargeEvaluator != null)
+            {
+                CodeChargeEvaluateContext codeChargeEvaluateContext = new CodeChargeEvaluateContext() { Code = code };
+                codeChargeEvaluator.Evaluate(codeChargeEvaluateContext);
+                codeData.CodeCharge = codeChargeEvaluateContext.CodeCharge;
+            }
+
+            return codeData;
+        }
+
         #region Compression
 
         public static List<ConvertedRoute> CompressRoutesWithCodes(IEnumerable<ConvertedRouteWithCode> uncompressdRoutes, Func<ICreateConvertedRouteWithCodeContext, ConvertedRouteWithCode> createConvertedRouteWithCode)
