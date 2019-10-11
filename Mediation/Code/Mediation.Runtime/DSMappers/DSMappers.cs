@@ -2450,6 +2450,8 @@ namespace Mediation.Runtime
 
                 try
                 {
+                    smsLine = smsLine.Replace("^", "");
+
                     string[] fields = smsLine.Split(',');
 
                     sms.DataSourceId = dataSourceId;
