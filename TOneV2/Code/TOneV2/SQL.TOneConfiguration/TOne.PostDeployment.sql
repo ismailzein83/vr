@@ -309,8 +309,12 @@ as (select * from (values
 ('562b655a-3d2a-4cd7-85aa-babff12d5f5e','Supplier Fault Ticket Validation','Supplier Fault Ticket Validation','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"whs-be-supplierfaultticket-onbeforesavehandler"}'),
 ('23fa8a42-8e96-4f26-96bb-dab1e50b9534','Customer Fault Ticket Validation','Customer Fault Ticket Validation','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"whs-be-customerfaultticket-onbeforesavehandler"}'),
 
-('f16718b8-8f3b-4455-8440-71a8dfd8f782','WhS_Sales_BulkActionType_BED','Modify BED','WhS_Sales_BulkActionType','{"Editor":"vr-whs-sales-bulkaction-type-bed-allzones","ValidationResultDirective":"vr-whs-sales-bulkaction-validationresult-bed","IsApplicableToSellingProduct":false,"IsApplicableToCustomer":true,"CanApplyZoneFilter":true,"DefaultBulkActionZoneFilterConfigId":"BDC22FEB-14E1-4F0D-8C3E-EF54A5A36312"}')
-                
+('f16718b8-8f3b-4455-8440-71a8dfd8f782','WhS_Sales_BulkActionType_BED','Modify BED','WhS_Sales_BulkActionType','{"Editor":"vr-whs-sales-bulkaction-type-bed-allzones","ValidationResultDirective":"vr-whs-sales-bulkaction-validationresult-bed","IsApplicableToSellingProduct":false,"IsApplicableToCustomer":true,"CanApplyZoneFilter":true,"DefaultBulkActionZoneFilterConfigId":"BDC22FEB-14E1-4F0D-8C3E-EF54A5A36312"}'),
+
+('E9B480FE-BE8F-4F1F-8D00-A3DF8EE74F7F', 'WhS_RouteSync_NumberLengthEvaluator_Fixed','Fixed','WhS_RouteSync_NumberLengthEvaluator','{"Editor":"whs-routesync-numberlength-fixed"}'),
+('FAE24FC0-F549-41F7-8D3C-A581B63F7AFB', 'WhS_RouteSync_NumberLengthEvaluator_International','From International Number Length','WhS_RouteSync_NumberLengthEvaluator','{"Editor":"whs-routesync-numberlength-international"}'),
+('E03E24AE-1985-455B-B843-1ED6A52DA9CE', 'WhS_RouteSync_CodeChargeEvaluator_Fixed','Fixed','WhS_RouteSync_CodeChargeEvaluator','{"Editor":"whs-routesync-codecharge-fixed"}'),
+('07ECEA2E-EEDD-4C65-B5D4-CC23BF680654', 'WhS_RouteSync_CodeChargeEvaluator_International','From International Code Charge','WhS_RouteSync_CodeChargeEvaluator','{"Editor":"whs-routesync-codecharge-international"}')             
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
