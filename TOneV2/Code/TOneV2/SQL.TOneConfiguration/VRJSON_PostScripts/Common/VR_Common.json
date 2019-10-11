@@ -2835,14 +2835,320 @@
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "View",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "8ac4b99e-01a0-41d1-ae54-09e679309086",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Status Definitions",
+              "Title": "Status Definitions",
+              "Url": "#/view/Common/Views/StatusDefinition/StatusDefinitionManagement",
+              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
+              "ActionNames": "VRCommon/StatusDefinition/GetFilteredStatusDefinitions",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 7,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.56"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "2cf7e0be-1396-4305-aa27-11070acfc18f",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Application Visibilities",
+              "Title": "Application Visibilities",
+              "Url": "#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement",
+              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
+              "ActionNames": "VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 12,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.563"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "c1a9486f-c2d0-4c2d-b3ca-1d69e042c22e",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Action Audit",
+              "Title": "Action Audit",
+              "Url": null,
+              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VRCommon_System_Log: View Action Audit\",\"Directive\":\"vr-common-actionaudit-search\",\"Title\":\"Action Audit\",\"Data\":null}}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 6,
+              "CreatedTime": "2019-08-26T13:57:23.28",
+              "LastModifiedTime": "2019-10-07T17:48:07.677"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a36f974f-4f1c-4b9d-b471-205d3d57c0a2",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Component Type",
+              "Title": "Component Type",
+              "Url": null,
+              "Module": "89254e36-5d91-4db1-970f-9bfef404679a",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"901b1ebc-6359-4277-8a29-93dbf5030aed\"}]}}",
+              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
+              "Rank": 4,
+              "CreatedTime": "2019-09-26T16:40:38.623",
+              "LastModifiedTime": "2019-10-07T17:48:07.713"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "52c580de-c91f-45e2-8e3a-46e0ba9e7efd",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Component Types",
+              "Title": "Component Types",
+              "Url": "#/view/Common/Views/VRComponentType/VRComponentTypeManagement",
+              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
+              "ActionNames": "VRCommon/VRComponentType/GetFilteredVRComponentTypes",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 4,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.553"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "c8272fea-32e8-4c3b-949a-50090db82981",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Component Settings",
+              "Title": "Component Settings",
+              "Url": "#/view/Common/Views/Settings/SettingsManagement",
+              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
+              "ActionNames": "VRCommon/Settings/GetFilteredSettings",
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.ComponentSettings\",\"ViewNameResourceKey\":\"Common.ComponentSettings\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 4,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.67"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "0d533879-3008-4707-915f-5cd6b56cbb50",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Projects",
+              "Title": "Projects",
+              "Url": null,
+              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"6954527c-6de0-411c-859d-e044165d58af\"}]}}",
+              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
+              "Rank": 2,
+              "CreatedTime": "2019-09-11T12:31:18.6",
+              "LastModifiedTime": "2019-10-07T17:48:07.55"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a20e826f-fb18-4a40-adac-7d257399a1ca",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Connections",
+              "Title": "Connections",
+              "Url": "#/view/Common/Views/VRConnection/VRConnectionManagement",
+              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
+              "ActionNames": "VRCommon/VRConnection/GetFilteredVRConnections",
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.Connection\",\"ViewNameResourceKey\":\"Common.Connection\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 10,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.68"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "32495d59-e401-4af0-81a3-829f9c442036",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Custom Namespaces",
+              "Title": "Custom Namespaces",
+              "Url": "#/view/Common/Views/VRNamespace/VRNamespaceManagement",
+              "Module": "be30ed3f-d201-400f-ad91-b5180ba39f6d",
+              "ActionNames": "VRCommon/VRNamespace/GetFilteredVRNamespaces",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 2,
+              "CreatedTime": "2018-08-30T10:12:17.187",
+              "LastModifiedTime": "2019-10-07T17:48:07.59"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "40a3247c-375a-4fe3-8e5e-8370d086f8fa",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Mail Templates",
+              "Title": "Mail Templates",
+              "Url": "#/view/Common/Views/VRMail/VRMailMessageTemplateManagement",
+              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
+              "ActionNames": "VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates",
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.MailTemplates\",\"ViewNameResourceKey\":\"Common.MailTemplates\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 8,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.68"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "026e0eeb-69b7-4e5d-b1bb-9d4fb59111b1",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "SMS Message Templates",
+              "Title": "SMS Message Templates",
+              "Url": "#/view/Common/Views/SMS/SMSMessageTemplateManagement",
+              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
+              "ActionNames": "VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 9,
+              "CreatedTime": "2018-05-11T10:00:49.13",
+              "LastModifiedTime": "2019-10-07T17:48:07.68"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "66de2441-8a96-41e7-94ea-9f8af38a3515",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Style",
+              "Title": "Style Definitions",
+              "Url": "#/view/Common/Views/StyleDefinition/StyleDefinitionManagement",
+              "Module": "a459d3d0-35ae-4b0e-b267-54436fda729a",
+              "ActionNames": "VRCommon/StyleDefinition/GetFilteredStyleDefinitions",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 7,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.653"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "af4ff1ba-c026-4cc7-ade2-b684453dbb8c",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Dynamic APIs",
+              "Title": "Dynamic APIs",
+              "Url": "#/view/Common/Views/VRDynamicAPIModule/VRDynamicAPIModuleManagement",
+              "Module": "be30ed3f-d201-400f-ad91-b5180ba39f6d",
+              "ActionNames": "VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules",
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 3,
+              "CreatedTime": "2018-12-07T13:13:01.887",
+              "LastModifiedTime": "2019-10-07T17:48:07.61"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "cfcf02c6-0c70-443d-a91e-b8d291f5263e",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Object Type Definitions",
+              "Title": "Object Type Definitions",
+              "Url": "#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement",
+              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
+              "ActionNames": "VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 6,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.557"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "905a2555-2658-4f75-a25c-e6f91ddc63be",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "General",
+              "Title": "General",
+              "Url": null,
+              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VRCommon_System_Log: View General Logs\",\"Directive\":\"vr-log-entry-search\",\"Title\":\"General\",\"Data\":null}}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 2,
+              "CreatedTime": "2019-08-26T13:57:23.28",
+              "LastModifiedTime": "2019-10-07T17:48:07.673"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "33ac6a20-f8be-4d6f-a659-f643dade1065",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Mail Message Types",
+              "Title": "Mail Message Types",
+              "Url": "#/view/Common/Views/VRMail/VRMailMessageTypeManagement",
+              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
+              "ActionNames": "VRCommon/VRMailMessageType/GetFilteredMailMessageTypes",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 5,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-10-07T17:48:07.557"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "ff4ade6e-2940-43c2-8017-70168e4cecfe",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Extension Configurations",
+              "Title": "Extension Configurations",
+              "Url": null,
+              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"55d757eb-0367-4a85-aa61-788fe62163cc\"}]}}",
+              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
+              "Rank": 3,
+              "CreatedTime": "2019-09-26T18:33:36",
+              "LastModifiedTime": "2019-10-11T13:51:27.987"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -2943,332 +3249,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "8ac4b99e-01a0-41d1-ae54-09e679309086",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Status Definitions",
-              "Title": "Status Definitions",
-              "Url": "#/view/Common/Views/StatusDefinition/StatusDefinitionManagement",
-              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
-              "ActionNames": "VRCommon/StatusDefinition/GetFilteredStatusDefinitions",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 7,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.9"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "2cf7e0be-1396-4305-aa27-11070acfc18f",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Application Visibilities",
-              "Title": "Application Visibilities",
-              "Url": "#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement",
-              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
-              "ActionNames": "VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 12,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.903"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "c1a9486f-c2d0-4c2d-b3ca-1d69e042c22e",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Action Audit",
-              "Title": "Action Audit",
-              "Url": null,
-              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VRCommon_System_Log: View Action Audit\",\"Directive\":\"vr-common-actionaudit-search\",\"Title\":\"Action Audit\",\"Data\":null}}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 6,
-              "CreatedTime": "2019-08-26T13:57:23.28",
-              "LastModifiedTime": "2019-09-27T16:08:41.947"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "a36f974f-4f1c-4b9d-b471-205d3d57c0a2",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Component Type",
-              "Title": "Component Type",
-              "Url": null,
-              "Module": "89254e36-5d91-4db1-970f-9bfef404679a",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"901b1ebc-6359-4277-8a29-93dbf5030aed\"}]}}",
-              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 19,
-              "CreatedTime": "2019-09-26T16:40:38.623",
-              "LastModifiedTime": "2019-09-27T16:08:41.98"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "52c580de-c91f-45e2-8e3a-46e0ba9e7efd",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Component Types",
-              "Title": "Component Types",
-              "Url": "#/view/Common/Views/VRComponentType/VRComponentTypeManagement",
-              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
-              "ActionNames": "VRCommon/VRComponentType/GetFilteredVRComponentTypes",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 4,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.897"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "c8272fea-32e8-4c3b-949a-50090db82981",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Component Settings",
-              "Title": "Component Settings",
-              "Url": "#/view/Common/Views/Settings/SettingsManagement",
-              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
-              "ActionNames": "VRCommon/Settings/GetFilteredSettings",
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.ComponentSettings\",\"ViewNameResourceKey\":\"Common.ComponentSettings\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 6,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.943"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "0d533879-3008-4707-915f-5cd6b56cbb50",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Projects",
-              "Title": "Projects",
-              "Url": null,
-              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"6954527c-6de0-411c-859d-e044165d58af\"}]}}",
-              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 2,
-              "CreatedTime": "2019-09-11T12:31:18.6",
-              "LastModifiedTime": "2019-09-27T16:08:41.893"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "a20e826f-fb18-4a40-adac-7d257399a1ca",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Connections",
-              "Title": "Connections",
-              "Url": "#/view/Common/Views/VRConnection/VRConnectionManagement",
-              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
-              "ActionNames": "VRCommon/VRConnection/GetFilteredVRConnections",
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.Connection\",\"ViewNameResourceKey\":\"Common.Connection\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 10,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.95"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "32495d59-e401-4af0-81a3-829f9c442036",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Custom Namespaces",
-              "Title": "Custom Namespaces",
-              "Url": "#/view/Common/Views/VRNamespace/VRNamespaceManagement",
-              "Module": "be30ed3f-d201-400f-ad91-b5180ba39f6d",
-              "ActionNames": "VRCommon/VRNamespace/GetFilteredVRNamespaces",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 2,
-              "CreatedTime": "2018-08-30T10:12:17.187",
-              "LastModifiedTime": "2019-09-27T16:08:41.913"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "40a3247c-375a-4fe3-8e5e-8370d086f8fa",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Mail Templates",
-              "Title": "Mail Templates",
-              "Url": "#/view/Common/Views/VRMail/VRMailMessageTemplateManagement",
-              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
-              "ActionNames": "VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates",
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.MailTemplates\",\"ViewNameResourceKey\":\"Common.MailTemplates\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 8,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.947"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "026e0eeb-69b7-4e5d-b1bb-9d4fb59111b1",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "SMS Message Templates",
-              "Title": "SMS Message Templates",
-              "Url": "#/view/Common/Views/SMS/SMSMessageTemplateManagement",
-              "Module": "baaf681e-ab1c-4a64-9a35-3f3951398881",
-              "ActionNames": "VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 9,
-              "CreatedTime": "2018-05-11T10:00:49.13",
-              "LastModifiedTime": "2019-09-27T16:08:41.947"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "66de2441-8a96-41e7-94ea-9f8af38a3515",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Style",
-              "Title": "Style Definitions",
-              "Url": "#/view/Common/Views/StyleDefinition/StyleDefinitionManagement",
-              "Module": "a459d3d0-35ae-4b0e-b267-54436fda729a",
-              "ActionNames": "VRCommon/StyleDefinition/GetFilteredStyleDefinitions",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 7,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.937"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "af4ff1ba-c026-4cc7-ade2-b684453dbb8c",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Dynamic APIs",
-              "Title": "Dynamic APIs",
-              "Url": "#/view/Common/Views/VRDynamicAPIModule/VRDynamicAPIModuleManagement",
-              "Module": "be30ed3f-d201-400f-ad91-b5180ba39f6d",
-              "ActionNames": "VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules",
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 3,
-              "CreatedTime": "2018-12-07T13:13:01.887",
-              "LastModifiedTime": "2019-09-27T16:08:41.913"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "cfcf02c6-0c70-443d-a91e-b8d291f5263e",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Object Type Definitions",
-              "Title": "Object Type Definitions",
-              "Url": "#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement",
-              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
-              "ActionNames": "VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 6,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.9"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "905a2555-2658-4f75-a25c-e6f91ddc63be",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "General",
-              "Title": "General",
-              "Url": null,
-              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VRCommon_System_Log: View General Logs\",\"Directive\":\"vr-log-entry-search\",\"Title\":\"General\",\"Data\":null}}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 2,
-              "CreatedTime": "2019-08-26T13:57:23.28",
-              "LastModifiedTime": "2019-09-27T16:08:41.943"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "33ac6a20-f8be-4d6f-a659-f643dade1065",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Mail Message Types",
-              "Title": "Mail Message Types",
-              "Url": "#/view/Common/Views/VRMail/VRMailMessageTypeManagement",
-              "Module": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
-              "ActionNames": "VRCommon/VRMailMessageType/GetFilteredMailMessageTypes",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 5,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.897"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '3fb1a9fc-2a00-499e-a3c6-f3d317f58d66'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
