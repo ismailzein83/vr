@@ -8,7 +8,7 @@ namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInIP
     {
         public override Guid ConfigId { get { return new Guid("44581097-A3A0-45B4-ADAE-559E51FBF01C"); } }
 
-        public override string RuntimeEditor { get { return "rec-anal-action-c4switch-blockinboundtrunk"; } }
+        public override string RuntimeEditor { get { return "rec-anal-action-c4switch-blockinip"; } }
 
         public Guid DataRecordTypeId { get; set; }
 
