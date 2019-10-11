@@ -9,6 +9,8 @@ using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Ericsson.Business;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
+using TOne.WhS.RouteSync.MainExtensions.CodeCharge;
+using TOne.WhS.RouteSync.MainExtensions.NumberLength;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
@@ -26,8 +28,6 @@ namespace TOne.WhS.RouteSync.Ericsson
         const string CommandPrompt = "<";
         public int FirstRCNumber { get; set; }
         public int NumberOfMappings { get; set; }
-        public int MinCodeLength { get; set; }
-        public int MaxCodeLength { get; set; }
         public int LocalNumberLength { get; set; }
         public string InterconnectGeneralPrefix { get; set; }
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
@@ -36,8 +36,45 @@ namespace TOne.WhS.RouteSync.Ericsson
         public BranchRouteSettings BranchRouteSettings { get; set; }
         public string PercentagePrefix { get; set; }
         public string ESR { get; set; }
-        public string CC { get; set; }
         public EricssonManualRouteSettings ManualRouteSettings { get; set; }
+
+        public int MinCodeLength { get; set; }
+        public int MaxCodeLength { get; set; }
+
+        private NumberLengthEvaluator _numberLengthEvaluator;
+        public NumberLengthEvaluator NumberLengthEvaluator
+        {
+            get
+            {
+                if (_numberLengthEvaluator == null)
+                    _numberLengthEvaluator = new FixedNumberLengthEvaluator() { MinCodeLength = MinCodeLength, MaxCodeLength = MaxCodeLength };
+
+                return _numberLengthEvaluator;
+            }
+            set
+            {
+                _numberLengthEvaluator = value;
+            }
+        }
+
+        public string CC { get; set; }
+
+        private CodeChargeEvaluator _codeChargeEvaluator;
+        public CodeChargeEvaluator CodeChargeEvaluator
+        {
+            get
+            {
+                //this.CC was not required before abstraction
+                if (_codeChargeEvaluator == null && !string.IsNullOrEmpty(CC))
+                    _codeChargeEvaluator = new FixedCodeChargeEvaluator() { CodeCharge = CC };
+
+                return _codeChargeEvaluator;
+            }
+            set
+            {
+                _codeChargeEvaluator = value;
+            }
+        }
 
         #region Public Methods
 
@@ -475,12 +512,18 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
         {
-            List<string> validationMessages = new List<string>();
             HashSet<string> allBOs = new HashSet<string>();
             HashSet<string> duplicatedBOs = new HashSet<string>();
             HashSet<string> manualRoutesMissingBOs = new HashSet<string>();
             HashSet<string> specialRoutingTargetInvalidBOs = new HashSet<string>();
             HashSet<string> specialRoutingSourceMissingBOs = new HashSet<string>();
+
+            HashSet<Guid> allOutTrunks = new HashSet<Guid>();
+            HashSet<string> supplierHavingManySupplierTrunkBackup = new HashSet<string>();
+            HashSet<string> suppliersWithDeletedOutTrunksInTrunkGroup = new HashSet<string>();
+            HashSet<string> suppliersWithDeletedOutTrunksInBackup = new HashSet<string>();
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
             if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
             {
@@ -498,14 +541,87 @@ namespace TOne.WhS.RouteSync.Ericsson
                 foreach (var carrierMapping in this.CarrierMappings)
                 {
                     CustomerMapping customerMapping = carrierMapping.Value.CustomerMapping;
-                    if (customerMapping == null || string.IsNullOrEmpty(customerMapping.BO))
+
+                    if (customerMapping != null && !string.IsNullOrEmpty(customerMapping.BO))
+                    {
+                        if (!allBOs.Contains(customerMapping.BO))
+                            allBOs.Add(customerMapping.BO);
+                        else
+                            duplicatedBOs.Add(customerMapping.BO);
+                    }
+
+                    SupplierMapping supplierMapping = carrierMapping.Value.SupplierMapping;
+                    if (supplierMapping == null)
                         continue;
 
-                    if (!allBOs.Contains(customerMapping.BO))
-                        allBOs.Add(customerMapping.BO);
-                    else
-                        duplicatedBOs.Add(customerMapping.BO);
+                    string supplierName = carrierAccountManager.GetCarrierAccountName(carrierMapping.Value.CarrierId);
+
+                    if (supplierMapping.OutTrunks != null)
+                    {
+                        foreach (var outTrunk in supplierMapping.OutTrunks)
+                            allOutTrunks.Add(outTrunk.TrunkId);
+                    }
+
+                    if (supplierMapping.TrunkGroups != null)
+                    {
+                        foreach (var trunkGroup in supplierMapping.TrunkGroups)
+                        {
+                            if (trunkGroup.TrunkTrunkGroups == null)
+                                continue;
+
+                            foreach (var trunkTrunkGroup in trunkGroup.TrunkTrunkGroups)
+                            {
+                                if (trunkTrunkGroup.Backups == null)
+                                    continue;
+
+                                foreach (var backup in trunkTrunkGroup.Backups)
+                                {
+                                    if (backup.Trunks == null || backup.Trunks.Count < 2)
+                                        continue;
+
+                                    supplierHavingManySupplierTrunkBackup.Add(supplierName);
+                                }
+                            }
+                        }
+                    }
                 }
+
+                foreach (var carrierMapping in this.CarrierMappings)
+                {
+                    string supplierName = carrierAccountManager.GetCarrierAccountName(carrierMapping.Value.CarrierId);
+
+                    SupplierMapping supplierMapping = carrierMapping.Value.SupplierMapping;
+                    if (supplierMapping == null || supplierMapping.TrunkGroups == null)
+                        continue;
+
+                    foreach (var trunkGroup in supplierMapping.TrunkGroups)
+                    {
+                        if (trunkGroup.TrunkTrunkGroups == null)
+                            continue;
+
+                        foreach (var trunkTrunkGroup in trunkGroup.TrunkTrunkGroups)
+                        {
+                            if (!allOutTrunks.Contains(trunkTrunkGroup.TrunkId))
+                                suppliersWithDeletedOutTrunksInTrunkGroup.Add(supplierName);
+
+                            if (trunkTrunkGroup.Backups == null)
+                                continue;
+
+                            foreach (var backup in trunkTrunkGroup.Backups)
+                            {
+                                if (backup.Trunks == null)
+                                    continue;
+
+                                foreach (var supplierTrunkBackup in backup.Trunks)
+                                {
+                                    if (supplierTrunkBackup != null && !allOutTrunks.Contains(supplierTrunkBackup.TrunkId))
+                                        suppliersWithDeletedOutTrunksInBackup.Add(supplierName);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (this.ManualRouteSettings != null)
                 {
                     if (ManualRouteSettings.EricssonManualRoutes != null)
@@ -534,17 +650,28 @@ namespace TOne.WhS.RouteSync.Ericsson
                 }
             }
 
+            List<string> validationMessages = new List<string>();
+
             if (duplicatedBOs.Count > 0)
-                validationMessages.Add(string.Format("Carrier Mapping Duplicated BOs: {0}", string.Join(", ", duplicatedBOs)));
+                validationMessages.Add($"Carrier Mapping Duplicated BOs: {string.Join(", ", duplicatedBOs)}");
 
             if (manualRoutesMissingBOs.Count > 0)
-                validationMessages.Add(string.Format("Following manual routes BOs are not defined in carrier mapping : {0}", string.Join(", ", manualRoutesMissingBOs)));
+                validationMessages.Add($"Following manual routes BOs are not defined in carrier mapping : {string.Join(", ", manualRoutesMissingBOs)}");
 
             if (specialRoutingSourceMissingBOs.Count > 0)
-                validationMessages.Add(string.Format("Following special routes Source BOs are not defined in carrier mapping : {0}", string.Join(", ", specialRoutingSourceMissingBOs)));
+                validationMessages.Add($"Following special routes Source BOs are not defined in carrier mapping : {string.Join(", ", specialRoutingSourceMissingBOs)}");
 
             if (specialRoutingTargetInvalidBOs.Count > 0)
-                validationMessages.Add(string.Format("Following special routes Target BOs already defined in carrier mapping : {0}", string.Join(", ", specialRoutingTargetInvalidBOs)));
+                validationMessages.Add($"Following special routes Target BOs already defined in carrier mapping : {string.Join(", ", specialRoutingTargetInvalidBOs)}");
+
+            if (supplierHavingManySupplierTrunkBackup.Count > 0)
+                validationMessages.Add($"Following suppliers have trunk group backups with more than one trunk : {string.Join(", ", supplierHavingManySupplierTrunkBackup)}");
+
+            if (suppliersWithDeletedOutTrunksInTrunkGroup.Count > 0)
+                validationMessages.Add($"Following suppliers have deleted trunks in their trunk groups : {string.Join(", ", suppliersWithDeletedOutTrunksInTrunkGroup)}");
+
+            if (suppliersWithDeletedOutTrunksInBackup.Count > 0)
+                validationMessages.Add($"Following suppliers have deleted trunks in their trunk group backups : {string.Join(", ", suppliersWithDeletedOutTrunksInBackup)}");
 
             context.ValidationMessages = validationMessages.Count > 0 ? validationMessages : null;
             return validationMessages.Count == 0;
