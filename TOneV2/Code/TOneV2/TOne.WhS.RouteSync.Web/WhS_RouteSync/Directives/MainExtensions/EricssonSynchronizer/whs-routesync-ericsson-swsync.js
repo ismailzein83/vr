@@ -29,6 +29,12 @@
             var carrierAccountMappingGridAPI;
             var carrierAccountMappingGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var numberLengthDirectiveAPI;
+            var numberLengthDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var codeChargeDirectiveAPI;
+            var codeChargeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var branchRouteSettingsAPI;
             var branchRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -58,6 +64,16 @@
                     switchCommunicationReadyPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.onNumberLengthDirectiveReady = function (api) {
+                    numberLengthDirectiveAPI = api;
+                    numberLengthDirectiveReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onCodeChargeDirectiveReady = function (api) {
+                    codeChargeDirectiveAPI = api;
+                    codeChargeDirectiveReadyPromiseDeferred.resolve();
+                };
+
                 $scope.scopeModel.onBranchRouteSettingsReady = function (api) {
                     branchRouteSettingsAPI = api;
                     branchRouteSettingsReadyPromiseDeferred.resolve();
@@ -67,13 +83,6 @@
                     carrierAccountMappingGridAPI = api;
                     carrierAccountMappingGridReadyPromiseDeferred.resolve();
                 };
-
-                $scope.scopeModel.isCodeLengthValid = function () {
-                    if ($scope.scopeModel.minCodeLength != undefined && $scope.scopeModel.maxCodeLength != undefined && parseInt($scope.scopeModel.minCodeLength) > parseInt($scope.scopeModel.maxCodeLength))
-                        return 'Maximum Code Length should be greater than Minimum Code Length.';
-                    return null;
-                };
-
 
                 $scope.scopeModel.addReservedBTable = function () {
                     $scope.scopeModel.reservedBTables.push($scope.scopeModel.reservedBTable);
@@ -118,7 +127,6 @@
                         return false;
                     }
                 };
-
 
                 $scope.scopeModel.addReservedBTableRange = function () {
                     var reservedBTableRange = {
@@ -189,6 +197,7 @@
 
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
@@ -199,21 +208,24 @@
                     var carrierMappings;
                     var sshCommunicationList;
                     var switchLoggerList;
+                    var numberLengthEvaluator;
+                    var codeChargeEvaluator;
                     var branchRouteSettings;
+                    var context;
 
                     if (payload != undefined) {
                         ericssonSWSync = payload.switchSynchronizerSettings;
+                        context = payload.context;
 
                         if (ericssonSWSync != undefined) {
                             $scope.scopeModel.isEditMode = true;
                             $scope.scopeModel.firstRCNumber = ericssonSWSync.FirstRCNumber;
                             $scope.scopeModel.numberOfMappings = ericssonSWSync.NumberOfMappings;
-                            $scope.scopeModel.minCodeLength = ericssonSWSync.MinCodeLength;
-                            $scope.scopeModel.maxCodeLength = ericssonSWSync.MaxCodeLength;
                             $scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
                             $scope.scopeModel.esr = ericssonSWSync.ESR;
-                            $scope.scopeModel.cc = ericssonSWSync.CC;
                             $scope.scopeModel.percentagePrefix = ericssonSWSync.PercentagePrefix;
+                            numberLengthEvaluator = ericssonSWSync.NumberLengthEvaluator;
+                            codeChargeEvaluator = ericssonSWSync.CodeChargeEvaluator;
                             branchRouteSettings = ericssonSWSync.BranchRouteSettings;
                             sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
                             switchLoggerList = ericssonSWSync.SwitchLoggerList;
@@ -231,6 +243,14 @@
                     //Loading CarrierAccountMapping Grid
                     var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise();
                     promises.push(carrierAccountMappingGridLoadPromise);
+
+                    //Loading NumberLengthDirective
+                    var numberLengthDirectiveLoadPromise = getNumberLengthDirectiveLoadPromise();
+                    promises.push(numberLengthDirectiveLoadPromise);
+
+                    //Loading CodeChargeDirective
+                    var codeChargeDirectiveLoadPromise = getCodeChargeDirectiveLoadPromise();
+                    promises.push(codeChargeDirectiveLoadPromise);
 
                     //LoadingBranchRouteSettings
                     var branchRouteSettingsLoadPromise = getBranchRouteSettingsLoadPromise();
@@ -292,11 +312,36 @@
                         var carrierAccountMappingGridLoadDeferred = UtilsService.createPromiseDeferred();
 
                         carrierAccountMappingGridReadyPromiseDeferred.promise.then(function () {
-                            var carrierAccountMappingGridPayload = { carrierMappings: carrierMappings };
+                            var carrierAccountMappingGridPayload = {
+                                carrierMappings: carrierMappings,
+                                context: context
+                            };
                             VRUIUtilsService.callDirectiveLoad(carrierAccountMappingGridAPI, carrierAccountMappingGridPayload, carrierAccountMappingGridLoadDeferred);
                         });
 
                         return carrierAccountMappingGridLoadDeferred.promise;
+                    }
+
+                    function getNumberLengthDirectiveLoadPromise() {
+                        var numberLengthDirectiveLoadPromise = UtilsService.createPromiseDeferred();
+
+                        numberLengthDirectiveReadyPromiseDeferred.promise.then(function () {
+                            var numberLengthDirectivePayload = { numberLengthEvaluator: numberLengthEvaluator };
+                            VRUIUtilsService.callDirectiveLoad(numberLengthDirectiveAPI, numberLengthDirectivePayload, numberLengthDirectiveLoadPromise);
+                        });
+
+                        return numberLengthDirectiveLoadPromise.promise;
+                    }
+
+                    function getCodeChargeDirectiveLoadPromise() {
+                        var codeChargeDirectiveLoadPromise = UtilsService.createPromiseDeferred();
+
+                        codeChargeDirectiveReadyPromiseDeferred.promise.then(function () {
+                            var codeChargeDirectivePayload = { codeChargeEvaluator: codeChargeEvaluator };
+                            VRUIUtilsService.callDirectiveLoad(codeChargeDirectiveAPI, codeChargeDirectivePayload, codeChargeDirectiveLoadPromise);
+                        });
+
+                        return codeChargeDirectiveLoadPromise.promise;
                     }
 
                     function getBranchRouteSettingsLoadPromise() {
@@ -326,19 +371,18 @@
                     var data = {
                         $type: "TOne.WhS.RouteSync.Ericsson.EricssonSWSync, TOne.WhS.RouteSync.Ericsson",
                         NumberOfMappings: $scope.scopeModel.numberOfMappings,
-                        MinCodeLength: $scope.scopeModel.minCodeLength,
-                        MaxCodeLength: $scope.scopeModel.maxCodeLength,
                         InterconnectGeneralPrefix: $scope.scopeModel.interconnectGeneralPrefix,
                         CarrierMappings: carrierAccountMappingGridAPI.getData(),
                         SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
                         SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
                         FirstRCNumber: $scope.scopeModel.firstRCNumber,
+                        NumberLengthEvaluator: numberLengthDirectiveAPI != undefined ? numberLengthDirectiveAPI.getData() : undefined,
+                        CodeChargeEvaluator: codeChargeDirectiveAPI != undefined ? codeChargeDirectiveAPI.getData() : undefined,
                         BranchRouteSettings: (branchRouteSettingsAPI != undefined) ? branchRouteSettingsAPI.getData() : null,
                         ManualRouteSettings: getManualRoutesSettings(),
                         ReservedBTables: $scope.scopeModel.reservedBTables,
                         ReservedBTableRanges: $scope.scopeModel.reservedBTableRanges,
                         ESR: $scope.scopeModel.esr,
-                        CC: $scope.scopeModel.cc,
                         PercentagePrefix: $scope.scopeModel.percentagePrefix
                     };
                     return data;

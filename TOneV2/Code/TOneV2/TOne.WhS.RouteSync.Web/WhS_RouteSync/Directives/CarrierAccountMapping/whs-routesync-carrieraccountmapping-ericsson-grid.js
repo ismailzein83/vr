@@ -1,120 +1,85 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncCarrieraccountmappingEricssonGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum', 'WhS_BE_CarrierAccountActivationStatusEnum',
-    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CarrierAccountActivationStatusEnum) {
-		return {
-			restrict: 'E',
-			scope: {
-				onReady: '='
-			},
-			controller: function ($scope, $element, $attrs) {
-				var ctrl = this;
-				var ctor = new EricssonCarrierAccountMappingGridCtor($scope, ctrl, $attrs);
-				ctor.initializeController();
-			},
-			controllerAs: 'ctrl',
-			bindToController: true,
-			templateUrl: '/Client/Modules/WhS_RouteSync/Directives/CarrierAccountMapping/Templates/CarrierAccountMappingEricssonGridTemplate.html'
-		};
+app.directive('whsRoutesyncCarrieraccountmappingEricssonGrid', ['VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum', 'WhS_BE_CarrierAccountActivationStatusEnum',
+    function (VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CarrierAccountActivationStatusEnum) {
 
-		function EricssonCarrierAccountMappingGridCtor($scope, ctrl, $attrs) {
-			this.initializeController = initializeController;
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new EricssonCarrierAccountMappingGridCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/CarrierAccountMapping/Templates/CarrierAccountMappingEricssonGridTemplate.html'
+        };
 
-			var carrierMappings;
-			var context;
+        function EricssonCarrierAccountMappingGridCtor($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-			var gridAPI;
+            var carrierMappings;
+            var context;
+            var supplierOutTrunksMappings = {};
 
-			function initializeController() {
-				$scope.scopeModel = {};
-				$scope.scopeModel.carrierAccountMappings = [];
-				$scope.scopeModel.carrierAccountMappingsGridDS = [];
+            var gridAPI;
 
-				$scope.scopeModel.onGridReady = function (api) {
-					gridAPI = api;
-					defineAPI();
-				};
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.carrierAccountMappings = [];
+                $scope.scopeModel.carrierAccountMappingsGridDS = [];
 
-				$scope.scopeModel.loadMoreData = function () {
-					return loadMoreCarrierMappings();
-				};
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+                };
 
-				$scope.scopeModel.showExpandIcon = function (dataItem) {
-					if (showCustomerMapping(dataItem))
-						return true;
+                $scope.scopeModel.loadMoreData = function () {
+                    return loadMoreCarrierMappings();
+                };
 
-					if (showSupplierMapping(dataItem))
-						return true;
+                $scope.scopeModel.showExpandIcon = function (dataItem) {
+                    if (showCustomerMapping(dataItem))
+                        return true;
 
-					return false;
-				};
-			}
-			function defineAPI() {
-				var api = {};
+                    if (showSupplierMapping(dataItem))
+                        return true;
 
-				api.load = function (payload) {
+                    return false;
+                };
+            }
+            function defineAPI() {
+                var api = {};
 
-					if (payload != undefined) {
-						carrierMappings = payload.carrierMappings;
-						context = payload.context;
-					}
+                api.load = function (payload) {
 
-					var promises = [];
+                    if (payload != undefined) {
+                        carrierMappings = payload.carrierMappings;
+                        context = payload.context;
+                    }
 
-					var ericssonCarrierAccountMappingsGridLoadPromise = getEricssonCarrierAccountMappingsGridLoadPromise();
-					promises.push(ericssonCarrierAccountMappingsGridLoadPromise);
+                    var promises = [];
 
-					return UtilsService.waitMultiplePromises(promises);
-				};
+                    var ericssonCarrierAccountMappingsGridLoadPromise = getEricssonCarrierAccountMappingsGridLoadPromise();
+                    promises.push(ericssonCarrierAccountMappingsGridLoadPromise);
 
-				api.getData = function () {
+                    return UtilsService.waitMultiplePromises(promises);
+                };
 
-					var results = {};
-					for (var i = 0; i < $scope.scopeModel.carrierAccountMappings.length; i++) {
-						var carrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
-						if (carrierAccountMapping == undefined)
-							continue;
+                api.getData = function () {
+                    return buildCarrierMappingEntity();
+                };
 
-						if (carrierAccountMapping.customerMappingGridAPI != undefined || carrierAccountMapping.supplierMappingGridAPI != undefined) {
-							results[carrierAccountMapping.CarrierAccountId] = {
-								CarrierId: carrierAccountMapping.CarrierAccountId,
-								CustomerMapping: getCustomerMapping(carrierAccountMapping.customerMappingGridAPI, carrierAccountMapping.CarrierAccountId),
-								SupplierMapping: getSupplierMapping(carrierAccountMapping.supplierMappingGridAPI, carrierAccountMapping.CarrierAccountId)
-							};
-						} else {
-							results[carrierAccountMapping.CarrierAccountId] = carrierMappings != undefined ? carrierMappings[carrierAccountMapping.CarrierAccountId] : undefined;
-						}
-					}
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
 
-					function getCustomerMapping(customerMappingGridAPI, carrierAccountId) {
-						if (customerMappingGridAPI != undefined)
-							return customerMappingGridAPI.getData();
+            function getEricssonCarrierAccountMappingsGridLoadPromise() {
 
-						if (carrierMappings != undefined && carrierMappings[carrierAccountId] != undefined)
-							return carrierMappings[carrierAccountId].CustomerMapping;
-
-						return null;
-					}
-					function getSupplierMapping(supplierMappingGridAPI, carrierAccountId) {
-						if (supplierMappingGridAPI != undefined)
-							return supplierMappingGridAPI.getData();
-
-						if (carrierMappings != undefined && carrierMappings[carrierAccountId] != undefined)
-							return carrierMappings[carrierAccountId].SupplierMapping;
-
-						return null;
-					}
-
-					return results;
-				};
-
-				if (ctrl.onReady != null)
-					ctrl.onReady(api);
-			}
-
-			function getEricssonCarrierAccountMappingsGridLoadPromise() {
-
-				var loadEricssonCarrierAccountMappingsGridPromiseDeferred = UtilsService.createPromiseDeferred();
+                var loadEricssonCarrierAccountMappingsGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 var carrierAccountfilter = {
                     ActivationStatuses: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value, WhS_BE_CarrierAccountActivationStatusEnum.Testing.value]
@@ -124,200 +89,250 @@ app.directive('whsRoutesyncCarrieraccountmappingEricssonGrid', ['VRNotificationS
 
                 WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serilizedCarrierAccountFilter).then(function (response) {
 
-					if (response != undefined) {
-						var mappingSeparator = context != undefined ? context.getMappingSeparator() : undefined;
+                    if (response != undefined) {
 
-						for (var i = 0; i < response.length; i++) {
-							var currentCarrierAccountInfo = response[i];
+                        for (var i = 0; i < response.length; i++) {
+                            var currentCarrierAccountInfo = response[i];
 
-							var carrierMapping = carrierMappings != undefined ? carrierMappings[response[i].CarrierAccountId] : undefined;
-							var carrierAccountMapping = {
-								CarrierAccountId: currentCarrierAccountInfo.CarrierAccountId,
-								CarrierAccountType: currentCarrierAccountInfo.AccountType,
-								CarrierAccountName: currentCarrierAccountInfo.Name,
-								CustomerMapping: (carrierMapping && carrierMapping.CustomerMapping) ? carrierMapping.CustomerMapping : undefined,
-								SupplierMapping: (carrierMapping && carrierMapping.SupplierMapping) ? carrierMapping.SupplierMapping : undefined
-							};
-							extendCarrierAccountMapping(carrierAccountMapping);
-							$scope.scopeModel.carrierAccountMappings.push(carrierAccountMapping);
-						}
-					}
+                            var carrierMapping = carrierMappings != undefined ? carrierMappings[response[i].CarrierAccountId] : undefined;
+                            var carrierAccountMapping = {
+                                CarrierAccountId: currentCarrierAccountInfo.CarrierAccountId,
+                                CarrierAccountType: currentCarrierAccountInfo.AccountType,
+                                CarrierAccountName: currentCarrierAccountInfo.Name,
+                                CustomerMapping: (carrierMapping && carrierMapping.CustomerMapping) ? carrierMapping.CustomerMapping : undefined,
+                                SupplierMapping: (carrierMapping && carrierMapping.SupplierMapping) ? carrierMapping.SupplierMapping : undefined
+                            };
+                            extendCarrierAccountMapping(carrierAccountMapping);
+                            $scope.scopeModel.carrierAccountMappings.push(carrierAccountMapping);
 
-					loadMoreCarrierMappings();
-					loadEricssonCarrierAccountMappingsGridPromiseDeferred.resolve();
-				}).catch(function (error) {
-					loadEricssonCarrierAccountMappingsGridPromiseDeferred.reject(error);
-				});
+                            var supplierId = carrierAccountMapping.CarrierAccountId;
+                            if (carrierAccountMapping.SupplierMapping != undefined && carrierAccountMapping.SupplierMapping.OutTrunks != undefined) {
+                                supplierOutTrunksMappings[supplierId] = carrierAccountMapping.SupplierMapping.OutTrunks;
+                            } else {
+                                supplierOutTrunksMappings[supplierId] = [];
+                            }
+                        }
+                    }
 
-				return loadEricssonCarrierAccountMappingsGridPromiseDeferred.promise;
-			}
-			function loadMoreCarrierMappings() {
+                    loadMoreCarrierMappings();
+                    loadEricssonCarrierAccountMappingsGridPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadEricssonCarrierAccountMappingsGridPromiseDeferred.reject(error);
+                });
 
-				var pageInfo = gridAPI.getPageInfo();
-				var itemsLength = pageInfo.toRow;
+                return loadEricssonCarrierAccountMappingsGridPromiseDeferred.promise;
+            }
+            function loadMoreCarrierMappings() {
 
-				if (pageInfo.toRow > $scope.scopeModel.carrierAccountMappings.length) {
-					if (pageInfo.fromRow < $scope.scopeModel.carrierAccountMappings.length)
-						itemsLength = $scope.scopeModel.carrierAccountMappings.length;
-					else
-						return;
-				}
+                var pageInfo = gridAPI.getPageInfo();
+                var itemsLength = pageInfo.toRow;
 
-				var items = [];
+                if (pageInfo.toRow > $scope.scopeModel.carrierAccountMappings.length) {
+                    if (pageInfo.fromRow < $scope.scopeModel.carrierAccountMappings.length)
+                        itemsLength = $scope.scopeModel.carrierAccountMappings.length;
+                    else
+                        return;
+                }
 
-				for (var i = pageInfo.fromRow - 1; i < itemsLength; i++) {
-					var currentCarrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
-					defineCarrierAccountMappingTabs(currentCarrierAccountMapping);
-					items.push(currentCarrierAccountMapping);
-				}
-				gridAPI.addItemsToSource(items);
-			}
-			function defineCarrierAccountMappingTabs(carrierAccountMapping) {
+                var items = [];
 
-				var drillDownTabs = [];
+                for (var i = pageInfo.fromRow - 1; i < itemsLength; i++) {
+                    var currentCarrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
+                    defineCarrierAccountMappingTabs(currentCarrierAccountMapping);
+                    items.push(currentCarrierAccountMapping);
+                }
+                gridAPI.addItemsToSource(items);
+            }
+            function defineCarrierAccountMappingTabs(carrierAccountMapping) {
 
-				if (showCustomerMapping(carrierAccountMapping)) {
-					drillDownTabs.push(buildCustomerMappingDrillDownTab());
-				}
+                var drillDownTabs = [];
 
-				if (showSupplierMapping(carrierAccountMapping)) {
-					drillDownTabs.push(buildSupplierMappingDrillDownTab());
-				}
+                if (showCustomerMapping(carrierAccountMapping)) {
+                    drillDownTabs.push(buildCustomerMappingDrillDownTab());
+                }
 
-				setDrillDownTabs();
+                if (showSupplierMapping(carrierAccountMapping)) {
+                    drillDownTabs.push(buildSupplierMappingDrillDownTab());
+                }
 
-				function buildCustomerMappingDrillDownTab() {
-					var drillDownTab = {};
-					drillDownTab.title = "In";
-					drillDownTab.directive = "whs-routesync-ericsson-customermapping";
+                setDrillDownTabs();
 
-					drillDownTab.loadDirective = function (customerMappingGridAPI, carrierAccountMapping) {
-						carrierAccountMapping.customerMappingGridAPI = customerMappingGridAPI;
-						return carrierAccountMapping.customerMappingGridAPI.load(buildCustomerMappingPayload(carrierAccountMapping));
-					};
+                function buildCustomerMappingDrillDownTab() {
+                    var drillDownTab = {};
+                    drillDownTab.title = "In";
+                    drillDownTab.directive = "whs-routesync-ericsson-customermapping";
 
-					function buildCustomerMappingPayload(carrierAccountMapping) {
-						var customerMappingPayload = {};
-						//customerMappingPayload.carrierAccountId = carrierAccountMapping.CarrierAccountId;
-						customerMappingPayload.customerMapping = carrierAccountMapping.CustomerMapping;
-						customerMappingPayload.context = buildCustomerMappingDirectiveContext(carrierAccountMapping);
-						return customerMappingPayload;
-					}
+                    drillDownTab.loadDirective = function (customerMappingGridAPI, carrierAccountMapping) {
+                        carrierAccountMapping.customerMappingGridAPI = customerMappingGridAPI;
+                        return carrierAccountMapping.customerMappingGridAPI.load(buildCustomerMappingPayload(carrierAccountMapping));
+                    };
 
-					return drillDownTab;
-				}
-				function buildSupplierMappingDrillDownTab() {
-					var drillDownTab = {};
-					drillDownTab.title = "Out";
-					drillDownTab.directive = "whs-routesync-ericsson-suppliermapping";
+                    function buildCustomerMappingPayload(carrierAccountMapping) {
+                        var customerMappingPayload = {};
+                        //customerMappingPayload.carrierAccountId = carrierAccountMapping.CarrierAccountId;
+                        customerMappingPayload.customerMapping = carrierAccountMapping.CustomerMapping;
+                        customerMappingPayload.context = buildCustomerMappingDirectiveContext(carrierAccountMapping);
+                        return customerMappingPayload;
+                    }
 
-					drillDownTab.loadDirective = function (supplierMappingGridAPI, carrierAccountMapping) {
-						carrierAccountMapping.supplierMappingGridAPI = supplierMappingGridAPI;
-						return carrierAccountMapping.supplierMappingGridAPI.load(buildSupplierMappingQuery(carrierAccountMapping));
-					};
+                    return drillDownTab;
+                }
+                function buildSupplierMappingDrillDownTab() {
+                    var drillDownTab = {};
+                    drillDownTab.title = "Out";
+                    drillDownTab.directive = "whs-routesync-ericsson-suppliermapping";
 
-					function buildSupplierMappingQuery(carrierAccountMapping) {
-						var supplierMappingQuery = {};
-						//supplierMappingQuery.carrierAccountId = carrierAccountMapping.CarrierAccountId;
-						supplierMappingQuery.supplierMapping = carrierAccountMapping.SupplierMapping;
-						supplierMappingQuery.context = buildSupplierMappingDirectiveContext(carrierAccountMapping);
-						return supplierMappingQuery;
-					}
+                    drillDownTab.loadDirective = function (supplierMappingGridAPI, carrierAccountMapping) {
+                        carrierAccountMapping.supplierMappingGridAPI = supplierMappingGridAPI;
+                        return carrierAccountMapping.supplierMappingGridAPI.load(buildSupplierMappingQuery(carrierAccountMapping));
+                    };
 
-					return drillDownTab;
-				}
-				function setDrillDownTabs() {
-					var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
-					drillDownManager.setDrillDownExtensionObject(carrierAccountMapping);
-				}
-			}
-			function showCustomerMapping(carrierMappingItem) {
-				if (WhS_BE_CarrierAccountTypeEnum.Exchange.value == carrierMappingItem.CarrierAccountType || WhS_BE_CarrierAccountTypeEnum.Customer.value == carrierMappingItem.CarrierAccountType)
-					return true;
-				return false;
-			}
-			function showSupplierMapping(carrierMappingItem) {
-				if (WhS_BE_CarrierAccountTypeEnum.Exchange.value == carrierMappingItem.CarrierAccountType || WhS_BE_CarrierAccountTypeEnum.Supplier.value == carrierMappingItem.CarrierAccountType)
-					return true;
-				return false;
-			}
+                    function buildSupplierMappingQuery(carrierAccountMapping) {
+                        var supplierMappingQuery = {};
+                        supplierMappingQuery.supplierMapping = carrierAccountMapping.SupplierMapping;
+                        supplierMappingQuery.supplierId = carrierAccountMapping.CarrierAccountId;
+                        supplierMappingQuery.supplierOutTrunksMappings = supplierOutTrunksMappings;
+                        supplierMappingQuery.context = buildSupplierMappingDirectiveContext(carrierAccountMapping, context);
+                        return supplierMappingQuery;
+                    }
 
-			function extendCarrierAccountMapping(carrierAccountMapping) {
-				if (carrierAccountMapping == undefined)
-					return;
+                    return drillDownTab;
+                }
+                function setDrillDownTabs() {
+                    var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
+                    drillDownManager.setDrillDownExtensionObject(carrierAccountMapping);
+                }
+            }
+            function showCustomerMapping(carrierMappingItem) {
+                if (WhS_BE_CarrierAccountTypeEnum.Exchange.value == carrierMappingItem.CarrierAccountType || WhS_BE_CarrierAccountTypeEnum.Customer.value == carrierMappingItem.CarrierAccountType)
+                    return true;
+                return false;
+            }
+            function showSupplierMapping(carrierMappingItem) {
+                if (WhS_BE_CarrierAccountTypeEnum.Exchange.value == carrierMappingItem.CarrierAccountType || WhS_BE_CarrierAccountTypeEnum.Supplier.value == carrierMappingItem.CarrierAccountType)
+                    return true;
+                return false;
+            }
 
-				if (carrierAccountMapping.CustomerMapping != undefined) {
-					var customerMapping = carrierAccountMapping.CustomerMapping;
+            function extendCarrierAccountMapping(carrierAccountMapping) {
+                if (carrierAccountMapping == undefined)
+                    return;
 
-					var isCustomerMappingExists = customerMapping != undefined && customerMapping.BO != undefined && customerMapping.BO != "";
-					if (isCustomerMappingExists) {
-						carrierAccountMapping.CustomerMappingDescription = buildCustomerMappingDescription(customerMapping);
-					} else {
-						carrierAccountMapping.CustomerMappingDescription = "";
-					}
-				}
+                if (carrierAccountMapping.CustomerMapping != undefined) {
+                    var customerMapping = carrierAccountMapping.CustomerMapping;
 
-				if (carrierAccountMapping.SupplierMapping != undefined) {
-					var supplierMapping = carrierAccountMapping.SupplierMapping;
+                    var isCustomerMappingExists = customerMapping != undefined && customerMapping.BO != undefined && customerMapping.BO != "";
+                    if (isCustomerMappingExists) {
+                        carrierAccountMapping.CustomerMappingDescription = buildCustomerMappingDescription(customerMapping);
+                    } else {
+                        carrierAccountMapping.CustomerMappingDescription = "";
+                    }
+                }
 
-					var isSupplierMappingExists = supplierMapping != undefined;
-					if (isSupplierMappingExists) {
-						carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMapping);
-					} else {
-						carrierAccountMapping.SupplierMappingDescription = "";
-					}
-				}
-			}
-			function buildCustomerMappingDescription(customerMapping) {
-				if (customerMapping == undefined)
-					return "";
+                if (carrierAccountMapping.SupplierMapping != undefined) {
+                    var supplierMapping = carrierAccountMapping.SupplierMapping;
 
-				var boDesciption = customerMapping.BO != undefined ? customerMapping.BO : "";
-				var nationalOBA = customerMapping.NationalOBA != undefined ? customerMapping.NationalOBA : "";
-				var internationalOBA = customerMapping.InternationalOBA != undefined ? customerMapping.InternationalOBA : "";
-				//var numberOfInTrunks = customerMapping.InTrunks != undefined && customerMapping.InTrunks.length > 0 ? customerMapping.InTrunks.length : 0;
-				//return "BO: '" + boDesciption + "'; National OBA: '" + nationalOBA + "'; International OBA: '" + internationalOBA + "'; # of InTrunks: " + numberOfInTrunks;
+                    var isSupplierMappingExists = supplierMapping != undefined;
+                    if (isSupplierMappingExists) {
+                        carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMapping);
+                    } else {
+                        carrierAccountMapping.SupplierMappingDescription = "";
+                    }
+                }
+            }
+            function buildCustomerMappingDescription(customerMapping) {
+                if (customerMapping == undefined)
+                    return "";
 
-				return "BO: '" + boDesciption + "'; National OBA: '" + nationalOBA + "'; International OBA: '" + internationalOBA;
-			}
-			function buildCustomerMappingDirectiveContext(carrierAccountMapping) {
-				var context = {
-					updateErrorDescription: function (isValid, fromCustomerMapping) {
-						updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping);
-					},
-					updateCustomerMappingDescription: function (customerMapping) {
-						carrierAccountMapping.CustomerMappingDescription = buildCustomerMappingDescription(customerMapping);
-					}
-				};
-				return context;
-			}
-			function buildSupplierMappingDescription(supplierMapping) {
-				if (supplierMapping == undefined || supplierMapping.OutTrunks == undefined)
-					return "";
+                var boDesciption = customerMapping.BO != undefined ? customerMapping.BO : "";
+                var nationalOBA = customerMapping.NationalOBA != undefined ? customerMapping.NationalOBA : "";
+                var internationalOBA = customerMapping.InternationalOBA != undefined ? customerMapping.InternationalOBA : "";
+                //var numberOfInTrunks = customerMapping.InTrunks != undefined && customerMapping.InTrunks.length > 0 ? customerMapping.InTrunks.length : 0;
+                //return "BO: '" + boDesciption + "'; National OBA: '" + nationalOBA + "'; International OBA: '" + internationalOBA + "'; # of InTrunks: " + numberOfInTrunks;
 
-				var numberOfOutTrunks = supplierMapping.OutTrunks != undefined && supplierMapping.OutTrunks.length > 0 ? supplierMapping.OutTrunks.length : 0;
-				var numberOfTrunkGroups = supplierMapping.TrunkGroups != undefined && supplierMapping.TrunkGroups.length > 0 ? supplierMapping.TrunkGroups.length : 0;
+                return "BO: '" + boDesciption + "'; National OBA: '" + nationalOBA + "'; International OBA: '" + internationalOBA;
+            }
+            function buildCustomerMappingDirectiveContext(carrierAccountMapping) {
+                var context = {
+                    updateErrorDescription: function (isValid, fromCustomerMapping) {
+                        updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping);
+                    },
+                    updateCustomerMappingDescription: function (customerMapping) {
+                        carrierAccountMapping.CustomerMappingDescription = buildCustomerMappingDescription(customerMapping);
+                    }
+                };
+                return context;
+            }
+            function buildSupplierMappingDescription(supplierMapping) {
+                if (supplierMapping == undefined || supplierMapping.OutTrunks == undefined)
+                    return "";
 
-				return "# of OutTrunks: " + numberOfOutTrunks + "; # of TrunkGroups: " + numberOfTrunkGroups;
-			}
-			function buildSupplierMappingDirectiveContext(carrierAccountMapping) {
-				var context = {
-					updateErrorDescription: function (isValid, fromCustomerMapping) {
-						updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping);
-					},
-					updateSupplierMappingDescription: function (supplierMapping) {
-						carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMapping);
-					}
-				};
-				return context;
-			}
-			function updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping) {
+                var numberOfOutTrunks = supplierMapping.OutTrunks != undefined && supplierMapping.OutTrunks.length > 0 ? supplierMapping.OutTrunks.length : 0;
+                var numberOfTrunkGroups = supplierMapping.TrunkGroups != undefined && supplierMapping.TrunkGroups.length > 0 ? supplierMapping.TrunkGroups.length : 0;
 
-				if (fromCustomerMapping) {
-					carrierAccountMapping.isCustomerMappingInvalid = !isValid;
-				} else {
-					carrierAccountMapping.isSupplierMappingInvalid = !isValid;
-				}
-			}
-		}
-	}]);
+                return "# of OutTrunks: " + numberOfOutTrunks + "; # of TrunkGroups: " + numberOfTrunkGroups;
+            }
+            function buildSupplierMappingDirectiveContext(carrierAccountMapping, context) {
+
+                return {
+                    displayError: context.displayError,
+                    clearError: context.clearError,
+                    getCarrierMappings: buildCarrierMappingEntity,
+                    updateErrorDescription: function (isValid, fromCustomerMapping) {
+                        updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping);
+                    },
+                    updateSupplierMappingDescription: function (supplierMapping) {
+                        carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMapping);
+                    }
+                };
+            }
+            function updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping) {
+
+                if (fromCustomerMapping) {
+                    carrierAccountMapping.isCustomerMappingInvalid = !isValid;
+                } else {
+                    carrierAccountMapping.isSupplierMappingInvalid = !isValid;
+                }
+            }
+
+            function buildCarrierMappingEntity() {
+                var results = {};
+                for (var i = 0; i < $scope.scopeModel.carrierAccountMappings.length; i++) {
+                    var carrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
+                    if (carrierAccountMapping == undefined)
+                        continue;
+
+                    if (carrierAccountMapping.customerMappingGridAPI != undefined || carrierAccountMapping.supplierMappingGridAPI != undefined) {
+                        results[carrierAccountMapping.CarrierAccountId] = {
+                            CarrierId: carrierAccountMapping.CarrierAccountId,
+                            CustomerMapping: getCustomerMapping(carrierAccountMapping.customerMappingGridAPI, carrierAccountMapping.CarrierAccountId),
+                            SupplierMapping: getSupplierMapping(carrierAccountMapping.supplierMappingGridAPI, carrierAccountMapping.CarrierAccountId)
+                        };
+                    } else {
+                        results[carrierAccountMapping.CarrierAccountId] = carrierMappings != undefined ? carrierMappings[carrierAccountMapping.CarrierAccountId] : undefined;
+                    }
+                }
+
+                function getCustomerMapping(customerMappingGridAPI, carrierAccountId) {
+                    if (customerMappingGridAPI != undefined)
+                        return customerMappingGridAPI.getData();
+
+                    if (carrierMappings != undefined && carrierMappings[carrierAccountId] != undefined)
+                        return carrierMappings[carrierAccountId].CustomerMapping;
+
+                    return null;
+                }
+                function getSupplierMapping(supplierMappingGridAPI, carrierAccountId) {
+                    if (supplierMappingGridAPI != undefined)
+                        return supplierMappingGridAPI.getData();
+
+                    if (carrierMappings != undefined && carrierMappings[carrierAccountId] != undefined)
+                        return carrierMappings[carrierAccountId].SupplierMapping;
+
+                    return null;
+                }
+
+                return results;
+            }
+        }
+    }]);

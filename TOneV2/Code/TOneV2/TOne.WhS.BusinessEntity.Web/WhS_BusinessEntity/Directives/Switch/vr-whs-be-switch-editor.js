@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_SwitchAPIService", "WhS_BE_SwitchService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SwitchAPIService, WhS_BE_SwitchService) {
+app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_SwitchAPIService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SwitchAPIService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -9,7 +9,6 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
                 onReady: "=",
                 onswitchadded: "=",
                 onswitchupdated: "="
-                //= (means function), @ (means attribute)
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -18,9 +17,6 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Switch/Templates/SwitchFormEditor.html"
         };
 
@@ -61,7 +57,7 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
                 };
 
                 defineAPI();
-            };
+            }
 
             function defineAPI() {
                 var directiveAPI = {};
@@ -131,10 +127,14 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
             function loadSwitchSyncSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                switchSyncSettingsDirectiveReadyDeferred.promise.then(function () {
+                UtilsService.waitMultiplePromises([switchSyncSettingsDirectiveReadyDeferred.promise, additionalErrorsReadyDeferred.promise]).then(function () {
+
                     var settingsDirectivePayload;
                     if (switchEntity != undefined && switchEntity.Settings != undefined) {
-                        settingsDirectivePayload = { switchSynchronizerSettings: switchEntity.Settings.RouteSynchronizer };
+                        settingsDirectivePayload = {
+                            switchSynchronizerSettings: switchEntity.Settings.RouteSynchronizer,
+                            context: buildContext()
+                        };
                     }
                     VRUIUtilsService.callDirectiveLoad(switchSyncSettingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
                 });
@@ -145,6 +145,7 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
                 var switchCDRMappingConfigurationDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 switchCDRMappingConfigurationDirectiveReadyDeferred.promise.then(function () {
+
                     var switchCDRMappingConfigurationDirectivePayload;
                     if (switchEntity != undefined && switchEntity.Settings != undefined) {
                         switchCDRMappingConfigurationDirectivePayload = {
@@ -209,6 +210,29 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
                     }
                 };
                 return obj;
+            }
+            function buildContext() {
+
+                var context = {
+                    displayError: function (errorMessages, showErrorMessage) {
+                        VRNotificationService.showError(showErrorMessage);
+
+                        var additionalErrorsDirectivePayload = {
+                            className: 'alert alert-danger',
+                            errorMessages: errorMessages
+                        };
+                        additionalErrorsDirectiveAPI.load(additionalErrorsDirectivePayload);
+                    },
+                    clearError: function () {
+                        var additionalErrorsDirectivePayload = {
+                            className: '',
+                            errorMessages: []
+                        };
+                        additionalErrorsDirectiveAPI.load(additionalErrorsDirectivePayload);
+                    }
+                };
+
+                return context;
             }
         }
 

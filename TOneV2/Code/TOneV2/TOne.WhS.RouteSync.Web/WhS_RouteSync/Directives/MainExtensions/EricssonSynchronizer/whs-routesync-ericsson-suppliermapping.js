@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_RouteSync_TrunkTypeEnum', 'WhS_RouteSync_RouteSyncDefinitionService',
-    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_RouteSync_TrunkTypeEnum, WhS_RouteSync_RouteSyncDefinitionService) {
+app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'UtilsService', 'WhS_RouteSync_TrunkTypeEnum', 'WhS_RouteSync_RouteSyncDefinitionService', 'WhS_RouteSync_EricssonAPIService',
+    function (VRUIUtilsService, UtilsService, WhS_RouteSync_TrunkTypeEnum, WhS_RouteSync_RouteSyncDefinitionService, WhS_RouteSync_EricssonAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -22,6 +22,9 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
 
             var isFirstLoad = true;
             var context;
+            var supplierOutTrunksMappings;
+            var supplierId;
+            var drillDownManager;
 
             var trunkGridAPI;
             var trunkGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -59,17 +62,29 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                         return "Trunk name can not include '~'.";
                 };
 
-                $scope.scopeModel.onBeforeTrunkDeleted = function (deletedItem) {
-                    return VRNotificationService.showConfirmation("Are you sure you want to delete this trunk; this trunk will be removed from all trunk groups").then(function (result) {
-                        return result;
-                    });
+                $scope.scopeModel.onBeforeDeleteTrunk = function (deletedItem) {
+                    if (context != undefined && context.getCarrierMappings != undefined && typeof (context.getCarrierMappings) == 'function') {
+                        return WhS_RouteSync_EricssonAPIService.IsSupplierTrunkUsed(supplierId, deletedItem.TrunkId, deletedItem.TrunkName, context.getCarrierMappings()).then(function (response) {
+
+                            if (response.Result) {
+                                context.clearError();
+                            } else {
+                                context.displayError(response.ErrorMessages, 'Failed to delete Trunk');
+                            }
+                            return response.Result;
+                        });
+                    }
                 };
 
                 $scope.scopeModel.onTrunkDeleted = function (deletedItem) {
                     var trunkIndex = UtilsService.getItemIndexByVal($scope.scopeModel.trunks, deletedItem.TrunkId, "TrunkId");
                     $scope.scopeModel.trunks.splice(trunkIndex, 1);
 
-                    deleteTrunkFromTrunkGroups(deletedItem);
+                    var index = UtilsService.getItemIndexByVal(supplierOutTrunksMappings[supplierId], deletedItem.TrunkId, "TrunkId");
+                    if (index > -1) {
+                        supplierOutTrunksMappings[supplierId].splice(index, 1);
+                    }
+
                     $scope.scopeModel.updateSupplierDescriptions();
                 };
 
@@ -87,10 +102,10 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
 
                         for (var j = 0; j < $scope.scopeModel.trunkGroups.length; j++) {
                             var currentTrunkGroup = $scope.scopeModel.trunkGroups[j];
-                            if (currentTrunkGroup.trunkTrunkGroupGridAPI == undefined)
+                            if (currentTrunkGroup.trunkTrunkGroupDirectiveAPI == undefined)
                                 continue;
 
-                            var trunksInfo = currentTrunkGroup.trunkTrunkGroupGridAPI.getTrunksInfo();
+                            var trunksInfo = currentTrunkGroup.trunkTrunkGroupDirectiveAPI.getTrunksInfo();
                             if (trunksInfo == undefined)
                                 continue;
 
@@ -104,6 +119,11 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                                     description: currentTrunk.TrunkName
                                 });
                             }
+                        }
+
+                        var index = UtilsService.getItemIndexByVal(supplierOutTrunksMappings[supplierId], currentTrunk.TrunkId, "TrunkId");
+                        if (index == -1) {
+                            supplierOutTrunksMappings[supplierId].push(currentTrunk);
                         }
                     }
                 };
@@ -132,6 +152,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
 
                 $scope.scopeModel.onTrunkGroupGridReady = function (api) {
                     trunkGroupGridAPI = api;
+                    drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildTrunkTrunkGroupDrillDownTabs(), trunkGroupGridAPI);
                     trunkGroupGridReadyDeferred.resolve();
                 };
 
@@ -146,14 +167,13 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
 
                     var trunkGroupLoadDirectivesDeferred = UtilsService.createPromiseDeferred();
                     extendTrunkGroupEntity(addedTrunkGroup, trunkGroupLoadDirectivesDeferred);
-                    defineTrunkTrunkGroupTabs(addedTrunkGroup, $scope.scopeModel.trunks);
+
+                    drillDownManager.setDrillDownExtensionObject(addedTrunkGroup);
 
                     trunkGroupGridAPI.expandRow(addedTrunkGroup);
-                    //$scope.scopeModel.updateSupplierDescriptions();
                     $scope.scopeModel.trunkGroups.push(addedTrunkGroup);
 
                     UtilsService.waitMultiplePromises([trunkGroupLoadDirectivesDeferred.promise]).then(function () {
-
                         $scope.scopeModel.isTrunkGroupGridLoading = false;
                     });
                 };
@@ -258,6 +278,8 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                     if (payload != undefined) {
                         context = payload.context;
                         supplierMapping = payload.supplierMapping;
+                        supplierOutTrunksMappings = payload.supplierOutTrunksMappings;
+                        supplierId = payload.supplierId;
                     }
 
                     if (supplierMapping != undefined && supplierMapping.OutTrunks != undefined) {
@@ -304,8 +326,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                                     var trunkGroupLoadDirectivesDeferred = UtilsService.createPromiseDeferred();
                                     _promises.push(trunkGroupLoadDirectivesDeferred.promise);
                                     extendTrunkGroupEntity(currentTrunkGroup, trunkGroupLoadDirectivesDeferred);
-                                    defineTrunkTrunkGroupTabs(currentTrunkGroup, trunks);
-                                    trunkGroupGridAPI.expandRow(currentTrunkGroup);
+                                    drillDownManager.setDrillDownExtensionObject(currentTrunkGroup);
                                     $scope.scopeModel.trunkGroups.push(currentTrunkGroup);
                                 }
                             }
@@ -376,22 +397,20 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                 });
             }
 
-            function defineTrunkTrunkGroupTabs(trunkGroup) {
+            function buildTrunkTrunkGroupDrillDownTabs() {
 
                 var drillDownTabs = [];
                 drillDownTabs.push(buildTrunkTrunkGroupDrillDownTab());
-
-                setDrillDownTabs();
 
                 function buildTrunkTrunkGroupDrillDownTab() {
                     var drillDownTab = {};
                     drillDownTab.title = "Trunks";
                     drillDownTab.directive = "whs-routesync-ericsson-trunktrunkgroup";
 
-                    drillDownTab.loadDirective = function (trunkTrunkGroupGridAPI, trunkGroup) {
-                        trunkGroup.trunkTrunkGroupGridAPI = trunkTrunkGroupGridAPI;
+                    drillDownTab.loadDirective = function (trunkTrunkGroupDirectiveAPI, trunkGroup) {
+                        trunkGroup.trunkTrunkGroupDirectiveAPI = trunkTrunkGroupDirectiveAPI;
 
-                        return trunkGroup.trunkTrunkGroupGridAPI.load(buildTrunkTrunkGroupPayload(trunkGroup)).then(function () {
+                        return trunkGroup.trunkTrunkGroupDirectiveAPI.load(buildTrunkTrunkGroupPayload(trunkGroup)).then(function () {
                             $scope.scopeModel.updateSupplierDescriptions();
                         });
                     };
@@ -400,24 +419,15 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                         var trunkTrunkGroupPayload = {};
                         trunkTrunkGroupPayload.trunks = $scope.scopeModel.trunks;
                         trunkTrunkGroupPayload.trunkTrunkGroups = trunkGroup.TrunkTrunkGroups;
-                        trunkTrunkGroupPayload.context = buildTrunkTrunkGroupDirectiveContext();
+                        trunkTrunkGroupPayload.LoadSharing = trunkGroup.LoadSharing;
+                        trunkTrunkGroupPayload.supplierOutTrunksMappings = supplierOutTrunksMappings;
                         return trunkTrunkGroupPayload;
-                    }
-                    function buildTrunkTrunkGroupDirectiveContext() {
-                        var context = {
-                            updateSupplierDescriptions: function () {
-                                $scope.scopeModel.updateSupplierDescriptions();
-                            }
-                        };
-                        return context;
                     }
 
                     return drillDownTab;
                 }
-                function setDrillDownTabs() {
-                    var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, trunkGroupGridAPI);
-                    drillDownManager.setDrillDownExtensionObject(trunkGroup);
-                }
+
+                return drillDownTabs;
             }
 
             function updateErrorDescription() {
@@ -440,19 +450,6 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                 }
             }
 
-            function deleteTrunkFromTrunkGroups(trunk) {
-                for (var index = 0; index < $scope.scopeModel.trunkGroups.length; index++) {
-                    var currentTrunkGroup = $scope.scopeModel.trunkGroups[index];
-
-                    if (currentTrunkGroup.trunkTrunkGroupGridAPI != undefined) {
-                        trunkGroupGridAPI.expandRow(currentTrunkGroup);
-                        currentTrunkGroup.trunkTrunkGroupGridAPI.deleteTrunkTrunkGroup(trunk);
-                    } else {
-                        trunkGroupGridAPI.expandRow(currentTrunkGroup);
-                    }
-                }
-            }
-
             function getSupplierMappingEntity() {
 
                 function getTrunks() {
@@ -471,13 +468,23 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                 }
                 function getTrunkGroups() {
                     var trunkGroups = [];
+
                     for (var index = 0; index < $scope.scopeModel.trunkGroups.length; index++) {
                         var currentTrunkGroup = $scope.scopeModel.trunkGroups[index];
+
+                        var currentTrunkGroupDirectiveData;
+                        if (currentTrunkGroup.trunkTrunkGroupDirectiveAPI != undefined) {
+                            currentTrunkGroupDirectiveData = currentTrunkGroup.trunkTrunkGroupDirectiveAPI.getData();
+                        } else {
+                            currentTrunkGroupDirectiveData = UtilsService.getItemByVal($scope.scopeModel.trunkGroups, currentTrunkGroup.TrunkGroupNb, 'TrunkGroupNb');
+                        }
+
                         trunkGroups.push({
-                            TrunkTrunkGroups: currentTrunkGroup.trunkTrunkGroupGridAPI != undefined ? currentTrunkGroup.trunkTrunkGroupGridAPI.getData() : undefined,
                             CustomerTrunkGroups: getCustomerTrunkGroups(currentTrunkGroup),
                             CodeGroupTrunkGroups: getCodeGroupTrunkGroups(currentTrunkGroup),
-                            IsBackup: currentTrunkGroup.IsBackup
+                            TrunkTrunkGroups: currentTrunkGroupDirectiveData != undefined ? currentTrunkGroupDirectiveData.TrunkTrunkGroups : undefined,
+                            IsBackup: currentTrunkGroup.IsBackup,
+                            LoadSharing: currentTrunkGroupDirectiveData != undefined ? currentTrunkGroupDirectiveData.LoadSharing : undefined
                         });
                     }
 

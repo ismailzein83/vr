@@ -53,16 +53,17 @@
 
             function defineAPI() {
                 var api = {};
-                var serviceSettings;
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
                     var promises = [];
                     var switchSynchronizerSettings;
+                    var context;
 
                     if (payload != undefined) {
                         switchSynchronizerSettings = payload.switchSynchronizerSettings;
+                        context = payload.context;
                     }
 
                     if (switchSynchronizerSettings != undefined) {
@@ -93,7 +94,10 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { switchSynchronizerSettings: switchSynchronizerSettings };
+                            var directivePayload = {
+                                switchSynchronizerSettings: switchSynchronizerSettings,
+                                context: context
+                            };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -126,5 +130,4 @@
     }
 
     app.directive('whsRoutesyncSwitchroutesynchronizerSettings', SwitchSynchronizerSettingsDirective);
-
 })(app);

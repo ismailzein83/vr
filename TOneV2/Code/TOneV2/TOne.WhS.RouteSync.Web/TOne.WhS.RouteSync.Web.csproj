@@ -141,9 +141,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodeChargeController.cs" />
     <Compile Include="Controllers\EricssonController.cs" />
     <Compile Include="Controllers\FreeRadiusController.cs" />
     <Compile Include="Controllers\IdbDataManagerSettingsController.cs" />
+    <Compile Include="Controllers\NumberLengthController.cs" />
     <Compile Include="Controllers\RouteSyncDefinitionController.cs" />
     <Compile Include="Controllers\RadiusDataManagerSettingsController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
@@ -178,6 +180,12 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-customermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-suppliermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-transportprotocol-selector.js" />
+    <Content Include="WhS_RouteSync\Directives\CodeCharge\MainExtensions\Templates\CodeChargeFixedTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\CodeCharge\MainExtensions\Templates\CodeChargeInternationalTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\CodeCharge\MainExtensions\whs-routesync-codecharge-fixed.js" />
+    <Content Include="WhS_RouteSync\Directives\CodeCharge\MainExtensions\whs-routesync-codecharge-international.js" />
+    <Content Include="WhS_RouteSync\Directives\CodeCharge\Templates\CodeChargeTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\CodeCharge\whs-routesync-codecharge.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsRORangeTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsFreeTextTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsTemplate.html" />
@@ -202,7 +210,15 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationrange.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-destinationrange.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationcodes.js" />
+    <Content Include="WhS_RouteSync\Directives\NumberLength\MainExtensions\Templates\NumberLengthFixedTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\NumberLength\MainExtensions\Templates\NumberLengthInternationalTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\NumberLength\MainExtensions\whs-routesync-numberlength-fixed.js" />
+    <Content Include="WhS_RouteSync\Directives\NumberLength\MainExtensions\whs-routesync-numberlength-international.js" />
+    <Content Include="WhS_RouteSync\Directives\NumberLength\Templates\NumberLengthTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\NumberLength\whs-routesync-numberlength.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\CodeChargeAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\EricssonAPIService.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\NumberLengthAPIService.js" />
     <Content Include="WhS_RouteSync\Views\NationalCountryCodes\NationalCountryCodesEditorController.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\SpecialRouting\Templates\EricssonSpecialroutingServicelanguageTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\SpecialRouting\Templates\EricssonSpecialroutingTypeSelectiveTemplate.html" />
@@ -325,6 +341,10 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Ericsson\TOne.WhS.RouteSync.Ericsson.csproj">
+      <Project>{f0c17114-11c9-4d69-bfff-0a8ba62b7179}</Project>
+      <Name>TOne.WhS.RouteSync.Ericsson</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.FreeRadius\TOne.WhS.RouteSync.FreeRadius.csproj">
       <Project>{87790317-4035-4fb8-be4f-88d44fd02abe}</Project>

@@ -8,29 +8,23 @@
                 <vr-textbox value="scopeModel.numberOfMappings" label="Number Of Mappings" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
             </vr-columns>
             <vr-columns width="1/4row">
-                <vr-textbox value="scopeModel.minCodeLength" label="Min Code Length" type="number" decimalprecision="0" minvalue="1" isrequired customvalidate="scopeModel.isCodeLengthValid()"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/4row">
-                <vr-textbox value="scopeModel.maxCodeLength" label="Max Code Length" type="number" decimalprecision="0" minvalue="1" isrequired customvalidate="scopeModel.isCodeLengthValid()"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/4row">
                 <vr-textbox value="scopeModel.interconnectGeneralPrefix" label="Interconnect General Prefix" type="text"></vr-textbox>
-            </vr-columns>
-        </vr-row>
-        <vr-row>
-            <vr-columns width="1/4row">
-                <vr-textbox value="scopeModel.firstRCNumber" label="First Route Case Number" type="number" decimalprecision="0" minvalue="1"
-                            isrequired vr-disabled="scopeModel.isEditMode"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/4row">
                 <vr-textbox value="scopeModel.esr" label="ESR" type="text"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/4row">
-                <vr-textbox value="scopeModel.cc" label="CC" type="text"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/4row">
                 <vr-textbox value="scopeModel.percentagePrefix" label="Percentage Prefix" type="text"></vr-textbox>
             </vr-columns>
+        </vr-row>
+        <vr-row removeline>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.firstRCNumber" label="First Route Case Number" type="number" decimalprecision="0" minvalue="1"
+                            isrequired vr-disabled="scopeModel.isEditMode">
+                </vr-textbox>
+            </vr-columns>
+            <whs-routesync-numberlength on-ready="scopeModel.onNumberLengthDirectiveReady" normal-col-num="3"></whs-routesync-numberlength>
+            <whs-routesync-codecharge on-ready="scopeModel.onCodeChargeDirectiveReady" normal-col-num="3"></whs-routesync-codecharge>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">

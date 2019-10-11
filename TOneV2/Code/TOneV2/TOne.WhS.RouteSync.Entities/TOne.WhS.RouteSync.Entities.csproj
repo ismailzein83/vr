@@ -59,9 +59,11 @@
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="BusinessManagers\IRouteSyncDefinitionManager.cs" />
     <Compile Include="CodeCharge\CodeChargeEvaluator.cs" />
+    <Compile Include="CodeCharge\CodeChargeEvaluatorConfig.cs" />
     <Compile Include="Context\IApplyDifferentialRoutesContext.cs" />
     <Compile Include="Context\ISwapTableContext.cs" />
     <Compile Include="FTPLogger\FTPLoggerEntities.cs" />
+    <Compile Include="NumberLength\NumberLengthEvaluatorConfig.cs" />
     <Compile Include="RouteEntities\ConvertedRoute.cs" />
     <Compile Include="RouteEntities\ConvertedRouteBatch.cs" />
     <Compile Include="RouteEntities\RouteBatch.cs" />

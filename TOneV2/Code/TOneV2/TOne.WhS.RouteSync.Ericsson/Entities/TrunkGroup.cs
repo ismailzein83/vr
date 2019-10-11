@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.RouteSync.Ericsson
 {
-	public class TrunkGroup
+    public class TrunkGroup
 	{
 		public List<CustomerTrunkGroup> CustomerTrunkGroups { get; set; }
 
@@ -15,9 +12,11 @@ namespace TOne.WhS.RouteSync.Ericsson
 		public List<TrunkTrunkGroup> TrunkTrunkGroups { get; set; }
 
 		public bool IsBackup { get; set; }
-	}
 
-	public class CustomerTrunkGroup
+        public bool LoadSharing { get; set; }
+    }
+
+    public class CustomerTrunkGroup
 	{
 		public int CustomerId { get; set; }
 	}
@@ -32,5 +31,19 @@ namespace TOne.WhS.RouteSync.Ericsson
 		public Guid TrunkId { get; set; }
 
 		public int? Percentage { get; set; }
+
+        public List<SupplierTrunkGroup> Backups { get; set; }
 	}
+
+    public class SupplierTrunkGroup
+    {
+        public int SupplierId { get; set; }
+
+        public List<SupplierTrunk> Trunks { get; set; }
+    }
+
+    public class SupplierTrunk
+    {
+        public Guid TrunkId { get; set; } 
+    }
 }
