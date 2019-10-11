@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Integration.Entities;
@@ -2129,7 +2130,10 @@ namespace Mediation.Runtime
                 {
                     case "Mobilis_Ericsson_R13_CDR":
 
+                        var mobilisDataSourceManager = new Mediation.Mobilis.Business.MobilisDataSourceManager();
+
                         List<dynamic> filteredCDRs = new List<dynamic>();
+                        List<dynamic> multiLegRecords = new List<dynamic>();
 
                         foreach (var record in parsedBatch.Records)
                         {
@@ -2152,11 +2156,25 @@ namespace Mediation.Runtime
                                     continue;
                             }
 
-                            filteredCDRs.Add(record);
+
+                            if (mobilisDataSourceManager.IsMobilisR13MultiLegCDR(record))
+                                multiLegRecords.Add(record);
+                            else
+                                filteredCDRs.Add(record);
                         }
 
-                        MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(filteredCDRs, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
-                        mappedBatches.Add("CDRTransformationStage", cdrBatch);
+                        if (filteredCDRs.Count > 0)
+                        {
+                            MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(filteredCDRs, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+                            mappedBatches.Add("CDRTransformationStage", cdrBatch);
+                        }
+
+                        if (multiLegRecords.Count > 0)
+                        {
+                            MappedBatchItem multiLegBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(multiLegRecords, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+                            mappedBatches.Add("Prepare CDR For Correlation Stage", multiLegBatch);
+                        }
+
                         break;
 
                     case "Mobilis_Ericsson_R13_SMS":
@@ -2367,7 +2385,10 @@ namespace Mediation.Runtime
                 {
                     case "Mobilis_Huawei_R13_CDR":
 
+                        var mobilisDataSourceManager = new Mediation.Mobilis.Business.MobilisDataSourceManager();
+
                         List<dynamic> filteredCDRs = new List<dynamic>();
+                        List<dynamic> multiLegRecords = new List<dynamic>();
 
                         foreach (var record in parsedBatch.Records)
                         {
@@ -2390,11 +2411,23 @@ namespace Mediation.Runtime
                                     continue;
                             }
 
-                            filteredCDRs.Add(record);
+                            if (mobilisDataSourceManager.IsMobilisR13MultiLegCDR(record))
+                                multiLegRecords.Add(record);
+                            else
+                                filteredCDRs.Add(record);
                         }
 
-                        MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(filteredCDRs, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
-                        mappedBatches.Add("CDRTransformationStage", cdrBatch);
+                        if (filteredCDRs.Count > 0)
+                        {
+                            MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(filteredCDRs, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+                            mappedBatches.Add("CDRTransformationStage", cdrBatch);
+                        }
+
+                        if (multiLegRecords.Count > 0)
+                        {
+                            MappedBatchItem multiLegBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(multiLegRecords, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+                            mappedBatches.Add("Prepare CDR For Correlation Stage", multiLegBatch);
+                        }
                         break;
 
                     case "Mobilis_Huawei_R13_SMS":
