@@ -7,9 +7,9 @@ using TOne.WhS.RouteSync.Business;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Huawei.SoftX3000.Business;
 using TOne.WhS.RouteSync.Huawei.SoftX3000.Entities;
-using TOne.WhS.RouteSync.MainExtensions.ChargeCode;
+using TOne.WhS.RouteSync.MainExtensions.CodeCharge;
 using TOne.WhS.RouteSync.MainExtensions.NumberLength;
-using Vanrise.Common;
+using Vanrise.Common; 
 
 namespace TOne.WhS.RouteSync.Huawei.SoftX3000
 {
