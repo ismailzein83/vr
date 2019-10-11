@@ -999,7 +999,6 @@
     <None Include="VRJSON_PostScripts\MarketView.json" />
     <None Include="VRJSON_PostScripts\DevTools.json" />
     <None Include="VRJSON_PostScripts\Retail_NIMForDIDs.PostDeployment.json" />
-    <None Include="VRJSON_PostScripts\Retail_RecordAnalysis.PostDeployment.json" />
     <None Include="VRJSON_PostScripts\NP_SimSMSG.PostDeployment.json" />
     <None Include="Retail_Invoice.PostDeployment.sql" />
     <None Include="VRJSON_PostScripts\Mediation\Mediation.json" />
@@ -1054,5 +1053,6 @@
     <None Include="VRJSON_PostScripts\TestCallAnalysis\TestCallAnalysis.json" />
     <None Include="VRJSON_PostScripts\PA\PATool.json" />
     <None Include="VRJSON_PostScripts\Inspkt\C5.json" />
+    <None Include="VRJSON_PostScripts\Inspkt\C4.json" />
   </ItemGroup>
 </Project>
