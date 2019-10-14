@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.GenericData.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -13,56 +14,65 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)
         {
-            if (!context.FromTime.HasValue)
-                throw new NullReferenceException("context.FromTime");
-
-            DateTime effectiveDate = context.FromTime.Value;
+            DateTime effectiveDate = DateTime.Today.Date;
             List<RoutingCustomerInfoDetails> customerInfoDetails = GetCustomerInfoDetails();
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfoDetails, effectiveDate, false));
-            SaleEntityZoneRateLocator futureCustomerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfoDetails, context.FromTime.Value, true));
+            SaleEntityZoneRateLocator futureCustomerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfoDetails, effectiveDate, true));
 
-            var carrierAccountManager = new CarrierAccountManager();
             var saleZoneManager = new SaleZoneManager();
             var saleRatesInfo = new List<SaleRateInfo>();
             foreach (RoutingCustomerInfoDetails customerInfo in customerInfoDetails)
             {
-                int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerInfo.CustomerId, CarrierAccountType.Customer);
-                IEnumerable<SaleZone> customerSaleZones = saleZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, effectiveDate, false);
+                int customerId = customerInfo.CustomerId;
+                int sellingProductId = customerInfo.SellingProductId;
+                IEnumerable<SaleZone> customerSaleZones = saleZoneManager.GetCustomerSaleZones(customerId, effectiveDate, true);
+
+                if (customerSaleZones == null)
+                    continue;
 
                 foreach (var customerZone in customerSaleZones)
                 {
-                    SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
-                    SaleEntityZoneRate futureCustomerZoneRate = futureCustomerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
+                    long saleZoneId = customerZone.SaleZoneId;
+                    SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerId, sellingProductId, saleZoneId);
+                    if (customerZoneRate == null)
+                    {
+                        //zone might be open in the future
+                        SaleEntityZoneRate futureCustomerZoneRate = futureCustomerZoneRateLocator.GetCustomerZoneRate(customerId, sellingProductId, saleZoneId);
+
+                        if (futureCustomerZoneRate == null || futureCustomerZoneRate.Rate == null)
+                            throw new VRBusinessException($"Zone {customerZone.Name} does not have any effective rates on customer {customerId}");
+
+                        var futureSaleRate = new SaleRateInfo
+                        {
+                            CustomerId = customerId,
+                            ZoneId = saleZoneId,
+                            PendingRate = futureCustomerZoneRate.Rate.Rate,
+                            PendingRateBED = futureCustomerZoneRate.Rate.BED
+                        };
+                        saleRatesInfo.Add(futureSaleRate);
+                    }
 
                     var currentRate = customerZoneRate.Rate;
                     var saleRate = new SaleRateInfo
                     {
-                        CustomerId = customerInfo.CustomerId,
+                        CustomerId = customerId,
                         Rate = currentRate.Rate,
-                        ZoneId = customerZone.SaleZoneId
+                        ZoneId = saleZoneId,
+                        CurrentRateBED = currentRate.BED
                     };
-                    if (futureCustomerZoneRate != null)
-                        saleRate.FutureRate = futureCustomerZoneRate.Rate.Rate;
-                    if (currentRate.EED.HasValue)
-                        saleRate.DaysToEnd = DateTime.Now.Subtract(currentRate.EED.Value).Days;
-                    saleRatesInfo.Add(saleRate);
-                }
 
-                IEnumerable<SaleZone> futurCustomerSaleZones = saleZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, null, false);
+                    SaleRate pendingRate = GetPendingRate(customerId, sellingProductId, saleZoneId, customerZoneRate, futureCustomerZoneRateLocator);
 
-                foreach (var futureCustomerZone in futurCustomerSaleZones)
-                {
-                    SaleEntityZoneRate futureCustomerZoneRate = futureCustomerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, futureCustomerZone.SaleZoneId);
-                    if (futureCustomerZoneRate == null || futureCustomerZoneRate.Rate == null)
-                        continue;
-
-                    var futureSaleRate = new SaleRateInfo
+                    if (pendingRate != null)
                     {
-                        CustomerId = customerInfo.CustomerId,
-                        FutureRate = futureCustomerZoneRate.Rate.Rate,
-                        ZoneId = futureCustomerZone.SaleZoneId
-                    };
-                    saleRatesInfo.Add(futureSaleRate);
+                        if (!currentRate.EED.HasValue)
+                            throw new VRBusinessException($"Zone {customerZone.Name} has multiple effective rates on customer {customerId}");
+
+                        saleRate.PendingRate = pendingRate.Rate;
+                        saleRate.DaysToEnd = currentRate.EED.Value.Subtract(DateTime.Now).Days;
+                        saleRate.CurrentRateBED = pendingRate.BED;
+                    }
+                    saleRatesInfo.Add(saleRate);
                 }
             }
             foreach (var saleRateInfo in saleRatesInfo)
@@ -72,6 +82,19 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #region Private Methods
+        private SaleRate GetPendingRate(int customerId, int sellingProductId, long zoneId, SaleEntityZoneRate CurrentCustomerZoneRate, SaleEntityZoneRateLocator futureCustomerZoneRateLocator)
+        {
+            SaleEntityZoneRate futureCustomerZoneRate = futureCustomerZoneRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+
+            if (futureCustomerZoneRate == null)
+                return null;
+
+            if (futureCustomerZoneRate.Rate.Rate == CurrentCustomerZoneRate.Rate.Rate)
+                return null;
+
+            return futureCustomerZoneRate.Rate;
+        }
+
         private DataRecordObject DataRecordObjectMapper(SaleRateInfo saleRateInfo)
         {
             var saleRateObject = new Dictionary<string, object>
@@ -79,8 +102,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 {"Zone", saleRateInfo.ZoneId},
                 {"Customer", saleRateInfo.CustomerId},
                 {"CurrentRate", saleRateInfo.Rate},
-                {"FutureRate", saleRateInfo.FutureRate},
-                {"DaysToEnd", saleRateInfo.DaysToEnd}
+                {"PendingRate", saleRateInfo.PendingRate},
+                {"DaysToEnd", saleRateInfo.DaysToEnd},
+                {"CurrentRateBED",saleRateInfo.CurrentRateBED },
+                {"PendingRateBED",saleRateInfo.PendingRateBED }
             };
             return new DataRecordObject(new Guid("d03b09aa-4af2-44cd-b9c7-3cf51a567218"), saleRateObject);
         }
@@ -92,11 +117,12 @@ namespace TOne.WhS.BusinessEntity.Business
             var customerInfos = new List<RoutingCustomerInfoDetails>();
             foreach (var customer in customers)
             {
-                customerInfos.Add(new RoutingCustomerInfoDetails
-                {
-                    CustomerId = customer.CarrierAccountId,
-                    SellingProductId = customer.SellingProductId.Value
-                });
+                if (carrierAccountManager.IsCarrierAccountActive(customer))
+                    customerInfos.Add(new RoutingCustomerInfoDetails
+                    {
+                        CustomerId = customer.CarrierAccountId,
+                        SellingProductId = customer.SellingProductId.Value
+                    });
             }
             return customerInfos;
         }
@@ -107,7 +133,9 @@ namespace TOne.WhS.BusinessEntity.Business
             public int CustomerId { get; set; }
             public int? DaysToEnd { get; set; }
             public decimal Rate { get; set; }
-            public decimal? FutureRate { get; set; }
+            public decimal? PendingRate { get; set; }
+            public DateTime CurrentRateBED { get; set; }
+            public DateTime? PendingRateBED { get; set; }
         }
     }
 }
