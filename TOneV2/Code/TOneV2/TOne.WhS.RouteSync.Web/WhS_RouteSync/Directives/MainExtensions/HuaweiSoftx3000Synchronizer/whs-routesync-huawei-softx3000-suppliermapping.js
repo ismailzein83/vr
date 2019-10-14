@@ -2,7 +2,7 @@
 
     'use strict';
 
-    whsRoutesyncHuaweiSoftX3000Suppliermapping.$inject = ['UtilsService']
+    whsRoutesyncHuaweiSoftX3000Suppliermapping.$inject = ['UtilsService'];
 
     function whsRoutesyncHuaweiSoftX3000Suppliermapping(UtilsService) {
         return {
