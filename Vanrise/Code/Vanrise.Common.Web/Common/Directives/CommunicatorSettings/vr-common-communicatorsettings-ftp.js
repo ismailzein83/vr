@@ -26,6 +26,15 @@ app.directive('vrCommonCommunicatorsettingsFtp', ['UtilsService', 'VRUIUtilsServ
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.tempFileExtension = "tmp";
+                $scope.scopeModel.validateFileExtension = function () {
+                    if ($scope.scopeModel.tempFileExtension != undefined && $scope.scopeModel.tempFileExtension.length > 0) {
+                        if (UtilsService.contains($scope.scopeModel.tempFileExtension, "."))
+                            return "Please enter the extension name only.";
+                    }
+                    return null;
+                };
+
                 defineAPI();
             }
 
@@ -41,6 +50,10 @@ app.directive('vrCommonCommunicatorsettingsFtp', ['UtilsService', 'VRUIUtilsServ
                         $scope.scopeModel.serverIP = payload.ftpCommunicatorSettings.ServerIP;
                         $scope.scopeModel.username = payload.ftpCommunicatorSettings.Username;
                         $scope.scopeModel.password = payload.ftpCommunicatorSettings.Password;
+                        $scope.scopeModel.useTempFileBeforeCommit = payload.ftpCommunicatorSettings.UseTempFileBeforeCommit;
+                        if ($scope.scopeModel.useTempFileBeforeCommit)
+                            $scope.scopeModel.tempFileExtension = payload.ftpCommunicatorSettings.TempFileExtension;
+
                     }
                     else {
                         $scope.scopeModel.selectedFtpType = $scope.scopeModel.ftpTypes[0];
@@ -53,7 +66,9 @@ app.directive('vrCommonCommunicatorsettingsFtp', ['UtilsService', 'VRUIUtilsServ
                         Directory: $scope.scopeModel.directory,
                         ServerIP: $scope.scopeModel.serverIP,
                         Username: $scope.scopeModel.username,
-                        Password: $scope.scopeModel.password
+                        Password: $scope.scopeModel.password,
+                        UseTempFileBeforeCommit: $scope.scopeModel.useTempFileBeforeCommit,
+                        TempFileExtension: $scope.scopeModel.useTempFileBeforeCommit ? $scope.scopeModel.tempFileExtension : undefined
                     };
                 };
 

@@ -1,6 +1,7 @@
 ﻿using Rebex.Net;
 using System;
 using System.IO;
+using System.Text;
 
 namespace Vanrise.Common
 {
@@ -12,6 +13,8 @@ namespace Vanrise.Common
         public string ServerIP { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public bool UseTempFileBeforeCommit { get; set; }
+        public string TempFileExtension { get; set; }
     }
 
     public class FTPCommunicator : IDisposable
@@ -68,7 +71,7 @@ namespace Vanrise.Common
 
         private void CreateFile(Stream stream, string fileName, string directory)
         {
-            CommunicatorClient.CreateFile(stream, string.Format("{0}/{1}", directory, fileName));
+            CommunicatorClient.CreateFile(stream, string.Format("{0}/{1}", directory, fileName), FTPCommunicatorSettings.UseTempFileBeforeCommit, FTPCommunicatorSettings.TempFileExtension);
         }
 
         private void CreateDirectoryIfNotExists(string directory)
@@ -87,7 +90,7 @@ namespace Vanrise.Common
         {
             public abstract bool TryOpenConnection(string serverIP, string userName, string password);
 
-            public abstract void CreateFile(Stream stream, string remotePath);
+            public abstract void CreateFile(Stream stream, string remotePath, bool useTempFileBeforeCommit = false, string tempFileExtension = null);
 
             public abstract void CreateDirectoryIfNotExists(string remotePath);
 
@@ -113,9 +116,31 @@ namespace Vanrise.Common
                 return Ftp.GetConnectionState().Connected;
             }
 
-            public override void CreateFile(Stream stream, string remotePath)
+            public override void CreateFile(Stream stream, string remotePath, bool useTempFileBeforeCommit = false, string tempFileExtension = null)
             {
-                Ftp.PutFile(stream, remotePath);
+                if (useTempFileBeforeCommit)
+                {
+                    bool isTransferDone = false;
+                    remotePath += "." + tempFileExtension;
+
+                    Ftp.TransferProgress += (sender1, e1) =>
+                    {
+                        if (e1.Finished)
+                        {
+                            isTransferDone = true;
+                        }
+                    };
+                    Ftp.PutFile(stream, remotePath);
+                    while (!isTransferDone)
+                    {
+                        System.Threading.Thread.Sleep(200);
+                    }
+                    Ftp.Rename(remotePath, remotePath.Remove(remotePath.Length - (tempFileExtension.Length + 1)));
+                }
+                else
+                {
+                    Ftp.PutFile(stream, remotePath);
+                }
             }
 
             public override void CreateDirectoryIfNotExists(string remotePath)
@@ -151,9 +176,31 @@ namespace Vanrise.Common
                 return Sftp.GetConnectionState().Connected;
             }
 
-            public override void CreateFile(Stream stream, string remotePath)
+            public override void CreateFile(Stream stream, string remotePath, bool useTempFileBeforeCommit = false, string tempFileExtension = null)
             {
-                Sftp.PutFile(stream, remotePath);
+                if (useTempFileBeforeCommit)
+                {
+                    bool isTransferDone = false;
+                    remotePath += "." + tempFileExtension;
+
+                    Sftp.TransferProgress += (sender1, e1) =>
+                    {
+                        if (e1.Finished)
+                        {
+                            isTransferDone = true;
+                        }
+                    };
+                    Sftp.PutFile(stream, remotePath);
+                    while (!isTransferDone)
+                    {
+                        System.Threading.Thread.Sleep(200);
+                    }
+                    Sftp.Rename(remotePath, remotePath.Remove(remotePath.Length - (tempFileExtension.Length + 1)));
+                }
+                else
+                {
+                    Sftp.PutFile(stream, remotePath);
+                }
             }
 
             public override void CreateDirectoryIfNotExists(string remotePath)
