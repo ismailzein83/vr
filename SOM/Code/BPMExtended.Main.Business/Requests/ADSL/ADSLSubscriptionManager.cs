@@ -231,6 +231,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StLinePathID");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -243,12 +244,14 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var linePathID = entities[0].GetColumnValue("StLinePathID");
 
                 SOMRequestInput<SOMAPI.ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
                 {
 
                     InputArguments = new ADSLSubscriptionRequestInput
                     {
+                        LinePathId = linePathID.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -288,7 +291,6 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
-            esq.AddColumn("StLinePathID");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -301,14 +303,12 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
-                var linePathID = entities[0].GetColumnValue("StLinePathID");
 
                 SOMRequestInput<ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
                 {
                     
                     InputArguments = new ADSLSubscriptionRequestInput
                     {
-                        LinePathId = linePathID.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
