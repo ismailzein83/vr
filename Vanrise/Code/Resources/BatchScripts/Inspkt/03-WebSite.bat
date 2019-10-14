@@ -40,5 +40,10 @@ xcopy "C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess" /S /E /R /y 
 xcopy "C:\TFS\Retail\Code\Retail.BusinessEntity.Web\Retail_BusinessEntity" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Client\Modules\Retail_BusinessEntity\"
 xcopy "C:\TFS\Retail\Code\RecordAnalysis.Web\RecordAnalysis" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Client\Modules\RecordAnalysis\"
 xcopy "C:\Publish\Retail\bin\RecordAnalysis*" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Bin\"
+
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Bin\NetworkProvision.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Bin\Vanrise.AccountBalance.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Bin\Vanrise.Invoice.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Bin\Vanrise.InvToAccBalanceRelation.*"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Bin\*.pdb"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Bin\*.config"

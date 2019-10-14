@@ -14,4 +14,9 @@ xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R			
 rename																										"\\192.168.110.185\Fixes\WebSite\Inspkt\Runtime\%YYYYMMDD%\App.config.RecordAnalysis.exclude"	"Inspkt.Runtime.exe.config"
 rename																										"\\192.168.110.185\Fixes\WebSite\Inspkt\Runtime\%YYYYMMDD%\Retail.Runtime.exe"					"Inspkt.Runtime.exe"
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release\RecordAnalysis*" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Inspkt\Runtime\%YYYYMMDD%\"
+
+del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\Inspkt\Runtime\%YYYYMMDD%\NetworkProvision.*"
+del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\Inspkt\Runtime\%YYYYMMDD%\Vanrise.AccountBalance.*"
+del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\Inspkt\Runtime\%YYYYMMDD%\Vanrise.Invoice.*"
+del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\Inspkt\Runtime\%YYYYMMDD%\Vanrise.InvToAccBalanceRelation.*"
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\Inspkt\Runtime\%YYYYMMDD%\*.pdb"
