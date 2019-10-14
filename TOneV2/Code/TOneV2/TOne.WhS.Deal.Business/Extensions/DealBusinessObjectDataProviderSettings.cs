@@ -165,7 +165,7 @@ namespace TOne.WhS.Deal.Business
                         WeeklyProgressPerc = weeklyExpectedVolumeInMin > 0 ? (dealInfo.WeeklyProgressMinutes / weeklyExpectedVolumeInMin) * 100 : 0,
                         ReachedDuration = dealInfo.OverallProgressInMinutes,
                         ReachedAmount = dealInfo.OverallProgressInMinutes * dealInfo.Rate,
-                        Currency = currencyManager.GetCurrencyName(dealInfo.CurrencyId),
+                        Currency = dealInfo.CurrencyId,
 
 
                     };
@@ -283,7 +283,7 @@ namespace TOne.WhS.Deal.Business
         public decimal ReachedAmount { get; set; }
         public int SumOfAttempts { get; set; }
         public int SumOfSuccessfulAttempts { get; set; }
-        public string Currency { get; set; }
+        public int Currency { get; set; }
 
     }
 
