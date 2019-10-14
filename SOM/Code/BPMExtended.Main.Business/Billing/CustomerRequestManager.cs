@@ -571,6 +571,26 @@ namespace BPMExtended.Main.Business
             }
             return result;
         }
+        public void UpdateWorkOrderTask(string taskId, bool value)
+        {
+            //TODO : Update gshdsl object
+            var SchemaName = "StTasksInWorkOrder";
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName(SchemaName);
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, SchemaName);
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", taskId));
+            var collection = eSQ.GetEntityCollection(UserConnection);
+            if (collection.Count > 0)
+            {
+                recordEntity = collection[0];
+                recordEntity.SetColumnValue("StIsTaskCompleted", value);
+            }
+            recordEntity.Save();
+        }
         #region Private Methods
 
         private CreateCustomerRequestOutput CreateSOMRequest(BPMCustomerType customerType, Guid accountOrContactId, string requestTitle, SOMRequestExtendedSettings requestSettings)
