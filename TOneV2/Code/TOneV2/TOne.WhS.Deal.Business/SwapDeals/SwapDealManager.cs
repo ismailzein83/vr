@@ -67,7 +67,9 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealDefinition in deals)
             {
-                if (dealDefinition.Settings.Status != DealStatus.Inactive && (!dealDefinition.Settings.RealEED.HasValue || dealDefinition.Settings.RealEED > effectiveAfter))
+                var dealSetting = dealDefinition.Settings;
+                if (dealSetting.Status != DealStatus.Draft &&
+                    (dealSetting.RealBED <= effectiveAfter && (!dealSetting.RealEED.HasValue || dealSetting.RealEED > effectiveAfter)))
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;
@@ -87,7 +89,7 @@ namespace TOne.WhS.Deal.Business
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;
-        } 
+        }
 
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
