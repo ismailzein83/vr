@@ -67,15 +67,15 @@
     <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="RecordAnalysis\Tables\C4CDR.sql" />
-    <Build Include="RecordAnalysis\Tables\C4MappedCDR.sql" />
     <Build Include="RecordAnalysis\User Defined Types\C4CDRType.sql" />
     <Build Include="RecordAnalysis\User Defined Types\C4MappedCDRType.sql" />
     <Build Include="Security\RecordAnalysis.sql" />
     <Build Include="Security\VANRISE_wissam.ajamy.sql" />
     <Build Include="Security\VANRISE_development.sql" />
     <Build Include="Security\RoleMemberships.sql" />
-    <Build Include="RecordAnalysis\Tables\C4InvalidCDR.sql" />
-    <Build Include="RecordAnalysis\Tables\C4BadCDR.sql" />
+    <Build Include="RecordAnalysis\Tables\C4MappedAttempt.sql" />
+    <Build Include="RecordAnalysis\Tables\C4InvalidAttempt.sql" />
+    <Build Include="RecordAnalysis\Tables\C4BadAttempt.sql" />
+    <Build Include="RecordAnalysis\Tables\C4Attempt.sql" />
   </ItemGroup>
 </Project>

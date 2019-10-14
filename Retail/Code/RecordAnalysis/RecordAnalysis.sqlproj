@@ -67,8 +67,6 @@
     <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="RecordAnalysis\Tables\C4SwitchInterconnection.sql" />
-    <Build Include="RecordAnalysis\Tables\C4Switch.sql" />
     <Build Include="RecordAnalysis\Tables\C4Probe.sql" />
     <Build Include="RecordAnalysis\Tables\C4Interconnection.sql" />
     <Build Include="RecordAnalysis\User Defined Types\C4SwitchInterconnectionType.sql" />
