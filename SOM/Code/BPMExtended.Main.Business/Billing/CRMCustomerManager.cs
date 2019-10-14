@@ -1338,13 +1338,15 @@ namespace BPMExtended.Main.Business
             return output;
         }
 
-        public CustomerCreationOutput CreateAccount(string parentCustomerId, string CustomerCategoryId, string levelId, string companyName, string branch,string companyId,string FirstName, string LastName, string CSO,
+        public CustomerCreationOutput CreateAccount(string contactId ,string parentCustomerId, string CustomerCategoryId, string levelId, string companyName, string branch,string companyId,string FirstName, string LastName, string CSO,
          string BankCode, string AccountNumber, string BankName, string IBAN, string country, string nationality, string birthDate, string building, string career,string City,
          string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
          string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId, string PaymentMethodId
          )
         {
             IDManager manager = new IDManager();
+            CommonManager commonManager = new CommonManager();
+            Contact contact = commonManager.GetContact(contactId);
             string customerId = manager.GetCustomerNextId();
             DateTime dob = DateTime.MinValue;
             DateTime.TryParse(birthDate, out dob);
@@ -1357,9 +1359,9 @@ namespace BPMExtended.Main.Business
             string documentType = "";// GetDocumentType(documentTypeId);
             string nationalityNumber = GetNationalityNumber(nationality);
             string customerTitle = "";
-            if (title != "")
+            if (contact.Title != "")
             {
-                customerTitle = GetCustomerTitle(title);
+                customerTitle = GetCustomerTitle(contact.Title);
             }
 
             string customerLanguage = "";
@@ -1379,13 +1381,9 @@ namespace BPMExtended.Main.Business
 				CompanyId= companyId,
                 DefaultRatePlan = rateplan,
                 Title = customerTitle,
-                FirstName = FirstName,
-                MiddleName = middleName,
-                LastName = LastName,
-                MotherName = motherName,
-                BirthDate = dob,
-                Career = career,
-                Language = customerLanguage,
+                FirstName = contact.GivenName,
+                MiddleName = contact.MiddleName,
+                LastName = contact.SurName,
                 Nationality = nationalityNumber,
                 ExternalCustomerSetId = externalCustomerId,
                 Country = countryNumber,
@@ -1397,7 +1395,6 @@ namespace BPMExtended.Main.Business
                 Building = building,
                 Floor = floor,
                 AddressNotes = addressNotes,
-                HomePhone = homePhone,
                 FaxNumber = faxNumber,
                 MobilePhone = mobilePhone,
                 BusinessPhone = businessPhone,
@@ -1410,11 +1407,11 @@ namespace BPMExtended.Main.Business
                 BankCode = BankCode,
                 BankName = BankName,
                 AccountNumber = AccountNumber,
-                DebitAccountOwner = FirstName,
+                DebitAccountOwner = contact.GivenName,
                 IBAN = IBAN,
                 BankSwiftCode = "",
-                DocumentId = documentId,
-                DocumentTypeId = documentType,
+                DocumentId = contact.DocumentID,
+                DocumentTypeId = GetDocumentType(contact.DocumentIdTypeId),
                 ValidFromDate = DateTime.Now,
             };
 
@@ -1431,10 +1428,10 @@ namespace BPMExtended.Main.Business
             IDManager manager = new IDManager();
             CommonManager commonManager = new CommonManager();
             Contact contact = commonManager.GetContact(officialAccountInput.ContactId);
-            string customerId = manager.GetCustomerNextId();
+            officialAccountInput.CustomerId = manager.GetCustomerNextId();
             officialAccountInput.DocumentId = contact.DocumentID;
             officialAccountInput.DocumentIdType = GetDocumentType(contact.DocumentIdTypeId);
-
+            officialAccountInput.PaymentResponsibility = true;
             officialAccountInput.CSO = GetCSOId(officialAccountInput.CSO);
             officialAccountInput.BillCycle = GetDefaultBillCycle();
             officialAccountInput.ExternalCustomerSetId = new CatalogManager().GetExternalCustomerSetId(officialAccountInput.ExternalCustomerSetId);
@@ -1445,7 +1442,7 @@ namespace BPMExtended.Main.Business
             using (var client = new SOMClient())
             {
                 output = client.Post<OfficialAccountInput, CustomerCreationOutput>("api/SOM.ST/Billing/CreateOfficialCustomer", officialAccountInput);
-                output.CustomerSequenceId = customerId;
+                output.CustomerSequenceId = officialAccountInput.CustomerId;
             }
             return output;
         }

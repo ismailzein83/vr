@@ -32,25 +32,17 @@ namespace BPMExtended.Main.SOMAPI
 
         public string LastName { get; set; }
 
-        public string MotherName { get; set; }
-
-        public DateTime BirthDate { get; set; }
-
-        public string Career { get; set; }
-
         public string Nationality { get; set; }
-
-        public string Language { get; set; }
 
         public string ExternalCustomerSetId { get; set; }
 
-        public string HomePhone { get; set; }
+        public string BusinessPhone { get; set; }
 
         public string MobilePhone { get; set; }
 
-        public string BusinessPhone { get; set; }
-
         public string FaxNumber { get; set; }
+
+        public string BusinessType { get; set; }
 
         public string Email { get; set; }
 
@@ -77,10 +69,6 @@ namespace BPMExtended.Main.SOMAPI
         public string DocumentId { get; set; }
 
         public string DocumentTypeId { get; set; }
-
-        public bool ContractResponsibity { get; set; }
-
-        public string Password { get; set; }
 
         public bool PaymentResponsibility { get; set; }
 

@@ -285,6 +285,11 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCustomerCategoryID");
             esq.AddColumn("StCustomerCategoryName"); 
             var documentType=esq.AddColumn("StDocumentIDType.Id");
+            esq.AddColumn("GivenName");
+            esq.AddColumn("Surname");
+            esq.AddColumn("MiddleName");
+            var titleId=esq.AddColumn("StTitle.Id");
+
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
             esq.Filters.Add(esqFirstFilter);
 
@@ -299,8 +304,10 @@ namespace BPMExtended.Main.Business
                 var customerCategoryId = entities[0].GetColumnValue("StCustomerCategoryID");
                 var customerCategoryName = entities[0].GetColumnValue("StCustomerCategoryName");
                 var documentIdTypeId = entities[0].GetTypedColumnValue<Guid>(documentType.Name); 
-
-
+                var givenName = entities[0].GetColumnValue("GivenName");
+                var surName= entities[0].GetColumnValue("Surname");
+                var middleName= entities[0].GetColumnValue("MiddleName");
+                var title= entities[0].GetTypedColumnValue<Guid>(titleId.Name);
                 contact = new Contact()
                 {
                     CustomerId = customerId.ToString(),
@@ -310,7 +317,11 @@ namespace BPMExtended.Main.Business
                     CustomerCategoryName = customerCategoryName.ToString(),
                     CSOId = csoId.ToString(),
                     CustomerCode = customerCode.ToString(),
-                    DocumentIdTypeId= documentIdTypeId.ToString()
+                    DocumentIdTypeId= documentIdTypeId.ToString(),
+                    GivenName=givenName.ToString(),
+                    SurName=surName.ToString(),
+                    MiddleName=middleName.ToString(),
+                    Title=title.ToString()
                 };
             }
             return contact;
