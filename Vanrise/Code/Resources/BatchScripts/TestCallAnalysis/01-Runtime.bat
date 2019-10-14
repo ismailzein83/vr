@@ -16,7 +16,6 @@ rename																										"\\192.168.110.185\Fixes\WebSite\TestCallAnalysi
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release\TestCallAnalysis.*" /S /E /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\Runtime\%YYYYMMDD%\"
 
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\Runtime\%YYYYMMDD%\NetworkProvision.*"
-del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\Runtime\%YYYYMMDD%\Vanrise.AccountManager.*"
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\Runtime\%YYYYMMDD%\Vanrise.AccountBalance.*"
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\Runtime\%YYYYMMDD%\Vanrise.Invoice.*"
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\Runtime\%YYYYMMDD%\Vanrise.InvToAccBalanceRelation.*"
