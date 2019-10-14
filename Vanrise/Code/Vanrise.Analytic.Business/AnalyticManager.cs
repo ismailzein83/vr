@@ -392,13 +392,15 @@ namespace Vanrise.Analytic.Business
             var allDBDimensions = getAnalyticRecordsContext.AllQueryDBDimensions;
             var recordFilterMeasures = getAnalyticRecordsContext.RecordFilterMeasures;
 
-            HashSet<string> allDimensionNames = new HashSet<string>();
+            List<string> allDimensionNamesList = new List<string>();
 
             if (query.DimensionFields != null)
-                allDimensionNames.Union(query.DimensionFields);
+                allDimensionNamesList.AddRange(query.DimensionFields);
 
             if (query.ParentDimensions != null)
-                allDimensionNames.Union(query.ParentDimensions);
+                allDimensionNamesList.AddRange(query.ParentDimensions);
+
+            HashSet<string> allDimensionNames = ExtensionMethods.ToHashSet(allDimensionNamesList.Distinct());
 
             List<string> allMeasureNames = new List<string>();
 
