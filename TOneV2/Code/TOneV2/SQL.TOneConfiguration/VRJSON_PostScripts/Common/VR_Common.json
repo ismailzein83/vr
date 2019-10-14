@@ -1175,7 +1175,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "b0375939-3e36-4e07-8313-67aa63ec0538",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "ComponentType",
@@ -1190,7 +1189,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "407ad657-82c6-4db5-b114-8667a8967b2f",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "ExtensionConfiguration",
@@ -1205,7 +1203,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "a9d6ca31-f26b-4605-b131-a8d6bd95e309",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "VRCompiledAssembly",
@@ -1220,7 +1217,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "7033848f-d17e-41f2-acdf-b1386da58daa",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "Project",
@@ -1235,7 +1231,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "117a2640-db5c-4ec1-8d07-b8b246e8d765",
               "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
               "Name": "DashboardDefinition",
@@ -1319,7 +1314,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "b7b25a3a-a208-4ac6-8a48-f113a36b4051",
               "Name": "ComponentType",
               "DataRecordTypeID": "b0375939-3e36-4e07-8313-67aa63ec0538",
@@ -1332,7 +1326,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "4dff27d3-5f30-4067-b20d-970f90ff96c4",
               "Name": "ExtensionConfiguration",
               "DataRecordTypeID": "407ad657-82c6-4db5-b114-8667a8967b2f",
@@ -1345,7 +1338,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "954f75d0-7d2c-49fc-a266-3e1b4c6fb8ce",
               "Name": "VRCompiledAssembly Table",
               "DataRecordTypeID": "a9d6ca31-f26b-4605-b131-a8d6bd95e309",
@@ -1358,7 +1350,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "9ed6a257-5190-4f8f-bed5-6a4143907754",
               "Name": "Project",
               "DataRecordTypeID": "7033848f-d17e-41f2-acdf-b1386da58daa",
@@ -1371,7 +1362,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "cdfe02de-c968-4af2-bc20-971bb5ec832c",
               "Name": "VRTileReport",
               "DataRecordTypeID": "117a2640-db5c-4ec1-8d07-b8b246e8d765",
@@ -1384,7 +1374,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "ee51b750-62c8-4e06-9942-4fbd33ba3bab",
               "Name": "DashboardDefinition",
               "DataRecordTypeID": "117a2640-db5c-4ec1-8d07-b8b246e8d765",
@@ -1683,14 +1672,134 @@
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "BusinessEntityModule",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Billing",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:54.947"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "16419fe1-ed56-49ba-b609-284a5e21fc07",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Traffic",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:55.14"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Rules",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:55.073"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "5b13c15e-c118-41dc-a2d4-437c9e93f13b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Security",
+              "ParentId": "61451603-e7b9-40c6-ae27-6cba974e1b3b",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:54.93"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Root",
+              "ParentId": null,
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:54.917"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "0ba03544-a3d8-4570-8855-5162b42b50ab",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System Settings",
+              "ParentId": "61451603-e7b9-40c6-ae27-6cba974e1b3b",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:54.937"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "8faf6aa2-6c00-4c48-8ebf-68b87d2dc493",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Lookups",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:55.043"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "61451603-e7b9-40c6-ae27-6cba974e1b3b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Administration",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:54.917"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "b6b8f582-4759-43fb-9220-aa7662c366ea",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System Processes",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:55.097"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "7913acd9-38c5-43b3-9612-beff66606f22",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Configuration",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": true,
+              "LastModifiedTime": "2019-10-08T13:45:54.993"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d9666aea-9517-4dc5-a3d2-d074b2b99a1c",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Business Entities",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:54.97"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "fc455c73-490d-48f2-a2b8-c2385137de0f",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Business CRM",
+              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
+              "BreakInheritance": false,
+              "LastModifiedTime": "2019-10-08T13:45:54.963"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -1735,156 +1844,227 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Billing",
-              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:46.843"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "16419fe1-ed56-49ba-b609-284a5e21fc07",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Traffic",
-              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:49.677"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "9bbd7c00-011d-4ac9-8b25-36d3e2a8f7cf",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Rules",
-              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:48.95"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "5b13c15e-c118-41dc-a2d4-437c9e93f13b",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Security",
-              "ParentId": "61451603-e7b9-40c6-ae27-6cba974e1b3b",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:46.52"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Root",
-              "ParentId": null,
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:43.117"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "0ba03544-a3d8-4570-8855-5162b42b50ab",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System Settings",
-              "ParentId": "61451603-e7b9-40c6-ae27-6cba974e1b3b",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:46.627"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "8faf6aa2-6c00-4c48-8ebf-68b87d2dc493",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Lookups",
-              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:48.597"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "61451603-e7b9-40c6-ae27-6cba974e1b3b",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Administration",
-              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:46.383"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "b6b8f582-4759-43fb-9220-aa7662c366ea",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System Processes",
-              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:49.117"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "7913acd9-38c5-43b3-9612-beff66606f22",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Configuration",
-              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "BreakInheritance": true,
-              "LastModifiedTime": "2019-01-03T16:51:47.493"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "d9666aea-9517-4dc5-a3d2-d074b2b99a1c",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Business Entities",
-              "ParentId": "5a9e78ae-229e-41b9-9dbf-492997b42b61",
-              "BreakInheritance": false,
-              "LastModifiedTime": "2019-01-03T16:51:47.29"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '3fb1a9fc-2a00-499e-a3c6-f3d317f58d66'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "BusinessEntity",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "Id": "1de9d8e2-15ae-43ed-bbdb-01d8ce41f491",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "SMSBillingData",
+              "Title": "SMS Billing Data",
+              "ModuleId": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.957"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "4dfd6381-a5ae-443a-8e2a-0a747bbc8037",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "FaultTicket",
+              "Title": "Fault Ticket",
+              "ModuleId": "16419fe1-ed56-49ba-b609-284a5e21fc07",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:55.14"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "a611a651-b60b-483d-bc83-1c2b667a120a",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "TrafficData",
+              "Title": "Traffic Data",
+              "ModuleId": "16419fe1-ed56-49ba-b609-284a5e21fc07",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\"]",
+              "LastModifiedTime": "2019-10-08T13:45:55.153"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "4d241178-0f89-45a1-85b2-358abd66b34a",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "FaultTicketLooKup",
+              "Title": "Fault Ticket Lookup",
+              "ModuleId": "8faf6aa2-6c00-4c48-8ebf-68b87d2dc493",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:55.047"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "70b312dc-aa2d-4565-a70c-407fba3a7d78",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VRCommon_System_Log",
+              "Title": "Logs",
+              "ModuleId": "0ba03544-a3d8-4570-8855-5162b42b50ab",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View General Logs\",\"View Action Audit\",\"View Technical Logs\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.94"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "c3d56166-1778-413f-9615-4f39129da824",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VRDynamicAPI",
+              "Title": "VRDynamicAPI",
+              "ModuleId": "7913acd9-38c5-43b3-9612-beff66606f22",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:55.01"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "a99a836d-0c03-4946-a0e2-5a758354807b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VR_System_Administration",
+              "Title": "System Administration",
+              "ModuleId": "61451603-e7b9-40c6-ae27-6cba974e1b3b",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\",\"Manage\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.927"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "d884b97b-e179-4ed5-b09b-5ea69f274da8",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VRCommon_VRMailMessageTemplate",
+              "Title": "Email Templates",
+              "ModuleId": "0ba03544-a3d8-4570-8855-5162b42b50ab",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.943"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "be46e2dc-ce86-46f5-a071-65656e8ccb25",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VRCommon_VRConnection",
+              "Title": "Connections",
+              "ModuleId": "0ba03544-a3d8-4570-8855-5162b42b50ab",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.943"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "e7e838cb-8931-48ed-bd43-6ce483ed3d0e",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "SMS_Problems",
+              "Title": "SMS Problems",
+              "ModuleId": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.957"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "ab794846-853c-4402-a8e4-6f5c3a75f5f2",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "BillingData",
+              "Title": "Billing Data",
+              "ModuleId": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.95"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "6fdd628e-c876-4dbf-92bf-77225a88c3b9",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VR_Analytic_AnalyticReport",
+              "Title": "Analytic Reports",
+              "ModuleId": "7913acd9-38c5-43b3-9612-beff66606f22",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.993"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "8dcd6e7b-7f93-4fb5-86c1-77a40939dec7",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "CDR_Problems",
+              "Title": "CDR Problems",
+              "ModuleId": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.95"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "7be1a6f6-38e3-46d0-930f-a870fe76a4b2",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "SMSTrafficData",
+              "Title": "SMS Traffic Data",
+              "ModuleId": "16419fe1-ed56-49ba-b609-284a5e21fc07",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\"]",
+              "LastModifiedTime": "2019-10-08T13:45:55.15"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "a4fcc225-8614-43d7-8147-b474502c5d78",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VRCommon_Settings",
+              "Title": "Component Settings",
+              "ModuleId": "0ba03544-a3d8-4570-8855-5162b42b50ab",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\", \"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:54.94"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "106bcfc5-238d-4efa-b15f-cb91c2704f7e",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VR_SystemConfiguration",
+              "Title": "System Configuration",
+              "ModuleId": "7913acd9-38c5-43b3-9612-beff66606f22",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\", \"Add\", \"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:55.003"
+            }
+          },
+          {
+            "FieldValues": {
+              "Id": "c2029536-b819-4a10-b293-ea11670de357",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "VRDynamicAPIModule",
+              "Title": "VRDynamicAPIModule",
+              "ModuleId": "7913acd9-38c5-43b3-9612-beff66606f22",
+              "BreakInheritance": false,
+              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
+              "LastModifiedTime": "2019-10-08T13:45:55.01"
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -1943,262 +2123,503 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "1de9d8e2-15ae-43ed-bbdb-01d8ce41f491",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "SMSBillingData",
-              "Title": "SMS Billing Data",
-              "ModuleId": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\"]",
-              "LastModifiedTime": "2019-03-12T14:05:19.837"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "4dfd6381-a5ae-443a-8e2a-0a747bbc8037",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "FaultTicket",
-              "Title": "Fault Ticket",
-              "ModuleId": "16419fe1-ed56-49ba-b609-284a5e21fc07",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:49.717"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "a611a651-b60b-483d-bc83-1c2b667a120a",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "TrafficData",
-              "Title": "Traffic Data",
-              "ModuleId": "16419fe1-ed56-49ba-b609-284a5e21fc07",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\"]",
-              "LastModifiedTime": "2019-01-11T16:41:39.407"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "4d241178-0f89-45a1-85b2-358abd66b34a",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "FaultTicketLooKup",
-              "Title": "Fault Ticket Lookup",
-              "ModuleId": "8faf6aa2-6c00-4c48-8ebf-68b87d2dc493",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:48.617"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "70b312dc-aa2d-4565-a70c-407fba3a7d78",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VRCommon_System_Log",
-              "Title": "Logs",
-              "ModuleId": "0ba03544-a3d8-4570-8855-5162b42b50ab",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View General Logs\",\"View Action Audit\",\"View Technical Logs\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.71"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "c3d56166-1778-413f-9615-4f39129da824",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VRDynamicAPI",
-              "Title": "VRDynamicAPI",
-              "ModuleId": "7913acd9-38c5-43b3-9612-beff66606f22",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.807"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "a99a836d-0c03-4946-a0e2-5a758354807b",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VR_System_Administration",
-              "Title": "System Administration",
-              "ModuleId": "61451603-e7b9-40c6-ae27-6cba974e1b3b",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\",\"Manage\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.423"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "d884b97b-e179-4ed5-b09b-5ea69f274da8",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VRCommon_VRMailMessageTemplate",
-              "Title": "Email Templates",
-              "ModuleId": "0ba03544-a3d8-4570-8855-5162b42b50ab",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.763"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "be46e2dc-ce86-46f5-a071-65656e8ccb25",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VRCommon_VRConnection",
-              "Title": "Connections",
-              "ModuleId": "0ba03544-a3d8-4570-8855-5162b42b50ab",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.747"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "e7e838cb-8931-48ed-bd43-6ce483ed3d0e",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "SMS_Problems",
-              "Title": "SMS Problems",
-              "ModuleId": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\"]",
-              "LastModifiedTime": "2019-05-06T12:51:44.887"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "ab794846-853c-4402-a8e4-6f5c3a75f5f2",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "BillingData",
-              "Title": "Billing Data",
-              "ModuleId": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.88"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "6fdd628e-c876-4dbf-92bf-77225a88c3b9",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VR_Analytic_AnalyticReport",
-              "Title": "Analytic Reports",
-              "ModuleId": "7913acd9-38c5-43b3-9612-beff66606f22",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:47.513"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "8dcd6e7b-7f93-4fb5-86c1-77a40939dec7",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "CDR_Problems",
-              "Title": "CDR Problems",
-              "ModuleId": "520558fa-cf2f-440b-9b58-09c23b6a2e9b",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.9"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "7be1a6f6-38e3-46d0-930f-a870fe76a4b2",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "SMSTrafficData",
-              "Title": "SMS Traffic Data",
-              "ModuleId": "16419fe1-ed56-49ba-b609-284a5e21fc07",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\"]",
-              "LastModifiedTime": "2019-03-12T14:06:15.393"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "a4fcc225-8614-43d7-8147-b474502c5d78",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VRCommon_Settings",
-              "Title": "Component Settings",
-              "ModuleId": "0ba03544-a3d8-4570-8855-5162b42b50ab",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\", \"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.667"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "106bcfc5-238d-4efa-b15f-cb91c2704f7e",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VR_SystemConfiguration",
-              "Title": "System Configuration",
-              "ModuleId": "7913acd9-38c5-43b3-9612-beff66606f22",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\", \"Add\", \"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:47.647"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "Id": "c2029536-b819-4a10-b293-ea11670de357",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "VRDynamicAPIModule",
-              "Title": "VRDynamicAPIModule",
-              "ModuleId": "7913acd9-38c5-43b3-9612-beff66606f22",
-              "BreakInheritance": false,
-              "PermissionOptions": "[\"View\",\"Add\",\"Edit\"]",
-              "LastModifiedTime": "2019-01-03T16:51:46.827"
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '3fb1a9fc-2a00-499e-a3c6-f3d317f58d66'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
     {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "Module",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "525b77dc-f097-4bf1-930a-034b9bbe1ac4",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System Operations",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
+              "Icon": null,
+              "Rank": 10,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.SystemOperations\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.423",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "50624672-cd25-44fd-8580-0e3ac8e34c71",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Administration",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/Client/Images/menu-icons/admin.png",
+              "Rank": 4,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Administration\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.39",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Rules",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/Client/Images/menu-icons/rules.png",
+              "Rank": 32,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Rules\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.797",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "eb303a61-929a-4d33-bf50-18f40308bc86",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Reports & Dashboards",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/Client/Images/menu-icons/busines intel.png",
+              "Rank": 33,
+              "AllowDynamic": true,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Reports\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.863",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "80e0e78c-f7da-481c-b8d3-1ff61188263b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Sales",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/images/menu-icons/Sale Area.png",
+              "Rank": 29,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.73",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "baaf681e-ab1c-4a64-9a35-3f3951398881",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System Settings",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
+              "Icon": null,
+              "Rank": 3,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.SystemSettings\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.397",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "574270fb-d66d-406b-80a1-4c83ada7c0fa",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Billing",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "Icon": null,
+              "Rank": 13,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Billing\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.38",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a459d3d0-35ae-4b0e-b267-54436fda729a",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Entities Definition",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "Icon": null,
+              "Rank": 14,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.383",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System Processes",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "Icon": null,
+              "Rank": 7,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.363",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "26ab075a-62fc-4272-8234-5e5b32531cba",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System Logs",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "baaf681e-ab1c-4a64-9a35-3f3951398881",
+              "Icon": null,
+              "Rank": 7,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.4",
+              "RenderedAsView": true
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "c33b407d-476e-4779-83f8-5f88ca1a4df3",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Voice",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "eb303a61-929a-4d33-bf50-18f40308bc86",
+              "Icon": null,
+              "Rank": 14,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.873",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "75c29f78-49b1-4968-9c4a-6233461c6897",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "SMS",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "Icon": null,
+              "Rank": 14,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.827",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a28351ba-a5d7-4651-913c-6c9e09b92ac1",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "Icon": null,
+              "Rank": 2,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.313",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "ad9eeb65-70a3-4f57-b261-79f40d541e23",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Business CRM",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/images/menu-icons/plug.png",
+              "Rank": 17,
+              "AllowDynamic": true,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.BusinessCRM\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.63",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Definitions",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "Icon": null,
+              "Rank": 4,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Definitions\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.343",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "aa947fb8-caf1-4196-b278-89d8e2ce3e12",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Services",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/images/menu-icons/Routing.png",
+              "Rank": 30,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.743",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "b7d68911-9501-48f4-a3ed-8af7cdbb1a2b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Business Processes",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "1037157d-bbc9-4b28-b53f-908936cec137",
+              "Icon": null,
+              "Rank": 4,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.BusinessProcesses\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.507",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "1037157d-bbc9-4b28-b53f-908936cec137",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System Processes",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/Client/Images/menu-icons/SystemProcesses.png",
+              "Rank": 6,
+              "AllowDynamic": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.SystemProcesses\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.5",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "3b6e324f-4f1f-417a-ab60-963d4856b4cc",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "SMS",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "eb303a61-929a-4d33-bf50-18f40308bc86",
+              "Icon": null,
+              "Rank": 24,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.88",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "89254e36-5d91-4db1-970f-9bfef404679a",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Lookups",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
+              "Icon": null,
+              "Rank": 11,
+              "AllowDynamic": true,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Lookups\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.427",
+              "RenderedAsView": true
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d2899d41-a6db-4e5b-9c28-9fa69e74aae2",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Voice",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "Icon": null,
+              "Rank": 7,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.803",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "be30ed3f-d201-400f-ad91-b5180ba39f6d",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Development",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "Icon": null,
+              "Rank": 6,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Development\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.363",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "9add9ac2-d329-4834-bdea-ba87c26c2a1d",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "SMS",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "6471da6f-e4dd-4b2a-bfb6-f8ea498cd37c",
+              "Icon": null,
+              "Rank": 13,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.773",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "9b73765c-bdd7-487b-8d32-e386288db79b",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Security",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
+              "Icon": null,
+              "Rank": 12,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Security\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.483",
+              "RenderedAsView": false
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "40ea6f5e-1d32-4f14-adfa-ee67a20574b9",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Lookups",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "aa947fb8-caf1-4196-b278-89d8e2ce3e12",
+              "Icon": null,
+              "Rank": 2,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.743",
+              "RenderedAsView": true
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "0aaa7d9e-ee0b-4aa6-8aa1-f03e2379d811",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Voice",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "6471da6f-e4dd-4b2a-bfb6-f8ea498cd37c",
+              "Icon": null,
+              "Rank": 8,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.767",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "e73c4aba-fd03-4137-b047-f3fb4f7eed03",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Business Entities",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/Client/Images/menu-icons/Business Entities.png",
+              "Rank": 8,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.517",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "937f4a80-74fd-43ba-bcc1-f674445170bb",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Business Partner",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/Client/Images/menu-icons/Business Entities.png",
+              "Rank": 9,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.6",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "6471da6f-e4dd-4b2a-bfb6-f8ea498cd37c",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Billing Management",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/Client/Images/menu-icons/billing.png",
+              "Rank": 31,
+              "AllowDynamic": false,
+              "Settings": null,
+              "LastModifiedTime": "2019-10-14T11:38:38.753",
+              "RenderedAsView": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "Configuration",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": null,
+              "Icon": "/Client/Images/menu-icons/configuration.png",
+              "Rank": 2,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Configurations\"}",
+              "LastModifiedTime": "2019-10-14T11:38:38.313",
+              "RenderedAsView": null
+            }
+          }
+        ],
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -2285,552 +2706,11 @@
             "IncludeInUpdate": true
           }
         ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "525b77dc-f097-4bf1-930a-034b9bbe1ac4",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System Operations",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
-              "Icon": null,
-              "Rank": 9,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.SystemOperations\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.963",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "50624672-cd25-44fd-8580-0e3ac8e34c71",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Administration",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/admin.png",
-              "Rank": 4,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Administration\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.94",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Rules",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/rules.png",
-              "Rank": 31,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Rules\"}",
-              "LastModifiedTime": "2019-09-27T16:08:42.257",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "eb303a61-929a-4d33-bf50-18f40308bc86",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Reports & Dashboards",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/busines intel.png",
-              "Rank": 32,
-              "AllowDynamic": true,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Reports\"}",
-              "LastModifiedTime": "2019-09-27T16:08:42.31",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "80e0e78c-f7da-481c-b8d3-1ff61188263b",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Sales",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/images/menu-icons/Sale Area.png",
-              "Rank": 28,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.213",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "baaf681e-ab1c-4a64-9a35-3f3951398881",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System Settings",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
-              "Icon": null,
-              "Rank": 2,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.SystemSettings\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.94",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "574270fb-d66d-406b-80a1-4c83ada7c0fa",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Billing",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "Icon": null,
-              "Rank": 13,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Billing\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.93",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "a459d3d0-35ae-4b0e-b267-54436fda729a",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Entities Definition",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "Icon": null,
-              "Rank": 14,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.933",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System Processes",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "Icon": null,
-              "Rank": 7,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.913",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "26ab075a-62fc-4272-8234-5e5b32531cba",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System Logs",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "baaf681e-ab1c-4a64-9a35-3f3951398881",
-              "Icon": null,
-              "Rank": 7,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.943",
-              "RenderedAsView": true
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "c33b407d-476e-4779-83f8-5f88ca1a4df3",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Voice",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "eb303a61-929a-4d33-bf50-18f40308bc86",
-              "Icon": null,
-              "Rank": 17,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.32",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "75c29f78-49b1-4968-9c4a-6233461c6897",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "SMS",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
-              "Icon": null,
-              "Rank": 14,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.28",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "a28351ba-a5d7-4651-913c-6c9e09b92ac1",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "Icon": null,
-              "Rank": 2,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:41.887",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "ad9eeb65-70a3-4f57-b261-79f40d541e23",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Business CRM",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/images/menu-icons/plug.png",
-              "Rank": 16,
-              "AllowDynamic": true,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.BusinessCRM\"}",
-              "LastModifiedTime": "2019-09-27T16:08:42.13",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "b57974b8-cee7-42ee-85d9-84813ed22fe7",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Definitions",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "Icon": null,
-              "Rank": 4,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Definitions\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.893",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "aa947fb8-caf1-4196-b278-89d8e2ce3e12",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Services",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/images/menu-icons/Routing.png",
-              "Rank": 29,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.223",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "b7d68911-9501-48f4-a3ed-8af7cdbb1a2b",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Business Processes",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "1037157d-bbc9-4b28-b53f-908936cec137",
-              "Icon": null,
-              "Rank": 4,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.BusinessProcesses\"}",
-              "LastModifiedTime": "2019-09-27T16:08:42.047",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "1037157d-bbc9-4b28-b53f-908936cec137",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System Processes",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/SystemProcesses.png",
-              "Rank": 6,
-              "AllowDynamic": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.SystemProcesses\"}",
-              "LastModifiedTime": "2019-09-27T16:08:42.04",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "3b6e324f-4f1f-417a-ab60-963d4856b4cc",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "SMS",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "eb303a61-929a-4d33-bf50-18f40308bc86",
-              "Icon": null,
-              "Rank": 33,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.333",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "89254e36-5d91-4db1-970f-9bfef404679a",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Lookups",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
-              "Icon": null,
-              "Rank": 10,
-              "AllowDynamic": true,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Lookups\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.967",
-              "RenderedAsView": true
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "d2899d41-a6db-4e5b-9c28-9fa69e74aae2",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Voice",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
-              "Icon": null,
-              "Rank": 7,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.26",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "be30ed3f-d201-400f-ad91-b5180ba39f6d",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Development",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "Icon": null,
-              "Rank": 6,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Development\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.913",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "9add9ac2-d329-4834-bdea-ba87c26c2a1d",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "SMS",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "6471da6f-e4dd-4b2a-bfb6-f8ea498cd37c",
-              "Icon": null,
-              "Rank": 13,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.243",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "9b73765c-bdd7-487b-8d32-e386288db79b",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Security",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
-              "Icon": null,
-              "Rank": 11,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Common.Security\"}",
-              "LastModifiedTime": "2019-09-27T16:08:42.02",
-              "RenderedAsView": false
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "40ea6f5e-1d32-4f14-adfa-ee67a20574b9",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Lookups",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "aa947fb8-caf1-4196-b278-89d8e2ce3e12",
-              "Icon": null,
-              "Rank": 2,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.223",
-              "RenderedAsView": true
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "0aaa7d9e-ee0b-4aa6-8aa1-f03e2379d811",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Voice",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "6471da6f-e4dd-4b2a-bfb6-f8ea498cd37c",
-              "Icon": null,
-              "Rank": 8,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.24",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "e73c4aba-fd03-4137-b047-f3fb4f7eed03",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Business Entities",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/Business Entities.png",
-              "Rank": 8,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.05",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "937f4a80-74fd-43ba-bcc1-f674445170bb",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Business Partner",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/Business Entities.png",
-              "Rank": 9,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.107",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "6471da6f-e4dd-4b2a-bfb6-f8ea498cd37c",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Billing Management",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/billing.png",
-              "Rank": 30,
-              "AllowDynamic": false,
-              "Settings": null,
-              "LastModifiedTime": "2019-09-27T16:08:42.23",
-              "RenderedAsView": null
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "d018c0cd-f15f-486d-80c3-f9b87c3f47b8",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Configuration",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": null,
-              "Icon": "/Client/Images/menu-icons/configuration.png",
-              "Rank": 2,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"Configurations\"}",
-              "LastModifiedTime": "2019-09-27T16:08:41.883",
-              "RenderedAsView": null
-            }
-          }
-        ],
-        "Variables": null,
+        "IsIdentity": false,
+        "Variables": [],
         "LastWhereCondition": "DevProjectID = '3fb1a9fc-2a00-499e-a3c6-f3d317f58d66'",
         "LastJoinStatement": null,
-        "IsIdentity": false
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
     },
@@ -2857,7 +2737,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 7,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.56"
+              "LastModifiedTime": "2019-10-14T11:38:38.35"
             }
           },
           {
@@ -2875,7 +2755,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 12,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.563"
+              "LastModifiedTime": "2019-10-14T11:38:38.353"
             }
           },
           {
@@ -2893,7 +2773,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 6,
               "CreatedTime": "2019-08-26T13:57:23.28",
-              "LastModifiedTime": "2019-10-07T17:48:07.677"
+              "LastModifiedTime": "2019-10-14T11:38:38.403"
             }
           },
           {
@@ -2911,7 +2791,7 @@
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Rank": 4,
               "CreatedTime": "2019-09-26T16:40:38.623",
-              "LastModifiedTime": "2019-10-07T17:48:07.713"
+              "LastModifiedTime": "2019-10-14T11:38:38.43"
             }
           },
           {
@@ -2929,7 +2809,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 4,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.553"
+              "LastModifiedTime": "2019-10-14T11:38:38.347"
             }
           },
           {
@@ -2947,7 +2827,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 4,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.67"
+              "LastModifiedTime": "2019-10-14T11:38:38.4"
             }
           },
           {
@@ -2965,7 +2845,7 @@
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Rank": 2,
               "CreatedTime": "2019-09-11T12:31:18.6",
-              "LastModifiedTime": "2019-10-07T17:48:07.55"
+              "LastModifiedTime": "2019-10-14T11:38:38.343"
             }
           },
           {
@@ -2983,7 +2863,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 10,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.68"
+              "LastModifiedTime": "2019-10-14T11:38:38.407"
             }
           },
           {
@@ -3001,7 +2881,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 2,
               "CreatedTime": "2018-08-30T10:12:17.187",
-              "LastModifiedTime": "2019-10-07T17:48:07.59"
+              "LastModifiedTime": "2019-10-14T11:38:38.363"
             }
           },
           {
@@ -3019,7 +2899,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 8,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.68"
+              "LastModifiedTime": "2019-10-14T11:38:38.403"
             }
           },
           {
@@ -3037,7 +2917,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 9,
               "CreatedTime": "2018-05-11T10:00:49.13",
-              "LastModifiedTime": "2019-10-07T17:48:07.68"
+              "LastModifiedTime": "2019-10-14T11:38:38.407"
             }
           },
           {
@@ -3055,7 +2935,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 7,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.653"
+              "LastModifiedTime": "2019-10-14T11:38:38.387"
             }
           },
           {
@@ -3073,7 +2953,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 3,
               "CreatedTime": "2018-12-07T13:13:01.887",
-              "LastModifiedTime": "2019-10-07T17:48:07.61"
+              "LastModifiedTime": "2019-10-14T11:38:38.363"
             }
           },
           {
@@ -3091,7 +2971,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 6,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.557"
+              "LastModifiedTime": "2019-10-14T11:38:38.347"
             }
           },
           {
@@ -3109,7 +2989,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 2,
               "CreatedTime": "2019-08-26T13:57:23.28",
-              "LastModifiedTime": "2019-10-07T17:48:07.673"
+              "LastModifiedTime": "2019-10-14T11:38:38.4"
             }
           },
           {
@@ -3127,7 +3007,7 @@
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
               "Rank": 5,
               "CreatedTime": null,
-              "LastModifiedTime": "2019-10-07T17:48:07.557"
+              "LastModifiedTime": "2019-10-14T11:38:38.347"
             }
           },
           {
@@ -3145,7 +3025,7 @@
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
               "Rank": 3,
               "CreatedTime": "2019-09-26T18:33:36",
-              "LastModifiedTime": "2019-10-11T13:51:27.987"
+              "LastModifiedTime": "2019-10-14T11:38:38.343"
             }
           }
         ],
