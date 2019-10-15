@@ -2,13 +2,16 @@
 <vr-form name="validationContext">
 	<vr-row>
 		<vr-columns width="1/4row">
-			<vr-textbox value="scopeModel.bo" label="BO" type="text" onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
+			<vr-textbox value="scopeModel.bo" label="BO" type="number" minvalue="0" maxvalue="100" decimalprecision="0" 
+                        onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
 		</vr-columns>
 		<vr-columns width="1/4row">
-			<vr-textbox value="scopeModel.nationalOBA" label="National OBA" type="text" onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
+			<vr-textbox value="scopeModel.nationalOBA" label="National OBA" type="number" minvalue="0" maxvalue="100" decimalprecision="0" 
+                        onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
 		</vr-columns>
 		<vr-columns width="1/4row">
-			<vr-textbox value="scopeModel.internationalOBA" label="International OBA" type="text" onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
+			<vr-textbox value="scopeModel.internationalOBA" label="International OBA" type="number" minvalue="0" maxvalue="100" decimalprecision="0" 
+                        onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
 		</vr-columns>
 	</vr-row>
 	<!--

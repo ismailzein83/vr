@@ -46,15 +46,21 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                 };
 
                 $scope.scopeModel.onTrunkAdded = function () {
-                    $scope.scopeModel.trunks.push({
+                    var trunk = {
                         TrunkId: UtilsService.guid(),
                         TrunkName: undefined,
-                        NationalCountryCode: undefined,
-                        selectedTrunkType: UtilsService.getEnum(WhS_RouteSync_TrunkTypeEnum, 'value', 0),
-                        IsSwitch: false
-                    });
+                        TrunkType: 0,
+                        IsSwitch: false,
+                        NationalCountryCode: undefined
+                    };
 
+                    var trunkTypeLoadSelectorDeferred = UtilsService.createPromiseDeferred();
+                    extendTrunkEntity(trunk, trunkTypeLoadSelectorDeferred);
+
+                    $scope.scopeModel.trunks.push(trunk);
                     $scope.scopeModel.updateSupplierDescriptions();
+
+                    return UtilsService.waitMultiplePromises([trunkTypeLoadSelectorDeferred]);
                 };
 
                 $scope.scopeModel.validateTrunkName = function (name) {
@@ -459,9 +465,9 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                         trunks.push({
                             TrunkId: currentTrunk.TrunkId,
                             TrunkName: currentTrunk.TrunkName,
-                            NationalCountryCode: currentTrunk.NationalCountryCode,
                             TrunkType: currentTrunk.selectedTrunkType.value,
-                            IsSwitch: currentTrunk.IsSwitch
+                            IsSwitch: currentTrunk.IsSwitch,
+                            NationalCountryCode: currentTrunk.NationalCountryCode
                         });
                     }
                     return trunks.length > 0 ? trunks : undefined;
