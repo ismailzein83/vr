@@ -60,9 +60,29 @@ namespace BPMExtended.Main.Business
         {
             List<InvoiceFee> fees;
 
+            string operationId = new CommonManager().GetOperationByContractId(contracId);
+            string entityName = new CommonManager().GetEntityNameByRequestId(contracId);
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
+            esq.AddColumn("StRatePlanID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                operationId = entities[0].GetColumnValue("StRatePlanID").ToString();
+
+            }
+
             var input = new InvoiceFeeInput()
             {
-                RatePlanId = new ContractManager().GetContractRatePlan(contracId),
+                RatePlanId =  new ContractManager().GetContractDetails(contracId).RateplanId,
                 ServiceIds = services
             };
           

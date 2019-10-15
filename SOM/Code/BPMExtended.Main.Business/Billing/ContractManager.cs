@@ -57,15 +57,15 @@ namespace BPMExtended.Main.Business
                 var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetTelephonyContract?ContractId={0}", contractId));
                 contractInfo = CustomerContractToTelephonyContractInfo(item);
             }
-            return contractInfo;
+            return contractInfo;   
         }
 
-        public string GetContractRatePlan(string contractId)
+        public ContractDetails GetContractDetails(string contractId)
         {
 
             using (SOMClient client = new SOMClient())
-            {
-                return client.Get<string>(String.Format("api/SOM.ST/Billing/GetContractRatePlan?ContractId={0}", contractId));
+            { 
+                return client.Get<ContractDetails>(String.Format("api/SOM.ST/Billing/GetContractDetails?contractId={0}", contractId));
             }
         }
 

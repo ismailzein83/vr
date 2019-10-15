@@ -688,5 +688,29 @@ namespace BPMExtended.Main.Business
             }
             return operationId;
         }
+
+        public string GetOperationByContractId(string contractId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string operationId = "";
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("StOperation");
+            esq.AddColumn("StOperation.Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contractId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                operationId = entities[0].GetColumnValue("StOperationId").ToString();
+
+            }
+            return operationId;
+        }
+
     }
 }
