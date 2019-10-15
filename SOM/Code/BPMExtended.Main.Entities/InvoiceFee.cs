@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class TelephonyContractEntity : ContractEntity
+    public class InvoiceFee
     {
-        public string PhoneNumber { get; set; }
-        public bool IsPABX { get; set; }
+        public string ServiceName { get; set; }
+        public decimal? Amount { get; set; }
     }
 }
