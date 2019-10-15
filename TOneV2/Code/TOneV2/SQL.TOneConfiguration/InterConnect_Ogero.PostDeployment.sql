@@ -733,9 +733,9 @@ as (select * from (values
 merge	[genericdata].[VRNumberPrefix] as t
 using	cte_data as s
 on		1=1 and t.[Number] = s.[Number]
-when matched then
-	update set
-	[Number] = s.[Number],[Type] = s.[Type],[IsExact] = s.[IsExact]
+--when matched then
+--	update set
+--	[Number] = s.[Number],[Type] = s.[Type],[IsExact] = s.[IsExact]
 when not matched by target then
 	insert([Number],[Type],[IsExact])
 	values(s.[Number],s.[Type],s.[IsExact]);
