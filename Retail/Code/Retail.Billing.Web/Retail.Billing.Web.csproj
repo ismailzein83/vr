@@ -161,19 +161,19 @@
   <ItemGroup>
     <Content Include="Retail_Billing\Constants\CustomerMessagesTypeEnum.js" />
     <Content Include="Retail_Billing\Constants\ModuleConfig.js" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\retail-billing-chargetype-extendedsettings-customcode.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\retail-billing-chargetype-customcode.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\Templates\CustomCodeChargeTypeTemplate.html" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\retail-billing-charge-customobjectsettings.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\retail-billing-charge-customobject-definition.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\retail-billing-chargetype-selector.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\retail-billing-chargetype-extendedsettings.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\retail-billing-chargetype-settings.js" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\Templates\RetailBillingChargeCustomObjectSettingsTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\Templates\RetailBillingChargeCustomObjectDefinitionTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\Templates\BillingChargeTypeSettingsTemplate.html" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\MainExtensions\retail-billing-chargetype-extendedsettings-customcode-runtime.js" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\MainExtensions\Templates\CustomCodeChargeTypeRuntimeTemplate.html" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\retail-billing-charge-customobject.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\MainExtensions\retail-billing-charge-customcode.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\MainExtensions\Templates\CustomCodeChargeTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\retail-billing-charge-customobject-runtime.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\retail-billing-charge.js" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\Templates\RetailBillingChargeCustomObjectTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\Templates\RetailBillingChargeCustomObjectRuntimeTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\Templates\RetailBillingChargeTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\retail-billing-datasourcesettings-customermessages.js" />
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\Templates\CustomerMessagesTemplate.html" />

@@ -10,11 +10,11 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public Guid? ChargeSettingsRecordTypeId { get; set; }
 
-        public VRGenericEditorDefinitionSetting ChargeSettingsGenericEditorSettings { get; set; }
+        public VRGenericEditorDefinitionSetting ChargeSettingsEditorDefinition { get; set; }
 
         public string PricingLogic { get; set; }
 
-        public override string RuntimeEditor { get { return "retail-billing-chargetype-extendedsettings-customcode-runtime"; } }
+        public override string RuntimeEditor { get { return "retail-billing-charge-customcode"; } }
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {

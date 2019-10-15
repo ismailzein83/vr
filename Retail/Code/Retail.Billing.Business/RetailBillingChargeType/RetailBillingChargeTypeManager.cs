@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 
@@ -16,13 +15,12 @@ namespace Retail.Billing.Business
         {
             return this.GetCachedRetailBillingChargeTypes().MapRecords(RetailBillingChargeTypeInfoMapper).OrderBy(x => x.Name);
         }
-
         public RetailBillingChargeType GetRetailBillingChargeType(Guid retailBillingChargeTypeId)
         {
             if (this.GetCachedRetailBillingChargeTypes().TryGetValue(retailBillingChargeTypeId, out RetailBillingChargeType retailBillingChargeType))
                 return retailBillingChargeType;
             else
-                return null;
+                throw new Exception($"No Retail Billing Charge Type with ID : {retailBillingChargeTypeId}");
         }
 
         public IEnumerable<RetailBillingChargeTypeExtendedSettingsConfig> GetChargeTypeExtendedSettingsConfigs()

@@ -21,7 +21,7 @@
             controllerAs: "ctrl",
             bindToController: true,
             template: function (element, attrs) {
-                return getTamplate(attrs);
+                return getTemplate(attrs);
             }
         };
 
@@ -61,14 +61,14 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-
-                    var promises = [];
                     var extendedSettings;
 
                     if (payload != undefined) {
                         context = payload.context;
                         extendedSettings = payload.extendedSettings;
                     }
+
+                    var promises = [];
 
                     if (extendedSettings != undefined) {
                         var loadDirectivePromise = loadDirective();
@@ -91,10 +91,10 @@
                             }
                         });
                     }
-                    function loadDirective() {
-                        directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+                    function loadDirective() {
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                        directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
@@ -104,7 +104,6 @@
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
-
                         return directiveLoadDeferred.promise;
                     }
 
@@ -129,7 +128,6 @@
             }
 
             function getContext() {
-
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
@@ -137,8 +135,8 @@
                 return currentContext;
             }
         }
-      
-        function getTamplate(attrs) {
+
+        function getTemplate(attrs) {
             var label = "label='Charge Type'";
             if (attrs.hidelabel != undefined) {
                 label = "";
@@ -157,12 +155,13 @@
                 + '</vr-select>'
                 + ' </vr-columns>'
                 + '</vr-row>'
-                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.DefinitionEditor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
-            return template;
+                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.DefinitionEditor" '
+                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}"  '
+                + 'isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
 
+            return template;
         }
     }
 
     app.directive('retailBillingChargetypeExtendedsettings', BillingChargeTypeExtendedSettingsDirective);
-
 })(app);

@@ -5,7 +5,7 @@
 
     function chargeTypeAPIService(BaseAPIService, UtilsService, Retail_Billing_ModuleConfig) {
 
-        var controllerName = "ChargeType";
+        var controllerName = "RetailBillingChargeType";
 
         function GetChargeTypeExtendedSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_Billing_ModuleConfig.moduleName, controllerName, "GetChargeTypeExtendedSettingsConfigs"));
@@ -21,15 +21,10 @@
             });
         }
 
-        function TryCompileChargeCustomCode(chargeType) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Billing_ModuleConfig.moduleName, controllerName, "TryCompileChargeCustomCode"), chargeType);
-        }
-
         return ({
             GetChargeTypeExtendedSettingsConfigs: GetChargeTypeExtendedSettingsConfigs,
             GetRetailBillingChargeTypeInfo: GetRetailBillingChargeTypeInfo,
-            GetRetailBillingChargeType: GetRetailBillingChargeType,
-            TryCompileChargeCustomCode: TryCompileChargeCustomCode
+            GetRetailBillingChargeType: GetRetailBillingChargeType
         });
     }
 

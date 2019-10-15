@@ -1,28 +1,26 @@
 ﻿"use strict";
 
-app.directive('retailBillingChargeCustomobject', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailBillingChargeCustomobjectRuntime', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '=',
+                isrequired: '=',                
                 normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new retailBillingChargeDirectiveCtor(ctrl, $scope, $attrs);
+                var ctor = new retailBillingChargeCustomObjectRuntimeDirectiveCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
-            templateUrl: '/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingCharge/Templates/RetailBillingChargeCustomObjectTemplate.html'
+            templateUrl: '/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingCharge/Templates/RetailBillingChargeCustomObjectRuntimeTemplate.html'
         };
 
-        function retailBillingChargeDirectiveCtor(ctrl, $scope, $attrs) {
+        function retailBillingChargeCustomObjectRuntimeDirectiveCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             var chargeTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();

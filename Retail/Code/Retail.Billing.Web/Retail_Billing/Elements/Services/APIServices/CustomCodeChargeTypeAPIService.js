@@ -5,17 +5,16 @@
 
     function chargeTypeAPIService(BaseAPIService, UtilsService, Retail_Billing_ModuleConfig) {
 
-        var controllerName = "CustomCodeChargeType";
+        var controllerName = "RetailBillingCustomCodeChargeType";
 
-        function TryCompileChargeCustomCode(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Billing_ModuleConfig.moduleName, controllerName, "TryCompileChargeCustomCode"), input);
+        function TryCompileChargeTypeCustomCode(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Billing_ModuleConfig.moduleName, controllerName, "TryCompileChargeTypeCustomCode"), input);
         }
 
         return ({
-            TryCompileChargeCustomCode: TryCompileChargeCustomCode
+            TryCompileChargeTypeCustomCode: TryCompileChargeTypeCustomCode
         });
     }
-
     appControllers.service('Retail_Billing_CustomCodeChargeTypeAPIService', chargeTypeAPIService);
 
 })(appControllers);

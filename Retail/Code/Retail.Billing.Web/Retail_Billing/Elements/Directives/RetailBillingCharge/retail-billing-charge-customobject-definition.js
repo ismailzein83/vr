@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RetailbillingChargeCustomObjectSettings.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    RetailbillingChargeCustomObjectDefinition.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function RetailbillingChargeCustomObjectSettings(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function RetailbillingChargeCustomObjectDefinition(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -12,15 +12,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new RetailBEChargeCustomObjectSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new RetailBEChargeCustomObjectDefinitionCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingChargeType/Templates/RetailBillingChargeCustomObjectSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingCharge/Templates/RetailBillingChargeCustomObjectDefinitionTemplate.html"
         };
 
-        function RetailBEChargeCustomObjectSettingsCtor($scope, ctrl, $attrs) {
+        function RetailBEChargeCustomObjectDefinitionCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -47,7 +47,5 @@
             }
         }
     }
-
-    app.directive('retailBillingChargeCustomobjectsettings', RetailbillingChargeCustomObjectSettings);
-
+    app.directive('retailBillingChargeCustomobjectDefinition', RetailbillingChargeCustomObjectDefinition);
 })(app);

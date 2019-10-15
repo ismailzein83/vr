@@ -7,7 +7,8 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -107,9 +108,12 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
 
                 api.getData = function () {
                     var obj = directiveAPI != undefined ? directiveAPI.getData() : {};
-                    obj.RetailBillingChargeTypeId = $scope.scopeModel.selectedChargeType.RetailBillingChargeTypeId;
 
-                    return obj;
+                    if ($scope.scopeModel.selectedChargeType != undefined) {
+                        obj.RetailBillingChargeTypeId = $scope.scopeModel.selectedChargeType.RetailBillingChargeTypeId;
+                        return obj;
+                    }
+                    return undefined;
                 };
 
                 if (ctrl.onReady != null)

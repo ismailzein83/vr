@@ -1,14 +1,13 @@
 ﻿"use strict";
 
-app.directive("retailBillingChargetypeExtendedsettingsCustomcodeRuntime", ["UtilsService", "VRUIUtilsService",
+app.directive("retailBillingChargeCustomcode", ["UtilsService", "VRUIUtilsService",
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
-
             restrict: "E",
             scope:
             {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -18,10 +17,7 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcodeRuntime", ["Util
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
-            templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingCharge/MainExtensions/Templates/CustomCodeChargeTypeRuntimeTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingCharge/MainExtensions/Templates/CustomCodeChargeTemplate.html"
         };
 
         function BillingChargeTypeSettings($scope, ctrl, $attrs) {
@@ -68,8 +64,8 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcodeRuntime", ["Util
                             var runtimeEditorPayload = {
                                 selectedValues: fieldValues,
                                 dataRecordTypeId: extendedSettings != undefined ? extendedSettings.ChargeSettingsRecordTypeId : undefined,
-                                definitionSettings: extendedSettings != undefined ? extendedSettings.ChargeSettingsGenericEditorSettings : undefined,
-                                runtimeEditor: extendedSettings != undefined && extendedSettings.ChargeSettingsGenericEditorSettings != undefined ? extendedSettings.ChargeSettingsGenericEditorSettings.RuntimeEditor : undefined,
+                                definitionSettings: extendedSettings != undefined ? extendedSettings.ChargeSettingsEditorDefinition : undefined,
+                                runtimeEditor: extendedSettings != undefined && extendedSettings.ChargeSettingsEditorDefinition != undefined ? extendedSettings.ChargeSettingsEditorDefinition.RuntimeEditor : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(editorRuntimeDirectiveAPI, runtimeEditorPayload, editorRuntimeDirectiveLoadPromiseDeferred);
                         });
@@ -80,7 +76,6 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcodeRuntime", ["Util
                 };
 
                 api.getData = function () {
-
                     var obj = {
                         $type: "Retail.Billing.MainExtensions.RetailBillingCharge.RetailBillingCustomCodeCharge,Retail.Billing.MainExtensions",
                         FieldValues: {}

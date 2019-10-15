@@ -7,18 +7,10 @@ using Vanrise.Web.Base;
 
 namespace Retail.Billing.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "ChargeType")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "RetailBillingChargeType")]
     [JSONWithTypeAttribute]
     public class RetailBillingChargeTypeController : BaseAPIController
     {
-
-        [HttpGet]
-        [Route("GetChargeTypeExtendedSettingsConfigs")]
-        public IEnumerable<RetailBillingChargeTypeExtendedSettingsConfig> GetChargeTypeExtendedSettingsConfigs()
-        {
-            return new RetailBillingChargeTypeManager().GetChargeTypeExtendedSettingsConfigs();
-        }
-
         [HttpGet]
         [Route("GetRetailBillingChargeTypeInfo")]
         public IEnumerable<RetailBillingChargeTypeInfo> GetRetailBillingChargeTypeInfo()
@@ -31,6 +23,13 @@ namespace Retail.Billing.Web.Controllers
         public RetailBillingChargeType GetRetailBillingChargeType(Guid retailBillingChargeTypeId)
         {
             return new RetailBillingChargeTypeManager().GetRetailBillingChargeType(retailBillingChargeTypeId);
+        }
+
+        [HttpGet]
+        [Route("GetChargeTypeExtendedSettingsConfigs")]
+        public IEnumerable<RetailBillingChargeTypeExtendedSettingsConfig> GetChargeTypeExtendedSettingsConfigs()
+        {
+            return new RetailBillingChargeTypeManager().GetChargeTypeExtendedSettingsConfigs();
         }
     }
 }

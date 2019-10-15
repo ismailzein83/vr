@@ -1,5 +1,4 @@
-﻿using Retail.Billing.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Vanrise.Common;
@@ -10,34 +9,7 @@ namespace Retail.Billing.Business
     {
         #region Public Methods
 
-        public RetailBillingCompilationOutput TryCompileChargeCustomCode(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic)
-        {
-            List<string> errorMessages = new List<string>();
-
-            bool compilationResult = TryCompileChargeCustomCode(targetRecordTypeId, chargeSettingsRecordTypeId, pricingLogic, out errorMessages);
-            if (compilationResult)
-            {
-                return new RetailBillingCompilationOutput
-                {
-                    ErrorMessages = null,
-                    Result = true
-                };
-            }
-            else
-            {
-                return new RetailBillingCompilationOutput
-                {
-                    ErrorMessages = errorMessages,
-                    Result = false
-                };
-            }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private bool TryCompileChargeCustomCode(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out List<string> errorMessages)
+        public bool TryCompileChargeTypeCustomCode(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out List<string> errorMessages)
         {
             StringBuilder codeBuilder = new StringBuilder(@" 
                 using System;
@@ -66,7 +38,7 @@ namespace Retail.Billing.Business
                     }
                 }");
 
-            string className = "RetailBillingCustomCodeChargeTypeEvaluator";
+            string className = $"RetailBillingCustomCodeChargeTypeEvaluator_{Guid.NewGuid().ToString("N")}";
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
 
@@ -91,6 +63,10 @@ namespace Retail.Billing.Business
                 return false;
             }
         }
+
+        #endregion
+
+        #region Private Methods
 
         private List<String> PrepareErrorMessages(List<CSharpCompilationError> errors)
         {

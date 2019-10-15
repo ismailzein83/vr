@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailBillingChargetypeExtendedsettingsCustomcode", ["UtilsService", "VRUIUtilsService", "VR_GenericData_DataRecordFieldAPIService", "Retail_Billing_CustomCodeChargeTypeAPIService",
+app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsService", "VR_GenericData_DataRecordFieldAPIService", "Retail_Billing_CustomCodeChargeTypeAPIService",
     function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, Retail_Billing_CustomCodeChargeTypeAPIService) {
 
         var directiveDefinitionObject = {
@@ -132,7 +132,7 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcode", ["UtilsServic
                     }
                 };
 
-                $scope.scopeModel.tryCompileChargeCustomCode = function () {
+                $scope.scopeModel.tryCompileChargeTypeCustomCode = function () {
 
                     var obj = {
                         TargetRecordTypeId: targetRecordTypeSelectorAPI.getSelectedIds(),
@@ -140,7 +140,7 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcode", ["UtilsServic
                         PricingLogic: $scope.scopeModel.pricingLogic
                     };
 
-                    return Retail_Billing_CustomCodeChargeTypeAPIService.TryCompileChargeCustomCode(obj).then(function (response) {
+                    return Retail_Billing_CustomCodeChargeTypeAPIService.TryCompileChargeTypeCustomCode(obj).then(function (response) {
                         if (response != undefined)
                             errorMessages = response.ErrorMessages;
                         return !(errorMessages != undefined && errorMessages.length > 0);
@@ -171,7 +171,7 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcode", ["UtilsServic
                     if (payload != undefined) {
                         context = payload.context;
                         if (context != undefined) {
-                            context.beforeSaveHandler = $scope.scopeModel.tryCompileChargeCustomCode;
+                            context.beforeSaveHandler = $scope.scopeModel.tryCompileChargeTypeCustomCode;
                         }
 
                         extendedSettings = payload != undefined ? payload.extendedSettings : undefined;
@@ -222,7 +222,7 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcode", ["UtilsServic
 
                         chargeSettingsEditorDefinitionDirectiveReadyDeferred.promise.then(function () {
                             var editorPayload = {
-                                settings: extendedSettings != undefined ? extendedSettings.ChargeSettingsGenericEditorSettings : undefined,
+                                settings: extendedSettings != undefined ? extendedSettings.ChargeSettingsEditorDefinition : undefined,
                                 context: getContext()
                             };
 
@@ -258,7 +258,7 @@ app.directive("retailBillingChargetypeExtendedsettingsCustomcode", ["UtilsServic
                         TargetRecordTypeId: targetRecordTypeSelectorAPI.getSelectedIds(),
                         PricingLogic: $scope.scopeModel.pricingLogic,
                         ChargeSettingsRecordTypeId: chargeSettingsRecordTypeSelectorAPI.getSelectedIds(),
-                        ChargeSettingsGenericEditorSettings: chargeSettingsEditorDefinitionDirectiveApi != undefined ? chargeSettingsEditorDefinitionDirectiveApi.getData() : undefined
+                        ChargeSettingsEditorDefinition: chargeSettingsEditorDefinitionDirectiveApi != undefined ? chargeSettingsEditorDefinitionDirectiveApi.getData() : undefined
                     };
                     return obj;
                 };
