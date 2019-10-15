@@ -94,6 +94,7 @@
     <Compile Include="PackageInfo.cs" />
     <Compile Include="PromotionDetail.cs" />
     <Compile Include="InvoiceEntity.cs" />
+    <Compile Include="RatePlanServiceParameter.cs" />
     <Compile Include="RequestHeaderInfo.cs" />
     <Compile Include="SOMProcessInstanceLog.cs" />
     <Compile Include="ServiceHistoryRecordDetail.cs" />
