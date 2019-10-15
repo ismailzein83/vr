@@ -5,7 +5,7 @@ namespace Retail.Billing.MainExtensions.DiscountRuleCondition
 {
     public class DiscountRuleConditionCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId => new Guid("866A226E-E75D-412B-AC0A-2F8AA89AB63E");
 
         public override bool AreEqual(object newValue, object oldValue)
         {
