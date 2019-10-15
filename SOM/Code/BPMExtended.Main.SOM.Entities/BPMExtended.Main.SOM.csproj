@@ -109,6 +109,7 @@
     <Compile Include="Billing\WorkflowInput\GetContractAddressInput.cs" />
     <Compile Include="Billing\WorkflowInput\GSHDSLContractOnHoldInput.cs" />
     <Compile Include="Billing\WorkflowInput\GSHDSLSubscriptionRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\InvoiceFeeInput.cs" />
     <Compile Include="Billing\WorkflowInput\LastMileChangeRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\LeasedLineContractOnHoldInput.cs" />
     <Compile Include="Billing\WorkflowInput\LeasedLineRequestInput.cs" />

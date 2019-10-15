@@ -514,6 +514,36 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public bool IsContractHasAnyOpenOperation(string contractId)
+        {
+            if (contractId == null) return false;
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFilter, esqFilter2;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("Id");
+            var status = esq.AddColumn("StStatus.StIsClosed");
+
+            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contractId);
+            esqFilter2 = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.StIsClosed", false);
+
+            esq.Filters.Add(esqFilter);
+            esq.Filters.Add(esqFilter2);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                // bool isClosed = entities[0].GetTypedColumnValue<bool>(status.Name);
+                return true;
+
+            }
+            return false;
+        }
+
+
+
+
         public List<string> GetOperationsFromRequestHeader(string requestType, string statusId)
         {
             EntitySchemaQuery esq;

@@ -56,118 +56,25 @@ namespace BPMExtended.Main.Business
         }
 
 
-     
+        public List<InvoiceFee> GetInvoicesFees(string contracId,List<string> services)
+        {
+            List<InvoiceFee> fees;
+
+            var input = new InvoiceFeeInput()
+            {
+                RatePlanId = new ContractManager().GetContractRatePlan(contracId),
+                ServiceIds = services
+            };
+          
+            using (SOMClient client = new SOMClient())
+            {
+                fees = client.Post<InvoiceFeeInput, List<InvoiceFee>>("api/SOM.ST/Billing/GetInvoicesFees", input);
+            }
+
+            return fees;
+        }
 
 
-        //old one
-        //public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId, BPMExtended.Main.Entities.OperationType operationType)
-        //{
-        //    //After creating a contract with status on hold for this customer
-        //    //Send to POS the list of services to pay with the contract id
-
-        //    decimal depositAmount = 0;
-        //    bool hasCallBaring = false;
-        //    bool isForeigner = false;
-        //    PaymentInfo payment = new PaymentInfo();
-
-        //    ServiceManager serviceManager = new ServiceManager();
-        //    var coreServices = serviceManager.GetCoreServices(ratePlanId);
-
-        //    decimal amountToPay = 0;
-
-        //    foreach (var service in coreServices)
-        //    {
-        //        amountToPay += service.SubscriptionFee;
-        //    }
-
-        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-        //    var esqResult = new EntitySchemaQuery(connection.EntitySchemaManager, "Contact");
-        //    esqResult.AddColumn("Name");
-        //    esqResult.AddColumn("StCustomerDocumentType");
-        //    esqResult.AddColumn("StSponsorDocumentIDNumber");
-
-        //    // Execution of query to database and getting object with set identifier.
-        //    var entity = esqResult.GetEntity(connection, contactId);
-        //    object customerTypeId = entity.GetColumnValue("StCustomerDocumentTypeId");
-        //    object sponsorNumber = entity.GetColumnValue("StSponsorDocumentIDNumber");
-
-        //    //get customer type
-        //    var esqResult2 = new EntitySchemaQuery(connection.EntitySchemaManager, "StCustomerDocumentType");
-        //    esqResult2.AddColumn("Name");
-        //    var entity2 = esqResult2.GetEntity(connection, customerTypeId);
-        //    object customerType = entity2.GetColumnValue("Name");
-
-
-        //    if (operationType == BPMExtended.Main.Entities.OperationType.TelephonyLineSubscription)
-        //    {
-
-        //        //get services
-        //        var esqResult3 = new EntitySchemaQuery(connection.EntitySchemaManager, "StLineSubscriptionRequest");
-        //        esqResult3.AddColumn("StServices");
-        //        var entity3 = esqResult3.GetEntity(connection, requestId);
-        //        object servicesJson = entity3.GetColumnValue("StServices");
-
-        //        if (servicesJson.ToString() != "" && servicesJson != null && servicesJson.ToString() != "\"\"")
-        //        {
-
-        //            List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
-
-        //            foreach (Service service in services)
-        //            {
-        //                if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
-        //                {
-        //                    hasCallBaring = true;
-        //                    break;
-        //                }
-        //            }
-
-        //        }
-
-        //    }
-
-
-        //    if (customerType.Equals("أجنبي") && sponsorNumber.ToString().Equals(""))
-        //    {
-        //        if (hasCallBaring) depositAmount = 15000;
-        //        else depositAmount = 20000;
-
-        //        depositAmount = 15000;
-        //        isForeigner = true;
-        //    }
-
-
-        //    //
-        //    payment.amountToPay = amountToPay;
-        //    payment.isForeigner = isForeigner;
-        //    payment.depositAmount = depositAmount;
-
-        //    return payment;
-        //}
-
-        //public PaymentInfo SubmitToPOS(string ratePlanId)
-        //{
-        //    //Send to POS the list of services to pay with the contract id
-
-        //    PaymentInfo payment = new PaymentInfo();
-
-        //    ServiceManager serviceManager = new ServiceManager();
-        //    var coreServices = serviceManager.GetCoreServices(ratePlanId);
-
-        //    decimal amountToPay = 0;
-
-        //    foreach (var service in coreServices)
-        //    {
-        //        amountToPay += service.SubscriptionFee;
-        //    }
-
-
-        //    //
-        //    payment.amountToPay = amountToPay;
-
-        //    return payment;
-        //}
-
-    
         public bool CheckIfUserPayForWaitingList(Guid requestId)
         {
             //Get sequence Number
@@ -177,90 +84,6 @@ namespace BPMExtended.Main.Business
             return new Random().Next(10) <= 5 ? true : false;
 
         }
-
-        //public PaymentInfo GetDepositAmount(Guid contactId, BPMExtended.Main.Entities.OperationType operationType, List<ServiceParameter> services)
-        //{
-        //    PaymentInfo payment = new PaymentInfo();
-        //    bool isContractCreated;
-        //    decimal depositAmount = 0;
-        //    bool hasCallBaring = false;
-        //    bool isForeigner = false;
-        //    string depositId=null;
-
-        //    //TODO : Create a contract with status on hold for this customer on Billing system
-            
-        //    isContractCreated = true; // suppose that the contract created successfully
-
-        //    if (!isContractCreated)
-        //    {
-        //        payment.isContractCreated = false;
-        //        return payment;
-
-        //    }
-
-        //    //Check if customer is foreigner and without sponsor + check if it has a call baring service selected
-
-         
-        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-        //    var esqResult = new EntitySchemaQuery(connection.EntitySchemaManager, "Contact");
-        //    esqResult.AddColumn("Name");
-        //    esqResult.AddColumn("StCustomerDocumentType");
-        //    esqResult.AddColumn("StSponsorDocumentIDNumber");
-
-        //    // Execution of query to database and getting object with set identifier.
-        //    var entity = esqResult.GetEntity(connection, contactId);
-        //    object customerTypeId = entity.GetColumnValue("StCustomerDocumentTypeId");
-        //    object sponsorNumber = entity.GetColumnValue("StSponsorDocumentIDNumber");
-
-        //    //get customer type
-        //    var esqResult2 = new EntitySchemaQuery(connection.EntitySchemaManager, "StCustomerDocumentType");
-        //    esqResult2.AddColumn("Name");
-        //    var entity2 = esqResult2.GetEntity(connection, customerTypeId);
-        //    object customerType = entity2.GetColumnValue("Name");
-
-
-        //    if (operationType == BPMExtended.Main.Entities.OperationType.TelephonyLineSubscription)
-        //    {
-
-   
-        //        if (services != null)
-        //        {
-
-        //            foreach (ServiceParameter service in services)
-        //            {
-        //                if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
-        //                {
-        //                    hasCallBaring = true;
-        //                    break;
-        //                }
-        //            }
-
-        //        }
-
-        //    }
-
-
-        //    if (customerType.Equals("أجنبي") && sponsorNumber.ToString().Equals(""))
-        //    {
-        //        if (hasCallBaring)
-        //            depositAmount = 15000;
-        //        else 
-        //            depositAmount = 20000;
-
-        //        isForeigner = true;
-        //        depositId = "A1D1F6E6-0D44-4D0B-AB2C-8DB759E8F8FF";
-        //    }
-
-
-        //    //
-        //    payment.isForeigner = isForeigner;
-        //    payment.depositAmount = depositAmount;
-        //    payment.depositId = depositId;
-        //    payment.isContractCreated = true;
-            
-
-        //    return payment;
-        //}
 
         public decimal SubmitToPOS(string contractId, string requestId, BPMExtended.Main.Entities.OperationType operationType)
         {
@@ -341,6 +164,18 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
+
+        public bool GetPABXTree(string contractId)
+        {
+            List<string> result;
+
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<List<string>>(String.Format("api/SOM.ST/Billing/GetPABXTree?contractId={0}", contractId));
+            }
+
+            return result.Count > 0;
+        }
 
         public bool generateInvoice(string customerId , string contractId , bool simulate)
         {

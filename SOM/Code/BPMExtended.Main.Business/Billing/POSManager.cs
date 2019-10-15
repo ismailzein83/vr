@@ -26,11 +26,11 @@ namespace BPMExtended.Main.Business
         }
         #endregion
 
-        public SubmitToPOSResponse SubmitToPOS(string requestId , string fees)
+        public List<SubmitToPOSResponse> SubmitToPOS(string requestId , string fees)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
-            SubmitToPOSResponse item=null;
+            List<SubmitToPOSResponse> items=null;
             bool depositFlag;
             string contractId=null,contactId,accountId;
             Contact contact = new Contact();
@@ -91,11 +91,11 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    item = client.Post<SubmitToPOSInput,SubmitToPOSResponse>("api/SOM.ST/Billing/SubmitToPOS", somRequestInput);
+                    items = client.Post<SubmitToPOSInput, List<SubmitToPOSResponse>>("api/SOM.ST/Billing/SubmitToPOS", somRequestInput);
                 }
             }
 
-            return item;
+            return items;
                     
         }
 
