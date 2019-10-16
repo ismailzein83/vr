@@ -267,7 +267,20 @@ namespace BPMExtended.Main.Business
             return new List<ServiceDetail>();
         }
 
+        public List<RatePlanServiceParameter> GetRatePlanServiceParameters(string serviceId) {
+            List<RatePlanServiceParameter> ratePlanServiceParameters = new List<RatePlanServiceParameter>();
+            ratePlanServiceParameters.Add(new RatePlanServiceParameter {
+            ParameterName="TextBox1",
+            ParameterType=ParameterType.TB
+            });
 
+            ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            {
+                ParameterName = "TextBox2",
+                ParameterType = ParameterType.TB
+            });
+            return ratePlanServiceParameters;
+        }
 
         public List<ServiceDetail> GetADSLOptionalServicesByContractId(string telephonycontractid)//adsl contractId
         {
