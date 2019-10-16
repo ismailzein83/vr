@@ -594,6 +594,30 @@ namespace BPMExtended.Main.Business
             return entityName;
         }
 
+        public string GetEntityNameByOperationId(string operationId)
+        {
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string entityName = "";
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestsTypes");
+            esq.AddColumn("StEntityName");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", operationId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                entityName = entities[0].GetColumnValue("StEntityName").ToString();
+
+            }
+            return entityName;
+        }
+
         public string GetStepColumnNameByRequestId(string requestId)
         {
 
