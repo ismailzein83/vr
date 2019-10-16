@@ -92,6 +92,7 @@
     <Compile Include="DeviceType.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="InvoiceFee.cs" />
+    <Compile Include="Money.cs" />
     <Compile Include="PackageInfo.cs" />
     <Compile Include="PromotionDetail.cs" />
     <Compile Include="InvoiceEntity.cs" />

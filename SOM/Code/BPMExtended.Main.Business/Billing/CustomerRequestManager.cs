@@ -555,6 +555,7 @@ namespace BPMExtended.Main.Business
             var contactCol = esq.AddColumn("StContact.Id");
             var accountCol = esq.AddColumn("StAccount.Id");
             var contractCol = esq.AddColumn("StContractID");
+            esq.AddColumn("StSequenceNumber");
             var Id = esq.AddColumn("Id");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
@@ -565,9 +566,11 @@ namespace BPMExtended.Main.Business
                 string contactId = entities[0].GetTypedColumnValue<string>(contactCol.Name).ToString();
                 string accountId = entities[0].GetTypedColumnValue<string>(accountCol.Name).ToString();
                 string contractId = entities[0].GetTypedColumnValue<string>(contractCol.Name).ToString();
+                string sequenceNumber = entities[0].GetTypedColumnValue<string>("StSequenceNumber").ToString();
                 result.AccountId = accountId;
                 result.ContactId = contactId;
                 result.ContractId = contractId;
+                result.SequenceNumber = sequenceNumber;
             }
             return result;
         }

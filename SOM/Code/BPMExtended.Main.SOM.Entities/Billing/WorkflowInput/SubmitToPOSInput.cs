@@ -12,6 +12,7 @@ namespace BPMExtended.Main.SOMAPI
         public string CustomerCode { get; set; }
         public string ContractId { get; set; }
         public bool DepositFlag { get; set; }
+        public string SequenceNumber { get; set; }
         public List<SaleService> Services { get; set; }
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class DepositDocument
+    public class Money 
     {
-        public string Id { get; set; }
-        public string Amount { get; set; }
+        public decimal amount { get; set; }
+        public string currency { get; set; }
     }
 }

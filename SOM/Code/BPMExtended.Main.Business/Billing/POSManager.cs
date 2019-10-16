@@ -83,6 +83,7 @@ namespace BPMExtended.Main.Business
                 var somRequestInput = new SubmitToPOSInput()
                 {
                     ContractId = contractId,
+                    SequenceNumber = new CustomerRequestManager().GetRequestHeaderInfo(requestId).SequenceNumber,
                     CustomerCode = contactId!=null && contactId != "" ?  new CRMCustomerManager().GetCustomerInfo(contact.CustomerId).CustomerCode : new CRMCustomerManager().GetCustomerInfo(account.CustomerId).CustomerCode,
                     DepositFlag = depositFlag,
                     Services = services.Where(s=>s.UpFront==true).ToList()//filter the fees by upfront (just send the fees that have the UpFront == true)
@@ -99,20 +100,22 @@ namespace BPMExtended.Main.Business
                     
         }
 
-        public ValidatePaymentState ValidatePosPayment(string caseId, string requestId , string depositId)
+        public ValidatePaymentState ValidatePosPayment(string requestId)
         {
             //TODO: check if user has paid
+            List<DepositDocument> listOfDeposites = new List<DepositDocument>();    
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             EntityCollection entities;
             Contact contact = new Contact();
             Account account = new Account();
             ValidatePaymentState item ;
-            string contactId, accountId,customerId;
+            string contactId, accountId,customerId, depositId=null;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, new CRMCustomerManager().GetEntityNameByRequestId(requestId));
             var stContact = esq.AddColumn("StContact.Id");
             var stAccount = esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedDeposites");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -122,6 +125,13 @@ namespace BPMExtended.Main.Business
             {
                 contactId = entities[0].GetTypedColumnValue<string>(stContact.Name).ToString();
                 accountId = entities[0].GetTypedColumnValue<string>(stAccount.Name).ToString();
+                string deposites = entities[0].GetColumnValue("StOperationAddedDeposites").ToString();
+                if (deposites != "\"\"" && deposites != null && deposites != "")
+                {
+                    listOfDeposites = JsonConvert.DeserializeObject<List<DepositDocument>>(deposites);
+                    if (listOfDeposites.Count > 0)
+                        depositId = listOfDeposites.ElementAt(0).Id;
+                }
 
                 if (contactId != null && contactId != "")
                     customerId = new CommonManager().GetContact(contactId).CustomerId;
@@ -130,7 +140,7 @@ namespace BPMExtended.Main.Business
 
                 using (SOMClient client = new SOMClient())
                 {
-                    item = client.Get<ValidatePaymentState>(String.Format("api/SOM.ST/Billing/ValidatePayment?CaseId={0}&CustomerCode={1}&CustomerId={1}&DepositId={1}", caseId, new CRMCustomerManager().GetCustomerInfo(customerId).CustomerCode, customerId, depositId));
+                    item = client.Get<ValidatePaymentState>(String.Format("api/SOM.ST/Billing/ValidatePayment?sequenceNumber={0}&customerCode={1}&customerId={2}&depositId={3}", new CustomerRequestManager().GetRequestHeaderInfo(requestId).SequenceNumber,new CRMCustomerManager().GetCustomerInfo(customerId).CustomerCode, customerId, depositId));
                 }
                 return item;
             }     

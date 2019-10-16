@@ -288,17 +288,24 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("GivenName");
             esq.AddColumn("Surname");
             esq.AddColumn("MiddleName");
-            var titleId=esq.AddColumn("StTitle.StName");
+            var titleId=esq.AddColumn("StTitle.Id");
 
             esq.AddColumn("StMotherNameTrimmed");
             esq.AddColumn("BirthDate");
             esq.AddColumn("StCareer");
+            esq.AddColumn("StLanguage");
             esq.AddColumn("StLanguage.Id");
+            esq.AddColumn("StNationality");
             esq.AddColumn("StNationality.Id");
-            esq.AddColumn("CountryId");
-            esq.AddColumn("RegionId");
+            esq.AddColumn("Country");
+            esq.AddColumn("Country.Id");
+            esq.AddColumn("Region");
+            esq.AddColumn("Region.Id");
+            esq.AddColumn("City");
             esq.AddColumn("City.Id");
+            esq.AddColumn("StTown");
             esq.AddColumn("StTown.Id");
+            esq.AddColumn("StDistrict");
             esq.AddColumn("StDistrict.Id");
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloorNumber");
@@ -337,13 +344,13 @@ namespace BPMExtended.Main.Business
                 var motherName = entities[0].GetColumnValue("StMotherNameTrimmed");
                 var birthDate = entities[0].GetColumnValue("BirthDate");
                 var career = entities[0].GetColumnValue("StCareer");
-                var languageName = entities[0].GetColumnValue("StLanguageName");
-                var nationalityName = entities[0].GetColumnValue("StNationalityName");
-                var countryName = entities[0].GetColumnValue("CountryName");
-                var regionName = entities[0].GetColumnValue("RegionName");
-                var cityName = entities[0].GetColumnValue("CityName");
-                var townName = entities[0].GetColumnValue("StTownName");
-                var districtName = entities[0].GetColumnValue("StDistrictName");
+                var languageId = entities[0].GetColumnValue("StLanguageId");
+                var nationalityId = entities[0].GetColumnValue("StNationalityId");
+                var countryId = entities[0].GetColumnValue("CountryId");
+                var regionId = entities[0].GetColumnValue("RegionId");
+                var cityId = entities[0].GetColumnValue("CityId");
+                var townId = entities[0].GetColumnValue("StTownId");
+                var districtId = entities[0].GetColumnValue("StDistrictId");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
                 var floorNumber = entities[0].GetColumnValue("StFloorNumber");
                 var addressNotes = entities[0].GetColumnValue("StAddressNotes");
@@ -377,13 +384,13 @@ namespace BPMExtended.Main.Business
                     MotherName = motherName.ToString(),
                     BirthDate = birthDate.ToString(),
                     Career = career.ToString(),
-                    LanguageId = languageName.ToString(),
-                    NationalityId = nationalityName.ToString(),
-                    CountryId = countryName.ToString(),
-                    RegionId = regionName.ToString(),
-                    CityId = cityName.ToString(),
-                    TownId = townName.ToString(),
-                    DistrictId = districtName.ToString(),
+                    LanguageId = languageId.ToString(),
+                    NationalityId = nationalityId.ToString(),
+                    CountryId = countryId.ToString(),
+                    RegionId = regionId.ToString(),
+                    CityId = cityId.ToString(),
+                    TownId = townId.ToString(),
+                    DistrictId = districtId.ToString(),
                     BuildingNumber = buildingNumber.ToString(),
                     FloorNumber = floorNumber.ToString(),
                     AddressNotes = addressNotes.ToString(),
@@ -448,7 +455,7 @@ namespace BPMExtended.Main.Business
             return account;
         }
 
-        public void UpdateDepositDocumentId(string requestId, List<DepositDocument> depositDocumentId, string depositAmount)
+        public void UpdateDepositDocumentId(string requestId, List<DepositDocument> depositDocument)
         {
 
             EntitySchemaQuery esq;
@@ -473,7 +480,7 @@ namespace BPMExtended.Main.Business
                     listOfDeposites = JsonConvert.DeserializeObject<List<DepositDocument>>(deposites);
                 }
 
-                List<DepositDocument> newDepositsList = listOfDeposites.Concat(depositDocumentId).ToList();
+                List<DepositDocument> newDepositsList = listOfDeposites.Concat(depositDocument).ToList();
 
 
                 //update deposites

@@ -96,7 +96,7 @@ namespace BPMExtended.Main.Business
           
             using (SOMClient client = new SOMClient())
             {
-                fees = client.Post<InvoiceFeeInput, List<InvoiceFee>>("api/SOM.ST/Billing/GetInvoicesFees", input);
+                fees = client.Post<InvoiceFeeInput, List<InvoiceFee>>("api/SOM.ST/Billing/GetInvoiceFees", input);
             }
 
             return fees;
