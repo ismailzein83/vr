@@ -448,7 +448,7 @@ namespace BPMExtended.Main.Business
             return account;
         }
 
-        public void UpdateDepositDocumentId(string requestId, List<DepositDocument> depositDocumentId)
+        public void UpdateDepositDocumentId(string requestId, List<DepositDocument> depositDocumentId, string depositAmount)
         {
 
             EntitySchemaQuery esq;
