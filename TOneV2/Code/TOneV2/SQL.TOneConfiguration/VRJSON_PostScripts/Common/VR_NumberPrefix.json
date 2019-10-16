@@ -381,9 +381,9 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"fe36264a-1db1-4c1d-9228-036a43195d4d\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 61,
+              "Rank": 50,
               "CreatedTime": "2019-07-01T14:44:45.82",
-              "LastModifiedTime": "2019-09-27T16:08:42.007"
+              "LastModifiedTime": "2019-10-15T11:18:46.32"
             }
           },
           {
@@ -399,9 +399,9 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"992c93a5-0d90-41cd-8501-7235b4cab09e\"}]}}",
               "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 62,
+              "Rank": 51,
               "CreatedTime": "2019-07-01T14:44:45.82",
-              "LastModifiedTime": "2019-09-27T16:08:42.01"
+              "LastModifiedTime": "2019-10-15T11:18:46.32"
             }
           }
         ],
