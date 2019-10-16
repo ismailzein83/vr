@@ -210,6 +210,8 @@
     <Compile Include="Request Flow Management\ManagePabxFlowManagement.cs" />
     <Compile Include="Request Flow Management\TelephonyContractTakeOverFlowManagement.cs" />
     <Compile Include="SecurityManager.cs" />
+    <Compile Include="Work Orders\SwitchManager.cs" />
+    <Compile Include="Work Orders\WorkOrdersManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BPMExtended.Main.Common\BPMExtended.Main.Common.csproj">

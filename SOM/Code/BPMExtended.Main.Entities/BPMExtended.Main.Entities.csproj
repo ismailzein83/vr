@@ -159,6 +159,7 @@
     <Compile Include="Contracts\TelephonyContractDetail.cs" />
     <Compile Include="SubType.cs" />
     <Compile Include="VASService.cs" />
+    <Compile Include="WorkOrder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
