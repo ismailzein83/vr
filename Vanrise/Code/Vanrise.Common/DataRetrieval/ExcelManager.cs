@@ -131,7 +131,7 @@ namespace Vanrise.Common
             return excelResult;
         }
 
-        public ExcelResult<T> ExportExcel<T>(ExportExcelSheet excelSheet,bool throwIfContentLengthExceeded = false)
+        public ExcelResult<T> ExportExcel<T>(ExportExcelSheet excelSheet, bool throwIfContentLengthExceeded = false)
         {
             if (excelSheet == null)
                 throw new ArgumentNullException("excelSheet");
@@ -168,7 +168,9 @@ namespace Vanrise.Common
                     rowIndex++;
                 }
             }
+
             colIndex = 0;
+            int? idColumnIndex = null;
             //filling header
             foreach (var headerCell in excelSheet.Header.Cells)
             {
@@ -176,6 +178,9 @@ namespace Vanrise.Common
                     RateWorkSheet.Cells.SetColumnWidth(colIndex, headerCell.Width.Value);
                 else
                     RateWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+
+                if (string.Compare(headerCell.Title, "Id", true) == 0)
+                    idColumnIndex = colIndex;
 
                 RateWorkSheet.Cells[rowIndex, colIndex].PutValue(headerCell.Title);
                 Cell cell = RateWorkSheet.Cells.GetCell(rowIndex, colIndex);
@@ -198,12 +203,16 @@ namespace Vanrise.Common
             {
                 if (excelRow.Cells == null)
                     throw new NullReferenceException(String.Format("excelRow.Cells. RowIndex '{0}'", rowIndex));
+
                 if (excelRow.Cells.Count != excelSheet.Header.Cells.Count)
                     throw new Exception(String.Format("Invalid Row Cell Count. RowIndex '{0}'. Row Cell Count '{1}' Header Cell Count '{2}'", rowIndex, excelRow.Cells.Count, excelSheet.Header.Cells.Count));
+
                 colIndex = 0;
+
                 foreach (var cell in excelRow.Cells)
                 {
                     var excelCell = RateWorkSheet.Cells[rowIndex, colIndex];
+
                     if (colIndex >= excelSheet.Header.Cells.Count)
                         throw new Exception(String.Format("Cell Index '{0}' in row '{1}' is greater than header cell count '{2}'", colIndex, rowIndex, excelSheet.Header.Cells.Count));
                     var headerCell = excelSheet.Header.Cells[colIndex];
@@ -221,6 +230,7 @@ namespace Vanrise.Common
                         string truncatedString = cellValueAsString.Substring(0, 32762);
                         truncatedString += "...";
                         excelCell.PutValue(truncatedString);
+
                         if (!showTruncatedCellWarning)
                             showTruncatedCellWarning = true;
                     }
@@ -230,6 +240,15 @@ namespace Vanrise.Common
                     }
 
                     colIndex++;
+                }
+
+                if (idColumnIndex.HasValue)
+                {
+                    var excelIdCell = RateWorkSheet.Cells[rowIndex, idColumnIndex.Value];
+                    string idValue = excelIdCell.Value as string;
+
+                    if (!string.IsNullOrEmpty(idValue))
+                        excelIdCell.Value = idValue.Replace(",", string.Empty);
                 }
 
                 rowIndex++;
