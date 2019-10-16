@@ -58,7 +58,6 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                     if (payload.settings != undefined) {
                         attachmentGenerators =  payload.settings.AttachementGenerators;
                         ftpCommunicatorSettings = payload.settings.FTPCommunicatorSettings;
-                        $scope.scopeModel.subdirectory = payload.settings.Subdirectory;
                     }
                 }
 
@@ -106,7 +105,6 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                 return {
                     $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.FTPHandler,Vanrise.Analytic.MainExtensions",
                     AttachementGenerators: fileGeneratorGridAPI.getData(),
-                    Subdirectory: $scope.scopeModel.subdirectory,
                     FTPCommunicatorSettings: ftpCommunicatorSettingsAPI.getData()
                 };
             };

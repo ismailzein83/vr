@@ -100,7 +100,6 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         {
             get { return new Guid("F38308EF-433A-48C6-891B-34847929FD5A"); }
         }
-        public string Subdirectory { get; set; }
         public FTPCommunicatorSettings FTPCommunicatorSettings { get; set; }
 
         public override void Execute(IGenerateFilesActionTypeContext context)
@@ -125,7 +124,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                         MemoryStream stream = new MemoryStream(generator.FileContent);
                         string errorMessage = null;
 
-                        if (!ftpCommunicator.TryWriteFile(stream, generator.FileName, this.Subdirectory, out errorMessage))
+                        if (!ftpCommunicator.TryWriteFile(stream, generator.FileName, null, out errorMessage))
                         {
                             if (context.HandlerContext.EvaluatorContext != null)
                                 context.HandlerContext.EvaluatorContext.WriteErrorBusinessTrackingMsg(errorMessage);

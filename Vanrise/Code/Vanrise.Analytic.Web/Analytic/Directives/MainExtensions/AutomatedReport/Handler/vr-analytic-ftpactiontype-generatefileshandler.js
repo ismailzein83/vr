@@ -47,7 +47,6 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                     context = payload.context;
                     if (payload.actionType != undefined) {
                         ftpCommunicatorSettings = payload.actionType.FTPCommunicatorSettings;
-                        $scope.scopeModel.subdirectory = payload.actionType.Subdirectory;
                     }
                 }
 
@@ -74,7 +73,6 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
             api.getData = function () {
                 return {
                     $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.FTPActionType,Vanrise.Analytic.MainExtensions",
-                    Subdirectory: $scope.scopeModel.subdirectory,
                     FTPCommunicatorSettings: ftpCommunicatorSettingsAPI.getData()
                 };
             };

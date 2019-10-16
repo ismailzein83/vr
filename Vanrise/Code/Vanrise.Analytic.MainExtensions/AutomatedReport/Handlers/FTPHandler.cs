@@ -18,8 +18,6 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         }
         public List<VRAutomatedReportFileGenerator> AttachementGenerators { get; set; }
 
-        public string Subdirectory { get; set; }
-
         public FTPCommunicatorSettings FTPCommunicatorSettings { get; set; }
 
         public override void OnAfterSaveAction(IVRAutomatedReportHandlerSettingsOnAfterSaveActionContext context)
@@ -65,7 +63,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                             MemoryStream stream = new MemoryStream(generatedFileOutput.GeneratedFile.FileContent);
                             string errorMessage = null;
 
-                            if (!ftpCommunicator.TryWriteFile(stream, generatedFileOutput.FileName, this.Subdirectory, out errorMessage))
+                            if (!ftpCommunicator.TryWriteFile(stream, generatedFileOutput.FileName, null, out errorMessage))
                             {
                                 if (context.EvaluatorContext != null)
                                     context.EvaluatorContext.WriteErrorBusinessTrackingMsg(errorMessage);
