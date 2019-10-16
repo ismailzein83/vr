@@ -3537,6 +3537,10 @@ vr-label[hasbackgroundcolor] .vr-control-label {
     display: inline !important;
 }
 
+vr-label[fullwidth] .vr-control-label {
+    display: inline-block !important;
+    width: 100% !important;
+}
 label[vr-alert].alert {
     padding: 5px;
     margin: 0px;
