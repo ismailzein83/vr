@@ -10,7 +10,7 @@ namespace Retail.Billing.Entities
     {
         public long BillingAccountId { get; set; }
 
-        public long ContractId { get; set; }
+        public long? ContractId { get; set; }
 
         public long? ContractServiceId { get; set; }
 
