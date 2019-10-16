@@ -603,16 +603,6 @@ namespace NP.IVSwitch.Business
                             }
                         }
 
-                        if (routeOption.Huntstop.Value == 1)
-                        {
-                            foreach (var item in itemsRequiredBackups)
-                            {
-                                routeTableRouteDetail.RouteOptionsDetails.Add(item);
-                            }
-                            itemsRequiredBackups = new List<RouteTableRouteOptionDetails>();
-                            continue;
-                        }
-
                         if (!hasPercentage && itemsRequiredBackups.Count == 0)
                         {
                             routeTableRouteDetail.RouteOptionsDetails.Add(new RouteTableRouteOptionDetails
@@ -625,6 +615,14 @@ namespace NP.IVSwitch.Business
                             });
                         }
 
+                        if (routeOption.Huntstop.Value == 1)
+                        {
+                            foreach (var item in itemsRequiredBackups)
+                            {
+                                routeTableRouteDetail.RouteOptionsDetails.Add(item);
+                            }
+                            itemsRequiredBackups = new List<RouteTableRouteOptionDetails>();
+                        }
                     }
                 if (routeTableRouteDetail.RouteOptionsDetails != null)
                     routeTableRouteDetail.RouteOptionsDetails = routeTableRouteDetail.RouteOptionsDetails.OrderByDescending(item => item.Preference).ToList();
