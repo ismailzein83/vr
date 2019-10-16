@@ -9,6 +9,14 @@
     [DataSourceId]      UNIQUEIDENTIFIER NULL,
     [InTrunk]           VARCHAR (50)     NULL,
     [OutTrunk]          VARCHAR (50)     NULL,
+    [SetupTime]         DATETIME         NULL,
     CONSTRAINT [PK_AlcatelCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_AlcatelCDR_SetupTime]
+    ON [Mediation_ICX].[AlcatelCDR]([SetupTime] ASC);
 

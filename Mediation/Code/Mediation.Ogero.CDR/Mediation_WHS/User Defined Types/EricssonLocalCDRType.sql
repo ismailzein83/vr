@@ -24,5 +24,8 @@
     [Route_Id]                 VARCHAR (4)      NULL,
     [ExtraFields]              VARCHAR (MAX)    NULL,
     [FileName]                 VARCHAR (255)    NULL,
-    [DataSourceId]             UNIQUEIDENTIFIER NULL);
+    [DataSourceId]             UNIQUEIDENTIFIER NULL,
+    [SetupTime]                DATETIME         NULL);
+
+
 

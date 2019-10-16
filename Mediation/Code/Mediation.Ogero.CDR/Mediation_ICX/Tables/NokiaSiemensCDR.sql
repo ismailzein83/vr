@@ -25,3 +25,10 @@
     CONSTRAINT [PK_NokiaSiemensCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_NokiaSiemensCDR_BeginDate]
+    ON [Mediation_ICX].[NokiaSiemensCDR]([BeginDate] ASC);
+

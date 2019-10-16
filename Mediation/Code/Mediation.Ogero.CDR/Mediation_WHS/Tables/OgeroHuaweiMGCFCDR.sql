@@ -53,3 +53,10 @@
     CONSTRAINT [PK_OgeroHuaweiMGCFCDR] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_OgeroHuaweiMGCFCDR_SetupTime]
+    ON [Mediation_WHS].[OgeroHuaweiMGCFCDR]([SetupTime] ASC);
+

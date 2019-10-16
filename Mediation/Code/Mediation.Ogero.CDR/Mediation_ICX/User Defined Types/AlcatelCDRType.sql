@@ -8,5 +8,8 @@
     [InTrunk]           VARCHAR (50)     NULL,
     [OutTrunk]          VARCHAR (50)     NULL,
     [FileName]          VARCHAR (255)    NULL,
-    [DataSourceId]      UNIQUEIDENTIFIER NULL);
+    [DataSourceId]      UNIQUEIDENTIFIER NULL,
+    [SetupTime]         DATETIME         NULL);
+
+
 

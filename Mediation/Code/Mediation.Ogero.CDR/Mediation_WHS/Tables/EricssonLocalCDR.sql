@@ -25,6 +25,14 @@
     [ExtraFields]              VARCHAR (MAX)    NULL,
     [FileName]                 VARCHAR (255)    NULL,
     [DataSourceId]             UNIQUEIDENTIFIER NULL,
+    [SetupTime]                DATETIME         NULL,
     CONSTRAINT [PK_EricssonLocalCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_EricssonLocalCDR_SetupTime]
+    ON [Mediation_WHS].[EricssonLocalCDR]([SetupTime] ASC);
 
