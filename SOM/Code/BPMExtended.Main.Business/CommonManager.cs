@@ -293,13 +293,13 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StMotherNameTrimmed");
             esq.AddColumn("BirthDate");
             esq.AddColumn("StCareer");
-            esq.AddColumn("StLanguageId");
-            esq.AddColumn("StNationalityId");
+            esq.AddColumn("StLanguage.Id");
+            esq.AddColumn("StNationality.Id");
             esq.AddColumn("CountryId");
             esq.AddColumn("RegionId");
-            esq.AddColumn("CityId");
-            esq.AddColumn("StTownId");
-            esq.AddColumn("StDistrictId");
+            esq.AddColumn("City.Id");
+            esq.AddColumn("StTown.Id");
+            esq.AddColumn("StDistrict.Id");
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloorNumber");
             esq.AddColumn("StAddressNotes");

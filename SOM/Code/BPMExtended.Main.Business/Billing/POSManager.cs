@@ -99,7 +99,7 @@ namespace BPMExtended.Main.Business
                     
         }
 
-        public bool ValidatePosPayment(string caseId, string requestId)
+        public ValidatePaymentState ValidatePosPayment(string caseId, string requestId , string depositId)
         {
             //TODO: check if user has paid
             EntitySchemaQuery esq;
@@ -107,7 +107,7 @@ namespace BPMExtended.Main.Business
             EntityCollection entities;
             Contact contact = new Contact();
             Account account = new Account();
-            bool item=false;
+            ValidatePaymentState item ;
             string contactId, accountId,customerId;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, new CRMCustomerManager().GetEntityNameByRequestId(requestId));
@@ -130,10 +130,11 @@ namespace BPMExtended.Main.Business
 
                 using (SOMClient client = new SOMClient())
                 {
-                    item = client.Get<bool>(String.Format("api/SOM.ST/Billing/ValidatePayment?CaseId={0}&CustomerCode={1}", caseId, new CRMCustomerManager().GetCustomerInfo(customerId).CustomerCode));
+                    item = client.Get<ValidatePaymentState>(String.Format("api/SOM.ST/Billing/ValidatePayment?CaseId={0}&CustomerCode={1}&CustomerId={1}&DepositId={1}", caseId, new CRMCustomerManager().GetCustomerInfo(customerId).CustomerCode, customerId, depositId));
                 }
-            }          
-            return item;
+                return item;
+            }     
+            return ValidatePaymentState.Undefined;
         }
     }
 }
