@@ -32,12 +32,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         public List<VRAutomatedReportFileGenerator> AttachementGenerators { get; set; }
         public override void OnAfterSaveAction(IVRAutomatedReportHandlerSettingsOnAfterSaveActionContext context)
         {
-            if(AttachementGenerators != null)
+            if (AttachementGenerators != null)
             {
-                foreach(var attachementGenerator in AttachementGenerators)
+                foreach (var attachementGenerator in AttachementGenerators)
                 {
                     if (attachementGenerator.Settings != null)
-                     attachementGenerator.Settings.OnAfterSaveAction(new VRAutomatedReportFileGeneratorOnAfterSaveActionContext { TaskId = context.TaskId, VRReportGenerationId = context.VRReportGenerationId });
+                        attachementGenerator.Settings.OnAfterSaveAction(new VRAutomatedReportFileGeneratorOnAfterSaveActionContext { TaskId = context.TaskId, VRReportGenerationId = context.VRReportGenerationId });
                 }
             }
         }
@@ -65,9 +65,10 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
                     VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext
                     {
+                        DontExecuteIfEmpty = DontExecuteIfEmpty,
                         HandlerContext = context
                     };
-                    
+
                     var generatedFileOutput = fileGeneratorManager.GenerateFileOutput(generator, generateFileContext);
                     if (generatedFileOutput != null && (!generatedFileOutput.GeneratedFile.FileIsEmpty || !DontExecuteIfEmpty))
                     {
@@ -97,14 +98,14 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
         public override void Validate(IVRAutomatedReportHandlerValidateContext context)
         {
-          
+
             this.AttachementGenerators.ThrowIfNull("No attachment generators were added.");
             foreach (var generator in this.AttachementGenerators)
             {
                 generator.Settings.ThrowIfNull("generator.Settings");
                 generator.Settings.Validate(context);
-                if (context.Result==QueryHandlerValidatorResult.Failed)
-                    break; 
+                if (context.Result == QueryHandlerValidatorResult.Failed)
+                    break;
             }
         }
     }

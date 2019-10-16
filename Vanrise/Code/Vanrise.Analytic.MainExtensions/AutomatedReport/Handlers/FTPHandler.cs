@@ -41,8 +41,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 int filesLeft = totalFiles;
                 if (context.EvaluatorContext != null)
                 {
-                    if(totalFiles==1)
-                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to generate and transfer to directory {0} using FTP is 1 file.",  this.FTPCommunicatorSettings.Directory);
+                    if (totalFiles == 1)
+                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to generate and transfer to directory {0} using FTP is 1 file.", this.FTPCommunicatorSettings.Directory);
                     else
                         context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to generate and transfer to directory {0} using FTP is {1} files.", this.FTPCommunicatorSettings.Directory, totalFiles);
                 }
@@ -53,6 +53,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                         generator.Settings.ThrowIfNull("generator.Settings");
                         VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext
                         {
+                            DontExecuteIfEmpty = DontExecuteIfEmpty,
                             HandlerContext = context
                         };
                         var generatedFileOutput = fileGeneratorManager.GenerateFileOutput(generator, generateFileContext);
@@ -91,7 +92,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
             {
                 generator.Settings.ThrowIfNull("generator.Settings");
                 generator.Settings.Validate(context);
-                if (context.Result==QueryHandlerValidatorResult.Failed)
+                if (context.Result == QueryHandlerValidatorResult.Failed)
                     break;
             }
         }

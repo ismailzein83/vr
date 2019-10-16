@@ -8,6 +8,8 @@ namespace Vanrise.Analytic.Entities
 {
     public class VRAutomatedReportFileGeneratorGenerateFileContext : IVRAutomatedReportFileGeneratorGenerateFileContext
     {
+        public bool DontExecuteIfEmpty { get; set; }
+
         public IVRAutomatedReportHandlerExecuteContext HandlerContext { get; set; }
     }
 }

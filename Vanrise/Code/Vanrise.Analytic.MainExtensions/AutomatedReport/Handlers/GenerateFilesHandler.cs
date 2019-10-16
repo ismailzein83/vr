@@ -43,6 +43,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
                     VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext
                     {
+                        DontExecuteIfEmpty = DontExecuteIfEmpty,
                         HandlerContext = context
                     };
                     var generatedFileOutput = fileGeneratorManager.GenerateFileOutput(generator, generateFileContext);

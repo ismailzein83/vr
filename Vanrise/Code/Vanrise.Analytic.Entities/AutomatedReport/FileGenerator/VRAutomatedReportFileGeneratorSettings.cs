@@ -12,7 +12,7 @@ namespace Vanrise.Analytic.Entities
 
         public virtual void Validate(IVRAutomatedReportHandlerValidateContext context)
         {
-            
+
         }
         public virtual void OnAfterSaveAction(IVRAutomatedReportFileGeneratorOnAfterSaveActionContext context)
         {
@@ -35,6 +35,7 @@ namespace Vanrise.Analytic.Entities
 
     public interface IVRAutomatedReportFileGeneratorGenerateFileContext
     {
+        bool DontExecuteIfEmpty { get; set; }
         IVRAutomatedReportHandlerExecuteContext HandlerContext { get; }
     }
 }

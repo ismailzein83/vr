@@ -18,6 +18,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             input.FileGenerator.ThrowIfNull("input.FileGenerator");
             VRAutomatedReportFileGeneratorGenerateFileContext fileGeneratorContext = new VRAutomatedReportFileGeneratorGenerateFileContext
             {
+                DontExecuteIfEmpty = false,
                 HandlerContext = new VRAutomatedReportHandlerExecuteContext(input.Queries, null, null, input.FilterDefinition, input.FilterRuntime)
             };
             var generatedOutput = GenerateFileOutput(input.FileGenerator, fileGeneratorContext);
@@ -34,26 +35,28 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             generateFileContext.HandlerContext.ThrowIfNull("generateFileContext.HandlerContext");
             var fileName = fileGenerator.Name;
             var configManager = new Vanrise.Analytic.Business.ConfigManager();
-            foreach (var fileNamePart in configManager.GetFileNameParts())
-            {
-                if (fileName != null && fileName.Contains(string.Format("#{0}#", fileNamePart.VariableName)))
-                {
-                    fileName = fileName.Replace(string.Format("#{0}#", fileNamePart.VariableName), fileNamePart.Settings.GetPartText(new VRAutomatedReportFileNamePartConcatenatedPartContext()
-                    {
-                        TaskId = generateFileContext.HandlerContext.TaskId
-                    }));
-                }
-            }
 
             if (generateFileContext.HandlerContext.EvaluatorContext != null)
-                generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Started generating the file '{0}'.", fileName);
+                generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Started generating the file.");
             var generatedFile = fileGenerator.Settings.GenerateFile(new VRAutomatedReportFileGeneratorGenerateFileContext()
             {
                 HandlerContext = generateFileContext.HandlerContext
             });
             generatedFile.ThrowIfNull("generatedFile");
             if (generateFileContext.HandlerContext.EvaluatorContext != null)
-                generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished generating the file '{0}'.", fileName);
+                generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished generating the file.");
+
+            foreach (var fileNamePart in configManager.GetFileNameParts())
+            {
+                if (fileName != null && fileName.Contains(string.Format("#{0}#", fileNamePart.VariableName)))
+                {
+                    fileName = fileName.Replace(string.Format("#{0}#", fileNamePart.VariableName), fileNamePart.Settings.GetPartText(new VRAutomatedReportFileNamePartConcatenatedPartContext()
+                    {
+                        TaskId = (generatedFile.FileIsEmpty && generateFileContext.DontExecuteIfEmpty) ? null : generateFileContext.HandlerContext.TaskId
+                    }));
+                }
+            }
+
             if (fileGenerator.CompressFile)
             {
 
@@ -61,11 +64,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 var zippedFileContent = zipUtility.Zip(new ZipFileInfo()
                 {
                     Content = generatedFile.FileContent,
-                    FileName = string.Format("{0}.{1}",fileName, generatedFile.FileExtension) 
+                    FileName = string.Format("{0}.{1}", fileName, generatedFile.FileExtension)
                 });
                 return new VRAutomatedReportGeneratedOutput()
                 {
-                    FileName =  string.Format("{0}.zip", fileName),
+                    FileName = string.Format("{0}.zip", fileName),
                     GeneratedFile = new VRAutomatedReportGeneratedFile
                     {
                         FileContent = zippedFileContent,
@@ -76,10 +79,10 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
             return new VRAutomatedReportGeneratedOutput()
             {
-                FileName = string.Format("{0}.{1}",fileName,generatedFile.FileExtension),
+                FileName = string.Format("{0}.{1}", fileName, generatedFile.FileExtension),
                 GeneratedFile = generatedFile
             };
-  
+
         }
         public class VRAutomatedReportGeneratedOutput
         {
