@@ -296,9 +296,8 @@
                     directiveApi.getData = function () {
                         var tableRows = [];
                         for (var k = 0; k < $scope.scopeModel.selectedTableData.length; k++) {
-                            tableRows.push($scope.scopeModel.selectedTableData[k].Entity);
+                            tableRows.push(Object.assign({ '$type': 'Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities' }, $scope.scopeModel.selectedTableData[k].Entity));
                         }
-
                         return {
                             tableRows: tableRows,
                             selectedTableData: $scope.scopeModel.selectedTableData,

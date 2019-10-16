@@ -50,6 +50,7 @@ namespace Vanrise.DevTools.Entities
         {
             return new GeneratedScriptItemComparisonOutput { IsSimilar = true };
         }
+        public abstract GeneratedScriptItemTableSettings FindScriptDiffernces(GeneratedScriptItemTableSettings newScriptSettings, GeneratedScriptItemTableSettings oldScriptSettings);
     }
     public class GeneratedScriptItemComparisonOutput
     {

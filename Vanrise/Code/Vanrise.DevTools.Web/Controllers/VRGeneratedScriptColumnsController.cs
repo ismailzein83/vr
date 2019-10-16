@@ -48,6 +48,12 @@ namespace Vanrise.DevTools.Web.Controllers
             return columnsManager.CompareItems(generatedScriptItem);
         }
         [HttpPost]
+        [Route("CompareJsonScripts")]
+        public string CompareJsonScripts(ScriptsComparisonData data)
+        {
+            return columnsManager.CompareJsonScripts(data.NewScripts, data.OldScripts);
+        }
+        [HttpPost]
         [Route("GenerateQueries")]
         public string GenerateQueries(GeneratedScriptItem generatedScriptItem)
         {
@@ -66,6 +72,11 @@ namespace Vanrise.DevTools.Web.Controllers
         public string GenerateQueriesFromTextFile(string filePath, GeneratedScriptType type)
         {
             return columnsManager.GenerateQueriesFromTextFile(filePath, type);
+        }
+        public class ScriptsComparisonData
+        {
+            public string NewScripts { get; set; }
+            public string OldScripts { get; set; }
         }
     }
 }

@@ -136,12 +136,17 @@
                     if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
                         data = directiveAPI.getData();
                         if (data != undefined && data.ConfigId == undefined) {
-                            data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                            var info = {};
+                            info['$type'] = data['$type']
+                            info.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                            for (var item in data) {
+                                if (item != '$type')
+                                    info[item] = data[item];
+                            }
                         }
                         var title = $scope.scopeModel.selectedTemplateConfig.Title;
-
                     }
-                    return { data: data, Title: title };
+                    return { data: info, Title: title };
                 };
 
                 api.clear = function () {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Vanrise.DevTools.Entities;
 using Vanrise.Common;
+using System.Linq;
+
 namespace Vanrise.DevTools.Business
 {
     public class DeleteGeneratedScriptItem : GeneratedScriptItemTableSettings
@@ -21,6 +23,31 @@ namespace Vanrise.DevTools.Business
             return (Errors.Count != 0) ? false : true;
 
         }
+
+        public override GeneratedScriptItemTableSettings FindScriptDiffernces(GeneratedScriptItemTableSettings newScriptSettings, GeneratedScriptItemTableSettings oldScriptSettings)
+        {
+            var newDeleteSettings = newScriptSettings as DeleteGeneratedScriptItem;
+
+            if (newDeleteSettings == null || newDeleteSettings.KeyValues == null || newDeleteSettings.KeyValues.Count == 0)
+                return null;
+
+            var oldDeleteSettings = oldScriptSettings as DeleteGeneratedScriptItem;
+
+            if (oldDeleteSettings == null || oldDeleteSettings.KeyValues == null || oldDeleteSettings.KeyValues.Count == 0)
+                return newDeleteSettings;
+
+            var keyDifferences = newDeleteSettings.KeyValues.Except(oldDeleteSettings.KeyValues).ToList();
+
+            if (keyDifferences.Count > 0)
+                return new DeleteGeneratedScriptItem()
+                {
+                    IdentifierColumn = newDeleteSettings.IdentifierColumn,
+                    KeyValues = newDeleteSettings.KeyValues
+                };
+
+            return null;
+        }
+
         public GeneratedScriptItemTableColumn IdentifierColumn { get; set; }
         public List<string> KeyValues { get; set; }
         public override string GenerateQuery(IGeneratedScriptItemTableContext context)

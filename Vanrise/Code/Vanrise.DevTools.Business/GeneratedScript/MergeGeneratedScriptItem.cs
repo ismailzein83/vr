@@ -153,6 +153,115 @@ namespace Vanrise.DevTools.Business
             }
             return comparisonOutput;
         }
+
+
+        public override GeneratedScriptItemTableSettings FindScriptDiffernces(GeneratedScriptItemTableSettings newScriptSettings, GeneratedScriptItemTableSettings oldScriptSettings)
+        {
+            var newMergeSettings = newScriptSettings as MergeGeneratedScriptItem;
+
+            if (newMergeSettings == null || newMergeSettings.DataRows == null || newMergeSettings.DataRows.Count == 0)
+                return null;
+
+            var oldMergeSettings = oldScriptSettings as MergeGeneratedScriptItem;
+
+            if (oldMergeSettings == null || oldMergeSettings.DataRows == null || oldMergeSettings.DataRows.Count == 0)
+                return newMergeSettings;
+
+            MergeGeneratedScriptItem differences = new MergeGeneratedScriptItem()
+            {
+                Columns = newMergeSettings.Columns,
+                Variables = newMergeSettings.Variables,
+                LastWhereCondition = newMergeSettings.LastWhereCondition,
+                LastJoinStatement = newMergeSettings.LastJoinStatement,
+                IsIdentity = newMergeSettings.IsIdentity,
+                DataRows = new List<GeneratedScriptItemTableRow>()
+            };
+
+            foreach (var newRow in newMergeSettings.DataRows)
+            {
+                string newRowIdentifierKey = "";
+                var isRowFound = false;
+
+                if (newRow.FieldValues != null && Columns != null && Columns.Count > 0)
+                {
+                    foreach (var column in Columns)
+                    {
+                        if (column.IsIdentifier)
+                            newRowIdentifierKey += newRow.FieldValues[column.ColumnName];
+                    }
+                }
+
+                foreach (var oldRow in oldMergeSettings.DataRows)
+                {
+                    string oldRowIdentifierKey = "";
+
+                    if (oldRow.FieldValues != null && Columns != null && Columns.Count > 0)
+                    {
+                        foreach (var column in Columns)
+                        {
+                            if (column.IsIdentifier)
+                                oldRowIdentifierKey += oldRow.FieldValues[column.ColumnName];
+                        }
+                    }
+
+                    if (newRowIdentifierKey == oldRowIdentifierKey)
+                    {
+                        isRowFound = true;
+
+                        if (newRow.FieldValues != null && oldRow.FieldValues != null && Columns != null && Columns.Count > 0)
+                        {
+                            foreach (var column in Columns)
+                            {
+                                if (newRow.FieldValues[column.ColumnName] is GeneratedScriptVariableData || oldRow.FieldValues[column.ColumnName] is GeneratedScriptVariableData)
+                                {
+                                    var newRowValueAsVariable = newRow.FieldValues[column.ColumnName] as GeneratedScriptVariableData;
+                                    var oldRowValueAsVariable = oldRow.FieldValues[column.ColumnName] as GeneratedScriptVariableData;
+
+                                    if (newRowValueAsVariable == null || oldRowValueAsVariable == null || newRowValueAsVariable.VariableId.ToString() != oldRowValueAsVariable.VariableId.ToString())
+                                    {
+                                        differences.DataRows.Add(newRow);
+                                        break;
+                                    }
+                                }
+
+                                else if (newRow.FieldValues[column.ColumnName] is GeneratedScriptOverriddenData || oldRow.FieldValues[column.ColumnName] is GeneratedScriptOverriddenData)
+                                {
+                                    var newRowValueAsOverriddenData = newRow.FieldValues[column.ColumnName] as GeneratedScriptOverriddenData;
+                                    var oldRowValueAsOverriddenData = oldRow.FieldValues[column.ColumnName] as GeneratedScriptOverriddenData;
+
+                                    if (newRowValueAsOverriddenData == null || oldRowValueAsOverriddenData == null || newRowValueAsOverriddenData.Value.ToString() != oldRowValueAsOverriddenData.Value.ToString())
+                                    {
+                                        differences.DataRows.Add(newRow);
+                                        break;
+                                    }
+                                }
+
+                                else
+                                {
+                                    var newRowValue = newRow.FieldValues[column.ColumnName] != null ? newRow.FieldValues[column.ColumnName].ToString() : null;
+                                    var oldRowValue = newRow.FieldValues[column.ColumnName] != null ? newRow.FieldValues[column.ColumnName].ToString() : null;
+
+                                    if (newRowValue != oldRowValue)
+                                    {
+                                        differences.DataRows.Add(newRow);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                if (!isRowFound)
+                    differences.DataRows.Add(newRow);
+            }
+
+            if (differences.DataRows.Count == 0)
+                return null;
+
+            return differences;
+        }
         public override string GenerateQuery(IGeneratedScriptItemTableContext context)
         {
             switch (context.Type)

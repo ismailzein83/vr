@@ -76,6 +76,7 @@ namespace Vanrise.DevTools.Business
             public string Schema { get; set; }
             public string IdColumnName { get; set; }
             public List<string> ExcludedColumns { get; set; }
+            public bool IsIdentity { get; set; }
             public bool IncludeOnlyInInsert { get; set; }
             public string WhereCondition { get; set; }
             public string JoinCondition { get; set; }
@@ -108,7 +109,7 @@ namespace Vanrise.DevTools.Business
                     { "MailMessageTemplate",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="MailMessageTemplate",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition,IncludeOnlyInInsert=true}},
                     { "StatusDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="StatusDefinition",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("genericdata","BusinessEntityDefinition","BusinessEntityDefinitionID")}},
                     { "StyleDefinition",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="StyleDefinition",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
-                    { "RateType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="RateType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
+                    { "RateType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="RateType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition,IsIdentity=true}},
                     { "VRComponentType",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRComponentType",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRNamespace",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNamespace",Schema="common",IdColumnName="ID",WhereCondition=WhereCondition}},
                     { "VRNamespaceItem",new VRGeneratedScriptDevProjectTableParameters{ DevProjectId=devProjectId,TableName="VRNamespaceItem",Schema="common",IdColumnName="ID",WhereCondition=JoinedWhereCondition,JoinCondition=GetJoinCondition("common","VRNamespace","VRNamespaceId")}},
@@ -228,6 +229,7 @@ namespace Vanrise.DevTools.Business
                             {
                                 LastWhereCondition = table.Value.WhereCondition,
                                 LastJoinStatement = table.Value.JoinCondition,
+                                IsIdentity=table.Value.IsIdentity
                             };
 
                             if (dataRows != null && dataRows.Count() > 0)
@@ -247,12 +249,11 @@ namespace Vanrise.DevTools.Business
                                             if (table.Value.ExcludedColumns == null || !table.Value.ExcludedColumns.Contains(value.Key))
                                                 tableRowFieldValues.Add(value.Key, value.Value);
                                         }
-
+                                        tableRowFieldValues.Remove("$type");
                                         tableRow.FieldValues = tableRowFieldValues;
                                     }
 
                                     mergeGeneratedScriptItem.DataRows.Add(tableRow);
-
                                 }
                             }
                   
@@ -262,7 +263,7 @@ namespace Vanrise.DevTools.Business
                             var columnsInfo = generatedScriptColumnsManager.GetColumnsInfo(new VRGeneratedScriptColumnsInfoFilter() { ConnectionId = input.ConnectionId, SchemaName = table.Value.Schema, TableName = table.Value.TableName });
 
                             if (columnsInfo != null && columnsInfo.Count() > 0)
-                                mergeGeneratedScriptItem.Columns.AddRange(columnsInfo.MapRecords(x => new MergeGeneratedScriptItemColumn() { ColumnName = x.Name, IncludeInInsert = true, IncludeInUpdate = !table.Value.IncludeOnlyInInsert, IsIdentifier = x.Name == table.Value.IdColumnName ? true : false }, x => table.Value.ExcludedColumns==null || !table.Value.ExcludedColumns.Contains(x.Name)));
+                                mergeGeneratedScriptItem.Columns.AddRange(columnsInfo.MapRecords(x => new MergeGeneratedScriptItemColumn() { ColumnName = x.Name, IncludeInInsert = true, IncludeInUpdate = !table.Value.IncludeOnlyInInsert && !(table.Value.IsIdentity && x.Name == table.Value.IdColumnName), IsIdentifier = x.Name == table.Value.IdColumnName }, x => table.Value.ExcludedColumns == null || !table.Value.ExcludedColumns.Contains(x.Name)));
 
                             item.Settings = mergeGeneratedScriptItem;
                             items.Add(item);

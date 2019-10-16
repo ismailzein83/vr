@@ -75,6 +75,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                     if (!columnName) {
                         ctrl.datasource.push({
                             data: {
+                                "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
                                 ColumnName: item.Name,
                                 IncludeInInsert: true,
                                 IncludeInUpdate: true
@@ -580,14 +581,16 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                         dataRows = selectedTableDataGridApi.getData().tableRows;
                     }
 
+                    var variablesData = variablesDataGridApi.getData();
+
                     return {
                         $type: "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-                        DataRows: dataRows,
                         Columns: columns,
-                        IsIdentity: $scope.scopeModel.IsIdentity,
-                        Variables: variablesDataGridApi.getData(),
+                        DataRows: dataRows,
+                        Variables: (variablesData == undefined || variablesData.length == 0) ? null : variablesData,
                         LastWhereCondition: $scope.scopeModel.sqlFilter,
-                        LastJoinStatement: $scope.scopeModel.sqlJoinStatement
+                        LastJoinStatement: $scope.scopeModel.sqlJoinStatement,
+                        IsIdentity: $scope.scopeModel.IsIdentity,
                     };
                 };
 

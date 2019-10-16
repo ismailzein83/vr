@@ -84,7 +84,56 @@ namespace Vanrise.DevTools.Business
 
             return results;
         }
+        public string CompareJsonScripts(string newScripts, string oldScripts)
+        {
+            GeneratedScriptItemTables newItems = Serializer.Deserialize<GeneratedScriptItemTables>(newScripts);
+            GeneratedScriptItemTables oldItems = Serializer.Deserialize<GeneratedScriptItemTables>(oldScripts);
 
+            if (newItems == null || newItems.Scripts == null || newItems.Scripts.Count == 0)
+                return null;
+
+            if (oldItems == null || oldItems.Scripts == null || oldItems.Scripts.Count == 0)
+                return Serializer.Serialize(newItems);
+
+            GeneratedScriptItemTables differentItems = new GeneratedScriptItemTables() { Scripts = new List<GeneratedScriptItemTable>() }; ;
+
+            foreach (var newScript in newItems.Scripts)
+            {
+                bool isScriptFound = false;
+
+                foreach (var oldScript in oldItems.Scripts)
+                {
+                    if (newScript.ConnectionId == oldScript.ConnectionId && newScript.Schema == oldScript.Schema && newScript.TableName == oldScript.TableName)
+                    {
+                        isScriptFound = true;
+
+                        if (oldScript.Settings != null)
+                        {
+                            var settingsDifferences = oldScript.Settings.FindScriptDiffernces(newScript.Settings, oldScript.Settings);
+                            if (settingsDifferences != null)
+                            {
+                                differentItems.Scripts.Add(new GeneratedScriptItemTable()
+                                {
+                                    ConnectionId = newScript.ConnectionId,
+                                    Schema = newScript.Schema,
+                                    TableName = newScript.TableName,
+                                    Settings = settingsDifferences
+                                });
+                            }
+                        }
+
+                        break;
+                    }
+                }
+
+                if (!isScriptFound && newScript.Settings != null)
+                    differentItems.Scripts.Add(newScript);
+            }
+            if (differentItems.Scripts.Count == 0)
+                return null;
+
+            return Serializer.Serialize(differentItems);
+        }
         public List<GeneratedScriptItemComparisonOutput> CompareItems(GeneratedScriptItem generatedScriptItem)
         {
             List<GeneratedScriptItemComparisonOutput> comparisonOutputs = new List<GeneratedScriptItemComparisonOutput>();

@@ -20,6 +20,10 @@
         function CompareItems(generatedScriptItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Devtools_ModuleConfig.moduleName, controller, "CompareItems"), generatedScriptItem);
         }
+        function CompareJsonScripts(scriptsComparisonData) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Devtools_ModuleConfig.moduleName, controller, "CompareJsonScripts"), scriptsComparisonData);
+        }
+     
         function GenerateQueries(generatedScriptItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Devtools_ModuleConfig.moduleName, controller, "GenerateQueries"), generatedScriptItem);
         }
@@ -36,7 +40,8 @@
             Validate: Validate,
             GenerateQueries: GenerateQueries,
             GenerateQueriesFromTextFile: GenerateQueriesFromTextFile,
-            CompareItems: CompareItems
+            CompareItems: CompareItems,
+            CompareJsonScripts: CompareJsonScripts
         };
     }
     appControllers.service("VR_Devtools_ColumnsAPIService", columnsAPIService);

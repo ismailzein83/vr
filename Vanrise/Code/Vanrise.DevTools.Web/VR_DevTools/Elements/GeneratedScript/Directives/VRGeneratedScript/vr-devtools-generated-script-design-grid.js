@@ -119,8 +119,18 @@
                                 };
                             }
                             if (designs != undefined && designs.length > 0) {
+
                                 for (var i = 0; i < designs.length; i++) {
                                     var design = designs[i];
+                                    var dataRows = design.Settings.DataRows;
+
+                                    if (dataRows != undefined && dataRows.length > 0) {
+
+                                        for (var j = 0; j < dataRows.length; j++) {
+                                            delete dataRows[j].FieldValues.$type;
+                                        }
+                                    }
+
                                     design.Title = scriptTypes[design.Settings.ConfigId];
                                     $scope.scopeModel.designs.push({ Entity: design  });
                                 }

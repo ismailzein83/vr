@@ -289,6 +289,7 @@
 
             return {
                 Entity: {
+                    "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
                     ConnectionId: connectionStringDirectiveApi.getSelectedIds(),
                     Schema: schemaDirectiveApi.getSelectedIds(),
                     TableName: tableDirectiveApi.getSelectedIds(),
