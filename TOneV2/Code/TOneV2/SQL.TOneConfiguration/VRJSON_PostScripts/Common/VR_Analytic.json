@@ -2254,63 +2254,63 @@
             "ColumnName": "ID",
             "IsIdentifier": true,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "DevProjectID",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "Name",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "Type",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "Category",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "Settings",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "Data",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "IsTechnical",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "LastModifiedTime",
             "IsIdentifier": false,
             "IncludeInInsert": true,
-            "IncludeInUpdate": true
+            "IncludeInUpdate": false
           }
         ],
         "IsIdentity": false,
