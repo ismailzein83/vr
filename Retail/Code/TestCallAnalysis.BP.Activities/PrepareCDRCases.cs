@@ -40,6 +40,10 @@ namespace TestCallAnalysis.BP.Activities
 
     public class PrepareCDRCases : DependentAsyncActivity<PrepareCDRCasesInput>
     {
+
+        static Guid suspectStatusId = new Guid("43f65fbf-ba78-4211-a0bb-88edc91b26ff");
+        static Guid fraudStatusId = new Guid("4ea323c2-56ba-46db-a84d-5792009924a3");
+
         [RequiredArgument]
         public InOutArgument<MemoryQueue<CDRCaseBatch>> InputQueue { get; set; }
         [RequiredArgument]
@@ -66,8 +70,6 @@ namespace TestCallAnalysis.BP.Activities
         {
             WhiteListManager whiteListManager = new WhiteListManager();
             CaseCDRManager caseCDRManager = new CaseCDRManager();
-            var suspectStatusId = new Guid("43f65fbf-ba78-4211-a0bb-88edc91b26ff");
-            var fraudStatusId = new Guid("4ea323c2-56ba-46db-a84d-5792009924a3");
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -130,7 +132,7 @@ namespace TestCallAnalysis.BP.Activities
                                             if (cases != null && cases.Count > 0)
                                             {
                                                 var caseCDR = cases.OrderByDescending(x => x.CreatedTime).First();
-                                                GetUpdateOrUpdateItem(caseCDR, casesToUpdate);
+                                                GetUpdateOrUpdateItem(caseCDR, casesToUpdate, record);
                                             }
                                         }
                                         else
@@ -138,7 +140,7 @@ namespace TestCallAnalysis.BP.Activities
                                             if (record.ReceivedCallingNumberType == ReceivedCallingNumberType.International)
                                                 continue;
 
-                                            else 
+                                            else
                                             {
                                                 if (record.GeneratedCalledNumber == null && record.GeneratedCallingNumber == null)
                                                 {
@@ -153,7 +155,7 @@ namespace TestCallAnalysis.BP.Activities
                                                     GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
                                                     continue;
                                                 }
-                                                else 
+                                                else
                                                 {
                                                     tcanalCaseCDR.StatusId = fraudStatusId;
                                                     GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
@@ -216,17 +218,24 @@ namespace TestCallAnalysis.BP.Activities
             }
         }
 
-        private void GetUpdateOrUpdateItem(TCAnalCaseCDR tcanalCaseCDR, Dictionary<string, TCAnalCaseCDR> casesToUpdate)
+        private void GetUpdateOrUpdateItem(TCAnalCaseCDR tcanalCaseCDR, Dictionary<string, TCAnalCaseCDR> casesToUpdate, TCAnalCorrelatedCDR record)
         {
             TCAnalCaseCDR updatedItem = null;
             if (casesToUpdate.TryGetValue(tcanalCaseCDR.CallingNumber, out updatedItem))
             {
+                if (tcanalCaseCDR.StatusId == suspectStatusId && record.GeneratedCallingNumber != null)
+                    updatedItem.StatusId = fraudStatusId;
                 updatedItem.NumberOfCDRs++;
-                updatedItem.LastAttempt = tcanalCaseCDR.LastAttempt;
+                if (updatedItem.LastAttempt < record.AttemptDateTime)
+                    updatedItem.LastAttempt = record.AttemptDateTime;
             }
             else
             {
+                if (tcanalCaseCDR.StatusId == suspectStatusId && record.GeneratedCallingNumber != null)
+                    tcanalCaseCDR.StatusId = fraudStatusId;
                 tcanalCaseCDR.NumberOfCDRs++;
+                if (tcanalCaseCDR.LastAttempt < record.AttemptDateTime)
+                    tcanalCaseCDR.LastAttempt = record.AttemptDateTime;
                 casesToUpdate.Add(tcanalCaseCDR.CallingNumber, tcanalCaseCDR);
             }
         }
