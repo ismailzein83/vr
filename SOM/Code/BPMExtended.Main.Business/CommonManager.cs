@@ -290,6 +290,31 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("MiddleName");
             var titleId=esq.AddColumn("StTitle.Id");
 
+            esq.AddColumn("StMotherNameTrimmed");
+            esq.AddColumn("BirthDate");
+            esq.AddColumn("StCareer");
+            esq.AddColumn("StLanguageId");
+            esq.AddColumn("StNationalityId");
+            esq.AddColumn("CountryId");
+            esq.AddColumn("RegionId");
+            esq.AddColumn("CityId");
+            esq.AddColumn("StTownId");
+            esq.AddColumn("StDistrictId");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StFloorNumber");
+            esq.AddColumn("StAddressNotes");
+            esq.AddColumn("HomePhone");
+            esq.AddColumn("StFaxNumber");
+            esq.AddColumn("MobilePhone");
+            esq.AddColumn("StBusinessPhone");
+            esq.AddColumn("Email");
+            esq.AddColumn("StCustomerBillCycle");
+            esq.AddColumn("StBankID");
+            esq.AddColumn("StBankName");
+            esq.AddColumn("StBankAccountID");
+            esq.AddColumn("StIBAN");
+            esq.AddColumn("StStreet");
+
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
             esq.Filters.Add(esqFirstFilter);
 
@@ -308,6 +333,33 @@ namespace BPMExtended.Main.Business
                 var surName= entities[0].GetColumnValue("Surname");
                 var middleName= entities[0].GetColumnValue("MiddleName");
                 var title= entities[0].GetTypedColumnValue<Guid>(titleId.Name);
+
+                var motherName = entities[0].GetColumnValue("StMotherNameTrimmed");
+                var birthDate = entities[0].GetColumnValue("BirthDate");
+                var career = entities[0].GetColumnValue("StCareer");
+                var languageId = entities[0].GetColumnValue("StLanguageId");
+                var nationalityId = entities[0].GetColumnValue("StNationalityId");
+                var countryId = entities[0].GetColumnValue("CountryId");
+                var regionId = entities[0].GetColumnValue("RegionId");
+                var cityId = entities[0].GetColumnValue("CityId");
+                var townId = entities[0].GetColumnValue("StTownId");
+                var districtId = entities[0].GetColumnValue("StDistrictId");
+                var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
+                var floorNumber = entities[0].GetColumnValue("StFloorNumber");
+                var addressNotes = entities[0].GetColumnValue("StAddressNotes");
+                var homePhone = entities[0].GetColumnValue("HomePhone");
+                var faxNumber = entities[0].GetColumnValue("StFaxNumber");
+                var mobilePhone = entities[0].GetColumnValue("MobilePhone");
+                var businessPhone = entities[0].GetColumnValue("StBusinessPhone");
+                var email = entities[0].GetColumnValue("Email");
+                var customerBillCycle = entities[0].GetColumnValue("StCustomerBillCycle");
+                var bankID = entities[0].GetColumnValue("StBankID");
+                var bankName = entities[0].GetColumnValue("StBankName");
+                var bankAccountID = entities[0].GetColumnValue("StBankAccountID");
+                var IBAN = entities[0].GetColumnValue("StIBAN");
+                var street = entities[0].GetColumnValue("StStreet");
+
+
                 contact = new Contact()
                 {
                     CustomerId = customerId.ToString(),
@@ -321,7 +373,33 @@ namespace BPMExtended.Main.Business
                     GivenName=givenName.ToString(),
                     SurName=surName.ToString(),
                     MiddleName=middleName.ToString(),
-                    Title=title.ToString()
+                    Title=title.ToString(),
+                    MotherName = motherName.ToString(),
+                    BirthDate = birthDate.ToString(),
+                    Career = career.ToString(),
+                    LanguageId = languageId.ToString(),
+                    NationalityId = nationalityId.ToString(),
+                    CountryId = countryId.ToString(),
+                    RegionId = regionId.ToString(),
+                    CityId = cityId.ToString(),
+                    TownId = townId.ToString(),
+                    DistrictId = districtId.ToString(),
+                    BuildingNumber = buildingNumber.ToString(),
+                    FloorNumber = floorNumber.ToString(),
+                    AddressNotes = addressNotes.ToString(),
+                    HomePhone = homePhone.ToString(),
+                    FaxNumber = faxNumber.ToString(),
+                    MobilePhone = mobilePhone.ToString(),
+                    BusinessPhone = businessPhone.ToString(),
+                    Email = email.ToString(),
+                    CustomerBillCycle = customerBillCycle.ToString(),  
+                    BankID= bankID.ToString(),
+                    BankName = bankName.ToString(),
+                    BankAccountID = bankAccountID.ToString(),
+                    IBAN = IBAN.ToString(),
+                    Street = street.ToString()
+
+                    
                 };
             }
             return contact;
