@@ -1255,7 +1255,19 @@ namespace BPMExtended.Main.Business
             }
 
         }
+        public CustomerCreationOutput CreateCustomerFromIndividual (string contactId,string CustomerCategoryId, string segmentId, string CSO, string paymentMethodId)
+        {
 
+            CommonManager commonManager = new CommonManager();
+            var contact = commonManager.GetContact(contactId);
+            if (contact != null)
+                return CreateCustomer(CustomerCategoryId,paymentMethodId,contact.CityId,contact.GivenName,contact.SurName,contact.CSOId,contact.BankID,contact.BankAccountID,contact.BankName,contact.IBAN
+                    ,contact.CountryId,"DefaultRatePlan",contact.NationalityId,contact.BirthDate,contact.BuildingNumber,contact.Career,contact.DocumentID,contact.DocumentIdTypeId,contact.Email,
+                    contact.FaxNumber, contact.FloorNumber, contact.HomePhone,contact.MiddleName,contact.MobilePhone,contact.MotherName,contact.DistrictId,contact.Street,contact.RegionId,contact.LanguageId
+                    ,contact.Title,contact.TownId,contact.AddressNotes,contact.BusinessPhone,segmentId);
+            else return null;
+            
+        }
         public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CSO,
             string BankCode, string AccountNumber, string BankName, string IBAN, string country, string DefaultRatePlan, string nationality, string birthDate, string building, string career,
             string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
@@ -1302,10 +1314,10 @@ namespace BPMExtended.Main.Business
                 Nationality = nationalityNumber,
                 ExternalCustomerSetId = externalCustomerId,
                 Country = countryNumber,
-                StateProvince = stateProvince,
+                StateProvince = stateProvince, // Region in UI
                 City = City,
                 Town = town,
-                Region = region,
+                Region = region, //District in UI
                 Street = street,
                 Building = building,
                 Floor = floor,
@@ -1319,9 +1331,9 @@ namespace BPMExtended.Main.Business
                 PaymentResponsibility = true,
                 PaymentMethodId = PaymentMethodId,
                 BillCycle = billcycle,
-                BankCode = BankCode,
+                BankCode = BankCode, // BankID in UI
                 BankName = BankName,
-                AccountNumber = AccountNumber,
+                AccountNumber = AccountNumber, //BankAccountID
                 DebitAccountOwner = FirstName,
                 IBAN = IBAN,
                 BankSwiftCode = "",
