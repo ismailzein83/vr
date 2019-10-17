@@ -239,7 +239,7 @@ namespace Vanrise.DevTools.Business
                                 else
                                 {
                                     var newRowValue = newRow.FieldValues[column.ColumnName] != null ? newRow.FieldValues[column.ColumnName].ToString() : null;
-                                    var oldRowValue = newRow.FieldValues[column.ColumnName] != null ? newRow.FieldValues[column.ColumnName].ToString() : null;
+                                    var oldRowValue = oldRow.FieldValues[column.ColumnName] != null ? oldRow.FieldValues[column.ColumnName].ToString() : null;
 
                                     if (newRowValue != oldRowValue)
                                     {

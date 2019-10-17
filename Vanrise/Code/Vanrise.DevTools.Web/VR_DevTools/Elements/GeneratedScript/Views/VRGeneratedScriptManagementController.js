@@ -75,11 +75,12 @@
             $scope.scopeModel.disablegenerateQueries = function () {
                 var tableData = gridApi != undefined ? gridApi.getData() : undefined;
 
-                if (isCompareToTabSelected && ($scope.scopeModel.scriptsDifferneces == undefined || $scope.scopeModel.scriptsDifferneces== "No Differences"))
+                if (isCompareToTabSelected && ($scope.scopeModel.scriptsDifferneces == undefined || $scope.scopeModel.scriptsDifferneces == "No Differences"))
                     return true;
 
                 if (queriesTypeSelectorDirectiveApi != undefined && queriesTypeSelectorDirectiveApi.getSelectedIds() != undefined &&
-                    $scope.scopeModel.tableDataSource != undefined && $scope.scopeModel.Errors.length == 0 && tableData != undefined && tableData.length > 0)
+                    (isCompareToTabSelected || ($scope.scopeModel.tableDataSource != undefined && $scope.scopeModel.Errors.length == 0 && tableData != undefined && tableData.length > 0))
+                )
                     return false;
 
                 return true;
@@ -157,6 +158,8 @@
                     }
                 if (generatedScripts.length > 0)
                     $scope.scopeModel.tableDataSource = JSON.stringify({ Scripts: generatedScripts }, null, 2);
+                else
+                    $scope.scopeModel.tableDataSource = undefined;
             }
             $scope.scopeModel.isLoading = false;
         }
