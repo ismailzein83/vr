@@ -137,7 +137,7 @@
                         data = directiveAPI.getData();
                         if (data != undefined && data.ConfigId == undefined) {
                             var info = {};
-                            info['$type'] = data['$type']
+                            info['$type'] = data['$type'];
                             info.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                             for (var item in data) {
                                 if (item != '$type')
