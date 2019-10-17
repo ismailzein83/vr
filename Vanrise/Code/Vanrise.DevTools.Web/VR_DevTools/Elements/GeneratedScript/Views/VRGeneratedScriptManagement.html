@@ -8,7 +8,7 @@
         </vr-row>
         <vr-tabs>
             <vr-tab header="'Source'" ontabselected="scopeModel.onSourceTabSelected" tabobject="scopeModel.sourceTab">
-                <vr-textarea value="scopeModel.tableDataSource" rows="30"></vr-textarea>
+                <vr-textarea value="scopeModel.tableDataSource" rows="40"></vr-textarea>
                 <vr-row ng-repeat="x in scopeModel.Errors">
                     <vr-columns width="fullrow">
                         <label class="alert alert-danger" vr-alert>{{x.TableTitle}}:</label>
@@ -27,10 +27,10 @@
                 <vr-button type="Compare" buttontitle="Compare Scripts" customlabel="Compare Scripts" standalone data-onclick="scopeModel.compareScripts"></vr-button>
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-textarea value="scopeModel.compareToDataSource" rows="30" label="Script"></vr-textarea>
+                        <vr-textarea value="scopeModel.compareToDataSource" rows="37" label="Script"></vr-textarea>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-textarea value="scopeModel.scriptsDifferneces" rows="30" label="Differences"></vr-textarea>
+                        <vr-textarea value="scopeModel.scriptsDifferneces" rows="37" label="Differences"></vr-textarea>
                     </vr-columns>
                 </vr-row>
             </vr-tab>

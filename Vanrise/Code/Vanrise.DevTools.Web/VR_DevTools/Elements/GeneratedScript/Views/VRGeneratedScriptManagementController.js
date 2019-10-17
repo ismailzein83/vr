@@ -155,8 +155,8 @@
                     for (var i = 0; i < designs.length; i++) {
                         generatedScripts.push(designs[i].Entity);
                     }
-
-                $scope.scopeModel.tableDataSource = JSON.stringify({ Scripts: generatedScripts }, null, 2);
+                if (generatedScripts.length > 0)
+                    $scope.scopeModel.tableDataSource = JSON.stringify({ Scripts: generatedScripts }, null, 2);
             }
             $scope.scopeModel.isLoading = false;
         }
