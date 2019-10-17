@@ -21,7 +21,7 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = selectOptionsStep; break;
-                case selectOptionsStep: nextStepId = paymentStep; break;
+                case selectOptionsStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? downloadStep: paymentStep; break;
                 case paymentStep: nextStepId = downloadStep; break;
                 case downloadStep: nextStepId = completedStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));

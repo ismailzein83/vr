@@ -41,7 +41,7 @@ namespace BPMExtended.Main.Business
                 case startingProcessStep: nextStepId = nearByNumberStep; break;
                 case nearByNumberStep: nextStepId = freeReservationStep; break;
                 case freeReservationStep: nextStepId = technicalStep; break;
-                case micReservationStep: nextStepId = paymentStep; break;
+                case micReservationStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? printStep : paymentStep; break;
                 case paymentStep: nextStepId = printStep; break;
                 case printStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = technicalStep; break;

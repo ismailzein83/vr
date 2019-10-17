@@ -20,8 +20,8 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = newPasswordStep; break;
-                case newPasswordStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = printStep; break;
+                case newPasswordStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ?printStep: paymentStep; break;
+                case paymentStep: nextStepId =  printStep; break;
                 case printStep: nextStepId = technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }

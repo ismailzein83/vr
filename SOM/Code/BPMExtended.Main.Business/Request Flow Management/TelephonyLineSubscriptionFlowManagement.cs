@@ -63,7 +63,7 @@ namespace BPMExtended.Main.Business
                 case subscriptionAddressStep: nextStepId = servicesStep; break;
                 case servicesStep:nextStepId = this.IsContactForeigner(id) ? foreignerStep : contractOnHoldStep; break;  //nextStepId = contractOnHoldStep; break;-
                 case foreignerStep: nextStepId = contractOnHoldStep; break;
-                case contractOnHoldStep: nextStepId = paymentStep; break;
+                case contractOnHoldStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id)? printContractStep: paymentStep; break;
                 case paymentStep: nextStepId = printContractStep; break;
                 case printContractStep: nextStepId = submitToOMStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));

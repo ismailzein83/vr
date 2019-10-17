@@ -55,7 +55,7 @@ namespace BPMExtended.Main.Business
                 case waitingListStep: nextStepId = adslCredentialsStep; break;
                 case adslCredentialsStep: nextStepId = servicesStep; break;
                 case servicesStep: nextStepId = createContractOnHold; break;
-                case createContractOnHold: nextStepId = paymentStep; break;
+                case createContractOnHold: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? printConfigurationStep: paymentStep; break;
                 case paymentStep: nextStepId = printConfigurationStep; break;
                 case printConfigurationStep: nextStepId = SubmitToOMStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));

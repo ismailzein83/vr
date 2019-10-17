@@ -23,7 +23,7 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case startingProcess: nextStepId = services; break;
-                case services: nextStepId = payment; break;
+                case services: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ?print: payment; break;
                 case payment: nextStepId = print; break;
                 case print: nextStepId = attachment; break;
                 case attachment: nextStepId = submitToOM; break;

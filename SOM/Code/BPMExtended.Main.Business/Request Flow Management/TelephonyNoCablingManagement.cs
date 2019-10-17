@@ -29,7 +29,7 @@ namespace BPMExtended.Main.Business
                 case choosePhoneNumberStep: nextStepId = technicalStep; break;
                 case addressStep: nextStepId = ratePlanStep; break;
                 case ratePlanStep: nextStepId = createContractOnHoldStep; break;
-                case createContractOnHoldStep: nextStepId = paymentStep; break;
+                case createContractOnHoldStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? printStep: paymentStep; break;
                 case paymentStep: nextStepId = printStep; break;
                 case printStep: nextStepId = attachmentstep; break;
                 case attachmentstep: nextStepId = submittedtoomStep; break;

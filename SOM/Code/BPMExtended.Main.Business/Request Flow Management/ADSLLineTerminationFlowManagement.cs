@@ -35,7 +35,7 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = printStep; break;
                 case printStep: nextStepId = ReasonStep; break;
-                case ReasonStep: nextStepId = paymentStep; break;
+                case ReasonStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? attachmentStep: paymentStep; break;
                 case paymentStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = TechnicalStep; break;
                 case TechnicalStep: nextStepId = completedStep; break;

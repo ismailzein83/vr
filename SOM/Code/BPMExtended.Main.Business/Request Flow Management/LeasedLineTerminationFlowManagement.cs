@@ -33,7 +33,7 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = reasonStep; break;
-                case reasonStep: nextStepId = paymentStep; break;
+                case reasonStep: nextStepId =paymentStep; break;
                 case paymentStep: nextStepId = technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
 

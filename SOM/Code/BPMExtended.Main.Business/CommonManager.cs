@@ -752,6 +752,29 @@ namespace BPMExtended.Main.Business
             return completedStepId;
         }
 
+        public bool IsRequestAdvantageous(string entityName , string requestId)
+        {
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            bool isAdvantageous = false;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
+            esq.AddColumn("StAdvantageous");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                isAdvantageous = (bool)entities[0].GetColumnValue("StAdvantageous");
+
+            }
+            return isAdvantageous;
+        }
+
         public Guid GetRequestStageIdByStepId(string stepId)
         {
 

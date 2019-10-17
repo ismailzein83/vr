@@ -21,7 +21,7 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = FAFNumbers; break;
-                case FAFNumbers: nextStepId = paymentStep; break;
+                case FAFNumbers: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? printStep : paymentStep; break;
                 case paymentStep: nextStepId = printStep; break;
                 case printStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = submitStep; break;

@@ -67,7 +67,7 @@ namespace BPMExtended.Main.Business
                 case credentialsStep: nextStepId = printCredentialsStep; break;
                 case printCredentialsStep: nextStepId = servicesStep; break;
                 case servicesStep: nextStepId = createContractStep; break;
-                case createContractStep: nextStepId = paymentStep; break;
+                case createContractStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? printContractStep : paymentStep; break;
                 case paymentStep: nextStepId = printContractStep; break;
                 case printContractStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = submitToOMStep; break;

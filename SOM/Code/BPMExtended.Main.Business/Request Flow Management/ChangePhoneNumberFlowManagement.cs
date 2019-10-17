@@ -29,7 +29,7 @@ namespace BPMExtended.Main.Business
                 case welcomeStep: nextStepId = choosePhoneNumberStep; break;
                 case choosePhoneNumberStep: nextStepId = isSubTypeChanged?changeRatePlanStep : printStep; break;
                 case changeRatePlanStep: nextStepId = printStep; break;
-                case printStep: nextStepId = paymentStep; break;
+                case printStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? attachmentStep : paymentStep; break;
                 case paymentStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));

@@ -47,20 +47,18 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
-        public bool CheckADSLRequestInWaitingListByTelContract(string contractId)
+        public bool CheckADSLRequestInWaitingList()
         {
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter, esqSecondFilter, esqThirdFilter;
+            IEntitySchemaQueryFilterItem esqSecondFilter, esqThirdFilter;
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
             esq.AddColumn("StRequestId");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contractId);
             esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", "8BC51DE4-23FE-4CF9-93A7-C7D9CC35C5AC");
             esqThirdFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestType", "5");
-            esq.Filters.Add(esqFirstFilter);
             esq.Filters.Add(esqSecondFilter);
             esq.Filters.Add(esqThirdFilter);
 

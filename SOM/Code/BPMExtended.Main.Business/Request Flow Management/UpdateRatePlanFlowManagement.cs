@@ -32,7 +32,7 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = updateRatePlanStep; break;
-                case updateRatePlanStep: nextStepId = paymentStep; break;
+                case updateRatePlanStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? attachmentStep: paymentStep; break;
                 case paymentStep: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = submitToOMStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));

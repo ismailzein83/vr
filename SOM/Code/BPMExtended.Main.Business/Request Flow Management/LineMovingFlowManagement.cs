@@ -39,7 +39,7 @@ namespace BPMExtended.Main.Business
                 case adslStep: nextStepId = hasADSL?adslFreeReservation:address; break;
                 case adslFreeReservation: nextStepId = isADSLWaitingList ? adslWaitingList :address; break;
                 case adslWaitingList: nextStepId = adslFreeReservation; break;
-                case address: nextStepId = payment; break;
+                case address: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? printNewDocument: payment; break;
                 case payment: nextStepId = printNewDocument; break;
                 case printNewDocument: nextStepId = attachments; break;
                 case attachments: nextStepId = technicalStep; break;

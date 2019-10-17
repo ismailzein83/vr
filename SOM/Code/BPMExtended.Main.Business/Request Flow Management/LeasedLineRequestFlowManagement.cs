@@ -37,7 +37,7 @@ namespace BPMExtended.Main.Business
                 case requestID: nextStepId = address; break;
                 case address: nextStepId = technicalStep; break;
                 case services: nextStepId = createContractOnHolld; break;
-                case createContractOnHolld: nextStepId = paymentMethod; break;
+                case createContractOnHolld: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? attachmentStep: paymentMethod; break;
                 case paymentMethod: nextStepId = attachmentStep; break;
                 case attachmentStep: nextStepId = technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
