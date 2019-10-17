@@ -619,8 +619,8 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                // bool isClosed = entities[0].GetTypedColumnValue<bool>(status.Name);
-                return true;
+                //return true;
+                return false; // to be removed and must be replaced by the above one
 
             }
             return false;
