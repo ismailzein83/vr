@@ -9,6 +9,7 @@ namespace BPMExtended.Main.Entities
     public class SOMProcessInstanceLog
     {
         public Guid RequestId { get; set; }
+        public long SequenceNumber { get; set; }
         public long ProcessInstanceId { get; set; }
     }
 }
