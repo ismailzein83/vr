@@ -95,9 +95,9 @@ namespace BPMExtended.Main.Business
                         OldLinePathId = oldLinePathId.ToString(),
                         NewLinePathId = newLinePathID.ToString(),
                         SameSwitch = !((bool)newSwitch),
-                        ContractAddress = new Address
+                        Address = new Address
                         {
-                            Sequence= new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),//new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
                             StateProvince = province.ToString(),
                             City = city.ToString(),
                             Town = town.ToString(),
@@ -200,9 +200,10 @@ namespace BPMExtended.Main.Business
                         OldDirectoryNumber = oldPhoneNumber.ToString(),
                         NewDirectoryNumber = newPhoneNumber.ToString(),
                         SameSwitch = !isNewSwitch,
-                        ContractAddress = new Address
+                        Address = new Address
                         {
-                            Sequence = new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),
+                            //new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
                             StateProvince = province.ToString(),
                             City = city.ToString(),
                             Town = town.ToString(),
@@ -304,9 +305,10 @@ namespace BPMExtended.Main.Business
                         OldDirectoryNumber = oldPhoneNumber.ToString(),
                         NewDirectoryNumber = newPhoneNumber.ToString(),
                         SameSwitch = !isNewSwitch,
-                        ContractAddress = new Address
+                        Address = new Address
                         {
-                            Sequence = new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),
+                            //new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
                             StateProvince = province.ToString(),
                             City = city.ToString(),
                             Town = town.ToString(),
