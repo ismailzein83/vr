@@ -44,7 +44,7 @@ namespace Retail.Teles.Business
         }
         public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(Guid vrConnectionId, TelesEnterpriseFilter filter)
         {
-            var cachedEnterprises = GetCachedEnterprises(vrConnectionId,filter.TelesDomainId, false);
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, filter.TelesDomainId, false);
 
             Func<TelesEnterpriseInfo, bool> filterFunc = null;
             if (filter != null)
@@ -66,9 +66,9 @@ namespace Retail.Teles.Business
 
             return cachedEnterprises.Values.OrderBy(x => x.Name);
         }
-        public TelesEnterpriseInfo GetEnterprise(Guid vrConnectionId, string enterpriseId,string telesDomainId)
+        public TelesEnterpriseInfo GetEnterprise(Guid vrConnectionId, string enterpriseId, string telesDomainId)
         {
-            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, telesDomainId,false);
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, telesDomainId, false);
             TelesEnterpriseInfo enterpriseInfo;
             cachedEnterprises.TryGetValue(enterpriseId, out enterpriseInfo);
             return enterpriseInfo;
@@ -84,9 +84,9 @@ namespace Retail.Teles.Business
             TelesEnterpriseManager.SetCacheExpired();
             return Convert.ToString(enterpriseId);
         }
-        public string GetEnterpriseName(Guid vrConnectionId, string enterpriseId,string telesDomainId)
+        public string GetEnterpriseName(Guid vrConnectionId, string enterpriseId, string telesDomainId)
         {
-            var cachedEnterprises = GetCachedEnterprises(vrConnectionId,telesDomainId, true);
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, telesDomainId, true);
             if (cachedEnterprises != null)
             {
                 TelesEnterpriseInfo enterpriseInfo;
@@ -123,7 +123,7 @@ namespace Retail.Teles.Business
 
             }
             return updateOperationOutput;
-     
+
         }
         public bool CanMapTelesEnterprise(Guid accountBEDefinitionId, string telesEnterpriseId)
         {
@@ -142,7 +142,7 @@ namespace Retail.Teles.Business
             //{
             //    _accountBEManager.DeleteAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, account.AccountId);
             //}
-          
+
             return _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
                 enterpriseAccountMappingInfo);
         }
@@ -154,7 +154,7 @@ namespace Retail.Teles.Business
             {
                 var settings = accountDefinitionAction.ActionDefinitionSettings as MappingTelesAccountActionSettings;
                 if (settings != null)
-                {   
+                {
                     var account = _accountBEManager.GetAccount(accountBEDefinitionId, accountId);
                     return _accountBEManager.EvaluateAccountCondition(account, accountDefinitionAction.AvailabilityCondition);
                 }
@@ -228,68 +228,127 @@ namespace Retail.Teles.Business
             Guid accountBEDefinitionId = Guid.Parse("9a427357-cf55-4f33-99f7-745206dee7cd");
             string countryCode = "965";
 
-
             AccountBEManager accountBEManager = new AccountBEManager();
-            var accountByInterpriseId = new TelesEnterpriseManager().GetCachedAccountsByEnterprises(accountBEDefinitionId);
-            var screenNumbers = GetScreanNumbersByCountryCode(vrConnectionId, countryCode);
+            var accountByEnterpriseId = new TelesEnterpriseManager().GetCachedAccountsByEnterprises(accountBEDefinitionId);
 
             List<AccountEnterpriseDID> accountEnterprisesDIDs = new List<AccountEnterpriseDID>();
+            var domainLists = GetDomainLists(vrConnectionId);
+            Dictionary<string, SiteEntity> sites = new Dictionary<string, SiteEntity>();
+            Dictionary<string, EnterpriseEntity> enterprises = new Dictionary<string, EnterpriseEntity>();
+            string level;
+            if (domainLists != null)
+            {
+                foreach (var domainList in domainLists)
+                {
+                    level = domainList.level.ToString();
+                    if (level.Equals("Site", StringComparison.OrdinalIgnoreCase))
+                    {
+                        sites.Add(domainList.id.ToString(), new SiteEntity()
+                        {
+                            Name = domainList.name.ToString(),
+                            Description = domainList.description.ToString(),
+                        });
+                    }
+                    else if (level.Equals("Enterprise", StringComparison.OrdinalIgnoreCase))
+                    {
+                        enterprises.Add(domainList.id.ToString(), new EnterpriseEntity()
+                        {
+                            Name = domainList.name.ToString(),
+                            Description = domainList.description.ToString(),
+                        });
+                    }
+                }
+            }
 
-
+            var screenNumbers = GetScreenNumbersByCountryCode(vrConnectionId, countryCode);
             if (screenNumbers != null)
             {
                 foreach (var screenNumber in screenNumbers)
                 {
-                    string domainId = screenNumber.domainId.ToString();
+                    string enterpriseId = screenNumber.domainId.ToString();
+                    string siteId = screenNumber.siteId != null ? screenNumber.siteId.ToString() : string.Empty;
+
                     long? accountId = null;
                     long enterpriseAccountId;
-                    if (accountByInterpriseId.TryGetValue(domainId, out enterpriseAccountId))
+
+                    EnterpriseEntity enterpriseEntity = enterprises.GetRecord(enterpriseId);
+                    SiteEntity siteEntity = sites.GetRecord(siteId);
+
+                    if (accountByEnterpriseId.TryGetValue(enterpriseId, out enterpriseAccountId))
                         accountId = enterpriseAccountId;
+
                     accountEnterprisesDIDs.Add(new AccountEnterpriseDID()
                     {
                         AccountId = accountId,
                         ScreenNumber = screenNumber.sn.ToString(),
-                        EnterpriseId = domainId,
+                        EnterpriseId = enterpriseId,
+                        EnterpriseName = enterpriseEntity != null ? enterpriseEntity.Name : null,
+                        EnterpriseDescription = enterpriseEntity != null ? enterpriseEntity.Description : null,
+                        SiteId = siteId,
+                        SiteName = siteEntity != null ? siteEntity.Name : null,
+                        SiteDescription = siteEntity != null ? siteEntity.Description : null,
                         MaxCalls = 1,
                         Type = AccountEnterpriseDIDType.SN
                     });
                 }
             }
-            var businessTrunks = GetUsersBTs(vrConnectionId);
-            if (businessTrunks != null)
+
+
+
+            var businessTrunkReports = GetUserBTReports(vrConnectionId);
+
+            if (businessTrunkReports != null)
             {
-                foreach (var businessTrunk in businessTrunks)
+                foreach (var businessTrunkReport in businessTrunkReports)
                 {
-                    string domainId = businessTrunk.enterpriseId.ToString();
+                    string domainId = businessTrunkReport.user.domainId.ToString();
+                    string enterpriseId = businessTrunkReport.user.enterpriseId.ToString();
+                    string siteId = businessTrunkReport.user.siteId != null ? businessTrunkReport.user.siteId.ToString() : string.Empty;
+
+
                     long? accountId = null;
                     long enterpriseAccountId;
-                    if (accountByInterpriseId.TryGetValue(domainId, out enterpriseAccountId))
+                    if (accountByEnterpriseId.TryGetValue(domainId, out enterpriseAccountId))
                         accountId = enterpriseAccountId;
+
+                    EnterpriseEntity enterpriseEntity = enterprises.GetRecord(enterpriseId);
+                    string enterpriseName = enterpriseEntity != null ? enterpriseEntity.Name : null;
+                    string enterpriseDescription = enterpriseEntity != null ? enterpriseEntity.Description : null;
+
+                    SiteEntity siteEntity = sites.GetRecord(siteId);
+                    string siteName = siteEntity != null ? siteEntity.Name : null;
+                    string siteDescription = siteEntity != null ? siteEntity.Description : null;
+
                     string screenNumber = null;
-                    if (businessTrunk.numberRanges != null)
+                    if (businessTrunkReport.numberRanges != null)
                     {
-                        foreach (var numberRange in businessTrunk.numberRanges)
+                        foreach (var numberRange in businessTrunkReport.numberRanges)
                         {
+                            int maxCalls = businessTrunkReport.specialTarget.maxCalls;
                             if (numberRange.systemRange == true)
                             {
                                 screenNumber = numberRange.startSn.ToString();
                             }
-                            var startSn =  numberRange.startSn.ToString();
+                            var startSn = numberRange.startSn.ToString();
                             accountEnterprisesDIDs.Add(new AccountEnterpriseDID()
                             {
                                 AccountId = accountId,
                                 ScreenNumber = startSn,
-                                EnterpriseId = domainId,
-                                MaxCalls = businessTrunk.maxCalls,
+                                EnterpriseId = enterpriseId,
+                                EnterpriseName = enterpriseName,
+                                EnterpriseDescription = enterpriseDescription,
+                                SiteId = siteId,
+                                SiteName = siteName,
+                                SiteDescription = siteDescription,
+                                MaxCalls = maxCalls,
                                 Type = AccountEnterpriseDIDType.BT
                             });
-                            
                             if (numberRange.endSn != null)
                             {
                                 long parsedStartSn;
                                 long parsedEndSn = -1;
                                 var endSn = numberRange.endSn.ToString();
-                                if(long.TryParse(startSn, out parsedStartSn) && long.TryParse(endSn, out parsedEndSn))
+                                if (long.TryParse(startSn, out parsedStartSn) && long.TryParse(endSn, out parsedEndSn))
                                 {
                                     long i = parsedStartSn + 1;
                                     while (i <= parsedEndSn)
@@ -298,8 +357,13 @@ namespace Retail.Teles.Business
                                         {
                                             AccountId = accountId,
                                             ScreenNumber = i.ToString(),
-                                            EnterpriseId = domainId,
-                                            MaxCalls = businessTrunk.maxCalls,
+                                            EnterpriseId = enterpriseId,
+                                            EnterpriseName = enterpriseName,
+                                            EnterpriseDescription = enterpriseDescription,
+                                            SiteId = siteId,
+                                            SiteName = siteName,
+                                            SiteDescription = siteDescription,
+                                            MaxCalls = maxCalls,
                                             Type = AccountEnterpriseDIDType.BT
                                         });
                                         i++;
@@ -307,13 +371,12 @@ namespace Retail.Teles.Business
                                 }
 
                             }
-                           
                         }
                     }
                 }
             }
 
-            return accountEnterprisesDIDs;
+         return accountEnterprisesDIDs;
         }
         public static void SetCacheExpired()
         {
@@ -340,7 +403,7 @@ namespace Retail.Teles.Business
                     return true;
                 }
             }
-            
+
         }
 
         private class CachedEnterprisesInfo
@@ -370,7 +433,7 @@ namespace Retail.Teles.Business
             public override IEnumerable<EnterpriseDID> RetrieveAllData(DataRetrievalInput<EnterpriseDIDsQuery> input)
             {
                 AccountBEManager accountBEManager = new AccountBEManager();
-                EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(input.Query.AccountBEDefinitionId,input.Query.AccountId);
+                EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(input.Query.AccountBEDefinitionId, input.Query.AccountId);
                 List<EnterpriseDID> enterpriseDID = new List<EnterpriseDID>();
                 if (enterpriseAccountMappingInfo != null && enterpriseAccountMappingInfo.TelesEnterpriseId != null)
                 {
@@ -561,9 +624,12 @@ namespace Retail.Teles.Business
 
                 return new AccountEnterpriseDIDDetail
                 {
-                    AccountName = entity.AccountId.HasValue? new AccountBEManager().GetAccountName(accountBEDefinitionId,entity.AccountId.Value):null,
+                    AccountName = entity.AccountId.HasValue ? new AccountBEManager().GetAccountName(accountBEDefinitionId, entity.AccountId.Value) : null,
                     ScreenNumber = entity.ScreenNumber,
-                    EnterpriseName = new TelesEnterpriseManager().GetEnterpriseName(vrConnectionId, entity.EnterpriseId, telesRestConnection.DefaultDomainId.Value.ToString()),
+                    EnterpriseName = entity.EnterpriseName,
+                    EnterpriseDescription = entity.EnterpriseDescription,
+                    SiteName = entity.SiteName,
+                    SiteDescription =entity.SiteDescription,
                     MaxCalls = entity.MaxCalls,
                     Type = Utilities.GetEnumDescription(entity.Type)
                 };
@@ -608,7 +674,7 @@ namespace Retail.Teles.Business
                     SheetName = "Enterprises",
                     Header = new ExportExcelHeader
                     {
-                        Cells = new List<ExportExcelHeaderCell> { 
+                        Cells = new List<ExportExcelHeaderCell> {
                             new ExportExcelHeaderCell { Title = "Account Name" },
                             new ExportExcelHeaderCell { Title = "Enterprise Name" },
                             new ExportExcelHeaderCell { Title = "Screen Number" },
@@ -649,7 +715,7 @@ namespace Retail.Teles.Business
             public Guid VRConnectionId { get; set; }
             public string TelesDomainId { get; set; }
         }
-        private Dictionary<string, TelesEnterpriseInfo> GetCachedEnterprises(Guid vrConnectionId,string telesDomainId, bool handleTelesNotAvailable)
+        private Dictionary<string, TelesEnterpriseInfo> GetCachedEnterprises(Guid vrConnectionId, string telesDomainId, bool handleTelesNotAvailable)
         {
             CachedEnterprisesInfo enterpriseInfos = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(new GetEnterpriseCacheName
             {
@@ -711,18 +777,16 @@ namespace Retail.Teles.Business
                     throw new VRBusinessException("Cannot connect to Teles API");
             }
         }
-      
+
         private TelesRestConnection GetTelesRestConnection(Guid vrConnectionId)
         {
             VRConnectionManager vrConnectionManager = new VRConnectionManager();
             VRConnection vrConnection = vrConnectionManager.GetVRConnection<TelesRestConnection>(vrConnectionId);
             return vrConnection.Settings.CastWithValidate<TelesRestConnection>("telesRestConnection", vrConnectionId);
         }
-
-        
-        private List<dynamic> GetScreanNumbersByCountryCode(Guid vrConnectionId, string countryCode)
+        private List<dynamic> GetScreenNumbersByCountryCode(Guid vrConnectionId, string countryCode)
         {
-            var telesRestConnection = GetTelesRestConnection( vrConnectionId);
+            var telesRestConnection = GetTelesRestConnection(vrConnectionId);
             string actionPath = string.Format("/screenNum/search?cc={0}&limit=1000", countryCode);
             return telesRestConnection.Get<List<dynamic>>(actionPath);
         }
@@ -730,6 +794,18 @@ namespace Retail.Teles.Business
         {
             var telesRestConnection = GetTelesRestConnection(vrConnectionId);
             string actionPath = string.Format("/user/search?role=BT");
+            return telesRestConnection.Get<List<dynamic>>(actionPath);
+        }
+        private List<dynamic> GetDomainLists(Guid vrConnectionId)
+        {
+            var telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            string actionPath = string.Format("/domain/list");
+            return telesRestConnection.Get<List<dynamic>>(actionPath);
+        }
+        private List<dynamic> GetUserBTReports(Guid vrConnectionId)
+        {
+            var telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            string actionPath = string.Format("/user/businessTrunkReport");
             return telesRestConnection.Get<List<dynamic>>(actionPath);
         }
         #endregion
@@ -740,7 +816,7 @@ namespace Retail.Teles.Business
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings.CastWithValidate<TelesEnterpriseBEDefinitionSettings>("context.EntityDefinition.Settings");
 
-            var cachedEnterprises = GetCachedEnterprises(telesBEDefinitionSettings.VRConnectionId,null, false);
+            var cachedEnterprises = GetCachedEnterprises(telesBEDefinitionSettings.VRConnectionId, null, false);
 
             return cachedEnterprises.Values.Select(itm => itm as dynamic).ToList();
         }
@@ -748,13 +824,13 @@ namespace Retail.Teles.Business
         public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings as TelesEnterpriseBEDefinitionSettings;
-            return GetEnterprise(telesBEDefinitionSettings.VRConnectionId,null, context.EntityId);
+            return GetEnterprise(telesBEDefinitionSettings.VRConnectionId, null, context.EntityId);
         }
 
         public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings as TelesEnterpriseBEDefinitionSettings;
-            return GetEnterpriseName(telesBEDefinitionSettings.VRConnectionId, context.EntityId.ToString(),null);
+            return GetEnterpriseName(telesBEDefinitionSettings.VRConnectionId, context.EntityId.ToString(), null);
         }
 
         public override dynamic GetEntityId(IBusinessEntityIdContext context)
@@ -783,7 +859,7 @@ namespace Retail.Teles.Business
             throw new NotImplementedException();
         }
 
-        #endregion  
-    
+        #endregion
+
     }
 }

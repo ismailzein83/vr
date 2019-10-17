@@ -4,6 +4,6 @@ AS
 BEGIN
 	DELETE [TelesEnterprise].[AccountEnterpriseDID]
 	
-	Insert into [TelesEnterprise].[AccountEnterpriseDID] (AccountId,EnterpriseId,ScreenNumber,[Type],[MaxCalls])
-	Select AccountId,EnterpriseId,ScreenNumber,[Type],[MaxCalls] FROM @AccountEnterpriseDIDTable
+	Insert into [TelesEnterprise].[AccountEnterpriseDID] (AccountId,EnterpriseId,EnterpriseDescription,SiteId,SiteDescription,ScreenNumber,[Type],[MaxCalls])
+	Select AccountId,EnterpriseId,EnterpriseDescription,SiteId,SiteDescription,ScreenNumber,[Type],[MaxCalls] FROM @AccountEnterpriseDIDTable
 END

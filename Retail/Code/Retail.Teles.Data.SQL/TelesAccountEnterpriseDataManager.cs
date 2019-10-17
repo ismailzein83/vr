@@ -46,6 +46,9 @@ namespace Retail.Teles.Data.SQL
             DataTable dt = new DataTable(AccountEnterpriseDID_TABLENAME);
             dt.Columns.Add("AccountId", typeof(long));
             dt.Columns.Add("EnterpriseId", typeof(string));
+            dt.Columns.Add("EnterpriseDescription", typeof(string));
+            dt.Columns.Add("SiteId", typeof(string));
+            dt.Columns.Add("SiteDescription", typeof(string));
             dt.Columns.Add("ScreenNumber", typeof(string));
             dt.Columns.Add("Type", typeof(int));
             dt.Columns.Add("MaxCalls", typeof(int));
@@ -56,6 +59,9 @@ namespace Retail.Teles.Data.SQL
             if (accountEnterpriseDID.AccountId.HasValue)
                 dr["AccountId"] = accountEnterpriseDID.AccountId;
             dr["EnterpriseId"] = accountEnterpriseDID.EnterpriseId;
+            dr["EnterpriseDescription"] = accountEnterpriseDID.EnterpriseDescription;
+            dr["SiteId"] = accountEnterpriseDID.SiteId;
+            dr["SiteDescription"] = accountEnterpriseDID.SiteDescription;
             dr["ScreenNumber"] = accountEnterpriseDID.ScreenNumber;
             dr["Type"] = accountEnterpriseDID.Type;
             dr["MaxCalls"] = accountEnterpriseDID.MaxCalls;

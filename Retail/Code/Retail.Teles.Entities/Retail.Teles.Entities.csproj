@@ -58,6 +58,8 @@
     <Compile Include="EnterpriseDIDDetail.cs" />
     <Compile Include="EnterpriseDIDsQuery.cs" />
     <Compile Include="AccountEnterpriseDIDQuery.cs" />
+    <Compile Include="EnterpriseEntity.cs" />
+    <Compile Include="SiteEntity.cs" />
     <Compile Include="TelesUserMappingInfo.cs" />
     <Compile Include="TelesSiteRoutingGroupFilter.cs" />
     <Compile Include="TelesSiteRoutingGroupInfo.cs" />
