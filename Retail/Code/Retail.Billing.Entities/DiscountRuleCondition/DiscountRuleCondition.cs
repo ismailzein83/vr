@@ -9,6 +9,8 @@ namespace Retail.Billing.Entities
         public abstract Guid ConfigID { get; }
 
         public abstract bool IsMatched(IDiscountRuleConditionIsMatchedContext context);
+
+        public abstract string GetDescription();
     }
 
     public interface IDiscountRuleConditionIsMatchedContext
