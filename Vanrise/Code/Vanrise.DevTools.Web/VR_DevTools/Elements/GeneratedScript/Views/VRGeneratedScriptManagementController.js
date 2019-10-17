@@ -16,6 +16,8 @@
 
             var queriesTypeSelectorDirectiveApi;
             var isCompareToTabSelected = false;
+            var isSourceTabSelected = false;
+            var isDesignTabSelected = false;
 
             $scope.scopeModel.tableDataSource = "";
             $scope.scopeModel.Errors = [];
@@ -87,64 +89,82 @@
             };
 
             $scope.scopeModel.onDesignTabSelected = function () {
+                if (isSourceTabSelected)
+                    loadGrid();
+
+                isDesignTabSelected = true;
                 isCompareToTabSelected = false;
-
-                if ($scope.scopeModel.tableDataSource) {
-                    $scope.scopeModel.isLoading = true;
-                    designs = [];
-
-                    try {
-                        isDynamicallyChanged = false;
-                        $scope.scopeModel.Errors = [];
-
-                        generatedScripts = JSON.parse($scope.scopeModel.tableDataSource).Scripts;
-                        VR_Devtools_ColumnsAPIService.Validate({ Scripts: generatedScripts }).then(function (response) {
-
-                            if (response) {
-
-                                for (var j = 0; j < response.length; j++) {
-                                    if (!response[j].IsValidated) {
-                                        $scope.scopeModel.Errors.push({ Errors: response[j].Errors, TableTitle: response[j].TableTitle });
-                                    }
-                                }
-
-                                if ($scope.scopeModel.Errors.length != 0) {
-                                    $scope.scopeModel.sourceTab.isSelected = true;
-                                    isDynamicallyChanged = true;
-                                }
-
-                                else {
-
-                                    for (var k = 0; k < generatedScripts.length; k++) {
-                                        designs.push(generatedScripts[k]);
-                                    }
-
-                                    gridApi.load({ designs: designs });
-                                }
-                            }
-                            $scope.scopeModel.isLoading = false;
-                        });
-
-                    }
-                    catch (error) { $scope.scopeModel.isLoading = false; }
-                }
-
-                else {
-                    gridApi.load();
-                }
+                isSourceTabSelected = false;
             };
 
             $scope.scopeModel.onSourceTabSelected = function () {
+                if (isDesignTabSelected)
+                    stringifyDesigns();
+
+                isDesignTabSelected = false;
                 isCompareToTabSelected = false;
-                stringifyDesigns();
+                isSourceTabSelected = true;
             };
 
             $scope.scopeModel.onCompareToTabSelected = function () {
                 isCompareToTabSelected = true;
-                stringifyDesigns();
+
+                if (isSourceTabSelected) {
+                    isSourceTabSelected = false;
+                    loadGrid();
+                }
+                if (isDesignTabSelected) {
+                    isDesignTabSelected = false;
+                    stringifyDesigns();
+                }
             };
         }
+        function loadGrid()  {
+            if ($scope.scopeModel.tableDataSource) {
+                $scope.scopeModel.isLoading = true;
+                designs = [];
 
+                try {
+                    isDynamicallyChanged = false;
+                    $scope.scopeModel.Errors = [];
+
+                    generatedScripts = JSON.parse($scope.scopeModel.tableDataSource).Scripts;
+                    VR_Devtools_ColumnsAPIService.Validate({ Scripts: generatedScripts }).then(function (response) {
+
+                        if (response) {
+
+                            for (var j = 0; j < response.length; j++) {
+                                if (!response[j].IsValidated) {
+                                    $scope.scopeModel.Errors.push({ Errors: response[j].Errors, TableTitle: response[j].TableTitle });
+                                }
+                            }
+
+                            if ($scope.scopeModel.Errors.length != 0) {
+                                $scope.scopeModel.sourceTab.isSelected = true;
+                                isDynamicallyChanged = true;
+                            }
+
+                            else {
+
+                                for (var k = 0; k < generatedScripts.length; k++) {
+                                    designs.push(generatedScripts[k]);
+                                }
+
+                                gridApi.load({ designs: designs });
+                            }
+                        }
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
+
+                }
+                catch (error) { $scope.scopeModel.isLoading = false; }
+            }
+
+            else {
+                gridApi.load();
+            }
+        }
         function stringifyDesigns() {
             $scope.scopeModel.isLoading = true;
 

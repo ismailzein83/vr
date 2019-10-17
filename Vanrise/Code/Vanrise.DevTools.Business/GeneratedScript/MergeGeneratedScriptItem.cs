@@ -158,13 +158,15 @@ namespace Vanrise.DevTools.Business
         public override GeneratedScriptItemTableSettings FindScriptDiffernces(GeneratedScriptItemTableSettings newScriptSettings, GeneratedScriptItemTableSettings oldScriptSettings)
         {
             var newMergeSettings = newScriptSettings as MergeGeneratedScriptItem;
-
-            if (newMergeSettings == null || newMergeSettings.DataRows == null || newMergeSettings.DataRows.Count == 0)
-                return null;
-
             var oldMergeSettings = oldScriptSettings as MergeGeneratedScriptItem;
 
-            if (oldMergeSettings == null || oldMergeSettings.DataRows == null || oldMergeSettings.DataRows.Count == 0)
+            if (oldMergeSettings == null || newMergeSettings == null || newMergeSettings.DataRows == null || newMergeSettings.DataRows.Count == 0)
+                return null;
+
+            if (newMergeSettings.LastWhereCondition != oldMergeSettings.LastWhereCondition)
+                return null;
+
+            if (oldMergeSettings.DataRows == null || oldMergeSettings.DataRows.Count == 0)
                 return newMergeSettings;
 
             MergeGeneratedScriptItem differences = new MergeGeneratedScriptItem()
