@@ -384,7 +384,7 @@ namespace BPMExtended.Main.Business
                     MotherName = motherName.ToString(),
                     BirthDate = birthDate.ToString(),
                     Career = career.ToString(),
-                    LanguageId = languageId.ToString(),
+                    LanguageId = languageId != null? languageId.ToString(): null,
                     NationalityId = nationalityId.ToString(),
                     CountryId = countryId.ToString(),
                     RegionId = regionId.ToString(),
