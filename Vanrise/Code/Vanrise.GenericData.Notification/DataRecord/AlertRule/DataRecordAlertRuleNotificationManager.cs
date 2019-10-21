@@ -89,7 +89,7 @@ namespace Vanrise.GenericData.Notification
                                 {NotificationActionMappingField.UserId, userId },
                                 {NotificationActionMappingField.NotificationTypeId, notificationTypeId },
                                 {NotificationActionMappingField.Notification, alertRuleNotificationOutput.CreateVRNotificationOutput.NotificationId },
-                                {NotificationActionMappingField.AlertRuleLevelId,dataRecordAlertRuleNotification.AlertLevelId }
+                                {NotificationActionMappingField.AlertRuleLevelId, dataRecordAlertRuleNotification.AlertLevelId }
                             };
 
                             OnDataRecordNotificationCreatedExecutionContext executionActionContext = new OnDataRecordNotificationCreatedExecutionContext(dataRecordAlertRuleNotification.FieldValues, dataRecordTypeId, enumFieldValuesByFieldName);

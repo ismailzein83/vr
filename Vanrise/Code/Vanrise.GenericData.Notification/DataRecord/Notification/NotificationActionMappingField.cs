@@ -7,26 +7,31 @@ namespace Vanrise.GenericData.Notification
 {
     public enum NotificationActionMappingField
     {
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.StaticField)]
         AlertRuleTypeId = 0,
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.StaticField)]
         NotificationTypeId = 1,
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.StaticField)]
         AlertRuleId = 2,
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.StaticField)]
         MinNotificationInterval = 3,
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.StaticField)]
         AlertNotificationDescription = 4,
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.StaticField)]
         UserId = 5,
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.StaticField)]
         Notification = 6,
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.StaticField)]
         AlertRuleLevelId = 7,
-        [NotificationActionMappingField()]
+        [NotificationActionMappingField(MappingFieldType = NotificationActionMappingFieldType.DataRecordField)]
         RecordTypeField = 99
     }
 
+    public enum NotificationActionMappingFieldType
+    {
+        StaticField = 0,
+        DataRecordField = 1
+    }
 
     public class NotificationActionMappingFieldAttribute : Attribute
     {
@@ -42,10 +47,11 @@ namespace Vanrise.GenericData.Notification
             }
         }
 
+        public NotificationActionMappingFieldType MappingFieldType { get; set; }
+
         public static NotificationActionMappingFieldAttribute GetAttribute(NotificationActionMappingField status)
         {
             return _cachedAttributes.GetRecord(status);
         }
     }
-
 }
