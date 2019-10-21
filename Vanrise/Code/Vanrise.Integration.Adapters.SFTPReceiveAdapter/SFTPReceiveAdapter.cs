@@ -298,13 +298,16 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
         private void MoveFile(Sftp sftp, SftpItem fileObj, String filePath, string directorytoMoveFile, string extension, string newExtension)
         {
+            if (directorytoMoveFile.Last() == '/')
+                directorytoMoveFile = directorytoMoveFile.Substring(0, directorytoMoveFile.Length - 1);
+
             base.LogVerbose("Moving file {0} after import to Directory {1}", fileObj.Name, directorytoMoveFile);
 
             if (!sftp.DirectoryExists(directorytoMoveFile))
                 sftp.CreateDirectory(directorytoMoveFile);
 
             string fileObjWithoutExtension = fileObj.Name.Replace(extension, "");
-            string newFilePath = Path.Combine(directorytoMoveFile, string.Format(@"{0}.{1}", fileObjWithoutExtension, newExtension));
+            string newFilePath = string.Concat(directorytoMoveFile, "/", string.Format(@"{0}.{1}", fileObjWithoutExtension, newExtension));
             if (sftp.FileExists(newFilePath))
                 newFilePath = newFilePath.Replace(fileObjWithoutExtension, string.Format(@"{0}_{1}", fileObjWithoutExtension, Guid.NewGuid()));
 

@@ -63,7 +63,7 @@
             <vr-select datasource="scopeModel.actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action" selectedvalues="scopeModel.selectedAction" onselectionchanged="scopeModel.onSelectedActionChanged" isrequired hideremoveicon></vr-select>
         </vr-columns>
         <vr-columns ng-show="scopeModel.selectedAction.value == 2" width="1/3row">
-            <vr-textbox value="scopeModel.directorytoMoveFile" label="Processed File Directory Path" />
+            <vr-textbox value="scopeModel.directorytoMoveFile" label="Processed File Directory Path" isrequired="scopeModel.selectedAction.value != undefined && scopeModel.selectedAction.value == 2"/>
         </vr-columns>
         <vr-columns ng-show="scopeModel.selectedAction.value != undefined && scopeModel.selectedAction.value != -1" width="1/3row">
             <vr-select datasource="scopeModel.fileCheckCriterias" datatextfield="description" datavaluefield="value"
