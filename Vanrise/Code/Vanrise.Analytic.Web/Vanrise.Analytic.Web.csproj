@@ -201,10 +201,12 @@
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\CustomCode\vr-analytic-reportgenerationcustomcode-filegenerator.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\Templates\FlatFileGeneratorTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\vr-analytic-flatfile-filegenerator.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorFixedFieldsMappedTable.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTableGridTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTableTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTableTitlesGridTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-fixedmappedfieldstable.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-mappedtable-grid.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-mappedtable-titlesgrid.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-mappedtable.js" />
