@@ -1353,7 +1353,7 @@ namespace BPMExtended.Main.Business
         public CustomerCreationOutput CreateAccount(string contactId ,string parentCustomerId, string CustomerCategoryId, string levelId, string companyName, string branch,string companyId,string FirstName, string LastName, string CSO,
          string BankCode, string AccountNumber, string BankName, string IBAN, string country, string nationality, string birthDate, string building, string career,string City,
          string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
-         string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId, string PaymentMethodId
+         string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId, string PaymentMethodId,string businessType
          )
         {
             IDManager manager = new IDManager();
@@ -1425,6 +1425,7 @@ namespace BPMExtended.Main.Business
                 DocumentId = contact.DocumentID,
                 DocumentTypeId = GetDocumentType(contact.DocumentIdTypeId),
                 ValidFromDate = DateTime.Now,
+                BusinessType= businessType
             };
 
             using (var client = new SOMClient())
