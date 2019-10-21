@@ -103,7 +103,7 @@ namespace Vanrise.DevTools.Business
 
                 foreach (var oldScript in oldItems.Scripts)
                 {
-                    if (newScript.ConnectionId == oldScript.ConnectionId && newScript.Schema == oldScript.Schema && newScript.TableName == oldScript.TableName)
+                    if (newScript.ConnectionId == oldScript.ConnectionId && newScript.Schema == oldScript.Schema && newScript.TableName == oldScript.TableName && newScript.Settings.ConfigId.ToString() == oldScript.Settings.ConfigId.ToString())
                     {
                         isScriptFound = true;
 
