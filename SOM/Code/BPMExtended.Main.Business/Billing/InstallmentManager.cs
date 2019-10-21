@@ -10,7 +10,7 @@ namespace BPMExtended.Main.Business
 {
     public class InstallmentManager
     {
-        public List<InstallmentTemplateInfo> GetCustomerCategoryInfo()
+        public List<InstallmentTemplateInfo> GetInstallmentTemplatesInfo()
         {
             var installmentTemplateInfoItems = new List<InstallmentTemplateInfo>();
             using (SOMClient client = new SOMClient())
