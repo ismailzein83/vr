@@ -23,6 +23,10 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
 
         public FilterParameterCollection FilterParameters { get; set; }
 
+        public Guid ParametersRecordTypeId { get; set; }
+
+        public VRGenericEditorDefinitionSetting ParametersEditorDefinitionSetting { get; set; }
+
         public override List<DAProfCalcOutputField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context)
         {
             List<DAProfCalcOutputField> fields = new List<DAProfCalcOutputField>();
