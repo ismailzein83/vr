@@ -8,6 +8,6 @@ namespace Vanrise.Notification.Entities
 {
     public class CreateVRNotificationOutput
     {
-
+        public long NotificationId { get; set; }
     }
 }

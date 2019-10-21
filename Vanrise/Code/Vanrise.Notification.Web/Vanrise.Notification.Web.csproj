@@ -28,7 +28,7 @@
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -128,6 +128,7 @@
     <Compile Include="Controllers\VRAlertRuleController.cs" />
     <Compile Include="Controllers\VRAlertRuleTypeController.cs" />
     <Compile Include="Controllers\VRBalanceAlertRuleController.cs" />
+    <Compile Include="Controllers\VRDataRecordNotificationTypeController.cs" />
     <Compile Include="Controllers\VRNotificationViewController.cs" />
     <Compile Include="Controllers\VRNotificationTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -215,6 +216,7 @@
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleTypeAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRBalanceAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRNotificationsAPIService.js" />
+    <Content Include="VR_Notification\Services\APIServices\VRDataRecordNotificationTypeAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRNotificationTypeAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRNotificationViewAPIService.js" />
     <Content Include="VR_Notification\Services\VRActionService.js" />

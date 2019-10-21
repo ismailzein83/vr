@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Common;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 
@@ -38,12 +39,21 @@ namespace Vanrise.GenericData.Notification
                 else
                     dataRecordAlertRuleNotificationsToBeExecuted = dataRecordAlertRuleNotifications;
 
+                VRNotificationTypeManager notificationTypeManager = new VRNotificationTypeManager();
+
+                OnDataRecordNotificationCreatedAction onDataRecordNotificationCreatedAction = null;
+                var notificationTypeExtendedSettings = notificationTypeManager.GetVRNotificationTypeExtendedSettings(notificationTypeId);
+                var dataRecordNotificationTypeSettings = notificationTypeExtendedSettings as DataRecordNotificationTypeSettings;
+                if (dataRecordNotificationTypeSettings != null && dataRecordNotificationTypeSettings.OnNotificationCreatedHandler != null)
+                    onDataRecordNotificationCreatedAction = dataRecordNotificationTypeSettings.OnNotificationCreatedHandler.Action;
+
                 if (dataRecordAlertRuleNotificationsToBeExecuted != null && dataRecordAlertRuleNotificationsToBeExecuted.Count > 0)
                 {
                     createNotification = true;
                     numberOfNotificationsCreated = dataRecordAlertRuleNotificationsToBeExecuted.Count;
 
                     VRAlertRuleNotificationManager alertRuleNotificationManager = new VRAlertRuleNotificationManager();
+
                     foreach (DataRecordAlertRuleNotification dataRecordAlertRuleNotification in dataRecordAlertRuleNotificationsToBeExecuted)
                     {
                         CreateAlertRuleNotificationInput notificationInput = new CreateAlertRuleNotificationInput()
@@ -62,7 +72,29 @@ namespace Vanrise.GenericData.Notification
                             UserId = userId,
                             NotificationTypeId = notificationTypeId
                         };
-                        alertRuleNotificationManager.CreateNotification(notificationInput);
+
+                        var alertRuleNotificationOutput = alertRuleNotificationManager.CreateNotification(notificationInput);
+
+                        if (onDataRecordNotificationCreatedAction != null)
+                        {
+                            alertRuleNotificationOutput.ThrowIfNull("alertRuleNotificationOutput");
+                            alertRuleNotificationOutput.CreateVRNotificationOutput.ThrowIfNull("alertRuleNotificationOutput.CreateVRNotificationOutput");
+
+                            Dictionary<NotificationActionMappingField, dynamic> enumFieldValuesByFieldName = new Dictionary<NotificationActionMappingField, dynamic>()
+                            {
+                                {NotificationActionMappingField.AlertNotificationDescription, alertNotificationDescription },
+                                {NotificationActionMappingField.AlertRuleTypeId, alertRuleTypeId },
+                                {NotificationActionMappingField.AlertRuleId, alertRuleId },
+                                {NotificationActionMappingField.MinNotificationInterval, minNotificationInterval },
+                                {NotificationActionMappingField.UserId, userId },
+                                {NotificationActionMappingField.NotificationTypeId, notificationTypeId },
+                                {NotificationActionMappingField.Notification, alertRuleNotificationOutput.CreateVRNotificationOutput.NotificationId },
+                                {NotificationActionMappingField.AlertRuleLevelId,dataRecordAlertRuleNotification.AlertLevelId }
+                            };
+
+                            OnDataRecordNotificationCreatedExecutionContext executionActionContext = new OnDataRecordNotificationCreatedExecutionContext(dataRecordAlertRuleNotification.FieldValues, dataRecordTypeId, enumFieldValuesByFieldName);
+                            onDataRecordNotificationCreatedAction.Execute(executionActionContext);
+                        }
                     }
                 }
             }

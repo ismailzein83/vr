@@ -1,0 +1,31 @@
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady"
+                                               onselectionchanged="scopeModel.onDataRecordStorageSelectionChanged"
+                                               selectedvalues="scopeModel.selectedRecordStorage"
+                                               isrequired="true"
+                                               label="Record Storage"
+                                               hideremoveicon>
+    </vr-genericdata-datarecordstorage-selector>
+</vr-columns>
+
+<span ng-show="scopeModel.selectedRecordStorage != undefined && scopeModel.selectedRecordStorage.DataRecordTypeId != undefined">
+    <vr-columns width="fullrow" vr-loader="scopeModel.isGridLoading">
+        <vr-validator validate="scopeModel.validateGrid()">
+            <vr-datagrid datasource="scopeModel.dataRecordTypeFields"
+                         enabledraggablerow="true"
+                         hidegridmenu>
+                <vr-datagridcolumn field="'Title'" headertext="'Record Field Name'" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Mapping Field'" disablesorting>
+                    <vr-columns width="1/2row" haschildcolumns>
+                        <vr-select datasource="viewScope.scopeModel.mappingFieldTypes" selectedvalues="dataItem.selectedMappingField" entityname="Field Type" datavaluefield="value" datatextfield="description"></vr-select>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <span ng-if="dataItem.selectedMappingField != undefined && dataItem.selectedMappingField.showRecordFieldsSelector">
+                            <vr-select datasource="viewScope.scopeModel.mappingDataRecordTypeFields" selectedvalues="dataItem.selectedDataRecordField" entityname="Field" datavaluefield="Name" datatextfield="Title" isrequired="true" hideremoveicon></vr-select>
+                        </span>
+                    </vr-columns>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</span>

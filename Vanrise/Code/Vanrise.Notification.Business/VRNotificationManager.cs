@@ -58,9 +58,9 @@ namespace Vanrise.Notification.Business
                 InputArguments = executeNotificationProcessInput
             };
             var createProcessOutput = _bpInstanceManager.CreateNewProcess(createProcessInput);
-            return new CreateVRNotificationOutput
+            return new CreateVRNotificationOutput()
             {
-
+                NotificationId = notificationId
             };
         }
 

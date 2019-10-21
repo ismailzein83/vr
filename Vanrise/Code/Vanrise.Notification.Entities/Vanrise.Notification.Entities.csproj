@@ -103,6 +103,7 @@
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeQuery.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeSettings.cs" />
     <Compile Include="VRNotificationType\IVRNotificationTypeGetNotificationEventPayloadContext.cs" />
+    <Compile Include="VRNotificationType\VRDataRecordNotificationActionConfig.cs" />
     <Compile Include="VRNotification\IGetVRNotificationContext.cs" />
     <Compile Include="VRNotification\IVRNotificationBeforeIdContext.cs" />
     <Compile Include="VRNotification\IVRNotificationFirstPageContext.cs" />

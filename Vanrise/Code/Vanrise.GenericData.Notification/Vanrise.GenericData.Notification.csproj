@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -95,6 +96,9 @@
     <Compile Include="DataRecord\Filters\IVRAlertRuleTypeFilter\DataRecordAlertRuleTypeFilter.cs" />
     <Compile Include="DataRecord\AlertRule\RecordFilterAlertRuleConfig.cs" />
     <Compile Include="DataRecord\Filters\IVRNotificationTypeFilter\DataRecordNotificationTypeFilter.cs" />
+    <Compile Include="DataRecord\Notification\OnDataRecordNotificationCreatedAction.cs" />
+    <Compile Include="DataRecord\Notification\OnDataRecordNotificationCreatedHandler.cs" />
+    <Compile Include="DataRecord\Notification\NotificationActionMappingField.cs" />
     <Compile Include="EvaluateDataRecordRule.cs" />
     <Compile Include="LoadDataRecordRuleEvaluatorDefinition.cs" />
     <Compile Include="DataRecord\QueueActivators\DataRecordCheckAlertRulesQueueActivator.cs" />

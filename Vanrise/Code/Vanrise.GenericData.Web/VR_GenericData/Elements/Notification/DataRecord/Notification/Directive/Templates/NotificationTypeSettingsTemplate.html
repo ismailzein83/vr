@@ -1,6 +1,4 @@
-﻿
-
-<vr-columns width="1/2row">
+﻿<vr-columns width="1/2row">
     <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
                                             onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
                                             isrequired="true"
@@ -9,30 +7,38 @@
     </vr-genericdata-datarecordtype-selector>
 </vr-columns>
 
+<span ng-show="scopeModel.dataRecordTypeSelected" vr-loader="scopeModel.isLoading">
+    <vr-columns width="fullrow" haschildcolumns>
+        <vr-columns width="1/4row">
+            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
+                                                          selectedvalues="scopeModel.selectedDataRecordFields"
+                                                          onselectitem="scopeModel.onSelectDataRecordTypeField"
+                                                          ondeselectitem="scopeModel.onDeselectDataRecordTypeField"
+                                                          ismultipleselection hideselectedvaluessection hideremoveicon>
+            </vr-genericdata-datarecordtypefields-selector>
+        </vr-columns>
+        <vr-columns width="3/4row">
+            <vr-label></vr-label>
+            <vr-validator validate="scopeModel.validateGrid()">
+                <vr-datagrid datasource="scopeModel.gridColumnDefinitions"
+                             ondeleterow="scopeModel.onDeleteRow"
+                             enabledraggablerow="true"
+                             hidegridmenu>
 
-<vr-span ng-show="scopeModel.showDataRecordFieldsGrid">
-    <vr-columns width="1/4row">
-        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
-                                                      selectedvalues="scopeModel.selectedDataRecordFields"
-                                                      onselectitem="scopeModel.onSelectDataRecordTypeField"
-                                                      ondeselectitem="scopeModel.onDeselectDataRecordTypeField"
-                                                      ismultipleselection hideselectedvaluessection hideremoveicon>
-        </vr-genericdata-datarecordtypefields-selector>
+                    <vr-datagridcolumn field="'FieldName'" headertext="'Grid Column Name'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Grid Column Header'" disablesorting>
+                        <vr-textbox value="dataItem.Header" isrequired="true"></vr-textbox>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-columns>
     </vr-columns>
-    <vr-columns width="3/4row">
-        <vr-label></vr-label>
-        <vr-validator validate="scopeModel.validateGrid()">
-            <vr-datagrid datasource="scopeModel.gridColumnDefinitions"
-                         ondeleterow="scopeModel.onDeleteRow"
-                         enabledraggablerow="true"
-                         hidegridmenu>
 
-                <vr-datagridcolumn field="'FieldName'" headertext="'Grid Column Name'" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Grid Column Header'" disablesorting>
-                    <vr-textbox value="dataItem.Header" isrequired="true"></vr-textbox>
-                </vr-datagridcolumn>
-            </vr-datagrid>
-        </vr-validator>
+    <vr-columns width="fullrow">
+        <vr-section title="On Notification Created" collapsible>
+            <vr-row>
+                <vr-genericdata-datarecordnotificationtype-onnotificationcreated-handler on-ready="scopeModel.onNotificationCreatedHandlerDirectiveReady" normal-col-num="3"></vr-genericdata-datarecordnotificationtype-onnotificationcreated-handler>
+            </vr-row>
+        </vr-section>
     </vr-columns>
-</vr-span>
-
+</span>

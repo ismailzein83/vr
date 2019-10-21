@@ -22,6 +22,7 @@ namespace Vanrise.GenericData.Notification
 
         public List<NotificationGridColumnDefinition> GridColumnDefinitions { get; set; }
 
+        public OnDataRecordNotificationCreatedHandler OnNotificationCreatedHandler { get; set; }
 
         public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
         {

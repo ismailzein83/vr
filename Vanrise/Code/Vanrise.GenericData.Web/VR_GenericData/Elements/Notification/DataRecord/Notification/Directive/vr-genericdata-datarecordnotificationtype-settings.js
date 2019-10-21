@@ -1,5 +1,4 @@
 ﻿'use strict';
-
 app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
@@ -29,33 +28,45 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var onNotificationCreatedHandlerDirectiveAPI;
+            var onNotificationCreatedHandlerDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.gridColumnDefinitions = [];
-                $scope.scopeModel.showDataRecordFieldsGrid = false;
+                $scope.scopeModel.dataRecordTypeSelected = false;
 
                 $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
                     dataRecordTypeSelectorPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onDataRecordFieldsSelectorReady = function (api) {
                     dataRecordTypeFieldsSelectorAPI = api;
                     dataRecordTypeFieldsSelectorReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onNotificationCreatedHandlerDirectiveReady = function (api) {
+                    onNotificationCreatedHandlerDirectiveAPI = api;
+                    onNotificationCreatedHandlerDirectiveReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onDataRecordTypeSelectionChanged = function (selectedItem) {
 
                     if (selectedItem != undefined) {
                         dataRecordTypeId = selectedItem.DataRecordTypeId;
-                        $scope.scopeModel.showDataRecordFieldsGrid = true;
+                        $scope.scopeModel.dataRecordTypeSelected = true;
 
                         if (dataRecordTypeSelectorSelectionChangedDeferred != undefined) {
                             dataRecordTypeSelectorSelectionChangedDeferred.resolve();
                         }
                         else {
+                            var promises = [];
+                            $scope.scopeModel.isLoading = true;
                             $scope.scopeModel.gridColumnDefinitions = [];
-                            loadDataRecordTypeFieldsSelector();
+
+                            promises.push(loadDataRecordTypeFieldsSelector());
+                            promises.push(reloadOnNotificationCreatedHandlerDirective());
 
                             function loadDataRecordTypeFieldsSelector() {
                                 var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -67,6 +78,22 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
 
                                 return dataRecordTypeFieldsSelectorLoadDeferred.promise;
                             }
+
+                            function reloadOnNotificationCreatedHandlerDirective() {
+                                var loadOnNotificationCreatedHandlerDirectivePromiseDeferred = UtilsService.createPromiseDeferred("loadOnNotificationCreatedHandlerDirectivePromiseDeferred");
+
+                                var onNotificationCreatedHandlerPayload = {
+                                    dataRecordTypeId: dataRecordTypeId
+                                };
+
+                                VRUIUtilsService.callDirectiveLoad(onNotificationCreatedHandlerDirectiveAPI, onNotificationCreatedHandlerPayload, loadOnNotificationCreatedHandlerDirectivePromiseDeferred);
+
+                                return loadOnNotificationCreatedHandlerDirectivePromiseDeferred.promise;
+                            }
+
+                            UtilsService.waitMultiplePromises(promises).then(function () {
+                                $scope.scopeModel.isLoading = false;
+                            }); 
                         }
                     }
                 };
@@ -79,6 +106,7 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
                         Header: dataRecordTypeField.Title
                     });
                 };
+
                 $scope.scopeModel.onDeselectDataRecordTypeField = function (deselectedItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.gridColumnDefinitions, deselectedItem.Name, 'FieldName');
                     $scope.scopeModel.gridColumnDefinitions.splice(index, 1);
@@ -104,6 +132,7 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
 
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
@@ -111,27 +140,33 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
                     var promises = [];
 
                     var gridColumnDefinitions;
+                    var onNotificationCreatedHandler;
 
                     if (payload != undefined) {
                         dataRecordTypeId = payload.DataRecordTypeId;
                         gridColumnDefinitions = payload.GridColumnDefinitions;
+                        onNotificationCreatedHandler = payload.OnNotificationCreatedHandler
                     }
 
                     //Loading DataRecordType Selector
                     var dataRecordTypeSelectorLoadPromise = getDataRecordTypeSelectorLoadPromise();
                     promises.push(dataRecordTypeSelectorLoadPromise);
 
-                    //Loading DataRecordTypeFields Selector
+
                     if (dataRecordTypeId != undefined) {
+                        //Loading DataRecordTypeFields Selector
                         var dataRecordTypeFieldsSelectorLoadPromise = getDataRecordTypeFieldsSelectorLoadPromise();
                         promises.push(dataRecordTypeFieldsSelectorLoadPromise);
+
+                        //Loading OnNotificationCreatedHandler
+                        var loadOnNotificationCreatedHandlerDirectivePromise = loadOnNotificationCreatedHandlerDirective();
+                        promises.push(loadOnNotificationCreatedHandlerDirectivePromise);
                     }
 
                     //Loading Grid
                     if (gridColumnDefinitions != undefined) {
                         $scope.scopeModel.gridColumnDefinitions = gridColumnDefinitions;
                     }
-
 
                     function getDataRecordTypeSelectorLoadPromise() {
                         if (dataRecordTypeId != undefined)
@@ -149,6 +184,7 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
 
                         return dataRecordTypeSelectorLoadPromiseDeferred.promise;
                     }
+
                     function getDataRecordTypeFieldsSelectorLoadPromise() {
                         var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -167,6 +203,24 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
                         return dataRecordTypeFieldsSelectorLoadDeferred.promise;
                     }
 
+                    function loadOnNotificationCreatedHandlerDirective() {
+                        var loadOnNotificationCreatedHandlerDirectivePromiseDeferred = UtilsService.createPromiseDeferred("loadOnNotificationCreatedHandlerDirectivePromiseDeferred");
+
+                        onNotificationCreatedHandlerDirectiveReadyDeferred.promise.then(function () {
+                            var onNotificationCreatedHandlerPayload = {
+                                dataRecordTypeId: dataRecordTypeId
+                            };
+
+                            if (onNotificationCreatedHandler != undefined) {
+                                onNotificationCreatedHandlerPayload.onNotificationCreatedHandler = onNotificationCreatedHandler;
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(onNotificationCreatedHandlerDirectiveAPI, onNotificationCreatedHandlerPayload, loadOnNotificationCreatedHandlerDirectivePromiseDeferred);
+                        });
+
+                        return loadOnNotificationCreatedHandlerDirectivePromiseDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -174,7 +228,8 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
                     return {
                         $type: 'Vanrise.GenericData.Notification.DataRecordNotificationTypeSettings, Vanrise.GenericData.Notification',
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
-                        GridColumnDefinitions: $scope.scopeModel.gridColumnDefinitions
+                        GridColumnDefinitions: $scope.scopeModel.gridColumnDefinitions,
+                        OnNotificationCreatedHandler: onNotificationCreatedHandlerDirectiveAPI.getData()
                     };
                 };
 

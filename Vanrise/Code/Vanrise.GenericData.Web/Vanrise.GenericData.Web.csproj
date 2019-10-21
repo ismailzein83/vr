@@ -229,6 +229,7 @@
     <Content Include="VR_GenericData\Constants\MappingRuleStructureBehaviorTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
     <Content Include="VR_GenericData\Constants\DataRecordFieldComparisonOperatorEnum.js" />
+    <Content Include="VR_GenericData\Constants\NotificationActionMappingFieldEnum.js" />
     <Content Include="VR_GenericData\Constants\SingleMathOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\TimeRoundingIntervalEnum.js" />
     <Content Include="VR_GenericData\Constants\VRActionAuditLKUPTypeEnum.js" />
@@ -1038,6 +1039,9 @@
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\Templates\DataRecordAlertRuleTypeSettingsTemplate.html" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\vr-genericdata-datarecordalertrule-extendedsettings.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\vr-genericdata-datarecordalertruletype-settings.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\Templates\SaveDataRecordNotificationActionTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\vr-genericdata-datarecordnotificationtype-onnotificationcreated-handler.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\vr-genericdata-onnotificationcreatedaction-saverecord.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\QueueActivators\Directive\Templates\QueueActivatorDataRecordCheckAlertRulesTemplate.html" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\QueueActivators\Directive\vr-genericdata-queueactivator-datarecordcheckalertrules.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Services\DataRecordNotificationTypeSettingsService.js" />
