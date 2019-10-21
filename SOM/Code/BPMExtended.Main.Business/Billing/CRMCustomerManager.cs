@@ -1021,23 +1021,38 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
+            string nationalityNumber = "";
+            string documentIdType = "";
+            string customerTitle = "";
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdateAccount");
-            esq.AddColumn("StFirstName");
-            esq.AddColumn("StLastName");
+         
+            esq.AddColumn("StPrimaryContact");
+            esq.AddColumn("StPrimaryContact.Id");
             esq.AddColumn("StCustomerId");
+            esq.AddColumn("StCompanyId");
             esq.AddColumn("StAddressID");
             esq.AddColumn("StStreet");
             esq.AddColumn("StFloorNumber");
-            esq.AddColumn("StMiddleName");
             esq.AddColumn("StAddressID");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
             esq.AddColumn("StArea");
             esq.AddColumn("StArea.Id");
             esq.AddColumn("StProvince");
-            esq.AddColumn("StProvince.Id"); 
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
+            esq.AddColumn("StNationalityLookup");
+            esq.AddColumn("StNationalityLookup.Id");
+            esq.AddColumn("StBusinessTypeLookup");
+            esq.AddColumn("StBusinessTypeLookup.Id");
             esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StMobilePhone");
+            esq.AddColumn("StBusinessPhone");
+            esq.AddColumn("StFaxNumber");
+            esq.AddColumn("StEmail");
+            esq.AddColumn("StAddressNotes");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -1045,9 +1060,6 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var lastName = entities[0].GetColumnValue("StFirstName");
-                var firstName = entities[0].GetColumnValue("StLastName");
-                var middleName = entities[0].GetColumnValue("StMiddleName");
                 var addressId = entities[0].GetColumnValue("StAddressID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var street = entities[0].GetColumnValue("StStreet");
@@ -1056,22 +1068,65 @@ namespace BPMExtended.Main.Business
                 var city = entities[0].GetColumnValue("StCityName");
                 var area = entities[0].GetColumnValue("StAreaName");
                 var province = entities[0].GetColumnValue("StProvinceName");
+                var primaryContactId = entities[0].GetColumnValue("StPrimaryContactId");
+                var compnayId = entities[0].GetColumnValue("StCompanyId");
+                var businessType = entities[0].GetColumnValue("StBusinessTypeLookupName");
 
-                SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
+                var notes = entities[0].GetColumnValue("StAddressNotes");
+
+                var businessPhone = entities[0].GetColumnValue("StBusinessPhone");
+                var email = entities[0].GetColumnValue("StEmail");
+                var faxNumber = entities[0].GetColumnValue("StFaxNumber");
+                var mobilePhone = entities[0].GetColumnValue("StMobilePhone");
+                var nationalityId = entities[0].GetColumnValue("StNationalityLookupId");
+                var town = entities[0].GetColumnValue("StTownName");
+
+                Contact contact = new CommonManager().GetContact(primaryContactId.ToString());
+
+                if (!string.IsNullOrEmpty(nationalityId.ToString()))
                 {
-                    InputArguments = new CustomerAddressInput
+                    nationalityNumber = GetNationalityNumber(nationalityId.ToString());
+                }
+
+                if (!string.IsNullOrEmpty(contact.Title.ToString()))
+                {
+                    customerTitle = GetCustomerTitle(contact.Title.ToString());
+                }
+
+                if (!string.IsNullOrEmpty(contact.DocumentIdTypeId.ToString()))
+                {
+                    documentIdType = GetDocumentType(contact.DocumentIdTypeId.ToString());
+                }
+
+
+
+                SOMRequestInput<UpdateEnterpriseAccountInput> somRequestInput = new SOMRequestInput<UpdateEnterpriseAccountInput>
+                {
+                    InputArguments = new UpdateEnterpriseAccountInput
                     {
+                        CompanyId = compnayId.ToString(),
+                        Title = customerTitle,
+                        AddressNotes = notes.ToString(),
+                        BusinessPhone =businessPhone.ToString(),
+                        BusinessType = businessType.ToString(),
+                        DocumentIdType = documentIdType,
+                        Email =email.ToString(),
+                        FaxNumber =faxNumber.ToString(),
+                        MainContactId = contact.CustomerId.ToString(),
+                        MobilePhone = mobilePhone.ToString(),
+                        NationalId = contact.DocumentID,
+                        Nationality = nationalityNumber,
                         City = city.ToString(),
                         Building = building.ToString(),
                         Floor = floor.ToString(),
-                        MiddleName = middleName.ToString(),
+                        MiddleName = contact.MiddleName.ToString(),
                         StateProvince = province.ToString(),
                         Region = area.ToString(),
-                        FirstName = firstName.ToString(),
-                        LastName = lastName.ToString(),
+                        FirstName = contact.GivenName.ToString(),
+                        LastName = contact.SurName.ToString(),
                         AddressSeq = long.Parse(addressId.ToString()),
                         Street = street.ToString(),
-                        //Country = "206",
+                        Town = town.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             CustomerId = customerId.ToString(),
@@ -1083,7 +1138,7 @@ namespace BPMExtended.Main.Business
 
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<CustomerAddressInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateAccountCustomerAddress/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<UpdateEnterpriseAccountInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateAccountCustomerAddress/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();
@@ -1098,15 +1153,19 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
+            string nationalityNumber = "";
+            string documentIdType = "";
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdateAccount");
-            esq.AddColumn("StFirstName");
-            esq.AddColumn("StLastName");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdateAccountOfficial");
+            esq.AddColumn("StPrimaryContact");
+            esq.AddColumn("StPrimaryContact.Id");
             esq.AddColumn("StCustomerId");
+            esq.AddColumn("StCompanyName");
+            esq.AddColumn("StMinistry");
+            esq.AddColumn("StEndCustomerName");
             esq.AddColumn("StAddressID");
             esq.AddColumn("StStreet");
             esq.AddColumn("StFloorNumber");
-            esq.AddColumn("StMiddleName");
             esq.AddColumn("StAddressID");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
@@ -1114,7 +1173,18 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StArea.Id");
             esq.AddColumn("StProvince");
             esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
+            esq.AddColumn("StNationalityLookup");
+            esq.AddColumn("StNationalityLookup.Id");
+            esq.AddColumn("StBusinessTypeLookup");
+            esq.AddColumn("StBusinessTypeLookup.Id");
             esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StMobilePhone");
+            esq.AddColumn("StBusinessPhone");
+            esq.AddColumn("StFaxNumber");
+            esq.AddColumn("StEmail");
+            esq.AddColumn("StAddressNotes");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -1122,33 +1192,69 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var lastName = entities[0].GetColumnValue("StFirstName");
-                var firstName = entities[0].GetColumnValue("StLastName");
-                var middleName = entities[0].GetColumnValue("StMiddleName");
                 var addressId = entities[0].GetColumnValue("StAddressID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var ministry = entities[0].GetColumnValue("StMinistry");
+                var endCustomerName = entities[0].GetColumnValue("StEndCustomerName");
                 var street = entities[0].GetColumnValue("StStreet");
                 var building = entities[0].GetColumnValue("StBuildingNumber");
                 var floor = entities[0].GetColumnValue("StFloorNumber");
                 var city = entities[0].GetColumnValue("StCityName");
                 var area = entities[0].GetColumnValue("StAreaName");
                 var province = entities[0].GetColumnValue("StProvinceName");
+                var primaryContactId = entities[0].GetColumnValue("StPrimaryContactId");
+                var compnayName = entities[0].GetColumnValue("StCompanyName");
+                var businessType = entities[0].GetColumnValue("StBusinessTypeLookupName");
 
-                SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
+                var notes = entities[0].GetColumnValue("StAddressNotes");
+
+                var businessPhone = entities[0].GetColumnValue("StBusinessPhone");
+                var email = entities[0].GetColumnValue("StEmail");
+                var faxNumber = entities[0].GetColumnValue("StFaxNumber");
+                var mobilePhone = entities[0].GetColumnValue("StMobilePhone");
+                var nationalityId = entities[0].GetColumnValue("StNationalityLookupId");
+                var town = entities[0].GetColumnValue("StTownName");
+
+                Contact contact = new CommonManager().GetContact(primaryContactId.ToString());
+
+                if (!string.IsNullOrEmpty(nationalityId.ToString()))
                 {
-                    InputArguments = new CustomerAddressInput
+                    nationalityNumber = GetNationalityNumber(nationalityId.ToString());
+                }
+
+
+                if (!string.IsNullOrEmpty(contact.DocumentIdTypeId.ToString()))
+                {
+                    documentIdType = GetDocumentType(contact.DocumentIdTypeId.ToString());
+                }
+
+
+
+                SOMRequestInput<UpdateOfficialAccountInput> somRequestInput = new SOMRequestInput<UpdateOfficialAccountInput>
+                {
+                    InputArguments = new UpdateOfficialAccountInput
                     {
+                        Name = compnayName.ToString(),
+                        MinistryName = ministry.ToString(),
+                        EndCustomerName = endCustomerName.ToString(),
+                        AddressNotes = notes.ToString(),
+                        BusinessPhone = businessPhone.ToString(),
+                        BusinessType = businessType.ToString(),
+                        DocumentIdType = documentIdType,
+                        Email = email.ToString(),
+                        FaxNumber = faxNumber.ToString(),
+                        MainContactId = contact.CustomerId.ToString(),
+                        MobilePhone = mobilePhone.ToString(),
+                        NationalId = contact.DocumentID,
+                        Nationality = nationalityNumber,
                         City = city.ToString(),
                         Building = building.ToString(),
                         Floor = floor.ToString(),
-                        MiddleName = middleName.ToString(),
                         StateProvince = province.ToString(),
                         Region = area.ToString(),
-                        FirstName = firstName.ToString(),
-                        LastName = lastName.ToString(),
                         AddressSeq = long.Parse(addressId.ToString()),
                         Street = street.ToString(),
-                        //Country = "206",
+                        Town = town.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             CustomerId = customerId.ToString(),
@@ -1160,7 +1266,7 @@ namespace BPMExtended.Main.Business
 
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<CustomerAddressInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<UpdateOfficialAccountInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateOfficialCustomerAddress/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();

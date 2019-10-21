@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Business
 {
-    public class UpdateAccountFlowManagement
+    public class UpdateOfficialAccountFlowManagement
     {
-        const string startingProcess = "294059CD-34BA-4056-9C84-FA5A35D8B630";
-        const string update = "1A904D24-436C-4E82-BFA9-94551C9DE0F1";
-        const string submitToOM = "83D06326-0959-4639-9A75-2AC63A7EB5A4";
-        const string endProcess = "9129190F-6B33-43DC-B404-3198273D3962";
+        const string startingProcess = "0F10B27F-4255-452E-BAC4-F792C73F72BB";
+        const string update = "EA63090E-38A6-4337-B6E7-ED11800D4913";
+        const string submitToOM = "9686ABD4-2550-4169-B665-02957E4B5833";
 
         public string GetNextStep(string id, string currentStepId)
         {

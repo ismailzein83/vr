@@ -133,6 +133,8 @@
     <Compile Include="Billing\WorkflowInput\SuspensionRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\TelephonyContractOnHoldInput.cs" />
     <Compile Include="Billing\WorkflowInput\UpdateContractAddressRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\UpdateEnterpriseAccountInput.cs" />
+    <Compile Include="Billing\WorkflowInput\UpdateOfficialAccountInput.cs" />
     <Compile Include="Billing\WorkflowInput\WriteBusinessTransactionInput.cs" />
     <Compile Include="Inventory\ServiceResponse\Device.cs" />
     <Compile Include="Inventory\ServiceResponse\DeviceInfo.cs" />

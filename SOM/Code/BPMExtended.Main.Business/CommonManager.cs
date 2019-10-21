@@ -374,7 +374,7 @@ namespace BPMExtended.Main.Business
                     DocumentID = documentId.ToString(),
                     CustomerCategoryID = customerCategoryId.ToString(),
                     CustomerCategoryName = customerCategoryName.ToString(),
-                    CSOId = csoId.ToString(),
+                    CSOId = csoId != null ? csoId.ToString() : null,
                     CustomerCode = customerCode.ToString(),
                     DocumentIdTypeId= documentIdTypeId.ToString(),
                     GivenName=givenName.ToString(),
