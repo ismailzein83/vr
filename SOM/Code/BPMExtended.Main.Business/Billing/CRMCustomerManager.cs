@@ -1462,6 +1462,7 @@ namespace BPMExtended.Main.Business
             CreateLargeMemberCustomerInput input = new CreateLargeMemberCustomerInput
             {
                 ParentCustomerId = parentCustomerId,
+                MainContactId=contact.CustomerId,
                 CustomerId = customerId,
                 CustomerCategoryId = CustomerCategoryId,
                 LevelId = levelId,
@@ -1519,6 +1520,7 @@ namespace BPMExtended.Main.Business
             CommonManager commonManager = new CommonManager();
             Contact contact = commonManager.GetContact(officialAccountInput.ContactId);
             officialAccountInput.CustomerId = manager.GetCustomerNextId();
+            officialAccountInput.MainContactId = contact.CustomerId;
             officialAccountInput.DocumentId = contact.DocumentID;
             officialAccountInput.DocumentIdType = GetDocumentType(contact.DocumentIdTypeId);
             officialAccountInput.PaymentResponsibility = true;

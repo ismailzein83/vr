@@ -13,5 +13,10 @@ namespace BPMExtended.Main.Entities
         public string PackageId { get; set; }
         public bool IsNetwork { get; set; }
         public bool NeedProvisioning { get; set; }
+        public List<Parameter> ServiceParameters { get; set; }
+    }
+    public class Parameter {
+        public string ParameterName { get; set; }
+        public string ParameterValue { get; set; }
     }
 }

@@ -274,10 +274,20 @@ namespace BPMExtended.Main.Business
             ParameterType=ParameterType.TB
             });
 
+
+            List<ListBoxValue> list = new List<ListBoxValue>();
+            list.Add(new ListBoxValue { DisplayValue="xxxxxxx",
+            Value="aaaaaa"});
+            list.Add(new ListBoxValue
+            {
+                DisplayValue = "yyyyy",
+                Value = "bbbbbb"
+            });
             ratePlanServiceParameters.Add(new RatePlanServiceParameter
             {
-                ParameterName = "TextBox2",
-                ParameterType = ParameterType.TB
+                ParameterName = "ListBox1",
+                ParameterType = ParameterType.LB,
+                ListBoxValues = list
             });
             return ratePlanServiceParameters;
         }

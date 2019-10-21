@@ -8,6 +8,8 @@ namespace BPMExtended.Main.SOMAPI
 {
     public class CreateLargeMemberCustomerInput
     {
+        public string MainContactId { get; set; }
+
         public string ParentCustomerId { get; set; }
 
         public string CustomerId { get; set; }
