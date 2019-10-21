@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using Vanrise.Queueing;
-using Vanrise.BusinessProcess;
-using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-
     public class PrepareSupplierZoneDetailForDBApplyInput
     {
-        public BaseQueue<SupplierZoneDetailBatch> InputQueue { get; set; }
-        public BaseQueue<Object> OutputQueue { get; set; }
         public DateTime? EffectiveOn { get; set; }
         public bool IsFuture { get; set; }
+        public int RoutingDatabaseId { get; set; }
+        public BaseQueue<SupplierZoneDetailBatch> InputQueue { get; set; }
+        public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     public sealed class PrepareSupplierZoneDetailForDBApply : DependentAsyncActivity<PrepareSupplierZoneDetailForDBApplyInput>
@@ -28,8 +25,13 @@ namespace TOne.WhS.Routing.BP.Activities
 
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> RoutingDatabaseId { get; set; }
+
         [RequiredArgument]
         public InArgument<BaseQueue<SupplierZoneDetailBatch>> InputQueue { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
 
@@ -38,7 +40,10 @@ namespace TOne.WhS.Routing.BP.Activities
             ISupplierZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ISupplierZoneDetailsDataManager>();
             dataManager.EffectiveDate = inputArgument.EffectiveOn;
             dataManager.IsFuture = inputArgument.IsFuture;
+            dataManager.RoutingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(inputArgument.RoutingDatabaseId);
+
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, SupplierZoneDetailsBatch => SupplierZoneDetailsBatch.SupplierZoneDetails);
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Supplier Zone Detail For DB Apply is done", null);
         }
 

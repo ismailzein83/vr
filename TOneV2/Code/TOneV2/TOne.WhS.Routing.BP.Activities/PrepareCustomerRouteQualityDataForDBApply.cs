@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Activities;
+using System.Linq;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.Queueing;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.BP.Activities
 {

@@ -1,29 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using Vanrise.Queueing;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
-using TOne.WhS.Routing.Data;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
     public class PrepareCodeMatchesForApplyInput
     {
-		public bool ShouldApplyCodeZoneMatch { get; set; }
-
+        public int RoutingDatabaseId { get; set; }
+        public bool ShouldApplyCodeZoneMatch { get; set; }
         public BaseQueue<CodeMatchesBatch> InputQueue { get; set; }
-
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
-
     public sealed class PrepareCodeMatchesForApply : DependentAsyncActivity<PrepareCodeMatchesForApplyInput>
     {
-		[RequiredArgument]
+        [RequiredArgument]
+        public InArgument<int> RoutingDatabaseId { get; set; }
+
+        [RequiredArgument]
 		public InArgument<bool> ShouldApplyCodeZoneMatch { get; set; }
 
         [RequiredArgument]
@@ -32,12 +31,14 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
 
-
         protected override void DoWork(PrepareCodeMatchesForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICodeMatchesDataManager codeMatchesDataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
 			codeMatchesDataManager.ShouldApplyCodeZoneMatch = inputArgument.ShouldApplyCodeZoneMatch;
+            codeMatchesDataManager.RoutingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(inputArgument.RoutingDatabaseId);
+
             PrepareDataForDBApply(previousActivityStatus, handle, codeMatchesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, CodeMatchesBatch => CodeMatchesBatch.CodeMatches);
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Code Matches For Apply is done", null);
         }
 
@@ -45,6 +46,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new PrepareCodeMatchesForApplyInput
             {
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
 				ShouldApplyCodeZoneMatch = this.ShouldApplyCodeZoneMatch.Get(context),
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)

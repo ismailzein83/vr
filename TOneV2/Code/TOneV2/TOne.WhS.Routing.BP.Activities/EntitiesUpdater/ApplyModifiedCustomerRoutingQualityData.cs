@@ -56,7 +56,7 @@ namespace TOne.WhS.Routing.BP.Activities
             if (customerRouteQualityConfigurationDataToUpdate.Count > 0)
                 dataManager.UpdateCustomerRouteQualityConfigurationsData(customerRouteQualityConfigurationDataToUpdate);
 
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Updating Modified Customer Route Quality Configuration is done", null);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Updating Modified Customer Route Formula Configuration is done", null);
         }
 
         protected override ApplyModifiedCustomerRoutingQualityDataInput GetInputArgument2(AsyncCodeActivityContext context)

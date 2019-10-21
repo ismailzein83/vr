@@ -69,8 +69,8 @@
       <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
-      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
@@ -223,6 +223,11 @@
             <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">Input.RoutingCustomerInfos</mca:CSharpValue>
           </InArgument>
         </twrba1:PrepareProductRoutesForApply.RoutingCustomerInfos>
+        <twrba1:PrepareProductRoutesForApply.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+          </InArgument>
+        </twrba1:PrepareProductRoutesForApply.RoutingDatabaseId>
         <twrba1:PrepareProductRoutesForApply.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareRouteProductBatchStatus</mca:CSharpReference>
@@ -252,7 +257,7 @@
         </twrba1:ApplyProductRoutesToDB.RoutingDatabaseId>
       </twrba1:ApplyProductRoutesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZFJvdXRpbmdQcm9kdWN0cy54YW1sJk4DgAIOAgEBUgVwCgMB6AFxBf4BEAIBAlULVZIBAwHpAVkJbikDAewBdQ11rwECAQN+B5gBIQMBugGZAQfMAR4CAV/NAQfnAS0CATHoAQf9AScCAQxcD1x9AwH2AWYPZmMDAfMBYQ9haAMB8AFrD2tmAwHtAYsBDYsBYQMB3wGQAQ2QAXUDAdYBhgENhgGHAQMBzQGBAQ2BAVoDAcQBlQENlQFYAwG7AZwBDZwBcwMBsQG1AQ21AW0DAagBpgENpgF/AwGfAb8BDb8BYQMBlgGhAQ2hAWsDAY0BxAENxAF5AwGEAbABDbABgAECAXvJAQ3JAZEBAgFyqwENqwFaAgFpugENugGGAQIBYNoBDdoBcQIBVtABDdABeAIBTeQBDeQBfwIBRNUBDdUBgAECATvfAQ3fAYYBAgEy8AEN8AF3AgEo6wEN6wF4AgEf+gEN+gFhAgEW9QEN9QGGAQIBDQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZFJvdXRpbmdQcm9kdWN0cy54YW1sJ04DhQIOAgEBUgVwCgMB8QFxBYMCEAIBAlULVZIBAwHyAVkJbikDAfUBdQ11rwECAQN+B5gBIQMBwwGZAQfMAR4CAWjNAQfsAS0CATHtAQeCAicCAQxcD1x9AwH/AWYPZmMDAfwBYQ9haAMB+QFrD2tmAwH2AYsBDYsBYQMB6AGQAQ2QAXUDAd8BhgENhgGHAQMB1gGBAQ2BAVoDAc0BlQENlQFYAwHEAZwBDZwBcwMBugG1AQ21AW0DAbEBpgENpgF/AwGoAb8BDb8BYQMBnwGhAQ2hAWsDAZYBxAENxAF5AwGNAbABDbABgAEDAYQByQENyQGRAQIBe6sBDasBWgIBcroBDboBhgECAWnaAQ3aAXECAV/QAQ3QAXgCAVbkAQ3kAWECAU3pAQ3pAX8CAUTVAQ3VAYABAgE73wEN3wGGAQIBMvUBDfUBdwIBKPABDfABeAIBH/8BDf8BYQIBFvoBDfoBhgECAQ0=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

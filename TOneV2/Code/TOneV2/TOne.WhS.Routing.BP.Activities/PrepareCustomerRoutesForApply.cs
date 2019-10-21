@@ -1,31 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using TOne.WhS.Routing.Entities;
-using Vanrise.Queueing;
-using Vanrise.BusinessProcess;
+using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-
     public class PrepareCustomerRoutesForApplyInput
     {
+        public int RoutingDatabaseId { get; set; }
         public int ParentWFRuntimeProcessId { get; set; }
-
         public BaseQueue<CustomerRoutesBatch> InputQueue { get; set; }
-
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     public sealed class PrepareCustomerRoutesForApply : DependentAsyncActivity<PrepareCustomerRoutesForApplyInput>
     {
         [RequiredArgument]
-        public InArgument<int> ParentWFRuntimeProcessId { get; set; }
+        public InArgument<int> RoutingDatabaseId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<int> ParentWFRuntimeProcessId { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<CustomerRoutesBatch>> InputQueue { get; set; }
@@ -37,9 +35,11 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void DoWork(PrepareCustomerRoutesForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICustomerRouteDataManager customeRoutesDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+            customeRoutesDataManager.RoutingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(inputArgument.RoutingDatabaseId);
             customeRoutesDataManager.ParentWFRuntimeProcessId = inputArgument.ParentWFRuntimeProcessId;
             customeRoutesDataManager.ParentBPInstanceId = handle.SharedInstanceData.InstanceInfo != null && handle.SharedInstanceData.InstanceInfo.ParentProcessID.HasValue ? handle.SharedInstanceData.InstanceInfo.ParentProcessID.Value : default(long);
             customeRoutesDataManager.BPContext = new Vanrise.BusinessProcess.BPContext(handle);
+
             PrepareDataForDBApply(previousActivityStatus, handle, customeRoutesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, CustomerRoutesBatch => CustomerRoutesBatch.CustomerRoutes);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Customer Routes For Apply is done", null);
         }

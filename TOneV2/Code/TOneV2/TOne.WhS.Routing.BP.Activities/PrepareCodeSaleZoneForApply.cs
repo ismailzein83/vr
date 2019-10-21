@@ -1,29 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using Vanrise.Queueing;
+using System.Collections.Generic;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
-using TOne.WhS.Routing.Data;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-
     public class PrepareCodeSaleZoneForApplyInput
     {
+        public int RoutingDatabaseId { get; set; }
         public BaseQueue<CodeMatchesBatch> InputQueue { get; set; }
-
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     public sealed class PrepareCodeSaleZoneForApply : DependentAsyncActivity<PrepareCodeSaleZoneForApplyInput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<CodeMatchesBatch>> InputQueue { get; set; }
+        public InArgument<int> RoutingDatabaseId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<BaseQueue<CodeMatchesBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
@@ -31,8 +31,11 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void DoWork(PrepareCodeSaleZoneForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ICodeSaleZoneDataManager CodeSaleZoneDataManager = RoutingDataManagerFactory.GetDataManager<ICodeSaleZoneDataManager>();
-            PrepareDataForDBApply(previousActivityStatus, handle, CodeSaleZoneDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, GetCodeSaleZoneList);
+            ICodeSaleZoneDataManager codeSaleZoneDataManager = RoutingDataManagerFactory.GetDataManager<ICodeSaleZoneDataManager>();
+            codeSaleZoneDataManager.RoutingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(inputArgument.RoutingDatabaseId);
+
+            PrepareDataForDBApply(previousActivityStatus, handle, codeSaleZoneDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, GetCodeSaleZoneList);
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Code Sale Zone For Apply is done", null);
         }
 
@@ -40,6 +43,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new PrepareCodeSaleZoneForApplyInput
             {
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };

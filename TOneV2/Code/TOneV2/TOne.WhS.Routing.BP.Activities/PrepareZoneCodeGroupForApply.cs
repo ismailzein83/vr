@@ -5,17 +5,22 @@ using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
     public class PrepareZoneCodeGroupForApplyInput
     {
+        public int RoutingDatabaseId { get; set; }
         public BaseQueue<ZoneCodeGroupBatch> InputQueue { get; set; }
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     public sealed class PrepareZoneCodeGroupForApply : DependentAsyncActivity<PrepareZoneCodeGroupForApplyInput>
     {
+        [RequiredArgument]
+        public InArgument<int> RoutingDatabaseId { get; set; }
+
         [RequiredArgument]
         public InArgument<BaseQueue<ZoneCodeGroupBatch>> InputQueue { get; set; }
 
@@ -25,7 +30,10 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void DoWork(PrepareZoneCodeGroupForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IRPZoneCodeGroupDataManager rpZoneCodeGroupDataManager = RoutingDataManagerFactory.GetDataManager<IRPZoneCodeGroupDataManager>();
+            rpZoneCodeGroupDataManager.RoutingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(inputArgument.RoutingDatabaseId);
+
             PrepareDataForDBApply(previousActivityStatus, handle, rpZoneCodeGroupDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, ZoneCodeGroupBatch => ZoneCodeGroupBatch.ZoneCodeGroups);
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Zone Code Group For Apply is done", null);
         }
 
