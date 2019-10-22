@@ -552,9 +552,9 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SaleRateDetail> context)
             {
+                IEnumerable<int> rateTypeIds = null;
                 List<RateItem> rateItems = GetRateItems(context);
-
-                var rateTypeIds = Helper.GetRateTypeIds(query.OwnerId, DateTime.Now);
+                bool isCustomer = query.OwnerType == SalePriceListOwnerType.Customer;
 
                 var rateTypeManager = new RateTypeManager();
 
@@ -576,7 +576,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
                     if (query.ColumnsToShow.Contains("RateChange"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
-                    if (query.ColumnsToShow.Contains("RateInherited"))
+                    if (isCustomer && query.ColumnsToShow.Contains("RateInherited"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Inherited" });
                     if (query.ColumnsToShow.Contains("PricelistId"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Pricelist Id" });
@@ -588,12 +588,18 @@ namespace TOne.WhS.BusinessEntity.Business
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
-
-                    foreach (var rateTypeId in rateTypeIds)
+                    if (isCustomer)
                     {
-                        var rateType = rateTypeManager.GetRateType(rateTypeId);
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateType.Name });
+                        rateTypeIds = Helper.GetRateTypeIds(query.OwnerId, DateTime.Now);
+                        foreach (var rateTypeId in rateTypeIds)
+                        {
+                            var rateType = rateTypeManager.GetRateType(rateTypeId);
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateType.Name });
+                        }
+                        if (query.ColumnsToShow.Contains("Note"))
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Note" });
                     }
+
                     sheet.Rows = new List<ExportExcelRow>();
 
                     foreach (var record in rateItems)
@@ -610,10 +616,10 @@ namespace TOne.WhS.BusinessEntity.Business
                             row.Cells.Add(new ExportExcelCell { Value = record.Rate });
                         if (query.ColumnsToShow.Contains("RateChange"))
                             row.Cells.Add(new ExportExcelCell { Value = record.ChangeDescription });
-                        if (query.ColumnsToShow.Contains("RateInherited"))
+                        if (isCustomer && query.ColumnsToShow.Contains("RateInherited"))
                             row.Cells.Add(new ExportExcelCell { Value = record.RateInherited });
                         if (query.ColumnsToShow.Contains("PricelistId"))
-                            row.Cells.Add(new ExportExcelCell { Value = record.PriceListFileId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.PriceListId });
                         if (query.ColumnsToShow.Contains("Currency"))
                             row.Cells.Add(new ExportExcelCell { Value = record.CurrencySymbol });
                         if (query.ColumnsToShow.Contains("Rate BED"))
@@ -622,15 +628,20 @@ namespace TOne.WhS.BusinessEntity.Business
                             row.Cells.Add(new ExportExcelCell { Value = record.RateEED });
 
                         row.Cells.Add(new ExportExcelCell { Value = record.ServicesSymbol });
-                        foreach (var rateTypeId in rateTypeIds)
+                        if (isCustomer)
                         {
-                            if (record.RatesByRateType != null && record.RatesByRateType.TryGetValue(rateTypeId, out var otherRateHistory))
-                            {
-                                row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
-                            }
-                            else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
+                            if (rateTypeIds != null)
+                                foreach (var rateTypeId in rateTypeIds)
+                                {
+                                    if (record.RatesByRateType != null && record.RatesByRateType.TryGetValue(rateTypeId, out var otherRateHistory))
+                                    {
+                                        row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
+                                    }
+                                    else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
+                                }
+                            if (query.ColumnsToShow.Contains("Note"))
+                                row.Cells.Add(new ExportExcelCell { Value = record.Note });
                         }
-
                         sheet.Rows.Add(row);
                     }
                 }
@@ -643,16 +654,21 @@ namespace TOne.WhS.BusinessEntity.Business
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Inherited" });
+                    if (isCustomer) sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Inherited" });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Pricelist Id" });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
-                    foreach (var rateTypeId in rateTypeIds)
+                    if (isCustomer)
                     {
-                        var rateType = rateTypeManager.GetRateType(rateTypeId);
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateType.Name });
+                        if (rateTypeIds != null)
+                            foreach (var rateTypeId in rateTypeIds)
+                            {
+                                var rateType = rateTypeManager.GetRateType(rateTypeId);
+                                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateType.Name });
+                            }
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Note" });
                     }
                     sheet.Rows = new List<ExportExcelRow>();
 
@@ -665,19 +681,24 @@ namespace TOne.WhS.BusinessEntity.Business
                         row.Cells.Add(new ExportExcelCell { Value = record.CountryNames });
                         row.Cells.Add(new ExportExcelCell { Value = record.Rate });
                         row.Cells.Add(new ExportExcelCell { Value = record.ChangeDescription });
-                        row.Cells.Add(new ExportExcelCell { Value = record.RateInherited });
-                        row.Cells.Add(new ExportExcelCell { Value = record.PriceListFileId });
+                        if (isCustomer) row.Cells.Add(new ExportExcelCell { Value = record.RateInherited });
+                        row.Cells.Add(new ExportExcelCell { Value = record.PriceListId });
                         row.Cells.Add(new ExportExcelCell { Value = record.CurrencySymbol });
                         row.Cells.Add(new ExportExcelCell { Value = record.RateBED });
                         row.Cells.Add(new ExportExcelCell { Value = record.RateEED });
                         row.Cells.Add(new ExportExcelCell { Value = record.ServicesSymbol });
-                        foreach (var rateTypeId in rateTypeIds)
+                        if (isCustomer)
                         {
-                            if (record.RatesByRateType != null && record.RatesByRateType.TryGetValue(rateTypeId, out var otherRateHistory))
-                            {
-                                row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
-                            }
-                            else row.Cells.Add(new ExportExcelCell { Value = record.Rate });
+                            if (rateTypeIds != null)
+                                foreach (var rateTypeId in rateTypeIds)
+                                {
+                                    if (record.RatesByRateType != null && record.RatesByRateType.TryGetValue(rateTypeId, out var otherRateHistory))
+                                    {
+                                        row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
+                                    }
+                                    else row.Cells.Add(new ExportExcelCell { Value = record.Rate });
+                                }
+                            row.Cells.Add(new ExportExcelCell { Value = record.Note });
                         }
                         sheet.Rows.Add(row);
                     }
@@ -693,12 +714,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 int sellingProductId = new CarrierAccountManager().GetSellingProductId(query.OwnerId);
                 int longPrecisionValue = new GeneralSettingsManager().GetLongPrecisionValue();
 
-                var customerIds = new List<RoutingCustomerInfo> { new RoutingCustomerInfo { CustomerId = query.OwnerId } };
-                var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, query.EffectiveOn, false));
-
                 var saleZoneIds = context.BigResult.Data.Select(item => item.Entity.ZoneId).ToList();
                 var saleCodes = new SaleCodeManager().GetSaleCodesByZoneIDs(saleZoneIds, query.EffectiveOn);
-                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int> { query.OwnerId }, new List<int> { sellingProductId }, saleZoneIds, false, true));
+                SaleEntityZoneRoutingProductLocator routingProductLocator;
+                CustomerZoneRateHistoryLocator customerZoneRateHistoryLocator = null;
+
+                if (query.OwnerType == SalePriceListOwnerType.Customer)
+                {
+                    var customerIds = new List<RoutingCustomerInfo> { new RoutingCustomerInfo { CustomerId = query.OwnerId } };
+                    routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, query.EffectiveOn, false));
+                    customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int> { query.OwnerId }, new List<int> { sellingProductId }, saleZoneIds, false, true));
+                }
+                else
+                {
+                    routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(query.EffectiveOn));
+                }
 
                 Dictionary<long, List<SaleCode>> saleCodesByZoneId = StructureSaleCodesByZoneId(saleCodes);
 
@@ -719,16 +749,18 @@ namespace TOne.WhS.BusinessEntity.Business
                     var servicesIds = new RoutingProductManager().GetZoneServiceIds(currentRoutingProduct.RoutingProductId, zoneId);
                     string servicesSymbol = new ZoneServiceConfigManager().GetZoneServicesNames(servicesIds.ToList());
 
-                    foreach (var rateTypeId in rateTypeIds)
+                    if (query.OwnerType == SalePriceListOwnerType.Customer)
                     {
-                        var otherRateHistory = customerZoneRateHistoryLocator.GetCustomerZoneRateHistoryRecord(
-                            query.OwnerId, sellingProductId, saleRateDetail.ZoneName, rateTypeId, saleRateDetail.CountryId, query.EffectiveOn,
-                            query.IsSystemCurrency ? query.CurrencyId.Value : saleRateDetail.Entity.CurrencyId.Value, longPrecisionValue);
+                        foreach (var rateTypeId in rateTypeIds)
+                        {
+                            var otherRateHistory = customerZoneRateHistoryLocator.GetCustomerZoneRateHistoryRecord(
+                                query.OwnerId, sellingProductId, saleRateDetail.ZoneName, rateTypeId, saleRateDetail.CountryId, query.EffectiveOn,
+                                query.IsSystemCurrency ? query.CurrencyId.Value : saleRateDetail.Entity.CurrencyId.Value, longPrecisionValue);
 
-                        if (otherRateHistory != null)
-                            ratesByRateType.Add(rateTypeId, otherRateHistory);
+                            if (otherRateHistory != null)
+                                ratesByRateType.Add(rateTypeId, otherRateHistory);
+                        }
                     }
-
                     if (query.ByCode)
                     {
                         var ratesByCode = GetRateItemByCode(saleRateDetail, saleCodes, ratesByRateType, servicesSymbol);
@@ -761,7 +793,9 @@ namespace TOne.WhS.BusinessEntity.Business
                         CurrencySymbol = saleRateDetail.DisplayedCurrency,
                         RateInherited = saleRateDetail.IsRateInherited ? "Inherited" : "Explicit",
                         ChangeDescription = Utilities.GetEnumDescription(saleRateDetail.Entity.RateChange),
-                        RatesByRateType = ratesByRateType.Count > 0 ? ratesByRateType : null
+                        RatesByRateType = ratesByRateType.Count > 0 ? ratesByRateType : null,
+                        Note = saleRateDetail.Entity.Note,
+                        PriceListId = saleRateDetail.Entity.PriceListId
                     };
                     var codeGroup = new CodeGroupManager().GetCodeGroup(saleCode.CodeGroupId);
                     if (codeGroup != null)
@@ -785,9 +819,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     ZoneName = saleRateDetail.ZoneName,
                     CurrencySymbol = saleRateDetail.DisplayedCurrency,
                     PriceListFileId = saleRateDetail.PriceListFileId,
+                    PriceListId = saleRateDetail.Entity.PriceListId,
                     RateInherited = saleRateDetail.IsRateInherited ? "Inherited" : "Explicit",
                     ChangeDescription = Utilities.GetEnumDescription(saleRateDetail.Entity.RateChange),
-                    RatesByRateType = ratesByRateType.Count > 0 ? ratesByRateType : null
+                    RatesByRateType = ratesByRateType.Count > 0 ? ratesByRateType : null,
+                    Note = saleRateDetail.Entity.Note
                 };
                 List<string> codeValues = new List<string>();
                 HashSet<int> codeGroupsId = new HashSet<int>();
@@ -835,10 +871,12 @@ namespace TOne.WhS.BusinessEntity.Business
             public string CountryNames { get; set; }
             public string RateInherited { get; set; }
             public long? PriceListFileId { get; set; }
+            public long? PriceListId { get; set; }
             public string ServicesSymbol { get; set; }
             public string CurrencySymbol { get; set; }
             public string ChangeDescription { get; set; }
             public Dictionary<int, SaleRateHistoryRecord> RatesByRateType { get; set; }
+            public string Note { get; set; }
         }
         #endregion
     }

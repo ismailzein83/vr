@@ -57,8 +57,8 @@
                     filter: { SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds() }
                 };
 
-                var sellingProductSelectorLoadPromise = sellingProductSelectorAPI.load(sellingProductPayload);
-                var carrierAccountSelectorLoadPromise = carrierAccountSelectorAPI.load(carrierAccountPayload);
+                var sellingProductSelectorLoadPromise = loadSellingProduct(sellingProductPayload);
+                var carrierAccountSelectorLoadPromise = loadCarrierAccount(carrierAccountPayload);
 
                 $scope.isLoadingOwnerSelector = true;
                 UtilsService.waitMultiplePromises([sellingProductSelectorLoadPromise, carrierAccountSelectorLoadPromise]).finally(function () {
@@ -115,7 +115,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadSellingProduct, loadCarrierAccount, loadPrimarySaleEntity, getSystemCurrencyId, loadCountrySelector])
+            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadPrimarySaleEntity, getSystemCurrencyId, loadCountrySelector])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -131,18 +131,18 @@
 
             return loadSellingNumberPlanPromiseDeferred.promise;
         }
-        function loadSellingProduct() {
+        function loadSellingProduct(sellingProductPayload) {
             var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             sellingProductSelectorReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, { selectifsingleitem: true }, sellingProductSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, sellingProductPayload, sellingProductSelectorLoadDeferred);
             });
             return sellingProductSelectorLoadDeferred.promise;
         }
-        function loadCarrierAccount() {
+        function loadCarrierAccount(carrierAccountPayload) {
             var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             carrierAccountSelectorReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, undefined, carrierAccountSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountPayload, carrierAccountSelectorLoadDeferred);
             });
             return carrierAccountSelectorLoadDeferred.promise;
         }
