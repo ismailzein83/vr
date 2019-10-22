@@ -78,6 +78,7 @@ app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "
                     $scope.mainGridMenuActions = [];
                     if (payload != undefined) {
                         gridQuery = payload.query;
+                        $scope.showNotes = gridQuery.OwnerType == whSBeSalePriceListOwnerTypeEnum.Customer.value;
                         primarySaleEntity = payload.primarySaleEntity;
                     }
                     $scope.mainGridMenuActions.push({

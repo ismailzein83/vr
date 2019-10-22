@@ -17,7 +17,7 @@
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Currency'" field="'DisplayedCurrency'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'PriceList Id'" field="'Entity.PriceListId'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Note'" field="'Entity.Note'" expendablecolumn type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-show={{showNotes}} headertext="'Note'" field="'Entity.Note'" expendablecolumn type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
 

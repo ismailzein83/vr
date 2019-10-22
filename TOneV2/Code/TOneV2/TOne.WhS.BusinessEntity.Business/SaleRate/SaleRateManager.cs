@@ -711,7 +711,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     return null;
 
                 var rateItems = new List<RateItem>();
-                int sellingProductId = new CarrierAccountManager().GetSellingProductId(query.OwnerId);
                 int longPrecisionValue = new GeneralSettingsManager().GetLongPrecisionValue();
 
                 var saleZoneIds = context.BigResult.Data.Select(item => item.Entity.ZoneId).ToList();
@@ -721,6 +720,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 if (query.OwnerType == SalePriceListOwnerType.Customer)
                 {
+                    int sellingProductId = new CarrierAccountManager().GetSellingProductId(query.OwnerId);
                     var customerIds = new List<RoutingCustomerInfo> { new RoutingCustomerInfo { CustomerId = query.OwnerId } };
                     routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, query.EffectiveOn, false));
                     customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int> { query.OwnerId }, new List<int> { sellingProductId }, saleZoneIds, false, true));
