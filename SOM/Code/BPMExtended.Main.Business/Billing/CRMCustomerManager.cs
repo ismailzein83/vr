@@ -1031,6 +1031,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StPrimaryContact.Id");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StCompanyId");
+            esq.AddColumn("StBranch");
+            esq.AddColumn("StCompanyName");
             esq.AddColumn("StAddressID");
             esq.AddColumn("StStreet");
             esq.AddColumn("StFloorNumber");
@@ -1062,6 +1064,8 @@ namespace BPMExtended.Main.Business
             {
                 var addressId = entities[0].GetColumnValue("StAddressID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var companyName = entities[0].GetColumnValue("StCompanyName");
+                var branch = entities[0].GetColumnValue("StBranch");
                 var street = entities[0].GetColumnValue("StStreet");
                 var building = entities[0].GetColumnValue("StBuildingNumber");
                 var floor = entities[0].GetColumnValue("StFloorNumber");
@@ -1105,6 +1109,8 @@ namespace BPMExtended.Main.Business
                     InputArguments = new UpdateEnterpriseAccountInput
                     {
                         CompanyId = compnayId.ToString(),
+                        CompanyName = companyName.ToString(),
+                        Branch = branch.ToString(),
                         Title = customerTitle,
                         AddressNotes = notes.ToString(),
                         BusinessPhone =businessPhone.ToString(),

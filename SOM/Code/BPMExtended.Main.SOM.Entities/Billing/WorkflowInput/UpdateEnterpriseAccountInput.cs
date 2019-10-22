@@ -13,6 +13,8 @@ namespace BPMExtended.Main.Entities
 
         public string MainContactId { get; set; }
         public string CompanyId { get; set; }
+        public string CompanyName { get; set; }
+        public string Branch { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
