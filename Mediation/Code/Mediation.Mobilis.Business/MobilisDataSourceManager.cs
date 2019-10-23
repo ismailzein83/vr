@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mediation.Generic.Entities;
 
 namespace Mediation.Mobilis.Business
 {
@@ -7,46 +8,70 @@ namespace Mediation.Mobilis.Business
     {
         public static Guid s_SwitchTrunkIdentificationRule = new Guid("FFBF9592-57E0-497E-9D16-4B38D27A8A87");
 
+        public const int InDirection = 1;
+        public const int OutDirection = 2;
+
         public const int MSOriginatingType = 0;
         public const int MSTerminatingType = 1;
         public const int TransitType = 5;
         public const int CallForwardingType = 100;
 
-        public bool IsMobilisR13MultiLegCDR(dynamic cdr)
+        public CDRState GetMobilisR13CDRType(dynamic cdr)
         {
             var mappingRuleManager = new Vanrise.GenericData.Transformation.MappingRuleManager();
 
-            var inTrunkSwitchTarget = new Vanrise.GenericData.Entities.GenericRuleTarget() { TargetFieldValues = new Dictionary<string, object>() };
-            inTrunkSwitchTarget.TargetFieldValues.Add("Direction", 1);
-            inTrunkSwitchTarget.TargetFieldValues.Add("Trunks", cdr.IncomingRoute);
-            var inTrunkSwitchRule = mappingRuleManager.GetMatchRule(s_SwitchTrunkIdentificationRule, inTrunkSwitchTarget);
-
-            var outTrunkSwitchTarget = new Vanrise.GenericData.Entities.GenericRuleTarget() { TargetFieldValues = new Dictionary<string, object>() };
-            outTrunkSwitchTarget.TargetFieldValues.Add("Direction", 2);
-            outTrunkSwitchTarget.TargetFieldValues.Add("Trunks", cdr.OutgoingRoute);
-            var outTrunkSwitchRule = mappingRuleManager.GetMatchRule(s_SwitchTrunkIdentificationRule, outTrunkSwitchTarget);
-
             cdr.IsInTrunkSwitch = false;
-            if (inTrunkSwitchRule != null && (bool)inTrunkSwitchRule.Settings.Value)
+            string incomingRoute = cdr.IncomingRoute;
+            if (!string.IsNullOrEmpty(incomingRoute))
+            {
+                var inTrunkSwitchTarget = new Vanrise.GenericData.Entities.GenericRuleTarget();
+                inTrunkSwitchTarget.TargetFieldValues = new Dictionary<string, object>();
+                inTrunkSwitchTarget.TargetFieldValues.Add("Direction", InDirection);
+                inTrunkSwitchTarget.TargetFieldValues.Add("Trunks", incomingRoute);
+                var inTrunkSwitchRule = mappingRuleManager.GetMatchRule(s_SwitchTrunkIdentificationRule, inTrunkSwitchTarget);
+
+                if (inTrunkSwitchRule != null && (bool)inTrunkSwitchRule.Settings.Value)
+                    cdr.IsInTrunkSwitch = true;
+            }
+            else
+            {
                 cdr.IsInTrunkSwitch = true;
+            }
 
             cdr.IsOutTrunkSwitch = false;
-            if (outTrunkSwitchRule != null && (bool)outTrunkSwitchRule.Settings.Value)
+            string outgoingRoute = cdr.OutgoingRoute;
+            if (!string.IsNullOrEmpty(outgoingRoute))
+            {
+                var outTrunkSwitchTarget = new Vanrise.GenericData.Entities.GenericRuleTarget();
+                outTrunkSwitchTarget.TargetFieldValues = new Dictionary<string, object>();
+                outTrunkSwitchTarget.TargetFieldValues.Add("Direction", OutDirection);
+                outTrunkSwitchTarget.TargetFieldValues.Add("Trunks", outgoingRoute);
+                var outTrunkSwitchRule = mappingRuleManager.GetMatchRule(s_SwitchTrunkIdentificationRule, outTrunkSwitchTarget);
+
+                if (outTrunkSwitchRule != null && (bool)outTrunkSwitchRule.Settings.Value)
+                    cdr.IsOutTrunkSwitch = true;
+            }
+            else
+            {
                 cdr.IsOutTrunkSwitch = true;
+            }
+
+            if (cdr.RecordType == TransitType && cdr.IsInTrunkSwitch && cdr.IsOutTrunkSwitch)
+                return CDRState.Ignore;
+
+            if (cdr.RecordType == TransitType && cdr.IsInTrunkSwitch == !cdr.IsOutTrunkSwitch)
+                return CDRState.MultiLeg;
 
             if (cdr.RecordType == MSOriginatingType && cdr.IsOutTrunkSwitch)
-                return true;
+                return CDRState.MultiLeg;
 
             if (cdr.RecordType == MSTerminatingType && cdr.IsInTrunkSwitch)
-                return true;
+                return CDRState.MultiLeg;
 
             if (cdr.RecordType == CallForwardingType && (cdr.IsInTrunkSwitch || cdr.IsOutTrunkSwitch))
-                return true;
+                return CDRState.MultiLeg;
 
-            if (cdr.RecordType == TransitType && (cdr.IsInTrunkSwitch == !cdr.IsOutTrunkSwitch))
-                return true;
-
-            return false;
+            return CDRState.Normal;
         }
     }
 }

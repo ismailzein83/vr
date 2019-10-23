@@ -580,6 +580,10 @@
     <Reference Include="Vanrise.Security.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Web.Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
