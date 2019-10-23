@@ -47,6 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildingAddress.cs" />
+    <Compile Include="ConnectionType\ConnectionTypeInfo.cs" />
+    <Compile Include="ConnectionType\ConnectionTypeInfoFilter.cs" />
+    <Compile Include="ConnectionType\ConnectionTypeEntity.cs" />
     <Compile Include="DP\DP.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="FDB\FDB.cs" />
@@ -56,6 +59,15 @@
     <Compile Include="FTTHPath\FTTHPath.cs" />
     <Compile Include="IMS\IMS.cs" />
     <Compile Include="IMS\IMSPhoneNumber.cs" />
+    <Compile Include="NodePartType\NodePartType.cs" />
+    <Compile Include="NodePartType\NodePartTypeInfo.cs" />
+    <Compile Include="NodePartType\NodePartTypeInfoFilter.cs" />
+    <Compile Include="NodePortType\NodePortTypeInfoFilter.cs" />
+    <Compile Include="NodePortType\NodePortType.cs" />
+    <Compile Include="NodePortType\NodePortTypeInfo.cs" />
+    <Compile Include="NodeType\NodeType.cs" />
+    <Compile Include="NodeType\NodeTypeInfo.cs" />
+    <Compile Include="NodeType\NodeTypeInfoFilter.cs" />
     <Compile Include="PhoneNumberStatus.cs" />
     <Compile Include="PortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
