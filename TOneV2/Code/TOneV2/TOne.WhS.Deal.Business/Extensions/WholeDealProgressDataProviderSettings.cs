@@ -54,7 +54,7 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealDetailProgress in dealDetailProgresses)
             {
-                if (!dealDetailProgress.TierNb.HasValue) //Deal does not have any extra volume rate by there is traffic related to this zone
+                if (!dealDetailProgress.TierNb.HasValue || dealDetailProgress.TierNb.Value == 2) //tiernumber = null Deal does not have any extra volume rate but there is traffic related to this zone, tiernumber=2 extra volume traffic will not be included
                     continue;
 
                 var dealId = dealDetailProgress.DealId;
