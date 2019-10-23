@@ -89,37 +89,35 @@ namespace Retail.NIM.Business
         public ReservePortOutput ReservePort(ReservePortInput input)
         {
 
-            var reserveStatus = new Guid("c51bb41b-b31a-45ba-b12e-8f521b0323eb");
-            var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
+            var filter = new Vanrise.GenericData.Entities.RecordFilterGroup
             {
-                BusinessEntityDefinitionId = _nodePortDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Status", reserveStatus } },
-                FilterGroup = new RecordFilterGroup
+                Filters = new List<Vanrise.GenericData.Entities.RecordFilter>
                 {
-                    Filters = new List<Vanrise.GenericData.Entities.RecordFilter>
+                    new ObjectListRecordFilter
                     {
-                        new ObjectListRecordFilter
-                        {
-                              FieldName = "Node",
-                              Values = new List<object> { input.NodeId }
-                        },
-                        new ObjectListRecordFilter
-                        {
-                              FieldName = "Status",
-                              Values = new List<object> { _freeNodeStatus }
-                        }
-                   }
+                        FieldName ="Node",
+                        Values =  new List<object> {input.NodeId}
+                    }
                 }
-            });
-            if (updatedEntity.Result == Vanrise.Entities.UpdateOperationResult.Failed)
-                return null;
-
-            return new ReservePortOutput
-            {
-                PortId = (long)updatedEntity.UpdatedObject.FieldValues.GetRecord("ID").Value,
-                Number = updatedEntity.UpdatedObject.FieldValues.GetRecord("Number").Description
             };
 
+            if (input.PartTypeId.HasValue)
+            {
+                filter.Filters.Add(new ObjectListRecordFilter
+                {
+                    FieldName = "Part",
+                    Values = new List<object> { input.PartTypeId.Value }
+                });
+            }
+            var entities = _genericBusinessEntityManager.GetAllGenericBusinessEntities(_nodePortDefinitionId, null, filter);
+
+            if (entities == null || entities.Count() == 0)
+                return null;
+
+            var firstItem = entities.First();
+
+            var portid = (long)firstItem.FieldValues.GetRecord("ID");
+            return ReservePort(portid);
         }
         public ReservePortOutput ReservePort(long portId)
         {
