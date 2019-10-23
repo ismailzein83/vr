@@ -81,6 +81,7 @@
     <Compile Include="IMS\IMSPhoneNumberManager.cs" />
     <Compile Include="IMS\IMSTIDManager.cs" />
     <Compile Include="NodePartType\NodePartTypeManager.cs" />
+    <Compile Include="NodePortManager.cs" />
     <Compile Include="NodePortType\NodePortTypeManager.cs" />
     <Compile Include="NodeType\NodeTypeManager.cs" />
     <Compile Include="OLT\OLTHorizontalPortManager.cs" />
