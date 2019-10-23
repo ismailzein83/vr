@@ -13899,7 +13899,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "Transit"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
                 }
@@ -13926,7 +13926,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSOriginating"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
                 }
@@ -13953,7 +13953,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "RoamingCallForwarding"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
                 }
@@ -13980,7 +13980,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "CallForwarding"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
                 }
@@ -14007,7 +14007,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSTerminating"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
                 }
@@ -14034,7 +14034,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSOriginatingSMSinMSC"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_R13_SMS",
+                    RecordType = "Mobilis_R13_SMS",
                     CompositeFieldsParsers = GetCompositeFieldParsers_SMS_EricssonMobilis()
                 }
             });
@@ -14060,7 +14060,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSTerminatingSMSinMSC"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_R13_SMS",
+                    RecordType = "Mobilis_R13_SMS",
                     CompositeFieldsParsers = GetCompositeFieldParsers_SMS_EricssonMobilis()
                 }
             });
@@ -15100,6 +15100,33 @@ namespace Mediation.Runtime.DataParser
         {
             Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
 
+            subParser.Add("A0", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A0_Transit_FieldParsers_Mobilis_HuaweiR13()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 5
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "Transit"
+                        }
+                    },
+                    RecordType = "Mobilis_R13_CDR",
+                    TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
+                }
+            });
+
             subParser.Add("A1", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
@@ -15121,7 +15148,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSOriginating"
                         }
                     },
-                    RecordType = "Mobilis_Huawei_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
                 }
@@ -15148,7 +15175,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "RoamingCallForwarding"
                         }
                     },
-                    RecordType = "Mobilis_Huawei_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
                 }
@@ -15175,7 +15202,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "CallForwarding"
                         }
                     },
-                    RecordType = "Mobilis_Huawei_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
                 }
@@ -15202,7 +15229,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSTerminating"
                         }
                     },
-                    RecordType = "Mobilis_Huawei_R13_CDR",
+                    RecordType = "Mobilis_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
                 }
@@ -15229,7 +15256,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSOriginatingSMSinMSC"
                         }
                     },
-                    RecordType = "Mobilis_Huawei_R13_SMS",
+                    RecordType = "Mobilis_R13_SMS",
                     CompositeFieldsParsers = GetCompositeFieldParsers_SMS_Mobilis_HuaweiR13()
                 }
             });
@@ -15255,7 +15282,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSTerminatingSMSinMSC"
                         }
                     },
-                    RecordType = "Mobilis_Huawei_R13_SMS",
+                    RecordType = "Mobilis_R13_SMS",
                     CompositeFieldsParsers = GetCompositeFieldParsers_SMS_Mobilis_HuaweiR13()
                 }
             });
@@ -15287,6 +15314,118 @@ namespace Mediation.Runtime.DataParser
             };
         }
 
+        private Dictionary<string, BinaryFieldParser> Get_A0_Transit_FieldParsers_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectingParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "DateForStartOfCharge",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("89", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStartOfCharge"
+                }
+            });
+
+            parsers.Add("8A", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStopOfCharge"
+                }
+            });
+
+            parsers.Add("8B", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "ChargeableDurationInSeconds"
+                }
+            });
+
+            parsers.Add("8D", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
+
+            parsers.Add("95", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("96", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
+            parsers.Add("9F2E", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "NetworkCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
+            return parsers;
+        }
         private Dictionary<string, BinaryFieldParser> Get_A1_MSOriginating_FieldParsers_Mobilis_HuaweiR13()
         {
             Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();

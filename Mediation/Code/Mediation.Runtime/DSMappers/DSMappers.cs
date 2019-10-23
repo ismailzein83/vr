@@ -4,7 +4,6 @@ using System.Data;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Integration.Entities;
-
 namespace Mediation.Runtime
 {
     public static class DSMappers
@@ -2128,7 +2127,7 @@ namespace Mediation.Runtime
             {
                 switch (parsedBatch.RecordType)
                 {
-                    case "Mobilis_Ericsson_R13_CDR":
+                    case "Mobilis_R13_CDR":
 
                         var mobilisDataSourceManager = new Mediation.Mobilis.Business.MobilisDataSourceManager();
 
@@ -2156,11 +2155,14 @@ namespace Mediation.Runtime
                                     continue;
                             }
 
-
-                            if (mobilisDataSourceManager.IsMobilisR13MultiLegCDR(record))
-                                multiLegRecords.Add(record);
-                            else
-                                filteredCDRs.Add(record);
+                            var cdrState = mobilisDataSourceManager.GetMobilisR13CDRType(record);
+                            switch (cdrState)
+                            {
+                                case Mediation.Generic.Entities.CDRState.Normal: filteredCDRs.Add(record); break;
+                                case Mediation.Generic.Entities.CDRState.MultiLeg: multiLegRecords.Add(record); break;
+                                case Mediation.Generic.Entities.CDRState.Ignore: break;
+                                default: throw new NotSupportedException($"CDRState {cdrState} not supported.");
+                            }
                         }
 
                         if (filteredCDRs.Count > 0)
@@ -2174,10 +2176,9 @@ namespace Mediation.Runtime
                             MappedBatchItem multiLegBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(multiLegRecords, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                             mappedBatches.Add("Prepare CDR For Correlation Stage", multiLegBatch);
                         }
-
                         break;
 
-                    case "Mobilis_Ericsson_R13_SMS":
+                    case "Mobilis_R13_SMS":
 
                         List<dynamic> filteredSMSs = new List<dynamic>();
 
@@ -2209,7 +2210,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static MappingOutput MapCDR_File_Mobilis_Huawei(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+                public static MappingOutput MapCDR_File_Mobilis_Huawei(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions();
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
@@ -2383,7 +2384,7 @@ namespace Mediation.Runtime
             {
                 switch (parsedBatch.RecordType)
                 {
-                    case "Mobilis_Huawei_R13_CDR":
+                    case "Mobilis_R13_CDR":
 
                         var mobilisDataSourceManager = new Mediation.Mobilis.Business.MobilisDataSourceManager();
 
@@ -2411,10 +2412,14 @@ namespace Mediation.Runtime
                                     continue;
                             }
 
-                            if (mobilisDataSourceManager.IsMobilisR13MultiLegCDR(record))
-                                multiLegRecords.Add(record);
-                            else
-                                filteredCDRs.Add(record);
+                            var cdrState = mobilisDataSourceManager.GetMobilisR13CDRType(record);
+                            switch (cdrState)
+                            {
+                                case Mediation.Generic.Entities.CDRState.Normal: filteredCDRs.Add(record); break;
+                                case Mediation.Generic.Entities.CDRState.MultiLeg: multiLegRecords.Add(record); break;
+                                case Mediation.Generic.Entities.CDRState.Ignore: break;
+                                default: throw new NotSupportedException($"CDRState {cdrState} not supported.");
+                            }
                         }
 
                         if (filteredCDRs.Count > 0)
@@ -2430,7 +2435,7 @@ namespace Mediation.Runtime
                         }
                         break;
 
-                    case "Mobilis_Huawei_R13_SMS":
+                    case "Mobilis_R13_SMS":
 
                         List<dynamic> filteredSMSs = new List<dynamic>();
 
