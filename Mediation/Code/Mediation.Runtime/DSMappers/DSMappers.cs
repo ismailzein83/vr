@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Integration.Entities;
+
 namespace Mediation.Runtime
 {
     public static class DSMappers
@@ -2210,7 +2210,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-                public static MappingOutput MapCDR_File_Mobilis_Huawei(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        public static MappingOutput MapCDR_File_Mobilis_Huawei(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions();
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
