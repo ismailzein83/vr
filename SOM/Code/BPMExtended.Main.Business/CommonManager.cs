@@ -269,6 +269,31 @@ namespace BPMExtended.Main.Business
             return 0;
         }
 
+        public List<string> GetXDSLActionsMenuBySubType(string subType)
+        {
+            List<string> actions = new List<string>();
+
+            actions.Add("Line Termination");
+            actions.Add("Change Password");
+            actions.Add("Print Configuration");
+            actions.Add("Service Addition");
+            actions.Add("Service Removal");
+            actions.Add("Technical Complaint");
+
+            if (subType == "ADSL")
+            {
+                actions.Add("Line Moving");
+                actions.Add("Contract Take Over");
+                actions.Add("Alter Speed");
+            }
+            else
+            {
+                actions.Add("Update Address");
+            }
+
+            return actions;
+        }
+
         public Contact GetContact(string contactId)
         {
             EntitySchemaQuery esq;

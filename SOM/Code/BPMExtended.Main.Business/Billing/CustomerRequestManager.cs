@@ -363,7 +363,7 @@ namespace BPMExtended.Main.Business
                 eSQ.AddAllSchemaColumns();
                 esqFirstFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.LessOrEqual, "StLastPendingCustomerReturn", lastPendingDate);
                 esqSecondFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StMarkAsCancelled", false);
-                esqThirdFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", Constant.PENDING_CUSTOMER_RETURN_STATUS);
+                esqThirdFilter = eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", new Guid(Constant.PENDING_CUSTOMER_RETURN_STATUS));
 
                 eSQ.Filters.Add(esqFirstFilter);
                 eSQ.Filters.Add(esqSecondFilter);
