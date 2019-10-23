@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Retail.NIM.Entities;
 
 namespace Retail.NIM.Business
 {
@@ -151,28 +152,5 @@ namespace Retail.NIM.Business
             };
         }
     }
-    public class ReserveConnectionOutput
-    {
-        public ReservePortOutput Port1 { get; set; }
-        public ReservePortOutput Port2 { get; set; }
-    }
-    public class ReserveConnectionInput
-    {
-        public Guid ConnectionTypeId { get; set; }
-        public long Port1NodeId { get; set; }
-        public long Port2NodeId { get; set; }
-        public Guid? Port1PartTypeId { get; set; }
-        public Guid? Port2PartTypeId { get; set; }
 
-    }
-    public class ReservePortInput
-    {
-        public long NodeId { get; set; }
-        public Guid? PartTypeId { get; set; }
-    }
-    public class ReservePortOutput
-    {
-        public long PortId { get; set; }
-        public string Number { get; set; }
-    }
 }
