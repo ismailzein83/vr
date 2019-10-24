@@ -736,13 +736,14 @@ namespace TOne.WhS.BusinessEntity.Business
                             CurrencyId = rateChange.CurrencyId,
                             Note = rateChange.Note
                         };
-                        salePlZoneNotification.Increment = GetIncrementDescription(customerId, zoneId, rateChange.BED);
+                        salePlZoneNotification.Increment = GetIncrementDescription(customerId, zoneId, rateChange.BED, country.CountryId);
 
                     }
                     else if (existingSaleZone != null)
                     {
                         salePlZoneNotification.Rate = GetRateNotificationFromExistingData(customerId, sellingProductId, existingSaleZone.ZoneId, existingSaleZone.ZoneName, country.CountryId, customerZoneRateHistoryLocator);
-                        salePlZoneNotification.Increment = GetIncrementDescription(customerId, zoneId, salePlZoneNotification.Rate.BED);
+                        DateTime maxDate = salePlZoneNotification.Rate.BED > DateTime.Now ? salePlZoneNotification.Rate.BED : DateTime.Now; // in case of pending rate get pendig taariff
+                        salePlZoneNotification.Increment = GetIncrementDescription(customerId, zoneId, maxDate, country.CountryId);
                     }
 
                     var rateTypeIds = Helper.GetRateTypeIds(customerId, zoneId, DateTime.Now);
@@ -788,7 +789,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (salePlzone.Rate == null)
                         {
                             salePlzone.Rate = GetRateNotificationFromExistingData(customerId, sellingProductId, existingSaleZone.ZoneId, existingSaleZone.ZoneName, country.CountryId, customerZoneRateHistoryLocator);
-                            salePlzone.Increment = GetIncrementDescription(customerId, existingSaleZone.ZoneId, salePlzone.Rate.BED);
+                            DateTime maxDate = salePlzone.Rate.BED > DateTime.Now ? salePlzone.Rate.BED : DateTime.Now; // in case of pending rate get pendig taariff
+                            salePlzone.Increment = GetIncrementDescription(customerId, existingSaleZone.ZoneId, maxDate, country.CountryId);
                         }
                     }
                 }
@@ -894,7 +896,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
                 zoneNotification.Codes.AddRange(existingZone.Codes.Select(item => ExistingCodeToSalePLCodeNotificationMapper(item, countrySellDate, countryEED)));
                 zoneNotification.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, existingZone.ZoneId, existingZone.ZoneName, countryId, customerZoneRateHistoryLocator);
-                zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, zoneNotification.Rate.BED);
+                DateTime maxDate = zoneNotification.Rate.BED > DateTime.Now ? zoneNotification.Rate.BED : DateTime.Now; // in case of pending rate get pendig taariff
+                zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, maxDate, countryId);
                 this.AddExistingOtherRatesToNotification(zoneNotification, existingZone, sellingProductId, customerId, countryId, customerZoneRateHistoryLocator);
 
                 salePlZoneNotifications.Add(zoneNotification);
@@ -969,7 +972,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 this.AddExistingOtherRatesToNotification(zoneNotification, existingZone, sellingProductId, customerId, countryId, customerZoneRateHistoryLocator);
 
-                zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, zoneNotification.Rate.BED);
+                DateTime maxDate = zoneNotification.Rate.BED > DateTime.Now ? zoneNotification.Rate.BED : DateTime.Now; // in case of pending rate get pendig taariff
+                zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, maxDate, countryId);
                 salePlZoneNotifications.Add(zoneNotification);
             }
 
@@ -977,7 +981,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return salePlZoneNotifications;
         }
 
-        private string GetIncrementDescription(int customerId, long saleZoneId, DateTime pricelistDate)
+        private string GetIncrementDescription(int customerId, long saleZoneId, DateTime effectiveDate, int countryId)
         {
             var tariffRuleManager = new TariffRuleManager();
             var configManager = new ConfigManager();
@@ -986,12 +990,13 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<string, object> targetFieldsValue = new Dictionary<string, object>
             {
                 {"CustomerId", customerId},
-                {"SaleZoneId", saleZoneId}
+                {"SaleZoneId", saleZoneId},
+                { "Country",countryId}
             };
 
             Vanrise.GenericData.Entities.GenericRuleTarget target = new Vanrise.GenericData.Entities.GenericRuleTarget
             {
-                EffectiveOn = pricelistDate,
+                EffectiveOn = effectiveDate,
                 IsEffectiveInFuture = false,
                 TargetFieldValues = targetFieldsValue
             };
