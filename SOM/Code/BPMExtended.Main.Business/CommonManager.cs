@@ -269,29 +269,40 @@ namespace BPMExtended.Main.Business
             return 0;
         }
 
-        public List<string> GetXDSLActionsMenuBySubType(string subType)
+        public Dictionary<string, List<MenuAction>> GetXDSLActionsMenuBySubType(string subType)
         {
-            List<string> actions = new List<string>();
+            Dictionary<string, List<MenuAction>> menuActions = new Dictionary<string, List<MenuAction>>();
+            List<MenuAction> lineOperationsActions = new List<MenuAction>();
+            List<MenuAction> configurationActions = new List<MenuAction>();
+            List<MenuAction> addressActions = new List<MenuAction>();
+            List<MenuAction> complaintsActions = new List<MenuAction>();
 
-            actions.Add("Line Termination");
-            actions.Add("Change Password");
-            actions.Add("Print Configuration");
-            actions.Add("Service Addition");
-            actions.Add("Service Removal");
-            actions.Add("Technical Complaint");
+            //add common operations
+            lineOperationsActions.Add(new MenuAction {actionName =  "Line Termination" , actionFunctionName = "ADSLLineTermination" });
+            configurationActions.Add(new MenuAction { actionName = "Service Addition", actionFunctionName = "ServiceAddition" });
+            configurationActions.Add(new MenuAction { actionName = "Service Removal", actionFunctionName = "ServiceRemoval" });
+            configurationActions.Add(new MenuAction { actionName = "Change Password", actionFunctionName = "ADSLChangePassword" });
+            configurationActions.Add(new MenuAction { actionName = "Print Configuration", actionFunctionName = "ADSLPrintConfiguration" });
+            complaintsActions.Add(new MenuAction { actionName = "Technical Complaint", actionFunctionName = "onComplaintButtonClick" });
 
             if (subType == "ADSL")
             {
-                actions.Add("Line Moving");
-                actions.Add("Contract Take Over");
-                actions.Add("Alter Speed");
+                lineOperationsActions.Add(new MenuAction { actionName = "Line Moving", actionFunctionName = "ADSLLineMoving" });
+                lineOperationsActions.Add(new MenuAction { actionName = "Contract Take Over", actionFunctionName = "ADSLTakeOver" });
+                configurationActions.Add(new MenuAction { actionName = "Alter Speed", actionFunctionName = "ADSLAlterSpeed" });
+
             }
             else
             {
-                actions.Add("Update Address");
+                addressActions.Add(new MenuAction { actionName = "Update Address", actionFunctionName = "UpdateAddress" });
             }
 
-            return actions;
+            menuActions.Add("Line Operations", lineOperationsActions);
+            menuActions.Add("Configuration", configurationActions);
+            menuActions.Add("Address", addressActions);
+            menuActions.Add("Complaints", complaintsActions);
+
+            return menuActions;
         }
 
         public Contact GetContact(string contactId)
