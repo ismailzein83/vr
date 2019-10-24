@@ -12,8 +12,6 @@ namespace Vanrise.GenericData.MainExtensions.VRActions
 
         public override string ActionName { get { return "Save Record"; } }
 
-        //public Guid DataRecordTypeId { get; set; }
-
         public Guid DataRecordStorageId { get; set; }
 
         public List<SaveRecordActionGridItemMapping> GridItemsMapping { get; set; }

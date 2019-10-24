@@ -118,6 +118,9 @@
                 };
 
                 api.getData = function () {
+                    if (directiveAPI == undefined)
+                        return null;
+
                     var action = directiveAPI.getData();
 
                     if (action == undefined || $scope.scopeModel.selectedExtensionConfig == undefined)

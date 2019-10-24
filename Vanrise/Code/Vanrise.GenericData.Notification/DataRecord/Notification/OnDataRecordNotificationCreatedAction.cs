@@ -33,13 +33,21 @@ namespace Vanrise.GenericData.Notification
             _enumValuesByName = enumFieldValues;
         }
 
-        public dynamic GetFieldValue(NotificationActionMappingField fieldName, string recordTypeFieldName)
+        public dynamic GetFieldValue(NotificationActionMappingField fieldName, string specificFieldName)
         {
-            switch (NotificationActionMappingFieldAttribute.GetAttribute(fieldName).MappingFieldType)
+            var mappingFieldType = NotificationActionMappingFieldAttribute.GetAttribute(fieldName).MappingFieldType;
+            switch (mappingFieldType)
             {
-                case NotificationActionMappingFieldType.StaticField: return _enumValuesByName.GetRecord(fieldName);
-                case NotificationActionMappingFieldType.DataRecordField: recordTypeFieldName.ThrowIfNull("recordTypeFieldName"); return GetDataRecordTypeFieldValue(recordTypeFieldName);
-                default: throw new NotSupportedException($"Enum NotificationActionMappingField: {fieldName}");
+                case NotificationActionMappingFieldType.StaticField:
+                    if (_enumValuesByName.TryGetValue(fieldName, out dynamic value))
+                        return value;
+                    throw new Exception($"Unable to get value for the field: {fieldName}");
+
+                case NotificationActionMappingFieldType.DataRecordField:
+                    specificFieldName.ThrowIfNull("specificFieldName");
+                    return GetDataRecordTypeFieldValue(specificFieldName);
+
+                default: throw new NotSupportedException($"Enum NotificationActionMappingFieldType: {mappingFieldType}");
             }
         }
 
