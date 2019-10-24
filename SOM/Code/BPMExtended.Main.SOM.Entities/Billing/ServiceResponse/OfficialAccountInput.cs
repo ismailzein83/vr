@@ -47,5 +47,8 @@ namespace BPMExtended.Main.SOMAPI
         public string IBAN { get; set; }
         public string BankSwiftCode { get; set; }
         public DateTime ValidFromDate { get; set; }
+        public string BankAddress { get; set; }
+        public string DebitCreditCard { get; set; }
+        public string AccountOwner { get; set; }
     }
 }

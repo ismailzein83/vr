@@ -1453,21 +1453,31 @@ namespace BPMExtended.Main.Business
                 return CreateCustomer(CustomerCategoryId,paymentMethodId,contact.CityId,contact.GivenName,contact.SurName,contact.CSOId,contact.BankID,contact.BankAccountID,contact.BankName,contact.IBAN
                     ,contact.CountryId,"DefaultRatePlan",contact.NationalityId,contact.BirthDate,contact.BuildingNumber,contact.Career,contact.DocumentID,contact.DocumentIdTypeId,contact.Email,
                     contact.FaxNumber, contact.FloorNumber, contact.HomePhone,contact.MiddleName,contact.MobilePhone,contact.MotherName,contact.DistrictId,contact.Street,contact.RegionId,contact.LanguageId
-                    ,contact.Title,contact.TownId,contact.AddressNotes,contact.BusinessPhone,segmentId);
+                    ,contact.Title,contact.TownId,contact.AddressNotes,contact.BusinessPhone,segmentId,"","");
             else return null;
             
         }
         public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CSO,
             string BankCode, string AccountNumber, string BankName, string IBAN, string country, string DefaultRatePlan, string nationality, string birthDate, string building, string career,
             string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
-            string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId
+            string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId,string accountOwner,string debitCreditCard
             )
         {
             IDManager manager = new IDManager();
             string customerId = manager.GetCustomerNextId();
             DateTime dob = DateTime.MinValue;
             DateTime.TryParse(birthDate, out dob);
-
+            string bankName = "";
+            string bankAddress = "";
+            if (!string.IsNullOrEmpty(BankCode))
+            {
+                Bank bank = this.GetBank(BankCode);
+                bankName = bank.Name;
+                bankAddress = bank.Address;
+                BankCode = bank.Code;
+            }
+            else
+                BankCode = "";
             string cso = GetCSOId(CSO);
             string billcycle = GetDefaultBillCycle();
             string externalCustomerId = new CatalogManager().GetExternalCustomerSetId(segmentId);
@@ -1521,7 +1531,7 @@ namespace BPMExtended.Main.Business
                 PaymentMethodId = PaymentMethodId,
                 BillCycle = billcycle,
                 BankCode = BankCode, // BankID in UI
-                BankName = BankName,
+                BankName = bankName,
                 AccountNumber = AccountNumber, //BankAccountID
                 DebitAccountOwner = FirstName,
                 IBAN = IBAN,
@@ -1529,6 +1539,9 @@ namespace BPMExtended.Main.Business
                 DocumentId = documentId,
                 DocumentTypeId = documentType,
                 ValidFromDate = DateTime.Now,
+                AccountOwner=accountOwner,
+                DebitCreditCard=debitCreditCard,
+                BankAddress= bankAddress
             };
 
             using (var client = new SOMClient())
@@ -1542,7 +1555,7 @@ namespace BPMExtended.Main.Business
         public CustomerCreationOutput CreateAccount(string contactId ,string parentCustomerId, string CustomerCategoryId, string levelId, string companyName, string branch,string companyId,string FirstName, string LastName, string CSO,
          string BankCode, string AccountNumber, string BankName, string IBAN, string country, string nationality, string birthDate, string building, string career,string City,
          string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
-         string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId, string PaymentMethodId,string businessType
+         string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId, string PaymentMethodId,string businessType,string accountOwner,string debitCreditCard
          )
         {
             IDManager manager = new IDManager();
@@ -1551,7 +1564,17 @@ namespace BPMExtended.Main.Business
             string customerId = manager.GetCustomerNextId();
             DateTime dob = DateTime.MinValue;
             DateTime.TryParse(birthDate, out dob);
-
+            string bankName = "";
+            string bankAddress = "";
+            if (!string.IsNullOrEmpty(BankCode))
+            {
+                Bank bank = this.GetBank(BankCode);
+                bankName = bank.Name;
+                bankAddress = bank.Address;
+                BankCode = bank.Code;
+            }
+            else
+                BankCode = "";
             string cso = GetCSOId(CSO);
             string billcycle = GetDefaultBillCycle();
             string externalCustomerId = new CatalogManager().GetExternalCustomerSetId(segmentId);
@@ -1606,8 +1629,8 @@ namespace BPMExtended.Main.Business
                 PaymentResponsibility = true,
                 PaymentMethodId = PaymentMethodId,
                 BillCycle = billcycle,
-                BankCode = BankCode,
-                BankName = BankName,
+                BankCode =BankCode,
+                BankName = bankName,
                 AccountNumber = AccountNumber,
                 DebitAccountOwner = contact.GivenName,
                 IBAN = IBAN,
@@ -1615,7 +1638,10 @@ namespace BPMExtended.Main.Business
                 DocumentId = contact.DocumentID,
                 DocumentTypeId = GetDocumentType(contact.DocumentIdTypeId),
                 ValidFromDate = DateTime.Now,
-                BusinessType= businessType
+                BusinessType= businessType,
+                BankAddress= bankAddress,
+                DebitCreditCard=debitCreditCard,
+                AccountOwner=accountOwner
             };
 
             using (var client = new SOMClient())
@@ -1631,6 +1657,16 @@ namespace BPMExtended.Main.Business
             IDManager manager = new IDManager();
             CommonManager commonManager = new CommonManager();
             Contact contact = commonManager.GetContact(officialAccountInput.ContactId);
+            if (!string.IsNullOrEmpty(officialAccountInput.BankCode))
+            {
+                Bank bank = this.GetBank(officialAccountInput.BankCode);
+                officialAccountInput.BankAddress = bank.Address;
+                officialAccountInput.BankName = bank.Name;
+                officialAccountInput.DebitAccountOwner = contact.GivenName;
+                officialAccountInput.BankCode = bank.Code;
+            }
+            else
+                officialAccountInput.BankCode = "";
             officialAccountInput.CustomerId = manager.GetCustomerNextId();
             officialAccountInput.MainContactId = contact.CustomerId;
             officialAccountInput.DocumentId = contact.DocumentID;
@@ -1651,6 +1687,39 @@ namespace BPMExtended.Main.Business
             return output;
         }
 
+        public Bank GetBank(string id)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            Bank bank = null;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StBank");
+            esq.AddColumn("StName");
+            esq.AddColumn("StCode");
+            esq.AddColumn("StAddress");
+            esq.AddColumn("StDescription");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", id);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var name = entities[0].GetColumnValue("StName");
+                var code = entities[0].GetColumnValue("StCode");
+                var address = entities[0].GetColumnValue("StAddress");
+                var description = entities[0].GetColumnValue("StDescription");
+
+                bank = new Bank()
+                {
+                    Name = name.ToString(),
+                    Code = code.ToString(),
+                    Description = address.ToString(),
+                    Address = description.ToString(),
+                };
+            }
+            return bank;
+        }
         public string GetCSOId(string Id)
         {
 

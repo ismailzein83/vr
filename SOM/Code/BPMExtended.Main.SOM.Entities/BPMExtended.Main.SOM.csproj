@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Billing\ServiceResponse\Bank.cs" />
     <Compile Include="Billing\ServiceResponse\BillOnDemandOutput.cs" />
     <Compile Include="Billing\ServiceResponse\BPTrackingMessage.cs" />
     <Compile Include="Billing\ServiceResponse\BPInstance.cs" />

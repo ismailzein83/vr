@@ -63,6 +63,9 @@ namespace BPMExtended.Main.SOMAPI
         public DateTime ValidFromDate { get; set; }
         public bool IsEmployee { get; set; }
         public string AddressNotes { get; set; }
+        public string AccountOwner { get; set; }
+        public string DebitCreditCard { get; set; }
+        public string BankAddress { get; set; }
     }
 
 
