@@ -13,7 +13,11 @@ namespace BPMExtended.Main.SOMAPI
         public PaymentData PaymentData { get; set; }
         public string NewRatePlan { get; set; }
         public string LinePathId{ get; set; }
-
+        public string ContractId { get; set; }
+        public string RequestId { get; set; }
+        public List<ServicePackage> ServicesAreUnavailableInNewRP { get; set; }
+        public List<ServicePackage> ServicesAreInDifferentPKGInNewRP { get; set; }
+        public List<ServicePackage> ServicesAreCoreInNewRP { get; set; }
 
     }
 }

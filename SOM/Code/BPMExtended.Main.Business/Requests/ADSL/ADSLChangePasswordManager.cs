@@ -35,6 +35,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StLinePathId");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
+            esq.AddColumn("StUserName");
+            esq.AddColumn("StNewPassword");
+            esq.AddColumn("StRatePlanId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -42,7 +45,10 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractID");              
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var userName = entities[0].GetColumnValue("StUserName");
+                var newPassword = entities[0].GetColumnValue("StNewPassword");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathdId = entities[0].GetColumnValue("StLinePathId");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
@@ -57,6 +63,9 @@ namespace BPMExtended.Main.Business
                     InputArguments = new ADSLChangePasswordRequestInput
                     {
                         LinePathId = pathdId.ToString(),
+                        Username = userName.ToString(),
+                        NewPassowrd = newPassword.ToString(),
+                        IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN"? true : false,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -76,7 +85,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLChangePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitADSLResetPassword/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLChangePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitChangePasswordForXDSLContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -117,13 +126,8 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new ADSLChangePasswordRequestInput
                     {
-                        LinePathId = pathdId.ToString(),
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                            ContractId = contractId.ToString(),
-                            RequestId = requestId.ToString(),
-                            CustomerId = customerId.ToString()
-                        },
+                        ContractId = contractId.ToString(),
+                        RequestId = requestId.ToString(),
                         PaymentData = new PaymentData()
                         {
                             Fees = feesServices,
@@ -137,7 +141,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLChangePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeADSLResetPassword/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLChangePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeChangePasswordForXDSLContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

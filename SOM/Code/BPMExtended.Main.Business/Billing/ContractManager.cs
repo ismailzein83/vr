@@ -840,12 +840,12 @@ namespace BPMExtended.Main.Business
         {
             int stat = 0;
             int.TryParse(contract.Status.ToString(), out stat);
-
+            
             return new ADSLContractDetail
             {
                 ContractId = contract.Id,
                 Status = GetContractStatusByEnumValue(contract.Status.ToString()), //Check if API and Our conventions are the same
-                ActivationDate = contract.ActivationDate,
+                ActivationDate = contract.ActivationDate
                 //ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
                 //ContractStatusId = GetContractStatusByEnumValue(contract.Status.ToString())
             };

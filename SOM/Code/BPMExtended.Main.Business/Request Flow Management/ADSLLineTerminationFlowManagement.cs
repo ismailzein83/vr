@@ -26,6 +26,7 @@ namespace BPMExtended.Main.Business
         const string paymentStep = "A0297B0C-53AD-43A9-8568-160317FE99B8";
         const string attachmentStep = "FB8D7425-046F-4FCC-8983-F9C5A9336DCE";
         const string TechnicalStep = "56D55B17-8962-4D80-9564-361AD127E6B5";
+        const string submitToOMStep = "7885FB19-EAC7-4E12-8936-A7AF53E42E5D";
         const string completedStep = "639E4A4C-1752-42E3-83CD-85674B6E9903";
 
         public string GetNextStep(string id, string currentStepId)
@@ -37,8 +38,7 @@ namespace BPMExtended.Main.Business
                 case printStep: nextStepId = ReasonStep; break;
                 case ReasonStep: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? attachmentStep: paymentStep; break;
                 case paymentStep: nextStepId = attachmentStep; break;
-                case attachmentStep: nextStepId = TechnicalStep; break;
-                case TechnicalStep: nextStepId = completedStep; break;
+                case attachmentStep: nextStepId = submitToOMStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;

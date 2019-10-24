@@ -85,6 +85,9 @@ namespace BPMExtended.Main.Business
                     {
                         LinePathId = pathdId.ToString(),
                         NewRatePlan = newRatePlanId.ToString(),
+                        ServicesAreCoreInNewRP = new ServiceManager().ReadProductChangeServices(contractId.ToString(),newRatePlanId.ToString()).ServicesAreCoreInNewRP,
+                        ServicesAreInDifferentPKGInNewRP = new ServiceManager().ReadProductChangeServices(contractId.ToString(), newRatePlanId.ToString()).ServicesAreInDifferentPKGInNewRP,
+                        ServicesAreUnavailableInNewRP = new ServiceManager().ReadProductChangeServices(contractId.ToString(), newRatePlanId.ToString()).ServicesAreUnavailableInNewRP,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -104,7 +107,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitXDSLAlterSpeed/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitADSLAlterSpeed/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();
@@ -172,14 +175,8 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new ADSLAlterSpeedRequestInput
                     {
-                        LinePathId = pathdId.ToString(),
-                        NewRatePlan = newRatePlanId.ToString(),
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                            ContractId = contractId.ToString(),
-                            RequestId = requestId.ToString(),
-                            CustomerId = customerId.ToString()
-                        },
+                        ContractId = contractId.ToString(),
+                        RequestId = requestId.ToString(),
                         PaymentData = new PaymentData()
                         {
                             Fees = feesServices,
@@ -193,7 +190,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeXDSLAlterSpeed/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeADSLAlterSpeed/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();

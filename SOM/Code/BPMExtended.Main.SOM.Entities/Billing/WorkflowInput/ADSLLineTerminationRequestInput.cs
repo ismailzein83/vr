@@ -14,6 +14,8 @@ namespace BPMExtended.Main.SOMAPI
         public string TelephonyContractId { get; set; }
         public string LinePathId { get; set; }
         public string Reason { get; set; }
+        public string Username { get; set; }
+        public bool IsVPN { get; set; }
 
     }
 }
