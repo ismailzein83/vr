@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
@@ -15,6 +11,15 @@ namespace Vanrise.Entities
         public int Second { get; set; }
         public int MilliSecond { get; set; }
 
+        public double TotalSeconds
+        {
+            get
+            {
+                TimeSpan ts = new TimeSpan(0, this.Hour, this.Minute, this.Second, this.MilliSecond);
+                return ts.TotalSeconds;
+            }
+        }
+
         static Time()
         {
             new Time();
@@ -22,7 +27,9 @@ namespace Vanrise.Entities
             ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(Time), false).Add(parameters);
         }
 
-        public Time() { }
+        public Time()
+        {
+        }
 
         public Time(string time)
         {
@@ -94,6 +101,10 @@ namespace Vanrise.Entities
             this.MilliSecond = timeSpan.Milliseconds;
         }
 
+        #endregion
+
+        #region Overridden Methods
+
         public override bool Equals(object timeObj)
         {
             Time time = timeObj as Time;
@@ -104,6 +115,11 @@ namespace Vanrise.Entities
                 return false;
 
             return true;
+        }
+
+        public override string ToString()
+        {
+            return this.ToLongTimeString();
         }
 
         #endregion
@@ -215,11 +231,6 @@ namespace Vanrise.Entities
                 return true;
             else
                 return false;
-        }
-
-        public override string ToString()
-        {
-            return this.ToLongTimeString();
         }
 
         #endregion

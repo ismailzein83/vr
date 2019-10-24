@@ -3,7 +3,7 @@ using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
 {
-    public enum TimeFieldUnit { Seconds = 0 }
+    public enum TimeFieldUnit { Seconds = 0, VRTime = 1 }
     public class DateTimeCompositeParser : CompositeFieldsParser
     {
         public override Guid ConfigId { get { return new Guid("068FFEDC-9779-4BCA-AE67-D8A2ACE540D4"); } }
@@ -15,18 +15,33 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
 
         public override void Execute(ICompositeFieldsParserContext context)
         {
-            object dateTimeFieldObj = context.Record.GetFieldValue(DateFieldName);
-            if (dateTimeFieldObj == null)
+            object dateTimeFieldAsObj = context.Record.GetFieldValue(DateFieldName);
+            if (dateTimeFieldAsObj == null)
                 return;
 
-            DateTime dateTimeField = (DateTime)dateTimeFieldObj;
+            DateTime dateTimeField = (DateTime)dateTimeFieldAsObj;
 
             double timeFieldValue = default(double);
             if (!string.IsNullOrEmpty(TimeFieldName))
             {
-                object timeFieldObj = context.Record.GetFieldValue(TimeFieldName);
-                if (timeFieldObj != null)
-                    timeFieldValue = Convert.ToDouble(timeFieldObj);
+                object timeFieldAsObj = context.Record.GetFieldValue(TimeFieldName);
+                if (timeFieldAsObj != null)
+                {
+                    switch (this.TimeFieldUnit)
+                    {
+                        case TimeFieldUnit.Seconds:
+                            timeFieldValue = Convert.ToDouble(timeFieldAsObj);
+                            break;
+
+                        case TimeFieldUnit.VRTime:
+                            var timeFieldAsTime = timeFieldAsObj as Vanrise.Entities.Time;
+                            timeFieldValue = timeFieldAsTime.TotalSeconds;
+                            break;
+
+                        default:
+                            throw new NotSupportedException(string.Format("TimeFieldUnit '{0}'", this.TimeFieldUnit));
+                    }
+                }
             }
             timeFieldValue = SubtractTime ? -timeFieldValue : timeFieldValue;
 
@@ -34,6 +49,7 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
             switch (this.TimeFieldUnit)
             {
                 case TimeFieldUnit.Seconds:
+                case TimeFieldUnit.VRTime:
                     value = dateTimeField.AddSeconds(timeFieldValue); break;
 
                 default:
