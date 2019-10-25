@@ -253,6 +253,7 @@
     <Build Include="common\Stored Procedures\sp_ProcessState_InsertOrUpdate.sql" />
     <Build Include="common\Stored Procedures\sp_ProcessState_GetAll.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetFiltered.sql" />
+    <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_DeleteByProcessInstanceId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />
