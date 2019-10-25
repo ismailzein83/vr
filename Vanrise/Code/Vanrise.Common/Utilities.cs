@@ -690,6 +690,13 @@ namespace Vanrise.Common
             return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, time.Hour, time.Minute, time.Second, time.MilliSecond);
         }
 
+        public static DateTime ConverUnixTimeToDateTime(double unixTime)
+        {
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddSeconds(unixTime).ToLocalTime();
+            return dateTime;
+        }
+
         /// <summary>
         /// Implementation as per Iso8601
         /// </summary>
