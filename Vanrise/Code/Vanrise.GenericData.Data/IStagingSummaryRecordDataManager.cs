@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Data
         void GetStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, DateTime batchEnd, Action<StagingSummaryRecord> onItemLoaded); 
         void ApplyStreamToDB(object stream);
         void DeleteStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, DateTime batchEnd); 
+        void DeleteStagingSummaryRecords(long processInstanceId);
         List<StagingSummaryInfo> GetStagingSummaryInfo(long processInstanceId, string stageName);
     }
 }
-

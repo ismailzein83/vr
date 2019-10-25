@@ -7,6 +7,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.QueueActivators;
@@ -284,8 +285,8 @@ namespace Vanrise.AccountBalance.Business
         {
             Dictionary<BalanceStageBatchRecordKey, BalanceStageBatchRecord> results = new Dictionary<BalanceStageBatchRecordKey, BalanceStageBatchRecord>();
 
-            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
-            List<StagingSummaryInfo> stagingSummaryInfo = dataManager.GetStagingSummaryInfo(context.ProcessInstanceId, context.CurrentStageName);
+            StagingSummaryRecordManager stagingSummaryRecordManager = new StagingSummaryRecordManager();
+            List<StagingSummaryInfo> stagingSummaryInfo = stagingSummaryRecordManager.GetStagingSummaryInfo(context.ProcessInstanceId, context.CurrentStageName);
 
             List<AccountBalanceType> accountBalanceTypes = this.GetAccountBalanceTypeCombinations(new GetAccountBalanceTypeCombinationsContext());
             Dictionary<AccountBalanceType, List<BatchRecordData>> batchRecordDataByType = accountBalanceTypes.ToDictionary(itm => itm, itm => new List<BatchRecordData>());
@@ -329,7 +330,7 @@ namespace Vanrise.AccountBalance.Business
                         current = batchRecordDataItem.BatchEnd;
                         if (batchRecordDataItem.AlreadyFinalised)
                         {
-                            dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, batchRecordDataItem.BatchStart, batchRecordDataItem.BatchEnd);
+                            stagingSummaryRecordManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, batchRecordDataItem.BatchStart, batchRecordDataItem.BatchEnd);
                         }
                         else
                         {
@@ -424,12 +425,12 @@ namespace Vanrise.AccountBalance.Business
         private void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<CorrectUsageBalanceItemByType> queueLoadedBatches,
             AsyncActivityStatus loadBatchStatus, BalanceStageBatchRecord balanceStageBatchRecord)
         {
-            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+            StagingSummaryRecordManager stagingSummaryRecordManager = new StagingSummaryRecordManager();
 
             try
             {
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Loading Batches for Stage {0}", context.CurrentStageName));
-                dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, balanceStageBatchRecord.BatchStart, balanceStageBatchRecord.BatchEnd, (stagingSummaryRecord) =>
+                stagingSummaryRecordManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, balanceStageBatchRecord.BatchStart, balanceStageBatchRecord.BatchEnd, (stagingSummaryRecord) =>
                 {
                     var correctUsageBalanceItemsByType = ProtoBufSerializer.Deserialize<CorrectUsageBalanceItemByType>(stagingSummaryRecord.Data);
                     queueLoadedBatches.Enqueue(correctUsageBalanceItemsByType);
@@ -437,7 +438,7 @@ namespace Vanrise.AccountBalance.Business
             }
             finally
             {
-                dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, balanceStageBatchRecord.BatchStart, balanceStageBatchRecord.BatchEnd);
+                stagingSummaryRecordManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, balanceStageBatchRecord.BatchStart, balanceStageBatchRecord.BatchEnd);
                 loadBatchStatus.IsComplete = true;
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
             }

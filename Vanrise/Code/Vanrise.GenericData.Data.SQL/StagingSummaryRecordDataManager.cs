@@ -41,6 +41,11 @@ namespace Vanrise.GenericData.Data.SQL
             ExecuteNonQuerySP("reprocess.sp_StagingSummaryRecord_Delete", processInstanceId, stageName, batchStart, batchEnd);
         }
 
+        public void DeleteStagingSummaryRecords(long processInstanceId)
+        {
+            ExecuteNonQuerySP("reprocess.sp_StagingSummaryRecord_DeleteByProcessInstanceId", processInstanceId);
+        }
+
         public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -99,7 +104,6 @@ namespace Vanrise.GenericData.Data.SQL
                 Payload = reader["Payload"] as string
             };
         }
-
         #endregion
     }
 }

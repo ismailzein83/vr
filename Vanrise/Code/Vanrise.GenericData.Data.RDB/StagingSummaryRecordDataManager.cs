@@ -125,6 +125,16 @@ namespace Vanrise.GenericData.Data.RDB
             queryContext.ExecuteNonQuery();
         }
 
+        public void DeleteStagingSummaryRecords(long processInstanceId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            var where = deleteQuery.Where();
+            where.EqualsCondition(COL_ProcessInstanceId).Value(processInstanceId);
+            queryContext.ExecuteNonQuery();
+        }
+
         public List<StagingSummaryInfo> GetStagingSummaryInfo(long processInstanceId, string stageName)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
