@@ -83,20 +83,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_NIM\Constant\ModuleConfig.js" />
     <Content Include="Retail_NIM\Constant\NodeType.js" />
+    <Content Include="Retail_NIM\Directives\ConnectionType\retail-nim-connectiontype-selector.js" />
+    <Content Include="Retail_NIM\Directives\Connection\retail-nim-connection-staticeditor.js" />
+    <Content Include="Retail_NIM\Directives\Connection\retail-nim-connection-directive.js" />
+    <Content Include="Retail_NIM\Directives\Connection\Templates\ConnectionStaticEditorTemplate.html" />
+    <Content Include="Retail_NIM\Directives\Connection\Templates\ConnectionDirectiveTemplate.html" />
     <Content Include="Retail_NIM\Directives\FTTHPath\retail-nim-ftthpath-designer.js" />
     <Content Include="Retail_NIM\Directives\FTTHPath\Templates\FTTHPathTemplate.html" />
     <Content Include="Retail_NIM\Directives\NetworkPath\retail-nim-networkpath-designer.js" />
     <Content Include="Retail_NIM\Directives\NetworkPath\Templates\NetworkPathTemplate.html" />
     <Content Include="Retail_NIM\Directives\NetworkPath\Styles\NetworkPathStyle.css" />
+    <Content Include="Retail_NIM\Directives\NodePortType\retail-nim-nodeporttype-selector.js" />
+    <Content Include="Retail_NIM\Directives\NodePort\retail-nim-nodeport-directive.js" />
+    <Content Include="Retail_NIM\Directives\NodePort\Templates\NodePortDirectiveTemplate.html" />
+    <Content Include="Retail_NIM\Directives\NodeType\retail-nim-nodetype-selector.js" />
+    <Content Include="Retail_NIM\Services\APIServices\ConnectionTypeAPIService.js" />
+    <Content Include="Retail_NIM\Services\APIServices\NodePartAPIService.js" />
+    <Content Include="Retail_NIM\Services\APIServices\NodePartTypeAPIService.js" />
+    <Content Include="Retail_NIM\Services\APIServices\NodePortTypeAPIService.js" />
+    <Content Include="Retail_NIM\Services\APIServices\NodeTypeAPIService.js" />
+    <Content Include="Retail_NIM\Services\NodePortService.js" />
+    <Content Include="Retail_NIM\Services\NodeService.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ConnectionTypeController.cs" />
     <Compile Include="Controllers\ConnectorController.cs" />
     <Compile Include="Controllers\FDBController.cs" />
     <Compile Include="Controllers\FreeFTTHPathController.cs" />
     <Compile Include="Controllers\IMSPhoneNumberController.cs" />
+    <Compile Include="Controllers\NodePartController.cs" />
+    <Compile Include="Controllers\NodePartTypeController.cs" />
+    <Compile Include="Controllers\NodePortTypeController.cs" />
+    <Compile Include="Controllers\NodeTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +130,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Retail_NIM\Services\" />
     <Folder Include="Retail_NIM\Views\" />
   </ItemGroup>
   <ItemGroup>

@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionType\ConnectionTypeManager.cs" />
+    <Compile Include="Connection\ConnectionManager.cs" />
     <Compile Include="Connectors\ConnectorManager.cs" />
     <Compile Include="Connectors\IMSOLTConnectorManager.cs" />
     <Compile Include="Connectors\IMSPhoneNumberTIDConnectorManager.cs" />
@@ -81,9 +82,12 @@
     <Compile Include="IMS\IMSPhoneNumberManager.cs" />
     <Compile Include="IMS\IMSTIDManager.cs" />
     <Compile Include="NodePartType\NodePartTypeManager.cs" />
-    <Compile Include="NodePortManager.cs" />
+    <Compile Include="NodePart\NodePartManager.cs" />
+    <Compile Include="NodePort\NodePortManager.cs" />
     <Compile Include="NodePortType\NodePortTypeManager.cs" />
+    <Compile Include="NodePort\NodePortInfoFilter.cs" />
     <Compile Include="NodeType\NodeTypeManager.cs" />
+    <Compile Include="Node\NodeManager.cs" />
     <Compile Include="OLT\OLTHorizontalPortManager.cs" />
     <Compile Include="OLT\OLTVerticalPortManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
