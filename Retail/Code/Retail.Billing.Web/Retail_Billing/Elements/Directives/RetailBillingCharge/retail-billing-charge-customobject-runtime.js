@@ -7,7 +7,7 @@ app.directive('retailBillingChargeCustomobjectRuntime', ['UtilsService', 'VRUIUt
             restrict: 'E',
             scope: {
                 onReady: '=',
-                isrequired: '=',                
+                isrequired: '=',
                 normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
@@ -43,9 +43,13 @@ app.directive('retailBillingChargeCustomobjectRuntime', ['UtilsService', 'VRUIUt
                 api.load = function (payload) {
                     var promises = [];
                     var charge;
+                    var title;
 
-                    if (payload != undefined)
+                    if (payload != undefined) {
                         charge = payload.fieldValue;
+                        title = payload.fieldTitle;
+                    }
+                    $scope.scopeModel.isPayloadReady = true;
 
                     promises.push(loadChargeDirective());
 
@@ -53,14 +57,14 @@ app.directive('retailBillingChargeCustomobjectRuntime', ['UtilsService', 'VRUIUt
                         var loadChargeTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         chargeTypeSelectorReadyPromiseDeferred.promise.then(function () {
+                            var chargeDirectivePayload;
 
-                            var payload;
-                            if (charge != undefined)
-                                payload = {
-                                    charge: charge
+                            if (payload != undefined)
+                                chargeDirectivePayload = {
+                                    charge: charge,
+                                    title: title
                                 };
-
-                            VRUIUtilsService.callDirectiveLoad(chargeDirectiveAPI, payload, loadChargeTypeSelectorPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(chargeDirectiveAPI, chargeDirectivePayload, loadChargeTypeSelectorPromiseDeferred);
                         });
                         return loadChargeTypeSelectorPromiseDeferred.promise;
                     }

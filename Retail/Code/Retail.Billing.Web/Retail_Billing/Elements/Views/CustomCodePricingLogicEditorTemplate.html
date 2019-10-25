@@ -1,4 +1,4 @@
-﻿<!--<div vr-modalcontent ng-controller="RetailBilling_ChargeType_CustomCodePricingLogicEditor" vr-loader="isLoading" width="'100%'">
+﻿<div vr-modalcontent ng-controller="RetailBilling_ChargeType_CustomCodePricingLogicEditor" vr-loader="isLoading" width="'100%'">
     <vr-modalbody>
         <vr-form>
             <vr-row>
@@ -23,8 +23,8 @@
                                 <vr-columns width="fullrow">
                                     <vr-scrollable-container maxheight="519">
                                         <vr-datalist datasource="scopeModel.targetRecordTypeFields" onitemclicked="scopeModel.insertText" maxitemsperrow="1" ng-show="scopeModel.targetRecordTypeFields.length>0">
-                                            <span title="{{dataItem.Name}}">
-                                                {{dataItem.Name}}
+                                            <span title="{{dataItem.Title}}">
+                                                {{dataItem.Title}}
                                             </span>
                                         </vr-datalist>
                                     </vr-scrollable-container>
@@ -37,8 +37,8 @@
                                 <vr-columns width="fullrow">
                                     <vr-scrollable-container maxheight="519">
                                         <vr-datalist datasource="scopeModel.chargeSettingsRecordTypeFields" onitemclicked="scopeModel.insertText" maxitemsperrow="1" ng-show="scopeModel.chargeSettingsRecordTypeFields.length>0">
-                                            <span title="{{dataItem.Name}}">
-                                                {{dataItem.Name}}
+                                            <span title="{{dataItem.Title}}">
+                                                {{dataItem.Title}}
                                             </span>
                                         </vr-datalist>
                                     </vr-scrollable-container>
@@ -59,4 +59,4 @@
             </div>
         </vr-actionbar>
     </div>
-</div>-->
+</div>

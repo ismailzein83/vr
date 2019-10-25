@@ -1,27 +1,26 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
+    "use strict";
 
-//    "use strict";
+    RetailBilling_CustomCodeChargeTypeService.$inject = ['VRModalService'];
 
-//    RetailBilling_CustomCodeChargeTypeService.$inject = ['VRModalService'];
+    function RetailBilling_CustomCodeChargeTypeService(VRModalService) {
 
-//    function RetailBilling_CustomCodeChargeTypeService(VRModalService) {
+        function openExpressionEditorBuilder(onSetValue, params) {
+            var modalSettings = {};
 
-//        function openExpressionEditorBuilder(onSetValue, params) {
-//            var modalSettings = {};
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onSetValue = onSetValue;
+            };
+            var parameters = {
+                params: params
+            };
+            VRModalService.showModal('/Client/Modules/Retail_Billing/Elements/Views/CustomCodePricingLogicEditorTemplate.html', parameters, modalSettings);
+        }
 
-//            modalSettings.onScopeReady = function (modalScope) {
-//                modalScope.onSetValue = onSetValue;
-//            };
-//            var parameters = {
-//                params: params
-//            };
-//            VRModalService.showModal('/Client/Modules/Retail_Billing/Elements/Views/CustomCodePricingLogicEditorTemplate.html', parameters, modalSettings);
-//        }
+        return {
+            openExpressionEditorBuilder: openExpressionEditorBuilder
+        };
+    }
 
-//        return ({
-//            openExpressionEditorBuilder: openExpressionEditorBuilder
-//        });
-//    }
-
-//    appControllers.service('RetailBilling_CustomCodeChargeTypeService', RetailBilling_CustomCodeChargeTypeService);
-//})(appControllers);
+    appControllers.service('RetailBilling_CustomCodeChargeTypeService', RetailBilling_CustomCodeChargeTypeService);
+})(appControllers);

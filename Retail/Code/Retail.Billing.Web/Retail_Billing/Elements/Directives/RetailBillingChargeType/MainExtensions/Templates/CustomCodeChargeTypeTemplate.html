@@ -1,13 +1,7 @@
-﻿
-<vr-row>
-    <vr-columns width="1/2row">
-        <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onTargetRecordTypeSelectorReady" label="Target Record Type" showaddbutton
-                                                onselectionchanged="scopeModel.onTargetRecordTypeSelectorChanged" selectedvalues="scopeModel.selectedTargetRecordType"></vr-genericdata-datarecordtype-selector>
-    </vr-columns>
-
+﻿<vr-row>
     <vr-columns width="1/2row">
         <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onChargeSettingsRecordTypeSelectorReady" label="Charge Record Type" showaddbutton
-                                                onselectionchanged="scopeModel.onChargeSettingsRecordTypeSelectorChanged" selectedvalues="scopeModel.selectedChargeSettingsRecordType">
+                                                onselectionchanged="scopeModel.onChargeSettingsRecordTypeSelectorChanged" ondeselectitem="scopeModel.onChargeSettingsRecordTypeDeselect" selectedvalues="scopeModel.selectedChargeSettingsRecordType">
         </vr-genericdata-datarecordtype-selector>
     </vr-columns>
 </vr-row>
@@ -16,54 +10,22 @@
     <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onChargeSettingsEditorDefinitionDirectiveReady" normal-col-num="3"></vr-genericdata-genericbe-editordefinition-settings>
 </vr-columns>
 
-<vr-columns colnum="9" haschildcolumns>
-    <vr-row>
-        <vr-columns colnum="11">
+<vr-row>
+    <span vr-loader="scopeModel.isCompiling">
+        <vr-columns colnum="10">
             <vr-validator validate="scopeModel.hasErrorsValidator()">
                 <vr-textarea on-ready="scopeModel.onTextAreaReady" label="Pricing Logic" value="scopeModel.pricingLogic" isrequired="true" rows="6"> </vr-textarea>
             </vr-validator>
         </vr-columns>
-        <vr-columns colnum="1" withemptyline>
-            <vr-columns colnum="1" haschildcolumns withemptyline>
-                <vr-button type="Compile" data-onclick="scopeModel.tryCompileChargeTypeCustomCode" vr-disabled="!(scopeModel.pricingLogic!=undefined && scopeModel.pricingLogic.length!=0)" standalone></vr-button>
+        <vr-columns colnum="2" withemptyline>
+            <vr-columns colnum="12" withemptyline>
+                <vr-columns colnum="6" haschildcolumns withemptyline>
+                    <vr-button type="Edit" data-onclick="scopeModel.openExpressionBuilder" standalone></vr-button>
+                </vr-columns>
+                <vr-columns colnum="6" haschildcolumns withemptyline>
+                    <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.tryCompileChargeTypeCustomCode()">Compile</a>
+                </vr-columns>
             </vr-columns>
         </vr-columns>
-    </vr-row>
-</vr-columns>
-
-<vr-columns haschildcolumns colnum="3" ng-if="(scopeModel.selectedTargetRecordType!= undefined)||(scopeModel.selectedChargeSettingsRecordType!=undefined)">
-    <vr-row>
-        <vr-columns colnum="8">
-            <vr-textbox label="Name" value="scopeModel.filterValue" onvaluechanged="scopeModel.filterValueChanged"></vr-textbox>
-        </vr-columns>
-    </vr-row>
-    <vr-tabs>
-        <vr-tab header="'Target Record'" ng-if="scopeModel.selectedTargetRecordType!= undefined">
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-scrollable-container maxheight="290">
-                        <vr-datalist datasource="scopeModel.targetRecordTypeFields" onitemclicked="scopeModel.insertText" maxitemsperrow="1">
-                            <span title="{{dataItem.Title}}">
-                                {{dataItem.Title}}
-                            </span>
-                        </vr-datalist>
-                    </vr-scrollable-container>
-                </vr-columns>
-            </vr-row>
-        </vr-tab>
-        <vr-tab header="'Charge Settings Record'" ng-if="scopeModel.selectedChargeSettingsRecordType!=undefined">
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-scrollable-container maxheight="290">
-                        <vr-datalist datasource="scopeModel.chargeSettingsRecordTypeFields" onitemclicked="scopeModel.insertText" maxitemsperrow="1">
-                            <span title="{{dataItem.Title}}">
-                                {{dataItem.Title}}
-                            </span>
-                        </vr-datalist>
-                    </vr-scrollable-container>
-                </vr-columns>
-            </vr-row>
-        </vr-tab>
-    </vr-tabs>
-</vr-columns>
-
+    </span>
+</vr-row>

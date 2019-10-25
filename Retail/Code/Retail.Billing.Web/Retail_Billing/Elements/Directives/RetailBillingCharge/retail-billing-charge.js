@@ -8,7 +8,8 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
             scope: {
                 onReady: '=',
                 normalColNum: '@',
-                isrequired: '='
+                isrequired: '=',
+                customlabel: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -17,9 +18,6 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: '/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingCharge/Templates/RetailBillingChargeTemplate.html'
         };
 
@@ -30,6 +28,7 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
             var chargeTypeSelectorDirectiveAPI;
             var retailBillingChargeTypeSettingsExtendedSettings;
             var charge;
+            var title;
             var retailBillingChargeTypeId;
 
             var directiveReadyPromiseDeferred;
@@ -63,7 +62,6 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
                         });
                     }
                 };
-
                 defineAPI();
             }
 
@@ -71,21 +69,22 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
-                    promises.push(loadChargeTypeSelector());
-
                     if (payload != undefined) {
                         charge = payload.charge;
+                        title = payload.title;
 
                         if (charge != undefined)
                             retailBillingChargeTypeId = charge.RetailBillingChargeTypeId;
+                    }
 
-                        if (retailBillingChargeTypeId != undefined) {
-                            promises.push(getRetailBillingChargeType(retailBillingChargeTypeId));
+                    var promises = [];
+                    promises.push(loadChargeTypeSelector(payload));
 
-                            directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(directiveReadyPromiseDeferred.promise);
-                        }
+                    if (retailBillingChargeTypeId != undefined) {
+                        promises.push(getRetailBillingChargeType(retailBillingChargeTypeId));
+
+                        directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(directiveReadyPromiseDeferred.promise);
                     }
 
                     return UtilsService.waitPromiseNode({
@@ -120,14 +119,17 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
                     ctrl.onReady(api);
             }
 
-            function loadChargeTypeSelector() {
+            function loadChargeTypeSelector(payload) {
                 var loadChargeTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 chargeTypeSelectorReadyPromiseDeferred.promise.then(function () {
-                    var chargeTypeSelectorPayload;
 
-                    if (retailBillingChargeTypeId != undefined)
-                        chargeTypeSelectorPayload = { selectedIds: retailBillingChargeTypeId };
+                    var chargeTypeSelectorPayload;
+                    if (payload != undefined)
+                        chargeTypeSelectorPayload = {
+                            selectedIds: retailBillingChargeTypeId,
+                            title: title
+                        };
 
                     VRUIUtilsService.callDirectiveLoad(chargeTypeSelectorDirectiveAPI, chargeTypeSelectorPayload, loadChargeTypeSelectorPromiseDeferred);
                 });

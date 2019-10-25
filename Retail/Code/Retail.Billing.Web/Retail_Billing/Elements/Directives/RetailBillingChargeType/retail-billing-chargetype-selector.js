@@ -13,7 +13,8 @@ app.directive('retailBillingChargetypeSelector', ['Retail_Billing_ChargeTypeAPIS
             isrequired: '=',
             hideremoveicon: '@',
             normalColNum: '@',
-            customvalidate: '='
+            customvalidate: '=',
+            customlabel: '='
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -58,6 +59,7 @@ app.directive('retailBillingChargetypeSelector', ['Retail_Billing_ChargeTypeAPIS
 
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    ctrl.title = payload.title;
                 }
 
                 return Retail_Billing_ChargeTypeAPIService.GetRetailBillingChargeTypeInfo().then(function (response) {
@@ -83,19 +85,16 @@ app.directive('retailBillingChargetypeSelector', ['Retail_Billing_ChargeTypeAPIS
     }
 
     function getTemplate(attrs) {
-
         var multipleselection = "";
-        var label = "Charge Type";
-
+        var label = '{{ctrl.title}}';
         if (attrs.ismultipleselection != undefined) {
-            label = "Charge Types";
-            multipleselection = "ismultipleselection";
+            label = '{{ctrl.title}}';
+            multipleselection = 'ismultipleselection';
         }
-        if (attrs.customlabel != undefined)
-            label = attrs.customlabel;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-            + '<vr-select ' + multipleselection + ' datatextfield = "Name" datavaluefield = "RetailBillingChargeTypeId" isrequired = "ctrl.isrequired" label = "' + label + '" datasource = "ctrl.datasource"'
+            + '<vr-label>' + label + '</vr-label>'
+            + '<vr-select ' + multipleselection + ' datatextfield = "Name" datavaluefield = "RetailBillingChargeTypeId" isrequired = "ctrl.isrequired"  datasource = "ctrl.datasource" '
             + 'on-ready="ctrl.onSelectorReady" selectedvalues = "ctrl.selectedvalues" ' +
             + 'onselectionchanged = "ctrl.onselectionchanged" entityName = "' + label + '" onselectitem = "ctrl.onselectitem" ondeselectitem = "ctrl.ondeselectitem" '
             + 'hideremoveicon = "ctrl.hideremoveicon" customvalidate = "ctrl.customvalidate"></vr-select></vr-columns> ';

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BillingChargeTypeExtendedSettingsDirective.$inject = ['Retail_Billing_ChargeTypeAPIService', 'UtilsService', 'VRUIUtilsService'];
+    BillingChargeTypeExtendedSettingsDirective.$inject = ['Retail_Billing_ChargeTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService'];
 
-    function BillingChargeTypeExtendedSettingsDirective(Retail_Billing_ChargeTypeAPIService, UtilsService, VRUIUtilsService) {
+    function BillingChargeTypeExtendedSettingsDirective(Retail_Billing_ChargeTypeAPIService, UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -31,6 +31,9 @@
             var selectorAPI;
             var context;
 
+            var targetRecordTypeSelectorAPI;
+            var targetRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var directiveAPI;
             var directiveReadyDeferred;
 
@@ -38,6 +41,11 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
+
+                $scope.scopeModel.onTargetRecordTypeSelectorReady = function (api) {
+                    targetRecordTypeSelectorAPI = api;
+                    targetRecordTypeSelectorReadyDeferred.resolve();
+                };
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -75,6 +83,8 @@
                         promises.push(loadDirectivePromise);
                     }
 
+                    promises.push(loadTargetRecordTypeSelector());
+
                     var getChargeTypeExtendedSettingsConfigsPromise = getChargeTypeExtendedSettingsConfigs();
                     promises.push(getChargeTypeExtendedSettingsConfigsPromise);
 
@@ -90,6 +100,18 @@
                                 }
                             }
                         });
+                    }
+
+                    function loadTargetRecordTypeSelector() {
+                        var targetRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        targetRecordTypeSelectorReadyDeferred.promise.then(function () {
+                            var payload = {
+                                selectedIds: extendedSettings != undefined ? extendedSettings.TargetRecordTypeId : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(targetRecordTypeSelectorAPI, payload, targetRecordTypeSelectorLoadDeferred);
+                        });
+                        return targetRecordTypeSelectorLoadDeferred.promise;
                     }
 
                     function loadDirective() {
@@ -112,14 +134,15 @@
 
                 api.getData = function () {
                     var data;
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
 
+                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined)
                         data = directiveAPI.getData();
-                        if (data != undefined) {
-                            data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                        }
+
+                    if (data != undefined) {
+                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                        data.TargetRecordTypeId = targetRecordTypeSelectorAPI.getSelectedIds();
+                        return data;
                     }
-                    return data;
                 };
 
                 if (ctrl.onReady != null) {
@@ -132,8 +155,37 @@
                 if (currentContext == undefined)
                     currentContext = {};
 
+                currentContext.getTargetRecordTypeId = function () {
+                    return targetRecordTypeSelectorAPI.getSelectedIds();
+                };
+
+                currentContext.getTargetRecordTypeFields = function (targetRecordTypeFields) {
+                    if ($scope.scopeModel.selectedTargetRecordType != undefined) {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo($scope.scopeModel.selectedTargetRecordType.DataRecordTypeId, null).then(function (response) {
+                            if (response != undefined) {
+                                var filter = $scope.scopeModel.filterValue != undefined ? $scope.scopeModel.filterValue.toLowerCase() : "";
+
+                                for (var i = 0; i < response.length; i++) {
+                                    var currentField = response[i];
+
+                                    if (currentField.Entity != undefined)
+                                        targetRecordTypeFields.push({
+                                            Title: currentField.Entity.Title,
+                                            Value: "Target." + currentField.Entity.Name,
+                                            hideItem: currentField.Entity.Title.toLowerCase().indexOf(filter) == -1
+                                        });
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        var getTargetRecordTypeFieldsPromise = UtilsService.createPromiseDeferred();
+                        getTargetRecordTypeFieldsPromise.resolve();
+                        return getTargetRecordTypeFieldsPromise.promise;
+                    }
+                };
                 return currentContext;
-            }
+            };
         }
 
         function getTemplate(attrs) {
@@ -142,7 +194,12 @@
                 label = "";
             }
             var template =
-                '<vr-row>'
+                '<vr-row > '
+                + '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                + '<vr-genericdata-datarecordtype-selector on-ready="scopeModel.onTargetRecordTypeSelectorReady" label="Target Record Type" showaddbutton '
+                + ' selectedvalues="scopeModel.selectedTargetRecordType">'
+                + '</vr-genericdata-datarecordtype-selector> '
+                + '</vr-columns>'
                 + '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                 + ' datasource="scopeModel.templateConfigs"'
@@ -156,7 +213,7 @@
                 + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.DefinitionEditor" '
-                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}"  '
+                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" '
                 + 'isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
 
             return template;
