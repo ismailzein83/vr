@@ -5,6 +5,7 @@ using Vanrise.Common;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 using Vanrise.Reprocess.Entities;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.Reprocess.Business
 {
@@ -14,8 +15,11 @@ namespace Vanrise.Reprocess.Business
         {
             HoldRequestManager holdRequestManager = new HoldRequestManager();
             holdRequestManager.DeleteHoldRequestByBPInstanceId(context.BPInstance.ProcessInstanceID);
+
+            StagingSummaryRecordManager stagingSummaryRecordManager = new StagingSummaryRecordManager();
+            stagingSummaryRecordManager.DeleteStagingSummaryRecords(context.BPInstance.ProcessInstanceID);
         }
-        
+
         public override bool CanRunBPInstance(BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
         {
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
