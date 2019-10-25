@@ -215,9 +215,12 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public void PostADSLSubscriptionToOM(Guid requestId)
+        public void SubmitActivateADSLContract(Guid requestId)
         {
-            //Get Data from StLineSubscriptionRequest table
+
+            List<ContractService> contractServices = new List<ContractService>();
+            List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
+            List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
@@ -229,8 +232,14 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+            esq.AddColumn("StCoreServices");
+            esq.AddColumn("StServices");
             esq.AddColumn("StLinePathID");
-
+            esq.AddColumn("StUserName");
+            esq.AddColumn("StPassword");
+            esq.AddColumn("StRatePlanId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -239,25 +248,47 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+                string coreServices = entities[0].GetColumnValue("StCoreServices").ToString();
+                string optionalServices = entities[0].GetColumnValue("StServices").ToString();
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
-                var linePathID = entities[0].GetColumnValue("StLinePathID");
+                var pathId = entities[0].GetColumnValue("StLinePathID");
+                var userName = entities[0].GetColumnValue("StUserName");
+                var password = entities[0].GetColumnValue("StPassword");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
 
-                SOMRequestInput<SOMAPI.ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
+                if (coreServices != "\"\"") listOfCoreServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
+                if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
+
+                var items = listOfCoreServices.Concat(listOfOptionalServices);
+
+
+                foreach (var item in items)
+                {
+                    var contractServiceItem = ServiceDetailToContractServiceMapper(item);
+                    contractServices.Add(contractServiceItem);
+                }
+
+
+                SOMRequestInput<ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
                 {
 
                     InputArguments = new ADSLSubscriptionRequestInput
                     {
-                        LinePathId = linePathID.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            //AccountId = null,
                             RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
-                        }
+                            CustomerId = customerId.ToString()
+                        },
+                        LinePathId = pathId.ToString(),
+                        ContractServices = contractServices,
+                        IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN" ? true : false,
+                        Username = userName.ToString(),
+                        Password= password.ToString()
                     }
 
                 };
@@ -275,7 +306,167 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void ActivateADSLSubscriptionToOM(Guid requestId)
+        public void FinalizeActivateADSLContract(Guid requestId)
+        {
+
+            List<ContractService> contractServices = new List<ContractService>();
+            List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
+            List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSL");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+            esq.AddColumn("StCoreServices");
+            esq.AddColumn("StServices");
+            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StUserName");
+            esq.AddColumn("StPassword");
+            esq.AddColumn("StRatePlanId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+                string coreServices = entities[0].GetColumnValue("StCoreServices").ToString();
+                string optionalServices = entities[0].GetColumnValue("StServices").ToString();
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var pathId = entities[0].GetColumnValue("StLinePathID");
+                var userName = entities[0].GetColumnValue("StUserName");
+                var password = entities[0].GetColumnValue("StPassword");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
+
+                if (coreServices != "\"\"") listOfCoreServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
+                if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
+
+                var items = listOfCoreServices.Concat(listOfOptionalServices);
+
+
+                foreach (var item in items)
+                {
+                    var contractServiceItem = ServiceDetailToContractServiceMapper(item);
+                    contractServices.Add(contractServiceItem);
+                }
+
+
+                SOMRequestInput<ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
+                {
+
+                    InputArguments = new ADSLSubscriptionRequestInput
+                    {
+                        ContractId = contractId.ToString(),
+                        RequestId = requestId.ToString(),
+                        LinePathId = pathId.ToString(),
+                        ContractServices = contractServices,
+                        IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN" ? true : false,
+                        Username = userName.ToString(),
+                        Password = password.ToString()
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeActivateADSLContract/StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+        }
+
+        public void SubmitActivateServicesADSLContract(Guid requestId)
+        {
+
+            List<ContractService> contractServices = new List<ContractService>();
+            List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
+            List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSL");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+            esq.AddColumn("StCoreServices");
+            esq.AddColumn("StServices");
+            esq.AddColumn("StLinePathID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                string coreServices = entities[0].GetColumnValue("StCoreServices").ToString();
+                string optionalServices = entities[0].GetColumnValue("StServices").ToString();
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var pathId = entities[0].GetColumnValue("StLinePathID");
+
+                if (coreServices != "\"\"") listOfCoreServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
+                if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
+
+                var items = listOfCoreServices.Concat(listOfOptionalServices);
+
+
+                foreach (var item in items)
+                {
+                    var contractServiceItem = ServiceDetailToContractServiceMapper(item);
+                    contractServices.Add(contractServiceItem);
+                }
+
+
+                SOMRequestInput<ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
+                {
+
+                    InputArguments = new ADSLSubscriptionRequestInput
+                    {
+                        ContractId = contractId.ToString(),
+                        RequestId = requestId.ToString(),
+                        LinePathId = pathId.ToString(),
+                        ContractServices = contractServices
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitActivateServicesADSLContract /StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+        }
+
+        public void FinalizeActivateServicesADSLContract(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
@@ -307,12 +498,7 @@ namespace BPMExtended.Main.Business
                     
                     InputArguments = new ADSLSubscriptionRequestInput
                     {
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                            ContractId = contractId.ToString(),
-                            RequestId = requestId.ToString(),
-                            //CustomerId = customerId.ToString()
-                        }
+                        RequestId = requestId.ToString()
                     }
 
                 };
@@ -321,7 +507,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeActivateServicesADSLContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -330,163 +516,6 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void SubmitActivateVPNADSLContract(Guid requestId)
-        {
-            
-            List<ContractService> contractServices = new List<ContractService>();
-            List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
-            List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            SOMRequestOutput output;
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSL");
-            esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
-            esq.AddColumn("StOperationAddedFees");
-            esq.AddColumn("StIsPaid");
-            esq.AddColumn("StCoreServices");
-            esq.AddColumn("StServices");
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
-            esq.Filters.Add(esqFirstFilter);
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                var contractId = entities[0].GetColumnValue("StContractID");
-                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
-                var isPaid = entities[0].GetColumnValue("StIsPaid");
-                string coreServices = entities[0].GetColumnValue("StCoreServices").ToString();
-                string optionalServices = entities[0].GetColumnValue("StServices").ToString();
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
-
-                if (coreServices != "\"\"") listOfCoreServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
-                if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
-
-                var items = listOfCoreServices.Concat(listOfOptionalServices);
-       
-
-                foreach (var item in items)
-                {
-                    var contractServiceItem = ServiceDetailToContractServiceMapper(item);
-                    contractServices.Add(contractServiceItem);
-                }
-
-
-                SOMRequestInput<ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
-                {
-
-                    InputArguments = new ADSLSubscriptionRequestInput
-                    {
-                        ContractId = contractId.ToString(),
-                        ContractServices = contractServices,
-                        RequestId = requestId.ToString(),
-                        PaymentData = new PaymentData()
-                        {
-                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
-                            IsPaid = (bool)isPaid
-                        },
-                    }
-
-                };
-
-
-                //call api
-                using (var client = new SOMClient())
-                {
-                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitActivateVPNADSLContract/StartProcess", somRequestInput);
-                }
-                var manager = new BusinessEntityManager();
-                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
-            }
-        }
-
-        public void FinalizeActivateADSLContract(Guid requestId)
-        {
-
-            List<ContractService> contractServices = new List<ContractService>();
-            List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
-            List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            SOMRequestOutput output;
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSL");
-            esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
-            esq.AddColumn("StOperationAddedFees");
-            esq.AddColumn("StIsPaid");
-            esq.AddColumn("StCoreServices");
-            esq.AddColumn("StServices");
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
-            esq.Filters.Add(esqFirstFilter);
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                var contractId = entities[0].GetColumnValue("StContractID");
-                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
-                var isPaid = entities[0].GetColumnValue("StIsPaid");
-                string coreServices = entities[0].GetColumnValue("StCoreServices").ToString();
-                string optionalServices = entities[0].GetColumnValue("StServices").ToString();
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
-
-                if (coreServices != "\"\"") listOfCoreServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
-                if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
-
-                var items = listOfCoreServices.Concat(listOfOptionalServices);
-
-
-                foreach (var item in items)
-                {
-                    var contractServiceItem = ServiceDetailToContractServiceMapper(item);
-                    contractServices.Add(contractServiceItem);
-                }
-
-
-                SOMRequestInput<ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
-                {
-
-                    InputArguments = new ADSLSubscriptionRequestInput
-                    {
-                        ContractId = contractId.ToString(),
-                        ContractServices = contractServices,
-                        RequestId = requestId.ToString(),
-                        PaymentData = new PaymentData()
-                        {
-                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
-                            IsPaid = (bool)isPaid
-                        },
-                    }
-
-                };
-
-
-                //call api
-                using (var client = new SOMClient())
-                {
-                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeActivateADSLContract/StartProcess", somRequestInput);
-                }
-                var manager = new BusinessEntityManager();
-                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
-            }
-        }
 
         #endregion
 

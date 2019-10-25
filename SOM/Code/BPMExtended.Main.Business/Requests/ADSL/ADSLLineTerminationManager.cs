@@ -177,8 +177,6 @@ namespace BPMExtended.Main.Business
                     {
                         LinePathId = pathdId.ToString(),
                         Reason = reason.ToString(),
-                        Username = userName.ToString(),
-                        IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN" ? true : false,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),

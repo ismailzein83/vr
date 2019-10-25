@@ -373,6 +373,8 @@ namespace BPMExtended.Main.Entities
 
         [Description("Line Moving Request")]
         [EntitySchemaName("StLineMovingRequest")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("B2B4E3AF-B99D-42E9-9E6E-717D145F3258")]
         [CompletedStep("StTypeId")]
         [CompletedStepId("BB0D3D76-4029-4517-B6BD-A23DA24A9F7C")]
         LineMovingRequest = 40,
