@@ -412,15 +412,15 @@ namespace Retail.Billing.Business
                 statusId = (Guid)existingContractServiceEntity.FieldValues["Status"];
             }
 
-            Guid? chargeableRecurringTypeId;
+            Guid? chargeableConditionId;
             if (statusId == s_StatusId_Active)
-                chargeableRecurringTypeId = new Guid("87fd7d04-84fc-4250-a4c3-2c7d1f52f212");
+                chargeableConditionId = new Guid("87fd7d04-84fc-4250-a4c3-2c7d1f52f212");
             else if (statusId == s_StatusId_Suspended)
-                chargeableRecurringTypeId = new Guid("b5ff8ef1-52f6-497a-889f-ccb2dce73f27");
+                chargeableConditionId = new Guid("b5ff8ef1-52f6-497a-889f-ccb2dce73f27");
             else
-                chargeableRecurringTypeId = null;
+                chargeableConditionId = null;
 
-            fieldValues.Add("ChargeableRecurringType", chargeableRecurringTypeId);
+            fieldValues.Add("ChargeableCondition", chargeableConditionId);
 
 
             Dictionary<string, object> historyFieldValues = new Dictionary<string, object>();
@@ -573,19 +573,19 @@ namespace Retail.Billing.Business
                 statusReasonId = (Guid?)existingContractService.FieldValues["StatusReason"];
             }
 
-            Guid? chargeableRecurringTypeId;
+            Guid? chargeableConditionId;
             if (statusId == s_StatusId_Active)
-                chargeableRecurringTypeId = new Guid("87fd7d04-84fc-4250-a4c3-2c7d1f52f212");
+                chargeableConditionId = new Guid("87fd7d04-84fc-4250-a4c3-2c7d1f52f212");
             else if (statusId == s_StatusId_Suspended)
-                chargeableRecurringTypeId = new Guid("b5ff8ef1-52f6-497a-889f-ccb2dce73f27");
+                chargeableConditionId = new Guid("b5ff8ef1-52f6-497a-889f-ccb2dce73f27");
             else
-                chargeableRecurringTypeId = null;
+                chargeableConditionId = null;
 
-            entityToUpdateFieldValues.Add("ChargeableRecurringType", chargeableRecurringTypeId);
+            entityToUpdateFieldValues.Add("ChargeableCondition", chargeableConditionId);
 
 
             historyFieldValues.Add("ServiceTypeOption", serviceTypeOptionId);
-            historyFieldValues.Add("ChargeableRecurringType", chargeableRecurringTypeId);
+            historyFieldValues.Add("ChargeableCondition", chargeableConditionId);
             historyFieldValues.Add("Status", statusId);
             historyFieldValues.Add("StatusReason", statusReasonId);
             historyFieldValues.Add("BET", bet);
