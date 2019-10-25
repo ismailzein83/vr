@@ -1054,5 +1054,6 @@
     <None Include="VRJSON_PostScripts\PA\PATool.json" />
     <None Include="VRJSON_PostScripts\Inspkt\C5.json" />
     <None Include="VRJSON_PostScripts\Inspkt\C4.json" />
+    <None Include="VRJSON_PostScripts\TOne\VTel.json" />
   </ItemGroup>
 </Project>
