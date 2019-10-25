@@ -132,6 +132,7 @@ namespace Mediation.Runtime
                                     throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging_01));
 
                                 cdr_01.DateForStartCharging = new DateTime(year, month, day);
+                                cdr_01.SetupTime = cdr_01.DateForStartCharging;
                             }
 
                             string timeForStartCharging_01 = cdrAsString_01.Substring(52, 6);
@@ -150,6 +151,12 @@ namespace Mediation.Runtime
                                     throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging_01));
 
                                 cdr_01.TimeForStartCharging = new Time(hour, minute, second, 0);
+
+                                if (!string.IsNullOrWhiteSpace(dateForStartCharging_01))
+                                {
+                                    TimeSpan time = new TimeSpan(hour, minute, second);
+                                    cdr_01.SetupTime = cdr_01.SetupTime.Add(time);
+                                }
                             }
 
                             string chargeableDuration_01 = cdrAsString_01.Substring(58, 6);
@@ -427,6 +434,7 @@ namespace Mediation.Runtime
                                     throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging));
 
                                 cdr.DateForStartCharging = new DateTime(year, month, day);
+                                cdr.SetupTime = cdr.DateForStartCharging;
                             }
 
                             string timeForStartCharging = cdrAsString.Substring(55, 6);
@@ -445,6 +453,12 @@ namespace Mediation.Runtime
                                     throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging));
 
                                 cdr.TimeForStartCharging = new Time(hour, minute, second, 0);
+
+                                if (!string.IsNullOrWhiteSpace(dateForStartCharging))
+                                {
+                                    TimeSpan time = new TimeSpan(hour, minute, second);
+                                    cdr.SetupTime = cdr.SetupTime.Add(time);
+                                }
                             }
 
                             string chargeableDuration = cdrAsString.Substring(61, 6);
@@ -609,6 +623,7 @@ namespace Mediation.Runtime
                                     throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging_01));
 
                                 cdr_01.DateForStartCharging = new DateTime(year, month, day);
+                                cdr_01.SetupTime = cdr_01.DateForStartCharging;
                             }
 
                             string timeForStartCharging_01 = cdrAsString_01.Substring(52, 6);
@@ -627,6 +642,12 @@ namespace Mediation.Runtime
                                     throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging_01));
 
                                 cdr_01.TimeForStartCharging = new Time(hour, minute, second, 0);
+
+                                if (!string.IsNullOrWhiteSpace(dateForStartCharging_01))
+                                {
+                                    TimeSpan time = new TimeSpan(hour, minute, second);
+                                    cdr_01.SetupTime = cdr_01.SetupTime.Add(time);
+                                }
                             }
 
                             string chargeableDuration_01 = cdrAsString_01.Substring(58, 6);
@@ -920,6 +941,7 @@ namespace Mediation.Runtime
                                     throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging));
 
                                 cdr.DateForStartCharging = new DateTime(year, month, day);
+                                cdr.SetupTime = cdr.DateForStartCharging;
                             }
 
                             string timeForStartCharging = cdrAsString.Substring(55, 6);
@@ -938,6 +960,12 @@ namespace Mediation.Runtime
                                     throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging));
 
                                 cdr.TimeForStartCharging = new Time(hour, minute, second, 0);
+
+                                if (!string.IsNullOrWhiteSpace(dateForStartCharging))
+                                {
+                                    TimeSpan time = new TimeSpan(hour, minute, second);
+                                    cdr.SetupTime = cdr.SetupTime.Add(time);
+                                }
                             }
 
                             string chargeableDuration = cdrAsString.Substring(61, 6);

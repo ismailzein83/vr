@@ -236,6 +236,7 @@ namespace Mediation.Runtime.DataParser
             compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
             compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
             compositeParsers.Add(new DateFromDayNumberCompositeParser() { FieldName = "DateOfCall", YearFieldName = "Year", DayNumberFieldName = "DayNumber" });
+            compositeParsers.Add(new DateTimeCompositeParser { FieldName = "SetupTime", DateFieldName = "DateOfCall", TimeFieldName = "TimeOfCall", TimeFieldUnit = TimeFieldUnit.VRTime });
             return compositeParsers;
         }
 
