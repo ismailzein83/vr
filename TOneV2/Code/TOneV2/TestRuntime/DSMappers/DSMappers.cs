@@ -60,7 +60,6 @@ namespace TestRuntime
                 rowCount++;
                 if (rowCount == maximumBatchSize)
                     break;
-
             }
 
             if (cdrs.Count > 0)
@@ -1056,7 +1055,7 @@ namespace TestRuntime
             LogVerbose("Finished");
             return result;
         }
-         
+
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_SQL_NokiaSiemens(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
             List<dynamic> cdrs = new List<dynamic>();
@@ -1134,6 +1133,217 @@ namespace TestRuntime
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             LogVerbose("Finished");
 
+            return result;
+        }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Cataleya_Txt(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
+
+            string dateTimeFormat = "yyyyMMddHHmmssfff";
+
+            List<string> reroutedCDRFields = new List<string>()
+            {
+                "zone_id", "call_id", "zone_name", "sip_remote_addr", "inviting_ts", "response_ts", "failure_reason",
+                "reason_phrase", "reason_hdr", "warning_hdr", "tgid", "calling_party", "pi", "extra_data"
+            };
+
+            var cdrs = new List<dynamic>();
+
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            System.IO.StreamReader sr = importedData.StreamReader;
+
+            string currentLine = sr.ReadLine();
+            if (!string.IsNullOrEmpty(currentLine))
+            {
+                currentLine = currentLine.Replace("number_of_cdrs=", "");
+
+                int numberOfCdrs;
+                if (!int.TryParse(currentLine, out numberOfCdrs))
+                    throw new Exception($"Number of CDRs: '{currentLine}' is invalid");
+
+                for (int i = 0; i < numberOfCdrs; i++)
+                {
+                    currentLine = sr.ReadLine();
+                    string[] fields = currentLine.Split(',');
+
+                    dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+                    cdr.SwitchId = 1;
+
+                    long idOnSwitch;
+                    if (long.TryParse(fields[0], out idOnSwitch))
+                        cdr.IDonSwitch = idOnSwitch;
+
+                    DateTime attemptDateTime;
+                    if (DateTime.TryParseExact(fields[1], dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out attemptDateTime))
+                        cdr.AttemptDateTime = attemptDateTime;
+
+                    DateTime alertDateTime;
+                    if (DateTime.TryParseExact(fields[2], dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out alertDateTime))
+                        cdr.AlertDateTime = alertDateTime;
+
+                    DateTime connectDateTime;
+                    if (DateTime.TryParseExact(fields[3], dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out connectDateTime))
+                        cdr.ConnectDateTime = connectDateTime;
+
+                    DateTime disconnectDateTime;
+                    if (DateTime.TryParseExact(fields[4], dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out disconnectDateTime))
+                        cdr.DisconnectDateTime = disconnectDateTime;
+
+                    cdr.InCarrier = fields[5];
+                    cdr.InTrunk = fields[6];
+                    cdr.OutCarrier = fields[7];
+                    cdr.OutTrunk = fields[8];
+
+                    cdr.CGPN = fields[14];
+                    cdr.CDPN = fields[15];
+                    cdr.CDPNOut = fields[15];
+                    cdr.CDPNIn = null;
+
+                    if (!string.IsNullOrEmpty(fields[16]))
+                    {
+                        decimal durationInSeconds;
+                        if (!decimal.TryParse(fields[16], out durationInSeconds))
+                            throw new Exception($"DurationInSeconds '{fields[16]}' is invalid");
+
+                        cdr.DurationInSeconds = durationInSeconds;
+                    }
+
+                    cdr.InIP = fields[18];
+                    cdr.OutIP = fields[19];
+
+                    switch (fields[21])
+                    {
+                        case "1": cdr.CauseFrom = cdr.CauseTo = "A side"; break;
+                        case "2": cdr.CauseFrom = cdr.CauseTo = "B side"; break;
+                        case "3": cdr.CauseFrom = cdr.CauseTo = "from switch"; break;
+                        default: cdr.CauseFrom = cdr.CauseTo = null; break;
+                    }
+
+                    cdr.CauseFromReleaseCode = fields[27];
+                    cdr.CauseToReleaseCode = fields[28];
+                    cdr.Tag = importedData.Name;
+                    cdr.SIP = "YES";
+                    cdr.IsRerouted = false;
+
+                    Dictionary<string, string> extraFields = new Dictionary<string, string>();
+                    extraFields["routelist_id"] = fields[22];
+                    extraFields["routelist_name"] = fields[23];
+                    extraFields["route_priority"] = fields[24];
+                    extraFields["trace_id"] = fields[25];
+                    extraFields["named_params"] = fields[26];
+                    cdr.ExtraFields = extraFields;
+
+                    string reroutedCDRText = fields[29];
+                    if (!string.IsNullOrEmpty(reroutedCDRText))
+                    {
+                        int index = 29;
+                        while (true)
+                        {
+                            reroutedCDRText = fields[index];
+                            if (!reroutedCDRText.Contains("zone_id"))
+                                break;
+
+                            dynamic reroutedCDR = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+                            reroutedCDR.SwitchId = cdr.SwitchId;
+                            reroutedCDR.IDonSwitch = cdr.IDonSwitch;
+                            reroutedCDR.ConnectDateTime = cdr.ConnectDateTime;
+                            reroutedCDR.DisconnectDateTime = cdr.DisconnectDateTime;
+                            reroutedCDR.DurationInSeconds = cdr.DurationInSeconds;
+                            reroutedCDR.CGPN = cdr.CGPN;
+                            reroutedCDR.CDPN = cdr.CDPN;
+                            reroutedCDR.CDPNIn = cdr.CDPNIn;
+                            reroutedCDR.CDPNOut = cdr.CDPNOut;
+                            reroutedCDR.InCarrier = cdr.InCarrier;
+                            reroutedCDR.InTrunk = cdr.InTrunk;
+                            reroutedCDR.InIP = cdr.InIP;
+                            reroutedCDR.CauseFrom = cdr.CauseFrom;
+                            reroutedCDR.CauseTo = cdr.CauseTo;
+                            reroutedCDR.CauseFromReleaseCode = cdr.CauseFromReleaseCode;
+                            reroutedCDR.Tag = cdr.Tag;
+                            reroutedCDR.SIP = cdr.SIP;
+                            reroutedCDR.ExtraFields = cdr.ExtraFields;
+                            reroutedCDR.IsRerouted = true;
+
+                            Dictionary<int, string> fieldNameByIndex = new Dictionary<int, string>();
+                            Dictionary<string, string> fieldValueByName = new Dictionary<string, string>();
+
+                            foreach (var field in reroutedCDRFields)
+                                fieldNameByIndex.Add(reroutedCDRText.IndexOf(field), field);
+
+                            foreach (var kvp in fieldNameByIndex)
+                            {
+                                int fieldNameIndex = kvp.Key;
+                                string fieldName = kvp.Value;
+
+                                int startIndex = fieldNameIndex + fieldName.Length + 1;
+                                int endIndex = startIndex;
+                                while (true)
+                                {
+                                    if (fieldNameByIndex.ContainsKey(endIndex) || endIndex > reroutedCDRText.Length)
+                                        break;
+
+                                    endIndex++;
+                                }
+                                endIndex--;
+
+                                if (endIndex > startIndex)
+                                    fieldValueByName.Add(fieldName, reroutedCDRText.Substring(startIndex, endIndex - startIndex));
+                                else
+                                    fieldValueByName.Add(fieldName, null);
+                            }
+
+                            reroutedCDR.OutCarrier = fieldValueByName["zone_id"];
+                            reroutedCDR.OutTrunk = fieldValueByName["zone_name"];
+                            reroutedCDR.OutIP = fieldValueByName["sip_remote_addr"];
+                            reroutedCDR.CauseToReleaseCode = fieldValueByName["reason_phrase"];
+
+                            string attemptDateTimeField = fieldValueByName["inviting_ts"];
+                            if (!string.IsNullOrEmpty(attemptDateTimeField))
+                            {
+                                double reroutedCDRAttemptUnixTime;
+                                if (!double.TryParse(attemptDateTimeField, out reroutedCDRAttemptUnixTime))
+                                    throw new Exception($"inviting_ts '{attemptDateTimeField}' is invalid");
+
+                                reroutedCDR.AttemptDateTime = Vanrise.Common.Utilities.ConverUnixTimeToDateTime(reroutedCDRAttemptUnixTime);
+                            }
+
+                            string alertDateTimeField = fieldValueByName["response_ts"];
+                            if (!string.IsNullOrEmpty(alertDateTimeField))
+                            {
+                                double reroutedCDRAlertUnixTime;
+                                if (!double.TryParse(alertDateTimeField, out reroutedCDRAlertUnixTime))
+                                    throw new Exception($"response_ts '{alertDateTimeField}' is invalid");
+
+                                reroutedCDR.AlertDateTime = Vanrise.Common.Utilities.ConverUnixTimeToDateTime(reroutedCDRAlertUnixTime);
+                            }
+
+                            cdrs.Add(reroutedCDR);
+
+                            index++;
+                        }
+                    }
+
+                    cdrs.Add(cdr);
+                }
+            }
+
+            long startingId;
+            if (cdrs.Count > 0)
+            {
+                var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDR");
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
+
+                foreach (dynamic cdr in cdrs)
+                    cdr.Id = startingId++;
+
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
+                mappedBatches.Add("Distribute Raw CDRs Stage", batch);
+            }
+
+            MappingOutput result = new MappingOutput();
+            result.Result = MappingResult.Valid;
             return result;
         }
 
