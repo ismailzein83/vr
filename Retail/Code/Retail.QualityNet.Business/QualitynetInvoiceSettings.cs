@@ -5,7 +5,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Retail.QualityNet.Business
 {
-    public class QualityNetInvoiceSettings : BaseRetailInvoiceTypeSettings
+    public class QualityNetInvoiceTypeSettings : BaseRetailInvoiceTypeSettings
     {
         public override Guid ConfigId { get { return new Guid("D8AF155C-4303-491B-B8DD-553DEEEB9C68"); } }
         public Guid MainDataRecordStorageId { get { return new Guid("5cd31703-3bc6-41eb-b204-ef473cb394e4"); } }
@@ -37,6 +37,7 @@ namespace Retail.QualityNet.Business
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
             throw new NotImplementedException();
+
             //var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(this.AccountBEDefinitionId, context.PartnerId);
             //context.PartnerCreationDate = financialAccountData.Account.CreatedTime;
         }
@@ -44,12 +45,14 @@ namespace Retail.QualityNet.Business
         public override InvoiceGenerator GetInvoiceGenerator()
         {
             throw new NotImplementedException();
+
             //return new QualityNetInvoiceGenerator(this.AccountBEDefinitionId, this.MainDataRecordStorageId);
         }
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
             throw new NotImplementedException();
+
             //switch (context.PartnerRetrievalType)
             //{
             //    case PartnerRetrievalType.GetActive:
@@ -63,6 +66,7 @@ namespace Retail.QualityNet.Business
         public override InvoicePartnerManager GetPartnerManager()
         {
             throw new NotImplementedException();
+
             //return new QualityNetInvoicePartnerSettings(this.AccountBEDefinitionId);
         }
     }
