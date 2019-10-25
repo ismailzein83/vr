@@ -1290,11 +1290,11 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdatePaymentArrangement");
             esq.AddColumn("StPaymentMethodID");
-            esq.AddColumn("StBankID");
-            esq.AddColumn("StBankName");
-            esq.AddColumn("StBankAccountID");
-            esq.AddColumn("StPaymentMethodName");
-            esq.AddColumn("StIBAN");
+            esq.AddColumn("StBankLookup");
+            esq.AddColumn("StBankLookup.Id");
+            esq.AddColumn("StAccountOwner");
+            esq.AddColumn("StAccountNumber");
+            esq.AddColumn("StDebitCreditCard");
             esq.AddColumn("StCustomerId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -1304,28 +1304,32 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var paymentMethodId = entities[0].GetColumnValue("StPaymentMethodID");
-                var bankCode = entities[0].GetColumnValue("StBankID");
-                var accountNumber = entities[0].GetColumnValue("StBankAccountID");
-                var iban = entities[0].GetColumnValue("StIBAN");
-                var bankName = entities[0].GetColumnValue("StBankName");
+                var bankId = entities[0].GetColumnValue("StBankLookupId");
+                var accountOwner = entities[0].GetColumnValue("StAccountOwner");
+                var accountNumber = entities[0].GetColumnValue("StAccountNumber");
+                var debitCreditCard = entities[0].GetColumnValue("StDebitCreditCard");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                CustomerPaymentProfileInput customerPaymentProfileInput = new CustomerPaymentProfileInput {
+                    AccountNumber = accountNumber.ToString(),
+                    AccountOwner = accountOwner.ToString(),
+                    DebitCreditCard = debitCreditCard.ToString(),
+                    PaymentMethodId = paymentMethodId.ToString(),
+                    CommonInputArgument = new CommonInputArgument()
+                    {
+                        CustomerId = customerId.ToString(),
+                        RequestId = requestId.ToString()
+                    }
+                };
+                if (!string.IsNullOrEmpty(bankId.ToString()))
+                { Bank bank = GetBank(bankId.ToString());
+                    customerPaymentProfileInput.BankCode = bank.Code;
+                    customerPaymentProfileInput.BankAddress = bank.Address;
+                    customerPaymentProfileInput.BankName = bank.Name;
+                }
 
                 SOMRequestInput<CustomerPaymentProfileInput> somRequestInput = new SOMRequestInput<CustomerPaymentProfileInput>
                 {
-                    InputArguments = new CustomerPaymentProfileInput
-                    {
-                        AccountNumber = accountNumber.ToString(),
-                        PaymentMethodId = paymentMethodId.ToString(),
-                        BankCode = bankCode.ToString(),
-                        IBAN = iban.ToString(),
-                        BankName= bankName.ToString(),
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                            CustomerId = customerId.ToString(),
-                            RequestId = requestId.ToString()
-                        }
-                    }
-
+                    InputArguments = customerPaymentProfileInput
                 };
 
                 using (var client = new SOMClient())
