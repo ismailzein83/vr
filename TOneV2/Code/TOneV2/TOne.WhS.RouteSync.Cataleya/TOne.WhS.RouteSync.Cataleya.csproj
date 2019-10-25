@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="CataleyaSWSync.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
+    <Compile Include="Entities\CustomerMapping.cs" />
+    <Compile Include="Entities\SupplierMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
