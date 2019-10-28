@@ -2,16 +2,13 @@
 using Retail.QualityNet.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 
 namespace Retail.QualityNet.Business
 {
-    public class QualitynetInvoicePartnerSettings : InvoicePartnerManager
+    public class QualityNetInvoicePartnerSettings : InvoicePartnerManager
     {
         Guid _acountBEDefinitionId;
 
@@ -33,11 +30,11 @@ namespace Retail.QualityNet.Business
         {
             get
             {
-                return "";
+                return "Retail.QualityNet.Business.AssignedFinancialAccountToInvoiceSettingFilter,Retail.QualityNet.Business";
             }
         }
 
-        public QualitynetInvoicePartnerSettings(Guid acountBEDefinitionId)
+        public QualityNetInvoicePartnerSettings(Guid acountBEDefinitionId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
         }
@@ -70,24 +67,24 @@ namespace Retail.QualityNet.Business
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
                     AccountBEManager accountBEManager = new AccountBEManager();
 
-                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+                    int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+                    string currencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
+                    AddQualityNetInvoiceRDLCParameter(rdlcReportParameters, QualityNetInvoiceRDLCParameter.Currency, currencySymbol, true);
+
                     string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-                    // int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+                    AddQualityNetInvoiceRDLCParameter(rdlcReportParameters, QualityNetInvoiceRDLCParameter.CustomerName, accountName, true);
 
-                    CurrencyManager currencyManager = new CurrencyManager();
-                    int currencyId = currencyManager.GetSystemCurrency().CurrencyId;
-                    string currencySymbol = currencyManager.GetCurrencySymbol(currencyId);
-                    AddQualitynetInvoiceRDLCParameter(rdlcReportParameters, QualitynetInvoiceRDLCParameter.Currency, currencySymbol, true);
-
+                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
                     if (companySetting != null)
                     {
                         var logo = new VRFileManager().GetFile(companySetting.CompanyLogo);
                         if (logo != null)
-                            AddQualitynetInvoiceRDLCParameter(rdlcReportParameters, QualitynetInvoiceRDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
-
-                        AddQualitynetInvoiceRDLCParameter(rdlcReportParameters, QualitynetInvoiceRDLCParameter.Name, companySetting.CompanyName, true);
+                            AddQualityNetInvoiceRDLCParameter(rdlcReportParameters, QualityNetInvoiceRDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
                     }
 
+                    var invoiceItemsDetails = context.Invoice.Details as InvoiceDetails;
+                    AddQualityNetInvoiceRDLCParameter(rdlcReportParameters, QualityNetInvoiceRDLCParameter.GrandTotal, invoiceItemsDetails.GrandTotalAmount.ToString(), true);
+                  
                     return rdlcReportParameters;
             }
             return null;
@@ -99,12 +96,9 @@ namespace Retail.QualityNet.Business
             return new AccountBEManager().GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
         }
 
-        private void AddQualitynetInvoiceRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, QualitynetInvoiceRDLCParameter key, string value, bool isVisible)
+        private void AddQualityNetInvoiceRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, QualityNetInvoiceRDLCParameter key, string value, bool isVisible)
         {
-            if (rdlcReportParameters == null)
-                rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
             rdlcReportParameters.Add(key.ToString(), new VRRdlcReportParameter { Value = value, IsVisible = isVisible });
         }
-
     }
 }

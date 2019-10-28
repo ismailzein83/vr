@@ -14,60 +14,51 @@ namespace Retail.QualityNet.Business
 
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
-            throw new NotImplementedException();
-            //AccountBEManager accountBEManager = new AccountBEManager();
-            //var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
+            AccountBEManager accountBEManager = new AccountBEManager();
+            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
 
-            //switch (context.InfoType)
-            //{
-            //    case "MailTemplate":
-            //        long accountId = Convert.ToInt32(financialAccountData.Account.AccountId);
-            //        var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
-            //        Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-            //        objects.Add("Operator", account);
-            //        objects.Add("Invoice", context.Invoice);
-            //        return objects;
+            switch (context.InfoType)
+            {
+                case "MailTemplate":
+                    long accountId = Convert.ToInt32(financialAccountData.Account.AccountId);
+                    var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
+                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                    objects.Add("Operator", account);
+                    objects.Add("Invoice", context.Invoice);
+                    return objects;
 
-            //    case "BankDetails":
-            //        return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId, financialAccountData.Account.AccountId);
-            //}
-            //return null;
+                case "BankDetails":
+                    return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId, financialAccountData.Account.AccountId);
+            }
+            return null;
         }
 
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
-            throw new NotImplementedException();
-
-            //var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(this.AccountBEDefinitionId, context.PartnerId);
-            //context.PartnerCreationDate = financialAccountData.Account.CreatedTime;
+            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(this.AccountBEDefinitionId, context.PartnerId);
+            context.PartnerCreationDate = financialAccountData.Account.CreatedTime;
         }
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            throw new NotImplementedException();
-
-            //return new QualityNetInvoiceGenerator(this.AccountBEDefinitionId, this.MainDataRecordStorageId);
+            return new QualityNetInvoiceGenerator(this.AccountBEDefinitionId, this.MainDataRecordStorageId);
         }
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
-            throw new NotImplementedException();
-
-            //switch (context.PartnerRetrievalType)
-            //{
-            //    case PartnerRetrievalType.GetActive:
-            //    case PartnerRetrievalType.GetAll:
-            //        return new FinancialAccountManager().GetAllFinancialAccountsIds(this.AccountBEDefinitionId);
-            //    default:
-            //        return null;
-            //}
+            switch (context.PartnerRetrievalType)
+            {
+                case PartnerRetrievalType.GetActive:
+                case PartnerRetrievalType.GetAll:
+                    return new FinancialAccountManager().GetAllFinancialAccountsIds(this.AccountBEDefinitionId);
+                default:
+                    return null;
+            }
         }
 
         public override InvoicePartnerManager GetPartnerManager()
         {
-            throw new NotImplementedException();
-
-            //return new QualityNetInvoicePartnerSettings(this.AccountBEDefinitionId);
+            return new QualityNetInvoicePartnerSettings(this.AccountBEDefinitionId);
         }
     }
 }
