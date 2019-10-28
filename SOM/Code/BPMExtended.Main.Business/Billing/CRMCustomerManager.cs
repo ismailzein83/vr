@@ -1320,7 +1320,7 @@ namespace BPMExtended.Main.Business
                         RequestId = requestId.ToString()
                     }
                 };
-                if (!string.IsNullOrEmpty(bankId.ToString()))
+                if (bankId!=null && !string.IsNullOrEmpty(bankId.ToString()))
                 { Bank bank = GetBank(bankId.ToString());
                     customerPaymentProfileInput.BankCode = bank.Code;
                     customerPaymentProfileInput.BankAddress = bank.Address;
