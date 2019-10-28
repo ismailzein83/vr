@@ -5,7 +5,7 @@
                 <vr-columns width="1/2row">
                     <vr-select datasource="scopeModel.menualBulkActions"
                                datatextfield="Title"
-                               datavaluefield="MeualInvoiceBulkActionId"
+                               datavaluefield="InvoiceBulkActionId"
                                selectedvalues="scopeModel.selectedMenualBulkAction"
                                entityname="Action"
                                isrequired="true"
@@ -13,7 +13,6 @@
                                localizedlabel="VRRes.Common.Action.VREnd"
                                onselectionchanged="scopeModel.onMenualBulkActionSelectionChanged">
                     </vr-select>
-
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-select datasource="scopeModel.handlingOnErrorOptions"
