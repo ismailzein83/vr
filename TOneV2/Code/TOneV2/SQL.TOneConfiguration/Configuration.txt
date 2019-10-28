@@ -84,30 +84,32 @@ DataAnalysis.Retail_Centrex.PostDeployment.sql
 
 REtail_Ringo
 Retail_Ringo.PostDeployment.sql
+.json
 
 CarrierPortal
 CarrierPortal.PostDeployment.sql
-
+CarrierPortal.json
 CarrierPortal_Retail
 CarrierPortal.RetailPortal.PostDeployment.sql
-
+RetailPortal.json
 CarrierPortal_Centrex
 CarrierPortal.RetailPortal_Centrex.PostDeployment.sql
-
+RetailPortal_Centrex.json
 CarrierPortal_Zajil
 CarrierPortal.RetailPortal_Zajil.PostDeployment.sql
-
+RetailPortal_Zajil.json
 CarrierPortal_Ringo
 CarrierPortal.RingoPortal.PostDeployment.sql
-
+RingoPortal.json
 CarrierPortal_Multinet
 CarrierPortal.RetailPortal_MultiNet.PostDeployment.sql
-
+RetailPortal_MultiNet.json
 CarrierPortal_SupplierPricelist
 CarrierPortal.SupplierPricelist.PostDeployment.sql
-
+SupplierPricelist.json
 CP_WHS
 CarrierPortal.TOnePortal.PostDeployment.sql
+TOnePortal.json
 MarketView.json
 
 Mediation

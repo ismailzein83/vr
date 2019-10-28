@@ -150,6 +150,9 @@
     <Folder Include="VRJSON_PostScripts\TestCallAnalysis" />
     <Folder Include="VRJSON_PostScripts\PA" />
     <Folder Include="VRJSON_PostScripts\Inspkt" />
+    <Folder Include="VRJSON_PostScripts\CarrierPortal\TOne" />
+    <Folder Include="VRJSON_PostScripts\CarrierPortal" />
+    <Folder Include="VRJSON_PostScripts\CarrierPortal\Retail" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -1055,5 +1058,13 @@
     <None Include="VRJSON_PostScripts\Inspkt\C5.json" />
     <None Include="VRJSON_PostScripts\Inspkt\C4.json" />
     <None Include="VRJSON_PostScripts\TOne\VTel.json" />
+    <None Include="VRJSON_PostScripts\CarrierPortal\TOne\SupplierPricelist.json" />
+    <None Include="VRJSON_PostScripts\CarrierPortal\TOne\TOnePortal.json" />
+    <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal.json" />
+    <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal_Centrex.json" />
+    <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal_MultiNet.json" />
+    <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal_Zajil.json" />
+    <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RingoPortal.json" />
+    <None Include="VRJSON_PostScripts\CarrierPortal\CarrierPortal.json" />
   </ItemGroup>
 </Project>
