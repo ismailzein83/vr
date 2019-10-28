@@ -6,20 +6,22 @@
     <vr-genericdata-genericbusinessentity-selector customlabel="Node" on-ready="scopeModel.onNodeSelectorReady"  onselectionchanged="scopeModel.onNodeSelectionChanged" isrequired="true" normal-col-num="{{ctrl.normalColNum}}" hideremoveicon></vr-genericdata-genericbusinessentity-selector>
 </span>
 
+<vr-columns width="fullrow">
+    <vr-section header="Part" ng-if="scopeModel.isNodeSelected" width="fullrow" vr-loader="scopeModel.isLoadingNodeParts">
+        <vr-treeview on-ready="scopeModel.onNodePartTreeReady"
+                     datachildrenfield="childParts"
+                     datavaluefield="nodePartId"
+                     datatextfield="nodePartName"
+                     selecteditem="scopeModel.currentNodePartNode"
+                     hasremotechildrenfield="hasRemoteChildren"
+                     loadremotechildren="scopeModel.loadChildNodeParts"
+                     onvaluechanged="scopeModel.onNodePartTreeSelection"
+                     state="true">
+        </vr-treeview>
+    </vr-section>
+</vr-columns>
 <span vr-loader="scopeModel.isLoadingNodePortSelector">
     <vr-genericdata-genericbusinessentity-selector customlabel="Port" on-ready="scopeModel.onNodePortSelectorReady" isrequired="true" normal-col-num="{{ctrl.normalColNum}}" hideremoveicon></vr-genericdata-genericbusinessentity-selector>
 </span>
 
 
-<vr-columns ng-if="scopeModel.isNodeSelected" width="fullrow" vr-loader="scopeModel.isLoadingNodeParts">
-    <vr-treeview on-ready="scopeModel.onNodePartTreeReady"
-                 datachildrenfield="childParts"
-                 datavaluefield="nodePartId"
-                 datatextfield="nodePartName"
-                 selecteditem="scopeModel.currentNodePartNode"
-                 hasremotechildrenfield="hasRemoteChildren"
-                 loadremotechildren="scopeModel.loadChildNodeParts"
-                 onvaluechanged="scopeModel.onNodePartTreeSelection"
-                 state="true">
-    </vr-treeview>
-</vr-columns>
