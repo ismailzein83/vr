@@ -76,7 +76,11 @@ app.directive("vrInvoicetypeDatasourcesettingsItemgrouping", ["UtilsService", "V
 				$scope.scopeModel.onDeselectDimensionItem = function (dimension) {
 					var dimensionIndex = UtilsService.getItemIndexByVal(selectedDimensions, dimension.DimensionItemFieldId, 'DimensionId');
 					selectedDimensions.splice(dimensionIndex, 1);
-				};
+                };
+
+                $scope.scopeModel.onDeselectAllDimensionItems = function () {
+                    selectedDimensions.length = 0;
+                };
 
 				$scope.scopeModel.onSelectMeasureItem = function (measure) {
 					selectedMeasures.push({ MeasureId: measure.MeasureItemFieldId });
@@ -84,7 +88,11 @@ app.directive("vrInvoicetypeDatasourcesettingsItemgrouping", ["UtilsService", "V
 				$scope.scopeModel.onDeselectMeasureItem = function (measure) {
 					var measureIndex = UtilsService.getItemIndexByVal(selectedMeasures, measure.MeasureItemFieldId, 'MeasureId');
 					selectedMeasures.splice(measureIndex, 1);
-				};
+                };
+
+                $scope.scopeModel.onDeselectAllMeasureItems = function () {
+                    selectedMeasures.length = 0;
+                };
 
 				$scope.scopeModel.onRecordFilterReady = function (api) {
 					recordFilterDirectiveAPI = api;
