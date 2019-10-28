@@ -872,6 +872,7 @@
     <Build Include="common\Stored Procedures\sp_VRCompiledAssembly_GetByName.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoiceStatus.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetPaymentTransactionsForInvoiceId.sql" />
+    <Build Include="common\Tables\CountryArabic.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
@@ -984,6 +985,7 @@
     <None Include="Retail_RetailBilling_common.PostDeployment.sql" />
     <None Include="Demo_MarketView.PostDeployment.sql" />
     <None Include="Retail_Qualitynet.PostDeployment.sql" />
+    <None Include="Retail_Qualitynet_Overridden.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
