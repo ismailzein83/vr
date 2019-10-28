@@ -2269,6 +2269,48 @@ namespace BPMExtended.Main.Business
 
         //}
 
+        public void SetRequestToPendingCustomerReturn(string requestId)
+        {
+            var SchemaName = "StRequestHeader";
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName(SchemaName);
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, SchemaName);
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId));
+            var collection = eSQ.GetEntityCollection(UserConnection);
+            if (collection.Count > 0)
+            {
+                recordEntity = collection[0];
+                recordEntity.SetColumnValue("StStatusId", "9B7BA6FB-D4C2-4AE7-B940-2119C7BD460A");
+            }
+            recordEntity.Save();
+
+        }
+
+        public void SetRequestToInProgress(string requestId)
+        {
+            var SchemaName = "StRequestHeader";
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName(SchemaName);
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, SchemaName);
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId));
+            var collection = eSQ.GetEntityCollection(UserConnection);
+            if (collection.Count > 0)
+            {
+                recordEntity = collection[0];
+                recordEntity.SetColumnValue("StStatusId", "BB66071E-5416-4F87-B85B-7A7514D05BC2");
+            }
+            recordEntity.Save();
+
+        }
+
         #endregion
 
         #region Mappers
