@@ -792,7 +792,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!CountryInArabic.Value</Value>
+                                  <Value>=IIF(NOT(Fields!CountryInArabic.Value Is Nothing) , Fields!CountryInArabic.Value, Fields!Country.Value)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
