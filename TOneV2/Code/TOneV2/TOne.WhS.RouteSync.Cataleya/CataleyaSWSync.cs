@@ -13,6 +13,7 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
+        public DatabaseConnection DatabaseConnection { get; set; }
 
         #region Public Methods
 
