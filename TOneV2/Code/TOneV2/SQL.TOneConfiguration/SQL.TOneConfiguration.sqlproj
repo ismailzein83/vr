@@ -153,6 +153,7 @@
     <Folder Include="VRJSON_PostScripts\CarrierPortal\TOne" />
     <Folder Include="VRJSON_PostScripts\CarrierPortal" />
     <Folder Include="VRJSON_PostScripts\CarrierPortal\Retail" />
+    <Folder Include="VRJSON_PostScripts\Retail" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -1068,5 +1069,6 @@
     <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal_Zajil.json" />
     <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RingoPortal.json" />
     <None Include="VRJSON_PostScripts\CarrierPortal\CarrierPortal.json" />
+    <None Include="VRJSON_PostScripts\Retail\Retail_Qualitynet.json" />
   </ItemGroup>
 </Project>
