@@ -22,10 +22,10 @@
             <vr-datagridcolumn headertext="'Supplier'">
                 <vr-whs-be-supplier-selector hidelabel on-ready="dataItem.onSuppliersDirectiveReady" onselectionchanged="dataItem.onSupplierSelectionChanged" isrequired="true"></vr-whs-be-supplier-selector>
             </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Routes'">
-                    <span vr-loader="dataItem.isRouteSelectorLoading">
-                        <np-ivswitch-route-selector hidelabel on-ready="dataItem.onRouteDirectiveReady" ismultipleselection isrequired="true"></np-ivswitch-route-selector>
-                    </span>
+            <vr-datagridcolumn headertext="'Routes'">
+                <span vr-loader="dataItem.isRouteSelectorLoading">
+                    <np-ivswitch-route-selector hidelabel on-ready="dataItem.onRouteDirectiveReady" ismultipleselection isrequired="true"></np-ivswitch-route-selector>
+                </span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Percantage'">
                 <vr-textbox value="dataItem.percentage" isrequired="{{viewScope.scopeModel.showBackupTabs}}" type="number" decimalprecision="0" minvalue="1" maxvalue="100" onvaluechanged="viewScope.scopeModel.onPercentageValueChangedItems" customvalidate="viewScope.scopeModel.onPercentageValueChanged()"></vr-textbox>
@@ -35,4 +35,12 @@
             </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-validator>
+
+    <vr-row ng-if="scopeModel.warning!=undefined">
+        <vr-columns width="fullrow" medium-spacing >
+            <vr-label fullwidth color="alert-warning">
+              {{scopeModel.warning.Message}}
+            </vr-label>
+        </vr-columns>
+    </vr-row>
 </vr-section>
