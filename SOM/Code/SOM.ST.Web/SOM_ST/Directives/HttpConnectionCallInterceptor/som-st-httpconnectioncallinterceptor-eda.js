@@ -36,7 +36,9 @@
                     var promises = [];
 
                     if (payload != undefined && payload.Interceptor != undefined) {
-                        $scope.scopeModel.sessionId = payload.Interceptor.SessionId;
+                        $scope.scopeModel.userId = payload.Interceptor.UserId;
+                        $scope.scopeModel.password = payload.Interceptor.Password;
+                        $scope.scopeModel.authenticationServiceURI = payload.Interceptor.AuthenticationServiceURI;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -44,7 +46,9 @@
                 api.getData = function () {
                     var data = {
                         $type: "SOM.ST.Business.EDAOnlineInterceptor, SOM.ST.Business",
-                        SessionId: $scope.scopeModel.sessionId,
+                        UserId: $scope.scopeModel.userId,
+                        Password: $scope.scopeModel.password,
+                        AuthenticationServiceURI: $scope.scopeModel.authenticationServiceURI
                     };
                     return data;
                 };

@@ -29,7 +29,7 @@ namespace SOM.ST.Business
             var somDevMode_BPMConfiguration = ConfigurationManager.AppSettings["SOMDevMode_BPMConfiguration"];
 
             if (!String.IsNullOrEmpty(somDevMode_BPMConfiguration))
-             {
+            {
                 var bpmConfigurations = somDevMode_BPMConfiguration.Split('|');
                 foreach (var item in bpmConfigurations)
                 {
@@ -53,6 +53,16 @@ namespace SOM.ST.Business
             cookiesContainer.ThrowIfNull("cookiesContainer");
 
             string cookiesAsString = GetCookiesAsString(fullAuthenticationServiceURI, cookiesContainer);
+            var cookies = cookiesContainer.GetCookies(new Uri(fullAuthenticationServiceURI));
+
+            foreach (Cookie cookie in cookies)
+            {
+                if (cookie.Name == "BPMCSRF")
+                {
+                    context.HttpRequestMessage.Headers.Add(cookie.Name, cookie.Value);
+                    context.Client.DefaultRequestHeaders.Add(cookie.Name, cookie.Value);
+                }
+            }
             context.HttpRequestMessage.Headers.Add("Cookie", cookiesAsString);
             context.Client.DefaultRequestHeaders.Add("Cookie", cookiesAsString);
         }
