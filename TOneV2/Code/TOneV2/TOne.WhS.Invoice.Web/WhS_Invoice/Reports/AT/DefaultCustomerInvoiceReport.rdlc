@@ -6,7 +6,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>3.69383in</Width>
+              <Width>7.55729in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -99,7 +99,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Direction de Linterconnexion Internationale</Value>
+                              <Value>Direction d'interconnexion Internationale</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -138,7 +138,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Département des Comptes et Produits Internationaux</Value>
+                              <Value>Département Facturation des Produits Internationaux</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -184,7 +184,7 @@
         <Top>0.03417in</Top>
         <Left>0.13236in</Left>
         <Height>0.625in</Height>
-        <Width>3.69383in</Width>
+        <Width>7.55729in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -255,6 +255,27 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
+                              <Value>From/de </Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
+                              <Value>=Parameters!Name.Value</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
+                              <Value> To/A </Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
                               <Value>=Parameters!CarrierCompanyName.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
@@ -295,7 +316,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Votre Contact : </Value>
+                              <Value>Pour Toute Information Veuillez Contacter: </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2080,7 +2101,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Currency.Value &amp;": "&amp; Code.convertNumberToFrenchLetters(Parameters!TotalInvoiceAmount.Value.ToString().Replace(",", string.Empty))&amp;" seulement"</Value>
+                              <Value>=Code.convertNumberToFrenchLetters(Parameters!TotalInvoiceAmount.Value.ToString().Replace(",", string.Empty))&amp;" "&amp; Parameters!Currency.Value &amp;" seulement"</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2538,78 +2559,6 @@
           </Border>
         </Style>
       </Tablix>
-      <Tablix Name="Tablix10">
-        <TablixBody>
-          <TablixColumns>
-            <TablixColumn>
-              <Width>19.19552cm</Width>
-            </TablixColumn>
-          </TablixColumns>
-          <TablixRows>
-            <TablixRow>
-              <Height>1.15772cm</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox59">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Facture</Value>
-                              <Style>
-                                <FontSize>22pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox59</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-          </TablixRows>
-        </TablixBody>
-        <TablixColumnHierarchy>
-          <TablixMembers>
-            <TablixMember />
-          </TablixMembers>
-        </TablixColumnHierarchy>
-        <TablixRowHierarchy>
-          <TablixMembers>
-            <TablixMember />
-          </TablixMembers>
-        </TablixRowHierarchy>
-        <DataSetName>InvoiceHeader</DataSetName>
-        <Top>6.86126cm</Top>
-        <Left>0.33622cm</Left>
-        <Height>1.15772cm</Height>
-        <Width>19.19552cm</Width>
-        <ZIndex>9</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Tablix>
     </ReportItems>
     <Height>21.91255cm</Height>
     <Style />
@@ -2655,7 +2604,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!Name.Value</Value>
+                  <Value>=Parameters!RegNo.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -2762,7 +2711,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!BillingCompanyEmail.Value</Value>
+                  <Value>www.algerie.telecom.dz</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -3388,6 +3337,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Image">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="RegNo">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

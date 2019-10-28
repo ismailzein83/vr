@@ -22,7 +22,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Facture Détaillée </Value>
+                              <Value EvaluationMode="Constant">Facture Détaillée / Invoice Detail</Value>
                               <Style>
                                 <FontFamily>verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -125,6 +125,19 @@
                               </TextRuns>
                               <Style />
                             </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Zone Name</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox8</rd:DefaultName>
                           <Style>
@@ -152,6 +165,21 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>Période Facturée</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Invoice Period</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -215,7 +243,22 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Center</TextAlign>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Traffic Volume</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
                             <Paragraph>
@@ -310,7 +353,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Monnaie </Value>
+                                  <Value>Monnaie</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -319,7 +362,22 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Center</TextAlign>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Currency </Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
                             <Paragraph>
@@ -371,7 +429,22 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Amount</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -617,7 +690,7 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Center</TextAlign>
+                                <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -1610,16 +1683,16 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.1237in</Width>
+              <Width>2.03875in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.18707in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.88151in</Width>
+              <Width>0.88693in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.70538in</Width>
+              <Width>0.76305in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.09375in</Width>
@@ -1673,7 +1746,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Parameters!TotalDuration.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1791,7 +1864,7 @@
         <Top>1.55175in</Top>
         <Left>1.69167in</Left>
         <Height>0.19792in</Height>
-        <Width>5.99141in</Width>
+        <Width>5.96955in</Width>
         <ZIndex>6</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
