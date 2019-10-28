@@ -22,5 +22,8 @@ namespace Retail.NIM.Entities
 
         public static Guid OLTNodeTypeId = new Guid("3f93d113-b5b8-4f75-b4d8-81dc6bc40cc8");
         public static Guid MDFTypeId = new Guid("c29902a5-a82f-4c4c-ae8a-84a1a405d8e6");
+
+        public static Guid SwitchTypeId = new Guid("8C3EA9B7-07EB-42CC-8B7D-78AACDFC8FF6");
+        public static Guid DSLAMTypeId = new Guid("37EA9CA7-9099-4F9A-8279-8985B47591B5");
     }
 }

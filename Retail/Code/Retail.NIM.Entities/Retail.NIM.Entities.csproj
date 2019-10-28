@@ -74,6 +74,9 @@
     <Compile Include="PortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticBEDefinitionIDs.cs" />
+    <Compile Include="TechnicalAddress\GetTechnicalAddressOutput.cs" />
+    <Compile Include="TechnicalAddress\GetTechnicalAddressOutputTechnologyItem.cs" />
+    <Compile Include="TechnicalAddress\GetTechnicalAddressOutputTechnologyItemNetworkElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NodePort\" />

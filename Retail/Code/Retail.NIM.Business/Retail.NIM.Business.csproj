@@ -93,6 +93,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Splitter\SplitterInPortManager.cs" />
     <Compile Include="Splitter\SplitterOutPortManager.cs" />
+    <Compile Include="TechnicalAddress\TechnicalAddressManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.NIM.Data\Retail.NIM.Data.csproj">
