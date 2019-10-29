@@ -40,7 +40,6 @@ namespace Retail.NIM.Business
                 return null;
             return dpItems.First();
         }
-
         public GenericBusinessEntity GetSwitchBySiteId(long siteId)
         {
             var dpItems = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.SwitchTypeId, null, new RecordFilterGroup
@@ -79,7 +78,7 @@ namespace Retail.NIM.Business
                 return null;
             return dpItems.First();
         }
-        public GenericBusinessEntity GetNodeByAddress(Guid businessEntityDefinitionId, long areadId, long siteId, int regionId, int cityId, int townId, long streetId)
+        public GenericBusinessEntity GetNodeByAddress(Guid businessEntityDefinitionId, long areadId, long siteId, int regionId, int cityId, int townId, long streetId, string buildingDetails)
         {
             var filter = new RecordFilterGroup
             {
@@ -115,6 +114,11 @@ namespace Retail.NIM.Business
                         FieldName = "Street",
                         CompareOperator = ListRecordFilterOperator.In,
                         Values =new List<object>{ streetId }
+                    },new StringRecordFilter
+                    {
+                        FieldName = "BuildingDetails",
+                        CompareOperator = StringRecordFilterOperator.Equals,
+                        Value = buildingDetails
                     }
                 }
             };

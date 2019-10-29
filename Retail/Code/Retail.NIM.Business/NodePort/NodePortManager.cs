@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Retail.NIM.Entities;
 
 namespace Retail.NIM.Business
@@ -13,15 +14,13 @@ namespace Retail.NIM.Business
     public class NodePortManager
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
-        ConnectionManager _connectionManager = new ConnectionManager();
-        NodeManager _nodeManager = new NodeManager();
 
         public ReservePortOutput ReservePort(ReservePortInput input)
         {
 
-            var filter = new Vanrise.GenericData.Entities.RecordFilterGroup
+            var filter = new RecordFilterGroup
             {
-                Filters = new List<Vanrise.GenericData.Entities.RecordFilter>
+                Filters = new List<RecordFilter>
                 {
                     new ObjectListRecordFilter
                     {
@@ -39,6 +38,7 @@ namespace Retail.NIM.Business
                     Values = new List<object> { input.PartTypeId.Value }
                 });
             }
+
             var entities = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.NodePortBEDefinitionId, null, filter);
 
             if (entities == null || entities.Count() == 0)
@@ -58,7 +58,7 @@ namespace Retail.NIM.Business
                 GenericBusinessEntityId = portId,
                 FilterGroup =new RecordFilterGroup
                 {
-                    Filters = new List<Vanrise.GenericData.Entities.RecordFilter>
+                    Filters = new List<RecordFilter>
                     {
                         new ObjectListRecordFilter
                         {
@@ -69,7 +69,7 @@ namespace Retail.NIM.Business
                 }
             });
 
-            if (updatedEntity.Result == Vanrise.Entities.UpdateOperationResult.Failed)
+            if (updatedEntity.Result == UpdateOperationResult.Failed)
                 return null;
 
             return new ReservePortOutput

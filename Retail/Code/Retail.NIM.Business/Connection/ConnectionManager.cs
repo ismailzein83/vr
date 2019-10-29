@@ -13,7 +13,6 @@ namespace Retail.NIM.Business
     public class ConnectionManager
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
-        NodePortManager _nodePortManager = new NodePortManager();
         public GenericBusinessEntity GetConnection(long nodeId, List<long> notIncludeNodes)
         {
             List<Object> excludedNodes = new List<object>();
@@ -78,9 +77,11 @@ namespace Retail.NIM.Business
 
         public ReserveConnectionOutput ReserveConnection(ReserveConnectionInput input)
         {
-            var filter = new Vanrise.GenericData.Entities.RecordFilterGroup
+            NodePortManager _nodePortManager = new NodePortManager();
+
+            var filter = new RecordFilterGroup
             {
-                Filters = new List<Vanrise.GenericData.Entities.RecordFilter>
+                Filters = new List<RecordFilter>
                 {
                     new ObjectListRecordFilter
                     {
@@ -130,13 +131,13 @@ namespace Retail.NIM.Business
 
             var firstItem = entities.First();
 
-            var port1id = (long)firstItem.FieldValues.GetRecord("Port1");
+            var port1Id = (long)firstItem.FieldValues.GetRecord("Port1");
 
-            var port2id = (long)firstItem.FieldValues.GetRecord("Port2");
+            var port2Id = (long)firstItem.FieldValues.GetRecord("Port2");
 
-            var reservedPort1 =_nodePortManager.ReservePort(port1id);
+            var reservedPort1 =_nodePortManager.ReservePort(port1Id);
 
-            var reservedPort2 = _nodePortManager.ReservePort(port2id);
+            var reservedPort2 = _nodePortManager.ReservePort(port2Id);
 
             return new ReserveConnectionOutput
             {
