@@ -371,9 +371,9 @@ namespace Retail.Interconnect.Business
                 amountByCurrency = new Dictionary<string, decimal>();
                 foreach (var invoice in invoices)
                 {
-                    bool newInvoiceCheck = true;
                     if (getAllCurrencies || selectedInvoiceIds.Any(x => x.InvoiceId == invoice.InvoiceId))
                     {
+                        List<int> currenciesPerInvoice = new List<int>();
                         var innvoiceDetails = invoice.Details as InterconnectInvoiceDetails;
                         if (innvoiceDetails != null)
                         {
@@ -386,7 +386,6 @@ namespace Retail.Interconnect.Business
                                 {
                                     if (getAllCurrencies || selectedInvoiceIds.Any(x => x.InvoiceId == invoice.InvoiceId && x.CurrencyId == invoiceItemDetail.CurrencyId))
                                     {
-
                                         string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
                                         currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
                                         OriginalDataCurrrency originalDataCurrrency;
@@ -395,10 +394,12 @@ namespace Retail.Interconnect.Business
                                             decimal amountValue;
                                             if (!amountByCurrency.TryGetValue(currencySymbol, out amountValue))
                                             {
+                                                currenciesPerInvoice.Add(invoiceItemDetail.CurrencyId);
                                                 amountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
                                             }
-                                            else if (newInvoiceCheck)
+                                            else if (!currenciesPerInvoice.Contains(invoiceItemDetail.CurrencyId))
                                             {
+                                                currenciesPerInvoice.Add(invoiceItemDetail.CurrencyId);
                                                 amountByCurrency[currencySymbol] = amountValue + Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue);
                                             }
                                         }
@@ -416,7 +417,6 @@ namespace Retail.Interconnect.Business
                                         }
                                     }
                                 }
-                                newInvoiceCheck = false;
                             }
                         }
                     }
