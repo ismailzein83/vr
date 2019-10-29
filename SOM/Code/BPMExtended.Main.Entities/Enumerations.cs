@@ -458,6 +458,12 @@ namespace BPMExtended.Main.Entities
         [CompletedStep("StTypeId")]
         [CompletedStepId("352ABB46-323D-4734-A479-67D2F403BDB9")]
         UpdateOfficialAccount = 52,
+
+        [Description("Installments Request")]
+        [EntitySchemaName("StInstallments")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("4D3FD81C-6F7B-4E6C-ABAC-71613276A924")]
+        Installment = 53,
     }
     public enum ContractStatus
     {

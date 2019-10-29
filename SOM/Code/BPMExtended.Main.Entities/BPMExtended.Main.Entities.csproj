@@ -91,6 +91,7 @@
     <Compile Include="CustomerAddress.cs" />
     <Compile Include="DeviceType.cs" />
     <Compile Include="Domain.cs" />
+    <Compile Include="Installment.cs" />
     <Compile Include="InstallmentTemplate.cs" />
     <Compile Include="InvoiceFee.cs" />
     <Compile Include="MenuAction.cs" />

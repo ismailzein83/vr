@@ -62,7 +62,6 @@
     <Compile Include="Billing\ServiceResponse\PaymentPlan.cs" />
     <Compile Include="Billing\ServiceResponse\Payment.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerContact.cs" />
-    <Compile Include="Billing\ServiceResponse\Installment.cs" />
     <Compile Include="Billing\ServiceResponse\PaymentPlanTemplate.cs" />
     <Compile Include="Billing\ServiceResponse\RatePlanChangeResponse.cs" />
     <Compile Include="Billing\ServiceResponse\Reason.cs" />

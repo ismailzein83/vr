@@ -325,28 +325,6 @@ namespace BPMExtended.Main.Business
             return templatesInfoItems;
         }
 
-        public List<InstallmentDetail> GetInstallments(string templateId, string invoiceId)
-        {
-            return SimulatePaymentPlan(templateId,invoiceId);
-
-        }
-
-        public List<InstallmentDetail> SimulatePaymentPlan(string templateId,string invoiceId)
-        {
-            // return RatePlanMockDataGenerator.GetInstallments();
-            var installmentsDetailItems = new List<InstallmentDetail>();
-            using (SOMClient client = new SOMClient())
-            {
-                List<Installment> items = client.Get<List<Installment>>(String.Format("api/SOM.ST/Billing/SimulatePaymentPlan?invoiceId={0}&paymentPlanTemplateIdPub={1}",invoiceId,templateId));
-                foreach (var item in items)
-                {
-                    var installmentsDetaiItem = InstallmentToDetailMapper(item);
-                    installmentsDetailItems.Add(installmentsDetaiItem);
-                }
-            }
-            return installmentsDetailItems;
-        }
-
         public List<ProfessionalDI> GetFilteredProfessionalDI(string firstName, string fatherName, string lastName, string street, string province, string city, string profession)
         {
             return RatePlanMockDataGenerator.GetFilteredProfessionalDI(firstName,fatherName,lastName,street,province,city,profession);
@@ -510,20 +488,6 @@ namespace BPMExtended.Main.Business
             {
                 PromotionPackageId = item.PromotionPackageId,
                 AssignDate = Convert.ToString(item.AssignDate)
-            };
-        }
-
-
-
-        public InstallmentDetail InstallmentToDetailMapper(Installment item)
-        {
-            return new InstallmentDetail
-            {
-                Id = item.Id,
-                Amount = item.Amount.ToString(),
-                Currency = item.Currency,
-                Date = item.DueDate.ToString()
-
             };
         }
 
