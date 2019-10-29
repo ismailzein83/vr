@@ -124,6 +124,7 @@
     <Content Include="BatchScripts\Inspkt\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Inspkt\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Inspkt\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Retail.Qualitynet\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TestCallAnalysis\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TestCallAnalysis\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TestCallAnalysis\runtime-list-of-excluded-files.txt" />
@@ -558,6 +559,15 @@
     <None Include="BatchScripts\Retail.Billing\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Retail.Billing\All.bat" />
     <None Include="BatchScripts\Retail.NtegraV2\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\01-Runtime.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\03-WebSite.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\05-CompressFiles.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\Retail.Qualitynet\All.bat" />
     <None Include="BatchScripts\TelecomCRM\01-Runtime.bat" />
     <None Include="BatchScripts\TelecomCRM\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\TelecomCRM\03-WebSite.bat" />

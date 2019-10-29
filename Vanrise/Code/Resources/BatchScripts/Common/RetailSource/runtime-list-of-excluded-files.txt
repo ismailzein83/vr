@@ -14,5 +14,6 @@
 \Retail.NIM.
 \Retail.Billing.
 \Retail.Ogero.
+\Retail.QualityNet.
 .aspx\
 .cs\

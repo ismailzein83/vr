@@ -19,3 +19,4 @@ Demo\
 \bin\Retail.NIM.
 \bin\Retail.Billing.
 \bin\Retail.Ogero.
+\bin\Retail.QualityNet.
