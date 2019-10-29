@@ -241,21 +241,24 @@ namespace Retail.Teles.Business
                 foreach (var domainList in domainLists)
                 {
                     level = domainList.level.ToString();
-                    if (level.Equals("Site", StringComparison.OrdinalIgnoreCase))
+                    if (!string.IsNullOrEmpty(level))
                     {
-                        sites.Add(domainList.id.ToString(), new SiteEntity()
+                        if (level.Equals("Site", StringComparison.OrdinalIgnoreCase))
                         {
-                            Name = domainList.name.ToString(),
-                            Description = domainList.description.ToString(),
-                        });
-                    }
-                    else if (level.Equals("Enterprise", StringComparison.OrdinalIgnoreCase))
-                    {
-                        enterprises.Add(domainList.id.ToString(), new EnterpriseEntity()
+                            sites.Add(domainList.id.ToString(), new SiteEntity()
+                            {
+                                Name = domainList.name.ToString(),
+                                Description = domainList.description.ToString(),
+                            });
+                        }
+                        else if (level.Equals("Enterprise", StringComparison.OrdinalIgnoreCase))
                         {
-                            Name = domainList.name.ToString(),
-                            Description = domainList.description.ToString(),
-                        });
+                            enterprises.Add(domainList.id.ToString(), new EnterpriseEntity()
+                            {
+                                Name = domainList.name.ToString(),
+                                Description = domainList.description.ToString(),
+                            });
+                        }
                     }
                 }
             }
@@ -376,7 +379,7 @@ namespace Retail.Teles.Business
                 }
             }
 
-         return accountEnterprisesDIDs;
+            return accountEnterprisesDIDs;
         }
         public static void SetCacheExpired()
         {
@@ -629,7 +632,7 @@ namespace Retail.Teles.Business
                     EnterpriseName = entity.EnterpriseName,
                     EnterpriseDescription = entity.EnterpriseDescription,
                     SiteName = entity.SiteName,
-                    SiteDescription =entity.SiteDescription,
+                    SiteDescription = entity.SiteDescription,
                     MaxCalls = entity.MaxCalls,
                     Type = Utilities.GetEnumDescription(entity.Type)
                 };
@@ -677,10 +680,13 @@ namespace Retail.Teles.Business
                         Cells = new List<ExportExcelHeaderCell> {
                             new ExportExcelHeaderCell { Title = "Account Name" },
                             new ExportExcelHeaderCell { Title = "Enterprise Name" },
+                            new ExportExcelHeaderCell { Title = "Enterprise Description" },
+                            new ExportExcelHeaderCell { Title = "Site Name" },
+                            new ExportExcelHeaderCell { Title = "Site Description" },
                             new ExportExcelHeaderCell { Title = "Screen Number" },
-                             new ExportExcelHeaderCell { Title = "Type" },
+                            new ExportExcelHeaderCell { Title = "Type" },
                             new ExportExcelHeaderCell { Title = "Channels" }
-                        }
+                        }                      
                     }
                 };
 
@@ -696,6 +702,9 @@ namespace Retail.Teles.Business
                             var accountNameRow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             accountNameRow.Cells.Add(new ExportExcelCell { Value = item.AccountName });
                             accountNameRow.Cells.Add(new ExportExcelCell { Value = item.EnterpriseName });
+                            accountNameRow.Cells.Add(new ExportExcelCell { Value = item.EnterpriseDescription });
+                            accountNameRow.Cells.Add(new ExportExcelCell { Value = item.SiteName });
+                            accountNameRow.Cells.Add(new ExportExcelCell { Value = item.SiteDescription });
                             accountNameRow.Cells.Add(new ExportExcelCell { Value = item.ScreenNumber });
                             accountNameRow.Cells.Add(new ExportExcelCell { Value = item.Type });
                             accountNameRow.Cells.Add(new ExportExcelCell { Value = item.MaxCalls });
