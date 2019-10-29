@@ -77,7 +77,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     });
                     dealItemSetNames = GetDealItemSetNames(carrierAccountIds, context.FromDate, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.OffsetValue, dimensionName, financialAccountId, context.IssueDate, currencyId, taxItemDetails);
                     invoiceBySaleCurrency = loadVoiceCurrencyItemSet(dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
-                    AddDealToCustomerCurrency(invoiceBySaleCurrency, dealItemSetNames);
+                    AddDealToCustomerCurrency(() => { if (invoiceBySaleCurrency == null) invoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>(); return invoiceBySaleCurrency; }, dealItemSetNames);
                 }
             }
 
@@ -94,9 +94,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 });
 
                 var sMSInvoiceBySaleCurrencies = loadSMSCurrencyItemSet(dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
-                if (invoiceBySaleCurrency == null)
-                    invoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
-                TryMergeByCurrencyItemSets(invoiceBySaleCurrency, sMSInvoiceBySaleCurrencies);
+                TryMergeByCurrencyItemSets(() => { if (invoiceBySaleCurrency == null) invoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>(); return invoiceBySaleCurrency; }, sMSInvoiceBySaleCurrencies);
             }
 
             if (((smsItemSetNames == null || smsItemSetNames.Count == 0) && ((voiceItemSetNames == null || voiceItemSetNames.Count == 0))) && (evaluatedCustomerRecurringCharges == null || evaluatedCustomerRecurringCharges.Count == 0) && (dealItemSetNames == null || dealItemSetNames.Count == 0))
@@ -185,9 +183,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
                 }
 
-                if (invoiceBySaleCurrency == null)
-                    invoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
-                AddRecurringChargeToCustomerCurrency(invoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
+                AddRecurringChargeToCustomerCurrency(() => { if (invoiceBySaleCurrency == null) invoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>(); return invoiceBySaleCurrency; }, evaluatedCustomerRecurringCharges);
 
                 CurrencyManager currencyManager = new CurrencyManager();
                 var systemCurrency = currencyManager.GetSystemCurrency();
@@ -320,12 +316,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
         }
 
-        private void AddDealToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails, List<CustomerInvoiceDealItemDetails> dealItemSetNames)
+        private void AddDealToCustomerCurrency(Func<List<CustomerInvoiceBySaleCurrencyItemDetails>> getCustomerInvoiceBySaleCurrencyItemDetails, List<CustomerInvoiceDealItemDetails> dealItemSetNames)
         {
             if (dealItemSetNames != null && dealItemSetNames.Count > 0)
             {
-                if (customerInvoiceBySaleCurrencyItemDetails == null)
-                    customerInvoiceBySaleCurrencyItemDetails = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
+                List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails = getCustomerInvoiceBySaleCurrencyItemDetails();
 
                 foreach (var item in dealItemSetNames)
                 {
@@ -360,12 +355,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 }
             }
         }
-        private void AddRecurringChargeToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems)
+        private void AddRecurringChargeToCustomerCurrency(Func<List<CustomerInvoiceBySaleCurrencyItemDetails>> getCustomerInvoiceBySaleCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems)
         {
             if (recurringChargeItems != null && recurringChargeItems.Count > 0)
             {
-                if (customerInvoiceBySaleCurrencyItemDetails == null)
-                    customerInvoiceBySaleCurrencyItemDetails = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
+                List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails = getCustomerInvoiceBySaleCurrencyItemDetails();
 
                 foreach (var item in recurringChargeItems)
                 {
@@ -735,10 +729,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return null;
 
         }
-        private void TryMergeByCurrencyItemSets(List<CustomerInvoiceBySaleCurrencyItemDetails> mainByCurrencyItemSets, List<CustomerInvoiceBySaleCurrencyItemDetails> sMSInvoiceBySaleCurrency)
+        private void TryMergeByCurrencyItemSets(Func<List<CustomerInvoiceBySaleCurrencyItemDetails>> getCustomerInvoiceBySaleCurrencyItemDetails, List<CustomerInvoiceBySaleCurrencyItemDetails> sMSInvoiceBySaleCurrency)
         {
             if (sMSInvoiceBySaleCurrency != null && sMSInvoiceBySaleCurrency.Count > 0)
             {
+                List<CustomerInvoiceBySaleCurrencyItemDetails> mainByCurrencyItemSets = getCustomerInvoiceBySaleCurrencyItemDetails();
+
                 foreach (var item in sMSInvoiceBySaleCurrency)
                 {
                     var invoiceBySaleCurrencyItem = mainByCurrencyItemSets.FindRecord(x => x.CurrencyId == item.CurrencyId && x.Month == item.Month);
@@ -828,7 +824,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         if (!tier.UpToVolume.HasValue || tier.EvaluatedRate == null)
                             continue;
 
-                        var invoiceDealItemDetailsContext = new InvoiceDealItemDetailsContext {
+                        var invoiceDealItemDetailsContext = new InvoiceDealItemDetailsContext
+                        {
                             AllCustomerDealItemSetNames = allDealItemSetNames,
                             EffectiveDealId = effectiveVolCommitmentDeal.Key,
                             ZoneGroupName = dealGroup.Name,
