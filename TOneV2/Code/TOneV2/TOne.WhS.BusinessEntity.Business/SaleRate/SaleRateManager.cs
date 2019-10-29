@@ -745,7 +745,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     var ratesByRateType = new Dictionary<int, SaleRateHistoryRecord>();
                     var rateTypeIds = Helper.GetRateTypeIds(query.OwnerId, saleRateDetail.Entity.ZoneId, DateTime.Now);
 
-                    SaleEntityZoneRoutingProduct currentRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(query.OwnerId, sellingProductId, zoneId);
+                    SaleEntityZoneRoutingProduct currentRoutingProduct = query.OwnerType == SalePriceListOwnerType.Customer
+                                                                        ? routingProductLocator.GetCustomerZoneRoutingProduct(query.OwnerId, sellingProductId, zoneId)
+                                                                        : routingProductLocator.GetSellingProductZoneRoutingProduct(query.OwnerId, zoneId);
+
                     var servicesIds = new RoutingProductManager().GetZoneServiceIds(currentRoutingProduct.RoutingProductId, zoneId);
                     string servicesSymbol = new ZoneServiceConfigManager().GetZoneServicesNames(servicesIds.ToList());
 
