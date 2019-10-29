@@ -48,7 +48,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('F0A5A4EC-B1D9-4F4E-957D-7A055469DAF8','Invoice','Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig'						,'{"Editor":"retail-invoice-invoicetype-zajilsubscriberinvoicesettings"}'),
+('D8AF155C-4303-491B-B8DD-553DEEEB9C68','VR_BEBridge_BEConvertor_QualityNetInvoice','QualityNet Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig','{"Editor":"retail-invoice-invoicetype-qualitynetinvoicesettings"}'),
 
 ('0897F25A-7BF4-4A4F-A97F-0EE33993633C','Payment Convertor','Payment Convertor','VR_BEBridge_BEConvertor'								,'{"Editor":"retail-zajil-payment-convertor-editor"}'),
 ('26DC208A-7954-4258-A8E5-48497C02EF19','Account Convertor','Account Convertor','VR_BEBridge_BEConvertor'								,'{"Editor":"retail-zajil-account-convertor-editor"}'),
