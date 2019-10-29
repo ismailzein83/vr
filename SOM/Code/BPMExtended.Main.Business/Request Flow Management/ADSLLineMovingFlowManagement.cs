@@ -33,6 +33,7 @@ namespace BPMExtended.Main.Business
 
         const string attachmentsStep = "A72E1158-13C5-4A02-9589-E68D5D4A5E02";
         const string technicalStep = "9A9C358C-8A33-4580-A5BE-36126E805E3E";
+        const string submitToOMStep = "6630C5E7-4B17-4DC3-A05C-002E95D92942";
         const string completedStep = "F3384A9D-A1D3-4F2C-8985-8987639522DE";
 
         public string GetNextStep(string id, string currentStepId,bool isWaitingList)
@@ -42,11 +43,15 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = chooseContractStep; break;
                 case chooseContractStep: nextStepId = printStep; break;
-                case printStep: nextStepId = SameSwitch(id) ? addressStep :  DSLAMPortStep; break;
+                case printStep:
+                        checkIfSameMDF(id);
+                        nextStepId = DSLAMPortStep;
+                    break;
+
                 case DSLAMPortStep: nextStepId = isWaitingList ? waitingListStep : addressStep; break;
                 case waitingListStep: nextStepId = addressStep; break;
                 case addressStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = technicalStep; break;
+                case paymentStep: nextStepId = submitToOMStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
@@ -79,9 +84,8 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public bool SameSwitch(string id)
+        public void checkIfSameMDF(string id)
         {
-            bool isonsameswitch = false;
             if (id != "")
             {
                 //get request from bpm
@@ -100,18 +104,22 @@ namespace BPMExtended.Main.Business
                 if (entities.Count > 0)
                 {
                     var selectedcontract = entities[0].GetColumnValue("StSelectedTelephonyContract");
-                    var pilotcontract = entities[0].GetColumnValue("StTelephonyContractId");
+                    var oldContract = entities[0].GetColumnValue("StTelephonyContractId");
+
                     InventoryManager manager = new InventoryManager();
-                    isonsameswitch = manager.IsNumbersOnSameSwitch(selectedcontract.ToString(), pilotcontract.ToString());
+
+                    string newMDFId = manager.GetTechnicalDetails(new ContractManager().GetTelephonyContractInfo(selectedcontract.ToString()).PhoneNumber).MDFId;
+                    string oldMDFId = manager.GetTechnicalDetails(new ContractManager().GetTelephonyContractInfo(oldContract.ToString()).PhoneNumber).MDFId;
+
+                    bool isSameMDF = newMDFId == oldMDFId;
 
                     UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-                    var update = new Update(connection, "StADSLLineMoving").Set("StIsSameSwitch", Column.Parameter(isonsameswitch))
+                    var update = new Update(connection, "StADSLLineMoving").Set("StIsSameMDF", Column.Parameter(isSameMDF))
                         .Where("Id").IsEqual(Column.Parameter(id));
                     update.Execute();
 
                 }
             }
-            return isonsameswitch;
         }
     }
 }

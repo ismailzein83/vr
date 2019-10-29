@@ -36,6 +36,17 @@ namespace BPMExtended.Main.SOMAPI
         public string PrimrayMuxPortName { get; set; }
         public string DPPortId { get; set; }
 
+        public string DslamId { get; set; }
+        public string DslamName { get; set; }
+        public string DslamStatus { get; set; }
+        public string DslamOMC { get; set; }
+        public string DslamCardId { get; set; }
+        public string DslamCardName { get; set; }
+        public string DslamPortId { get; set; }
+        public string DslamPortName { get; set; }
+        public string DslamPortStatus { get; set; }
+        public string DslamISP { get; set; }
+
         public string DSlam { get; set; }
         public string DSlamPort { get; set; }
         public string DSlamOMC { get; set; }

@@ -19,6 +19,8 @@ namespace BPMExtended.Main.SOMAPI
         public string OldDSLAM { get; set; }
         public string NewDSLAM { get; set; }
         public Address Address { get; set; }
+        public string OldLinePathId { get; set; }
+        public string NewLinePathId { get; set; }
 
     }
 }

@@ -82,28 +82,8 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new ADSLLineMovingRequestInput
                     {
-                        NewDSLAM = isSameSwitch? "425": newDSLAMPort.ToString(),
-                        OldDSLAM = "425",
-                        AddressSequence = new ContractManager().GetTelephonyContract(newContractId.ToString()).ContractAddress.Sequence,
-                        Address = new Address
-                        {
-                            CountryId = "206",
-                            StateProvince= province.ToString(),
-                            City=city.ToString(),
-                            Town = town.ToString(),
-                            Region=area.ToString(),
-                            Building=buildingNumber.ToString(),
-                            Floor= floor.ToString(),
-                            Street=street.ToString(),
-                            
-                        },
-                        PaymentData = new PaymentData()
-                        {
-                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
-                            IsPaid = (bool)isPaid
-                        },
-                        OldTelephonyContractId = oldContractId.ToString(),
-                        NewTelephonyContractId= newContractId.ToString(),
+                        OldLinePathId = new ContractManager().GetTelephonyContract(oldContractId.ToString()).PathId,
+                        NewLinePathId = new ContractManager().GetTelephonyContract(newContractId.ToString()).PathId,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = adslContractId.ToString(),
@@ -129,41 +109,84 @@ namespace BPMExtended.Main.Business
         public void FinalizeADSLLineMovingToOM(Guid requestId)
         {
 
+
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineMoving");
-            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StTelephonyContractId");
             esq.AddColumn("StCustomerId");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StSelectedTelephonyContract");
+            esq.AddColumn("StSelectedDSLAMPort");
+            esq.AddColumn("StFloor");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StCity");
+            esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-            esq.AddColumn("StAddressSequence");
+            esq.AddColumn("StIsSameSwitch");
+            esq.AddColumn("StCountry");
+            esq.AddColumn("StCountry.Id");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
-
+            
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var countryId = entities[0].GetColumnValue("StCountryId");
+                var oldContractId = entities[0].GetColumnValue("StTelephonyContractId");
+                var newContractId = entities[0].GetColumnValue("StSelectedTelephonyContract");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var newDSLAMPort = entities[0].GetColumnValue("StSelectedDSLAMPort");
+                var floor = entities[0].GetColumnValue("StFloor");
+                var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
+                var street = entities[0].GetColumnValue("StStreet");
+                var city = entities[0].GetColumnValue("StCityName");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var province = entities[0].GetColumnValue("StProvinceName");
+                var town = entities[0].GetColumnValue("StTownName");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
+                bool isSameSwitch = (bool)entities[0].GetColumnValue("StIsSameSwitch");
 
                 SOMRequestInput<ADSLLineMovingRequestInput> somRequestInput = new SOMRequestInput<ADSLLineMovingRequestInput>
                 {
 
                     InputArguments = new ADSLLineMovingRequestInput
                     {
-                        ContractId = adslContractId.ToString(),
-                        RequestId = requestId.ToString(),
+                        Address = new Address
+                        {
+                            CountryId = new CRMCustomerManager().GetCountryNumber(countryId.ToString()),
+                            StateProvince = province.ToString(),
+                            City = city.ToString(),
+                            Town = town.ToString(),
+                            Region = area.ToString(),
+                            Building = buildingNumber.ToString(),
+                            Floor = floor.ToString(),
+                            Street = street.ToString(),
+
+                        },
                         PaymentData = new PaymentData()
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
+                        OldLinePathId = new ContractManager().GetTelephonyContract(oldContractId.ToString()).PathId,
+                        NewLinePathId = new ContractManager().GetTelephonyContract(newContractId.ToString()).PathId,
+                        OldTelephonyContractId = oldContractId.ToString(),
+                        NewTelephonyContractId = newContractId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = adslContractId.ToString(),
@@ -173,7 +196,6 @@ namespace BPMExtended.Main.Business
                     }
 
                 };
-
 
                 //call api
                 using (var client = new SOMClient())
