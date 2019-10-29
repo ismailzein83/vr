@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.NIM.Entities
 {
+    public enum TechnicalAddressNumberType { NearbyNumber = 1, FDBNumber = 2, DPNumber = 3 }
     public class GetTechnicalAddressOutput
     {
         public long AreaId { get; set; }

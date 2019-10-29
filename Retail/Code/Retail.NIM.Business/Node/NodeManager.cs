@@ -114,14 +114,25 @@ namespace Retail.NIM.Business
                         FieldName = "Street",
                         CompareOperator = ListRecordFilterOperator.In,
                         Values =new List<object>{ streetId }
-                    },new StringRecordFilter
-                    {
-                        FieldName = "BuildingDetails",
-                        CompareOperator = StringRecordFilterOperator.Equals,
-                        Value = buildingDetails
                     }
                 }
             };
+            if(string.IsNullOrEmpty(buildingDetails))
+            {
+                filter.Filters.Add(new EmptyRecordFilter
+                {
+                    FieldName = "Building"
+                });
+            }
+            else
+            {
+                filter.Filters.Add(new StringRecordFilter
+                {
+                    FieldName = "Building",
+                    CompareOperator = StringRecordFilterOperator.Equals,
+                    Value = buildingDetails
+                });
+            }
             var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(businessEntityDefinitionId, null, filter);
             if (items == null || items.Count == 0)
                 return null;

@@ -165,7 +165,7 @@ namespace Retail.NIM.Business
             return item;
         }
 
-        public GetTechnicalAddressOutput GetTechnicalAddress(NumberType numberType, string number)
+        public GetTechnicalAddressOutput GetTechnicalAddress(TechnicalAddressNumberType numberType, string number)
         {
             NodeManager _nodeManager = new NodeManager();
 
@@ -176,10 +176,10 @@ namespace Retail.NIM.Business
             Guid businessEntityDefinitionId = Guid.Empty;
             switch (numberType)
             {
-                case NumberType.DPNumber:
+                case TechnicalAddressNumberType.DPNumber:
                     businessEntityDefinitionId = StaticBEDefinitionIDs.DPBEDefinitionId;
                     break;
-                case NumberType.FDBNumber:
+                case TechnicalAddressNumberType.FDBNumber:
                     businessEntityDefinitionId = StaticBEDefinitionIDs.FDBBEDefinitionId;
                     break;
             }
@@ -197,17 +197,17 @@ namespace Retail.NIM.Business
             output.CityId = (int)nodeNeeded.FieldValues.GetRecord("City");
             output.TownId = (int)nodeNeeded.FieldValues.GetRecord("Town");
             output.StreetId = (long)nodeNeeded.FieldValues.GetRecord("Street");
-            output.BuildingDetails = (string)nodeNeeded.FieldValues.GetRecord("BuildingDetails");
+            output.BuildingDetails = nodeNeeded.FieldValues.GetRecord("Building") as string;
 
 
             switch (numberType)
             {
-                case NumberType.DPNumber:
+                case TechnicalAddressNumberType.DPNumber:
                     var fdbNode = _nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.FDBBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
                     output.TechnologyItems.Add(GetDPTechnicalAddress(nodeNeeded));
                     output.TechnologyItems.Add(GetFDBTechnicalAddress(fdbNode));
                     break;
-                case NumberType.FDBNumber:
+                case TechnicalAddressNumberType.FDBNumber:
                     var dpNode = _nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.DPBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
                     output.TechnologyItems.Add(GetFDBTechnicalAddress(nodeNeeded));
                     output.TechnologyItems.Add(GetDPTechnicalAddress(dpNode));
@@ -216,7 +216,7 @@ namespace Retail.NIM.Business
             return output;
         }
 
-        public enum NumberType { NearbyNumber = 1, FDBNumber = 2, DPNumber = 3 }
+       
 
     }
 }
