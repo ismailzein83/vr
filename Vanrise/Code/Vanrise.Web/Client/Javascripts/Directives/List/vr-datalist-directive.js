@@ -59,6 +59,12 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
                 return true;
             };
 
+            $scope.$on('$destroy', function () {
+                $element.remove();
+                delete $scope.ctrl;
+            });
+
+
         },
         controllerAs: 'VRDatalistCtrl',
         bindToController: true,

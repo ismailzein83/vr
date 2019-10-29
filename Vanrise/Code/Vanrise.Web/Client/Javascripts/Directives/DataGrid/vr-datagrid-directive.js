@@ -39,6 +39,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     $('.vr-grid-menu').parents('div').unbind('scroll', hideGridColumnsMenu);
                     $(window).unbind('scroll', hideGridColumnsMenu);
                     $(document).unbind('click', bindClickOutSideGridMenu);
+                     $scope.ctrl.datasource.length = 0;
+                    delete $scope.ctrl;
                     $element.remove();
                     if (ctrl.objectType) {
                         VRDataGridService.removeObjectType(ctrl.objectType);
@@ -244,6 +246,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     pre: function ($scope, iElem, iAttrs, ctrl) {
                         $scope.$on('$destroy', function () {
                             iElem.find('vr-datagridrows').remove();
+                            iElem.remove();
+                            delete $scope.ctrl;
                         });
 
                         var ctrl = $scope.ctrl;

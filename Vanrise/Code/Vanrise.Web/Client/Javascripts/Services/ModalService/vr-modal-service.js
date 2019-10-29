@@ -124,9 +124,13 @@
                 }            
             });
 
-            //modalScope.$on("$destroy", function () {
-            //   // $(window).off("resize.Viewport");
-            //});
+
+
+            modalScope.$on("$destroy", function () {
+                if (modalScope.scopeModel) delete modalScope.scopeModel;
+                if (modalScope.scopemodel) delete modalScope.scopemodel;
+                if (modalScope.scopeModal) delete modalScope.scopeModal;
+            });
 
 
 

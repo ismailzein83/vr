@@ -69,6 +69,7 @@
                     $(window).off("resize.Viewport");
                     datasourceWatch();
                     dataWatch();
+                    delete $scope.ctrl;
                 });
                 $element.on('$destroy', function () {
                     $('div[name=' + $attrs.id + ']').parents('div').unbind('scroll', fixDropdownPosition);

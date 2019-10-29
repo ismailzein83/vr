@@ -63,6 +63,7 @@ app.directive('vrActionbar', ['ActionBarDirService', 'MultiTranscludeService', '
             ctrl.showMenuOption = false;
             $('.vr-menu-list').removeClass("open-grid-menu");
             $(document).unbind('click', bindClickOutSidePersonalizationMenu);
+            $(window).unbind('scroll', hidePersonalizationMenu);
         });
 
         ctrl.toggelOptionMenu = function (e) {
@@ -102,11 +103,13 @@ app.directive('vrActionbar', ['ActionBarDirService', 'MultiTranscludeService', '
                 $scope.$root.$digest();
             }
         }
-
-        setTimeout(function () {
-            $('.vr-menu-list').parents('div').on('scroll', hidePersonalizationMenu);
-            $(window).on('scroll', hidePersonalizationMenu);
-        }, 1);
+        if (ctrl.showpersonalizationmenu) {
+            setTimeout(function () {
+                $('.vr-menu-list').parents('div').on('scroll', hidePersonalizationMenu);
+                $(window).bind('scroll', hidePersonalizationMenu);
+            }, 1);
+        }
+       
 
         function hidePersonalizationMenu() {
             var menu = $('.vr-menu-list');
