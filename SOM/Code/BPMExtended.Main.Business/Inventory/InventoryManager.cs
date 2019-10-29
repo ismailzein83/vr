@@ -181,6 +181,7 @@ namespace BPMExtended.Main.Business
             }
             return item;
         }
+
         public List<Domain> GetAllDomains()
         {
             List<Domain> items = null;
@@ -503,7 +504,18 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void CreateFullPath(string phoneNumber , string pathID)
+        public bool CheckIfDeviceIsOnMSANCombo(string linePathId)
+        {
+
+            using (SOMClient client = new SOMClient())
+            {
+                return client.Get<bool>(String.Format("api/SOM.ST/Inventory/CheckIfDeviceIsOnMSANCombo?linePathId={0}",linePathId));
+            }
+
+        }
+
+
+        public void CreateFullPath(string phoneNumber, string pathID)
         {
             string phoneNumberId = phoneNumber.EndsWith(".0") ? phoneNumber.Substring(0, phoneNumber.Length - 2) : phoneNumber;
 
@@ -513,6 +525,8 @@ namespace BPMExtended.Main.Business
             }
 
         }
+
+
 
         public string GetPhoneNumberId(string phoneNumber)
         {

@@ -88,10 +88,10 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new ADSLTakeOverInput
                     {
-                        NewUserName = userName.ToString(),
+                        Username = userName.ToString(),
                         NewCustomerId = newCustomerId.ToString(),
                         LinePathId = pathId.ToString(),
-                        NewPassword = password.ToString(),
+                        Password = password.ToString(),
                         CSO = new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null).csoBSCSId,
                         NewTelephonyContractId = newTelephonyContractId.ToString(),
                         PaymentData = new PaymentData()
@@ -114,7 +114,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ADSLTakeOverInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/XDSLSubmitContractTakeOver/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ADSLTakeOverInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ADSLContractTakeOver/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

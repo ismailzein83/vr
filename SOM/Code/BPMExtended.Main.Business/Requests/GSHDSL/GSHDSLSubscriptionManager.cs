@@ -26,6 +26,41 @@ namespace BPMExtended.Main.Business
 
         #region public
 
+        public string CreateGSHDSLLinePath(string phoneNumber, string pathID)
+        {
+            string phoneNumberId = phoneNumber.EndsWith(".0") ? phoneNumber.Substring(0, phoneNumber.Length - 2) : phoneNumber;
+
+            using (SOMClient client = new SOMClient())
+            {
+                return client.Get<string>(String.Format("api/SOM.ST/Inventory/CreateGSHDSLLinePath?portId={0}&linePathId={1}", phoneNumberId, pathID));
+            }
+
+        }
+
+        public bool CheckGSHDSLRequestInWaitingList()
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqSecondFilter, esqThirdFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("StRequestId");
+
+            esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus.Id", "8BC51DE4-23FE-4CF9-93A7-C7D9CC35C5AC");
+            esqThirdFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestType", "15");
+            esq.Filters.Add(esqSecondFilter);
+            esq.Filters.Add(esqThirdFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                //Guid requestId = entities[0].GetTypedColumnValue<Guid>("StRequestId");
+                return true;
+            }
+            return false;
+        }
+
         public string HasPendingRequestInWaitingList(string switchId , string division)
         {
             EntitySchemaQuery esq;
@@ -48,6 +83,16 @@ namespace BPMExtended.Main.Business
                 return id.ToString();
             }
             return null;
+        }
+
+        public TechnicalReservation GetTemporaryReservationForGSHDSL(string phoneNumber)
+        {
+            TechnicalReservation item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<TechnicalReservation>(String.Format("api/SOM.ST/Inventory/GetTemporaryReservationForGSHDSL?phoneNumber={0}", phoneNumber));
+            }
+            return item;
         }
 
         public SOMRequestOutput CreateGSHDSLContract(Guid requestId, string coreServices, string optionalServices, string ratePlanId)
@@ -177,7 +222,6 @@ namespace BPMExtended.Main.Business
 
             return output;
         }
-
 
         public void SubmitActivateGSHDSLContract(Guid requestId)
         {
@@ -427,10 +471,7 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new GSHDSLSubscriptionRequestInput
                     {
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                            RequestId = requestId.ToString()
-                        }
+                        RequestId = requestId.ToString()
                     }
 
                 };

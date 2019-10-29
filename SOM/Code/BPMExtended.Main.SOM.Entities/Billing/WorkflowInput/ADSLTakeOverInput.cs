@@ -14,8 +14,8 @@ namespace BPMExtended.Main.SOMAPI
         public string NewTelephonyContractId { get; set; }
         public string LinePathId { get; set; }
         public string CSO { get; set; }
-        public string NewUserName { get; set; }
-        public string NewPassword { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
         public PaymentData PaymentData { get; set; }
     }
 }
