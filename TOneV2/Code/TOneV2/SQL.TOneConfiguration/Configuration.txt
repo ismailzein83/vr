@@ -75,6 +75,9 @@ Retail_Teles.PostDeployment1.sql
 Retail_Zajil_Overridden.PostDeployment.sql
 Retail_Zajil.PostDeployment.sql
 
+Retail_Qualitynet
+Retail_Qualitynet.PostDeployment.sql
+Retail_Qualitynet_Overridden.PostDeployment.sql
 
 Retail_Multinet
 Retail_Multinet_Overridden.PostDeployment.sql
