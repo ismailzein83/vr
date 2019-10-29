@@ -48,7 +48,12 @@ namespace SOM.ST.Business
 
             using (var response = (HttpWebResponse)authRequest.GetResponse())
             {
-                var loginResponse = new VRXmlSerializer().Deserialize<LogInResponse>(response.ToString());
+                string responseText;
+                using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
+                {
+                    responseText = reader.ReadToEnd();
+                }
+                var loginResponse = new VRXmlSerializer().Deserialize<LogInResponse>(responseText);
                 sessionId = loginResponse.sessionId;
             }
 
