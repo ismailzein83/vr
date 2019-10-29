@@ -23,12 +23,22 @@ app.directive( 'vrTreeview', ['UtilsService', function ( UtilsService )
             hasremotechildrenfield: '@',
             loadremotechildren: '=',
             maxlevel: '@',
-            onmoveitem: '='
+            onmoveitem: '=',
+            maxheight:'='
         },
         controller: function ( $scope, $element, $attrs )
         {
             var ctrl = this;
-            ctrl.treeHeight = $element.parents( ".modal-dialog" ).length > 0 ? innerHeight * 0.50 : ( innerHeight - 210 ) + 'px';
+            if (ctrl.maxheight != undefined && !isNaN(ctrl.maxheight)) {
+                ctrl.treeHeight = 'auto';
+                ctrl.treeMaxHeight = ctrl.maxheight + 'px';
+
+            }
+            else {
+                ctrl.treeHeight = $element.parents(".modal-dialog").length > 0 ? innerHeight * 0.50 : (innerHeight - 210) + 'px';
+                ctrl.treeMaxHeight = 'unset';
+            }
+
             var treeElement = $element.find( '#divTree' );
             $scope.$on( "$destroy", function ()
             {
@@ -339,7 +349,7 @@ app.directive( 'vrTreeview', ['UtilsService', function ( UtilsService )
         },
         template: function ( element, attrs )
         {
-            return '<div ng-style="::{\'height\':ctrl.treeHeight,\'overflow-y\':\'auto\'}"><div id="divTree" /></div>';
+            return '<div ng-style="::{\'height\':ctrl.treeHeight,\'max-height\':ctrl.treeMaxHeight,\'overflow-y\':\'auto\'}"><div id="divTree" /></div>';
         }
 
     };
