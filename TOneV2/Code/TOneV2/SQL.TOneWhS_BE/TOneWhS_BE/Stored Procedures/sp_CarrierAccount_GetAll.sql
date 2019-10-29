@@ -11,6 +11,7 @@ BEGIN
 		ca.CustomerSettings,
 		ca.SupplierSettings,
 		ca.SellingNumberPlanID,
+		ca.LOBID,
 		ca.SellingProductID,
 		ca.CarrierAccountSettings,
 		ca.sourceid,

@@ -675,5 +675,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_GetByPlID.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_Get.sql" />
+    <Build Include="TOneWhS_BE\Tables\LOB.sql" />
   </ItemGroup>
 </Project>

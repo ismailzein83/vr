@@ -7,6 +7,7 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_CarrierAccount_Insert]
 	@Name nvarchar(255),
 	@CarrierProfileId int,
 	@AccountType int,
+	@LOBID uniqueidentifier,
 	@SellingNumberPlanID int = null,
 	@SellingProductID int = null,
 	@CustomerSettings nvarchar(max),
@@ -20,8 +21,8 @@ BEGIN
 	set @id = 0;
 	if not exists(select 1 from TOneWhS_BE.CarrierAccount where  isnull([NameSuffix],'') = isnull(@Name,'') and [CarrierProfileID] = @CarrierProfileId and ISNULL(IsDeleted,0) = 0)
 	begin
-		insert into TOneWhS_BE.CarrierAccount([NameSuffix], [CarrierProfileID], [AccountType], [SupplierSettings], [CustomerSettings], [CarrierAccountSettings], [SellingNumberPlanID], [SellingProductID], [CreatedBy], [LastModifiedBy], [LastModifiedTime])
-		values (@Name, @CarrierProfileId, @AccountType, @SupplierSettings, @CustomerSettings, @CarrierAccountSettings, @SellingNumberPlanID, @SellingProductId,  @CreatedBy, @LastModifiedBy, GETDATE())
+		insert into TOneWhS_BE.CarrierAccount([NameSuffix], [CarrierProfileID], [AccountType], [SupplierSettings], [CustomerSettings], [CarrierAccountSettings],[LOBID], [SellingNumberPlanID], [SellingProductID], [CreatedBy], [LastModifiedBy], [LastModifiedTime])
+		values (@Name, @CarrierProfileId, @AccountType, @SupplierSettings, @CustomerSettings, @CarrierAccountSettings, @LOBID, @SellingNumberPlanID, @SellingProductId,  @CreatedBy, @LastModifiedBy, GETDATE())
 		set @Id = scope_identity()
 	end
 END
