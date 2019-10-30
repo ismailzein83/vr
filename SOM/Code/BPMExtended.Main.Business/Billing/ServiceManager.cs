@@ -40,6 +40,89 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public ServiceConsistensyCatalog GetServicesConsistencyCatalog()
+        {
+            var item = new ServiceConsistensyCatalog();
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<ServiceConsistensyCatalog>(String.Format("api/SOM.ST/Billing/GetServicesConsistencyCatalog"));
+            }
+            return item;
+        }
+        public UnconsistentServices GetUnconsistentServices(List<string> servicesIds)
+        {
+
+            UnconsistentServices unconsistentServices = new UnconsistentServices
+            {
+                ProhibitedServices = new Dictionary<string, string>(),
+                RequiredServices = new Dictionary<string, string>()
+            };
+            if (servicesIds != null && servicesIds.Count > 0)
+            {
+                EntitySchemaQuery esq;
+                IEntitySchemaQueryFilterItem esqFirstFilter;
+                SOMRequestOutput output;
+
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+                esq.AddColumn("StServiceConsistencyConfiguration");
+
+
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "98b9cb89-09dc-4750-a773-0ca6509ef2da");
+                esq.Filters.Add(esqFirstFilter);
+
+                var entities = esq.GetEntityCollection(BPM_UserConnection);
+                if (entities.Count > 0)
+                {
+                    var serializedObject = entities[0].GetColumnValue("StServiceConsistencyConfiguration");
+                    if (serializedObject != null)
+                    {
+                        ServiceConsistensyCatalog serviceConsistensyCatalog = JsonConvert.DeserializeObject<ServiceConsistensyCatalog>(serializedObject.ToString());
+                        if (serviceConsistensyCatalog != null)
+                        {
+                            if (serviceConsistensyCatalog.RequiredServices != null)
+                            {
+                                foreach (var serviceId in servicesIds)
+                                {
+                                    List<RequiredService> requiredServices = null;
+                                    serviceConsistensyCatalog.RequiredServices.TryGetValue(serviceId, out requiredServices);
+                                    if (requiredServices != null)
+                                    {
+                                        List<string> allRequiredServices = new List<string>();
+                                        foreach (var reqServ in requiredServices)
+                                        {
+                                            if (!servicesIds.Contains(reqServ.ServiceId))
+                                                allRequiredServices.Add(reqServ.ServiceId);
+                                        }
+                                        unconsistentServices.RequiredServices.Add(serviceId, string.Join(" , ", allRequiredServices));
+                                    }
+                                }
+                            }
+                            //------------------------------------------------------------------------------------------
+                            if (serviceConsistensyCatalog.ProhibitedServices != null)
+                            {
+                                foreach (var serviceId in servicesIds)
+                                {
+                                    List<ProhibitedService> prohibitedServices = null;
+                                    serviceConsistensyCatalog.ProhibitedServices.TryGetValue(serviceId, out prohibitedServices);
+                                    if (prohibitedServices != null)
+                                    {
+                                        List<string> allProhibitedServices = new List<string>();
+                                        foreach (var reqServ in prohibitedServices)
+                                        {
+                                            if (servicesIds.Contains(reqServ.ServiceId))
+                                                allProhibitedServices.Add(reqServ.ServiceId);
+                                        }
+                                        unconsistentServices.ProhibitedServices.Add(serviceId, string.Join(" , ", allProhibitedServices));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return unconsistentServices;
+        }
+
         public List<ServiceInfo> GetServicesInfo()
         {
             var servicesInfoItems = new List<ServiceInfo>();
@@ -54,6 +137,21 @@ namespace BPMExtended.Main.Business
             }
             return servicesInfoItems;
         }
+
+        public void UpdateServiceConfiguration()
+        {
+            var servicesInfoItems = new List<ServiceInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<ServiceDefinition> items = client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetServicesDefinition"));
+                foreach (var item in items)
+                {
+                    var serviceInfoItem = ServiceDefinitionToInfoMapper(item);
+                    servicesInfoItems.Add(serviceInfoItem);
+                }
+            }
+       }
+
         public List<ServiceInfo> GetServicesInfoForCatalog(string catalogId, string catalogName, string sourceSchemaName)
         {
             List<string> Servicesids = new List<string>();
