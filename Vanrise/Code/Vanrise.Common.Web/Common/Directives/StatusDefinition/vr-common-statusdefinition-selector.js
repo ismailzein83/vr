@@ -14,6 +14,7 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                 ondeselectitem: '=',
                 isrequired: '=',
                 hideremoveicon: '@',
+                hidelabel:'@',
                 normalColNum: '@',
                 customvalidate: '='
             },
@@ -27,7 +28,7 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                     ctrl.label = "Status Definitions";
                     ctrl.selectedvalues = [];
                 }
-                    
+
 
                 var statusDefinitionSelector = new StatusDefinitionSelector(ctrl, $scope, $attrs);
                 statusDefinitionSelector.initializeController();
@@ -67,11 +68,10 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                         selectfirstitem = payload.selectfirstitem != undefined && payload.selectfirstitem == true;
                         filter = payload.filter;
                         var businessEntityDefinitionId = payload.businessEntityDefinitionId;
-                        if(businessEntityDefinitionId != undefined)
-                        {
+                        if (businessEntityDefinitionId != undefined) {
                             if (filter == undefined)
                                 filter = {};
-                            filter.BusinessEntityDefinitionId = businessEntityDefinitionId;                           
+                            filter.BusinessEntityDefinitionId = businessEntityDefinitionId;
                         }
 
                     }
@@ -111,17 +111,29 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
             var multipleselection = "";
             var label = "{{ctrl.label}}";
 
+            var hidelabel="";
+            if (attrs.hidelabel != undefined) {
+                hidelabel = "hidelabel";
+            }
+            else {
+                if (attrs.customlabel != undefined)
+                    label = attrs.customlabel;
+            }
+
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
             }
-            if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
 
+            var hideremoveicon="";
+            if (attrs.hideremoveicon != undefined) {
+                hideremoveicon = "hideremoveicon";
+            }
+            
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                   '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="StatusDefinitionId" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Status" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
-                   '</vr-select>' +
-                   '</vr-columns>';
+                '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="StatusDefinitionId" isrequired="ctrl.isrequired" label="' + label +
+                '" datasource="ctrl.datasource" ' + hidelabel + '  on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Status" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' " customvalidate="ctrl.customvalidate" >' +
+                '</vr-select>' +
+                '</vr-columns>';
         }
 
     }]);
