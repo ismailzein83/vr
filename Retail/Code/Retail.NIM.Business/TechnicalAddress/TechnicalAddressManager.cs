@@ -128,8 +128,7 @@ namespace Retail.NIM.Business
                 if (port1NodeId != nodeId)
                 {
                     nodeId = port1NodeId;
-                }
-                if (port2NodeId != nodeId)
+                }else if (port2NodeId != nodeId)
                 {
                     nodeId = port2NodeId;
                 }
