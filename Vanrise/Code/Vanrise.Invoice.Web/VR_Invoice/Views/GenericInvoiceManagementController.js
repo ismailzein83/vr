@@ -144,13 +144,14 @@
 
         function load() {
             $scope.scopeModel.isLoadingFilters = true;
-            UtilsService.waitMultipleAsyncOperations([getInvoiceTypeRuntime, GetAvailableMenualBulkActionIds]).then(function () {
+            GetAvailableMenualBulkActionIds().then(function () {
+                UtilsService.waitMultipleAsyncOperations([getInvoiceTypeRuntime]).then(function () {
                     loadAllControls();
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.scopeModel.isLoadingFilters = false;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoadingFilters = false;
+                });
             });
-
         }
         function getFilterObject() {
             var partnerObject;
@@ -249,7 +250,7 @@
 
         function GetAvailableMenualBulkActionIds() {
 
-            VR_Invoice_InvoiceAPIService.GetAvailableMenualBulkActionIds(invoiceTypeId).then(function (response) {
+            return VR_Invoice_InvoiceAPIService.GetAvailableMenualBulkActionIds(invoiceTypeId).then(function (response) {
                 if (response == undefined || response.length != 0) {
                     allowedMenualBulkActionIds = response;
                     $scope.scopeModel.showActionButtons = false;
@@ -259,7 +260,7 @@
         function getInvoiceTypeRuntime() {
             return VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypeRuntime(invoiceTypeId).then(function (response) {
                 $scope.scopeModel.invoiceTypeEntity = response;
-                if ($scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions.length > 0 && allowedMenualBulkActionIds != undefined && allowedMenualBulkActionIds.length!=0)
+                if ($scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions.length > 0 && allowedMenualBulkActionIds != undefined && allowedMenualBulkActionIds.length != 0)
                     $scope.scopeModel.showActionButtons = true;
                 if (!$scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.HidePaidFilter)
                     $scope.scopeModel.showPaidFilter = true;
