@@ -123,9 +123,15 @@ namespace Retail.QualityNet.Business
                         TotalNumberOfCalls = 1
                     };
 
-                    var zone = saleZoneManager.GetSaleZone(billingCDR.ZoneId);
-                    qualityNetCDR.Country = countryManager.GetCountryName(zone.CountryId);
-                    qualityNetCDR.CountryInArabic = businessEntityManager.GetEntityDescription(CountryInArabicBusinessEntityId, zone.CountryId);
+                    if (billingCDR.ZoneId.HasValue)
+                    {
+                        var zone = saleZoneManager.GetSaleZone(billingCDR.ZoneId.Value);
+                        if (zone != null)
+                        {
+                            qualityNetCDR.Country = countryManager.GetCountryName(zone.CountryId);
+                            qualityNetCDR.CountryInArabic = businessEntityManager.GetEntityDescription(CountryInArabicBusinessEntityId, zone.CountryId);
+                        }
+                    }
 
                     qualityNetCDR.TotalAmount = Decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(billingCDR.SaleAmount, qualityNetCDR.SaleCurrencyId, context.CurrencyId, qualityNetCDR.AttemptDateTime), normalPrecisionValue);
                     qualityNetCDR.TotalAmountInArabicWords = numberToArabicText.ConvertNumberToText(internationalTotalAmount, textCurrency);
@@ -291,7 +297,7 @@ namespace Retail.QualityNet.Business
                     CalledNumber = Convert.ToString(calledField.Value),
                     SaleAmount = saleAmount,
                     DurationInSeconds = Convert.ToDecimal(durationInSecondsField.Value),
-                    ZoneId = Convert.ToInt64(zoneField.Value),
+                    ZoneId = zoneField.Value != null ? Convert.ToInt64(zoneField.Value) : default(long?),
                     SaleCurrencyId = Convert.ToInt32(saleCurrencyIdField.Value),
                     ServiceTypeId = new Guid(serviceTypeIdField.Value.ToString())
                 };
@@ -400,7 +406,7 @@ namespace Retail.QualityNet.Business
             public String CalledNumber { get; set; }
             public String CallingNumber { get; set; }
             public Decimal DurationInSeconds { get; set; }
-            public long ZoneId { get; set; }
+            public long? ZoneId { get; set; }
             public int SaleCurrencyId { get; set; }
             public Guid ServiceTypeId { get; set; }
         }

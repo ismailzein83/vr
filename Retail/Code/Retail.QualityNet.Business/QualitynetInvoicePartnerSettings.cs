@@ -16,14 +16,14 @@ namespace Retail.QualityNet.Business
         {
             get
             {
-                return "retail-be-account-invoice-selector";
+                return "retail-invoice-financialaccount-selector";
             }
         }
         public override string PartnerSelector
         {
             get
             {
-                return "retail-be-account-invoice-selector";
+                return "retail-invoice-financialaccount-selector";
             }
         }
         public override string PartnerInvoiceSettingFilterFQTN
