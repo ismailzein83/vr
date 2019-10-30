@@ -105,11 +105,17 @@ namespace BPMExtended.Main.Business
 
         public bool CheckIfUserPayForWaitingList(Guid requestId)
         {
+
             //Get sequence Number
             string sequenceNumber = new CRMCustomerManager().GetSequenceNumberFromRequestHeader(requestId);
 
+            using (SOMClient client = new SOMClient())
+            {
+                return client.Get<bool>(String.Format("api/SOM.ST/Billing/CheckIfUserPayForWaitingList?requestId={0}",sequenceNumber));
+            }
+
             //TODO: check if user paid 
-            return new Random().Next(10) <= 5 ? true : false;
+            //return new Random().Next(10) <= 5 ? true : false;
 
         }
 
