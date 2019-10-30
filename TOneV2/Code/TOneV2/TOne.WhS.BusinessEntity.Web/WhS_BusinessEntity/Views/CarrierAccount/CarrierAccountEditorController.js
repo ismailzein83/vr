@@ -551,7 +551,7 @@
         }
         function loadStaticData() {
             if (!isEditMode && !isViewHistoryMode) {
-                $scope.scopeModel.nominalCapacity = 1;
+                $scope.scopeModel.channelsLimit = 1;
                 return;
             }
             if (carrierAccountEntity != undefined) {
@@ -562,7 +562,7 @@
 
                 if (carrierAccountEntity.CarrierAccountSettings != undefined) {
                     $scope.scopeModel.mask = carrierAccountEntity.CarrierAccountSettings.Mask;
-                    $scope.scopeModel.nominalCapacity = carrierAccountEntity.CarrierAccountSettings.NominalCapacity;
+                    $scope.scopeModel.channelsLimit = carrierAccountEntity.CarrierAccountSettings.ChannelsLimit;
                     $scope.scopeModel.isInterconnectSwitch = carrierAccountEntity.CarrierAccountSettings.IsInterconnectSwitch;
                 }
 
@@ -1032,7 +1032,7 @@
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     Mask: $scope.scopeModel.mask,
                     CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
-                    NominalCapacity: $scope.scopeModel.nominalCapacity,
+                    ChannelsLimit: $scope.scopeModel.channelsLimit,
                     IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch,
                     LOBId: lobSelectorAPI.getSelectedIds(),
                 },

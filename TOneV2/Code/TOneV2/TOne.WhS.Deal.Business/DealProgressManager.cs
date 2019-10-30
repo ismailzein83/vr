@@ -11,6 +11,11 @@ namespace TOne.WhS.Deal.Business
     public class DealProgressManager
     {
         #region Public Methods
+        public List<DealProgress> GetDealsProgress(IEnumerable<int> dealIds)
+        {
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+            return  dealProgressDataManager.GetDealsProgress(dealIds);
+        }
 
         public Dictionary<DealZoneGroup, DealProgress> GetDealProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
         {

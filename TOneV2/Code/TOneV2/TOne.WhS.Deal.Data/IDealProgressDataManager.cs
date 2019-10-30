@@ -19,5 +19,6 @@ namespace TOne.WhS.Deal.Data
 
         void DeleteAffectedDealZoneGroups();
         List<DealProgress> GetDealProgressesByDealId(int dealId);
+        List<DealProgress> GetDealsProgress(IEnumerable<int> dealId);
     }
 }

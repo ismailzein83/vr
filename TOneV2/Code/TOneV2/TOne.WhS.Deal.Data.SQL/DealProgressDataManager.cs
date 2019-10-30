@@ -31,7 +31,15 @@ namespace TOne.WhS.Deal.Data.SQL
                 cmd.Parameters.Add(dtPrm);
             });
         }
-        public List<DealProgress>GetDealProgressesByDealId (int dealId)
+
+        public List<DealProgress> GetDealsProgress(IEnumerable<int> dealIds)
+        {
+            string strDealIds = null;
+            if (dealIds != null )
+                strDealIds = string.Join(",", dealIds);
+            return GetItemsSP("[TOneWhS_Deal].[sp_DealProgress_GetByDealIds]", DealProgressMapper, strDealIds);
+        }
+        public List<DealProgress> GetDealProgressesByDealId(int dealId)
         {
             return GetItemsSP("[TOneWhS_Deal].[sp_DealProgress_GetByDealId]", DealProgressMapper, dealId);
         }

@@ -1,0 +1,44 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_SwapDealCapacityController" vr-loader="isLoadingFilter" size="medium">
+    <vr-modalbody>
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-datetimepicker label="Deal BED" type="date" value="scopeModel.dealBED"></vr-datetimepicker>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-datetimepicker label="Deal EED" type="date" value="scopeModel.dealEED"></vr-datetimepicker>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-textbox label="Channels limit" value="scopeModel.channelsLimit" type="number"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-textbox label="Capacity Per Day" value="scopeModel.capacityPerDay" type="number"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-textbox label="Selling Volume" value="scopeModel.sellingVolume" type="number"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-textbox label="Buying Volume" value="scopeModel.buyingVolume" type="number"></vr-textbox>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-datagrid datasource="scopeModel.swapDealCapacityDataSource"
+                             pagingtype="'PagingOnScroll'"
+                             enableautoexport="true">
+                    <vr-datagridcolumn headertext="'From Date'" widthfactor="3" field="'FromTime'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'To Date'" widthfactor="3" field="'ToTime'" type="'Datetime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Deal Names'" field="'DealNames'" type="'Text'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Expected Capacity'" widthfactor="3" field="'ExpectedCapacity'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Allowed Capacity'" widthfactor="3" field="'AllowedCapacity'" type="'Number'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

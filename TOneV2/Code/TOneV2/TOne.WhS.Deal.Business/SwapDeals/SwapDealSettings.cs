@@ -31,11 +31,6 @@ namespace TOne.WhS.Deal.Business
         Commitment = 1
     }
 
-    public enum SwapDealTimeZone
-    {
-        System = 0,
-        Supplier = 1
-    }
 
     public class SwapDealSettings : DealSettings
     {

@@ -1,23 +1,87 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.ComponentModel;
 using Vanrise.Common;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
-using TOne.WhS.Deal.Entities;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.Deal.Entities.Settings;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Deal.Data;
 using Vanrise.Caching;
-using Vanrise.GenericData.Entities;
+using Vanrise.Entities;
+using TOne.WhS.Deal.Data;
+using System.ComponentModel;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common.Business;
+using System.Collections.Generic;
+using TOne.WhS.Deal.Entities.Settings;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
     public class SwapDealManager : BaseDealManager
     {
         #region Public Methods
+        public List<DealCapacity> GetIntersectedSwapDealsAboveCapacity(DealDefinition deal)
+        {
+            if (deal == null)
+                return null;
+
+            var swapDealSettings = (SwapDealSettings)deal.Settings;
+
+            if (swapDealSettings == null || swapDealSettings.Inbounds == null || swapDealSettings.Inbounds.Count == 0 || swapDealSettings.Outbounds == null || swapDealSettings.Outbounds.Count == 0
+                || swapDealSettings.BeginDate == new DateTime())
+                return null;
+
+            Dictionary<int, Interval> dealsIntervalByDealId = GetIntersectedDeals(swapDealSettings.CarrierAccountId, swapDealSettings.RealBED, swapDealSettings.RealEED);
+            Dictionary<int, double> dealProgressByDealId = GetDealsReachedDurByDealId(dealsIntervalByDealId.Keys);
+
+            var dealsCapacity = new List<DealCapacity>();
+            var dealIdsByInterval = GetDealIdsByInterval(swapDealSettings, dealsIntervalByDealId);
+            if (dealIdsByInterval == null || dealIdsByInterval.Count == 0)
+                return dealsCapacity;
+
+            int newDealVolume = GetDealVolume(swapDealSettings.Inbounds, swapDealSettings.Outbounds);
+            double newDeallExpectedPerHour = GetExpectedPerHour(swapDealSettings.RealBED, swapDealSettings.RealEED, newDealVolume);
+            int channelsLimit = new CarrierAccountManager().GetAccountChannelsLimit(swapDealSettings.CarrierAccountId);
+            int nominalCapacity = channelsLimit * 60;
+            var dealNames = new List<string>();
+
+            foreach (var kvp_deal in dealIdsByInterval)
+            {
+                Interval dealInterval = kvp_deal.Key;
+                double intersectedDealHours = dealInterval.ToDate.HasValue ? (dealInterval.ToDate.Value - dealInterval.FromDate).TotalHours : 0;
+                double totalIntersectedExpectedCapacity = 0;
+                dealNames = new List<string>();
+
+                foreach (var dealId in kvp_deal.Value)
+                {
+                    DealDefinition intersectedDeal = GetDeal(dealId);
+                    dealNames.Add(intersectedDeal.Name);
+                    var intersectedSwapDealSettings = (SwapDealSettings)intersectedDeal.Settings;
+                    var intersectedDealVolume = GetDealVolume(intersectedSwapDealSettings.Inbounds, intersectedSwapDealSettings.Outbounds);
+
+                    double interectedReachedDuration = dealProgressByDealId.GetRecord(dealId);
+                    double intersectedRemainingVolume = intersectedDealVolume - interectedReachedDuration;
+                    double? dealLifeSpan = GetDealLifeSpan(intersectedSwapDealSettings.RealBED, intersectedSwapDealSettings.RealEED);
+                    if (dealLifeSpan.HasValue)
+                    {
+                        double intersectedExpectedPerHour = intersectedRemainingVolume / dealLifeSpan.Value;
+                        totalIntersectedExpectedCapacity += intersectedExpectedPerHour * intersectedDealHours;
+                    }
+                }
+                double newDealExpectedCapacity = newDeallExpectedPerHour * intersectedDealHours;
+                double expectedCapacity = totalIntersectedExpectedCapacity + newDealExpectedCapacity;
+                double allowedCapacity = nominalCapacity * intersectedDealHours;
+
+                if (expectedCapacity > allowedCapacity)
+                    dealsCapacity.Add(new DealCapacity
+                    {
+                        DealIds = kvp_deal.Value,
+                        DealNames = string.Join(",", dealNames.ToArray()),
+                        ExpectedCapacity = expectedCapacity,
+                        FromTime = dealInterval.FromDate,
+                        ToTime = dealInterval.ToDate,
+                        AllowedCapacity = allowedCapacity
+                    });
+            }
+            return dealsCapacity;
+        }
 
         public Dictionary<int, SwapDealSettings> GetEffectiveSwapDeals(List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, out DateTime? minBED, out DateTime? maxEED)
         {
@@ -307,7 +371,6 @@ namespace TOne.WhS.Deal.Business
             return detail;
         }
 
-
         public override BaseDealLoggableEntity GetLoggableEntity()
         {
             return SwapDealLoggableEntity.Instance;
@@ -329,7 +392,112 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region private Methods
+        private Dictionary<Interval, List<int>> GetDealIdsByInterval(SwapDealSettings swapDealSettings, Dictionary<int, Interval> dealsIntervalByDealId)
+        {
+            HashSet<DateTime?> dates = new HashSet<DateTime?> { swapDealSettings.RealBED, swapDealSettings.RealEED };
 
+            foreach (var dealInterval in dealsIntervalByDealId.Values)
+            {
+                if (dealInterval.FromDate > swapDealSettings.RealBED)
+                    dates.Add(dealInterval.FromDate);
+
+                if (dealInterval.ToDate < swapDealSettings.RealEED)
+                    dates.Add(dealInterval.ToDate);
+            }
+
+            var intersectedIntervals = new List<Interval>();
+            var orderedDates = dates.OrderBy(it => it).ToList();
+            int count = orderedDates.Count();
+            for (int i = 0; i < count; i++)
+            {
+                if (i + 1 > count)
+                    continue;
+                intersectedIntervals.Add(new Interval
+                {
+                    FromDate = orderedDates[i].Value,
+                    ToDate = orderedDates[i + 1]
+                });
+            }
+
+            var dealIdsByInterval = new Dictionary<Interval, List<int>>();
+            foreach (var dealIntersection in intersectedIntervals)
+            {
+                var dealIds = new List<int>();
+                foreach (var dealId in dealsIntervalByDealId.Keys)
+                {
+                    DealDefinition intersectedDeal = GetDeal(dealId);
+                    var intersectedSwapDealSettings = (SwapDealSettings)intersectedDeal.Settings;
+
+                    if (Utilities.AreTimePeriodsOverlapped(intersectedSwapDealSettings.RealBED, intersectedSwapDealSettings.RealEED, dealIntersection.FromDate, dealIntersection.ToDate))
+                        dealIds.Add(dealId);
+                }
+                if (dealIds.Count > 0)
+                    dealIdsByInterval.Add(dealIntersection, dealIds);
+            }
+            return dealIdsByInterval;
+        }
+        private double? GetDealLifeSpan(DateTime BED, DateTime? EED)
+        {
+            if (!EED.HasValue)
+                return null;
+            return (EED.Value - BED).TotalHours;
+        }
+        private Dictionary<int, double> GetDealsReachedDurByDealId(IEnumerable<int> dealIds)
+        {
+            var dealProgressManager = new DealProgressManager();
+            List<DealProgress> dealsProgress = dealProgressManager.GetDealsProgress(dealIds);
+            var dealprgressDataByDealId = new Dictionary<int, double>();
+            foreach (var dealProgress in dealsProgress)
+            {
+                if (dealProgress.CurrentTierNb == 2)
+                    continue; //not including any extra volume traffic
+
+                double reachedDuration = dealprgressDataByDealId.GetOrCreateItem(dealProgress.DealId);
+                if (dealProgress.ReachedDurationInSeconds.HasValue)
+                    reachedDuration += (double)dealProgress.ReachedDurationInSeconds.Value / 60;
+            }
+            return dealprgressDataByDealId;
+        }
+        public double GetExpectedPerHour(DateTime dealBED, DateTime? dealEED, int dealVolume)
+        {
+            double dealHours = dealEED.HasValue ? (dealEED.Value - dealBED).TotalHours : 0;
+            return dealHours != 0 ? dealVolume / dealHours : 0;
+        }
+        private int GetDealVolume(List<SwapDealInbound> inbounds, List<SwapDealOutbound> outbounds)
+        {
+            int volume = 0;
+
+            if (inbounds != null && inbounds.Count > 0)
+                foreach (var inbound in inbounds)
+                    volume += inbound.Volume;
+
+            if (outbounds != null)
+                foreach (var outbound in outbounds)
+                    volume += outbound.Volume;
+
+            return volume;
+        }
+        private Dictionary<int, Interval> GetIntersectedDeals(int carrierId, DateTime dealBED, DateTime? dealEED)
+        {
+            var effectiveDeals = new SwapDealManager().GetSwapDealsBetweenDate(dealBED, dealEED);
+
+            if (effectiveDeals == null && effectiveDeals.Count() == 0)
+                return null;
+
+            var dealIntervalsByDealId = new Dictionary<int, Interval>();
+            foreach (var deal in effectiveDeals)
+            {
+                var dealSettings = deal.Settings.CastWithValidate<SwapDealSettings>("deal.Settings");
+                if (dealSettings != null)
+                {
+                    if (dealSettings.CarrierAccountId != carrierId)
+                        continue;
+
+                    dealIntervalsByDealId.Add(deal.DealId, new Interval { FromDate = dealSettings.RealBED, ToDate = dealSettings.RealEED });
+                }
+            }
+            return dealIntervalsByDealId;
+        }
         private bool isEffectiveDeal(DateTime fromDate, DateTime? toDate, DateTime dealBED, DateTime? DealEED)
         {
             if (!DealEED.HasValue)
@@ -348,7 +516,24 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region Private Classes
+        private class DealContext
+        {
+            public int DealId { get; set; }
+            public DateTime DealBED { get; set; }
+            public DateTime? DealEED { get; set; }
+            public int DealVolume { get; set; }
+            public int CarrierNominalCapacity { get; set; }
+            public double ReacheDurationInMin { get; set; }
+            public double NewDeallExpectedPerHour { get; set; }
+        }
 
+        private class IntersectedDeal
+        {
+            public DateTime BED { get; set; }
+            public DateTime? EED { get; set; }
+            public int DealId { get; set; }
+            public int DealVolume { get; set; }
+        }
 
         private class SwapDealExcelExportHandler : ExcelExportHandler<DealDefinitionDetail>
         {
@@ -435,6 +620,11 @@ namespace TOne.WhS.Deal.Business
         }
 
         #endregion
+        public struct Interval
+        {
+            public DateTime FromDate { get; set; }
+            public DateTime? ToDate { get; set; }
+        }
 
         #region IBusinessEntityManager
 

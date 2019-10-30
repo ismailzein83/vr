@@ -4,7 +4,7 @@
 
     SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealAnalysisAPIService', 'WhS_Deal_DealService'];
 
-    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealAnalysisAPIService, WhS_Deal_DealService) {
+    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_SwapDealService, WhS_BE_SwapDealAnalysisService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealAnalysisAPIService, WhS_Deal_DealService) {
         var isEditMode;
 
         var dealId;
@@ -85,6 +85,7 @@
             if (!isEditMode)
                 $scope.scopeModel.followSupplierTimeZone = false;
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
+                $scope.hasDealsAboveCapacity = false;
                 carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                 if (carrierAccountInfo != undefined && !isEditMode) {
                     WhS_Deal_DealDefinitionAPIService.GetLastDealInfo(carrierAccountInfo.CarrierAccountId).then(function (response) {
@@ -139,9 +140,10 @@
             };
             $scope.scopeModel.onBEDchanged = function () {
                 updateDescription();
+                GetSwapDealsAboveCapacity();
             };
             $scope.scopeModel.onEEDchanged = function () {
-
+                GetSwapDealsAboveCapacity();
             };
             $scope.scopeModel.onCurrencySelectReady = function (api) {
                 currencyDirectiveAPI = api;
@@ -205,6 +207,12 @@
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
 
+            $scope.scopeModel.validateWarningConfirmationValue = function () {
+                return ($scope.hasDealsAboveCapacity && ($scope.scopeModel.warningConfirmationValue == undefined || !$scope.scopeModel.warningConfirmationValue))
+                    ? 'You must confirm the warnings to continue, for more details click on "View More"'
+                    : null;
+            };
+
             $scope.scopeModel.validateSwapDealInbounds = function () {
                 if (carrierAccountSelectorAPI == undefined)
                     return null;
@@ -235,13 +243,23 @@
                 return null;
             };
             $scope.scopeModel.onDealStatusChanged = function () {
-                if ($scope.scopeModel.selectedDealStatus != undefined && $scope.scopeModel.selectedDealStatus.value != WhS_Deal_DealStatusTypeEnum.Inactive.value)
-                    $scope.scopeModel.deActivationDate = undefined;
-                if ($scope.scopeModel.selectedDealStatus != undefined && $scope.scopeModel.deActivationDate == undefined && $scope.scopeModel.selectedDealStatus.value == WhS_Deal_DealStatusTypeEnum.Inactive.value)
-                    $scope.scopeModel.deActivationDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+                if ($scope.scopeModel.selectedDealStatus != undefined) {
+                    if ($scope.scopeModel.selectedDealStatus.value != WhS_Deal_DealStatusTypeEnum.Inactive.value)
+                        $scope.scopeModel.deActivationDate = undefined;
+                    if ($scope.scopeModel.deActivationDate == undefined && $scope.scopeModel.selectedDealStatus.value == WhS_Deal_DealStatusTypeEnum.Inactive.value)
+                        $scope.scopeModel.deActivationDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+                    GetSwapDealsAboveCapacity();
+                }
             };
             $scope.scopeModel.dataForBoundsReady = function () {
                 return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined && $scope.scopeModel.selectedTimeZone.value != undefined);
+            };
+
+            $scope.scopeModel.viewDealsAboveCapacity = function () {
+                WhS_Deal_SwapDealService.viewDealsAboveCapacity(buildSwapDealObjFromScope());
+            };
+            $scope.scopeModel.onTimeZoneChanged = function () {
+                GetSwapDealsAboveCapacity();
             };
         }
         function load() {
@@ -662,7 +680,8 @@
                         shiftedBED = newShiftedBED;
                         shiftedEED = newShiftedEED;
                     });
-                }
+                },
+                GetSwapDealsAboveCapacity: GetSwapDealsAboveCapacity
             };
         }
         function getSelectedSaleZonesIdsFromItems(includedIds) {
@@ -727,6 +746,27 @@
             }
             return zonesIds;
         }
+        function GetSwapDealsAboveCapacity() {
+            $scope.hasDealsAboveCapacity = false;
+            var inboundData = dealInboundAPI != undefined ? dealInboundAPI.getData() : undefined;
+            var outboundData = dealOutboundAPI != undefined ? dealOutboundAPI.getData() : undefined;
+            var carrierAccountId = carrierAccountSelectorAPI != undefined ? carrierAccountSelectorAPI.getSelectedIds() : undefined;
+            if (inboundData != undefined && inboundData.inbounds.length > 0 && outboundData != undefined && outboundData.outbounds.length > 0 && $scope.scopeModel.selectedTimeZone != undefined
+                && carrierAccountId != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined
+                && $scope.scopeModel.gracePeriod != undefined && $scope.scopeModel.selectedDealStatus != undefined) {
+                $scope.scopeModel.isLoading = true;
+                return WhS_Deal_SwapDealAPIService.GetSwapDealsAboveCapacity(buildSwapDealObjFromScope()).then(function (response) {
+                    if (response != undefined) {
+                        $scope.hasDealsAboveCapacity = response != undefined && response.length > 0;
+                    }
+                }).catch(function () {
+                    $scope.scopeModel.isLoading = false;
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
+        }
+
     }
 
     app.controller('WhS_Deal_SwapDealEditorController', SwapDealEditorController);

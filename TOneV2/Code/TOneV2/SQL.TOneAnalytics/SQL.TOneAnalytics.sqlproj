@@ -126,5 +126,6 @@
     <Build Include="TOneWhS_CallQuality\Tables\AccumulatedCallQuality15Min.sql" />
     <Build Include="TOneWhS_CallQuality\User Defined Types\AccumulatedCallQuality15MinType.sql" />
     <Build Include="Security\TOneWhS_CallQuality.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealProgress_GetByDealIds.sql" />
   </ItemGroup>
 </Project>

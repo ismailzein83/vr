@@ -18,4 +18,11 @@ namespace TOne.WhS.Deal.Entities
 
         public int BuyingVolume { set; get; }
     }
+    public enum SwapDealTimeZone
+    {
+        System = 0,
+        Supplier = 1
+    }
+
 }
+

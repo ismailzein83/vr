@@ -34,6 +34,7 @@
 
             VRModalService.showModal(editorUrl, parameters, settings);
         }
+
         function viewSwapDeal(dealId, viewMode) {
             var parameters = {
                 dealId: dealId,
@@ -47,6 +48,16 @@
                 }
             };
             VRModalService.showModal(editorUrl, parameters, settings);
+        }
+
+        function viewDealsAboveCapacity(dealContext) {
+            var url = "/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealCapacity.html";
+            var parameters =
+            {
+                DealContext: dealContext
+            };
+            var settings = {};
+            VRModalService.showModal(url, parameters, settings);
         }
 
         function getEntityUniqueName() {
@@ -133,7 +144,8 @@
             getDrillDownDefinition: getDrillDownDefinition,
             registerHistoryViewAction: registerHistoryViewAction,
             analyzeSwapDeal: analyzeSwapDeal,
-            viewSwapDeal: viewSwapDeal
+            viewSwapDeal: viewSwapDeal,
+            viewDealsAboveCapacity: viewDealsAboveCapacity
         };
     }
 

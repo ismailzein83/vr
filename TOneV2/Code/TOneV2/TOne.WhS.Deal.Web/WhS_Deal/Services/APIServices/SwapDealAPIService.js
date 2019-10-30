@@ -55,7 +55,15 @@
                 recurringType: recurringType
             });
         }
+        function GetSwapDealsAboveCapacity(context) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetSwapDealsAboveCapacity"), context);
+        }
+        function GetCarrierAccountChannelsLimit(carrierAccountId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetCarrierAccountChannelsLimit'), {
+                carrierAccountId: carrierAccountId
+            });
+        }
         return ({
             GetFilteredSwapDeals: GetFilteredSwapDeals,
             GetDeal: GetDeal,
@@ -67,7 +75,9 @@
             GetSwapDealSettingData: GetSwapDealSettingData,
             GetSwapDealHistoryDetailbyHistoryId: GetSwapDealHistoryDetailbyHistoryId,
             RecurDeal: RecurDeal,
-            getSwapDealFromAnalysis: getSwapDealFromAnalysis
+            getSwapDealFromAnalysis: getSwapDealFromAnalysis,
+            GetSwapDealsAboveCapacity: GetSwapDealsAboveCapacity,
+            GetCarrierAccountChannelsLimit: GetCarrierAccountChannelsLimit
         });
     }
 

@@ -87,6 +87,7 @@
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisInbound.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutbound.cs" />
     <Compile Include="SwapDealProgressDetail.cs" />
+    <Compile Include="SwapDeal\DealCapacity.cs" />
     <Compile Include="SwapDeal\SubstituteRateType.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateOutboundRateInput.cs" />

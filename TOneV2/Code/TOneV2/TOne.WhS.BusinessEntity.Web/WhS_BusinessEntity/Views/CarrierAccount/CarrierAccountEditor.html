@@ -41,11 +41,11 @@
                         <vr-common-company-setting-selector on-ready="scopeModel.onCompanySettingSelectorReady" normal-col-num="6"></vr-common-company-setting-selector>
 
                         <vr-columns width="1/2row">
-                            <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
+                            <vr-textbox type="number" decimalprecision="0" minvalue="1" value="scopeModel.channelsLimit" label="Channels Limit" isrequired></vr-textbox>
                         </vr-columns>
 
                         <span vr-disabled="scopeModel.disableLOB">
-                            <vr-whs-be-lob-selector on-ready="scopeModel.onLOBSelectorReady" onselectionchanged="scopeModel.onLOBSelectionChanged" selectedvalues="selectedLOB" isrequired="true"  normal-col-num="6" hideremoveicon></vr-whs-be-lob-selector>
+                            <vr-whs-be-lob-selector on-ready="scopeModel.onLOBSelectorReady" onselectionchanged="scopeModel.onLOBSelectionChanged" selectedvalues="selectedLOB" isrequired="true" normal-col-num="6" hideremoveicon></vr-whs-be-lob-selector>
                         </span>
 
                         <vr-columns width="1/2row">

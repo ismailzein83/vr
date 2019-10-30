@@ -6,6 +6,7 @@ using Vanrise.Web.Base;
 using TOne.WhS.Deal.Entities.Settings;
 using TOne.WhS.BusinessEntity.Entities;
 using System;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.Deal.Web.Controllers
 {
@@ -66,6 +67,19 @@ namespace TOne.WhS.Deal.Web.Controllers
         public DealDefinition GetSwapDealFromAnalysis(int genericBusinessEntityId)
         {
             return _manager.GetSwapDealFromAnalysis(genericBusinessEntityId);
+        }
+        [HttpPost]
+        [Route("GetSwapDealsAboveCapacity")]
+        public List<DealCapacity> GetSwapDealsAboveCapacity(DealDefinition deal)
+        {
+            return _manager.GetIntersectedSwapDealsAboveCapacity(deal);
+        }
+        [HttpGet]
+        [Route("GetCarrierAccountChannelsLimit")]
+        public int GetCarrierAccountChannelsLimit(int carrierAccountId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            return carrierAccountManager.GetAccountChannelsLimit(carrierAccountId);
         }
     }
 }

@@ -58,7 +58,7 @@
             };
 
             var swapDealCurrency = context.getSwapDealCurrency();
-            $scope.scopeModel.currency = swapDealCurrency != undefined ? swapDealCurrency.Symbol: undefined;
+            $scope.scopeModel.currency = swapDealCurrency != undefined ? swapDealCurrency.Symbol : undefined;
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -81,7 +81,7 @@
             };
 
             $scope.onSubstituteRateTypeChange = function (val) {
-                if (val != undefined) 
+                if (val != undefined)
                     $scope.scopeModel.substituteRateTypeValue = val.value;
 
                 if (val.value != Whs_Deal_SubstituteRateTypeEnum.FixedRate.value)
@@ -234,15 +234,19 @@
             $scope.scopeModel.isLoading = true;
 
             var swapDealOutboundObject = buildSwapDealOutboundObjFromScope();
-            if ($scope.onSwapDealOutboundAdded != undefined)
+            if ($scope.onSwapDealOutboundAdded != undefined) {
                 $scope.onSwapDealOutboundAdded(swapDealOutboundObject);
+                context.GetSwapDealsAboveCapacity();
+            }
             $scope.modalContext.closeModal();
         }
 
         function updateSwapDealOutbound() {
             var swapDealOutboundObject = buildSwapDealOutboundObjFromScope();
-            if ($scope.onSwapDealOutboundUpdated != undefined)
+            if ($scope.onSwapDealOutboundUpdated != undefined) {
                 $scope.onSwapDealOutboundUpdated(swapDealOutboundObject);
+                context.GetSwapDealsAboveCapacity();
+            }
             $scope.modalContext.closeModal();
         }
 
@@ -251,9 +255,9 @@
             var zoneIds = supplierZoneDirectiveAPI.getSelectedIds();
             for (var j = 0; j < zoneIds.length; j++) {
                 supplierZones.push(
-                {
-                    ZoneId: zoneIds[j]
-                });
+                    {
+                        ZoneId: zoneIds[j]
+                    });
             }
             var obj = {
                 Name: $scope.scopeModel.name,

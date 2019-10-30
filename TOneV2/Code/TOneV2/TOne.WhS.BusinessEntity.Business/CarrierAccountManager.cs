@@ -45,7 +45,13 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Public Methods
 
         #region CarrierAccount
-
+        public int GetAccountChannelsLimit(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new NullReferenceException(String.Format("carrierAccount '{0}'", carrierAccountId));
+            return carrierAccount.CarrierAccountSettings.ChannelsLimit;
+        }
         public List<BankDetail> GetSupplierBankDetails(int carrierAccountId)
         {
             var supplier = GetCarrierAccount(carrierAccountId);
@@ -623,7 +629,7 @@ namespace TOne.WhS.BusinessEntity.Business
                       return false;
                   if (input.Query.IsInterconnectSwitch == true && input.Query.IsInterconnectSwitch != item.CarrierAccountSettings.IsInterconnectSwitch)
                       return false;
-                  
+
                   if (input.Query.InvoiceTypes != null && input.Query.InvoiceTypes.Count > 0)
                   {
                       WHSCarrierFinancialAccountData financialAccountData;
@@ -1217,22 +1223,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             else
                 return customer.SellingNumberPlanId;
-        }
-        public int GetAccountNominalCapacity(int carrierAccountId)
-        {
-            var carrierAccount = GetCarrierAccount(carrierAccountId);
-            if (carrierAccount == null)
-                throw new NullReferenceException(String.Format("carrierAccount '{0}'", carrierAccountId));
-            return carrierAccount.CarrierAccountSettings.NominalCapacity;
-        }
-        public int GetAccountsTotalNominalCapacity(IEnumerable<int> carrierAccountIds)
-        {
-            int totalNominalCapacity = 0;
-            foreach (var accountId in carrierAccountIds.Distinct())
-            {
-                totalNominalCapacity += GetAccountNominalCapacity(accountId);
-            }
-            return totalNominalCapacity;
         }
         public int GetCarrierAccountCurrencyId(int carrierAccountId)
         {

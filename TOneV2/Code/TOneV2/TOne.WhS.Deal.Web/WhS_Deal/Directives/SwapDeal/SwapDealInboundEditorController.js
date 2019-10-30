@@ -222,16 +222,20 @@
             $scope.scopeModel.isLoading = true;
 
             var swapDealInboundObject = buildSwapDealInboundObjFromScope();
-            if ($scope.onSwapDealInboundAdded != undefined)
+            if ($scope.onSwapDealInboundAdded != undefined) {
                 $scope.onSwapDealInboundAdded(swapDealInboundObject);
+                context.GetSwapDealsAboveCapacity();
+            }
             $scope.modalContext.closeModal();
         }
 
         function updateSwapDealInbound() {
             var swapDealInboundObject = buildSwapDealInboundObjFromScope();
 
-            if ($scope.onSwapDealInboundUpdated != undefined)
+            if ($scope.onSwapDealInboundUpdated != undefined) {
                 $scope.onSwapDealInboundUpdated(swapDealInboundObject);
+                context.GetSwapDealsAboveCapacity();
+            }
             $scope.modalContext.closeModal();
         }
 

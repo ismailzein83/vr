@@ -226,5 +226,10 @@ namespace TOne.WhS.Deal.Data.RDB
         {
             throw new System.NotImplementedException();
         }
+
+        public List<DealProgress> GetDealsProgress(IEnumerable<int> dealId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
