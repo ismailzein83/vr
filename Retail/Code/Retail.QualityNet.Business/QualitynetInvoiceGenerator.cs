@@ -36,20 +36,23 @@ namespace Retail.QualityNet.Business
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            FinancialAccountData financialAccountData = new FinancialAccountManager().GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
-            if (context.FromDate < financialAccountData.FinancialAccount.BED || context.ToDate > financialAccountData.FinancialAccount.EED)
+            AccountBEManager accountBEManager = new AccountBEManager();
+            IAccountPayment accountPayment;
+            long accountId = Convert.ToInt64(context.PartnerId);
+            var account = accountBEManager.GetAccount(this._acountBEDefinitionId, accountId);
+
+            if (!accountBEManager.HasAccountPayment(this._acountBEDefinitionId, accountId, false, out accountPayment))
             {
-                context.ErrorMessage = "From date and To date should be within the effective date of financial account.";
+                context.ErrorMessage = string.Format("Account Id: {0} is not a financial account", accountId);
                 context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
-                return;
             }
 
-            int currencyId = new AccountBEManager().GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+            int currencyId = accountPayment.CurrencyId;
 
             var qualityNetInvoiceGeneratorContext = new QualityNetInvoiceGeneratorContext()
             {
                 IssueDate = context.IssueDate,
-                FinancialAccount = financialAccountData.Account,
+                FinancialAccount = account,
                 CurrencyId = currencyId,
                 FromDate = context.FromDate,
                 ToDate = context.ToDate
@@ -63,7 +66,7 @@ namespace Retail.QualityNet.Business
                 return;
             }
 
-            InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(invoiceItems, currencyId, financialAccountData.Account);
+            InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(invoiceItems, currencyId, account);
 
             context.Invoice = new GeneratedInvoice
             {
@@ -348,8 +351,7 @@ namespace Retail.QualityNet.Business
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", context.InvoiceTypeId);
             QualityNetInvoiceTypeSettings invoiceSettings = invoiceType.Settings.ExtendedSettings.CastWithValidate<QualityNetInvoiceTypeSettings>("invoiceType.Settings.ExtendedSettings");
 
-            Guid accountTypeId = GetBillingTransactionAccountTypeId(context.InvoiceTypeId, context.PartnerId, context.IssueDate);
-
+            Guid accountTypeId = new AccountBalanceManager().GetAccountBalanceTypeId(_acountBEDefinitionId);
             var billingTransaction = new GeneratedInvoiceBillingTransaction()
             {
                 AccountTypeId = accountTypeId,
@@ -362,26 +364,17 @@ namespace Retail.QualityNet.Business
             billingTransaction.Settings = new GeneratedInvoiceBillingTransactionSettings();
             billingTransaction.Settings.UsageOverrides = new List<GeneratedInvoiceBillingTransactionUsageOverride>();
 
-            foreach (Guid usageTransactionTypeId in invoiceSettings.UsageTransactionTypeIds)
+            if (invoiceSettings.UsageTransactionTypeIds != null)
             {
-                billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+                foreach (Guid usageTransactionTypeId in invoiceSettings.UsageTransactionTypeIds)
                 {
-                    TransactionTypeId = usageTransactionTypeId
-                });
+                    billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+                    {
+                        TransactionTypeId = usageTransactionTypeId
+                    });
+                }
             }
-
             context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
-        }
-
-        private Guid GetBillingTransactionAccountTypeId(Guid invoiceTypeId, string accountId, DateTime effectiveOn)
-        {
-            List<BalanceAccountInfo> invoiceBalanceAccounts = new InvToAccBalanceRelationDefinitionManager().GetInvoiceBalanceAccounts(invoiceTypeId, accountId, effectiveOn);
-
-            invoiceBalanceAccounts.ThrowIfNull("invoiceBalanceAccounts", accountId);
-            if (invoiceBalanceAccounts.Count == 0)
-                throw new DataIntegrityValidationException("invoiceBalanceAccounts");
-
-            return invoiceBalanceAccounts.FirstOrDefault().AccountTypeId;
         }
 
         #endregion

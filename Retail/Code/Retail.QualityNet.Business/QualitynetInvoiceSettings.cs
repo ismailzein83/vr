@@ -15,12 +15,11 @@ namespace Retail.QualityNet.Business
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
             AccountBEManager accountBEManager = new AccountBEManager();
-            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
+            long accountId = Convert.ToInt64(context.Invoice.PartnerId);
 
             switch (context.InfoType)
             {
                 case "MailTemplate":
-                    long accountId = Convert.ToInt32(financialAccountData.Account.AccountId);
                     var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("Operator", account);
@@ -28,15 +27,16 @@ namespace Retail.QualityNet.Business
                     return objects;
 
                 case "BankDetails":
-                    return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId, financialAccountData.Account.AccountId);
+                    return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId, accountId);
             }
             return null;
         }
 
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
-            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(this.AccountBEDefinitionId, context.PartnerId);
-            context.PartnerCreationDate = financialAccountData.Account.CreatedTime;
+            long accountId = Convert.ToInt64(context.PartnerId);
+            var account = new AccountBEManager().GetAccount(this.AccountBEDefinitionId, accountId);
+            context.PartnerCreationDate = account.CreatedTime;
         }
 
         public override InvoiceGenerator GetInvoiceGenerator()

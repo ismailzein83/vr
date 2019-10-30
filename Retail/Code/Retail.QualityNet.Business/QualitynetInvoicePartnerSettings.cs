@@ -1,4 +1,5 @@
 ﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using Retail.QualityNet.Entities;
 using System;
 using System.Collections.Generic;
@@ -41,40 +42,43 @@ namespace Retail.QualityNet.Business
 
         public override dynamic GetActualPartnerId(IActualPartnerContext context)
         {
-            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
-            return financialAccountData.Account.AccountId;
+            return Convert.ToInt64(context.PartnerId);
         }
 
         public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
         {
-            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
             return new VRInvoiceAccountData
             {
-                BED = financialAccountData.FinancialAccount.BED,
-                EED = financialAccountData.FinancialAccount.EED,
-                Status = new AccountBEManager().IsAccountInvoiceActive(financialAccountData.Account) ? VRAccountStatus.Active : VRAccountStatus.InActive
+                BED = null,
+                EED = null,
             };
         }
 
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
-            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
             switch (context.InfoType)
             {
                 case "Account":
-                    return financialAccountData.Account;
+                    long accountId = long.Parse(context.PartnerId);
+                    return new AccountBEManager().GetAccount(_acountBEDefinitionId, accountId);
+
                 case "InvoiceRDLCReport":
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
+                    long partnerId = Convert.ToInt64(context.PartnerId);
                     AccountBEManager accountBEManager = new AccountBEManager();
 
-                    int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-                    string currencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
+                    var account = accountBEManager.GetAccount(this._acountBEDefinitionId, partnerId);
+                    IAccountPayment accountPayment;
+                    if (!accountBEManager.HasAccountPayment(this._acountBEDefinitionId, account.AccountId, false, out accountPayment))
+                        throw new NullReferenceException($"AccountId {context.PartnerId} for AccoutnBEDefinitionId {_acountBEDefinitionId}  doesn't have account payment");
+
+                    string currencySymbol = new CurrencyManager().GetCurrencySymbol(accountPayment.CurrencyId);
                     AddQualityNetInvoiceRDLCParameter(rdlcReportParameters, QualityNetInvoiceRDLCParameter.Currency, currencySymbol, true);
 
-                    string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+                    string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, account.AccountId);
                     AddQualityNetInvoiceRDLCParameter(rdlcReportParameters, QualityNetInvoiceRDLCParameter.CustomerName, accountName, true);
 
-                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId, partnerId);
                     if (companySetting != null)
                     {
                         var logo = new VRFileManager().GetFile(companySetting.CompanyLogo);
@@ -84,7 +88,7 @@ namespace Retail.QualityNet.Business
 
                     var invoiceItemsDetails = context.Invoice.Details as InvoiceDetails;
                     AddQualityNetInvoiceRDLCParameter(rdlcReportParameters, QualityNetInvoiceRDLCParameter.GrandTotal, invoiceItemsDetails.GrandTotalAmount.ToString(), true);
-                  
+
                     return rdlcReportParameters;
             }
             return null;
@@ -92,8 +96,7 @@ namespace Retail.QualityNet.Business
 
         public override string GetPartnerName(IPartnerNameManagerContext context)
         {
-            var financialAccountData = new FinancialAccountManager().GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
-            return new AccountBEManager().GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+            return new AccountBEManager().GetAccountName(this._acountBEDefinitionId, Convert.ToInt64(context.PartnerId));
         }
 
         private void AddQualityNetInvoiceRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, QualityNetInvoiceRDLCParameter key, string value, bool isVisible)
