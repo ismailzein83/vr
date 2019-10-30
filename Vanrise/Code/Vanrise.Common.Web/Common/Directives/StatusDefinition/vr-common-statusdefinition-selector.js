@@ -14,9 +14,10 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                 ondeselectitem: '=',
                 isrequired: '=',
                 hideremoveicon: '@',
-                hidelabel:'@',
+                hidelabel: '@',
                 normalColNum: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                usefullcolumn: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -111,7 +112,7 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
             var multipleselection = "";
             var label = "{{ctrl.label}}";
 
-            var hidelabel="";
+            var hidelabel = "";
             if (attrs.hidelabel != undefined) {
                 hidelabel = "hidelabel";
             }
@@ -124,12 +125,16 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                 multipleselection = "ismultipleselection";
             }
 
-            var hideremoveicon="";
+            var hideremoveicon = "";
             if (attrs.hideremoveicon != undefined) {
                 hideremoveicon = "hideremoveicon";
             }
-            
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
+
+            var haschildcolumns = '';
+            if (attrs.usefullcolumn != undefined)
+                haschildcolumns = "haschildcolumns";
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + ' >' +
                 '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="StatusDefinitionId" isrequired="ctrl.isrequired" label="' + label +
                 '" datasource="ctrl.datasource" ' + hidelabel + '  on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Status" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' " customvalidate="ctrl.customvalidate" >' +
                 '</vr-select>' +
