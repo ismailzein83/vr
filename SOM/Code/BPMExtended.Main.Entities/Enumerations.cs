@@ -265,8 +265,8 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.ADSL)]
         [Description("ADSL Print Configuration")]
         [EntitySchemaName("StADSLPrintConfiguration")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("219E9C9D-A21C-40F3-90B3-F5672E79DE0B")]
         ADSLPrintConfiguration = 25,
 
         //[LineOfBusiness(LineOfBusiness.Telephony)]

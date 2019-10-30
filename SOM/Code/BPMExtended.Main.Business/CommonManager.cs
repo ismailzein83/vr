@@ -120,7 +120,11 @@ namespace BPMExtended.Main.Business
             EntityCollection entities;
 
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
+            if(contactId != null)
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
+            else
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Account");
+
             esq.AddColumn("Id");
             var c = esq.AddColumn("Country");
             var country = esq.AddColumn("Country.Id");
