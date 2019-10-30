@@ -1,4 +1,6 @@
-﻿--[runtime].[ScheduleTask]------------------------------------------------------------------------------
+﻿Delete FROM [sec].[View] where id = 'ACA1B73C-5EB1-4E4F-9947-B933058251FD'
+
+--[runtime].[ScheduleTask]------------------------------------------------------------------------------
 BEGIN
 set nocount on;
 ;with cte_data([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
@@ -90,8 +92,8 @@ as (select * from (values
 ('5D6ED454-6BAE-4E26-ABEB-91BAD7675DE4','Zajil_Processes_PaymentPull','Payment Pull'									,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["Start","View Process Logs"]'),
 ('A6880754-B838-4374-B637-F12C16D41ED5','Zajil_Processes_InvoicePush','Invoice Push'									,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["Start","View Process Logs"]'),
 
-('C457BAAA-942D-4C15-8DA7-67D00F86020B','Zajil_Invoice_Subscriber','Subscriber Invoice'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Regenerate"]')
-
+('C457BAAA-942D-4C15-8DA7-67D00F86020B','Zajil_Invoice_Subscriber','Subscriber Invoice'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Regenerate"]'),
+('42623E8F-FA6F-4279-A96F-7B603475A952','QualityNet_Invoice_Subscriber','Subscriber Invoice'				,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Regenerate","Set_Paid","Set_Unpaid","Set_Lock","Set_UnLock","Send Email","Save Invoice File"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
