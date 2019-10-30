@@ -17,6 +17,7 @@ namespace BPMExtended.Main.Entities
         public string OpenAmount { get; set; }
         public string BillDispute { get; set; }
         public string CurrencyCode { get; set; }
+        public string InvoiceId { get; set; }
     }
     public class BillOnDemandInvoiceDetail
     {

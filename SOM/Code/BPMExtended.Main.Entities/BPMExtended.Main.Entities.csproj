@@ -94,6 +94,7 @@
     <Compile Include="Domain.cs" />
     <Compile Include="Installment.cs" />
     <Compile Include="InstallmentTemplate.cs" />
+    <Compile Include="InvoiceAmountData.cs" />
     <Compile Include="InvoiceFee.cs" />
     <Compile Include="MenuAction.cs" />
     <Compile Include="Money.cs" />

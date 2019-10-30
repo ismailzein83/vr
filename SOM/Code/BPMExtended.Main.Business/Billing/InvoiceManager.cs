@@ -129,6 +129,7 @@ namespace BPMExtended.Main.Business
                 OpenAmount = Convert.ToString(item.OpenAmount),
                 BillDispute = GetBillDisputeByEnumValue(item.BillDispute),
                 CurrencyCode = item.Currency,
+                InvoiceId = item.Id
             };
         }
         public string GetBillDisputeByEnumValue(int enumValue)
@@ -204,6 +205,7 @@ namespace BPMExtended.Main.Business
                 OpenAmount = Convert.ToString(item.OpenAmount),
                 BillDispute = GetBillDisputeByEnumValue(item.BillDispute),
                 CurrencyCode = item.Currency,
+                
             };
         }
 

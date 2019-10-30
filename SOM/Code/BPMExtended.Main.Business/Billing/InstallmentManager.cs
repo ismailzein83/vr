@@ -40,6 +40,15 @@ namespace BPMExtended.Main.Business
             }
             return installmentsDetailItems;
         }
+        public InvoiceAmountData GetInvoiceAmountData(string invoiceId)
+        {
+            InvoiceAmountData invoiceAmountData = new InvoiceAmountData();
+            using (SOMClient client = new SOMClient())
+            {
+                 invoiceAmountData = client.Get<InvoiceAmountData>(String.Format("/api/SOM.ST/Billing/GetInvoiceAmountsForInstallment?invoiceId=120",invoiceId));
+            }
+            return invoiceAmountData;
+        }
         public InstallmentTemplateInfo InstallmentTemplateToInfoMapper(InstallmentTemplate item)
         {
             return new InstallmentTemplateInfo
