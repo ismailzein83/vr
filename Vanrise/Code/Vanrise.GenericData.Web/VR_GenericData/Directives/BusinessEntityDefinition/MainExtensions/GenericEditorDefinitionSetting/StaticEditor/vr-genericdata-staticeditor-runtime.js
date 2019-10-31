@@ -99,7 +99,7 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRUIUtilsSer
                     if (editorRuntimeDirectiveAPI != undefined && editorRuntimeDirectiveAPI.onFieldValueChanged != undefined && typeof (editorRuntimeDirectiveAPI.onFieldValueChanged) == "function") {
                         var onFieldValueChangedPromise = editorRuntimeDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames, changedField);
                         if (onFieldValueChangedPromise != undefined)
-                            _promises.push(onFieldValueChangedPromise));
+                            _promises.push(onFieldValueChangedPromise);
                     }
 
                     return UtilsService.waitMultiplePromises(_promises);
