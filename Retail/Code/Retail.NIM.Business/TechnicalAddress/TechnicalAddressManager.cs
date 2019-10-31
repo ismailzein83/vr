@@ -153,10 +153,29 @@ namespace Retail.NIM.Business
                     if (subscriptionFeasible)
                     {
                         long siteId = (long)nodeItem.FieldValues.GetRecord("Site");
-                        if (_nodeManager.GetSwitchBySiteId(siteId) != null)
+                        var switchItem = _nodeManager.GetSwitchBySiteId(siteId);
+                        if (switchItem != null && switchItem.FieldValues != null)
+                        {
+                            item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
+                            {
+                                ID = (long)switchItem.FieldValues.GetRecord("ID"),
+                                Number = (string)switchItem.FieldValues.GetRecord("Number"),
+                                Type = (Guid)switchItem.FieldValues.GetRecord("NodeType")
+                            });
                             item.TelephonyFeasible = true;
-                        if (_nodeManager.GetDslamBySiteId(siteId) != null)
+                        }
+                        var dslam = _nodeManager.GetDslamBySiteId(siteId);
+                        if (dslam != null && dslam.FieldValues != null)
+                        {
+                            item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
+                            {
+                                ID = (long)dslam.FieldValues.GetRecord("ID"),
+                                Number = (string)dslam.FieldValues.GetRecord("Number"),
+                                Type = (Guid)dslam.FieldValues.GetRecord("NodeType")
+                            });
                             item.DataFeasible = true;
+                        }
+                           
                     }
                 }
             }
