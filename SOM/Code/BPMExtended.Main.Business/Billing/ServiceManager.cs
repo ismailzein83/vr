@@ -40,14 +40,16 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public ServiceConsistensyCatalog GetServicesConsistencyCatalog()
+        public string GetServicesConsistencyCatalog()
         {
             var item = new ServiceConsistensyCatalog();
             using (SOMClient client = new SOMClient())
             {
                 item = client.Get<ServiceConsistensyCatalog>(String.Format("api/SOM.ST/Billing/GetServicesConsistencyCatalog"));
             }
-            return item;
+            var itemAsString = JSONSerializer.Serialize(item);
+            
+            return itemAsString;
         }
         public UnconsistentServices GetUnconsistentServices(List<string> servicesIds)
         {
@@ -79,13 +81,13 @@ namespace BPMExtended.Main.Business
                         ServiceConsistensyCatalog serviceConsistensyCatalog = JsonConvert.DeserializeObject<ServiceConsistensyCatalog>(serializedObject.ToString());
                         if (serviceConsistensyCatalog != null)
                         {
-                            if (serviceConsistensyCatalog.RequiredServices != null)
+                            if (serviceConsistensyCatalog.RequiredServices != null && serviceConsistensyCatalog.RequiredServices.Count>0)
                             {
                                 foreach (var serviceId in servicesIds)
                                 {
                                     List<RequiredService> requiredServices = null;
                                     serviceConsistensyCatalog.RequiredServices.TryGetValue(serviceId, out requiredServices);
-                                    if (requiredServices != null)
+                                    if (requiredServices != null && requiredServices.Count>0)
                                     {
                                         List<string> allRequiredServices = new List<string>();
                                         foreach (var reqServ in requiredServices)
@@ -97,14 +99,14 @@ namespace BPMExtended.Main.Business
                                     }
                                 }
                             }
-                            //------------------------------------------------------------------------------------------
-                            if (serviceConsistensyCatalog.ProhibitedServices != null)
+                           // ------------------------------------------------------------------------------------------
+                            if (serviceConsistensyCatalog.ProhibitedServices != null && serviceConsistensyCatalog.ProhibitedServices.Count>0)
                             {
                                 foreach (var serviceId in servicesIds)
                                 {
                                     List<ProhibitedService> prohibitedServices = null;
                                     serviceConsistensyCatalog.ProhibitedServices.TryGetValue(serviceId, out prohibitedServices);
-                                    if (prohibitedServices != null)
+                                    if (prohibitedServices != null && prohibitedServices.Count>0)
                                     {
                                         List<string> allProhibitedServices = new List<string>();
                                         foreach (var reqServ in prohibitedServices)
