@@ -576,3 +576,45 @@ when not matched by target then
 	values(s.[ID],s.[TableId],s.[ItemType],s.[Name],s.[Title],s.[Config]);
 ----------------------------------------------------------------------------------------------------
 END
+
+
+--[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([ID],[Name],[Title],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('EA307219-8903-40B7-B9F1-404B32A5A64B','QualityNet Invoice Comment','QualityNet Invoice Comment','{"$type":"Vanrise.Common.Business.VRCommentBEDefinitionSettings, Vanrise.Common.Business","ConfigId":"98154422-b815-4843-9304-ce63930ced84","Security":{"$type":"Vanrise.Common.Business.VRCommentDefinitionSecurity, Vanrise.Common.Business","ViewRequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"AddRequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}},"WorkFlowAddBEActivityEditor":"businessprocess-vr-workflowactivity-addcomment-settings","DefinitionEditor":"vr-common-commentbe-editor","IdType":"System.Int64","ManagerFQTN":"Vanrise.Common.Business.VRCommentManager, Vanrise.Common.Business","SelectorUIControl":""}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Settings]))
+merge	[genericdata].[BusinessEntityDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+END
+
+
+--[common].[MailMessageType]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('C692692C-2E9E-4CFF-82AE-4DC62BD0E7C5','QualityNet Invoice','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","Invoice":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Invoice","VRObjectTypeDefinitionId":"2727937e-2c93-49a1-89ce-eec9589d3c5d"},"Operator":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Operator","VRObjectTypeDefinitionId":"e69be69a-f905-4689-b50b-68ce10b1284c"}}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[common].[MailMessageType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
