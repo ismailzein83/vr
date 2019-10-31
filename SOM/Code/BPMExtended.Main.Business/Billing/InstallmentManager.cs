@@ -45,7 +45,7 @@ namespace BPMExtended.Main.Business
             InvoiceAmountData invoiceAmountData = new InvoiceAmountData();
             using (SOMClient client = new SOMClient())
             {
-                 invoiceAmountData = client.Get<InvoiceAmountData>(String.Format("/api/SOM.ST/Billing/GetInvoiceAmountsForInstallment?invoiceId=120",invoiceId));
+                 invoiceAmountData = client.Get<InvoiceAmountData>(String.Format("/api/SOM.ST/Billing/GetInvoiceAmountsForInstallment?invoiceId={0}",invoiceId));
             }
             return invoiceAmountData;
         }
