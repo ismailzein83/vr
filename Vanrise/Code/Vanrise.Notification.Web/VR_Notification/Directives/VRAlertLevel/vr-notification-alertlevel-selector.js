@@ -69,55 +69,55 @@ app.directive('vrNotificationAlertlevelSelector', ['VR_Notification_AlertLevelAP
 
                             filter.BusinessEntityDefinitionId = payload.businessEntityDefinitionId;
                         }
+                    }
+                    return VR_Notification_AlertLevelAPIService.GetAlertLevelsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
 
-                        return VR_Notification_AlertLevelAPIService.GetAlertLevelsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-
-                            selectorAPI.clearDataSource();
-                            if (response != null) {
-                                for (var i = 0; i < response.length; i++) {
-                                    ctrl.datasource.push(response[i]);
-                                }
-
-                                if (selectedIds != undefined) {
-                                    VRUIUtilsService.setSelectedValues(selectedIds, 'VRAlertLevelId', attrs, ctrl);
-                                }
+                        selectorAPI.clearDataSource();
+                        if (response != null) {
+                            for (var i = 0; i < response.length; i++) {
+                                ctrl.datasource.push(response[i]);
                             }
-                        });
-                    };
 
-                    api.getSelectedIds = function () {
-                        return VRUIUtilsService.getIdSelectedIds('VRAlertLevelId', attrs, ctrl);
-                    };
+                            if (selectedIds != undefined) {
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'VRAlertLevelId', attrs, ctrl);
+                            }
+                        }
+                    });
+                };
 
-                    if (ctrl.onReady != null)
-                        ctrl.onReady(api);
-                }
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('VRAlertLevelId', attrs, ctrl);
+                };
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
+        }
 
-            function getTemplate(attrs) {
+        function getTemplate(attrs) {
 
-                var multipleselection = "";
-                var label = "Alert Level";
-                var lookandfeeltype = '';
-                if (attrs.ismultipleselection != undefined) {
-                    label = "Alert Levels";
-                    multipleselection = "ismultipleselection";
-                }
-                if (attrs.lookandfeeltype != undefined) {
-                    lookandfeeltype = 'lookandfeeltype="' + attrs.lookandfeeltype + '"';
-
-                }
-                if (attrs.customlabel != undefined)
-                    label = attrs.customlabel;
-
-                return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                    '<span vr-loader="ctrl.isloading">' +
-                    '<vr-select ' + multipleselection + ' ' + lookandfeeltype + '  datatextfield="Name" datavaluefield="VRAlertLevelId" isrequired="ctrl.isrequired" label="' + label +
-                    '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                    '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
-                    '</vr-select>' +
-                    '</span>' +
-                    '</vr-columns>';
+            var multipleselection = "";
+            var label = "Alert Level";
+            var lookandfeeltype = '';
+            if (attrs.ismultipleselection != undefined) {
+                label = "Alert Levels";
+                multipleselection = "ismultipleselection";
             }
+            if (attrs.lookandfeeltype != undefined) {
+                lookandfeeltype = 'lookandfeeltype="' + attrs.lookandfeeltype + '"';
 
-        }]);
+            }
+            if (attrs.customlabel != undefined)
+                label = attrs.customlabel;
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
+                '<span vr-loader="ctrl.isloading">' +
+                '<vr-select ' + multipleselection + ' ' + lookandfeeltype + '  datatextfield="Name" datavaluefield="VRAlertLevelId" isrequired="ctrl.isrequired" label="' + label +
+                '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
+                '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                '</vr-select>' +
+                '</span>' +
+                '</vr-columns>';
+        }
+    }
+]);
