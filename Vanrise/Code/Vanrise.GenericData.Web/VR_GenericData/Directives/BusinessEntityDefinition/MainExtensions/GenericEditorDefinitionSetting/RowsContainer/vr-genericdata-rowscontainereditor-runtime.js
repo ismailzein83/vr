@@ -127,7 +127,7 @@
                     }
                 };
 
-                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames, changedField) {
                     if ($scope.scopeModel.rowContainers == undefined)
                         return null;
 
@@ -138,7 +138,7 @@
                         for (var j = 0; j < rowContainer.rowSettings.length; j++) {
                             var rowSetting = rowContainer.rowSettings[j];
                             if (rowSetting.editorRuntimeAPI != undefined && rowSetting.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (rowSetting.editorRuntimeAPI.onFieldValueChanged) == "function") {
-                                var onFieldValueChangedPromise = rowSetting.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                                var onFieldValueChangedPromise = rowSetting.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames, changedField);
                                 if (onFieldValueChangedPromise != undefined)
                                     _promises.push(onFieldValueChangedPromise);
                             }

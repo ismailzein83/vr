@@ -93,13 +93,13 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRUIUtilsSer
                     editorRuntimeDirectiveAPI.setData(dicData);
                 };
 
-                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames, changedField) {
                     var _promises = [];
 
                     if (editorRuntimeDirectiveAPI != undefined && editorRuntimeDirectiveAPI.onFieldValueChanged != undefined && typeof (editorRuntimeDirectiveAPI.onFieldValueChanged) == "function") {
-                        var onFieldValueChangedPromise = editorRuntimeDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                        var onFieldValueChangedPromise = editorRuntimeDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames, changedField);
                         if (onFieldValueChangedPromise != undefined)
-                            _promises.push(editorRuntimeDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames));
+                            _promises.push(onFieldValueChangedPromise));
                     }
 
                     return UtilsService.waitMultiplePromises(_promises);

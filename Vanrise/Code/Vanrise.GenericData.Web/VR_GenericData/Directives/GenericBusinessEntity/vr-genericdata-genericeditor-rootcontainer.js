@@ -185,7 +185,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                         if (runtimeEditorAPI.onFieldValueChanged != undefined && typeof (runtimeEditorAPI.onFieldValueChanged) == "function") {
 
-                            var promise = runtimeEditorAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            var promise = runtimeEditorAPI.onFieldValueChanged(allFieldValuesByFieldNames, { changedField: changedField });
                             if (promise != undefined) {
                                 _promises.push(promise);
                             }

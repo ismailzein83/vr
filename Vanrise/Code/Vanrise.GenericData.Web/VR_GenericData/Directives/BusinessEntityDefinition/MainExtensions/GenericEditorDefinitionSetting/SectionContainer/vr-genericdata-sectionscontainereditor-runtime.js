@@ -105,7 +105,7 @@ app.directive("vrGenericdataSectionscontainereditorRuntime", ["UtilsService", "V
                     }
                 };
 
-                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames, changedField) {
                     if ($scope.scopeModel.sectionContainers == undefined)
                         return null;
 
@@ -114,7 +114,7 @@ app.directive("vrGenericdataSectionscontainereditorRuntime", ["UtilsService", "V
                     for (var i = 0; i < $scope.scopeModel.sectionContainers.length; i++) {
                         var currentSectionContainers = $scope.scopeModel.sectionContainers[i];
                         if (currentSectionContainers.editorRuntimeAPI != undefined && currentSectionContainers.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (currentSectionContainers.editorRuntimeAPI.onFieldValueChanged) == "function") {
-                            var onFieldValueChangedPromise = currentSectionContainers.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            var onFieldValueChangedPromise = currentSectionContainers.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames, changedField);
                             if (onFieldValueChangedPromise != undefined)
                                 _promises.push(onFieldValueChangedPromise);
                         }

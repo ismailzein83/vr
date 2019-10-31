@@ -144,11 +144,11 @@
                     return rowDirectiveAPI != undefined ? rowDirectiveAPI.getData() : undefined;
                 };
 
-                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames, changedField) {
                     var _promises = [];
 
                     if (rowDirectiveAPI != undefined && rowDirectiveAPI.onFieldValueChanged != undefined && typeof (rowDirectiveAPI.onFieldValueChanged) == "function") {
-                        var onFieldValueChangedPromise = rowDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                        var onFieldValueChangedPromise = rowDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames, changedField);
                         if (onFieldValueChangedPromise != undefined)
                             _promises.push(onFieldValueChangedPromise);
                     }

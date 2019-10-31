@@ -105,7 +105,7 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
                     }
                 };
 
-                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames, changedField) {
                     if ($scope.scopeModel.tabContainers == undefined)
                         return null;
 
@@ -114,7 +114,7 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
                     for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
                         var currentTabContainers = $scope.scopeModel.tabContainers[i];
                         if (currentTabContainers.editorRuntimeAPI != undefined && currentTabContainers.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (currentTabContainers.editorRuntimeAPI.onFieldValueChanged) == "function") {
-                            var onFieldValueChangedPromise = currentTabContainers.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            var onFieldValueChangedPromise = currentTabContainers.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames, changedField);
                             if (onFieldValueChangedPromise != undefined)
                                 _promises.push(onFieldValueChangedPromise);
                         }

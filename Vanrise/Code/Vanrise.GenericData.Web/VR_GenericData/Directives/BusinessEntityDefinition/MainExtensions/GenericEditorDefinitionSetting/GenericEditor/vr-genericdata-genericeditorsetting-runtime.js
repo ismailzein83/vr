@@ -107,11 +107,11 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                     }
                 };
 
-                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames, changedField) {
                     var _promises = [];
 
                     if (sectionDirectiveAPI != undefined && sectionDirectiveAPI.onFieldValueChanged != undefined && typeof (sectionDirectiveAPI.onFieldValueChanged) == "function") {
-                        var onFieldValueChangedPromise = sectionDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                        var onFieldValueChangedPromise = sectionDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames, changedField);
                         if (onFieldValueChangedPromise != undefined)
                             _promises.push(onFieldValueChangedPromise);
                     }
