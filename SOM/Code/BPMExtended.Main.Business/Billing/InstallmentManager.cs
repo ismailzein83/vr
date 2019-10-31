@@ -6,11 +6,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using Terrasoft.Core;
+using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
 {
     public class InstallmentManager
     {
+        #region User Connection
+        public UserConnection BPM_UserConnection
+        {
+            get
+            {
+                return (UserConnection)HttpContext.Current.Session["UserConnection"];
+            }
+        }
+
+
+        #endregion
         public List<InstallmentTemplateInfo> GetInstallmentTemplatesInfo()
         {
             var installmentTemplateInfoItems = new List<InstallmentTemplateInfo>();
@@ -52,28 +66,66 @@ namespace BPMExtended.Main.Business
             }
             return installmentsDetailItems;
         }
-        public void ApplyInstallment(string customerId, string paymentPlanTemplateId, string invoiceCode, string invoiceAmount, string additionalFees, string lateFee, string firstPayment, string reductionRate, string currency, string startDate, string approvalId)
+        public void ApplyInstallment(Guid requestId/*,string customerId, string paymentPlanTemplateId, string invoiceCode, string invoiceAmount, string additionalFees, string lateFee, string firstPayment, string reductionRate, string currency, string startDate, string approvalId*/)
         {
-            var input = new SimulateInstallmentInput
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StInstallments");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StTemplateId");
+            esq.AddColumn("StInvoiceCode");
+            esq.AddColumn("StInvoiceAmount");
+            esq.AddColumn("StAdditionalFees");
+            esq.AddColumn("StLateFees");
+            esq.AddColumn("StFirstPayment");
+            esq.AddColumn("StCurrency");
+            esq.AddColumn("StReductionRate");
+            esq.AddColumn("StStartDate");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
             {
-                CustomerId = customerId,
-                PaymentPlanTemplateId = paymentPlanTemplateId,
-                InvoiceCode = invoiceCode,
-                InvoiceAmount = invoiceAmount,
-                AdditionalFees = additionalFees,
-                LateFee = lateFee,
-                FirstPayment = firstPayment,
-                ReductionRate = reductionRate,
-                Currency = currency,
-                StartDate = startDate,
-                ApprovalId = approvalId
-            };
-            var ProcessInstanceId = new SOMRequestOutput();
-            using (SOMClient client = new SOMClient())
-            {
-                ProcessInstanceId = client.Post<SimulateInstallmentInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ApplyInstallment/StartProcess", input);
+                string customerId = entities[0].GetColumnValue("StCustomerId").ToString();
+                string paymentPlanTemplateId = entities[0].GetColumnValue("StTemplateId").ToString();
+                string invoiceCode = entities[0].GetColumnValue("StInvoiceCode").ToString();
+                string invoiceAmount = entities[0].GetColumnValue("StInvoiceAmount").ToString();
+                string additionalFees = entities[0].GetColumnValue("StAdditionalFees").ToString();
+                string lateFee = entities[0].GetColumnValue("StLateFees").ToString();
+                string reductionRate = entities[0].GetColumnValue("StReductionRate").ToString();
+                string startDate = entities[0].GetColumnValue("StStartDate").ToString();
+                string currency = entities[0].GetColumnValue("StCurrency").ToString();
+                string firstPayment = entities[0].GetColumnValue("StFirstPayment").ToString();
+
+                var input = new SimulateInstallmentInput
+                {
+                    CustomerId = customerId,
+                    PaymentPlanTemplateId = paymentPlanTemplateId,
+                    InvoiceCode = invoiceCode,
+                    InvoiceAmount = invoiceAmount,
+                    AdditionalFees = additionalFees,
+                    LateFee = lateFee,
+                    FirstPayment = firstPayment,
+                    ReductionRate = reductionRate,
+                    Currency = currency,
+                    StartDate = startDate,
+                    ApprovalId = "1"
+                };
+                var ProcessInstanceId = new SOMRequestOutput();
+                using (SOMClient client = new SOMClient())
+                {
+                    ProcessInstanceId = client.Post<SimulateInstallmentInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ApplyInstallment/StartProcess", input);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, ProcessInstanceId);
             }
+          
         }
+
         public InvoiceAmountData GetInvoiceAmountData(string invoiceId)
         {
             InvoiceAmountData invoiceAmountData = new InvoiceAmountData();

@@ -461,6 +461,8 @@ namespace BPMExtended.Main.Entities
 
         [Description("Installments Request")]
         [EntitySchemaName("StInstallments")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("D5CAA3E5-7879-4679-A30D-7F325825D5AF")]
         [CompletedStep("StTypeId")]
         [CompletedStepId("4D3FD81C-6F7B-4E6C-ABAC-71613276A924")]
         Installment = 53,
