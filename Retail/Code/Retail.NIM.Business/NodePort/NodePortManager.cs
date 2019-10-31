@@ -26,7 +26,12 @@ namespace Retail.NIM.Business
                     {
                         FieldName ="Node",
                         Values =  new List<object> {input.NodeId}
-                    }
+                    },
+                    new ObjectListRecordFilter
+                        {
+                              FieldName = "Status",
+                              Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
+                        }
                 }
             };
 
@@ -34,8 +39,8 @@ namespace Retail.NIM.Business
             {
                 filter.Filters.Add(new ObjectListRecordFilter
                 {
-                    FieldName = "Part",
-                    Values = new List<object> { input.PartTypeId.Value }
+                    FieldName = "PartType",
+                    Values = new List<object> { input.PartTypeId.Value.ToString() }
                 });
             }
 

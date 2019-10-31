@@ -111,7 +111,7 @@ namespace Retail.NIM.Business
                 filter.Filters.Add(new ObjectListRecordFilter
                 {
                     FieldName = "Port1PartType",
-                    Values = new List<object> { input.Port1PartTypeId.Value }
+                    Values = new List<object> { input.Port1PartTypeId.Value.ToString() }
                 });
             }
 
@@ -120,7 +120,7 @@ namespace Retail.NIM.Business
                 filter.Filters.Add(new ObjectListRecordFilter
                 {
                     FieldName = "Port2PartType",
-                    Values = new List<object> { input.Port2PartTypeId.Value }
+                    Values = new List<object> { input.Port2PartTypeId.Value.ToString() }
                 });
             }
 
