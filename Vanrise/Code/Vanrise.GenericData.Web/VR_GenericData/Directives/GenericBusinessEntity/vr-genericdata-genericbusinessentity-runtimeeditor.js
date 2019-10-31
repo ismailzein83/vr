@@ -142,7 +142,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                 function setTitle() {
                     if (context != undefined) {
                         if (isEditMode) {
-                            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+                            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId, historyId).then(function (response) {
                                 context.setTitle(UtilsService.buildTitleForUpdateEditor(response, definitionTitle, $scope));
                             });
                         } else {

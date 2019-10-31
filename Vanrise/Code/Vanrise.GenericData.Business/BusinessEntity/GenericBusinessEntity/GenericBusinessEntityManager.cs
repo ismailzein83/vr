@@ -262,8 +262,19 @@ namespace Vanrise.GenericData.Business
 
         public string GetGenericBusinessEntityName(Object genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
-            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);
             var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
+            return GetGenericBusinessEntityName(genericBusinessEntity, businessEntityDefinitionId);
+        }
+
+        public string GetGenericBusinessEntityNameByHistoryId(Object historyId, Guid businessEntityDefinitionId)
+        {
+            var genericBusinessEntity = historyId != null ? new VRObjectTrackingManager().GetObjectDetailById((int)historyId) as GenericBusinessEntity : null;
+            return GetGenericBusinessEntityName(genericBusinessEntity, businessEntityDefinitionId);
+        }
+
+        private string GetGenericBusinessEntityName(GenericBusinessEntity genericBusinessEntity, Guid businessEntityDefinitionId)
+        {
+            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);
             genericBEDefinitionSetting.TitleFieldName.ThrowIfNull("genericBEDefinitionSetting.TitleFieldName");
             var titleFieldType = _genericBEDefinitionManager.GetDataRecordTypeFieldByBEDefinitionId(businessEntityDefinitionId, genericBEDefinitionSetting.TitleFieldName);
             titleFieldType.ThrowIfNull("titleFieldType");
@@ -302,7 +313,6 @@ namespace Vanrise.GenericData.Business
             }
             return null;
         }
-
         public List<GenericBusinessEntity> GetAllGenericBusinessEntities(Guid businessEntityDefinitionId, List<string> columnsNeeded = null, RecordFilterGroup filterGroup = null)
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);
@@ -1404,9 +1414,12 @@ namespace Vanrise.GenericData.Business
             return null;
         }
 
-        public string GetGenericBETitleFieldValue(Object genericBusinessEntityId, Guid businessEntityDefinitionId)
+        public string GetGenericBETitleFieldValue(Object genericBusinessEntityId, Guid businessEntityDefinitionId, int? historyId)
         {
-            return GetGenericBusinessEntityName(genericBusinessEntityId, businessEntityDefinitionId);
+            if (historyId.HasValue)
+                return GetGenericBusinessEntityNameByHistoryId(historyId.Value, businessEntityDefinitionId);
+            else
+                return GetGenericBusinessEntityName(genericBusinessEntityId, businessEntityDefinitionId);
         }
         public Dictionary<string, GridColumnAttribute> GetGenericEditorColumnsInfo(Guid dataRecordTypeId, ListRecordRuntimeViewType listRecordViewType)
         {

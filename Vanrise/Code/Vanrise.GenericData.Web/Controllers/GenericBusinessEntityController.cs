@@ -153,10 +153,10 @@ namespace Vanrise.GenericData.Web.Controllers
         }
         [HttpGet]
         [Route("GetGenericBETitleFieldValue")]
-        public string GetGenericBETitleFieldValue(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
+        public string GetGenericBETitleFieldValue(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId, int? historyId = null)
         {
             genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
-            return _manager.GetGenericBETitleFieldValue(genericBusinessEntityId, businessEntityDefinitionId);
+            return _manager.GetGenericBETitleFieldValue(genericBusinessEntityId, businessEntityDefinitionId, historyId);
         }
         [HttpPost]
         [Route("GetGenericEditorColumnsInfo")]

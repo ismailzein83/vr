@@ -11,10 +11,11 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetDependentFieldValues'), input);
         }
 
-        function GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId) {
+        function GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId, historyId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBETitleFieldValue'), {
                 businessEntityDefinitionId: businessEntityDefinitionId,
-                genericBusinessEntityId: genericBusinessEntityId
+                genericBusinessEntityId: genericBusinessEntityId,
+                historyId: historyId
             });
         }
 
