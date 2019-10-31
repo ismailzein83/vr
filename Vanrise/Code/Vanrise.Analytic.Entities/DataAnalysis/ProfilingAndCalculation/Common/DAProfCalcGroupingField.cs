@@ -13,6 +13,10 @@ namespace Vanrise.Analytic.Entities
 
         public string FieldTitle { get; set; }
 
+        public bool IsRequired { get; set; }
+
+        public bool IsSelected { get; set; }
+
         public DataRecordFieldType FieldType { get; set; }
     }
 }

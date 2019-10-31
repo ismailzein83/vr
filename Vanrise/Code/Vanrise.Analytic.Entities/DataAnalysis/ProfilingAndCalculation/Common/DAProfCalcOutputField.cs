@@ -9,6 +9,10 @@ namespace Vanrise.Analytic.Entities
 
         public string Title { get; set; }
 
+        public bool IsRequired { get; set; }
+
+        public bool IsSelected { get; set; }
+
         public DataRecordFieldType Type { get; set; }
 
         public DAProfCalcOutputFieldType DAProfCalcOutputFieldType { get; set; }

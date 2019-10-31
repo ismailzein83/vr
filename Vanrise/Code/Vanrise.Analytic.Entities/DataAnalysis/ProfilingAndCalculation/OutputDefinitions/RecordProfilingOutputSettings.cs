@@ -30,8 +30,8 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
         public override List<DAProfCalcOutputField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context)
         {
             List<DAProfCalcOutputField> fields = new List<DAProfCalcOutputField>();
-            fields.AddRange(this.GroupingFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.GroupingField }));
-            fields.AddRange(this.AggregationFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.RecordAggregate.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.AggregationField }));
+            fields.AddRange(this.GroupingFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, IsRequired= itm.IsRequired, IsSelected = itm.IsSelected, Type = itm.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.GroupingField }));
+            fields.AddRange(this.AggregationFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle,  Type = itm.RecordAggregate.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.AggregationField }));
             fields.AddRange(this.CalculationFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.CalculationField }));
             return fields;
         }

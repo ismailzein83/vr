@@ -183,9 +183,11 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
             };
 
             function buildContext(groupingFields) {
+                var availableDataRecordFieldNames = groupingFields != undefined ? groupingFields : getDefaultSelectedGroupingFields(outputFields);
+
                 return {
                     recordfields: buildRecordFields(outputFields),
-                    vrActionTargetType: buildDAProfCalcTargetType(analysisTypeId, groupingFields),
+                    vrActionTargetType: buildDAProfCalcTargetType(analysisTypeId, availableDataRecordFieldNames),
                     notificationTypeId: notificationTypeId
                 };
             };
@@ -197,7 +199,9 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     recordFields.push({
                         Name: field.Name,
                         Title: field.Title,
-                        Type: field.Type
+                        Type: field.Type,
+                        IsRequired: field.IsRequired,
+                        IsSelected: field.IsSelected
                     });
                 };
                 return recordFields;
@@ -210,5 +214,16 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     AvailableDataRecordFieldNames: groupingFields
                 };
             };
+
+            function getDefaultSelectedGroupingFields(fields) {
+                var defaultSelectedFields = [];
+                for (var i = 0; i < fields.length; i++) {
+                    var field = fields[i];
+                    if (field.IsSelected)
+                        defaultSelectedFields.push(field.Name);
+                };
+
+                return defaultSelectedFields.length > 0 ? defaultSelectedFields : undefined;
+            }
         }
     }]);
