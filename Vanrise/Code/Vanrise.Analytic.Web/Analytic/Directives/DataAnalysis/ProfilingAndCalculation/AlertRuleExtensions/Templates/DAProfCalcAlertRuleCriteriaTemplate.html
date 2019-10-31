@@ -1,6 +1,6 @@
 ﻿<vr-row>
-    <vr-directivewrapper ng-if="scopeModel.daProfCalcAlertRuleFilterDefinition!=undefined" 
-                         directive="scopeModel.daProfCalcAlertRuleFilterDefinition.RuntimeEditor" 
+    <vr-directivewrapper ng-if="scopeModel.daProfCalcAlertRuleFilterDefinition!=undefined"
+                         directive="scopeModel.daProfCalcAlertRuleFilterDefinition.RuntimeEditor"
                          on-ready="scopeModel.onDAProfCalcAlertRuleFilterReady" isrequired="true" normal-col-num="4">
     </vr-directivewrapper>
     <vr-columns width="fullrow" ng-show="!scopeModel.hideActionRuleRecordFilter">
@@ -11,11 +11,13 @@
 </vr-row>
 <vr-row>
     <vr-columns width="1/3row">
-        <vr-analytic-dataanalysisitemdefinition-selector on-ready="scopeModel.onDataAnalysisItemDefinitionSelectorReady"
-                                                         onselectionchanged="scopeModel.onDataAnalysisItemDefinitionSelectionChanged"
-                                                         onbeforeselectionchanged="scopeModel.onBeforeDataAnalysisItemDefinitionSelectionChanged"
-                                                         customlabel="Analysis Type" isrequired="true">
-        </vr-analytic-dataanalysisitemdefinition-selector>
+        <span vr-loader="scopeModel.isDataAnalysisItemSelectorChanged">
+            <vr-analytic-dataanalysisitemdefinition-selector on-ready="scopeModel.onDataAnalysisItemDefinitionSelectorReady"
+                                                             onselectionchanged="scopeModel.onDataAnalysisItemDefinitionSelectionChanged"
+                                                             onbeforeselectionchanged="scopeModel.onBeforeDataAnalysisItemDefinitionSelectionChanged"
+                                                             customlabel="Analysis Type" hideremoveicon isrequired="true">
+            </vr-analytic-dataanalysisitemdefinition-selector>
+        </span>
     </vr-columns>
 
     <vr-analytic-daprofcalc-analysisperiod on-ready="scopeModel.onDataAnalysisPeriodDirectiveReady" normal-col-num="4" isrequired="true"></vr-analytic-daprofcalc-analysisperiod>

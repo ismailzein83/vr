@@ -15,7 +15,13 @@
                          ondeleterow="ctrl.onDeleteDAProfCalcGroupingField"
                          enabledraggablerow="true"
                          hidegridmenu>
-                <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'FieldName'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'FieldName'" widthfactor="3" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Required'" field="'IsRequired'" widthfactor="1" disablesorting>
+                    <vr-icon icontype="dataItem.IsRequired"></vr-icon>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Selected'" field="'IsSelected'" widthfactor="1" disablesorting>
+                    <vr-icon icontype="dataItem.IsSelected"></vr-icon>
+                </vr-datagridcolumn>
             </vr-datagrid>
         </vr-columns>
     </vr-row>

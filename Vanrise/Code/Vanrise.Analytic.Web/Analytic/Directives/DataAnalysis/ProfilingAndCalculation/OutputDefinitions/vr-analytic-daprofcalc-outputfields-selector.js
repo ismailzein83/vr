@@ -43,17 +43,55 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
             this.initializeController = initializeController;
 
             var selectorAPI;
+            var requiredFieldTitles = [];
 
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
                 };
+
+                ctrl.validateRequiredFields = function () {
+                    if (ctrl.customvalidate != undefined && typeof (ctrl.customvalidate) == "function") {
+                        var validation = ctrl.customvalidate();
+                        if (validation != undefined)
+                            return validation;
+                    }
+
+                    if (requiredFieldTitles.length == 0)
+                        return null;
+
+                    var selectedFieldTitles = VRUIUtilsService.getIdSelectedIds('Title', attrs, ctrl);
+                    if (selectedFieldTitles == undefined)
+                        return "Required Fields: " + requiredFieldTitles.join(', ');
+
+                    if (!Array.isArray(selectedFieldTitles)) {
+                        if (requiredFieldTitles.length == 1 && requiredFieldTitles.includes(selectedFieldTitles))
+                            return null;
+                        else
+                            return "Required Fields: " + requiredFieldTitles.join(', ');
+                    }
+                    else {
+                        var requiredFieldsNotSelected = [];
+                        for (var i = 0; i < requiredFieldTitles.length; i++) {
+                            var currentRequiredField = requiredFieldTitles[i];
+                            if (!selectedFieldTitles.includes(currentRequiredField)) {
+                                requiredFieldsNotSelected.push(currentRequiredField);
+                            }
+                        }
+
+                        return requiredFieldsNotSelected.length > 0 ? "Required Fields: " + requiredFieldsNotSelected.join(', ') : null;
+                    }
+
+                    return null;
+                };
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    requiredFieldTitles.length = 0;
                     var selectedIds;
                     var filter;
                     var dataAnalysisItemDefinitionId;
@@ -69,12 +107,25 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
                     return VR_Analytic_DAProfCalcOutputSettingsAPIService.GetFilteredOutputFields(dataAnalysisItemDefinitionId, serializedFilter).then(function (response) {
                         selectorAPI.clearDataSource();
                         if (response != null) {
+                            var defaultSelectedIds = [];
                             for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
+                                var currentField = response[i];
+                                ctrl.datasource.push(currentField);
+
+                                if (currentField.IsSelected) {
+                                    defaultSelectedIds.push(currentField.Name);
+                                }
+
+                                if (currentField.IsRequired) {
+                                    requiredFieldTitles.push(currentField.Title);
+                                }
                             }
 
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
+                            }
+                            else if (defaultSelectedIds.length > 0) {
+                                VRUIUtilsService.setSelectedValues(defaultSelectedIds, 'Name', attrs, ctrl);
                             }
                         }
                     });
@@ -83,7 +134,6 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
                 };
-
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -113,8 +163,8 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
 
             var template =
                 '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" ' + hideSelectAll + ' ' + hideClearAll + ' label="' + label +
-                '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" entityName="' + label +
-                '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" customvalidate="ctrl.validateRequiredFields()" entityName="' + label +
+                '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon">' +
                 '</vr-select>';
 
             return template;

@@ -79,6 +79,8 @@
 
                 $scope.scopeModel.fieldName = groupingFieldEntity.FieldName;
                 $scope.scopeModel.fieldTitle = groupingFieldEntity.FieldTitle;
+                $scope.scopeModel.isRequired = groupingFieldEntity.IsRequired;
+                $scope.scopeModel.isSelected = groupingFieldEntity.IsSelected;
             }
             function loadDataRecordTypeFieldsSelector() {
 
@@ -136,6 +138,8 @@
             return {
                 FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
                 FieldTitle: $scope.scopeModel.fieldTitle,
+                IsRequired: $scope.scopeModel.isRequired,
+                IsSelected: $scope.scopeModel.isSelected,
                 FieldType: fieldTypeSelectiveAPI.getData(),
             };
         }
