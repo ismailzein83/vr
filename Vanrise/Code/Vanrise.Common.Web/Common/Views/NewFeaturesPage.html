@@ -1,6 +1,6 @@
 ﻿<vr-panel ng-controller="Common_NewFeaturesController">
 
-    <vr-row>
+    <!--<vr-row>
         <vr-columns width="1/2row">
             <vr-section header="Node Editor">
                 <vr-form name="formNodeEditor">
@@ -41,11 +41,11 @@
                 </vr-actionbar>
             </vr-section>
         </vr-columns>
-    </vr-row>
+    </vr-row>-->
 
     <vr-row>
         <vr-columns colnum="12">
-            <vr-diagram on-ready="onDiagramReady" nodes="nodeDataArray"></vr-diagram>
+            <vr-diagram on-ready="onDiagramReady" nodes="nodeDataArray" nodevaluefield="Id" linkvaluefield="linkId" nodetypefield="elementType" nodegroupfield="Parent" nodeisgroupfield="hasChilds"></vr-diagram>
         </vr-columns>      
     </vr-row>
 </vr-panel>

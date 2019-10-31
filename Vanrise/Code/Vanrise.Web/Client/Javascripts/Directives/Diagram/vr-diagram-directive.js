@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrDiagram.ginject = ['UtilsService', 'MultiTranscludeService'];
+    vrDiagram.ginject = ['UtilsService', 'MultiTranscludeService', 'DiagramElementTypesEnum'];
 
-    function vrDiagram(UtilsService, MultiTranscludeService) {
+    function vrDiagram(UtilsService, MultiTranscludeService, DiagramElementTypesEnum) {
 
         return {
             restrict: 'E',
@@ -12,7 +12,12 @@
                 onReady: "=",
                 isrequired: "=",
                 nodes: "=",
-                links: "="
+                links: "=",
+                nodevaluefield:"@",
+                linkvaluefield: "@",
+                nodetypefield: "@",
+                nodegroupfield:"@",
+                nodeisgroupfield:"@",
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -131,7 +136,7 @@
                   ));
 
 
-                myDiagram.groupTemplateMap.add("SLOT", g(go.Group, "Auto",
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.SLOT.value, g(go.Group, "Auto",
                       {
                           background: "transparent",
                           computesBoundsAfterDrag: true,
@@ -162,7 +167,7 @@
                ));
 
 
-                myDiagram.groupTemplateMap.add("IMS", g("Group", "Auto",
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.IMS.value, g("Group", "Auto",
                        {
                            background: "transparent",
                            computesBoundsAfterDrag: true,
@@ -216,7 +221,7 @@
                 ));
 
 
-                myDiagram.groupTemplateMap.add("OLT", g(go.Group, "Auto",
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.OLT.value, g(go.Group, "Auto",
                   {
                       background: "transparent",
                       ungroupable: true,
@@ -268,7 +273,7 @@
 	                })
                 ));
 
-                myDiagram.nodeTemplateMap.add("Port",
+                myDiagram.nodeTemplateMap.add(DiagramElementTypesEnum.Port.value,
                  g(go.Node, "Auto",
                     {
                         mouseDrop: function (e, nod) { finishDrop(e, nod.containingGroup); }
@@ -303,7 +308,7 @@
 
 
 
-                myDiagram.nodeTemplateMap.add("PortRj",
+                myDiagram.nodeTemplateMap.add(DiagramElementTypesEnum.PortRj.value,
                  g(go.Node, "Auto",
                     {
                         mouseDrop: function (e, nod) { finishDrop(e, nod.containingGroup); }
@@ -420,10 +425,13 @@
 
 
                 ctrl.model = new go.GraphLinksModel();
-                ctrl.model.nodeGroupKeyProperty = "Parent";
+               
+                ctrl.model.nodeKeyProperty = ctrl.nodevaluefield;
+                ctrl.model.linkKeyProperty = ctrl.linkvaluefield;
+                ctrl.model.nodeCategoryProperty = ctrl.nodetypefield;
+                ctrl.model.nodeGroupKeyProperty = ctrl.nodegroupfield;
+                ctrl.model.nodeIsGroupProperty = ctrl.nodeisgroupfield;
 
-                ctrl.model.nodeKeyProperty = "Id";
-                ctrl.model.linkKeyProperty = "key";
                 if (ctrl.nodes && ctrl.nodes.length > 0)
                     ctrl.model.nodeDataArray = ctrl.nodes;
                 else
