@@ -464,6 +464,18 @@ namespace BPMExtended.Main.Entities
         [CompletedStep("StTypeId")]
         [CompletedStepId("4D3FD81C-6F7B-4E6C-ABAC-71613276A924")]
         Installment = 53,
+
+        [Description("Add Public DI")]
+        [EntitySchemaName("StAddPublicDI")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("657ADD47-AFC1-4BFE-BAB3-D3961517B710")]
+        AddPublicDI = 54,
+
+        [Description("Remove Public DI")]
+        [EntitySchemaName("StRemovePublicDI")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("9F693E6D-5E0C-4552-B301-A979008E7DF2")]
+        RemovePublicDI = 55,
     }
     public enum ContractStatus
     {
