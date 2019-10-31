@@ -81,22 +81,47 @@
                             dataAnalysisItemDefinitionSelectionChangedDeferred.resolve();
                         }
                         else {
-                            if (ctrl.onCriteriaSelectionChanged != undefined && typeof (ctrl.onCriteriaSelectionChanged) == 'function') {
-                                ctrl.onCriteriaSelectionChanged(selectedItem, undefined);
-                            }
+                            selectedOutputFields.length = 0;
 
-                            getGroupingOutputFieldsPromise();
+                            $scope.scopeModel.isDataAnalysisItemSelectorChanged = true;
+                            var filter = { DAProfCalcOutputFieldType: VR_Analytic_DAProfCalcOutputFieldTypeEnum.GroupingField.value };
+                            var selectionChangedPromises = [setDefaultSelectedGroupingOutputFieldsPromise(), getGroupingOutputFieldsPromise()];
+
+                            function setDefaultSelectedGroupingOutputFieldsPromise() {
+                                var serializedFilter = UtilsService.serializetoJson(filter);
+                                return VR_Analytic_DAProfCalcOutputSettingsAPIService.GetFilteredOutputFields(selectedItem.DataAnalysisItemDefinitionId, serializedFilter).then(function (response) {
+                                    if (response != null) {
+                                        for (var i = 0; i < response.length; i++) {
+                                            var currentField = response[i];
+                                            if (currentField.IsSelected) {
+                                                selectedOutputFields.push(currentField.Name);
+                                            }
+                                        }
+
+                                        if (ctrl.onCriteriaSelectionChanged != undefined && typeof (ctrl.onCriteriaSelectionChanged) == 'function') {
+                                            ctrl.onCriteriaSelectionChanged(selectedItem, selectedOutputFields);
+                                        }
+                                    }
+                                });
+                            }
 
                             function getGroupingOutputFieldsPromise() {
 
-                                var filter = { DAProfCalcOutputFieldType: VR_Analytic_DAProfCalcOutputFieldTypeEnum.GroupingField.value };
-                                var groupingOutputFieldsPayload = { dataAnalysisItemDefinitionId: selectedItem.DataAnalysisItemDefinitionId, filter: filter };
+                                var groupingOutputFieldsPayload = {
+                                    dataAnalysisItemDefinitionId: selectedItem.DataAnalysisItemDefinitionId,
+                                    filter: filter
+                                };
 
                                 var setLoader = function (value) {
                                     $scope.scopeModel.isOutputFieldsSelectorLoading = value;
                                 };
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, groupingOutputFiledsAPI, groupingOutputFieldsPayload, setLoader, undefined);
+
+                                return VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, groupingOutputFiledsAPI, groupingOutputFieldsPayload, setLoader, undefined);
                             }
+
+                            UtilsService.waitMultiplePromises(selectionChangedPromises).then(function () {
+                                $scope.scopeModel.isDataAnalysisItemSelectorChanged = false;
+                            });
                         }
                     }
                 };
@@ -142,6 +167,7 @@
                     defineAPI();
                 });
             }
+
             function defineAPI() {
                 var api = {};
 
