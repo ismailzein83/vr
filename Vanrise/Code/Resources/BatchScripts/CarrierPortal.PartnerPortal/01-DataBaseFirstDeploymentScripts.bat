@@ -7,7 +7,7 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO CarrierPortal.PartnerPortal DataBase First Deployment Scripts
 
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\CarrierPortal.RetailPortal.PostDeployment.sql" 			/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\CP.Partner\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\CarrierPortal.RetailPortal_Centrex.PostDeployment.sql" 	/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\CP.Partner\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\CarrierPortal.RetailPortal_Zajil.PostDeployment.sql" 	/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\CP.Partner\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" 										/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\CP.Partner\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal.json" 			/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\CP.Partner\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal_Centrex.json" 	/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\CP.Partner\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal_Zajil.json" 	/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\CP.Partner\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" 													/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\CP.Partner\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
