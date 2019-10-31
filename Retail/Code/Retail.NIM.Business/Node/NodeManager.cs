@@ -46,11 +46,10 @@ namespace Retail.NIM.Business
             {
                 Filters = new List<RecordFilter>
                         {
-                            new NumberRecordFilter
+                            new ObjectListRecordFilter
                             {
                                 FieldName ="Site",
-                                Value = siteId,
-                                CompareOperator = NumberRecordFilterOperator.Equals
+                                Values = new List<object>{ siteId } ,
                             }
                         }
             });
@@ -65,11 +64,10 @@ namespace Retail.NIM.Business
             {
                 Filters = new List<RecordFilter>
                         {
-                            new NumberRecordFilter
+                            new ObjectListRecordFilter
                             {
                                 FieldName ="Site",
-                                Value = siteId ,
-                                CompareOperator = NumberRecordFilterOperator.Equals
+                                Values = new List<object>{ siteId } ,
                             }
                         }
             });

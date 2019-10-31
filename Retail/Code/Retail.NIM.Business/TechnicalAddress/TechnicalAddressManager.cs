@@ -152,9 +152,10 @@ namespace Retail.NIM.Business
 
                     if (subscriptionFeasible)
                     {
-                        if (_nodeManager.GetSwitchBySiteId((int)nodeItem.FieldValues.GetRecord("Site")) != null)
+                        long siteId = (long)nodeItem.FieldValues.GetRecord("Site");
+                        if (_nodeManager.GetSwitchBySiteId(siteId) != null)
                             item.TelephonyFeasible = true;
-                        if (_nodeManager.GetDslamBySiteId((int)nodeItem.FieldValues.GetRecord("Site")) != null)
+                        if (_nodeManager.GetDslamBySiteId(siteId) != null)
                             item.DataFeasible = true;
                     }
                 }
