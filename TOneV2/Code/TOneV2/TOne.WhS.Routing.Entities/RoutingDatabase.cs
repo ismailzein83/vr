@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
+    public enum RoutingProcessMode : byte { RoudBuild = 0, Analysis = 1, RouteBuildWithAnalysis = 2 }
     public enum RoutingProcessType : byte { RoutingProductRoute = 0, CustomerRoute = 1 }
     public enum RoutingDatabaseType : byte { Current = 0, Future = 1, SpecificDate = 2 }
     public class RoutingDatabase
