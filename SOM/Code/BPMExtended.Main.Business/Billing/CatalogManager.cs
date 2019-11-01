@@ -26,6 +26,50 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region public
+        public List<ServiceData> GetAddPublicDIServices()
+        {
+            List<ServiceData> services = new List<ServiceData>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+
+            esq.AddColumn("StPublicDIId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "e7cf42f9-7a83-4ad2-a73a-5203c94a4da2");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var DIId = (string)entities[0].GetColumnValue("StPublicDIId");
+                services.Add(new ServiceData() { Id = DIId});
+
+            }
+            return services;
+        }
+        public List<ServiceData> GetRemovePublicDIServices()
+        {
+            List<ServiceData> services = new List<ServiceData>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+
+            esq.AddColumn("StRemovePublicDIId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "e7cf42f9-7a83-4ad2-a73a-5203c94a4da2");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var DIId = (string)entities[0].GetColumnValue("StRemovePublicDIId");
+                services.Add(new ServiceData() { Id = DIId });
+
+            }
+            return services;
+        }
         public List<SaleService> GetTelephonyPhoneCategoryFees(string phoneCategoryId)
         {
             EntitySchemaQuery esq;

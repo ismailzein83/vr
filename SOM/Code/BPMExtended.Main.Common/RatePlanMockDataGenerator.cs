@@ -2335,67 +2335,58 @@ namespace BPMExtended.Main.Common
 
         #region Normal DI
 
-        public static List<NormalDI> GetFilteredNormalDI(string firstName, string fatherName, string lastName, string street, string province, string city)
-        {
-            return GetAllNormalDI().FindAll(x => (x.FirstName.ToLower() == firstName.ToLower() || firstName == "") && (x.FatherName.ToLower() == fatherName.ToLower() || fatherName == "") && (x.LastName.ToLower() == lastName.ToLower() || lastName == "" ) && (x.Street.ToLower() == street.ToLower() || street == "") && (x.Province.ToLower() == province.ToLower() || province == "") && (x.City.ToLower() == city.ToLower() || city== ""));
-        }
+        //public static List<NormalDI> GetFilteredNormalDI(string firstName, string fatherName, string lastName, string enterpriseName)
+        //{
+        //    return GetAllNormalDI().FindAll(x => (x.FirstName.ToLower() == firstName.ToLower() || firstName == "") && (x.FatherName.ToLower() == fatherName.ToLower() || fatherName == "") 
+        //    && (x.LastName.ToLower() == lastName.ToLower() || lastName == "" )
+        //    && (x.EnterpriseName.ToLower() == enterpriseName.ToLower() || enterpriseName == "")
+        //    );
+        //}
      
-        private static List<NormalDI> GetAllNormalDI()
-        {
+        //private static List<NormalDI> GetAllNormalDI()
+        //{
 
-            return new List<NormalDI>
-            {
-                 new NormalDI
-                 {
-                    FirstName="MHD",
-                    FatherName ="aaaa",
-                    MotherName="asasas",
-                    LastName="saas",
-                    City="beirut",
-                    Province="Florida",
-                    Street="saaas",
-                    Building="bb",
-                    PhoneNumber="768888555"
-                 },
-                 new NormalDI
-                 {
-                    FirstName="MaaHD",
-                    FatherName ="ee",
-                    MotherName="tr",
-                    LastName="sammmas",
-                    City="tyr",
-                    Province="California",
-                    Street="saaas",
-                    Building="bb",
-                    PhoneNumber="768888555"
-                 },
-                 new NormalDI
-                 {
-                    FirstName ="ff",
-                    FatherName ="nvb",
-                    MotherName="qewq",
-                    LastName="zxz",
-                    City="saida",
-                    Province="Florida",
-                    Street="saaas",
-                    Building="bb",
-                    PhoneNumber="76169059"
-                 },
-                 new NormalDI
-                 {
-                    FirstName="MaaHD",
-                    FatherName ="oii",
-                    MotherName="bn",
-                    LastName="fdg",
-                    City="nabatieh",
-                    Province="California",
-                    Street="saaas",
-                    Building="bb",
-                    PhoneNumber="76169059"
-                 },
-            };
+        //    return new List<NormalDI>
+        //    {
+        //         new NormalDI
+        //         {
+        //            FirstName="MHD",
+        //            FatherName ="aaaa",
+        //            MotherName="asasas",
+        //            LastName="saas",
+        //            EnterpriseName="enterprise1",
+        //            PhoneNumber="768888555"
+        //         },
+        //         new NormalDI
+        //         {
+        //            FirstName="MaaHD",
+        //            FatherName ="ee",
+        //            MotherName="tr",
+        //            LastName="sammmas",
+        //             EnterpriseName ="enterprise2",
+        //            PhoneNumber="768888555"
+        //         },
+        //         new NormalDI
+        //         {
+        //            FirstName ="ff",
+        //            FatherName ="nvb",
+        //            MotherName="qewq",
+        //            LastName="zxz",
+        //            EnterpriseName="enterprise3",
+        //            PhoneNumber="76169059"
+        //         },
+        //         new NormalDI
+        //         {
+        //            FirstName="MaaHD",
+        //            FatherName ="oii",
+        //            MotherName="bn",
+        //            LastName="fdg",
+        //            EnterpriseName="enterprise4",
+        //            PhoneNumber="76169059"
+        //         },
+        //    };
 
-        }
+        //}
 
         #endregion
 
@@ -2456,72 +2447,72 @@ namespace BPMExtended.Main.Common
 
         #region Professional DI
 
-        public static List<ProfessionalDI> GetFilteredProfessionalDI(string firstName, string fatherName, string lastName, string street, string province, string city, string profession)
-        {
-            return GetAllProfessionalDI().FindAll(x => (x.FirstName.ToLower() == firstName.ToLower() || firstName == "") && (x.FatherName.ToLower() == fatherName.ToLower() || fatherName == "") && (x.LastName.ToLower() == lastName.ToLower() || lastName == "") && (x.Street.ToLower() == street.ToLower() || street == "") && (x.Province.ToLower() == province.ToLower() || province == "") && (x.City.ToLower() == city.ToLower() || city == "") && (x.Profession.ToLower() == profession.ToLower() || profession == ""));
-        }
+        //public static List<ProfessionalDI> GetFilteredProfessionalDI(string firstName, string fatherName, string lastName, string street, string province, string city, string profession)
+        //{
+        //    return GetAllProfessionalDI().FindAll(x => (x.FirstName.ToLower() == firstName.ToLower() || firstName == "") && (x.FatherName.ToLower() == fatherName.ToLower() || fatherName == "") && (x.LastName.ToLower() == lastName.ToLower() || lastName == "") && (x.Street.ToLower() == street.ToLower() || street == "") && (x.Province.ToLower() == province.ToLower() || province == "") && (x.City.ToLower() == city.ToLower() || city == "") && (x.Profession.ToLower() == profession.ToLower() || profession == ""));
+        //}
 
-        private static List<ProfessionalDI> GetAllProfessionalDI()
-        {
+        //private static List<ProfessionalDI> GetAllProfessionalDI()
+        //{
 
-            return new List<ProfessionalDI>
-            {
-                 new ProfessionalDI
-                 {
-                    FirstName="MHD",
-                    FatherName ="aaaa",
-                    MotherName="asasas",
-                    LastName="saas",
-                    City="beirut",
-                    Province="Florida",
-                    Street="saaas",
-                    Building="bb",
-                    PhoneNumber="768888555",
-                    Profession ="p1"
+        //    return new List<ProfessionalDI>
+        //    {
+        //         new ProfessionalDI
+        //         {
+        //            FirstName="MHD",
+        //            FatherName ="aaaa",
+        //            MotherName="asasas",
+        //            LastName="saas",
+        //            City="beirut",
+        //            Province="Florida",
+        //            Street="saaas",
+        //            Building="bb",
+        //            PhoneNumber="768888555",
+        //            Profession ="p1"
                     
-                 },
-                 new ProfessionalDI
-                 {
-                    FirstName="MaaHD",
-                    FatherName ="ee",
-                    MotherName="tr",
-                    LastName="sammmas",
-                    City="tyr",
-                    Province="Florida",
-                    Street="saaas",
-                    Building="bb",
-                    PhoneNumber="768888555",
-                    Profession ="p2"
-                 },
-                 new ProfessionalDI
-                 {
-                    FirstName ="ff",
-                    FatherName ="nvb",
-                    MotherName="qewq",
-                    LastName="zxz",
-                    City="saida",
-                    Province="California",
-                    Street="saaas",
-                    Building="bb",
-                    PhoneNumber="76169059",
-                    Profession ="p3"
-                 },
-                 new ProfessionalDI
-                 {
-                    FirstName="MaaHD",
-                    FatherName ="oii",
-                    MotherName="bn",
-                    LastName="fdg",
-                    City="nabatieh",
-                    Province="California",
-                    Street="saaas",
-                    Building="bb",
-                    PhoneNumber="76169059",
-                    Profession ="p4"
-                 },
-            };
+        //         },
+        //         new ProfessionalDI
+        //         {
+        //            FirstName="MaaHD",
+        //            FatherName ="ee",
+        //            MotherName="tr",
+        //            LastName="sammmas",
+        //            City="tyr",
+        //            Province="Florida",
+        //            Street="saaas",
+        //            Building="bb",
+        //            PhoneNumber="768888555",
+        //            Profession ="p2"
+        //         },
+        //         new ProfessionalDI
+        //         {
+        //            FirstName ="ff",
+        //            FatherName ="nvb",
+        //            MotherName="qewq",
+        //            LastName="zxz",
+        //            City="saida",
+        //            Province="California",
+        //            Street="saaas",
+        //            Building="bb",
+        //            PhoneNumber="76169059",
+        //            Profession ="p3"
+        //         },
+        //         new ProfessionalDI
+        //         {
+        //            FirstName="MaaHD",
+        //            FatherName ="oii",
+        //            MotherName="bn",
+        //            LastName="fdg",
+        //            City="nabatieh",
+        //            Province="California",
+        //            Street="saaas",
+        //            Building="bb",
+        //            PhoneNumber="76169059",
+        //            Profession ="p4"
+        //         },
+        //    };
 
-        }
+        //}
 
         #endregion
 

@@ -331,14 +331,28 @@ namespace BPMExtended.Main.Business
             return templatesInfoItems;
         }
 
-        public List<ProfessionalDI> GetFilteredProfessionalDI(string firstName, string fatherName, string lastName, string street, string province, string city, string profession)
+        public List<ProfessionalDI> GetFilteredProfessionalDI(string name)
         {
-            return RatePlanMockDataGenerator.GetFilteredProfessionalDI(firstName,fatherName,lastName,street,province,city,profession);
+            List<ProfessionalDI> items = new List<ProfessionalDI>();
+            using (SOMClient client = new SOMClient())
+            {
+                items = client.Get<List<ProfessionalDI>>(String.Format("api/SOM.ST/Billing/FilterPrivateDirectoryInquiry?businessType=&givenName={0}",name));
+            }
+            return items;
+            //return RatePlanMockDataGenerator.GetFilteredProfessionalDI(firstName,fatherName,lastName,street,province,city,profession);
         }
 
-        public List<NormalDI> GetFilteredNormalDI(string firstName, string fatherName, string lastName, string street, string province, string city)
+        public List<NormalDI> GetFilteredNormalDI(string firstName, string fatherName, string lastName, string enterpriseName)
         {
-            return RatePlanMockDataGenerator.GetFilteredNormalDI(firstName, fatherName, lastName, street, province, city);
+            List<NormalDI> items = new List<NormalDI>();
+            using (SOMClient client = new SOMClient())
+            {
+                items = client.Get<List<NormalDI>>(String.Format("api/SOM.ST/Billing/FilterPublicDirectoryInquiry?firstName={0}&lastName={1}&middleName={2}&enterpriseName={3}",
+                    firstName,fatherName,lastName,enterpriseName));
+                
+            }
+            return items;
+            //return RatePlanMockDataGenerator.GetFilteredNormalDI(firstName, fatherName, lastName, enterpriseName);
         }
 
         public List<CompanyDI> GetFilteredCompaniesDI(string accountName, string city, string province, string street)

@@ -102,12 +102,16 @@
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="MainProxy.cs" />
+    <Compile Include="Request Flow Management\AddProffessionalDIFlowManagement.cs" />
+    <Compile Include="Request Flow Management\AddPublicDIFlowManagement.cs" />
     <Compile Include="Request Flow Management\ADSLContractTakeOverFlowManagement.cs" />
     <Compile Include="Request Flow Management\BillOnDemandRequestFlowManagement.cs" />
     <Compile Include="Request Flow Management\BSCSSuspensionFromDunningFlowManagement.cs" />
     <Compile Include="Request Flow Management\IndividualToCustomerFlowManagement.cs" />
     <Compile Include="Request Flow Management\InstallmentsFlowManagement.cs" />
     <Compile Include="Request Flow Management\LastMileChangeFlowManagement.cs" />
+    <Compile Include="Request Flow Management\RemoveProffessionalDIFlowManagement.cs" />
+    <Compile Include="Request Flow Management\RemovePublicDIFlowManagement.cs" />
     <Compile Include="Request Flow Management\RevokeFlowManagement.cs" />
     <Compile Include="Request Flow Management\SuspensionFlowManagement.cs" />
     <Compile Include="Request Flow Management\TelephonyNoCablingManagement.cs" />
@@ -148,6 +152,8 @@
     <Compile Include="Requests\Leased Line\LeasedLineTerminationManager.cs" />
     <Compile Include="Requests\System\BSCSSuspensionFromDunningManager.cs" />
     <Compile Include="Requests\Telephony\ActivateCPTManager.cs" />
+    <Compile Include="Requests\Telephony\AddProffessionalDIManager.cs" />
+    <Compile Include="Requests\Telephony\AddPublicDIManager.cs" />
     <Compile Include="Requests\Telephony\CallDetailsManager.cs" />
     <Compile Include="Requests\Telephony\ChangePhoneNumberManager.cs" />
     <Compile Include="Requests\Telephony\ChangeRatePlanManager.cs" />
@@ -167,6 +173,8 @@
     <Compile Include="Requests\Telephony\NetworkResetPasswordManager.cs" />
     <Compile Include="Requests\Telephony\OtherChargesManager.cs" />
     <Compile Include="Requests\Telephony\PABXManager.cs" />
+    <Compile Include="Requests\Telephony\RemoveProffessionalDIManager.cs" />
+    <Compile Include="Requests\Telephony\RemovePublicDIManager.cs" />
     <Compile Include="Requests\Telephony\RevokeManager.cs" />
     <Compile Include="Requests\Telephony\ServiceAdditionManager.cs" />
     <Compile Include="Requests\Telephony\ServiceRemovalManager.cs" />

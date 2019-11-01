@@ -75,6 +75,8 @@
     <Compile Include="Billing\WorkflowInput\ActivateCptRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ActivateTelephonyContractInput.cs" />
     <Compile Include="Billing\WorkflowInput\AddOtherChargesRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\AddProffessionalDIInput.cs" />
+    <Compile Include="Billing\WorkflowInput\AddPublicDIInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLAlterSpeedRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLChangePasswordRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ADSLContractOnHoldInput.cs" />
