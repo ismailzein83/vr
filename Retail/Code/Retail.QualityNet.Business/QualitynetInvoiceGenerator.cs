@@ -161,8 +161,7 @@ namespace Retail.QualityNet.Business
                         CallingNumber = calling,
                         TotalNumberOfCalls = numberOfInternationalCalls,
                         TotalAmount = internationalTotalAmount,
-                        TotalAmountInArabicWords = numberToArabicText.ConvertNumberToText(internationalTotalAmount, textCurrency),
-                        GrandTotalAmount = internationalGrandTotalAmount
+                        TotalAmountInArabicWords = numberToArabicText.ConvertNumberToText(internationalTotalAmount, textCurrency)
                     };
                     internationalCDRsSummaryPerDID.Add(calling, internationalQualityNetCDRsSummary);
                 }
@@ -429,12 +428,9 @@ namespace Retail.QualityNet.Business
             public int TotalNumberOfCalls { get; set; }
             public decimal TotalAmount { get; set; }
             public string TotalAmountInArabicWords { get; set; }
-            public decimal GrandTotalAmount { get; set; }
         }
 
         private class BillingCDRsByDID : Dictionary<string, List<BillingCDR>> { }
-
-        // private class BillingCDRsByDIDByAccount : Dictionary<long, BillingCDRsByDID> { }
 
         #endregion
     }
