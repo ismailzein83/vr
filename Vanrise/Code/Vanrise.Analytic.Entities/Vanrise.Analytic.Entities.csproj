@@ -121,6 +121,7 @@
     <Compile Include="AnalyticDataProvider\AnalyticDataProviderConfig.cs" />
     <Compile Include="CustomCodeCompilationInput.cs" />
     <Compile Include="CustomCodeCompilationOutput.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleFilter.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleFilterConfig.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleFilterDefinitionConfig.cs" />
