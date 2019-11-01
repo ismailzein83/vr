@@ -77,6 +77,16 @@ namespace Retail.NIM.Business
 
         public ReserveConnectionOutput ReserveConnection(ReserveConnectionInput input)
         {
+
+            var port1Type = new NodePortTypeManager().GetNodePortType(input.Port1TypeId);
+            port1Type.ThrowIfNull("port1Type", input.Port1TypeId);
+
+
+            var port2Type = new NodePortTypeManager().GetNodePortType(input.Port2TypeId);
+            port2Type.ThrowIfNull("port2Type", input.Port2TypeId);
+
+
+
             NodePortManager _nodePortManager = new NodePortManager();
 
             var filter = new RecordFilterGroup
@@ -135,9 +145,9 @@ namespace Retail.NIM.Business
 
             var port2Id = (long)firstItem.FieldValues.GetRecord("Port2");
 
-            var reservedPort1 =_nodePortManager.ReservePort(port1Id);
+            var reservedPort1 =_nodePortManager.ReservePort(port1Id, port1Type.BusinessEntitityDefinitionId);
 
-            var reservedPort2 = _nodePortManager.ReservePort(port2Id);
+            var reservedPort2 = _nodePortManager.ReservePort(port2Id, port2Type.BusinessEntitityDefinitionId);
 
             return new ReserveConnectionOutput
             {
@@ -213,5 +223,19 @@ namespace Retail.NIM.Business
             return items != null && items.Count > 0;
         }
 
+
+        //public void AddConnection()
+        //{
+
+        //}
+
+        //public void AddConnectionToPath()
+        //{
+
+        //}
+        //public bool SetPathReady()
+        //{
+
+        //}
     }
 }

@@ -10,6 +10,7 @@ namespace Retail.NIM.Entities
     {
         public long NodeId { get; set; }
         public Guid? PartTypeId { get; set; }
+        public Guid PortTypeId { get; set; }
     }
 
     public class ReservePortOutput

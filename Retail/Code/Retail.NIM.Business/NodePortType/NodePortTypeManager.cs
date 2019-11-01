@@ -13,6 +13,11 @@ namespace Retail.NIM.Business
     public class NodePortTypeManager
     {
         static Guid _definitionId = new Guid("8F4AC01A-82F2-45E7-A792-EE06CC16AE31");
+
+        public NodePortType GetNodePortType(Guid nodePortTypeId)
+        {
+            return GetCachedNodePortTypes().GetRecord(nodePortTypeId);
+        }
         public IEnumerable<NodePortTypeInfo> GetNodePortTypeInfo(NodePortTypeInfoFilter nodePortTypeInfoFilter)
         {
             Func<NodePortType, bool> filterExpression = (nodePortTypeEntity) =>

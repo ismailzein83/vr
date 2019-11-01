@@ -14,6 +14,8 @@ namespace Retail.NIM.Entities
     public class ReserveConnectionInput
     {
         public Guid ConnectionTypeId { get; set; }
+        public Guid Port1TypeId { get; set; }
+        public Guid Port2TypeId { get; set; }
         public long Port1NodeId { get; set; }
         public long Port2NodeId { get; set; }
         public Guid? Port1PartTypeId { get; set; }

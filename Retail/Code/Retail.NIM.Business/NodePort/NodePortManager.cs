@@ -18,6 +18,10 @@ namespace Retail.NIM.Business
         public ReservePortOutput ReservePort(ReservePortInput input)
         {
 
+            var portType = new NodePortTypeManager().GetNodePortType(input.PortTypeId);
+            portType.ThrowIfNull("portType",input.PortTypeId);
+
+
             var filter = new RecordFilterGroup
             {
                 Filters = new List<RecordFilter>
@@ -44,7 +48,7 @@ namespace Retail.NIM.Business
                 });
             }
 
-            var entities = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.NodePortBEDefinitionId, null, filter);
+            var entities = _genericBusinessEntityManager.GetAllGenericBusinessEntities(portType.BusinessEntitityDefinitionId, null, filter);
 
             if (entities == null || entities.Count() == 0)
                 return null;
@@ -52,13 +56,13 @@ namespace Retail.NIM.Business
             var firstItem = entities.First();
 
             var portid = (long)firstItem.FieldValues.GetRecord("ID");
-            return ReservePort(portid);
+            return ReservePort(portid, portType.BusinessEntitityDefinitionId);
         }
-        public ReservePortOutput ReservePort(long portId)
+        public ReservePortOutput ReservePort(long portId, Guid businessEntitityDefinitionId)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
+                BusinessEntityDefinitionId = businessEntitityDefinitionId,
                 FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.ReservedPortStatusDefinitionId } },
                 GenericBusinessEntityId = portId,
                 FilterGroup =new RecordFilterGroup
