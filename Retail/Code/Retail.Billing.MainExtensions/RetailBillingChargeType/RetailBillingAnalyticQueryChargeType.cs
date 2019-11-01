@@ -19,7 +19,7 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public override bool IsApplicableToTarget(IRetailBillingChargeTypeIsApplicableToTargetContext context)
