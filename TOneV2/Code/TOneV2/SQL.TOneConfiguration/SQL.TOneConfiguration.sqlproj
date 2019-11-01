@@ -154,6 +154,10 @@
     <Folder Include="VRJSON_PostScripts\CarrierPortal" />
     <Folder Include="VRJSON_PostScripts\CarrierPortal\Retail" />
     <Folder Include="VRJSON_PostScripts\Retail" />
+    <Folder Include="VRJSON_PostScripts\Interconnect" />
+    <Folder Include="VRJSON_PostScripts\Interconnect\Voice" />
+    <Folder Include="VRJSON_PostScripts\Interconnect\Data" />
+    <Folder Include="VRJSON_PostScripts\Interconnect\SMS" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -1070,5 +1074,9 @@
     <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RingoPortal.json" />
     <None Include="VRJSON_PostScripts\CarrierPortal\CarrierPortal.json" />
     <None Include="VRJSON_PostScripts\Retail\Retail_Qualitynet.json" />
+    <None Include="VRJSON_PostScripts\Interconnect\Interconnect.json" />
+    <None Include="VRJSON_PostScripts\Interconnect\Data\Interconnect_Data.json" />
+    <None Include="VRJSON_PostScripts\Interconnect\SMS\Interconnect_SMS.json" />
+    <None Include="VRJSON_PostScripts\Interconnect\Voice\Interconnect_Voice.json" />
   </ItemGroup>
 </Project>

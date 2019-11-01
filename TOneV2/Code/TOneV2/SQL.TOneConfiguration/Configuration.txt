@@ -139,6 +139,7 @@ Retail_RA.PostDeployment.sql
 
 Interconnect
 InterConnect.PostDeployment.sql
+Interconnect.json
 
 CentralAuth
 CentralAuth.PostDeployment.sql
