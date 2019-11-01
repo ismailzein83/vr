@@ -2285,6 +2285,7 @@ namespace BPMExtended.Main.Business
             {
                 recordEntity = collection[0];
                 recordEntity.SetColumnValue("StStatusId", "9B7BA6FB-D4C2-4AE7-B940-2119C7BD460A");
+                recordEntity.SetColumnValue("StLastPendingCustomerReturn", DateTime.Now);
             }
             recordEntity.Save();
 
