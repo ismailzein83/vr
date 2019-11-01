@@ -7,8 +7,9 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO.
 ECHO Retail.Qualitynet DataBase First Deployment Scripts
 
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail_Qualitynet.PostDeployment.sql" 			/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Qualitynet\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail_Qualitynet_Overridden.PostDeployment.sql" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Qualitynet\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_CountryInArabic.json"	/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Retail.Qualitynet\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail_Qualitynet.PostDeployment.sql" 				/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Retail.Qualitynet\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail_Qualitynet_Overridden.PostDeployment.sql"		/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Retail.Qualitynet\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
 ::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail_Centrex.PostDeployment.sql" 				/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Qualitynet\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 ::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail.SwitchReleaseCause.PostDeployment.sql"	/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Qualitynet\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
