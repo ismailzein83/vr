@@ -8,11 +8,13 @@ namespace TOne.WhS.Routing.BP.Arguments
     {
         public DateTime? EffectiveTime { get; set; }
         public bool IsFuture { get; set; }
-        public RoutingDatabaseType RoutingDatabaseType { get; set; }
+        public RoutingProcessMode RoutingProcessMode { get; set; }
         public RoutingProcessType RoutingProcessType { get; set; }
+        public RoutingDatabaseType RoutingDatabaseType { get; set; }
         public bool DivideProcessIntoSubProcesses { get; set; }
         public List<string> Switches { get; set; }
         public int EffectiveAfterInMinutes { get; set; }
+        public List<Guid> RiskyMarginCategories { get; set; }
 
         public override string GetTitle()
         {
@@ -25,9 +27,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
             if (!IsFuture && evaluatedExpressions.ContainsKey("ScheduleTime"))
-            {
                 EffectiveTime = DateTime.Now.AddMinutes(EffectiveAfterInMinutes);
-            }
         }
     }
 }
