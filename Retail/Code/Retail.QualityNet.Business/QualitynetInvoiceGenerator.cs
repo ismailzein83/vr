@@ -90,6 +90,7 @@ namespace Retail.QualityNet.Business
             var countryManager = new CountryManager();
             var businessEntityManager = new BusinessEntityManager();
             var currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            var countryInArabicManager = new CountryInArabicManager();
 
             Dictionary<string, List<QualityNetCDR>> cdrsPerDID = new Dictionary<string, List<QualityNetCDR>>();
             Dictionary<string, InternationalQualityNetCDRsSummary> internationalCDRsSummaryPerDID = new Dictionary<string, InternationalQualityNetCDRsSummary>();
@@ -132,7 +133,9 @@ namespace Retail.QualityNet.Business
                         if (zone != null)
                         {
                             qualityNetCDR.Country = countryManager.GetCountryName(zone.CountryId);
-                            qualityNetCDR.CountryInArabic = businessEntityManager.GetEntityDescription(CountryInArabicBusinessEntityId, zone.CountryId);
+                            var countryInArabic = countryInArabicManager.GetCountryInArabic(zone.CountryId);
+                            if (countryInArabic != null)
+                                qualityNetCDR.CountryInArabic = countryInArabic.Name;
                         }
                     }
 
