@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Retail_BE].[AccountPartDefinition] (
     [ID]               UNIQUEIDENTIFIER NOT NULL,
-    [OldID]            INT              NULL,
+    [DevProjectID]     UNIQUEIDENTIFIER NULL,
     [Title]            NVARCHAR (255)   NULL,
     [Name]             NVARCHAR (255)   NULL,
     [Details]          NVARCHAR (MAX)   NULL,
@@ -10,6 +10,8 @@
     CONSTRAINT [PK_AccountPartDefinition] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_AccountPartDefinition_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 
