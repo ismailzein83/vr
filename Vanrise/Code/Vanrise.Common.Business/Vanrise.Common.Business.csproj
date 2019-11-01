@@ -74,6 +74,7 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CacheRefreshManager.cs" />
+    <Compile Include="Country\CountryInArabicManager.cs" />
     <Compile Include="Country\VRRestCountryManager.cs" />
     <Compile Include="DataEncryptionKeyManager.cs" />
     <Compile Include="DBReplicationDefinitionManager.cs" />

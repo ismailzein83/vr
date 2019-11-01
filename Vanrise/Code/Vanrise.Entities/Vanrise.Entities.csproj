@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
+    <Compile Include="Country\CountryInArabic.cs" />
     <Compile Include="ReceivedRequestLog\VRReceivedRequestLogModuleFilterConfig.cs" />
     <Compile Include="VRCompiledAssembly\VRCompiledAssembly.cs" />
     <Compile Include="VRDevProject\VRDevProjectFilter.cs" />
