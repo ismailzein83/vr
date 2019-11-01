@@ -22,6 +22,12 @@ namespace Retail.Billing.Entities
 
         Dictionary<string, Object> TargetFieldValues { get; }
     }
+    public class RetailBillingChargeTypeCalculateChargeContext: IRetailBillingChargeTypeCalculateChargeContext
+    {
+        public RetailBillingCharge Charge { get; set; }
+
+        public Dictionary<string, Object> TargetFieldValues { get; set; }
+    }
 
     public interface IRetailBillingChargeTypeIsApplicableToTargetContext
     {

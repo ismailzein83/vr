@@ -91,9 +91,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdvancedPaymentManager.cs" />
+    <Compile Include="ContractServiceActionChargeTypeManager.cs" />
+    <Compile Include="RatePlanServiceActionChargeManager.cs" />
+    <Compile Include="RatePlanServiceRecurringChargeManager.cs" />
+    <Compile Include="ContractServiceRecurringChargeTypeManager.cs" />
+    <Compile Include="RatePlanManager.cs" />
     <Compile Include="DepositManager.cs" />
     <Compile Include="InstallmentItemManager.cs" />
     <Compile Include="InstallmentManager.cs" />
+    <Compile Include="RetailBillingChargeManager.cs" />
     <Compile Include="RetailBillingChargeType\CustomCode\IRetailBillingCustomCodeChargeTypeEvaluator.cs" />
     <Compile Include="RetailBillingChargeType\CustomCode\RetailBillingCustomCodeChargeTypeManager.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingChargeTypeManager.cs" />
