@@ -10,21 +10,25 @@ function NewFeaturesController($scope, UtilsService, DiagramElementTypesEnum) {
         { categoryId: 5, categoryName: "PortRj", hasChilds: false }
     ];
     $scope.nodeDataArray = [
-            { Id: 7, elementType: DiagramElementTypesEnum.IMS.value , Name: " IMS", hasChilds: true },
-            { Id: 8, elementType:  DiagramElementTypesEnum.OLT.value, Name: " OLT", hasChilds: true },
-            { Id: 9, Parent: 7, elementType: DiagramElementTypesEnum.Port.value, get Name() { return this.Name = DiagramElementTypesEnum.Port.description + " " + this.Id; } },
-            { Id: 12, Parent: 7, elementType: DiagramElementTypesEnum.Port.value, Name: " Port" },
-            { Id: 11, Parent: 7, elementType: DiagramElementTypesEnum.Port.value, Name: " Port" },
-            { Id: 10, Parent: 8, elementType: DiagramElementTypesEnum.Port.value, Name: " Port 2" },
-            { Id: 13, Parent: 8, elementType: DiagramElementTypesEnum.Port.value, Name: " Port 3" },
-            { Id: 14, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, Name: " Port 4" },
-            { Id: 15, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, Name: " Port 5" },
-            { Id: 164, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, Name: " Port 6" },
-            { Id: 165, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, Name: " Port 7" },
-            { Id: 167, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, Name: " Port 8" },
-            { Id: 168, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, Name: " Port 9" },
-            { Id: 155, Parent: 7, elementType:DiagramElementTypesEnum.SLOT.value, Name: "Slot 1", hasChilds: true }
+            { Id: 7, elementType: DiagramElementTypesEnum.IMS.value , name: " IMS", hasChilds: true },
+            { Id: 8, elementType:  DiagramElementTypesEnum.OLT.value, name: " OLT", hasChilds: true },
+            { Id: 9, Parent: 7, elementType: DiagramElementTypesEnum.Port.value, get name() { return this.name = DiagramElementTypesEnum.Port.description + " " + this.Id; } },
+            { Id: 12, Parent: 7, elementType: DiagramElementTypesEnum.Port.value, name: " Port" },
+            { Id: 11, Parent: 7, elementType: DiagramElementTypesEnum.Port.value, name: " Port" },
+            { Id: 10, Parent: 8, elementType: DiagramElementTypesEnum.Port.value, name: " Port 2" },
+            { Id: 13, Parent: 8, elementType: DiagramElementTypesEnum.Port.value, name: " Port 3" },
+            { Id: 14, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, name: " Port 4" },
+            { Id: 15, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, name: " Port 5" },
+            { Id: 164, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, name: " Port 6" },
+            { Id: 165, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, name: " Port 7" },
+            { Id: 167, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, name: " Port 8" },
+            { Id: 168, Parent: 155, elementType: DiagramElementTypesEnum.PortRj.value, name: " Port 9" },
+            { Id: 155, Parent: 7, elementType:DiagramElementTypesEnum.SLOT.value, name: "Slot 1", hasChilds: true }
     ];
+
+    $scope.onNodeClicked = function (node) {
+        console.log(node);
+    };
 
     var diagramApi;
     $scope.onDiagramReady = function (api) {

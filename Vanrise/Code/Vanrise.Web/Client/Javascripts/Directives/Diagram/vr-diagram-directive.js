@@ -13,14 +13,20 @@
                 isrequired: "=",
                 nodes: "=",
                 links: "=",
-                nodevaluefield:"@",
+                nodevaluefield: "@",
+                nodetextfield: "@",
                 linkvaluefield: "@",
                 nodetypefield: "@",
-                nodegroupfield:"@",
-                nodeisgroupfield:"@",
+                nodegroupfield: "@",
+                nodeisgroupfield: "@",
+                linktofield: "@",
+                linkfromfield: "@",
+                onnodeclicked: "=",
+                onlinkclicked: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
+                ctrl.nodetTextProperty = ctrl.nodetextfield ? ctrl.nodetextfield : 'name';
 
                 ctrl.isValid = function () {
                     if (ctrl.model.nodeDataArray.length == 0 && ctrl.isrequired == true)
@@ -46,7 +52,7 @@
                     mouseDrop: function (e) { finishDrop(e, null); },
                     "undoManager.isEnabled": true,
                 });
-       
+
                 myDiagram.addModelChangedListener(function (evt) {
                     if (!evt.isTransactionFinished) return;
                     var txn = evt.object;
@@ -130,7 +136,7 @@
                                 alignment: go.Spot.Center,
                                 font: "Bold 12pt Sans-Serif"
                             },
-                            new go.Binding("text", "Name")
+                            new go.Binding("text", ctrl.nodetTextProperty)
                         )
                     )
                   ));
@@ -204,7 +210,7 @@
                                  opacity: 0.75,
                                  stroke: "#404040"
                              },
-                             new go.Binding("text", "Name").makeTwoWay())
+                             new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
                          ),
                          g(go.Placeholder,
                            { padding: 10, alignment: go.Spot.TopLeft })
@@ -257,7 +263,7 @@
                             opacity: 0.75,
                             stroke: "#404040"
                         },
-                        new go.Binding("text", "Name").makeTwoWay())
+                        new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
                     ),
                     g(go.Placeholder,
                       { padding: 10, alignment: go.Spot.TopLeft })
@@ -382,10 +388,16 @@
                 myDiagram.addDiagramListener("ObjectSingleClicked", function (e) {
                     var part = e.subject.part;
                     if (part instanceof go.Node) {
-                        console.log(part.data + "//  data clicked");
+                        var onNodeClick = ctrl.onnodeclicked;
+                        if (onNodeClick != undefined && typeof (onNodeClick) == 'function') {
+                            onNodeClick(part.data);
+                        }
                     }
                     if (part instanceof go.Link) {
-                        console.log(part.data + "//  link clicked");
+                        var onlinkClick = ctrl.onlinkclicked;
+                        if (onlinkClick != undefined && typeof (onlinkClick) == 'function') {
+                            onlinkClick(part.data);
+                        }
                     }
                     $scope.$apply();
                 });
@@ -424,13 +436,16 @@
                 });
 
 
+
                 ctrl.model = new go.GraphLinksModel();
-               
-                ctrl.model.nodeKeyProperty = ctrl.nodevaluefield;
-                ctrl.model.linkKeyProperty = ctrl.linkvaluefield;
-                ctrl.model.nodeCategoryProperty = ctrl.nodetypefield;
-                ctrl.model.nodeGroupKeyProperty = ctrl.nodegroupfield;
-                ctrl.model.nodeIsGroupProperty = ctrl.nodeisgroupfield;
+
+                ctrl.model.nodeKeyProperty = ctrl.nodevaluefield ? ctrl.nodevaluefield : 'key';
+                ctrl.model.linkKeyProperty = ctrl.linkKeyProperty ? ctrl.linkKeyProperty : '';
+                ctrl.model.nodeCategoryProperty = ctrl.nodetypefield ? ctrl.nodetypefield : 'category';
+                ctrl.model.nodeGroupKeyProperty = ctrl.nodegroupfield ? ctrl.nodegroupfield : 'group';
+                ctrl.model.nodeIsGroupProperty = ctrl.nodeisgroupfield ? ctrl.nodeisgroupfield : 'isGroup';
+                ctrl.model.linkFromKeyProperty = ctrl.linkfromfield ? ctrl.linkfromfield : 'from';
+                ctrl.model.linkToKeyProperty = ctrl.linktofield ? ctrl.linktofield : 'to';
 
                 if (ctrl.nodes && ctrl.nodes.length > 0)
                     ctrl.model.nodeDataArray = ctrl.nodes;
@@ -467,7 +482,7 @@
 
                 };
 
-                api.addLinkData = function (link) {                  
+                api.addLinkData = function (link) {
                     myDiagram.model.addLinkData(link);
                 };
 
