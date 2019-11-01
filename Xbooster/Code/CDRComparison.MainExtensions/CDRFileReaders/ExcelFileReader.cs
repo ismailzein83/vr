@@ -137,7 +137,6 @@ namespace CDRComparison.MainExtensions
                     if (string.IsNullOrWhiteSpace(cell.StringValue))
                     {
                         numberOfEmptyCells++;
-                        continue;
                     }
 
                     data.Add(cell.StringValue);
