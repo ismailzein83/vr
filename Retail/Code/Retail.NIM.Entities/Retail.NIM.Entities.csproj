@@ -50,6 +50,7 @@
     <Compile Include="ConnectionType\ConnectionTypeInfo.cs" />
     <Compile Include="ConnectionType\ConnectionTypeInfoFilter.cs" />
     <Compile Include="ConnectionType\ConnectionTypeEntity.cs" />
+    <Compile Include="Connection\Connection.cs" />
     <Compile Include="Connection\ReserveConnection.cs" />
     <Compile Include="DP\DP.cs" />
     <Compile Include="Enums.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="NodeType\NodeType.cs" />
     <Compile Include="NodeType\NodeTypeInfo.cs" />
     <Compile Include="NodeType\NodeTypeInfoFilter.cs" />
+    <Compile Include="PathConnection\PathConnection.cs" />
+    <Compile Include="Path\Path.cs" />
     <Compile Include="PhoneNumberStatus.cs" />
     <Compile Include="PortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
