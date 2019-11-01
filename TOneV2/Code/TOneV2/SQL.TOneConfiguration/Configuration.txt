@@ -76,6 +76,7 @@ Retail_Zajil_Overridden.PostDeployment.sql
 Retail_Zajil.PostDeployment.sql
 
 Retail_Qualitynet
+VR_CountryInArabic.json
 Retail_Qualitynet.PostDeployment.sql
 Retail_Qualitynet_Overridden.PostDeployment.sql
 
