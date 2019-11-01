@@ -275,3 +275,25 @@ begin
 set nocount on;;with cte_data([ID],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('EFD46DB3-E470-4D47-AA36-97E138F5A1EC','Whs_RDRRules','RDR Rules','B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([ID],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])	values(s.[ID],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 ----------------------------------------------------------------------------------------------------
 end
+
+
+--[reprocess].[ReprocessDefinition]-----------------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([Id],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('0934C243-12E4-4A98-A8A2-84625909DEA1','RDR Reprocess','{"$type":"Vanrise.Reprocess.Entities.ReprocessDefinitionSettings, Vanrise.Reprocess.Entities","SourceRecordStorageIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["474f8ba2-d49f-4ede-94b8-bf15e5ff4210"]},"ExecutionFlowDefinitionId":"2f1d3589-538e-43ed-9282-a5e3bae73abc","StageNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["Process RDR Stage","Invalid RDR Storage Stage","Accumulated RDR XMin Generation Stage"]},"InitiationStageNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["Process RDR Stage"]},"StagesToHoldNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["Distribute RDRs"]},"StagesToProcessNames":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["RDR Storage Stage","Process RDR Stage","Invalid RDR Storage Stage","Accumulated RDR XMin Generation Stage","Accumulated RDR XMin Update Stage"]},"RecordCountPerTransaction":50000,"ForceUseTempStorage":false,"CannotBeTriggeredManually":false,"PostExecution":{"$type":"Vanrise.Reprocess.Entities.PostExecution, Vanrise.Reprocess.Entities"}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Settings]))
+merge	[reprocess].[ReprocessDefinition] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([Id],[Name],[Settings])
+	values(s.[Id],s.[Name],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end
