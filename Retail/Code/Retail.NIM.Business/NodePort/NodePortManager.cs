@@ -31,11 +31,13 @@ namespace Retail.NIM.Business
                         FieldName ="Node",
                         Values =  new List<object> {input.NodeId}
                     },
-                    new ObjectListRecordFilter
-                        {
+                    new ObjectListRecordFilter{
                               FieldName = "Status",
                               Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
-                        }
+                    }, new ObjectListRecordFilter{
+                              FieldName = "Type",
+                              Values = new List<object> { input.PortTypeId.ToString() }
+                    }
                 }
             };
 
@@ -47,6 +49,13 @@ namespace Retail.NIM.Business
                     Values = new List<object> { input.PartTypeId.Value.ToString() }
                 });
             }
+            else
+            {
+                filter.Filters.Add(new EmptyRecordFilter
+                {
+                    FieldName = "PartType",
+                });
+            }
 
             var entities = _genericBusinessEntityManager.GetAllGenericBusinessEntities(portType.BusinessEntitityDefinitionId, null, filter);
 
@@ -56,13 +65,13 @@ namespace Retail.NIM.Business
             var firstItem = entities.First();
 
             var portid = (long)firstItem.FieldValues.GetRecord("ID");
-            return ReservePort(portid, portType.BusinessEntitityDefinitionId);
+            return ReservePort(portid,input.PortTypeId);
         }
-        public ReservePortOutput ReservePort(long portId, Guid businessEntitityDefinitionId)
+        public ReservePortOutput ReservePort(long portId,Guid portTypeId)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
             {
-                BusinessEntityDefinitionId = businessEntitityDefinitionId,
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
                 FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.ReservedPortStatusDefinitionId } },
                 GenericBusinessEntityId = portId,
                 FilterGroup =new RecordFilterGroup

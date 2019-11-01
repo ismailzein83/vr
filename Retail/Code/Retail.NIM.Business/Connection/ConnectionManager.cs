@@ -124,6 +124,13 @@ namespace Retail.NIM.Business
                     Values = new List<object> { input.Port1PartTypeId.Value.ToString() }
                 });
             }
+            else
+            {
+                filter.Filters.Add(new EmptyRecordFilter
+                {
+                    FieldName = "Port1PartType",
+                });
+            }
 
             if (input.Port2PartTypeId.HasValue)
             {
@@ -131,6 +138,13 @@ namespace Retail.NIM.Business
                 {
                     FieldName = "Port2PartType",
                     Values = new List<object> { input.Port2PartTypeId.Value.ToString() }
+                });
+            }
+            else
+            {
+                filter.Filters.Add(new EmptyRecordFilter
+                {
+                    FieldName = "Port2PartType",
                 });
             }
 
@@ -145,9 +159,9 @@ namespace Retail.NIM.Business
 
             var port2Id = (long)firstItem.FieldValues.GetRecord("Port2");
 
-            var reservedPort1 =_nodePortManager.ReservePort(port1Id, port1Type.BusinessEntitityDefinitionId);
+            var reservedPort1 =_nodePortManager.ReservePort(port1Id, input.Port1TypeId);
 
-            var reservedPort2 = _nodePortManager.ReservePort(port2Id, port2Type.BusinessEntitityDefinitionId);
+            var reservedPort2 = _nodePortManager.ReservePort(port2Id, input.Port2TypeId);
 
             return new ReserveConnectionOutput
             {
