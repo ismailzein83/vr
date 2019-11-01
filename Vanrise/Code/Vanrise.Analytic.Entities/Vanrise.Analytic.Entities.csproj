@@ -73,6 +73,7 @@
     <Compile Include="AnalyticTableDetail.cs" />
     <Compile Include="AnalyticTableQuery.cs" />
     <Compile Include="AutomatedReportQueries.cs" />
+    <Compile Include="AutomatedReport\FileGenerator\AdvancedExcelFileGeneratorFixedFieldSettingsConfig.cs" />
     <Compile Include="AutomatedReport\FileGenerator\VRAutomatedReportHandlerValidateContext.cs" />
     <Compile Include="AutomatedReport\FileGenerator\VRAutomatedReportFileGeneratorConfig.cs" />
     <Compile Include="AutomatedReport\GenerateFilesActionType.cs" />
