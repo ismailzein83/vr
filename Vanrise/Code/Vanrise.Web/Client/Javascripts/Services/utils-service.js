@@ -1015,6 +1015,16 @@
             return 0;
         }
 
+        function watchFunction(scope, valueToWatch, callBack) {
+            var watchHandler = scope.$watch(valueToWatch, function () {
+                if (callBack && typeof (callBack) == 'function')
+                    callBack();
+            });
+            scope.$on("$destroy", function () {
+                watchHandler();
+            });
+        }
+
         return {
             replaceAll: replaceAll,
             waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -1085,7 +1095,8 @@
             getUnitCeildWidthNextStepValue: getUnitCeildWidthNextStepValue,
             validateFileName: validateFileName,
             buildTitleForChangeEditor: buildTitleForChangeEditor,
-            sortTimes: sortTimes
+            sortTimes: sortTimes,
+            watchFunction: watchFunction
         };
     }
 
