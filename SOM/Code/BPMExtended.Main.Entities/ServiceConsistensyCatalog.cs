@@ -36,7 +36,13 @@ namespace BPMExtended.Main.Entities
 
     public class UnconsistentServices
     {
-        public Dictionary<string, string> RequiredServices { get; set; }
-        public Dictionary<string, string> ProhibitedServices { get; set; }
+        public List<UnconsistentService> ProhibitedAndRequiredServices { get; set; }
     }
+    public class UnconsistentService
+    {
+        public string ServiceName { get; set; }
+        public string RequiredServices { get; set; }
+        public string ProhibitedServices { get; set; }
+    }
+
 }

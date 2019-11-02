@@ -48,17 +48,16 @@ namespace BPMExtended.Main.Business
                 item = client.Get<ServiceConsistensyCatalog>(String.Format("api/SOM.ST/Billing/GetServicesConsistencyCatalog"));
             }
             var itemAsString = JSONSerializer.Serialize(item);
-            
+
             return itemAsString;
         }
         public UnconsistentServices GetUnconsistentServices(List<string> servicesIds)
         {
 
-            UnconsistentServices unconsistentServices = new UnconsistentServices
-            {
-                ProhibitedServices = new Dictionary<string, string>(),
-                RequiredServices = new Dictionary<string, string>()
+            UnconsistentServices unconsistentServices = new UnconsistentServices {
+            ProhibitedAndRequiredServices=new List<UnconsistentService>()
             };
+
             if (servicesIds != null && servicesIds.Count > 0)
             {
                 EntitySchemaQuery esq;
@@ -81,13 +80,14 @@ namespace BPMExtended.Main.Business
                         ServiceConsistensyCatalog serviceConsistensyCatalog = JsonConvert.DeserializeObject<ServiceConsistensyCatalog>(serializedObject.ToString());
                         if (serviceConsistensyCatalog != null)
                         {
-                            if (serviceConsistensyCatalog.RequiredServices != null && serviceConsistensyCatalog.RequiredServices.Count>0)
+                            foreach (var serviceId in servicesIds)
                             {
-                                foreach (var serviceId in servicesIds)
+                                UnconsistentService unconsistentService = new UnconsistentService { ServiceName = serviceId };
+                                if (serviceConsistensyCatalog.RequiredServices != null && serviceConsistensyCatalog.RequiredServices.Count > 0)
                                 {
                                     List<RequiredService> requiredServices = null;
                                     serviceConsistensyCatalog.RequiredServices.TryGetValue(serviceId, out requiredServices);
-                                    if (requiredServices != null && requiredServices.Count>0)
+                                    if (requiredServices != null && requiredServices.Count > 0)
                                     {
                                         List<string> allRequiredServices = new List<string>();
                                         foreach (var reqServ in requiredServices)
@@ -95,18 +95,17 @@ namespace BPMExtended.Main.Business
                                             if (!servicesIds.Contains(reqServ.ServiceId))
                                                 allRequiredServices.Add(reqServ.ServiceId);
                                         }
-                                        unconsistentServices.RequiredServices.Add(serviceId, string.Join(" , ", allRequiredServices));
+                                        if (allRequiredServices.Count > 0)
+                                            unconsistentService.RequiredServices = string.Join(" , ", allRequiredServices);
                                     }
                                 }
-                            }
-                           // ------------------------------------------------------------------------------------------
-                            if (serviceConsistensyCatalog.ProhibitedServices != null && serviceConsistensyCatalog.ProhibitedServices.Count>0)
-                            {
-                                foreach (var serviceId in servicesIds)
+
+                                if (serviceConsistensyCatalog.ProhibitedServices != null && serviceConsistensyCatalog.ProhibitedServices.Count > 0)
                                 {
+
                                     List<ProhibitedService> prohibitedServices = null;
                                     serviceConsistensyCatalog.ProhibitedServices.TryGetValue(serviceId, out prohibitedServices);
-                                    if (prohibitedServices != null && prohibitedServices.Count>0)
+                                    if (prohibitedServices != null && prohibitedServices.Count > 0)
                                     {
                                         List<string> allProhibitedServices = new List<string>();
                                         foreach (var reqServ in prohibitedServices)
@@ -114,9 +113,12 @@ namespace BPMExtended.Main.Business
                                             if (servicesIds.Contains(reqServ.ServiceId))
                                                 allProhibitedServices.Add(reqServ.ServiceId);
                                         }
-                                        unconsistentServices.ProhibitedServices.Add(serviceId, string.Join(" , ", allProhibitedServices));
+                                        if (allProhibitedServices.Count > 0)
+                                            unconsistentService.ProhibitedServices = string.Join(" , ", allProhibitedServices);
                                     }
                                 }
+                                if (!string.IsNullOrEmpty(unconsistentService.RequiredServices) || !string.IsNullOrEmpty(unconsistentService.ProhibitedServices))
+                                unconsistentServices.ProhibitedAndRequiredServices.Add(unconsistentService);
                             }
                         }
                     }
@@ -152,7 +154,7 @@ namespace BPMExtended.Main.Business
                     servicesInfoItems.Add(serviceInfoItem);
                 }
             }
-       }
+        }
 
         public List<ServiceInfo> GetServicesInfoForCatalog(string catalogId, string catalogName, string sourceSchemaName)
         {
@@ -401,7 +403,7 @@ namespace BPMExtended.Main.Business
 
             if (isForeigner)
                 return foreignerFilteredServicesDetailItems.OrderBy(x => x.PackageId).ToList();
-                // return foreignerFilteredServicesDetailItems;
+            // return foreignerFilteredServicesDetailItems;
 
             return filteredServicesDetailItems.OrderBy(x => x.PackageId).ToList();
 

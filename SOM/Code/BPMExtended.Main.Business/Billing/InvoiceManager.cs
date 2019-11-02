@@ -75,8 +75,33 @@ namespace BPMExtended.Main.Business
             }
             return invoicesDetailItems;
         }
+        public bool SimulateCustomerBOD(string customerId)
+        {
 
+            bool result;
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<bool>(String.Format("api/SOM.ST/Billing/SimulateCustomerBOD?CustomerId={0}", customerId));
+            }
+            return  result;
+        }
+        public List<BillOnDemandInvoiceDetail> GetCustomerBODSimulatedInvoices(string customerId)
+        {
 
+            var invoicesDetailItems = new List<BillOnDemandInvoiceDetail>();
+
+            using (SOMClient client = new SOMClient())
+            {
+                List<Invoice> items = client.Get<List<Invoice>>(String.Format("api/SOM.ST/Billing/GetCustomerBODSimulatedInvoices?CustomerId={0}", customerId));
+                foreach (var item in items)
+                {
+                    var detailItem = BillOnDemandInvoiceToDetailMapper(item);
+                    invoicesDetailItems.Add(detailItem);
+                }
+            }
+            return invoicesDetailItems;
+        }
+ 
         public List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId)
         {
             var paymentDetails = new List<PaymentPlanDetail>();
