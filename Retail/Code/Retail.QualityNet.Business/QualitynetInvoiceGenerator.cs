@@ -240,6 +240,12 @@ namespace Retail.QualityNet.Business
                                FieldName = "FinancialAccountId",
                                CompareOperator = NumberRecordFilterOperator.Equals,
                                Value = accountId,
+                           },
+                           new NumberRecordFilter
+                           {
+                               FieldName = "TrafficDirection",
+                               CompareOperator = NumberRecordFilterOperator.Equals,
+                               Value = 2
                            }
                        }
                     },
