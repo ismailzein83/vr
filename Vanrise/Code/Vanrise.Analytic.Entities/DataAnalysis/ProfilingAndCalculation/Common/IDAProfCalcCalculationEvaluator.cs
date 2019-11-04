@@ -14,5 +14,7 @@ namespace Vanrise.Analytic.Entities
         bool IsGroupingValueIncluded(string groupingName);
 
         dynamic GetGroupingValue(string groupingName);
+
+        dynamic GetParameterValue(string parameterName);
     }
 }

@@ -1,0 +1,11 @@
+﻿<vr-tabs>
+    <span ng-repeat="dataAnalysisItemTab in scopeModel.dataAnalysisItemTabs">
+        <vr-tab header="dataAnalysisItemTab.tabTitle">
+            <vr-row>
+                <!--<vr-section title="Parameters">-->
+                    <vr-genericdata-genericeditor-rootcontainer on-ready="dataAnalysisItemTab.onParametersEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
+                <!--</vr-section>-->
+            </vr-row>
+        </vr-tab>
+    </span>
+</vr-tabs>

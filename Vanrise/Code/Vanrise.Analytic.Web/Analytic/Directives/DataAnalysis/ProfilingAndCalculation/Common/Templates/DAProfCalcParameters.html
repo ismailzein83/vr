@@ -1,0 +1,26 @@
+﻿<span vr-loader="scopeModel.isLoading">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onParametersRecordTypeSelectorReady" label="Record Type" showaddbutton
+                                                    onselectionchanged="scopeModel.onParametersRecordTypeSelectionChanged"
+                                                    selectedvalues="scopeModel.selectedRecordType">
+            </vr-genericdata-datarecordtype-selector>
+        </vr-columns>
+    </vr-row>
+    <span ng-if="scopeModel.selectedRecordType!=undefined">
+        <vr-validator validate="scopeModel.validateParameters()">
+            <vr-tabs>
+                <vr-tab header="'Global Parameters'">
+                    <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGlobalParametersEditorDefinitionDirectiveReady"
+                                                                        normal-col-num="4" isnotrequired>
+                    </vr-genericdata-genericbe-editordefinition-settings>
+                </vr-tab>
+                <vr-tab header="'Overridden Parameters'">
+                    <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onOverriddenParametersEditorDefinitionDirectiveReady"
+                                                                        normal-col-num="4" isnotrequired>
+                    </vr-genericdata-genericbe-editordefinition-settings>
+                </vr-tab>
+            </vr-tabs>
+        </vr-validator>
+    </span>
+</span>

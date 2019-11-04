@@ -14,6 +14,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
         public IDAProfCalcOutputRecordProcessor OutputRecordProcessor { get; set; }
 
+        #region Public Methods
 
         public override string GetItemGroupingKey(IDataGroupingHandlerGetItemGroupingKeyContext context)
         {
@@ -62,8 +63,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             foreach (IDataGroupingItem item in context.GroupedItems)
             {
                 ProfilingDGItem profilingDGItem = item as ProfilingDGItem;
-                Dictionary<string, dynamic> fieldValues = new Dictionary<string, dynamic>(profilingDGItem.GroupingValues);
 
+                Dictionary<string, dynamic> fieldValues = new Dictionary<string, dynamic>(profilingDGItem.GroupingValues);
                 Dictionary<string, dynamic> aggregationValues = new Dictionary<string, dynamic>();
 
                 for (var index = 0; index < recordProfilingOutputSettings.AggregationFields.Count; index++)
@@ -77,7 +78,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
                 if (daProfCalcCalculationFieldDetailDict != null && daProfCalcCalculationFieldDetailDict.Count > 0)
                 {
-                    DAProfCalcGetMeasureValueContext daProfCalcGetMeasureValueContext = new DAProfCalcGetMeasureValueContext(profilingDGItem.GroupingValues, aggregationValues);
+                    DAProfCalcGetMeasureValueContext daProfCalcGetMeasureValueContext = new DAProfCalcGetMeasureValueContext(profilingDGItem.GroupingValues, aggregationValues, DAProfCalcExecInput.ParameterValues, DAProfCalcExecInput.OutputItemDefinitionId);
                     foreach (var daProfCalcCalculationFieldDetail in daProfCalcCalculationFieldDetailDict)
                     {
                         fieldValues.Add(daProfCalcCalculationFieldDetail.Value.Entity.FieldName, daProfCalcCalculationFieldDetail.Value.Evaluator.GetCalculationValue(daProfCalcGetMeasureValueContext));
@@ -90,6 +91,10 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
             OutputRecordProcessor.ProcessOutputRecords(daProfCalcOutputRecordProcessorProcessContext);
         }
+
+        #endregion
+
+        #region Private Classes
 
         private class DARecordAggregateUpdateExistingFromNewContext : IDARecordAggregateUpdateExistingFromNewContext
         {
@@ -122,5 +127,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 this.State = state;
             }
         }
+
+        #endregion
     }
 }

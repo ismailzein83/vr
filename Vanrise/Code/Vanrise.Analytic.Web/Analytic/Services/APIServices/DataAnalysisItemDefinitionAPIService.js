@@ -43,6 +43,9 @@
             });
         }
 
+        function GetDataAnalysisItemDefinitionsHavingParameters(parametersType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisItemDefinitionsHavingParameters"), { type: parametersType } );
+        }
 
         return ({
             GetFilteredDataAnalysisItemDefinitions: GetFilteredDataAnalysisItemDefinitions,
@@ -51,7 +54,8 @@
             UpdateDataAnalysisItemDefinition: UpdateDataAnalysisItemDefinition,
             GetDARecordAggregateExtensionConfigs: GetDARecordAggregateExtensionConfigs,
             GetTimeRangeFilterExtensionConfigs: GetTimeRangeFilterExtensionConfigs,
-            GetDataAnalysisItemDefinitionsInfo: GetDataAnalysisItemDefinitionsInfo
+            GetDataAnalysisItemDefinitionsInfo: GetDataAnalysisItemDefinitionsInfo,
+            GetDataAnalysisItemDefinitionsHavingParameters: GetDataAnalysisItemDefinitionsHavingParameters
         });
     }
 

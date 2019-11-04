@@ -21,5 +21,7 @@ namespace Vanrise.Analytic.Entities
         public DAProfCalcAnalysisPeriod DAProfCalcAnalysisPeriod { get; set; }
 
         public DAProfCalcAlertRuleFilter DAProfCalcAlertRuleFilter { get; set; }
+
+        public Dictionary<string, Object> ParameterValues { get; set; }
     }
 }

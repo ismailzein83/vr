@@ -10,10 +10,15 @@ namespace Vanrise.Analytic.Entities
     public class DataAnalysisSettings : SettingData
     {
         public const string SETTING_TYPE = "VR_Analytic_DataAnalysisSettings";
-        public Dictionary<Guid, DataAnalysisItemTab> DataAnalysisItemsSettingsByItemId { get; set; }
+
+        public DataAnalysisItemParameters Parameters { get; set; }
+    }
+    public class DataAnalysisItemParameters
+    {
+        public Dictionary<Guid, DataAnalysisItemParameterSettings> DataAnalysisItemParameterSettingsByItemId { get; set; }
     }
 
-    public class DataAnalysisItemTab
+    public class DataAnalysisItemParameterSettings
     {
         public Guid DataAnalysisItemDefinitionId { get; set; }
 

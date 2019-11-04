@@ -12,3 +12,8 @@
         <vr-genericdata-datarecordalertrule-settings on-ready="scopeModel.onDataRecordAlertRuleSettingsReady"></vr-genericdata-datarecordalertrule-settings>
     </span>
 </vr-tab>
+<vr-tab header="'Parameters'" ng-if="scopeModel.hasOverriddenParameters">
+    <span vr-loader="scopeModel.isParameterSettingsDirectiveLoading">
+        <vr-genericdata-genericeditor-rootcontainer on-ready="scopeModel.onParametersEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
+    </span>
+</vr-tab>

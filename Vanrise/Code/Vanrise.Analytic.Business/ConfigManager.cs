@@ -25,14 +25,14 @@ namespace Vanrise.Analytic.Business
             automatedReportSettings.ThrowIfNull("automatedReportSettings");
             return automatedReportSettings;
         }
-        public List<MeasureStyleRule> GetAnalytictableKPIMeasureStyleRuleSettings (Guid analyticTableId)
+        public List<MeasureStyleRule> GetAnalytictableKPIMeasureStyleRuleSettings(Guid analyticTableId)
         {
             SettingManager settingManager = new SettingManager();
             KPISettings kpiSettings = settingManager.GetSetting<KPISettings>(KPISettings.SETTING_TYPE);
-            if(kpiSettings != null && kpiSettings.AnalyticTablesKPISettings !=null)
+            if (kpiSettings != null && kpiSettings.AnalyticTablesKPISettings != null)
             {
                 var analyticTableKPISettings = kpiSettings.AnalyticTablesKPISettings.FindRecord(x => x.AnalyticTableId == analyticTableId);
-                if(analyticTableKPISettings != null)
+                if (analyticTableKPISettings != null)
                     return analyticTableKPISettings.MeasureStyleRules;
             }
             return null;
@@ -46,6 +46,31 @@ namespace Vanrise.Analytic.Business
                 var analyticTableKPISettings = kpiSettings.AnalyticTablesKPISettings.FindRecord(x => x.AnalyticTableId == analyticTableId);
                 if (analyticTableKPISettings != null)
                     return analyticTableKPISettings;
+            }
+            return null;
+        }
+
+        public DataAnalysisSettings GetDataAnalysisSettings()
+        {
+            SettingManager settingManager = new SettingManager();
+            return settingManager.GetSetting<DataAnalysisSettings>(DataAnalysisSettings.SETTING_TYPE);
+        }
+
+        public ParameterSettings GetDataAnalysisItemParametersSettings(Guid dataAnalysisItemDefinitionId)
+        {
+            var settings = GetDataAnalysisSettings();
+            if (settings != null && settings.Parameters != null && settings.Parameters.DataAnalysisItemParameterSettingsByItemId != null)
+            {
+                var dataAnalysisItemParameterSettingsByItemId = settings.Parameters.DataAnalysisItemParameterSettingsByItemId;
+                DataAnalysisItemParameterSettings dataAnalysisItemParameterSettings;
+
+                if (dataAnalysisItemParameterSettingsByItemId.TryGetValue(dataAnalysisItemDefinitionId, out dataAnalysisItemParameterSettings))
+                {
+                    if (dataAnalysisItemParameterSettings != null && dataAnalysisItemParameterSettings.ParameterSettings != null)
+                    {
+                        return dataAnalysisItemParameterSettings.ParameterSettings;
+                    }
+                }
             }
             return null;
         }

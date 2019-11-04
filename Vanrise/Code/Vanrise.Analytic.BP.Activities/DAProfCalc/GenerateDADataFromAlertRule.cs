@@ -108,8 +108,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                             },
                             DataAnalysisRecordFilter = BuildDataAnalysisRecordFilter(alertRuleTypeRecordFilter, daProfCalcAlertRuleSettings.DataAnalysisFilterGroup),
                             GroupingFieldNames = daProfCalcAlertRuleSettings.GroupingFieldNames,
-                            DAProfCalcAnalysisPeriod = daProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod
-                        };
+                            DAProfCalcAnalysisPeriod = daProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod,
+                            ParameterValues = daProfCalcAlertRuleSettings.ParameterValues
+                    };
 
                     bool hasMatching = false;
                     foreach (DAProfCalcExecInput existingDAProfCalcExecInput in daProfCalcExecInputs)

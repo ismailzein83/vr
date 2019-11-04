@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DAProfCalcAlertRuleCriteriaDirective.$inject = ["VR_Analytic_DAProfCalcOutputSettingsAPIService", "UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_DAProfCalcOutputFieldTypeEnum', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DAProfCalcTimeUnitEnum'];
+    DAProfCalcAlertRuleCriteriaDirective.$inject = ["VR_Analytic_DAProfCalcOutputSettingsAPIService", "UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_DAProfCalcOutputFieldTypeEnum', 'VR_Analytic_DataAnalysisDefinitionAPIService'];
 
-    function DAProfCalcAlertRuleCriteriaDirective(VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_DAProfCalcOutputFieldTypeEnum, VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DAProfCalcTimeUnitEnum) {
+    function DAProfCalcAlertRuleCriteriaDirective(VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_DAProfCalcOutputFieldTypeEnum, VR_Analytic_DataAnalysisDefinitionAPIService) {
 
         return {
             restrict: "E",
@@ -55,18 +55,22 @@
                     dataAnalysisItemDefinitionSelectorAPI = api;
                     dataAnalysisItemDefinitionSelectoReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.onDAProfCalcAlertRuleFilterReady = function (api) {
                     daProfCalcAlertRuleFilterDWAPI = api;
                     daProfCalcAlertRuleFilterDWReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.onDataAnalaysisRecordFilterDirectiveReady = function (api) {
                     dataAnalysisRecordFilterDirectiveAPI = api;
                     dataAnalysisRecordFilterDirectiveReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.onDataAnalysisItemOutputFieldsSelectorReady = function (api) {
                     groupingOutputFiledsAPI = api;
                     groupingOutputFiledsReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.onDataAnalysisPeriodDirectiveReady = function (api) {
                     dataAnalysisPeriodDirectiveAPI = api;
                     dataAnalysisPeriodDirectiveReadyDeferred.resolve();

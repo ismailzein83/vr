@@ -165,6 +165,26 @@ namespace Vanrise.Analytic.Business
             return this.GetCachedDataAnalysisItemDefinitions().MapRecords(DataAnalysisItemDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
+        public IEnumerable<DataAnalysisItemDefinition> GetDataAnalysisItemDefinitionsHavingParameters(DataAnalysisParametersType type)
+        {
+            var cachedDataAnalysisItemDefinitions = GetCachedDataAnalysisItemDefinitions();
+            if (cachedDataAnalysisItemDefinitions == null)
+                return null;
+
+            var context = new DataAnalysisItemDefinitionSettingsHasParametersContext() { ParametersType = type };
+            List<DataAnalysisItemDefinition> result = new List<DataAnalysisItemDefinition>();
+            foreach (var kvp in cachedDataAnalysisItemDefinitions)
+            {
+                var dataAnalysisItemDefinition = kvp.Value;
+                if (dataAnalysisItemDefinition.Settings == null || !dataAnalysisItemDefinition.Settings.HasParameters(context))
+                    continue;
+
+                result.Add(dataAnalysisItemDefinition);
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region Private Classes

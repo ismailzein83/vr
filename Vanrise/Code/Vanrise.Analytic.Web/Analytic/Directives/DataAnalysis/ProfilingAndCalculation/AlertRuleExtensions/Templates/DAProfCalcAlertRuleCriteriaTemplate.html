@@ -36,3 +36,8 @@
         <vr-timespan label="Min Notification Interval" isrequired="true" value="scopeModel.minNotificationInterval"></vr-timespan>
     </vr-columns>
 </vr-row>
+<vr-row ng-if="scopeModel.daProfCalcParameters != undefined">
+    <vr-section title="Parameters">
+        <vr-genericdata-genericeditor-rootcontainer on-ready="scopeModel.onParametersEditorDirectiveReady"></vr-genericdata-genericeditor-rootcontainer>
+    </vr-section>
+</vr-row>

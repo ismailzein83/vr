@@ -128,6 +128,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Analytic\Constants\DataAnalysisParametersType.js" />
     <Content Include="Analytic\Constants\AccessLevel.js" />
     <Content Include="Analytic\Constants\AdvancedFilterMeasuresRelationTypeEnum.js" />
     <Content Include="Analytic\Constants\AdvancedFilterFieldsRelationTypeEnum.js" />
@@ -179,7 +180,11 @@
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportquerydefinition-settings.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-querydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportprocessquery-selector.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\Templates\DataAnalysisSettingsEditorTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysis-settings-editor.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalc-alertrulefilterdefinition.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcParameters.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\vr-analytic-daprofcalc-parameters.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\Templates\MeasureStyleGridViewerTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-grid-viewer.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\MainExtensions\Templates\PermanentFilterConditionFilter.html" />

@@ -64,5 +64,12 @@ namespace Vanrise.Analytic.Web.Controllers
             DataAnalysisItemDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<DataAnalysisItemDefinitionFilter>(filter) : null;
             return _manager.GetDataAnalysisItemDefinitionsInfo(deserializedFilter, dataAnalysisDefinisitonId);
         }
+
+        [HttpGet]
+        [Route("GetDataAnalysisItemDefinitionsHavingParameters")]
+        public IEnumerable<DataAnalysisItemDefinition> GetDataAnalysisItemDefinitionsHavingParameters(DataAnalysisParametersType type)
+        {
+            return _manager.GetDataAnalysisItemDefinitionsHavingParameters(type);
+        }
     }
 }
