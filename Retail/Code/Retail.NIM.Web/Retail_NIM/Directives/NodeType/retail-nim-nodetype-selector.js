@@ -48,10 +48,12 @@ app.directive("retailNimNodetypeSelector", ["Retail_NIM_NodeTypeAPIService", "VR
                 hideremoveicon = "hideremoveicon";
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                + '<span vr-disabled="ctrl.isDisabled">'
                 + '<vr-select  on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="Name" datavaluefield="NodeTypeId" isrequired="ctrl.isrequired" '
                 + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName=" Node Type" onselectitem="onselectitem" '
                 + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' >'
                 + '</vr-select>'
+                + '</span>'
                 + '</vr-columns>';
         }
 
@@ -75,12 +77,14 @@ app.directive("retailNimNodetypeSelector", ["Retail_NIM_NodeTypeAPIService", "VR
                 var api = {};
 
                 api.load = function (payload) {
+                    selectorAPI.clearDataSource();
                     var selectedIds;
                     var selectIfSingleItem;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         selectIfSingleItem = payload.selectifsingleitem;
+                        ctrl.isDisabled = payload.isDisabled;
                     }
 
                     return Retail_NIM_NodeTypeAPIService.GetNodeTypeInfo().then(function (response) {
@@ -96,6 +100,10 @@ app.directive("retailNimNodetypeSelector", ["Retail_NIM_NodeTypeAPIService", "VR
                             }
                         }
                     });
+                };
+
+                api.clearDataSource = function () {
+                    selectorAPI.clearDataSource();
                 };
 
                 api.getSelectedIds = function () {

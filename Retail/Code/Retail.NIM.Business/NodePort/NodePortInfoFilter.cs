@@ -7,6 +7,7 @@ namespace Retail.NIM.Business
     {
         public long NodeId { get; set; }
         public long? NodePartId { get; set; }
+        public int ConnectionDirection { get; set; }
 
         public bool IsMatch(IGenericBusinessEntityFilterContext context)
         {
@@ -15,7 +16,8 @@ namespace Retail.NIM.Business
                 if (context.GenericBusinessEntity != null && context.GenericBusinessEntity.FieldValues != null && context.GenericBusinessEntity.FieldValues.Count > 0)
                 {
                     long nodeId = (long)context.GenericBusinessEntity.FieldValues.GetRecord("Node");
-                    long? nodePartId =(long?) context.GenericBusinessEntity.FieldValues.GetRecord("Part");
+                    long? nodePartId = (long?)context.GenericBusinessEntity.FieldValues.GetRecord("Part");
+                    int? connectionDirection = (int?)context.GenericBusinessEntity.FieldValues.GetRecord("ConnectionDirection");
 
                     if (!NodeId.Equals(nodeId))
                     {
@@ -26,6 +28,12 @@ namespace Retail.NIM.Business
                     {
                         return false;
                     }
+
+                    if (connectionDirection.HasValue && !ConnectionDirection.Equals(connectionDirection.Value))
+                    {
+                        return false;
+                    }
+
                 }
             }
             return true;

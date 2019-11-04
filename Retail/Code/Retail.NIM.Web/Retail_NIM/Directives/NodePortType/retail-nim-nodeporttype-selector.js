@@ -48,10 +48,12 @@ app.directive("retailNimNodeporttypeSelector", ["Retail_NIM_NodePortTypeAPIServi
                 hideremoveicon = "hideremoveicon";
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                + '<span vr-disabled="ctrl.isDisabled">'
                 + '<vr-select  on-ready="scopeModel.onSelectorReady" ' + multipleselection + ' datatextfield="Name" datavaluefield="NodePortTypeId" isrequired="ctrl.isrequired" '
                 + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Port Type" onselectitem="onselectitem" '
                 + ' ondeselectitem = "ctrl.ondeselectitem"' + hideremoveicon + ' >'
                 + '</vr-select>'
+                + '</span>'
                 + '</vr-columns>';
         }
 
@@ -81,6 +83,7 @@ app.directive("retailNimNodeporttypeSelector", ["Retail_NIM_NodePortTypeAPIServi
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         selectIfSingleItem = payload.selectifsingleitem;
+                        ctrl.isDisabled = payload.isDisabled;
                     }
 
                     return Retail_NIM_NodePortTypeAPIService.GetNodePortTypeInfo().then(function (response) {
@@ -96,6 +99,10 @@ app.directive("retailNimNodeporttypeSelector", ["Retail_NIM_NodePortTypeAPIServi
                             }
                         }
                     });
+                };
+
+                api.clearDataSource = function () {
+                    selectorAPI.clearDataSource();
                 };
 
                 api.getSelectedIds = function () {

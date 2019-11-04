@@ -25,6 +25,12 @@ app.directive("retailNimConnectionDirective", ["VRUIUtilsService", "UtilsService
         function ConnectionCtor(ctrl, $scope) {
             this.initializeController = initializeController;
 
+            var area;
+            var site;
+            var selectedValues;
+            var parentFieldValues;
+            var isAddMode;
+
             var firstPortDirectiveAPI;
             var firstPortDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -33,6 +39,7 @@ app.directive("retailNimConnectionDirective", ["VRUIUtilsService", "UtilsService
 
             function initializeController() {
                 $scope.scopeModel = {};
+
 
                 $scope.scopeModel.onFirstPortDirectiveReady = function (api) {
                     firstPortDirectiveAPI = api;
@@ -54,18 +61,27 @@ app.directive("retailNimConnectionDirective", ["VRUIUtilsService", "UtilsService
 
                 api.load = function (payload) {
                     var promises = [];
-                    var connectionType;
-                    var firstPort;
-                    var secondPort;
 
 
                     if (payload != undefined) {
-                        firstPort = payload.Port1;
-                        secondPort = payload.Port2;
+                        selectedValues = payload.selectedValues;
+                        parentFieldValues = payload.parentFieldValues;
+                        isAddMode = payload.isAddMode;
+
+                        if (isAddMode) {
+                            if (parentFieldValues != undefined) {
+                                area = parentFieldValues.Area.value != undefined ? parentFieldValues.Area.value : parentFieldValues.Area;
+                                site = parentFieldValues.Site.value != undefined ? parentFieldValues.Site.value : parentFieldValues.Site;
+                            }
+                        } else {
+                            area = selectedValues.Area;
+                            site = selectedValues.Site;
+                        }
                     }
-                    var loadFirstPortDirectivePromise = loadFirstPortDirective(firstPort);
+
+                    var loadFirstPortDirectivePromise = loadFirstPortDirective();
                     promises.push(loadFirstPortDirectivePromise);
-                    var loadSecondPortDirectivePromise = loadSecondPortDirective(secondPort);
+                    var loadSecondPortDirectivePromise = loadSecondPortDirective();
                     promises.push(loadSecondPortDirectivePromise);
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -78,29 +94,57 @@ app.directive("retailNimConnectionDirective", ["VRUIUtilsService", "UtilsService
                     };
                 };
 
+                api.clearDataSource = function () {
+                    firstPortDirectiveAPI.clearDataSource();
+                    secondPortDirectiveAPI.clearDataSource();
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
 
-            function loadFirstPortDirective(firstPort) {
+            function loadFirstPortDirective() {
                 var firstPortLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 firstPortDirectiveReadyDeferred.promise.then(function () {
                     var firstPortDirectivePayload = {
-                        selectedIds: firstPort
+                        selectedIds: selectedValues != undefined ? selectedValues.Port1 : undefined,
+                        area: area,
+                        site: site,
+                        connectionDirection: 1,
+                        isAddMode: isAddMode
                     };
+
+                    if (parentFieldValues != undefined) {
+                        firstPortDirectivePayload.parentFieldValues = {
+                            NodeId: parentFieldValues.Port1Node != undefined ? parentFieldValues.Port1Node.value : undefined,
+                            NodePartId: parentFieldValues.Port1Part != undefined ? parentFieldValues.Port1Part.value : undefined,
+                            NodePortId: parentFieldValues.Port1 != undefined ? parentFieldValues.Port1.value : undefined
+                        };
+                    }
                     VRUIUtilsService.callDirectiveLoad(firstPortDirectiveAPI, firstPortDirectivePayload, firstPortLoadPromiseDeferred);
 
                 });
                 return firstPortLoadPromiseDeferred.promise;
             }
 
-            function loadSecondPortDirective(secondPort) {
+            function loadSecondPortDirective() {
                 var secondPortLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 secondPortDirectiveReadyDeferred.promise.then(function () {
                     var secondPortDirectivePayload = {
-                        selectedIds: secondPort
+                        selectedIds: selectedValues != undefined ? selectedValues.Port2 : undefined,
+                        area: area,
+                        site: site,
+                        connectionDirection: 2,
+                        isAddMode: isAddMode
                     };
+                    if (parentFieldValues != undefined) {
+                        secondPortDirectivePayload.parentFieldValues = {
+                            NodeId: parentFieldValues.Port2Node != undefined ? parentFieldValues.Port2Node.value : undefined,
+                            NodePartId: parentFieldValues.Port2Part != undefined ? parentFieldValues.Port2Part.value : undefined,
+                            NodePortId: parentFieldValues.Port2 != undefined ? parentFieldValues.Port2.value : undefined,
+                        };
+                    }
                     VRUIUtilsService.callDirectiveLoad(secondPortDirectiveAPI, secondPortDirectivePayload, secondPortLoadPromiseDeferred);
 
                 });

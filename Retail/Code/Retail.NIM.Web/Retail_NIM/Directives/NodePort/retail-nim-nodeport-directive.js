@@ -28,12 +28,27 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
             this.initializeController = initializeController;
 
             var nodeId;
+            var nodeNumber;
             var nodePartId;
             var nodePortTypeId;
             var nodeTypeId;
             var nodePortId;
             var nodePortBEDefinitionId;
             var nodeBEDefinitionId;
+            var nodeEntity;
+            var nodePortEntity;
+            var nodePortDefinitionId;
+            var nodeDefinitionId;
+            var area;
+            var site;
+
+
+
+            var disableNode = false;
+            var disableNodePart = false;
+            var disableNodePort = false;
+
+            var connectionDirection;
 
             var nodePortTypeSelectorAPI;
             var nodePortTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -60,6 +75,7 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                 $scope.scopeModel.nodeParts = [];
                 $scope.scopeModel.isLoadingNodeParts = true;
                 $scope.scopeModel.isNodeSelected = false;
+                $scope.scopeModel.isNodeDisabled = false;
 
                 $scope.scopeModel.onNodePortTypeSelectorReady = function (api) {
                     nodePortTypeSelectorAPI = api;
@@ -86,6 +102,13 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                         } else {
                             var nodeSelectorPayload = {
                                 businessEntityDefinitionId: nodeBEDefinitionId,
+                                filter: {
+                                    Filters: [{
+                                        "$type": "Retail.NIM.Business.NodeInfoFilter, Retail.NIM.Business",
+                                        AreaId: area,
+                                        SiteId: site
+                                    }]
+                                },
                                 selectIfSingleItem: true
                             };
                             var setLoader = function (value) {
@@ -107,9 +130,10 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                     }
                 };
                 $scope.scopeModel.onNodeSelectionChanged = function (selectedItem) {
+                    $scope.scopeModel.isNodeSelected = selectedItem != undefined;
                     if (selectedItem != undefined) {
-                        $scope.scopeModel.isNodeSelected = true;
                         nodeId = selectedItem.GenericBusinessEntityId;
+                        nodeNumber = selectedItem.Name;
                         if (nodeSelectedPromiseDeferred != undefined) {
                             nodeSelectedPromiseDeferred.resolve();
                         } else {
@@ -159,44 +183,81 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                 var api = {};
 
                 api.load = function (payload) {
-                    var nodePortDefinitionId = Retail_NIM_NodePortService.getNodePortDefinitionId();
-                    var nodeDefinitionId = Retail_NIM_NodeService.getNodeDefinitionId();
+                    var rootPromiseNode = { promises: [] };
 
-                    var rootPromiseNode;
-                    var nodeEntity;
-                    var nodePortEntity;
+                    nodePortDefinitionId = Retail_NIM_NodePortService.getNodePortDefinitionId();
+                    nodeDefinitionId = Retail_NIM_NodeService.getNodeDefinitionId();
 
+                    var parentFieldValues;
+
+                    var isAddMode;
 
                     if (payload != undefined) {
                         nodePortId = payload.selectedIds;
+                        parentFieldValues = payload.parentFieldValues;
+                        area = payload.area;
+                        site = payload.site;
+                        isAddMode = payload.isAddMode;
+                        connectionDirection = payload.connectionDirection;
                     }
 
-                    if (nodePortId != undefined) {
-                        nodePortTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                        nodeTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                        nodeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                        nodePartTreeSelectedDeferred = UtilsService.createPromiseDeferred();
+                    if (parentFieldValues != undefined) {
+                        disableNode = parentFieldValues.NodeId != undefined;
+                        disableNodePart = parentFieldValues.NodePartId != undefined;
+                        disableNodePort = parentFieldValues.NodePortId != undefined;
+                        if (isAddMode) {
+                            nodeId = parentFieldValues.NodeId;
+                            nodePartId = parentFieldValues.NodePartId;
+                            nodePortId = parentFieldValues.NodePortId;
+                        }
+                    }
 
-                        rootPromiseNode = { 
-                            promises: [getNodePort()],
+                    if (area != undefined && site != undefined) {
+
+                        var promises = [];
+
+                        if (nodePortId != undefined) {
+                            nodePortTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(getNodePort());
+                        }
+
+                        rootPromiseNode = {
+                            promises: promises,
                             getChildNode: function () {
+                                var secondPromises = [loadNodePortTypeSelector()];
+                                if (nodeId != undefined) {
+                                    nodeTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    nodeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    secondPromises.push(getNode());
+                                }
                                 return {
-                                    promises: [loadNodePortTypeSelector()],
+                                    promises: secondPromises,
                                     getChildNode: function () {
+                                        var thirdPromises = [loadNodeTypeSelector()];
+                                        if (nodeId != undefined) {
+                                            thirdPromises.push(loadNodeSelector());
+                                        }
+
                                         return {
-                                            promises: [getNode()],
+                                            promises: thirdPromises,
                                             getChildNode: function () {
-                                                var promises = [loadNodeTypeSelector(), loadNodeSelector(), loadNodePortSelector()];
+                                                var fourthPromises = [];
+                                                if (nodePartId != undefined) {
+                                                    nodePartTreeSelectedDeferred = UtilsService.createPromiseDeferred();
+                                                    fourthPromises.push(nodeSelectedPromiseDeferred.promise, nodePartTreeReadyDeferred.promise);
+                                                }
                                                 return {
-                                                    promises: promises,
+                                                    promises: fourthPromises,
                                                     getChildNode: function () {
+                                                        var fifthPromises = [];
+                                                        if (nodePortId != undefined) {
+                                                            fifthPromises.push(loadNodePortSelector());
+                                                        }
+                                                        if (nodeId != undefined) {
+                                                            fifthPromises.push( getNodeParts());
+                                                        }
                                                         return {
-                                                            promises: [nodePartTreeReadyDeferred.promise, nodeSelectedPromiseDeferred.promise],
-                                                            getChildNode: function () {
-                                                                return {
-                                                                    promises: [getNodeParts()]
-                                                                };
-                                                            }
+                                                            promises: fifthPromises
                                                         };
                                                     }
                                                 };
@@ -206,12 +267,6 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                                 };
                             }
                         };
-
-                    } else {
-
-                        rootPromiseNode = {
-                            promises: [loadNodePortTypeSelector(), loadNodeTypeSelector()]
-                        };
                     }
 
                     return UtilsService.waitPromiseNode(rootPromiseNode).finally(function () {
@@ -220,33 +275,14 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                         nodeSelectedPromiseDeferred = undefined;
                         nodePartTreeSelectedDeferred = undefined;
                     });
-
-                    function getNodePort() {
-                        return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(nodePortDefinitionId, nodePortId).then(function (response) {
-                            if (response != undefined) {
-                                nodePortEntity = response.FieldValues;
-                            }
-                            if (nodePortEntity != undefined) {
-                                nodePortTypeId = nodePortEntity.Type;
-                                nodeId = nodePortEntity.Node; 
-                                nodePartId = nodePortEntity.Part;
-                            }
-                        });
-                    }
-
-                    function getNode() {
-                        return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(nodeDefinitionId, nodeId).then(function (response) {
-                            if (response != undefined) {
-                                nodeEntity = response.FieldValues;
-                            }
-
-                            if (nodeEntity != undefined) {
-                                nodeTypeId = nodeEntity.NodeType;
-                            }
-                        });
-                    }
                 };
 
+                api.clearDataSource = function () {
+                    nodePortTypeSelectorAPI.clearDataSource();
+                    nodeTypeSelectorAPI.clearDataSource();
+                    nodeSelectorAPI.clearDataSource();
+                    nodePortSelectorAPI.clearDataSource();
+                };
 
                 api.getSelectedIds = function () {
                     return nodePortSelectorAPI.getSelectedIds();
@@ -261,7 +297,9 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
 
                 nodePortTypeSelectorReadyDeferred.promise.then(function () {
                     var nodePortTypeSelectorPayload = {
-                        selectedIds: nodePortTypeId
+                        selectedIds: nodePortTypeId,
+                        isDisabled: disableNodePort,
+                        selectIfSingleItem: true
                     };
                     VRUIUtilsService.callDirectiveLoad(nodePortTypeSelectorAPI, nodePortTypeSelectorPayload, nodePortTypeSelectorLoadPromiseDeferred);
 
@@ -275,7 +313,9 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
 
                 nodeTypeSelectorReadyDeferred.promise.then(function () {
                     var nodeTypeSelectorPayload = {
-                        selectedIds: nodeTypeId
+                        selectedIds: nodeTypeId,
+                        isDisabled: disableNode,
+                        selectIfSingleItem: true
                     };
                     VRUIUtilsService.callDirectiveLoad(nodeTypeSelectorAPI, nodeTypeSelectorPayload, nodeTypeSelectorLoadPromiseDeferred);
                 });
@@ -285,17 +325,23 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
 
             function loadNodePortSelector() {
                 var nodePortSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                UtilsService.waitMultiplePromises([nodePortSelectorReadyDeferred.promise, nodePortTypeSelectedPromiseDeferred.promise, nodeSelectedPromiseDeferred.promise]).then(function () {
+                var promises = [nodePortSelectorReadyDeferred.promise, nodePortTypeSelectedPromiseDeferred.promise];
+                if (nodePartId != undefined)
+                    promises.push(nodePartTreeSelectedDeferred.promise);
+
+                UtilsService.waitMultiplePromises(promises).then(function () {
                     var nodePortSelectorPayload = {
                         businessEntityDefinitionId: nodePortBEDefinitionId,
                         filter: {
                             Filters: [{
                                 "$type": "Retail.NIM.Business.NodePortInfoFilter, Retail.NIM.Business",
                                 NodeId: nodeId,
-                                NodePartId: nodePartId
+                                NodePartId: nodePartId,
+                                ConnectionDirection: connectionDirection
                             }]
                         },
                         selectedIds: nodePortId,
+                        isDisabled: disableNodePort,
                         selectIfSingleItem: true
                     };
                     VRUIUtilsService.callDirectiveLoad(nodePortSelectorAPI, nodePortSelectorPayload, nodePortSelectorLoadPromiseDeferred);
@@ -309,26 +355,39 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                     var nodeSelectorPayload = {
                         businessEntityDefinitionId: nodeBEDefinitionId,
                         selectedIds: nodeId,
+                        filter: {
+                            Filters: [{
+                                "$type": "Retail.NIM.Business.NodeInfoFilter, Retail.NIM.Business",
+                                AreaId: area,
+                                SiteId: site
+                            }]
+                        },
+                        isDisabled: disableNode,
                         selectIfSingleItem: true
                     };
                     VRUIUtilsService.callDirectiveLoad(nodeSelectorAPI, nodeSelectorPayload, nodeSelectorLoadPromiseDeferred);
                 });
                 return nodeSelectorLoadPromiseDeferred.promise;
+
             }
 
             function getNodeParts() {
                 nodeParts.length = 0;
                 return Retail_NIM_NodePartAPIService.GetNodePartTree(nodeId).then(function (response) {
-                    if (response.ChildNodes != undefined) {
-                        for (var i = 0; i < response.ChildNodes.length; i++) {
-                            nodeParts.push(response.ChildNodes[i]);
-                        }
+                    if (response != undefined) {
+                        var rootNode = {
+                            Number: nodeNumber,
+                            ChildNodes: response.ChildNodes
+                        };
+                        nodeParts.push(rootNode);
+
                         buildNodePartTree();
-                        if (nodePartTreeSelectedDeferred != undefined) {
-                            $scope.scopeModel.currentNodePartNode = nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts, nodePartId, "nodePartId", "childParts");
-                            nodePartTreeAPI.refreshTree($scope.scopeModel.nodeParts);
-                            $scope.scopeModel.isLoadingNodeParts = false;
-                        }
+
+                        $scope.scopeModel.currentNodePartNode = nodePartId != undefined ? nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts, nodePartId, "nodePartId", "childParts") : undefined;
+
+                        nodePartTreeAPI.refreshTree($scope.scopeModel.nodeParts);
+                        $scope.scopeModel.isLoadingNodeParts = false;
+
                     }
                 });
             }
@@ -339,7 +398,6 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                     var nodePart = nodeParts[i];
                     $scope.scopeModel.nodeParts.push(mapNodePartToTreeItem(nodePart));
                 }
-                nodePartTreeAPI.refreshTree($scope.scopeModel.nodeParts);
             }
 
             function mapNodePartToTreeItem(nodePart) {
@@ -348,6 +406,7 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                     nodePartName: nodePart.Number,
                     childParts: [],
                     hasRemoteChildren: true,
+                    isDisabled: disableNodePart,
                     type: 'NodePart'
                 };
                 if (nodePart.ChildNodes != undefined) {
@@ -359,6 +418,32 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                 return nodePartTreeItem;
             }
 
+            function getNodePort() {
+                return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(nodePortDefinitionId, nodePortId).then(function (response) {
+                    if (response != undefined) {
+                        nodePortEntity = response.FieldValues;
+                    }
+                    if (nodePortEntity != undefined) {
+                        nodePortTypeId = nodePortEntity.Type;
+                        nodeId = nodePortEntity.Node;
+                        nodePartId = nodePortEntity.Part;
+                    }
+                });
+            }
+
+            function getNode() {
+                return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(nodeDefinitionId, nodeId).then(function (response) {
+                    if (response != undefined) {
+                        nodeEntity = response.FieldValues;
+                    }
+
+                    if (nodeEntity != undefined) {
+                        nodeTypeId = nodeEntity.NodeType;
+                        nodeNumber = nodeEntity.Number;
+                    }
+                });
+            }
+
             function getFilteredNodePorts() {
                 if (nodeId != undefined && nodePortBEDefinitionId != undefined) {
                     var nodePortSelectorPayload = {
@@ -367,7 +452,8 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                             Filters: [{
                                 $type: "Retail.NIM.Business.NodePortInfoFilter, Retail.NIM.Business",
                                 NodeId: nodeId,
-                                NodePartId: nodePartId
+                                NodePartId: nodePartId,
+                                ConnectionDirection: connectionDirection
                             }]
                         },
                         selectIfSingleItem: true
