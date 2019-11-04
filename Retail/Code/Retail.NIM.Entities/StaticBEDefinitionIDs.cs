@@ -19,11 +19,18 @@ namespace Retail.NIM.Entities
 
         public static Guid FreePortStatusDefinitionId = new Guid("a11d2835-89ed-442c-9646-c1f9b23ff213");
         public static Guid ReservedPortStatusDefinitionId = new Guid("c51bb41b-b31a-45ba-b12e-8f521b0323eb");
+        public static Guid UsedPortStatusDefinitionId = new Guid("e648730c-4a0c-4354-8c4e-5e0d8c34f855");
+        public static Guid FaultyPortStatusDefinitionId = new Guid("dea67efd-d92b-4674-b982-4d6ba1bc6b10");
+
 
         public static Guid OLTNodeTypeId = new Guid("3f93d113-b5b8-4f75-b4d8-81dc6bc40cc8");
         public static Guid MDFTypeId = new Guid("c29902a5-a82f-4c4c-ae8a-84a1a405d8e6");
 
         public static Guid SwitchTypeId = new Guid("8C3EA9B7-07EB-42CC-8B7D-78AACDFC8FF6");
         public static Guid DSLAMTypeId = new Guid("37EA9CA7-9099-4F9A-8279-8985B47591B5");
+
+        public static Guid PathBEDefinitionId = new Guid("95DCF8AF-2273-4356-81E7-081034CCD75B");
+        public static Guid ReadyPathStatusDefinitionId = new Guid("a7815af4-e6d9-4dd0-bd1a-3f4b8b7b72d0");
+        public static Guid DraftPathStatusDefinitionId = new Guid("d5618e4c-50f5-41bd-9b2e-c4e2d70d6715");
     }
 }

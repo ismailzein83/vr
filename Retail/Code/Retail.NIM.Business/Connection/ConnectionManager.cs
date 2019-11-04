@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -159,7 +160,7 @@ namespace Retail.NIM.Business
 
             var port2Id = (long)firstItem.FieldValues.GetRecord("Port2");
 
-            var reservedPort1 =_nodePortManager.ReservePort(port1Id, input.Port1TypeId);
+            var reservedPort1 = _nodePortManager.ReservePort(port1Id, input.Port1TypeId);
 
             var reservedPort2 = _nodePortManager.ReservePort(port2Id, input.Port2TypeId);
 
@@ -238,18 +239,36 @@ namespace Retail.NIM.Business
         }
 
 
-        //public void AddConnection()
-        //{
+        public ConnectionOutput AddConnection(ConnectionInput connectionInput)
+        {
+            var connectionType = new ConnectionTypeManager().GetConnectionType(connectionInput.ConnectionType);
+            connectionType.ThrowIfNull("connectionType", connectionInput.ConnectionType);
 
-        //}
+            var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
+            {
+                BusinessEntityDefinitionId = connectionType.BusinessEntitityDefinitionId,
+                FieldValues = new Dictionary<string, object> { { "Model", connectionInput.Model }, { "Port1", connectionInput.Port1 }, { "Port2", connectionInput.Port2 } }
+            });
 
-        //public void AddConnectionToPath()
-        //{
+            if (insertedEntity.Result == InsertOperationResult.Failed)
+                return null;
 
-        //}
-        //public bool SetPathReady()
-        //{
 
-        //}
+            return new ConnectionOutput
+            {
+                ConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
+            };
+        }
+
+        public void RemoveConnection(long connectionId)
+        {
+            _genericBusinessEntityManager.DeleteGenericBusinessEntity(new DeleteGenericBusinessEntityInput
+            {
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.ConnectionBEDefinitionId,
+                GenericBusinessEntityIds = new List<object>() { connectionId },
+                
+            });
+        }
+    
     }
 }

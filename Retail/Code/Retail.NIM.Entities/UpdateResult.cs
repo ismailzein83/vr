@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.NIM.Entities
 {
-    public class PathInput
+    public class UpdateResult
     {
-        public string Name { get; set; }
-    }
-
-    public class PathOutput
-    {
-        public long PathId { get; set; }
-
+        public bool IsSucceeded { get; set; }
     }
 }

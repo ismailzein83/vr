@@ -13,6 +13,12 @@ namespace Retail.NIM.Business
     public class ConnectionTypeManager
     {
         static Guid _definitionId = new Guid("A0AF0077-04F1-4C46-A829-B093084112F0");
+
+        public ConnectionTypeEntity GetConnectionType(Guid connectionTypeId)
+        {
+            return GetCachedConnectionTypes().GetRecord(connectionTypeId);
+        }
+
         public IEnumerable<ConnectionTypeInfo> GetConnectionTypeInfo(ConnectionTypeInfoFilter connectionTypeInfoFilter)
         {
             Func<ConnectionTypeEntity, bool> filterExpression = (connectionTypeEntity) =>
