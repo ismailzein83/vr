@@ -480,6 +480,10 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\whs-be-financialaccountobjecttype.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\whs-be-financialaccountpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-supplierfaultticket-settings.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MarginRule\Templates\MarginRuleSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MarginRule\Templates\MarginRuleDefinitionSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MarginRule\vr-whs-be-genericruledefinitionsettings-marginrule.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MarginRule\vr-whs-be-marginrulesettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\Templates\PointOfInterconnectCustomObjectSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\Templates\PointOfInterconnectFilterTemplate.html" />
