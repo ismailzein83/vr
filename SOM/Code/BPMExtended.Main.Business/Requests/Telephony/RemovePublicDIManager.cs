@@ -51,8 +51,9 @@ namespace BPMExtended.Main.Business
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
                 List<ServiceData> servicesList = new List<ServiceData>();
-                string serviceId = GetProfessionalDIServiceContracted(contractId.ToString());
-                servicesList.Add(new ServiceData() { Id = serviceId });
+
+                CatalogManager cmanager = new CatalogManager();
+                servicesList = cmanager.GetAddPublicDIServices();
 
                 SOMRequestInput<AddPublicDIInput> somRequestInput = new SOMRequestInput<AddPublicDIInput>
                 {
