@@ -33,7 +33,7 @@
             var businessEntityDefinitionId;
             var genericBEGridView;
             var fieldValues;
-
+            var genericBusinessEntityId;
             var gridAPI;
 
             function initializeController() {
@@ -49,26 +49,37 @@
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
+                    var promises = [];
                     $scope.scopeModel.isGridLoading = true;
                     if (payload != undefined) {
-
-                        fieldValues = payload.parentBEEntity != undefined ? payload.parentBEEntity.FieldValues : undefined;
                         genericBEGridView = payload.genericBEGridView;
+                        fieldValues = payload.parentBEEntity != undefined ? payload.parentBEEntity.FieldValues : undefined;
+
+                        genericBusinessEntityId = payload.genericBusinessEntityId;
+                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
+
                         if (genericBEGridView != undefined && genericBEGridView.Settings != undefined) {
-                            businessEntityDefinitionId = genericBEGridView.Settings.GenericBEDefinitionId;
-                            payload = {
-                                businessEntityDefinitionId: businessEntityDefinitionId,
-                                fieldValues: buildMappingfields(),
-                                filterValues: buildMappingfields()
+                            payload = {};
+                        
+                            if (!canMap()) {
+                                promises.push(getGenericBusinessEntity());
+                            } 
+                        }
+
+                    }
+                    var rootPromiseNode = {
+                        promises: promises,
+                        getChildNode: function () {
+                            payload = buildPayload();
+                            return {
+                                promises: [gridAPI.load(payload)]
                             };
                         }
-                    }
+                    };
 
-
-                    return gridAPI.load(payload).then(function () {
+                    return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
                         $scope.scopeModel.isGridLoading = false;
                     });
-
 
                 };
 
@@ -76,6 +87,36 @@
                     ctrl.onReady(api);
                 }
             }
+
+            function buildPayload() {
+                return {
+                    businessEntityDefinitionId: genericBEGridView.Settings.GenericBEDefinitionId,
+                    fieldValues: buildMappingfields(),
+                    filterValues: buildMappingfields()
+                };
+            }
+
+            function getGenericBusinessEntity() {
+                return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+                    if (response != undefined) {
+                        fieldValues = response.FieldValues;
+                    }
+                });
+            }
+
+            function canMap() {
+                var canMap = true;
+                for (var i = 0; i < genericBEGridView.Settings.Mappings.length; i++) {
+                    var currentMapping = genericBEGridView.Settings.Mappings[i];
+                    var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
+                    if (parentFieldValue == undefined) {
+                        canMap = false;
+                        break;
+                    }
+                }
+                return canMap;
+            }
+
             function buildMappingfields() {
 
                 var fields = {};
@@ -84,9 +125,9 @@
                     var childName = currentMapping.SubviewColumnName;
 
                     var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
-                    if (parentFieldValue != undefined  && childName != undefined) {
+                    if (parentFieldValue != undefined && childName != undefined) {
                         fields[childName] = {
-                            value: parentFieldValue.Value,
+                            value: parentFieldValue.Value != undefined ? parentFieldValue.Value : parentFieldValue,
                             isHidden: true,
                             isDisabled: true
                         };
