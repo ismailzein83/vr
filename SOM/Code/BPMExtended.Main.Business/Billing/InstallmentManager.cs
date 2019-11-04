@@ -82,6 +82,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCurrency");
             esq.AddColumn("StReductionRate");
             esq.AddColumn("StStartDate");
+            esq.AddColumn("StContractID");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -97,28 +98,38 @@ namespace BPMExtended.Main.Business
                 string additionalFees = entities[0].GetColumnValue("StAdditionalFees").ToString();
                 string lateFee = entities[0].GetColumnValue("StLateFees").ToString();
                 string reductionRate = entities[0].GetColumnValue("StReductionRate").ToString();
-                string startDate = entities[0].GetColumnValue("StStartDate").ToString();
+                string startDate = entities[0].GetColumnValue("StStartDate") != null ? entities[0].GetColumnValue("StStartDate").ToString() : null;
                 string currency = entities[0].GetColumnValue("StCurrency").ToString();
                 string firstPayment = entities[0].GetColumnValue("StFirstPayment").ToString();
+                string contractId = entities[0].GetColumnValue("StContractID").ToString();
 
-                var input = new SimulateInstallmentInput
+                SOMRequestInput<SimulateInstallment> input = new SOMRequestInput<SimulateInstallment>
                 {
-                    CustomerId = customerId,
-                    PaymentPlanTemplateId = paymentPlanTemplateId,
-                    InvoiceCode = invoiceCode,
-                    InvoiceAmount = invoiceAmount,
-                    AdditionalFees = additionalFees,
-                    LateFee = lateFee,
-                    FirstPayment = firstPayment,
-                    ReductionRate = reductionRate,
-                    Currency = currency,
-                    StartDate = startDate,
-                    ApprovalId = "1"
+
+                    InputArguments = new SimulateInstallment
+                    {
+                        input = new SimulateInstallmentInput
+                        {
+
+                            CustomerId = customerId,
+                            PaymentPlanTemplateId = paymentPlanTemplateId,
+                            InvoiceCode = invoiceCode,
+                            InvoiceAmount = invoiceAmount,
+                            AdditionalFees = additionalFees,
+                            LateFee = lateFee,
+                            FirstPayment = firstPayment,
+                            ReductionRate = reductionRate,
+                            Currency = currency,
+                            ApprovalId = "1"
+                        }
+                    }
+
                 };
+
                 var ProcessInstanceId = new SOMRequestOutput();
                 using (SOMClient client = new SOMClient())
                 {
-                    ProcessInstanceId = client.Post<SimulateInstallmentInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ApplyInstallment/StartProcess", input);
+                    ProcessInstanceId = client.Post<SOMRequestInput<SimulateInstallment>,SOMRequestOutput>("api/DynamicBusinessProcess_BP/ApplyInstallment/StartProcess", input);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, ProcessInstanceId);

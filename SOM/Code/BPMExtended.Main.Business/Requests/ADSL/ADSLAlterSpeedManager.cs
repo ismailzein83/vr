@@ -9,6 +9,7 @@ using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
 using Newtonsoft.Json;
 using Terrasoft.Core;
+using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
@@ -26,6 +27,95 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region public
+
+
+        public void GetSpeedService(Guid requestId, string newRatePlanId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+            string serviceId;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLAlterSpeed");
+            esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StOperationAddedFees");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+
+                var oldRatePlanId = entities[0].GetColumnValue("StRatePlanId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+
+                //fees
+                List<SaleService> feesServices = JsonConvert.DeserializeObject<List<SaleService>>(fees);
+
+                //Get ranks
+                int oldRank = new CatalogManager().GetRankByRatePlanId(oldRatePlanId.ToString());
+                int newRank = new CatalogManager().GetRankByRatePlanId(newRatePlanId);
+
+
+                if (oldRank < newRank)
+                {
+                    //get upgrade rank
+                    serviceId = new CatalogManager().GetUpgradSpeedServiceId();
+                    if (serviceId != null && serviceId != "")
+                    {
+
+                        if (feesServices != null)
+                        {
+                            feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                        }
+                        else
+                        {
+                            feesServices = new List<SaleService>();
+                            feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                        }
+
+
+                        var update = new Update(BPM_UserConnection, "StADSLAlterSpeed").Set("StOperationAddedFees", Column.Parameter(JsonConvert.SerializeObject(feesServices)))
+                       .Where("Id").IsEqual(Column.Parameter(requestId));
+                        update.Execute();
+
+                    }
+                                    
+                }
+                else if (oldRank > newRank)
+                {
+                    //get downgrade rank
+                    serviceId = new CatalogManager().GetDowngradeSpeedServiceId();
+                    if (serviceId != null && serviceId != "") {
+
+                        if (feesServices != null)
+                        {
+                            feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                        }
+                        else
+                        {
+                            feesServices = new List<SaleService>();
+                            feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                        }
+
+
+                        var update = new Update(BPM_UserConnection, "StADSLAlterSpeed").Set("StOperationAddedFees", Column.Parameter(JsonConvert.SerializeObject(feesServices)))
+                       .Where("Id").IsEqual(Column.Parameter(requestId));
+                        update.Execute();
+
+                    }
+
+                 }
+
+
+             }
+
+               
+         }
+      
+
         public void PostADSLAlterSpeedToOM(Guid requestId)
         {
             EntitySchemaQuery esq;
@@ -60,23 +150,6 @@ namespace BPMExtended.Main.Business
                 //fees
                 List<SaleService> feesServices = JsonConvert.DeserializeObject<List<SaleService>>(fees);
 
-                //Get ranks
-                int oldRank = new CatalogManager().GetRankByRatePlanId(oldRatePlanId.ToString());
-                int newRank = new CatalogManager().GetRankByRatePlanId(newRatePlanId.ToString());
-
-                
-                if(oldRank < newRank)
-                {
-                    //get upgrade rank
-                    serviceId = new CatalogManager().GetUpgradSpeedServiceId();
-                    feesServices.Add(new SaleService() {Id=serviceId,UpFront=false });
-                }
-                else if (oldRank > newRank)
-                {
-                    //get downgrade rank
-                    serviceId = new CatalogManager().GetDowngradeSpeedServiceId();
-                    feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
-                }
 
                 SOMRequestInput<ADSLAlterSpeedRequestInput> somRequestInput = new SOMRequestInput<ADSLAlterSpeedRequestInput>
                 {
@@ -152,23 +225,23 @@ namespace BPMExtended.Main.Business
                 //fees
                 List<SaleService> feesServices = JsonConvert.DeserializeObject<List<SaleService>>(fees);
 
-                //Get ranks
-                int oldRank = new CatalogManager().GetRankByRatePlanId(oldRatePlanId.ToString());
-                int newRank = new CatalogManager().GetRankByRatePlanId(newRatePlanId.ToString());
+                ////Get ranks
+                //int oldRank = new CatalogManager().GetRankByRatePlanId(oldRatePlanId.ToString());
+                //int newRank = new CatalogManager().GetRankByRatePlanId(newRatePlanId.ToString());
 
 
-                if (oldRank < newRank)
-                {
-                    //get upgrade rank
-                    serviceId = new CatalogManager().GetUpgradSpeedServiceId();
-                    feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
-                }
-                else if (oldRank > newRank)
-                {
-                    //get downgrade rank
-                    serviceId = new CatalogManager().GetDowngradeSpeedServiceId();
-                    feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
-                }
+                //if (oldRank < newRank)
+                //{
+                //    //get upgrade rank
+                //    serviceId = new CatalogManager().GetUpgradSpeedServiceId();
+                //    feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                //}
+                //else if (oldRank > newRank)
+                //{
+                //    //get downgrade rank
+                //    serviceId = new CatalogManager().GetDowngradeSpeedServiceId();
+                //    feesServices.Add(new SaleService() { Id = serviceId, UpFront = false });
+                //}
 
                 SOMRequestInput<ADSLAlterSpeedRequestInput> somRequestInput = new SOMRequestInput<ADSLAlterSpeedRequestInput>
                 {

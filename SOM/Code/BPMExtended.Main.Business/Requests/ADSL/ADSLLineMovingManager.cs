@@ -54,6 +54,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StIsSameSwitch");
+            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StNewLinePathId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -65,6 +67,8 @@ namespace BPMExtended.Main.Business
                 var newContractId = entities[0].GetColumnValue("StSelectedTelephonyContract");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var oldLinePathId = entities[0].GetColumnValue("StLinePathId");
+                var newLinePathId = entities[0].GetColumnValue("StNewLinePathId");
                 var newDSLAMPort = entities[0].GetColumnValue("StSelectedDSLAMPort");
                 var floor = entities[0].GetColumnValue("StFloor");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
@@ -82,8 +86,8 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new ADSLLineMovingRequestInput
                     {
-                        OldLinePathId = new ContractManager().GetTelephonyContract(oldContractId.ToString()).PathId,
-                        NewLinePathId = new ContractManager().GetTelephonyContract(newContractId.ToString()).PathId,
+                        OldLinePathId = oldLinePathId.ToString(),
+                        NewLinePathId = newLinePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = adslContractId.ToString(),
@@ -134,6 +138,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StIsSameSwitch");
+            esq.AddColumn("StNewLinePathId");
+
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -145,24 +151,15 @@ namespace BPMExtended.Main.Business
                 var newContractId = entities[0].GetColumnValue("StSelectedTelephonyContract");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var adslContractId = entities[0].GetColumnValue("StADSLContractId");
-                var newDSLAMPort = entities[0].GetColumnValue("StSelectedDSLAMPort");
-                var floor = entities[0].GetColumnValue("StFloor");
-                var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
-                var street = entities[0].GetColumnValue("StStreet");
-                var city = entities[0].GetColumnValue("StCityName");
-                var area = entities[0].GetColumnValue("StAreaName");
-                var province = entities[0].GetColumnValue("StProvinceName");
-                var town = entities[0].GetColumnValue("StTownName");
-                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
-                var isPaid = entities[0].GetColumnValue("StIsPaid");
-                bool isSameSwitch = (bool)entities[0].GetColumnValue("StIsSameSwitch");
+                var newLinePathId = entities[0].GetColumnValue("StNewLinePathId");
+
 
                 SOMRequestInput<ADSLLineMovingRequestInput> somRequestInput = new SOMRequestInput<ADSLLineMovingRequestInput>
                 {
 
                     InputArguments = new ADSLLineMovingRequestInput
                     {
-                        NewLinePathId = new ContractManager().GetTelephonyContract(newContractId.ToString()).PathId,
+                        NewLinePathId = newLinePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = adslContractId.ToString(),
@@ -216,6 +213,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StIsSameSwitch");
             esq.AddColumn("StCountry");
             esq.AddColumn("StCountry.Id");
+            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StNewLinePathId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -239,6 +238,9 @@ namespace BPMExtended.Main.Business
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
                 bool isSameSwitch = (bool)entities[0].GetColumnValue("StIsSameSwitch");
+                var oldLinePathId = entities[0].GetColumnValue("StLinePathId");
+                var newLinePathId = entities[0].GetColumnValue("StNewLinePathId");
+
 
                 SOMRequestInput<ADSLLineMovingRequestInput> somRequestInput = new SOMRequestInput<ADSLLineMovingRequestInput>
                 {
@@ -262,8 +264,8 @@ namespace BPMExtended.Main.Business
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
-                        OldLinePathId = new ContractManager().GetTelephonyContract(oldContractId.ToString()).PathId,
-                        NewLinePathId = new ContractManager().GetTelephonyContract(newContractId.ToString()).PathId,
+                        OldLinePathId = oldLinePathId.ToString(),
+                        NewLinePathId = newLinePathId.ToString(),
                         OldTelephonyContractId = oldContractId.ToString(),
                         NewTelephonyContractId = newContractId.ToString(),
                         CommonInputArgument = new CommonInputArgument()

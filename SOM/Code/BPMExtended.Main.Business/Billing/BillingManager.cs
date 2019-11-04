@@ -56,7 +56,7 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public List<InvoiceFee> GetInvoicesFees(string contracId, List<string> services)
+        public List<InvoiceFee> GetInvoicesFees(string contracId, string requestId , List<string> services)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -64,29 +64,29 @@ namespace BPMExtended.Main.Business
             List<InvoiceFee> fees;
             string ratePlanId = null;
 
-            string operationId = new CommonManager().GetOperationByContractId(contracId);
-            string entityName = new CommonManager().GetEntityNameByOperationId(operationId);
+            //string operationId = new CommonManager().GetOperationByRequestId(requestId);
+            //string entityName = new CommonManager().GetEntityNameByOperationId(operationId);
 
 
-            if (entityName == "StLineSubscriptionRequest" || entityName == "StADSL" || entityName == "StGSHDSL" || entityName == "StLeasedLine")
-            { 
-                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
-                esq.AddColumn("StRatePlanID");
+            //if (entityName == "StLineSubscriptionRequest" || entityName == "StADSL" || entityName == "StGSHDSL" || entityName == "StLeasedLine")
+            //{ 
+            //    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
+            //    esq.AddColumn("StRatePlanID");
 
-                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contracId);
-                esq.Filters.Add(esqFirstFilter);
-                entities = esq.GetEntityCollection(BPM_UserConnection);
+            //    esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contracId);
+            //    esq.Filters.Add(esqFirstFilter);
+            //    entities = esq.GetEntityCollection(BPM_UserConnection);
 
-                if (entities.Count > 0)
-                {
-                    ratePlanId = entities[0].GetColumnValue("StRatePlanID").ToString();
+            //    if (entities.Count > 0)
+            //    {
+            //        ratePlanId = entities[0].GetColumnValue("StRatePlanID").ToString();
 
-                }
-            }
-            else
-            {
+            //    }
+            //}
+            //else
+            //{
                 ratePlanId = new ContractManager().GetContractDetails(contracId).RateplanId;
-            }
+            //}
 
             var input = new InvoiceFeeInput()
             {

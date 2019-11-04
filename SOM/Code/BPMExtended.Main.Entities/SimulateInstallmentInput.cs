@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
+    public class SimulateInstallment
+    {
+       public SimulateInstallmentInput input { get; set; }
+    }
+
     public class SimulateInstallmentInput
     {
         public string CustomerId { get; set; }

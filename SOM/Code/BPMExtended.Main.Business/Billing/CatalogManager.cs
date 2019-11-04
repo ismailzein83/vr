@@ -788,7 +788,7 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
             esq.AddColumn("StDowngradeSpeedServiceId");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "E3CE1E0B-1DBE-4AE0-B80D-CBB2F1E46C63");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "76F1F8CB-B826-41BD-B087-5C4F4F42AD44");
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
@@ -807,7 +807,7 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
             esq.AddColumn("StUpgradeSpeedServiceId");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "E3CE1E0B-1DBE-4AE0-B80D-CBB2F1E46C63");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "76F1F8CB-B826-41BD-B087-5C4F4F42AD44");
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
