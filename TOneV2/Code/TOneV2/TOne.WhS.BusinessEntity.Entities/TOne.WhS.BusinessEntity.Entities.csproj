@@ -46,6 +46,10 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -85,9 +89,11 @@
     <Compile Include="LOB\LOB.cs" />
     <Compile Include="LOB\LOBInfoFilter.cs" />
     <Compile Include="LOB\LOBInfo.cs" />
+    <Compile Include="Margin\IApplyMarginRuleContext.cs" />
     <Compile Include="Margin\MarginRule.cs" />
+    <Compile Include="Margin\ApplyMarginRuleContext.cs" />
     <Compile Include="Margin\MarginRuleDefinitionSettings.cs" />
-    <Compile Include="Margin\MarginRuleManager.cs" />
+    <Compile Include="Margin\MarginRuleSettings.cs" />
     <Compile Include="ModuleName.cs" />
     <Compile Include="PointOfInterconnect\PointOfInterconnectRecordFilter.cs" />
     <Compile Include="PortalAccountEditorObject.cs" />
