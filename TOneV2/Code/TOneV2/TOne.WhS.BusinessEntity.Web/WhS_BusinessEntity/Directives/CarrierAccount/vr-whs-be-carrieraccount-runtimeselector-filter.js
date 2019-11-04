@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeCarrieraccountRuntimeselectorFilter', ['UtilsService', 'VRUIUtilsService','WhS_BE_AccountManagerDataTypeEnum',
+app.directive('vrWhsBeCarrieraccountRuntimeselectorFilter', ['UtilsService', 'VRUIUtilsService', 'WhS_BE_AccountManagerDataTypeEnum',
     function (UtilsService, VRUIUtilsService, WhS_BE_AccountManagerDataTypeEnum) {
         return {
             restrict: 'E',
@@ -56,13 +56,16 @@ app.directive('vrWhsBeCarrieraccountRuntimeselectorFilter', ['UtilsService', 'VR
                 };
 
                 api.getData = function () {
+                    if ($scope.scopeModel.selectedDataType == undefined)
+                        return null;
+
                     return {
                         $type: "TOne.WhS.BusinessEntity.Business.CarrierAccountBERuntimeSelectorFilter, TOne.WhS.BusinessEntity.Business",
                         DataType: $scope.scopeModel.selectedDataType.value
                     };
                 };
 
-                if (ctrl.onReady != null) 
+                if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
         }
