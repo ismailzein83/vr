@@ -1,4 +1,5 @@
 ﻿using Retail.Billing.Entities;
+using Retail.Billing.MainExtensions.RetailBillingCharge;
 using System;
 using Vanrise.GenericData.Entities;
 
@@ -18,7 +19,8 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {
-            return 1;
+            RetailBillingCustomCodeCharge retailBillingCustomCodeCharge = context.Charge as RetailBillingCustomCodeCharge;
+            return PricingLogic.GetHashCode() + retailBillingCustomCodeCharge.GetHashCode();
         }
 
         public override bool IsApplicableToTarget(IRetailBillingChargeTypeIsApplicableToTargetContext context)
