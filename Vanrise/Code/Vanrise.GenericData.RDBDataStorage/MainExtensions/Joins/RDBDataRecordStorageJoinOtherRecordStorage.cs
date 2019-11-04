@@ -36,13 +36,17 @@ namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins
             codeBuilder.AppendLine($"joinStatement.JoinType(Vanrise.Data.RDB.RDBJoinType.{this.JoinType.ToString()});");
 
             codeBuilder.AppendLine("var onCondition = joinStatement.On();");
+            int iterationNb = 1;
             foreach (var condition in this.JoinConditions)
             {
+                var storageToCompareTableAliasVarName = $"storageToCompareTableAlias_{iterationNb}";
                 if (!String.IsNullOrEmpty(condition.SourceStorageJoinName))
-                    codeBuilder.AppendLine($@"string storageToCompareTableAlias = context.GetJoinTableAlias(""{condition.SourceStorageJoinName}"");");
+                    codeBuilder.AppendLine($@"string {storageToCompareTableAliasVarName} = context.GetJoinTableAlias(""{condition.SourceStorageJoinName}"");");
                 else
-                    codeBuilder.AppendLine($"string storageToCompareTableAlias = context.MainTableAlias;");
-                codeBuilder.AppendLine($@"onCondition.EqualsCondition(tableToJoinTableAlias, ""{condition.StorageToJoinFieldName}"").Column(storageToCompareTableAlias, ""{condition.SourceStorageFieldName}"");");
+                    codeBuilder.AppendLine($"string {storageToCompareTableAliasVarName} = context.MainTableAlias;");
+                codeBuilder.AppendLine($@"onCondition.EqualsCondition(tableToJoinTableAlias, ""{condition.StorageToJoinFieldName}"").Column({storageToCompareTableAliasVarName}, ""{condition.SourceStorageFieldName}"");");
+
+                iterationNb++;
             }
 
             return codeBuilder.ToString();
