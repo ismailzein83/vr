@@ -9,5 +9,6 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceTypeQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

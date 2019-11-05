@@ -17,6 +17,7 @@ namespace Vanrise.Invoice.Business
 {
     public class InvoiceTypeManager : IInvoiceTypeManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
         #region Public Methods
         public InvoiceType GetInvoiceType(Guid invoiceTypeId, bool getTranslated = false)
@@ -354,7 +355,19 @@ namespace Vanrise.Invoice.Business
             var allItems = GetCachedInvoiceTypes();
 
             Func<InvoiceType, bool> filterExpression = (itemObject) =>
-                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(itemObject.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                if (input.Query.DevProjectIds != null && (!itemObject.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(itemObject.DevProjectId.Value)))
+                    return false;
+
+                return true;
+            };
+
             VRActionLogger.Current.LogGetFilteredAction(InvoiceTypeLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, InvoiceTypeDetailMapper));
         }
@@ -446,6 +459,8 @@ namespace Vanrise.Invoice.Business
             var invoiceTypes = GetCachedInvoiceTypes();
             Func<InvoiceType, bool> filterExpression = (x) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
 
                 if (!DoesUserHaveViewSettingsAccess(SecurityContext.Current.GetLoggedInUserId(), x))
                     return false;
@@ -877,6 +892,10 @@ namespace Vanrise.Invoice.Business
         {
             InvoiceTypeDetail invoiceTypeDetail = new InvoiceTypeDetail();
             invoiceTypeDetail.Entity = invoiceTypeObject;
+
+            if (invoiceTypeObject.DevProjectId.HasValue)
+                invoiceTypeDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(invoiceTypeObject.DevProjectId.Value);
+
             return invoiceTypeDetail;
         }
         private InvoiceTypeInfo InvoiceTypeInfoMapper(InvoiceType invoiceTypeObject)

@@ -10,6 +10,9 @@
         var invoiceTypeId;
         var invoiceTypeEntity;
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var selectedDataRecordTypeSelectorReadyPromiseDeferred;
@@ -127,6 +130,12 @@
                 invoiceMenualActionsAPI = api;
                 invoiceMenualActionsReadyPromiseDeferred.resolve();
             };
+
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
                 localizationTextResourceSelectorAPI = api;
                 localizationTextResourceSelectorReadyPromiseDeferred.resolve();
@@ -325,11 +334,12 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToProcess = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToProcessAPI, stagesToProcessPayload, setLoader);
             }
-
+       
             function buildInvoiceTypeObjFromScope() {
                 var obj = {
                     InvoiceTypeId: invoiceTypeId,
                     Name: $scope.scopeModel.name,
+                    DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                     Settings: {
                         ExecutionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds(),
                         StagesToHoldNames: stagesToHoldAPI.getSelectedIds(),
@@ -464,7 +474,19 @@
                     });
                     return dataRecordTypeSelectorLoadPromiseDeferred.promise;
                 }
-
+                function loadDevProjectSelector() {
+                    var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                    devProjectPromiseReadyDeferred.promise.then(function () {
+                        var payloadDirective;
+                        if (invoiceTypeEntity != undefined) {
+                            payloadDirective = {
+                                selectedIds: invoiceTypeEntity.DevProjectId
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                    });
+                    return devProjectPromiseLoadDeferred.promise;
+                }
                 function loadLocalizationTextResourceSelector(localizationTextResourcePayload) {
                     var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -831,7 +853,7 @@
                     });
                     return commentDefinitionSelectorLoadPromiseDeferred.promise;
                 }
-                var promises = [setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector, loadLocalizationTextResourceSelector];
+                var promises = [setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector, loadLocalizationTextResourceSelector, loadDevProjectSelector];
 
                 return UtilsService.waitMultipleAsyncOperations(promises)
                     .catch(function (error) {

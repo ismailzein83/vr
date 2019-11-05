@@ -6,6 +6,9 @@
 
     function invoiceTypeManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceTypeService, VR_Invoice_InvoiceTypeAPIService, VRNotificationService) {
         var gridAPI;
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -27,6 +30,10 @@
             $scope.hasAddInvoiceTypePermission = function () {
                 return VR_Invoice_InvoiceTypeAPIService.HasAddInvoiceTypePermission();
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.addInvoiceType = addInvoiceType;
         }
         function load() {
@@ -36,11 +43,19 @@
         function getFilterObject() {
             var query = {
                 Name: $scope.name,
+                DevProjectIds: devProjectDirectiveApi != undefined ? devProjectDirectiveApi.getSelectedIds() : undefined
             };
             return query;
         }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([])
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })

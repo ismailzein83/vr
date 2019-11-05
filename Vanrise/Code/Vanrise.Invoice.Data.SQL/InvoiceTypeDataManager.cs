@@ -36,7 +36,7 @@ namespace Vanrise.Invoice.Data.SQL
             if (invoiceType.Settings != null)
                 serializedObj = Vanrise.Common.Serializer.Serialize(invoiceType.Settings);
 
-            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceType_Insert", invoiceType.InvoiceTypeId, invoiceType.Name, serializedObj);
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceType_Insert", invoiceType.InvoiceTypeId, invoiceType.Name, invoiceType.DevProjectId, serializedObj);
             return (affectedRows > -1);
         }
         public bool UpdateInvoiceType(InvoiceType invoiceType)
@@ -45,7 +45,7 @@ namespace Vanrise.Invoice.Data.SQL
             if (invoiceType.Settings != null)
                 serializedObj = Vanrise.Common.Serializer.Serialize(invoiceType.Settings);
 
-            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceType_Update", invoiceType.InvoiceTypeId, invoiceType.Name, serializedObj);
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceType_Update", invoiceType.InvoiceTypeId, invoiceType.Name, invoiceType.DevProjectId, serializedObj);
             return (affectedRows > -1);
         }
 
@@ -59,6 +59,7 @@ namespace Vanrise.Invoice.Data.SQL
             {
                 InvoiceTypeId = GetReaderValue<Guid>(reader, "ID"),
                 Name = reader["Name"] as string,
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<InvoiceTypeSettings>(reader["Settings"] as string)
             };
             return invoiceType;

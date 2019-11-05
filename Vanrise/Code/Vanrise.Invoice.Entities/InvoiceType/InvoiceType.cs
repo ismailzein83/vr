@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Entities
     {
         public Guid InvoiceTypeId { get; set; }
         public string Name { get; set; }
+        public Guid? DevProjectId { get; set; }
         public InvoiceTypeSettings Settings { get; set; }
     }
 

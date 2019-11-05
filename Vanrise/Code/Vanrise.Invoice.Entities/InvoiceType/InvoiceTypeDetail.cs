@@ -9,5 +9,6 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceTypeDetail
     {
         public InvoiceType Entity { get; set; }
+        public string DevProjectName { get; set; }
     }
 }
