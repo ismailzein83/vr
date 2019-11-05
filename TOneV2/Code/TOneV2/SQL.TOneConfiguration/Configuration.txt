@@ -162,6 +162,8 @@ FZero
 FMSV1.PostDeployment.sql
 
 Inspkt
+C4.json
+C5.json
 
 NetworkInventory
 NetworkInventory.PostDeployment.sql
