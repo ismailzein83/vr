@@ -17,6 +17,14 @@ namespace Retail.Billing.Business
 
         static readonly Guid BeDefinitionId = new Guid("322b9855-8dcf-44c9-8b52-f801789b1269");
 
+        static ContractServiceTypeManager s_contractServiceTypeManager = new ContractServiceTypeManager();
+        static ContractServiceRecurringChargeTypeManager s_contractServiceRecurringChargeTypeManager = new ContractServiceRecurringChargeTypeManager();
+        static RatePlanServiceRecurringChargeManager s_ratePlanServiceRecurringChargeManager = new RatePlanServiceRecurringChargeManager();
+        static ContractServiceActionChargeTypeManager s_contractServiceActionChargeTypeManager = new ContractServiceActionChargeTypeManager();
+        static RatePlanServiceActionChargeManager s_ratePlanServiceActionChargeManager = new RatePlanServiceActionChargeManager();
+
+        static RetailBillingChargeManager s_retailBillingChargeManager = new RetailBillingChargeManager();
+
         #region Public Methods
         public GetRatePlanPricesOutput GetRatePlanPrices(int ratePlanId)
         {
@@ -45,29 +53,35 @@ namespace Retail.Billing.Business
 
             return output;
         }
-        public Decimal EvaluateRecurringCharge(int ratePlanId, ChargeTargetContractService contractService)
+        public RatePlanEvaluateRecurringChargeOutput EvaluateRecurringCharge(RatePlanEvaluateRecurringChargeInput input)
         {
+            var output = new RatePlanEvaluateRecurringChargeOutput { };
+
+            var ratePlanId = input.RatePlanId;
+            var contractService = input.ContractService;
+
             if (contractService == null)
-                return 0;
+                return output;
 
             var recurringChargeType = new ContractServiceRecurringChargeTypeManager().GetContractServiceRecurringChargeTypeByServiceTypeIDAndServiceTypeOptionIDAndChargeableConditionID(contractService.ServiceType, contractService.ServiceTypeOption, contractService.ChargeableCondition);
             if (recurringChargeType == null)
-                return 0;
+                return output;
 
             BillingRatePlan ratePlan = GetBillingRatePlan(ratePlanId);
             if (ratePlan == null)
-                return 0;
+                return output;
 
             var ratePlanServiceRecurringCharge = new RatePlanServiceRecurringChargeManager().GetRatePlanServiceRecurringCharge(ratePlanId, recurringChargeType.ID);
             if (ratePlanServiceRecurringCharge == null)
-                return 0;
+                return output;
 
             var contractServiceToDictionary = contractService.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(contractService, null));
 
-            return new RetailBillingChargeManager().EvaluateRetailBillingCharge(ratePlanServiceRecurringCharge.Charge, contractServiceToDictionary);
+            output.Charge = new RetailBillingChargeManager().EvaluateRetailBillingCharge(ratePlanServiceRecurringCharge.Charge, contractServiceToDictionary);
+            return output;
         }
 
-        public RatePlanServiceActionChargeEvaluationOutput EvaluateActionCharge(int ratePlanId, ChargeTargetContractServiceAction contractServiceAction)
+        public RatePlanServiceActionChargeEvaluationOutput EvaluateActionCharge(RatePlanServiceActionChargeEvaluationInput input)
         {
             RatePlanServiceActionChargeEvaluationOutput evaluationOutput = new RatePlanServiceActionChargeEvaluationOutput()
             {
@@ -75,6 +89,9 @@ namespace Retail.Billing.Business
                 AdvancedPayment = 0,
                 Deposit = 0
             };
+
+            var ratePlanId = input.RatePlanId;
+            var contractServiceAction = input.ContractServiceAction;
 
             if (contractServiceAction == null)
                 return evaluationOutput;
@@ -100,6 +117,34 @@ namespace Retail.Billing.Business
 
             return evaluationOutput;
         }
+
+        public GetRatePlanServicesChargesOutput GetServicesCharges(int ratePlanId, Guid actionTypeId, Guid recurringChargeableConditionId)
+        {
+            var output = new GetRatePlanServicesChargesOutput { ServicesCharges = new List<RatePlanServiceCharges>() };
+
+            var ratePlan = GetBillingRatePlan(ratePlanId);
+            ratePlan.ThrowIfNull("ratePlan", ratePlanId);
+
+            var contractServiceTypes = s_contractServiceTypeManager.GetServiceTypes(ratePlan.ContractType);
+
+            if(contractServiceTypes != null)
+            {
+                foreach(var serviceType in contractServiceTypes)
+                {
+                    RatePlanServiceCharges serviceCharges = BuildServiceCharges(ratePlanId, serviceType.ContractServiceTypeId, null, actionTypeId, recurringChargeableConditionId);
+
+                    output.ServicesCharges.Add(serviceCharges);
+                }
+            }
+
+            return output;
+        }
+
+        public RatePlanServiceCharges GetServiceCharges(int ratePlanId, Guid serviceTypeId, Guid? serviceTypeOptionId, Guid actionTypeId, Guid recurringChargeableConditionId)
+        {
+            return BuildServiceCharges(ratePlanId, serviceTypeId, serviceTypeOptionId, actionTypeId, recurringChargeableConditionId);
+        }
+
         #endregion
 
         #region Private Methods
@@ -132,8 +177,43 @@ namespace Retail.Billing.Business
 
             return entities.MapRecords(BillingRatePlanMapper);
         }
-        #endregion
         
+        private RatePlanServiceCharges BuildServiceCharges(int ratePlanId, Guid serviceTypeId, Guid? serviceTypeOptionId, Guid actionTypeId, Guid recurringChargeableConditionId)
+        {
+            var serviceCharges = new RatePlanServiceCharges { ServiceTypeId = serviceTypeId };
+
+            var recurringChargeType = s_contractServiceRecurringChargeTypeManager.GetContractServiceRecurringChargeTypeByServiceTypeIDAndServiceTypeOptionIDAndChargeableConditionID(serviceTypeId, serviceTypeOptionId, recurringChargeableConditionId);
+
+            if (recurringChargeType != null)
+            {
+                var recurringCharge = s_ratePlanServiceRecurringChargeManager.GetRatePlanServiceRecurringCharge(ratePlanId, recurringChargeType.ID);
+
+                if (recurringCharge != null)
+                {
+                    serviceCharges.RecurringCharge = s_retailBillingChargeManager.GetChargeDescription(recurringCharge.Charge);
+                    serviceCharges.RecurringPeriod = recurringCharge.RecurringPeriod.ToString();
+                }
+            }
+
+            var actionChargeType = s_contractServiceActionChargeTypeManager.GetContractServiceActionChargeTypeByServiceTypeIDAndServiceTypeOptionIDAndActionTypeID(serviceTypeId, serviceTypeOptionId, actionTypeId);
+
+            if (actionChargeType != null)
+            {
+                var actionCharge = s_ratePlanServiceActionChargeManager.GetRatePlanServiceActionCharge(ratePlanId, actionChargeType.ID);
+
+                if (actionCharge != null)
+                {
+                    serviceCharges.InitialCharge = s_retailBillingChargeManager.GetChargeDescription(actionCharge.Charge);
+                    serviceCharges.Deposit = s_retailBillingChargeManager.GetChargeDescription(actionCharge.Deposit);
+                    serviceCharges.PaymentInAdvance = s_retailBillingChargeManager.GetChargeDescription(actionCharge.AdvancedPayment);
+                }
+            }
+
+            return serviceCharges;
+        }
+        
+        #endregion
+
         #region Mappers
         private BillingRatePlan BillingRatePlanMapper(GenericBusinessEntity genericBusinessEntity)
         {
@@ -186,7 +266,7 @@ namespace Retail.Billing.Business
         public int LastModifiedBy { get; set; }
         public int CreatedBy { get; set; }
     }
-
+    
     public class ChargeTargetContractService
     {
         public long ID { get; set; }
@@ -230,6 +310,23 @@ namespace Retail.Billing.Business
         public DateTime LastModifiedTime { get; set; }
         public int LastModifiedBy { get; set; }
         public int CreatedBy { get; set; }
+    }
+
+    public class RatePlanEvaluateRecurringChargeInput
+    {
+        public int RatePlanId { get; set; }
+        public ChargeTargetContractService ContractService { get; set; }
+    }
+
+    public class RatePlanEvaluateRecurringChargeOutput
+    {
+        public Decimal Charge { get; set; }
+    }
+
+    public class RatePlanServiceActionChargeEvaluationInput
+    {
+        public int RatePlanId { get; set; }
+        public ChargeTargetContractServiceAction ContractServiceAction { get; set; }
     }
 
     public class RatePlanServiceActionChargeEvaluationOutput
@@ -300,5 +397,71 @@ namespace Retail.Billing.Business
         public decimal PaymentInAdvance { get; set; }
 
         public decimal Deposit { get; set; }
+    }
+
+    public class GetRatePlanChargesInput
+    {
+        public int RatePlanId { get; set; }
+
+        public List<Guid> FilteredRecurringConditionIds { get; set; }
+
+        public List<Guid> FilteredActionTypeIds { get; set; }
+
+        public bool GetServiceOptionCharges { get; set; }
+    }
+
+    public class GetRatePlanChargesOutput
+    {
+        public List<GetRatePlanChargesOutputActionCharge> ActionCharges { get; set; }
+
+        public List<GetRatePlanChargesOutputRecurringCharge> RecurringCharges { get; set; }
+    }
+
+    public class GetRatePlanChargesOutputActionCharge
+    {
+        public Guid ActionTypeId { get; set; }
+
+        public Guid ServiceTypeId { get; set; }
+
+        public Guid? ServiceTypeOptionId { get; set; }
+
+        public string InitialCharge { get; set; }
+
+        public string Deposit { get; set; }
+
+        public string PaymentInAdvance { get; set; }
+    }
+
+    public class GetRatePlanChargesOutputRecurringCharge
+    {
+        public Guid ServiceTypeId { get; set; }
+
+        public Guid? ServiceTypeOptionId { get; set; }
+
+        public string Charge { get; set; }
+
+        public string RecurringPeriod { get; set; }
+    }
+
+    public class GetRatePlanServicesChargesOutput
+    {
+        public List<RatePlanServiceCharges> ServicesCharges { get; set; }
+    }
+
+    public class RatePlanServiceCharges
+    {
+        public Guid ServiceTypeId { get; set; }
+
+        public Guid? ServiceTypeOptionId { get; set; }
+
+        public string InitialCharge { get; set; }
+
+        public string Deposit { get; set; }
+
+        public string PaymentInAdvance { get; set; }
+
+        public string RecurringCharge { get; set; }
+
+        public string RecurringPeriod { get; set; }
     }
 }

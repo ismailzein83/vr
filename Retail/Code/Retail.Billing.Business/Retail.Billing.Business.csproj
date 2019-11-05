@@ -91,7 +91,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdvancedPaymentManager.cs" />
+    <Compile Include="ContractResourceManager.cs" />
     <Compile Include="ContractServiceActionChargeTypeManager.cs" />
+    <Compile Include="ContractServiceActionManager.cs" />
+    <Compile Include="ContractServiceTypeManager.cs" />
     <Compile Include="RatePlanServiceActionChargeManager.cs" />
     <Compile Include="RatePlanServiceRecurringChargeManager.cs" />
     <Compile Include="ContractServiceRecurringChargeTypeManager.cs" />

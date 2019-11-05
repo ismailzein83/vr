@@ -25,6 +25,13 @@ namespace Retail.Billing.Business
             });
         }
 
+        public string GetChargeDescription(RetailBillingCharge charge)
+        {
+            if (charge == null)
+                return null;
+            return charge.GetHashCode().ToString();
+        }
+
         #endregion
     }
 }
