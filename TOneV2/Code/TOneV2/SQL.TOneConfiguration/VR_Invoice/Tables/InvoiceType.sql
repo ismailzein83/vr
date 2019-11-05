@@ -9,6 +9,9 @@
     CONSTRAINT [PK_InvoiceType] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
+voiceType] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
 
 
 

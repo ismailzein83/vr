@@ -6,6 +6,7 @@
 CREATE PROCEDURE [VR_Invoice].[sp_InvoiceType_Update]
 	@InvoiceTypeId uniqueidentifier,
 	@Name nvarchar(255),
+	@DevProjectID uniqueidentifier,
 	@Settings nvarchar(MAX)
 AS
 BEGIN
@@ -13,6 +14,7 @@ IF NOT EXISTS(select 1 from VR_Invoice.InvoiceType where Name = @Name and Id!=@I
 BEGIN
 	Update VR_Invoice.InvoiceType
 	Set Name = @Name,
+        DevProjectID=@DevProjectID,
 		Settings = @Settings,
 		LastModifiedTime = GETDATE()
 	Where ID = @InvoiceTypeId
