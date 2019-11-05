@@ -98,6 +98,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="BatchScripts\CentralLog\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt.C4\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt.C4\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt.C4\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt.C5\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt.C5\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt.C5\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\PATool\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\PATool\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\DevTool\Client-list-of-excluded-files.txt" />
@@ -367,6 +373,24 @@
     <None Include="BatchScripts\CDRAnalysis\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\CDRAnalysis\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CDRAnalysis\All.bat" />
+    <None Include="BatchScripts\Inspkt.C4\01-Runtime.bat" />
+    <None Include="BatchScripts\Inspkt.C4\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\Inspkt.C4\03-WebSite.bat" />
+    <None Include="BatchScripts\Inspkt.C4\05-CompressFiles.bat" />
+    <None Include="BatchScripts\Inspkt.C4\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\Inspkt.C4\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\Inspkt.C4\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Inspkt.C4\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\Inspkt.C4\All.bat" />
+    <None Include="BatchScripts\Inspkt.C5\01-Runtime.bat" />
+    <None Include="BatchScripts\Inspkt.C5\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\Inspkt.C5\03-WebSite.bat" />
+    <None Include="BatchScripts\Inspkt.C5\05-CompressFiles.bat" />
+    <None Include="BatchScripts\Inspkt.C5\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\Inspkt.C5\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\Inspkt.C5\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Inspkt.C5\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\Inspkt.C5\All.bat" />
     <None Include="BatchScripts\PATool\01-Runtime.bat" />
     <None Include="BatchScripts\PATool\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\PATool\03-WebSite.bat" />
