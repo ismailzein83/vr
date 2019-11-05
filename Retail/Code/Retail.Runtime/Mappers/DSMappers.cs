@@ -153,8 +153,6 @@ namespace Retail.Runtime
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Record Analysis C4 CDR");
 
-            int maximumBatchSize = 50000;
-
             var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Record Analysis C4 CDR");
 
             int rowCount = 0;
@@ -195,8 +193,6 @@ namespace Retail.Runtime
                     cdrs.Add(cdr);
 
                     rowCount++;
-                    if (rowCount == maximumBatchSize)
-                        break;
                 }
                 catch (Exception ex)
                 {
@@ -230,6 +226,273 @@ namespace Retail.Runtime
             return result;
         }
 
+        public static Vanrise.Integration.Entities.MappingOutput MapC5Records_CSV(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            var mtcObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 21, Destination = 3, DurationInSeconds = 23, DisconnectDateTime = 22, CallClassId = 33, IsOnNet = 160, SubscriberTypeId = 73, IMEI = 2, BTS = 9, Cell = 10, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, ServiceTypeID = 12, ServiceVASName = 15, InTrunkID = 7, OutTrunkID = 8, ReleaseCode = 27, MSISDNAreaCode = 54, DestinationAreaCode = -1, AttemptDateTime = 84, AlertDateTime = 85 };
+            var mocObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 24, Destination = 5, DurationInSeconds = 26, DisconnectDateTime = 25, CallClassId = 38, IsOnNet = 187, SubscriberTypeId = 82, IMEI = 2, BTS = 12, Cell = 13, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, ServiceTypeID = 182, ServiceVASName = 154, InTrunkID = 10, OutTrunkID = 11, ReleaseCode = 30, MSISDNAreaCode = -1, DestinationAreaCode = -1, AttemptDateTime = 92, AlertDateTime = 93 };
+
+            var cdrs = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Record Analysis C5 Record");
+
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Record Analysis C5 Record");
+
+            int rowCount = 0;
+
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            System.IO.StreamReader sr = importedData.StreamReader;
+
+            //Reading Headers Line
+            if (!sr.EndOfStream)
+                sr.ReadLine();
+
+            while (!sr.EndOfStream)
+            {
+                string cdrLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(cdrLine))
+                    continue;
+
+                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+                cdr.SwitchId = 1;
+
+                try
+                {
+                    // Removing ; from end of line
+                    cdrLine = cdrLine.Remove(cdrLine.Length - 1);
+                    string[] fields = cdrLine.Split(',');
+
+                    cdr.DataSource = dataSourceId;
+                    cdr.FileName = importedData.Name;
+                    int recordType = int.Parse(fields[0]);
+
+                    dynamic temp;
+                    switch (recordType)
+                    {
+                        case 0: temp = mocObj; cdr.CallType = 0; break;
+                        case 1: temp = mtcObj; cdr.CallType = 1; break;
+                        default: continue;
+                    }
+
+                    cdr.MSISDN = fields[temp.MSISDN];
+                    cdr.IMSI = fields[temp.IMSI];
+
+                    string connectDateTimeAsString = fields[temp.ConnectDateTime];
+                    if (!string.IsNullOrWhiteSpace(connectDateTimeAsString))
+                    {
+                        int year;
+                        if (!int.TryParse(connectDateTimeAsString.Substring(0, 2), out year))
+                            throw new Exception(String.Format("ConnectDateTime '{0}' contains invalid Year value", connectDateTimeAsString));
+
+                        year += 2000;
+
+                        int month;
+                        if (!int.TryParse(connectDateTimeAsString.Substring(2, 2), out month))
+                            throw new Exception(String.Format("ConnectDateTime '{0}' contains invalid Month value", connectDateTimeAsString));
+
+                        int day;
+                        if (!int.TryParse(connectDateTimeAsString.Substring(4, 2), out day))
+                            throw new Exception(String.Format("ConnectDateTime '{0}' contains invalid Day value", connectDateTimeAsString));
+
+                        int hour;
+                        if (!int.TryParse(connectDateTimeAsString.Substring(6, 2), out hour))
+                            throw new Exception(String.Format("ConnectDateTime '{0}' contains invalid Hour value", connectDateTimeAsString));
+
+                        int minute;
+                        if (!int.TryParse(connectDateTimeAsString.Substring(8, 2), out minute))
+                            throw new Exception(String.Format("ConnectDateTime '{0}' contains invalid Minute value", connectDateTimeAsString));
+
+                        int second;
+                        if (!int.TryParse(connectDateTimeAsString.Substring(10, 2), out second))
+                            throw new Exception(String.Format("ConnectDateTime '{0}' contains invalid Second value", connectDateTimeAsString));
+
+                        cdr.ConnectDateTime = new DateTime(year, month, day, hour, minute, second);
+                    }
+
+                    string alertDateTimeAsString = fields[temp.AlertDateTime];
+                    if (!string.IsNullOrWhiteSpace(alertDateTimeAsString))
+                    {
+                        int year;
+                        if (!int.TryParse(alertDateTimeAsString.Substring(0, 2), out year))
+                            throw new Exception(String.Format("AlertDateTime '{0}' contains invalid Year value", alertDateTimeAsString));
+
+                        year += 2000;
+
+                        int month;
+                        if (!int.TryParse(alertDateTimeAsString.Substring(2, 2), out month))
+                            throw new Exception(String.Format("AlertDateTime '{0}' contains invalid Month value", alertDateTimeAsString));
+
+                        int day;
+                        if (!int.TryParse(alertDateTimeAsString.Substring(4, 2), out day))
+                            throw new Exception(String.Format("AlertDateTime '{0}' contains invalid Day value", alertDateTimeAsString));
+
+                        int hour;
+                        if (!int.TryParse(alertDateTimeAsString.Substring(6, 2), out hour))
+                            throw new Exception(String.Format("AlertDateTime '{0}' contains invalid Hour value", alertDateTimeAsString));
+
+                        int minute;
+                        if (!int.TryParse(alertDateTimeAsString.Substring(8, 2), out minute))
+                            throw new Exception(String.Format("AlertDateTime '{0}' contains invalid Minute value", alertDateTimeAsString));
+
+                        int second;
+                        if (!int.TryParse(alertDateTimeAsString.Substring(10, 2), out second))
+                            throw new Exception(String.Format("AlertDateTime '{0}' contains invalid Second value", alertDateTimeAsString));
+
+                        cdr.AlertDateTime = new DateTime(year, month, day, hour, minute, second);
+                    }
+
+                    string attemptDateTimeAsString = fields[temp.AttemptDateTime];
+                    if (!string.IsNullOrWhiteSpace(attemptDateTimeAsString))
+                    {
+                        int year;
+                        if (!int.TryParse(attemptDateTimeAsString.Substring(0, 2), out year))
+                            throw new Exception(String.Format("AttemptDateTime '{0}' contains invalid Year value", attemptDateTimeAsString));
+
+                        year += 2000;
+
+                        int month;
+                        if (!int.TryParse(attemptDateTimeAsString.Substring(2, 2), out month))
+                            throw new Exception(String.Format("AttemptDateTime '{0}' contains invalid Month value", attemptDateTimeAsString));
+
+                        int day;
+                        if (!int.TryParse(attemptDateTimeAsString.Substring(4, 2), out day))
+                            throw new Exception(String.Format("AttemptDateTime '{0}' contains invalid Day value", attemptDateTimeAsString));
+
+                        int hour;
+                        if (!int.TryParse(attemptDateTimeAsString.Substring(6, 2), out hour))
+                            throw new Exception(String.Format("AttemptDateTime '{0}' contains invalid Hour value", attemptDateTimeAsString));
+
+                        int minute;
+                        if (!int.TryParse(attemptDateTimeAsString.Substring(8, 2), out minute))
+                            throw new Exception(String.Format("AttemptDateTime '{0}' contains invalid Minute value", attemptDateTimeAsString));
+
+                        int second;
+                        if (!int.TryParse(attemptDateTimeAsString.Substring(10, 2), out second))
+                            throw new Exception(String.Format("AttemptDateTime '{0}' contains invalid Second value", attemptDateTimeAsString));
+
+                        cdr.AttemptDateTime = new DateTime(year, month, day, hour, minute, second);
+                    }
+
+                    cdr.Destination = fields[temp.Destination];
+
+                    if (decimal.TryParse(fields[temp.DurationInSeconds], out decimal durationInSeconds))
+                        cdr.DurationInSeconds = durationInSeconds;
+
+                    string disconnectDateTimeAsString = fields[temp.DisconnectDateTime];
+                    if (!string.IsNullOrWhiteSpace(disconnectDateTimeAsString))
+                    {
+                        int year;
+                        if (!int.TryParse(disconnectDateTimeAsString.Substring(0, 2), out year))
+                            throw new Exception(String.Format("DisconnectDateTime '{0}' contains invalid Year value", disconnectDateTimeAsString));
+
+                        year += 2000;
+
+                        int month;
+                        if (!int.TryParse(disconnectDateTimeAsString.Substring(2, 2), out month))
+                            throw new Exception(String.Format("DisconnectDateTime '{0}' contains invalid Month value", disconnectDateTimeAsString));
+
+                        int day;
+                        if (!int.TryParse(disconnectDateTimeAsString.Substring(4, 2), out day))
+                            throw new Exception(String.Format("DisconnectDateTime '{0}' contains invalid Day value", disconnectDateTimeAsString));
+
+                        int hour;
+                        if (!int.TryParse(disconnectDateTimeAsString.Substring(6, 2), out hour))
+                            throw new Exception(String.Format("DisconnectDateTime '{0}' contains invalid Hour value", disconnectDateTimeAsString));
+
+                        int minute;
+                        if (!int.TryParse(disconnectDateTimeAsString.Substring(8, 2), out minute))
+                            throw new Exception(String.Format("DisconnectDateTime '{0}' contains invalid Minute value", disconnectDateTimeAsString));
+
+                        int second;
+                        if (!int.TryParse(disconnectDateTimeAsString.Substring(10, 2), out second))
+                            throw new Exception(String.Format("DisconnectDateTime '{0}' contains invalid Second value", disconnectDateTimeAsString));
+
+                        cdr.DisconnectDateTime = new DateTime(year, month, day, hour, minute, second);
+                    }
+
+                    if (int.TryParse(fields[temp.CallClassId], out int callClassId))
+                        cdr.CallClassId = callClassId;
+
+                    if (bool.TryParse(fields[temp.IsOnNet], out bool isOnNet))
+                        cdr.IsOnNet = isOnNet;
+
+                    if (int.TryParse(fields[temp.SubscriberTypeId], out int subscriberTypeId))
+                        cdr.SubscriberTypeID = subscriberTypeId;
+
+                    cdr.IMEI = fields[temp.IMEI];
+                    cdr.BTS = fields[temp.BTS];
+                    cdr.Cell = fields[temp.Cell];
+
+
+                    decimal upVolume = 0;
+                    if (temp.UpVolume >= 0 && decimal.TryParse(fields[temp.UpVolume], out upVolume))
+                        cdr.UpVolume = upVolume;
+
+                    decimal downVolume = 0;
+                    if (temp.DownVolume >= 0 && decimal.TryParse(fields[temp.DownVolume], out downVolume))
+                        cdr.DownVolume = downVolume;
+
+                    decimal cellLatitude = 0;
+                    if (temp.CellLatitude >= 0 && decimal.TryParse(fields[temp.CellLatitude], out cellLatitude))
+                        cdr.CellLatitude = cellLatitude;
+
+                    decimal cellLongitude = 0;
+                    if (temp.CellLongitude >= 0 && decimal.TryParse(fields[temp.CellLongitude], out cellLongitude))
+                        cdr.CellLongitude = cellLongitude;
+
+                    if (int.TryParse(fields[temp.ServiceTypeID], out int serviceTypeId))
+                        cdr.ServiceTypeId = serviceTypeId;
+
+                    cdr.ServiceVASName = fields[temp.ServiceVASName];
+
+                    if (int.TryParse(fields[temp.InTrunkID], out int inTrunkID))
+                        cdr.InTrunkID = inTrunkID;
+
+                    if (int.TryParse(fields[temp.OutTrunkID], out int outTrunkID))
+                        cdr.OutTrunkID = outTrunkID;
+
+                    cdr.ReleaseCode = fields[temp.ReleaseCode];
+
+                    if (temp.MSISDNAreaCode >= 0 )
+                        cdr.MSISDNAreaCode = fields[temp.MSISDNAreaCode];
+
+                    if (temp.DestinationAreaCode >= 0)
+                        cdr.DestinationAreaCode = fields[temp.DestinationAreaCode];
+
+                    cdrs.Add(cdr);
+
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    failedRecordIdentifiers.Add(rowCount);
+                }
+            }
+
+            if (cdrs.Count > 0)
+            {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
+                long currentCDRId = startingId;
+
+                foreach (var cdr in cdrs)
+                {
+                    cdr.Id = currentCDRId;
+                    currentCDRId++;
+                }
+
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of C5 Records", "Record Analysis C5 Record");
+                mappedBatches.Add("Store C5 Records", batch);
+            }
+            else
+            {
+                importedData.IsEmpty = true;
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
         #endregion
 
         public static Vanrise.Integration.Entities.MappingOutput ImportCDRs_SFTP(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
