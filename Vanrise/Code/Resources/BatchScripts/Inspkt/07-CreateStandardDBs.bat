@@ -6,5 +6,5 @@ Set PARSEARG="eol=; tokens=1,2,3,4* delims=/, "
 For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO Inspkt Create Standard DBs Structure files
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\DBsStructure.txt" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\"
-start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "DBs" "Inspkt"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\DBsStructure.txt" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\"
+::start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "DBs" "Inspkt"
