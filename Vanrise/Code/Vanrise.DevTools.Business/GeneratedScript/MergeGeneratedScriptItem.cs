@@ -304,28 +304,28 @@ namespace Vanrise.DevTools.Business
         {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append(@"
-                 #Note#
-                 --- [#Schema#].[#TableName#]-------------------------------------------------------------------
-                 -----------------------------------------------------------------------------------------------
-                 begin
-                 #Variables#
-                 set nocount on;
-                 #IdentityOn#
-                 ;with cte_data(#Columns#)
-                  as (select* from (values
-                 --//////////////////////////////////////////////////////////////////////////////////////////////////
-                       #Values#
-                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                )c(#Columns#))
-                merge[#Schema#].[#TableName#] as t
-                using  cte_data as s
-                on            1=1 and #IdentifierColumns#
-                  #QueryType#
-                  #IdentityOff#
-            ----------------------------------------------------------------------------------------------------
-              end
-            ----------------------------------------------------------------------------------------------------
-              ");
+#Note#
+--- [#Schema#].[#TableName#]-------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+begin
+#Variables#
+set nocount on;
+#IdentityOn#
+;with cte_data(#Columns#)
+as (select* from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+#Values#
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c(#Columns#))
+merge[#Schema#].[#TableName#] as t
+using  cte_data as s
+on  1=1 and #IdentifierColumns#
+#QueryType#
+#IdentityOff#
+----------------------------------------------------------------------------------------------------
+end
+----------------------------------------------------------------------------------------------------");
+
 
             StringBuilder variablesBuilder = new StringBuilder();
             if (Variables != null && Variables.Count > 0)
@@ -378,18 +378,18 @@ namespace Vanrise.DevTools.Business
             if (Columns.Exists(x => x.IncludeInUpdate))
             {
                 queryTypeBuilder.Append(@"
-                  when matched then
-                 update set
-                 #Update#");
+when matched then
+update set
+#Update#");
 
                 queryTypeBuilder.Replace("#Update#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]=s.[{0}] ", x.ColumnName), x => x.IncludeInUpdate)));
             }
             if (Columns.Exists(x => x.IncludeInInsert))
             {
                 queryTypeBuilder.Append(@"
-                 when not matched by target then
-                 insert(#InsertColumns#)
-                 values(#InsertColumnsValues#)");
+when not matched by target then
+insert(#InsertColumns#)
+values(#InsertColumnsValues#)");
 
                 queryTypeBuilder.Replace("#InsertColumns#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]", x.ColumnName), x => x.IncludeInInsert)));
                 queryTypeBuilder.Replace("#InsertColumnsValues#", string.Join(", ", this.Columns.MapRecords(x => string.Format("s.[{0}]", x.ColumnName), x => x.IncludeInInsert)));
