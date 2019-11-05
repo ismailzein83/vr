@@ -45,6 +45,7 @@ namespace TOne.WhS.Deal.Business
             foreach (var kvp_deal in dealIdsByInterval)
             {
                 Interval dealInterval = kvp_deal.Key;
+                double? dealLifeSpan = GetDealLifeSpan(dealInterval.FromDate, dealInterval.ToDate);
                 double intersectedDealHours = dealInterval.ToDate.HasValue ? (dealInterval.ToDate.Value - dealInterval.FromDate).TotalHours : 0;
                 double totalIntersectedExpectedCapacity = 0;
                 dealNames = new List<string>();
@@ -58,7 +59,6 @@ namespace TOne.WhS.Deal.Business
 
                     double interectedReachedDuration = dealProgressByDealId.GetRecord(dealId);
                     double intersectedRemainingVolume = intersectedDealVolume - interectedReachedDuration;
-                    double? dealLifeSpan = GetDealLifeSpan(intersectedSwapDealSettings.RealBED, intersectedSwapDealSettings.RealEED);
                     if (dealLifeSpan.HasValue)
                     {
                         double intersectedExpectedPerHour = intersectedRemainingVolume / dealLifeSpan.Value;
@@ -408,10 +408,8 @@ namespace TOne.WhS.Deal.Business
             var intersectedIntervals = new List<Interval>();
             var orderedDates = dates.OrderBy(it => it).ToList();
             int count = orderedDates.Count();
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count - 1; i++)
             {
-                if (i + 1 > count)
-                    continue;
                 intersectedIntervals.Add(new Interval
                 {
                     FromDate = orderedDates[i].Value,
