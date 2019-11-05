@@ -131,7 +131,7 @@
                     var promiseNode = {
                         promises: initialPromises,
                         getChildNode: function () {
-                            var promises2 = []
+                            var promises2 = [];
                             if (parametersRecordTypeId != undefined) {
                                 if (globalParametersEditorDefinitionSetting != undefined) {
                                     var loadGlobalParametersEditorDefinitionPromise = getLoadGlobalParametersEditorDefinitionPromise();
