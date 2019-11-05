@@ -878,7 +878,6 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoiceStatus.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetPaymentTransactionsForInvoiceId.sql" />
     <Build Include="common\Tables\CountryArabic.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
