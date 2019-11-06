@@ -9,13 +9,22 @@ namespace Vanrise.Analytic.Entities
 
         public string FieldTitle { get; set; }
 
+        public DARecordAggregate RecordAggregate { get; set; }
+
         public RecordFilterGroup RecordFilter { get; set; }
+
+        public DAAggregateTimeFilter TimeFilter { get; set; }
 
         //ToBeDeleted
         public TimeRangeFilter TimeRangeFilter { get; set; }
+    }
 
-        public DARecordAggregate RecordAggregate { get; set; }
-
+    public class DAAggregateTimeFilter
+    {
         public VRTimePeriod TimePeriod { get; set; }
+
+        public bool ExcludeFrom { get; set; }
+
+        public bool ExcludeTo { get; set; }
     }
 }

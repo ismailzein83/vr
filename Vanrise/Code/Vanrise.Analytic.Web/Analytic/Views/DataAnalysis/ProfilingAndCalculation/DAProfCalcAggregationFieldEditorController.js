@@ -143,8 +143,11 @@
                 timePeriodDirectiveReadyDeferred.promise.then(function () {
 
                     var timePeriodDirectivePayload = {};
-                    if (aggregationFieldEntity != undefined && aggregationFieldEntity.TimePeriod != undefined) {
-                        timePeriodDirectivePayload.timePeriod = aggregationFieldEntity.TimePeriod;
+                    if (aggregationFieldEntity != undefined && aggregationFieldEntity.TimeFilter != undefined) {
+                        timePeriodDirectivePayload.timePeriod = aggregationFieldEntity.TimeFilter.TimePeriod;
+
+                        $scope.scopeModel.excludeFrom = aggregationFieldEntity.TimeFilter.ExcludeFrom;
+                        $scope.scopeModel.excludeTo = aggregationFieldEntity.TimeFilter.ExcludeTo;
                     }
                     VRUIUtilsService.callDirectiveLoad(timePeriodDirectiveAPI, timePeriodDirectivePayload, timePeriodDirectiveLoadDeferred);
                 });
@@ -174,12 +177,22 @@
             return context;
         }
         function buildAggregationFieldObjectFromScope() {
+            var timeFilter;
+            var timePeriodData = timePeriodDirectiveAPI.getData();
+
+            if (timePeriodData != undefined) {
+                timeFilter = {
+                    TimePeriod: timePeriodData,
+                    ExcludeFrom: $scope.scopeModel.excludeFrom,
+                    ExcludeTo: $scope.scopeModel.excludeTo
+                };
+            }
 
             return {
                 FieldName: $scope.scopeModel.fieldName,
                 FieldTitle: $scope.scopeModel.fieldTitle,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
-                TimePeriod: timePeriodDirectiveAPI.getData(),
+                TimeFilter: timeFilter,
                 TimeRangeFilter: timeRangeFilterSelectiveAPI.getData(),
                 RecordAggregate: recordAggregateSelectiveAPI.getData()
             };

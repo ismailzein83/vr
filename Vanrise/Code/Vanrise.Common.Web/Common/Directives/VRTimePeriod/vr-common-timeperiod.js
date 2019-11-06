@@ -13,7 +13,8 @@
                 normalColNum: '@',
                 label: '@',
                 customvalidate: '=',
-                isrequired: '@'
+                isrequired: '@',
+                selectedtemplate: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -45,6 +46,10 @@
                     defineAPI();
                 };
 
+                $scope.scopeModel.onSelectionChanged = function (selectedValue) {
+                    ctrl.selectedtemplate = selectedValue;
+                };
+
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) {
@@ -59,7 +64,7 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-                    
+
                     var promises = [];
                     var timePeriod;
 
@@ -115,7 +120,7 @@
                     }
                     return data;
                 };
-                
+
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
@@ -135,6 +140,7 @@
                 ' <vr-row>'
                 + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
+                + ' onselectionchanged="scopeModel.onSelectionChanged" '
                 + ' datasource="scopeModel.templateConfigs"'
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                 + ' datavaluefield="ExtensionConfigurationId"'

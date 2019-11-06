@@ -96,6 +96,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 });
             }
             RecordFilterManager recordFilterManager = new RecordFilterManager();
+            VRTimePeriodManager timePeriodManager = new VRTimePeriodManager();
 
             ExecuteRecordProfilingOutput output = new ExecuteRecordProfilingOutput();
             bool hasItem = false;
@@ -146,6 +147,19 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                                         var aggregationField = settings.AggregationFields[index];
                                         if (aggregationField.RecordFilter != null && !recordFilterManager.IsFilterGroupMatch(aggregationField.RecordFilter, filterContext))
                                             continue;
+
+                                        if (aggregationField.TimeFilter != null && aggregationField.TimeFilter.TimePeriod != null)
+                                        {
+                                            DateTimeRange dateTimeRange = timePeriodManager.GetTimePeriod(aggregationField.TimeFilter.TimePeriod, inputArgument.EffectiveDate);
+                                            if (aggregationField.TimeFilter.ExcludeFrom && attemptDateTime == dateTimeRange.From)
+                                                continue;
+
+                                            if (aggregationField.TimeFilter.ExcludeTo && attemptDateTime == dateTimeRange.To)
+                                                continue;
+                                            
+                                            if (attemptDateTime < dateTimeRange.From || attemptDateTime > dateTimeRange.To)
+                                                continue;
+                                        }
 
                                         aggregationField.RecordAggregate.Evaluate(new DARecordAggregateEvaluationContext(daDataRecordTypeId, cdr, profilingDGItem.AggregateStates[index]));
                                     }
