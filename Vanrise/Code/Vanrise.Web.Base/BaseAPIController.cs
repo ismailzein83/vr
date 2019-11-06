@@ -26,14 +26,18 @@ namespace Vanrise.Web.Base
 
             RemoteExcelResult<T> remoteExcelResult = result as RemoteExcelResult<T>;
             if (remoteExcelResult != null && !dataRetrievalInput.IsAPICall)
-                return GetExcelResponseFromRemote(remoteExcelResult);
+                return GetExcelResponseFromRemote(remoteExcelResult, resultFileName);
 
             return result;
         }
         protected object GetExcelResponseFromRemote(RemoteExcelResult remoteExcelResult)
         {
+            return GetExcelResponseFromRemote(remoteExcelResult, "ExcelReport");
+        }
+        protected object GetExcelResponseFromRemote(RemoteExcelResult remoteExcelResult, string resultFileName)
+        {
             MemoryStream ms = new MemoryStream(remoteExcelResult.Data);
-            return GetExcelResponse(new ExcelResult() { ExcelFileStream = ms });
+            return GetExcelResponse(new ExcelResult() { ExcelFileStream = ms }, resultFileName);
         }
         protected object GetExcelResponse(ExcelResult excelResult)
         {
