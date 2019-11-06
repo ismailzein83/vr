@@ -2149,6 +2149,7 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Mobilis_Ericsson_R13(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var vrNumberPrefixManager = new Vanrise.GenericData.Business.VRNumberPrefixManager();
+            var mobilisDataSourceManager = new Mediation.Mobilis.Business.MobilisDataSourceManager();
 
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("57E3E68E-9403-440D-A67D-CC5896D6BAD5"), (parsedBatch) =>
@@ -2157,31 +2158,13 @@ namespace Mediation.Runtime
                 {
                     case "Mobilis_R13_CDR":
 
-                        var mobilisDataSourceManager = new Mediation.Mobilis.Business.MobilisDataSourceManager();
-
                         List<dynamic> filteredCDRs = new List<dynamic>();
                         List<dynamic> multiLegRecords = new List<dynamic>();
 
                         foreach (var record in parsedBatch.Records)
                         {
-                            string callingPartyNumber = record.CallingPartyNumber;
-                            string calledPartyNumber = record.CalledPartyNumber;
-
-                            if (!string.IsNullOrEmpty(callingPartyNumber) && !string.IsNullOrEmpty(calledPartyNumber) && callingPartyNumber.Length > 10 && calledPartyNumber.Length > 10)
-                            {
-                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
-                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
-
-                                bool isMobileStationRoamingNumberOnNet = true;
-                                if (!string.IsNullOrEmpty(record.MobileStationRoamingNumber))
-                                {
-                                    Guid? mobileStationRoamingNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.MobileStationRoamingNumber);
-                                    isMobileStationRoamingNumberOnNet = mobileStationRoamingNumberType.HasValue;
-                                }
-
-                                if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue && isMobileStationRoamingNumberOnNet)
-                                    continue;
-                            }
+                            if (mobilisDataSourceManager.IsMobilisR13CDROnNet(record, vrNumberPrefixManager))
+                                continue;
 
                             var cdrState = mobilisDataSourceManager.GetMobilisR13CDRType(record);
                             switch (cdrState)
@@ -2406,6 +2389,7 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Mobilis_Huawei_R13(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var vrNumberPrefixManager = new Vanrise.GenericData.Business.VRNumberPrefixManager();
+            var mobilisDataSourceManager = new Mediation.Mobilis.Business.MobilisDataSourceManager();
 
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("09DB62EC-084C-46CB-9D08-26D88C82D04F"), (parsedBatch) =>
@@ -2414,31 +2398,13 @@ namespace Mediation.Runtime
                 {
                     case "Mobilis_R13_CDR":
 
-                        var mobilisDataSourceManager = new Mediation.Mobilis.Business.MobilisDataSourceManager();
-
                         List<dynamic> filteredCDRs = new List<dynamic>();
                         List<dynamic> multiLegRecords = new List<dynamic>();
 
                         foreach (var record in parsedBatch.Records)
                         {
-                            string callingPartyNumber = record.CallingPartyNumber;
-                            string calledPartyNumber = record.CalledPartyNumber;
-
-                            if (!string.IsNullOrEmpty(callingPartyNumber) && !string.IsNullOrEmpty(calledPartyNumber) && callingPartyNumber.Length > 10 && calledPartyNumber.Length > 10)
-                            {
-                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
-                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
-
-                                bool isMobileStationRoamingNumberOnNet = true;
-                                if (string.IsNullOrEmpty(record.MobileStationRoamingNumber))
-                                {
-                                    Guid? mobileStationRoamingNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.MobileStationRoamingNumber);
-                                    isMobileStationRoamingNumberOnNet = mobileStationRoamingNumberType.HasValue;
-                                }
-
-                                if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue && isMobileStationRoamingNumberOnNet)
-                                    continue;
-                            }
+                            if (mobilisDataSourceManager.IsMobilisR13CDROnNet(record, vrNumberPrefixManager))
+                                continue;
 
                             var cdrState = mobilisDataSourceManager.GetMobilisR13CDRType(record);
                             switch (cdrState)
@@ -3096,9 +3062,5 @@ namespace Mediation.Runtime
 
         #endregion
 
-        private static void LogVerbose(string Message)
-        {
-            Console.WriteLine(Message);
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mediation.Generic.Entities;
+using Vanrise.GenericData.Business;
 
 namespace Mediation.Mobilis.Business
 {
@@ -15,6 +16,30 @@ namespace Mediation.Mobilis.Business
         public const int MSTerminatingType = 1;
         public const int TransitType = 5;
         public const int CallForwardingType = 100;
+
+        public bool IsMobilisR13CDROnNet(dynamic cdr, VRNumberPrefixManager vrNumberPrefixManager)
+        {
+            string callingPartyNumber = cdr.CallingPartyNumber;
+            string calledPartyNumber = cdr.CalledPartyNumber;
+
+            if (!string.IsNullOrEmpty(callingPartyNumber) && !string.IsNullOrEmpty(calledPartyNumber) && callingPartyNumber.Length > 10 && calledPartyNumber.Length > 10)
+            {
+                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
+                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
+
+                bool isMobileStationRoamingNumberOnNet = true;
+                if (!string.IsNullOrEmpty(cdr.MobileStationRoamingNumber))
+                {
+                    Guid? mobileStationRoamingNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(cdr.MobileStationRoamingNumber);
+                    isMobileStationRoamingNumberOnNet = mobileStationRoamingNumberType.HasValue;
+                }
+
+                if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue && isMobileStationRoamingNumberOnNet)
+                    return true;
+            }
+
+            return false;
+        }
 
         public CDRState GetMobilisR13CDRType(dynamic cdr)
         {
@@ -56,11 +81,13 @@ namespace Mediation.Mobilis.Business
                 cdr.IsOutTrunkSwitch = true;
             }
 
-            if (cdr.RecordType == TransitType && cdr.IsInTrunkSwitch && cdr.IsOutTrunkSwitch)
-                return CDRState.Ignore;
-
-            if (cdr.RecordType == TransitType && cdr.IsInTrunkSwitch == !cdr.IsOutTrunkSwitch)
-                return CDRState.MultiLeg;
+            if (cdr.RecordType == TransitType)
+            {
+                if (cdr.IsInTrunkSwitch && cdr.IsOutTrunkSwitch)
+                    return CDRState.Ignore;
+                else
+                    return CDRState.MultiLeg;
+            }
 
             if (cdr.RecordType == MSOriginatingType && cdr.IsOutTrunkSwitch)
                 return CDRState.MultiLeg;
