@@ -81,6 +81,26 @@ namespace Retail.Billing.Business
             return output;
         }
 
+        public RatePlanEvaluateRecurringChargesOutput EvaluateRecurringCharges(RatePlanEvaluateRecurringChargesInput input)
+        {
+            var output = new RatePlanEvaluateRecurringChargesOutput { Charges = new List<EvaluatedRecurringCharge>() };
+
+            if(input != null && input.Services != null)
+            {
+                foreach(var service in input.Services)
+                {
+                    var serviceCharge = EvaluateRecurringCharge(new RatePlanEvaluateRecurringChargeInput
+                    {
+                        RatePlanId = input.RatePlanId,
+                        ContractService = service
+                    });
+
+                    output.Charges.Add(new EvaluatedRecurringCharge { Charge = serviceCharge.Charge });
+                }
+            }
+
+            return output;
+        }
         public RatePlanServiceActionChargeEvaluationOutput EvaluateActionCharge(RatePlanServiceActionChargeEvaluationInput input)
         {
             RatePlanServiceActionChargeEvaluationOutput evaluationOutput = new RatePlanServiceActionChargeEvaluationOutput()
@@ -116,6 +136,34 @@ namespace Retail.Billing.Business
             evaluationOutput.Deposit= retailBillingChargeManager.EvaluateRetailBillingCharge(ratePlanServiceActionCharge.Deposit, contractServiceActionToDictionary);
 
             return evaluationOutput;
+        }
+
+        public RatePlanServiceActionsChargesEvaluationOutput EvaluateActionsCharges(RatePlanServiceActionsChargesEvaluationInput input)
+        {
+            RatePlanServiceActionsChargesEvaluationOutput output = new RatePlanServiceActionsChargesEvaluationOutput
+            {
+                ActionsCharges = new List<EvaluatedRatePlanServiceActionCharges>()
+            };
+            //TEMPORARY IMPLEMENTATION NEEDS to be refactored and optimized
+            if(input.Actions != null)
+            {
+                foreach(var action in input.Actions)
+                {
+                    var actionEvaluationOutput = EvaluateActionCharge(new RatePlanServiceActionChargeEvaluationInput
+                    {
+                        RatePlanId = input.RatePlanId,
+                        ContractServiceAction = action
+                    });
+                    output.ActionsCharges.Add(new EvaluatedRatePlanServiceActionCharges
+                    {
+                        Charge = actionEvaluationOutput.Charge,
+                        Deposit = actionEvaluationOutput.Deposit,
+                        AdvancedPayment = actionEvaluationOutput.AdvancedPayment
+                    });
+                }
+            }
+
+            return output;
         }
 
         public GetRatePlanServicesChargesOutput GetServicesCharges(int ratePlanId, Guid actionTypeId, Guid recurringChargeableConditionId)
@@ -323,6 +371,22 @@ namespace Retail.Billing.Business
         public Decimal Charge { get; set; }
     }
 
+    public class RatePlanEvaluateRecurringChargesInput
+    {
+        public int RatePlanId { get; set; }
+        public List<ChargeTargetContractService> Services { get; set; }
+    }
+
+    public class RatePlanEvaluateRecurringChargesOutput
+    {
+        public List<EvaluatedRecurringCharge> Charges { get; set; }
+    }
+
+    public class EvaluatedRecurringCharge
+    {
+        public decimal Charge { get; set; }
+    }
+
     public class RatePlanServiceActionChargeEvaluationInput
     {
         public int RatePlanId { get; set; }
@@ -335,6 +399,25 @@ namespace Retail.Billing.Business
         public Decimal AdvancedPayment { get; set; }
         public Decimal Deposit { get; set; }
     }
+    
+    public class RatePlanServiceActionsChargesEvaluationInput
+    {
+        public int RatePlanId { get; set; }
+        public List<ChargeTargetContractServiceAction> Actions { get; set; }
+    }
+
+    public class RatePlanServiceActionsChargesEvaluationOutput
+    {
+        public List<EvaluatedRatePlanServiceActionCharges> ActionsCharges { get; set; }
+    }
+
+    public class EvaluatedRatePlanServiceActionCharges
+    {
+        public Decimal Charge { get; set; }
+        public Decimal AdvancedPayment { get; set; }
+        public Decimal Deposit { get; set; }
+    }
+
     public class GetRatePlanPricesOutput
     {
         public List<GetRatePlanPricesOutputItem> Items { get; set; }
