@@ -2639,7 +2639,10 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!BillingCompanyPhone.Value</Value>
+                  <Value>=
+"Tél : " + Parameters!BillingCompanyPhone.Value +
+iif(String.IsNullOrEmpty(Parameters!CompanyFax.Value),"",
+ " - Fax : " + Parameters!CompanyFax.Value)</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
