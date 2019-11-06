@@ -37,7 +37,7 @@ namespace Vanrise.Invoice.MainExtensions
                         perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                         perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
                         nextBillingInterval.FromDate = nextBillingInterval.ToDate.AddDays(1);
-                        nextBillingInterval.ToDate = nextBillingInterval.ToDate.AddMonths(2);
+                        nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddMonths(2).AddDays(-1);
                     }
                 }
             }
