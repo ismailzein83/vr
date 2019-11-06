@@ -490,6 +490,13 @@ namespace BPMExtended.Main.Entities
         [CompletedStep("StTypeId")]
         [CompletedStepId("290C7A1A-DC83-4F79-A337-C209E61CD8CA")]
         RemoveProffessionalDI = 57,
+
+        [Description("Cancel Payment Plan")]
+        [EntitySchemaName("StDisablePaymentPlan")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("78901F89-A682-4367-85F7-5F4DE34A6641")]
+        DisablePaymentPlan = 57,
+
     }
     public enum ContractStatus
     {

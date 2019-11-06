@@ -311,9 +311,17 @@ namespace BPMExtended.Main.Business
 
 
 
-        public PaymentPlan GetPaymentPlanById(string paymentPlanId)
+        public PaymentPlan GetPaymentPlanById(string invocieId /* invoice code */, string paymentPlanId) 
         {
-            return RatePlanMockDataGenerator.GetPaymentPlanById(paymentPlanId);
+            PaymentPlan item = null;
+
+            using (SOMClient client = new SOMClient())
+            {
+                 item = client.Get<PaymentPlan>(String.Format("api/SOM.ST/Billing/GetPaymentPlanDetails?invoiceId={0}&paymentPlanId={1}", invocieId , paymentPlanId));
+             
+            }
+            return item;
+
         }
 
         public List<PaymentPlanTemplateInfo> GetAllPaymentPlanTemplatesInfo()
@@ -366,9 +374,67 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public bool CancelInvoiceInstallment(string templateId, string invoiceId, string paymentPlanId)
+        public void CancelInvoiceInstallment(Guid requestId)
         {
-            return true;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDisablePaymentPlan");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StInvoiceId");
+            esq.AddColumn("StPaymentPlanId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                string invoiceId = entities[0].GetColumnValue("StInvoiceId").ToString();
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var paymentPlanId = entities[0].GetColumnValue("StPaymentPlanId");
+
+                InvoiceAmountData data =  new InstallmentManager().GetInvoiceAmountData(invoiceId);
+
+                SOMRequestInput<DisablePaymentPlanInput> somRequestInput = new SOMRequestInput<DisablePaymentPlanInput>
+                {
+
+                    InputArguments = new DisablePaymentPlanInput
+                    {
+                        Input = new DisablePaymentPlanInstallmentInput
+                        {
+
+                            InvoiceCode = new InvoiceManager().GetInvoiceById(invoiceId).InvoiceCode,
+                            InvoiceAmount = data.OpenAmount.ToString(),
+                            PaymentPlanId = paymentPlanId.ToString(),
+                            AdditionalFees = data.AdditionalFees.ToString(),
+                            LateFee = data.LateFee.ToString(),
+                            Currency = data.Currency,
+                            ApprovalId = "1"
+                        },
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
+                        },
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<DisablePaymentPlanInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/DeleteInstallment/StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
 
         }
 

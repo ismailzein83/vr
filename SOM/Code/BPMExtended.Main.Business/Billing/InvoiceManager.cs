@@ -102,12 +102,12 @@ namespace BPMExtended.Main.Business
             return invoicesDetailItems;
         }
  
-        public List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId)
+        public List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId/* invoice code */)
         {
             var paymentDetails = new List<PaymentPlanDetail>();
             using (SOMClient client = new SOMClient())
             {
-                List<PaymentPlan> items = client.Get<List<PaymentPlan>>(String.Format("api/SOM.ST/Billing/GetInvoiceInstallments?InvoiceId={0}", invoiceId));
+                List<PaymentPlan> items = client.Get<List<PaymentPlan>>(String.Format("api/SOM.ST/Billing/GetInvoicePaymentPlans?InvoiceId={0}", invoiceId));
                 foreach (var item in items)
                 {
                     var paymentPlanDetail = PaymentPlanToDetailMapper(item);

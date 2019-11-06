@@ -105,6 +105,7 @@
     <Compile Include="Billing\WorkflowInput\DeactivateCptRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\DeactivatePABXRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\DeportedNumberRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\DisablePaymentPlanInput.cs" />
     <Compile Include="Billing\WorkflowInput\EditPABXRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ExcludePackagesServiceInput.cs" />
     <Compile Include="Billing\WorkflowInput\FAFManagementRequestInput.cs" />

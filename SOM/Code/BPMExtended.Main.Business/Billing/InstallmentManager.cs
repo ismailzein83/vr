@@ -66,6 +66,18 @@ namespace BPMExtended.Main.Business
             }
             return installmentsDetailItems;
         }
+
+        public List<Installment> GetPaymentPlanInstallments(string invoiceId, string paymentPlanId)
+        {
+            List<Installment> item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<List<Installment>>(String.Format("api/SOM.ST/Billing/GetPaymentPlanInstallments?invoiceId={0}&paymentPlanId={1}", invoiceId, paymentPlanId));
+
+            }
+            return item;
+        }
+
         public void ApplyInstallment(Guid requestId/*,string customerId, string paymentPlanTemplateId, string invoiceCode, string invoiceAmount, string additionalFees, string lateFee, string firstPayment, string reductionRate, string currency, string startDate, string approvalId*/)
         {
             EntitySchemaQuery esq;
