@@ -30,6 +30,7 @@ namespace Retail.NIM.Entities
         public static Guid DSLAMTypeId = new Guid("37EA9CA7-9099-4F9A-8279-8985B47591B5");
 
         public static Guid PathBEDefinitionId = new Guid("95DCF8AF-2273-4356-81E7-081034CCD75B");
+        public static Guid PathConnectionBEDefinitionId = new Guid("24364ed5-1795-468c-a27b-c00013e830ac");
         public static Guid ReadyPathStatusDefinitionId = new Guid("a7815af4-e6d9-4dd0-bd1a-3f4b8b7b72d0");
         public static Guid DraftPathStatusDefinitionId = new Guid("d5618e4c-50f5-41bd-9b2e-c4e2d70d6715");
     }

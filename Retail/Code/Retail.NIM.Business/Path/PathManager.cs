@@ -36,7 +36,7 @@ namespace Retail.NIM.Business
         {
             var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathBEDefinitionId,
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathConnectionBEDefinitionId,
                 FieldValues = new Dictionary<string, object> { { "Path", pathConnectionInput.PathId }, { "Connection", pathConnectionInput.ConnectionId } }
             });
 
