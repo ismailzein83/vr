@@ -8,7 +8,7 @@ namespace Retail.NIM.Entities
 {
     public class ConnectionInput
     {
-        public Guid Model { get; set; }
+        public int Model { get; set; }
         public long Port1 { get; set; }
         public long Port2 { get; set; }
         public Guid ConnectionType { get; set; }
