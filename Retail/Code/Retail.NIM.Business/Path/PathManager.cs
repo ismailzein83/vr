@@ -14,6 +14,8 @@ namespace Retail.NIM.Business
     public class PathManager
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
+    
+        #region Public Methods
         public PathOutput CreatePath(PathInput pathInput)
         {
             var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
@@ -48,13 +50,13 @@ namespace Retail.NIM.Business
             };
         }
 
-        public UpdateResult SetPathReady(PathQuery pathQuery)
+        public SetPathReadyOutput SetPathReady(SetPathReadyInput input)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
             {
                 BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathBEDefinitionId,
                 FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.ReadyPathStatusDefinitionId } },
-                GenericBusinessEntityId = pathQuery.PathId,
+                GenericBusinessEntityId = input.PathId,
                 FilterGroup = new RecordFilterGroup
                 {
                     Filters = new List<RecordFilter>
@@ -68,10 +70,11 @@ namespace Retail.NIM.Business
                 }
             });
 
-            return new UpdateResult
+            return new SetPathReadyOutput
             {
                 IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
             };
         }
+        #endregion
     }
 }

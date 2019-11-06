@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.NIM.Entities
 {
-    public class PathQuery
+    public class SetPortFaultyOutput
     {
-        public long PathId { get; set; }
+        public bool IsSucceeded { get; set; }
     }
 }

@@ -13,15 +13,16 @@ namespace Retail.NIM.Business
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public GenericBusinessEntity GetNode(long nodeId, Guid businessEntityDefinitionId)
+        #region Internal Methods
+        internal GenericBusinessEntity GetNode(long nodeId, Guid businessEntityDefinitionId)
         {
             return _genericBusinessEntityManager.GetGenericBusinessEntity(nodeId, businessEntityDefinitionId);
         }
-        public GenericBusinessEntity GetNode(long nodeId)
+        internal GenericBusinessEntity GetNode(long nodeId)
         {
             return _genericBusinessEntityManager.GetGenericBusinessEntity(nodeId, StaticBEDefinitionIDs.NodeBEDefinitionId);
         }
-        public GenericBusinessEntity GetNodeByNumber(string number, Guid businessEntityDefinitionId)
+        internal GenericBusinessEntity GetNodeByNumber(string number, Guid businessEntityDefinitionId)
         {
             var dpItems = _genericBusinessEntityManager.GetAllGenericBusinessEntities(businessEntityDefinitionId, null, new RecordFilterGroup
             {
@@ -40,7 +41,7 @@ namespace Retail.NIM.Business
                 return null;
             return dpItems.First();
         }
-        public GenericBusinessEntity GetSwitchBySiteId(long siteId)
+        internal GenericBusinessEntity GetSwitchBySiteId(long siteId)
         {
             var dpItems = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.SwitchTypeId, null, new RecordFilterGroup
             {
@@ -58,7 +59,7 @@ namespace Retail.NIM.Business
                 return null;
             return dpItems.First();
         }
-        public GenericBusinessEntity GetDslamBySiteId(long siteId)
+        internal GenericBusinessEntity GetDslamBySiteId(long siteId)
         {
             var dpItems = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.DSLAMTypeId, null, new RecordFilterGroup
             {
@@ -76,7 +77,7 @@ namespace Retail.NIM.Business
                 return null;
             return dpItems.First();
         }
-        public GenericBusinessEntity GetNodeByAddress(Guid businessEntityDefinitionId, long areadId, long siteId, int regionId, int cityId, int townId, long streetId, string buildingDetails)
+        internal GenericBusinessEntity GetNodeByAddress(Guid businessEntityDefinitionId, long areadId, long siteId, int regionId, int cityId, int townId, long streetId, string buildingDetails)
         {
             var filter = new RecordFilterGroup
             {
@@ -137,5 +138,7 @@ namespace Retail.NIM.Business
             return items.First();
 
         }
+        #endregion
+
     }
 }

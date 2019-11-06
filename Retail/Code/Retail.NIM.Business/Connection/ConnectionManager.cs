@@ -14,68 +14,8 @@ namespace Retail.NIM.Business
     public class ConnectionManager
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
-        public GenericBusinessEntity GetConnection(long nodeId, List<long> notIncludeNodes)
-        {
-            List<Object> excludedNodes = new List<object>();
-            if (notIncludeNodes != null)
-            {
-                foreach (var notIncludeNode in notIncludeNodes)
-                    excludedNodes.Add(notIncludeNode);
-            }
 
-            var filter = new RecordFilterGroup
-            {
-                Filters = new List<RecordFilter>
-                {
-                    new RecordFilterGroup
-                    {
-                        LogicalOperator = RecordQueryLogicalOperator.Or,
-                        Filters = new List<RecordFilter>
-                        {
-                             new ObjectListRecordFilter
-                             {
-                                 FieldName = "Port1Node",
-                                 CompareOperator = ListRecordFilterOperator.In,
-                                 Values =new List<object>{ nodeId }
-                             },new ObjectListRecordFilter
-                             {
-                                FieldName = "Port2Node",
-                               CompareOperator = ListRecordFilterOperator.In,
-                               Values =new List<object>{ nodeId }
-                             }
-                        }
-                    }
-                },
-
-            };
-            if (excludedNodes.Count > 0)
-            {
-                filter.Filters.Add(new RecordFilterGroup
-                {
-                    LogicalOperator = RecordQueryLogicalOperator.Or,
-                    Filters = new List<RecordFilter>
-                        {
-                             new ObjectListRecordFilter
-                             {
-                                 FieldName = "Port1Node",
-                                 CompareOperator = ListRecordFilterOperator.NotIn,
-                                 Values = excludedNodes
-                             },new ObjectListRecordFilter
-                             {
-                                FieldName = "Port2Node",
-                               CompareOperator = ListRecordFilterOperator.NotIn,
-                               Values = excludedNodes
-                             }
-                        }
-                });
-            }
-            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.ConnectionBEDefinitionId, null, filter);
-            if (items == null || items.Count == 0)
-                return null;
-            return items.First();
-
-        }
-
+        #region Public Methods
         public ReserveConnectionOutput ReserveConnection(ReserveConnectionInput input)
         {
 
@@ -171,7 +111,101 @@ namespace Retail.NIM.Business
             };
         }
 
-        public bool CheckConnectionWithFreePort(long nodeId, List<long> excludedNodes)
+        public ConnectionOutput AddConnection(ConnectionInput connectionInput)
+        {
+            var connectionType = new ConnectionTypeManager().GetConnectionType(connectionInput.ConnectionType);
+            connectionType.ThrowIfNull("connectionType", connectionInput.ConnectionType);
+
+            var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
+            {
+                BusinessEntityDefinitionId = connectionType.BusinessEntitityDefinitionId,
+                FieldValues = new Dictionary<string, object> { { "Model", connectionInput.Model }, { "Port1", connectionInput.Port1 }, { "Port2", connectionInput.Port2 } }
+            });
+
+            if (insertedEntity.Result == InsertOperationResult.Failed)
+                return null;
+
+
+            return new ConnectionOutput
+            {
+                ConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
+            };
+        }
+
+        public void RemoveConnection(long connectionId)
+        {
+            _genericBusinessEntityManager.DeleteGenericBusinessEntity(new DeleteGenericBusinessEntityInput
+            {
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.ConnectionBEDefinitionId,
+                GenericBusinessEntityIds = new List<object>() { connectionId },
+
+            });
+        }
+        #endregion
+
+        #region Internal Methods
+        internal GenericBusinessEntity GetConnection(long nodeId, List<long> notIncludeNodes)
+        {
+            List<Object> excludedNodes = new List<object>();
+            if (notIncludeNodes != null)
+            {
+                foreach (var notIncludeNode in notIncludeNodes)
+                    excludedNodes.Add(notIncludeNode);
+            }
+
+            var filter = new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>
+                {
+                    new RecordFilterGroup
+                    {
+                        LogicalOperator = RecordQueryLogicalOperator.Or,
+                        Filters = new List<RecordFilter>
+                        {
+                             new ObjectListRecordFilter
+                             {
+                                 FieldName = "Port1Node",
+                                 CompareOperator = ListRecordFilterOperator.In,
+                                 Values =new List<object>{ nodeId }
+                             },new ObjectListRecordFilter
+                             {
+                                FieldName = "Port2Node",
+                               CompareOperator = ListRecordFilterOperator.In,
+                               Values =new List<object>{ nodeId }
+                             }
+                        }
+                    }
+                },
+
+            };
+            if (excludedNodes.Count > 0)
+            {
+                filter.Filters.Add(new RecordFilterGroup
+                {
+                    LogicalOperator = RecordQueryLogicalOperator.Or,
+                    Filters = new List<RecordFilter>
+                        {
+                             new ObjectListRecordFilter
+                             {
+                                 FieldName = "Port1Node",
+                                 CompareOperator = ListRecordFilterOperator.NotIn,
+                                 Values = excludedNodes
+                             },new ObjectListRecordFilter
+                             {
+                                FieldName = "Port2Node",
+                               CompareOperator = ListRecordFilterOperator.NotIn,
+                               Values = excludedNodes
+                             }
+                        }
+                });
+            }
+            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.ConnectionBEDefinitionId, null, filter);
+            if (items == null || items.Count == 0)
+                return null;
+            return items.First();
+
+        }
+        internal bool CheckConnectionWithFreePort(long nodeId, List<long> excludedNodes)
         {
             List<Object> notIncludeNodes = new List<object>();
             if (excludedNodes != null)
@@ -238,37 +272,7 @@ namespace Retail.NIM.Business
             return items != null && items.Count > 0;
         }
 
+        #endregion
 
-        public ConnectionOutput AddConnection(ConnectionInput connectionInput)
-        {
-            var connectionType = new ConnectionTypeManager().GetConnectionType(connectionInput.ConnectionType);
-            connectionType.ThrowIfNull("connectionType", connectionInput.ConnectionType);
-
-            var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
-            {
-                BusinessEntityDefinitionId = connectionType.BusinessEntitityDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Model", connectionInput.Model }, { "Port1", connectionInput.Port1 }, { "Port2", connectionInput.Port2 } }
-            });
-
-            if (insertedEntity.Result == InsertOperationResult.Failed)
-                return null;
-
-
-            return new ConnectionOutput
-            {
-                ConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
-            };
-        }
-
-        public void RemoveConnection(long connectionId)
-        {
-            _genericBusinessEntityManager.DeleteGenericBusinessEntity(new DeleteGenericBusinessEntityInput
-            {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.ConnectionBEDefinitionId,
-                GenericBusinessEntityIds = new List<object>() { connectionId },
-                
-            });
-        }
-    
     }
 }

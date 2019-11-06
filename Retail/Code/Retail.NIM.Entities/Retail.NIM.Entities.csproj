@@ -69,14 +69,18 @@
     <Compile Include="NodePortType\NodePortTypeInfoFilter.cs" />
     <Compile Include="NodePortType\NodePortType.cs" />
     <Compile Include="NodePortType\NodePortTypeInfo.cs" />
-    <Compile Include="NodePort\PortQuery.cs" />
+    <Compile Include="NodePort\SetPortFaultyInput.cs" />
+    <Compile Include="NodePort\SetPortUsedInput.cs" />
     <Compile Include="NodePort\ReservePort.cs" />
+    <Compile Include="NodePort\SetPortFaultyOutput.cs" />
+    <Compile Include="NodePort\SetPortUsedOutput.cs" />
     <Compile Include="NodeType\NodeType.cs" />
     <Compile Include="NodeType\NodeTypeInfo.cs" />
     <Compile Include="NodeType\NodeTypeInfoFilter.cs" />
     <Compile Include="PathConnection\PathConnection.cs" />
     <Compile Include="Path\Path.cs" />
-    <Compile Include="Path\PathQuery.cs" />
+    <Compile Include="Path\SetPathReadyInput.cs" />
+    <Compile Include="Path\SetPathReadyOutput.cs" />
     <Compile Include="PhoneNumberStatus.cs" />
     <Compile Include="PortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,7 +88,6 @@
     <Compile Include="TechnicalAddress\GetTechnicalAddressOutput.cs" />
     <Compile Include="TechnicalAddress\GetTechnicalAddressOutputTechnologyItem.cs" />
     <Compile Include="TechnicalAddress\GetTechnicalAddressOutputTechnologyItemNetworkElement.cs" />
-    <Compile Include="UpdateResult.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

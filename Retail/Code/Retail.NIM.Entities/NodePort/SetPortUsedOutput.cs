@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.NIM.Entities
 {
-    public class UpdateResult
+    public class SetPortUsedOutput
     {
         public bool IsSucceeded { get; set; }
     }

@@ -11,8 +11,62 @@ namespace Retail.NIM.Business
 {
     public class TechnicalAddressManager
     {
+      
+        #region Public Methods
+        public GetTechnicalAddressOutput GetTechnicalAddress(TechnicalAddressNumberType numberType, string number)
+        {
+            NodeManager _nodeManager = new NodeManager();
 
-        public GetTechnicalAddressOutputTechnologyItem GetFDBTechnicalAddress(GenericBusinessEntity node)
+            var output = new GetTechnicalAddressOutput
+            {
+                TechnologyItems = new List<GetTechnicalAddressOutputTechnologyItem>()
+            };
+            Guid businessEntityDefinitionId = Guid.Empty;
+            switch (numberType)
+            {
+                case TechnicalAddressNumberType.DPNumber:
+                    businessEntityDefinitionId = StaticBEDefinitionIDs.DPBEDefinitionId;
+                    break;
+                case TechnicalAddressNumberType.FDBNumber:
+                    businessEntityDefinitionId = StaticBEDefinitionIDs.FDBBEDefinitionId;
+                    break;
+            }
+            var nodeNeeded = _nodeManager.GetNodeByNumber(number, businessEntityDefinitionId);
+            if (nodeNeeded == null)
+            {
+                output.TechnologyItems.Add(GetDPTechnicalAddress(null));
+                output.TechnologyItems.Add(GetFDBTechnicalAddress(null));
+                return output;
+
+            }
+            output.AreaId = (long)nodeNeeded.FieldValues.GetRecord("Area");
+            output.SiteId = (long)nodeNeeded.FieldValues.GetRecord("Site");
+            output.RegionId = (int)nodeNeeded.FieldValues.GetRecord("Region");
+            output.CityId = (int)nodeNeeded.FieldValues.GetRecord("City");
+            output.TownId = (int)nodeNeeded.FieldValues.GetRecord("Town");
+            output.StreetId = (long)nodeNeeded.FieldValues.GetRecord("Street");
+            output.BuildingDetails = nodeNeeded.FieldValues.GetRecord("Building") as string;
+
+
+            switch (numberType)
+            {
+                case TechnicalAddressNumberType.DPNumber:
+                    var fdbNode = _nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.FDBBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
+                    output.TechnologyItems.Add(GetDPTechnicalAddress(nodeNeeded));
+                    output.TechnologyItems.Add(GetFDBTechnicalAddress(fdbNode));
+                    break;
+                case TechnicalAddressNumberType.FDBNumber:
+                    var dpNode = _nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.DPBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
+                    output.TechnologyItems.Add(GetFDBTechnicalAddress(nodeNeeded));
+                    output.TechnologyItems.Add(GetDPTechnicalAddress(dpNode));
+                    break;
+            }
+            return output;
+        }
+        #endregion
+
+        #region Private Methods
+        private GetTechnicalAddressOutputTechnologyItem GetFDBTechnicalAddress(GenericBusinessEntity node)
         {
             ConnectionManager _connectionManager = new ConnectionManager();
             NodeManager _nodeManager = new NodeManager();
@@ -82,8 +136,7 @@ namespace Retail.NIM.Business
             }
             return item;
         }
-
-        public GetTechnicalAddressOutputTechnologyItem GetDPTechnicalAddress(GenericBusinessEntity node)
+        private GetTechnicalAddressOutputTechnologyItem GetDPTechnicalAddress(GenericBusinessEntity node)
         {
             ConnectionManager _connectionManager = new ConnectionManager();
             NodeManager _nodeManager = new NodeManager();
@@ -128,7 +181,8 @@ namespace Retail.NIM.Business
                 if (port1NodeId != nodeId)
                 {
                     nodeId = port1NodeId;
-                }else if (port2NodeId != nodeId)
+                }
+                else if (port2NodeId != nodeId)
                 {
                     nodeId = port2NodeId;
                 }
@@ -175,7 +229,7 @@ namespace Retail.NIM.Business
                             });
                             item.DataFeasible = true;
                         }
-                           
+
                     }
                 }
             }
@@ -183,59 +237,6 @@ namespace Retail.NIM.Business
             item.SubscriptionFeasible = subscriptionFeasible;
             return item;
         }
-
-        public GetTechnicalAddressOutput GetTechnicalAddress(TechnicalAddressNumberType numberType, string number)
-        {
-            NodeManager _nodeManager = new NodeManager();
-
-            var output = new GetTechnicalAddressOutput
-            {
-                TechnologyItems = new List<GetTechnicalAddressOutputTechnologyItem>()
-            };
-            Guid businessEntityDefinitionId = Guid.Empty;
-            switch (numberType)
-            {
-                case TechnicalAddressNumberType.DPNumber:
-                    businessEntityDefinitionId = StaticBEDefinitionIDs.DPBEDefinitionId;
-                    break;
-                case TechnicalAddressNumberType.FDBNumber:
-                    businessEntityDefinitionId = StaticBEDefinitionIDs.FDBBEDefinitionId;
-                    break;
-            }
-            var nodeNeeded = _nodeManager.GetNodeByNumber(number, businessEntityDefinitionId);
-            if (nodeNeeded == null)
-            {
-                output.TechnologyItems.Add(GetDPTechnicalAddress(null));
-                output.TechnologyItems.Add(GetFDBTechnicalAddress(null));
-                return output;
-
-            }
-            output.AreaId = (long)nodeNeeded.FieldValues.GetRecord("Area");
-            output.SiteId = (long)nodeNeeded.FieldValues.GetRecord("Site");
-            output.RegionId = (int)nodeNeeded.FieldValues.GetRecord("Region");
-            output.CityId = (int)nodeNeeded.FieldValues.GetRecord("City");
-            output.TownId = (int)nodeNeeded.FieldValues.GetRecord("Town");
-            output.StreetId = (long)nodeNeeded.FieldValues.GetRecord("Street");
-            output.BuildingDetails = nodeNeeded.FieldValues.GetRecord("Building") as string;
-
-
-            switch (numberType)
-            {
-                case TechnicalAddressNumberType.DPNumber:
-                    var fdbNode = _nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.FDBBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
-                    output.TechnologyItems.Add(GetDPTechnicalAddress(nodeNeeded));
-                    output.TechnologyItems.Add(GetFDBTechnicalAddress(fdbNode));
-                    break;
-                case TechnicalAddressNumberType.FDBNumber:
-                    var dpNode = _nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.DPBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
-                    output.TechnologyItems.Add(GetFDBTechnicalAddress(nodeNeeded));
-                    output.TechnologyItems.Add(GetDPTechnicalAddress(dpNode));
-                    break;
-            }
-            return output;
-        }
-
-       
-
+        #endregion
     }
 }

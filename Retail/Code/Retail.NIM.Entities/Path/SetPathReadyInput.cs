@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.NIM.Entities
 {
-    public class PortQuery
+    public class SetPathReadyInput
     {
-        public long PortId { get; set; }
+        public long PathId { get; set; }
     }
 }

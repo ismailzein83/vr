@@ -15,6 +15,7 @@ namespace Retail.NIM.Business
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
+        #region Public Methods
         public ReservePortOutput ReservePort(ReservePortInput input)
         {
 
@@ -67,7 +68,38 @@ namespace Retail.NIM.Business
             var portid = (long)firstItem.FieldValues.GetRecord("ID");
             return ReservePort(portid, input.PortTypeId);
         }
-        public ReservePortOutput ReservePort(long portId, Guid portTypeId)
+        public SetPortUsedOutput SetPortUsed(SetPortUsedInput input)
+        {
+            var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
+            {
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.UsedPortStatusDefinitionId } },
+                GenericBusinessEntityId = input.PortId
+            });
+
+            return new SetPortUsedOutput
+            {
+                IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
+            };
+        }
+        public SetPortFaultyOutput SetPortFaulty(SetPortFaultyInput input)
+        {
+            var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
+            {
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.FaultyPortStatusDefinitionId } },
+                GenericBusinessEntityId = input.PortId
+            });
+
+            return new SetPortFaultyOutput
+            {
+                IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
+            };
+        }
+        #endregion
+
+        #region Internal Methods
+        internal ReservePortOutput ReservePort(long portId, Guid portTypeId)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
             {
@@ -97,34 +129,8 @@ namespace Retail.NIM.Business
             };
         }
 
-        public UpdateResult SetPortUsed(PortQuery portQuery)
-        {
-            var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
-            {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.UsedPortStatusDefinitionId } },
-                GenericBusinessEntityId = portQuery.PortId
-            });
+        #endregion
 
-            return new UpdateResult
-            {
-                IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
-            };
-        }
-
-        public UpdateResult SetPortFaulty(PortQuery portQuery)
-        {
-            var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
-            {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.FaultyPortStatusDefinitionId } },
-                GenericBusinessEntityId = portQuery.PortId
-            });
-
-            return new UpdateResult
-            {
-                IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
-            };
-        }
+   
     }
 }
