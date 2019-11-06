@@ -10,6 +10,7 @@ namespace Vanrise.Analytic.Business
 {
     public interface IReportGenerationCustomCodeContext
     {
+        string Extension { set; }
         VRExcelFile CreateExcelFile();
         VRAutomatedReportResolvedDataList GetDataList(string queryTitle, string listName);
         Guid? GetSubTableIdByGroupingFields(List<string> groupingFields, string queryTitle, string listName);
@@ -20,6 +21,8 @@ namespace Vanrise.Analytic.Business
         Func<string, string, VRAutomatedReportResolvedDataList> _dataListFunc;
         Func<List<string>, string, string, Guid?> _getSubTableIdByGroupingFieldsFunc;
         VRExcelFile excelFile;
+
+        public string Extension { get; set; }
 
         public ReportGenerationCustomCodeContext(Func<string , string , VRAutomatedReportResolvedDataList> dataListFunc, Func<List<string>, string, string, Guid?> getSubTableIdByGroupingFieldsFunc)
         {

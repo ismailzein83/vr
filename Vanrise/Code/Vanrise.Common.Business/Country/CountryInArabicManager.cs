@@ -18,6 +18,12 @@ namespace Vanrise.Common.Business
             return cachedCountriesInArabic.GetRecord(countryId);
         }
 
+        public string GetCountryInArabicName(int countryId)
+        {
+            CountryInArabic countryInArabic = GetCountryInArabic(countryId);
+            return countryInArabic != null ? countryInArabic.Name : null;
+        }
+
         private Dictionary<int, CountryInArabic> GetCachedCountriesInArabicByCountryId()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();

@@ -19,6 +19,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             get { return new Guid("482D20EB-78B0-4633-B6F3-4B93B2ED1190"); }
         }
         public Guid ReportGenerationCustomCodeId { get; set; }
+
         public override VRAutomatedReportGeneratedFile GenerateFile(IVRAutomatedReportFileGeneratorGenerateFileContext context1)
         {
             ReportGenerationCustomCodeManager customCodeSettingsManager = new ReportGenerationCustomCodeManager();
@@ -32,7 +33,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 return new VRAutomatedReportGeneratedFile()
                 {
                     FileContent = output,
-                    FileExtension = ".xlsx"
+                    FileExtension = context.Extension != null? context.Extension: ".xlsx"
                 };
             }
             return null;
