@@ -17,6 +17,8 @@ namespace BPMExtended.Main.Entities
         public string ContractId { get; set; }
         public string SwitchName { get; set; }
         public string DeviceName { get; set; }
+        public string OldDeviceId { get; set; }
+        public string NewDeviceId { get; set; }
         public string Type { get; set; }
     }
 }

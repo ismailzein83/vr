@@ -176,6 +176,48 @@ namespace BPMExtended.Main.Business
             }
         }
 
+        public void MDFConnectCompleted(Guid requestId, string oldDevice,string newDevice)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
+            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StDeviceType");
+            esq.AddColumn("StContractID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var pathId = entities[0].GetColumnValue("StLinePathID");
+                var deviceType = entities[0].GetColumnValue("StDeviceType");
+                var contractId = entities[0].GetColumnValue("StContractID");
+
+                SOMRequestInput<RecreateSwitchAccountInput> somRequestInput = new SOMRequestInput<RecreateSwitchAccountInput>
+                {
+                    InputArguments = new RecreateSwitchAccountInput
+                    {
+                        LinePathId = pathId.ToString(),
+                        ContractId = contractId.ToString(),
+                        NewDeviceId = newDevice,
+                        OldDeviceId = oldDevice,
+                        RequestId = requestId.ToString()
+                    },
+                };
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<RecreateSwitchAccountInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/RecreateSwitchAccount/StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+            }
+        }
         public void CancelLineSubscriptionRequest(Guid requestId)
         {
             new CustomerRequestManager().SetRequestAsCancelled(requestId.ToString());

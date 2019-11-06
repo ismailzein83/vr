@@ -38,6 +38,8 @@ namespace BPMExtended.Main.Business
             string supportsCommand=w.SupportsCommands;
             string commands = w.Commands;
             string contractId = w.ContractId;
+            string newDevice = w.NewDeviceId;
+            string oldDevice = w.OldDeviceId;
 
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -70,7 +72,8 @@ namespace BPMExtended.Main.Business
                 TechnicalStepFieldName = Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode).fieldName;
                 string requestsTypeId = GetRequestType(EntityName);
                 string recordName = GetEntityName(EntityName, requestId);
-                workOrderId = initiateWorkOrder(contractId,requestId, requestsTypeId, type, recordName, type, pathId, phoneNumber, switchName, deviceName, supportsCommand, commands);
+                workOrderId = initiateWorkOrder(contractId,requestId, requestsTypeId, type, recordName, type, pathId, phoneNumber, switchName, deviceName,
+                    supportsCommand, commands,newDevice,oldDevice);
 
                 //update request
                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
@@ -281,7 +284,8 @@ namespace BPMExtended.Main.Business
             return requestTypeId;
         }
         private string initiateWorkOrder(string contractId,string requestId, string requestTypeId, string workOrderType, string recordName
-            , string type, string pathId, string phoneNumber, string switchName, string deviceName, string supportsCommand, string commands)
+            , string type, string pathId, string phoneNumber, string switchName, string deviceName, string supportsCommand, string commands
+            , string newDevice, string oldDevice)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StWorkOrder");
             Entity workorder = schema.CreateEntity(BPM_UserConnection);
@@ -302,6 +306,8 @@ namespace BPMExtended.Main.Business
             workorder.SetColumnValue("StSupportCommands", supportsCommand);
             workorder.SetColumnValue("StCommands", commands);
             workorder.SetColumnValue("StPhoneNumber", phoneNumber);
+            workorder.SetColumnValue("StReservedDPId", oldDevice);
+            workorder.SetColumnValue("StSelectedDPPort", newDevice);
             //workorder.SetColumnValue("StContractID", contractId);
             workorder.Save();
 

@@ -126,6 +126,7 @@
     <Compile Include="Billing\WorkflowInput\LineUnBlockingRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\MultiplePackagesServiceInput.cs" />
     <Compile Include="Billing\WorkflowInput\NetworkServiceResetPasswordRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\RecreateSwitchAccountInput.cs" />
     <Compile Include="Billing\WorkflowInput\ResetNetworkServicePasswordRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\RevokeRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ServiceAdditionRequestInput.cs" />
