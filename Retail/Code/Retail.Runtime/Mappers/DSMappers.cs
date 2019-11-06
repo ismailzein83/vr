@@ -253,7 +253,6 @@ namespace Retail.Runtime
                     continue;
 
                 dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
-                cdr.SwitchId = 1;
 
                 try
                 {
