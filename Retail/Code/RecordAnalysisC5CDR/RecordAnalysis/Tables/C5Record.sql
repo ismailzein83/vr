@@ -15,7 +15,6 @@
     [IMEI]                NVARCHAR (20)    NULL,
     [BTS]                 NVARCHAR (50)    NULL,
     [Cell]                NVARCHAR (50)    NULL,
-    [SwitchId]            INT              NULL,
     [UpVolume]            DECIMAL (18, 2)  NULL,
     [DownVolume]          DECIMAL (18, 2)  NULL,
     [CellLatitude]        DECIMAL (18, 8)  NULL,
@@ -27,11 +26,12 @@
     [ReleaseCode]         NVARCHAR (50)    NULL,
     [MSISDNAreaCode]      NVARCHAR (10)    NULL,
     [DestinationAreaCode] NVARCHAR (10)    NULL,
-    [Switch]              INT              NULL,
     [DataSource]          UNIQUEIDENTIFIER NULL,
     [FileName]            NVARCHAR (255)   NULL,
     [QueueItemId]         BIGINT           NULL
 );
+
+
 
 
 GO
