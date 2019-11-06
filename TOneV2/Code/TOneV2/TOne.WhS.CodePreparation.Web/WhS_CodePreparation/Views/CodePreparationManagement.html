@@ -5,7 +5,7 @@
                 <vr-validation-group validationcontext="SearchGroup">
 
                     <vr-whs-be-lob-selector on-ready="onLOBSelectorReady" onselectionchanged="onLOBSelectionChanged" normal-col-num="2" isrequired="true" hideremoveicon></vr-whs-be-lob-selector>
-                    <span vr-loader="isLoadingSellingNumberPlan">
+                    <span vr-loader="scopeModel.isLoadingSellingNumberPlan">
                         <vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="onSellingNumberPlanSelectorChanged" selectedvalues="selectedSellingNumberPlan" showaddbutton></vr-whs-be-sellingnumberplan-selector>
                     </span>
                 </vr-validation-group>
