@@ -89,6 +89,10 @@
     <Content Include="RecordAnalysis\Directives\C4Switch\Templates\C4SwitchCustomObjectSettings.html" />
     <Content Include="RecordAnalysis\Directives\C4Switch\Templates\C4SwitchSettingsTemplate.html" />
     <Content Include="RecordAnalysis\Directives\C4Switch\rec-anal-c4switch-customobjectsettings.js" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C5Switch\VRActions\BlockNumber\rec-anal-action-c5switch-blocknumber.js" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C5Switch\VRActions\BlockNumber\rec-anal-actiondefinition-c5switch-blocknumber.js" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C5Switch\VRActions\BlockNumber\Templates\BlockNumberAction.html" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C5Switch\VRActions\BlockNumber\Templates\BlockNumberActionDefinition.html" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Ericsson\rec-anal-c4switch-settings-ericsson.js" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Huawei\rec-anal-c4switch-settings-huaweicommunication.js" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Huawei\rec-anal-c4switch-settings-huawei.js" />
