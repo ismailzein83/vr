@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9454AA0D-2A5D-4902-B6C5-0F705881222A}</ProjectGuid>
+    <ProjectGuid>{C12BE3AC-1242-4CCE-ABFB-FC21626B6DFE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TOne.WhS.RouteSync.Cataleya</RootNamespace>
-    <AssemblyName>TOne.WhS.RouteSync.Cataleya</AssemblyName>
+    <RootNamespace>TOne.WhS.RouteSync.Cataleya.Postgres</RootNamespace>
+    <AssemblyName>TOne.WhS.RouteSync.Cataleya.Postgres</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -16,8 +16,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile />
     <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,51 +45,24 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Common.Business">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Data">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+      <HintPath>..\..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data.Postgres">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.Postgres.dll</HintPath>
+      <HintPath>..\..\..\..\..\Vanrise\Code\Output\Vanrise.Data.Postgres.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\CarrierAccountManager.cs" />
-    <Compile Include="Business\CustomerIdentificationManager.cs" />
-    <Compile Include="Business\RouteManager.cs" />
-    <Compile Include="CataleyaSWSync.cs" />
-    <Compile Include="Data\ISyncDataManager.cs" />
-    <Compile Include="Entities\CarrierAccountRouteTableMapping.cs" />
-    <Compile Include="Entities\CarrierAccountVersionInfo.cs" />
-    <Compile Include="Entities\CataleyaConvertedRoute.cs" />
-    <Compile Include="Entities\Context\RouteContext.cs" />
-    <Compile Include="Entities\CustomerIdentification.cs" />
-    <Compile Include="Entities\CustomerInfo.cs" />
-    <Compile Include="Entities\DatabaseConnection.cs" />
-    <Compile Include="Entities\CarrierMapping.cs" />
-    <Compile Include="Entities\CustomerMapping.cs" />
-    <Compile Include="Entities\SupplierMapping.cs" />
+    <Compile Include="CarrierAccountDataManager.cs" />
+    <Compile Include="CustomerIdentificationDataManager.cs" />
+    <Compile Include="RouteDataManager.cs" />
+    <Compile Include="SyncDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
-      <Project>{5635598E-8526-4BB4-9D1B-87A6B3B1CE72}</Project>
-      <Name>TOne.WhS.BusinessEntity.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
-      <Project>{0923754D-484C-48F7-9284-BE9B6B9D5449}</Project>
-      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Cataleya\TOne.WhS.RouteSync.Cataleya.csproj">
+      <Project>{9454aa0d-2a5d-4902-b6c5-0f705881222a}</Project>
+      <Name>TOne.WhS.RouteSync.Cataleya</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
