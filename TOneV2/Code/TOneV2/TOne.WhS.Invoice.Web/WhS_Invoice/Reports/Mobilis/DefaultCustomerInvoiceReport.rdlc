@@ -1070,7 +1070,7 @@ La facture doit être payée avant </Value>
               <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.29917cm</Width>
+              <Width>4.28894cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1650,14 +1650,22 @@ La facture doit être payée avant </Value>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox4">
+                    <Textbox Name="Textbox100">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>Fax: </Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
+                              <Value>=Parameters!CompanyFax.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1668,7 +1676,7 @@ La facture doit être payée avant </Value>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox4</rd:DefaultName>
+                      <rd:DefaultName>Textbox95</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1807,7 +1815,7 @@ La facture doit être payée avant </Value>
         <Top>0.48176cm</Top>
         <Left>0.41311cm</Left>
         <Height>3cm</Height>
-        <Width>19.48744cm</Width>
+        <Width>19.47721cm</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -2542,7 +2550,7 @@ La facture doit être payée avant </Value>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
         <Top>8.63023cm</Top>
-        <Left>0.41312cm</Left>
+        <Left>0.41311cm</Left>
         <Height>0.9175cm</Height>
         <Width>19.48743cm</Width>
         <ZIndex>11</ZIndex>
@@ -2856,8 +2864,8 @@ La facture doit être payée avant </Value>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>9.72412cm</Top>
-        <Left>0.41313cm</Left>
+        <Top>9.68884cm</Top>
+        <Left>0.41311cm</Left>
         <Height>1.2cm</Height>
         <Width>19.48743cm</Width>
         <ZIndex>12</ZIndex>
@@ -3062,7 +3070,7 @@ La facture doit être payée avant </Value>
       </Border>
     </Style>
   </Body>
-  <Width>19.9514cm</Width>
+  <Width>19.92003cm</Width>
   <Page>
     <PageHeader>
       <Height>2.44826cm</Height>
@@ -3184,15 +3192,9 @@ La facture doit être payée avant </Value>
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>Tel: </Value>
-                  <Style>
-                    <FontFamily>Verdana</FontFamily>
-                    <FontSize>8pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                  </Style>
-                </TextRun>
-                <TextRun>
-                  <Value>=Parameters!BillingCompanyPhone.Value</Value>
+                  <Value>="Tel : " + Parameters!BillingCompanyPhone.Value +
+iif(String.IsNullOrEmpty(Parameters!CompanyFax.Value),"",
+ " - Fax : " + Parameters!CompanyFax.Value)</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -3943,6 +3945,12 @@ La facture doit être payée avant </Value>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="CompanyProfileName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyFax">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
