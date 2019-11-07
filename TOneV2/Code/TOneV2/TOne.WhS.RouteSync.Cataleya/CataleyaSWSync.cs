@@ -14,10 +14,8 @@ namespace TOne.WhS.RouteSync.Cataleya
     public class CataleyaSWSync : SwitchRouteSynchronizer
     {
         public override Guid ConfigId { get { return new Guid("D770F53B-057F-4BB8-BF20-883A2DBC510B"); } }
-        public DatabaseConnection DatabaseConnection { get; set; }
         public Guid APIConnectionId { get; set; }
         public ISyncDataManager DataManager { get; set; }
-
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
         #region Public Methods
@@ -57,7 +55,6 @@ namespace TOne.WhS.RouteSync.Cataleya
             {
                 CustomersInfoByCustomer = allActiveCustomersTrunksByCustomer
             });
-
         }
 
         public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)

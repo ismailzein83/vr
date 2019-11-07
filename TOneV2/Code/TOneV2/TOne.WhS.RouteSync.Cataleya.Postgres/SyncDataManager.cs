@@ -10,13 +10,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Postgres
     public class SyncDataManager : BasePostgresDataManager, ISyncDataManager
     {
         public Guid ConfigId { get { return new Guid("CAD5F46B-F182-462A-AACC-B862ACD11AEB"); } }
-        public string SwitchId { get; set; }
-        public string _connectionString { get; set; }
-
-        public SyncDataManager(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public DatabaseConnection DatabaseConnection { get; set; }
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
@@ -61,6 +55,12 @@ namespace TOne.WhS.RouteSync.Cataleya.Postgres
         public void PrepareTables(IRouteInitializeContext context)
         {
             throw new NotImplementedException();
+            //Create CustomerIdentification
+            //Create Carrier Account
+            //Drop if exist and fill CI temp and fill
+            //Drop if exist and fill CarrierAccount temp and fill
+            //Create all Routing tables
+
         }
 
         public List<CarrierAccountVersionInfo> GetCarrierAccountsPreviousVersionNumbers(IGetCarrierAccountsPreviousVersionNumbersContext context)
