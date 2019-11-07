@@ -193,6 +193,9 @@
                 var fields = [];
                 for (var i = 0; i < $scope.scopeModel.fields.length; i++) {
                     var currentField = $scope.scopeModel.fields[i];
+                    if (currentField.fieldTypeGenereicDesignEditorAPI == undefined)
+                        continue;
+
                     var data = currentField.fieldTypeGenereicDesignEditorAPI.getData();
                     if (data != undefined)
                         fields.push(data);
