@@ -10,6 +10,8 @@ using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.AccountBalance.MainExtensions.BalancePeriod;
 using Vanrise.BusinessProcess;
+using Vanrise.Caching.Runtime;
+using Vanrise.Common.Business;
 using Vanrise.Common.Excel;
 using Vanrise.Data.SQL;
 using Vanrise.ExcelConversion.Business;
@@ -27,37 +29,75 @@ namespace Retail.Runtime.Tasks
         public void Execute()
         {
 
-
-
-
             var runtimeServices = new List<Vanrise.Runtime.Entities.RuntimeService>();
+
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpService);
-            BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            QueueActivationRuntimeService queueActivationRuntimeService = new QueueActivationRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
 
-            runtimeServices.Add(queueActivationService);
-            runtimeServices.Add(schedulerService);
-            runtimeServices.Add(dsRuntimeService);
-            runtimeServices.Add(queueActivationRuntimeService);
-            runtimeServices.Add(bpRegulatorService);
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(queueRegulatorService);
+
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService);
+
+            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService);
+
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(schedulerService);
+
             Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bigDataService);
+
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dsRuntimeService);
+
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorRuntimeService);
+
+            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingRuntimeService);
+
+            CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingDistributorRuntimeService);
+
+            DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingExecutorRuntimeService);
+
+            DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingDistributorRuntimeService);
+
             RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
 
             //var runtimeServices = new List<Vanrise.Runtime.Entities.RuntimeService>();
-            //VoucherCardsManager voucherCardManager = new VoucherCardsManager();
-            //SetVoucherUsedInput input = new SetVoucherUsedInput() { PinCode = "sa", UsedBy = "mhd" };
-            //SetVoucherUsedOutput output = voucherCardManager.SetVoucherUsed(input);
-            //Console.ReadLine();
-            // runtimeServices.Add(voucherCardManager);
+            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(bpService);
+            //BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //QueueActivationRuntimeService queueActivationRuntimeService = new QueueActivationRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+
+            //runtimeServices.Add(queueActivationService);
+            //runtimeServices.Add(schedulerService);
+            //runtimeServices.Add(dsRuntimeService);
+            //runtimeServices.Add(queueActivationRuntimeService);
+            //runtimeServices.Add(bpRegulatorService);
+            //runtimeServices.Add(queueRegulatorService);
+            //Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(bigDataService);
             //RuntimeHost host = new RuntimeHost(runtimeServices);
-            host.Start();
+
+            ////var runtimeServices = new List<Vanrise.Runtime.Entities.RuntimeService>();
+            ////VoucherCardsManager voucherCardManager = new VoucherCardsManager();
+            ////SetVoucherUsedInput input = new SetVoucherUsedInput() { PinCode = "sa", UsedBy = "mhd" };
+            ////SetVoucherUsedOutput output = voucherCardManager.SetVoucherUsed(input);
+            ////Console.ReadLine();
+            //// runtimeServices.Add(voucherCardManager);
+            ////RuntimeHost host = new RuntimeHost(runtimeServices);
+            //host.Start();
 
             // SqlConnection cn = new SqlConnection();
             //cn.Open();
