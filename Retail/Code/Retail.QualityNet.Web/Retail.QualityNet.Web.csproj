@@ -168,6 +168,13 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Retail_QualityNet\Reports\OverallReports\DefaultCustomerAllCDRsInvoiceReport.rdlc" />
+    <Content Include="Retail_QualityNet\Reports\OverallReports\DefaultCustomerInvoiceItemsByDIDReport.rdlc" />
+    <Content Include="Retail_QualityNet\Reports\OverallReports\DefaultCustomerInvoiceReport.rdlc" />
+    <Content Include="Retail_QualityNet\Reports\OverallReports\DefaultInternationalCallsInvoiceItemsReport.rdlc" />
+    <Content Include="Retail_QualityNet\Reports\OverallReports\DefaultInternationalCallsInvoiceReport.rdlc" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
