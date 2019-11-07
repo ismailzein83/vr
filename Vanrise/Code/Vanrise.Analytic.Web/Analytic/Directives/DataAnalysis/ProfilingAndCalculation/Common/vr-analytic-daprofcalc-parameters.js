@@ -133,15 +133,11 @@
                         getChildNode: function () {
                             var promises2 = [];
                             if (parametersRecordTypeId != undefined) {
-                                if (globalParametersEditorDefinitionSetting != undefined) {
-                                    var loadGlobalParametersEditorDefinitionPromise = getLoadGlobalParametersEditorDefinitionPromise();
-                                    promises2.push(loadGlobalParametersEditorDefinitionPromise);
-                                }
+                                var loadGlobalParametersEditorDefinitionPromise = getLoadGlobalParametersEditorDefinitionPromise();
+                                promises2.push(loadGlobalParametersEditorDefinitionPromise);
 
-                                if (overriddenParametersEditorDefinitionSetting != undefined) {
-                                    var loadOverriddenParametersEditorDefinitionPromise = getLoadOverriddenParametersEditorDefinitionPromise();
-                                    promises2.push(loadOverriddenParametersEditorDefinitionPromise);
-                                }
+                                var loadOverriddenParametersEditorDefinitionPromise = getLoadOverriddenParametersEditorDefinitionPromise();
+                                promises2.push(loadOverriddenParametersEditorDefinitionPromise);
                             }
 
                             return {
@@ -168,9 +164,12 @@
 
                         globalParametersEditorDefinitionDirectiveReadyDeferred.promise.then(function () {
                             var globalParametersEditorDefinitionDirectivePayload = {
-                                settings: globalParametersEditorDefinitionSetting,
                                 context: getParametersEditorDefinitionContext()
                             };
+
+                            if (globalParametersEditorDefinitionSetting != undefined) {
+                                globalParametersEditorDefinitionDirectivePayload.settings = globalParametersEditorDefinitionSetting;
+                            }
 
                             VRUIUtilsService.callDirectiveLoad(globalParametersEditorDefinitionDirectiveAPI, globalParametersEditorDefinitionDirectivePayload, loadGlobalParametersEditorDefinitionDeferred);
                         });
@@ -183,9 +182,12 @@
 
                         overriddenParametersEditorDefinitionDirectiveReadyDeferred.promise.then(function () {
                             var overriddenParametersEditorDefinitionDirectivePayload = {
-                                settings: overriddenParametersEditorDefinitionSetting,
                                 context: getParametersEditorDefinitionContext()
                             };
+
+                            if (overriddenParametersEditorDefinitionSetting != undefined) {
+                                overriddenParametersEditorDefinitionDirectivePayload.settings = overriddenParametersEditorDefinitionSetting;
+                            }
 
                             VRUIUtilsService.callDirectiveLoad(overriddenParametersEditorDefinitionDirectiveAPI, overriddenParametersEditorDefinitionDirectivePayload, loadOverriddenParametersEditorDefinitionDeferred);
                         });
