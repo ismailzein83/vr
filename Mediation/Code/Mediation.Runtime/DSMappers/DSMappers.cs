@@ -9,7 +9,7 @@ namespace Mediation.Runtime
     public static class DSMappers
     {
         #region Ogero
-
+         
         public static MappingOutput MapCDR_File_Ogero_Alcatel_ICX(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = false };
@@ -3062,5 +3062,9 @@ namespace Mediation.Runtime
 
         #endregion
 
+        private static void LogVerbose(string Message)
+        {
+            Console.WriteLine(Message);
+        }
     }
 }
