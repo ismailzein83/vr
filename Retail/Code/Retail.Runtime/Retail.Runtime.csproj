@@ -680,6 +680,7 @@
     <Compile Include="Mappers\OgeroMappers.cs" />
     <Compile Include="Mappers\MultinetMappers.cs" />
     <Compile Include="Mappers\ZajilMappers.cs" />
+    <Compile Include="Tasks\AliSlaymanTask.cs" />
     <Compile Include="Tasks\AliAtouiTask.cs" />
     <Compile Include="Tasks\CustomCodeWriter.cs" />
     <Compile Include="Tasks\CustomParser.cs" />
