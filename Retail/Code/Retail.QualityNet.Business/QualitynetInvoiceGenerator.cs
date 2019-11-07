@@ -119,9 +119,11 @@ namespace Retail.QualityNet.Business
                     {
                         SubscriberAccountId = billingCDR.SubscriberAccountId,
                         AttemptDateTime = billingCDR.AttemptDateTime,
+                        ConnectDateTime = billingCDR.ConnectDateTime,
                         CallingNumber = billingCDR.CallingNumber,
                         CalledNumber = billingCDR.CalledNumber,
                         DurationInSeconds = billingCDR.DurationInSeconds,
+                        SaleAmount = billingCDR.SaleAmount,
                         SaleCurrencyId = billingCDR.SaleCurrencyId,
                         ServiceTypeId = billingCDR.ServiceTypeId,
                         TotalNumberOfCalls = 1
@@ -132,10 +134,10 @@ namespace Retail.QualityNet.Business
                         var zone = saleZoneManager.GetSaleZone(billingCDR.ZoneId.Value);
                         if (zone != null)
                         {
-                            qualityNetCDR.Country = countryManager.GetCountryName(zone.CountryId);
+                            qualityNetCDR.CountryId = zone.CountryId;
                             var countryInArabic = countryInArabicManager.GetCountryInArabic(zone.CountryId);
                             if (countryInArabic != null)
-                                qualityNetCDR.CountryInArabic = countryInArabic.Name;
+                                qualityNetCDR.CountryInArabicId = countryInArabic.CountryInArabicId;
                         }
                     }
 
@@ -223,7 +225,7 @@ namespace Retail.QualityNet.Business
 
         private BillingCDRsByDID LoadAndStructureCDRData(DateTime fromDate, DateTime toDate, long accountId)
         {
-            var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "SaleDurationInSeconds", "Calling", "Called", "SaleAmount", "SubscriberAccountId", "Zone", "SaleCurrencyId", "ServiceType" };
+            var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "ConnectDateTime", "DurationInSeconds", "Calling", "Called", "SaleAmount", "SubscriberAccountId", "Zone", "SaleCurrencyId", "ServiceType" };
 
             var cdrData = new DataRecordStorageManager().GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
             {
@@ -285,7 +287,10 @@ namespace Retail.QualityNet.Business
                 DataRecordFieldValue attemptDateTimeField = fieldValues.GetRecord("AttemptDateTime");
                 attemptDateTimeField.ThrowIfNull("attemptDateTimeField");
 
-                DataRecordFieldValue durationInSecondsField = fieldValues.GetRecord("SaleDurationInSeconds");
+                DataRecordFieldValue connectDateTimeField = fieldValues.GetRecord("ConnectDateTime");
+                connectDateTimeField.ThrowIfNull("connectDateTimeField");
+
+                DataRecordFieldValue durationInSecondsField = fieldValues.GetRecord("DurationInSeconds");
                 durationInSecondsField.ThrowIfNull("durationInSecondsField");
 
                 DataRecordFieldValue calledField = fieldValues.GetRecord("Called");
@@ -304,6 +309,7 @@ namespace Retail.QualityNet.Business
                 {
                     SubscriberAccountId = Convert.ToInt64(subscriberAccountField.Value),
                     AttemptDateTime = Convert.ToDateTime(attemptDateTimeField.Value),
+                    ConnectDateTime = Convert.ToDateTime(connectDateTimeField.Value),
                     CallingNumber = calling,
                     CalledNumber = Convert.ToString(calledField.Value),
                     SaleAmount = saleAmount,
@@ -403,6 +409,7 @@ namespace Retail.QualityNet.Business
         {
             public long SubscriberAccountId { get; set; }
             public DateTime AttemptDateTime { get; set; }
+            public DateTime ConnectDateTime { get; set; }
             public Decimal SaleAmount { get; set; }
             public String CalledNumber { get; set; }
             public String CallingNumber { get; set; }
@@ -416,13 +423,15 @@ namespace Retail.QualityNet.Business
         {
             public long SubscriberAccountId { get; set; }
             public DateTime AttemptDateTime { get; set; }
+            public DateTime ConnectDateTime { get; set; }
             public String CallingNumber { get; set; }
             public String CalledNumber { get; set; }
             public Guid ServiceTypeId { get; set; }
             public Decimal DurationInSeconds { get; set; }
+            public decimal SaleAmount { get; set; }
             public int SaleCurrencyId { get; set; }
-            public string Country { get; set; }
-            public string CountryInArabic { get; set; }
+            public int CountryId { get; set; }
+            public int CountryInArabicId { get; set; }
             public int TotalNumberOfCalls { get; set; }
             public decimal TotalAmount { get; set; }
             public string TotalAmountInArabicWords { get; set; }

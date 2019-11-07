@@ -17,8 +17,8 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="AttemptDateTime">
-          <DataField>AttemptDateTime</DataField>
+        <Field Name="ConnectDateTime">
+          <DataField>ConnectDateTime</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="CallingNumber">
@@ -33,10 +33,6 @@
           <DataField>DurationInSeconds</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrencyId">
-          <DataField>SaleCurrencyId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="TotalNumberOfCalls">
           <DataField>TotalNumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -49,12 +45,20 @@
           <DataField>TotalAmountInArabicWords</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Country">
-          <DataField>Country</DataField>
+        <Field Name="CountryId">
+          <DataField>CountryId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CountryIdDescription">
+          <DataField>CountryIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="CountryInArabic">
-          <DataField>CountryInArabic</DataField>
+        <Field Name="CountryInArabicId">
+          <DataField>CountryInArabicId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CountryInArabicIdDescription">
+          <DataField>CountryInArabicIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -692,7 +696,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Fields!DurationInSeconds.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                                  <Value>=FormatNumber(Fields!DurationInSeconds.Value,0)</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -725,7 +729,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Fields!AttemptDateTime.Value).ToString("hh:mm:ss")</Value>
+                                  <Value>=CDate(Fields!ConnectDateTime.Value).ToString("hh:mm:ss")</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -756,7 +760,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Fields!AttemptDateTime.Value).ToString("dd-MM-yyyy")</Value>
+                                  <Value>=CDate(Fields!ConnectDateTime.Value).ToString("dd-MM-yyyy")</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -792,7 +796,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(NOT(Fields!CountryInArabic.Value Is Nothing) , Fields!CountryInArabic.Value, Fields!Country.Value)</Value>
+                                  <Value>=IIF(String.IsNullOrEmpty(Fields!CountryInArabicIdDescription.Value) , UCase(Fields!CountryIdDescription.Value),Fields!CountryInArabicIdDescription.Value)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
