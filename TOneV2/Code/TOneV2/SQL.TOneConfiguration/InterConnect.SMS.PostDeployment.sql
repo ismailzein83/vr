@@ -470,7 +470,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('2472CFDF-228B-4011-95AA-B72C0C597EE9','Retail_BE_Gateway','Gateway'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
 ('DE21C9C2-F38E-4ABB-8EB4-3AFC10531A93','SMSSaleRate','SMS Sale Rate'								,'8AFF3CE5-A9B4-491D-A142-366737F5987E',0,'["View","Add","Edit"]'),
-('5CD84F7E-4B7C-4689-956C-BE81907D9BC0','SMSPurchaseRate	','SMS Purchase Rate'								,'E9F755B1-B844-4170-97E9-5908F70D31C9',0,'["View","Add","Edit"]'),
+('5CD84F7E-4B7C-4689-956C-BE81907D9BC0','SMSPurchaseRate','SMS Purchase Rate'								,'E9F755B1-B844-4170-97E9-5908F70D31C9',0,'["View","Add","Edit"]'),
 ('2D9CC93D-3AB4-46D1-A797-4AD47A677C17','ICX_SMSServiceType','SMS Service Type','8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
