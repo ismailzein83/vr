@@ -34,7 +34,6 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
             var additionalErrorsDirectiveAPI;
             var additionalErrorsReadyDeferred = UtilsService.createPromiseDeferred();
 
-
             var switchCDRMappingConfigurationDirectiveAPI;
             var switchCDRMappingConfigurationDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -129,12 +128,11 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
 
                 UtilsService.waitMultiplePromises([switchSyncSettingsDirectiveReadyDeferred.promise, additionalErrorsReadyDeferred.promise]).then(function () {
 
-                    var settingsDirectivePayload;
+                    var settingsDirectivePayload = {
+                        context: buildContext()
+                    };
                     if (switchEntity != undefined && switchEntity.Settings != undefined) {
-                        settingsDirectivePayload = {
-                            switchSynchronizerSettings: switchEntity.Settings.RouteSynchronizer,
-                            context: buildContext()
-                        };
+                        settingsDirectivePayload.switchSynchronizerSettings = switchEntity.Settings.RouteSynchronizer;
                     }
                     VRUIUtilsService.callDirectiveLoad(switchSyncSettingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
                 });

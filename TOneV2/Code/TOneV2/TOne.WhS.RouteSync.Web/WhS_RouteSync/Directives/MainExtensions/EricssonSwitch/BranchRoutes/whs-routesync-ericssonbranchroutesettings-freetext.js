@@ -2,9 +2,9 @@
 
 	'use strict';
 
-	whsRoutesyncEricssonbranchroutesettingsFreeText.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_RouteSync_EricssonBranchRouteSettingsAPIService'];
+	whsRoutesyncEricssonbranchroutesettingsFreeText.$inject = ["UtilsService"];
 
-	function whsRoutesyncEricssonbranchroutesettingsFreeText(UtilsService, VRUIUtilsService, WhS_RouteSync_EricssonBranchRouteSettingsAPIService) {
+	function whsRoutesyncEricssonbranchroutesettingsFreeText(UtilsService) {
 		return {
 			restrict: "E",
 			scope: {
@@ -30,12 +30,6 @@
 				$scope.scopeModel.validateBranchRouteName = function () {
 					if ($scope.scopeModel.brToAdd != undefined && $scope.scopeModel.brToAdd.includes('~'))
 						return "Branch Route name can not include '~'.";
-				};
-
-				$scope.scopeModel.validateBranchRoutes = function () {
-					if ($scope.scopeModel.brList == undefined || $scope.scopeModel.brList.length < 1)
-						return "At least one branch route should be added.";
-					return null;
 				};
 
 				$scope.scopeModel.isBRValid = function () {

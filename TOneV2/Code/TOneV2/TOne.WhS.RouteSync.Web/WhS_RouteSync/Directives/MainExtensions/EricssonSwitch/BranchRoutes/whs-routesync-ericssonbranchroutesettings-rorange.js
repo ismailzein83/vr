@@ -2,9 +2,9 @@
 
     'use strict';
 
-    whsRoutesyncEricssonbranchroutesettingsRORange.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_RouteSync_EricssonBranchRouteSettingsAPIService'];
+    whsRoutesyncEricssonbranchroutesettingsRORange.$inject = ["UtilsService"];
 
-    function whsRoutesyncEricssonbranchroutesettingsRORange(UtilsService, VRUIUtilsService, WhS_RouteSync_EricssonBranchRouteSettingsAPIService) {
+    function whsRoutesyncEricssonbranchroutesettingsRORange(UtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -26,12 +26,6 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.brList = [];
-
-                $scope.scopeModel.validateBranchRoutes = function () {
-                    if ($scope.scopeModel.brList == undefined || $scope.scopeModel.brList.length < 1)
-                        return "At least one branch route should be added.";
-                    return null;
-                };
 
                 $scope.scopeModel.isEmpty = function (value) {
                     return (value == undefined || value == null || value == '');

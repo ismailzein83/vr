@@ -53,14 +53,8 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                         IsSwitch: false,
                         NationalCountryCode: undefined
                     };
-
-                    var trunkTypeLoadSelectorDeferred = UtilsService.createPromiseDeferred();
-                    extendTrunkEntity(trunk, trunkTypeLoadSelectorDeferred);
-
+                    extendTrunkEntity(trunk);
                     $scope.scopeModel.trunks.push(trunk);
-                    $scope.scopeModel.updateSupplierDescriptions();
-
-                    return UtilsService.waitMultiplePromises([trunkTypeLoadSelectorDeferred]);
                 };
 
                 $scope.scopeModel.validateTrunkName = function (name) {
@@ -91,11 +85,6 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                         supplierOutTrunksMappings[supplierId].splice(index, 1);
                     }
 
-                    $scope.scopeModel.updateSupplierDescriptions();
-                };
-
-                $scope.scopeModel.onTrunkNameValueChanged = function (value) {
-                    updateErrorDescription();
                     updateSupplierMappingDescription();
                 };
 
@@ -179,7 +168,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                     trunkGroupGridAPI.expandRow(addedTrunkGroup);
                     $scope.scopeModel.trunkGroups.push(addedTrunkGroup);
 
-                    UtilsService.waitMultiplePromises([trunkGroupLoadDirectivesDeferred.promise]).then(function () {
+                    return UtilsService.waitMultiplePromises([trunkGroupLoadDirectivesDeferred.promise]).then(function () {
                         $scope.scopeModel.isTrunkGroupGridLoading = false;
                     });
                 };
@@ -188,7 +177,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                     var trunkGroupsIndex = UtilsService.getItemIndexByVal($scope.scopeModel.trunkGroups, deletedItem.TrunkGroupNb, "TrunkGroupNb");
                     $scope.scopeModel.trunkGroups.splice(trunkGroupsIndex, 1);
 
-                    $scope.scopeModel.updateSupplierDescriptions();
+                    updateSupplierMappingDescription();
                 };
 
                 $scope.scopeModel.isTrunkGroupsValid = function () {
@@ -260,15 +249,6 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                     return null;
                 };
 
-                $scope.scopeModel.updateSupplierDescriptions = function () {
-                    setTimeout(function () {
-                        $scope.$apply(function () {
-                            updateErrorDescription();
-                            updateSupplierMappingDescription();
-                        });
-                    }, 0);
-                };
-
                 defineAPI();
             }
 
@@ -300,20 +280,14 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                         var trunkGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         trunkGridReadyDeferred.promise.then(function () {
-                            var _promises = [];
 
                             for (var index = 0; index < trunks.length; index++) {
                                 var currentTrunk = trunks[index];
-
-                                var trunkTypeLoadSelectorDeferred = UtilsService.createPromiseDeferred();
-                                _promises.push(trunkTypeLoadSelectorDeferred.promise);
-                                extendTrunkEntity(currentTrunk, trunkTypeLoadSelectorDeferred);
+                                extendTrunkEntity(currentTrunk);
                                 $scope.scopeModel.trunks.push(currentTrunk);
                             }
 
-                            UtilsService.waitMultiplePromises(_promises).then(function () {
-                                trunkGridLoadPromiseDeferred.resolve();
-                            });
+                            trunkGridLoadPromiseDeferred.resolve();
                         });
 
                         return trunkGridLoadPromiseDeferred.promise;
@@ -347,6 +321,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         isFirstLoad = false;
+                        UtilsService.watchFunction($scope, 'validationContext.validate()', updateDescriptions);
                     });
                 };
 
@@ -358,12 +333,8 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                     ctrl.onReady(api);
             }
 
-            function extendTrunkEntity(trunk, trunkTypeLoadSelectorDeferred) {
-                trunk.onTrunkTypeSelectorReady = function (api) {
-                    //trunk.trunkTypeSelectorGridAPI = api;
-                    trunk.selectedTrunkType = UtilsService.getEnum(WhS_RouteSync_TrunkTypeEnum, 'value', trunk.TrunkType);
-                    trunkTypeLoadSelectorDeferred.resolve();
-                };
+            function extendTrunkEntity(trunk) {
+                trunk.selectedTrunkType = UtilsService.getEnum(WhS_RouteSync_TrunkTypeEnum, 'value', trunk.TrunkType);
 
                 trunk.openNationalCountryCodesEditor = function () {
                     var onNationalCountryCodesUpdated = function (updatedNationalCountryCodes) {
@@ -416,9 +387,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                     drillDownTab.loadDirective = function (trunkTrunkGroupDirectiveAPI, trunkGroup) {
                         trunkGroup.trunkTrunkGroupDirectiveAPI = trunkTrunkGroupDirectiveAPI;
 
-                        return trunkGroup.trunkTrunkGroupDirectiveAPI.load(buildTrunkTrunkGroupPayload(trunkGroup)).then(function () {
-                            $scope.scopeModel.updateSupplierDescriptions();
-                        });
+                        return trunkGroup.trunkTrunkGroupDirectiveAPI.load(buildTrunkTrunkGroupPayload(trunkGroup));
                     };
 
                     function buildTrunkTrunkGroupPayload(trunkGroup) {
@@ -434,6 +403,11 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRUIUtilsService', 'Utils
                 }
 
                 return drillDownTabs;
+            }
+
+            function updateDescriptions() {
+                updateErrorDescription();
+                updateSupplierMappingDescription();
             }
 
             function updateErrorDescription() {

@@ -24,12 +24,11 @@
                             </vr-validator>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Trunk Type'" widthfactor="2" disablesorting>
-                            <vr-select on-ready="dataItem.onTrunkTypeSelectorReady"
-                                       datasource="viewScope.scopeModel.trunkTypes"
+                            <vr-select datasource="viewScope.scopeModel.trunkTypes"
                                        selectedvalues="dataItem.selectedTrunkType"
                                        datavaluefield="value"
                                        datatextfield="description"
-                                       isrequired="true">
+                                       isrequired="true" hideremoveicon>
                             </vr-select>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'National Country Codes'" widthfactor="2" disablesorting>
@@ -75,17 +74,11 @@
 
                         <vr-datagridcolumn headertext="'Customers'" widthfactor="2" disablesorting>
                             <vr-whs-be-customer-selector on-ready="dataItem.onCustomerSelectorReady"
-                                                         onselectitem="viewScope.scopeModel.updateSupplierDescriptions"
-                                                         ondeselectitem="viewScope.scopeModel.updateSupplierDescriptions"
-                                                         ondeselectallitems="viewScope.scopeModel.updateSupplierDescriptions"
                                                          normal-col-num="12" usefullcolumn hidelabel ismultipleselection>
                             </vr-whs-be-customer-selector>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Code Groups'" widthfactor="2" disablesorting>
                             <vr-whs-be-codegroup-selector on-ready="dataItem.onCodeGroupSelectorReady"
-                                                          onselectitem="viewScope.scopeModel.updateSupplierDescriptions"
-                                                          ondeselectitem="viewScope.scopeModel.updateSupplierDescriptions"
-                                                          ondeselectallitems="viewScope.scopeModel.updateSupplierDescriptions"
                                                           hidelabel ismultipleselection>
                             </vr-whs-be-codegroup-selector>
                         </vr-datagridcolumn>

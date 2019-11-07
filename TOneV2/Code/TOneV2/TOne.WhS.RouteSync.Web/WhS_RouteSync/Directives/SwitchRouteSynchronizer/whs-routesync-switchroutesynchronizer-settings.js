@@ -26,11 +26,12 @@
         function SwitchSynchronizerSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var context;
+
             var selectorAPI;
 
             var directiveAPI;
             var directiveReadyDeferred;
-            var directivePayload;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -44,10 +45,14 @@
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
+
+                    var directivePayload = {
+                        context: context
+                    };
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -57,14 +62,14 @@
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
-                    var promises = [];
                     var switchSynchronizerSettings;
-                    var context;
 
                     if (payload != undefined) {
                         switchSynchronizerSettings = payload.switchSynchronizerSettings;
                         context = payload.context;
                     }
+
+                    var promises = [];
 
                     if (switchSynchronizerSettings != undefined) {
                         var loadDirectivePromise = loadDirective();
@@ -94,6 +99,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
+
                             var directivePayload = {
                                 switchSynchronizerSettings: switchSynchronizerSettings,
                                 context: context
