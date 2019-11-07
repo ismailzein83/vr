@@ -269,26 +269,54 @@ namespace BPMExtended.Main.Business
 
         public List<RatePlanServiceParameter> GetRatePlanServiceParameters(string serviceId) {
             List<RatePlanServiceParameter> ratePlanServiceParameters = new List<RatePlanServiceParameter>();
+
             ratePlanServiceParameters.Add(new RatePlanServiceParameter {
             ParameterName="TextBox1",
             ParameterType=ParameterType.TB
             });
 
+            ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            {
+                ParameterName = "TextBox2",
+                ParameterType = ParameterType.TB
+            });
+
+            ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            {
+                ParameterName = "CheckBox1",
+                ParameterType = ParameterType.CB
+            });
+
+            ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            {
+                ParameterName = "CheckBox2",
+                ParameterType = ParameterType.CB
+            });
+
 
             List<ListBoxValue> list = new List<ListBoxValue>();
-            list.Add(new ListBoxValue { DisplayValue="xxxxxxx",
-            Value="aaaaaa"});
-            list.Add(new ListBoxValue
-            {
-                DisplayValue = "yyyyy",
-                Value = "bbbbbb"
-            });
+            List<ListBoxValue> list1 = new List<ListBoxValue>();
+
+            list.Add(new ListBoxValue { DisplayValue="hassan", Value= "hassan" });
+            list.Add(new ListBoxValue { DisplayValue = "ali", Value = "ali" });
+
+            list1.Add(new ListBoxValue { DisplayValue = "moussa", Value = "moussa" });
+            list1.Add(new ListBoxValue { DisplayValue = "huda", Value = "huda" });
+
             ratePlanServiceParameters.Add(new RatePlanServiceParameter
             {
                 ParameterName = "ListBox1",
                 ParameterType = ParameterType.LB,
                 ListBoxValues = list
             });
+
+            ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            {
+                ParameterName = "ListBox2",
+                ParameterType = ParameterType.LB,
+                ListBoxValues = list1
+            });
+
             return ratePlanServiceParameters;
         }
 

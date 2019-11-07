@@ -1,5 +1,6 @@
 ﻿ using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
@@ -155,7 +156,16 @@ namespace BPMExtended.Main.Business
                 //get number of contracts
                 List<TelephonyContractDetail> telephonyContracts = new ContractManager().GetTelephonyContracts(customerId.ToString());
                 //telephonyContracts.RemoveAll(item => item.ContractId == contractId.ToString());
-                return telephonyContracts.Count <= 1;
+                //return telephonyContracts.Count <= 1;
+                if (telephonyContracts != null)
+                {
+                    if (telephonyContracts.Count == 0)
+                        return true;
+
+                    IEnumerable<TelephonyContractDetail> v = telephonyContracts.FindAllRecords<TelephonyContractDetail>(x => x.Status == "Active");
+                    return v.Count() <= 1;
+                }
+
                 //check if account type is official or operation is advantageous then skip BOD
 
             }
