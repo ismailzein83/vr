@@ -165,6 +165,7 @@ namespace TestCallAnalysis.Business
             List<string> fieldsToUpdate = new List<string>();
             fieldsToJoin.Add("ID");
             fieldsToUpdate.Add("NumberOfCDRs");
+            fieldsToUpdate.Add("StatusId");
             fieldsToUpdate.Add("LastAttempt");
             recordStorageDataManager.UpdateRecords(runtimeCases, fieldsToJoin, fieldsToUpdate);
         }
