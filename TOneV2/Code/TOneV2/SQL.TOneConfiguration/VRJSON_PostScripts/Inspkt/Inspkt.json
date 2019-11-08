@@ -77,8 +77,8 @@
           "ColumnName": "ID"
         },
         "KeyValues": [
-          "E68EFF9C-879E-4A6C-B412-8E225A966571",
-          "55C42E70-4A75-46A3-9F05-123EDD668122"
+          "'E68EFF9C-879E-4A6C-B412-8E225A966571'",
+          "'55C42E70-4A75-46A3-9F05-123EDD668122'"
         ]
       },
       "Title": "Delete"
