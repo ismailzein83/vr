@@ -7,7 +7,3 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO.
 ECHO Inspkt.C4 WebSite
-xcopy "C:\TFS\Retail\Code\RecordAnalysis.Web\RecordAnalysis" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Inspkt.C4\%YYYYMMDD%\Client\Modules\RecordAnalysis\"
-xcopy "C:\Publish\Retail\bin\RecordAnalysis*" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Inspkt.C4\%YYYYMMDD%\Bin\"
-del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Inspkt.C4\%YYYYMMDD%\Bin\*.pdb"
-del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Inspkt.C4\%YYYYMMDD%\Bin\*.config"
