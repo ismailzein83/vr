@@ -82,6 +82,7 @@
     <Compile Include="AccountBEActionTypes\MappingTelesSiteActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesAccountActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesUserActionSettings.cs" />
+    <Compile Include="AccountBEActionTypes\UnmappingTelesAccountActionSettings.cs" />
     <Compile Include="AccountViews\UserTelesInfoView.cs" />
     <Compile Include="AccountViews\AccountTelesDIDsAndBusinessTrunksView.cs" />
     <Compile Include="AccountMappedToTelesFieldDefinition.cs" />
