@@ -17,7 +17,7 @@ namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockDestinationNumbe
             dynamic record = Activator.CreateInstance(dataRecordRuntimeType, payload.OutputRecords);
 
             string command = $"ADD CALLPRICHK: CSCNAME=\"ALL\", PFX=K'{record.CDPN}, CPFX=K'8, PCDN=\"INVALID\", PT=INHIBITED, FCC=CV45;";
-            new CommandManager().AddCommand(CommandType.BlockDestinationNumberOnMSC, command);
+            new CommandManager(BEDefinitions.C4CommandBeDefinitionId).AddCommand(CommandType.BlockDestinationNumberOnMSC, command);
         }
     }
 }

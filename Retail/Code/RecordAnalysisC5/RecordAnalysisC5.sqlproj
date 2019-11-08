@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>RecordAnalysis</Name>
+    <Name>RecordAnalysisC5</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{ecab101e-69cd-45d5-a7a5-34d189ab4ada}</ProjectGuid>
+    <ProjectGuid>{62ffab0e-cf89-4801-aa68-e5f8f752870e}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>RecordAnalysis</RootNamespace>
-    <AssemblyName>RecordAnalysis</AssemblyName>
+    <RootNamespace>RecordAnalysisC5</RootNamespace>
+    <AssemblyName>RecordAnalysisC5</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -63,18 +63,10 @@
     <Folder Include="Properties" />
     <Folder Include="RecordAnalysis\" />
     <Folder Include="RecordAnalysis\Tables\" />
-    <Folder Include="RecordAnalysis\User Defined Types\" />
     <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="RecordAnalysis\Tables\C4Probe.sql" />
-    <Build Include="RecordAnalysis\Tables\C4Interconnection.sql" />
-    <Build Include="RecordAnalysis\User Defined Types\C4SwitchInterconnectionType.sql" />
-    <Build Include="RecordAnalysis\User Defined Types\C4InterconnectionType.sql" />
-    <Build Include="RecordAnalysis\User Defined Types\C4ProbeType.sql" />
-    <Build Include="RecordAnalysis\User Defined Types\C4SwitchType.sql" />
+    <Build Include="RecordAnalysis\Tables\C5Command.sql" />
     <Build Include="Security\RecordAnalysis.sql" />
-    <Build Include="RecordAnalysis\User Defined Types\C4CommandType.sql" />
-    <Build Include="RecordAnalysis\Tables\Command.sql" />
   </ItemGroup>
 </Project>

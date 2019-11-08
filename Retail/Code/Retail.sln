@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29025.244
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -268,9 +268,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.Data.
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FMSv1", "SQL.FMSv1\SQL.FMSv1.sqlproj", "{AF259B12-45AA-4967-AE58-8C3A7C85926F}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RecordAnalysis", "RecordAnalysis\RecordAnalysis.sqlproj", "{ECAB101E-69CD-45D5-A7A5-34D189AB4ADA}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RecordAnalysisC4", "RecordAnalysis\RecordAnalysisC4.sqlproj", "{ECAB101E-69CD-45D5-A7A5-34D189AB4ADA}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RecordAnalysisCDR", "RecordAnalysisCDR\RecordAnalysisCDR.sqlproj", "{954C104F-E2E7-44C0-8F0C-E224EFCC1555}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RecordAnalysisC4CDR", "RecordAnalysisCDR\RecordAnalysisC4CDR.sqlproj", "{954C104F-E2E7-44C0-8F0C-E224EFCC1555}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Interconnect.Data", "Retail.Interconnect.Data\Retail.Interconnect.Data.csproj", "{19D00A8A-5F7B-4BEB-BB0A-E408E68C4765}"
 EndProject
@@ -325,6 +325,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.QualityNet.Business", "Retail.QualityNet.Business\Retail.QualityNet.Business.csproj", "{B4029102-E09B-4ABB-B66A-4957CD4E2873}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RecordAnalysisC5CDR", "RecordAnalysisC5CDR\RecordAnalysisC5CDR.sqlproj", "{D2D120D5-0732-4C60-BD1C-2D32199AC82E}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RecordAnalysisC5", "RecordAnalysisC5\RecordAnalysisC5.sqlproj", "{62FFAB0E-CF89-4801-AA68-E5F8F752870E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -900,6 +902,12 @@ Global
 		{D2D120D5-0732-4C60-BD1C-2D32199AC82E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2D120D5-0732-4C60-BD1C-2D32199AC82E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2D120D5-0732-4C60-BD1C-2D32199AC82E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{62FFAB0E-CF89-4801-AA68-E5F8F752870E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62FFAB0E-CF89-4801-AA68-E5F8F752870E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62FFAB0E-CF89-4801-AA68-E5F8F752870E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{62FFAB0E-CF89-4801-AA68-E5F8F752870E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62FFAB0E-CF89-4801-AA68-E5F8F752870E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62FFAB0E-CF89-4801-AA68-E5F8F752870E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1059,12 +1067,13 @@ Global
 		{79DDD2A3-E477-458F-B7C8-0BC2B8566F06} = {70F55BB9-A6F5-42E8-98A2-9BE890596C6C}
 		{B4029102-E09B-4ABB-B66A-4957CD4E2873} = {70F55BB9-A6F5-42E8-98A2-9BE890596C6C}
 		{D2D120D5-0732-4C60-BD1C-2D32199AC82E} = {DBCF7D23-8951-4886-9024-282788E5D24F}
+		{62FFAB0E-CF89-4801-AA68-E5F8F752870E} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 134
+		SccNumberOfProjects = 135
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1504,101 +1513,105 @@ Global
 		SccProjectTopLevelParentUniqueName109 = Retail.sln
 		SccProjectName109 = SQL.FMSv1
 		SccLocalPath109 = SQL.FMSv1
-		SccProjectUniqueName110 = RecordAnalysis\\RecordAnalysis.sqlproj
+		SccProjectUniqueName110 = Retail.Interconnect.Data\\Retail.Interconnect.Data.csproj
 		SccProjectTopLevelParentUniqueName110 = Retail.sln
-		SccProjectName110 = RecordAnalysis
-		SccLocalPath110 = RecordAnalysis
-		SccProjectUniqueName111 = RecordAnalysisCDR\\RecordAnalysisCDR.sqlproj
+		SccProjectName110 = Retail.Interconnect.Data
+		SccLocalPath110 = Retail.Interconnect.Data
+		SccProjectUniqueName111 = Retail.Interconnect.Data.RDB\\Retail.Interconnect.Data.RDB.csproj
 		SccProjectTopLevelParentUniqueName111 = Retail.sln
-		SccProjectName111 = RecordAnalysisCDR
-		SccLocalPath111 = RecordAnalysisCDR
-		SccProjectUniqueName112 = Retail.Interconnect.Data\\Retail.Interconnect.Data.csproj
+		SccProjectName111 = Retail.Interconnect.Data.RDB
+		SccLocalPath111 = Retail.Interconnect.Data.RDB
+		SccProjectUniqueName112 = Retail.Billing.Business\\Retail.Billing.Business.csproj
 		SccProjectTopLevelParentUniqueName112 = Retail.sln
-		SccProjectName112 = Retail.Interconnect.Data
-		SccLocalPath112 = Retail.Interconnect.Data
-		SccProjectUniqueName113 = Retail.Interconnect.Data.RDB\\Retail.Interconnect.Data.RDB.csproj
+		SccProjectName112 = Retail.Billing.Business
+		SccLocalPath112 = Retail.Billing.Business
+		SccProjectUniqueName113 = Retail.Billing.Entities\\Retail.Billing.Entities.csproj
 		SccProjectTopLevelParentUniqueName113 = Retail.sln
-		SccProjectName113 = Retail.Interconnect.Data.RDB
-		SccLocalPath113 = Retail.Interconnect.Data.RDB
-		SccProjectUniqueName114 = Retail.Billing.Business\\Retail.Billing.Business.csproj
+		SccProjectName113 = Retail.Billing.Entities
+		SccLocalPath113 = Retail.Billing.Entities
+		SccProjectUniqueName114 = Retail.Billing.Web\\Retail.Billing.Web.csproj
 		SccProjectTopLevelParentUniqueName114 = Retail.sln
-		SccProjectName114 = Retail.Billing.Business
-		SccLocalPath114 = Retail.Billing.Business
-		SccProjectUniqueName115 = Retail.Billing.Entities\\Retail.Billing.Entities.csproj
+		SccProjectName114 = Retail.Billing.Web
+		SccLocalPath114 = Retail.Billing.Web
+		SccProjectUniqueName115 = Retail.NIM.Entities\\Retail.NIM.Entities.csproj
 		SccProjectTopLevelParentUniqueName115 = Retail.sln
-		SccProjectName115 = Retail.Billing.Entities
-		SccLocalPath115 = Retail.Billing.Entities
-		SccProjectUniqueName116 = Retail.Billing.Web\\Retail.Billing.Web.csproj
+		SccProjectName115 = Retail.NIM.Entities
+		SccLocalPath115 = Retail.NIM.Entities
+		SccProjectUniqueName116 = Retail.NIM.Business\\Retail.NIM.Business.csproj
 		SccProjectTopLevelParentUniqueName116 = Retail.sln
-		SccProjectName116 = Retail.Billing.Web
-		SccLocalPath116 = Retail.Billing.Web
-		SccProjectUniqueName117 = Retail.NIM.Entities\\Retail.NIM.Entities.csproj
+		SccProjectName116 = Retail.NIM.Business
+		SccLocalPath116 = Retail.NIM.Business
+		SccProjectUniqueName117 = Retail.NIM.Web\\Retail.NIM.Web.csproj
 		SccProjectTopLevelParentUniqueName117 = Retail.sln
-		SccProjectName117 = Retail.NIM.Entities
-		SccLocalPath117 = Retail.NIM.Entities
-		SccProjectUniqueName118 = Retail.NIM.Business\\Retail.NIM.Business.csproj
+		SccProjectName117 = Retail.NIM.Web
+		SccLocalPath117 = Retail.NIM.Web
+		SccProjectUniqueName118 = Retail.NIM.Data\\Retail.NIM.Data.csproj
 		SccProjectTopLevelParentUniqueName118 = Retail.sln
-		SccProjectName118 = Retail.NIM.Business
-		SccLocalPath118 = Retail.NIM.Business
-		SccProjectUniqueName119 = Retail.NIM.Web\\Retail.NIM.Web.csproj
+		SccProjectName118 = Retail.NIM.Data
+		SccLocalPath118 = Retail.NIM.Data
+		SccProjectUniqueName119 = Retail.NIM.Data.RDB\\Retail.NIM.Data.RDB.csproj
 		SccProjectTopLevelParentUniqueName119 = Retail.sln
-		SccProjectName119 = Retail.NIM.Web
-		SccLocalPath119 = Retail.NIM.Web
-		SccProjectUniqueName120 = Retail.NIM.Data\\Retail.NIM.Data.csproj
+		SccProjectName119 = Retail.NIM.Data.RDB
+		SccLocalPath119 = Retail.NIM.Data.RDB
+		SccProjectUniqueName120 = Retail.Ogero.Business\\Retail.Ogero.Business.csproj
 		SccProjectTopLevelParentUniqueName120 = Retail.sln
-		SccProjectName120 = Retail.NIM.Data
-		SccLocalPath120 = Retail.NIM.Data
-		SccProjectUniqueName121 = Retail.NIM.Data.RDB\\Retail.NIM.Data.RDB.csproj
+		SccProjectName120 = Retail.Ogero.Business
+		SccLocalPath120 = Retail.Ogero.Business
+		SccProjectUniqueName121 = NetworkProvision.Entities\\NetworkProvision.Entities.csproj
 		SccProjectTopLevelParentUniqueName121 = Retail.sln
-		SccProjectName121 = Retail.NIM.Data.RDB
-		SccLocalPath121 = Retail.NIM.Data.RDB
-		SccProjectUniqueName122 = Retail.Ogero.Business\\Retail.Ogero.Business.csproj
+		SccProjectName121 = NetworkProvision.Entities
+		SccLocalPath121 = NetworkProvision.Entities
+		SccProjectUniqueName122 = NetworkProvision.Business\\NetworkProvision.Business.csproj
 		SccProjectTopLevelParentUniqueName122 = Retail.sln
-		SccProjectName122 = Retail.Ogero.Business
-		SccLocalPath122 = Retail.Ogero.Business
-		SccProjectUniqueName123 = NetworkProvision.Entities\\NetworkProvision.Entities.csproj
+		SccProjectName122 = NetworkProvision.Business
+		SccLocalPath122 = NetworkProvision.Business
+		SccProjectUniqueName123 = NetworkProvision.Data\\NetworkProvision.Data.csproj
 		SccProjectTopLevelParentUniqueName123 = Retail.sln
-		SccProjectName123 = NetworkProvision.Entities
-		SccLocalPath123 = NetworkProvision.Entities
-		SccProjectUniqueName124 = NetworkProvision.Business\\NetworkProvision.Business.csproj
+		SccProjectName123 = NetworkProvision.Data
+		SccLocalPath123 = NetworkProvision.Data
+		SccProjectUniqueName124 = Retail.Billing.MainExtensions\\Retail.Billing.MainExtensions.csproj
 		SccProjectTopLevelParentUniqueName124 = Retail.sln
-		SccProjectName124 = NetworkProvision.Business
-		SccLocalPath124 = NetworkProvision.Business
-		SccProjectUniqueName125 = NetworkProvision.Data\\NetworkProvision.Data.csproj
+		SccProjectName124 = Retail.Billing.MainExtensions
+		SccLocalPath124 = Retail.Billing.MainExtensions
+		SccProjectUniqueName125 = NetworkProvision.Data.SQL\\NetworkProvision.Data.SQL.csproj
 		SccProjectTopLevelParentUniqueName125 = Retail.sln
-		SccProjectName125 = NetworkProvision.Data
-		SccLocalPath125 = NetworkProvision.Data
-		SccProjectUniqueName126 = Retail.Billing.MainExtensions\\Retail.Billing.MainExtensions.csproj
+		SccProjectName125 = NetworkProvision.Data.SQL
+		SccLocalPath125 = NetworkProvision.Data.SQL
+		SccProjectUniqueName126 = NetworkProvision.Data.RDB\\NetworkProvision.Data.RDB.csproj
 		SccProjectTopLevelParentUniqueName126 = Retail.sln
-		SccProjectName126 = Retail.Billing.MainExtensions
-		SccLocalPath126 = Retail.Billing.MainExtensions
-		SccProjectUniqueName127 = NetworkProvision.Data.SQL\\NetworkProvision.Data.SQL.csproj
+		SccProjectName126 = NetworkProvision.Data.RDB
+		SccLocalPath126 = NetworkProvision.Data.RDB
+		SccProjectUniqueName127 = NetworkProvision.Web\\NetworkProvision.Web.csproj
 		SccProjectTopLevelParentUniqueName127 = Retail.sln
-		SccProjectName127 = NetworkProvision.Data.SQL
-		SccLocalPath127 = NetworkProvision.Data.SQL
-		SccProjectUniqueName128 = NetworkProvision.Data.RDB\\NetworkProvision.Data.RDB.csproj
+		SccProjectName127 = NetworkProvision.Web
+		SccLocalPath127 = NetworkProvision.Web
+		SccProjectUniqueName128 = Retail.QualityNet.Web\\Retail.QualityNet.Web.csproj
 		SccProjectTopLevelParentUniqueName128 = Retail.sln
-		SccProjectName128 = NetworkProvision.Data.RDB
-		SccLocalPath128 = NetworkProvision.Data.RDB
-		SccProjectUniqueName129 = NetworkProvision.Web\\NetworkProvision.Web.csproj
+		SccProjectName128 = Retail.QualityNet.Web
+		SccLocalPath128 = Retail.QualityNet.Web
+		SccProjectUniqueName129 = Retail.QualityNet.Entities\\Retail.QualityNet.Entities.csproj
 		SccProjectTopLevelParentUniqueName129 = Retail.sln
-		SccProjectName129 = NetworkProvision.Web
-		SccLocalPath129 = NetworkProvision.Web
-		SccProjectUniqueName130 = Retail.QualityNet.Web\\Retail.QualityNet.Web.csproj
+		SccProjectName129 = Retail.QualityNet.Entities
+		SccLocalPath129 = Retail.QualityNet.Entities
+		SccProjectUniqueName130 = Retail.QualityNet.Business\\Retail.QualityNet.Business.csproj
 		SccProjectTopLevelParentUniqueName130 = Retail.sln
-		SccProjectName130 = Retail.QualityNet.Web
-		SccLocalPath130 = Retail.QualityNet.Web
-		SccProjectUniqueName131 = Retail.QualityNet.Entities\\Retail.QualityNet.Entities.csproj
+		SccProjectName130 = Retail.QualityNet.Business
+		SccLocalPath130 = Retail.QualityNet.Business
+		SccProjectUniqueName131 = RecordAnalysisC5CDR\\RecordAnalysisC5CDR.sqlproj
 		SccProjectTopLevelParentUniqueName131 = Retail.sln
-		SccProjectName131 = Retail.QualityNet.Entities
-		SccLocalPath131 = Retail.QualityNet.Entities
-		SccProjectUniqueName132 = Retail.QualityNet.Business\\Retail.QualityNet.Business.csproj
+		SccProjectName131 = RecordAnalysisC5CDR
+		SccLocalPath131 = RecordAnalysisC5CDR
+		SccProjectUniqueName132 = RecordAnalysis\\RecordAnalysisC4.sqlproj
 		SccProjectTopLevelParentUniqueName132 = Retail.sln
-		SccProjectName132 = Retail.QualityNet.Business
-		SccLocalPath132 = Retail.QualityNet.Business
-		SccProjectUniqueName133 = RecordAnalysisC5CDR\\RecordAnalysisC5CDR.sqlproj
+		SccProjectName132 = RecordAnalysis
+		SccLocalPath132 = RecordAnalysis
+		SccProjectUniqueName133 = RecordAnalysisCDR\\RecordAnalysisC4CDR.sqlproj
 		SccProjectTopLevelParentUniqueName133 = Retail.sln
-		SccProjectName133 = RecordAnalysisC5CDR
-		SccLocalPath133 = RecordAnalysisC5CDR
+		SccProjectName133 = RecordAnalysisCDR
+		SccLocalPath133 = RecordAnalysisCDR
+		SccProjectUniqueName134 = RecordAnalysisC5\\RecordAnalysisC5.sqlproj
+		SccProjectTopLevelParentUniqueName134 = Retail.sln
+		SccProjectName134 = RecordAnalysisC5
+		SccLocalPath134 = RecordAnalysisC5
 	EndGlobalSection
 EndGlobal

@@ -18,7 +18,7 @@ namespace RecordAnalysis.MainExtensions.C5Switch.VRActions.BlockNumber
 
             string number = payload.OutputRecords.ContainsKey("MSISDN") ? record.MSISDN : record.Number;
             string command = $"Blocking Number: {number}";
-            new CommandManager().AddCommand(CommandType.BlockNumber, command);
+            new CommandManager(BEDefinitions.C5CommandBeDefinitionId).AddCommand(CommandType.BlockNumber, command);
         }
     }
 }

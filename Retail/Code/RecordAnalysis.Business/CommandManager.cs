@@ -8,8 +8,12 @@ namespace RecordAnalysis.Business
 {
     public class CommandManager
     {
-        public static Guid s_beDefinitionId = new Guid("7c9bed54-7e1f-46d9-a738-f0588b8244ad");
+        private Guid beDefinitionId;
 
+        public CommandManager(Guid beDefinitionId)
+        {
+            this.beDefinitionId = beDefinitionId;
+        }
         public void AddCommand(CommandType commandType, string command)
         {
             Dictionary<string, object> fieldValues = new Dictionary<string, object>();
@@ -18,7 +22,7 @@ namespace RecordAnalysis.Business
 
             GenericBusinessEntityToAdd genericBusinessEntityToAdd = new GenericBusinessEntityToAdd()
             {
-                BusinessEntityDefinitionId = s_beDefinitionId,
+                BusinessEntityDefinitionId = beDefinitionId,
                 FieldValues = fieldValues
             };
 
