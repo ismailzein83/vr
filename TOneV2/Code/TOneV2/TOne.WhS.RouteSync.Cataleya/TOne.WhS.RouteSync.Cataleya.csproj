@@ -70,6 +70,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\CataleyaManager.cs" />
     <Compile Include="CataleyaSWSync.cs" />
     <Compile Include="Data.Postgres\CarrierAccountDataManager.cs" />
     <Compile Include="Data.Postgres\CataleyaPostgresDataManager.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Entities\CarrierAccountMapping.cs" />
     <Compile Include="Entities\CarrierAccountVersionInfo.cs" />
     <Compile Include="Entities\CataleyaConvertedRoute.cs" />
+    <Compile Include="Entities\CataleyaDataManagerConfig.cs" />
     <Compile Include="Entities\Context\RouteContext.cs" />
     <Compile Include="Entities\CataleyaConvertedRoutesForApply.cs" />
     <Compile Include="Entities\CustomerIdentification.cs" />
@@ -102,8 +104,6 @@
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Business\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
