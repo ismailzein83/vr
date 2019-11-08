@@ -16,8 +16,9 @@ namespace RecordAnalysis.MainExtensions.C5Switch.VRActions.BlockNumber
 
             dynamic record = Activator.CreateInstance(dataRecordRuntimeType, payload.OutputRecords);
 
-            string command = $"Blocking Number: {record.MSISDN}";
-            new C4CommandManager().AddC4Command(C4CommandType.BlockDestinationNumberOnMSC, command);
+            string number = payload.OutputRecords.ContainsKey("MSISDN") ? record.MSISDN : record.Number;
+            string command = $"Blocking Number: {number}";
+            new CommandManager().AddCommand(CommandType.BlockNumber, command);
         }
     }
 }

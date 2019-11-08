@@ -17,7 +17,7 @@ namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockOriginationNumbe
             dynamic record = Activator.CreateInstance(dataRecordRuntimeType, payload.OutputRecords);
 
             string command = $"ADD CALLPRICHK: CSCNAME=\"ALL\", PFX=K'8, CPFX=K'{record.CGPN}, PCDN=\"INVALID\", PT=INHIBITED, FCC=CV45;";
-            new C4CommandManager().AddC4Command(C4CommandType.BlockOriginationNumberOnMSC, command);
+            new CommandManager().AddCommand(CommandType.BlockOriginationNumberOnMSC, command);
         }
     }
 }

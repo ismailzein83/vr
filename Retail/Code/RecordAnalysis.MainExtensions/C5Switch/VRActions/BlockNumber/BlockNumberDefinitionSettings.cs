@@ -6,7 +6,7 @@ namespace RecordAnalysis.MainExtensions.C5Switch.VRActions.BlockNumber
 {
     public class BlockNumberDefinitionSettings : VRActionDefinitionExtendedSettings
     {
-        public override Guid ConfigId { get { return new Guid("3CD9A858-F5D9-4305-8EFB-264C1660D301"); } }
+        public override Guid ConfigId { get { return new Guid("25cd0ddc-bbd4-41ba-8515-fda7816f22de"); } }
 
         public override string RuntimeEditor { get { return "rec-anal-action-c5switch-blocknumber"; } }
 
