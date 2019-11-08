@@ -4,7 +4,7 @@ using System.Data;
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using Vanrise.Data.Postgres;
 
-namespace TOne.WhS.RouteSync.Cataleya.Postgres
+namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 {
     public class CarrierAccountDataManager : BasePostgresDataManager
     {
@@ -25,9 +25,6 @@ namespace TOne.WhS.RouteSync.Cataleya.Postgres
 
         public List<CarrierAccountVersionInfo> GetCarrierAccountsPreviousVersionNumbers(List<int> carrierAccountIds)
         {
-
-
-
             return this.GetItemsText("select name from sys.schemas ", CarrierAccountVersionInfoMapper, null);
 
             throw new NotImplementedException();

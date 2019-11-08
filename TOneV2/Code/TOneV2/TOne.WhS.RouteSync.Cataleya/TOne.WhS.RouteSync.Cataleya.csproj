@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Npgsql">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Npgsql.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -67,17 +70,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\CarrierAccountManager.cs" />
-    <Compile Include="Business\CustomerIdentificationManager.cs" />
-    <Compile Include="Business\RouteManager.cs" />
     <Compile Include="CataleyaSWSync.cs" />
-    <Compile Include="Data\ISyncDataManager.cs" />
-    <Compile Include="Entities\CarrierAccountRouteTableMapping.cs" />
+    <Compile Include="Data.Postgres\CarrierAccountDataManager.cs" />
+    <Compile Include="Data.Postgres\CataleyaPostgresDataManager.cs" />
+    <Compile Include="Data.Postgres\CustomerIdentificationDataManager.cs" />
+    <Compile Include="Data.Postgres\RouteDataManager.cs" />
+    <Compile Include="Data\ICataleyaDataManager.cs" />
+    <Compile Include="Entities\CarrierAccountMapping.cs" />
     <Compile Include="Entities\CarrierAccountVersionInfo.cs" />
     <Compile Include="Entities\CataleyaConvertedRoute.cs" />
     <Compile Include="Entities\Context\RouteContext.cs" />
     <Compile Include="Entities\CustomerIdentification.cs" />
-    <Compile Include="Entities\CustomerInfo.cs" />
     <Compile Include="Entities\DatabaseConnection.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\CustomerMapping.cs" />
@@ -97,6 +100,9 @@
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Business\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

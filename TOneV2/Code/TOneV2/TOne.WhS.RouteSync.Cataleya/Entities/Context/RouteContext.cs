@@ -5,11 +5,16 @@ namespace TOne.WhS.RouteSync.Cataleya.Entities
 {
     public interface IRouteInitializeContext
     {
-        Dictionary<int, CustomerInfo> CustomersInfoByCustomer { get; }
+        List<CustomerIdentification> CustomersIdentification { get; }
+        List<CarrierAccountMapping> CarrierAccountsMapping { get; }
+        List<String> RouteTableNames { get; }
     }
+
     public class RouteInitializeContext : IRouteInitializeContext
     {
-        public Dictionary<int, CustomerInfo> CustomersInfoByCustomer { get; set; }
+        public List<CustomerIdentification> CustomersIdentification { get; set; }
+        public List<CarrierAccountMapping> CarrierAccountsMapping { get; set; }
+        public List<String> RouteTableNames { get; set; }
     }
 
     public interface IRouteFinalizeContext { }

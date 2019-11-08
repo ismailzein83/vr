@@ -2,7 +2,7 @@
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using Vanrise.Data.Postgres;
 
-namespace TOne.WhS.RouteSync.Cataleya.Postgres
+namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 {
     public class RouteDataManager : BasePostgresDataManager
     {
