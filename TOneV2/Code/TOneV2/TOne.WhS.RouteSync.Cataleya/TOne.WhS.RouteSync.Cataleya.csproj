@@ -80,6 +80,7 @@
     <Compile Include="Entities\CarrierAccountVersionInfo.cs" />
     <Compile Include="Entities\CataleyaConvertedRoute.cs" />
     <Compile Include="Entities\Context\RouteContext.cs" />
+    <Compile Include="Entities\CataleyaConvertedRoutesForApply.cs" />
     <Compile Include="Entities\CustomerIdentification.cs" />
     <Compile Include="Entities\DatabaseConnection.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
