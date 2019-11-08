@@ -25,7 +25,7 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {
-            var customCodeChargeTypeEvaluator = GetCustomCodeChargeTypeEvaluator(context.ComponentTypeId);
+            var customCodeChargeTypeEvaluator = GetCustomCodeChargeTypeEvaluator(context.ChargeTypeId);
 
             if (customCodeChargeTypeEvaluator == null)
                 return 0;
@@ -54,20 +54,22 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
         {
             throw new NotImplementedException();
         }
+
         public Dictionary<Guid, Type> GetCachedCustomCodeChargeTypeEvaluators()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustomCodeChargeTypeEvaluators",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Common.Business.VRComponentTypeManager.CacheManager>().GetOrCreateObject("GetCachedCustomCodeChargeTypeEvaluators",
                () =>
                {
                    return GetCustomCodeChargeTypeTypes();
                });
         }
+
         public Dictionary<Guid, Type> GetCustomCodeChargeTypeTypes()
         {
             VRComponentTypeManager vrComponentTypeManager = new VRComponentTypeManager();
             var chargeTypes = vrComponentTypeManager.GetComponentTypes<RetailBillingChargeTypeSettings>();
-            Dictionary<Guid, string> chargeTypeFullTypeNamesByComponentTypeId = null;
-            Dictionary<Guid, Type> chargeTypeFullTypesByComponentTypeId = null;
+            Dictionary<Guid, string> chargeTypeFullTypeNamesByChargeTypeId = null;
+            Dictionary<Guid, Type> chargeTypeFullTypesByChargeTypeId = null;
 
             if (chargeTypes != null && chargeTypes.Count > 0)
             {
@@ -76,11 +78,12 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
                 using System.Collections.Generic;
                 using System.Linq;
                 using Vanrise.Common;
+
                 namespace #NAMESPACE#
                 {");
 
-                chargeTypeFullTypeNamesByComponentTypeId = new Dictionary<Guid, string>();
-                chargeTypeFullTypesByComponentTypeId = new Dictionary<Guid, Type>();
+                chargeTypeFullTypeNamesByChargeTypeId = new Dictionary<Guid, string>();
+                chargeTypeFullTypesByChargeTypeId = new Dictionary<Guid, Type>();
                 string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Retail.Billing.Business");
 
                 foreach (var chargeType in chargeTypes)
@@ -94,13 +97,14 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
                             string className;
                             codeBuilder.AppendLine(new RetailBillingCustomCodeChargeTypeManager().BuildChargeTypeCustomCodeClass(customCodeExtendedSettings.TargetRecordTypeId, customCodeExtendedSettings.ChargeSettingsRecordTypeId, customCodeExtendedSettings.PricingLogic, out className));
                             string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
-                            chargeTypeFullTypeNamesByComponentTypeId.Add(chargeType.VRComponentTypeId, fullTypeName);
+                            chargeTypeFullTypeNamesByChargeTypeId.Add(chargeType.VRComponentTypeId, fullTypeName);
                         }
                     }
                 }
 
                 codeBuilder.Append("}");
                 codeBuilder.Replace("#NAMESPACE#", classNamespace);
+
                 CSharpCompilationOutput compilationOutput;
 
                 if (!CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
@@ -110,33 +114,23 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
                 foreach (var chargeType in chargeTypes)
                 {
-                    var fullType = chargeTypeFullTypeNamesByComponentTypeId.GetRecord(chargeType.VRComponentTypeId);
+                    var fullType = chargeTypeFullTypeNamesByChargeTypeId.GetRecord(chargeType.VRComponentTypeId);
                     var runtimeType = compilationOutput.OutputAssembly.GetType(fullType);
 
                     if (runtimeType == null)
-                        throw new NullReferenceException($"runtimeType for component type Id:'{chargeType.VRComponentTypeId}'");
+                        throw new NullReferenceException($"runtimeType for charge type Id:'{chargeType.VRComponentTypeId}'");
 
-                    chargeTypeFullTypesByComponentTypeId.Add(chargeType.VRComponentTypeId, runtimeType);
+                    chargeTypeFullTypesByChargeTypeId.Add(chargeType.VRComponentTypeId, runtimeType);
                 }
             }
 
-            return chargeTypeFullTypesByComponentTypeId;
+            return chargeTypeFullTypesByChargeTypeId;
         }
-        public Type GetCustomCodeChargeTypeEvaluator(Guid componentTypeId)
+
+        public Type GetCustomCodeChargeTypeEvaluator(Guid chargeTypeId)
         {
             var customCodeChargeTypeEvaluators = GetCachedCustomCodeChargeTypeEvaluators();
-            return customCodeChargeTypeEvaluators.GetRecord(componentTypeId);
-        }
-
-        internal class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            VRComponentTypeManager _vrComponentTypeManager = new VRComponentTypeManager();
-
-            DateTime? _cacheLastCheck;
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _vrComponentTypeManager.IsCacheExpired(ref _cacheLastCheck);
-            }
+            return customCodeChargeTypeEvaluators.GetRecord(chargeTypeId);
         }
     }
 }

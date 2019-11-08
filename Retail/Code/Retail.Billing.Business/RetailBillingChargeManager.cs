@@ -19,7 +19,7 @@ namespace Retail.Billing.Business
 
             return chargeType.Settings.ExtendedSettings.CalculateCharge(new RetailBillingChargeTypeCalculateChargeContext()
             {
-                ComponentTypeId=chargeType.VRComponentTypeId,
+                ChargeTypeId = chargeType.VRComponentTypeId,
                 Charge = charge,
                 TargetFieldValues = targetFieldValues
             });
