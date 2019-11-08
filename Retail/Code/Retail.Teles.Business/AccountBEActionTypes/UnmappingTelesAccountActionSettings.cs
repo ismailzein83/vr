@@ -10,13 +10,19 @@ namespace Retail.Teles.Business.AccountBEActionTypes
 {
     public class UnmappingTelesAccountActionSettings : AccountActionDefinitionSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId
+        {
+            get
+            {
+                return new Guid("C7658EFB-EC75-4BFD-94C9-0B7EFA7EB158");
+            }
+        }
         public override string ClientActionName
         {
             get { return "UnmappingTelesAccount"; }
         }
 
-        public Guid AccountTypeId { get; set; }
+        public Guid CompanyTypeId { get; set; }
         public Guid SiteTypeId { get; set; }
 
         public UnmappingTelesAccountActionSecurity Security { get; set; }
