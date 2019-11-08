@@ -984,7 +984,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=UCase(Fields!CountryIdDescription.Value)</Value>
+                              <Value>=IIF(String.IsNullOrEmpty(Fields!CountryIdDescription.Value) , String.Empty,UCase(Fields!CountryIdDescription.Value))</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1543,7 +1543,7 @@
         <Top>0.84396in</Top>
         <Left>0.15in</Left>
         <Height>1.08678in</Height>
-        <Width>8.09095in</Width>
+        <Width>8.09096in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2223,7 +2223,7 @@
     <Height>4.93001cm</Height>
     <Style />
   </Body>
-  <Width>20.93201cm</Width>
+  <Width>20.93204cm</Width>
   <Page>
     <PageFooter>
       <Height>0.76033cm</Height>

@@ -1058,7 +1058,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=UCase(Fields!CountryDescription.Value)</Value>
+                              <Value>=IIF(String.IsNullOrEmpty(Fields!CountryDescription.Value) , String.Empty,UCase(Fields!CountryDescription.Value))</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1083,6 +1083,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>

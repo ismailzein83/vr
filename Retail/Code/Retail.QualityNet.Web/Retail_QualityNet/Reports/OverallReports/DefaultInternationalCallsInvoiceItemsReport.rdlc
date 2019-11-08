@@ -796,7 +796,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(String.IsNullOrEmpty(Fields!CountryInArabicIdDescription.Value) , UCase(Fields!CountryIdDescription.Value),Fields!CountryInArabicIdDescription.Value)</Value>
+                                  <Value>=IIF(String.IsNullOrEmpty(Fields!CountryInArabicIdDescription.Value) , UCase(IIF(String.IsNullOrEmpty(Fields!CountryIdDescription.Value) , String.Empty,UCase(Fields!CountryIdDescription.Value))),Fields!CountryInArabicIdDescription.Value)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
