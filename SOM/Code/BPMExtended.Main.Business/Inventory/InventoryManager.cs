@@ -244,11 +244,11 @@ namespace BPMExtended.Main.Business
                 item = client.Get<TechnicalDetails>(String.Format("api/SOM.ST/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
             }
 
-            string switchId = item.SwitchId;
+            string pathId = item.PathId;
             List<PortInfo> apiResult;
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM.ST/Inventory/GetSwitchFreePorts?switchId={0}", switchId));
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM.ST/Inventory/GetSwitchFreePorts?linePathId={0}", pathId));
             }
 
             return apiResult == null ? null : apiResult.MapRecords(r => new DSLAMPortInfo

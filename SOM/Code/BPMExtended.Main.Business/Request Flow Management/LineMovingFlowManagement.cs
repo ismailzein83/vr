@@ -3,11 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using Terrasoft.Core;
+using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
 {
+
     public class LineMovingFlowManagement
     {
+
+        #region User Connection
+        public UserConnection BPM_UserConnection
+        {
+            get
+            {
+                return (UserConnection)HttpContext.Current.Session["UserConnection"];
+            }
+        }
+        #endregion
+
         const string startingProcess = "EB1EBAC2-1144-4254-92D9-E9AD63D44FE2";
         const string nearbyNumber= "686EAE7A-F4D6-4043-A381-DA2E8F4CE7ED";
         const string print = "36DBA738-559E-4C0D-BCBC-02FCA872FBAA";
@@ -24,6 +39,7 @@ namespace BPMExtended.Main.Business
         const string printNewDocument = "08355BEC-A39D-4721-8E8B-969A68B1996E";
         const string attachments = "ACFE97C5-A396-45A1-A5F7-435E0D1850EB";
         const string technicalStep = "B2B4E3AF-B99D-42E9-9E6E-717D145F3258";
+        const string submitToOM = "D7879A7D-BEA6-44BC-8ED4-7DBB5E268A2A";
 
         public string GetNextStep(string id, string currentStepId, bool isWaitingList, bool isADSLWaitingList, bool hasADSL)
         {
@@ -42,11 +58,35 @@ namespace BPMExtended.Main.Business
                 case address: nextStepId = new CommonManager().IsRequestAdvantageous(new CommonManager().GetEntityNameByRequestId(id), id) ? printNewDocument: payment; break;
                 case payment: nextStepId = printNewDocument; break;
                 case printNewDocument: nextStepId = attachments; break;
-                case attachments: nextStepId = technicalStep; break;
+                case attachments: nextStepId = checkIfNewSwitch(id)? submitToOM :  technicalStep; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
 
             }
             return nextStepId;
         }
+
+        public bool checkIfNewSwitch(string requestId)
+        {
+
+                bool isNew = false;
+            
+                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineMovingRequest");
+
+                esq.AddColumn("Id");
+                esq.AddColumn("StIsNewSwitch");
+
+                var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+
+                esq.Filters.Add(esqFirstFilter);
+
+                var entities = esq.GetEntityCollection(BPM_UserConnection);
+                if (entities.Count > 0)
+                {
+                    return (bool)entities[0].GetColumnValue("StIsNewSwitch");
+                }
+            
+            return isNew;
+        }
+
     }
 }
