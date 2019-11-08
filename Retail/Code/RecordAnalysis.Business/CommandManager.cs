@@ -14,10 +14,10 @@ namespace RecordAnalysis.Business
         {
             this.beDefinitionId = beDefinitionId;
         }
-        public void AddCommand(CommandType commandType, string command)
+        public void AddCommand(int commandType, string command)
         {
             Dictionary<string, object> fieldValues = new Dictionary<string, object>();
-            fieldValues.Add("Type", (int)commandType);
+            fieldValues.Add("Type", commandType);
             fieldValues.Add("Command", command);
 
             GenericBusinessEntityToAdd genericBusinessEntityToAdd = new GenericBusinessEntityToAdd()

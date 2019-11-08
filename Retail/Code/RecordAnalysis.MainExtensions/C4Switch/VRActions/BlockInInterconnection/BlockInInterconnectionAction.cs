@@ -25,7 +25,7 @@ namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInInterconnectio
                 return;
 
             string command = $"Blocking In Interconnection";
-            new CommandManager(BEDefinitions.C4CommandBeDefinitionId).AddCommand(CommandType.BlockInterconnection, command);
+            new CommandManager(BEDefinitions.C4CommandBeDefinitionId).AddCommand((int)C4CommandType.BlockInterconnection, command);
 
             //C4SwitchInterconnectionManager c4SwitchInterconnectionManager = new C4SwitchInterconnectionManager();
 

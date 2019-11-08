@@ -28,7 +28,7 @@ namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInIP
             string command = $"Firewall blacklist item {record.InIP}";
             //}
 
-            new CommandManager(BEDefinitions.C4CommandBeDefinitionId).AddCommand(CommandType.BlockIP, command);
+            new CommandManager(BEDefinitions.C4CommandBeDefinitionId).AddCommand((int)C4CommandType.BlockIP, command);
         }
     }
 }
