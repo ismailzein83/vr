@@ -1,4 +1,4 @@
-﻿CREATE TABLE [RecordAnalysis].[C4Command] (
+﻿CREATE TABLE [RecordAnalysis].[Command] (
     [Id]          INT            IDENTITY (1, 1) NOT NULL,
     [Type]        INT            NULL,
     [Command]     NVARCHAR (255) NULL,
