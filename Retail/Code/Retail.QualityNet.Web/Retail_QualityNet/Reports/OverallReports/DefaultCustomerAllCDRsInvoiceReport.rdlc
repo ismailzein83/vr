@@ -18,7 +18,7 @@
               <Width>1.23892in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.57441in</Width>
+              <Width>1.1919in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.85827in</Width>
@@ -27,13 +27,13 @@
               <Width>0.9239in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.54067in</Width>
+              <Width>0.85483in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.31666in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.8534in</Width>
+              <Width>0.92175in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -837,7 +837,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Duration-s-    -المدة-ث</Value>
+                              <Value>Duration-s- -المدة-ث</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -874,7 +874,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount   المبلغ</Value>
+                              <Value>Amount المبلغ</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
