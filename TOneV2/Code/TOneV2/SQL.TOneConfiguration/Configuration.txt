@@ -162,6 +162,7 @@ FZero
 FMSV1.PostDeployment.sql
 
 Inspkt
+Inspkt.json
 C4.json
 C5.json
 
