@@ -22,10 +22,20 @@ namespace Vanrise.Common.Business
             return nationalSettings.NationalCountries.Contains(countryId);
         }
 
+        public int? GetFirstNationalCountryID()
+        {
+            SettingManager settingManager = new SettingManager();
+            NationalSettings nationalSettings = settingManager.GetSetting<NationalSettings>(NationalSettings.SETTING_TYPE);
+            if (nationalSettings == null || nationalSettings.NationalCountries == null || nationalSettings.NationalCountries.Count == 0)
+                return null;
+
+            return nationalSettings.NationalCountries.FirstOrDefault();
+        }
+
         public int GetSystemCurrencyId()
         {
             int currencyId;
-            if(TryGetSystemCurrencyId(out currencyId))
+            if (TryGetSystemCurrencyId(out currencyId))
             {
                 return currencyId;
             }
@@ -105,6 +115,7 @@ namespace Vanrise.Common.Business
 
             return smsSettingData.SMSSendHandler;
         }
+
         public GeneralSettingData GetGeneralSetting()
         {
             SettingManager settingManager = new SettingManager();
@@ -120,6 +131,7 @@ namespace Vanrise.Common.Business
             var generalSettings = settingManager.GetSetting<GeneralTechnicalSettingData>(Constants.GeneralTechnicalSettingType);
             return generalSettings;
         }
+
         public GoogleAnalyticsData GetGoogleAnalyticsSetting()
         {
             SettingManager settingManager = new SettingManager();
@@ -140,6 +152,7 @@ namespace Vanrise.Common.Business
 
             return productInfo;
         }
+
         public IEnumerable<BankDetail> GetBankDetails()
         {
             SettingManager settingManager = new SettingManager();
@@ -171,7 +184,6 @@ namespace Vanrise.Common.Business
 
             return lstBankDetailsInfo;
         }
-
 
         public Vanrise.Entities.InsertOperationOutput<BankDetail> AddBank(BankDetail BankDetail)
         {
@@ -264,10 +276,12 @@ namespace Vanrise.Common.Business
         {
             return GetProductInfo().VersionNumber;
         }
+
         public string GetProductName()
         {
             return GetProductInfo().ProductName;
         }
+
         public List<CompanyContactType> GetCompanyContactTypes()
         {
             var companyContactTypes = new List<CompanyContactType>();
@@ -282,17 +296,20 @@ namespace Vanrise.Common.Business
             var uiData = GetUISettingData();
             return uiData.MaxSearchRecordCount;
         }
+
         public UISettingData GetUISettingData()
         {
             var generalSettingData = GetGeneralSetting();
             generalSettingData.UIData.ThrowIfNull("generalSettingData.UIData");
             return generalSettingData.UIData;
         }
+
         public string GetExtendedTheme()
         {
             var uiData = GetUISettingData();
             return uiData.Theme;
         }
+
         public Dictionary<Guid, CompanyDefinitionSetting> GetCompanyDefinitionSettings()
         {
             var companyDefinitionSettings = new Dictionary<Guid, CompanyDefinitionSetting>();
@@ -301,6 +318,7 @@ namespace Vanrise.Common.Business
                 companyDefinitionSettings = generalTechnicalSettingData.CompanySettingDefinition.ExtendedSettings;
             return companyDefinitionSettings;
         }
+
         public IEnumerable<CompanySetting> GetCompanySetting()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().GetOrCreateObject("ConfigManager_GetCompanySetting",
@@ -314,6 +332,7 @@ namespace Vanrise.Common.Business
                     return settings;
                 });
         }
+
         public CompanySetting GetCompanySettingById(Guid companySettingId)
         {
             IEnumerable<CompanySetting> settings = GetCompanySetting();
@@ -352,6 +371,7 @@ namespace Vanrise.Common.Business
             CompanySetting companySetting = GetCompanySettingById(companySettingId);
             return companySetting != null ? GetCompanyExtendedSettings<T>(companySetting) : default(T);
         }
+
         public T GetCompanyExtendedSettings<T>(CompanySetting companySetting)
             where T : BaseCompanyExtendedSettings
         {
@@ -368,8 +388,8 @@ namespace Vanrise.Common.Business
             else
                 return default(T);
         }
-        #endregion
 
+        #endregion
 
         #region Mappers
 
@@ -390,7 +410,7 @@ namespace Vanrise.Common.Business
                 CompanyName = company.CompanyName,
             };
         }
-        #endregion
 
+        #endregion
     }
 }

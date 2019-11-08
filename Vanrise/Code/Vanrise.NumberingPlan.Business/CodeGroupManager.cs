@@ -14,15 +14,19 @@ namespace Vanrise.NumberingPlan.Business
 {
     public class CodeGroupManager
     {
-        #region ctor/Local Variables
+        #region Ctor/Local Variables
+
         private readonly CountryManager _countryManager;
+
         public CodeGroupManager()
         {
             _countryManager = new CountryManager();
         }
+
         #endregion
 
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<CodeGroupDetail> GetFilteredCodeGroups(Vanrise.Entities.DataRetrievalInput<CodeGroupQuery> input)
         {
             var allCodeGroups = GetCachedCodeGroups();
@@ -37,10 +41,12 @@ namespace Vanrise.NumberingPlan.Business
             };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper), handler);
         }
+
         public IEnumerable<CodeGroupInfo> GetAllCodeGroups()
         {
             return GetCachedCodeGroups().MapRecords(CodeGroupInfoMapper).OrderBy(x => x.Name);
         }
+
         public CodeGroup GetCodeGroup(int codeGroupId)
         {
             var codeGroups = GetCachedCodeGroups();
@@ -52,6 +58,7 @@ namespace Vanrise.NumberingPlan.Business
             CodeIterator<CodeGroup> codeIterator = GetCodeIterator();
             return codeIterator.GetLongestMatch(code);
         }
+
         public InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
         {
             ValidateCodeGroupToAdd(codeGroup);
@@ -78,6 +85,7 @@ namespace Vanrise.NumberingPlan.Business
             }
             return insertOperationOutput;
         }
+
         public UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroup)
         {
             ValidateCodeGroupToEdit(codeGroup);
@@ -240,12 +248,14 @@ namespace Vanrise.NumberingPlan.Business
 
             return uploadCodeGroupLog;
         }
+
         public byte[] DownloadCodeGroupLog(long fileID)
         {
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(fileID);
             return file.Content;
         }
+
         public byte[] DownloadCodeGroupListTemplate()
         {
             string physicalFilePath = VRWebContext.MapVirtualToPhysicalPath(System.Configuration.ConfigurationManager.AppSettings["DownloadVRCodeGroupTemplatePath"]);
@@ -254,18 +264,36 @@ namespace Vanrise.NumberingPlan.Business
 
             return bytes;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="countryId"></param>
+        /// <returns> return null in case country does not have any code group </returns>
+        public string GetFirstCodeGroup(int countryId)
+        {
+            Dictionary<int, List<CodeGroup>> codeGroupsByCountryID = GetCachedCodeGroupsByCountryID();
+
+            List<CodeGroup> countryCodeGroups;
+            if (!codeGroupsByCountryID.TryGetValue(countryId, out countryCodeGroups))
+                return null;
+
+            CodeGroup firstCodeGroup = countryCodeGroups.FirstOrDefault();
+            return firstCodeGroup != null ? firstCodeGroup.Code : null;
+        }
+
         #endregion
 
-
         #region Private Members
+
         private Dictionary<int, CodeGroup> GetCachedCodeGroups()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCodeGroups",
                () =>
                {
                    ICodeGroupDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
-                   IEnumerable<CodeGroup> codegroups = dataManager.GetCodeGroups();
-                   return codegroups.ToDictionary(cg => cg.CodeGroupId, cg => cg);
+                   IEnumerable<CodeGroup> codeGroups = dataManager.GetCodeGroups();
+                   return codeGroups.ToDictionary(cg => cg.CodeGroupId, cg => cg);
                });
         }
 
@@ -275,21 +303,31 @@ namespace Vanrise.NumberingPlan.Business
                () =>
                {
                    ICodeGroupDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
-                   IEnumerable<CodeGroup> codegroups = dataManager.GetCodeGroups();
-                   return codegroups.ToDictionary(cg => cg.Code, cg => cg);
+                   IEnumerable<CodeGroup> codeGroups = dataManager.GetCodeGroups();
+                   return codeGroups.ToDictionary(cg => cg.Code, cg => cg);
                });
         }
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        private Dictionary<int, List<CodeGroup>> GetCachedCodeGroupsByCountryID()
         {
-            ICodeGroupDataManager _dataManager = CodePrepDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
-            object _updateHandle;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCodeGroupsByCountryID",
+               () =>
+               {
+                   ICodeGroupDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
+                   Dictionary<int, CodeGroup> codeGroups = GetCachedCodeGroups();
 
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreCodeGroupUpdated(ref _updateHandle);
-            }
+                   Dictionary<int, List<CodeGroup>> codeGroupsByCountryID = new Dictionary<int, List<CodeGroup>>();
+
+                   foreach (var codeGroup in codeGroups.Values)
+                   {
+                       List<CodeGroup> currentCodeGroups = codeGroupsByCountryID.GetOrCreateItem(codeGroup.CountryId, () => { return new List<CodeGroup>(); });
+                       currentCodeGroups.Add(codeGroup);
+                   }
+
+                   return codeGroupsByCountryID;
+               });
         }
+
         private CodeIterator<CodeGroup> GetCodeIterator()
         {
             var cachedCodeGroups = GetCachedCodeGroups();
@@ -328,6 +366,18 @@ namespace Vanrise.NumberingPlan.Business
                 context.MainSheet = sheet;
             }
         }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ICodeGroupDataManager _dataManager = CodePrepDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreCodeGroupUpdated(ref _updateHandle);
+            }
+        }
+
         #endregion
 
         #region Validation Methods
@@ -356,6 +406,7 @@ namespace Vanrise.NumberingPlan.Business
         #endregion
 
         #region  Mappers
+
         private CodeGroupDetail CodeGroupDetailMapper(CodeGroup codeGroup)
         {
             CodeGroupDetail codeGroupDetail = new CodeGroupDetail();
