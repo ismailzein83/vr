@@ -6,7 +6,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.86339in</Width>
+              <Width>1.28006in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.28592in</Width>
@@ -15,25 +15,25 @@
               <Width>0.21875in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.13475in</Width>
+              <Width>1.23892in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.55457in</Width>
+              <Width>1.57441in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.85827in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83957in</Width>
+              <Width>0.9239in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.95734in</Width>
+              <Width>0.54067in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.31666in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.06173in</Width>
+              <Width>0.8534in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -656,7 +656,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Caller             المتصل</Value>
+                              <Value>Caller                        المتصل</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -732,7 +732,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>  Country                    الدولة</Value>
+                              <Value>  Country         الدولة</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -874,7 +874,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount       المبلغ</Value>
+                              <Value>Amount   المبلغ</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
