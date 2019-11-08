@@ -1027,6 +1027,7 @@
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
                 NameSuffix: $scope.scopeModel.name,
                 SellingProductId: (isCustomer()) ? sellingProductSelectorAPI.getSelectedIds() : null,
+                LOBId: lobSelectorAPI.getSelectedIds(),
                 CarrierAccountSettings: {
                     ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
@@ -1034,7 +1035,6 @@
                     CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
                     ChannelsLimit: $scope.scopeModel.channelsLimit,
                     IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch,
-                    LOBId: lobSelectorAPI.getSelectedIds(),
                 },
                 SupplierSettings: {
                     DefaultServices: zoneServiceConfigSelectorAPI != undefined ? getSelectedDefaultServices() : null,
