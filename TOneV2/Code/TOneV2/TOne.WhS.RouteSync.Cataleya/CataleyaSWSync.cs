@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Cataleya.Data;
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Common;
-using Vanrise.Common.Business;
 
 namespace TOne.WhS.RouteSync.Cataleya
 {
@@ -15,14 +13,19 @@ namespace TOne.WhS.RouteSync.Cataleya
     {
         public override Guid ConfigId { get { return new Guid("D770F53B-057F-4BB8-BF20-883A2DBC510B"); } }
         public Guid APIConnectionId { get; set; }
-        public ISyncDataManager DataManager { get; set; }
+        public ICataleyaDataManager DataManager { get; set; }
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
         #region Public Methods
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            var allActiveCustomersTrunksByCustomer = new Dictionary<int, CustomerInfo>();
+            var allActiveCarrierAccountMappingByCarrier = new Dictionary<int, CarrierAccountMapping>();
+
+            var customersIdentification = new List<CustomerIdentification>();
+            var carrierAccountsMapping = new List<CarrierAccountMapping>();
+            var routeTableNames = new List<string>();
+
             var allActiveCustomers = new CarrierAccountManager().GetRoutingActiveCustomers();
             var getCarrierAccountsPreviousVersionNumbersContext = new GetCarrierAccountsPreviousVersionNumbersContext() { CarrierAccountIds = new List<int>() };
 
@@ -31,14 +34,23 @@ namespace TOne.WhS.RouteSync.Cataleya
                 if (CarrierMappings.TryGetValue(customer.CustomerId.ToString(), out var carrierMapping))
                     if (carrierMapping.CustomerMappings != null && carrierMapping.CustomerMappings.InTrunks != null && carrierMapping.CustomerMappings.InTrunks.Count > 0)
                     {
-                        allActiveCustomersTrunksByCustomer.Add(carrierMapping.CarrierId, new CustomerInfo()
+                        allActiveCarrierAccountMappingByCarrier.Add(carrierMapping.CarrierId, new CarrierAccountMapping()
                         {
                             CarrierId = carrierMapping.CarrierId,
                             ZoneID = carrierMapping.ZoneID,
-                            InTrunks = carrierMapping.CustomerMappings.InTrunks
+                            Version = 0
                         });
 
                         getCarrierAccountsPreviousVersionNumbersContext.CarrierAccountIds.Add(carrierMapping.CarrierId);
+
+                        foreach (var trunk in carrierMapping.CustomerMappings.InTrunks)
+                        {
+                            customersIdentification.Add(new CustomerIdentification()
+                            {
+                                CarrierId = carrierMapping.CarrierId,
+                                Trunk = trunk.Trunk
+                            });
+                        }
                     }
             }
 
@@ -46,14 +58,21 @@ namespace TOne.WhS.RouteSync.Cataleya
 
             foreach (var carrierAccountVersionNumber in carrierAccountsVersionNumbers)
             {
-                var customerInfo = allActiveCustomersTrunksByCustomer.GetRecord(carrierAccountVersionNumber.CarrierAccountId);
+                var customerInfo = allActiveCarrierAccountMappingByCarrier.GetRecord(carrierAccountVersionNumber.CarrierAccountId);
                 if (customerInfo != null)
-                    customerInfo.Version = carrierAccountVersionNumber.Version;
+                    customerInfo.Version = (carrierAccountVersionNumber.Version + 1) % 2;
+
+                customerInfo.RouteTableName = $"Rt_{customerInfo.CarrierId}_{ customerInfo.Version}";
+
+                carrierAccountsMapping.Add(customerInfo);
+                routeTableNames.Add(customerInfo.RouteTableName);
             }
 
             this.DataManager.PrepareTables(new RouteInitializeContext()
             {
-                CustomersInfoByCustomer = allActiveCustomersTrunksByCustomer
+                CustomersIdentification = customersIdentification,
+                CarrierAccountsMapping = carrierAccountsMapping,
+                RouteTableNames = routeTableNames
             });
         }
 
@@ -120,14 +139,6 @@ namespace TOne.WhS.RouteSync.Cataleya
         public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
         {
             this.DataManager = null;
-        }
-
-        public string GetConnectionString(Guid vrConnectionId)
-        {
-            var connection = new VRConnectionManager().GetVRConnection(vrConnectionId);
-            var settings = connection.Settings as SQLConnection;
-
-            return settings.ConnectionString;
         }
 
         #endregion
