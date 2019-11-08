@@ -44,11 +44,18 @@ app.directive('retailBillingChargeCustomobjectRuntime', ['UtilsService', 'VRUIUt
                     var promises = [];
                     var charge;
                     var title;
+                    var targetRecordTypeId;
 
                     if (payload != undefined) {
                         charge = payload.fieldValue;
                         title = payload.fieldTitle;
+
+                        var fieldType = payload.fieldType;
+
+                        if (fieldType != undefined && fieldType.Settings != undefined)
+                            targetRecordTypeId = fieldType.Settings.TargetRecordTypeId;
                     }
+
                     $scope.scopeModel.isPayloadReady = true;
 
                     promises.push(loadChargeDirective());
@@ -62,7 +69,8 @@ app.directive('retailBillingChargeCustomobjectRuntime', ['UtilsService', 'VRUIUt
                             if (payload != undefined)
                                 chargeDirectivePayload = {
                                     charge: charge,
-                                    title: title
+                                    title: title,
+                                    targetRecordTypeId: targetRecordTypeId
                                 };
                             VRUIUtilsService.callDirectiveLoad(chargeDirectiveAPI, chargeDirectivePayload, loadChargeTypeSelectorPromiseDeferred);
                         });

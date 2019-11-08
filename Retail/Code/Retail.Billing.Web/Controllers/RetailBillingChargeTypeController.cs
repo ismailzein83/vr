@@ -13,9 +13,9 @@ namespace Retail.Billing.Web.Controllers
     {
         [HttpGet]
         [Route("GetRetailBillingChargeTypeInfo")]
-        public IEnumerable<RetailBillingChargeTypeInfo> GetRetailBillingChargeTypeInfo()
+        public IEnumerable<RetailBillingChargeTypeInfo> GetRetailBillingChargeTypeInfo(Guid? targetRecordTypeId = null)
         {
-            return new RetailBillingChargeTypeManager().GetRetailBillingChargeTypeInfo();
+            return new RetailBillingChargeTypeManager().GetRetailBillingChargeTypeInfo(targetRecordTypeId);
         }
 
         [HttpGet]

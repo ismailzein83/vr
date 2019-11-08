@@ -11,10 +11,22 @@ namespace Retail.Billing.Business
     {
         #region Public Methods
 
-        public IEnumerable<RetailBillingChargeTypeInfo> GetRetailBillingChargeTypeInfo()
+        public IEnumerable<RetailBillingChargeTypeInfo> GetRetailBillingChargeTypeInfo(Guid? targetRecordTypeId)
         {
-            return this.GetCachedRetailBillingChargeTypes().MapRecords(RetailBillingChargeTypeInfoMapper).OrderBy(x => x.Name);
+            Func<RetailBillingChargeType, bool> filterExpression = (chargeType) =>
+            {
+                if (targetRecordTypeId.HasValue)
+                {
+                    if (chargeType != null && chargeType.Settings != null && chargeType.Settings.ExtendedSettings != null && chargeType.Settings.ExtendedSettings.TargetRecordTypeId.HasValue)
+                        if (chargeType.Settings.ExtendedSettings.TargetRecordTypeId.Value != targetRecordTypeId.Value)
+                            return false;
+                }
+                return true;
+            };
+
+            return this.GetCachedRetailBillingChargeTypes().MapRecords(RetailBillingChargeTypeInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
+
         public RetailBillingChargeType GetRetailBillingChargeType(Guid retailBillingChargeTypeId)
         {
             if (this.GetCachedRetailBillingChargeTypes().TryGetValue(retailBillingChargeTypeId, out RetailBillingChargeType retailBillingChargeType))

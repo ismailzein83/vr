@@ -1,7 +1,13 @@
 ﻿using Retail.Billing.Entities;
 using Retail.Billing.MainExtensions.RetailBillingCharge;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using Vanrise.GenericData.Entities;
+using Retail.Billing.Business;
+using Vanrise.Common.Business;
+using Vanrise.Common;
+using Vanrise.GenericData.Business;
 
 namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 {
@@ -19,13 +25,118 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {
+            var customCodeChargeTypeEvaluator = GetCustomCodeChargeTypeEvaluator(context.ComponentTypeId);
+
+            if (customCodeChargeTypeEvaluator == null)
+                return 0;
+
             RetailBillingCustomCodeCharge retailBillingCustomCodeCharge = context.Charge as RetailBillingCustomCodeCharge;
-            return PricingLogic.GetHashCode() + retailBillingCustomCodeCharge.GetHashCode();
+            retailBillingCustomCodeCharge.ThrowIfNull("retailBillingCustomCodeCharge");
+
+            dynamic target = null;
+            dynamic chargeSettings = null;
+
+            if (ChargeSettingsRecordTypeId.HasValue)
+                chargeSettings = new DataRecordObject(ChargeSettingsRecordTypeId.Value, retailBillingCustomCodeCharge.FieldValues).Object;
+
+            if (TargetRecordTypeId.HasValue)
+                target = new DataRecordObject(TargetRecordTypeId.Value, context.TargetFieldValues).Object;
+
+            var customCodeChargeTypeEvaluatorInstance = Activator.CreateInstance(customCodeChargeTypeEvaluator, target, chargeSettings) as IRetailBillingCustomCodeChargeTypeEvaluator;
+
+            if (customCodeChargeTypeEvaluatorInstance == null)
+                return 0;
+
+            return customCodeChargeTypeEvaluatorInstance.CalculateCharge();
         }
 
         public override bool IsApplicableToTarget(IRetailBillingChargeTypeIsApplicableToTargetContext context)
         {
             throw new NotImplementedException();
+        }
+        public Dictionary<Guid, Type> GetCachedCustomCodeChargeTypeEvaluators()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustomCodeChargeTypeEvaluators",
+               () =>
+               {
+                   return GetCustomCodeChargeTypeTypes();
+               });
+        }
+        public Dictionary<Guid, Type> GetCustomCodeChargeTypeTypes()
+        {
+            VRComponentTypeManager vrComponentTypeManager = new VRComponentTypeManager();
+            var chargeTypes = vrComponentTypeManager.GetComponentTypes<RetailBillingChargeTypeSettings>();
+            Dictionary<Guid, string> chargeTypeFullTypeNamesByComponentTypeId = null;
+            Dictionary<Guid, Type> chargeTypeFullTypesByComponentTypeId = null;
+
+            if (chargeTypes != null && chargeTypes.Count > 0)
+            {
+                StringBuilder codeBuilder = new StringBuilder(@" 
+                using System;
+                using System.Collections.Generic;
+                using System.Linq;
+                using Vanrise.Common;
+                namespace #NAMESPACE#
+                {");
+
+                chargeTypeFullTypeNamesByComponentTypeId = new Dictionary<Guid, string>();
+                chargeTypeFullTypesByComponentTypeId = new Dictionary<Guid, Type>();
+                string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Retail.Billing.Business");
+
+                foreach (var chargeType in chargeTypes)
+                {
+                    if (chargeType.Settings != null && chargeType.Settings.ExtendedSettings != null)
+                    {
+                        var customCodeExtendedSettings = chargeType.Settings.ExtendedSettings as RetailBillingCustomCodeChargeType;
+
+                        if (customCodeExtendedSettings != null)
+                        {
+                            string className;
+                            codeBuilder.AppendLine(new RetailBillingCustomCodeChargeTypeManager().BuildChargeTypeCustomCodeClass(customCodeExtendedSettings.TargetRecordTypeId, customCodeExtendedSettings.ChargeSettingsRecordTypeId, customCodeExtendedSettings.PricingLogic, out className));
+                            string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+                            chargeTypeFullTypeNamesByComponentTypeId.Add(chargeType.VRComponentTypeId, fullTypeName);
+                        }
+                    }
+                }
+
+                codeBuilder.Append("}");
+                codeBuilder.Replace("#NAMESPACE#", classNamespace);
+                CSharpCompilationOutput compilationOutput;
+
+                if (!CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
+                {
+                    throw new Exception(String.Format("Compile Error when building Charge Type Custom Codes"));
+                }
+
+                foreach (var chargeType in chargeTypes)
+                {
+                    var fullType = chargeTypeFullTypeNamesByComponentTypeId.GetRecord(chargeType.VRComponentTypeId);
+                    var runtimeType = compilationOutput.OutputAssembly.GetType(fullType);
+
+                    if (runtimeType == null)
+                        throw new NullReferenceException($"runtimeType for component type Id:'{chargeType.VRComponentTypeId}'");
+
+                    chargeTypeFullTypesByComponentTypeId.Add(chargeType.VRComponentTypeId, runtimeType);
+                }
+            }
+
+            return chargeTypeFullTypesByComponentTypeId;
+        }
+        public Type GetCustomCodeChargeTypeEvaluator(Guid componentTypeId)
+        {
+            var customCodeChargeTypeEvaluators = GetCachedCustomCodeChargeTypeEvaluators();
+            return customCodeChargeTypeEvaluators.GetRecord(componentTypeId);
+        }
+
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            VRComponentTypeManager _vrComponentTypeManager = new VRComponentTypeManager();
+
+            DateTime? _cacheLastCheck;
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _vrComponentTypeManager.IsCacheExpired(ref _cacheLastCheck);
+            }
         }
     }
 }

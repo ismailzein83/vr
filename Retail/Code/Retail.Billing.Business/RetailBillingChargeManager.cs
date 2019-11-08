@@ -14,12 +14,12 @@ namespace Retail.Billing.Business
                 return 0;
 
             RetailBillingChargeType chargeType = new RetailBillingChargeTypeManager().GetRetailBillingChargeType(charge.RetailBillingChargeTypeId);
-
             if (chargeType.Settings == null || chargeType.Settings.ExtendedSettings == null)
                 return 0;
 
             return chargeType.Settings.ExtendedSettings.CalculateCharge(new RetailBillingChargeTypeCalculateChargeContext()
             {
+                ComponentTypeId=chargeType.VRComponentTypeId,
                 Charge = charge,
                 TargetFieldValues = targetFieldValues
             });

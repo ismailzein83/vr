@@ -11,8 +11,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_Billing_ModuleConfig.moduleName, controllerName, "GetChargeTypeExtendedSettingsConfigs"));
         }
 
-        function GetRetailBillingChargeTypeInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_Billing_ModuleConfig.moduleName, controllerName, "GetRetailBillingChargeTypeInfo"));
+        function GetRetailBillingChargeTypeInfo(targetRecordTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_Billing_ModuleConfig.moduleName, controllerName, "GetRetailBillingChargeTypeInfo"), {
+                targetRecordTypeId: targetRecordTypeId
+            });
         }
 
         function GetRetailBillingChargeType(retailBillingChargeTypeId) {

@@ -28,6 +28,7 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
             var chargeTypeSelectorDirectiveAPI;
             var retailBillingChargeTypeSettingsExtendedSettings;
             var charge;
+            var targetRecordTypeId;
             var title;
             var retailBillingChargeTypeId;
 
@@ -72,6 +73,7 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
                     if (payload != undefined) {
                         charge = payload.charge;
                         title = payload.title;
+                        targetRecordTypeId = payload.targetRecordTypeId;
 
                         if (charge != undefined)
                             retailBillingChargeTypeId = charge.RetailBillingChargeTypeId;
@@ -128,6 +130,7 @@ app.directive('retailBillingCharge', ['UtilsService', 'VRUIUtilsService', 'Retai
                     if (payload != undefined)
                         chargeTypeSelectorPayload = {
                             selectedIds: retailBillingChargeTypeId,
+                            targetRecordTypeId: targetRecordTypeId,
                             title: title
                         };
 

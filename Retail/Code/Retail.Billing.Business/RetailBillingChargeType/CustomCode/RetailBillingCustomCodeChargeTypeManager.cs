@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Retail.Billing.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Retail.Billing.Business
 {
@@ -9,16 +11,11 @@ namespace Retail.Billing.Business
     {
         #region Public Methods
 
-        public bool TryCompileChargeTypeCustomCode(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out List<string> errorMessages)
+        public string BuildChargeTypeCustomCodeClass(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out string className)
         {
-            StringBuilder codeBuilder = new StringBuilder(@" 
-                using System;
-                using System.Collections.Generic;
-                using System.Linq;
-                using Vanrise.Common;
 
-                namespace Retail.Billing.Business
-                {
+            StringBuilder codeBuilder = new StringBuilder(@" 
+      
                     public class #ClassName# : IRetailBillingCustomCodeChargeTypeEvaluator
                     {
                         public #TargetRecordTypeRuntimeType# Target { get; set; }
@@ -30,15 +27,17 @@ namespace Retail.Billing.Business
                             Target = target;
                             ChargeSettings = chargeSettings;  
                         }    
-                           
+                            public #ClassName#()
+                        {
+                        }     
+
                         public decimal CalculateCharge()
                         {
                             #PricingLogic#
                         }                       
-                    }
-                }");
+                     }");
 
-            string className = $"RetailBillingCustomCodeChargeTypeEvaluator_{Guid.NewGuid().ToString("N")}";
+            className = $"RetailBillingCustomCodeChargeTypeEvaluator_{Guid.NewGuid().ToString("N")}";
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
 
@@ -49,6 +48,23 @@ namespace Retail.Billing.Business
             codeBuilder.Replace("#TargetRecordTypeRuntimeType#", targetRecordTypeRuntimeType);
             codeBuilder.Replace("#ChargeSettingsRecordTypeRuntimeType#", chargeSettingsRecordTypeRuntimeType);
             codeBuilder.Replace("#PricingLogic#", pricingLogic);
+
+            return codeBuilder.ToString();
+        }
+        public bool TryCompileChargeTypeCustomCode(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out List<string> errorMessages)
+        {
+            StringBuilder codeBuilder = new StringBuilder(@" 
+                using System;
+                using System.Collections.Generic;
+                using System.Linq;
+                using Vanrise.Common;
+
+                namespace Retail.Billing.Business
+                {
+                    #Class#
+                }");
+
+            codeBuilder.Replace("#Class#",BuildChargeTypeCustomCodeClass(targetRecordTypeId, chargeSettingsRecordTypeId, pricingLogic, out string className));
 
             CSharpCompilationOutput compilationOutput;
 

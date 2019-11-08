@@ -44,6 +44,19 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Branches\Label_20190318\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
@@ -64,6 +77,10 @@
     <Compile Include="RetailBillingCharge\RetailBillingCustomCodeCharge.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.Billing.Business\Retail.Billing.Business.csproj">
+      <Project>{78b0018b-0fab-4329-b0db-f2d50099e912}</Project>
+      <Name>Retail.Billing.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Billing.Entities\Retail.Billing.Entities.csproj">
       <Project>{f0f463c2-64f4-48dc-95ae-fd7f6bca4ac3}</Project>
       <Name>Retail.Billing.Entities</Name>

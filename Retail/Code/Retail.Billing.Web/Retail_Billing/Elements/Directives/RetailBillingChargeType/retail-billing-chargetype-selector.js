@@ -56,13 +56,14 @@ app.directive('retailBillingChargetypeSelector', ['Retail_Billing_ChargeTypeAPIS
                 selectorAPI.clearDataSource();
 
                 var selectedIds;
-
+                var targetRecordTypeId;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    targetRecordTypeId = payload.targetRecordTypeId;
                     ctrl.title = payload.title;
                 }
 
-                return Retail_Billing_ChargeTypeAPIService.GetRetailBillingChargeTypeInfo().then(function (response) {
+                return Retail_Billing_ChargeTypeAPIService.GetRetailBillingChargeTypeInfo(targetRecordTypeId).then(function (response) {
                     if (response != null) {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);

@@ -7,6 +7,8 @@ namespace Retail.Billing.MainExtensions.RetailBillingCharge
     {
         public override Guid ConfigId { get { return new Guid("29cc92fd-9abb-4271-b1de-22181906d7f6"); } }
 
+        public Guid? TargetRecordTypeId { get; set; }
+
         public override string SelectorUIControl { get { return "retail-billing-charge-customobject-runtime"; } }
 
         public override bool AreEqual(object newValue, object oldValue)
