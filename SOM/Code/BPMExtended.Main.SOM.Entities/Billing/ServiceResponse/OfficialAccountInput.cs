@@ -13,6 +13,7 @@ namespace BPMExtended.Main.SOMAPI
         public string ContactId { get; set; }
         public string CustomerId { get; set; }
         public string CustomerCategoryId { get; set; }
+        public int LevelId { get; set; }
         public string DefaultRatePlan { get; set; }
         public string Name { get; set; }
         public string MinistryName { get; set; }
