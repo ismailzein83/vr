@@ -5,13 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.NIM.Business
 {
     public class TechnicalAddressManager
     {
-      
+        GenericBusinessEntityManager _genericBEManager = new GenericBusinessEntityManager();
+        
         #region Public Methods
         public GetTechnicalAddressOutput GetTechnicalAddress(TechnicalAddressNumberType numberType, string number)
         {
@@ -62,6 +64,95 @@ namespace Retail.NIM.Business
                     break;
             }
             return output;
+        }
+
+        public GetTechnicalAddressOutput GetTechnicalAddressByPath(long pathId)
+        {
+            var pathConnections = _genericBEManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.PathConnectionBEDefinitionId, null, new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>
+                {
+                    new ObjectListRecordFilter
+                    {
+                        FieldName = "Path",
+                        Values = new List<object>{ pathId }
+                    }
+                }
+            });
+
+            var output = new GetTechnicalAddressOutput
+            {
+                TechnologyItems = new List<GetTechnicalAddressOutputTechnologyItem>()
+            };
+
+            if (pathConnections != null && pathConnections.Count > 0)
+            {
+                NodeManager nodeManager = new NodeManager();
+                bool isFDBFound = false;
+                bool isDPFound = false;
+                GenericBusinessEntity nodeEntity = null;
+                foreach (var pathConnection in pathConnections)
+                {
+                    var port1NodeTypeId = (Guid)pathConnection.FieldValues.GetRecord("Port1NodeType");
+                    var port1NodeId = (long)pathConnection.FieldValues.GetRecord("Port1Node");
+                    var port2NodeTypeId = (Guid)pathConnection.FieldValues.GetRecord("Port2NodeType");
+                    var port2NodeId = (long)pathConnection.FieldValues.GetRecord("Port2Node");
+
+                    if (port1NodeTypeId == StaticBEDefinitionIDs.DPNodeTypeId)
+                    {
+                        nodeEntity = nodeManager.GetNode(port1NodeId);
+                        isDPFound = true;
+                        break;
+                    }
+                    if (port2NodeTypeId == StaticBEDefinitionIDs.DPNodeTypeId)
+                    {
+                        nodeEntity = nodeManager.GetNode(port2NodeId);
+                        isDPFound = true;
+                        break;
+                    }
+
+                    if (port1NodeTypeId == StaticBEDefinitionIDs.FDBNodeTypeId)
+                    {
+                        nodeEntity = nodeManager.GetNode(port1NodeId);
+                        isFDBFound = true;
+                        break;
+                    }
+                    if (port2NodeTypeId == StaticBEDefinitionIDs.FDBNodeTypeId)
+                    {
+                        nodeEntity = nodeManager.GetNode(port2NodeId);
+                        isFDBFound = true;
+                        break;
+                    }
+                }
+
+                output.AreaId = (long)nodeEntity.FieldValues.GetRecord("Area");
+                output.SiteId = (long)nodeEntity.FieldValues.GetRecord("Site");
+                output.RegionId = (int)nodeEntity.FieldValues.GetRecord("Region");
+                output.CityId = (int)nodeEntity.FieldValues.GetRecord("City");
+                output.TownId = (int)nodeEntity.FieldValues.GetRecord("Town");
+                output.StreetId = (long)nodeEntity.FieldValues.GetRecord("Street");
+                output.BuildingDetails = nodeEntity.FieldValues.GetRecord("Building") as string;
+
+                if (isFDBFound)
+                {
+                    var dpNode = nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.DPBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
+                    output.TechnologyItems.Add(GetFDBTechnicalAddress(nodeEntity));
+                    output.TechnologyItems.Add(GetDPTechnicalAddress(dpNode));
+                }
+                if(isDPFound)
+                {
+                    var dpNode = nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.DPBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
+                    output.TechnologyItems.Add(GetFDBTechnicalAddress(nodeEntity));
+                    output.TechnologyItems.Add(GetDPTechnicalAddress(dpNode));
+                }
+            }
+            else
+            {
+                output.TechnologyItems.Add(GetDPTechnicalAddress(null));
+                output.TechnologyItems.Add(GetFDBTechnicalAddress(null));
+            }
+            return output;
+
         }
         #endregion
 
