@@ -168,12 +168,13 @@ as (select * from (values
 ('376687E2-268D-4DFA-AA39-3205C3CD18E5','WhS_RouteSync_SwitchRouteSynchronizer_HuaweiMSoftX3000','Huawei MSoftX3000 Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-huawei-swsync", "SettingsEditor":"whs-routesync-huawei-settingseditor"}'),
 ('2574530b-b9fd-44e2-bd0c-d1f46db80e68','WhS_RouteSync_SwitchRouteSynchronizer_HuaweiSoftX3000','Huawei SoftX3000 Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-huawei-softx3000-swsync", "SettingsEditor":"whs-routesync-huaweisoftx3000-settingseditor"}'),
 ('94739CBC-00A7-4CEB-9285-B4CB35D7D003','WhS_RouteSync_SwitchRouteSynchronizer_Ericsson','Ericsson Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'						,'{"Editor":"whs-routesync-ericsson-swsync","SettingsEditor":"whs-routesync-ericsson-settingseditor"}'),
-('D770F53B-057F-4BB8-BF20-883A2DBC510B','WhS_RouteSync_SwitchRouteSynchronizer_Cataleya','Cataleya Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'						,'{"Editor":"whs-routesync-cataleya-swsync"}'),
+('D770F53B-057F-4BB8-BF20-883A2DBC510B','WhS_RouteSync_SwitchRouteSynchronizer_Cataleya','Cataleya Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'						,'{"Editor":"whs-routesync-cataleya-swsync"}'), 
  
 ('366AB5D3-5083-420D-B5CE-5313DA025106','Whs_RouteSync_RadiusDataManager_SQL','MVTS SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-mvtsradius-sqldatamanager"}'),
 ('09ED9252-AF87-447D-9C40-738CF222C64E','Whs_RouteSync_RadiusDataManager_SQL','Teles SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-telesradius-sqldatamanager"}'),
 ('34F3483D-2572-4349-A6ED-3504B2D9E714','Whs_RouteSync_IdbDataManager_Postgres','Teles Postgres Idb Data Manager','WhS_RouteSync_IdbDataManagerSettings'			,'{"Editor":"whs-routesync-telesidb-postgresdatamanager"}'),
 ('EBAAB50D-CEF3-4C4B-AAC8-FC677DCEA5E7','Whs_RouteSync_FreeRadiusDataManager_Postgres','Free Radius Postgres Data Manager','WhS_RouteSync_FreeRadiusDataManager'	,'{"Editor":"whs-routesync-freeradiuspostgres-datamanager"}'),
+('CAD5F46B-F182-462A-AACC-B862ACD11AEB','Whs_RouteSync_CataleyaDataManager_Postgres','Cataleya Postgres Data Manager','WhS_RouteSync_CataleyaDataManager'			,'{"Editor":"whs-routesync-cataleyapostgres-datamanager"}'),
 
 ('6B36007E-3333-40D3-B574-510C8338E6C0','WhS_SupPL_SupplierPriceListConfiguration_Basic','Basic','WhS_SupPL_SupplierPriceListConfiguration'	,'{"Editor":"whs-spl-supplierpricelistconfiguration-basic"}'),
 ('13CDF53A-3780-41D3-9FE1-0054458171C3','Pricelist Date','Pricelist Date','VR_ExcelConversion_FieldMapping'									,'{"Editor":"whs-spl-excelconversion-fieldmapping-pricelistdatefield"}'),
