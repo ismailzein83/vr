@@ -8,7 +8,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Entities
 {
     public class CarrierAccountVersionInfo
     {
-        public int CarrierAccountId { get; set; }
+        public int CarrierId { get; set; }
         public int Version { get; set; }
     }
 }

@@ -79,6 +79,7 @@
     <Compile Include="Data\ICataleyaDataManager.cs" />
     <Compile Include="Entities\CarrierAccountMapping.cs" />
     <Compile Include="Entities\CarrierAccountVersionInfo.cs" />
+    <Compile Include="Entities\CarrierFinalizationData.cs" />
     <Compile Include="Entities\CataleyaConvertedRoute.cs" />
     <Compile Include="Entities\CataleyaDataManagerConfig.cs" />
     <Compile Include="Entities\Context\RouteContext.cs" />

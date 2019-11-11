@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Cataleya.Data;
 using TOne.WhS.RouteSync.Cataleya.Entities;
@@ -20,7 +21,7 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            var allActiveCarrierAccountMappingByCarrier = new Dictionary<int, CarrierAccountMapping>();
+            var allActiveCarrierAccountsMappingByCarrier = new Dictionary<int, CarrierAccountMapping>();
 
             var customersIdentification = new List<CustomerIdentification>();
             var carrierAccountsMapping = new List<CarrierAccountMapping>();
@@ -34,12 +35,16 @@ namespace TOne.WhS.RouteSync.Cataleya
                 if (CarrierMappings.TryGetValue(customer.CustomerId.ToString(), out var carrierMapping))
                     if (carrierMapping.CustomerMappings != null && carrierMapping.CustomerMappings.InTrunks != null && carrierMapping.CustomerMappings.InTrunks.Count > 0)
                     {
-                        allActiveCarrierAccountMappingByCarrier.Add(carrierMapping.CarrierId, new CarrierAccountMapping()
+                        var carrierAccountMapping = new CarrierAccountMapping()
                         {
                             CarrierId = carrierMapping.CarrierId,
                             ZoneID = carrierMapping.ZoneID,
-                            Version = 0
-                        });
+                            Version = 0,
+                            RouteTableName = $"Rt_{carrierMapping.CarrierId}_0"
+                        };
+
+                        allActiveCarrierAccountsMappingByCarrier.Add(carrierMapping.CarrierId, carrierAccountMapping);
+                        carrierAccountsMapping.Add(carrierAccountMapping);
 
                         getCarrierAccountsPreviousVersionNumbersContext.CarrierAccountIds.Add(carrierMapping.CarrierId);
 
@@ -54,41 +59,34 @@ namespace TOne.WhS.RouteSync.Cataleya
                     }
             }
 
-            var carrierAccountsVersionNumbers = DataManager.GetCarrierAccountsPreviousVersionNumbers(getCarrierAccountsPreviousVersionNumbersContext);
+            var carrierAccountsPreviousVersionInfo = DataManager.GetCarrierAccountsPreviousVersion(getCarrierAccountsPreviousVersionNumbersContext);
 
-            foreach (var carrierAccountVersionNumber in carrierAccountsVersionNumbers)
+            if (carrierAccountsPreviousVersionInfo != null)
             {
-                var customerInfo = allActiveCarrierAccountMappingByCarrier.GetRecord(carrierAccountVersionNumber.CarrierAccountId);
-                if (customerInfo != null)
-                    customerInfo.Version = (carrierAccountVersionNumber.Version + 1) % 2;
+                foreach (var carrierAccountVersionInfo in carrierAccountsPreviousVersionInfo)
+                {
+                    var carrierAccountMapping = allActiveCarrierAccountsMappingByCarrier.GetRecord(carrierAccountVersionInfo.CarrierId);
+                    if (carrierAccountMapping == null)
+                        continue;
 
-                customerInfo.RouteTableName = $"Rt_{customerInfo.CarrierId}_{ customerInfo.Version}";
+                    var newVersion = (carrierAccountVersionInfo.Version + 1) % 2;
+                    carrierAccountMapping.Version = newVersion;
 
-                carrierAccountsMapping.Add(customerInfo);
-                routeTableNames.Add(customerInfo.RouteTableName);
+                    carrierAccountMapping.RouteTableName = $"Rt_{carrierAccountMapping.CarrierId}_{newVersion}";
+                }
             }
 
-            this.DataManager.PrepareTables(new RouteInitializeContext()
+            foreach (var carrierMapping in carrierAccountsMapping)
+            {
+                routeTableNames.Add(carrierMapping.RouteTableName);
+            }
+
+            DataManager.PrepareTables(new RouteInitializeContext()
             {
                 CustomersIdentification = customersIdentification,
                 CarrierAccountsMapping = carrierAccountsMapping,
                 RouteTableNames = routeTableNames
             });
-        }
-
-        public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
-        {
-            return this.DataManager.PrepareDataForApply(context.ConvertedRoutes);
-        }
-
-        public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
-        {
-            this.DataManager.ApplySwitchRouteSyncRoutes(context);
-        }
-
-        public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
-        {
-            throw new NotImplementedException();
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -136,9 +134,119 @@ namespace TOne.WhS.RouteSync.Cataleya
             context.ConvertedRoutes = routes;
         }
 
+        public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
+        {
+            return DataManager.PrepareDataForApply(context.ConvertedRoutes);
+        }
+
+        public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
+        {
+            DataManager.ApplySwitchRouteSyncRoutes(context);
+        }
+
+        public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
+        {
+            var carrierFinalizationDataByCustomer = new Dictionary<int, CarrierFinalizationData>();
+
+            var oldCustomerIdentifications = DataManager.GetAllCustomerIdentifications(false);
+            var customerIdentifications = DataManager.GetAllCustomerIdentifications(true);
+
+            var oldCarrierAccountsMapping = DataManager.GetAllCarrierAccountsMapping(false);
+            var carrierAccountsMapping = DataManager.GetAllCarrierAccountsMapping(true);
+            var routeTableNames = new List<String>();
+
+            if (customerIdentifications != null && customerIdentifications.Count > 0)
+            {
+                for (int i = 0; i < customerIdentifications.Count; i++)
+                {
+                    var customerIdentification = customerIdentifications[i];
+                    var carrierFinalizationData = carrierFinalizationDataByCustomer.GetOrCreateItem(customerIdentification.CarrierId);
+
+                    if (oldCustomerIdentifications != null && customerIdentifications.Count != 0)
+                        for (int j = 0; j < oldCustomerIdentifications.Count; j++)
+                        {
+                            var oldCustomerIdentification = oldCustomerIdentifications[j];
+                            if (oldCustomerIdentification.CarrierId == customerIdentification.CarrierId && oldCustomerIdentification.Trunk == customerIdentification.Trunk)
+                            {
+                                oldCustomerIdentifications.RemoveAt(j);
+                                break;
+                            }
+                        }
+                    else
+                    {
+                        if (carrierFinalizationData.CustomerIdentificationsToAdd == null)
+                            carrierFinalizationData.CustomerIdentificationsToAdd = new List<CustomerIdentification>() { };
+
+                        carrierFinalizationData.CustomerIdentificationsToAdd.Add(customerIdentification);
+                    }
+                }
+            }
+
+            if (oldCustomerIdentifications != null && customerIdentifications.Count != 0)
+            {
+                foreach (var oldCustomerIdentification in oldCustomerIdentifications)
+                {
+                    var carrierFinalizationData = carrierFinalizationDataByCustomer.GetOrCreateItem(oldCustomerIdentification.CarrierId);
+
+                    if (carrierFinalizationData.CustomerIdentificationsToDelete == null)
+                        carrierFinalizationData.CustomerIdentificationsToDelete = new List<CustomerIdentification>() { };
+
+                    carrierFinalizationData.CustomerIdentificationsToAdd.Add(oldCustomerIdentification);
+                }
+            }
+
+            if (carrierAccountsMapping != null && carrierAccountsMapping.Count != 0)
+            {
+                for (int i = 0; i < carrierAccountsMapping.Count; i++)
+                {
+                    var carrierAccountMapping = carrierAccountsMapping[i];
+                    var carrierFinalizationData = carrierFinalizationDataByCustomer.GetOrCreateItem(carrierAccountMapping.CarrierId);
+                    bool isItemToUpdate = false;
+
+                    if (oldCarrierAccountsMapping != null && oldCarrierAccountsMapping.Count != 0)
+                        for (int j = 0; j < oldCarrierAccountsMapping.Count; j++)
+                        {
+                            var oldcarrierAccount = oldCarrierAccountsMapping[j];
+
+                            if (oldcarrierAccount.CarrierId == carrierAccountMapping.CarrierId)
+                            {
+                                isItemToUpdate = true;
+                                carrierFinalizationData.CarrierAccountMappingToUpdate = carrierAccountMapping;
+                                oldCustomerIdentifications.RemoveAt(j);
+                                routeTableNames.Add(carrierAccountMapping.RouteTableName);
+                                break;
+                            }
+                        }
+                    if (!isItemToUpdate)
+                    {
+                        carrierFinalizationData.CarrierAccountMappingToAdd = carrierAccountMapping;
+                        routeTableNames.Add(carrierAccountMapping.RouteTableName);
+                    }
+                }
+            }
+
+            if (oldCarrierAccountsMapping != null && oldCarrierAccountsMapping.Count != 0)
+            {
+                foreach (var oldCarrierAccountMapping in oldCarrierAccountsMapping)
+                {
+                    var carrierFinalizationData = carrierFinalizationDataByCustomer.GetOrCreateItem(oldCarrierAccountMapping.CarrierId);
+
+                    carrierFinalizationData.CarrierAccountMappingToUpdate = new CarrierAccountMapping()
+                    {
+                        ZoneID = oldCarrierAccountMapping.ZoneID,
+                        CarrierId = oldCarrierAccountMapping.CarrierId,
+                        RouteTableName = null,
+                        Version = (oldCarrierAccountMapping.Version + 1) % 2
+                    };
+                }
+            }
+
+            DataManager.Finalize(new CataleyaFinalizeContext() { CarrierFinalizationDataByCustomer = carrierFinalizationDataByCustomer });
+        }
+
         public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
         {
-            this.DataManager = null;
+            DataManager = null;
         }
 
         #endregion
@@ -205,7 +313,6 @@ namespace TOne.WhS.RouteSync.Cataleya
 
             return string.Join("|", concatenatedOptionsTrunksWithBackups);
         }
-
         private string BuildPriorityOptions(List<RouteOption> routeOptions)
         {
             var allOptionsTrunks = new List<string>();
