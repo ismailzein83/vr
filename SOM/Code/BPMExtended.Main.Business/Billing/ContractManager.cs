@@ -187,7 +187,13 @@ namespace BPMExtended.Main.Business
             using (SOMClient client = new SOMClient())
             {
                 xDSLContractEntity = client.Get<XDSLContract>(String.Format("api/SOM.ST/Billing/GetXDSLContract?contractId={0}", contractId));
+                var catalogManager = new CatalogManager();
+                xDSLContractEntity.RatePlanName = catalogManager.GetRatePlanNameFromCatalog(xDSLContractEntity.RateplanId);
                 xDSLContractEntity.Status = GetContractStatusByEnumValue(xDSLContractEntity.Status.ToString());
+                if (string.IsNullOrEmpty(xDSLContractEntity.TelephonyContract))
+                    xDSLContractEntity.SubType = "GSHDSL";
+                else
+                    xDSLContractEntity.SubType = "ADSL";
             }
             return xDSLContractEntity;
         }

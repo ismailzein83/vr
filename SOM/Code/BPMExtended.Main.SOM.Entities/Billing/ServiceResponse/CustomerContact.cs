@@ -18,6 +18,8 @@ namespace BPMExtended.Main.SOMAPI
         public DateTime ActivationDate { get; set; }
         public DateTime LastStatusChangeDate { get; set; }
         public bool IsBlocked { get; set; }
+        public string RatePlanName { get; set; }
+        public string SubType { get; set; }
     }
 
     public class TelephonyContract

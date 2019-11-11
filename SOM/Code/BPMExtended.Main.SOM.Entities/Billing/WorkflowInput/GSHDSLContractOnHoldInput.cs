@@ -19,6 +19,7 @@ namespace BPMExtended.Main.SOMAPI
         public string Street { get; set; }
         public string Building { get; set; }
         public string Floor { get; set; }
+        public string LocationType { get; set; }
         public string Town { get; set; }
         public string Region { get; set; }
         public string StateProvince { get; set; }

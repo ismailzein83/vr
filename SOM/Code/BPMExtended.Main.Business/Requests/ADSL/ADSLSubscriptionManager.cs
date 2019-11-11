@@ -105,6 +105,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StStreet");
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
+            esq.AddColumn("StLocation");
+            esq.AddColumn("StLocation.Id");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -125,6 +127,7 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var username = entities[0].GetColumnValue("StUserName");
+                var locationType= entities[0].GetColumnValue("StLocationName");
 
                 CRMCustomerInfo info = contactId != null ? new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null) : new CRMCustomerManager().GetCRMCustomerInfo(null, accountId.ToString());
 
@@ -188,6 +191,7 @@ namespace BPMExtended.Main.Business
                         SubType =  "ADSL",
                         CountryId= "206",
                         RatePlanId = ratePlanId,
+                        LocationType= locationType.ToString(),
                         DepositServices = depositServices,
                         ContractServices = contractServices,
                         CommonInputArgument = new CommonInputArgument()
