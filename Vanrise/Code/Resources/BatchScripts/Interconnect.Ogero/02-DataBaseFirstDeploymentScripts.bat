@@ -7,5 +7,5 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO.
 ECHO Interconnect.Ogero DataBase First Deployment Scripts
 
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\InterConnect_Ogero.PostDeployment.sql" 		/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Interconnect.Ogero\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Interconnect\Interconnect_Ogero.json"	/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Interconnect.Ogero\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" 						/y /v /z /i /Q /R					"\\192.168.110.185\Fixes\WebSite\Interconnect.Ogero\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
