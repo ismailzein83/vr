@@ -71,6 +71,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
             Dictionary<string, DataAnalysisInfo> dataAnalysisInfos = new Dictionary<string, DataAnalysisInfo>();
             Dictionary<Guid, RecordProfilingOutputSettings> daRecordProfilingOutputSettings = new Dictionary<Guid, RecordProfilingOutputSettings>();
+            RecordProfilingOutputSettingsManager recordProfilingOutputSettingsManager = new RecordProfilingOutputSettingsManager();
 
             foreach (DAProfCalcExecInputDetail dAProfCalcExecInputItem in inputArgument.DAProfCalcExecInputDetails)
             {
@@ -82,6 +83,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 if (dataAnalysisItemDefinition == null)
                     throw new NullReferenceException(string.Format("dataAnalysisItemDefinition {0}", outputItemDefinitionId));
 
+                Dictionary<string, DAProfCalcAggregationFieldDetail> daProfCalcAggregationFieldDetailDict = recordProfilingOutputSettingsManager.GetRecordProfilingAggregationFields(outputItemDefinitionId);
+
                 var recordProfilingOutputSettings = GetRecordProfilingOutputSettings(dataAnalysisItemDefinition);
                 if (!daRecordProfilingOutputSettings.ContainsKey(outputItemDefinitionId))
                     daRecordProfilingOutputSettings.Add(outputItemDefinitionId, recordProfilingOutputSettings);
@@ -92,7 +95,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                     DataAnalysisItemDefinition = dataAnalysisItemDefinition,
                     DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor }, inputArgument.UseRemoteDataGrouper),
                     GroupingFieldNames = dAProfCalcExecInputItem.DAProfCalcExecInput.GroupingFieldNames,
-                    AnalysisStartDate = inputArgument.EffectiveDate.AddMinutes(-1 * dAProfCalcExecInputItem.DAProfCalcExecInput.DAProfCalcAnalysisPeriod.GetPeriodInMinutes())
+                    AnalysisStartDate = inputArgument.EffectiveDate.AddMinutes(-1 * dAProfCalcExecInputItem.DAProfCalcExecInput.DAProfCalcAnalysisPeriod.GetPeriodInMinutes()),
+                    DAProfCalcAggregationFieldDetailsByName = daProfCalcAggregationFieldDetailDict,
+                    ParameterValues = dAProfCalcExecInputItem.DAProfCalcExecInput.ParameterValues
                 });
             }
             RecordFilterManager recordFilterManager = new RecordFilterManager();
@@ -111,7 +116,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                             Dictionary<string, ProfilingDGItem> profilingDGItems = dataAnalysisInfo.Value.ProfilingDGItems;
 
                             RecordProfilingOutputSettings settings;
-                            daRecordProfilingOutputSettings.TryGetValue(dataAnalysisInfo.Value.DataAnalysisItemDefinition.DataAnalysisItemDefinitionId, out settings);
+
+                            var dataAnalysisItemDefinitionId = dataAnalysisInfo.Value.DataAnalysisItemDefinition.DataAnalysisItemDefinitionId;
+                            daRecordProfilingOutputSettings.TryGetValue(dataAnalysisItemDefinitionId, out settings);
 
                             foreach (dynamic cdr in recordBatch.Records)
                             {
@@ -140,6 +147,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                                     profilingDGItems.Add(groupingKey, profilingDGItem);
                                 }
 
+                                var daProfCalcAggregationFieldDetailsByName = dataAnalysisInfo.Value.DAProfCalcAggregationFieldDetailsByName;
+                                var context = new DAProfCalcIsExpressionMatchedContext(cdr, daDataRecordTypeId, groupingValues, dataAnalysisInfo.Value.ParameterValues, dataAnalysisItemDefinitionId);
+
                                 if (settings != null && settings.AggregationFields != null)
                                 {
                                     for (var index = 0; index < settings.AggregationFields.Count; index++)
@@ -156,8 +166,15 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
                                             if (aggregationField.TimeFilter.ExcludeTo && attemptDateTime == dateTimeRange.To)
                                                 continue;
-                                            
+
                                             if (attemptDateTime < dateTimeRange.From || attemptDateTime > dateTimeRange.To)
+                                                continue;
+                                        }
+
+
+                                        if (daProfCalcAggregationFieldDetailsByName != null && daProfCalcAggregationFieldDetailsByName.TryGetValue(aggregationField.FieldName, out DAProfCalcAggregationFieldDetail dAProfCalcAggregationFieldDetail))
+                                        {
+                                            if (dAProfCalcAggregationFieldDetail != null && dAProfCalcAggregationFieldDetail.Evaluator != null && !dAProfCalcAggregationFieldDetail.Evaluator.IsExpressionMatched(context))
                                                 continue;
                                         }
 
@@ -287,6 +304,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             public RecordFilterGroup DARecordFilterGroup { get; set; }
             public List<string> GroupingFieldNames { get; set; }
             public DateTime AnalysisStartDate { get; set; }
+            public Dictionary<string, DAProfCalcAggregationFieldDetail> DAProfCalcAggregationFieldDetailsByName { get; set; }
+            public Dictionary<string, Object> ParameterValues { get; set; }
         }
     }
 }

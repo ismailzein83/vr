@@ -32,5 +32,31 @@ namespace Vanrise.Analytic.Business
                     return calculationFields;
                 });
         }
+
+        public Dictionary<string, DAProfCalcAggregationFieldDetail> GetRecordProfilingAggregationFields(Guid dataAnalysisItemDefinitionId)
+        {
+            string cacheName = $"GetRecordProfilingAggregationFields{dataAnalysisItemDefinitionId}";
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataAnalysisItemDefinitionManager.CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
+
+                    Dictionary<string, DAProfCalcAggregationFieldDetail> aggregationFields = new Dictionary<string, DAProfCalcAggregationFieldDetail>();
+                    RecordProfilingOutputSettings recordProfilingOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<RecordProfilingOutputSettings>(dataAnalysisItemDefinitionId);
+                    if (recordProfilingOutputSettings.AggregationFields != null)
+                    {
+                        foreach (var aggregationField in recordProfilingOutputSettings.AggregationFields)
+                        {
+                            DAProfCalcAggregationFieldDetail daProfCalcAggregationFieldDetail = new DAProfCalcAggregationFieldDetail
+                            {
+                                Entity = aggregationField
+                            };
+                            aggregationFields.Add(daProfCalcAggregationFieldDetail.Entity.FieldName, daProfCalcAggregationFieldDetail);
+                        }
+                        DAProfCalcDynamicTypeGenerator.BuildAggregationEvaluators(dataAnalysisItemDefinitionId, aggregationFields.Values);
+                    }
+                    return aggregationFields;
+                });
+        }
     }
 }

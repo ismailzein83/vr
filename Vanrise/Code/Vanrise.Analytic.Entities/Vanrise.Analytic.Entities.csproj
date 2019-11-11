@@ -128,6 +128,7 @@
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAnalysisPeriod.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleFilterDefinition.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAnalysisPeriodSettings.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\IDAProfCalcAggregationEvaluator.cs" />
     <Compile Include="IAutomatedReportEvaluatorContext.cs" />
     <Compile Include="MeasureStyleRuleEditorRuntime.cs" />
     <Compile Include="Range\VRVisualizationRange.cs" />

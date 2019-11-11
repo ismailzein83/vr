@@ -37,6 +37,13 @@
                     <vr-section title="Time Filter" ng-show="false" collapsible>
                         <vr-analytic-timerangefilter-selective on-ready="scopeModel.onTimeRangeFilterSelectiveReady" isrequired="false"></vr-analytic-timerangefilter-selective>
                     </vr-section>
+                    <vr-section title="Expression" collapsible>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-textarea label="Expression" value="scopeModel.expression" rows="10"></vr-textarea>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

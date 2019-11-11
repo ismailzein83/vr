@@ -15,6 +15,8 @@ namespace Vanrise.Analytic.Entities
 
         public DAAggregateTimeFilter TimeFilter { get; set; }
 
+        public string Expression { get; set; }
+
         //ToBeDeleted
         public TimeRangeFilter TimeRangeFilter { get; set; }
     }
@@ -26,5 +28,12 @@ namespace Vanrise.Analytic.Entities
         public bool ExcludeFrom { get; set; }
 
         public bool ExcludeTo { get; set; }
+    }
+
+    public class DAProfCalcAggregationFieldDetail
+    {
+        public DAProfCalcAggregationField Entity { get; set; }
+
+        public IDAProfCalcAggregationEvaluator Evaluator { get; set; }
     }
 }

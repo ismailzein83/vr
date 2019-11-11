@@ -12,7 +12,11 @@ namespace Vanrise.Analytic.Business
         {
             Dictionary<string, string> calculationFullTypeById = new Dictionary<string, string>();
             StringBuilder codeBuilder = new StringBuilder(@"using System;
-                                                            using System.Linq;");
+                                                            using System.Linq;
+                                                            using System.Collections.Generic;
+                                                            using Vanrise.Entities;
+                                                            using Vanrise.Common;");
+
             foreach (var calculationField in calculationFields)
             {
                 if (String.IsNullOrEmpty(calculationField.Entity.Expression))
@@ -66,6 +70,74 @@ namespace Vanrise.Analytic.Business
                 calculationField.Evaluator = Activator.CreateInstance(runtimeType) as IDAProfCalcCalculationEvaluator;
                 if (calculationField.Evaluator == null)
                     throw new NullReferenceException(String.Format("calculationField.Evaluator '{0}'", calculationField.Entity.FieldName));
+            }
+        }
+
+        public static void BuildAggregationEvaluators(Guid outputItemDefinitionId, IEnumerable<DAProfCalcAggregationFieldDetail> aggregationFields)
+        {
+            Dictionary<string, string> aggregationFullTypeById = new Dictionary<string, string>();
+            StringBuilder codeBuilder = new StringBuilder(@"using System;
+                                                            using System.Linq;
+                                                            using System.Collections.Generic;
+                                                            using Vanrise.Entities;
+                                                            using Vanrise.Common;");
+
+            foreach (var aggregationField in aggregationFields)
+            {
+                if (String.IsNullOrEmpty(aggregationField.Entity.Expression))
+                    continue;
+
+                StringBuilder classDefinitionBuilder = new StringBuilder(@"
+                namespace #NAMESPACE#
+                {
+                    public class #CLASSNAME# : Vanrise.Analytic.Entities.IDAProfCalcAggregationEvaluator
+                    {
+                        public bool IsExpressionMatched(Vanrise.Analytic.Entities.IDAProfCalcIsExpressionMatchedContext context)
+                        {
+                            #EXECUTIONCODE#
+                        }
+                    }
+                }");
+
+                string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
+                string className = "AggregationEvaluator";
+                classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
+                classDefinitionBuilder.Replace("#CLASSNAME#", className);
+                string fullTypeName = $"{classNamespace}.{className}";
+
+                classDefinitionBuilder.Replace("#EXECUTIONCODE#", aggregationField.Entity.Expression);
+                codeBuilder.AppendLine(classDefinitionBuilder.ToString());
+                aggregationFullTypeById.Add(aggregationField.Entity.FieldName, fullTypeName);
+            }
+
+            if (aggregationFullTypeById.Count == 0)
+                return;
+
+            CSharpCompilationOutput compilationOutput;
+            if (!CSharpCompiler.TryCompileClass($"DAProfCalcOutputItemDef_{outputItemDefinitionId.ToString().Replace("-", "")}", codeBuilder.ToString(), out compilationOutput))
+            {
+                StringBuilder errorsBuilder = new StringBuilder();
+                if (compilationOutput.ErrorMessages != null)
+                {
+                    foreach (var errorMessage in compilationOutput.ErrorMessages)
+                    {
+                        errorsBuilder.AppendLine(errorMessage);
+                    }
+                }
+                throw new Exception($"Compile Error when building Aggregation Evaluator for Output Item Definition Id '{outputItemDefinitionId}'. Errors: {errorsBuilder}");
+            }
+
+            foreach (var aggregationField in aggregationFields)
+            {
+                if (!aggregationFullTypeById.TryGetValue(aggregationField.Entity.FieldName, out string aggregationFullType))
+                    continue;
+
+                var runtimeType = compilationOutput.OutputAssembly.GetType(aggregationFullType);
+                if (runtimeType == null)
+                    throw new NullReferenceException("runtimeType");
+                aggregationField.Evaluator = Activator.CreateInstance(runtimeType) as IDAProfCalcAggregationEvaluator;
+                if (aggregationField.Evaluator == null)
+                    throw new NullReferenceException($"aggregationField.Evaluator '{aggregationField.Entity.FieldName}'");
             }
         }
     }
