@@ -69,7 +69,7 @@
     <Compile Include="AnalyticTableViewSettings.cs" />
     <Compile Include="AutomatedReportManager.cs" />
     <Compile Include="ConfigManager.cs" />
-    <Compile Include="DataAnalysis\DAGetParameterValueContext.cs" />
+    <Compile Include="DataAnalysis\DAProfCalcIsExpressionMatchedContext.cs" />
     <Compile Include="DataAnalysis\DAProfCalcAlertRuleTypeBPExtentedSettings.cs" />
     <Compile Include="DataAnalysis\DADynamicTypeGenerator.cs" />
     <Compile Include="DataAnalysis\DAGetMeasureValueContext.cs" />
