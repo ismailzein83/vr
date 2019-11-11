@@ -1,0 +1,21 @@
+﻿<vr-form name="validationContext">
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-textbox type="number" value="scopeModel.zoneID" onvaluechanged="scopeModel.onZoneIDValueChanged" minvalue="1" decimalprecision="0"
+                        label="Zone ID" isrequired="scopeModel.isCustomerMappingExists || scopeModel.isSupplierMappingExists">
+            </vr-textbox>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row" ng-if="scopeModel.showCustomerMapping">
+            <vr-section title="In Trunks">
+                <whs-routesync-cataleya-customermapping on-ready="scopeModel.onCustomerMappingDirectiveReady"></whs-routesync-cataleya-customermapping>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/2row" ng-if="scopeModel.showSupplierMapping">
+            <vr-section title="Out Trunks">
+                <whs-routesync-cataleya-suppliermapping on-ready="scopeModel.onSupplierMappingDirectiveReady"></whs-routesync-cataleya-suppliermapping>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+</vr-form>

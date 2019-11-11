@@ -1,0 +1,6 @@
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-textbox label="Schema Name" type="text" value="scopeModel.schemaName"></vr-textbox>
+</vr-columns>
+<vr-common-connection-selector on-ready="scopeModel.onDBConnectionSelectorReady" customlabel="DB Connection" isrequired="true"
+                               normal-col-num="{{ctrl.normalColNum}}" includeviewhandler showaddbutton hideremoveicon>
+</vr-common-connection-selector>

@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CataleyaController.cs" />
     <Compile Include="Controllers\CodeChargeController.cs" />
     <Compile Include="Controllers\EricssonController.cs" />
     <Compile Include="Controllers\FreeRadiusController.cs" />
@@ -169,17 +170,21 @@
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-huawei-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telestax-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\Cataleya\DataManagers\Templates\CataleyaDataManagersTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\Cataleya\DataManagers\whs-routesync-cataleyadatamanagers.js" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiusdatamanagers.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaSWSyncTemplate.html" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaCustomerMappingTemplate.html" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaSupplierMappingTemplate.html" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-swsync.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSwitch\Communication\Templates\CataleyaSwitchCommunicationTemplate.html" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSwitch\Communication\whs-routesync-cataleyaswitchcommunication.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-customermapping.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-suppliermapping.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-transportprotocol-selector.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\DataManagers\Templates\CataleyaPostgresDataManagerTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\DataManagers\whs-routesync-cataleyapostgres-datamanager.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\Templates\CataleyaCarrierMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\Templates\CataleyaSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\Templates\CataleyaCustomerMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\Templates\CataleyaSupplierMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\whs-routesync-cataleya-carriermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\whs-routesync-cataleya-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\whs-routesync-cataleya-customermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\whs-routesync-cataleya-suppliermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\Cataleya\Synchronizer\whs-routesync-cataleya-transportprotocol-selector.js" />
     <Content Include="WhS_RouteSync\Directives\CodeCharge\MainExtensions\Templates\CodeChargeFixedTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CodeCharge\MainExtensions\Templates\CodeChargeInternationalTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CodeCharge\MainExtensions\whs-routesync-codecharge-fixed.js" />
@@ -218,6 +223,7 @@
     <Content Include="WhS_RouteSync\Directives\NumberLength\MainExtensions\whs-routesync-numberlength-international.js" />
     <Content Include="WhS_RouteSync\Directives\NumberLength\Templates\NumberLengthTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\NumberLength\whs-routesync-numberlength.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\CataleyaAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\CodeChargeAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\EricssonAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\NumberLengthAPIService.js" />
@@ -339,6 +345,10 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
       <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>
       <Name>TOne.WhS.RouteSync.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Cataleya\TOne.WhS.RouteSync.Cataleya.csproj">
+      <Project>{9454aa0d-2a5d-4902-b6c5-0f705881222a}</Project>
+      <Name>TOne.WhS.RouteSync.Cataleya</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>

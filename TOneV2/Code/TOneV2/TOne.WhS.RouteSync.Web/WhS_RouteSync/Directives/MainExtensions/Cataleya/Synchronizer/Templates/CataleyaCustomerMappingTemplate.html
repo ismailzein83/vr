@@ -1,0 +1,29 @@
+﻿<vr-row>
+    <vr-columns colnum="6">
+        <vr-button type="Add" data-onclick="scopeModel.addTrunk" standalone></vr-button>
+    </vr-columns>
+    <vr-columns colnum="6">
+        <div align="right">
+            <vr-label>Trunks should be sorted from highest to lowest priority.</vr-label>
+        </div>
+    </vr-columns>
+</vr-row>
+<vr-validator validate="scopeModel.areTrunksValid()">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-datagrid on-ready="scopeModel.onTrunkGridReady"
+                         datasource="scopeModel.inTrunks"
+                         ondeleterow="scopeModel.onTrunkDeleted"
+                         pagingtype="'PagingOnScroll'"
+                         enabledraggablerow="true" hidegridmenu>
+
+                <vr-datagridcolumn headertext="'Trunk'" disablesorting>
+                    <vr-textbox type="text" value="dataItem.Trunk" onblurtextbox="dataItem.onTrunkBlur(dataItem.trunk)"
+                                onvaluechanged="dataItem.onTrunkValueChanged" isrequired="true" tonextinput>
+                    </vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</vr-validator>

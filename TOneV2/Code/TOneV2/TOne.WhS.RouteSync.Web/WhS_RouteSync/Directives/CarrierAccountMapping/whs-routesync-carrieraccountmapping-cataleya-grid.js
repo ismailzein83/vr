@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationService', 'VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum', 'WhS_BE_CarrierAccountActivationStatusEnum',
-    function (VRValidationService, VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CarrierAccountActivationStatusEnum) {
+app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum', 'WhS_BE_CarrierAccountActivationStatusEnum',
+    function (VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CarrierAccountActivationStatusEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -53,11 +53,12 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
 
                     if (payload != undefined) {
                         carrierMappings = payload.carrierMappings;
                     }
+
+                    var promises = [];
 
                     var cataleyaCarrierAccountMappingsGridLoadPromise = getCataleyaCarrierAccountMappingsGridLoadPromise();
                     promises.push(cataleyaCarrierAccountMappingsGridLoadPromise);
@@ -70,41 +71,18 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                 };
 
                 api.getData = function () {
-
                     var results = {};
+
                     for (var i = 0; i < $scope.scopeModel.carrierAccountMappings.length; i++) {
                         var carrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
                         if (carrierAccountMapping == undefined)
                             continue;
 
-                        if (carrierAccountMapping.customerMappingGridAPI != undefined || carrierAccountMapping.supplierMappingGridAPI != undefined) {
-                            results[carrierAccountMapping.CarrierAccountId] = {
-                                CarrierId: carrierAccountMapping.CarrierAccountId,
-                                CustomerMappings: getCustomerMapping(carrierAccountMapping.customerMappingGridAPI, carrierAccountMapping.CarrierAccountId),
-                                SupplierMappings: getSupplierMapping(carrierAccountMapping.supplierMappingGridAPI, carrierAccountMapping.CarrierAccountId)
-                            };
+                        if (carrierAccountMapping.carrierMappingDirectiveAPI != undefined) {
+                            results[carrierAccountMapping.CarrierAccountId] = carrierAccountMapping.carrierMappingDirectiveAPI.getData();
                         } else {
                             results[carrierAccountMapping.CarrierAccountId] = carrierMappings != undefined ? carrierMappings[carrierAccountMapping.CarrierAccountId] : undefined;
                         }
-                    }
-
-                    function getCustomerMapping(customerMappingGridAPI, carrierAccountId) {
-                        if (customerMappingGridAPI != undefined)
-                            return customerMappingGridAPI.getData();
-
-                        if (carrierMappings != undefined && carrierMappings[carrierAccountId] != undefined)
-                            return carrierMappings[carrierAccountId].CustomerMappings;
-
-                        return null;
-                    }
-                    function getSupplierMapping(supplierMappingGridAPI, carrierAccountId) {
-                        if (supplierMappingGridAPI != undefined)
-                            return supplierMappingGridAPI.getData();
-
-                        if (carrierMappings != undefined && carrierMappings[carrierAccountId] != undefined)
-                            return carrierMappings[carrierAccountId].SupplierMappings;
-
-                        return null;
                     }
 
                     return results;
@@ -136,6 +114,7 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                                 CarrierAccountId: currentCarrierAccountInfo.CarrierAccountId,
                                 CarrierAccountType: currentCarrierAccountInfo.AccountType,
                                 CarrierAccountName: currentCarrierAccountInfo.Name,
+                                ZoneID: carrierMapping != undefined ? carrierMapping.ZoneID : undefined,
                                 CustomerMappings: (carrierMapping && carrierMapping.CustomerMappings) ? carrierMapping.CustomerMappings : undefined,
                                 SupplierMappings: (carrierMapping && carrierMapping.SupplierMappings) ? carrierMapping.SupplierMappings : undefined
                             };
@@ -169,70 +148,9 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
 
                 for (var i = pageInfo.fromRow - 1; i < itemsLength; i++) {
                     var currentCarrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
-                    defineCarrierAccountMappingTabs(currentCarrierAccountMapping);
                     items.push(currentCarrierAccountMapping);
                 }
                 gridAPI.addItemsToSource(items);
-            }
-
-            function defineCarrierAccountMappingTabs(carrierAccountMapping) {
-
-                var drillDownTabs = [];
-
-                if (showCustomerMapping(carrierAccountMapping)) {
-                    drillDownTabs.push(buildCustomerMappingDrillDownTab());
-                }
-
-                if (showSupplierMapping(carrierAccountMapping)) {
-                    drillDownTabs.push(buildSupplierMappingDrillDownTab());
-                }
-
-                setDrillDownTabs();
-
-                function buildCustomerMappingDrillDownTab() {
-                    var drillDownTab = {};
-                    drillDownTab.title = "In";
-                    drillDownTab.directive = "whs-routesync-cataleya-customermapping";
-
-                    drillDownTab.loadDirective = function (customerMappingGridAPI, carrierAccountMapping) {
-                        carrierAccountMapping.customerMappingGridAPI = customerMappingGridAPI;
-                        return carrierAccountMapping.customerMappingGridAPI.load(buildCustomerMappingPayload(carrierAccountMapping));
-                    };
-
-                    function buildCustomerMappingPayload(carrierAccountMapping) {
-                        var customerMappingPayload = {};
-                        //customerMappingPayload.carrierAccountId = carrierAccountMapping.CarrierAccountId;
-                        customerMappingPayload.customerMappings = carrierAccountMapping.CustomerMappings;
-                        customerMappingPayload.context = buildCustomerMappingDirectiveContext(carrierAccountMapping);
-                        return customerMappingPayload;
-                    }
-
-                    return drillDownTab;
-                }
-                function buildSupplierMappingDrillDownTab() {
-                    var drillDownTab = {};
-                    drillDownTab.title = "Out";
-                    drillDownTab.directive = "whs-routesync-cataleya-suppliermapping";
-
-                    drillDownTab.loadDirective = function (supplierMappingGridAPI, carrierAccountMapping) {
-                        carrierAccountMapping.supplierMappingGridAPI = supplierMappingGridAPI;
-                        return carrierAccountMapping.supplierMappingGridAPI.load(buildSupplierMappingPayload(carrierAccountMapping));
-                    };
-
-                    function buildSupplierMappingPayload(carrierAccountMapping) {
-                        var supplierMappingQuery = {};
-                        //supplierMappingQuery.carrierAccountId = carrierAccountMapping.CarrierAccountId;
-                        supplierMappingQuery.supplierMappings = carrierAccountMapping.SupplierMappings;
-                        supplierMappingQuery.context = buildSupplierMappingDirectiveContext(carrierAccountMapping);
-                        return supplierMappingQuery;
-                    }
-
-                    return drillDownTab;
-                }
-                function setDrillDownTabs() {
-                    var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
-                    drillDownManager.setDrillDownExtensionObject(carrierAccountMapping);
-                }
             }
 
             function showCustomerMapping(carrierMappingItem) {
@@ -251,10 +169,12 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                 if (carrierAccountMapping == undefined)
                     return;
 
+                carrierAccountMapping.ZoneIDDescription = carrierAccountMapping.ZoneID;
+
                 if (carrierAccountMapping.CustomerMappings != undefined) {
                     var customerMappings = carrierAccountMapping.CustomerMappings;
 
-                    var isCustomerMappingExists = customerMappings.length > 0;
+                    var isCustomerMappingExists = customerMappings.InTrunks != undefined ? customerMappings.InTrunks.length > 0 : false;
                     if (isCustomerMappingExists) {
                         carrierAccountMapping.CustomerMappingDescription = buildCustomerMappingDescription(customerMappings);
                     } else {
@@ -265,82 +185,80 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                 if (carrierAccountMapping.SupplierMappings != undefined) {
                     var supplierMappings = carrierAccountMapping.SupplierMappings;
 
-                    var isSupplierMappingExists = supplierMappings.length > 0;
+                    var isSupplierMappingExists = supplierMappings.OutTrunks != undefined ? supplierMappings.OutTrunks.length > 0 : false;
                     if (isSupplierMappingExists) {
                         carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMappings);
                     } else {
                         carrierAccountMapping.SupplierMappingDescription = "";
                     }
                 }
+
+                carrierAccountMapping.onCarrierMappingDirectiveReady = function (api) {
+                    carrierAccountMapping.carrierMappingDirectiveAPI = api;
+
+                    var carrierMappingDirectivePayload = {
+                        carrierAccountMapping: carrierAccountMapping,
+                        context: buildContext(carrierAccountMapping)
+                    };
+                    VRUIUtilsService.callDirectiveLoad(carrierAccountMapping.carrierMappingDirectiveAPI, carrierMappingDirectivePayload);
+                };
             }
 
             function buildCustomerMappingDescription(customerMappings) {
-                if (customerMappings == undefined || customerMappings.length == 0)
+                if (customerMappings == undefined || customerMappings.InTrunks == undefined || customerMappings.InTrunks.length == 0)
                     return "";
 
                 var customerMappingDescription = [];
-                for (var i = 0; i < customerMappings.length; i++) {
-                    var currentCustomerMapping = customerMappings[i];
-                    var ipAddressObj = currentCustomerMapping.IPAddress;
-                    if (ipAddressObj != undefined && ipAddressObj.IPAddress != undefined && ipAddressObj.IPAddress != "") {
-                        var ipAddressValue = ipAddressObj.IPAddress;
-
-                        if (VRValidationService.validateIp(ipAddressValue) || VRValidationService.validateIpV6(ipAddressValue))
-                            customerMappingDescription.push(ipAddressValue);
+                for (var i = 0; i < customerMappings.InTrunks.length; i++) {
+                    var inTrunk = customerMappings.InTrunks[i];
+                    if (inTrunk != undefined && inTrunk.Trunk != undefined) {
+                        var customerDescription = inTrunk.Trunk;
+                        customerMappingDescription.push(customerDescription);
                     }
                 }
-                return customerMappingDescription.join("; ");
+                return 'Trunks: ' + customerMappingDescription.join("; ");
             }
 
             function buildSupplierMappingDescription(supplierMappings) {
-                if (supplierMappings == undefined || supplierMappings.length == 0)
+                if (supplierMappings == undefined || supplierMappings.OutTrunks == undefined || supplierMappings.OutTrunks.length == 0)
                     return "";
 
                 var supplierMappingDescription = [];
-                for (var i = 0; i < supplierMappings.length; i++) {
-                    var currentsupplierMapping = supplierMappings[i];
-                    var ipAddressObj = currentsupplierMapping.IPAddress;
-                    if (ipAddressObj != undefined && ipAddressObj.IPAddress != undefined && ipAddressObj.IPAddress != "") {
-                        var ipAddressValue = ipAddressObj.IPAddress;
+                for (var i = 0; i < supplierMappings.OutTrunks.length; i++) {
+                    var outTrunk = supplierMappings.OutTrunks[i];
+                    if (outTrunk != undefined && outTrunk.Trunk != undefined) {
+                        var supplierDescription = outTrunk.Trunk;
 
-                        if (VRValidationService.validateIp(ipAddressValue) || VRValidationService.validateIpV6(ipAddressValue))
-                            supplierMappingDescription.push(ipAddressValue);
+                        if (outTrunk.Percentage != undefined) {
+                            supplierDescription = supplierDescription + ' (' + outTrunk.Percentage + '%)';
+                        }
+
+                        supplierMappingDescription.push(supplierDescription);
                     }
                 }
-                return supplierMappingDescription.join("; ");
+                return 'Trunks: ' + supplierMappingDescription.join("; ");
             }
 
-            function buildCustomerMappingDirectiveContext(carrierAccountMapping) {
+            function buildContext(carrierAccountMapping) {
                 var context = {
+                    updateZoneIDDescription: function (zoneID) {
+                        carrierAccountMapping.ZoneIDDescription = zoneID;
+                    },
                     updateCustomerMappingDescription: function (customerMapping) {
                         carrierAccountMapping.CustomerMappingDescription = buildCustomerMappingDescription(customerMapping);
                     },
-                    updateErrorDescription: function (isValid, fromCustomerMapping) {
-                        updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping);
-                    }
-                };
-                return context;
-            }
-
-            function buildSupplierMappingDirectiveContext(carrierAccountMapping) {
-                var context = {
                     updateSupplierMappingDescription: function (supplierMapping) {
                         carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMapping);
                     },
-                    updateErrorDescription: function (isValid, fromCustomerMapping) {
-                        updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping);
+                    updateErrorDescription: function (isValid) {
+                        updateErrorDescription(carrierAccountMapping, isValid);
                     }
                 };
                 return context;
             }
 
-            function updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping) {
-
-                if (fromCustomerMapping) {
-                    carrierAccountMapping.isCustomerMappingInvalid = !isValid;
-                } else {
-                    carrierAccountMapping.isSupplierMappingInvalid = !isValid;
-                }
+            function updateErrorDescription(carrierAccountMapping, isValid) {
+                carrierAccountMapping.isCarrierAccountMappingInvalid = !isValid;
             }
         }
     }]);

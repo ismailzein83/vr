@@ -1,0 +1,14 @@
+﻿<vr-row>
+    <vr-common-connection-selector on-ready="scopeModel.onAPIConnectionSelectorReady" 
+                                   customlabel="API Connection" isrequired="true"
+                                   normal-col-num="3" includeviewhandler showaddbutton hideremoveicon>
+    </vr-common-connection-selector>
+</vr-row>
+<vr-row>
+    <whs-routesync-cataleyadatamanagers on-ready="scopeModel.onCataleyaDataManagerDirectiveReady" normal-col-num="3" isrequired="true"></whs-routesync-cataleyadatamanagers>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <whs-routesync-carrieraccountmapping-cataleya-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-carrieraccountmapping-cataleya-grid>
+    </vr-columns>
+</vr-row>

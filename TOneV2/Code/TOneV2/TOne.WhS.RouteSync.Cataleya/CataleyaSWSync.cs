@@ -249,6 +249,85 @@ namespace TOne.WhS.RouteSync.Cataleya
             DataManager = null;
         }
 
+        public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
+        {
+            HashSet<int> allZoneIDs = new HashSet<int>();
+            HashSet<int> duplicatedZoneIDs = new HashSet<int>();
+            HashSet<string> allInTrunks = new HashSet<string>();
+            HashSet<string> duplicatedInTrunks = new HashSet<string>();
+            HashSet<string> allOutTrunks = new HashSet<string>();
+            HashSet<string> duplicatedOutTrunks = new HashSet<string>();
+            HashSet<string> invalidInTrunkNames = new HashSet<string>();
+            HashSet<string> invalidOutTrunkNames = new HashSet<string>();
+            char[] invalidCharacters = new char[] { ',', ';', '$', '|' };
+
+            if (CarrierMappings == null || CarrierMappings.Count == 0)
+                return true;
+
+            foreach (var kvp in CarrierMappings)
+            {
+                CarrierMapping carrierMapping = kvp.Value;
+                if (carrierMapping == null)
+                    continue;
+
+                int zoneID = carrierMapping.ZoneID;
+                if (allZoneIDs.Contains(zoneID))
+                    duplicatedZoneIDs.Add(zoneID);
+
+                allZoneIDs.Add(zoneID);
+
+                CustomerMapping customerMapping = carrierMapping.CustomerMappings;
+                if (customerMapping != null && customerMapping.InTrunks != null && customerMapping.InTrunks.Count > 0)
+                {
+                    foreach (var inTrunk in customerMapping.InTrunks)
+                    {
+                        if (inTrunk.Trunk.IndexOfAny(invalidCharacters) != -1)
+                            invalidInTrunkNames.Add(inTrunk.Trunk);
+
+                        if (allInTrunks.Contains(inTrunk.Trunk))
+                            duplicatedInTrunks.Add(inTrunk.Trunk);
+
+                        allInTrunks.Add(inTrunk.Trunk);
+                    }
+                }
+
+                SupplierMapping supplierMapping = carrierMapping.SupplierMappings;
+                if (supplierMapping != null && supplierMapping.OutTrunks != null && supplierMapping.OutTrunks.Count > 0)
+                {
+                    foreach (var outTrunk in supplierMapping.OutTrunks)
+                    {
+                        if (outTrunk.Trunk.IndexOfAny(invalidCharacters) != -1)
+                            invalidOutTrunkNames.Add(outTrunk.Trunk);
+
+                        if (allOutTrunks.Contains(outTrunk.Trunk))
+                            duplicatedOutTrunks.Add(outTrunk.Trunk);
+
+                        allOutTrunks.Add(outTrunk.Trunk);
+                    }
+                }
+            }
+
+            List<string> validationMessages = new List<string>();
+
+            if (duplicatedZoneIDs.Count > 0)
+                validationMessages.Add($"Following ZoneIDs are Duplicated: {string.Join(", ", duplicatedZoneIDs)}");
+
+            if (duplicatedInTrunks.Count > 0)
+                validationMessages.Add($"Following In Trunks are Duplicated: {string.Join(", ", duplicatedInTrunks)}");
+
+            if (duplicatedOutTrunks.Count > 0)
+                validationMessages.Add($"Following Out Trunks are Duplicated: {string.Join(", ", duplicatedOutTrunks)}");
+
+            if (invalidInTrunkNames.Count > 0)
+                validationMessages.Add($"Following In Trunks are Invalid: {string.Join(", ", invalidInTrunkNames)}");
+
+            if (invalidOutTrunkNames.Count > 0)
+                validationMessages.Add($"Following Out Trunks are Invalid: {string.Join(", ", invalidOutTrunkNames)}");
+
+            context.ValidationMessages = validationMessages.Count > 0 ? validationMessages : null;
+            return validationMessages.Count == 0;
+        }
+
         #endregion
 
         #region Private Methods
@@ -313,6 +392,7 @@ namespace TOne.WhS.RouteSync.Cataleya
 
             return string.Join("|", concatenatedOptionsTrunksWithBackups);
         }
+
         private string BuildPriorityOptions(List<RouteOption> routeOptions)
         {
             var allOptionsTrunks = new List<string>();
