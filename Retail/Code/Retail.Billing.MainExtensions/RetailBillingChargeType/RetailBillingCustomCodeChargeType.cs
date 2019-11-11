@@ -21,13 +21,15 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public string PricingLogic { get; set; }
 
+        public string DescriptionLogic { get; set; }
+
         public override string RuntimeEditor { get { return "retail-billing-charge-customcode"; } }
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {
-            var customCodeChargeTypeEvaluator = GetCustomCodeChargeTypeEvaluator(context.ChargeTypeId);
+            var customCodeChargeTypePriceEvaluator = GetCustomCodeChargeTypePriceEvaluator(context.ChargeTypeId);
 
-            if (customCodeChargeTypeEvaluator == null)
+            if (customCodeChargeTypePriceEvaluator == null)
                 return 0;
 
             RetailBillingCustomCodeCharge retailBillingCustomCodeCharge = context.Charge as RetailBillingCustomCodeCharge;
@@ -42,12 +44,35 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
             if (TargetRecordTypeId.HasValue)
                 target = new DataRecordObject(TargetRecordTypeId.Value, context.TargetFieldValues).Object;
 
-            var customCodeChargeTypeEvaluatorInstance = Activator.CreateInstance(customCodeChargeTypeEvaluator, target, chargeSettings) as IRetailBillingCustomCodeChargeTypeEvaluator;
+            var customCodeChargeTypePriceEvaluatorInstance = Activator.CreateInstance(customCodeChargeTypePriceEvaluator, target, chargeSettings) as IRetailBillingCustomCodeChargeTypePriceEvaluator;
 
-            if (customCodeChargeTypeEvaluatorInstance == null)
+            if (customCodeChargeTypePriceEvaluatorInstance == null)
                 return 0;
 
-            return customCodeChargeTypeEvaluatorInstance.CalculateCharge();
+            return customCodeChargeTypePriceEvaluatorInstance.CalculateCharge();
+        }
+
+        public override string GetDescription(IRetailBillingChargeTypeGetDescriptionContext context)
+        {
+            var customCodeChargeTypeDescriptionEvaluator = GetCustomCodeChargeTypeDescriptionEvaluator(context.ChargeTypeId);
+
+            if (customCodeChargeTypeDescriptionEvaluator == null)
+                return null;
+
+            RetailBillingCustomCodeCharge retailBillingCustomCodeCharge = context.Charge as RetailBillingCustomCodeCharge;
+            retailBillingCustomCodeCharge.ThrowIfNull("retailBillingCustomCodeCharge");
+
+            dynamic chargeSettings = null;
+
+            if (ChargeSettingsRecordTypeId.HasValue)
+                chargeSettings = new DataRecordObject(ChargeSettingsRecordTypeId.Value, retailBillingCustomCodeCharge.FieldValues).Object;
+
+            var customCodeChargeTypeDescriptionEvaluatorInstance = Activator.CreateInstance(customCodeChargeTypeDescriptionEvaluator, chargeSettings) as IRetailBillingCustomCodeChargeTypeDescriptionEvaluator;
+
+            if (customCodeChargeTypeDescriptionEvaluatorInstance == null)
+                return null;
+
+            return customCodeChargeTypeDescriptionEvaluatorInstance.GetDescription();
         }
 
         public override bool IsApplicableToTarget(IRetailBillingChargeTypeIsApplicableToTargetContext context)
@@ -55,21 +80,21 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
             throw new NotImplementedException();
         }
 
-        public Dictionary<Guid, Type> GetCachedCustomCodeChargeTypeEvaluators()
+        public Dictionary<Guid, ChargeTypeCustomCodeEvaluators> GetCachedCustomCodeChargeTypeEvaluators()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Common.Business.VRComponentTypeManager.CacheManager>().GetOrCreateObject("GetCachedCustomCodeChargeTypeEvaluators",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<VRComponentTypeManager.CacheManager>().GetOrCreateObject("GetCachedCustomCodeChargeTypeEvaluators",
                () =>
                {
-                   return GetCustomCodeChargeTypeTypes();
+                   return GetCustomCodeChargeTypesEvaluators();
                });
         }
 
-        public Dictionary<Guid, Type> GetCustomCodeChargeTypeTypes()
+        public Dictionary<Guid, ChargeTypeCustomCodeEvaluators> GetCustomCodeChargeTypesEvaluators()
         {
             VRComponentTypeManager vrComponentTypeManager = new VRComponentTypeManager();
             var chargeTypes = vrComponentTypeManager.GetComponentTypes<RetailBillingChargeTypeSettings>();
-            Dictionary<Guid, string> chargeTypeFullTypeNamesByChargeTypeId = null;
-            Dictionary<Guid, Type> chargeTypeFullTypesByChargeTypeId = null;
+            Dictionary<Guid, ChargeTypeCustomCodeEvaluatorsFullTypeNames> chargeTypeFullTypeNamesByChargeTypeId = null;
+            Dictionary<Guid, ChargeTypeCustomCodeEvaluators> chargeTypeFullTypesByChargeTypeId = null;
 
             if (chargeTypes != null && chargeTypes.Count > 0)
             {
@@ -80,11 +105,16 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
                 using Vanrise.Common;
 
                 namespace #NAMESPACE#
-                {");
+                {
+                   #CLASSES#
+                }");
 
-                chargeTypeFullTypeNamesByChargeTypeId = new Dictionary<Guid, string>();
-                chargeTypeFullTypesByChargeTypeId = new Dictionary<Guid, Type>();
+                chargeTypeFullTypeNamesByChargeTypeId = new Dictionary<Guid, ChargeTypeCustomCodeEvaluatorsFullTypeNames>();
+                chargeTypeFullTypesByChargeTypeId = new Dictionary<Guid, ChargeTypeCustomCodeEvaluators>();
+
                 string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Retail.Billing.Business");
+                RetailBillingCustomCodeChargeTypeManager retailBillingCustomCodeChargeTypeManager = new RetailBillingCustomCodeChargeTypeManager();
+                StringBuilder classesBuilder = new StringBuilder();
 
                 foreach (var chargeType in chargeTypes)
                 {
@@ -94,17 +124,25 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
                         if (customCodeExtendedSettings != null)
                         {
-                            string className;
-                            codeBuilder.AppendLine(new RetailBillingCustomCodeChargeTypeManager().BuildChargeTypeCustomCodeClass(customCodeExtendedSettings.TargetRecordTypeId, customCodeExtendedSettings.ChargeSettingsRecordTypeId, customCodeExtendedSettings.PricingLogic, out className));
-                            string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
-                            chargeTypeFullTypeNamesByChargeTypeId.Add(chargeType.VRComponentTypeId, fullTypeName);
+                            string priceEvaluatorClassName;
+                            classesBuilder.AppendLine(retailBillingCustomCodeChargeTypeManager.BuildChargeTypeCustomCodePriceEvaluatorClass(customCodeExtendedSettings.TargetRecordTypeId, customCodeExtendedSettings.ChargeSettingsRecordTypeId, customCodeExtendedSettings.PricingLogic, out priceEvaluatorClassName));
+                            string priceEvaluatorFullTypeName = String.Format("{0}.{1}", classNamespace, priceEvaluatorClassName);
+
+                            string descriptionEvaluatorClassName;
+                            classesBuilder.AppendLine(retailBillingCustomCodeChargeTypeManager.BuildChargeTypeCustomCodeDescriptionEvaluatorClass(customCodeExtendedSettings.ChargeSettingsRecordTypeId, customCodeExtendedSettings.DescriptionLogic, out descriptionEvaluatorClassName));
+                            string descriptionEvaluatorFullTypeName = String.Format("{0}.{1}", classNamespace, descriptionEvaluatorClassName);
+
+                            chargeTypeFullTypeNamesByChargeTypeId.Add(chargeType.VRComponentTypeId, new ChargeTypeCustomCodeEvaluatorsFullTypeNames()
+                            {
+                                PriceEvaluatorFullTypeName = priceEvaluatorFullTypeName,
+                                DescriptionEvaluatorFullTypeName = descriptionEvaluatorFullTypeName
+                            });
                         }
                     }
                 }
 
-                codeBuilder.Append("}");
                 codeBuilder.Replace("#NAMESPACE#", classNamespace);
-
+                codeBuilder.Replace("#CLASSES#", classesBuilder.ToString());
                 CSharpCompilationOutput compilationOutput;
 
                 if (!CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
@@ -114,23 +152,53 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
                 foreach (var chargeType in chargeTypes)
                 {
-                    var fullType = chargeTypeFullTypeNamesByChargeTypeId.GetRecord(chargeType.VRComponentTypeId);
-                    var runtimeType = compilationOutput.OutputAssembly.GetType(fullType);
+                    var evaluatorsFullTypes = chargeTypeFullTypeNamesByChargeTypeId.GetRecord(chargeType.VRComponentTypeId);
 
-                    if (runtimeType == null)
-                        throw new NullReferenceException($"runtimeType for charge type Id:'{chargeType.VRComponentTypeId}'");
+                    var priceEvaluatorRuntimeType = compilationOutput.OutputAssembly.GetType(evaluatorsFullTypes.PriceEvaluatorFullTypeName);
+                    if (priceEvaluatorRuntimeType == null)
+                        throw new NullReferenceException($"priceEvaluatorRuntimeType for charge type Id:'{chargeType.VRComponentTypeId}'");
 
-                    chargeTypeFullTypesByChargeTypeId.Add(chargeType.VRComponentTypeId, runtimeType);
+                    var descriptionEvaluatorRuntimeType = compilationOutput.OutputAssembly.GetType(evaluatorsFullTypes.DescriptionEvaluatorFullTypeName);
+                    if (descriptionEvaluatorRuntimeType == null)
+                        throw new NullReferenceException($"descriptionEvaluatorRuntimeType for charge type Id:'{chargeType.VRComponentTypeId}'");
+
+                    chargeTypeFullTypesByChargeTypeId.Add(chargeType.VRComponentTypeId, new ChargeTypeCustomCodeEvaluators()
+                    {
+                        PriceEvaluator = priceEvaluatorRuntimeType,
+                        DescriptionEvaluator = descriptionEvaluatorRuntimeType
+                    });
                 }
             }
 
             return chargeTypeFullTypesByChargeTypeId;
         }
 
-        public Type GetCustomCodeChargeTypeEvaluator(Guid chargeTypeId)
+        public Type GetCustomCodeChargeTypePriceEvaluator(Guid chargeTypeId)
         {
             var customCodeChargeTypeEvaluators = GetCachedCustomCodeChargeTypeEvaluators();
-            return customCodeChargeTypeEvaluators.GetRecord(chargeTypeId);
+            var chargeTypeEvaluators = customCodeChargeTypeEvaluators.GetRecord(chargeTypeId);
+
+            return chargeTypeEvaluators != null ? chargeTypeEvaluators.PriceEvaluator : null;
+        }
+
+        public Type GetCustomCodeChargeTypeDescriptionEvaluator(Guid chargeTypeId)
+        {
+            var customCodeChargeTypeEvaluators = GetCachedCustomCodeChargeTypeEvaluators();
+            var chargeTypeEvaluators = customCodeChargeTypeEvaluators.GetRecord(chargeTypeId);
+
+            return chargeTypeEvaluators != null ? chargeTypeEvaluators.DescriptionEvaluator : null;
+        }
+
+        public class ChargeTypeCustomCodeEvaluators
+        {
+            public Type PriceEvaluator { get; set; }
+            public Type DescriptionEvaluator { get; set; }
+        }
+
+        public class ChargeTypeCustomCodeEvaluatorsFullTypeNames
+        {
+            public string PriceEvaluatorFullTypeName { get; set; }
+            public string DescriptionEvaluatorFullTypeName { get; set; }
         }
     }
 }

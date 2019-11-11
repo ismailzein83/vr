@@ -1,4 +1,5 @@
 ﻿using System;
+using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.Billing.MainExtensions.RetailBillingCharge
@@ -18,7 +19,12 @@ namespace Retail.Billing.MainExtensions.RetailBillingCharge
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            return "Retail Billing Charge";
+            var charge = context.FieldValue as Retail.Billing.Entities.RetailBillingCharge;
+
+            if (charge == null)
+                return null;
+
+            return charge.GetDescription();
         }
 
         public override Type GetNonNullableRuntimeType()

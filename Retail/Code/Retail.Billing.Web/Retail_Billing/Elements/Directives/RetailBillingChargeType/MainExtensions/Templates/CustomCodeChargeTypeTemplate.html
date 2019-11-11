@@ -11,19 +11,38 @@
 </vr-columns>
 
 <vr-row>
-    <span vr-loader="scopeModel.isCompiling">
+    <span vr-loader="scopeModel.isCompilingPriceLogic">
         <vr-columns colnum="10">
-            <vr-validator validate="scopeModel.hasErrorsValidator()">
-                <vr-textarea on-ready="scopeModel.onTextAreaReady" label="Pricing Logic" value="scopeModel.pricingLogic" isrequired="true" rows="6"> </vr-textarea>
+            <vr-validator validate="scopeModel.priceLogicErrorsValidator()">
+                <vr-textarea on-ready="scopeModel.onPriceLogicTextAreaReady" label="Pricing Logic" value="scopeModel.pricingLogic" isrequired="true" rows="6"> </vr-textarea>
             </vr-validator>
         </vr-columns>
         <vr-columns colnum="2" withemptyline>
             <vr-columns colnum="12" withemptyline>
                 <vr-columns colnum="6" haschildcolumns withemptyline>
-                    <vr-button type="Edit" data-onclick="scopeModel.openExpressionBuilder" standalone></vr-button>
+                    <vr-button type="Edit" data-onclick="scopeModel.openPriceLogicExpressionBuilder" standalone></vr-button>
                 </vr-columns>
                 <vr-columns colnum="6" haschildcolumns withemptyline>
-                    <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.tryCompileChargeTypeCustomCode()">Compile</a>
+                    <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.tryCompileChargeTypeCustomCodePriceLogic()">Compile</a>
+                </vr-columns>
+            </vr-columns>
+        </vr-columns>
+    </span>
+</vr-row>
+<vr-row>
+    <span vr-loader="scopeModel.isCompilingDescriptionLogic">
+        <vr-columns colnum="10">
+            <vr-validator validate="scopeModel.descriptionLogicErrorsValidator()">
+                <vr-textarea on-ready="scopeModel.onDescriptionLogicTextAreaReady" label="Description Logic" value="scopeModel.descriptionLogic" isrequired="true" rows="6"> </vr-textarea>
+            </vr-validator>
+        </vr-columns>
+        <vr-columns colnum="2" withemptyline>
+            <vr-columns colnum="12" withemptyline>
+                <vr-columns colnum="6" haschildcolumns withemptyline>
+                    <vr-button type="Edit" data-onclick="scopeModel.openDescriptionLogicExpressionBuilder" standalone></vr-button>
+                </vr-columns>
+                <vr-columns colnum="6" haschildcolumns withemptyline>
+                    <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.tryCompileChargeTypeCustomCodeDescriptionLogic()">Compile</a>
                 </vr-columns>
             </vr-columns>
         </vr-columns>

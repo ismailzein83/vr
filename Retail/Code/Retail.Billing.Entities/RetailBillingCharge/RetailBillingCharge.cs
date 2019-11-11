@@ -9,5 +9,8 @@ namespace Retail.Billing.Entities
     public abstract class RetailBillingCharge
     {
         public Guid RetailBillingChargeTypeId { get; set; }
+
+        public abstract string GetDescription();
     }
 }
+

@@ -11,12 +11,12 @@ namespace Retail.Billing.Business
     {
         #region Public Methods
 
-        public string BuildChargeTypeCustomCodeClass(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out string className)
+        public string BuildChargeTypeCustomCodePriceEvaluatorClass(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out string className)
         {
 
             StringBuilder codeBuilder = new StringBuilder(@" 
       
-                    public class #ClassName# : IRetailBillingCustomCodeChargeTypeEvaluator
+                    public class #ClassName# : IRetailBillingCustomCodeChargeTypePriceEvaluator
                     {
                         public #TargetRecordTypeRuntimeType# Target { get; set; }
 
@@ -37,7 +37,7 @@ namespace Retail.Billing.Business
                         }                       
                      }");
 
-            className = $"RetailBillingCustomCodeChargeTypeEvaluator_{Guid.NewGuid().ToString("N")}";
+            className = $"RetailBillingCustomCodeChargeTypePriceEvaluator_{Guid.NewGuid().ToString("N")}";
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
 
@@ -51,7 +51,44 @@ namespace Retail.Billing.Business
 
             return codeBuilder.ToString();
         }
-        public bool TryCompileChargeTypeCustomCode(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out List<string> errorMessages)
+
+        public string BuildChargeTypeCustomCodeDescriptionEvaluatorClass(Guid? chargeSettingsRecordTypeId, string descriptionLogic, out string className)
+        {
+
+            StringBuilder codeBuilder = new StringBuilder(@" 
+      
+                    public class #ClassName# : IRetailBillingCustomCodeChargeTypeDescriptionEvaluator
+                    {
+                        public #ChargeSettingsRecordTypeRuntimeType# ChargeSettings { get; set; }
+
+                        public #ClassName#(#ChargeSettingsRecordTypeRuntimeType# chargeSettings)
+                        {
+                            ChargeSettings = chargeSettings;  
+                        }    
+                            public #ClassName#()
+                        {
+                        }     
+
+                        public string GetDescription()
+                        {
+                            #DescriptionLogic#
+                        }                       
+                     }");
+
+            className = $"RetailBillingCustomCodeChargeTypeDescriptionEvaluator_{Guid.NewGuid().ToString("N")}";
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+
+            var chargeSettingsRecordTypeRuntimeType = chargeSettingsRecordTypeId.HasValue ? dataRecordTypeManager.GetDataRecordRuntimeTypeAsString(chargeSettingsRecordTypeId.Value) : "object";
+
+            codeBuilder.Replace("#ClassName#", className);
+            codeBuilder.Replace("#ChargeSettingsRecordTypeRuntimeType#", chargeSettingsRecordTypeRuntimeType);
+            codeBuilder.Replace("#DescriptionLogic#", descriptionLogic);
+
+            return codeBuilder.ToString();
+        }
+
+        public bool TryCompileChargeTypeCustomCodePriceLogic(Guid? targetRecordTypeId, Guid? chargeSettingsRecordTypeId, string pricingLogic, out List<string> errorMessages)
         {
             StringBuilder codeBuilder = new StringBuilder(@" 
                 using System;
@@ -64,7 +101,36 @@ namespace Retail.Billing.Business
                     #Class#
                 }");
 
-            codeBuilder.Replace("#Class#",BuildChargeTypeCustomCodeClass(targetRecordTypeId, chargeSettingsRecordTypeId, pricingLogic, out string className));
+            codeBuilder.Replace("#Class#", BuildChargeTypeCustomCodePriceEvaluatorClass(targetRecordTypeId, chargeSettingsRecordTypeId, pricingLogic, out string className));
+
+            CSharpCompilationOutput compilationOutput;
+
+            if (CSharpCompiler.TryCompileClass(className, codeBuilder.ToString(), out compilationOutput))
+            {
+                errorMessages = null;
+                return true;
+            }
+            else
+            {
+                errorMessages = PrepareErrorMessages(compilationOutput.Errors);
+                return false;
+            }
+        }
+
+        public bool TryCompileChargeTypeCustomCodeDescriptionLogic(Guid? chargeSettingsRecordTypeId, string descriptionLogic, out List<string> errorMessages)
+        {
+            StringBuilder codeBuilder = new StringBuilder(@" 
+                using System;
+                using System.Collections.Generic;
+                using System.Linq;
+                using Vanrise.Common;
+
+                namespace Retail.Billing.Business
+                {
+                    #Class#
+                }");
+
+            codeBuilder.Replace("#Class#", BuildChargeTypeCustomCodeDescriptionEvaluatorClass(chargeSettingsRecordTypeId, descriptionLogic, out string className));
 
             CSharpCompilationOutput compilationOutput;
 

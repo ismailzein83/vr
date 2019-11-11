@@ -12,10 +12,22 @@ namespace Retail.Billing.Web.Controllers
     public class RetailBillingCustomCodeChargeTypeController : BaseAPIController
     {
         [HttpPost]
-        [Route("TryCompileChargeTypeCustomCode")]
-        public RetailBillingCompilationOutput TryCompileChargeTypeCustomCode(TryCompileChargeCustomCodeInput input)
+        [Route("TryCompileChargeTypeCustomCodePriceLogic")]
+        public RetailBillingCompilationOutput TryCompileChargeTypeCustomCodePriceLogic(TryCompileChargeCustomCodePriceInput input)
         {
-            var result = new RetailBillingCustomCodeChargeTypeManager().TryCompileChargeTypeCustomCode(input.TargetRecordTypeId, input.ChargeSettingsRecordTypeId, input.PricingLogic, out List<String> errorMessages);
+            var result = new RetailBillingCustomCodeChargeTypeManager().TryCompileChargeTypeCustomCodePriceLogic(input.TargetRecordTypeId, input.ChargeSettingsRecordTypeId, input.PricingLogic, out List<String> errorMessages);
+            return new RetailBillingCompilationOutput()
+            {
+                Result = result,
+                ErrorMessages = errorMessages
+            };
+        }
+
+        [HttpPost]
+        [Route("TryCompileChargeTypeCustomCodeDescriptionLogic")]
+        public RetailBillingCompilationOutput TryCompileChargeTypeCustomCodeDescriptionLogic(TryCompileChargeCustomCodeDescriptionInput input)
+        {
+            var result = new RetailBillingCustomCodeChargeTypeManager().TryCompileChargeTypeCustomCodeDescriptionLogic(input.ChargeSettingsRecordTypeId, input.DescriptionLogic, out List<String> errorMessages);
             return new RetailBillingCompilationOutput()
             {
                 Result = result,
@@ -24,10 +36,15 @@ namespace Retail.Billing.Web.Controllers
         }
     }
 
-    public class TryCompileChargeCustomCodeInput
+    public class TryCompileChargeCustomCodePriceInput
     {
         public Guid? TargetRecordTypeId { get; set; }
         public Guid? ChargeSettingsRecordTypeId { get; set; }
         public string PricingLogic { get; set; }
+    }
+    public class TryCompileChargeCustomCodeDescriptionInput
+    {
+        public Guid? ChargeSettingsRecordTypeId { get; set; }
+        public string DescriptionLogic { get; set; }
     }
 }

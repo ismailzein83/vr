@@ -21,7 +21,10 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
         {
             return 1;
         }
-
+        public override string GetDescription(IRetailBillingChargeTypeGetDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
         public override bool IsApplicableToTarget(IRetailBillingChargeTypeIsApplicableToTargetContext context)
         {
             throw new NotImplementedException();

@@ -29,7 +29,8 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
 
             var chargeSettingsRecordTypeFields = [];
             var editorChargeSettingsRecordTypeFields = [];
-            var errorMessages;
+            var priceLogicErrorMessages;
+            var descriptionLogicErrorMessages;
             var context;
 
             var chargeSettingsRecordTypeSelectorAPI;
@@ -39,14 +40,9 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
             var chargeSettingsEditorDefinitionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
             var chargeSettingsEditorDefinitionDirectiveSelectedPromiseDeferred;
 
-            var textAreaAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
-
-                $scope.scopeModel.onTextAreaReady = function (api) {
-                    textAreaAPI = api;
-                };
 
                 $scope.scopeModel.onChargeSettingsRecordTypeSelectorReady = function (api) {
                     chargeSettingsRecordTypeSelectorAPI = api;
@@ -83,8 +79,8 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
                     chargeSettingsRecordTypeFields.length = 0;
                 };
 
-                $scope.scopeModel.tryCompileChargeTypeCustomCode = function () {
-                    $scope.scopeModel.isCompiling = true;
+                $scope.scopeModel.tryCompileChargeTypeCustomCodePriceLogic = function () {
+                    $scope.scopeModel.isCompilingPriceLogic = true;
 
                     var obj = {
                         TargetRecordTypeId: context.getTargetRecordTypeId(),
@@ -92,12 +88,12 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
                         PricingLogic: $scope.scopeModel.pricingLogic
                     };
 
-                    return Retail_Billing_CustomCodeChargeTypeAPIService.TryCompileChargeTypeCustomCode(obj).then(function (response) {
-                        $scope.scopeModel.isCompiling = false;
+                    return Retail_Billing_CustomCodeChargeTypeAPIService.TryCompileChargeTypeCustomCodePriceLogic(obj).then(function (response) {
+                        $scope.scopeModel.isCompilingPriceLogic = false;
                         if (response != undefined)
-                            errorMessages = response.ErrorMessages;
+                            priceLogicErrorMessages = response.ErrorMessages;
 
-                        if (errorMessages == undefined || errorMessages.length == 0) {
+                        if (priceLogicErrorMessages == undefined || priceLogicErrorMessages.length == 0) {
                             VRNotificationService.showSuccess("Pricing Logic compiled successfully.");
                             return true;
                         }
@@ -108,18 +104,40 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
                     });
                 };
 
-                $scope.scopeModel.hasErrorsValidator = function () {
-                    if (errorMessages == undefined || errorMessages.length == 0)
-                        return null;
+                $scope.scopeModel.tryCompileChargeTypeCustomCodeDescriptionLogic = function () {
+                    $scope.scopeModel.isCompilingDescriptionLogic = true;
 
-                    var errorMessage = '';
-                    for (var i = 0; i < errorMessages.length; i++) {
-                        errorMessage += (i + 1) + ') ' + errorMessages[i] + '\n';
-                    }
-                    return errorMessage;
+                    var obj = {
+                        ChargeSettingsRecordTypeId: chargeSettingsRecordTypeSelectorAPI.getSelectedIds(),
+                        DescriptionLogic: $scope.scopeModel.descriptionLogic
+                    };
+
+                    return Retail_Billing_CustomCodeChargeTypeAPIService.TryCompileChargeTypeCustomCodeDescriptionLogic(obj).then(function (response) {
+                        $scope.scopeModel.isCompilingDescriptionLogic = false;
+                        if (response != undefined)
+                            descriptionLogicErrorMessages = response.ErrorMessages;
+
+                        if (descriptionLogicErrorMessages == undefined || descriptionLogicErrorMessages.length == 0) {
+                            VRNotificationService.showSuccess("Description Logic compiled successfully.");
+                            return true;
+                        }
+                        else {
+                            VRNotificationService.showWarning("Description Logic Compilation Failed.");
+                            return false;
+                        }
+                    });
                 };
 
-                $scope.scopeModel.openExpressionBuilder = function () {
+                $scope.scopeModel.priceLogicErrorsValidator = function () {
+                    return getErrorMessages(priceLogicErrorMessages);
+                };
+
+                $scope.scopeModel.descriptionLogicErrorsValidator = function () {
+                    return getErrorMessages(descriptionLogicErrorMessages);
+                };
+
+        
+                $scope.scopeModel.openPriceLogicExpressionBuilder = function () {
 
                     var onSetValue = function (value) {
                         if (value != undefined && value.CodeExpression != undefined) {
@@ -133,15 +151,32 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
                         var params = {
                             targetRecordTypeFields: targetRecordTypeFields,
                             chargeSettingsRecordTypeFields: chargeSettingsRecordTypeFields,
-                            expression: getExpression()
+                            expression: getExpression($scope.scopeModel.pricingLogic),
+                            label:"Pricing Logic"
                         };
                         RetailBilling_CustomCodeChargeTypeService.openExpressionEditorBuilder(onSetValue, params);
                     });
                 };
+                $scope.scopeModel.openDescriptionLogicExpressionBuilder = function () {
 
-                function getExpression() {
+                    var onSetValue = function (value) {
+                        if (value != undefined && value.CodeExpression != undefined) {
+                            $scope.scopeModel.descriptionLogic = value.CodeExpression;
+                        }
+                    };
+
+                    var params = {
+                        chargeSettingsRecordTypeFields: chargeSettingsRecordTypeFields,
+                        expression: getExpression($scope.scopeModel.descriptionLogic),
+                        label: "Description Logic"
+                    };
+
+                    RetailBilling_CustomCodeChargeTypeService.openExpressionEditorBuilder(onSetValue, params);
+                };
+
+                function getExpression(expression) {
                     return {
-                        CodeExpression: $scope.scopeModel.pricingLogic
+                        CodeExpression: expression
                     };
                 }
 
@@ -158,7 +193,19 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
                     if (payload != undefined) {
                         context = payload.context;
                         if (context != undefined) {
-                            context.beforeSaveHandler = $scope.scopeModel.tryCompileChargeTypeCustomCode;
+
+
+                            context.beforeSaveHandler = function () {
+                                var promises = [];
+                                promises.push($scope.scopeModel.tryCompileChargeTypeCustomCodePriceLogic());
+                                promises.push($scope.scopeModel.tryCompileChargeTypeCustomCodeDescriptionLogic());
+
+                                return UtilsService.waitPromiseNode({ promises: promises }).then(function () {
+                                    if ((priceLogicErrorMessages == undefined || priceLogicErrorMessages.length == 0) && (descriptionLogicErrorMessages == undefined || descriptionLogicErrorMessages.length == 0))
+                                        return true;
+                                    return false;
+                                });
+                            };
                         }
 
                         extendedSettings = payload != undefined ? payload.extendedSettings : undefined;
@@ -169,6 +216,7 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
                     if (extendedSettings != undefined) {
                         chargeSettingsEditorDefinitionDirectiveSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         $scope.scopeModel.pricingLogic = extendedSettings.PricingLogic;
+                        $scope.scopeModel.descriptionLogic = extendedSettings.DescriptionLogic;
 
                         if (extendedSettings.ChargeSettingsRecordTypeId != undefined) {
                             promises.push(getChargeSettingsRecordTypeFields(extendedSettings.ChargeSettingsRecordTypeId));
@@ -226,6 +274,7 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
                     return {
                         $type: "Retail.Billing.MainExtensions.RetailBillingChargeType.RetailBillingCustomCodeChargeType,Retail.Billing.MainExtensions",
                         PricingLogic: $scope.scopeModel.pricingLogic,
+                        DescriptionLogic: $scope.scopeModel.descriptionLogic,
                         ChargeSettingsRecordTypeId: chargeSettingsRecordTypeSelectorAPI.getSelectedIds(),
                         ChargeSettingsEditorDefinition: chargeSettingsEditorDefinitionDirectiveApi != undefined ? chargeSettingsEditorDefinitionDirectiveApi.getData() : undefined
                     };
@@ -302,6 +351,17 @@ app.directive("retailBillingChargetypeCustomcode", ["UtilsService", "VRUIUtilsSe
                 };
 
                 return currentContext;
+            }
+
+            function getErrorMessages(errorMessages) {
+                if (errorMessages == undefined || errorMessages.length == 0)
+                    return null;
+
+                var errorMessage = '';
+                for (var i = 0; i < errorMessages.length; i++) {
+                    errorMessage += (i + 1) + ') ' + errorMessages[i] + '\n';
+                }
+                return errorMessage;
             }
         }
         return directiveDefinitionObject;

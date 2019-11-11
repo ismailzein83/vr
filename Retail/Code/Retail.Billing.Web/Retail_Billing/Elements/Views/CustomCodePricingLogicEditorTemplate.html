@@ -5,7 +5,7 @@
                 <vr-columns colnum="{{(scopeModel.targetRecordTypeFields!= undefined && scopeModel.targetRecordTypeFields.length>0)||(scopeModel.chargeSettingsRecordTypeFields!= undefined && scopeModel.chargeSettingsRecordTypeFields.length>0)?'9':'12'}}">
                     <vr-row>
                         <vr-columns haschildcolumns colnum="12">
-                            <vr-textarea on-ready="scopeModel.onTextAreaReady" trim="false" label="Pricing Logic" value="scopeModel.expressionValue" height="600" isrequired></vr-textarea>
+                            <vr-textarea on-ready="scopeModel.onTextAreaReady" trim="false" label={{scopeModel.label}} value="scopeModel.expressionValue" height="600" isrequired></vr-textarea>
                         </vr-columns>
                     </vr-row>
                 </vr-columns>

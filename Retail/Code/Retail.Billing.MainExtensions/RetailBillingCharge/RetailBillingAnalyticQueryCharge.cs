@@ -12,5 +12,9 @@ namespace Retail.Billing.MainExtensions.RetailBillingCharge
         /// needs to be of type Generic RecordFilterGroup
         /// </summary>
         public string FilterGroup { get; set; }
+        public override string GetDescription()
+        {
+            return "Retail Billing Analytic Query Charge";
+        }
     }
 }

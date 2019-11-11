@@ -2,8 +2,12 @@
 
 namespace Retail.Billing.Business
 {
-    public interface IRetailBillingCustomCodeChargeTypeEvaluator
+    public interface IRetailBillingCustomCodeChargeTypePriceEvaluator
     {
         decimal CalculateCharge();
+    }
+    public interface IRetailBillingCustomCodeChargeTypeDescriptionEvaluator
+    {
+        string GetDescription();
     }
 }

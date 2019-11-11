@@ -8,6 +8,7 @@
 
         var textAreaAPI;
         var expression;
+        var label;
         var isEditMode;
 
         loadParameters();
@@ -21,7 +22,7 @@
             if (parameters != undefined && parameters != null && parameters.params != undefined) {
                 var params = parameters.params;
                 expression = params.expression;
-
+                label = params.label;
                 $scope.scopeModel.targetRecordTypeFields = params.targetRecordTypeFields;
                 if ($scope.scopeModel.targetRecordTypeFields != undefined && $scope.scopeModel.targetRecordTypeFields.length > 0) {
                     $scope.scopeModel.targetRecordTypeFields.sort(sortByName);
@@ -98,8 +99,8 @@
         }
 
         function loadAllControls() {
-
-            $scope.title = UtilsService.buildTitleForUpdateEditor('Pricing Logic Builder');
+            $scope.scopeModel.label = label;
+            $scope.title = UtilsService.buildTitleForUpdateEditor(label+' Builder');
             $scope.scopeModel.expressionValue = expression != undefined ? expression.CodeExpression : undefined;
             var promises = [];
 

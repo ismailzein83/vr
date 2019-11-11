@@ -27,9 +27,19 @@ namespace Retail.Billing.Business
 
         public string GetChargeDescription(RetailBillingCharge charge)
         {
-            if (charge == null)
+            if (charge == null || charge.RetailBillingChargeTypeId == null)
                 return null;
-            return charge.GetHashCode().ToString();
+
+            RetailBillingChargeType chargeType = new RetailBillingChargeTypeManager().GetRetailBillingChargeType(charge.RetailBillingChargeTypeId);
+
+            if (chargeType.Settings == null || chargeType.Settings.ExtendedSettings == null)
+                return null;
+
+            return chargeType.Settings.ExtendedSettings.GetDescription(new RetailBillingChargeTypeGetDescriptionContext()
+            {
+                ChargeTypeId = chargeType.VRComponentTypeId,
+                Charge = charge,
+            });
         }
 
         #endregion
