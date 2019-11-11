@@ -141,6 +141,7 @@ Retail_RA.PostDeployment.sql
 Interconnect
 InterConnect.PostDeployment.sql
 Interconnect.json
+Interconnect_Ogero.json
 
 CentralAuth
 CentralAuth.PostDeployment.sql
