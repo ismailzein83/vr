@@ -11,18 +11,18 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 {
     public class RouteDataManager : BasePostgresDataManager
     {
-        public string SchemaName { get; set; }
-        public string ConnectionString { get; set; }
+        string schemaName;
+        string connectionString;
 
         protected override string GetConnectionString()
         {
-            return ConnectionString;
+            return connectionString;
         }
 
-        public RouteDataManager(string schemaName, string connectionString)
+        public RouteDataManager(string _schemaName, string _connectionString)
         {
-            SchemaName = schemaName;
-            ConnectionString = connectionString;
+            schemaName = _schemaName;
+            connectionString = _connectionString;
         }
 
         #region Public Methods
@@ -32,7 +32,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             if (routes == null || routes.Count == 0)
                 return null;
 
-            var carrierAccountDataManager = new CarrierAccountDataManager(SchemaName, ConnectionString);
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(schemaName, connectionString);
             var convertedRoutesForApplyByCustomer = new Dictionary<int, CataleyaConvertedRoutesForApply>();
             var convertedRoutes = routes.VRCast<CataleyaConvertedRoute>();
 
@@ -53,7 +53,6 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                     });
                 }
             }
-
             return convertedRoutesForApplyByCustomer;
         }
 
@@ -64,45 +63,59 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             foreach (var keyValuePair in convertedRoutesForApplyByCustomer)
             {
                 var convertedRoutesForApply = keyValuePair.Value;
-                base.Bulk(convertedRoutesForApply.Routes, $"{SchemaName}.{convertedRoutesForApply.RouteTableName}");
+                var tableName = string.IsNullOrEmpty(schemaName) ? convertedRoutesForApply.RouteTableName : $"{schemaName}.{convertedRoutesForApply.RouteTableName}";
+                base.Bulk(convertedRoutesForApply.Routes, tableName);
             }
         }
 
-        public void DropIfExistsCreateRouteTables(List<string> routeTableNames)
+        public void Initialize(List<CarrierAccountMapping> carrierAccountsMapping)
+        {
+            DropIfExistsCreateRouteTables(carrierAccountsMapping.Select(item => item.RouteTableName).ToList());
+        }
+
+        public string GetDropBackUpRouteTableIfExistsQuery(string tableName)
+        {
+            var tableNameWithSchema = string.IsNullOrEmpty(schemaName) ? tableName : $"{schemaName}.{tableName}";
+            return DropBackUpRouteTableIfExists_Query.Replace("#TABLENAMEWITHSCHEMA#", tableNameWithSchema);
+        }
+
+        public string GetCreateRouteTablesIndexesQuery(List<string> routeTablesNames)
+        {
+            var query = new StringBuilder();
+            foreach (var routeTableName in routeTablesNames)
+            {
+                var tableNameWithSchema = string.IsNullOrEmpty(schemaName) ? routeTableName : $"{schemaName}.{routeTableName}";
+                query.AppendLine(Createindex_Query.Replace("#TABLENAMEWITHSCHEMA#", tableNameWithSchema));
+            }
+
+            return query.ToString();
+        }
+
+        #endregion
+
+
+        #region Private Methods
+
+        void DropIfExistsCreateRouteTables(List<string> routeTableNames)
         {
             var dropIfExistsCreateTempCustomerIdentificationTableQueries = new List<string>();
 
             foreach (var routeTableName in routeTableNames)
             {
-                var query = DropIfExistsCreateRouteTable_Query.Replace("#TABLENAME#", routeTableName);
-                query = query.Replace("#SCHEMA#", SchemaName);
+                var tableNameWithSchema = string.IsNullOrEmpty(schemaName) ? routeTableName : $"{schemaName}.{routeTableName}";
+                var query = DropIfExistsCreateRouteTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tableNameWithSchema);
+
                 dropIfExistsCreateTempCustomerIdentificationTableQueries.Add(query);
             }
 
             ExecuteNonQuery(dropIfExistsCreateTempCustomerIdentificationTableQueries.ToArray());
         }
 
-        public string GetDropBackUpRouteTableIfExistsQuery(string tableName)
-        {
-            return DropBackUpRouteTableIfExists_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{SchemaName}.{tableName}");
-        }
-
-        public void CreateRouteTablesIndexes(List<string> routeTablesNames)
-        {
-            var query = new StringBuilder();
-            foreach (var routeTableName in routeTablesNames)
-            {
-                query.AppendLine(Createindex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{SchemaName}.{routeTableName}"));
-            }
-
-            ExecuteNonQuery(new string[] { query.ToString() });
-        }
-
         #endregion
 
         #region Queries 
-        const string DropIfExistsCreateRouteTable_Query = @"DROP TABLE IF EXISTS #SCHEMA#.#TABLENAME#;
-                                                            CREATE TABLE  #SCHEMA#.#TABLENAME#
+        const string DropIfExistsCreateRouteTable_Query = @"DROP TABLE IF EXISTS #TABLENAMEWITHSCHEMA#;
+                                                            CREATE TABLE  #TABLENAMEWITHSCHEMA#
                                                             (Code int,
                                                              IsPercentage bool,
                                                              Options varchar );";

@@ -8,9 +8,8 @@ namespace TOne.WhS.RouteSync.Cataleya.Data
     public interface ICataleyaDataManager
     {
         Guid ConfigId { get; }
+        List<CarrierAccountMapping> GetCarrierAccountMappings(bool getFromTemp);
         void PrepareTables(IRouteInitializeContext context);
-        List<CarrierAccountVersionInfo> GetCarrierAccountsPreviousVersion(IGetCarrierAccountsPreviousVersionNumbersContext context);
-        List<CarrierAccountMapping> GetAllCarrierAccountsMapping(bool getFromTemp);
         List<CustomerIdentification> GetAllCustomerIdentifications(bool getFromTemp);
         Object PrepareDataForApply(List<ConvertedRoute> routes);
         void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);

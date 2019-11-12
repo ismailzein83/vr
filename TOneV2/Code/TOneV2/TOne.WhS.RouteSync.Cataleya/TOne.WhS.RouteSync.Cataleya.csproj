@@ -72,7 +72,7 @@
   <ItemGroup>
     <Compile Include="Business\CataleyaManager.cs" />
     <Compile Include="CataleyaSWSync.cs" />
-    <Compile Include="Data.Postgres\CarrierAccountDataManager.cs" />
+    <Compile Include="Data.Postgres\CarrierAccountMappingDataManager.cs" />
     <Compile Include="Data.Postgres\CataleyaPostgresDataManager.cs" />
     <Compile Include="Data.Postgres\CustomerIdentificationDataManager.cs" />
     <Compile Include="Data.Postgres\RouteDataManager.cs" />

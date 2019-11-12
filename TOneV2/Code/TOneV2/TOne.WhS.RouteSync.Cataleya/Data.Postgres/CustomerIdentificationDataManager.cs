@@ -8,46 +8,47 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 {
     public class CustomerIdentificationDataManager : BasePostgresDataManager
     {
-        public string SchemaName { get; set; }
-        public string ConnectionString { get; set; }
-        string TableName { get { return "CustomerIdentification"; } }
-        string TempTableName { get { return "CustomerIdentification_Temp"; } }
+        string schemaName;
+        string connectionString;
+        string tableName;
+        string tempTableName;
         protected override string GetConnectionString()
         {
-            return ConnectionString;
+            return connectionString;
         }
 
         #region Public Methods
 
-        public CustomerIdentificationDataManager(string schemaName, string connectionString)
+        public CustomerIdentificationDataManager(string _schemaName, string _connectionString)
         {
-            SchemaName = schemaName;
-            ConnectionString = connectionString;
+            schemaName = _schemaName;
+            connectionString = _connectionString;
+            tableName = !string.IsNullOrEmpty(schemaName) ? string.Format(@"""{0}"".{1}", schemaName, "CustomerIdentification") : "CustomerIdentification";
+            tempTableName = !string.IsNullOrEmpty(schemaName) ? string.Format(@"""{0}"".{1}", schemaName, "CustomerIdentification_Temp") : "CustomerIdentification_Temp";
         }
 
-        public List<CustomerIdentification> GetAllCustomerIdentifications(bool getFromTemp)
+        public void Initialize(List<CustomerIdentification> customersIdentification) 
         {
-            var TableNameWithSchema = getFromTemp ? $"{SchemaName}.{TempTableName}" : $"{SchemaName}.{TableName}";
-            var query = GetAllCustomerIdentifications_Query.Replace("#TABLENAMEWITHSCHEMA#", TableNameWithSchema);
-
-            return this.GetItemsText(query, CustomerIdentificationMapper, null);
+            CreateCustomerIdentificationTableIfNotExist();
+            DropIfExistsCreateTempCustomerIdentificationTable();
+            AddCustomerIdentificationsToTempTable(customersIdentification);
         }
 
-        public void CreateCustomerIdentificationTableIfNotExist()
+        void CreateCustomerIdentificationTableIfNotExist()
         {
-            var createCustomerIdentificationTableIfNotExistQuery = CreateCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{SchemaName}.{TableName}");
+            var createCustomerIdentificationTableIfNotExistQuery = CreateCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName);
 
             ExecuteNonQuery(new string[] { createCustomerIdentificationTableIfNotExistQuery });
         }
 
-        public void DropIfExistsCreateTempCustomerIdentificationTable()
+         void DropIfExistsCreateTempCustomerIdentificationTable()
         {
-            var dropIfExistsCreateTempCustomerIdentificationTableQuery = DropIfExistsCreateTempCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{SchemaName}.{TempTableName}");
+            var dropIfExistsCreateTempCustomerIdentificationTableQuery = DropIfExistsCreateTempCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
 
             ExecuteNonQuery(new string[] { dropIfExistsCreateTempCustomerIdentificationTableQuery });
         }
 
-        public void AddCustomerIdentificationsToTempTable(List<CustomerIdentification> customersIdentification)
+         void AddCustomerIdentificationsToTempTable(List<CustomerIdentification> customersIdentification)
         {
             var itemsToInsert = new List<String>();
             foreach (var customerIdentification in customersIdentification)
@@ -55,15 +56,23 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                 itemsToInsert.Add($"({customerIdentification.CarrierId},'{customerIdentification.Trunk}')");
             }
 
-            var addCustomerIdentificationsToTempTableQuery = AddCustomerIdentificationsToTempTable_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{SchemaName}.{TempTableName}");
+            var addCustomerIdentificationsToTempTableQuery = AddCustomerIdentificationsToTempTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
             addCustomerIdentificationsToTempTableQuery = addCustomerIdentificationsToTempTableQuery.Replace("#ITEMS#", string.Join(" ,", itemsToInsert));
 
             ExecuteNonQuery(new string[] { addCustomerIdentificationsToTempTableQuery });
         }
 
+        public List<CustomerIdentification> GetAllCustomerIdentifications(bool getFromTemp)
+        {
+            var table = getFromTemp ? tempTableName : tableName;
+            var query = GetAllCustomerIdentifications_Query.Replace("#TABLENAMEWITHSCHEMA#", table);
+
+            return this.GetItemsText(query, CustomerIdentificationMapper, null);
+        }
+
         public string GeAddCustomerIdentificationQuery(CustomerIdentification customerIdentificationToAdd)
         {
-            var query = AddCustomerIdentification_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{SchemaName}.{TableName}");
+            var query = AddCustomerIdentification_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName);
 
             query = query.Replace("#CAID#", customerIdentificationToAdd.CarrierId.ToString());
             query = query.Replace("#TRUNK#", customerIdentificationToAdd.Trunk);
@@ -72,7 +81,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public string GetDeleteCustomerIdentificationQuery(CustomerIdentification customerIdentificationToDelete)
         {
-            var query = DeleteCustomerIdentification_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{SchemaName}.{TableName}");
+            var query = DeleteCustomerIdentification_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName);
 
             query = query.Replace("#CAID#", customerIdentificationToDelete.CarrierId.ToString());
             query = query.Replace("#TRUNK#", customerIdentificationToDelete.Trunk);
@@ -81,7 +90,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public string GetDropTempCustomerIdentificationTableQuery()
         {
-            return DropTempCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{SchemaName}.{TempTableName}");
+            return DropTempCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
         }
 
         #endregion

@@ -5,6 +5,8 @@ using TOne.WhS.RouteSync.Cataleya.Entities;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Data.Postgres;
+using Vanrise.Common;
+using System.Linq;
 
 namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 {
@@ -13,24 +15,32 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         public Guid ConfigId { get { return new Guid("CAD5F46B-F182-462A-AACC-B862ACD11AEB"); } }
         public DatabaseConnection DatabaseConnection { get; set; }
 
+        string connectionString;
+        public CataleyaPostgresDataManager()
+        {
+            connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
+        }
+
         protected override string GetConnectionString()
         {
-            return GetConnectionStringById(DatabaseConnection.DBConnectionId);
+            return connectionString;
         }
 
         #region Public Methods
+        public List<CarrierAccountMapping> GetCarrierAccountMappings(bool getFromTemp)
+        {
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            return carrierAccountDataManager.GetCarrierAccountMappings(getFromTemp);
+        }
 
         public object PrepareDataForApply(List<ConvertedRoute> routes)
         {
-            var connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
             var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
-
             return routeDataManager.PrepareDataForApply(routes);
         }
 
         public void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            var connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
             var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
 
             routeDataManager.ApplyCataleyaRoutesToDB(context);
@@ -38,62 +48,40 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public void PrepareTables(IRouteInitializeContext context)
         {
-            var connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
-
             var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
-            var carrierAccountDataManager = new CarrierAccountDataManager(DatabaseConnection.SchemaName, connectionString);
+            customerIdentificationDataManager.Initialize(context.CustomersIdentification);
+
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            carrierAccountDataManager.Initialize(context.CarrierAccountsMapping);
+
             var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
-
-            customerIdentificationDataManager.CreateCustomerIdentificationTableIfNotExist();
-            carrierAccountDataManager.CreateCarrierAccountTableIfNotExist();
-
-            customerIdentificationDataManager.DropIfExistsCreateTempCustomerIdentificationTable();
-            carrierAccountDataManager.CreateCarrierAccountTableIfNotExist();
-
-            customerIdentificationDataManager.AddCustomerIdentificationsToTempTable(context.CustomersIdentification);
-            carrierAccountDataManager.AddCarrierAccountsMappingToTempTable(context.CarrierAccountsMapping);
-
-            routeDataManager.DropIfExistsCreateRouteTables(context.RouteTableNames);
-        }
-
-        public List<CarrierAccountVersionInfo> GetCarrierAccountsPreviousVersion(IGetCarrierAccountsPreviousVersionNumbersContext context)
-        {
-            var connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
-            var carrierAccountDataManager = new CarrierAccountDataManager(DatabaseConnection.SchemaName, connectionString);
-
-            return carrierAccountDataManager.GetCarrierAccountsPreviousVersionNumbers(context.CarrierAccountIds);
+            routeDataManager.Initialize(context.CarrierAccountsMapping);
         }
 
         public List<CarrierAccountMapping> GetAllCarrierAccountsMapping(bool getFromTemp)
         {
-            var connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
-            var carrierAccountDataManager = new CarrierAccountDataManager(DatabaseConnection.SchemaName, connectionString);
-
-            return carrierAccountDataManager.GetAllCarrierAccountsMapping(getFromTemp);
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            return carrierAccountDataManager.GetCarrierAccountMappings(getFromTemp);
         }
 
         public List<CustomerIdentification> GetAllCustomerIdentifications(bool getFromTemp)
         {
-            var connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
             var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
-
             return customerIdentificationDataManager.GetAllCustomerIdentifications(getFromTemp);
         }
 
         public void Finalize(CataleyaFinalizeContext context)
         {
             var carrierFinalizationDataByCustomer = context.CarrierFinalizationDataByCustomer;
-            var connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
 
-            var carrierAccountDataManager = new CarrierAccountDataManager(DatabaseConnection.SchemaName, connectionString);
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
             var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
             var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
 
-            foreach (var keyValuePair in carrierFinalizationDataByCustomer)
+            foreach (var carrierFinalizationData in carrierFinalizationDataByCustomer.Values)
             {
                 var queryCommands = new StringBuilder();
                 queryCommands.AppendLine("Begin;");
-                var carrierFinalizationData = keyValuePair.Value;
 
                 if (carrierFinalizationData.CarrierAccountMappingToAdd != null)
                 {
@@ -131,9 +119,9 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                 ExecuteNonQuery(new string[] { queryCommands.ToString() });
             };
 
-            ExecuteNonQuery(new string[] { carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery(), customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery() });
-
-            //Create Indexes
+            ExecuteNonQuery(new string[] { carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery(),
+                customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery(),
+                routeDataManager.GetCreateRouteTablesIndexesQuery(context.RouteTableNames) });
         }
 
         #endregion
@@ -142,10 +130,9 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         private string GetConnectionStringById(Guid vrConnectionId)
         {
-            var connection = new VRConnectionManager().GetVRConnection(vrConnectionId);
-            var settings = connection.Settings as SQLConnection;
-
-            return settings.ConnectionString;
+            var vrConnection = new VRConnectionManager().GetVRConnection(vrConnectionId);
+            SQLConnection sqlConnection = vrConnection.Settings.CastWithValidate<SQLConnection>("connection.Settings", vrConnectionId);
+            return sqlConnection.ConnectionString;
         }
 
         #endregion
