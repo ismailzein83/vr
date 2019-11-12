@@ -1,10 +1,10 @@
 ﻿
-app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountActionService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_AccountActionService) {
+app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountActionService', 'Retail_Teles_TelesAccountAPIService', 'InsertOperationResultEnum',
+    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_AccountActionService, Retail_Teles_TelesAccountAPIService, InsertOperationResultEnum) {
 
-      
+
         function registerMappingTelesAccount() {
-          
+
             var actionType = {
                 ActionTypeName: "MappingTelesAccount",
                 ExecuteAction: function (payload) {
@@ -27,8 +27,7 @@ app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsS
             Retail_BE_AccountActionService.registerActionType(actionType);
         }
 
-        function mapTelesAccountEditor(accountBEDefinitionId, accountActionId, accountId, enterpriseInfoEntity, onMappingAccount)
-        {
+        function mapTelesAccountEditor(accountBEDefinitionId, accountActionId, accountId, enterpriseInfoEntity, onMappingAccount) {
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
                 actionDefinitionId: accountActionId,
@@ -43,6 +42,67 @@ app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsS
             };
 
             VRModalService.showModal('/Client/Modules/Retail_Teles/Directives/AccountAction/MappingTelesAccountAction/Templates/MappingTelesAccountEditor.html', parameters, modalSettings);
+        }
+
+        function registerUnmappingTelesAccount() {
+
+            var actionType = {
+                ActionTypeName: "UnmappingTelesAccount",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var accountActionId = payload.accountActionDefinition.AccountActionDefinitionId;
+                    var onItemUpdated = payload.onItemUpdated;
+                    var account = payload.account;
+                    var onAccountUpdated = function (updatedAccount) {
+                        if (onItemUpdated != undefined)
+                            onItemUpdated(updatedAccount);
+                    };
+                    payload.showGridLoader(true);
+                    unmapTelesAccountEditor(accountBEDefinitionId, accountActionId, account.AccountId, onAccountUpdated).finally(function () {
+                        payload.showGridLoader(false);
+                    });
+                }
+            };
+            Retail_BE_AccountActionService.registerActionType(actionType);
+        }
+
+        function unmapTelesAccountEditor(accountBEDefinitionId, accountActionId, accountId, onUnmappingAccount) {
+            var parameters = {
+                AccountBEDefinitionId: accountBEDefinitionId,
+                ActionDefinitionId: accountActionId,
+                AccountId: accountId
+            };
+
+            var deferred = UtilsService.createPromiseDeferred();
+            VRNotificationService.showConfirmation('Are you sure you want to unmap Teles account?').then(function (response) {
+                if (response) {
+                    Retail_Teles_TelesAccountAPIService.UnmapTelesAccount(parameters).then(function (response) {
+                        if (response) {
+                            switch (response.Result) {
+                                case InsertOperationResultEnum.Succeeded.value:
+                                    VRNotificationService.showSuccess("Unmapping succeeded");
+                                    if (onUnmappingAccount != undefined) {
+                                        onUnmappingAccount(response.UpdatedObject);
+                                    }
+                                    break;
+                                case InsertOperationResultEnum.Failed.value:
+                                    VRNotificationService.showError("Unmapping Failed");
+                                    break;
+                                case InsertOperationResultEnum.SameExists.value:
+                                    VRNotificationService.showWarning("Same Account unmapped.");
+                            }
+                        }
+                        deferred.resolve();
+                    }).catch(function (error) {
+                        deferred.reject(error);
+                    });
+                } else {
+                    deferred.resolve();
+                }
+            });
+            return deferred.promise;
         }
 
         function registerMappingTelesSite() {
@@ -169,6 +229,7 @@ app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsS
             registerMappingTelesAccount: registerMappingTelesAccount,
             registerMappingTelesSite: registerMappingTelesSite,
             registerMappingTelesUser: registerMappingTelesUser,
-            registerChangeUserRoutingGroup: registerChangeUserRoutingGroup
+            registerChangeUserRoutingGroup: registerChangeUserRoutingGroup,
+            registerUnmappingTelesAccount: registerUnmappingTelesAccount
         });
     }]);

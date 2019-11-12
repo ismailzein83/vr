@@ -70,6 +70,13 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                                     Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions);
                                     defineAccountMenuActions(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions, accountActionDefinitions, accountActionGroups);
                                     gridAPI.itemUpdated(updatedItem);
+                                },
+                                showGridLoader: function (value) {
+                                    if (value) {
+                                        gridAPI.showLoader();
+                                    } else {
+                                        gridAPI.hideLoader();
+                                    }
                                 }
                             };
                             var promise = actionType.ExecuteAction(payload);

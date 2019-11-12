@@ -17,7 +17,9 @@ namespace Retail.Teles.Business
         AllowSiteMap = 4, 
         CanChangeSiteMapping = 5 ,
         AllowUserMap = 6, 
-        CanChangeUserMapping = 7 
+        CanChangeUserMapping = 7 ,
+        CanUnmapCompany = 8,
+        CanUnmapSite = 9
     }
     public class TelesAccountCondition : AccountCondition
     {
@@ -51,6 +53,10 @@ namespace Retail.Teles.Business
                     return AllowUserMap(context.Account, this.UserTypeId);
                 case Business.ConditionType.CanChangeUserMapping:
                     return CanChangeUserMapping(context.Account, this.UserTypeId);
+                case Business.ConditionType.CanUnmapCompany:
+                    return CanUnmapCompany(context.Account, this.CompanyTypeId);
+                case Business.ConditionType.CanUnmapSite:
+                    return CanUnmapSite(context.Account, this.SiteTypeId);
                 default:
                     return false;
             }
@@ -139,6 +145,34 @@ namespace Retail.Teles.Business
             }
             return false;
         }
+
+        public static bool CanUnmapCompany(Account account, Guid companyTypeId)
+        {
+            if (account.TypeId == companyTypeId)
+            {
+                if (IsEnterpriseNotMappedOrProvisioned(account))
+                    return false;
+                if (IsChangedUserRGs(account, false, null))
+                    return false;
+
+                var accountBEDefinitionId = _accountTypeManager.GetAccountBEDefinitionId(account.TypeId);
+                var childAccounts = _accountBEManager.GetChildAccounts(accountBEDefinitionId, account.AccountId, false);
+                if (childAccounts != null)
+                {
+                    foreach (var childAccount in childAccounts)
+                    {
+                        if (IsSiteMapped(childAccount))
+                            return false;
+                        if (IsChangedUserRGs(childAccount, false, null))
+                            return false;
+                    }
+                }
+
+                return true;
+            }
+            return false;
+        }
+
         public static bool CanChangeSiteMapping(Account account, Guid siteTypeId)
         {
            if (account.TypeId == siteTypeId)
@@ -149,6 +183,18 @@ namespace Retail.Teles.Business
             }
             return false;
         }
+
+        public static bool CanUnmapSite(Account account, Guid siteTypeId)
+        {
+            if (account.TypeId == siteTypeId)
+            {
+                if (IsSiteNotMappedOrProvisioned(account))
+                    return false;
+                return !IsChangedUserRGs(account, false, null);
+            }
+            return false;
+        }
+
         public static bool AllowChangeUserRGs(Account account, Guid companyTypeId, Guid siteTypeId,Guid? userTypeId, string actionType)
         {
             bool result = false;
@@ -241,6 +287,8 @@ namespace Retail.Teles.Business
             }
             return false;
         }
+
+
 
     }
 }

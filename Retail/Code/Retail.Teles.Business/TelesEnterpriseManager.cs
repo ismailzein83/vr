@@ -125,6 +125,29 @@ namespace Retail.Teles.Business
             return updateOperationOutput;
 
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UnmapEnterpriseToAccount(TelesAccountToUnmap input)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool result = TryUnMapEnterpriseToAccount(input.AccountBEDefinitionId, input.AccountId);
+            if (result)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                _accountBEManager.TrackAndLogObjectCustomAction(input.AccountBEDefinitionId, input.AccountId, "Unmap Teles Enterprise", null, null);
+                updateOperationOutput.UpdatedObject = _accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+            
+            return updateOperationOutput;
+        }
+
         public bool CanMapTelesEnterprise(Guid accountBEDefinitionId, string telesEnterpriseId)
         {
             var cachedAccountsByEnterprises = GetCachedAccountsByEnterprises(accountBEDefinitionId);
@@ -132,6 +155,7 @@ namespace Retail.Teles.Business
                 return false;
             return true;
         }
+
         public bool TryMapEnterpriseToAccount(Guid accountBEDefinitionId, long accountId, string telesEnterpriseId, ProvisionStatus? status = null)
         {
 
@@ -146,9 +170,14 @@ namespace Retail.Teles.Business
             return _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
                 enterpriseAccountMappingInfo);
         }
+
+        public bool TryUnMapEnterpriseToAccount(Guid accountBEDefinitionId, long accountId)
+        {
+            return _accountBEManager.DeleteAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId);
+        }
+
         public bool IsMapEnterpriseToAccountValid(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId)
         {
-
             var accountDefinitionAction = new AccountBEDefinitionManager().GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
             if (accountDefinitionAction != null)
             {
@@ -162,6 +191,7 @@ namespace Retail.Teles.Business
             }
             return false;
         }
+
         public Dictionary<string, long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject("GetCachedAccountsByEnterprises", accountBEDefinitionId, () =>
@@ -686,7 +716,7 @@ namespace Retail.Teles.Business
                             new ExportExcelHeaderCell { Title = "Screen Number" },
                             new ExportExcelHeaderCell { Title = "Type" },
                             new ExportExcelHeaderCell { Title = "Channels" }
-                        }                      
+                        }
                     }
                 };
 

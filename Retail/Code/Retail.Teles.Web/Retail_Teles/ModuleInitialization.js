@@ -3,5 +3,6 @@
     Retail_Teles_TelesAccountActionService.registerMappingTelesSite();
     Retail_Teles_TelesAccountActionService.registerMappingTelesUser();
     Retail_Teles_TelesAccountActionService.registerChangeUserRoutingGroup();
+    Retail_Teles_TelesAccountActionService.registerUnmappingTelesAccount();
 }]);
 
