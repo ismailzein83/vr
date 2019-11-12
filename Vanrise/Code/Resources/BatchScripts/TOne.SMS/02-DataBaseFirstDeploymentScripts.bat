@@ -8,9 +8,10 @@ ECHO.
 ECHO TOne.SMS DataBase First Deployment Scripts
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_Common.json" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_Bank.json" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_Countries.json" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_Currency.json" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_Bank.json" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_Company.json" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_Countries.json" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_TimeZone.json" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_RateType.json" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VRJSON_PostScripts\Common\VR_BusinessProcess.json" 	/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
