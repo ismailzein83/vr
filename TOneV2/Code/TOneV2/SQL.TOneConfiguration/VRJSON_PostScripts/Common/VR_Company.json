@@ -50,17 +50,16 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
-              "ID": "32f9ecbd-7ee7-4b14-8ea8-3f6e0b9f825f",
-              "Name": "VR_Bank",
+              "ID": "9ad12d8b-d4d7-473d-9644-3c6349bbad01",
+              "Name": "VR_Company",
               "AssemblyID": null,
-              "CreatedTime": "2019-09-27T14:03:44.767",
-              "LastModifiedTime": "2019-09-27T14:03:44.767"
+              "CreatedTime": "2019-11-12T13:54:50.61",
+              "LastModifiedTime": "2019-11-12T13:54:50.61"
             }
           }
         ],
         "Variables": null,
-        "LastWhereCondition": "ID = '32f9ecbd-7ee7-4b14-8ea8-3f6e0b9f825f'",
+        "LastWhereCondition": "ID = '9ad12d8b-d4d7-473d-9644-3c6349bbad01'",
         "LastJoinStatement": null,
         "IsIdentity": false
       },
@@ -144,20 +143,20 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "ID": "1cb20f2c-a835-4320-aec7-e034c5a756e9",
-              "DevProjectID": "32f9ecbd-7ee7-4b14-8ea8-3f6e0b9f825f",
-              "Name": "Bank Details",
-              "Type": "VR_Common_BankDetailsSettings",
+              "ID": "81f62ac3-bae4-4a2f-a60d-a655494625ea",
+              "DevProjectID": "9ad12d8b-d4d7-473d-9644-3c6349bbad01",
+              "Name": "Company",
+              "Type": "VR_Common_CompanySettings",
               "Category": "General",
-              "Settings": "{\"Editor\" : \"vr-common-bankdetailssettings-editor\"}",
-              "Data": null,
+              "Settings": "{\"Editor\":\"vr-common-companysettings-editor\"}",
+              "Data": "*",
               "IsTechnical": false,
               "LastModifiedTime": null
             }
           }
         ],
         "Variables": null,
-        "LastWhereCondition": "DevProjectID = '32f9ecbd-7ee7-4b14-8ea8-3f6e0b9f825f' and IsTechnical=0",
+        "LastWhereCondition": "DevProjectID = '9ad12d8b-d4d7-473d-9644-3c6349bbad01' and IsTechnical=0",
         "LastJoinStatement": null,
         "IsIdentity": false
       },

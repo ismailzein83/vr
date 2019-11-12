@@ -1,8 +1,9 @@
 ﻿Common
 VR_Common.json
-VR_Bank.json
-VR_Countries.json
 VR_Currency.json
+VR_Bank.json
+VR_Company.json
+VR_Countries.json
 VR_ExclusiveSession.json
 VR_GoogleAnalytics.json
 VR_RateType.json

@@ -1081,5 +1081,6 @@
     <None Include="VRJSON_PostScripts\Common\VR_CountryInArabic.json" />
     <None Include="VRJSON_PostScripts\Inspkt\Inspkt.json" />
     <None Include="VRJSON_PostScripts\Interconnect\Interconnect_Ogero.json" />
+    <None Include="VRJSON_PostScripts\Common\VR_Company.json" />
   </ItemGroup>
 </Project>

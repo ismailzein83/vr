@@ -975,65 +975,13 @@
       "Title": "Merge"
     },
     {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "common",
       "TableName": "Setting",
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "DataRows": [
-          {
-            "FieldValues": {
-              "ID": "5174e166-3ae1-4ed5-9874-07008504c737",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System Mail",
-              "Type": "VR_Common_Email",
-              "Category": "General",
-              "Settings": "{\"Editor\":\"vr-common-emailtemplate-settings-editor\"}",
-              "Data": "{\"$type\":\"Vanrise.Entities.EmailSettingData, Vanrise.Entities\",\"SenderEmail\":null,\"SenderPassword\":null,\"Host\":null,\"Port\":null,\"Timeout\":6000,\"EnabelSsl\":null}",
-              "IsTechnical": false,
-              "LastModifiedTime": null
-            }
-          },
-          {
-            "FieldValues": {
-              "ID": "26aa64f9-67c3-4bf6-be94-6d59030b9be3",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "System SMS",
-              "Type": "VR_Common_SMS",
-              "Category": "General",
-              "Settings": "{\"Editor\":\"vr-common-smstemplate-settings-editor\"}",
-              "Data": null,
-              "IsTechnical": false,
-              "LastModifiedTime": null
-            }
-          },
-          {
-            "FieldValues": {
-              "ID": "d8ec8190-a3ac-4384-a945-9af18b933889",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "General",
-              "Type": "VR_Common_GeneralSetting",
-              "Category": "General",
-              "Settings": "{\"Editor\":\"vr-common-general-settings-editor\"}",
-              "Data": "{\"$type\":\"Vanrise.Entities.GeneralSettingData, Vanrise.Entities\",\"UIData\":{\"$type\":\"Vanrise.Entities.UISettingData, Vanrise.Entities\",\"NormalPrecision\":2,\"LongPrecision\":4,\"GridPageSize\":10,\"MaxSearchRecordCount\":1000,\"HorizontalLine\":false,\"AlternativeColor\":true,\"VerticalLine\":false,\"Theme\":\"/Client/Themes/flat-theme-rainbow/flat-theme-rainbow.css\"},\"MasterLayoutData\":{\"$type\":\"Vanrise.Entities.MasterLayoutSettingData, Vanrise.Entities\",\"MenuOption\":0,\"ExpandedMenu\":true,\"IsBreadcrumbVisible\":false,\"ShowApplicationTiles\":false,\"ShowModuleTiles\":false,\"TilesMode\":false,\"ModuleTilesMode\":false},\"CacheData\":{\"$type\":\"Vanrise.Entities.CacheSettingData, Vanrise.Entities\",\"ClientCacheNumber\":1500}}",
-              "IsTechnical": false,
-              "LastModifiedTime": null
-            }
-          },
-          {
-            "FieldValues": {
-              "ID": "81f62ac3-bae4-4a2f-a60d-a655494625ea",
-              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
-              "Name": "Company",
-              "Type": "VR_Common_CompanySettings",
-              "Category": "General",
-              "Settings": "{\"Editor\":\"vr-common-companysettings-editor\"}",
-              "Data": null,
-              "IsTechnical": false,
-              "LastModifiedTime": null
-            }
-          }
-        ],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
         "Columns": [
           {
             "ColumnName": "ID",
@@ -1090,10 +1038,53 @@
             "IsIdentifier": false
           }
         ],
-        "IsIdentity": false,
-        "Variables": [],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "5174e166-3ae1-4ed5-9874-07008504c737",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System Mail",
+              "Type": "VR_Common_Email",
+              "Category": "General",
+              "Settings": "{\"Editor\":\"vr-common-emailtemplate-settings-editor\"}",
+              "Data": "{\"$type\":\"Vanrise.Entities.EmailSettingData, Vanrise.Entities\",\"SenderEmail\":null,\"SenderPassword\":null,\"Host\":null,\"Port\":null,\"Timeout\":6000,\"EnabelSsl\":null}",
+              "IsTechnical": false,
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "26aa64f9-67c3-4bf6-be94-6d59030b9be3",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "System SMS",
+              "Type": "VR_Common_SMS",
+              "Category": "General",
+              "Settings": "{\"Editor\":\"vr-common-smstemplate-settings-editor\"}",
+              "Data": null,
+              "IsTechnical": false,
+              "LastModifiedTime": null
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "d8ec8190-a3ac-4384-a945-9af18b933889",
+              "DevProjectID": "3fb1a9fc-2a00-499e-a3c6-f3d317f58d66",
+              "Name": "General",
+              "Type": "VR_Common_GeneralSetting",
+              "Category": "General",
+              "Settings": "{\"Editor\":\"vr-common-general-settings-editor\"}",
+              "Data": "{\"$type\":\"Vanrise.Entities.GeneralSettingData, Vanrise.Entities\",\"UIData\":{\"$type\":\"Vanrise.Entities.UISettingData, Vanrise.Entities\",\"NormalPrecision\":2,\"LongPrecision\":4,\"GridPageSize\":10,\"MaxSearchRecordCount\":1000,\"HorizontalLine\":false,\"AlternativeColor\":true,\"VerticalLine\":false,\"Theme\":\"/Client/Themes/flat-theme-rainbow/flat-theme-rainbow.css\"},\"MasterLayoutData\":{\"$type\":\"Vanrise.Entities.MasterLayoutSettingData, Vanrise.Entities\",\"MenuOption\":0,\"ExpandedMenu\":true,\"IsBreadcrumbVisible\":false,\"ShowApplicationTiles\":false,\"ShowModuleTiles\":false,\"TilesMode\":false,\"ModuleTilesMode\":false},\"CacheData\":{\"$type\":\"Vanrise.Entities.CacheSettingData, Vanrise.Entities\",\"ClientCacheNumber\":1500}}",
+              "IsTechnical": false,
+              "LastModifiedTime": null
+            }
+          }
+        ],
+        "Variables": null,
         "LastWhereCondition": "DevProjectID = '3fb1a9fc-2a00-499e-a3c6-f3d317f58d66' and [IsTechnical]=0",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+        "IsIdentity": false
       },
       "Title": "Merge"
     },
