@@ -704,6 +704,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\AnthonyTask.cs" />
     <Compile Include="Tasks\FatimaHammoudTask.cs" />
+    <Compile Include="Tasks\MohamadSheaibTask.cs" />
     <Compile Include="Tasks\MSaabTask.cs" />
     <Compile Include="Tasks\NaimTask.cs" />
     <Compile Include="Tasks\FatimaTask.cs" />
