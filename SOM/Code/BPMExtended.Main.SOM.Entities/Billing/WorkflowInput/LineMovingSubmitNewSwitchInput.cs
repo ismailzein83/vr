@@ -10,8 +10,12 @@ namespace BPMExtended.Main.SOMAPI
     public class LineMovingSubmitNewSwitchInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
-        public string NewDirectoryNumber { get; set; }
-        public string OldDirectoryNumber { get; set; }
+        public string NewPhoneNumber { get; set; }
+        public string OldPhoneNumber { get; set; }
+        public string OldTelLinePathId { get; set; }
+        public string NewTelLinePathId { get; set; }
+        public string NewADSLLinePathId { get; set; }
+        public List<ServiceData> NotApplicableServices { get; set; }
         public bool SameSwitch { get; set; }
         public Address Address { get; set; }
 

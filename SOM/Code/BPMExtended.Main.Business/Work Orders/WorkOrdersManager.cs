@@ -307,8 +307,8 @@ namespace BPMExtended.Main.Business
             workorder.SetColumnValue("StSupportCommands", supportsCommand);
             workorder.SetColumnValue("StCommands", commands);
             workorder.SetColumnValue("StPhoneNumber", phoneNumber);
-            workorder.SetColumnValue("StReservedDPId", oldDevice);
-            workorder.SetColumnValue("StSelectedDPPort", newDevice);
+            workorder.SetColumnValue("StOldDeviceId", oldDevice);
+            workorder.SetColumnValue("StReservedDeviceId", newDevice);
             workorder.SetColumnValue("StFlags", servicesList);
             workorder.Save();
 
