@@ -20,5 +20,6 @@ namespace BPMExtended.Main.Entities
         public string OldDeviceId { get; set; }
         public string NewDeviceId { get; set; }
         public string Type { get; set; }
+        public string NetworkServices { get; set; }
     }
 }

@@ -9,8 +9,8 @@ namespace BPMExtended.Main.SOMAPI
 {
     public class CreateSwitchAccountInput
     {
-        public CommonInputArgument CommonInputArgument { get; set; }
+        public string ContractId { get; set; }
+        public string RequestId { get; set; }
         public string LinePathId { get; set; }
-        public string DeviceType { get; set; }
     }
 }

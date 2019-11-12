@@ -106,6 +106,7 @@
     <Compile Include="RequestHeaderInfo.cs" />
     <Compile Include="RequiredService.cs" />
     <Compile Include="ServiceConsistensyCatalog.cs" />
+    <Compile Include="ServiceItem.cs" />
     <Compile Include="SimulateInstallmentInput.cs" />
     <Compile Include="SOMProcessInstanceLog.cs" />
     <Compile Include="ServiceHistoryRecordDetail.cs" />

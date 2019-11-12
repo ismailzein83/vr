@@ -109,6 +109,7 @@
     <Compile Include="Billing\WorkflowInput\EditPABXRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ExcludePackagesServiceInput.cs" />
     <Compile Include="Billing\WorkflowInput\FAFManagementRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\FinalizeActivateTelephonyContractInput.cs" />
     <Compile Include="Billing\WorkflowInput\GetContractAddressInput.cs" />
     <Compile Include="Billing\WorkflowInput\GSHDSLContractOnHoldInput.cs" />
     <Compile Include="Billing\WorkflowInput\GSHDSLSubscriptionRequestInput.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Billing\WorkflowInput\ServiceRemovalContractServicesInput.cs" />
     <Compile Include="Billing\WorkflowInput\ServiceRemovalSubmitInput.cs" />
     <Compile Include="Billing\WorkflowInput\SOMRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\SubmitActivateTelephonyContractInput.cs" />
     <Compile Include="Billing\WorkflowInput\SubmitToPOSInput.cs" />
     <Compile Include="Billing\WorkflowInput\SuspensionRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\TelephonyContractOnHoldInput.cs" />

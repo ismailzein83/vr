@@ -5,13 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using BPMExtended.Main.Entities;
 
+
 namespace BPMExtended.Main.SOMAPI
 {
-    public class ActivateTelephonyContractInput
+    public class SubmitActivateTelephonyContractInput
     {
-        public CommonInputArgument CommonInputArgument { get; set; }
+        public string ContractId { get; set; }
+        public string RequestId { get; set; }
+        public string LinePathId { get; set; }
+        public List<ServiceItem> Services { get; set; }
         public PaymentData PaymentData { get; set; }
-        //public List<ContractService> ContractServices { get; set; }
-        //public string LinePathId { get; set; }
     }
 }

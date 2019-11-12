@@ -40,6 +40,7 @@ namespace BPMExtended.Main.Business
             string contractId = w.ContractId;
             string newDevice = w.NewDeviceId;
             string oldDevice = w.OldDeviceId;
+            string servicesList = w.NetworkServices;
 
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -73,7 +74,7 @@ namespace BPMExtended.Main.Business
                 string requestsTypeId = GetRequestType(EntityName);
                 string recordName = GetEntityName(EntityName, requestId);
                 workOrderId = initiateWorkOrder(contractId,requestId, requestsTypeId, type, recordName, type, pathId, phoneNumber, switchName, deviceName,
-                    supportsCommand, commands,newDevice,oldDevice);
+                    supportsCommand, commands,newDevice,oldDevice, servicesList);
 
                 //update request
                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
@@ -285,7 +286,7 @@ namespace BPMExtended.Main.Business
         }
         private string initiateWorkOrder(string contractId,string requestId, string requestTypeId, string workOrderType, string recordName
             , string type, string pathId, string phoneNumber, string switchName, string deviceName, string supportsCommand, string commands
-            , string newDevice, string oldDevice)
+            , string newDevice, string oldDevice, string servicesList)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StWorkOrder");
             Entity workorder = schema.CreateEntity(BPM_UserConnection);
@@ -308,7 +309,7 @@ namespace BPMExtended.Main.Business
             workorder.SetColumnValue("StPhoneNumber", phoneNumber);
             workorder.SetColumnValue("StReservedDPId", oldDevice);
             workorder.SetColumnValue("StSelectedDPPort", newDevice);
-            //workorder.SetColumnValue("StContractID", contractId);
+            workorder.SetColumnValue("StFlags", servicesList);
             workorder.Save();
 
             return workOrderId.ToString();
