@@ -128,8 +128,8 @@ namespace Retail.NIM.Business
                 if(nodeParts != null && nodeParts.Count > 0)
                 {
 
-                    long? reachedPartId = null;
-                    while(reachedPartId != nodePartId.Value)
+                    long? reachedPartId = nodePartId.Value;
+                    while(reachedPartId != null)
                     {
                         foreach (var part in nodeParts)
                         {
@@ -138,7 +138,7 @@ namespace Retail.NIM.Business
                             var parentPartId = (long?)part.FieldValues.GetRecord("ParentPart");
                             var number = part.FieldValues.GetRecord("Number") as string;
 
-                            if (reachedPartId == parentPartId)
+                            if (reachedPartId == partId)
                             {
                                 nodePortInfo.NodeParts.Add(new NodePortPartInfo
                                 {
@@ -146,11 +146,12 @@ namespace Retail.NIM.Business
                                     NodePartNumber = number,
                                     NodePartTypeId = partTypeId,
                                 });
-                                reachedPartId = partId;
+                                reachedPartId = parentPartId;
                                 break;
                             }
                         }
                     }
+                    nodePortInfo.NodeParts.Reverse();
                 }
             }
             return nodePortInfo;
