@@ -49,7 +49,23 @@ namespace Retail.NIM.Business
                 PathConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
             };
         }
+        public PathPortOutput AddPortToPath(PathPortInput input)
+        {
+            var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
+            {
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathPortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { "Path", input.PathId }, { "Port", input.PortId } }
+            });
 
+
+            if (insertedEntity.Result == InsertOperationResult.Failed)
+                return null;
+
+            return new PathPortOutput
+            {
+                PathPortId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
+            };
+        }
         public SetPathReadyOutput SetPathReady(SetPathReadyInput input)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate

@@ -17,6 +17,7 @@ namespace Retail.NIM.Entities
         public static Guid FDBBEDefinitionId = new Guid("70fb7242-b36b-4e04-8efc-47b8c6aea7f9");
         public static Guid DPBEDefinitionId = new Guid("dac8e0c4-0809-48cc-a050-d32af586af3f");
         public static Guid PathConnectionBEDefinitionId = new Guid("24364ed5-1795-468c-a27b-c00013e830ac");
+        public static Guid PathPortBEDefinitionId = new Guid("890b8fbd-6556-4037-8d97-c2421b1b7095");
         public static Guid PathBEDefinitionId = new Guid("95DCF8AF-2273-4356-81E7-081034CCD75B");
 
 

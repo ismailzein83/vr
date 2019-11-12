@@ -78,6 +78,7 @@
     <Compile Include="NodeType\NodeTypeInfo.cs" />
     <Compile Include="NodeType\NodeTypeInfoFilter.cs" />
     <Compile Include="PathConnection\PathConnection.cs" />
+    <Compile Include="PathPort\PathPort.cs" />
     <Compile Include="Path\Path.cs" />
     <Compile Include="Path\SetPathReadyInput.cs" />
     <Compile Include="Path\SetPathReadyOutput.cs" />
