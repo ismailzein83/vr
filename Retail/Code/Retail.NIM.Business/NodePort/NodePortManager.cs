@@ -96,9 +96,73 @@ namespace Retail.NIM.Business
                 IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
             };
         }
+
+        public NodePortInfo GetPortInfo(long portId)
+        {
+            var nodePort = GetPort(portId);
+            if (nodePort == null)
+                return null;
+
+            var nodePortInfo = new NodePortInfo
+            {
+                NodeId = (long)nodePort.FieldValues.GetRecord("Node"),
+                NodeTypeId = (Guid)nodePort.FieldValues.GetRecord("NodeType"),
+                PortId = (long)nodePort.FieldValues.GetRecord("ID"),
+                PortNumber = nodePort.FieldValues.GetRecord("Number") as string,
+                PortTypeId = (Guid)nodePort.FieldValues.GetRecord("Type"),
+            };
+
+            var node = new NodeManager().GetNode(nodePortInfo.NodeId);
+            if(node != null)
+            {
+                nodePortInfo.NodeNumber = node.FieldValues.GetRecord("Number") as string;
+            }
+
+            var nodePartId = (long?)nodePort.FieldValues.GetRecord("Part");
+            if(nodePartId.HasValue)
+            {
+
+                nodePortInfo.NodeParts = new List<NodePortPartInfo>();
+
+                var nodeParts = new NodePartManager().GetNodePartsByNodeId(nodePortInfo.NodeId);
+                if(nodeParts != null && nodeParts.Count > 0)
+                {
+
+                    long? reachedPartId = null;
+                    while(reachedPartId != nodePartId.Value)
+                    {
+                        foreach (var part in nodeParts)
+                        {
+                            var partId = (long)part.FieldValues.GetRecord("ID");
+                            var partTypeId = (Guid)part.FieldValues.GetRecord("NodePartType");
+                            var parentPartId = (long?)part.FieldValues.GetRecord("ParentPart");
+                            var number = part.FieldValues.GetRecord("Number") as string;
+
+                            if (reachedPartId == parentPartId)
+                            {
+                                nodePortInfo.NodeParts.Add(new NodePortPartInfo
+                                {
+                                    NodePartId = partId,
+                                    NodePartNumber = number,
+                                    NodePartTypeId = partTypeId,
+                                });
+                                reachedPartId = partId;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return nodePortInfo;
+
+        }
         #endregion
 
         #region Internal Methods
+        internal GenericBusinessEntity GetPort(long portId)
+        {
+            return _genericBusinessEntityManager.GetGenericBusinessEntity(portId, StaticBEDefinitionIDs.NodePortBEDefinitionId);
+        }
         internal ReservePortOutput ReservePort(long portId, Guid portTypeId)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
@@ -130,7 +194,11 @@ namespace Retail.NIM.Business
         }
 
         #endregion
+        #region Private Methods
+        #endregion
+    }
+
+
 
    
-    }
 }

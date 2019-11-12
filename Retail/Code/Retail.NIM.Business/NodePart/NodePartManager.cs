@@ -63,5 +63,20 @@ namespace Retail.NIM.Business
             return nodePartTreeNode;
         }
 
+
+        internal List<GenericBusinessEntity> GetNodePartsByNodeId(long nodeId)
+        {
+            return  genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId,null,new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>
+                {
+                    new ObjectListRecordFilter
+                    {
+                        FieldName ="Node",
+                        Values = new List<object>{ nodeId }
+                    }
+                }
+            });
+        }
     }
 }
