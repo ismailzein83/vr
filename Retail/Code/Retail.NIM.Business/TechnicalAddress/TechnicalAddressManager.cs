@@ -173,6 +173,7 @@ namespace Retail.NIM.Business
             bool targetReach = false;
             var nodeId = (long)node.FieldValues.GetRecord("ID");
             item.NetworkElements = new List<GetTechnicalAddressOutputTechnologyItemNetworkElement>();
+            item.Connections = new List<GetTechnicalAddressOutputTechnologyItemConnection>();
             item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
             {
                 ID = nodeId,
@@ -188,8 +189,19 @@ namespace Retail.NIM.Business
                 if (connection == null)
                     return item;
 
+                long port1Id = (long)connection.FieldValues.GetRecord("Port1");
+                long port2Id = (long)connection.FieldValues.GetRecord("Port2");
+                long connectionId = (long)connection.FieldValues.GetRecord("ID");
+
                 long port1NodeId = (long)connection.FieldValues.GetRecord("Port1Node");
                 long port2NodeId = (long)connection.FieldValues.GetRecord("Port2Node");
+
+                item.Connections.Add(new GetTechnicalAddressOutputTechnologyItemConnection
+                {
+                    ConnectionId = connectionId,
+                    Port1Id = port1Id,
+                    Port2Id = port2Id
+                });
 
                 usedNodeIds.Add(nodeId);
                 if (port1NodeId != nodeId)
@@ -244,6 +256,8 @@ namespace Retail.NIM.Business
             bool targetReach = false;
             var nodeId = (long)node.FieldValues.GetRecord("ID");
             item.NetworkElements = new List<GetTechnicalAddressOutputTechnologyItemNetworkElement>();
+            item.Connections = new List<GetTechnicalAddressOutputTechnologyItemConnection>();
+
             item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
             {
                 ID = nodeId,
@@ -267,7 +281,16 @@ namespace Retail.NIM.Business
 
                 long port1NodeId = (long)connection.FieldValues.GetRecord("Port1Node");
                 long port2NodeId = (long)connection.FieldValues.GetRecord("Port2Node");
+                long port1Id = (long)connection.FieldValues.GetRecord("Port1");
+                long port2Id = (long)connection.FieldValues.GetRecord("Port2");
+                long connectionId = (long)connection.FieldValues.GetRecord("ID");
 
+                item.Connections.Add(new GetTechnicalAddressOutputTechnologyItemConnection
+                {
+                    ConnectionId = connectionId,
+                    Port1Id = port1Id,
+                    Port2Id = port2Id
+                });
                 usedNodeIds.Add(nodeId);
                 if (port1NodeId != nodeId)
                 {

@@ -15,5 +15,12 @@ namespace Retail.NIM.Entities
         public bool DataFeasible { get; set; }
         public string PanelNumber { get; set; }
         public List<GetTechnicalAddressOutputTechnologyItemNetworkElement> NetworkElements { get; set; }
+        public List<GetTechnicalAddressOutputTechnologyItemConnection> Connections { get; set; }
+    }
+    public class GetTechnicalAddressOutputTechnologyItemConnection
+    {
+        public long ConnectionId { get; set; }
+        public long Port1Id { get; set; }
+        public long Port2Id { get; set; }
     }
 }
