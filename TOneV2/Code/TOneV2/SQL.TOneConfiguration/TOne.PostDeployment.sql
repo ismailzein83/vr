@@ -1499,7 +1499,8 @@ as (select * from (values
 ('30EF7BEB-7F47-4171-8925-74211756FED8','CDR Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConnectionStringName":"TOneCDRDBConnString","ConfigId":1}'),
 ('765BD2DA-69AA-4906-9FD8-ED088B36E76D','Analytics Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConnectionStringName":"TOneAnalyticsDBConnString","ConfigId":1}'),
 ('ff21ae78-f1d2-44b5-b12d-8b380f8d4f42','ToneV2Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"ConfigurationDBConnString","IsRemoteDataStore":false}'),
-('1B8A8965-08AE-497D-B01C-B3AEBAD33716','TOne BE RDB Store','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringAppSettingName":"TOneWhS_BE_DBConnStringKey","IsRemoteDataStore":false}')
+('1B8A8965-08AE-497D-B01C-B3AEBAD33716','TOne BE RDB Store','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringAppSettingName":"TOneWhS_BE_DBConnStringKey","IsRemoteDataStore":false}'),
+('eaa586b8-c355-4104-a567-ca0de4eed585','ToneV2Store RDB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"TOneV2DBConnString","ConnectionStringAppSettingName":"TOneWhS_BE_DBConnStringKey","IsRemoteDataStore":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t
