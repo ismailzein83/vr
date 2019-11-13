@@ -156,6 +156,7 @@ app.directive("vrAnalyticAdvancedexcelFilegenerator", ["UtilsService", "VRAnalyt
                         if (fileGenerator != undefined) {
                             tableDefinitions = fileGenerator.TableDefinitions;
                             $scope.scopeModel.saveAsPDF = fileGenerator.SaveAsPDF;
+                            $scope.scopeModel.useXLSFormat = fileGenerator.UseXLSFormat;
                             promises.push(excelWorkbookReadyDeferred.promise);
                         }
 
@@ -324,7 +325,8 @@ app.directive("vrAnalyticAdvancedexcelFilegenerator", ["UtilsService", "VRAnalyt
                         $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGenerator,Vanrise.Analytic.MainExtensions",
                         FileUniqueId: $scope.scopeModel.file != undefined ? $scope.scopeModel.file.fileUniqueId : undefined,
                         TableDefinitions: getTables(),
-                        SaveAsPDF: $scope.scopeModel.saveAsPDF
+                        SaveAsPDF: $scope.scopeModel.saveAsPDF,
+                        UseXLSFormat: $scope.scopeModel.useXLSFormat
                     };
                     return obj;
 

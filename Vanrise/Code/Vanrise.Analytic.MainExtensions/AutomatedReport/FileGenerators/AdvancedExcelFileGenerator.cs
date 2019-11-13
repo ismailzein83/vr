@@ -49,6 +49,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         public List<AdvancedExcelFileGeneratorTableDefinition> TableDefinitions { get; set; }
         public List<AdvancedExcelFileGeneratorMatrixDefinition> MatrixDefinitions { get; set; }
         public bool SaveAsPDF { get; set; }
+        public bool UseXLSFormat { get; set; }
         public override VRAutomatedReportGeneratedFile GenerateFile(IVRAutomatedReportFileGeneratorGenerateFileContext context)
         {
             AdvancedExcelWorkBook advancedExcelWorkBook = new AdvancedExcelWorkBook();
@@ -102,8 +103,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
             return new VRAutomatedReportGeneratedFile()
             {
-                FileContent =  GenerateExcel(advancedExcelWorkBook),
-                FileExtension = SaveAsPDF ? "pdf" : "xlsx",
+                FileContent = GenerateExcel(advancedExcelWorkBook),
+                FileExtension = SaveAsPDF ? "pdf" : UseXLSFormat ? "xls" : "xlsx",
                 FileIsEmpty = fileIsEmpty
             };
 
@@ -939,7 +940,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             byte[] bytes = fileManager.GetFileByUniqueId(this.FileUniqueId).Content;
             Workbook tableDefinitionsWorkbook = new Workbook(new System.IO.MemoryStream(bytes));
             Common.Utilities.ActivateAspose();
-            
+
             if (advancedExcelWorkBook != null && advancedExcelWorkBook.Sheets != null)
             {
                 foreach (var sheet in advancedExcelWorkBook.Sheets)
@@ -1074,6 +1075,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             var saveFormat = SaveFormat.Xlsx;
             if (SaveAsPDF)
                 saveFormat = SaveFormat.Pdf;
+            else if (UseXLSFormat)
+                saveFormat = SaveFormat.Excel97To2003;
 
             tableDefinitionsWorkbook.Save(memoryStream, saveFormat);
             return memoryStream.ToArray();
