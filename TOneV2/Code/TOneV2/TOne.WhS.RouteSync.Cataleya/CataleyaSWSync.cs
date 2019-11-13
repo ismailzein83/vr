@@ -18,7 +18,19 @@ namespace TOne.WhS.RouteSync.Cataleya
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
         const string blockedTrunk = "999999";
-        const string optionsSeparator = "|";
+
+        const char optionsSeparatorAsChar = '|';
+        const string optionsSeparatorAsString = "|";
+
+        const char trunkPercentageSeparatorAsChar = ',';
+        const string trunkPercentageSeparatorAsString = ",";
+
+        const char trunkBackupsSeparatorAsChar = ';';
+        const string trunkBackupsSeparatorAsString = ";";
+
+        const char backupsSeparatorAsChar = '$';
+        const string backupsSeparatorAsString = "$";
+
         #region Public Methods
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
@@ -272,7 +284,7 @@ namespace TOne.WhS.RouteSync.Cataleya
             HashSet<string> duplicatedOutTrunks = new HashSet<string>();
             HashSet<string> invalidInTrunkNames = new HashSet<string>();
             HashSet<string> invalidOutTrunkNames = new HashSet<string>();
-            char[] invalidCharacters = new char[] { ',', ';', '$', '|' };
+            char[] invalidCharacters = new char[] { trunkPercentageSeparatorAsChar, trunkBackupsSeparatorAsChar, backupsSeparatorAsChar, optionsSeparatorAsChar };
 
             if (CarrierMappings == null || CarrierMappings.Count == 0)
                 return true;
@@ -367,7 +379,7 @@ namespace TOne.WhS.RouteSync.Cataleya
                 foreach (OutTrunk outTrunk in outTrunks)
                 {
                     if (outTrunk.Percentage.HasValue)
-                        trunksWithPercentage.Add($"{outTrunk.Trunk},{outTrunk.Percentage.Value * routeOption.Percentage.Value}");
+                        trunksWithPercentage.Add($"{outTrunk.Trunk}{trunkPercentageSeparatorAsString}{outTrunk.Percentage.Value * routeOption.Percentage.Value}");
                     else
                         trunksWithoutPercentage.Add($"{outTrunk.Trunk}");
                 }
@@ -392,18 +404,18 @@ namespace TOne.WhS.RouteSync.Cataleya
 
                 var concatenatedOptionBackupsTrunks = "";
                 if (trunksWithoutPercentage.Count > 0)
-                    concatenatedOptionBackupsTrunks = string.Join("$", trunksWithoutPercentage);
+                    concatenatedOptionBackupsTrunks = string.Join(backupsSeparatorAsString, trunksWithoutPercentage);
 
                 foreach (var optionMainTrunk in trunksWithPercentage)
                 {
-                    concatenatedOptionsTrunksWithBackups.Add($"{optionMainTrunk};{concatenatedOptionBackupsTrunks}");
+                    concatenatedOptionsTrunksWithBackups.Add($"{optionMainTrunk}{trunkBackupsSeparatorAsString}{concatenatedOptionBackupsTrunks}");
                 }
             }
 
             if (concatenatedOptionsTrunksWithBackups.Count == 0)
                 return blockedTrunk;
 
-            return string.Join(optionsSeparator, concatenatedOptionsTrunksWithBackups);
+            return string.Join(optionsSeparatorAsString, concatenatedOptionsTrunksWithBackups);
         }
 
         private string BuildPriorityOptions(List<RouteOption> routeOptions)
@@ -429,7 +441,7 @@ namespace TOne.WhS.RouteSync.Cataleya
             if (allOptionsTrunks.Count == 0)
                 return blockedTrunk;
 
-            return string.Join(optionsSeparator, allOptionsTrunks);
+            return string.Join(optionsSeparatorAsString, allOptionsTrunks);
         }
 
         #endregion
