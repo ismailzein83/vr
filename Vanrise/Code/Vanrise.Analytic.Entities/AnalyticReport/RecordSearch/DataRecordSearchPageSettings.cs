@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vanrise.Entities;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -16,6 +16,7 @@ namespace Vanrise.Analytic.Entities
         public int? MaxNumberOfRecords { get; set; }
 
         public int NumberOfRecords { get; set; }
+
         public override bool DoesUserHaveAccess(Security.Entities.IViewUserAccessContext context)
         {
             IDataRecordStorageManager _genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IDataRecordStorageManager>();
@@ -27,6 +28,7 @@ namespace Vanrise.Analytic.Entities
             }
             return false;
         }
+
         public override void ApplyTranslation(IAnalyticReportTranslationContext context)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
@@ -62,9 +64,9 @@ namespace Vanrise.Analytic.Entities
                                 detail.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(detail.TitleResourceKey, detail.FieldTitle, context.LanguageId);
                         }
                     }
-                    if(source.SubviewDefinitions!=null && source.SubviewDefinitions.Count > 0)
+                    if (source.SubviewDefinitions != null && source.SubviewDefinitions.Count > 0)
                     {
-                        foreach(var subview in source.SubviewDefinitions)
+                        foreach (var subview in source.SubviewDefinitions)
                         {
                             if (subview.NameResourceKey != null)
                                 subview.Name = vrLocalizationManager.GetTranslatedTextResourceValue(subview.NameResourceKey, subview.Name, context.LanguageId);
@@ -88,6 +90,7 @@ namespace Vanrise.Analytic.Entities
         public List<DRSearchPageSortColumn> SortColumns { get; set; }
         public List<DRSearchPageFilter> Filters { get; set; }
         public RecordFilterGroup RecordFilter { get; set; }
+        public bool HideTimeRange { get; set; }
     }
 
     public class DRSearchPageFilter
@@ -106,7 +109,6 @@ namespace Vanrise.Analytic.Entities
         public GridColumnSettings ColumnSettings { get; set; }
         public bool IsHidden { get; set; }
         public Guid? ColumnStyleId { get; set; }
-
     }
 
     public class DRSearchPageItemDetail
@@ -126,7 +128,6 @@ namespace Vanrise.Analytic.Entities
     public class DRSearchPageSubviewDefinition
     {
         public Guid SubviewDefinitionId { get; set; }
-
         public string Name { get; set; }
         public string NameResourceKey { get; set; }
         public DRSearchPageSubviewDefinitionSettings Settings { get; set; }
@@ -135,7 +136,6 @@ namespace Vanrise.Analytic.Entities
     public abstract class DRSearchPageSubviewDefinitionSettings
     {
         public abstract Guid ConfigId { get; }
-
         public abstract string RuntimeEditor { get; }
     }
 }

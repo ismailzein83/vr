@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService','VRLocalizationService'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService','VRLocalizationService'];
 
-    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum, Analytic_RecordSearchService, VRLocalizationService) {
+    function DataRecordSourceEditorController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum, Analytic_RecordSearchService, VRLocalizationService) {
 
         var isEditMode;
         var dataRecordSource;
@@ -340,6 +340,7 @@
             if (dataRecordSource != undefined) {
                 $scope.scopeModel.title = dataRecordSource.Title;
                 $scope.scopeModel.sourceName = dataRecordSource.Name;
+                $scope.scopeModel.hideTimeRange = dataRecordSource.HideTimeRange;
             }
         }
         function loadDataRecordTypeSelector() {
@@ -512,7 +513,7 @@
             };
             var dataItem = {
                 FieldName: gridField.payload.Name,
-                FieldTitle: gridField.payload.Title,
+                FieldTitle: gridField.payload.Title
             };
             var stylePayload;
             var textResourcePayload;
@@ -687,7 +688,8 @@
                 SortColumns: sortColumns,
                 Filters: filters,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
-                TitleResourceKey:localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
+                TitleResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined,
+                HideTimeRange: $scope.scopeModel.hideTimeRange
             };
             return obj;
         }

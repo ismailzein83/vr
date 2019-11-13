@@ -152,6 +152,7 @@
                     </vr-tabs>
                 </vr-tab>
                 <vr-tab header="'Filters'">
+                    <vr-switch value="scopeModel.hideTimeRange" label="Hide Time Range"></vr-switch>
                     <vr-section title="Record Filter" ng-show="scopeModel.selectedDataRecordType != undefined" vr-loader="scopeModel.isRecordFilterDirectiveLoading" collapsible>
                         <vr-row>
                             <vr-genericdata-recordfilter on-ready="onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
