@@ -67,7 +67,7 @@ namespace TOne.WhS.RouteSync.Cataleya
                     if (carrierAccountMapping == null)
                         continue;
 
-                    var newVersion = (existingCarrierAccount.Version + 1) % 2;
+                    var newVersion = (existingCarrierAccount.Version + 1) % 3;
                     carrierAccountMapping.Version = newVersion;
                     carrierAccountMapping.RouteTableName = Helper.BuildRouteTableName(existingCarrierAccount.CarrierId, newVersion);
                 }
@@ -228,7 +228,7 @@ namespace TOne.WhS.RouteSync.Cataleya
                         ZoneID = oldCarrierAccountMapping.ZoneID,
                         CarrierId = oldCarrierAccountMapping.CarrierId,
                         RouteTableName = null,
-                        Version = (oldCarrierAccountMapping.Version + 1) % 2,
+                        Version = (oldCarrierAccountMapping.Version + 1) % 3,
                         Status = CarrierAccountStatus.Active
                     };
                 }

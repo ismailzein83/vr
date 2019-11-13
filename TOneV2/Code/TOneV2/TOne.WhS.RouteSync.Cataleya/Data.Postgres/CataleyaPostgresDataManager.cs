@@ -109,7 +109,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                     var carrierAccountMappingToUpdate = carrierFinalizationData.CarrierAccountMappingToUpdate;
                     queryCommands.AppendLine(carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate));
 
-                    var backupVersionNumber = (carrierAccountMappingToUpdate.CarrierId + 1) % 2;
+                    var backupVersionNumber = (carrierAccountMappingToUpdate.CarrierId + 1) % 3;
                     string tableName = Helper.BuildRouteTableName(carrierAccountMappingToUpdate.CarrierId, backupVersionNumber);
                     var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
                     queryCommands.AppendLine(dropQuery);
