@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -18,7 +15,7 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
             get { return new Guid("79EA016F-3563-41BA-8928-FE0FEB4390AA"); }
         }
         public Guid HistoryBEDefintionID { get; set; }
-        public string ParentFieldName { get; set; }
+        public string ParentBEFieldName { get; set; }
         public override void Execute(IGenericBEOnAfterSaveHandlerContext context)
         {
             DateTime bet = DateTime.Now;
@@ -31,27 +28,32 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
             var historyFieldValues = new Dictionary<string, object>();
 
             var betField = historyDataRecordFields.GetRecord(BETFieldName);
-            if (betField != null)
-                historyFieldValues.Add(betField.Name, bet);
+            betField.ThrowIfNull("betField", HistoryBEDefintionID);
+            historyFieldValues.Add(betField.Name, bet);
 
-            historyFieldValues.Add(ParentFieldName, context.NewEntity.FieldValues.GetRecord(parentBEIdField.Name));
+            var parentBEIdFieldValue = context.NewEntity.FieldValues.GetRecord(parentBEIdField.Name);
+            parentBEIdFieldValue.ThrowIfNull("parentBEIdFieldValue", HistoryBEDefintionID);
+            historyFieldValues.Add(ParentBEFieldName, parentBEIdFieldValue);
 
             if (historyDataRecordFields != null && historyDataRecordFields.Count > 0)
             {
+                List<string> fieldsToExcludeFromMapping = new List<string> { historyBEIdField.Name, ParentBEFieldName, BETFieldName, EETFieldName, "CreatedTime", "LastModifiedTime", "CreatedBy", "LastModifiedBy" };
+
                 foreach (var field in historyDataRecordFields)
                 {
-                    List<string> fieldsToExcludeFromMapping = new List<string> { historyBEIdField.Name, ParentFieldName, BETFieldName, EETFieldName };
                     var fieldName = field.Value.Name;
-
                     if (!fieldsToExcludeFromMapping.Contains(fieldName))
-                        historyFieldValues.Add(fieldName, context.NewEntity.FieldValues.GetRecord(fieldName));
+                    {
+                        if (context.NewEntity.FieldValues.TryGetValue(fieldName, out object fieldValue))
+                            historyFieldValues.Add(fieldName, fieldValue);
+                    }
                 }
             }
 
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
             if (context.OperationType == HandlerOperationType.Update)
             {
-                var historyEntitiesToSetEET = GetHistoryEntitiesToSetEET(context.BusinessEntityDefinitionId, bet, historyBEIdField.Name);
+                var historyEntitiesToSetEET = GetHistoryEntitiesToSetEET(parentBEIdFieldValue, bet, historyBEIdField.Name);
                 if (historyEntitiesToSetEET != null && historyEntitiesToSetEET.Count > 0)
                 {
                     foreach (var entity in historyEntitiesToSetEET)
@@ -69,14 +71,14 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
 
             genericBusinessEntityManager.AddGenericBusinessEntity(historyGenericBEToAdd);
         }
-        private List<GenericBusinessEntityToUpdate> GetHistoryEntitiesToSetEET(object parentBEID, DateTime effectiveTime, string historyBEIdFieldName)
+        private List<GenericBusinessEntityToUpdate> GetHistoryEntitiesToSetEET(object parentGenericBEID, DateTime effectiveTime, string historyBEIdFieldName)
         {
             var filterGroup = new RecordFilterGroup { Filters = new List<RecordFilter>() };
 
             filterGroup.Filters.Add(new ObjectListRecordFilter
             {
-                FieldName = ParentFieldName,
-                Values = new List<object> { parentBEID }
+                FieldName = ParentBEFieldName,
+                Values = new List<object> { parentGenericBEID }
             });
 
             var orFilterGroup = new RecordFilterGroup
@@ -94,7 +96,7 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
                 Value = effectiveTime
             });
 
-            var historyEntities = new GenericBusinessEntityManager().GetAllGenericBusinessEntities(HistoryBEDefintionID, new List<string> { historyBEIdFieldName, ParentFieldName, BETFieldName, EETFieldName }, filterGroup);
+            var historyEntities = new GenericBusinessEntityManager().GetAllGenericBusinessEntities(HistoryBEDefintionID, new List<string> { historyBEIdFieldName, ParentBEFieldName, BETFieldName, EETFieldName }, filterGroup);
             var historyEntitiesToUpdate = new List<GenericBusinessEntityToUpdate>();
 
             if (historyEntities != null)

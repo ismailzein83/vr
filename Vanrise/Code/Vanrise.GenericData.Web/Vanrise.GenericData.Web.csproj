@@ -421,6 +421,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\Templates\GenericEditorSubViewViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-genericeditorsubview-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-statushistorysubview-definition.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnAfterSaveHandler\Templates\SaveHistoryGenericBEHandlerTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnAfterSaveHandler\vr-genericdata-genericbe-aftersavehandler-savehistorygenericbe.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeGetFilteredHandler\Templates\LoggedInUserIdHandlerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeGetFilteredHandler\vr-genericdata-genericbe-beforegetfilteredhandler-loggedinuserid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\BeforeInsertHandlerDefinitionEditorController.js" />

@@ -1,0 +1,13 @@
+﻿<vr-row>
+    <vr-columns width="1/4row">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
+                                                          onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectorChanged"
+                                                          customlabel="History Business Entity" isrequired="true" hideremoveicon>
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+    <vr-columns width="1/4row" vr-loader="scopeModel.isParentFieldSelectorLoading">
+        <vr-genericdata-datarecordtypefields-selector  on-ready="scopeModel.onParentFieldSelectorReady" 
+                                                    label="Parent Business Entity Field"  isrequired="true" hideremoveicon>
+        </vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+</vr-row>
