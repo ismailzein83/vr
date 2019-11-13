@@ -141,9 +141,9 @@ namespace Retail.NIM.Business
                 }
                 if(isDPFound)
                 {
-                    var dpNode = nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.DPBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
-                    output.TechnologyItems.Add(GetFDBTechnicalAddress(nodeEntity));
-                    output.TechnologyItems.Add(GetDPTechnicalAddress(dpNode));
+                    var fdbNode = nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.FDBBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
+                    output.TechnologyItems.Add(GetFDBTechnicalAddress(fdbNode));
+                    output.TechnologyItems.Add(GetDPTechnicalAddress(nodeEntity));
                 }
             }
             else

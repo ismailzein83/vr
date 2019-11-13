@@ -135,10 +135,10 @@ namespace Retail.Billing.Business
         {
             var filterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup { Filters = new System.Collections.Generic.List<Vanrise.GenericData.Entities.RecordFilter>() };
 
-            filterGroup.Filters.Add(new Vanrise.GenericData.Entities.ObjectListRecordFilter
+            filterGroup.Filters.Add(new Vanrise.GenericData.Entities.StringRecordFilter
             {
                 FieldName = "ResourceName",
-                Values = new System.Collections.Generic.List<object> { resourceName }
+                Value = resourceName
             });
 
             var contractEntities = s_genericBEManager.GetAllGenericBusinessEntities(
@@ -169,7 +169,7 @@ namespace Retail.Billing.Business
         {
             return new Contract
             {
-                ContractId = (long)contractEntity.FieldValues["Contract"],
+                ContractId = (long)contractEntity.FieldValues["ID"],
                 ContractTypeId = (Guid)contractEntity.FieldValues["ContractType"],
                 CustomerId = (long)contractEntity.FieldValues["Customer"],
                 RatePlanId = (int)contractEntity.FieldValues["RatePlan"],
