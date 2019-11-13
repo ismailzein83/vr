@@ -40,7 +40,7 @@ namespace BPMExtended.Main.Business
                 case reasonStep: nextStepId = isAdvantageous? attachmentsStep : new ContractManager().GetTelephonyContracts(customerId).Count>1 ? paymentStep : billOnDemandStep; break;
                 case paymentStep: nextStepId = attachmentsStep; break;
                 case billOnDemandStep: nextStepId = attachmentsStep; break;
-                case attachmentsStep: nextStepId = technicalStep; break;
+                case attachmentsStep: nextStepId = submitToOM; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
