@@ -1,21 +1,35 @@
 ﻿<vr-row>
     <vr-columns width="1/3row">
-        <vr-select datatextfield="description" datavaluefield="value" label="Routing Database Type" datasource="routingDatabaseTypes"
-                   selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingDatabaseTypeSelectionChanged" hideremoveicon>
+        <vr-select datasource="routingProcessModes" datatextfield="description" datavaluefield="value"
+                   selectedvalues="selectedRoutingProcessMode" label="Routing Process Mode" hideremoveicon>
         </vr-select>
     </vr-columns>
     <vr-columns width="1/3row">
-        <vr-textbox value="effectiveAfterInMinutes"
-                    label="Effective After (Min)" type="number"
+        <vr-select datasource="routingDatabaseTypes" datatextfield="description" datavaluefield="value"
+                   selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingDatabaseTypeSelectionChanged" label="Routing Database Type" hideremoveicon>
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="effectiveAfterInMinutes" label="Effective After (Min)" type="number"
                     minvalue="0" decimalprecision="0" isrequired="true">
         </vr-textbox>
     </vr-columns>
 </vr-row>
 
-<vr-row ng-show="!isFuture">
+<vr-row ng-show="!isFuture && selectedRoutingProcessMode.value != routingProcessModeAnalysisValue">
     <vr-columns width="fullrow">
         <vr-section title="Route Sync">
             <vr-whs-be-switch-selector on-ready="onSwitchSelectorReady" normal-col-num="6" ismultipleselection="true"></vr-whs-be-switch-selector>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+
+<vr-row ng-show="selectedRoutingProcessMode.value == routingProcessModeAnalysisValue || selectedRoutingProcessMode.value == routingProcessModeRouteBuildWithAnalysisValue">
+    <vr-columns width="fullrow">
+        <vr-section title="Analysis Data">
+            <vr-common-statusdefinition-selector on-ready="onStatusDefinitionSelectorReady" 
+                                                 normal-col-num="6" hideremoveicon ismultipleselection>
+            </vr-common-statusdefinition-selector>
         </vr-section>
     </vr-columns>
 </vr-row>

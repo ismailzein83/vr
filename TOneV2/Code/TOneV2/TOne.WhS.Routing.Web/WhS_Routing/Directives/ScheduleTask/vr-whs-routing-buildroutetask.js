@@ -1,7 +1,8 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'VRUIUtilsService',
-    function (UtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, VRUIUtilsService) {
+app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'VRUIUtilsService', 'WhS_Routing_RoutingProcessModeEnum',
+    function (UtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, VRUIUtilsService, WhS_Routing_RoutingProcessModeEnum) {
+
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -9,19 +10,11 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var directiveConstructor = new DirectiveConstructor($scope, ctrl);
                 directiveConstructor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: "/Client/Modules/WhS_Routing/Directives/ScheduleTask/Templates/BuildRouteTaskTemplate.html"
         };
 
@@ -31,12 +24,24 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
             var switchSelectorAPI;
             var switchSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var statusDefinitionSelectorAPI;
+            var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.effectiveAfterInMinutes = 0;
+                $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
+                $scope.routingProcessModes = UtilsService.getArrayEnum(WhS_Routing_RoutingProcessModeEnum);
+                $scope.routingProcessModeAnalysisValue = WhS_Routing_RoutingProcessModeEnum.Analysis.value;
+                $scope.routingProcessModeRouteBuildWithAnalysisValue = WhS_Routing_RoutingProcessModeEnum.RouteBuildWithAnalysis.value;
 
                 $scope.onSwitchSelectorReady = function (api) {
                     switchSelectorAPI = api;
                     switchSelectorReadyDeferred.resolve();
+                };
+
+                $scope.onStatusDefinitionSelectorReady = function (api) {
+                    statusDefinitionSelectorAPI = api;
+                    statusDefinitionSelectorReadyDeferred.resolve();
                 };
 
                 $scope.onRoutingDatabaseTypeSelectionChanged = function () {
@@ -45,18 +50,99 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
 
                 defineAPI();
             }
+
             function defineAPI() {
 
                 var api = {};
 
+                api.load = function (payload) {
+
+                    var selectedSwitches;
+                    var selectedRiskyMarginCategories;
+
+                    if (payload != undefined && payload.data != undefined) {
+                        $scope.effectiveAfterInMinutes = payload.data.EffectiveAfterInMinutes;
+                        $scope.selectedRoutingProcessMode = UtilsService.getEnum(WhS_Routing_RoutingProcessModeEnum, 'value', payload.data.RoutingProcessMode);
+                        $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', payload.data.RoutingDatabaseType);
+
+                        selectedSwitches = payload.data.Switches;
+                        selectedRiskyMarginCategories = payload.data.RiskyMarginCategories;
+                    }
+                    else {
+                        $scope.selectedRoutingProcessMode = WhS_Routing_RoutingProcessModeEnum.RouteBuild;
+                        $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
+                    }
+
+
+                    var promises = [];
+
+                    var loadSwitchSelectorPromise = loadSwitchSelector();
+                    promises.push(loadSwitchSelectorPromise);
+
+                    var loadStatusDefinitionSelectorPromise = loadStatusDefinitionSelector();
+                    promises.push(loadStatusDefinitionSelectorPromise);
+
+                    function loadSwitchSelector() {
+                        var switchSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        switchSelectorReadyDeferred.promise.then(function () {
+
+                            var payload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "TOne.WhS.BusinessEntity.Business.SyncWithinRouteBuildSwitchFilter, TOne.WhS.BusinessEntity.Business"
+                                    }]
+                                }
+                            };
+                            if (selectedSwitches != undefined) {
+                                payload.selectedIds = selectedSwitches;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, payload, switchSelectorLoadDeferred);
+                        });
+
+                        return switchSelectorLoadDeferred.promise;
+                    }
+
+                    function loadStatusDefinitionSelector() {
+                        var loadStatusDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        statusDefinitionSelectorReadyDeferred.promise.then(function () {
+
+                            var statusDefinitionSelectorPayload = {
+                                businessEntityDefinitionId: 'eacc1749-481c-4b14-9d2d-843f1ca5c723',
+                                selectedIds: selectedRiskyMarginCategories
+                            };
+                            VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, loadStatusDefinitionSelectorPromiseDeferred);
+                        });
+
+                        return loadStatusDefinitionSelectorPromiseDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
                 api.getData = function () {
+
+                    var switches;
+                    if (!$scope.isFuture && $scope.selectedRoutingProcessMode.value != $scope.routingProcessModeAnalysisValue) {
+                        switches = switchSelectorAPI.getSelectedIds();
+                    }
+
+                    var riskyMarginCategories;
+                    if ($scope.selectedRoutingProcessMode.value == $scope.routingProcessModeAnalysisValue ||
+                        $scope.selectedRoutingProcessMode.value == $scope.routingProcessModeRouteBuildWithAnalysisValue) {
+                        riskyMarginCategories = statusDefinitionSelectorAPI.getSelectedIds();
+                    }
+
                     return {
                         $type: "TOne.WhS.Routing.BP.Arguments.RoutingProcessInput, TOne.WhS.Routing.BP.Arguments",
                         IsFuture: $scope.isFuture,
+                        RoutingProcessMode: $scope.selectedRoutingProcessMode.value,
                         RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
                         RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value,
-                        Switches: !$scope.isFuture ? switchSelectorAPI.getSelectedIds() : null,
-                        EffectiveAfterInMinutes: $scope.effectiveAfterInMinutes
+                        EffectiveAfterInMinutes: $scope.effectiveAfterInMinutes,
+                        Switches: switches,
+                        RiskyMarginCategories: riskyMarginCategories
                     };
                 };
 
@@ -64,50 +150,9 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
                     return { "ScheduleTime": "ScheduleTime" };
                 };
 
-                api.load = function (payload) {
-                    $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
-
-                    if (payload != undefined && payload.data != undefined) {
-                        $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', payload.data.RoutingDatabaseType);
-                        $scope.effectiveAfterInMinutes = payload.data.EffectiveAfterInMinutes;
-                    }
-                    else {
-                        $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
-                    }
-
-                    var promises = [];
-                    var selectedSwitches = undefined;
-                    if (payload != undefined && payload.data != undefined) {
-                        selectedSwitches = payload.data.Switches;
-                    }
-                        
-                    promises.push(loadSwitchSelector(selectedSwitches));
-                    return UtilsService.waitMultiplePromises(promises);
-                };
-
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != null) {
                     ctrl.onReady(api);
-            }
-
-            function loadSwitchSelector(selectedIds) {
-                var switchSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                switchSelectorReadyDeferred.promise.then(function () {
-
-                    var payload = {
-                        filter: {
-                            Filters: [{
-                                $type: "TOne.WhS.BusinessEntity.Business.SyncWithinRouteBuildSwitchFilter, TOne.WhS.BusinessEntity.Business"
-                            }]
-                        }
-                    };
-                    if (selectedIds != undefined) {
-                        payload.selectedIds = selectedIds;
-                    }
-                    VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, payload, switchSelectorLoadDeferred);
-                });
-
-                return switchSelectorLoadDeferred.promise;
+                }
             }
         }
 

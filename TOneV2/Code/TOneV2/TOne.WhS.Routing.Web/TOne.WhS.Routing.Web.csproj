@@ -175,6 +175,7 @@
     <Content Include="WhS_Routing\Constant\RoutingApprovalType.js" />
     <Content Include="WhS_Routing\Constant\RouteOptionEvaluatedStatusEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteFilterEnum.js" />
+    <Content Include="WhS_Routing\Constant\RoutingProcessMode.js" />
     <Content Include="WhS_Routing\Constant\RoutingProductFilterEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteStatusEnum.js" />
