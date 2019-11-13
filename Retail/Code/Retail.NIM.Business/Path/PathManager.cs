@@ -14,6 +14,8 @@ namespace Retail.NIM.Business
     public class PathManager
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
+
+        #region PathConenctionFields
         static string s_idFieldName = "ID";
         static string s_connectionIdFieldName = "Connection";
         static string s_pathIdFieldName = "Path";
@@ -28,6 +30,16 @@ namespace Retail.NIM.Business
         static string s_port2NodeTypeIdFieldName = "Port2NodeType";
         static string s_port2NodePartIdFieldName = "Port2NodePart";
         static string s_port2NodePartTypeIdFieldName = "Port2NodePartType";
+        #endregion
+
+        #region PathPortFields
+        static string s_pathPortIdFieldName = "ID";
+        static string s_portIdFieldName = "Port";
+        static string s_portNodeIdFieldName = "Node";
+        static string s_portNodeTypeIdFieldName = "NodeType";
+        static string s_portNodePartIdFieldName = "NodePart";
+        static string s_portNodePartTypeIdFieldName = "NodePartType";
+        #endregion
 
         #region Public Methods
         public PathOutput CreatePath(PathInput pathInput)
@@ -133,9 +145,51 @@ namespace Retail.NIM.Business
                 return null;
             return items.MapRecords(PathConnectionMapper).ToList();
         }
+
+        public List<PathPort> GetPathPorts(long pathId)
+        {
+            var filter = new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>
+                {
+                    new RecordFilterGroup
+                    {
+                        LogicalOperator = RecordQueryLogicalOperator.Or,
+                        Filters = new List<RecordFilter>
+                        {
+                             new ObjectListRecordFilter
+                             {
+                                 FieldName = s_pathIdFieldName,
+                                 CompareOperator = ListRecordFilterOperator.In,
+                                 Values =new List<object>{ pathId }
+                             }
+                        }
+                    }
+                },
+
+            };
+            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.PathPortBEDefinitionId, null, filter);
+            if (items == null || items.Count == 0)
+                return null;
+            return items.MapRecords(PathPortMapper).ToList();
+        }
         #endregion
         #region Mapper
 
+        PathPort PathPortMapper(GenericBusinessEntity genericBusinessEntity)
+        {
+            return new PathPort
+            {
+                PathPortId = (long)genericBusinessEntity.FieldValues.GetRecord(s_pathPortIdFieldName),
+                PortId = (long)genericBusinessEntity.FieldValues.GetRecord(s_portIdFieldName),
+                PathId = (long)genericBusinessEntity.FieldValues.GetRecord(s_pathIdFieldName),
+                PortNodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_portNodeIdFieldName),
+                PortNodeTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_portNodeTypeIdFieldName),
+                PortNodePartId = (long?)genericBusinessEntity.FieldValues.GetRecord(s_portNodePartIdFieldName),
+                PortNodePartTypeId = (Guid?)genericBusinessEntity.FieldValues.GetRecord(s_portNodePartTypeIdFieldName),
+              
+            };
+        }
         PathConnection PathConnectionMapper(GenericBusinessEntity genericBusinessEntity)
         {
             return new PathConnection
