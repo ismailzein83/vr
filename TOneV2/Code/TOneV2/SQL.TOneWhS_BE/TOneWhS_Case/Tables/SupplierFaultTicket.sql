@@ -24,8 +24,11 @@
     [SendEmail]         BIT              NULL,
     [SystemReference]   NVARCHAR (1000)  NULL,
     [AccountManager]    NVARCHAR (255)   NULL,
+    [WithAttachments]   BIT              NULL,
     CONSTRAINT [PK_SupplierCase] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
