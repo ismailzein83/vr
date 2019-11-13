@@ -295,8 +295,8 @@ namespace BPMExtended.Main.Business
             string workOrderName = new CommonManager().GetWorkOrderTypeName(workOrderType);
 
             workorder.SetColumnValue("Id", workOrderId);
-            workorder.SetColumnValue("StName", workOrderName + "Step for: " + recordName);
-            workorder.SetColumnValue("StDescription", workOrderName + "Step for: " + recordName);
+            workorder.SetColumnValue("StName", workOrderName /*+ "Step for: " + recordName*/);
+            workorder.SetColumnValue("StDescription", workOrderName /*+ "Step for: " + recordName*/);
             workorder.SetColumnValue("StRequestID", requestId);
             workorder.SetColumnValue("StStatusId", "7470FB2F-4701-488D-99B2-F7A71400CB9E");
             workorder.SetColumnValue("StRequestTypeId", requestTypeId);
