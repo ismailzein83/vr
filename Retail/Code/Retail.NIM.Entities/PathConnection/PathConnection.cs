@@ -14,10 +14,14 @@ namespace Retail.NIM.Entities
         public long Port1Id { get; set; }
         public long Port1NodeId { get; set; }
         public Guid Port1NodeTypeId { get; set; }
+        public long? Port1NodePartId { get; set; }
+        public Guid? Port1NodePartTypeId { get; set; }
 
         public long Port2Id { get; set; }
         public long Port2NodeId { get; set; }
         public Guid Port2NodeTypeId { get; set; }
+        public long? Port2NodePartId { get; set; }
+        public Guid? Port2NodePartTypeId { get; set; }
 
     }
     public class PathConnectionInput

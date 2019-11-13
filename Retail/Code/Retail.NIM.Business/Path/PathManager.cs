@@ -20,10 +20,14 @@ namespace Retail.NIM.Business
         static string s_port1IdFieldName = "Port1";
         static string s_port1NodeIdFieldName = "Port1Node";
         static string s_port1NodeTypeIdFieldName = "Port1NodeType";
+        static string s_port1NodePartIdFieldName = "Port1NodePart";
+        static string s_port1NodePartTypeIdFieldName = "Port1NodePartType";
 
         static string s_port2IdFieldName = "Port2";
         static string s_port2NodeIdFieldName = "Port2Node";
         static string s_port2NodeTypeIdFieldName = "Port2NodeType";
+        static string s_port2NodePartIdFieldName = "Port2NodePart";
+        static string s_port2NodePartTypeIdFieldName = "Port2NodePartType";
 
         #region Public Methods
         public PathOutput CreatePath(PathInput pathInput)
@@ -145,6 +149,10 @@ namespace Retail.NIM.Business
                 Port2NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_port2NodeIdFieldName),
                 Port1NodeTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_port1NodeTypeIdFieldName),
                 Port2NodeTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_port2NodeTypeIdFieldName),
+                Port1NodePartId = (long?)genericBusinessEntity.FieldValues.GetRecord(s_port1NodePartIdFieldName),
+                Port1NodePartTypeId = (Guid?)genericBusinessEntity.FieldValues.GetRecord(s_port1NodePartTypeIdFieldName),
+                Port2NodePartId = (long?)genericBusinessEntity.FieldValues.GetRecord(s_port2NodePartIdFieldName),
+                Port2NodePartTypeId = (Guid?)genericBusinessEntity.FieldValues.GetRecord(s_port2NodePartTypeIdFieldName),
             };
         }
         #endregion
