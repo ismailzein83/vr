@@ -729,7 +729,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Fields!ConnectDateTime.Value).ToString("hh:mm:ss")</Value>
+                                  <Value>=CDate(Fields!ConnectDateTime.Value).ToString("HH:mm:ss")</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -749,6 +749,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
