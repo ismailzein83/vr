@@ -65,20 +65,10 @@ namespace Retail.NIM.Business
             }
             return output;
         }
-
+         
         public GetTechnicalAddressOutput GetTechnicalAddressByPath(long pathId)
         {
-            var pathConnections = _genericBEManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.PathConnectionBEDefinitionId, null, new RecordFilterGroup
-            {
-                Filters = new List<RecordFilter>
-                {
-                    new ObjectListRecordFilter
-                    {
-                        FieldName = "Path",
-                        Values = new List<object>{ pathId }
-                    }
-                }
-            });
+            var pathConnections = new PathManager().GetPathConnections(pathId);
 
             var output = new GetTechnicalAddressOutput
             {
@@ -93,33 +83,28 @@ namespace Retail.NIM.Business
                 Node nodeEntity = null;
                 foreach (var pathConnection in pathConnections)
                 {
-                    var port1NodeTypeId = (Guid)pathConnection.FieldValues.GetRecord("Port1NodeType");
-                    var port1NodeId = (long)pathConnection.FieldValues.GetRecord("Port1Node");
-                    var port2NodeTypeId = (Guid)pathConnection.FieldValues.GetRecord("Port2NodeType");
-                    var port2NodeId = (long)pathConnection.FieldValues.GetRecord("Port2Node");
-
-                    if (port1NodeTypeId == StaticBEDefinitionIDs.DPNodeTypeId)
+                    if (pathConnection.Port1NodeTypeId == StaticBEDefinitionIDs.DPNodeTypeId)
                     {
-                        nodeEntity = nodeManager.GetNode(port1NodeId);
+                        nodeEntity = nodeManager.GetNode(pathConnection.Port1NodeId);
                         isDPFound = true;
                         break;
                     }
-                    if (port2NodeTypeId == StaticBEDefinitionIDs.DPNodeTypeId)
+                    if (pathConnection.Port2NodeTypeId == StaticBEDefinitionIDs.DPNodeTypeId)
                     {
-                        nodeEntity = nodeManager.GetNode(port2NodeId);
+                        nodeEntity = nodeManager.GetNode(pathConnection.Port2NodeId);
                         isDPFound = true;
                         break;
                     }
 
-                    if (port1NodeTypeId == StaticBEDefinitionIDs.FDBNodeTypeId)
+                    if (pathConnection.Port1NodeTypeId == StaticBEDefinitionIDs.FDBNodeTypeId)
                     {
-                        nodeEntity = nodeManager.GetNode(port1NodeId);
+                        nodeEntity = nodeManager.GetNode(pathConnection.Port1NodeId);
                         isFDBFound = true;
                         break;
                     }
-                    if (port2NodeTypeId == StaticBEDefinitionIDs.FDBNodeTypeId)
+                    if (pathConnection.Port2NodeTypeId == StaticBEDefinitionIDs.FDBNodeTypeId)
                     {
-                        nodeEntity = nodeManager.GetNode(port2NodeId);
+                        nodeEntity = nodeManager.GetNode(pathConnection.Port2NodeId);
                         isFDBFound = true;
                         break;
                     }

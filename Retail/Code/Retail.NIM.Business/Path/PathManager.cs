@@ -47,7 +47,7 @@ namespace Retail.NIM.Business
             var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
             {
                 BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathConnectionBEDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Path", pathConnectionInput.PathId }, { "Connection", pathConnectionInput.ConnectionId } }
+                FieldValues = new Dictionary<string, object> { { s_pathIdFieldName, pathConnectionInput.PathId }, { s_connectionIdFieldName, pathConnectionInput.ConnectionId } }
             });
 
 
@@ -56,7 +56,7 @@ namespace Retail.NIM.Business
 
             return new PathConnectionOutput
             {
-                PathConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
+                PathConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord(s_idFieldName).Value
             };
         }
         public PathPortOutput AddPortToPath(PathPortInput input)
@@ -102,7 +102,6 @@ namespace Retail.NIM.Business
             };
         }
 
-
         public List<PathConnection> GetPathConnections(long pathId)
         {
             var filter = new RecordFilterGroup
@@ -116,7 +115,7 @@ namespace Retail.NIM.Business
                         {
                              new ObjectListRecordFilter
                              {
-                                 FieldName = "Path",
+                                 FieldName = s_pathIdFieldName,
                                  CompareOperator = ListRecordFilterOperator.In,
                                  Values =new List<object>{ pathId }
                              }
