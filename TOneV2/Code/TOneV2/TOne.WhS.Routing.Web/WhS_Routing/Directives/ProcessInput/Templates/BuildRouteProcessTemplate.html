@@ -5,7 +5,7 @@
         </vr-select>
     </vr-columns>
     <vr-columns width="1/3row">
-        <vr-select datasource="routingDatabaseTypes" datatextfield="description" datavaluefield="value" 
+        <vr-select datasource="routingDatabaseTypes" datatextfield="description" datavaluefield="value"
                    selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingDatabaseTypeSelectionChanged" label="Routing Database Type" hideremoveicon>
         </vr-select>
     </vr-columns>
@@ -25,7 +25,7 @@
 <vr-row ng-show="selectedRoutingProcessMode.value == routingProcessModeAnalysisValue || selectedRoutingProcessMode.value == routingProcessModeRouteBuildWithAnalysisValue">
     <vr-columns width="fullrow">
         <vr-section title="Analysis Data">
-            <vr-common-statusdefinition-selector on-ready="onStatusDefinitionSelectorReady"
+            <vr-common-statusdefinition-selector on-ready="onStatusDefinitionSelectorReady" customlabel="Risky Margin Categories"
                                                  normal-col-num="4" hideremoveicon ismultipleselection>
             </vr-common-statusdefinition-selector>
         </vr-section>
