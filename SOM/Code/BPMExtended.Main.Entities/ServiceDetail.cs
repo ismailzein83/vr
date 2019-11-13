@@ -19,6 +19,12 @@ namespace BPMExtended.Main.Entities
         public decimal AccessFee { get; set; }
         public bool CanDiscount { get; set; }
         public bool HasDiscount { get; set; }
+        public List<ServiceParameterInfo> ServiceParameters { get; set; }
+    }
+    public class ServiceParameterInfo {
+        public string ParameterName { get; set; }
+        public string ParameterValue { get; set; }
+        public string ParameterDisplayValue { get; set; }
     }
 
     public class ServiceInfo

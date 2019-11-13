@@ -270,52 +270,81 @@ namespace BPMExtended.Main.Business
         public List<RatePlanServiceParameter> GetRatePlanServiceParameters(string serviceId) {
             List<RatePlanServiceParameter> ratePlanServiceParameters = new List<RatePlanServiceParameter>();
 
-            ratePlanServiceParameters.Add(new RatePlanServiceParameter {
-            ParameterName="TextBox1",
-            ParameterType=ParameterType.TB
-            });
+            //ratePlanServiceParameters.Add(new RatePlanServiceParameter {
+            //ParameterName="TextBox1",
+            //ParameterType=ParameterType.TB
+            //});
 
-            ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            //ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            //{
+            //    ParameterName = "TextBox2",
+            //    ParameterType = ParameterType.TB
+            //});
+
+            //ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            //{
+            //    ParameterName = "CheckBox1",
+            //    ParameterType = ParameterType.CB
+            //});
+
+            //ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            //{
+            //    ParameterName = "CheckBox2",
+            //    ParameterType = ParameterType.CB
+            //});
+
+
+            //List<ListBoxValue> list = new List<ListBoxValue>();
+            //List<ListBoxValue> list1 = new List<ListBoxValue>();
+
+            //list.Add(new ListBoxValue { DisplayValue="hassan", Value= "hassan" });
+            //list.Add(new ListBoxValue { DisplayValue = "ali", Value = "ali" });
+
+            //list1.Add(new ListBoxValue { DisplayValue = "moussa", Value = "moussa" });
+            //list1.Add(new ListBoxValue { DisplayValue = "huda", Value = "huda" });
+
+            //ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            //{
+            //    ParameterName = "ListBox1",
+            //    ParameterType = ParameterType.LB,
+            //    ListBoxValues = list
+            //});
+
+            //ratePlanServiceParameters.Add(new RatePlanServiceParameter
+            //{
+            //    ParameterName = "ListBox2",
+            //    ParameterType = ParameterType.LB,
+            //    ListBoxValues = list1
+            //});
+            using (SOMClient client = new SOMClient())
             {
-                ParameterName = "TextBox2",
-                ParameterType = ParameterType.TB
-            });
-
-            ratePlanServiceParameters.Add(new RatePlanServiceParameter
-            {
-                ParameterName = "CheckBox1",
-                ParameterType = ParameterType.CB
-            });
-
-            ratePlanServiceParameters.Add(new RatePlanServiceParameter
-            {
-                ParameterName = "CheckBox2",
-                ParameterType = ParameterType.CB
-            });
-
-
-            List<ListBoxValue> list = new List<ListBoxValue>();
-            List<ListBoxValue> list1 = new List<ListBoxValue>();
-
-            list.Add(new ListBoxValue { DisplayValue="hassan", Value= "hassan" });
-            list.Add(new ListBoxValue { DisplayValue = "ali", Value = "ali" });
-
-            list1.Add(new ListBoxValue { DisplayValue = "moussa", Value = "moussa" });
-            list1.Add(new ListBoxValue { DisplayValue = "huda", Value = "huda" });
-
-            ratePlanServiceParameters.Add(new RatePlanServiceParameter
-            {
-                ParameterName = "ListBox1",
-                ParameterType = ParameterType.LB,
-                ListBoxValues = list
-            });
-
-            ratePlanServiceParameters.Add(new RatePlanServiceParameter
-            {
-                ParameterName = "ListBox2",
-                ParameterType = ParameterType.LB,
-                ListBoxValues = list1
-            });
+                List <RatePlanServiceParameterMapper> ratePlanServiceParameterMappers = client.Get<List<RatePlanServiceParameterMapper>>(String.Format("api/SOM.ST/Billing/GetServiceParameters?serviceId={0}", serviceId));
+                if (ratePlanServiceParameterMappers != null)
+                {
+                    foreach(var ratePlanSPMapper in ratePlanServiceParameterMappers)
+                    {
+                        RatePlanServiceParameter ratePlanServiceParameter = new RatePlanServiceParameter {
+                            ParameterName = ratePlanSPMapper.Description,
+                            ParameterNumber = ratePlanSPMapper.ParameterNumber,
+                            ParameterType = ratePlanSPMapper.Type,
+                            ListBoxValues = new List<ListBoxValue>()
+                        };
+                        if(ratePlanSPMapper.Values!=null)
+                        {
+                            foreach(var lbValueMappers in ratePlanSPMapper.Values)
+                            {
+                                ratePlanServiceParameter.ListBoxValues.Add(new ListBoxValue
+                                {
+                                    DisplayValue = lbValueMappers.Description,
+                                    Value = lbValueMappers.Value,
+                                    SequenceNumber = lbValueMappers.SequenceNumber
+                                });
+                            }
+                        }
+                        ratePlanServiceParameters.Add(ratePlanServiceParameter);
+                    }
+                }
+            }
 
             return ratePlanServiceParameters;
         }
