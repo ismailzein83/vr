@@ -91,6 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdvancedPaymentManager.cs" />
+    <Compile Include="BiilingContractServiceChargeableConditionManager.cs" />
+    <Compile Include="BiilingContractServiceChargeableConditionOnBeforeSaveHandler.cs" />
     <Compile Include="ContractResourceManager.cs" />
     <Compile Include="ContractServiceActionChargeTypeManager.cs" />
     <Compile Include="ContractServiceActionManager.cs" />

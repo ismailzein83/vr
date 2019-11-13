@@ -149,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RetailBillingRatePlanController.cs" />
+    <Compile Include="Controllers\RetailBillingChargeController.cs" />
     <Compile Include="Controllers\RetailBillingCustomCodeChargeTypeController.cs" />
     <Compile Include="Controllers\RetailBillingChargeTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -161,6 +163,7 @@
   <ItemGroup>
     <Content Include="Retail_Billing\Constants\CustomerMessagesTypeEnum.js" />
     <Content Include="Retail_Billing\Constants\ModuleConfig.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingContractService\retail-billing-contractservicechargeablecondition-beforesavehandler.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\retail-billing-chargetype-customcode.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\Templates\CustomCodeChargeTypeTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\retail-billing-charge-customobject-definition.js" />
@@ -178,10 +181,17 @@
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\retail-billing-datasourcesettings-customermessages.js" />
     <Content Include="Retail_Billing\Elements\Directives\Extensions\InvoiceDataSourceSettings\Templates\CustomerMessagesTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\retail-billing-invoicetypesettings.js" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRuleTargetType\retail-billing-discountrule-targettype-settings.js" />
-    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRuleTargetType\Templates\DiscountRuleTargetTypeSettingsTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingContractService\Templates\ContractServiceChargeableConditionOnBeforeSaveHandler.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Definition\retail-billing-discountrulecondition-customobject-definition.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Definition\Templates\DiscountRuleConditionDefinitionTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Runtime\retail-billing-discountrulecondition-customobject-runtime.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Runtime\Templates\DiscountRuleConditionRuntimeTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\TargetType\retail-billing-discountrule-targettype-settings.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\TargetType\Templates\DiscountRuleTargetTypeSettingsTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\Templates\BillingInvoiceTypeSettingsTemplate.html" />
     <Content Include="Retail_Billing\Elements\Reports\Reporting.aspx" />
+    <Content Include="Retail_Billing\Elements\Services\APIServices\RatePlanAPIService.js" />
+    <Content Include="Retail_Billing\Elements\Services\APIServices\ChargeAPIService.js" />
     <Content Include="Retail_Billing\Elements\Services\APIServices\CustomCodeChargeTypeAPIService.js" />
     <Content Include="Retail_Billing\Elements\Services\APIServices\ChargeTypeAPIService.js" />
     <Content Include="Retail_Billing\Elements\Services\CustomCodeChargeTypeService.js" />
