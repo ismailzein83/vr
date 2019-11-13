@@ -70,7 +70,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public void Initialize(List<CarrierAccountMapping> carrierAccountsMapping)
         {
-            DropIfExistsCreateRouteTables(carrierAccountsMapping.Select(item => item.RouteTableName).ToList());
+            DropIfExistsCreateRouteTables(carrierAccountsMapping.Select(item => item.RouteTableName));
         }
 
         public string GetDropBackUpRouteTableIfExistsQuery(string tableName)
@@ -96,19 +96,19 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         #region Private Methods
 
-        void DropIfExistsCreateRouteTables(List<string> routeTableNames)
+        void DropIfExistsCreateRouteTables(IEnumerable<string> routeTableNames)
         {
-            var dropIfExistsCreateTempCustomerIdentificationTableQueries = new List<string>();
+            var queries = new List<string>();
 
             foreach (var routeTableName in routeTableNames)
             {
                 var tableNameWithSchema = string.IsNullOrEmpty(schemaName) ? routeTableName : $"{schemaName}.{routeTableName}";
                 var query = DropIfExistsCreateRouteTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tableNameWithSchema);
 
-                dropIfExistsCreateTempCustomerIdentificationTableQueries.Add(query);
+                queries.Add(query);
             }
 
-            ExecuteNonQuery(dropIfExistsCreateTempCustomerIdentificationTableQueries.ToArray());
+            ExecuteNonQuery(queries.ToArray());
         }
 
         #endregion

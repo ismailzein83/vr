@@ -27,28 +27,29 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             tempTableName = !string.IsNullOrEmpty(schemaName) ? string.Format(@"""{0}"".{1}", schemaName, "CustomerIdentification_Temp") : "CustomerIdentification_Temp";
         }
 
-        public void Initialize(List<CustomerIdentification> customersIdentification) 
+        public void Initialize(List<CustomerIdentification> customersIdentification)
         {
-            CreateCustomerIdentificationTableIfNotExist();
-            DropIfExistsCreateTempCustomerIdentificationTable();
-            AddCustomerIdentificationsToTempTable(customersIdentification);
+            string[] queries = new string[3]
+            {
+                CreateCustomerIdentificationTableIfNotExist(),
+                DropIfExistsCreateTempCustomerIdentificationTable(),
+                AddCustomerIdentificationsToTempTable(customersIdentification)
+            };
+
+            ExecuteNonQuery(queries);
         }
 
-        void CreateCustomerIdentificationTableIfNotExist()
+        string CreateCustomerIdentificationTableIfNotExist()
         {
-            var createCustomerIdentificationTableIfNotExistQuery = CreateCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName);
-
-            ExecuteNonQuery(new string[] { createCustomerIdentificationTableIfNotExistQuery });
+            return CreateCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName);
         }
 
-         void DropIfExistsCreateTempCustomerIdentificationTable()
+        string DropIfExistsCreateTempCustomerIdentificationTable()
         {
-            var dropIfExistsCreateTempCustomerIdentificationTableQuery = DropIfExistsCreateTempCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
-
-            ExecuteNonQuery(new string[] { dropIfExistsCreateTempCustomerIdentificationTableQuery });
+            return DropIfExistsCreateTempCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
         }
 
-         void AddCustomerIdentificationsToTempTable(List<CustomerIdentification> customersIdentification)
+        string AddCustomerIdentificationsToTempTable(List<CustomerIdentification> customersIdentification)
         {
             var itemsToInsert = new List<String>();
             foreach (var customerIdentification in customersIdentification)
@@ -59,7 +60,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             var addCustomerIdentificationsToTempTableQuery = AddCustomerIdentificationsToTempTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
             addCustomerIdentificationsToTempTableQuery = addCustomerIdentificationsToTempTableQuery.Replace("#ITEMS#", string.Join(" ,", itemsToInsert));
 
-            ExecuteNonQuery(new string[] { addCustomerIdentificationsToTempTableQuery });
+            return addCustomerIdentificationsToTempTableQuery;
         }
 
         public List<CustomerIdentification> GetAllCustomerIdentifications(bool getFromTemp)

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace TOne.WhS.RouteSync.Cataleya.Entities
 {
-    public interface IRouteInitializeContext
+    public interface ICataleyaInitializeContext
     {
         List<CustomerIdentification> CustomersIdentification { get; }
         List<CarrierAccountMapping> CarrierAccountsMapping { get; }
     }
 
-    public class RouteInitializeContext : IRouteInitializeContext
+    public class CataleyaInitializeContext : ICataleyaInitializeContext
     {
         public List<CustomerIdentification> CustomersIdentification { get; set; }
         public List<CarrierAccountMapping> CarrierAccountsMapping { get; set; }

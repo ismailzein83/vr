@@ -46,7 +46,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             routeDataManager.ApplyCataleyaRoutesToDB(context);
         }
 
-        public void PrepareTables(IRouteInitializeContext context)
+        public void Initialize(ICataleyaInitializeContext context)
         {
             var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
             customerIdentificationDataManager.Initialize(context.CustomersIdentification);
@@ -70,7 +70,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             return customerIdentificationDataManager.GetAllCustomerIdentifications(getFromTemp);
         }
 
-        public void Finalize(CataleyaFinalizeContext context)
+        public void Finalize(ICataleyaFinalizeContext context)
         {
             var carrierFinalizationDataByCustomer = context.CarrierFinalizationDataByCustomer;
 
@@ -110,7 +110,8 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                     queryCommands.AppendLine(carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate));
 
                     var backupVersionNumber = (carrierAccountMappingToUpdate.CarrierId + 1) % 2;
-                    var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery($"Rt_{carrierAccountMappingToUpdate.CarrierId.ToString()}_{backupVersionNumber.ToString()}");
+                    string tableName = Helper.BuildRouteTableName(carrierAccountMappingToUpdate.CarrierId, backupVersionNumber);
+                    var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
                     queryCommands.AppendLine(dropQuery);
                 }
 
@@ -122,6 +123,12 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             ExecuteNonQuery(new string[] { carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery(),
                 customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery(),
                 routeDataManager.GetCreateRouteTablesIndexesQuery(context.RouteTableNames) });
+        }
+
+        public bool UpdateCarrierAccountMappingStatus(String customerId, CarrierAccountStatus status)
+        {
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            return carrierAccountDataManager.UpdateCarrierAccountMappingStatus(customerId, status);
         }
 
         #endregion

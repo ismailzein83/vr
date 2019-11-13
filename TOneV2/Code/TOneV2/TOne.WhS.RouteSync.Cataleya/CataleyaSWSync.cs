@@ -17,6 +17,8 @@ namespace TOne.WhS.RouteSync.Cataleya
         public ICataleyaDataManager DataManager { get; set; }
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
+        const string blockedTrunk = "999999";
+        const string optionsSeparator = "|";
         #region Public Methods
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
@@ -39,7 +41,8 @@ namespace TOne.WhS.RouteSync.Cataleya
                     CarrierId = carrierMapping.CarrierId,
                     ZoneID = carrierMapping.ZoneID,
                     Version = 0,
-                    RouteTableName = $"Rt_{carrierMapping.CarrierId}_0"
+                    RouteTableName = Helper.BuildRouteTableName(carrierMapping.CarrierId, 0),
+                    Status = CarrierAccountStatus.Active
                 };
 
                 carrierAccountMappingByAccountId.Add(carrierAccountMapping.CarrierId, carrierAccountMapping);
@@ -66,11 +69,11 @@ namespace TOne.WhS.RouteSync.Cataleya
 
                     var newVersion = (existingCarrierAccount.Version + 1) % 2;
                     carrierAccountMapping.Version = newVersion;
-                    carrierAccountMapping.RouteTableName = $"Rt_{existingCarrierAccount.CarrierId}_{newVersion}";
+                    carrierAccountMapping.RouteTableName = Helper.BuildRouteTableName(existingCarrierAccount.CarrierId, newVersion);
                 }
             }
 
-            DataManager.PrepareTables(new RouteInitializeContext()
+            DataManager.Initialize(new CataleyaInitializeContext()
             {
                 CustomersIdentification = customersIdentification,
                 CarrierAccountsMapping = carrierAccountMappingByAccountId.Values.ToList()
@@ -86,16 +89,22 @@ namespace TOne.WhS.RouteSync.Cataleya
 
             foreach (var route in context.Routes)
             {
+                if (!CarrierMappings.TryGetValue(route.CustomerId, out var carrierMapping))
+                    continue;
+
+                if (carrierMapping.CustomerMappings == null || carrierMapping.CustomerMappings.InTrunks == null || carrierMapping.CustomerMappings.InTrunks.Count == 0)
+                    continue;
+
                 bool isPercentage;
                 string concatenatedOptions = null;
                 if (route.Options == null || route.Options.Count == 0)
                 {
-                    concatenatedOptions = "999999";
+                    concatenatedOptions = blockedTrunk;
                     isPercentage = false;
                 }
                 else
                 {
-                    isPercentage = route.Options.FirstOrDefault(itm => itm.Percentage.HasValue && itm.Percentage.Value > 0) != null;
+                    isPercentage = route.Options.FirstOrDefault(itm => !itm.IsBlocked && itm.Percentage.HasValue && itm.Percentage.Value > 0) != null;
                     if (!isPercentage)
                     {
                         concatenatedOptions = BuildPriorityOptions(route.Options);
@@ -105,19 +114,14 @@ namespace TOne.WhS.RouteSync.Cataleya
                         concatenatedOptions = BuildPercentageOptions(route.Options);
                     }
                 }
-                if (CarrierMappings.TryGetValue(route.CustomerId, out var carrierMapping))
+
+                routes.Add(new CataleyaConvertedRoute()
                 {
-                    if (carrierMapping.CustomerMappings != null && carrierMapping.CustomerMappings.InTrunks != null && carrierMapping.CustomerMappings.InTrunks.Count > 0)
-                    {
-                        routes.Add(new CataleyaConvertedRoute()
-                        {
-                            CarrierID = carrierMapping.CarrierId,
-                            Code = route.Code,
-                            Options = concatenatedOptions,
-                            IsPercentage = isPercentage
-                        });
-                    }
-                }
+                    CarrierID = carrierMapping.CarrierId,
+                    Code = route.Code,
+                    Options = concatenatedOptions,
+                    IsPercentage = isPercentage
+                });
             }
             context.ConvertedRoutes = routes;
         }
@@ -224,7 +228,8 @@ namespace TOne.WhS.RouteSync.Cataleya
                         ZoneID = oldCarrierAccountMapping.ZoneID,
                         CarrierId = oldCarrierAccountMapping.CarrierId,
                         RouteTableName = null,
-                        Version = (oldCarrierAccountMapping.Version + 1) % 2
+                        Version = (oldCarrierAccountMapping.Version + 1) % 2,
+                        Status = CarrierAccountStatus.Active
                     };
                 }
             }
@@ -235,6 +240,26 @@ namespace TOne.WhS.RouteSync.Cataleya
         public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
         {
             DataManager = null;
+        }
+
+        public override bool TryBlockCustomer(ITryBlockCustomerContext context)
+        {
+            return DataManager.UpdateCarrierAccountMappingStatus(context.CustomerId, CarrierAccountStatus.Blocked);
+        }
+
+        public override bool TryUnBlockCustomer(ITryUnBlockCustomerContext context)
+        {
+            return DataManager.UpdateCarrierAccountMappingStatus(context.CustomerId, CarrierAccountStatus.Active);
+        }
+
+        public override bool TryDeactivate(ITryDeactivateContext context)
+        {
+            return DataManager.UpdateCarrierAccountMappingStatus(context.CarrierAccountId, CarrierAccountStatus.Blocked);
+        }
+
+        public override bool TryReactivate(ITryReactivateContext context)
+        {
+            return DataManager.UpdateCarrierAccountMappingStatus(context.CarrierAccountId, CarrierAccountStatus.Active);
         }
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
@@ -329,56 +354,56 @@ namespace TOne.WhS.RouteSync.Cataleya
                 if (routeOption.IsBlocked || !routeOption.Percentage.HasValue)
                     continue;
 
-                if (CarrierMappings.TryGetValue(routeOption.SupplierId, out var carrierMapping))
+                if (!CarrierMappings.TryGetValue(routeOption.SupplierId, out var carrierMapping))
+                    continue;
+
+                if (carrierMapping.SupplierMappings == null || carrierMapping.SupplierMappings.OutTrunks == null || carrierMapping.SupplierMappings.OutTrunks.Count == 0)
+                    continue;
+
+                List<string> trunksWithPercentage = new List<string>();
+                List<string> trunksWithoutPercentage = new List<string>();
+
+                List<OutTrunk> outTrunks = carrierMapping.SupplierMappings.OutTrunks;
+                foreach (OutTrunk outTrunk in outTrunks)
                 {
-                    if (carrierMapping.SupplierMappings == null || carrierMapping.SupplierMappings.OutTrunks == null || carrierMapping.SupplierMappings.OutTrunks.Count == 0)
+                    if (outTrunk.Percentage.HasValue)
+                        trunksWithPercentage.Add($"{outTrunk.Trunk},{outTrunk.Percentage.Value * routeOption.Percentage.Value}");
+                    else
+                        trunksWithoutPercentage.Add($"{outTrunk.Trunk}");
+                }
+
+                if (trunksWithPercentage.Count == 0)
+                {
+                    string firstTrunk = trunksWithoutPercentage.First();
+                    trunksWithoutPercentage.Remove(firstTrunk);
+                    trunksWithPercentage.Add($"{firstTrunk},{routeOption.Percentage}");
+                }
+
+                foreach (var backupOption in routeOption.Backups)
+                {
+                    if (!CarrierMappings.TryGetValue(backupOption.SupplierId, out var backupCarrierMapping))
                         continue;
 
-                    bool isTrunksPercentage = carrierMapping.SupplierMappings.OutTrunks.FirstOrDefault(itm => itm.Percentage.HasValue && itm.Percentage.Value > 0) != null;
-                    var routeOptionMainTrunks = new List<string>();
-                    var optionBackupsTrunks = new List<OutTrunk>();
+                    if (backupCarrierMapping.SupplierMappings == null || backupCarrierMapping.SupplierMappings.OutTrunks == null || backupCarrierMapping.SupplierMappings.OutTrunks.Count == 0)
+                        continue;
 
-                    if (!isTrunksPercentage)
-                    {
-                        var firstOutTrunk = carrierMapping.SupplierMappings.OutTrunks[0];
-                        routeOptionMainTrunks.Add($"{firstOutTrunk.Trunk},{firstOutTrunk.Percentage}");
+                    trunksWithoutPercentage.AddRange(backupCarrierMapping.SupplierMappings.OutTrunks.Select(outTrunk => outTrunk.Trunk));
+                }
 
-                        optionBackupsTrunks.AddRange(carrierMapping.SupplierMappings.OutTrunks.Skip(1));
-                    }
-                    else
-                    {
-                        foreach (var outTrunk in carrierMapping.SupplierMappings.OutTrunks)
-                        {
-                            routeOptionMainTrunks.Add($"{outTrunk.Trunk},{outTrunk.Percentage.Value * routeOption.Percentage.Value}");
-                        }
-                    };
+                var concatenatedOptionBackupsTrunks = "";
+                if (trunksWithoutPercentage.Count > 0)
+                    concatenatedOptionBackupsTrunks = string.Join("$", trunksWithoutPercentage);
 
-                    foreach (var backupOption in routeOption.Backups)
-                    {
-                        if (CarrierMappings.TryGetValue(backupOption.SupplierId, out var backupCarrierMapping))
-                        {
-                            if (backupCarrierMapping.SupplierMappings == null || backupCarrierMapping.SupplierMappings.OutTrunks == null || backupCarrierMapping.SupplierMappings.OutTrunks.Count == 0)
-                                continue;
-
-                            optionBackupsTrunks.AddRange(backupCarrierMapping.SupplierMappings.OutTrunks);
-                        }
-                    }
-
-                    var concatenatedOptionBackupsTrunks = "";
-                    if (optionBackupsTrunks.Count > 0)
-                        concatenatedOptionBackupsTrunks = $";{string.Join("$", optionBackupsTrunks.Select(outTrunk => outTrunk.Trunk))}";
-
-                    foreach (var optionMainTrunk in routeOptionMainTrunks)
-                    {
-                        concatenatedOptionsTrunksWithBackups.Add($"{optionMainTrunk}{concatenatedOptionBackupsTrunks}");
-                    }
+                foreach (var optionMainTrunk in trunksWithPercentage)
+                {
+                    concatenatedOptionsTrunksWithBackups.Add($"{optionMainTrunk};{concatenatedOptionBackupsTrunks}");
                 }
             }
 
             if (concatenatedOptionsTrunksWithBackups.Count == 0)
-                return "999999";
+                return blockedTrunk;
 
-            return string.Join("|", concatenatedOptionsTrunksWithBackups);
+            return string.Join(optionsSeparator, concatenatedOptionsTrunksWithBackups);
         }
 
         private string BuildPriorityOptions(List<RouteOption> routeOptions)
@@ -389,22 +414,22 @@ namespace TOne.WhS.RouteSync.Cataleya
                 if (routeOption.IsBlocked)
                     continue;
 
-                if (CarrierMappings.TryGetValue(routeOption.SupplierId, out var carrierMapping))
-                {
-                    if (carrierMapping.SupplierMappings == null || carrierMapping.SupplierMappings.OutTrunks == null || carrierMapping.SupplierMappings.OutTrunks.Count == 0)
-                        continue;
+                if (!CarrierMappings.TryGetValue(routeOption.SupplierId, out var carrierMapping))
+                    continue;
 
-                    foreach (var trunk in carrierMapping.SupplierMappings.OutTrunks)
-                    {
-                        allOptionsTrunks.Add(trunk.Trunk);
-                    }
+                if (carrierMapping.SupplierMappings == null || carrierMapping.SupplierMappings.OutTrunks == null || carrierMapping.SupplierMappings.OutTrunks.Count == 0)
+                    continue;
+
+                foreach (var trunk in carrierMapping.SupplierMappings.OutTrunks)
+                {
+                    allOptionsTrunks.Add(trunk.Trunk);
                 }
             }
 
             if (allOptionsTrunks.Count == 0)
-                return "999999";
+                return blockedTrunk;
 
-            return string.Join("|", allOptionsTrunks);
+            return string.Join(optionsSeparator, allOptionsTrunks);
         }
 
         #endregion
