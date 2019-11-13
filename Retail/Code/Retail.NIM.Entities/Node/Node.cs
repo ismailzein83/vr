@@ -18,7 +18,7 @@ namespace Retail.NIM.Entities
         public string Notes { get; set; }
         public long StreetId { get; set; }
         public string Building { get; set; }
-        public int BuildingSizeId { get; set; }
+        public int? BuildingSizeId { get; set; }
         public string BlockNumber { get; set; }
         public int RegionId { get; set; }
         public int CityId { get; set; }

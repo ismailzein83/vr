@@ -172,7 +172,7 @@ namespace Retail.NIM.Business
                 Notes = genericBusinessEntity.FieldValues.GetRecord(s_notesFieldName) as string,
                 StreetId = (long)genericBusinessEntity.FieldValues.GetRecord(s_streetIdFieldName),
                 Building = genericBusinessEntity.FieldValues.GetRecord(s_buildingFieldName) as string,
-                BuildingSizeId = (int)genericBusinessEntity.FieldValues.GetRecord(s_buildingSizeIdFieldName),
+                BuildingSizeId = (int?)genericBusinessEntity.FieldValues.GetRecord(s_buildingSizeIdFieldName),
                 BlockNumber = genericBusinessEntity.FieldValues.GetRecord(s_blockNumberFieldName) as string,
                 CityId = (int)genericBusinessEntity.FieldValues.GetRecord(s_cityIdFieldName),
                 RegionId = (int)genericBusinessEntity.FieldValues.GetRecord(s_regionIdFieldName),
