@@ -32,6 +32,7 @@ namespace BPMExtended.Main.SOMAPI
         public string SWITCH_TYPE { get; set; }
         public string DEV_TYPE { get; set; }
         public string DevName { get; set; }
+        public string DeviceId { get; set; }
         public string DeviceStatus { get; set; }
         public string PrimrayMuxPortName { get; set; }
         public string DPPortId { get; set; }

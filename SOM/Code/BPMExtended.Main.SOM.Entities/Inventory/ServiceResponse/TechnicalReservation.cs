@@ -17,6 +17,7 @@ namespace BPMExtended.Main.SOMAPI
         public string VerticalMDFId { get; set; }
         public string MDFPort { get; set; }
         public string MDFPortId { get; set; }
+        public string DeviceId { get; set; }
 
         public string Cabinet { get; set; }
         public string CabinetId { get; set; }
