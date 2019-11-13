@@ -174,7 +174,7 @@ namespace BPMExtended.Main.Business
                 Id = item.Id,
                 Amount = item.Amount,
                 Currency = item.Currency,
-                Date = item.Date
+                Date = item.DueDate.ToString("MM/dd/yyyy")
 
             };
         }
