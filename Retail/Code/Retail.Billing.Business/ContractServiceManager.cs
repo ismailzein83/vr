@@ -326,6 +326,24 @@ namespace Retail.Billing.Business
                 historyFieldValues.Add("PackageLimitInGB", input.PackageLimitInGB.Value);
             }
 
+            if (input.VoiceVolumeFixed.HasValue)
+            {
+                entityToAddFieldValues.Add("VoiceVolumeFixed", input.VoiceVolumeFixed.Value);
+                historyFieldValues.Add("VoiceVolumeFixed", input.VoiceVolumeFixed.Value);
+            }
+
+            if (input.VoiceVolumeMobile.HasValue)
+            {
+                entityToAddFieldValues.Add("VoiceVolumeMobile", input.VoiceVolumeMobile.Value);
+                historyFieldValues.Add("VoiceVolumeMobile", input.VoiceVolumeMobile.Value);
+            }
+
+            if (input.VoiceVolumePreferredNb.HasValue)
+            {
+                entityToAddFieldValues.Add("VoiceVolumePreferredNb", input.VoiceVolumePreferredNb.Value);
+                historyFieldValues.Add("VoiceVolumePreferredNb", input.VoiceVolumePreferredNb.Value);
+            }
+
             //if (input.SpecialNumberCategoryId.HasValue)
             //{
             //    entityToAddFieldValues.Add("SpecialNumberCategory", input.SpecialNumberCategoryId.Value);
@@ -475,7 +493,10 @@ namespace Retail.Billing.Business
                 SpecialNumberCategoryId = (Guid?)contractServiceEntity.FieldValues["SpecialNumberCategory"],
                 SpeedInMbps = (decimal?)contractServiceEntity.FieldValues["SpeedInMbps"],
                 SpeedType = (int?)contractServiceEntity.FieldValues["SpeedType"],
-                PackageLimitInGB = (int?)contractServiceEntity.FieldValues["PackageLimitInGB"]
+                PackageLimitInGB = (int?)contractServiceEntity.FieldValues["PackageLimitInGB"],
+                VoiceVolumeFixed = (int?)contractServiceEntity.FieldValues["VoiceVolumeFixed"],
+                VoiceVolumeMobile = (int?)contractServiceEntity.FieldValues["VoiceVolumeMobile"],
+                VoiceVolumePreferredNb = (int?)contractServiceEntity.FieldValues["VoiceVolumePreferredNb"]
             };
         }
 

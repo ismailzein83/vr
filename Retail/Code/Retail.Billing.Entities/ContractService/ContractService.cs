@@ -33,5 +33,8 @@ namespace Retail.Billing.Entities
         public int? SpeedType { get; set; }
 
         public int? PackageLimitInGB { get; set; }
+        public int? VoiceVolumeFixed { get; set; }
+        public int? VoiceVolumeMobile { get; set; }
+        public int? VoiceVolumePreferredNb { get; set; }
     }
 }

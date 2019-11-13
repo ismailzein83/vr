@@ -61,6 +61,7 @@
     <Compile Include="ContractServiceAction\AddContractServiceActionOutput.cs" />
     <Compile Include="ContractServiceType\ContractServiceType.cs" />
     <Compile Include="ContractService\ContractService.cs" />
+    <Compile Include="Contract\Contract.cs" />
     <Compile Include="Deposit\AddDepositInput.cs" />
     <Compile Include="Deposit\AddDepositOutput.cs" />
     <Compile Include="DiscountRuleCondition\DiscountRuleCondition.cs" />

@@ -121,9 +121,73 @@ namespace Retail.Billing.Business
             return new UpdateContractStatusOutput();
         }
 
+
+        public Contract GetContract(long contractId)
+        {
+            var contractEntity = s_genericBEManager.GetGenericBusinessEntity(contractId, s_BusinessEntityDefinitionId_Contract);
+
+            contractEntity.ThrowIfNull("contractEntity", contractId);
+
+            return ContractMapper(contractEntity);
+        }
+
+        public List<Contract> GetContractsByMainResource(string resourceName)
+        {
+            var filterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup { Filters = new System.Collections.Generic.List<Vanrise.GenericData.Entities.RecordFilter>() };
+
+            filterGroup.Filters.Add(new Vanrise.GenericData.Entities.ObjectListRecordFilter
+            {
+                FieldName = "ResourceName",
+                Values = new System.Collections.Generic.List<object> { resourceName }
+            });
+
+            var contractEntities = s_genericBEManager.GetAllGenericBusinessEntities(
+                s_BusinessEntityDefinitionId_Contract,
+                null,
+                filterGroup);
+
+            var contracts = new List<Contract>();
+
+            if (contractEntities != null)
+            {
+                foreach (var contractEntity in contractEntities)
+                {
+                    Contract contract = ContractMapper(contractEntity);
+
+                    contracts.Add(contract);
+                }
+            }
+
+            return contracts;
+        }
+
         #endregion
 
         #region Private Methods
+
+        private Contract ContractMapper(Vanrise.GenericData.Entities.GenericBusinessEntity contractEntity)
+        {
+            return new Contract
+            {
+                ContractId = (long)contractEntity.FieldValues["Contract"],
+                ContractTypeId = (Guid)contractEntity.FieldValues["ContractType"],
+                CustomerId = (long)contractEntity.FieldValues["Customer"],
+                RatePlanId = (int)contractEntity.FieldValues["RatePlan"],
+                MainResourceName = contractEntity.FieldValues["ResourceName"] as string,
+                BillingAccountId = (long)contractEntity.FieldValues["BillingAccount"],
+                StatusId = (Guid)contractEntity.FieldValues["Status"],
+                StatusReasonId = (Guid?)contractEntity.FieldValues["StatusReason"],
+                TechnologyId = (Guid?)contractEntity.FieldValues["Technology"],
+                SpecialNumberCategoryId = (Guid?)contractEntity.FieldValues["SpecialNumberCategory"],
+                SpeedInMbps = (decimal?)contractEntity.FieldValues["SpeedInMbps"],
+                SpeedType = (int?)contractEntity.FieldValues["SpeedType"],
+                PackageLimitInGB = (int?)contractEntity.FieldValues["PackageLimitInGB"],
+                HasInternet = (bool?)contractEntity.FieldValues["HasInternet"],
+                HasTelephony = (bool?)contractEntity.FieldValues["HasTelephony"],
+                NbOfLinks = (int?)contractEntity.FieldValues["NbOfLinks"],
+                NIMPathId = (long?)contractEntity.FieldValues["NIMPath"]
+            };
+        }
 
         private long InsertContract(Dictionary<string, object> entityToAddFieldValues)
         {
@@ -249,6 +313,12 @@ namespace Retail.Billing.Business
             {
                 entityToAddFieldValues.Add("HasTelephony", input.HasTelephony.Value);
                 historyFieldValues.Add("HasTelephony", input.HasTelephony.Value);
+            }
+
+            if (input.NIMPathId.HasValue)
+            {
+                entityToAddFieldValues.Add("NIMPath", input.NIMPathId.Value);
+                historyFieldValues.Add("NIMPath", input.NIMPathId.Value);
             }
 
             if (input.HasInternet.HasValue)

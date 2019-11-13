@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Retail.Billing.Entities
 {
-    public class AddContractInput
+    public class Contract
     {
+        public long ContractId { get; set; }
         public Guid ContractTypeId { get; set; }
 
         public long CustomerId { get; set; }
@@ -18,7 +19,9 @@ namespace Retail.Billing.Entities
 
         public string MainResourceName { get; set; }
 
-        public DateTime BET { get; set; }
+        public Guid StatusId { get; set; }
+
+        public Guid? StatusReasonId { get; set; }
 
         public Guid? TechnologyId { get; set; }
 

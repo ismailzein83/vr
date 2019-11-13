@@ -322,7 +322,7 @@ namespace Retail.Billing.Business
         public Guid ServiceType { get; set; }
         public Guid? ServiceTypeOption { get; set; }
         public Guid Status { get; set; }
-        public Guid? BillingAccount { get; set; }
+        public long? BillingAccount { get; set; }
         public Guid? StatusReason { get; set; }
         public Guid? Technology { get; set; }
         public Guid? SpecialNumberCategory { get; set; }
