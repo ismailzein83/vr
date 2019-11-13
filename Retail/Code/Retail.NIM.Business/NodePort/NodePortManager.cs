@@ -115,7 +115,7 @@ namespace Retail.NIM.Business
             var node = new NodeManager().GetNode(nodePortInfo.NodeId);
             if(node != null)
             {
-                nodePortInfo.NodeNumber = node.FieldValues.GetRecord("Number") as string;
+                nodePortInfo.NodeNumber = node.Number;
             }
 
             var nodePartId = (long?)nodePort.FieldValues.GetRecord("Part");
@@ -195,6 +195,7 @@ namespace Retail.NIM.Business
         }
 
         #endregion
+        
         #region Private Methods
         #endregion
     }

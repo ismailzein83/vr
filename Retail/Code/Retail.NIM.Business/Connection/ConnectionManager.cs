@@ -14,6 +14,23 @@ namespace Retail.NIM.Business
     public class ConnectionManager
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
+        static string s_idFieldName = "ID";
+        static string s_modelFieldName = "Model";
+        static string s_areaFieldName = "Area";
+        static string s_siteFieldName = "Site";
+        static string s_port1FieldName = "Port1";
+        static string s_port1StatusFieldName = "Port1Status";
+        static string s_port1NodeFieldName = "Port1Node";
+        static string s_port1PartFieldName = "Port1Part";
+        static string s_port1PartTypeFieldName = "Port1PartType";
+        static string s_port1NodeTypeFieldName = "Port1NodeType";
+        static string s_port2FieldName = "Port2";
+        static string s_port2StatusFieldName = "Port2Status";
+        static string s_port2NodeFieldName = "Port2Node";
+        static string s_port2PartFieldName = "Port2Part";
+        static string s_port2PartTypeFieldName = "Port2PartType";
+        static string s_port2NodeTypeFieldName = "Port2NodeType";
+
 
         #region Public Methods
         public ReserveConnectionOutput ReserveConnection(ReserveConnectionInput input)
@@ -36,22 +53,22 @@ namespace Retail.NIM.Business
                 {
                     new ObjectListRecordFilter
                     {
-                        FieldName ="Port1Node",
+                        FieldName =s_port1NodeFieldName,
                         Values =  new List<object> {input.Port1NodeId}
                     }
                    ,new ObjectListRecordFilter
                     {
-                        FieldName ="Port2Node",
+                        FieldName =s_port2NodeFieldName,
                         Values =  new List<object> {input.Port2NodeId}
                     }
                    ,new ObjectListRecordFilter
                    {
-                        FieldName = "Port1Status",
+                        FieldName = s_port1StatusFieldName,
                         Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
                    }
                    ,new ObjectListRecordFilter
                    {
-                       FieldName = "Port2Status",
+                       FieldName = s_port2StatusFieldName,
                        Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
                    }
                 }
@@ -61,7 +78,7 @@ namespace Retail.NIM.Business
             {
                 filter.Filters.Add(new ObjectListRecordFilter
                 {
-                    FieldName = "Port1PartType",
+                    FieldName = s_port1PartTypeFieldName,
                     Values = new List<object> { input.Port1PartTypeId.Value.ToString() }
                 });
             }
@@ -69,7 +86,7 @@ namespace Retail.NIM.Business
             {
                 filter.Filters.Add(new EmptyRecordFilter
                 {
-                    FieldName = "Port1PartType",
+                    FieldName = s_port1PartTypeFieldName,
                 });
             }
 
@@ -77,7 +94,7 @@ namespace Retail.NIM.Business
             {
                 filter.Filters.Add(new ObjectListRecordFilter
                 {
-                    FieldName = "Port2PartType",
+                    FieldName = s_port2PartTypeFieldName,
                     Values = new List<object> { input.Port2PartTypeId.Value.ToString() }
                 });
             }
@@ -85,7 +102,7 @@ namespace Retail.NIM.Business
             {
                 filter.Filters.Add(new EmptyRecordFilter
                 {
-                    FieldName = "Port2PartType",
+                    FieldName = s_port2PartTypeFieldName,
                 });
             }
 
@@ -96,9 +113,9 @@ namespace Retail.NIM.Business
 
             var firstItem = entities.First();
 
-            var port1Id = (long)firstItem.FieldValues.GetRecord("Port1");
+            var port1Id = (long)firstItem.FieldValues.GetRecord(s_port1FieldName);
 
-            var port2Id = (long)firstItem.FieldValues.GetRecord("Port2");
+            var port2Id = (long)firstItem.FieldValues.GetRecord(s_port2FieldName);
 
             var reservedPort1 = _nodePortManager.ReservePort(port1Id, input.Port1TypeId);
 
@@ -119,7 +136,7 @@ namespace Retail.NIM.Business
             var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
             {
                 BusinessEntityDefinitionId = connectionType.BusinessEntitityDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Model", connectionInput.Model }, { "Port1", connectionInput.Port1 }, { "Port2", connectionInput.Port2 } }
+                FieldValues = new Dictionary<string, object> { { s_modelFieldName, connectionInput.Model }, { s_port1FieldName, connectionInput.Port1 }, { s_port2FieldName, connectionInput.Port2 } }
             });
 
             if (insertedEntity.Result == InsertOperationResult.Failed)
@@ -128,7 +145,7 @@ namespace Retail.NIM.Business
 
             return new ConnectionOutput
             {
-                ConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
+                ConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord(s_idFieldName).Value
             };
         }
 
@@ -144,7 +161,7 @@ namespace Retail.NIM.Business
         #endregion
 
         #region Internal Methods
-        internal GenericBusinessEntity GetConnection(long nodeId, List<long> notIncludeNodes)
+        internal Connection GetConnection(long nodeId, List<long> notIncludeNodes)
         {
             List<Object> excludedNodes = new List<object>();
             if (notIncludeNodes != null)
@@ -187,12 +204,12 @@ namespace Retail.NIM.Business
                         {
                              new ObjectListRecordFilter
                              {
-                                 FieldName = "Port1Node",
+                                 FieldName = s_port1NodeFieldName,
                                  CompareOperator = ListRecordFilterOperator.NotIn,
                                  Values = excludedNodes
                              },new ObjectListRecordFilter
                              {
-                                FieldName = "Port2Node",
+                                FieldName = s_port2NodeFieldName,
                                CompareOperator = ListRecordFilterOperator.NotIn,
                                Values = excludedNodes
                              }
@@ -202,7 +219,7 @@ namespace Retail.NIM.Business
             var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.ConnectionBEDefinitionId, null, filter);
             if (items == null || items.Count == 0)
                 return null;
-            return items.First();
+            return ConnectionMapper(items.First());
 
         }
         internal bool CheckConnectionWithFreePort(long nodeId, List<long> excludedNodes)
@@ -225,24 +242,24 @@ namespace Retail.NIM.Business
                         {
                              new ObjectListRecordFilter
                              {
-                                 FieldName = "Port1Node",
+                                 FieldName = s_port1NodeFieldName,
                                  CompareOperator = ListRecordFilterOperator.In,
                                  Values =new List<object>{ nodeId }
                              },new ObjectListRecordFilter
                              {
-                                FieldName = "Port2Node",
+                                FieldName = s_port2NodeFieldName,
                                CompareOperator = ListRecordFilterOperator.In,
                                Values =new List<object>{ nodeId }
                              }
                         }
                     },new ObjectListRecordFilter
                    {
-                        FieldName = "Port1Status",
+                        FieldName = s_port1StatusFieldName,
                         Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
                    }
                    ,new ObjectListRecordFilter
                    {
-                       FieldName = "Port2Status",
+                       FieldName = s_port2StatusFieldName,
                        Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
                    }
 
@@ -257,12 +274,12 @@ namespace Retail.NIM.Business
                         {
                              new ObjectListRecordFilter
                              {
-                                 FieldName = "Port1Node",
+                                 FieldName = s_port1NodeFieldName,
                                  CompareOperator = ListRecordFilterOperator.NotIn,
                                  Values = notIncludeNodes
                              },new ObjectListRecordFilter
                              {
-                                FieldName = "Port2Node",
+                                FieldName = s_port2NodeFieldName,
                                CompareOperator = ListRecordFilterOperator.NotIn,
                                Values = notIncludeNodes
                              }
@@ -274,5 +291,39 @@ namespace Retail.NIM.Business
 
         #endregion
 
+        #region Mapper
+
+        Connection ConnectionMapper(GenericBusinessEntity genericBusinessEntity)
+        {
+            return new Connection
+            {
+                ConnectionId = (long)genericBusinessEntity.FieldValues.GetRecord(s_idFieldName),
+                ModelId = (int)genericBusinessEntity.FieldValues.GetRecord(s_modelFieldName),
+                AreaId = (long)genericBusinessEntity.FieldValues.GetRecord(s_areaFieldName),
+                SiteId = (long)genericBusinessEntity.FieldValues.GetRecord(s_siteFieldName),
+                Port1Id = (long)genericBusinessEntity.FieldValues.GetRecord(s_port1FieldName),
+                Port1StatusId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_port1StatusFieldName),
+                Port1NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_port1NodeFieldName),
+                Port1PartId = (long?)genericBusinessEntity.FieldValues.GetRecord(s_port1PartFieldName),
+                Port1PartTypeId = (Guid?)genericBusinessEntity.FieldValues.GetRecord(s_port1PartTypeFieldName),
+                Port1NodeTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_port1NodeTypeFieldName),
+                Port2Id = (long)genericBusinessEntity.FieldValues.GetRecord(s_port2FieldName),
+                Port2StatusId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_port2StatusFieldName),
+                Port2NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_port2NodeFieldName),
+                Port2PartId = (long?)genericBusinessEntity.FieldValues.GetRecord(s_port2PartFieldName),
+                Port2PartTypeId = (Guid?)genericBusinessEntity.FieldValues.GetRecord(s_port2PartTypeFieldName),
+                Port2NodeTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_port2NodeTypeFieldName),
+            };    
+        }
+        #endregion
+
     }
-}
+}                
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 

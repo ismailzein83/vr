@@ -41,13 +41,13 @@ namespace Retail.NIM.Business
                 return output;
 
             }
-            output.AreaId = (long)nodeNeeded.FieldValues.GetRecord("Area");
-            output.SiteId = (long)nodeNeeded.FieldValues.GetRecord("Site");
-            output.RegionId = (int)nodeNeeded.FieldValues.GetRecord("Region");
-            output.CityId = (int)nodeNeeded.FieldValues.GetRecord("City");
-            output.TownId = (int)nodeNeeded.FieldValues.GetRecord("Town");
-            output.StreetId = (long)nodeNeeded.FieldValues.GetRecord("Street");
-            output.BuildingDetails = nodeNeeded.FieldValues.GetRecord("Building") as string;
+            output.AreaId = nodeNeeded.AreaId;
+            output.SiteId = nodeNeeded.SiteId;
+            output.RegionId = nodeNeeded.RegionId;
+            output.CityId = nodeNeeded.CityId;
+            output.TownId = nodeNeeded.TownId;
+            output.StreetId = nodeNeeded.StreetId;
+            output.BuildingDetails = nodeNeeded.Building;
 
 
             switch (numberType)
@@ -90,7 +90,7 @@ namespace Retail.NIM.Business
                 NodeManager nodeManager = new NodeManager();
                 bool isFDBFound = false;
                 bool isDPFound = false;
-                GenericBusinessEntity nodeEntity = null;
+                Node nodeEntity = null;
                 foreach (var pathConnection in pathConnections)
                 {
                     var port1NodeTypeId = (Guid)pathConnection.FieldValues.GetRecord("Port1NodeType");
@@ -125,13 +125,13 @@ namespace Retail.NIM.Business
                     }
                 }
 
-                output.AreaId = (long)nodeEntity.FieldValues.GetRecord("Area");
-                output.SiteId = (long)nodeEntity.FieldValues.GetRecord("Site");
-                output.RegionId = (int)nodeEntity.FieldValues.GetRecord("Region");
-                output.CityId = (int)nodeEntity.FieldValues.GetRecord("City");
-                output.TownId = (int)nodeEntity.FieldValues.GetRecord("Town");
-                output.StreetId = (long)nodeEntity.FieldValues.GetRecord("Street");
-                output.BuildingDetails = nodeEntity.FieldValues.GetRecord("Building") as string;
+                output.AreaId = nodeEntity.AreaId;
+                output.SiteId = nodeEntity.SiteId;
+                output.RegionId = nodeEntity.RegionId;
+                output.CityId = nodeEntity.CityId;
+                output.TownId = nodeEntity.TownId;
+                output.StreetId = nodeEntity.StreetId;
+                output.BuildingDetails = nodeEntity.Building;
 
                 if (isFDBFound)
                 {
@@ -157,7 +157,7 @@ namespace Retail.NIM.Business
         #endregion
 
         #region Private Methods
-        private GetTechnicalAddressOutputTechnologyItem GetFDBTechnicalAddress(GenericBusinessEntity node)
+        private GetTechnicalAddressOutputTechnologyItem GetFDBTechnicalAddress(Node node)
         {
             ConnectionManager _connectionManager = new ConnectionManager();
             NodeManager _nodeManager = new NodeManager();
@@ -165,20 +165,20 @@ namespace Retail.NIM.Business
             var item = new GetTechnicalAddressOutputTechnologyItem
             {
                 Technology = StaticBEDefinitionIDs.FiberTechnology,
-                PanelNumber = node != null ? node.FieldValues.GetRecord("Number").ToString() : null
+                PanelNumber = node != null? node.Number:null
             };
             if (node == null)
                 return item;
 
             bool targetReach = false;
-            var nodeId = (long)node.FieldValues.GetRecord("ID");
+            var nodeId = node.NodeId;
             item.NetworkElements = new List<GetTechnicalAddressOutputTechnologyItemNetworkElement>();
             item.Connections = new List<GetTechnicalAddressOutputTechnologyItemConnection>();
             item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
             {
                 ID = nodeId,
-                Number = (string)node.FieldValues.GetRecord("Number"),
-                Type = (Guid)node.FieldValues.GetRecord("NodeType")
+                Number = node.Number,
+                Type = node.NodeTypeId
             });
 
             item.SubscriptionFeasible = _connectionManager.CheckConnectionWithFreePort(nodeId, null);
@@ -189,39 +189,32 @@ namespace Retail.NIM.Business
                 if (connection == null)
                     return item;
 
-                long port1Id = (long)connection.FieldValues.GetRecord("Port1");
-                long port2Id = (long)connection.FieldValues.GetRecord("Port2");
-                long connectionId = (long)connection.FieldValues.GetRecord("ID");
-
-                long port1NodeId = (long)connection.FieldValues.GetRecord("Port1Node");
-                long port2NodeId = (long)connection.FieldValues.GetRecord("Port2Node");
-
                 item.Connections.Add(new GetTechnicalAddressOutputTechnologyItemConnection
                 {
-                    ConnectionId = connectionId,
-                    Port1Id = port1Id,
-                    Port2Id = port2Id
+                    ConnectionId = connection.ConnectionId,
+                    Port1Id = connection.Port1Id,
+                    Port2Id = connection.Port2Id
                 });
 
                 usedNodeIds.Add(nodeId);
-                if (port1NodeId != nodeId)
+                if (connection.Port1NodeId != nodeId)
                 {
-                    nodeId = port1NodeId;
+                    nodeId = connection.Port1NodeId;
                 }
-                else if (port2NodeId != nodeId)
+                else if (connection.Port2NodeId != nodeId)
                 {
-                    nodeId = port2NodeId;
+                    nodeId = connection.Port2NodeId;
                 }
 
                 var nodeItem = _nodeManager.GetNode(nodeId);
                 if (nodeItem == null)
                     return item;
 
-                var nodeTypeId = (Guid)nodeItem.FieldValues.GetRecord("NodeType");
+                var nodeTypeId = nodeItem.NodeTypeId;
                 item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
                 {
                     ID = nodeId,
-                    Number = (string)nodeItem.FieldValues.GetRecord("Number"),
+                    Number = nodeItem.Number,
                     Type = nodeTypeId
                 });
 
@@ -239,7 +232,7 @@ namespace Retail.NIM.Business
             }
             return item;
         }
-        private GetTechnicalAddressOutputTechnologyItem GetDPTechnicalAddress(GenericBusinessEntity node)
+        private GetTechnicalAddressOutputTechnologyItem GetDPTechnicalAddress(Node node)
         {
             ConnectionManager _connectionManager = new ConnectionManager();
             NodeManager _nodeManager = new NodeManager();
@@ -247,22 +240,22 @@ namespace Retail.NIM.Business
             var item = new GetTechnicalAddressOutputTechnologyItem
             {
                 Technology = StaticBEDefinitionIDs.CopperTechnology,
-                PanelNumber = node != null ? node.FieldValues.GetRecord("Number").ToString() : null
+                PanelNumber = node != null ? node.Number : null
             };
 
             if (node == null)
                 return item;
 
             bool targetReach = false;
-            var nodeId = (long)node.FieldValues.GetRecord("ID");
+            var nodeId =  node.NodeId;
             item.NetworkElements = new List<GetTechnicalAddressOutputTechnologyItemNetworkElement>();
             item.Connections = new List<GetTechnicalAddressOutputTechnologyItemConnection>();
 
             item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
             {
                 ID = nodeId,
-                Number = (string)node.FieldValues.GetRecord("Number"),
-                Type = (Guid)node.FieldValues.GetRecord("NodeType")
+                Number = node.Number,
+                Type = node.NodeTypeId
             });
 
             List<long> usedNodeIds = new List<long>();
@@ -279,37 +272,31 @@ namespace Retail.NIM.Business
                     subscriptionFeasible = false;
                 }
 
-                long port1NodeId = (long)connection.FieldValues.GetRecord("Port1Node");
-                long port2NodeId = (long)connection.FieldValues.GetRecord("Port2Node");
-                long port1Id = (long)connection.FieldValues.GetRecord("Port1");
-                long port2Id = (long)connection.FieldValues.GetRecord("Port2");
-                long connectionId = (long)connection.FieldValues.GetRecord("ID");
-
                 item.Connections.Add(new GetTechnicalAddressOutputTechnologyItemConnection
                 {
-                    ConnectionId = connectionId,
-                    Port1Id = port1Id,
-                    Port2Id = port2Id
+                    ConnectionId = connection.ConnectionId,
+                    Port1Id = connection.Port1Id,
+                    Port2Id = connection.Port2Id
                 });
                 usedNodeIds.Add(nodeId);
-                if (port1NodeId != nodeId)
+                if (connection.Port1NodeId != nodeId)
                 {
-                    nodeId = port1NodeId;
+                    nodeId = connection.Port1NodeId;
                 }
-                else if (port2NodeId != nodeId)
+                else if (connection.Port2NodeId != nodeId)
                 {
-                    nodeId = port2NodeId;
+                    nodeId = connection.Port2NodeId;
                 }
 
                 var nodeItem = _nodeManager.GetNode(nodeId);
                 if (nodeItem == null)
                     return item;
 
-                var nodeTypeId = (Guid)nodeItem.FieldValues.GetRecord("NodeType");
+                var nodeTypeId = nodeItem.NodeTypeId;
                 item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
                 {
                     ID = nodeId,
-                    Number = (string)nodeItem.FieldValues.GetRecord("Number"),
+                    Number = nodeItem.Number,
                     Type = nodeTypeId
                 });
 
@@ -320,26 +307,25 @@ namespace Retail.NIM.Business
 
                     if (subscriptionFeasible)
                     {
-                        long siteId = (long)nodeItem.FieldValues.GetRecord("Site");
-                        var switchItem = _nodeManager.GetSwitchBySiteId(siteId);
-                        if (switchItem != null && switchItem.FieldValues != null)
+                        var switchItem = _nodeManager.GetSwitchBySiteId(nodeItem.SiteId);
+                        if (switchItem != null)
                         {
                             item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
                             {
-                                ID = (long)switchItem.FieldValues.GetRecord("ID"),
-                                Number = (string)switchItem.FieldValues.GetRecord("Number"),
-                                Type = (Guid)switchItem.FieldValues.GetRecord("NodeType")
+                                ID = switchItem.NodeId,
+                                Number = switchItem.Number,
+                                Type = switchItem.NodeTypeId
                             });
                             item.TelephonyFeasible = true;
                         }
-                        var dslam = _nodeManager.GetDslamBySiteId(siteId);
-                        if (dslam != null && dslam.FieldValues != null)
+                        var dslam = _nodeManager.GetDslamBySiteId(nodeItem.SiteId);
+                        if (dslam != null)
                         {
                             item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
                             {
-                                ID = (long)dslam.FieldValues.GetRecord("ID"),
-                                Number = (string)dslam.FieldValues.GetRecord("Number"),
-                                Type = (Guid)dslam.FieldValues.GetRecord("NodeType")
+                                ID = dslam.NodeId,
+                                Number = dslam.Number,
+                                Type = dslam.NodeTypeId
                             });
                             item.DataFeasible = true;
                         }

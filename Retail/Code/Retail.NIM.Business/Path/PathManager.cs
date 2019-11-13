@@ -14,7 +14,13 @@ namespace Retail.NIM.Business
     public class PathManager
     {
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
-    
+        static string s_idFieldName = "ID";
+        static string s_connectionIdFieldName = "Connection";
+        static string s_pathIdFieldName = "Path";
+        static string s_port1IdFieldName = "Port1";
+        static string s_port1NodeIdFieldName = "Port1Node";
+        static string s_port2IdFieldName = "Port2";
+        static string s_port2NodeIdFieldName = "Port2Node";
         #region Public Methods
         public PathOutput CreatePath(PathInput pathInput)
         {
@@ -91,6 +97,52 @@ namespace Retail.NIM.Business
                 IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
             };
         }
+
+
+        public List<PathConnection> GetPathConnections(long pathId)
+        {
+            var filter = new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>
+                {
+                    new RecordFilterGroup
+                    {
+                        LogicalOperator = RecordQueryLogicalOperator.Or,
+                        Filters = new List<RecordFilter>
+                        {
+                             new ObjectListRecordFilter
+                             {
+                                 FieldName = "Path",
+                                 CompareOperator = ListRecordFilterOperator.In,
+                                 Values =new List<object>{ pathId }
+                             }
+                        }
+                    }
+                },
+
+            };
+            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.PathConnectionBEDefinitionId, null, filter);
+            if (items == null || items.Count == 0)
+                return null;
+            return items.MapRecords(PathConnectionMapper).ToList();
+        }
+        #endregion
+        #region Mapper
+
+        PathConnection PathConnectionMapper(GenericBusinessEntity genericBusinessEntity)
+        {
+            return new PathConnection
+            {
+                PathConnectionId = (long)genericBusinessEntity.FieldValues.GetRecord(s_idFieldName),
+                ConnectionId = (long)genericBusinessEntity.FieldValues.GetRecord(s_connectionIdFieldName),
+                PathId = (long)genericBusinessEntity.FieldValues.GetRecord(s_pathIdFieldName),
+                Port1Id = (long)genericBusinessEntity.FieldValues.GetRecord(s_port1IdFieldName),
+                Port1NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_port1NodeIdFieldName),
+                Port2Id = (long)genericBusinessEntity.FieldValues.GetRecord(s_port2IdFieldName),
+                Port2NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_port2NodeIdFieldName),
+            };
+        }
         #endregion
     }
+   
 }
