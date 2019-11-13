@@ -19,8 +19,12 @@ namespace Retail.NIM.Business
         static string s_pathIdFieldName = "Path";
         static string s_port1IdFieldName = "Port1";
         static string s_port1NodeIdFieldName = "Port1Node";
+        static string s_port1NodeTypeIdFieldName = "Port1NodeType";
+
         static string s_port2IdFieldName = "Port2";
         static string s_port2NodeIdFieldName = "Port2Node";
+        static string s_port2NodeTypeIdFieldName = "Port2NodeType";
+
         #region Public Methods
         public PathOutput CreatePath(PathInput pathInput)
         {
@@ -140,6 +144,8 @@ namespace Retail.NIM.Business
                 Port1NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_port1NodeIdFieldName),
                 Port2Id = (long)genericBusinessEntity.FieldValues.GetRecord(s_port2IdFieldName),
                 Port2NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_port2NodeIdFieldName),
+                Port1NodeTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_port1NodeTypeIdFieldName),
+                Port2NodeTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_port2NodeTypeIdFieldName),
             };
         }
         #endregion
