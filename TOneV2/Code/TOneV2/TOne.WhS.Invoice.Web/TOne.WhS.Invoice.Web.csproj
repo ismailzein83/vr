@@ -506,6 +506,12 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultSupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ITPC\DefaultSupplierInvoiceReport.rdlc" />
+    <Content Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceCreditNoteReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="WhS_Invoice\Reports\Mobilis\SettlementInvoiceCreditNoteReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
     <EmbeddedResource Include="WhS_Invoice\Reports\ST\DefaultCustomerInvoiceItemsByCurrencyReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
