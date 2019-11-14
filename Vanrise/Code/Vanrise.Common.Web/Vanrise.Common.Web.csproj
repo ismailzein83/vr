@@ -118,6 +118,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\PesonilizationSaveTypeOptions.js" />
     <Content Include="Common\Constant\VRIconVirtualPathEnum.js" />
     <Content Include="Common\Constant\FiguresTileMaxItemsPerRowEnum.js" />
     <Content Include="Common\Constant\PatternPartsEnum.js" />
@@ -128,6 +129,7 @@
     <Content Include="Common\Constant\VRIPAddressType.js" />
     <Content Include="Common\Directives\AdditionalErrors\AdditionalErrorsTemplate.html" />
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
+    <Content Include="Common\Directives\Personalization\vr-common-savetype-selector.js" />
     <Content Include="Common\Directives\ProgressBar\vr-common-progress-bar.js" />
     <Content Include="Common\Directives\ConnectionString\Templates\ConnectionStringTemplate.html" />
     <Content Include="Common\Directives\ConnectionString\vr-common-connectionstring.js" />
