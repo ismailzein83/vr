@@ -76,6 +76,17 @@ namespace Retail.NIM.Business
                 PathConnectionId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord(s_idFieldName).Value
             };
         }
+
+        public void RemovePathConnection(RemovePathConnectionInput input)
+        {
+            _genericBusinessEntityManager.DeleteGenericBusinessEntity(new DeleteGenericBusinessEntityInput
+            {
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathConnectionBEDefinitionId,
+                GenericBusinessEntityIds = new List<object>() { input.PathConnectionId },
+
+            });
+        }
+
         public PathPortOutput AddPortToPath(PathPortInput input)
         {
             var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
@@ -92,6 +103,16 @@ namespace Retail.NIM.Business
             {
                 PathPortId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
             };
+        }
+
+        public void RemovePathPort(RemovePathPortInput input)
+        {
+            _genericBusinessEntityManager.DeleteGenericBusinessEntity(new DeleteGenericBusinessEntityInput
+            {
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathPortBEDefinitionId,
+                GenericBusinessEntityIds = new List<object>() { input.PathPortId },
+
+            });
         }
         public SetPathReadyOutput SetPathReady(SetPathReadyInput input)
         {

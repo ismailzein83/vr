@@ -35,4 +35,10 @@ namespace Retail.NIM.Entities
     {
         public long PathConnectionId { get; set; }
     }
+
+
+    public class RemovePathConnectionInput
+    {
+        public long PathConnectionId { get; set; }
+    }
 }

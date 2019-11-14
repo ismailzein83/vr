@@ -26,4 +26,10 @@ namespace Retail.NIM.Entities
     {
         public long PathPortId { get; set; }
     }
+
+    public class RemovePathPortInput
+    {
+        public long PathPortId { get; set; }
+    }
+
 }
