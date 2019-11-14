@@ -9,12 +9,13 @@ using Vanrise.Notification.Entities;
 
 namespace Retail.Teles.Business
 {
-    public class UserRGDefinition : VRActionDefinitionExtendedSettings
+    public class UserRGActionDefinition : VRActionDefinitionExtendedSettings
     {
         public override Guid ConfigId
         {
             get { return new Guid("BDDFED8C-4D51-4D53-8D71-C9399CA91517"); }
         }
+        public override string RuntimeEditor { get { return "retail-teles-provisioner-action-blockinternationalcalls"; } }
 
         public Guid VRConnectionId { get; set; }
         public Guid CompanyTypeId { get; set; }
