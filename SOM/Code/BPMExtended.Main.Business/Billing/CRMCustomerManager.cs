@@ -2058,7 +2058,7 @@ namespace BPMExtended.Main.Business
                         Notes = addressNotes.ToString(),
                         CSO = info.csoBSCSId,
                         RatePlanId = ratePlanId,
-                        ContractServices = contractServices,
+                        Services = contractServices,
                         DepositServices = depositServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
