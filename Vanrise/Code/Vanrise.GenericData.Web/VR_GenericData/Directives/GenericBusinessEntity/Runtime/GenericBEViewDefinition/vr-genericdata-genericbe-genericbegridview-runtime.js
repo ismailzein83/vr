@@ -123,16 +123,16 @@
                 for (var i = 0; i < genericBEGridView.Settings.Mappings.length; i++) {
                     var currentMapping = genericBEGridView.Settings.Mappings[i];
                     var childName = currentMapping.SubviewColumnName;
-
                     var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
-                    if (parentFieldValue != undefined && childName != undefined) {
+                    if (parentFieldValue != undefined && childName != undefined && parentFieldValue.Value != undefined) {
                         fields[childName] = {
-                            value: parentFieldValue.Value != undefined ? parentFieldValue.Value : parentFieldValue,
+                            value: parentFieldValue.Value,
                             isHidden: true,
                             isDisabled: true
                         };
                     }
                 }
+
                 return fields;
             }
         }
