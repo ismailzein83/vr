@@ -88,6 +88,7 @@
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\CustomerMapping.cs" />
     <Compile Include="Entities\SupplierMapping.cs" />
+    <Compile Include="Entities\ZoneData.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

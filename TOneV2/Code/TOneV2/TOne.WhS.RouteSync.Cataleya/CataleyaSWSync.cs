@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Cataleya.Data;
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.RouteSync.Cataleya
 {
@@ -256,22 +259,62 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         public override bool TryBlockCustomer(ITryBlockCustomerContext context)
         {
-            return DataManager.UpdateCarrierAccountMappingStatus(context.CustomerId, CarrierAccountStatus.Blocked);
+            //   return DataManager.UpdateCarrierAccountMappingStatus(context.CustomerId, CarrierAccountStatus.Blocked);
+
+            var nodeID = 1;
+            string username = "vanrise";
+            string password = "v@nr1seS@pp0rt2";
+            string baseURL = "https://81.24.196.106:8443";
+
+            if (!this.CarrierMappings.TryGetValue(context.CustomerId, out var carrierMapping))
+                return false;
+
+            return ChangeAccountStatus(nodeID, carrierMapping.ZoneID, "Locked", username, password, baseURL);
         }
 
         public override bool TryUnBlockCustomer(ITryUnBlockCustomerContext context)
         {
-            return DataManager.UpdateCarrierAccountMappingStatus(context.CustomerId, CarrierAccountStatus.Active);
+            //return DataManager.UpdateCarrierAccountMappingStatus(context.CustomerId, CarrierAccountStatus.Active);
+
+            var nodeID = 1;
+            string username = "vanrise";
+            string password = "v@nr1seS@pp0rt2";
+            string baseURL = "https://81.24.196.106:8443";
+
+            if (!this.CarrierMappings.TryGetValue(context.CustomerId, out var carrierMapping))
+                return false;
+
+            return ChangeAccountStatus(nodeID, carrierMapping.ZoneID, "Unlocked", username, password, baseURL);
         }
 
         public override bool TryDeactivate(ITryDeactivateContext context)
         {
-            return DataManager.UpdateCarrierAccountMappingStatus(context.CarrierAccountId, CarrierAccountStatus.Blocked);
+            //    return DataManager.UpdateCarrierAccountMappingStatus(context.CarrierAccountId, CarrierAccountStatus.Blocked);
+
+            var nodeID = 1;
+            string username = "vanrise";
+            string password = "v@nr1seS@pp0rt2";
+            string baseURL = "https://81.24.196.106:8443";
+
+            if (!this.CarrierMappings.TryGetValue(context.CarrierAccountId, out var carrierMapping))
+                return false;
+
+            return ChangeAccountStatus(nodeID, carrierMapping.ZoneID, "Locked", username, password, baseURL);
         }
 
         public override bool TryReactivate(ITryReactivateContext context)
         {
-            return DataManager.UpdateCarrierAccountMappingStatus(context.CarrierAccountId, CarrierAccountStatus.Active);
+            //   return DataManager.UpdateCarrierAccountMappingStatus(context.CarrierAccountId, CarrierAccountStatus.Active);
+
+            var nodeID = 1;
+            string username = "vanrise";
+            string password = "v@nr1seS@pp0rt2";
+            string baseURL = "https://81.24.196.106:8443";
+
+            if (!this.CarrierMappings.TryGetValue(context.CarrierAccountId, out var carrierMapping))
+                return false;
+
+            return ChangeAccountStatus(nodeID, carrierMapping.ZoneID, "Unlocked", username, password, baseURL);
         }
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
@@ -442,6 +485,71 @@ namespace TOne.WhS.RouteSync.Cataleya
                 return blockedTrunk;
 
             return string.Join(optionsSeparatorAsString, allOptionsTrunks);
+        }
+
+        private bool ChangeAccountStatus(int nodeID, int zoneID, string status, string username, string password, string baseURL)
+        {
+            var authURI = $"{baseURL}/cataleya/j_spring_security";
+            var fullURI = $"{baseURL}/cataleya/j_spring_security_check?j_username={username}&j_password={password}";
+            var requestURI = $"{baseURL}/cataleya/configuration/zone/{nodeID}/{zoneID}";
+
+            var zone = APIRequest<ZoneData>("GET", requestURI, authURI, fullURI);
+
+            var version = zone.data.ver;
+
+            var lockingURI = $"{baseURL}/cataleya/configuration/zone/lock_unlock?id={zoneID}&nodeId={nodeID}&adminState={status}&ver={version}";
+            var postResponse = APIRequest<PostCallResponse>("POST", lockingURI, authURI, fullURI);
+
+            return postResponse.Success;
+        }
+
+        private string GetCookieAsString(string authURI, string fullURI)
+        {
+            var authRequest = HttpWebRequest.Create(fullURI) as HttpWebRequest;
+            authRequest.Method = "POST";
+            authRequest.ContentType = "application/json";
+            CookieContainer authCookie = new CookieContainer();
+            authRequest.CookieContainer = authCookie;
+
+            using (var response = (HttpWebResponse)authRequest.GetResponse())
+            {
+                return GetCookiesAsString(authURI, authCookie);
+            }
+        }
+
+        private string GetCookiesAsString(string fullAuthenticationServiceURI, CookieContainer cookiesContainer)
+        {
+            var cookies = cookiesContainer.GetCookies(new Uri(fullAuthenticationServiceURI));
+
+            List<string> cookiesAsString = new List<string>();
+
+            foreach (Cookie cookie in cookies)
+            {
+                var cookieAsString = string.Format("{0}={1}", cookie.Name, cookie.Value);
+                cookiesAsString.Add(cookieAsString);
+            }
+
+            return string.Join("; ", cookiesAsString);
+        }
+
+        private T APIRequest<T>(string callType, string requestURI, string authURI, string fullURI)
+        {
+            var cookie = GetCookieAsString(authURI, fullURI);
+            var request = HttpWebRequest.Create(requestURI) as HttpWebRequest;
+            request.Method = callType;
+            request.ContentType = "application/json";
+            request.Headers.Add("Cookie", cookie);
+
+            using (var response = (HttpWebResponse)request.GetResponse())
+            {
+                var a = response;
+                using (Stream stream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(stream, Encoding.UTF8);
+                    String responseString = reader.ReadToEnd();
+                    return responseString != null ? Vanrise.Common.Serializer.Deserialize<T>(responseString) : default(T); ;
+                }
+            }
         }
 
         #endregion
