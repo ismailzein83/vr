@@ -37,9 +37,9 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = printStep; break;
                 case printStep: nextStepId = reasonStep; break;
-                case reasonStep: nextStepId = isAdvantageous? attachmentsStep : new ContractManager().GetTelephonyContracts(customerId).Count>1 ? paymentStep : billOnDemandStep; break;
+                case reasonStep: nextStepId = new ContractManager().GetTelephonyContracts(customerId).Count>1 ? isAdvantageous? attachmentsStep : paymentStep : billOnDemandStep; break;
                 case paymentStep: nextStepId = attachmentsStep; break;
-                case billOnDemandStep: nextStepId = attachmentsStep; break;
+                case billOnDemandStep: nextStepId = isAdvantageous ? attachmentsStep : paymentStep; break;
                 case attachmentsStep: nextStepId = submitToOM; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }

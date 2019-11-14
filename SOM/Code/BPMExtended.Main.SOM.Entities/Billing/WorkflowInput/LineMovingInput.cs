@@ -12,6 +12,7 @@ namespace BPMExtended.Main.SOMAPI
         public CommonInputArgument CommonInputArgument { get; set; }
         public string OldLinePathId { get; set; }
         public string NewLinePathId { get; set; }
+        public bool IsVPN { get; set; }
         public bool SameSwitch { get; set; }
         public Address Address { get; set; }
         public PaymentData PaymentData { get; set; }
