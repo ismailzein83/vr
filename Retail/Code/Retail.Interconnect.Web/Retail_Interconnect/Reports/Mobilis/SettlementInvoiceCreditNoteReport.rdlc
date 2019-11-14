@@ -564,7 +564,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Facture</Value>
+                <Value>Facture d'avoir</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
