@@ -3251,7 +3251,7 @@
             "FieldValues": {
               "ID": "43cb8df7-5b2d-4f27-aed9-9352d61829ee",
               "DevProjectID": "9d4b15e0-3e0d-4af6-b5f6-2fe0a065757f",
-              "Name": "ICX CDR",
+              "Name": "CDR",
               "Title": "CDR Rules",
               "Url": null,
               "Module": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
@@ -3262,7 +3262,7 @@
               "Type": "729be766-f3d7-4bcc-9678-cccf57bd4aad",
               "Rank": 10,
               "CreatedTime": "2018-04-19T14:38:46.587",
-              "LastModifiedTime": "2019-11-07T10:33:55.477"
+              "LastModifiedTime": "2019-11-14T14:42:23.473"
             }
           },
           {
