@@ -1930,7 +1930,7 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output  =new SOMRequestOutput();
-            List<ContractService> contractServices = new List<ContractService>();
+            List<ContractServiceInfo> contractServices = new List<ContractServiceInfo>();
             List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
             List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
             List<DepositDocument> depositServices = new List<DepositDocument>();
@@ -2009,7 +2009,6 @@ namespace BPMExtended.Main.Business
                 {
                     var contractServiceItem = ServiceDetailToContractServiceMapper(item);
                     contractServices.Add(contractServiceItem);
-
                 }
 
 
@@ -2315,13 +2314,35 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region Mappers
-        public ContractService ServiceDetailToContractServiceMapper(ServiceDetail item)
+        public ContractServiceInfo ServiceDetailToContractServiceMapper(ServiceDetail item)
         {
-            return new ContractService
+            ContractServiceInfo contractServiceInfo =new ContractServiceInfo
             {
-                sncode = item.Id,
-                spcode = item.PackageId
+                Id = item.Id,
+                PackageId = item.PackageId,
+                Parameters=new List<ContractServiceParameter>()
             };
+
+            if (item.ServiceParameters != null)
+            {
+                foreach(var seviceParameter in item.ServiceParameters)
+                {
+                    ContractServiceParameter contractServiceParameter = new ContractServiceParameter();
+                    contractServiceParameter.Description = seviceParameter.ParameterName;
+                    contractServiceParameter.Id = seviceParameter.Id;
+                    contractServiceParameter.ParameterNumber = seviceParameter.ParameterNumber;
+                    contractServiceParameter.Type = seviceParameter.Type;
+                    contractServiceParameter.Values = new List<ContractServiceParameterValue> {
+                        new ContractServiceParameterValue {
+                        Description = seviceParameter.ParameterDisplayValue,
+                        Value=seviceParameter.ParameterValue,
+                        SequenceNumber=seviceParameter.SequenceNumber
+                    }
+                    };
+                    contractServiceInfo.Parameters.Add(contractServiceParameter);
+                }
+            }
+            return null;
         }
 
         #endregion

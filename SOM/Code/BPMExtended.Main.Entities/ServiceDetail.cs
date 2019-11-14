@@ -22,9 +22,13 @@ namespace BPMExtended.Main.Entities
         public List<ServiceParameterInfo> ServiceParameters { get; set; }
     }
     public class ServiceParameterInfo {
+        public string Id { get; set; }
+        public string ParameterNumber { get; set; }
         public string ParameterName { get; set; }
         public string ParameterValue { get; set; }
+        public ParameterType Type { get; set; }
         public string ParameterDisplayValue { get; set; }
+        public string SequenceNumber { get; set; }
     }
 
     public class ServiceInfo

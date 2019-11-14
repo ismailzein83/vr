@@ -324,6 +324,7 @@ namespace BPMExtended.Main.Business
                     foreach(var ratePlanSPMapper in ratePlanServiceParameterMappers)
                     {
                         RatePlanServiceParameter ratePlanServiceParameter = new RatePlanServiceParameter {
+                            Id= ratePlanSPMapper.Id,
                             ParameterName = ratePlanSPMapper.Description,
                             ParameterNumber = ratePlanSPMapper.ParameterNumber,
                             ParameterType = ratePlanSPMapper.Type,

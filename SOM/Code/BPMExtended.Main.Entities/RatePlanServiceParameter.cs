@@ -8,6 +8,7 @@ namespace BPMExtended.Main.Entities
 {
     public class RatePlanServiceParameter
     {
+        public string Id { get; set; }
         public string ParameterName { get; set; }
         public ParameterType ParameterType { get; set; }
         public List<ListBoxValue> ListBoxValues { get; set; }

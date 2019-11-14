@@ -111,9 +111,9 @@ namespace BPMExtended.Main.Business
                 }
 
                 //call api
-                SOMRequestInput<TelephonyContractOnHoldInput> somRequestInput = new SOMRequestInput<TelephonyContractOnHoldInput>
+                SOMRequestInput<TelephonyNoCanlingContractOnHoldInput> somRequestInput = new SOMRequestInput<TelephonyNoCanlingContractOnHoldInput>
                 {
-                    InputArguments = new TelephonyContractOnHoldInput
+                    InputArguments = new TelephonyNoCanlingContractOnHoldInput
                     {
                         LinePathId = linePathId,//"11112222",
                         PhoneNumber = phoneNumber.ToString(),
@@ -142,7 +142,7 @@ namespace BPMExtended.Main.Business
 
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<TelephonyContractOnHoldInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateTelephonyContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<TelephonyNoCanlingContractOnHoldInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateTelephonyContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
