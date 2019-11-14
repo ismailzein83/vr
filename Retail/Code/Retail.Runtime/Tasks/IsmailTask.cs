@@ -198,8 +198,8 @@ namespace Retail.Runtime.Tasks
             //runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             //runtimeServices.Add(summaryQueueActivationService);
 
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(schedulerService);
+            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            //runtimeServices.Add(schedulerService);
 
             //Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             //runtimeServices.Add(bigDataService);

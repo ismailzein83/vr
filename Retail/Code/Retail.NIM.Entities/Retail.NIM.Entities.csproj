@@ -71,6 +71,8 @@
     <Compile Include="NodePortType\NodePortTypeInfo.cs" />
     <Compile Include="NodePort\NodePortInfo.cs" />
     <Compile Include="NodePort\SetPortFaultyInput.cs" />
+    <Compile Include="NodePort\SetPortFreeInput.cs" />
+    <Compile Include="NodePort\SetPortFreeOutput.cs" />
     <Compile Include="NodePort\SetPortUsedInput.cs" />
     <Compile Include="NodePort\ReservePort.cs" />
     <Compile Include="NodePort\SetPortFaultyOutput.cs" />

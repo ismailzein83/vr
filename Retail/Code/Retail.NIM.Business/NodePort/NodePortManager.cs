@@ -96,7 +96,20 @@ namespace Retail.NIM.Business
                 IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
             };
         }
+        public SetPortFreeOutput SetPortFree(SetPortFreeInput input)
+        {
+            var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
+            {
+                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.FreePortStatusDefinitionId } },
+                GenericBusinessEntityId = input.PortId
+            });
 
+            return new SetPortFreeOutput
+            {
+                IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
+            };
+        }
         public NodePortInfo GetPortInfo(long portId)
         {
             var nodePort = GetPort(portId);
