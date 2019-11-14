@@ -35,6 +35,9 @@
             var codeChargeDirectiveAPI;
             var codeChargeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var trunkBackupsModeDirectiveAPI;
+            var trunkBackupsModeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var branchRouteSettingsAPI;
             var branchRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -72,6 +75,11 @@
                 $scope.scopeModel.onCodeChargeDirectiveReady = function (api) {
                     codeChargeDirectiveAPI = api;
                     codeChargeDirectiveReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onEricssonBackupsModeDirectiveReady = function (api) {
+                    trunkBackupsModeDirectiveAPI = api;
+                    trunkBackupsModeDirectiveReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onBranchRouteSettingsReady = function (api) {
@@ -210,6 +218,7 @@
                     var switchLoggerList;
                     var numberLengthEvaluator;
                     var codeChargeEvaluator;
+                    //var trunkBackupsMode;
                     var branchRouteSettings;
                     var context;
 
@@ -226,6 +235,7 @@
                             $scope.scopeModel.percentagePrefix = ericssonSWSync.PercentagePrefix;
                             numberLengthEvaluator = ericssonSWSync.NumberLengthEvaluator;
                             codeChargeEvaluator = ericssonSWSync.CodeChargeEvaluator;
+                           // trunkBackupsMode = ericssonSWSync.TrunkBackupsMode;
                             branchRouteSettings = ericssonSWSync.BranchRouteSettings;
                             sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
                             switchLoggerList = ericssonSWSync.SwitchLoggerList;
@@ -251,6 +261,10 @@
                     //Loading CodeChargeDirective
                     var codeChargeDirectiveLoadPromise = getCodeChargeDirectiveLoadPromise();
                     promises.push(codeChargeDirectiveLoadPromise);
+
+                    ////Loading TrunkBackupsModeDirective
+                    //var trunkBackupsModeDirectiveLoadPromise = getTrunkBackupsModeDirectiveLoadPromise();
+                    //promises.push(trunkBackupsModeDirectiveLoadPromise);
 
                     //LoadingBranchRouteSettings
                     var branchRouteSettingsLoadPromise = getBranchRouteSettingsLoadPromise();
@@ -344,6 +358,17 @@
                         return codeChargeDirectiveLoadPromise.promise;
                     }
 
+                    //function getTrunkBackupsModeDirectiveLoadPromise() {
+                    //    var trunkBackupsModeDirectiveLoadPromise = UtilsService.createPromiseDeferred();
+
+                    //    trunkBackupsModeDirectiveReadyPromiseDeferred.promise.then(function () {
+                    //        var backupsModeDirectivePayload = { trunkBackupsMode: trunkBackupsMode };
+                    //        VRUIUtilsService.callDirectiveLoad(trunkBackupsModeDirectiveAPI, backupsModeDirectivePayload, trunkBackupsModeDirectiveLoadPromise);
+                    //    });
+
+                    //    return trunkBackupsModeDirectiveLoadPromise.promise;
+                    //}
+
                     function getBranchRouteSettingsLoadPromise() {
                         var branchRouteSettingsLoadPromise = UtilsService.createPromiseDeferred();
                         branchRouteSettingsReadyPromiseDeferred.promise.then(function () {
@@ -378,6 +403,7 @@
                         FirstRCNumber: $scope.scopeModel.firstRCNumber,
                         NumberLengthEvaluator: numberLengthDirectiveAPI != undefined ? numberLengthDirectiveAPI.getData() : undefined,
                         CodeChargeEvaluator: codeChargeDirectiveAPI != undefined ? codeChargeDirectiveAPI.getData() : undefined,
+                        //TrunkBackupsMode: trunkBackupsModeDirectiveAPI != undefined ? trunkBackupsModeDirectiveAPI.getData() : undefined,
                         BranchRouteSettings: (branchRouteSettingsAPI != undefined) ? branchRouteSettingsAPI.getData() : null,
                         ManualRouteSettings: getManualRoutesSettings(),
                         ReservedBTables: $scope.scopeModel.reservedBTables,
