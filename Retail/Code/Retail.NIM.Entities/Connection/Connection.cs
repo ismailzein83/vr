@@ -37,4 +37,11 @@ namespace Retail.NIM.Entities
     {
         public long ConnectionId { get; set; }
     }
+
+
+    public class RemoveConnectionInput
+    {
+        public long ConnectionId { get; set; }
+        public Guid ConnectionTypeId { get; set; }
+    }
 }

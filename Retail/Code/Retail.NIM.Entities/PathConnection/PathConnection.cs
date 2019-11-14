@@ -10,6 +10,7 @@ namespace Retail.NIM.Entities
     {
         public long PathConnectionId { get; set; }
         public long ConnectionId { get; set; }
+        public Guid ConnectionTypeId { get; set; }
         public long PathId { get; set; }
         public long Port1Id { get; set; }
         public long Port1NodeId { get; set; }

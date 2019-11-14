@@ -149,12 +149,15 @@ namespace Retail.NIM.Business
             };
         }
 
-        public void RemoveConnection(long connectionId)
+        public void RemoveConnection(RemoveConnectionInput input)
         {
+            var connectionType = new ConnectionTypeManager().GetConnectionType(input.ConnectionTypeId);
+            connectionType.ThrowIfNull("connectionType", input.ConnectionTypeId);
+
             _genericBusinessEntityManager.DeleteGenericBusinessEntity(new DeleteGenericBusinessEntityInput
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.ConnectionBEDefinitionId,
-                GenericBusinessEntityIds = new List<object>() { connectionId },
+                BusinessEntityDefinitionId = connectionType.BusinessEntitityDefinitionId,
+                GenericBusinessEntityIds = new List<object>() { input.ConnectionId },
 
             });
         }

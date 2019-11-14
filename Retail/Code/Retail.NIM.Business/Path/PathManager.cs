@@ -18,6 +18,7 @@ namespace Retail.NIM.Business
         #region PathConenctionFields
         static string s_idFieldName = "ID";
         static string s_connectionIdFieldName = "Connection";
+        static string s_connectionTypeIdFieldName = "ConnectionType";
         static string s_pathIdFieldName = "Path";
         static string s_port1IdFieldName = "Port1";
         static string s_port1NodeIdFieldName = "Port1Node";
@@ -196,6 +197,7 @@ namespace Retail.NIM.Business
             {
                 PathConnectionId = (long)genericBusinessEntity.FieldValues.GetRecord(s_idFieldName),
                 ConnectionId = (long)genericBusinessEntity.FieldValues.GetRecord(s_connectionIdFieldName),
+                ConnectionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord(s_connectionTypeIdFieldName),
                 PathId = (long)genericBusinessEntity.FieldValues.GetRecord(s_pathIdFieldName),
                 Port1Id = (long)genericBusinessEntity.FieldValues.GetRecord(s_port1IdFieldName),
                 Port1NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_port1NodeIdFieldName),
