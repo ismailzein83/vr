@@ -1,6 +1,7 @@
 ﻿using Retail.BusinessEntity.Business;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vanrise.Invoice.Entities;
 
 namespace Retail.QualityNet.Business
@@ -50,7 +51,10 @@ namespace Retail.QualityNet.Business
             {
                 case PartnerRetrievalType.GetActive:
                 case PartnerRetrievalType.GetAll:
-                    return new FinancialAccountManager().GetAllFinancialAccountsIds(this.AccountBEDefinitionId);
+                    var financialAccounts = new AccountBEManager().GetFinancialAccounts(this.AccountBEDefinitionId);
+                    if (financialAccounts == null)
+                        return null;
+                    return financialAccounts.Select(x => x.AccountId.ToString());
                 default:
                     return null;
             }
