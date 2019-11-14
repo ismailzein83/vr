@@ -229,6 +229,7 @@
                         if (ericssonSWSync != undefined) {
                             $scope.scopeModel.isEditMode = true;
                             $scope.scopeModel.firstRCNumber = ericssonSWSync.FirstRCNumber;
+                            $scope.scopeModel.numberOfBTables = ericssonSWSync.NumberOfBTables;
                             $scope.scopeModel.numberOfMappings = ericssonSWSync.NumberOfMappings;
                             $scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
                             $scope.scopeModel.esr = ericssonSWSync.ESR;
@@ -401,6 +402,7 @@
                         SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
                         SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
                         FirstRCNumber: $scope.scopeModel.firstRCNumber,
+                        NumberOfBTables: $scope.scopeModel.numberOfBTables,
                         NumberLengthEvaluator: numberLengthDirectiveAPI != undefined ? numberLengthDirectiveAPI.getData() : undefined,
                         CodeChargeEvaluator: codeChargeDirectiveAPI != undefined ? codeChargeDirectiveAPI.getData() : undefined,
                         //TrunkBackupsMode: trunkBackupsModeDirectiveAPI != undefined ? trunkBackupsModeDirectiveAPI.getData() : undefined,

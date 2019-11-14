@@ -23,11 +23,16 @@
                             isrequired vr-disabled="scopeModel.isEditMode">
                 </vr-textbox>
             </vr-columns>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.numberOfBTables" label="Number Of BTables" type="number" decimalprecision="0" minvalue="1"
+                            isrequired vr-disabled="scopeModel.isEditMode">
+                </vr-textbox>
+            </vr-columns>
             <whs-routesync-numberlength on-ready="scopeModel.onNumberLengthDirectiveReady" normal-col-num="3"></whs-routesync-numberlength>
             <whs-routesync-codecharge on-ready="scopeModel.onCodeChargeDirectiveReady" normal-col-num="3"></whs-routesync-codecharge>
             <!--<vr-columns width="1/4row">
-                <whs-routesync-ericssonbackupsmode on-ready="scopeModel.onEricssonBackupsModeDirectiveReady"></whs-routesync-ericssonbackupsmode>
-            </vr-columns>-->
+        <whs-routesync-ericssonbackupsmode on-ready="scopeModel.onEricssonBackupsModeDirectiveReady"></whs-routesync-ericssonbackupsmode>
+    </vr-columns>-->
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
