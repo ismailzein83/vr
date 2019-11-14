@@ -78,7 +78,7 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output = new SOMRequestOutput();
-            List<ContractService> contractServices = new List<ContractService>();
+            List<ContractServiceInfo> contractServices = new List<ContractServiceInfo>();
             List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
             List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
             List<DepositDocument> depositServices = new List<DepositDocument>();
@@ -157,7 +157,7 @@ namespace BPMExtended.Main.Business
 
                 foreach (var item in items)
                 {
-                    var contractServiceItem = ServiceDetailToContractServiceMapper(item);
+                    var contractServiceItem = ServiceToContractServiceMapper(item);
                     contractServices.Add(contractServiceItem);
                 }
 
@@ -193,7 +193,7 @@ namespace BPMExtended.Main.Business
                         RatePlanId = ratePlanId,
                         LocationType= locationType.ToString(),
                         DepositServices = depositServices,
-                        ContractServices = contractServices,
+                        Services = contractServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId != null ? contactId.ToString() : null,
@@ -530,6 +530,14 @@ namespace BPMExtended.Main.Business
             {
                 sncode = item.Id,
                 spcode = item.PackageId
+            };
+        }
+        public ContractServiceInfo ServiceToContractServiceMapper(ServiceDetail item)
+        {
+            return new ContractServiceInfo
+            {
+                Id = item.Id,
+                PackageId = item.PackageId
             };
         }
 

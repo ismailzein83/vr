@@ -2342,7 +2342,7 @@ namespace BPMExtended.Main.Business
                     contractServiceInfo.Parameters.Add(contractServiceParameter);
                 }
             }
-            return null;
+            return contractServiceInfo;
         }
 
         #endregion

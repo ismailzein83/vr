@@ -32,7 +32,7 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output = new SOMRequestOutput();
-            List<ContractService> contractServices = new List<ContractService>();
+            List<ContractServiceInfo> contractServices = new List<ContractServiceInfo>();
             List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
             List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
             List<DepositDocument> depositServices = new List<DepositDocument>();
@@ -96,7 +96,7 @@ namespace BPMExtended.Main.Business
 
                 foreach (var item in items)
                 {
-                    var contractServiceItem = ServiceDetailToContractServiceMapper(item);
+                    var contractServiceItem = ServiceToContractServiceMapper(item);
                     contractServices.Add(contractServiceItem);
                 }
 
@@ -128,7 +128,7 @@ namespace BPMExtended.Main.Business
                         CountryId = "206",
                         CSO = info.csoBSCSId,//info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
-                        ContractServices = contractServices,
+                        Services = contractServices,
                         DepositServices = depositServices,
                         LocationType = locationType.ToString(),
                         Notes = addressNotes.ToString(),
@@ -235,6 +235,14 @@ namespace BPMExtended.Main.Business
             {
                 sncode = item.Id,
                 spcode = item.PackageId
+            };
+        }
+        public ContractServiceInfo ServiceToContractServiceMapper(ServiceDetail item)
+        {
+            return new ContractServiceInfo
+            {
+                Id = item.Id,
+                PackageId = item.PackageId
             };
         }
 

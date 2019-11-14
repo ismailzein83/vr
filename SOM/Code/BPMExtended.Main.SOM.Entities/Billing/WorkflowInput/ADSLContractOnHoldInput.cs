@@ -27,7 +27,7 @@ namespace BPMExtended.Main.SOMAPI
         public string ServiceResource { get; set; }
         public string Notes { get; set; }
         public string LinePathId { get; set; }
-        public List<ContractService> ContractServices { get; set; }
+        public List<ContractServiceInfo> Services { get; set; }
         public List<DepositDocument> DepositServices { get; set; }
     }
 }
