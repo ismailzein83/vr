@@ -229,13 +229,13 @@ namespace BPMExtended.Main.Business
 
         //    return workOrderId;
         //}
-        public string UpdateNodeInPath(string linePathId, string oldNode, string newNode)
+        public string UpdateNodeInPath(string linePathId, string oldNode, string newNode, string nodeType )
         {
             string result = null;
 
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<string>(String.Format("api/SOM.ST/Inventory/UpdateNodeInPath?linePathId={0}&oldNode={1}&newNode={2}", linePathId, oldNode, newNode));
+                result = client.Get<string>(String.Format("api/SOM.ST/Inventory/UpdateNodeInPath?linePathId={0}&oldNode={1}&newNode={2}&nodeType={3}", linePathId, oldNode, newNode, nodeType));
             }
 
             return result;
