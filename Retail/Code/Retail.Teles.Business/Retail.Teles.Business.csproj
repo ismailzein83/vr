@@ -68,6 +68,10 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
@@ -87,6 +91,7 @@
     <Compile Include="AccountViews\AccountTelesDIDsAndBusinessTrunksView.cs" />
     <Compile Include="AccountMappedToTelesFieldDefinition.cs" />
     <Compile Include="AccountMappedToTelesGenericField.cs" />
+    <Compile Include="Provisioning\ChangeUsersRGs\UserRGDefinition.cs" />
     <Compile Include="TelesAccountManager.cs" />
     <Compile Include="TelesTemplateEntityDefinitionFilter.cs" />
     <Compile Include="EnterpriseBEDefinitionFilter.cs" />
@@ -108,6 +113,7 @@
     <Compile Include="Provisioning\RoutingGroupConditionContext.cs" />
     <Compile Include="RoutingGroupCondition\RoutingGroupFilter.cs" />
     <Compile Include="TelesGatewayManager.cs" />
+    <Compile Include="Provisioning\ChangeUsersRGs\UserRGManager.cs" />
     <Compile Include="UsersNotMappedToAccountFilter.cs" />
     <Compile Include="SitesNotMappedToAccountFilter.cs" />
     <Compile Include="TelesAccountCondition.cs" />
