@@ -890,7 +890,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var expectedAmount = getCustomerInvoiceDealItemDetailsContext.Volume * getCustomerInvoiceDealItemDetailsContext.Rate;
             if (dealItemSet != null)
             {
-                if (expectedAmount <= dealItemSet.OriginalAmount || getCustomerInvoiceDealItemDetailsContext.CurrencyId != dealItemSet.CurrencyId)
+                if (expectedAmount <= dealItemSet.OriginalAmount || getCustomerInvoiceDealItemDetailsContext.DealCurrencyId != dealItemSet.CurrencyId)
                     return null;
 
                 var originalAmount = expectedAmount - dealItemSet.OriginalAmount;
@@ -935,7 +935,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     SaleDealTierNb = 1,
                     SaleDealZoneGroupNb = getCustomerInvoiceDealItemDetailsContext.ZoneGroupNumber,
                     SaleDealZoneGroupName = getCustomerInvoiceDealItemDetailsContext.ZoneGroupName,
-                    CurrencyId = getCustomerInvoiceDealItemDetailsContext.CurrencyId,
+                    CurrencyId = getCustomerInvoiceDealItemDetailsContext.DealCurrencyId,
                     Amount = _currencyExchangeRateManager.ConvertValueToCurrency(expectedAmount, getCustomerInvoiceDealItemDetailsContext.DealCurrencyId, getCustomerInvoiceDealItemDetailsContext.CurrencyId, getCustomerInvoiceDealItemDetailsContext.IssueDate),
                     ToDate = getCustomerInvoiceDealItemDetailsContext.EndDate.Value,
                     FromDate = getCustomerInvoiceDealItemDetailsContext.FromDateBeforeShift >= getCustomerInvoiceDealItemDetailsContext.BeginDate ? getCustomerInvoiceDealItemDetailsContext.FromDateBeforeShift : getCustomerInvoiceDealItemDetailsContext.BeginDate,
