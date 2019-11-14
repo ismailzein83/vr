@@ -202,7 +202,7 @@ namespace Retail.NIM.Business
             {
                 filter.Filters.Add(new RecordFilterGroup
                 {
-                    LogicalOperator = RecordQueryLogicalOperator.Or,
+                    LogicalOperator = RecordQueryLogicalOperator.And,
                     Filters = new List<RecordFilter>
                         {
                              new ObjectListRecordFilter
