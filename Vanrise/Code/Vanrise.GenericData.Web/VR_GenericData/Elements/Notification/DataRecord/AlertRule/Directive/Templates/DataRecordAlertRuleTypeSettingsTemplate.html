@@ -7,20 +7,38 @@
                                                     isrequired="true" label="Record Type" hideremoveicon>
             </vr-genericdata-datarecordtype-selector>
         </vr-columns>
-        <vr-columns width="1/2row" ng-show="scopeModel.selectedDataRecordType != undefined">
-            <vr-span vr-loader="scopeModel.isDataRecordtypeFieldsSelectorLoading">
+        <span ng-show="scopeModel.selectedDataRecordType != undefined">
+            <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
+                                                              isloading="scopeModel.isNotificationTypeSettingsSelectorLoading"
+                                                              isrequired="true" normal-col-num="6">
+            </vr-notification-notificationtypesetting-selector>
+        </span>
+    </vr-row>
+    <vr-row>
+        <vr-span vr-loader="scopeModel.isDataRecordTypeFieldsSelectorLoading" ng-show="scopeModel.selectedDataRecordType != undefined">
+            <vr-columns width="1/3row">
                 <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
+                                                              onselectitem="scopeModel.onDataRecordFieldSelected"
+                                                              ondeselectitem="scopeModel.onDataRecordFieldDeselected"
                                                               selectedvalues="scopeModel.selectedDataRecordFields"
                                                               label="Identification Fields" isrequired="true"
                                                               ismultipleselection hideremoveicon>
                 </vr-genericdata-datarecordtypefields-selector>
-            </vr-span>
-        </vr-columns>
-    </vr-row>
-    <vr-row ng-show="scopeModel.selectedDataRecordType != undefined">
-        <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
-                                                          isloading="scopeModel.isNotificationTypeSettingsSelectorLoading"
-                                                          isrequired="true" normal-col-num="6">
-        </vr-notification-notificationtypesetting-selector>
+            </vr-columns>
+            <vr-columns width="2/3row">
+                <vr-datagrid datasource="scopeModel.gridDataRecordFields"
+                             ondeleterow="scopeModel.onDataRecordFieldDeleted"
+                             enabledraggablerow="true" hidegridmenu>
+                    
+                    <vr-datagridcolumn headertext="'Field'" field="'Name'" widthfactor="2"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Required'" widthfactor="1">
+                        <vr-switch value="dataItem.IsRequired"></vr-switch>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Selected'" widthfactor="1">
+                        <vr-switch value="dataItem.IsSelected"></vr-switch>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-span>
     </vr-row>
 </vr-tab>

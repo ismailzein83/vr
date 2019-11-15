@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordAlertRuleService', 'VRNotificationService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordAlertRuleService, VRNotificationService) {
+app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -33,11 +33,13 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
             function initializeController() {
                 $scope.scopeModel = {}; 
                 $scope.scopeModel.tabObject = { showTab: false };
+                $scope.scopeModel.selectedDataRecordFields = [];
 
                 $scope.scopeModel.onDataRecordFieldsSelectorReady = function (api) {
                     dataRecordTypeFieldsSelectorAPI = api;
                     dataRecordTypeFieldsSelectorReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.onDataRecordAlertRuleSettingsReady = function (api) {
                     dataRecordAlertRuleSettingsAPI = api;
                     dataRecordAlertRuleSettingReadyDeferred.resolve();
@@ -64,6 +66,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
 
                     return;
                 };
+
                 $scope.scopeModel.onSelectDataRecordField = function (selectedItem) {
                     $scope.scopeModel.tabObject.showTab = true;
 
@@ -71,6 +74,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                         loadDataRecordAlertRuleSettingsDirective();
                     }
                 };
+
                 $scope.scopeModel.onDeselectDataRecordField = function (deselectedItem) {
                     if ($scope.scopeModel.selectedDataRecordFields.length == 1)
                         $scope.scopeModel.tabObject.showTab = false;
@@ -78,6 +82,29 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                     if (deselectedItem != undefined) {
                         loadDataRecordAlertRuleSettingsDirective();
                     }
+                };
+
+                $scope.scopeModel.validateDataRecordFieldSelection = function () {
+                    if (identificationFields == undefined) {
+                        return null;
+                    }
+
+                    var requiredDataRecordFields = [];
+                    for (var i = 0; i < identificationFields.length; i++) {
+                        var currentIdentificationField = identificationFields[i];
+                        if (currentIdentificationField.IsRequired) {
+                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedDataRecordFields, currentIdentificationField.Name, 'Name');
+                            if (index == -1) {
+                                requiredDataRecordFields.push(currentIdentificationField.Name);
+                            }
+                        }
+                    }
+
+                    if (requiredDataRecordFields.length > 0) {
+                        return 'Required Fields: ' + requiredDataRecordFields.join(', ');
+                    }
+
+                    return null;
                 };
 
                 defineAPI();
@@ -118,7 +145,6 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                     else
                         $scope.scopeModel.minNotificationInterval = '0.01:00:00';
 
-
                     //Loading DataRecordAlertRuleSettings Directive
                     var dataRecordAlertRuleSettingsLoadPromise = getDataRecordAlertRuleSettingsLoadPromise();
                     promises.push(dataRecordAlertRuleSettingsLoadPromise);
@@ -142,13 +168,20 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                             if (availableIdentificationFields != undefined) {
                                 dataRecordTypeFieldsSelectorPayload.selectedIds = UtilsService.getPropValuesFromArray(availableIdentificationFields, 'Name');
                             } else {
-                                dataRecordTypeFieldsSelectorPayload.selectedIds = _includedFieldNames; //by default Select all Identification Fields
+                                dataRecordTypeFieldsSelectorPayload.selectedIds = [];
+                                for (var i = 0; i < identificationFields.length; i++) {
+                                    var currentIdentificationField = identificationFields[i];
+                                    if (currentIdentificationField.IsSelected) {
+                                        dataRecordTypeFieldsSelectorPayload.selectedIds.push(currentIdentificationField.Name);
+                                    }
+                                }
                             }
                             VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
                         });
 
                         return dataRecordTypeFieldsSelectorLoadDeferred.promise;
                     }
+
                     function getDataRecordAlertRuleSettingsLoadPromise() {
                         var dataRecordAlertRuleSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -164,7 +197,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                         });
 
                         return dataRecordAlertRuleSettingsLoadDeferred.promise;
-                    };
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
