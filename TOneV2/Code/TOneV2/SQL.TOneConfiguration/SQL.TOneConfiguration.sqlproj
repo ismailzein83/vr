@@ -158,6 +158,7 @@
     <Folder Include="VRJSON_PostScripts\Interconnect\Voice" />
     <Folder Include="VRJSON_PostScripts\Interconnect\Data" />
     <Folder Include="VRJSON_PostScripts\Interconnect\SMS" />
+    <Folder Include="VRJSON_PostScripts\NIM" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -1082,5 +1083,8 @@
     <None Include="VRJSON_PostScripts\Inspkt\Inspkt.json" />
     <None Include="VRJSON_PostScripts\Interconnect\Interconnect_Ogero.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Company.json" />
+    <None Include="VRJSON_PostScripts\NIM\Retail_NIMBase.json" />
+    <None Include="VRJSON_PostScripts\NIM\Retail_NIMCopper.json" />
+    <None Include="VRJSON_PostScripts\NIM\Retail_NIMFiber.json" />
   </ItemGroup>
 </Project>
