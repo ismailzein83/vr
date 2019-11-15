@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatarecordruleevaluatorManual", ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive("vrGenericdataDatarecordruleevaluatorManual", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', function (UtilsService, VRUIUtilsService, VRValidationService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -37,6 +37,10 @@ app.directive("vrGenericdataDatarecordruleevaluatorManual", ['UtilsService', 'VR
                 datarecordruleevaluatordefinitionSelectorAPI = api;
                 datarecordruleevaluatordefinitionSelectorReadyDeferred.resolve();
             
+            };
+
+            $scope.scopeModel.validateTimeRange = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
             };
 
             defineAPI();
