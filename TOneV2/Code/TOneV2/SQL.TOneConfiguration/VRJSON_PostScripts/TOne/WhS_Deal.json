@@ -2029,7 +2029,7 @@
               "DevProjectID": "02ed43e1-6af6-40e5-b78f-33c207cf97a6",
               "Name": "Whole Swap Deal Progress Evaluator",
               "ConfigID": "aa969bad-225d-4d83-b76c-68bfdbc0f045",
-              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.DataRecordRuleEvaluatorDefinitionSettings, Vanrise.GenericData.Entities\",\"VRComponentTypeConfigId\":\"aa969bad-225d-4d83-b76c-68bfdbc0f045\",\"DataRecordStorageIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"1a72a456-028d-4a18-ac83-bcc6312730cc\"]},\"AlertRuleTypeId\":\"0aefd0a0-f4b1-43aa-8c57-8de1a2fb18bb\",\"AreDatesHardCoded\":false,\"Security\":{\"$type\":\"Vanrise.GenericData.Entities.DataRecordRuleEvaluatorDefinitionSecurity, Vanrise.GenericData.Entities\",\"ViewPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}},\"StartInstancePermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}}",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.DataRecordRuleEvaluatorDefinitionSettings, Vanrise.GenericData.Entities\",\"VRComponentTypeConfigId\":\"aa969bad-225d-4d83-b76c-68bfdbc0f045\",\"DataRecordStorageIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib\",\"$values\":[\"1a72a456-028d-4a18-ac83-bcc6312730cc\"]},\"AlertRuleTypeId\":\"0aefd0a0-f4b1-43aa-8c57-8de1a2fb18bb\",\"AreDatesHardCoded\":false,\"Security\":{\"$type\":\"Vanrise.GenericData.Entities.DataRecordRuleEvaluatorDefinitionSecurity, Vanrise.GenericData.Entities\",\"ViewPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"85f8a3c0-f413-449e-abee-be37659e0626\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"View Process Logs\"]}}]}},\"StartInstancePermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities\",\"EntityId\":\"85f8a3c0-f413-449e-abee-be37659e0626\",\"PermissionOptions\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"Start Process\"]}}]}}}}",
               "CreatedTime": "2019-07-24T10:32:38.79",
               "LastModifiedTime": "2019-07-24T10:32:38.79"
             }
@@ -3133,7 +3133,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "242adc4e-4b76-4fd8-89d1-700a9df70cd4",
               "DevProjectID": "02ed43e1-6af6-40e5-b78f-33c207cf97a6",
               "Name": "Reports",
@@ -3151,7 +3150,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
               "ID": "670fd0f9-6dce-4567-8e12-dc3e5830b549",
               "DevProjectID": "02ed43e1-6af6-40e5-b78f-33c207cf97a6",
               "Name": "Deals",
