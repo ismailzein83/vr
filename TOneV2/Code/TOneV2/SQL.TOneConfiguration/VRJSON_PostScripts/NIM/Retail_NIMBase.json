@@ -1987,6 +1987,408 @@
         "IsIdentity": false
       },
       "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRNamespace",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "ff5e48bb-1fed-47e1-83d6-23f5aa830110",
+              "Name": "PSTNNIM",
+              "DevProjectID": "e56671b2-285c-49ff-b823-dc5cd219563e",
+              "LastModifiedTime": "2019-11-15T15:35:35.793",
+              "CreatedTime": null
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "DevProjectID = 'e56671b2-285c-49ff-b823-dc5cd219563e'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRNamespaceItem",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "VRNamespaceId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedBy",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedBy",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "a75b0a57-840c-4d0a-ac53-4091fc8e7d8e",
+              "VRNamespaceId": "ff5e48bb-1fed-47e1-83d6-23f5aa830110",
+              "Name": "NodePortManager",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRNamespaceItemSettings, Vanrise.Entities\",\"Code\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.CustomCodeDynamicCodeSettings, Vanrise.Common.MainExtensions\",\"ConfigId\":\"bdd289df-573c-44a1-9a95-d0de2ed9dd71\",\"CustomCode\":\"public class NodePortManager:Retail.NIM.Business.NodePortManager\\n{\\n\\n}\"}}",
+              "CreatedTime": "2019-11-06T10:27:31.917",
+              "CreatedBy": -1,
+              "LastModifiedTime": null,
+              "LastModifiedBy": -1
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "10a5f60e-db00-4b0d-9b09-6d651634b8ae",
+              "VRNamespaceId": "ff5e48bb-1fed-47e1-83d6-23f5aa830110",
+              "Name": "TechnicalAddressManager",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRNamespaceItemSettings, Vanrise.Entities\",\"Code\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.CustomCodeDynamicCodeSettings, Vanrise.Common.MainExtensions\",\"ConfigId\":\"bdd289df-573c-44a1-9a95-d0de2ed9dd71\",\"CustomCode\":\"public class TechnicalAddressManager: Retail.NIM.Business.TechnicalAddressManager\\n{\\n\\n}\"}}",
+              "CreatedTime": "2019-11-06T10:26:58.493",
+              "CreatedBy": -1,
+              "LastModifiedTime": null,
+              "LastModifiedBy": -1
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "e506f0d6-b88b-4652-9875-935211d313d7",
+              "VRNamespaceId": "ff5e48bb-1fed-47e1-83d6-23f5aa830110",
+              "Name": "ConnectionManager",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRNamespaceItemSettings, Vanrise.Entities\",\"Code\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.CustomCodeDynamicCodeSettings, Vanrise.Common.MainExtensions\",\"ConfigId\":\"bdd289df-573c-44a1-9a95-d0de2ed9dd71\",\"CustomCode\":\"public class ConnectionManager : Retail.NIM.Business.ConnectionManager \\n{\\n\\n}\"}}",
+              "CreatedTime": "2019-11-06T10:26:26.56",
+              "CreatedBy": -1,
+              "LastModifiedTime": null,
+              "LastModifiedBy": -1
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "f299c726-81d2-48c0-b6c7-c86a9177ce30",
+              "VRNamespaceId": "ff5e48bb-1fed-47e1-83d6-23f5aa830110",
+              "Name": "PathManager",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRNamespaceItemSettings, Vanrise.Entities\",\"Code\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicCode.CustomCodeDynamicCodeSettings, Vanrise.Common.MainExtensions\",\"ConfigId\":\"bdd289df-573c-44a1-9a95-d0de2ed9dd71\",\"CustomCode\":\"public class PathManager:Retail.NIM.Business.PathManager\\n    {\\n        public GetPathOutput GetPath(GetPathNumberType numberType, string number)\\n        {\\n            return new GetPathOutput\\n            {\\n                //    DPNumber = \\\"DP-001\\\",\\n                FDBNumber = \\\"FDB-001\\\"\\n            };\\n        }\\n        \\n        public ReserveFTTHPathOutput ReserveFTTHPath(ReserveFTTHPathInput input)\\n        {\\n            var output = new ReserveFTTHPathOutput\\n            {\\n                FDBId = 1,\\n                FDBNumber = input.FDBNumber,\\n                FDBPortId = 1000,\\n                FDBPortNumber = \\\"Port1000\\\",\\n                IMSId = 2\\n            };\\n\\n            return output;\\n        }\\n\\n        public ReserveCopperPathOutput ReserveCopperPath(ReserveCopperPathInput input)\\n        {\\n            var output = new ReserveCopperPathOutput\\n            {\\n                DPId = 1,\\n                DPNumber = input.DPNumber,\\n                DPPortId = 1,\\n                DPPortNumber = \\\"Port1\\\",\\n                CabinetId = 1,\\n                CabinetNumber = \\\"Cabinet1\\\",\\n                CabinetPrimaryNumber = \\\"Primary1\\\",\\n                CabinetPrimaryPortId = 1,\\n                CabinetPrimaryPortNumber = \\\"Primary1Port1\\\",\\n                CabinetSecondaryNumber = \\\"Secondary1\\\",\\n                CabinetSecondaryPortId = 1,\\n                CabinetSecondaryPortNumber = \\\"Secondary1Port1\\\",\\n                MDFId = 3,\\n                MDFNumber = \\\"MDF 1\\\",\\n                MDFHorizontalNumber = \\\"Horizontal1\\\",\\n                MDFHorizontalPortId = 9,\\n                MDFHorizontalPortNumber = \\\"Horizontal1Port1\\\",\\n                MDFVerticalNumber = \\\"Vertical1\\\",\\n                MDFVerticalPortId = 9,\\n                MDFVerticalPortNumber = \\\"Vertical1Port1\\\"\\n            };\\n\\n            if(input.ReserveTelephony)\\n            {\\n                output.SwitchId = 2;\\n                output.SwitchNumber = \\\"Switch1\\\";\\n                output.SwitchCardNumber = \\\"Card1\\\";\\n                output.SwitchSlotNumber = \\\"Slot1\\\";\\n                output.SwitchDeviceId = 5;\\n                output.SwitchDeviceNumber = \\\"Device1\\\";\\n            }\\n\\n            if(input.ReserveData)\\n            {\\n                output.DSLAMId = 1;\\n                output.DSLAMNumber = \\\"DSLAM11\\\";\\n                output.DSLAMFrameNumber = \\\"DSLAMFRAME11\\\";\\n                output.DSLAMCardNumber = \\\"DSLAMCARD11\\\";\\n                output.DSLAMPortId = 1;\\n                output.DSLAMPortNumber = \\\"DSLAMPort11\\\";\\n            }\\n\\n            return output;\\n        }\\n\\n        public ReserveFreePortOutput ReserveFreePort(ReserveFreePortInput input)\\n        {\\n            return new ReserveFreePortOutput\\n            {\\n                PortId = 1,\\n                PortNumber = input.PortTypeName + \\\"001\\\",\\n                NodeParts = new List<ReserveFreePortOutputNodePart>\\n                {\\n                    new ReserveFreePortOutputNodePart\\n                    {\\n                        NodePartTypeName = \\\"Part Type 1\\\",\\n                        NodePartNumber = \\\"PartType001\\\"\\n                    },\\n                    new ReserveFreePortOutputNodePart\\n                    {\\n                        NodePartTypeName = \\\"Part Type 2\\\",\\n                        NodePartNumber = \\\"PartType002\\\"\\n                    }\\n                }\\n                \\n            };\\n        }\\n    }\\n\\n    public class ReserveFreePortInput\\n    {\\n        public Guid PortTypeId { get; set; }\\n\\n        /// <summary>\\n        /// Temporary\\n        /// </summary>\\n        public string PortTypeName { get; set; }\\n\\n        public Guid NodeTypeId { get; set; }\\n\\n        public long NodeId { get; set; }\\n\\n        public Guid? NodePartTypeId { get; set; }\\n    }\\n\\n    public class ReserveFreePortOutput\\n    {\\n        public long PortId { get; set; }\\n\\n        public string PortNumber { get; set; }\\n\\n        public List<ReserveFreePortOutputNodePart> NodeParts { get; set; }\\n    }\\n\\n    public class ReserveFreePortOutputNodePart\\n    {\\n        public Guid NodePartTypeId { get; set; }\\n        /// <summary>\\n        /// Temporary\\n        /// </summary>\\n        public string NodePartTypeName { get; set; }\\n        public long NodePartId { get; set; }\\n        public string NodePartNumber { get; set; }\\n    }\\n\\n    public enum GetPathNumberType { PhoneNumber = 1, DP = 2, FDB = 3 }\\n\\n    public class GetPathOutput\\n    {\\n        public string FDBNumber { get; set; }\\n\\n        public string DPNumber { get; set; }\\n\\n        public int UsedDPPorts { get; set; }\\n\\n        public int AvailableDPPorts { get; set; }\\n\\n        public int UsedFDBPorts { get; set; }\\n\\n        public int AvailableFDBPorts { get; set; }\\n    }\\n\\n    public class ReserveFTTHPathInput\\n    {\\n        public string FDBNumber { get; set; }\\n    }\\n\\n    public class ReserveFTTHPathOutput\\n    {\\n        public long FDBId { get; set; }\\n\\n        public string FDBNumber { get; set; }\\n\\n        public long FDBPortId { get; set; }\\n\\n        public string FDBPortNumber { get; set; }\\n\\n        public long IMSId { get; set; }\\n    }\\n\\n    public class ReserveCopperPathInput\\n    {\\n        public string DPNumber { get; set; }\\n\\n        public bool ReserveTelephony { get; set; }\\n\\n        public bool ReserveData { get; set; }\\n    }\\n\\n    public class ReserveCopperPathOutput\\n    {\\n        public long DPId { get; set; }\\n\\n        public string DPNumber { get; set; }\\n\\n        public long DPPortId { get; set; }\\n\\n        public string DPPortNumber { get; set; }\\n\\n        public long CabinetId { get; set; }\\n\\n        public string CabinetNumber { get; set; }\\n\\n        public string CabinetPrimaryNumber { get; set; }\\n\\n        public long CabinetPrimaryPortId { get; set; }\\n\\n        public string CabinetPrimaryPortNumber { get; set; }\\n\\n        public string CabinetSecondaryNumber { get; set; }\\n\\n        public long CabinetSecondaryPortId { get; set; }\\n\\n        public string CabinetSecondaryPortNumber { get; set; }\\n\\n        public long MDFId { get; set; }\\n\\n        public string MDFNumber { get; set; }\\n\\n        public string MDFHorizontalNumber { get; set; }\\n\\n        public long MDFHorizontalPortId { get; set; }\\n\\n        public string MDFHorizontalPortNumber { get; set; }\\n\\n        public string MDFVerticalNumber { get; set; }\\n\\n        public long MDFVerticalPortId { get; set; }\\n\\n        public string MDFVerticalPortNumber { get; set; }\\n\\n        public long? SwitchId { get; set; }\\n\\n        public string SwitchNumber { get; set; }\\n\\n        public string SwitchSlotNumber { get; set; }\\n\\n        public string SwitchCardNumber { get; set; }\\n\\n        public long? SwitchDeviceId { get; set; }\\n\\n        public string SwitchDeviceNumber { get; set; }\\n\\n        public long? DSLAMId { get; set; }\\n\\n        public string DSLAMNumber { get; set; }\\n\\n        public string DSLAMFrameNumber { get; set; }\\n\\n        public string DSLAMCardNumber { get; set; }\\n\\n        public long? DSLAMPortId { get; set; }\\n\\n        public string DSLAMPortNumber { get; set; }\\n    }\"}}",
+              "CreatedTime": "2019-09-23T15:07:54.457",
+              "CreatedBy": -1,
+              "LastModifiedTime": "2019-11-06T10:32:21.327",
+              "LastModifiedBy": -1
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "rec.DevProjectID = 'e56671b2-285c-49ff-b823-dc5cd219563e'",
+        "LastJoinStatement": "JOIN common.VRNamespace rec on MainTable.VRNamespaceId = rec.ID",
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDynamicAPIModule",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedBy",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedBy",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "06eba023-7f49-4ee4-b096-006b28636879",
+              "Name": "PSTNNIM",
+              "DevProjectID": "e56671b2-285c-49ff-b823-dc5cd219563e",
+              "CreatedTime": "2019-09-23T15:08:07.72",
+              "CreatedBy": -1,
+              "LastModifiedTime": "2019-11-15T15:35:24.507",
+              "LastModifiedBy": -1
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "DevProjectID = 'e56671b2-285c-49ff-b823-dc5cd219563e'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDynamicAPI",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ModuleId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedBy",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedBy",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "58d153f1-64d3-4059-a375-3013008bc63c",
+              "Name": "Path",
+              "ModuleId": "06eba023-7f49-4ee4-b096-006b28636879",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRDynamicAPISettings, Vanrise.Entities\",\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPISecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}},\"Methods\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"GetPath\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"GetPath\",\"MethodType\":1},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"ReserveCopperPath\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"ReserveCopperPath\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"ReserveFTTHPath\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"ReserveFTTHPath\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"ReserveFreePort\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"ReserveFreePort\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"CreatePath\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"CreatePath\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"AddConnectionToPath\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"AddConnectionToPath\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"SetPathReady\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"SetPathReady\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"AddPortToPath\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"AddPortToPath\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"GetPathConnections\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"GetPathConnections\",\"MethodType\":1},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"GetPathPorts\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"GetPathPorts\",\"MethodType\":1},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"RemovePathConnection\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"RemovePathConnection\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"RemovePathPort\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"PathManager\",\"MethodName\":\"RemovePathPort\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}}]}}",
+              "CreatedTime": "2019-09-23T15:10:09.957",
+              "CreatedBy": -1,
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-11-14T16:04:48.977"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "84314727-d5cd-4f1d-8b21-475d8f182a58",
+              "Name": "Port",
+              "ModuleId": "06eba023-7f49-4ee4-b096-006b28636879",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRDynamicAPISettings, Vanrise.Entities\",\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPISecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}},\"Methods\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"ReservePort\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"NodePortManager\",\"MethodName\":\"ReservePort\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"SetPortFaulty\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"NodePortManager\",\"MethodName\":\"SetPortFaulty\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"SetPortUsed\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"NodePortManager\",\"MethodName\":\"SetPortUsed\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"GetPortInfo\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"NodePortManager\",\"MethodName\":\"GetPortInfo\",\"MethodType\":1},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"SetPortFree\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"NodePortManager\",\"MethodName\":\"SetPortFree\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}}]}}",
+              "CreatedTime": "2019-10-29T11:17:25.93",
+              "CreatedBy": -1,
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-11-14T09:09:36.987"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "1ea81844-1030-4d68-a6ba-4aa8e8bda08e",
+              "Name": "Connection",
+              "ModuleId": "06eba023-7f49-4ee4-b096-006b28636879",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRDynamicAPISettings, Vanrise.Entities\",\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPISecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}},\"Methods\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"ReserveConnection\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"ConnectionManager\",\"MethodName\":\"ReserveConnection\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"AddConnection\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"ConnectionManager\",\"MethodName\":\"AddConnection\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"RemoveConnection\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"ConnectionManager\",\"MethodName\":\"RemoveConnection\",\"MethodType\":2},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}}]}}",
+              "CreatedTime": "2019-10-23T16:37:23.87",
+              "CreatedBy": -1,
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-11-14T09:25:27.547"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "bcb1e83f-7e28-4a29-8523-6fab1b4a4028",
+              "Name": "TechnicalAddress",
+              "ModuleId": "06eba023-7f49-4ee4-b096-006b28636879",
+              "Settings": "{\"$type\":\"Vanrise.Entities.VRDynamicAPISettings, Vanrise.Entities\",\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPISecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}},\"Methods\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"GetTechnicalAddress\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"TechnicalAddressManager\",\"MethodName\":\"GetTechnicalAddress\",\"MethodType\":1},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}},{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethod, Vanrise.Entities\",\"VRDynamicAPIMethodId\":\"00000000-0000-0000-0000-000000000000\",\"Name\":\"GetTechnicalAddressByPath\",\"Settings\":{\"$type\":\"Vanrise.Common.MainExtensions.VRDynamicAPI.VRCallMethodDynamicAPI, Vanrise.Common.MainExtensions\",\"ConfigId\":\"aac62543-cf85-4f0d-bb42-121c7b699816\",\"NamespaceId\":\"ff5e48bb-1fed-47e1-83d6-23f5aa830110\",\"ClassName\":\"TechnicalAddressManager\",\"MethodName\":\"GetTechnicalAddressByPath\",\"MethodType\":1},\"Security\":{\"$type\":\"Vanrise.Entities.VRDynamicAPIMethodSecurity, Vanrise.Entities\",\"RequiredPermissions\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}}}]}}",
+              "CreatedTime": "2019-10-29T11:21:41.09",
+              "CreatedBy": -1,
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-11-13T10:54:30.82"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "rec.DevProjectID = 'e56671b2-285c-49ff-b823-dc5cd219563e'",
+        "LastJoinStatement": "JOIN common.VRDynamicAPIModule rec on MainTable.ModuleId = rec.ID",
+        "IsIdentity": false
+      },
+      "Title": "Merge"
     }
   ]
 }

@@ -58,6 +58,8 @@
     <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>
     <add key="CommonEntitiesConnStringKey"                      value="ConfigurationDBConnString"/>
     <add key="NIMDBConnStringKey"                               value="ConfigurationDBConnString"/>
+    <add key="NIMCopperDBConnStringKey"                         value="ConfigurationDBConnString"/>
+    <add key="NIMFiberDBConnStringKey"                          value="ConfigurationDBConnString"/>
   </appSettings>
 
   <system.web>
