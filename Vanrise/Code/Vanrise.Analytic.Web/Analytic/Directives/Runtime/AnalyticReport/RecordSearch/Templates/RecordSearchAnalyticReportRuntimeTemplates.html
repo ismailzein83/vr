@@ -24,7 +24,7 @@
                 <vr-textbox label="Limit Result To" localizedlabel="VRRes.Common.LimitResultTo.VREnd"  value="limit" type="number" decimalprecision="0" minvalue="0" customvalidate="checkMaxNumberResords()" isrequired="true"></vr-textbox>
             </vr-columns>
 
-            <vr-columns width="normal">
+            <vr-columns width="normal" ng-show="!hideTimeRange">
                 <vr-select label="Order Direction" localizedlabel="VRRes.Analytic.OrderDirection.VREnd" datasource="orderDirectionList" selectedvalues="selectedOrderDirection"
                            datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon>
                 </vr-select>
