@@ -12,6 +12,7 @@ namespace Vanrise.DevTools.Business
     public class VRGeneratedScriptDevProjectTemplateManager
     {
         static List<VRGeneratedScriptTable> TableNames = new List<VRGeneratedScriptTable>{
+            new VRGeneratedScriptTable() { Name = "VRDevProject" } ,
             new VRGeneratedScriptTable() { Name = "AnalyticTable" } ,
             new VRGeneratedScriptTable() { Name = "AnalyticItemConfig" } ,
             new VRGeneratedScriptTable() { Name = "AnalyticReport" } ,
@@ -207,7 +208,7 @@ namespace Vanrise.DevTools.Business
                 items = new List<GeneratedScriptItemTable>();
                 foreach (var table in tables.Tables)
                 {
-                    if (input.TableNames.Contains(table.Key) || table.Key== "VRDevProject")
+                    if (input.TableNames.Contains(table.Key))
                     {
                         VRGeneratedScriptTableDataManager generatedScriptTableDataManager = new VRGeneratedScriptTableDataManager();
                         var dataRows = generatedScriptTableDataManager.GetFilteredTableData(new VRGeneratedScriptTableDataQuery()
