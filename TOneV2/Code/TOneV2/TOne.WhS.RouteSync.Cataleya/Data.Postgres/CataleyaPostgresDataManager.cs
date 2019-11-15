@@ -121,13 +121,27 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                     var carrierAccountMappingToUpdate = finalCustomerData.CarrierAccountMappingToUpdate;
                     queryCommands.Add(carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate));
 
-                    if (string.IsNullOrEmpty(carrierAccountMappingToUpdate.RouteTableName))
+                    if (!string.IsNullOrEmpty(carrierAccountMappingToUpdate.RouteTableName))
                     {
-                        var backupVersionNumber = (carrierAccountMappingToUpdate.CarrierId + 1) % 3;
+                        var backupVersionNumber = (carrierAccountMappingToUpdate.Version + 1) % 3;
                         string tableName = Helper.BuildRouteTableName(carrierAccountMappingToUpdate.CarrierId, backupVersionNumber);
                         var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
                         queryCommands.Add(dropQuery);
                     }
+                }
+                if (finalCustomerData.CarrierAccountMappingToDelete != null)
+                {
+                    var carrierAccountMappingToDelete = finalCustomerData.CarrierAccountMappingToDelete;
+                    var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(carrierAccountMappingToDelete.RouteTableName);
+                    queryCommands.Add(dropQuery);
+
+                    var backupVersionNumber = (carrierAccountMappingToDelete.Version + 2) % 3;
+                    string tableName = Helper.BuildRouteTableName(carrierAccountMappingToDelete.CarrierId, backupVersionNumber);
+                    var dropBackupQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
+
+                    queryCommands.Add(carrierAccountDataManager.GetDeleteCarrierAccountMappingQuery(carrierAccountMappingToDelete));
+
+                    queryCommands.Add(dropBackupQuery);
                 }
 
                 if (finalCustomerData.CustomerIdentificationsToAdd != null && finalCustomerData.CustomerIdentificationsToAdd.Count > 0)

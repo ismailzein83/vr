@@ -43,7 +43,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                     var carrierAccount = carrierAccountDataManager.GetCarrierAccountMapping(convertedRoute.CarrierID);
                     return new CataleyaConvertedRoutesForApply()
                     {
-                        Routes = new List<CataleyaConvertedRoute>() { convertedRoute },
+                        Routes = new List<CataleyaConvertedRoute>(),
                         RouteTableName = carrierAccount.RouteTableName
                     };
                 });
@@ -83,14 +83,16 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
             foreach (var routeTableName in routeTablesNames)
             {
-                query.AppendLine(Createindex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}"));
+                var createIndexQuery = Createindex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}");
+                createIndexQuery = createIndexQuery.Replace("#GUID#", Guid.NewGuid().ToString("N"));
+
+                query.AppendLine(createIndexQuery);
             }
 
             return query.ToString();
         }
 
         #endregion
-
 
         #region Private Methods
 
@@ -114,12 +116,13 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         const string DropIfExistsCreateRouteTable_Query = @"DROP TABLE IF EXISTS #TABLENAMEWITHSCHEMA#;
                                                             CREATE TABLE  #TABLENAMEWITHSCHEMA#
                                                             (Code character varying(30),
-                                                             IsPercentage bool,
-                                                             Options varchar );";
+                                                             IsPercentage character varying(10),
+                                                             Options varchar,
+                                                             Statics varchar);";
 
         const string DropBackUpRouteTableIfExists_Query = @"Drop Table IF EXISTS #TABLENAMEWITHSCHEMA#;";
 
-        const string Createindex_Query = @"ALTER TABLE #TABLENAMEWITHSCHEMA# ADD constraint route_pkey PRIMARY KEY (Code);";
+        const string Createindex_Query = @"ALTER TABLE #TABLENAMEWITHSCHEMA# ADD constraint route_pkey_#GUID# PRIMARY KEY (Code);";
 
         #endregion
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using Vanrise.Data.Postgres;
 
@@ -40,6 +41,9 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public void FillTempCustomerIdentificationTable(IEnumerable<CustomerIdentification> customersIdentification)
         {
+            if (customersIdentification == null || !customersIdentification.Any())
+                return;
+
             var itemsToInsert = new List<String>();
             foreach (var customerIdentification in customersIdentification)
             {

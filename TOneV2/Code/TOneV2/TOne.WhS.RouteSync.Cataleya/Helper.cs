@@ -6,7 +6,7 @@ namespace TOne.WhS.RouteSync.Cataleya
     {
         public static string BuildRouteTableName(int carrierId, int version)
         {
-            return $"Rt_{carrierId}_{version}";
+            return $"RL_{carrierId}_{version}";
         }
     }
 }

@@ -439,7 +439,7 @@ namespace TOne.WhS.Routing.Entities
                 SaleRate = customerRoute.Rate,
                 Code = customerRoute.Code
             };
-            if (customerRoute.Options != null)
+            if (!customerRoute.IsBlocked && customerRoute.Options != null)
             {
                 route.Options = new List<RouteSync.Entities.RouteOption>();
                 foreach (var customerRouteOption in customerRoute.Options)

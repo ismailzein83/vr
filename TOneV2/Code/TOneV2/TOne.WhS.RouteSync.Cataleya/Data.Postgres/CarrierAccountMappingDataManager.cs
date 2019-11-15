@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using Vanrise.Data.Postgres;
+using System.Linq;
 
 namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 {
@@ -49,6 +50,9 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public void FillTempCarrierAccountMappingTable(IEnumerable<CarrierAccountMapping> carrierAccountsMapping)
         {
+            if (carrierAccountsMapping == null || !carrierAccountsMapping.Any())
+                return;
+
             var itemsToInsert = new List<String>();
             foreach (var carrierAccountMapping in carrierAccountsMapping)
             {
@@ -92,6 +96,14 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             return query;
         }
 
+        public string GetDeleteCarrierAccountMappingQuery(CarrierAccountMapping carrierAccountMappingToDelete)
+        {
+            var query = DeleteCarrierAccountMapping_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName);
+            query = query.Replace("#CAID#", carrierAccountMappingToDelete.CarrierId.ToString());
+
+            return query;
+        }
+
         public string GetDropTempCarrierAccountMappingTableQuery()
         {
             return DropTempCarrierAccountMappingTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
@@ -128,17 +140,18 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         const string GetAllCarrierAccountMappings_Query = @"select Version, CAID , ZoneID, RouteTableName  from #TABLENAMEWITHSCHEMA#;";
 
         const string CreateCarrierAccountTable_Query = @"CREATE TABLE IF NOT EXISTS #TABLENAMEWITHSCHEMA#
-                                                          (Version int,
+                                                          (
                                                            CAID int,
                                                            ZoneID int,
-                                                           RouteTableName character varying(30));";
+                                                           RouteTableName character varying(30),
+                                                           Version int);";
 
         const string DropIfExistsCreateTempCarrierAccountTable_Query = @"DROP TABLE IF EXISTS #TABLENAMEWITHSCHEMA#;
                                                            CREATE TABLE #TABLENAMEWITHSCHEMA#
-                                                          (Version int,
-                                                           CAID int,
+                                                          (CAID int,
                                                            ZoneID int,
-                                                           RouteTableName character varying(30));";
+                                                           RouteTableName character varying(30),
+                                                           Version int);";
 
         const string AddCarrierAccountsMappingToTempTable_Query = @"INSERT INTO #TABLENAMEWITHSCHEMA#(
 	                                                                 Version, CAID,ZoneID,RouteTableName)
@@ -149,6 +162,8 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         const string AddCarrierAccountMapping_Query = @"INSERT INTO #TABLENAMEWITHSCHEMA# (Version, CAID,ZoneID,RouteTableName) VALUES ('#VERSION#','#CAID#','#ZONEID#','#ROUTETABLENAME#');";
 
         const string UpdateCarrierAccountMapping_Query = @"UPDATE #TABLENAMEWITHSCHEMA# set Version = '#VERSION#' , RouteTableName = '#ROUTETABLENAME#' where CAID = '#CAID#';";
+
+        const string DeleteCarrierAccountMapping_Query = @"Delete from #TABLENAMEWITHSCHEMA# where CAID = '#CAID#';";
 
         const string DropTempCarrierAccountMappingTable_Query = @"Drop Table #TABLENAMEWITHSCHEMA#;";
 
