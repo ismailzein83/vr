@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using TOne.WhS.RouteSync.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Data.Postgres;
-using Vanrise.Common;
-using System.Linq;
 
 namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 {
@@ -16,21 +14,71 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         public DatabaseConnection DatabaseConnection { get; set; }
 
         string connectionString;
-        public CataleyaPostgresDataManager()
+        string ConnectionString
         {
-            connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
+            get
+            {
+                if (string.IsNullOrEmpty(connectionString))
+                    connectionString = GetConnectionStringById(DatabaseConnection.DBConnectionId);
+
+                return connectionString;
+            }
         }
 
         protected override string GetConnectionString()
         {
-            return connectionString;
+            return ConnectionString;
         }
 
-        #region Public Methods
+
+        #region Carrier Account Mappings
+
         public List<CarrierAccountMapping> GetCarrierAccountMappings(bool getFromTemp)
         {
             var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
             return carrierAccountDataManager.GetCarrierAccountMappings(getFromTemp);
+        }
+
+        public void InitializeCarrierAccountMappingTable()
+        {
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            carrierAccountDataManager.Initialize();
+        }
+
+        public void FillTempCarrierAccountMappingTable(IEnumerable<CarrierAccountMapping> carrierAccountsMappings)
+        {
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            carrierAccountDataManager.FillTempCarrierAccountMappingTable(carrierAccountsMappings);
+        }
+
+        #endregion
+
+        #region Customer Identification
+        public List<CustomerIdentification> GetCustomerIdentifications(bool getFromTemp)
+        {
+            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
+            return customerIdentificationDataManager.GetCustomerIdentifications(getFromTemp);
+        }
+
+        public void InitializeCustomerIdentificationTable()
+        {
+            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
+            customerIdentificationDataManager.Initialize();
+        }
+
+        public void FillTempCustomerIdentificationTable(IEnumerable<CustomerIdentification> customerIdentifications)
+        {
+            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
+            customerIdentificationDataManager.FillTempCustomerIdentificationTable(customerIdentifications);
+        }
+
+        #endregion
+
+        #region Routes
+        public void InitializeRouteTables(IEnumerable<CarrierAccountMapping> carrierAccountsMappings)
+        {
+            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
+            routeDataManager.Initialize(carrierAccountsMappings);
         }
 
         public object PrepareDataForApply(List<ConvertedRoute> routes)
@@ -42,96 +90,71 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         public void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
             var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
-
             routeDataManager.ApplyCataleyaRoutesToDB(context);
         }
 
-        public void Initialize(ICataleyaInitializeContext context)
-        {
-            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
-            customerIdentificationDataManager.Initialize(context.CustomersIdentification);
-
-            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
-            carrierAccountDataManager.Initialize(context.CarrierAccountsMapping);
-
-            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
-            routeDataManager.Initialize(context.CarrierAccountsMapping);
-        }
-
-        public List<CarrierAccountMapping> GetAllCarrierAccountsMapping(bool getFromTemp)
-        {
-            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
-            return carrierAccountDataManager.GetCarrierAccountMappings(getFromTemp);
-        }
-
-        public List<CustomerIdentification> GetAllCustomerIdentifications(bool getFromTemp)
-        {
-            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
-            return customerIdentificationDataManager.GetAllCustomerIdentifications(getFromTemp);
-        }
+        #endregion
 
         public void Finalize(ICataleyaFinalizeContext context)
         {
-            var carrierFinalizationDataByCustomer = context.CarrierFinalizationDataByCustomer;
-
             var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
             var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
             var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
 
-            foreach (var carrierFinalizationData in carrierFinalizationDataByCustomer.Values)
-            {
-                var queryCommands = new StringBuilder();
-                queryCommands.AppendLine("Begin;");
-
-                if (carrierFinalizationData.CarrierAccountMappingToAdd != null)
-                {
-                    queryCommands.AppendLine(carrierAccountDataManager.GetAddCarrierAccountMappingQuery(carrierFinalizationData.CarrierAccountMappingToAdd));
-                }
-
-                if (carrierFinalizationData.CustomerIdentificationsToAdd != null && carrierFinalizationData.CustomerIdentificationsToAdd.Count > 0)
-                {
-                    foreach (var customerIdentificationToAdd in carrierFinalizationData.CustomerIdentificationsToAdd)
-                    {
-                        queryCommands.AppendLine(customerIdentificationDataManager.GeAddCustomerIdentificationQuery(customerIdentificationToAdd));
-                    }
-                }
-
-                if (carrierFinalizationData.CustomerIdentificationsToDelete != null && carrierFinalizationData.CustomerIdentificationsToDelete.Count > 0)
-                {
-                    foreach (var customerIdentificationToDelete in carrierFinalizationData.CustomerIdentificationsToDelete)
-                    {
-                        queryCommands.AppendLine(customerIdentificationDataManager.GetDeleteCustomerIdentificationQuery(customerIdentificationToDelete));
-                    }
-                }
-
-                if (carrierFinalizationData.CarrierAccountMappingToUpdate != null)
-                {
-                    var carrierAccountMappingToUpdate = carrierFinalizationData.CarrierAccountMappingToUpdate;
-                    queryCommands.AppendLine(carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate));
-
-                    var backupVersionNumber = (carrierAccountMappingToUpdate.CarrierId + 1) % 3;
-                    string tableName = Helper.BuildRouteTableName(carrierAccountMappingToUpdate.CarrierId, backupVersionNumber);
-                    var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
-                    queryCommands.AppendLine(dropQuery);
-                }
-
-                queryCommands.AppendLine("Commit;");
-
-                ExecuteNonQuery(new string[] { queryCommands.ToString() });
-            };
-
             ExecuteNonQuery(new string[] { carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery(),
                 customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery(),
-                routeDataManager.GetCreateRouteTablesIndexesQuery(context.RouteTableNames) });
+                routeDataManager.GetCreateRouteTablesIndexesQuery(context.RouteTableNamesForIndexes) });
+
+            var finalCustomerDataByAccountId = context.FinalCustomerDataByAccountId;
+
+            foreach (var finalCustomerData in finalCustomerDataByAccountId.Values)
+            {
+                var queryCommands = new List<string>();
+
+                if (finalCustomerData.CarrierAccountMappingToAdd != null)
+                {
+                    queryCommands.Add(carrierAccountDataManager.GetAddCarrierAccountMappingQuery(finalCustomerData.CarrierAccountMappingToAdd));
+                }
+
+                if (finalCustomerData.CarrierAccountMappingToUpdate != null)
+                {
+                    var carrierAccountMappingToUpdate = finalCustomerData.CarrierAccountMappingToUpdate;
+                    queryCommands.Add(carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate));
+
+                    if (string.IsNullOrEmpty(carrierAccountMappingToUpdate.RouteTableName))
+                    {
+                        var backupVersionNumber = (carrierAccountMappingToUpdate.CarrierId + 1) % 3;
+                        string tableName = Helper.BuildRouteTableName(carrierAccountMappingToUpdate.CarrierId, backupVersionNumber);
+                        var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
+                        queryCommands.Add(dropQuery);
+                    }
+                }
+
+                if (finalCustomerData.CustomerIdentificationsToAdd != null && finalCustomerData.CustomerIdentificationsToAdd.Count > 0)
+                {
+                    foreach (var customerIdentificationToAdd in finalCustomerData.CustomerIdentificationsToAdd)
+                    {
+                        queryCommands.Add(customerIdentificationDataManager.GeAddCustomerIdentificationQuery(customerIdentificationToAdd));
+                    }
+                }
+
+                if (finalCustomerData.CustomerIdentificationsToDelete != null && finalCustomerData.CustomerIdentificationsToDelete.Count > 0)
+                {
+                    foreach (var customerIdentificationToDelete in finalCustomerData.CustomerIdentificationsToDelete)
+                    {
+                        queryCommands.Add(customerIdentificationDataManager.GetDeleteCustomerIdentificationQuery(customerIdentificationToDelete));
+                    }
+                }
+
+                ExecuteNonQuery(queryCommands.ToArray());
+            };
         }
 
-        public bool UpdateCarrierAccountMappingStatus(String customerId, CarrierAccountStatus status)
-        {
-            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
-            return carrierAccountDataManager.UpdateCarrierAccountMappingStatus(customerId, status);
-        }
-
-        #endregion
+        //public bool UpdateCarrierAccountMappingStatus(String customerId, CarrierAccountStatus status)
+        //{
+        //    var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+        //    return carrierAccountDataManager.UpdateCarrierAccountMappingStatus(customerId, status);
+        //}
 
         #region Private
 

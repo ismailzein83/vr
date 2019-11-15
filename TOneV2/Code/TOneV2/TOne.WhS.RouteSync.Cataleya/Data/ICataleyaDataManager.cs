@@ -8,12 +8,17 @@ namespace TOne.WhS.RouteSync.Cataleya.Data
     public interface ICataleyaDataManager
     {
         Guid ConfigId { get; }
-        void Initialize(ICataleyaInitializeContext context);
         List<CarrierAccountMapping> GetCarrierAccountMappings(bool getFromTemp);
-        List<CustomerIdentification> GetAllCustomerIdentifications(bool getFromTemp);
+        void InitializeCustomerIdentificationTable();
+        void InitializeCarrierAccountMappingTable();
+        void InitializeRouteTables(IEnumerable<CarrierAccountMapping> carrierAccountsMappings);
+        void FillTempCustomerIdentificationTable(IEnumerable<CustomerIdentification> customerIdentifications);
+        void FillTempCarrierAccountMappingTable(IEnumerable<CarrierAccountMapping> carrierAccountsMappings);
+
+        List<CustomerIdentification> GetCustomerIdentifications(bool getFromTemp);
         Object PrepareDataForApply(List<ConvertedRoute> routes);
         void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
         void Finalize(ICataleyaFinalizeContext context);
-        bool UpdateCarrierAccountMappingStatus(String customerId , CarrierAccountStatus status);
+        //bool UpdateCarrierAccountMappingStatus(String customerId , CarrierAccountStatus status);
     }
 }

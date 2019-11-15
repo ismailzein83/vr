@@ -15,14 +15,14 @@ namespace TOne.WhS.RouteSync.Cataleya.Entities
             return CarrierID.ToString();
         }
 
-        public string ConvertToString()
-        {
-            return string.Format("{1}{0}{2}{0}{3}", "\t", CarrierID, IsPercentage, Options);
-        }
-
         public override string GetRouteOptionsIdentifier()
         {
             return Options;
+        }
+
+        public string ConvertToString()
+        {
+            return string.Format("{1}{0}{2}{0}{3}", "\t", CarrierID, IsPercentage, Options);
         }
     }
 }

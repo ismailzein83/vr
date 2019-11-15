@@ -27,29 +27,18 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             tempTableName = !string.IsNullOrEmpty(schemaName) ? string.Format(@"""{0}"".{1}", schemaName, "CustomerIdentification_Temp") : "CustomerIdentification_Temp";
         }
 
-        public void Initialize(List<CustomerIdentification> customersIdentification)
+        public void Initialize()
         {
-            string[] queries = new string[3]
+            string[] queries = new string[2]
             {
-                CreateCustomerIdentificationTableIfNotExist(),
-                DropIfExistsCreateTempCustomerIdentificationTable(),
-                AddCustomerIdentificationsToTempTable(customersIdentification)
+                CreateCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName),
+                DropIfExistsCreateTempCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName)
             };
 
             ExecuteNonQuery(queries);
         }
 
-        string CreateCustomerIdentificationTableIfNotExist()
-        {
-            return CreateCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName);
-        }
-
-        string DropIfExistsCreateTempCustomerIdentificationTable()
-        {
-            return DropIfExistsCreateTempCustomerIdentificationTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
-        }
-
-        string AddCustomerIdentificationsToTempTable(List<CustomerIdentification> customersIdentification)
+        public void FillTempCustomerIdentificationTable(IEnumerable<CustomerIdentification> customersIdentification)
         {
             var itemsToInsert = new List<String>();
             foreach (var customerIdentification in customersIdentification)
@@ -60,10 +49,10 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             var addCustomerIdentificationsToTempTableQuery = AddCustomerIdentificationsToTempTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
             addCustomerIdentificationsToTempTableQuery = addCustomerIdentificationsToTempTableQuery.Replace("#ITEMS#", string.Join(" ,", itemsToInsert));
 
-            return addCustomerIdentificationsToTempTableQuery;
+            ExecuteNonQuery(new string[] { addCustomerIdentificationsToTempTableQuery });
         }
 
-        public List<CustomerIdentification> GetAllCustomerIdentifications(bool getFromTemp)
+        public List<CustomerIdentification> GetCustomerIdentifications(bool getFromTemp)
         {
             var table = getFromTemp ? tempTableName : tableName;
             var query = GetAllCustomerIdentifications_Query.Replace("#TABLENAMEWITHSCHEMA#", table);

@@ -70,6 +70,7 @@
                             $scope.scopeModel.isEditMode = true;
                             carrierMappings = cataleyaSWSync.CarrierMappings;
                             apiConnectionId = cataleyaSWSync.APIConnectionId;
+                            $scope.scopeModel.nodeID = cataleyaSWSync.NodeID;
                             cataleyaDataManager = cataleyaSWSync.DataManager;
                         }
                     }
@@ -145,6 +146,7 @@
                     var data = {
                         $type: "TOne.WhS.RouteSync.Cataleya.CataleyaSWSync, TOne.WhS.RouteSync.Cataleya",
                         APIConnectionId: apiConnectionSelectorAPI.getSelectedIds(),
+                        NodeID : $scope.scopeModel.nodeID,
                         DataManager: cataleyaDataManagerDirectiveAPI.getData(),
                         CarrierMappings: carrierAccountMappingGridAPI.getData()
                     };

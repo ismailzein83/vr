@@ -1,8 +1,11 @@
 ﻿<vr-row>
-    <vr-common-connection-selector on-ready="scopeModel.onAPIConnectionSelectorReady" 
+    <vr-common-connection-selector on-ready="scopeModel.onAPIConnectionSelectorReady"
                                    customlabel="API Connection" isrequired="true"
                                    normal-col-num="3" includeviewhandler showaddbutton hideremoveicon>
     </vr-common-connection-selector>
+    <vr-columns width="1/4row">
+        <vr-textbox value="scopeModel.nodeID" type="number" label="Node ID" isrequired="true"></vr-textbox>
+    </vr-columns>
 </vr-row>
 <vr-row>
     <whs-routesync-cataleyadatamanagers on-ready="scopeModel.onCataleyaDataManagerDirectiveReady" normal-col-num="3" isrequired="true"></whs-routesync-cataleyadatamanagers>

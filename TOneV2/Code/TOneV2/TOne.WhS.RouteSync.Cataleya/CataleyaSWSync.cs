@@ -19,6 +19,7 @@ namespace TOne.WhS.RouteSync.Cataleya
         public Guid APIConnectionId { get; set; }
         public ICataleyaDataManager DataManager { get; set; }
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
+        public int NodeID { get; set; }
 
         const string blockedTrunk = "999999";
 
@@ -38,14 +39,22 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
+            DataManager.InitializeCarrierAccountMappingTable();
+            DataManager.InitializeCustomerIdentificationTable();
+
             var carrierAccountMappingByAccountId = new Dictionary<int, CarrierAccountMapping>();
             var customersIdentification = new List<CustomerIdentification>();
 
             var allActiveCustomers = new CarrierAccountManager().GetRoutingActiveCustomers();
+            if (allActiveCustomers == null || !allActiveCustomers.Any())
+                return;
+
+            if (CarrierMappings == null || !CarrierMappings.Any())
+                return;
 
             foreach (var customer in allActiveCustomers)
             {
-                if (CarrierMappings == null || !CarrierMappings.TryGetValue(customer.CustomerId.ToString(), out CarrierMapping carrierMapping))
+                if (!CarrierMappings.TryGetValue(customer.CustomerId.ToString(), out CarrierMapping carrierMapping))
                     continue;
 
                 if (carrierMapping.CustomerMappings == null || carrierMapping.CustomerMappings.InTrunks == null || carrierMapping.CustomerMappings.InTrunks.Count == 0)
@@ -56,8 +65,8 @@ namespace TOne.WhS.RouteSync.Cataleya
                     CarrierId = carrierMapping.CarrierId,
                     ZoneID = carrierMapping.ZoneID,
                     Version = 0,
-                    RouteTableName = Helper.BuildRouteTableName(carrierMapping.CarrierId, 0),
-                    Status = CarrierAccountStatus.Active
+                    RouteTableName = Helper.BuildRouteTableName(carrierMapping.CarrierId, 0)
+                    //Status = CarrierAccountStatus.Active
                 };
 
                 carrierAccountMappingByAccountId.Add(carrierAccountMapping.CarrierId, carrierAccountMapping);
@@ -87,12 +96,9 @@ namespace TOne.WhS.RouteSync.Cataleya
                     carrierAccountMapping.RouteTableName = Helper.BuildRouteTableName(existingCarrierAccount.CarrierId, newVersion);
                 }
             }
-
-            DataManager.Initialize(new CataleyaInitializeContext()
-            {
-                CustomersIdentification = customersIdentification,
-                CarrierAccountsMapping = carrierAccountMappingByAccountId.Values.ToList()
-            });
+            DataManager.FillTempCarrierAccountMappingTable(carrierAccountMappingByAccountId.Values);
+            DataManager.FillTempCustomerIdentificationTable(customersIdentification);
+            DataManager.InitializeRouteTables(carrierAccountMappingByAccountId.Values);
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -126,7 +132,7 @@ namespace TOne.WhS.RouteSync.Cataleya
                     }
                     else
                     {
-                        concatenatedOptions = BuildPercentageOptions(route.Options);
+                        concatenatedOptions = BuildPercentageOptions(route.Options, out isPercentage);
                     }
                 }
 
@@ -153,103 +159,160 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
-            var carrierFinalizationDataByCustomer = new Dictionary<int, CarrierFinalizationData>();
+            var finalCustomerDataByAccountId = new Dictionary<int, FinalCustomerData>();
 
-            var oldCustomerIdentifications = DataManager.GetAllCustomerIdentifications(false);
-            var customerIdentifications = DataManager.GetAllCustomerIdentifications(true);
+            var oldCustomerIdentificationsDict = ConvertToDictionary(DataManager.GetCustomerIdentifications(false));
+            var customerIdentificationsDict = ConvertToDictionary(DataManager.GetCustomerIdentifications(true));
 
-            var oldCarrierAccountsMapping = DataManager.GetCarrierAccountMappings(false);
-            var carrierAccountsMapping = DataManager.GetCarrierAccountMappings(true);
-            var routeTableNames = new List<String>();
+            var routeTableNamesForIndexes = new List<String>();
 
-            if (customerIdentifications != null && customerIdentifications.Count > 0)
+            if (customerIdentificationsDict != null && customerIdentificationsDict.Count > 0)
             {
-                for (int i = 0; i < customerIdentifications.Count; i++)
+                foreach (var customerIdentificationKVP in customerIdentificationsDict)
                 {
-                    var customerIdentification = customerIdentifications[i];
-                    var carrierFinalizationData = carrierFinalizationDataByCustomer.GetOrCreateItem(customerIdentification.CarrierId);
+                    int customerId = customerIdentificationKVP.Key;
+                    var customerIdentifications = customerIdentificationKVP.Value;
 
-                    if (oldCustomerIdentifications != null && customerIdentifications.Count != 0)
-                        for (int j = 0; j < oldCustomerIdentifications.Count; j++)
+                    var finalCustomerData = finalCustomerDataByAccountId.GetOrCreateItem(customerId);
+
+                    if (oldCustomerIdentificationsDict != null && oldCustomerIdentificationsDict.Count >= 0)
+                    {
+                        var oldCustomerIdentifications = oldCustomerIdentificationsDict.GetRecord(customerId);
+                        if (oldCustomerIdentifications != null && oldCustomerIdentifications.Count > 0)
                         {
-                            var oldCustomerIdentification = oldCustomerIdentifications[j];
-                            if (oldCustomerIdentification.CarrierId == customerIdentification.CarrierId && oldCustomerIdentification.Trunk == customerIdentification.Trunk)
-                            {
-                                oldCustomerIdentifications.RemoveAt(j);
-                                break;
-                            }
+                            var itemsToAdd = GetUpdatedItems(customerIdentifications, oldCustomerIdentifications);
+                            if (itemsToAdd != null && itemsToAdd.Count > 0)
+                                finalCustomerData.CustomerIdentificationsToAdd.AddRange(itemsToAdd);
+
+                            var itemsToDelete = GetUpdatedItems(oldCustomerIdentifications, customerIdentifications);
+                            if (itemsToDelete != null && itemsToDelete.Count > 0)
+                                finalCustomerData.CustomerIdentificationsToDelete.AddRange(itemsToDelete);
                         }
+                        else
+                        {
+                            finalCustomerData.CustomerIdentificationsToAdd.AddRange(customerIdentifications);
+                        }
+                    }
                     else
                     {
-                        if (carrierFinalizationData.CustomerIdentificationsToAdd == null)
-                            carrierFinalizationData.CustomerIdentificationsToAdd = new List<CustomerIdentification>() { };
+                        finalCustomerData.CustomerIdentificationsToAdd.AddRange(customerIdentifications);
+                    }
+                }
+            }
+            else
+            {
+                if (oldCustomerIdentificationsDict != null && oldCustomerIdentificationsDict.Count >= 0)
+                {
+                    foreach (var oldCustomerIdentificationsKVP in oldCustomerIdentificationsDict)
+                    {
+                        int oldCustomerId = oldCustomerIdentificationsKVP.Key;
+                        var oldCustomerIdentifications = oldCustomerIdentificationsKVP.Value;
 
-                        carrierFinalizationData.CustomerIdentificationsToAdd.Add(customerIdentification);
+                        var finalCustomerData = finalCustomerDataByAccountId.GetOrCreateItem(oldCustomerId);
+                        finalCustomerData.CustomerIdentificationsToDelete.AddRange(oldCustomerIdentifications);
                     }
                 }
             }
 
-            if (oldCustomerIdentifications != null && customerIdentifications.Count != 0)
+            Dictionary<int, CarrierAccountMapping> oldCarrierAccountMappingsDict = null;
+            var oldCarrierAccountMappings = DataManager.GetCarrierAccountMappings(false);
+            if (oldCarrierAccountMappings != null)
+                oldCarrierAccountMappingsDict = oldCarrierAccountMappings.ToDictionary(itm => itm.CarrierId, itm => itm);
+
+
+            Dictionary<int, CarrierAccountMapping> carrierAccountMappingsDict = null;
+            var carrierAccountMappings = DataManager.GetCarrierAccountMappings(true);
+            if (carrierAccountMappings != null)
+                carrierAccountMappingsDict = carrierAccountMappings.ToDictionary(itm => itm.CarrierId, itm => itm);
+
+            if (carrierAccountMappingsDict != null && carrierAccountMappingsDict.Count > 0)
             {
-                foreach (var oldCustomerIdentification in oldCustomerIdentifications)
+                foreach (var carrierAccountsMappingKVP in carrierAccountMappingsDict)
                 {
-                    var carrierFinalizationData = carrierFinalizationDataByCustomer.GetOrCreateItem(oldCustomerIdentification.CarrierId);
+                    int customerId = carrierAccountsMappingKVP.Key;
+                    var carrierAccountMapping = carrierAccountsMappingKVP.Value;
 
-                    if (carrierFinalizationData.CustomerIdentificationsToDelete == null)
-                        carrierFinalizationData.CustomerIdentificationsToDelete = new List<CustomerIdentification>() { };
+                    var finalCustomerData = finalCustomerDataByAccountId.GetOrCreateItem(customerId);
 
-                    carrierFinalizationData.CustomerIdentificationsToAdd.Add(oldCustomerIdentification);
-                }
-            }
-
-            if (carrierAccountsMapping != null && carrierAccountsMapping.Count != 0)
-            {
-                for (int i = 0; i < carrierAccountsMapping.Count; i++)
-                {
-                    var carrierAccountMapping = carrierAccountsMapping[i];
-                    var carrierFinalizationData = carrierFinalizationDataByCustomer.GetOrCreateItem(carrierAccountMapping.CarrierId);
-                    bool isItemToUpdate = false;
-
-                    if (oldCarrierAccountsMapping != null && oldCarrierAccountsMapping.Count != 0)
-                        for (int j = 0; j < oldCarrierAccountsMapping.Count; j++)
+                    if (oldCarrierAccountMappingsDict != null && oldCarrierAccountMappingsDict.Count >= 0)
+                    {
+                        var oldCarrierAccountMapping = oldCarrierAccountMappingsDict.GetRecord(customerId);
+                        if (oldCarrierAccountMapping != null)
                         {
-                            var oldcarrierAccount = oldCarrierAccountsMapping[j];
-
-                            if (oldcarrierAccount.CarrierId == carrierAccountMapping.CarrierId)
-                            {
-                                isItemToUpdate = true;
-                                carrierFinalizationData.CarrierAccountMappingToUpdate = carrierAccountMapping;
-                                oldCustomerIdentifications.RemoveAt(j);
-                                routeTableNames.Add(carrierAccountMapping.RouteTableName);
-                                break;
-                            }
+                            routeTableNamesForIndexes.Add(carrierAccountMapping.RouteTableName);
+                            finalCustomerData.CarrierAccountMappingToUpdate = carrierAccountMapping;
                         }
-                    if (!isItemToUpdate)
+                        else
+                        {
+                            routeTableNamesForIndexes.Add(carrierAccountMapping.RouteTableName);
+                            finalCustomerData.CarrierAccountMappingToAdd = carrierAccountMapping;
+                        }
+                    }
+                    else
                     {
-                        carrierFinalizationData.CarrierAccountMappingToAdd = carrierAccountMapping;
-                        routeTableNames.Add(carrierAccountMapping.RouteTableName);
+                        routeTableNamesForIndexes.Add(carrierAccountMapping.RouteTableName);
+                        finalCustomerData.CarrierAccountMappingToAdd = carrierAccountMapping;
+                    }
+                }
+            }
+            else
+            {
+                if (oldCarrierAccountMappingsDict != null && oldCarrierAccountMappingsDict.Count >= 0)
+                {
+                    foreach (var oldCarrierAccountMappingKVP in oldCarrierAccountMappingsDict)
+                    {
+                        int oldCustomerId = oldCarrierAccountMappingKVP.Key;
+                        var oldCarrierAccountMapping = oldCarrierAccountMappingKVP.Value;
+
+                        var finalCustomerData = finalCustomerDataByAccountId.GetOrCreateItem(oldCustomerId);
+                        finalCustomerData.CarrierAccountMappingToUpdate = new CarrierAccountMapping()
+                        {
+                            ZoneID = oldCarrierAccountMapping.ZoneID,
+                            CarrierId = oldCarrierAccountMapping.CarrierId,
+                            RouteTableName = null,
+                            Version = oldCarrierAccountMapping.Version
+                        };
                     }
                 }
             }
 
-            if (oldCarrierAccountsMapping != null && oldCarrierAccountsMapping.Count != 0)
-            {
-                foreach (var oldCarrierAccountMapping in oldCarrierAccountsMapping)
-                {
-                    var carrierFinalizationData = carrierFinalizationDataByCustomer.GetOrCreateItem(oldCarrierAccountMapping.CarrierId);
+            DataManager.Finalize(new CataleyaFinalizeContext() { FinalCustomerDataByAccountId = finalCustomerDataByAccountId, RouteTableNamesForIndexes = routeTableNamesForIndexes });
+        }
 
-                    carrierFinalizationData.CarrierAccountMappingToUpdate = new CarrierAccountMapping()
+        private List<CustomerIdentification> GetUpdatedItems(List<CustomerIdentification> firstListItems, List<CustomerIdentification> secondListItems)
+        {
+            List<CustomerIdentification> result = new List<CustomerIdentification>();
+            foreach (CustomerIdentification firstItem in firstListItems)
+            {
+                bool isMatching = false;
+                foreach (CustomerIdentification secondItem in secondListItems)
+                {
+                    if (string.Compare(firstItem.Trunk, secondItem.Trunk, true) == 0)
                     {
-                        ZoneID = oldCarrierAccountMapping.ZoneID,
-                        CarrierId = oldCarrierAccountMapping.CarrierId,
-                        RouteTableName = null,
-                        Version = (oldCarrierAccountMapping.Version + 1) % 3,
-                        Status = CarrierAccountStatus.Active
-                    };
+                        isMatching = true;
+                        break;
+                    }
                 }
+                if (!isMatching)
+                    result.Add(firstItem);
             }
 
-            DataManager.Finalize(new CataleyaFinalizeContext() { CarrierFinalizationDataByCustomer = carrierFinalizationDataByCustomer, RouteTableNames = routeTableNames });
+            return result;
+        }
+
+        private Dictionary<int, List<CustomerIdentification>> ConvertToDictionary(List<CustomerIdentification> customerIdentifications)
+        {
+            if (customerIdentifications == null || customerIdentifications.Count == 0)
+                return null;
+
+            Dictionary<int, List<CustomerIdentification>> result = new Dictionary<int, List<CustomerIdentification>>();
+            foreach (CustomerIdentification customerIdentification in customerIdentifications)
+            {
+                List<CustomerIdentification> tempList = result.GetOrCreateItem(customerIdentification.CarrierId);
+                tempList.Add(customerIdentification);
+            }
+
+            return result;
         }
 
         public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
@@ -259,62 +322,32 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         public override bool TryBlockCustomer(ITryBlockCustomerContext context)
         {
-            //   return DataManager.UpdateCarrierAccountMappingStatus(context.CustomerId, CarrierAccountStatus.Blocked);
-
-            var nodeID = 1;
-            string username = "vanrise";
-            string password = "v@nr1seS@pp0rt2";
-            string baseURL = "https://81.24.196.106:8443";
-
-            if (!this.CarrierMappings.TryGetValue(context.CustomerId, out var carrierMapping))
-                return false;
-
-            return ChangeAccountStatus(nodeID, carrierMapping.ZoneID, "Locked", username, password, baseURL);
+            return ChangeAccountStatus(context.CustomerId, "Locked");
         }
 
         public override bool TryUnBlockCustomer(ITryUnBlockCustomerContext context)
         {
-            //return DataManager.UpdateCarrierAccountMappingStatus(context.CustomerId, CarrierAccountStatus.Active);
+            return ChangeAccountStatus(context.CustomerId, "Unlocked");
+        }
 
-            var nodeID = 1;
-            string username = "vanrise";
-            string password = "v@nr1seS@pp0rt2";
-            string baseURL = "https://81.24.196.106:8443";
+        public override bool TryBlockSupplier(ITryBlockSupplierContext context)
+        {
+            return ChangeAccountStatus(context.SupplierId, "Locked");
+        }
 
-            if (!this.CarrierMappings.TryGetValue(context.CustomerId, out var carrierMapping))
-                return false;
-
-            return ChangeAccountStatus(nodeID, carrierMapping.ZoneID, "Unlocked", username, password, baseURL);
+        public override bool TryUnBlockSupplier(ITryUnBlockSupplierContext context)
+        {
+            return ChangeAccountStatus(context.SupplierId, "Unlocked");
         }
 
         public override bool TryDeactivate(ITryDeactivateContext context)
         {
-            //    return DataManager.UpdateCarrierAccountMappingStatus(context.CarrierAccountId, CarrierAccountStatus.Blocked);
-
-            var nodeID = 1;
-            string username = "vanrise";
-            string password = "v@nr1seS@pp0rt2";
-            string baseURL = "https://81.24.196.106:8443";
-
-            if (!this.CarrierMappings.TryGetValue(context.CarrierAccountId, out var carrierMapping))
-                return false;
-
-            return ChangeAccountStatus(nodeID, carrierMapping.ZoneID, "Locked", username, password, baseURL);
+            return ChangeAccountStatus(context.CarrierAccountId, "Locked");
         }
 
         public override bool TryReactivate(ITryReactivateContext context)
         {
-            //   return DataManager.UpdateCarrierAccountMappingStatus(context.CarrierAccountId, CarrierAccountStatus.Active);
-
-            var nodeID = 1;
-            string username = "vanrise";
-            string password = "v@nr1seS@pp0rt2";
-            string baseURL = "https://81.24.196.106:8443";
-
-            if (!this.CarrierMappings.TryGetValue(context.CarrierAccountId, out var carrierMapping))
-                return false;
-
-            return ChangeAccountStatus(nodeID, carrierMapping.ZoneID, "Unlocked", username, password, baseURL);
+            return ChangeAccountStatus(context.CarrierAccountId, "Unlocked");
         }
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
@@ -400,14 +433,26 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         #region Private Methods
 
-        private string BuildPercentageOptions(List<RouteOption> routeOptions)
+        private string BuildPercentageOptions(List<RouteOption> routeOptions, out bool hasValidPercentageOptions)
         {
+            hasValidPercentageOptions = true;
+
+            if (routeOptions == null || routeOptions.Count == 0)
+                return blockedTrunk;
+
             var concatenatedOptionsTrunksWithBackups = new List<string>();
+            List<RouteOption> optionsWithoutPercentage = new List<RouteOption>();
 
             foreach (var routeOption in routeOptions)
             {
-                if (routeOption.IsBlocked || !routeOption.Percentage.HasValue)
+                if (routeOption.IsBlocked)
                     continue;
+
+                if (!routeOption.Percentage.HasValue)
+                {
+                    optionsWithoutPercentage.Add(routeOption);
+                    continue;
+                }
 
                 if (!CarrierMappings.TryGetValue(routeOption.SupplierId, out var carrierMapping))
                     continue;
@@ -427,22 +472,25 @@ namespace TOne.WhS.RouteSync.Cataleya
                         trunksWithoutPercentage.Add($"{outTrunk.Trunk}");
                 }
 
-                if (trunksWithPercentage.Count == 0)
+                if (trunksWithPercentage.Count == 0)//In this case, we deal with the first trunk as its percentage is 100
                 {
                     string firstTrunk = trunksWithoutPercentage.First();
                     trunksWithoutPercentage.Remove(firstTrunk);
-                    trunksWithPercentage.Add($"{firstTrunk},{routeOption.Percentage}");
+                    trunksWithPercentage.Add($"{firstTrunk}{trunkPercentageSeparatorAsString}{routeOption.Percentage}");
                 }
 
-                foreach (var backupOption in routeOption.Backups)
+                if (routeOption.Backups != null && routeOption.Backups.Count > 0)
                 {
-                    if (!CarrierMappings.TryGetValue(backupOption.SupplierId, out var backupCarrierMapping))
-                        continue;
+                    foreach (var backupOption in routeOption.Backups)
+                    {
+                        if (!CarrierMappings.TryGetValue(backupOption.SupplierId, out var backupCarrierMapping))
+                            continue;
 
-                    if (backupCarrierMapping.SupplierMappings == null || backupCarrierMapping.SupplierMappings.OutTrunks == null || backupCarrierMapping.SupplierMappings.OutTrunks.Count == 0)
-                        continue;
+                        if (backupCarrierMapping.SupplierMappings == null || backupCarrierMapping.SupplierMappings.OutTrunks == null || backupCarrierMapping.SupplierMappings.OutTrunks.Count == 0)
+                            continue;
 
-                    trunksWithoutPercentage.AddRange(backupCarrierMapping.SupplierMappings.OutTrunks.Select(outTrunk => outTrunk.Trunk));
+                        trunksWithoutPercentage.AddRange(backupCarrierMapping.SupplierMappings.OutTrunks.Select(outTrunk => outTrunk.Trunk));
+                    }
                 }
 
                 var concatenatedOptionBackupsTrunks = "";
@@ -456,13 +504,26 @@ namespace TOne.WhS.RouteSync.Cataleya
             }
 
             if (concatenatedOptionsTrunksWithBackups.Count == 0)
-                return blockedTrunk;
+            {
+                if (optionsWithoutPercentage.Count == 0)
+                {
+                    return blockedTrunk;
+                }
+                else
+                {
+                    hasValidPercentageOptions = false;
+                    BuildPriorityOptions(optionsWithoutPercentage);
+                }
+            };
 
             return string.Join(optionsSeparatorAsString, concatenatedOptionsTrunksWithBackups);
         }
 
         private string BuildPriorityOptions(List<RouteOption> routeOptions)
         {
+            if (routeOptions == null || routeOptions.Count == 0)
+                return blockedTrunk;
+
             var allOptionsTrunks = new List<string>();
             foreach (var routeOption in routeOptions)
             {
@@ -487,6 +548,23 @@ namespace TOne.WhS.RouteSync.Cataleya
             return string.Join(optionsSeparatorAsString, allOptionsTrunks);
         }
 
+        private bool ChangeAccountStatus(string carrierAccountId, string status)
+        {
+            var vrConnection = new VRConnectionManager().GetVRConnection(APIConnectionId);
+            VRHttpConnection httpConnection = vrConnection.Settings.CastWithValidate<VRHttpConnection>("connection.Settings", APIConnectionId);
+
+            var apiInterceptor = httpConnection.Interceptor.CastWithValidate<VRAPIConnectionHttpConnectionCallInterceptor>(" httpConnection.Interceptor", APIConnectionId);
+
+            if (!this.CarrierMappings.TryGetValue(carrierAccountId, out var carrierMapping))
+                return false;
+
+            return ChangeAccountStatus(NodeID, carrierMapping.ZoneID, status, apiInterceptor.Username, apiInterceptor.Password, httpConnection.BaseURL);
+        }
+
+        #endregion
+
+        #region API Call
+
         private bool ChangeAccountStatus(int nodeID, int zoneID, string status, string username, string password, string baseURL)
         {
             var authURI = $"{baseURL}/cataleya/j_spring_security";
@@ -501,6 +579,26 @@ namespace TOne.WhS.RouteSync.Cataleya
             var postResponse = APIRequest<PostCallResponse>("POST", lockingURI, authURI, fullURI);
 
             return postResponse.Success;
+        }
+
+        private T APIRequest<T>(string callType, string requestURI, string authURI, string fullURI)
+        {
+            var cookie = GetCookieAsString(authURI, fullURI);
+            var request = HttpWebRequest.Create(requestURI) as HttpWebRequest;
+            request.Method = callType;
+            request.ContentType = "application/json";
+            request.Headers.Add("Cookie", cookie);
+
+            using (var response = (HttpWebResponse)request.GetResponse())
+            {
+                var a = response;
+                using (Stream stream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(stream, Encoding.UTF8);
+                    String responseString = reader.ReadToEnd();
+                    return responseString != null ? Vanrise.Common.Serializer.Deserialize<T>(responseString) : default(T); ;
+                }
+            }
         }
 
         private string GetCookieAsString(string authURI, string fullURI)
@@ -531,27 +629,6 @@ namespace TOne.WhS.RouteSync.Cataleya
 
             return string.Join("; ", cookiesAsString);
         }
-
-        private T APIRequest<T>(string callType, string requestURI, string authURI, string fullURI)
-        {
-            var cookie = GetCookieAsString(authURI, fullURI);
-            var request = HttpWebRequest.Create(requestURI) as HttpWebRequest;
-            request.Method = callType;
-            request.ContentType = "application/json";
-            request.Headers.Add("Cookie", cookie);
-
-            using (var response = (HttpWebResponse)request.GetResponse())
-            {
-                var a = response;
-                using (Stream stream = response.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-                    String responseString = reader.ReadToEnd();
-                    return responseString != null ? Vanrise.Common.Serializer.Deserialize<T>(responseString) : default(T); ;
-                }
-            }
-        }
-
         #endregion
     }
 }

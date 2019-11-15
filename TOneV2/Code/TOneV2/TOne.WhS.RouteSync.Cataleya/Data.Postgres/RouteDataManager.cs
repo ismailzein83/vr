@@ -38,37 +38,34 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
             foreach (var convertedRoute in convertedRoutes)
             {
-                if (convertedRoutesForApplyByCustomer.TryGetValue(convertedRoute.CarrierID, out var cataleyaConvertedRoutesForApply))
-                {
-                    cataleyaConvertedRoutesForApply.Routes.Add(convertedRoute);
-                }
-                else
+                var cataleyaConvertedRoutesForApply = convertedRoutesForApplyByCustomer.GetOrCreateItem(convertedRoute.CarrierID, () =>
                 {
                     var carrierAccount = carrierAccountDataManager.GetCarrierAccountMapping(convertedRoute.CarrierID);
-
-                    convertedRoutesForApplyByCustomer.Add(carrierAccount.CarrierId, new CataleyaConvertedRoutesForApply()
+                    return new CataleyaConvertedRoutesForApply()
                     {
                         Routes = new List<CataleyaConvertedRoute>() { convertedRoute },
                         RouteTableName = carrierAccount.RouteTableName
-                    });
-                }
+                    };
+                });
+                cataleyaConvertedRoutesForApply.Routes.Add(convertedRoute);
             }
+
             return convertedRoutesForApplyByCustomer;
         }
 
         public void ApplyCataleyaRoutesToDB(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
             var convertedRoutesForApplyByCustomer = context.PreparedItemsForApply as Dictionary<int, CataleyaConvertedRoutesForApply>;
+            string tableNamePrefix = string.IsNullOrEmpty(schemaName) ? "" : $"{schemaName}.";
 
             foreach (var keyValuePair in convertedRoutesForApplyByCustomer)
             {
                 var convertedRoutesForApply = keyValuePair.Value;
-                var tableName = string.IsNullOrEmpty(schemaName) ? convertedRoutesForApply.RouteTableName : $"{schemaName}.{convertedRoutesForApply.RouteTableName}";
-                base.Bulk(convertedRoutesForApply.Routes, tableName);
+                base.Bulk(convertedRoutesForApply.Routes, $"{tableNamePrefix}{convertedRoutesForApply.RouteTableName}");
             }
         }
 
-        public void Initialize(List<CarrierAccountMapping> carrierAccountsMapping)
+        public void Initialize(IEnumerable<CarrierAccountMapping> carrierAccountsMapping)
         {
             DropIfExistsCreateRouteTables(carrierAccountsMapping.Select(item => item.RouteTableName));
         }
@@ -82,10 +79,11 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         public string GetCreateRouteTablesIndexesQuery(List<string> routeTablesNames)
         {
             var query = new StringBuilder();
+            string tableNamePrefix = string.IsNullOrEmpty(schemaName) ? "" : $"{schemaName}.";
+
             foreach (var routeTableName in routeTablesNames)
             {
-                var tableNameWithSchema = string.IsNullOrEmpty(schemaName) ? routeTableName : $"{schemaName}.{routeTableName}";
-                query.AppendLine(Createindex_Query.Replace("#TABLENAMEWITHSCHEMA#", tableNameWithSchema));
+                query.AppendLine(Createindex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}"));
             }
 
             return query.ToString();
@@ -99,12 +97,11 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         void DropIfExistsCreateRouteTables(IEnumerable<string> routeTableNames)
         {
             var queries = new List<string>();
+            string tableNamePrefix = string.IsNullOrEmpty(schemaName) ? "" : $"{schemaName}.";
 
             foreach (var routeTableName in routeTableNames)
             {
-                var tableNameWithSchema = string.IsNullOrEmpty(schemaName) ? routeTableName : $"{schemaName}.{routeTableName}";
-                var query = DropIfExistsCreateRouteTable_Query.Replace("#TABLENAMEWITHSCHEMA#", tableNameWithSchema);
-
+                var query = DropIfExistsCreateRouteTable_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}");
                 queries.Add(query);
             }
 

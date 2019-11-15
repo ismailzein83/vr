@@ -83,7 +83,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: 'TOne.WhS.RouteSync.Cataleya.Data.Postgres.CataleyaPostgresDataManager, TOne.WhS.RouteSync.Cataleya',
+                        $type: "TOne.WhS.RouteSync.Cataleya.Data.Postgres.CataleyaPostgresDataManager, TOne.WhS.RouteSync.Cataleya",
                         DatabaseConnection: {
                             SchemaName: $scope.scopeModel.schemaName,
                             DBConnectionId: dbConnectionSelectorAPI.getSelectedIds()
