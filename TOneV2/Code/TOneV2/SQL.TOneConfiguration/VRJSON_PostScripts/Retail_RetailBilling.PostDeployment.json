@@ -5403,7 +5403,41 @@
               "Rank": 7,
               "AllowDynamic": false,
               "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"RetailBilling.CommercialCatalogs\"}",
-              "LastModifiedTime": "2019-11-15T13:58:55.21",
+              "LastModifiedTime": "2019-11-15T15:22:16.843",
+              "RenderedAsView": true
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "426b3462-1c64-4e89-b7ea-b1e52e96d229",
+              "DevProjectID": "39fd306b-90f9-48aa-8ca4-848bfc74eca6",
+              "Name": "Usage",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "66f2dd29-5eaf-4aee-97c7-a5fd9ccad47b",
+              "Icon": null,
+              "Rank": 2,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"RetailBilling.Usage\"}",
+              "LastModifiedTime": "2019-11-15T17:14:25.29",
+              "RenderedAsView": true
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "eeca75e8-4a73-4630-bdde-fd332953b420",
+              "DevProjectID": "39fd306b-90f9-48aa-8ca4-848bfc74eca6",
+              "Name": "Dunning",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "1c7569fa-43c9-4853-ae4c-1152746a34fd",
+              "Icon": null,
+              "Rank": 9,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"RetailBilling.Donning\"}",
+              "LastModifiedTime": "2019-11-15T17:13:54.98",
               "RenderedAsView": true
             }
           }
