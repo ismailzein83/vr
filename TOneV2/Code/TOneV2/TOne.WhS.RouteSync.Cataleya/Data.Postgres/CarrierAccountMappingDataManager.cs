@@ -63,8 +63,8 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public CarrierAccountMapping GetCarrierAccountMapping(int carrierID)
         {
-            var query = GetCarrierAccount_Query.Replace("#TABLENAMEWITHSCHEMA#", tableName);
-            query.Replace("#WHERECONDITION#", $"where CAID = {carrierID}");
+            var query = GetCarrierAccount_Query.Replace("#TABLENAMEWITHSCHEMA#", tempTableName);
+            query = query.Replace("#WHERECONDITION#", $"where CAID = {carrierID}");
 
             return this.GetItemText(query, CarrierAccountMappingMapper, null);
         }
@@ -144,8 +144,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 	                                                                 Version, CAID,ZoneID,RouteTableName)
 	                                                                 VALUES #ITEMS#;";
 
-        const string GetCarrierAccount_Query = @"select Version, CAID , ZoneID, RouteTableName from #TABLENAMEWITHSCHEMA#
-                                                                        #WHERECONDITION#;";
+        const string GetCarrierAccount_Query = @"select Version, CAID , ZoneID, RouteTableName from #TABLENAMEWITHSCHEMA# #WHERECONDITION#;";
 
         const string AddCarrierAccountMapping_Query = @"INSERT INTO #TABLENAMEWITHSCHEMA# (Version, CAID,ZoneID,RouteTableName) VALUES ('#VERSION#','#CAID#','#ZONEID#','#ROUTETABLENAME#');";
 

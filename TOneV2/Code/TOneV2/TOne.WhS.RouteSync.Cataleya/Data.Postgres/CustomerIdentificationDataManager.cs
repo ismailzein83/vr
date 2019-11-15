@@ -106,7 +106,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         const string DropIfExistsCreateTempCustomerIdentificationTable_Query = @"DROP TABLE IF EXISTS #TABLENAMEWITHSCHEMA# ;
                                                            CREATE TABLE #TABLENAMEWITHSCHEMA#
-                                                          (CAID bigint,
+                                                          (CAID int,
                                                            TRUNK character varying(30));";
 
         const string AddCustomerIdentificationsToTempTable_Query = @"INSERT INTO #TABLENAMEWITHSCHEMA#(

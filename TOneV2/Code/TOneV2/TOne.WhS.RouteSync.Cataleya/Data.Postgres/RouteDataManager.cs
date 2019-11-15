@@ -113,7 +113,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         #region Queries 
         const string DropIfExistsCreateRouteTable_Query = @"DROP TABLE IF EXISTS #TABLENAMEWITHSCHEMA#;
                                                             CREATE TABLE  #TABLENAMEWITHSCHEMA#
-                                                            (Code int,
+                                                            (Code character varying(30),
                                                              IsPercentage bool,
                                                              Options varchar );";
 

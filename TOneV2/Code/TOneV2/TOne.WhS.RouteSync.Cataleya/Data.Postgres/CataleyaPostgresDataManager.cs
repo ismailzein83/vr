@@ -41,13 +41,13 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public void InitializeCarrierAccountMappingTable()
         {
-            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, ConnectionString);
             carrierAccountDataManager.Initialize();
         }
 
         public void FillTempCarrierAccountMappingTable(IEnumerable<CarrierAccountMapping> carrierAccountsMappings)
         {
-            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, ConnectionString);
             carrierAccountDataManager.FillTempCarrierAccountMappingTable(carrierAccountsMappings);
         }
 
@@ -56,7 +56,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         #region Customer Identification
         public List<CustomerIdentification> GetCustomerIdentifications(bool getFromTemp)
         {
-            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
+            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, ConnectionString);
             return customerIdentificationDataManager.GetCustomerIdentifications(getFromTemp);
         }
 
@@ -68,7 +68,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public void FillTempCustomerIdentificationTable(IEnumerable<CustomerIdentification> customerIdentifications)
         {
-            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
+            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, ConnectionString);
             customerIdentificationDataManager.FillTempCustomerIdentificationTable(customerIdentifications);
         }
 
@@ -77,19 +77,19 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         #region Routes
         public void InitializeRouteTables(IEnumerable<CarrierAccountMapping> carrierAccountsMappings)
         {
-            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
+            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, ConnectionString);
             routeDataManager.Initialize(carrierAccountsMappings);
         }
 
         public object PrepareDataForApply(List<ConvertedRoute> routes)
         {
-            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
+            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, ConnectionString);
             return routeDataManager.PrepareDataForApply(routes);
         }
 
         public void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
+            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, ConnectionString);
             routeDataManager.ApplyCataleyaRoutesToDB(context);
         }
 
@@ -97,9 +97,9 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public void Finalize(ICataleyaFinalizeContext context)
         {
-            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
-            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
-            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, connectionString);
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, ConnectionString);
+            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, ConnectionString);
+            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, ConnectionString);
 
             ExecuteNonQuery(new string[] { carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery(),
                 customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery(),
@@ -152,7 +152,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         //public bool UpdateCarrierAccountMappingStatus(String customerId, CarrierAccountStatus status)
         //{
-        //    var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+        //    var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, ConnectionString);
         //    return carrierAccountDataManager.UpdateCarrierAccountMappingStatus(customerId, status);
         //}
 

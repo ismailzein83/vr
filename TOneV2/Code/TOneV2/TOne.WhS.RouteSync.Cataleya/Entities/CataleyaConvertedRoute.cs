@@ -22,7 +22,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Entities
 
         public string ConvertToString()
         {
-            return string.Format("{1}{0}{2}{0}{3}", "\t", CarrierID, IsPercentage, Options);
+            return string.Format("{1}{0}{2}{0}{3}", "\t", Code, IsPercentage, Options);
         }
     }
 }
