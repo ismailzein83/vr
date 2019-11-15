@@ -1,0 +1,5 @@
+﻿CREATE TABLE [NIM_Fiber].[FiberConnectionModel] (
+    [ID] INT NOT NULL,
+    CONSTRAINT [PK__Fibercon__3214EC2731D75E8D] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+

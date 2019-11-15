@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SQL.NIM.Copper</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{b8f4e4c0-16d8-43c4-90f7-2e7ce8c3f1ec}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SQL.NIM.Copper</RootNamespace>
+    <AssemblyName>SQL.NIM.Copper</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="NIM_Copper\" />
+    <Folder Include="NIM_Copper\Tables\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="NIM_Copper\Tables\Cabinet.sql" />
+    <Build Include="NIM_Copper\Tables\SwitchSlotModel.sql" />
+    <Build Include="NIM_Copper\Tables\SwitchSlot.sql" />
+    <Build Include="NIM_Copper\Tables\SwitchRackModel.sql" />
+    <Build Include="NIM_Copper\Tables\SwitchRack.sql" />
+    <Build Include="NIM_Copper\Tables\SwitchModel.sql" />
+    <Build Include="NIM_Copper\Tables\SwitchCardModel.sql" />
+    <Build Include="NIM_Copper\Tables\SwitchCard.sql" />
+    <Build Include="NIM_Copper\Tables\Switch.sql" />
+    <Build Include="NIM_Copper\Tables\MDFVerticalModel.sql" />
+    <Build Include="NIM_Copper\Tables\MDFVertical.sql" />
+    <Build Include="NIM_Copper\Tables\MDFModel.sql" />
+    <Build Include="NIM_Copper\Tables\MDFHorizontalModel.sql" />
+    <Build Include="NIM_Copper\Tables\MDFHorizontal.sql" />
+    <Build Include="NIM_Copper\Tables\MDF.sql" />
+    <Build Include="NIM_Copper\Tables\EthernetModel.sql" />
+    <Build Include="NIM_Copper\Tables\DSLAMModel.sql" />
+    <Build Include="NIM_Copper\Tables\DSLAM.sql" />
+    <Build Include="NIM_Copper\Tables\DPModel.sql" />
+    <Build Include="NIM_Copper\Tables\DP.sql" />
+    <Build Include="NIM_Copper\Tables\DevicePortModel.sql" />
+    <Build Include="NIM_Copper\Tables\DevicePort.sql" />
+    <Build Include="NIM_Copper\Tables\CopperConnectionModel.sql" />
+    <Build Include="NIM_Copper\Tables\CopperConnection.sql" />
+    <Build Include="NIM_Copper\Tables\CabinetSecondarySideModel.sql" />
+    <Build Include="NIM_Copper\Tables\CabinetSecondarySide.sql" />
+    <Build Include="NIM_Copper\Tables\CabinetPrimarySideModel.sql" />
+    <Build Include="NIM_Copper\Tables\CabinetPrimarySide.sql" />
+    <Build Include="NIM_Copper\Tables\CabinetModel.sql" />
+    <Build Include="Security\VANRISE_wissam.ajamy.sql" />
+    <Build Include="Security\VANRISE_development.sql" />
+    <Build Include="Security\NIM_Copper.sql" />
+  </ItemGroup>
+</Project>

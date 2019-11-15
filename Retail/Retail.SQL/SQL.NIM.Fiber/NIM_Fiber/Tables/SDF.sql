@@ -1,0 +1,5 @@
+﻿CREATE TABLE [NIM_Fiber].[SDF] (
+    [ID] BIGINT NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+

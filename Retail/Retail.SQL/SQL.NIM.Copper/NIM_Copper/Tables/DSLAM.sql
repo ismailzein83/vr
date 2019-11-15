@@ -1,0 +1,5 @@
+﻿CREATE TABLE [NIM_Copper].[DSLAM] (
+    [ID] BIGINT NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
