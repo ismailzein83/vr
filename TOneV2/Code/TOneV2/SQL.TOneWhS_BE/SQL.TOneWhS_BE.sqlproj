@@ -117,6 +117,7 @@
     <Folder Include="TOneWhS_SMSBE\Tables\" />
     <Folder Include="TOneWhS_AM\" />
     <Folder Include="TOneWhS_AM\Tables\" />
+    <Folder Include="TOneWhS_Routing\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -676,5 +677,12 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistNotification_Get.sql" />
     <Build Include="TOneWhS_BE\Tables\LOB.sql" />
+    <Build Include="TOneWhS_Routing\Tables\RiskyMarginCode_Future.sql" />
+    <Build Include="TOneWhS_Routing\Tables\RiskyMarginCode_Current.sql" />
+    <Build Include="TOneWhS_Routing\Tables\CustomerRouteMarginSummary_Future.sql" />
+    <Build Include="TOneWhS_Routing\Tables\CustomerRouteMarginSummary_Current.sql" />
+    <Build Include="TOneWhS_Routing\Tables\CustomerRouteMargin_Future.sql" />
+    <Build Include="TOneWhS_Routing\Tables\CustomerRouteMargin_Current.sql" />
+    <Build Include="TOneWhS_Routing\Views\CustomerRouteMarginSummary.sql" />
   </ItemGroup>
 </Project>
