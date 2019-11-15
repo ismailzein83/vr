@@ -8,6 +8,7 @@ namespace Retail.NIM.Entities
 {
     public class ReserveConnectionOutput
     {
+        public long ConnectionId { get; set; }
         public ReservePortOutput Port1 { get; set; }
         public ReservePortOutput Port2 { get; set; }
     }

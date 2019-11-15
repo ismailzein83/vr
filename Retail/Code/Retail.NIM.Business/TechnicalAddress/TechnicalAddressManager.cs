@@ -257,12 +257,12 @@ namespace Retail.NIM.Business
                     subscriptionFeasible = false;
                 }
 
-                item.Connections.Add(new GetTechnicalAddressOutputTechnologyItemConnection
-                {
-                    ConnectionId = connection.ConnectionId,
-                    Port1Id = connection.Port1Id,
-                    Port2Id = connection.Port2Id
-                });
+                //item.Connections.Add(new GetTechnicalAddressOutputTechnologyItemConnection
+                //{
+                //    ConnectionId = connection.ConnectionId,
+                //    Port1Id = connection.Port1Id,
+                //    Port2Id = connection.Port2Id
+                //});
                 usedNodeIds.Add(nodeId);
                 if (connection.Port1NodeId != nodeId)
                 {

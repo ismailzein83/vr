@@ -113,6 +113,8 @@ namespace Retail.NIM.Business
 
             var firstItem = entities.First();
 
+            var connectionId = (long)firstItem.FieldValues[s_idFieldName];
+
             var port1Id = (long)firstItem.FieldValues.GetRecord(s_port1FieldName);
 
             var port2Id = (long)firstItem.FieldValues.GetRecord(s_port2FieldName);
@@ -123,6 +125,7 @@ namespace Retail.NIM.Business
 
             return new ReserveConnectionOutput
             {
+                ConnectionId = connectionId,
                 Port1 = reservedPort1,
                 Port2 = reservedPort2
             };
