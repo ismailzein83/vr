@@ -173,7 +173,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('093D631E-9F79-440C-8B3E-4194918E4768','CDR Comparison','CDRComparison_CDRComparisonSettings','General','{"Editor":"cdrcomparison-cdrcomparisonsettings-editor"}','{"$type":"CDRComparison.Entities.CDRComparisonSettingData, CDRComparison.Entities","TaskTimeoutInSeconds":300}',1)
+('093D631E-9F79-440C-8B3E-4194918E4768','CDR Comparison','CDRComparison_CDRComparisonSettings','General','{"Editor":"cdrcomparison-cdrcomparisonsettings-editor"}','{"$type":"CDRComparison.Entities.CDRComparisonSettingData, CDRComparison.Entities","TaskTimeoutInSeconds":300}',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
