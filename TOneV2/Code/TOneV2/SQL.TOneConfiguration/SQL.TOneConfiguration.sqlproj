@@ -159,6 +159,7 @@
     <Folder Include="VRJSON_PostScripts\Interconnect\Data" />
     <Folder Include="VRJSON_PostScripts\Interconnect\SMS" />
     <Folder Include="VRJSON_PostScripts\NIM" />
+    <Folder Include="VRJSON_PostScripts\CommonEntities" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -1021,12 +1022,9 @@
     <None Include="VRJSON_PostScripts\Mediation\Ogero.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Security.json" />
     <None Include="VRJSON_PostScripts\Common\VR_AccountBalance.json" />
-    <None Include="VRJSON_PostScripts\Common\VR_Address.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Analytic.json" />
-    <None Include="VRJSON_PostScripts\Common\VR_BankEntities.json" />
     <None Include="VRJSON_PostScripts\Common\VR_BEBridge.json" />
     <None Include="VRJSON_PostScripts\Common\VR_BusinessProcess.json" />
-    <None Include="VRJSON_PostScripts\Common\VR_CommonEntities.json" />
     <None Include="VRJSON_PostScripts\Common\VR_DataAnalysis.json" />
     <None Include="VRJSON_PostScripts\Common\VR_ExcelConversion.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Generic.json" />
@@ -1036,7 +1034,6 @@
     <None Include="VRJSON_PostScripts\Common\VR_Notification.json" />
     <None Include="VRJSON_PostScripts\Common\VR_NumberingPlan.json" />
     <None Include="VRJSON_PostScripts\Common\VR_NumberPrefix.json" />
-    <None Include="VRJSON_PostScripts\Common\VR_PersonProfile.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Queueing.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Reprocess.json" />
     <None Include="VRJSON_PostScripts\Common\VR_Rules.json" />
@@ -1086,5 +1083,9 @@
     <None Include="VRJSON_PostScripts\NIM\Retail_NIMBase.json" />
     <None Include="VRJSON_PostScripts\NIM\Retail_NIMCopper.json" />
     <None Include="VRJSON_PostScripts\NIM\Retail_NIMFiber.json" />
+    <None Include="VRJSON_PostScripts\CommonEntities\VR_CommonEntities.json" />
+    <None Include="VRJSON_PostScripts\CommonEntities\VR_BankEntities.json" />
+    <None Include="VRJSON_PostScripts\CommonEntities\VR_PersonProfile.json" />
+    <None Include="VRJSON_PostScripts\CommonEntities\VR_Address.json" />
   </ItemGroup>
 </Project>
