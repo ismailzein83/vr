@@ -5440,6 +5440,23 @@
               "LastModifiedTime": "2019-11-15T17:13:54.98",
               "RenderedAsView": true
             }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "2cde49da-6e10-45eb-b9cc-b508f2c154d2",
+              "DevProjectID": "39fd306b-90f9-48aa-8ca4-848bfc74eca6",
+              "Name": "Contract Sub Types",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "50624672-cd25-44fd-8580-0e3ac8e34c71",
+              "Icon": null,
+              "Rank": 9,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\",\"LocalizedName\":\"CRMFixed.ContractSubTypes\"}",
+              "LastModifiedTime": "2019-11-15T17:25:11.867",
+              "RenderedAsView": true
+            }
           }
         ],
         "Variables": null,
