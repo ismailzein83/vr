@@ -171,6 +171,9 @@ C5.json
 NetworkInventory
 NetworkInventory.PostDeployment.sql
 Retail_NIMForFixedOperator.PostDeployment.json
+Retail_NIMBase.json
+Retail_NIMCopper.json
+Retail_NIMFiber.json
 
 TelecomCRM
 TelecomCRM.PostDeployment.sql
