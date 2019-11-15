@@ -17,13 +17,12 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_Teles/Directives/AccountAction/Provisioning/ChangeUsersRGs/Templates/ChangeUserRGsDirectiveTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Teles/Directives/AccountAction/Provisioning/ChangeUsersRGs/Templates/ChangeUserRGsDefinitionTemplate.html"
 
         };
         function ProvisionerDefinitionsettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var mainPayload;
-
+            var classFQTN;
             var newRoutingGroupConditionAPI;
             var newRoutingGroupConditionReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -88,15 +87,14 @@
                 api.load = function (payload) {
                     var settings;
                     if (payload != undefined) {
-                        mainPayload = payload;
                         settings = payload.provisionerDefinitionSettings != undefined ? payload.provisionerDefinitionSettings : payload.ExtendedSettings;
+                        classFQTN = payload.classFQTN;
                         if (settings != undefined) {
                             $scope.scopeModel.saveChangesToAccountState = settings.SaveChangesToAccountState;
                             $scope.scopeModel.actionType = settings.ActionType;
                             $scope.scopeModel.selectedNewRGNoMatchHandling = UtilsService.getItemByVal($scope.scopeModel.newRGNoMatchHandlings, settings.NewRGNoMatchHandling, "value");
                             $scope.scopeModel.selectedNewRGMultiMatchHandling = UtilsService.getItemByVal($scope.scopeModel.newRGMultiMatchHandlings, settings.NewRGMultiMatchHandling, "value");
                             $scope.scopeModel.selectedExistingRGNoMatchHandling = UtilsService.getItemByVal($scope.scopeModel.existingRGNoMatchHandlings, settings.ExistingRGNoMatchHandling, "value");
-
                         }
 
                     }
@@ -180,7 +178,7 @@
                     function loadUserTypes() {
                         var userTypeLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        userTypeReadyDeferred.promise.then(function () {    
+                        userTypeReadyDeferred.promise.then(function () {
                             var userTypePayload;
                             if (settings != undefined) {
                                 userTypePayload = { selectedIds: settings.UserTypeId };
@@ -192,29 +190,33 @@
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                api.setData = function (object) {
-                    object.SaveChangesToAccountState = $scope.scopeModel.saveChangesToAccountState;
-                    object.ActionType = $scope.scopeModel.saveChangesToAccountState ? $scope.scopeModel.actionType : undefined;
-                    object.NewRoutingGroupCondition = newRoutingGroupConditionAPI.getData();
-                    object.ExistingRoutingGroupCondition = existingRoutingGroupConditionAPI.getData();
-                    object.VRConnectionId = conectionTypeAPI.getSelectedIds();
-                    object.NewRGNoMatchHandling = $scope.scopeModel.selectedNewRGNoMatchHandling.value;
-                    object.NewRGMultiMatchHandling = $scope.scopeModel.selectedNewRGMultiMatchHandling.value;
-                    object.ExistingRGNoMatchHandling = $scope.scopeModel.selectedExistingRGNoMatchHandling.value;
-                    object.CompanyTypeId = companyTypeAPI.getSelectedIds();
-                    object.SiteTypeId = siteTypeAPI.getSelectedIds();
-                    object.UserTypeId = userTypeAPI.getSelectedIds();
+                api.getData = function () {
+                    return {
+                        $type: classFQTN,
+                        SaveChangesToAccountState: $scope.scopeModel.saveChangesToAccountState,
+                        ActionType: $scope.scopeModel.saveChangesToAccountState ? $scope.scopeModel.actionType : undefined,
+                        NewRoutingGroupCondition: newRoutingGroupConditionAPI.getData(),
+                        ExistingRoutingGroupCondition: existingRoutingGroupConditionAPI.getData(),
+                        VRConnectionId: conectionTypeAPI.getSelectedIds(),
+                        NewRGNoMatchHandling: $scope.scopeModel.selectedNewRGNoMatchHandling.value,
+                        NewRGMultiMatchHandling: $scope.scopeModel.selectedNewRGMultiMatchHandling.value,
+                        ExistingRGNoMatchHandling: $scope.scopeModel.selectedExistingRGNoMatchHandling.value,
+                        CompanyTypeId: companyTypeAPI.getSelectedIds(),
+                        SiteTypeId: siteTypeAPI.getSelectedIds(),
+                        UserTypeId: userTypeAPI.getSelectedIds()
+                    };
+
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
 
-               
+
             }
         }
     }
 
-    app.directive('retailTelesProvisionerDefinitionsettingsChangeusersrgsDirective', ProvisionerDefinitionsettingsDirective);
+    app.directive('retailTelesProvisionerDefinitionChangeusersrgs', ProvisionerDefinitionsettingsDirective);
 
 })(app);
