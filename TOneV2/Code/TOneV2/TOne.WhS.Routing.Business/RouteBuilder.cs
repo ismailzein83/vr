@@ -50,6 +50,10 @@ namespace TOne.WhS.Routing.Business
 
             bool keepBackupsForRemovedOptions = new ConfigManager().GetCustomerRouteBuildKeepBackUpsForRemovedOptions();
 
+            CustomerRouteOptionMarginStaging optimalCustomerRouteOptionMarginStaging = null;
+            if (context.GenerateAnalysisData)
+                optimalCustomerRouteOptionMarginStaging = GetOptimalCustomerRouteOptionMarginStaging(context.SupplierCodeMatches);
+
             if (context.SaleZoneDefintions != null)
             {
                 Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules = new Dictionary<RouteRule, List<RouteOptionRuleTarget>>();
@@ -110,12 +114,15 @@ namespace TOne.WhS.Routing.Business
                                         SaleZoneId = customerZoneDetail.SaleZoneId,
                                         SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds
                                     };
-                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetailData, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier,
-                                        routeRuleTarget, routeRule, context.RoutingDatabase, RoutingProcessType.CustomerRoute, keepBackupsForRemovedOptions);
+                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetailData, context.SupplierCodeMatches,
+                                        context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule, context.RoutingDatabase, RoutingProcessType.CustomerRoute, keepBackupsForRemovedOptions);
 
                                     route.CustomerId = customerZoneDetail.CustomerId;
                                     route.VersionNumber = context.VersionNumber;
                                     customerRoutes.Add(route);
+
+                                    if (context.GenerateAnalysisData)
+                                        CalculateAndAddRouteMargin(route, customerZoneDetail, context.SupplierCodeMatchesBySupplier, optimalCustomerRouteOptionMarginStaging, context.SaleZoneOptionsMarginStagingByCustomerSaleZone);
                                 }
                             }
                             else
@@ -142,27 +149,8 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
             }
+
             return customerRoutes;
-
-
-        }
-
-        private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager, List<CustomerRoute> customerRoutes,
-            HashSet<int> countryIdsHavingParentCode, string routeCode, SaleZoneDefintion saleZoneDefintion, int routeCodeCountryId, bool isCountryIdsHavingParentCodeNotEmpty, int versionNumber)
-        {
-            HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
-            {
-                var customerCountryIds = customerCountryManager.GetCustomerCountryIds(customerId, context.EntitiesEffectiveOn, context.EntitiesEffectiveInFuture);
-                return customerCountryIds != null ? Vanrise.Common.ExtensionMethods.ToHashSet(customerCountryIds) : null;
-            });
-
-            if (soldCountries == null)
-                return;
-
-            if (soldCountries.Contains(routeCodeCountryId) || (isCountryIdsHavingParentCodeNotEmpty && countryIdsHavingParentCode.Any(soldCountries.Contains)))
-            {
-                customerRoutes.Add(new CustomerRoute() { Code = routeCode, CorrespondentType = CorrespondentType.Other, CustomerId = customerId, SaleZoneId = saleZoneDefintion.SaleZoneId, VersionNumber = versionNumber });
-            }
         }
 
         public IEnumerable<RPRouteByCustomer> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId)
@@ -305,8 +293,9 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        public T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetailData customerZoneDetailData, List<SupplierCodeMatchWithRate> supplierCodeMatches,
-            SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase, RoutingProcessType processType, bool keepBackupsForRemovedOptions) where T : BaseRoute
+        public T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetailData customerZoneDetailData,
+            List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase,
+            RoutingProcessType processType, bool keepBackupsForRemovedOptions) where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
             int numberOfOptionsInSettings = configManager.GetCustomerRouteBuildNumberOfOptions();
@@ -334,7 +323,6 @@ namespace TOne.WhS.Routing.Business
                 case RoutingProcessType.CustomerRoute: maxNumberOfOptions = routeRule.Settings.GetMaxNumberOfOptions(routeRuleExecutionContext); break;
                 case RoutingProcessType.RoutingProductRoute: maxNumberOfOptions = null; break;
             }
-
 
             if (routeRule.Settings.UseOrderedExecution)
             {
@@ -427,6 +415,114 @@ namespace TOne.WhS.Routing.Business
 
             route.IsBlocked = routeRuleTarget.BlockRoute;
             return route;
+        }
+
+        private CustomerRouteOptionMarginStaging GetOptimalCustomerRouteOptionMarginStaging(List<SupplierCodeMatchWithRate> supplierCodeMatches)
+        {
+            if (supplierCodeMatches == null || supplierCodeMatches.Count == 0)
+                return null;
+
+            SupplierCodeMatchWithRate firstSupplierCodeMatchWithRate = supplierCodeMatches.First();
+
+            CustomerRouteOptionMarginStaging optimalCustomerRouteOptionMarginStaging = new CustomerRouteOptionMarginStaging()
+            {
+                SupplierZoneID = firstSupplierCodeMatchWithRate.CodeMatch.SupplierZoneId,
+                SupplierServiceIDs = firstSupplierCodeMatchWithRate.SupplierServiceIds,
+                SupplierRate = firstSupplierCodeMatchWithRate.RateValue,
+                SupplierDealID = firstSupplierCodeMatchWithRate.DealId
+            };
+
+            foreach (var supplierCodeMatch in supplierCodeMatches)
+            {
+                if (optimalCustomerRouteOptionMarginStaging.SupplierRate <= supplierCodeMatch.RateValue)
+                    continue;
+
+                optimalCustomerRouteOptionMarginStaging.SupplierZoneID = supplierCodeMatch.CodeMatch.SupplierZoneId;
+                optimalCustomerRouteOptionMarginStaging.SupplierServiceIDs = supplierCodeMatch.SupplierServiceIds;
+                optimalCustomerRouteOptionMarginStaging.SupplierRate = supplierCodeMatch.RateValue;
+                optimalCustomerRouteOptionMarginStaging.SupplierDealID = supplierCodeMatch.DealId;
+            }
+
+            return optimalCustomerRouteOptionMarginStaging;
+        }
+
+        private void CalculateAndAddRouteMargin(CustomerRoute route, CustomerZoneDetail customerZoneDetail, SupplierCodeMatchWithRateBySupplier supplierCodeMatchesBySupplier,
+            CustomerRouteOptionMarginStaging optimalCustomerRouteOptionMarginStaging, Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging> saleZoneOptionsMarginStagingByCustomerSaleZone)
+        {
+            List<RouteOption> routeOptions = route.Options;
+            if (routeOptions == null || routeOptions.Count == 0)
+                return;
+
+            var firstOption = routeOptions.FirstOrDefault(itm => !itm.IsBlocked);
+            if (firstOption == null)
+                return;
+
+            var customerRouteOptionMarginStagingBySupplierZone = new Dictionary<long, CustomerRouteOptionMarginStaging>();
+
+            SupplierCodeMatchWithRate supplierCodeMatchWithRate = supplierCodeMatchesBySupplier[firstOption.SupplierId];
+
+            var firstCustomerRouteOptionMarginStaging = new CustomerRouteOptionMarginStaging()
+            {
+                SupplierZoneID = firstOption.SupplierZoneId,
+                SupplierServiceIDs = firstOption.ExactSupplierServiceIds,
+                SupplierRate = firstOption.SupplierRate,
+                SupplierDealID = supplierCodeMatchWithRate.DealId
+            };
+            customerRouteOptionMarginStagingBySupplierZone.Add(firstOption.SupplierZoneId, firstCustomerRouteOptionMarginStaging);
+
+            if (firstOption.Percentage.HasValue)
+            {
+                foreach (var currentRouteOption in routeOptions)
+                {
+                    if (currentRouteOption == firstOption || !currentRouteOption.Percentage.HasValue || currentRouteOption.IsBlocked
+                        || customerRouteOptionMarginStagingBySupplierZone.ContainsKey(currentRouteOption.SupplierZoneId))
+                        continue;
+
+                    SupplierCodeMatchWithRate currentSupplierCodeMatchWithRate = supplierCodeMatchesBySupplier[currentRouteOption.SupplierId];
+
+                    var currentCustomerRouteOptionMarginStaging = new CustomerRouteOptionMarginStaging()
+                    {
+                        SupplierZoneID = currentRouteOption.SupplierZoneId,
+                        SupplierServiceIDs = currentRouteOption.ExactSupplierServiceIds,
+                        SupplierRate = currentRouteOption.SupplierRate,
+                        SupplierDealID = currentSupplierCodeMatchWithRate.DealId
+                    };
+                    customerRouteOptionMarginStagingBySupplierZone.Add(currentRouteOption.SupplierZoneId, currentCustomerRouteOptionMarginStaging);
+                }
+            }
+
+            CustomerSaleZone customerSaleZone = new CustomerSaleZone() { CustomerId = customerZoneDetail.CustomerId, SaleZoneId = customerZoneDetail.SaleZoneId };
+            SaleZoneOptionsMarginStaging saleZoneOptionsMarginStaging = saleZoneOptionsMarginStagingByCustomerSaleZone.GetOrCreateItem(customerSaleZone, () => new SaleZoneOptionsMarginStaging()
+            {
+                SaleRate = route.Rate.Value,
+                SaleDealID = customerZoneDetail.DealId,
+                CodeOptionsMarginStagingList = new List<CodeOptionsMarginStaging>()
+            });
+
+            saleZoneOptionsMarginStaging.CodeOptionsMarginStagingList.Add(new CodeOptionsMarginStaging()
+            {
+                Code = route.Code,
+                CustomerRouteOptionMarginStagingBySupplierZone = customerRouteOptionMarginStagingBySupplierZone,
+                OptimalCustomerRouteOptionMarginStaging = optimalCustomerRouteOptionMarginStaging
+            });
+        }
+
+        private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager, List<CustomerRoute> customerRoutes,
+            HashSet<int> countryIdsHavingParentCode, string routeCode, SaleZoneDefintion saleZoneDefintion, int routeCodeCountryId, bool isCountryIdsHavingParentCodeNotEmpty, int versionNumber)
+        {
+            HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
+            {
+                var customerCountryIds = customerCountryManager.GetCustomerCountryIds(customerId, context.EntitiesEffectiveOn, context.EntitiesEffectiveInFuture);
+                return customerCountryIds != null ? Vanrise.Common.ExtensionMethods.ToHashSet(customerCountryIds) : null;
+            });
+
+            if (soldCountries == null)
+                return;
+
+            if (soldCountries.Contains(routeCodeCountryId) || (isCountryIdsHavingParentCodeNotEmpty && countryIdsHavingParentCode.Any(soldCountries.Contains)))
+            {
+                customerRoutes.Add(new CustomerRoute() { Code = routeCode, CorrespondentType = CorrespondentType.Other, CustomerId = customerId, SaleZoneId = saleZoneDefintion.SaleZoneId, VersionNumber = versionNumber });
+            }
         }
 
         private List<RouteOptionRuleTarget> CloneRouteOptionRuleTargets(List<RouteOptionRuleTarget> routeOptionRuleTargets)
@@ -531,7 +627,8 @@ namespace TOne.WhS.Routing.Business
             return results;
         }
 
-        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, int sellingNumberPlanId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase)
+        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, int sellingNumberPlanId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget,
+            RouteRule routeRule, RoutingDatabase routingDatabase)
         {
             ConfigManager configManager = new ConfigManager();
 
@@ -664,6 +761,10 @@ namespace TOne.WhS.Routing.Business
 
             optionSupplierDetails.SupplierZones.Add(optionSupplierZone);
         }
+
+        #endregion
+
+        #region Classes
 
         private class FinalizeRouteOptionContext : IFinalizeRouteOptionContext
         {

@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Activities;
-using TOne.WhS.Routing.Entities;
-using Vanrise.Queueing;
-using Vanrise.BusinessProcess;
-using TOne.WhS.Routing.Business;
-using Vanrise.Entities;
+using System.Collections.Generic;
+using System.Linq;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.BP.Activities;
 using TOne.WhS.RouteSync.Entities;
-using TOne.WhS.Routing.Business.Extensions;
-using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
+using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -19,7 +19,9 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<RoutingCodeMatches> InputQueue { get; set; }
         public BaseQueue<CustomerRoutesBatch> OutputQueue { get; set; }
         public DateTime? EffectiveDate { get; set; }
+        public RoutingDatabaseType RoutingDatabaseType { get; set; }
         public bool IsFuture { get; set; }
+        public bool GenerateAnalysisData { get; set; }
         public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
         public int VersionNumber { get; set; }
         public int RoutingDatabaseId { get; set; }
@@ -41,7 +43,13 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<DateTime?> EffectiveDate { get; set; }
 
         [RequiredArgument]
+        public InArgument<RoutingDatabaseType> RoutingDatabaseType { get; set; }
+
+        [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
+
+        [RequiredArgument]
+        public InArgument<bool> GenerateAnalysisData { get; set; }
 
         [RequiredArgument]
         public InArgument<IEnumerable<RoutingCustomerInfo>> ActiveRoutingCustomerInfos { get; set; }
@@ -52,6 +60,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
 
+        [RequiredArgument]
         public InArgument<List<SwitchInProcess>> SwitchesInProcess { get; set; }
 
 
@@ -73,6 +82,10 @@ namespace TOne.WhS.Routing.BP.Activities
 
             Dictionary<int, HashSet<int>> customerCountries = new Dictionary<int, HashSet<int>>();
 
+            Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging> saleZoneOptionsMarginStagingByCustomerSaleZone = null;
+            if (inputArgument.GenerateAnalysisData)
+                saleZoneOptionsMarginStagingByCustomerSaleZone = new Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging>();
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -81,7 +94,8 @@ namespace TOne.WhS.Routing.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
                     {
                         BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate,
-                            inputArgument.IsFuture, inputArgument.ActiveRoutingCustomerInfos, customerCountries, inputArgument.VersionNumber, true, routingDatabase);
+                            inputArgument.IsFuture, inputArgument.ActiveRoutingCustomerInfos, customerCountries, inputArgument.VersionNumber, true, routingDatabase,
+                            inputArgument.GenerateAnalysisData, saleZoneOptionsMarginStagingByCustomerSaleZone);
 
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code);
 
@@ -102,12 +116,18 @@ namespace TOne.WhS.Routing.BP.Activities
                 } while (!ShouldStop(handle) && hasItem);
             });
 
+            if (inputArgument.GenerateAnalysisData)
+            {
+                List<CustomerRouteMarginStaging> customerRouteMarginStagingList = GetCustomerRouteMarginStagingList(saleZoneOptionsMarginStagingByCustomerSaleZone);
+                if (customerRouteMarginStagingList != null && customerRouteMarginStagingList.Count > 0)
+                    new CustomerRouteMarginStagingManager().InsertCustomerRouteMarginStagingListToDB(inputArgument.RoutingDatabaseType, customerRouteMarginStagingList);
+            }
+
             if (customerRoutesBatch.CustomerRoutes.Count > 0)
             {
                 if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)
-                {
                     switchesInProcessRoutes.AddRange(customerRoutesBatch.CustomerRoutes);
-                }
+
                 inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
             }
 
@@ -115,6 +135,70 @@ namespace TOne.WhS.Routing.BP.Activities
                 FillSwitchInProcessQueues(inputArgument.SwitchesInProcess, switchesInProcessRoutes);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Customer Routes is done", null);
+        }
+
+        private List<CustomerRouteMarginStaging> GetCustomerRouteMarginStagingList(Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging> saleZoneOptionsMarginStagingByCustomerSaleZone)
+        {
+            if (saleZoneOptionsMarginStagingByCustomerSaleZone == null || saleZoneOptionsMarginStagingByCustomerSaleZone.Count == 0)
+                return null;
+
+            Dictionary<CustomerRouteMarginIdentifier, CustomerRouteMarginStaging> results = new Dictionary<CustomerRouteMarginIdentifier, CustomerRouteMarginStaging>();
+
+            foreach (var kvp in saleZoneOptionsMarginStagingByCustomerSaleZone)
+            {
+                CustomerSaleZone customerSaleZone = kvp.Key;
+                SaleZoneOptionsMarginStaging saleZoneOptionsMarginStaging = kvp.Value;
+
+                foreach (var codeOptionsMarginStaging in saleZoneOptionsMarginStaging.CodeOptionsMarginStagingList)
+                {
+                    foreach (var customerRouteOptionMarginBySupplierZone in codeOptionsMarginStaging.CustomerRouteOptionMarginStagingBySupplierZone)
+                    {
+                        long supplierZoneId = customerRouteOptionMarginBySupplierZone.Key;
+                        CustomerRouteOptionMarginStaging customerRouteOptionMarginStaging = customerRouteOptionMarginBySupplierZone.Value;
+
+                        var customerRouteMarginIdentifier = new CustomerRouteMarginIdentifier()
+                        {
+                            CustomerID = customerSaleZone.CustomerId,
+                            SaleZoneID = customerSaleZone.SaleZoneId,
+                            SupplierZoneID = supplierZoneId
+                        };
+
+                        if (results.TryGetValue(customerRouteMarginIdentifier, out CustomerRouteMarginStaging customerRouteMarginStaging))
+                        {
+                            if (customerRouteMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierRate < customerRouteOptionMarginStaging.SupplierRate)
+                            {
+                                customerRouteMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierZoneID = customerRouteOptionMarginStaging.SupplierZoneID;
+                                customerRouteMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierServiceIDs = customerRouteOptionMarginStaging.SupplierServiceIDs;
+                                customerRouteMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierRate = customerRouteOptionMarginStaging.SupplierRate;
+                                customerRouteMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierDealID = customerRouteOptionMarginStaging.SupplierDealID;
+                            }
+
+                            customerRouteMarginStaging.Codes.Add(codeOptionsMarginStaging.Code);
+                        }
+                        else
+                        {
+                            results.Add(customerRouteMarginIdentifier, new CustomerRouteMarginStaging()
+                            {
+                                CustomerID = customerSaleZone.CustomerId,
+                                SaleZoneID = customerSaleZone.SaleZoneId,
+                                SaleRate = saleZoneOptionsMarginStaging.SaleRate,
+                                SaleDealID = saleZoneOptionsMarginStaging.SaleDealID,
+                                Codes = new HashSet<string>() { codeOptionsMarginStaging.Code },
+                                CustomerRouteOptionMarginStaging = customerRouteOptionMarginStaging,
+                                OptimalCustomerRouteOptionMarginStaging = new CustomerRouteOptionMarginStaging()
+                                {
+                                    SupplierZoneID = codeOptionsMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierZoneID,
+                                    SupplierServiceIDs = codeOptionsMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierServiceIDs,
+                                    SupplierRate = codeOptionsMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierRate,
+                                    SupplierDealID = codeOptionsMarginStaging.OptimalCustomerRouteOptionMarginStaging.SupplierDealID
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            return results.Values.ToList();
         }
 
         protected override BuildCustomerRoutesInput GetInputArgument2(AsyncCodeActivityContext context)
@@ -125,7 +209,9 @@ namespace TOne.WhS.Routing.BP.Activities
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 EffectiveDate = this.EffectiveDate.Get(context),
+                RoutingDatabaseType = this.RoutingDatabaseType.Get(context),
                 IsFuture = this.IsFuture.Get(context),
+                GenerateAnalysisData = this.GenerateAnalysisData.Get(context),
                 ActiveRoutingCustomerInfos = this.ActiveRoutingCustomerInfos.Get(context),
                 VersionNumber = this.VersionNumber.Get(context),
                 RoutingDatabaseId = this.RoutingDatabaseId.Get(context),

@@ -59,7 +59,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICustomerRouteMarginStagingDataManager.cs" />
+    <Compile Include="ICustomerRouteMarginDataManager.cs" />
+    <Compile Include="ICustomerRouteMarginSummaryDataManager.cs" />
     <Compile Include="IModifiedCustomerRoutePreviewDataManager.cs" />
+    <Compile Include="IRiskyMarginCodeDataManager.cs" />
     <Compile Include="IRPZoneCodeGroupDataManager.cs" />
     <Compile Include="IRPQualityConfigurationDataManager.cs" />
     <Compile Include="ICustomerQualityConfigurationDataManager.cs" />

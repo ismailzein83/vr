@@ -109,6 +109,10 @@
   <ItemGroup>
     <Compile Include="CodeMatchBuilder.cs" />
     <Compile Include="CodeZoneMatchManager.cs" />
+    <Compile Include="CustomerRouteMargin\CustomerRouteMarginManager.cs" />
+    <Compile Include="CustomerRouteMargin\CustomerRouteMarginStagingManager.cs" />
+    <Compile Include="CustomerRouteMargin\CustomerRouteMarginSummaryManager.cs" />
+    <Compile Include="CustomerRouteMargin\RiskyMarginCodeManager.cs" />
     <Compile Include="CustomerZoneDetailsManager.cs" />
     <Compile Include="ModifiedCustomerRoutePreviewManager.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationDefinition\QualityConfigurationDefinitionManager.cs" />

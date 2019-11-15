@@ -18,10 +18,12 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public override string GetTitle()
         {
+            string routingProcessModeDescription = Vanrise.Common.Utilities.GetEnumDescription(this.RoutingProcessMode);
+
             if (EffectiveTime.HasValue)
-                return String.Format("#BPDefinitionTitle# for Effective Time {0}", EffectiveTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                return String.Format($"{routingProcessModeDescription} for Effective Time {EffectiveTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}");
             else
-                return String.Format("#BPDefinitionTitle#");
+                return String.Format($"{routingProcessModeDescription}");
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)

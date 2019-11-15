@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
@@ -30,6 +27,10 @@ namespace TOne.WhS.Routing.Entities
         bool IsFullRouteBuild { get; }
 
         RoutingDatabase RoutingDatabase { get; }
+
+        bool GenerateAnalysisData { get; }
+
+        Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging> SaleZoneOptionsMarginStagingByCustomerSaleZone { get; }
     }
 
     public class BuildCustomerRoutesContext : IBuildCustomerRoutesContext
@@ -56,9 +57,13 @@ namespace TOne.WhS.Routing.Entities
 
         public RoutingDatabase RoutingDatabase { get; set; }
 
+        public bool GenerateAnalysisData { get; set; }
+
+        public Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging> SaleZoneOptionsMarginStagingByCustomerSaleZone { get; set; }
 
         public BuildCustomerRoutesContext(RoutingCodeMatches routingCodeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture,
-            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries, int versionNumber, bool isFullRouteBuild, RoutingDatabase routingDatabase)
+            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries, int versionNumber, bool isFullRouteBuild,
+            RoutingDatabase routingDatabase, bool generateAnalysisData, Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging> saleZoneOptionsMarginStagingByCustomerSaleZone)
         {
             this.SaleZoneDefintions = routingCodeMatches.SaleZoneDefintions;
             this.SupplierCodeMatches = routingCodeMatches.SupplierCodeMatches;
@@ -71,6 +76,8 @@ namespace TOne.WhS.Routing.Entities
             this.VersionNumber = versionNumber;
             this.IsFullRouteBuild = isFullRouteBuild;
             this.RoutingDatabase = routingDatabase;
+            this.GenerateAnalysisData = generateAnalysisData;
+            this.SaleZoneOptionsMarginStagingByCustomerSaleZone = saleZoneOptionsMarginStagingByCustomerSaleZone;
         }
     }
 }

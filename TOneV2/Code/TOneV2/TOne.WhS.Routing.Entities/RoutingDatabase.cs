@@ -1,10 +1,22 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public enum RoutingProcessMode : byte { RouteBuild = 0, Analysis = 1, RouteBuildWithAnalysis = 2 }
+    public enum RoutingProcessMode : byte
+    {
+        [Description("Route Build")]
+        RouteBuild = 0,
+
+        [Description("Route Analysis")]
+        RouteAnalysis = 1,
+
+        [Description("Route Build With Analysis")]
+        RouteBuildWithAnalysis = 2
+    }
     public enum RoutingProcessType : byte { RoutingProductRoute = 0, CustomerRoute = 1 }
     public enum RoutingDatabaseType : byte { Current = 0, Future = 1, SpecificDate = 2 }
+
     public class RoutingDatabase
     {
         public int ID { get; set; }

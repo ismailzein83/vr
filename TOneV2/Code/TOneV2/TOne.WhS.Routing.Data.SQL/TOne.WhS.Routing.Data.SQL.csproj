@@ -58,6 +58,9 @@
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
@@ -67,7 +70,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomerRouteMarginStagingDataManager.cs" />
+    <Compile Include="CustomerRouteMarginDataManager.cs" />
+    <Compile Include="CustomerRouteMarginSummaryDataManager.cs" />
     <Compile Include="ModifiedCustomerRoutePreviewDataManager.cs" />
+    <Compile Include="RiskyMarginCodeDataManager.cs" />
     <Compile Include="RPZoneCodeGroupDataManager.cs" />
     <Compile Include="RPQualityConfigurationDataManager.cs" />
     <Compile Include="CustomerQualityConfigurationDataManager.cs" />

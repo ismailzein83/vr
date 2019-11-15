@@ -57,6 +57,7 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
@@ -74,6 +75,7 @@
       <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
@@ -132,7 +134,7 @@
             </InArgument>
           </twrba2:GetSaleCodes.IsFuture>
         </twrba2:GetSaleCodes>
-        <twrba2:GetCustomerZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCustomerZoneDetails_1">
+        <twrba2:GetCustomerZoneDetails FromZoneId="{x:Null}" Status="{x:Null}" ToZoneId="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCustomerZoneDetails_1">
           <twrba2:GetCustomerZoneDetails.CustomerZoneDetails>
             <OutArgument x:TypeArguments="twre:CustomerZoneDetailByZone">
               <mca:CSharpReference x:TypeArguments="twre:CustomerZoneDetailByZone">CustomerZoneDetails</mca:CSharpReference>
@@ -332,6 +334,11 @@
             <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
           </InArgument>
         </twrba2:BuildCustomerRoutes.EffectiveDate>
+        <twrba2:BuildCustomerRoutes.GenerateAnalysisData>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.GenerateAnalysisData</mca:CSharpValue>
+          </InArgument>
+        </twrba2:BuildCustomerRoutes.GenerateAnalysisData>
         <twrba2:BuildCustomerRoutes.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(twre:RoutingCodeMatches)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RoutingCodeMatches)">queueCodeMatchesBatch_ForCustomerRoutes</mca:CSharpValue>
@@ -357,6 +364,11 @@
             <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
         </twrba2:BuildCustomerRoutes.RoutingDatabaseId>
+        <twrba2:BuildCustomerRoutes.RoutingDatabaseType>
+          <InArgument x:TypeArguments="twre:RoutingDatabaseType">
+            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
+          </InArgument>
+        </twrba2:BuildCustomerRoutes.RoutingDatabaseType>
         <twrba2:BuildCustomerRoutes.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">buildCustomerRoutesStatus</mca:CSharpReference>
@@ -510,7 +522,7 @@
         </If.Then>
       </If>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbGJSA4IEDgIBAVwFZw4DAbsJaAXWARADAfQH1wEFgwIKAwGqB4QCBYAEEAIBAmQLZIcBAwHGCV8LX3IDAbwJaQeYARIDAecImQEH1QESAwH1B9oBC9oBXgMBqwfeAQmBAhQDAbUHjAINjAKTAQIBGJYCDZYCjwECAQOaAge+AiEDAZUGvwIH8gIkAwHBBPMCB5IDLgMBwgOTAwejAygDAYIDpAMH2wMSAwGtAdwDB/8DDAIBLWoJcCkDAbAJcQmGAR8DAYcJhwEJlwEpAwHoCJ0BCaMBKQMB2wikAQnDASMDAZgIxAEJ1AEpAwH2B98BC/QBKgMBywf1AQuAAjIDAbYHrAINrAJ1AwGVB6cCDacCgwEDAYAHnQINnQJ4AwHrBrECDbECdwMB1gaiAg2iApcBAwHBBrYCDbYCfQMBrAaaAoYBmgKMAQMBqwa7Ag27AnMDAZYGxwINxwJzAwGABsICDcIChgEDAesF4AIN4AJvAwHWBdECDdECjwEDAcEF5QIN5QJhAwGsBe8CDe8CdAMBlwXMAg3MAmoDAYIF6gIN6gJ6AwHtBNsCDdsCiQEDAdgEvwJpvwJsAwHXBNYCDdYCWgMBwgSFAw2FA3IDAawE9gIN9gKBAQMBlwSKAw2KA2EDAYIEgAMNgANoAwHtA48DDY8DfAMB2AP7Ag37AnwDAcMDmwMNmwN0AwGtA5YDDZYDdAMBmAOgAw2gA2EDAYMDpQMJxAMtAwGDAsUDCdoDJwMBrgHfAw3fA2ACAS7jAwv9AykCAUNtD22QAQMBsQl+D35sAwGmCXkPeX8DAZwJdA90egMBkgmDAQ+DAVwDAYgJigEPigF9AwH9CJQBD5QBdwMB8wiPAQ+PAWMDAekIoAEPoAGIAQMB3AisAQ+sAWwDAdAIpwEPpwF6AwHFCLYBD7YBkAEDAboIwAEPwAGAAQMBrwi7AQ+7AYcBAwGkCLEBD7EBXAMBmQjHAQ/HAWMDAY0IzAEPzAF/AwGCCNEBD9EBfQMB9wfsARHsAagBAwHqB+cBEecBgAEDAeAH4gER4gFnAwHWB/EBEfEBXQMBzAf9ARH9AaMBAwHBB/gBEfgBbAMBtweyAw+yA3EDAe0CqAMPqAN9AwHYArcDD7cDYwMBwwK8Aw+8A2wDAa4CwQMPwQN7AwGZAq0DD60DewMBhALNAw/NA3MDAe4ByAMPyANzAwHZAdIDD9IDYwMBxAHXAw/XA2wDAa8B+gMR+gN4AwGYAfUDEfUDpAEDAYMB8AMR8AODAQIBbusDEesDdgIBWeYDEeYDmwECAUQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbGRUA44EDgIBAV4FaQ4DAeUJagXYARADAZ4I2QEFhQIKAwHUB4YCBYwEEAIBAmYLZocBAwHwCWELYXIDAeYJaweaARIDAZEJmwEH1wESAwGfCNwBC9wBXgMB1QfgAQmDAhQDAd8HjgINjgKTAQIBGJgCDZgCjwECAQOcAgfAAiEDAb8GwQIH/gIkAwHBBP8CB54DLgMBwgOfAwevAygDAYIDsAMH5wMSAwGtAegDB4sEDAIBLWwJcikDAdoJcwmIAR8DAbEJiQEJmQEpAwGSCZ8BCaUBKQMBhQmmAQnFASMDAcIIxgEJ1gEpAwGgCOEBC/YBKgMB9Qf3AQuCAjIDAeAHrgINrgJ1AwG/B6kCDakCgwEDAaoHnwINnwJ4AwGVB7MCDbMCdwMBgAekAg2kApcBAwHrBrgCDbgCfQMB1gacAoYBnAKMAQMB1Qa9Ag29AnMDAcAGyQINyQJzAwGqBsQCDcQChgEDAZUG8QIN8QJ0AwGABucCDecCbwMB6wXYAg3YAo8BAwHWBewCDewCYQMBwQXTAg3TAmYDAawF+wIN+wJ0AwGXBc4CDc4CagMBggX2Ag32AnoDAe0E4gIN4gKJAQMB2ATBAmnBAmwDAdcE3QIN3QJaAwHCBJEDDZEDcgMBrASCAw2CA4EBAwGXBJYDDZYDYQMBggSMAw2MA2gDAe0DmwMNmwN8AwHYA4cDDYcDfAMBwwOnAw2nA3QDAa0DogMNogN0AwGYA6wDDawDYQMBgwOxAwnQAy0DAYMC0QMJ5gMnAwGuAesDDesDYAIBLu8DC4kEKQIBQ28Pb5ABAwHbCYABD4ABbAMB0Al7D3t/AwHGCXYPdnoDAbwJhQEPhQFcAwGyCYwBD4wBfQMBpwmWAQ+WAXcDAZ0JkQEPkQFjAwGTCaIBD6IBiAEDAYYJrgEPrgFsAwH6CKkBD6kBegMB7wi4AQ+4AZABAwHkCMIBD8IBgAEDAdkIvQEPvQGHAQMBzgizAQ+zAVwDAcMIyQEPyQFjAwG3CM4BD84BfwMBrAjTAQ/TAX0DAaEI7gER7gGoAQMBlAjpARHpAYABAwGKCOQBEeQBZwMBgAjzARHzAV0DAfYH/wER/wGjAQMB6wf6ARH6AWwDAeEHvgMPvgNxAwHtArQDD7QDfQMB2ALDAw/DA2MDAcMCyAMPyANsAwGuAs0DD80DewMBmQK5Aw+5A3sDAYQC2QMP2QNzAwHuAdQDD9QDcwMB2QHeAw/eA2MDAcQB4wMP4wNsAwGvAYYEEYYEeAMBmAGBBBGBBKQBAwGDAfwDEfwDgwECAW73AxH3A3YCAVnyAxHyA5sBAgFE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

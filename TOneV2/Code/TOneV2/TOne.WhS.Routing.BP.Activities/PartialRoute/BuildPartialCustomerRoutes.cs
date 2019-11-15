@@ -92,7 +92,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     if (customerZoneDetailByZone != null)
                     {
                         BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(routingCodeMatches, customerZoneDetailByZone, inputArgument.EffectiveDate,
-                            false, null, null, inputArgument.VersionNumber, false, inputArgument.RoutingDatabase);
+                            false, null, null, inputArgument.VersionNumber, false, inputArgument.RoutingDatabase, false, null);
 
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, routingCodeMatches.Code);
 
@@ -106,7 +106,6 @@ namespace TOne.WhS.Routing.BP.Activities
 
             if (customerRoutesBatch.CustomerRoutes.Count > 0)
                 inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
-
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Customer Routes is done", null);
         }

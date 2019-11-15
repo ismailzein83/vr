@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
-using Vanrise.BusinessProcess;
-using TOne.WhS.Routing.Entities;
-using TOne.WhS.Routing.Data;
+﻿using System.Activities;
 using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
     public sealed class FinalizeRouteProcess : BaseCodeActivity
     {
+        [RequiredArgument]
         public InArgument<bool> BuildRouteSync { get; set; }
 
+        [RequiredArgument]
         public InArgument<RoutingDatabaseType> RoutingDatabaseType { get; set; }
 
+        [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
 
         protected override void VRExecute(IBaseCodeActivityContext context)
@@ -34,7 +33,8 @@ namespace TOne.WhS.Routing.BP.Activities
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(routingDatabaseId);
 
-            dataManager.FinalizeRoutingProcess(finalizeRouteContext, (message) => {
+            dataManager.FinalizeRoutingProcess(finalizeRouteContext, (message) =>
+            {
                 context.ActivityContext.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
             });
         }

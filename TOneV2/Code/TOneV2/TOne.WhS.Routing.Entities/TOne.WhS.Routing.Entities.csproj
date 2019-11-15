@@ -71,6 +71,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticMeasureInfo.cs" />
+    <Compile Include="CustomerRouteMargin\CustomerRouteMargin.cs" />
+    <Compile Include="CustomerRouteMargin\CustomerRouteMarginStaging.cs" />
+    <Compile Include="CustomerRouteMargin\CustomerRouteMarginSummary.cs" />
+    <Compile Include="CustomerRouteMargin\CustomerRouteOptionMargin.cs" />
+    <Compile Include="CustomerRouteMargin\CustomerRouteOptionMarginStaging.cs" />
+    <Compile Include="CustomerRouteMargin\RiskyMarginCode.cs" />
     <Compile Include="IRouteRuleAreSuppliersIncludedContext.cs" />
     <Compile Include="PartialRoute\ModifiedCustomerRouteOptionDetail.cs" />
     <Compile Include="PartialRoute\ModifiedCustomerRoutesPreviewDetail.cs" />

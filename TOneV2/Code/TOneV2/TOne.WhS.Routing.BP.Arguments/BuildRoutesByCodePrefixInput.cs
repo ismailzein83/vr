@@ -11,15 +11,19 @@ namespace TOne.WhS.Routing.BP.Arguments
     {
         public int ParentWFRuntimeProcessId { get; set; }
 
-        public Dictionary<string,int> SupplierCodeServiceRuntimeProcessIds { get; set; }
+        public Dictionary<string, int> SupplierCodeServiceRuntimeProcessIds { get; set; }
 
         public int RoutingDatabaseId { get; set; }
 
-		public bool ShouldApplyCodeZoneMatch { get; set; }
+        public bool ShouldApplyCodeZoneMatch { get; set; }
 
         public IEnumerable<CodePrefix> CodePrefixGroup { get; set; }
 
         public DateTime? EffectiveOn { get; set; }
+
+        public RoutingDatabaseType RoutingDatabaseType { get; set; }
+
+        public bool GenerateAnalysisData { get; set; }   
 
         public bool IsFuture { get; set; }
 
