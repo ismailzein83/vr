@@ -31,8 +31,8 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
                 $scope.effectiveAfterInMinutes = 0;
                 $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
                 $scope.routingProcessModes = UtilsService.getArrayEnum(WhS_Routing_RoutingProcessModeEnum);
-                $scope.routingProcessModeAnalysisValue = WhS_Routing_RoutingProcessModeEnum.Analysis.value;
-                $scope.routingProcessModeRouteBuildWithAnalysisValue = WhS_Routing_RoutingProcessModeEnum.RouteBuildWithAnalysis.value;
+                $scope.routeAnalysisModeValue = WhS_Routing_RoutingProcessModeEnum.RouteAnalysis.value;
+                $scope.routeBuildWithAnalysisModeValue = WhS_Routing_RoutingProcessModeEnum.RouteBuildWithAnalysis.value;
 
                 $scope.onSwitchSelectorReady = function (api) {
                     switchSelectorAPI = api;
@@ -124,13 +124,13 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
                 api.getData = function () {
 
                     var switches;
-                    if (!$scope.isFuture && $scope.selectedRoutingProcessMode.value != $scope.routingProcessModeAnalysisValue) {
+                    if (!$scope.isFuture && $scope.selectedRoutingProcessMode.value != $scope.routeAnalysisModeValue) {
                         switches = switchSelectorAPI.getSelectedIds();
                     }
 
                     var riskyMarginCategories;
-                    if ($scope.selectedRoutingProcessMode.value == $scope.routingProcessModeAnalysisValue ||
-                        $scope.selectedRoutingProcessMode.value == $scope.routingProcessModeRouteBuildWithAnalysisValue) {
+                    if ($scope.selectedRoutingProcessMode.value == $scope.routeAnalysisModeValue ||
+                        $scope.selectedRoutingProcessMode.value == $scope.routeBuildWithAnalysisModeValue) {
                         riskyMarginCategories = statusDefinitionSelectorAPI.getSelectedIds();
                     }
 

@@ -27,14 +27,13 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
             var statusDefinitionSelectorAPI;
             var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-
             function initializeController() {
                 $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
                 $scope.routingProcessModes = UtilsService.getArrayEnum(WhS_Routing_RoutingProcessModeEnum);
                 $scope.selectedRoutingProcessMode = WhS_Routing_RoutingProcessModeEnum.RouteBuild;
                 $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
-                $scope.routingProcessModeAnalysisValue = WhS_Routing_RoutingProcessModeEnum.Analysis.value;
-                $scope.routingProcessModeRouteBuildWithAnalysisValue = WhS_Routing_RoutingProcessModeEnum.RouteBuildWithAnalysis.value;
+                $scope.routeAnalysisModeValue = WhS_Routing_RoutingProcessModeEnum.RouteAnalysis.value;
+                $scope.routeBuildWithAnalysisModeValue = WhS_Routing_RoutingProcessModeEnum.RouteBuildWithAnalysis.value;
 
                 $scope.onSwitchSelectorReady = function (api) {
                     switchSelectorAPI = api;
@@ -109,13 +108,13 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
                 api.getData = function () {
 
                     var switches;
-                    if (!$scope.isFuture && $scope.selectedRoutingProcessMode.value != $scope.routingProcessModeAnalysisValue) {
+                    if (!$scope.isFuture && $scope.selectedRoutingProcessMode.value != $scope.routeAnalysisModeValue) {
                         switches = switchSelectorAPI.getSelectedIds();
                     }
 
                     var riskyMarginCategories;
-                    if ($scope.selectedRoutingProcessMode.value == $scope.routingProcessModeAnalysisValue ||
-                        $scope.selectedRoutingProcessMode.value == $scope.routingProcessModeRouteBuildWithAnalysisValue) {
+                    if ($scope.selectedRoutingProcessMode.value == $scope.routeAnalysisModeValue ||
+                        $scope.selectedRoutingProcessMode.value == $scope.routeBuildWithAnalysisModeValue) {
                         riskyMarginCategories = statusDefinitionSelectorAPI.getSelectedIds();
                     }
 

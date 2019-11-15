@@ -16,7 +16,7 @@
     </vr-columns>
 </vr-row>
 
-<vr-row ng-show="!isFuture && selectedRoutingProcessMode.value != routingProcessModeAnalysisValue">
+<vr-row ng-show="!isFuture && selectedRoutingProcessMode.value != routeAnalysisModeValue">
     <vr-columns width="fullrow">
         <vr-section title="Route Sync">
             <vr-whs-be-switch-selector on-ready="onSwitchSelectorReady" normal-col-num="6" ismultipleselection="true"></vr-whs-be-switch-selector>
@@ -24,7 +24,7 @@
     </vr-columns>
 </vr-row>
 
-<vr-row ng-show="selectedRoutingProcessMode.value == routingProcessModeAnalysisValue || selectedRoutingProcessMode.value == routingProcessModeRouteBuildWithAnalysisValue">
+<vr-row ng-show="selectedRoutingProcessMode.value == routeAnalysisModeValue || selectedRoutingProcessMode.value == routeBuildWithAnalysisModeValue">
     <vr-columns width="fullrow">
         <vr-section title="Analysis Data">
             <vr-common-statusdefinition-selector on-ready="onStatusDefinitionSelectorReady" customlabel="Risky Margin Categories"
