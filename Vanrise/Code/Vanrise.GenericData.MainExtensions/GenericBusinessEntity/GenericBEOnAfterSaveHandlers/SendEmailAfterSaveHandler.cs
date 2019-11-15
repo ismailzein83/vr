@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
+
 namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAfterSaveHandlers
 {
     public class SendEmailAfterSaveHandler : GenericBEOnAfterSaveHandler
@@ -39,16 +42,35 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
                 }
 
                 var mailTemplateId = genericBusinessEntityDefinitionManager.GetExtendedSettingsInfoByType(context.DefinitionSettings, this.InfoType);
-                if(mailTemplateId != null)
+                if (mailTemplateId != null)
                 {
+                    List<VRMailAttachement> vrMailAttachments = new List<VRMailAttachement>();
+
+                    if (!string.IsNullOrEmpty(WithAttachmentsFieldName) && !string.IsNullOrEmpty(AttachmentsFieldName))
+                    {
+                        bool withAttachments = (bool)context.NewEntity.FieldValues.GetRecord(WithAttachmentsFieldName);
+
+                        if (withAttachments)
+                        {
+                            var attachments = (List<AttachmentFieldTypeEntity>)context.NewEntity.FieldValues.GetRecord(AttachmentsFieldName);
+
+                            if (attachments != null && attachments.Count > 0)
+                            {
+                                vrMailAttachments = attachments.MapRecords(x => vrMailManager.ConvertToGeneralAttachement(x.FileId)).ToList();
+                            }
+                        }
+                    }
+
                     var emailTemplateEvaluator = vrMailManager.EvaluateMailTemplate((Guid)mailTemplateId, objects);
                     emailTemplateEvaluator.ThrowIfNull("emailTemplateEvaluator");
 
-                    vrMailManager.SendMail(emailTemplateEvaluator.From, emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body);
+                    vrMailManager.SendMail(emailTemplateEvaluator.From, emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body, vrMailAttachments);
                     new GenericBusinessEntityManager().LogObjectCustomAction(context.BusinessEntityDefinitionId, context.NewEntity, "Send Email", true, null);
                 }
             }
         }
+        public string WithAttachmentsFieldName { get; set; }
+        public string AttachmentsFieldName { get; set; }
         public string EntityObjectName { get; set; }
         public string InfoType { get; set; }
         public List<SendEmailObjectInfo> SendEmailObjectsInfo { get; set; }

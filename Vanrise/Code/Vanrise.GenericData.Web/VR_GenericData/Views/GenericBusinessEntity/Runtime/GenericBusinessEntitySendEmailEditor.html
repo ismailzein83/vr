@@ -1,46 +1,54 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBusinessEntitySendEmailController" vr-loader="scopeModel.isLoading" width="'35%'">
     <vr-modalbody>
         <vr-form name="formGenericSendEmailEditor">
-               <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-common-mailmessagetemplate-selector ng-if="scopeModel.showMailMessageTemplateSelector" showaddbutton hideremoveicon on-ready="scopeModel.onGenericBEMailTemplateSelectorReady" isrequired="true" customlabel="Email Template" localizedlabel="VRRes.Common.EmailTemplate.VREnd" onselectionchanged="scopeModel.onGenericBEMailTemplateSelectionChanged"></vr-common-mailmessagetemplate-selector>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-textbox type="labeledemail" label="From" localizedlabel="VRRes.Common.From.VREnd" value="scopeModel.from"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-textbox-multiple datatype="email" label="To" localizedlabel="VRRes.Common.To.VREnd" value="scopeModel.to" isrequired="true"></vr-textbox-multiple>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-textbox-multiple datatype="email" label="CC" localizedlabel="VRRes.Common.CC.VREnd" value="scopeModel.cc"></vr-textbox-multiple>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-textbox type="text" label="Subject" localizedlabel="VRRes.Common.Subject.VREnd" value="scopeModel.subject" isrequired="true"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-editor label="Body" value="scopeModel.body" localizedlabel="VRRes.Common.Body.VREnd" isrequired="true"></vr-editor>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="1/3row">
-                            <vr-fileupload extension="all" value="scopeModel.uploadedAttachement" label="Upload Attachement" localizedlabel="VRRes.Common.UploadAttachement.VREnd"
-                                           on-ready="scopeModel.onUploadedAttachementFileReady" onvaluechanged="scopeModel.addUploadedAttachement" tempfile="true">
-                            </vr-fileupload>
-                        </vr-columns>
-                    </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-common-mailmessagetemplate-selector ng-if="scopeModel.showMailMessageTemplateSelector" showaddbutton hideremoveicon on-ready="scopeModel.onGenericBEMailTemplateSelectorReady" isrequired="true" customlabel="Email Template" localizedlabel="VRRes.Common.EmailTemplate.VREnd" onselectionchanged="scopeModel.onGenericBEMailTemplateSelectionChanged"></vr-common-mailmessagetemplate-selector>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-textbox type="labeledemail" label="From" localizedlabel="VRRes.Common.From.VREnd" value="scopeModel.from"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-textbox-multiple datatype="email" label="To" localizedlabel="VRRes.Common.To.VREnd" value="scopeModel.to" isrequired="true"></vr-textbox-multiple>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-textbox-multiple datatype="email" label="CC" localizedlabel="VRRes.Common.CC.VREnd" value="scopeModel.cc"></vr-textbox-multiple>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-label ng-if="!scopeModel.isLocalizationEnabled">Attachements</vr-label>
+                    <vr-label ng-if="scopeModel.isLocalizationEnabled">VRRes.Common.Attachements.VREnd</vr-label>
+                </vr-columns>
+                <vr-columns width="fullrow">
                     <vr-datalist maxitemsperrow="3" datasource="scopeModel.uploadedAttachements" autoremoveitem="true">
-                        <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.fileId)">{{dataItem.fileName}}</a>
+                        <vr-filedownload value="dataItem.value"></vr-filedownload>
                     </vr-datalist>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-textbox type="text" label="Subject" localizedlabel="VRRes.Common.Subject.VREnd" value="scopeModel.subject" isrequired="true"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-editor label="Body" value="scopeModel.body" localizedlabel="VRRes.Common.Body.VREnd" isrequired="true"></vr-editor>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="1/3row">
+                    <vr-fileupload extension="all" value="scopeModel.uploadedAttachement" label="Upload Attachement" localizedlabel="VRRes.Common.UploadAttachement.VREnd"
+                                   on-ready="scopeModel.onUploadedAttachementFileReady" onvaluechanged="scopeModel.addUploadedAttachement" tempfile="true">
+                    </vr-fileupload>
+                </vr-columns>
+            </vr-row>
 
         </vr-form>
     </vr-modalbody>

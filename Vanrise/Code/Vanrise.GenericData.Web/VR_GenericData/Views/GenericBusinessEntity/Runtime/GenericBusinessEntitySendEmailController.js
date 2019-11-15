@@ -2,12 +2,13 @@
 
     "use strict";
 
-    GenericBusinessEntitySendEmailController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','VR_GenericData_GenericBEEmailActionAPIService', 'VRCommon_VRMailAPIService'];
+    GenericBusinessEntitySendEmailController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEEmailActionAPIService', 'VRCommon_VRMailAPIService','VR_GenericData_GenericBusinessEntityAPIService'];
 
-    function GenericBusinessEntitySendEmailController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_GenericData_GenericBEEmailActionAPIService, VRCommon_VRMailAPIService) {
+    function GenericBusinessEntitySendEmailController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_GenericData_GenericBEEmailActionAPIService, VRCommon_VRMailAPIService, VR_GenericData_GenericBusinessEntityAPIService) {
         var genericBusinessEntityId;
         var businessEntityDefinitionId;
         var genericBEActionId;
+        var genericBusinessEntity;
         var genericBEEntity;
         var genericBETemplateEntity;
         var infoType;
@@ -55,7 +56,7 @@
             };
             $scope.scopeModel.addUploadedAttachement = function (obj) {
                 if (obj != undefined) {
-                    $scope.scopeModel.uploadedAttachements.push(obj);
+                    $scope.scopeModel.uploadedAttachements.push({ value: { fileId: obj.fileId } });
                     fileAPI.clearFileUploader();
                 }
             };
@@ -159,7 +160,18 @@
                 return mailMsgTemplateSelectorLoadDeferred.promise;
             }
         }
+        function getGenericBusinessEntity() {
 
+            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+                genericBusinessEntity = response;
+                if (genericBusinessEntity != undefined && genericBusinessEntity.FieldValues != undefined && genericBusinessEntity.FieldValues.Attachments != undefined && genericBusinessEntity.FieldValues.Attachments.length > 0) {
+                    var attachments = genericBusinessEntity.FieldValues.Attachments;
+                    for (var j = 0; j < attachments.length; j++) {
+                        $scope.scopeModel.uploadedAttachements.push({ value: { fileId: attachments[j].FileId } });
+                    }
+                }
+            });
+        }
         function loadAllControls() {
 
             function setTitle() {
@@ -180,7 +192,7 @@
                 getChildNode: function () {
                     setTitle();
                     loadStaticData();
-                    return { promises: [] };
+                    return { promises: [getGenericBusinessEntity()] };
                 }
             }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -227,7 +239,7 @@
         }
 
         function buildGenericBETemplateObjFromScope() {
-            var attachementFileIds = $scope.scopeModel.uploadedAttachements.map(function (a) { return a.fileId; });
+            var attachementFileIds = $scope.scopeModel.uploadedAttachements.map(function (a) { return a.value.fileId; });
 
             var obj = {
                 BusinessEntityDefinitionId: businessEntityDefinitionId,

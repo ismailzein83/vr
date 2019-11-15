@@ -68,6 +68,8 @@ app.directive("vrGenericdataGenericbeAftersavehandlerSendemail", ["UtilsService"
                         $type: "Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAfterSaveHandlers.SendEmailAfterSaveHandler, Vanrise.GenericData.MainExtensions",
                         EntityObjectName: $scope.scopeModel.entityObjectName,
                         InfoType: $scope.scopeModel.infoType,
+                        WithAttachmentsFieldName: $scope.scopeModel.withAttachmentsFieldName,
+                        AttachmentsFieldName: $scope.scopeModel.attachmentsFieldName,
                         SendEmailObjectsInfo: sendEmailObjectsInfo
                     };
                 };
@@ -76,6 +78,8 @@ app.directive("vrGenericdataGenericbeAftersavehandlerSendemail", ["UtilsService"
                     if (payload != undefined && payload.settings) {                        
                         $scope.scopeModel.entityObjectName = payload.settings.EntityObjectName;
                         $scope.scopeModel.infoType = payload.settings.InfoType;
+                        $scope.scopeModel.withAttachmentsFieldName = payload.settings.WithAttachmentsFieldName;
+                        $scope.scopeModel.attachmentsFieldName = payload.settings.AttachmentsFieldName;
 
                         if (payload.settings.SendEmailObjectsInfo != undefined)
                         {
