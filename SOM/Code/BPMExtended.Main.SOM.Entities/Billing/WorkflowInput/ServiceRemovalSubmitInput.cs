@@ -10,7 +10,8 @@ namespace BPMExtended.Main.SOMAPI
     public class ServiceRemovalSubmitInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
-        public List<VASService> ServicesToRemove { get; set; }
+        public string LinePathId { get; set; }
+        public List<VASService> Services { get; set; }
         public PaymentData PaymentData { get; set; }
     }
 }

@@ -81,7 +81,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StOperationAddedServices");
             esq.AddColumn("StIsPaid");
-
+            esq.AddColumn("StPathId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -94,13 +94,15 @@ namespace BPMExtended.Main.Business
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 string VASServices = entities[0].GetColumnValue("StOperationAddedServices").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
+                var pathId = entities[0].GetColumnValue("StPathId");
 
                 SOMRequestInput<ServiceRemovalSubmitInput> somRequestInput = new SOMRequestInput<ServiceRemovalSubmitInput>
                 {
 
                     InputArguments = new ServiceRemovalSubmitInput
                     {
-                        ServicesToRemove = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
+                        Services = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
+                        LinePathId = pathId.ToString(),
                         PaymentData = new PaymentData()
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
@@ -118,7 +120,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ServiceRemovalSubmitInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitRemoveContractServices/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ServiceRemovalSubmitInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitRemoveContractServices/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();
@@ -158,7 +160,7 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new ServiceRemovalSubmitInput
                     {
-                        ServicesToRemove = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
+                        //ServicesToRemove = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
                         PaymentData = new PaymentData()
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
@@ -176,7 +178,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ServiceRemovalSubmitInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateRemoveContractServices/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ServiceRemovalSubmitInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeRemoveContractServices/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();
