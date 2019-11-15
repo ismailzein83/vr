@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [CRMFixedOper].[Ticket] (
     [ID]               BIGINT           IDENTITY (1, 1) NOT NULL,
+    [TicketTypeID]     UNIQUEIDENTIFIER NULL,
     [CaseId]           BIGINT           NULL,
-    [TicketType]       INT              NULL,
     [ReferenceNumber]  NVARCHAR (255)   NULL,
     [Customer]         BIGINT           NULL,
     [Order]            BIGINT           NULL,
@@ -24,6 +24,8 @@
     [FreeNotes]        VARCHAR (255)    NULL,
     CONSTRAINT [PK__Ticket__3214EC2755F4C372] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

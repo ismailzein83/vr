@@ -1,19 +1,20 @@
 ﻿CREATE TABLE [CRMFixedOper].[TicketType] (
-    [ID]                INT            IDENTITY (1, 1) NOT NULL,
-    [TicketCategory]    INT            NULL,
-    [TicketSubCategory] INT            NULL,
-    [Name]              NVARCHAR (255) NULL,
-    [RoutedTo]          INT            NULL,
-    [LateTickets]       INT            NULL,
-    [EscalationLevel]   NVARCHAR (MAX) NULL,
-    [CreatedTime]       DATETIME       NULL,
-    [CreatedBy]         INT            NULL,
-    [LastModifiedTime]  DATETIME       NULL,
-    [LastModifiedBy]    INT            NULL,
-    [timestamp]         ROWVERSION     NULL,
-    [InformationToShow] INT            NULL,
-    PRIMARY KEY CLUSTERED ([ID] ASC)
+    [ID]                  UNIQUEIDENTIFIER NOT NULL,
+    [TicketSubCategoryID] UNIQUEIDENTIFIER NULL,
+    [Name]                NVARCHAR (255)   NULL,
+    [RoutedTo]            INT              NULL,
+    [LateTickets]         INT              NULL,
+    [EscalationLevel]     NVARCHAR (MAX)   NULL,
+    [CreatedTime]         DATETIME         NULL,
+    [CreatedBy]           INT              NULL,
+    [LastModifiedTime]    DATETIME         NULL,
+    [LastModifiedBy]      INT              NULL,
+    [timestamp]           ROWVERSION       NULL,
+    [InformationToShow]   INT              NULL,
+    CONSTRAINT [PK_TicketType] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

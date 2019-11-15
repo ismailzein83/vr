@@ -123,5 +123,19 @@
     <Build Include="CRMFixedOper\Tables\Payment.sql" />
     <Build Include="CRMFixedOper\Tables\Order_VPNSubscription.sql" />
     <Build Include="CRMFixedOper\Tables\Group.sql" />
+    <Build Include="CRMFixedOper\Tables\TicketTypeSupportedNewTicket.sql" />
+    <Build Include="CRMFixedOper\Tables\TicketTypeSupportedDecision.sql" />
+    <Build Include="CRMFixedOper\Tables\TicketDecision.sql" />
+    <Build Include="CRMFixedOper\Tables\ServiceCategory.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_ServicesSuspension.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_ServicesDeactivation.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_ServicesAddition.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_LineSubscription.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_Deactivation.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_ChangePhoneNumber.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_ChangeInternetPackage.sql" />
+    <Build Include="CRMFixedOper\Tables\Decree.sql" />
+    <Build Include="CRMFixedOper\Tables\ContractServiceTypeOption.sql" />
+    <Build Include="CRMFixedOper\Tables\ContractServiceType.sql" />
   </ItemGroup>
 </Project>
