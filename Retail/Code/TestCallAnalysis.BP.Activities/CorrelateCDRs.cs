@@ -97,7 +97,7 @@ namespace TestCallAnalysis.BP.Activities
                                 Entities.UpdatedMappedCDRs updateMappedCDRs = new Entities.UpdatedMappedCDRs();
                                 updateMappedCDRs.MappedCDRsToUpdate = new List<TCAnalMappedCDR>();
 
-                                Dictionary<long,List<DateTime>> attemptDateTimesByOperatorIds = new Dictionary<long, List<DateTime>>();
+                                Dictionary<long, List<DateTime>> attemptDateTimesByOperatorIds = new Dictionary<long, List<DateTime>>();
                                 // Divide all CDRs between generated and received
                                 foreach (var cdr in recordBatch.Records)
                                 {
@@ -105,7 +105,7 @@ namespace TestCallAnalysis.BP.Activities
 
                                     if (mappedCDR.CDRType.Equals(CDRType.Generated))
                                     {
-                                       var generatedCdrsByCalledNumber = generatedCDRsByOperatorId.GetOrCreateItem(mappedCDR.CalledOperatorID.Value);
+                                        var generatedCdrsByCalledNumber = generatedCDRsByOperatorId.GetOrCreateItem(mappedCDR.CalledOperatorID.Value);
                                         generatedCdrsByCalledNumber.GetOrCreateItem(mappedCDR.AttemptDateTime.Date).Add(mappedCDR);
                                     }
                                     else
@@ -133,18 +133,18 @@ namespace TestCallAnalysis.BP.Activities
                                             var receivedCDRsForOperator = receivedCDRsByOperatorId.GetRecord(operatorId);
                                             var generatedCDRsForOperator = generatedCDRsByOperatorId.GetRecord(operatorId);
 
-                                            if(receivedCDRsForOperator != null)
+                                            if (receivedCDRsForOperator != null)
                                             {
                                                 foreach (var attemptDateTime in attemptDateTimes)
                                                 {
                                                     handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Start Correlation for day {0:yyyy/MM/dd}.", attemptDateTime));
 
                                                     var recievedCDRs = receivedCDRsForOperator.GetRecord(attemptDateTime);
-                                                    if(recievedCDRs != null)
+                                                    if (recievedCDRs != null)
                                                     {
                                                         List<TCAnalMappedCDR> generatedCDRs = null;
-                                                          if(generatedCDRsForOperator != null)
-                                                             generatedCDRs= generatedCDRsForOperator.GetRecord(attemptDateTime);
+                                                        if (generatedCDRsForOperator != null)
+                                                            generatedCDRs = generatedCDRsForOperator.GetRecord(attemptDateTime);
 
                                                         foreach (var recievedCDR in recievedCDRs)
                                                         {
@@ -156,7 +156,8 @@ namespace TestCallAnalysis.BP.Activities
                                                                 IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(operatorId, recievedCDR.CalledNumber);
                                                                 foreach (var generatedCDR in generatedCDRs)
                                                                 {
-                                                                    if (Math.Abs(recievedCDR.AttemptDateTime.Subtract(generatedCDR.AttemptDateTime).TotalSeconds) <= dateTimeMargin.TotalSeconds)
+                                                                    var attemptDateTimeDifference = recievedCDR.AttemptDateTime.Subtract(generatedCDR.AttemptDateTime).TotalSeconds;
+                                                                    if (attemptDateTimeDifference >= 0 && attemptDateTimeDifference <= dateTimeMargin.TotalSeconds)
                                                                     {
                                                                         if (recievedCDR.CalledNumber == generatedCDR.CalledNumber || (mappingNumberList != null && mappingNumberList.Count() > 0 && mappingNumberList.Contains(generatedCDR.CalledNumber)))
                                                                         {
@@ -210,7 +211,7 @@ namespace TestCallAnalysis.BP.Activities
                                 {
                                     long correlatedCDRStartingId = correlatedCDRManager.ReserveIDRange(correlatedCDRs.Count());
 
-                                    foreach(var correlatedCDR in correlatedCDRs)
+                                    foreach (var correlatedCDR in correlatedCDRs)
                                     {
                                         correlatedCDR.CorrelatedCDRId = correlatedCDRStartingId++;
                                         casesBatch.CaseCDRsToInsert.Add(correlatedCDR);
