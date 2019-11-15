@@ -102,10 +102,33 @@
     <Build Include="RetailBilling\Tables\CustomerMessage.sql" />
     <Build Include="RetailBilling\Tables\DunningRules.sql" />
     <Build Include="RetailBilling\Tables\DunningExcludeCustomers.sql" />
-    <Build Include="RetailBilling\Tables\Instalment.sql" />
     <Build Include="RetailBilling\Tables\CDRType.sql" />
     <Build Include="RetailBilling\Tables\CDR.sql" />
     <Build Include="RetailBilling\Tables\Data.sql" />
     <Build Include="RetailBilling\Tables\Bundle.sql" />
+    <Build Include="RetailBilling\Tables\StatusReason.sql" />
+    <Build Include="RetailBilling\Tables\ServiceCategory.sql" />
+    <Build Include="RetailBilling\Tables\RatePlanServiceRecurringCharge.sql" />
+    <Build Include="RetailBilling\Tables\RatePlanServiceActionCharge.sql" />
+    <Build Include="RetailBilling\Tables\RatePlanOneTimeCharge.sql" />
+    <Build Include="RetailBilling\Tables\InvoiceAdditionalChargeRule.sql" />
+    <Build Include="RetailBilling\Tables\InstallmentType.sql" />
+    <Build Include="RetailBilling\Tables\InstallmentItem.sql" />
+    <Build Include="RetailBilling\Tables\Installment.sql" />
+    <Build Include="RetailBilling\Tables\DiscountRule.sql" />
+    <Build Include="RetailBilling\Tables\ContractServiceTypeOption.sql" />
+    <Build Include="RetailBilling\Tables\ContractServiceType.sql" />
+    <Build Include="RetailBilling\Tables\ContractServiceRecurringChargeType.sql" />
+    <Build Include="RetailBilling\Tables\ContractServiceHistory.sql" />
+    <Build Include="RetailBilling\Tables\ContractServiceChargeableCondition.sql" />
+    <Build Include="RetailBilling\Tables\ContractServiceActionType.sql" />
+    <Build Include="RetailBilling\Tables\ContractServiceActionChargeType.sql" />
+    <Build Include="RetailBilling\Tables\ContractServiceAction.sql" />
+    <Build Include="RetailBilling\Tables\ContractResourceType.sql" />
+    <Build Include="RetailBilling\Tables\ContractResource.sql" />
+    <Build Include="RetailBilling\Tables\ContractOneTimeFeeType.sql" />
+    <Build Include="RetailBilling\Tables\ContractHistory.sql" />
+    <Build Include="RetailBilling\Tables\ContractChargeType.sql" />
+    <Build Include="RetailBilling\Tables\AdvancedPayment.sql" />
   </ItemGroup>
 </Project>
