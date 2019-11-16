@@ -38,6 +38,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StADSLLinePathId");
+            esq.AddColumn("StHasADSL");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -49,6 +52,8 @@ namespace BPMExtended.Main.Business
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathId = entities[0].GetColumnValue("StLinePathId");
                 var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var adslLinePathId = entities[0].GetColumnValue("StADSLLinePathId");
                 bool hasADSL = (bool)entities[0].GetColumnValue("StHasADSL");
                 var reason = entities[0].GetColumnValue("StReason");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
@@ -68,11 +73,12 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        LinePathId = pathId.ToString(),
+                        TelLinePathId = pathId.ToString(),
+                        HasADSL = hasADSL,
+                        ADSLContractId = adslContractId.ToString(),
+                        ADSLLinePathId = adslLinePathId.ToString(),
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
-                        //HasADSL = hasADSL,
                         //Reason = reason.ToString(),
-                        //ADSLContract = entity == null?string.Empty: entity.ContractId
                     }
 
                 };
@@ -105,6 +111,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StADSLLinePathId");
+            esq.AddColumn("StHasADSL");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -116,6 +125,8 @@ namespace BPMExtended.Main.Business
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathId = entities[0].GetColumnValue("StLinePathId");
                 var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var adslLinePathId = entities[0].GetColumnValue("StADSLLinePathId");
                 bool hasADSL = (bool)entities[0].GetColumnValue("StHasADSL");
                 var reason = entities[0].GetColumnValue("StReason");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
@@ -135,11 +146,11 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        OldLinePathId = pathId.ToString(),
+                        TelLinePathId = pathId.ToString(),
+                        HasADSL = hasADSL,
+                        ADSLContractId = adslContractId.ToString(),
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
-                        //HasADSL = hasADSL,
                         //Reason = reason.ToString(),
-                        //ADSLContract = entity == null?string.Empty: entity.ContractId
                     }
 
                 };
@@ -172,7 +183,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StRatePlanId");
-
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StADSLLinePathId");
+            esq.AddColumn("StHasADSL");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -183,13 +196,16 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathId = entities[0].GetColumnValue("StLinePathId");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var adslLinePathId = entities[0].GetColumnValue("StADSLLinePathId");
                 bool hasADSL = (bool)entities[0].GetColumnValue("StHasADSL");
                 var reason = entities[0].GetColumnValue("StReason");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
 
-                ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
+
+                //ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
 
                 SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
@@ -202,8 +218,10 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        LinePathId = pathId.ToString(),
+                        ADSLContractId = adslContractId.ToString(),
+                        ADSLLinePathId = adslLinePathId.ToString(),
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
+                        //Reason = reason.ToString(),
                     }
 
                 };
@@ -235,8 +253,13 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StLinePathId");
             esq.AddColumn("StHasADSL");
             esq.AddColumn("StReason");
+            esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StADSLLinePathId");
+            esq.AddColumn("StHasADSL");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
+
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -247,12 +270,15 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathId = entities[0].GetColumnValue("StLinePathId");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var adslLinePathId = entities[0].GetColumnValue("StADSLLinePathId");
                 bool hasADSL = (bool)entities[0].GetColumnValue("StHasADSL");
                 var reason = entities[0].GetColumnValue("StReason");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
-
+                //ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
 
                 SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
@@ -265,13 +291,16 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
+                        ADSLContractId = adslContractId.ToString(),
+                        ADSLLinePathId = adslLinePathId.ToString(),
+                        TelLinePathId = pathId.ToString(),
+                        Reason = reason.ToString(),
+                        HasADSL = hasADSL,
                         PaymentData = new PaymentData()
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
-                        },
-                        LinePathId = pathId.ToString(),
-                        Reason = reason.ToString(),
+                        }
                     }
 
                 };
