@@ -257,7 +257,7 @@ namespace BPMExtended.Main.Business
                             Building = buildingNumber.ToString(),
                             Floor = floor.ToString(),
                             Street = street.ToString(),
-
+                            Sequence = new CatalogManager().GetSequenceNumberFromRequestHeader(requestId.ToString())
                         },
                         PaymentData = new PaymentData()
                         {

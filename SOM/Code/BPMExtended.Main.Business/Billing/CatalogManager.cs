@@ -493,6 +493,34 @@ namespace BPMExtended.Main.Business
             return numberOfInvoices;
         }
 
+        public string GetSequenceNumberFromRequestHeader(string requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("Id");
+            esq.AddColumn("StSequenceNumber");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return entities[0].GetTypedColumnValue<string>("StSequenceNumber");
+
+            }
+
+            return  null;
+
+        }
+
         public OperationServices GetOperationServices(Guid requestId)
         {
             EntitySchemaQuery esq;
