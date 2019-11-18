@@ -400,7 +400,7 @@ namespace Vanrise.Common
             }
             throw new ArgumentException("textFilterType");
         }
-
+         
         public static object GetTypeDefault(Type type)
         {
             if (type.IsValueType)
@@ -690,10 +690,14 @@ namespace Vanrise.Common
             return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, time.Hour, time.Minute, time.Second, time.MilliSecond);
         }
 
-        public static DateTime ConverUnixTimeToDateTime(double unixTime)
+        public static DateTime ConverUnixTimeToDateTime(double unixTime, bool convertToLocal = false)
         {
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            dateTime = dateTime.AddSeconds(unixTime).ToLocalTime();
+
+            dateTime = dateTime.AddSeconds(unixTime);
+            if (convertToLocal)
+                dateTime = dateTime.ToLocalTime();
+
             return dateTime;
         }
 
