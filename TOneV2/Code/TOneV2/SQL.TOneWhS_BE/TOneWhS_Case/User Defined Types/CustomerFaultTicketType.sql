@@ -23,7 +23,10 @@
     [LastModifiedTime]  DATETIME         NULL,
     [TicketDetails]     NVARCHAR (MAX)   NULL,
     [SendEmail]         BIT              NULL,
-    [AccountManager]    NVARCHAR (255)   NULL);
+    [AccountManager]    NVARCHAR (255)   NULL,
+    [WithAttachments]   BIT              NULL);
+
+
 
 
 

@@ -23,7 +23,10 @@
     [TicketDetails]     NVARCHAR (MAX)   NULL,
     [SendEmail]         BIT              NULL,
     [SystemReference]   NVARCHAR (1000)  NULL,
-    [AccountManager]    NVARCHAR (255)   NULL);
+    [AccountManager]    NVARCHAR (255)   NULL,
+    [WithAttachments]   BIT              NULL);
+
+
 
 
 

@@ -1,14 +1,16 @@
 ﻿CREATE TABLE [TOneWhS_BE].[SellingNumberPlan] (
     [ID]               INT              IDENTITY (1, 1) NOT NULL,
+    [LOBID]            UNIQUEIDENTIFIER NULL,
     [Name]             NVARCHAR (255)   NOT NULL,
     [timestamp]        ROWVERSION       NULL,
     [CreatedTime]      DATETIME         CONSTRAINT [DF_SellingNumberPlan_CreatedTime] DEFAULT (getdate()) NULL,
     [CreatedBy]        INT              NULL,
     [LastModifiedBy]   INT              NULL,
     [LastModifiedTime] DATETIME         CONSTRAINT [DF_SellingNumberPlan_LastModifiedTime] DEFAULT (getdate()) NULL,
-    [LOBID]            UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_SellingNumberPlan] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
