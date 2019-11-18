@@ -20,7 +20,7 @@ namespace TOne.WhS.Analytics.Business
         private readonly SwitchManager _switchManager;
         private readonly SwitchReleaseCauseManager _switchReleaseCauseManager;
 
-      
+
         public ReleaseCodeManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
@@ -67,13 +67,13 @@ namespace TOne.WhS.Analytics.Business
             {
                 IReleaseCodeDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IReleaseCodeDataManager>();
                 SaleCodeManager manager = new SaleCodeManager();
-               // List<string> salecodesIds = null;
+                // List<string> salecodesIds = null;
                 //if (input.Query.Filter.CountryIds != null && input.Query.Filter.CountryIds.Count() > 0)
                 //{
                 //    List<SaleCode> salecodes = manager.GetSaleCodesByCodeGroups(input.Query.Filter.CountryIds);
                 //    salecodesIds = salecodes.Select(x => x.Code).ToList();
                 //}
-                
+
 
                 return dataManager.GetAllFilteredReleaseCodes(input);
             }
@@ -120,9 +120,9 @@ namespace TOne.WhS.Analytics.Business
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Port Out" });
                     }
                 }
-                if(_query.Filter.ColumnsToShow!=null && _query.Filter.ColumnsToShow.Count > 0)
+                if (_query.Filter.ColumnsToShow != null && _query.Filter.ColumnsToShow.Count > 0)
                 {
-                    if(_query.Filter.ColumnsToShow.Contains("ReleaseCode"))
+                    if (_query.Filter.ColumnsToShow.Contains("ReleaseCode"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
                     if (_query.Filter.ColumnsToShow.Contains("ReleaseSource"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Source" });
@@ -137,9 +137,9 @@ namespace TOne.WhS.Analytics.Business
                     if (_query.Filter.ColumnsToShow.Contains("DurationInMinutes"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
                     if (_query.Filter.ColumnsToShow.Contains("FirstAttempt"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt" });
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
                     if (_query.Filter.ColumnsToShow.Contains("LastAttempt"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt" });
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
                 }
                 else
                 {
