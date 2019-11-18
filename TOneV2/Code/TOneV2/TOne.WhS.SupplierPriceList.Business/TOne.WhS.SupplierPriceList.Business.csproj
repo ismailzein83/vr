@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="BusinessRules\Actions\GetServiceWithMinimumBEDAction.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ClosingZonesAboveThresholdCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCountries\DifferentRateCodeEED.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\NewZonesWithoutCodeGroupsCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeGroupVerificationCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\AcceptableRateDecreaseCondition.cs" />
@@ -156,6 +157,14 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
+      <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
+      <Name>TOne.WhS.Routing.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
+      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
+      <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Arguments\TOne.WhS.SupplierPriceList.BP.Arguments.csproj">
       <Project>{05b7b8cf-6d2a-4bef-ae8b-af5fc3940baa}</Project>
