@@ -11,5 +11,6 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public string ZoneName { get; set; }
         public string Code { get; set; }
         public DateTime? EffectiveDate { get; set; }
+        public DateTime? EndEffectiveDate { get; set; }
     }
 }

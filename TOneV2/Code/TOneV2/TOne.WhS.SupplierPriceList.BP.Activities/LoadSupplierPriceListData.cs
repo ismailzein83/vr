@@ -127,7 +127,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     CodeGroup = codeGroup,
                     ZoneName = zoneNameValue,
                     BED = (priceListCode.EffectiveDate.HasValue) ? priceListCode.EffectiveDate.Value : DateTime.MinValue,
-                    EED = null
+                    EED = priceListCode.EndEffectiveDate
                 });
             }
 
@@ -165,7 +165,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     Rate = priceListRate.Rate.Value,
                     CurrencyId = currencyId,
                     BED = (priceListRate.EffectiveDate.HasValue) ? priceListRate.EffectiveDate.Value : DateTime.MinValue,
-                    EED = null,
+                    EED = priceListRate.EndEffectiveDate,
                 });
             }
 

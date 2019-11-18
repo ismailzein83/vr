@@ -70,13 +70,22 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         private CodeChangeType GetCodeChangeType(ImportedCode importedCode)
         {
-            if (importedCode.ChangeType == CodeChangeType.New && importedCode.ChangedExistingCodes.Count() > 0)
+            //if (importedCode.ChangeType == CodeChangeType.New && importedCode.ChangedExistingCodes.Count() > 0)
+            //{
+            //    ExistingCode existingCode = importedCode.ChangedExistingCodes.OrderBy(item => item.BED).First();
+            //    if (existingCode.EED.HasValue && existingCode.EED.Value.Equals(importedCode.BED))
+            //        return CodeChangeType.NotChanged;
+            //}
+            if (importedCode.ChangedExistingCodes.Count() > 0)
             {
                 ExistingCode existingCode = importedCode.ChangedExistingCodes.OrderBy(item => item.BED).First();
-                if (existingCode.EED.HasValue && existingCode.EED.Value.Equals(importedCode.BED))
+                if (existingCode.EED.HasValue && existingCode.EED.Value.Equals(importedCode.BED) && importedCode.ChangeType == CodeChangeType.New)
                     return CodeChangeType.NotChanged;
-            }
+                else if (importedCode.ChangeType == CodeChangeType.NotChanged && importedCode.EED.HasValue &&
+                   (!existingCode.EED.HasValue || !existingCode.EED.Value.Equals(importedCode.BED)))
+                    return CodeChangeType.Deleted;
 
+            }
             return importedCode.ChangeType;
         }
     }

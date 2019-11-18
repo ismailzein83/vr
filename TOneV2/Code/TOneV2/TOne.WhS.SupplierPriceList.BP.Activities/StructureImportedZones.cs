@@ -32,14 +32,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                 importedZone.ImportedCodes.AddRange(importedDataByZone.ImportedCodes);
 
-                importedZone.ImportedNormalRate = importedDataByZone.ImportedNormalRates.First();
+                importedZone.ImportedNormalRate = GetMaxNormalRateEED(importedDataByZone.ImportedNormalRates);
 
                 foreach (KeyValuePair<int, List<ImportedRate>> kvp in importedDataByZone.ImportedOtherRates)
                 {
                     importedZone.ImportedOtherRates.Add(kvp.Key, kvp.Value.First());
                 }
-               
-                if(importedDataByZone.ImportedZoneServicesToValidate.Count > 0)
+
+                if (importedDataByZone.ImportedZoneServicesToValidate.Count > 0)
                 {
                     importedZone.ImportedZoneServiceGroup = new ImportedZoneServiceGroup()
                     {
@@ -54,6 +54,20 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             this.ImportedZones.Set(context, importedZones);
             this.AllImportedZones.Set(context, new AllImportedZones() { Zones = importedZones });
+        }
+
+        private ImportedRate GetMaxNormalRateEED(List<ImportedRate> importedRates)
+        {
+            DateTime maxImportedRateEED = new DateTime();
+            ImportedRate lastImportedRate = null;
+            foreach (var importedRate in importedRates)
+            {
+                if (!importedRate.EED.HasValue)
+                    return importedRate;
+                if (importedRate.EED > maxImportedRateEED)
+                    lastImportedRate = importedRate;
+            }
+            return lastImportedRate;
         }
     }
 }

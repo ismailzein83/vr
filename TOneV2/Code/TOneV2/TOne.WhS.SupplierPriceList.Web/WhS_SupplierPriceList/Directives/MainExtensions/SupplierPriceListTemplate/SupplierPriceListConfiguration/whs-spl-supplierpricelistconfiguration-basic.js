@@ -117,7 +117,7 @@
                             codeListMappingPayload.fieldMappings.push({ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value });
                         }
                         codeListMappingPayload.fieldMappings.push({ FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value });
-
+                        codeListMappingPayload.fieldMappings.push({ FieldName: "EndEffectiveDate", FieldTitle: "End Effective Date", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value });
                         var setLoader = function (value) {
                             $scope.scopeModel.isCodeListMappingLoading = value;
                         };
@@ -156,8 +156,13 @@
                             rateTypeTabe.rateListAPI = api;
                             var payload = {
                                 context: getContext(),
-                                fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
-                                listName: item.Name,
+                                fieldMappings:
+                                    [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }
+                                        , { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }
+                                        , { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }
+                                        , { FieldName: "EndEffectiveDate", FieldTitle: "End Effective Date", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }
+                                    ],
+                                listName: item.Name
                             };
                             var setLoader = function (value) {
                                 $scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
@@ -214,7 +219,7 @@
                 $scope.scopeModel.onCodeLayoutSelectionChanged = function () {
 
                     var isDelimitedCodeLayout =
-						($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value);
+                        ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value);
 
                     if (isCodeLayoutSelected === false) {
                         isCodeLayoutSelected = true;
@@ -237,7 +242,11 @@
 
                     var rateListMappingPayload = {
                         context: getContext(),
-                        fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
+                        fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }
+                            , { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }
+                            , { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }
+                            , { FieldName: "EndEffectiveDate", FieldTitle: "End Effective Date", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }
+                        ],
                         listName: "RateList",
                     };
 
@@ -259,7 +268,7 @@
                     if (codeListAPI != undefined) {
                         var codeListData = codeListAPI.getData();
                         if (codeListData != undefined && codeListData.FieldMappings != undefined) {
-                            for (var i = 0 ; i < codeListData.FieldMappings.length; i++) {
+                            for (var i = 0; i < codeListData.FieldMappings.length; i++) {
                                 var fieldMappingForCodeList = codeListData.FieldMappings[i];
                                 if (fieldMappingForCodeList.FieldType == VR_ExcelConversion_FieldTypeEnum.DateTime.value) {
                                     return true;
@@ -270,7 +279,7 @@
                     if (rateListAPI != undefined) {
                         var rateListData = rateListAPI.getData();
                         if (rateListData != undefined && rateListData.FieldMappings != undefined) {
-                            for (var i = 0 ; i < rateListData.FieldMappings.length; i++) {
+                            for (var i = 0; i < rateListData.FieldMappings.length; i++) {
                                 var fieldMappingForRateList = rateListData.FieldMappings[i];
                                 if (fieldMappingForRateList.FieldType == VR_ExcelConversion_FieldTypeEnum.DateTime.value) {
                                     return true;
@@ -410,7 +419,11 @@
 
                             var payload = {
                                 context: getContext(),
-                                fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
+                                fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }
+                                    , { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }
+                                    , { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }
+                                    , { FieldName: "EndEffectiveDate", FieldTitle: "End Effective Date", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }
+                                ],
                                 listName: "RateList",
                             };
                             if (configDetails != undefined && configDetails.NormalRateListMapping) {
@@ -440,6 +453,7 @@
                                 payload.fieldMappings.push({ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value });
                             }
                             payload.fieldMappings.push({ FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value });
+                            payload.fieldMappings.push({ FieldName: "EndEffectiveDate", FieldTitle: "End Effective Date", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value });
 
                             if (configDetails != undefined && configDetails.CodeListMapping) {
                                 payload.listMappingData = configDetails.CodeListMapping;
@@ -526,7 +540,7 @@
                         HasCodeRange: $scope.scopeModel.hasCodeRange,
                         IsCommaDecimalSeparator: $scope.scopeModel.isCommaDecimalSeparator,
                         Precision: $scope.scopeModel.precisionValue,
-                            RatePrecicionType: ($scope.scopeModel.ratePrecicionType != null) ? $scope.scopeModel.ratePrecicionType.value: WhS_SupPL_RatePrecisionTypeEnum.RoundRate,
+                        RatePrecicionType: ($scope.scopeModel.ratePrecicionType != null) ? $scope.scopeModel.ratePrecicionType.value : WhS_SupPL_RatePrecisionTypeEnum.RoundRate,
                     };
 
                     if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value) {
@@ -561,6 +575,8 @@
                             FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value
                         }, {
                             FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value
+                        }, {
+                            FieldName: "EndEffectiveDate", FieldTitle: "End Effective Date", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value
                         }],
                         listName: rateType.Name
                     };

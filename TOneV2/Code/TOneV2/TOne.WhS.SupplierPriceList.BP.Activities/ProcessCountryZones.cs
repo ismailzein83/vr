@@ -155,7 +155,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 IEnumerable<ExistingZone> connectedEntites = this.GetConnectedExistingZones(importedZone.ExistingZones, importedZone.ZoneName);
                 return connectedEntites.Last().EED;
             }
-
+            else if (importedZone.ImportedNormalRate.EED.HasValue)
+                return importedZone.ImportedNormalRate.EED.Value;
             return null;
         }
 

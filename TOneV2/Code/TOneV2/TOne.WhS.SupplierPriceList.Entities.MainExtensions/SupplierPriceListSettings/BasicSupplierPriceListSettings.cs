@@ -113,7 +113,9 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                 ConvertedExcelField zoneField;
                 ConvertedExcelField codeField;
                 ConvertedExcelField codeEffectiveDateField;
+                ConvertedExcelField codeEndEffectiveDateField;
                 DateTime? result = null;
+                DateTime? EED = null;
                 ConvertedExcelField codeGroupField;
                 string codeGroup = null;
                 if (record.Fields.TryGetValue("CodeGroup", out codeGroupField))
@@ -127,6 +129,11 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                 {
                     if (codeEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(codeEffectiveDateField.FieldValue.ToString()))
                         result = Convert.ToDateTime(codeEffectiveDateField.FieldValue).Date;
+                };
+                if (record.Fields.TryGetValue("EndEffectiveDate", out codeEndEffectiveDateField))
+                {
+                    if (codeEndEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(codeEndEffectiveDateField.FieldValue.ToString()))
+                        EED = Convert.ToDateTime(codeEndEffectiveDateField.FieldValue).Date;
                 };
                 if (record.Fields.TryGetValue("Zone", out zoneField))
                 {
@@ -142,7 +149,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                             {
                                 ZoneName = zone,
                                 Code = codeGroup != null ? codeGroup : null,
-                                EffectiveDate = result
+                                EffectiveDate = result,
+                                EndEffectiveDate = EED
                             });
                             continue;
                         }
@@ -184,6 +192,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                                     Code = codeGroup != null ? string.Concat(codeGroup, string.Join("", firstPrefix), increasedCode) : increasedCode,
                                                     EffectiveDate = result,
                                                     ZoneName = zone,
+                                                    EndEffectiveDate = EED
                                                 });
                                             }
                                         }
@@ -202,6 +211,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                             Code = codeGroup != null ? string.Concat(codeGroup, codeValueTrimmed) : codeValueTrimmed,
                                             EffectiveDate = result,
                                             ZoneName = zone,
+                                            EndEffectiveDate = EED
                                         });
                                     }
                                 }
@@ -212,6 +222,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         Code = codeGroup != null ? string.Concat(codeGroup, codeValueTrimmed) : codeValueTrimmed,
                                         EffectiveDate = result,
                                         ZoneName = zone,
+                                        EndEffectiveDate = EED
                                     });
                                 }
                             }
@@ -223,6 +234,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                 Code = codeGroup != null ? string.Concat(codeGroup, code) : code,
                                 EffectiveDate = result,
                                 ZoneName = zone,
+                                EndEffectiveDate = EED
                             });
                         }
                     }
@@ -251,11 +263,18 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     ConvertedExcelField zoneField;
                     ConvertedExcelField rateField;
                     ConvertedExcelField rateEffectiveDateField;
+                    ConvertedExcelField rateEndEffectiveDateField;
                     DateTime? result = null;
+                    DateTime? EED = null;
                     if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
                     {
                         if (rateEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateEffectiveDateField.FieldValue.ToString()))
                             result = Convert.ToDateTime(rateEffectiveDateField.FieldValue).Date;
+                    };
+                    if (obj.Fields.TryGetValue("EndEffectiveDate", out rateEndEffectiveDateField))
+                    {
+                        if (rateEndEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateEndEffectiveDateField.FieldValue.ToString()))
+                            EED = Convert.ToDateTime(rateEndEffectiveDateField.FieldValue).Date;
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
@@ -268,7 +287,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                             {
                                 ZoneName = zoneField.FieldValue != null ? zoneField.FieldValue.ToString() : null,
                                 Rate = rate,
-                                EffectiveDate = result
+                                EffectiveDate = result,
+                                EndEffectiveDate = EED
                             });
                         }
                     }

@@ -9,28 +9,27 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class DifferentRateCodeEED : BusinessRuleCondition
     {
+        //This rule should be last rule to execute in "ValidateZones"
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedCountry != null);
+            return (target as ImportedDataByZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCountry importedCountry = context.Target as ImportedCountry;
+            ImportedDataByZone importedZone = context.Target as ImportedDataByZone;
             var messages = new List<string>();
 
-            foreach (var importedZone in importedCountry.ImportedZones)
+            if (importedZone.ImportedNormalRates.All(item => item.EED.HasValue))
             {
-                DateTime? importedRateEED = importedZone.ImportedNormalRate.EED;
-                DateTime? maxCodeEED = null;
-
+                DateTime? importedRateEED = importedZone.ImportedNormalRates.Max(item => item.EED);
+                DateTime? maxCodeEED = new DateTime();
                 foreach (var importedCode in importedZone.ImportedCodes)
                 {
                     maxCodeEED = importedCode.EED.VRGreaterThan(maxCodeEED)
                       ? importedCode.EED
                       : maxCodeEED;
                 }
-
                 if (importedRateEED.HasValue && maxCodeEED.HasValue && maxCodeEED.Value != importedRateEED.Value)
                     messages.Add($"Code EED is different than rate EED in zone {importedZone.ZoneName}");
                 if (importedRateEED.HasValue && importedZone.ImportedCodes.Any(item => !item.EED.HasValue))

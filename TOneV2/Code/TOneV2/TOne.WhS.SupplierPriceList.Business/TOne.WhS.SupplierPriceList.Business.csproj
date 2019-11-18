@@ -92,7 +92,7 @@
   <ItemGroup>
     <Compile Include="BusinessRules\Actions\GetServiceWithMinimumBEDAction.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ClosingZonesAboveThresholdCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCountries\DifferentRateCodeEED.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\DifferentRateCodeEED.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\NewZonesWithoutCodeGroupsCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeGroupVerificationCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\AcceptableRateDecreaseCondition.cs" />
