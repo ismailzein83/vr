@@ -52,7 +52,6 @@
     <Compile Include="ConnectionType\ConnectionTypeEntity.cs" />
     <Compile Include="Connection\Connection.cs" />
     <Compile Include="Connection\ReserveConnection.cs" />
-    <Compile Include="Enums.cs" />
     <Compile Include="CopperPath\CopperPath.cs" />
     <Compile Include="NodePartType\NodePartType.cs" />
     <Compile Include="NodePartType\NodePartTypeInfo.cs" />
@@ -79,11 +78,9 @@
     <Compile Include="Path\Path.cs" />
     <Compile Include="Path\SetPathReadyInput.cs" />
     <Compile Include="Path\SetPathReadyOutput.cs" />
-    <Compile Include="PhoneNumberStatus.cs" />
     <Compile Include="PhoneNumber\ReservePhoneNumber.cs" />
     <Compile Include="PhoneNumber\SetPhoneNumberUsedInput.cs" />
     <Compile Include="PhoneNumber\SetPhoneNumberUsedOutput.cs" />
-    <Compile Include="PortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticBEDefinitionIDs.cs" />
     <Compile Include="TechnicalAddress\GetTechnicalAddressOutput.cs" />
