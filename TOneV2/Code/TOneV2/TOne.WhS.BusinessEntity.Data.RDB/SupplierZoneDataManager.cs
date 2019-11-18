@@ -10,13 +10,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
     {
         #region RDB
 
-        static string TABLE_ALIAS = "spz";
-        static string TABLE_NAME = "TOneWhS_BE_SupplierZone";
+        public static string TABLE_ALIAS = "spz";
+        public static string TABLE_NAME = "TOneWhS_BE_SupplierZone";
+        public const string COL_ID = "ID";
+        public const string COL_Name = "Name";
+        public const string COL_SupplierID = "SupplierID";
 
-        internal const string COL_ID = "ID";
-        internal const string COL_Name = "Name";
         internal const string COL_CountryID = "CountryID";
-        internal const string COL_SupplierID = "SupplierID";
 
         const string COL_BED = "BED";
         const string COL_EED = "EED";

@@ -53,7 +53,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
     }
 
 
-    public class    ZoneRatePreviewDetail
+    public class ZoneRatePreviewDetail
     {
         public string ZoneName { get; set; }
         public string RecentZoneName { get; set; }
@@ -80,8 +80,9 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public int CodesMovedTo { get; set; }
 
         public int CodesMovedFrom { get; set; }
+        public bool IsIncludeInRouting { get; set; }
 
 
     }
-  
+
 }

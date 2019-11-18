@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using TOne.WhS.Routing.Entities;
 using Vanrise.Data;
+using TOne.WhS.Routing.Entities;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Data
 {
@@ -14,5 +14,7 @@ namespace TOne.WhS.Routing.Data
         void CreateIndexes(RoutingDatabaseType routingDatabaseType, Action<string> trackStep);
 
         void SwapTables(RoutingDatabaseType routingDatabaseType);
+
+        HashSet<string> GetSupplierZoneNames(int supplierId, RoutingDatabaseType routingDatabaseType);
     }
 }

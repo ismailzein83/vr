@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.SupplierPriceList.Data;
-using TOne.WhS.SupplierPriceList.Entities;
 using Vanrise.Common;
-using Vanrise.Common.Business;
 using Vanrise.Entities;
+using System.ComponentModel;
+using Vanrise.Common.Business;
+using TOne.WhS.Routing.Entities;
+using TOne.WhS.Routing.Business;
+using System.Collections.Generic;
+using TOne.WhS.SupplierPriceList.Data;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -35,7 +34,17 @@ namespace TOne.WhS.SupplierPriceList.Business
             public override IEnumerable<ZoneRatePreviewDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
             {
                 ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
-                return dataManager.GetFilteredZonePreview(input.Query);
+                var customerRouteMarginManager = new CustomerRouteMarginManager();
+                HashSet<string> currentSupplierZoneNames = customerRouteMarginManager.GetSupplierZoneNames(input.Query.SupplierId, RoutingDatabaseType.Current);
+                HashSet<string> futureSupplierZoneNames = customerRouteMarginManager.GetSupplierZoneNames(input.Query.SupplierId, RoutingDatabaseType.Future);
+
+                currentSupplierZoneNames.UnionWith(futureSupplierZoneNames);
+                var zoneRatesPreview = dataManager.GetFilteredZonePreview(input.Query);
+                foreach (var zoneRate in zoneRatesPreview)
+                {
+                    zoneRate.IsIncludeInRouting = currentSupplierZoneNames.Contains(zoneRate.ZoneName.ToLower());
+                }
+                return zoneRatesPreview;
             }
             protected override ResultProcessingHandler<ZoneRatePreviewDetail> GetResultProcessingHandler(DataRetrievalInput<SPLPreviewQuery> input, BigResult<ZoneRatePreviewDetail> bigResult)
             {
@@ -45,7 +54,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 };
             }
         }
-      
+
         private class ZonePreviewExportExcelHandler : ExcelExportHandler<ZoneRatePreviewDetail>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<ZoneRatePreviewDetail> context)
@@ -70,7 +79,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Deleted Codes", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Codes Moved From", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Codes Moved To", Width = 30 });
-                
+
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
@@ -82,13 +91,13 @@ namespace TOne.WhS.SupplierPriceList.Business
                         if (record.ImportedServiceIds != null)
                         {
                             var services = zoneServiceConfigManager.GetZoneServicesNames(record.ImportedServiceIds);
-                             servicesSymbol = string.Join(",", services);
+                            servicesSymbol = string.Join(",", services);
                         }
                         if (record != null)
                         {
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                             row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
-                            row.Cells.Add(new ExportExcelCell() { Value = Utilities.GetEnumAttribute<ZoneChangeType, DescriptionAttribute>(record.ChangeTypeZone).Description});
+                            row.Cells.Add(new ExportExcelCell() { Value = Utilities.GetEnumAttribute<ZoneChangeType, DescriptionAttribute>(record.ChangeTypeZone).Description });
                             row.Cells.Add(new ExportExcelCell() { Value = record.ZoneBED });
                             row.Cells.Add(new ExportExcelCell() { Value = record.ZoneEED });
                             row.Cells.Add(new ExportExcelCell() { Value = record.SystemRate });
@@ -101,7 +110,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                             row.Cells.Add(new ExportExcelCell() { Value = record.DeletedCodes });
                             row.Cells.Add(new ExportExcelCell() { Value = record.CodesMovedFrom });
                             row.Cells.Add(new ExportExcelCell() { Value = record.CodesMovedTo });
-                           
+
 
                             sheet.Rows.Add(row);
                         }

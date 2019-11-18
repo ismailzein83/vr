@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
+using TOne.WhS.Routing.Entities;
+using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Data.RDB;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
@@ -214,6 +215,34 @@ namespace TOne.WhS.Routing.Data.SQL
             queryContext.ExecuteNonQuery();
         }
 
+        public HashSet<string> GetSupplierZoneNames(int supplierId, RoutingDatabaseType routingDatabaseType)
+        {
+            tableName = GetTableName(routingDatabaseType, false);
+            string tableAlias = $"{tableName}Alias";
+
+            var queryContext = new RDBQueryContext(this.GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(tableName, tableAlias, null, true);
+
+            var joinStatement = selectQuery.Join().Join(SupplierZoneDataManager.TABLE_NAME, SupplierZoneDataManager.TABLE_ALIAS);
+            joinStatement.WithNoLock();
+            joinStatement.On().EqualsCondition(tableAlias, COL_SupplierZoneID, SupplierZoneDataManager.TABLE_ALIAS, SupplierZoneDataManager.COL_ID);
+
+            selectQuery.SelectColumns().Column(SupplierZoneDataManager.TABLE_ALIAS, SupplierZoneDataManager.COL_Name, SupplierZoneDataManager.COL_Name);
+            selectQuery.Where().EqualsCondition(SupplierZoneDataManager.TABLE_ALIAS, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
+
+            var supplierZoneNames = new HashSet<string>();
+            queryContext.ExecuteReader(
+              (reader) =>
+              {
+                  while (reader.Read())
+                  {
+                      string supplierZoneName = reader.GetString(SupplierZoneDataManager.COL_Name);
+                      supplierZoneNames.Add(supplierZoneName.ToLower());
+                  }
+              });
+            return supplierZoneNames;
+        }
         #endregion
 
         #region IBulkApplyDataManager

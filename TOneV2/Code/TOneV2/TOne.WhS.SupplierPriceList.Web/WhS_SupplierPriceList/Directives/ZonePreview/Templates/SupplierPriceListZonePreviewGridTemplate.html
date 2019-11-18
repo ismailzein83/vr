@@ -7,6 +7,9 @@
     <vr-datagridcolumn fixedwidth="'35'" headertext="'Zone Change Type'" invisibleheader>
         <vr-icon iconurl="dataItem.ZoneStatusIconUrl" tooltip="dataItem.ZoneStatusIconTooltip"></vr-icon>
     </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Include In Routing'"  disablesorting="true" fixedwidth="'120'">
+        <vr-icon icontype="dataItem.IsIncludeInRouting"></vr-icon>
+    </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" headerdescription="'Zone BED'" field="'ZoneBED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" headerdescription="'Zone EED'" field="'ZoneEED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'C.Rate'" headerdescription="'Current Rate'" field="'SystemRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'50'"></vr-datagridcolumn>
@@ -15,9 +18,9 @@
         <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateStatusIconUrl" tooltip="dataItem.RateStatusIconTooltip" inline></vr-icon>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'C.R.BED'" headerdescription="'Current Rate BED'" field="'SystemRateBED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'I.R.BED'" headerdescription="'Imported Rate BED'" field="'ImportedRateBED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'I.R.BED'" headerdescription="'Imported Rate BED'" field="'ImportedRateBED'" type="'Datetime'" fixedwidth="'150'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'C.R.EED'" headerdescription="'Current Rate EED'" field="'SystemRateEED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Imported Services'" headerdescription="'Imported Services'" fixedwidth="'100'">
+    <vr-datagridcolumn headertext="'Imported Services'" headerdescription="'Imported Services'" fixedwidth="'110'">
         <vr-whs-be-services-viewer on-ready="dataItem.onImportedServicesReady"></vr-whs-be-services-viewer>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'N.C'" headerdescription="'New Codes'" field="'NewCodes'" type="'Text'" fixedwidth="'25'"></vr-datagridcolumn>

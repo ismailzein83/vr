@@ -25,10 +25,15 @@ namespace TOne.WhS.Routing.Business
             dataManager.CreateIndexes(routingDatabaseType, trackStep);
         }
 
-        public void SwapTables(RoutingDatabaseType routingDatabaseType) 
+        public void SwapTables(RoutingDatabaseType routingDatabaseType)
         {
             ICustomerRouteMarginDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteMarginDataManager>();
             dataManager.SwapTables(routingDatabaseType);
+        }
+        public HashSet<string> GetSupplierZoneNames(int supplierId, RoutingDatabaseType routingDatabaseType)
+        {
+            ICustomerRouteMarginDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteMarginDataManager>();
+            return dataManager.GetSupplierZoneNames(supplierId, routingDatabaseType);
         }
     }
 }
