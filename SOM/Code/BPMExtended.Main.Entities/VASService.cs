@@ -22,10 +22,17 @@ namespace BPMExtended.Main.Entities
     public class Parameter
     {
         public string Id { get; set; }
-        public string Description { get; set; }
         public string ParameterNumber { get; set; }
+        public string ParameterName { get; set; }
+        public string ParameterValue { get; set; }
         public ParameterType Type { get; set; }
-        public List<ParameterValue> Values { get; set; }
+        public string ParameterDisplayValue { get; set; }
+        public string SequenceNumber { get; set; }
+        //public string Id { get; set; }
+        //public string Description { get; set; }
+        //public string ParameterNumber { get; set; }
+        //public ParameterType Type { get; set; }
+        //public List<ParameterValue> Values { get; set; }
     }
 
     public class ParameterValue

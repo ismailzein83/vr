@@ -123,13 +123,23 @@ namespace BPMExtended.Main.Business
                 string VASServices = entities[0].GetColumnValue("StOperationAddedServices").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
+                List<ContractServiceInfo> contractAddedServices = new List<ContractServiceInfo>();
+
+                List<VASService> vasServices = JsonConvert.DeserializeObject<List<VASService>>(VASServices);
+                if (vasServices != null)
+                {
+                    foreach (var vService in vasServices)
+                    {
+                        contractAddedServices.Add(ServiceDetailToContractServiceMapper(vService));
+                    }
+                }
                 SOMRequestInput<ServiceAdditionRequestInput> somRequestInput = new SOMRequestInput<ServiceAdditionRequestInput>
                 {
 
                     InputArguments = new ServiceAdditionRequestInput
                     {
                         LinePathId = pathId.ToString(),
-                        Services = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
+                        Services = contractAddedServices,
                         PaymentData = new PaymentData()
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
@@ -141,8 +151,7 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                         }
                     }
-
-                }; 
+                };
 
                 //call api
                 using (var client = new SOMClient())
@@ -189,14 +198,23 @@ namespace BPMExtended.Main.Business
                 string deposits = entities[0].GetColumnValue("StOperationAddedDeposites").ToString();
                 string VASServices = entities[0].GetColumnValue("StOperationAddedServices").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
+                List<ContractServiceInfo> contractAddedServices = new List<ContractServiceInfo>();
 
+                List<VASService> vasServices = JsonConvert.DeserializeObject<List<VASService>>(VASServices);
+                if (vasServices != null)
+                {
+                    foreach(var vService in vasServices)
+                    {
+                        contractAddedServices.Add(ServiceDetailToContractServiceMapper(vService));
+                    }
+                }
                 SOMRequestInput<ServiceAdditionRequestInput> somRequestInput = new SOMRequestInput<ServiceAdditionRequestInput>
                 {
 
                     InputArguments = new ServiceAdditionRequestInput
                     {
                         LinePathId = pathId.ToString(),
-                        Services = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
+                        Services = contractAddedServices,
                         PaymentData = new PaymentData()
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
@@ -287,6 +305,36 @@ namespace BPMExtended.Main.Business
 
             }
 
+        }
+        public ContractServiceInfo ServiceDetailToContractServiceMapper(VASService item)
+        {
+            ContractServiceInfo contractServiceInfo = new ContractServiceInfo
+            {
+                Id = item.Id,
+                PackageId = item.PackageId,
+                Parameters = new List<ContractServiceParameter>()
+            };
+
+            if (item.Parameters != null)
+            {
+                foreach (var seviceParameter in item.Parameters)
+                {
+                    ContractServiceParameter contractServiceParameter = new ContractServiceParameter();
+                    contractServiceParameter.Description = seviceParameter.ParameterName;
+                    contractServiceParameter.Id = seviceParameter.Id;
+                    contractServiceParameter.ParameterNumber = seviceParameter.ParameterNumber;
+                    contractServiceParameter.Type = seviceParameter.Type;
+                    contractServiceParameter.Values = new List<ContractServiceParameterValue> {
+                        new ContractServiceParameterValue {
+                        Description = seviceParameter.ParameterDisplayValue,
+                        Value=seviceParameter.ParameterValue,
+                        SequenceNumber=seviceParameter.SequenceNumber
+                    }
+                    };
+                    contractServiceInfo.Parameters.Add(contractServiceParameter);
+                }
+            }
+            return contractServiceInfo;
         }
 
         #endregion

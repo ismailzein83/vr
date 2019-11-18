@@ -223,6 +223,8 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Service Addition")]
         [EntitySchemaName("StServiceAdditionRequest")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("69f8b95f-c61c-4304-95b4-ba817c9b23b5")]
         [CompletedStep("StStepId")]
         [CompletedStepId("64436D8D-547F-4B12-AFAA-B44425FE6EAF")]
         ServiceAddition = 19,
