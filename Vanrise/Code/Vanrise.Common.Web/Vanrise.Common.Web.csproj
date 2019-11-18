@@ -129,8 +129,8 @@
     <Content Include="Common\Constant\VRIPAddressType.js" />
     <Content Include="Common\Directives\AdditionalErrors\AdditionalErrorsTemplate.html" />
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
-    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionAPIConnectionInterceptorEditorTemplate.html" />
-    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-httpconnection-apiconnectioninterceptor-editor.js" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCookieAuthInterceptorEditorTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-httpconnection-cookieauthinterceptor-editor.js" />
     <Content Include="Common\Directives\Personalization\vr-common-savetype-selector.js" />
     <Content Include="Common\Directives\ProgressBar\vr-common-progress-bar.js" />
     <Content Include="Common\Directives\ConnectionString\Templates\ConnectionStringTemplate.html" />

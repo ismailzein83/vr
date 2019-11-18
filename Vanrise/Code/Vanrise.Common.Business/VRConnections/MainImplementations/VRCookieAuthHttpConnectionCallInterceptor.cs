@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Common.Business
 {
-    public class VRAPIConnectionHttpConnectionCallInterceptor : VRHttpConnectionCallInterceptor
+    public class VRCookieAuthHttpConnectionCallInterceptor : VRHttpConnectionCallInterceptor
     {
         public override Guid ConfigId { get { return new Guid("E0E15373-0F94-45A2-BBEE-73ACEB3D3301"); } }
         public string Username { get; set; }

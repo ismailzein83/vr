@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrCommonHttpconnectionApiconnectioninterceptorEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrCommonHttpconnectionCookieauthinterceptorEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -9,15 +9,15 @@ app.directive('vrCommonHttpconnectionApiconnectioninterceptorEditor', ['UtilsSer
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new HttpConnectionAPIInterceptorCtor(ctrl, $scope, $attrs);
+                var ctor = new HttpConnectionCookieAuthInterceptorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: "/Client/Modules/Common/Directives/MainExtensions/ConnectionTypes/Templates/HttpConnectionAPIConnectionInterceptorEditorTemplate.html"
+            templateUrl: "/Client/Modules/Common/Directives/MainExtensions/ConnectionTypes/Templates/HttpConnectionCookieAuthInterceptorEditorTemplate.html"
         };
 
-        function HttpConnectionAPIInterceptorCtor(ctrl, $scope, attrs) {
+        function HttpConnectionCookieAuthInterceptorCtor(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -43,7 +43,7 @@ app.directive('vrCommonHttpconnectionApiconnectioninterceptorEditor', ['UtilsSer
                 api.getData = function () {
 
                     return {
-                        $type: "Vanrise.Common.Business.VRAPIConnectionHttpConnectionCallInterceptor, Vanrise.Common.Business",
+                        $type: "Vanrise.Common.Business.VRCookieAuthHttpConnectionCallInterceptor, Vanrise.Common.Business",
                         Username: $scope.scopeModel.username,
                         Password: $scope.scopeModel.password
                     };
