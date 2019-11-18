@@ -8,3 +8,4 @@ Old\
 \TOne.WhS.SMSBusinessEntity.
 \Vanrise.MobileNetwork.
 \Vanrise.Voucher.
+\TOne.WhS.RouteSync.Cataleya

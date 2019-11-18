@@ -18,3 +18,4 @@ Demo\
 \bin\TOne.WhS.SMSBusinessEntity.
 \bin\Vanrise.MobileNetwork.
 \bin\Vanrise.Voucher.
+\bin\TOne.WhS.RouteSync.Cataleya
