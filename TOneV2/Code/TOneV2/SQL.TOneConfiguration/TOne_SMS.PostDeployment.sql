@@ -657,3 +657,30 @@ on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and 
 when not matched by target then
 	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+
+--- [TOneWhS_BE].[LOB]-------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+begin
+
+set nocount on;
+
+;with cte_data([ID],[Name],[CreatedTime],[CreatedBy],[LastModifiedTime],[LastModifiedBy])
+as (select* from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('b8b690fc-935c-4f79-b8c6-d1f179c45e0c','SMS',NULL,NULL,NULL,NULL)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[CreatedTime],[CreatedBy],[LastModifiedTime],[LastModifiedBy]))
+merge[TOneWhS_BE].[LOB] as t
+using  cte_data as s
+on  1=1 and t.[ID]=s.[ID]
+
+when matched then
+update set
+[ID]=s.[ID] ,[Name]=s.[Name] ,[CreatedTime]=s.[CreatedTime] ,[CreatedBy]=s.[CreatedBy] ,[LastModifiedTime]=s.[LastModifiedTime] ,[LastModifiedBy]=s.[LastModifiedBy] 
+when not matched by target then
+insert([ID],[Name],[CreatedTime],[CreatedBy],[LastModifiedTime],[LastModifiedBy])
+values(s.[ID], s.[Name], s.[CreatedTime], s.[CreatedBy], s.[LastModifiedTime], s.[LastModifiedBy]);
+
+----------------------------------------------------------------------------------------------------
+end
+----------------------------------------------------------------------------------------------------
