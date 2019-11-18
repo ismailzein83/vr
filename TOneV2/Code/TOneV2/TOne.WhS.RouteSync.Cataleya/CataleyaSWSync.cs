@@ -408,7 +408,12 @@ namespace TOne.WhS.RouteSync.Cataleya
                 }
             }
 
+            var apiConnectionValidationError = ValidateAPIConnection();
+
             List<string> validationMessages = new List<string>();
+
+            if (!string.IsNullOrEmpty(apiConnectionValidationError))
+                validationMessages.Add(apiConnectionValidationError);
 
             if (duplicatedZoneIDs.Count > 0)
                 validationMessages.Add($"Following ZoneIDs are Duplicated: {string.Join(", ", duplicatedZoneIDs)}");
@@ -603,12 +608,29 @@ namespace TOne.WhS.RouteSync.Cataleya
             var vrConnection = new VRConnectionManager().GetVRConnection(APIConnectionId);
             VRHttpConnection httpConnection = vrConnection.Settings.CastWithValidate<VRHttpConnection>("connection.Settings", APIConnectionId);
 
-            var apiInterceptor = httpConnection.Interceptor.CastWithValidate<VRAPIConnectionHttpConnectionCallInterceptor>(" httpConnection.Interceptor", APIConnectionId);
+            var apiInterceptor = httpConnection.Interceptor.CastWithValidate<VRCookieAuthHttpConnectionCallInterceptor>(" httpConnection.Interceptor", APIConnectionId);
 
             if (!this.CarrierMappings.TryGetValue(carrierAccountId, out var carrierMapping))
                 return false;
 
             return ChangeAccountStatus(NodeID, carrierMapping.ZoneID, status, apiInterceptor.Username, apiInterceptor.Password, httpConnection.BaseURL);
+        }
+
+        private string ValidateAPIConnection()
+        {
+            var vrConnection = new VRConnectionManager().GetVRConnection(APIConnectionId);
+            if (vrConnection == null || vrConnection.Settings == null)
+                return $"Invalid Connection of id {APIConnectionId}.";
+
+            VRHttpConnection httpConnection = vrConnection.Settings as VRHttpConnection;
+            if (httpConnection == null)
+                return $"The API Connection should be of type 'VRHttpConnection'.";
+
+            VRCookieAuthHttpConnectionCallInterceptor cookieAuthInterceptor = httpConnection.Interceptor as VRCookieAuthHttpConnectionCallInterceptor;
+            if (cookieAuthInterceptor == null)
+                return $"The API Connection should have an Interceptor of type 'Cookie Auth'.";
+
+            return null;
         }
 
         #endregion
