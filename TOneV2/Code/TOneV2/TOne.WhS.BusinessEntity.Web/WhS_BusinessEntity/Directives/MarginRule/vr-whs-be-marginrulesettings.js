@@ -32,7 +32,7 @@ app.directive('vrWhsBeMarginrulesettings', ['UtilsService', 'VRUIUtilsService',
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.marginSettingItems = []
+                $scope.scopeModel.marginSettingItems = [];
 
                 $scope.scopeModel.onCurrencySelectReady = function (api) {
                     currencyDirectiveAPI = api;
