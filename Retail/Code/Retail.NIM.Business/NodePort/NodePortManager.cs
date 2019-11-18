@@ -13,7 +13,23 @@ namespace Retail.NIM.Business
 {
     public class NodePortManager
     {
+        static Guid s_nodePortBEDefinitionId = new Guid("04868fe5-9944-4e2b-b4d2-de9c5f73e2f4");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
+        static string s_portIdFieldName = "ID";
+        static string s_nodeIdFieldName = "Node";
+        static string s_statusIdFieldName = "Status";
+        static string s_portTypeIdFieldName = "Type";
+        static string s_numberFieldName = "Number";
+        static string s_nodeTypeIdFieldName = "NodeType";
+        static string s_partTypeIdFieldName = "PartType";
+        static string s_partIdFieldName = "Part";
+
+        #region Public Methods
+        public static Guid s_freePortStatusDefinitionId = new Guid("a11d2835-89ed-442c-9646-c1f9b23ff213");
+        public static Guid s_reservedPortStatusDefinitionId = new Guid("c51bb41b-b31a-45ba-b12e-8f521b0323eb");
+        public static Guid s_usedPortStatusDefinitionId = new Guid("e648730c-4a0c-4354-8c4e-5e0d8c34f855");
+        public static Guid s_faultyPortStatusDefinitionId = new Guid("dea67efd-d92b-4674-b982-4d6ba1bc6b10");
+        #endregion
 
         #region Public Methods
         public ReservePortOutput ReservePort(ReservePortInput input)
@@ -29,14 +45,14 @@ namespace Retail.NIM.Business
                 {
                     new ObjectListRecordFilter
                     {
-                        FieldName ="Node",
+                        FieldName =s_nodeIdFieldName,
                         Values =  new List<object> {input.NodeId}
                     },
                     new ObjectListRecordFilter{
-                              FieldName = "Status",
-                              Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
+                              FieldName = s_statusIdFieldName,
+                              Values = new List<object> { s_freePortStatusDefinitionId.ToString() }
                     }, new ObjectListRecordFilter{
-                              FieldName = "Type",
+                              FieldName = s_portTypeIdFieldName,
                               Values = new List<object> { input.PortTypeId.ToString() }
                     }
                 }
@@ -46,7 +62,7 @@ namespace Retail.NIM.Business
             {
                 filter.Filters.Add(new ObjectListRecordFilter
                 {
-                    FieldName = "PartType",
+                    FieldName = s_partTypeIdFieldName,
                     Values = new List<object> { input.PartTypeId.Value.ToString() }
                 });
             }
@@ -54,7 +70,7 @@ namespace Retail.NIM.Business
             {
                 filter.Filters.Add(new EmptyRecordFilter
                 {
-                    FieldName = "PartType",
+                    FieldName = s_partTypeIdFieldName,
                 });
             }
 
@@ -65,15 +81,15 @@ namespace Retail.NIM.Business
 
             var firstItem = entities.First();
 
-            var portid = (long)firstItem.FieldValues.GetRecord("ID");
+            var portid = (long)firstItem.FieldValues.GetRecord(s_portIdFieldName);
             return ReservePort(portid, input.PortTypeId);
         }
         public SetPortUsedOutput SetPortUsed(SetPortUsedInput input)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.UsedPortStatusDefinitionId } },
+                BusinessEntityDefinitionId = s_nodePortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { s_statusIdFieldName,s_usedPortStatusDefinitionId } },
                 GenericBusinessEntityId = input.PortId
             });
 
@@ -86,8 +102,8 @@ namespace Retail.NIM.Business
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.FaultyPortStatusDefinitionId } },
+                BusinessEntityDefinitionId = s_nodePortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { s_statusIdFieldName, s_faultyPortStatusDefinitionId } },
                 GenericBusinessEntityId = input.PortId
             });
 
@@ -100,8 +116,8 @@ namespace Retail.NIM.Business
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.FreePortStatusDefinitionId } },
+                BusinessEntityDefinitionId = s_nodePortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { s_statusIdFieldName, s_freePortStatusDefinitionId} },
                 GenericBusinessEntityId = input.PortId
             });
 
@@ -118,11 +134,11 @@ namespace Retail.NIM.Business
 
             var nodePortInfo = new NodePortInfo
             {
-                NodeId = (long)nodePort.FieldValues.GetRecord("Node"),
-                NodeTypeId = (Guid)nodePort.FieldValues.GetRecord("NodeType"),
-                PortId = (long)nodePort.FieldValues.GetRecord("ID"),
-                PortNumber = nodePort.FieldValues.GetRecord("Number") as string,
-                PortTypeId = (Guid)nodePort.FieldValues.GetRecord("Type"),
+                NodeId = (long)nodePort.FieldValues.GetRecord(s_nodeIdFieldName),
+                NodeTypeId = (Guid)nodePort.FieldValues.GetRecord(s_nodeTypeIdFieldName),
+                PortId = (long)nodePort.FieldValues.GetRecord(s_portIdFieldName),
+                PortNumber = nodePort.FieldValues.GetRecord(s_numberFieldName) as string,
+                PortTypeId = (Guid)nodePort.FieldValues.GetRecord(s_portTypeIdFieldName),
             };
 
             var node = new NodeManager().GetNode(nodePortInfo.NodeId);
@@ -131,7 +147,7 @@ namespace Retail.NIM.Business
                 nodePortInfo.NodeNumber = node.Number;
             }
 
-            var nodePartId = (long?)nodePort.FieldValues.GetRecord("Part");
+            var nodePartId = (long?)nodePort.FieldValues.GetRecord(s_partIdFieldName);
             if(nodePartId.HasValue)
             {
 
@@ -146,10 +162,10 @@ namespace Retail.NIM.Business
                     {
                         foreach (var part in nodeParts)
                         {
-                            var partId = (long)part.FieldValues.GetRecord("ID");
-                            var partTypeId = (Guid)part.FieldValues.GetRecord("NodePartType");
-                            var parentPartId = (long?)part.FieldValues.GetRecord("ParentPart");
-                            var number = part.FieldValues.GetRecord("Number") as string;
+                            var partId = part.NodePartId;
+                            var partTypeId = part.NodePartTypeId;
+                            var parentPartId = part.ParentPartId;
+                            var number = part.Number;
 
                             if (reachedPartId == partId)
                             {
@@ -175,14 +191,14 @@ namespace Retail.NIM.Business
         #region Internal Methods
         internal GenericBusinessEntity GetPort(long portId)
         {
-            return _genericBusinessEntityManager.GetGenericBusinessEntity(portId, StaticBEDefinitionIDs.NodePortBEDefinitionId);
+            return _genericBusinessEntityManager.GetGenericBusinessEntity(portId, s_nodePortBEDefinitionId);
         }
         internal ReservePortOutput ReservePort(long portId, Guid portTypeId)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.NodePortBEDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Status", StaticBEDefinitionIDs.ReservedPortStatusDefinitionId } },
+                BusinessEntityDefinitionId = s_nodePortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { s_statusIdFieldName, s_reservedPortStatusDefinitionId} },
                 GenericBusinessEntityId = portId,
                 FilterGroup = new RecordFilterGroup
                 {
@@ -190,8 +206,8 @@ namespace Retail.NIM.Business
                     {
                         new ObjectListRecordFilter
                         {
-                              FieldName = "Status",
-                              Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId }
+                              FieldName = s_statusIdFieldName,
+                              Values = new List<object> { s_freePortStatusDefinitionId}
                         }
                    }
                 }
@@ -203,7 +219,7 @@ namespace Retail.NIM.Business
             return new ReservePortOutput
             {
                 PortId = portId,
-                Number = updatedEntity.UpdatedObject.FieldValues.GetRecord("Number").Description
+                Number = updatedEntity.UpdatedObject.FieldValues.GetRecord(s_numberFieldName).Description
             };
         }
 

@@ -15,68 +15,86 @@ namespace Retail.NIM.Business
     {
         static Guid _definitionId = new Guid("ADFFB988-63C8-4C62-B084-4AE4FBEA3C3C");
         GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
+        static string s_partIdFieldName = "ID";
+        static string s_numberFieldName = "Number";
+        static string s_modelFieldName = "Model";
+        static string s_nodeIdFieldName = "Node";
+        static string s_parentPartIdFieldName = "ParentPart";
+        static string s_createdByFieldName = "CreatedBy";
+        static string s_createdTimeFieldName = "CreatedTime";
+        static string s_lastModifiedByFieldName = "LastModifiedBy";
+        static string s_lastModifiedTimeFieldName = "CreatedTime";
+        static string s_nodePartTypeIdFieldName = "NodePartType";
 
         public NodePartTreeNode GetNodePartTree(long nodeId)
         {
-            List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
+            var nodeParts = GetNodePartsByNodeId(nodeId);
 
-            long nodePartNodeId;
             Dictionary<long, NodePartTreeNode> nodePartTrees = new Dictionary<long, NodePartTreeNode>();
-            foreach (var genericBusinessEntity in genericBusinessEntities)
+            foreach (var nodePart in nodeParts)
             {
-                nodePartNodeId = (long)genericBusinessEntity.FieldValues.GetRecord("Node");
-                if (nodePartNodeId.Equals(nodeId))
+                NodePartTreeNode node = new NodePartTreeNode
                 {
-                    NodePartTreeNode node = new NodePartTreeNode
-                    {
-                        Id = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
-                        Number = genericBusinessEntity.FieldValues.GetRecord("Number") as string,
-                        ParentPartId = (long?)genericBusinessEntity.FieldValues.GetRecord("ParentPart"),
-                    };
-                    nodePartTrees.Add(node.Id, node);
-                }
+                    Id = (long)nodePart.NodePartId,
+                    Number = nodePart.Number,
+                    ParentPartId = nodePart.ParentPartId,
+                };
+                nodePartTrees.Add(node.Id, node);
             }
+
+
+
+            NodePartTreeNode nodePartTreeNode = new NodePartTreeNode();
+            nodePartTreeNode.Id = nodeId;
 
             foreach (var node in nodePartTrees.Values)
             {
 
                 if (node.ParentPartId.HasValue)
                 {
-                    NodePartTreeNode parentNode;
-                    if (nodePartTrees.TryGetValue(node.ParentPartId.Value, out parentNode))
-                    {
-                        parentNode.ChildNodes.Add(node);
-                    }
+                    NodePartTreeNode parentNode = nodePartTrees.GetRecord(node.ParentPartId.Value);
+                    parentNode.ChildNodes.Add(node);
                 }
-            }
-
-            NodePartTreeNode nodePartTreeNode = new NodePartTreeNode();
-            nodePartTreeNode.Id = nodeId;
-            foreach (var node in nodePartTrees.Values)
-            {
-                if (node.ParentPartId == null)
+                else
                 {
                     nodePartTreeNode.ChildNodes.Add(node);
                 }
             }
-
             return nodePartTreeNode;
         }
 
-
-        internal List<GenericBusinessEntity> GetNodePartsByNodeId(long nodeId)
+        internal List<NodePart> GetNodePartsByNodeId(long nodeId)
         {
-            return  genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId,null,new RecordFilterGroup
+            var items =   genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId,null,new RecordFilterGroup
             {
                 Filters = new List<RecordFilter>
                 {
                     new ObjectListRecordFilter
                     {
-                        FieldName ="Node",
+                        FieldName =s_nodeIdFieldName,
                         Values = new List<object>{ nodeId }
                     }
                 }
             });
+            if (items == null)
+                return null;
+            return items.MapRecords(NodePartMapper).ToList();
+        }
+        NodePart NodePartMapper(GenericBusinessEntity genericBusinessEntity)
+        {
+            return new NodePart
+            {
+                NodePartId = (long)genericBusinessEntity.FieldValues.GetRecord(s_partIdFieldName),
+                Model = (int)genericBusinessEntity.FieldValues.GetRecord(s_modelFieldName),
+                NodeId = (long)genericBusinessEntity.FieldValues.GetRecord(s_nodeIdFieldName),
+                Number = genericBusinessEntity.FieldValues.GetRecord(s_numberFieldName) as string,
+                ParentPartId = (long?)genericBusinessEntity.FieldValues.GetRecord(s_parentPartIdFieldName),
+                CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord(s_createdByFieldName),
+                CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord(s_createdTimeFieldName),
+                LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord(s_lastModifiedByFieldName),
+                LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord(s_lastModifiedTimeFieldName),
+                NodePartTypeId=(Guid)genericBusinessEntity.FieldValues.GetRecord(s_nodePartTypeIdFieldName),
+            };
         }
     }
 }

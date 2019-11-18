@@ -13,6 +13,7 @@ namespace Retail.NIM.Business
 {
     public class ConnectionManager
     {
+        static Guid s_connectionBEDefinitionId = new Guid("e74d9d5d-cc59-4b40-8626-048a755c054c");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
         static string s_idFieldName = "ID";
         static string s_modelFieldName = "Model";
@@ -64,12 +65,12 @@ namespace Retail.NIM.Business
                    ,new ObjectListRecordFilter
                    {
                         FieldName = s_port1StatusFieldName,
-                        Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
+                        Values = new List<object> { NodePortManager.s_freePortStatusDefinitionId.ToString() }
                    }
                    ,new ObjectListRecordFilter
                    {
                        FieldName = s_port2StatusFieldName,
-                       Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
+                       Values = new List<object> { NodePortManager.s_freePortStatusDefinitionId.ToString() }
                    }
                 }
             };
@@ -106,7 +107,7 @@ namespace Retail.NIM.Business
                 });
             }
 
-            var entities = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.ConnectionBEDefinitionId, null, filter);
+            var entities = _genericBusinessEntityManager.GetAllGenericBusinessEntities(s_connectionBEDefinitionId, null, filter);
 
             if (entities == null || entities.Count() == 0)
                 return null;
@@ -222,7 +223,7 @@ namespace Retail.NIM.Business
                         }
                 });
             }
-            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.ConnectionBEDefinitionId, null, filter);
+            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(s_connectionBEDefinitionId, null, filter);
             if (items == null || items.Count == 0)
                 return null;
             return ConnectionMapper(items.First());
@@ -261,12 +262,12 @@ namespace Retail.NIM.Business
                     },new ObjectListRecordFilter
                    {
                         FieldName = s_port1StatusFieldName,
-                        Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
+                        Values = new List<object> { NodePortManager.s_freePortStatusDefinitionId.ToString() }
                    }
                    ,new ObjectListRecordFilter
                    {
                        FieldName = s_port2StatusFieldName,
-                       Values = new List<object> { StaticBEDefinitionIDs.FreePortStatusDefinitionId.ToString() }
+                       Values = new List<object> { NodePortManager.s_freePortStatusDefinitionId.ToString() }
                    }
 
                 },
@@ -291,7 +292,7 @@ namespace Retail.NIM.Business
                              }
                         }
                 });
-            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.ConnectionBEDefinitionId, null, filter);
+            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(s_connectionBEDefinitionId, null, filter);
             return items != null && items.Count > 0;
         }
 

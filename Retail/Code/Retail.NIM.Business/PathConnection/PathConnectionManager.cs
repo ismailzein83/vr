@@ -13,6 +13,7 @@ namespace Retail.NIM.Business
 {
     public class PathConnectionManager
     {
+        static Guid s_pathConnectionBEDefinitionId = new Guid("24364ed5-1795-468c-a27b-c00013e830ac");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
         static string s_idFieldName = "ID";
@@ -35,7 +36,7 @@ namespace Retail.NIM.Business
         {
             var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathConnectionBEDefinitionId,
+                BusinessEntityDefinitionId = s_pathConnectionBEDefinitionId,
                 FieldValues = new Dictionary<string, object> { { s_pathIdFieldName, pathConnectionInput.PathId }, { s_connectionIdFieldName, pathConnectionInput.ConnectionId } }
             });
 
@@ -52,7 +53,7 @@ namespace Retail.NIM.Business
         {
             _genericBusinessEntityManager.DeleteGenericBusinessEntity(new DeleteGenericBusinessEntityInput
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathConnectionBEDefinitionId,
+                BusinessEntityDefinitionId = s_pathConnectionBEDefinitionId,
                 GenericBusinessEntityIds = new List<object>() { input.PathConnectionId },
 
             });
@@ -79,7 +80,7 @@ namespace Retail.NIM.Business
                 },
 
             };
-            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.PathConnectionBEDefinitionId, null, filter);
+            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(s_pathConnectionBEDefinitionId, null, filter);
             if (items == null || items.Count == 0)
                 return null;
             return items.MapRecords(PathConnectionMapper).ToList();

@@ -12,6 +12,7 @@ namespace Retail.NIM.Entities
         public string Number { get; set; }
         public long? ParentPartId { get; set; }
         public long NodeId { get; set; }
+        public Guid NodePartTypeId { get; set; }
         public int Model { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedTime { get; set; }

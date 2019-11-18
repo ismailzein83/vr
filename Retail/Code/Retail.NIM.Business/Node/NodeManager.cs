@@ -11,6 +11,7 @@ namespace Retail.NIM.Business
 {
     public class NodeManager
     {
+        static Guid s_nodeBEDefinitionId = new Guid("c20d34be-9eda-4dcc-8872-41a415f38468");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
         static string s_nodeIdFieldName = "ID";
         static string s_modelIdFieldName = "Model";
@@ -38,7 +39,7 @@ namespace Retail.NIM.Business
         }
         internal Node GetNode(long nodeId)
         {
-            return GetNode(nodeId, StaticBEDefinitionIDs.NodeBEDefinitionId);
+            return GetNode(nodeId, s_nodeBEDefinitionId);
         }
         internal Node GetNodeByNumber(string number, Guid businessEntityDefinitionId)
         {

@@ -80,6 +80,9 @@
     <Compile Include="Path\SetPathReadyInput.cs" />
     <Compile Include="Path\SetPathReadyOutput.cs" />
     <Compile Include="PhoneNumberStatus.cs" />
+    <Compile Include="PhoneNumber\ReservePhoneNumber.cs" />
+    <Compile Include="PhoneNumber\SetPhoneNumberUsedInput.cs" />
+    <Compile Include="PhoneNumber\SetPhoneNumberUsedOutput.cs" />
     <Compile Include="PortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticBEDefinitionIDs.cs" />

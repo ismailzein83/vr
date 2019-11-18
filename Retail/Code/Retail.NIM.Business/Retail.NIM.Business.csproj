@@ -76,6 +76,7 @@
     <Compile Include="PathConnection\PathConnectionManager.cs" />
     <Compile Include="PathPort\PathPortManager.cs" />
     <Compile Include="Path\PathManager.cs" />
+    <Compile Include="PhoneNumber\PhoneNumberManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TechnicalAddress\TechnicalAddressManager.cs" />
   </ItemGroup>

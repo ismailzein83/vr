@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Retail.NIM.Entities
+{
+    public class SetPhoneNumberUsedOutput
+    {
+        public bool IsSucceeded { get; set; }
+    }
+}

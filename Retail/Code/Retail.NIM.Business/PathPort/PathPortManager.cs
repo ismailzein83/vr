@@ -12,6 +12,7 @@ namespace Retail.NIM.Business
 {
     public class PathPortManager
     {
+        static Guid s_pathPortBEDefinitionId = new Guid("890b8fbd-6556-4037-8d97-c2421b1b7095");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
         static string s_pathPortIdFieldName = "ID";
@@ -27,8 +28,8 @@ namespace Retail.NIM.Business
         {
             var insertedEntity = _genericBusinessEntityManager.AddGenericBusinessEntity(new GenericBusinessEntityToAdd
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathPortBEDefinitionId,
-                FieldValues = new Dictionary<string, object> { { "Path", input.PathId }, { "Port", input.PortId } }
+                BusinessEntityDefinitionId = s_pathPortBEDefinitionId,
+                FieldValues = new Dictionary<string, object> { { s_pathIdFieldName, input.PathId }, { s_portIdFieldName, input.PortId } }
             });
 
 
@@ -37,14 +38,14 @@ namespace Retail.NIM.Business
 
             return new PathPortOutput
             {
-                PathPortId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord("ID").Value
+                PathPortId = (long)insertedEntity.InsertedObject.FieldValues.GetRecord(s_pathPortIdFieldName).Value
             };
         }
         public void RemovePathPort(RemovePathPortInput input)
         {
             _genericBusinessEntityManager.DeleteGenericBusinessEntity(new DeleteGenericBusinessEntityInput
             {
-                BusinessEntityDefinitionId = StaticBEDefinitionIDs.PathPortBEDefinitionId,
+                BusinessEntityDefinitionId = s_pathPortBEDefinitionId,
                 GenericBusinessEntityIds = new List<object>() { input.PathPortId },
 
             });
@@ -71,7 +72,7 @@ namespace Retail.NIM.Business
                 },
 
             };
-            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.PathPortBEDefinitionId, null, filter);
+            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(s_pathPortBEDefinitionId, null, filter);
             if (items == null || items.Count == 0)
                 return null;
             return items.MapRecords(PathPortMapper).ToList();
