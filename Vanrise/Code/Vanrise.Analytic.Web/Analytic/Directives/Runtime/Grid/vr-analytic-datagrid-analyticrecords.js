@@ -868,20 +868,22 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             FilterValues: [dataItem.DimensionValues[i].Value]
                         });
                     }
+                    if (dimensionFilters != undefined) {
+                        for (var i = 0; i < dimensionFilters.length; i++) {
+                            var currentDimension = dimensionFilters[i];
+                            if (currentDimension == undefined)
+                                continue;
 
-                    for (var i = 0; i < dimensionFilters.length; i++) {
-                        var currentDimension = dimensionFilters[i];
-                        if (currentDimension == undefined)
-                            continue;
-
-                        dimensionValues.push({
-                            Dimension: currentDimension.Dimension,
-                            FilterValues: currentDimension.FilterValues
-                        });
+                            dimensionValues.push({
+                                Dimension: currentDimension.Dimension,
+                                FilterValues: currentDimension.FilterValues
+                            });
+                        }
                     }
 
+                   
                     //if parentDimensions.length > 0 all groupingDimensions are already added to dimensionValues by selectedDimensions and dimensionFilters
-                    if (parentDimensions.length == 0) {
+                    if (parentDimensions != undefined && parentDimensions.length == 0) {
                         for (var i = 0; i < groupingDimensions.length; i++) {
                             var groupingDimension = groupingDimensions[i];
                             if (groupingDimension == undefined || groupingDimension.DimensionName == undefined)// || UtilsService.getItemByVal(dimensionValues, groupingDimension.DimensionName, "Dimension") != undefined)
