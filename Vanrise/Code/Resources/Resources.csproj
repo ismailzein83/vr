@@ -373,6 +373,15 @@
     <None Include="BatchScripts\CDRAnalysis\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\CDRAnalysis\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CDRAnalysis\All.bat" />
+    <None Include="BatchScripts\CloudXCataleya\01-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\CloudXCataleya\02-Runtime.bat" />
+    <None Include="BatchScripts\CloudXCataleya\03-WebSite.bat" />
+    <None Include="BatchScripts\CloudXCataleya\05-CompressFiles.bat" />
+    <None Include="BatchScripts\CloudXCataleya\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\CloudXCataleya\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\CloudXCataleya\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\CloudXCataleya\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\CloudXCataleya\All.bat" />
     <None Include="BatchScripts\Inspkt.C4\01-Runtime.bat" />
     <None Include="BatchScripts\Inspkt.C4\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Inspkt.C4\03-WebSite.bat" />
