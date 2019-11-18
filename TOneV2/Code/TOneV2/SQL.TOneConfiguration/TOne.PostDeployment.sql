@@ -704,8 +704,7 @@ as (select * from (values
 
 ('DBA11797-C5BA-49B7-BC2C-9483B36449CA','Whs_CallQualityRules','Call Quality Rules'						,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]'),
 ('6E7E79EE-CC89-487B-8753-E5F875776A26','CallQualityTraffic','Call Quality Traffic'						,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
-('5e17ce89-cf1e-42fa-af96-20bc068a0147','WhS_FaultTicket_Processes','FaultTicket Processes','b6b8f582-4759-43fb-9220-aa7662c366ea','False','["View","Start Instance"]')
-
+('5e17ce89-cf1e-42fa-af96-20bc068a0147','WhS_FaultTicket_Processes','FaultTicket Processes'				,'b6b8f582-4759-43fb-9220-aa7662c366ea',0,'["View","Start Instance"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
