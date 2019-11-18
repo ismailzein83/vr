@@ -8,7 +8,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
-namespace Retail.NIM.Business.PhoneNumber
+namespace Retail.NIM.Business
 {
     public class PhoneNumberManager
     {
