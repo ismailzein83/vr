@@ -23,7 +23,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticManager manager = new AnalyticManager();
             if (manager.CheckAnalyticRequiredPermission(input))
 
-                return GetWebResponse(input, manager.GetFilteredRecords(input),input.Query.ReportName);
+                return GetWebResponse(input, manager.GetFilteredRecords(input),string.IsNullOrEmpty(input.Query.ReportTitle)? input.Query.ReportName: input.Query.ReportTitle);
 
             return GetUnauthorizedResponse();
           

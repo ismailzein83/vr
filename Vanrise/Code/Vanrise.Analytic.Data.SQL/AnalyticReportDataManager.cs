@@ -28,13 +28,13 @@ namespace Vanrise.Analytic.Data.SQL
         }
         public bool AddAnalyticReport(Entities.AnalyticReport analyticReport)
         {
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Insert", analyticReport.AnalyticReportId, analyticReport.Name, analyticReport.UserID, analyticReport.AccessType, analyticReport.DevProjectId, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Insert", analyticReport.AnalyticReportId, analyticReport.Name, analyticReport.Title, analyticReport.UserID, analyticReport.AccessType, analyticReport.DevProjectId, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
 
             return (recordesEffected > 0);
         }
         public bool UpdateAnalyticReport(Entities.AnalyticReport analyticReport)
         {
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Update", analyticReport.AnalyticReportId, analyticReport.Name, analyticReport.UserID, analyticReport.AccessType, analyticReport.DevProjectId, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Update", analyticReport.AnalyticReportId, analyticReport.Name,analyticReport.Title, analyticReport.UserID, analyticReport.AccessType, analyticReport.DevProjectId, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
             return (recordesEffected > 0);
         }
         #endregion
@@ -47,6 +47,7 @@ namespace Vanrise.Analytic.Data.SQL
                 AnalyticReportId =  GetReaderValue<Guid>(reader,"ID"),
                 DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string,
+                Title = reader["Title"] as string,
                 AccessType = (AccessType)reader["AccessType"],
                 UserID = (int)reader["UserID"],
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticReportSettings>(reader["Settings"] as string),

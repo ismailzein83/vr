@@ -17,6 +17,7 @@ namespace Vanrise.Analytic.Data.RDB
         public const string COL_DevProjectID = "DevProjectID";
         public const string COL_UserID = "UserID";
         public const string COL_Name = "Name";
+        public const string COL_Title = "Title";
         public const string COL_AccessType = "AccessType";
         public const string COL_Settings = "Settings";
         public const string COL_CreatedTime = "CreatedTime";
@@ -28,6 +29,7 @@ namespace Vanrise.Analytic.Data.RDB
             columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_UserID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_AccessType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -58,6 +60,7 @@ namespace Vanrise.Analytic.Data.RDB
                 AccessType = (AccessType)reader.GetInt(COL_AccessType),
                 UserID=reader.GetInt(COL_UserID),
                 Name = reader.GetString(COL_Name),
+                Title = reader.GetString(COL_Title),
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticReportSettings>(reader.GetString(COL_Settings)),
             };
             return analyticTable;
@@ -77,6 +80,7 @@ namespace Vanrise.Analytic.Data.RDB
 
             insertQuery.Column(COL_ID).Value(analyticReport.AnalyticReportId);
             insertQuery.Column(COL_Name).Value(analyticReport.Name);
+            insertQuery.Column(COL_Title).Value(analyticReport.Title);
             insertQuery.Column(COL_UserID).Value(analyticReport.UserID);
             insertQuery.Column(COL_AccessType).Value((int)analyticReport.AccessType);
             if (analyticReport.DevProjectId.HasValue)
@@ -113,6 +117,7 @@ namespace Vanrise.Analytic.Data.RDB
             notExistsCondition.EqualsCondition(COL_Name).Value(analyticReport.Name);
 
             updateQuery.Column(COL_Name).Value(analyticReport.Name);
+            updateQuery.Column(COL_Title).Value(analyticReport.Title);
             if (analyticReport.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
             else

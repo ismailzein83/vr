@@ -14,6 +14,8 @@ namespace Vanrise.Analytic.Entities
         public int UserID { get; set; }
         public AccessType AccessType { get; set; }
         public string Name { get; set; }
+        public string Title { get; set; }
+
         public AnalyticReportSettings Settings { get; set; }
     }
 }

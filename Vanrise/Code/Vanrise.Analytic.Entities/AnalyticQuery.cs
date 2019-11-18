@@ -12,6 +12,8 @@ namespace Vanrise.Analytic.Entities
     public class AnalyticQuery
     {
         public string ReportName { get; set; }
+        public string ReportTitle { get; set; }
+
         public Guid TableId { get; set; }
 
         public VRTimePeriod TimePeriod { get; set; }
