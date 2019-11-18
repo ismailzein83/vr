@@ -64,23 +64,7 @@
   <ItemGroup>
     <Compile Include="ConnectionType\ConnectionTypeManager.cs" />
     <Compile Include="Connection\ConnectionManager.cs" />
-    <Compile Include="Connectors\ConnectorManager.cs" />
-    <Compile Include="Connectors\IMSOLTConnectorManager.cs" />
-    <Compile Include="Connectors\IMSPhoneNumberTIDConnectorManager.cs" />
-    <Compile Include="Connectors\OLTHorizontalVerticalConnectorManager.cs" />
-    <Compile Include="Connectors\OLTSplitterConnectorManager.cs" />
-    <Compile Include="Connectors\OLTSplitterLogicalConnectorManager.cs" />
-    <Compile Include="Connectors\SplitterFDBConnectorManager.cs" />
-    <Compile Include="Connectors\SplitterInOutConnectorManager.cs" />
-    <Compile Include="DP\DPManager.cs" />
-    <Compile Include="FDB\FDBManager.cs" />
-    <Compile Include="FDB\FDBPortManager.cs" />
     <Compile Include="CopperPath\CopperPathManager.cs" />
-    <Compile Include="FTTHPath\FreeFTTHPathManager.cs" />
-    <Compile Include="FTTHPath\FTTHPathManager.cs" />
-    <Compile Include="IMS\IMSManager.cs" />
-    <Compile Include="IMS\IMSPhoneNumberManager.cs" />
-    <Compile Include="IMS\IMSTIDManager.cs" />
     <Compile Include="NodePartType\NodePartTypeManager.cs" />
     <Compile Include="NodePart\NodePartManager.cs" />
     <Compile Include="NodePort\NodePortManager.cs" />
@@ -89,12 +73,8 @@
     <Compile Include="NodeType\NodeTypeManager.cs" />
     <Compile Include="Node\NodeInfoFilter.cs" />
     <Compile Include="Node\NodeManager.cs" />
-    <Compile Include="OLT\OLTHorizontalPortManager.cs" />
-    <Compile Include="OLT\OLTVerticalPortManager.cs" />
     <Compile Include="Path\PathManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Splitter\SplitterInPortManager.cs" />
-    <Compile Include="Splitter\SplitterOutPortManager.cs" />
     <Compile Include="TechnicalAddress\TechnicalAddressManager.cs" />
   </ItemGroup>
   <ItemGroup>

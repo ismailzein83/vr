@@ -111,10 +111,6 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\ConnectionTypeController.cs" />
-    <Compile Include="Controllers\ConnectorController.cs" />
-    <Compile Include="Controllers\FDBController.cs" />
-    <Compile Include="Controllers\FreeFTTHPathController.cs" />
-    <Compile Include="Controllers\IMSPhoneNumberController.cs" />
     <Compile Include="Controllers\NodePartController.cs" />
     <Compile Include="Controllers\NodePartTypeController.cs" />
     <Compile Include="Controllers\NodePortTypeController.cs" />

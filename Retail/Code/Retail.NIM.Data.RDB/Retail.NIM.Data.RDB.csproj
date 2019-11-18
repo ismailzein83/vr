@@ -52,25 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AreaDataManager.cs" />
-    <Compile Include="FDBDataManager.cs" />
-    <Compile Include="FDBPortDataManager.cs" />
-    <Compile Include="FreeFTTHPathDataManager.cs" />
-    <Compile Include="IMSCardDataManager.cs" />
-    <Compile Include="IMSDataManager.cs" />
-    <Compile Include="IMSSlotDataManager.cs" />
-    <Compile Include="IMSTIDDataManager.cs" />
-    <Compile Include="OLTDataManager.cs" />
-    <Compile Include="OLTHorizontalDataManager.cs" />
-    <Compile Include="OLTHorizontalPortDataManager.cs" />
-    <Compile Include="OLTVerticalDataManager.cs" />
-    <Compile Include="OLTVerticalPortDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SiteDataManager.cs" />
-    <Compile Include="SplitterDataManager.cs" />
-    <Compile Include="SplitterInPortDataManager.cs" />
-    <Compile Include="SplitterOutPortDataManager.cs" />
-    <Compile Include="VendorDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.NIM.Data\Retail.NIM.Data.csproj">

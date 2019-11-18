@@ -52,15 +52,8 @@
     <Compile Include="ConnectionType\ConnectionTypeEntity.cs" />
     <Compile Include="Connection\Connection.cs" />
     <Compile Include="Connection\ReserveConnection.cs" />
-    <Compile Include="DP\DP.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="FDB\FDB.cs" />
-    <Compile Include="FDB\FDBPort.cs" />
     <Compile Include="CopperPath\CopperPath.cs" />
-    <Compile Include="FTTHPath\FreeFTTHPath.cs" />
-    <Compile Include="FTTHPath\FTTHPath.cs" />
-    <Compile Include="IMS\IMS.cs" />
-    <Compile Include="IMS\IMSPhoneNumber.cs" />
     <Compile Include="NodePartType\NodePartType.cs" />
     <Compile Include="NodePartType\NodePartTypeInfo.cs" />
     <Compile Include="NodePartType\NodePartTypeInfoFilter.cs" />
