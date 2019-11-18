@@ -126,6 +126,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
             supplierPricelistPreviewDataReadyPromiseDeferred.promise.then(function () {
                 var payload = {
                     processInstanceId: processInstanceId,
+                    supplierId: supplierId
                 };
                 VRUIUtilsService.callDirectiveLoad(supplierPricelistPreviewDataAPI, payload, loadSupplierPricelistPreviewDataPromiseDeferred);
             });
