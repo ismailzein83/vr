@@ -2033,6 +2033,18 @@
               "CreatedTime": "2019-07-24T10:32:38.79",
               "LastModifiedTime": "2019-07-24T10:32:38.79"
             }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "9269232f-5526-428a-8243-413b366f0a9a",
+              "DevProjectID": "02ed43e1-6af6-40e5-b78f-33c207cf97a6",
+              "Name": "Send Email (Whole Swap Deal Progress)",
+              "ConfigID": "d96f17c8-29d7-4c0c-88dc-9d5fbca2178f",
+              "Settings": "{\"$type\":\"Vanrise.Notification.Entities.VRActionDefinitionSettings, Vanrise.Notification.Entities\",\"VRComponentTypeConfigId\":\"d96f17c8-29d7-4c0c-88dc-9d5fbca2178f\",\"ExtendedSettings\":{\"$type\":\"Vanrise.GenericData.Notification.DataRecordSendEmailDefinitionSettings, Vanrise.GenericData.Notification\",\"ConfigId\":\"3b904e8c-2ac0-43db-a4ef-425869d40544\",\"RuntimeEditor\":\"vr-genericdata-datarecord-vraction-sendemail\",\"DataRecordTypeId\":\"c87d22db-f35a-42e2-b22d-0d376f0e6898\",\"MailMessageTypeId\":\"3b7bddaa-000f-42f6-99cd-b47944b46a2e\",\"DataRecordObjectName\":\"WholeSwapDealProgress\",\"ObjectFieldMappings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Notification.ObjectFieldMapping, Vanrise.GenericData.Notification]], mscorlib\",\"$values\":[]}}}",
+              "CreatedTime": "2019-09-25T16:42:25.14",
+              "LastModifiedTime": "2019-09-25T16:42:25.14"
+            }
           }
         ],
         "Variables": null,
