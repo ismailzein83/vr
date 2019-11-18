@@ -14,6 +14,7 @@ namespace Retail.NIM.Business
     {
         static Guid _definitionId = new Guid("8F4AC01A-82F2-45E7-A792-EE06CC16AE31");
 
+        #region Public Methods
         public NodePortType GetNodePortType(Guid nodePortTypeId)
         {
             return GetCachedNodePortTypes().GetRecord(nodePortTypeId);
@@ -26,7 +27,9 @@ namespace Retail.NIM.Business
             };
             return GetCachedNodePortTypes().MapRecords(NodePortTypeInfoMapper, filterExpression);
         }
-               
+      
+        #endregion
+
         #region Private Methods
 
         private Dictionary<Guid, NodePortType> GetCachedNodePortTypes()

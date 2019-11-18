@@ -158,6 +158,7 @@ namespace Retail.NIM.Business
 
         }
         #endregion
+     
         #region Mapper
         Node NodeMapper(GenericBusinessEntity genericBusinessEntity)
         {

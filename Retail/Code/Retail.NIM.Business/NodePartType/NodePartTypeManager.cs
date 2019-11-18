@@ -14,6 +14,8 @@ namespace Retail.NIM.Business
     {
 
         static Guid _definitionId = new Guid("FC3B7620-849A-4F18-88BD-DBE02FBBC72B");
+
+        #region Public Methods
         public IEnumerable<NodePartTypeInfo> GetNodePartTypeInfo(NodePartTypeInfoFilter nodePartTypeInfoFilter)
         {
             Func<NodePartType, bool> filterExpression = (nodePartTypeEntity) =>
@@ -22,6 +24,7 @@ namespace Retail.NIM.Business
             };
             return GetCachedNodePartTypes().MapRecords(NodePartTypeInfoMapper, filterExpression);
         }
+        #endregion
 
         #region Private Methods
 

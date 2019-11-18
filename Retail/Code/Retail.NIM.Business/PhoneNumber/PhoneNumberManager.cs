@@ -24,6 +24,7 @@ namespace Retail.NIM.Business
         static Guid s_phoneNumberBEDefinitionId = new Guid("71e1a021-659e-4379-b858-8f6269449894");
         static string s_statusIdFieldName = "Status";
 
+        #region Public Methods
         public ReservePhoneNumberOutput ReservePhoneNumber(ReservePhoneNumberInput input)
         {
             var updatedEntity = _genericBusinessEntityManager.UpdateGenericBusinessEntity(new GenericBusinessEntityToUpdate
@@ -78,5 +79,6 @@ namespace Retail.NIM.Business
                 IsSucceeded = (updatedEntity.Result == UpdateOperationResult.Succeeded)
             };
         }
+        #endregion
     }
 }

@@ -24,7 +24,8 @@ namespace Retail.NIM.Business
         static string s_partTypeIdFieldName = "PartType";
         static string s_partIdFieldName = "Part";
 
-        #region Public Methods
+        #region Port Status
+
         public static Guid s_freePortStatusDefinitionId = new Guid("a11d2835-89ed-442c-9646-c1f9b23ff213");
         public static Guid s_reservedPortStatusDefinitionId = new Guid("c51bb41b-b31a-45ba-b12e-8f521b0323eb");
         public static Guid s_usedPortStatusDefinitionId = new Guid("e648730c-4a0c-4354-8c4e-5e0d8c34f855");

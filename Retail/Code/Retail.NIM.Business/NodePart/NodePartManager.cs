@@ -25,7 +25,8 @@ namespace Retail.NIM.Business
         static string s_lastModifiedByFieldName = "LastModifiedBy";
         static string s_lastModifiedTimeFieldName = "CreatedTime";
         static string s_nodePartTypeIdFieldName = "NodePartType";
-
+      
+        #region Public Methods
         public NodePartTreeNode GetNodePartTree(long nodeId)
         {
             var nodeParts = GetNodePartsByNodeId(nodeId);
@@ -62,7 +63,9 @@ namespace Retail.NIM.Business
             }
             return nodePartTreeNode;
         }
+        #endregion
 
+        #region Internal Methods
         internal List<NodePart> GetNodePartsByNodeId(long nodeId)
         {
             var items =   genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId,null,new RecordFilterGroup
@@ -80,6 +83,9 @@ namespace Retail.NIM.Business
                 return null;
             return items.MapRecords(NodePartMapper).ToList();
         }
+        #endregion
+
+        #region Mapper
         NodePart NodePartMapper(GenericBusinessEntity genericBusinessEntity)
         {
             return new NodePart
@@ -96,5 +102,6 @@ namespace Retail.NIM.Business
                 NodePartTypeId=(Guid)genericBusinessEntity.FieldValues.GetRecord(s_nodePartTypeIdFieldName),
             };
         }
+        #endregion
     }
 }

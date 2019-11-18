@@ -12,7 +12,10 @@ namespace Retail.NIM.Business
 {
    public class NodeTypeManager
     {
+
         static Guid _definitionId = new Guid("EAB80DB1-59AC-4D1F-874A-290E94EC1837");
+       
+        #region Public Methods
         public IEnumerable<NodeTypeInfo> GetNodeTypeInfo(NodeTypeInfoFilter nodeTypeInfoFilter)
         {
             Func<NodeType, bool> filterExpression = (nodeTypeEntity) =>
@@ -21,7 +24,7 @@ namespace Retail.NIM.Business
             };
             return GetCachedNodeTypes().MapRecords(NodeTypeInfoMapper, filterExpression);
         }
-
+        #endregion
 
 
         #region Private Methods
