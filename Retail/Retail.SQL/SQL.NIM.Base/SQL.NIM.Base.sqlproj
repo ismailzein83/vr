@@ -86,5 +86,9 @@
     <Build Include="NIM\Tables\NodeType.sql" />
     <Build Include="NIM\Tables\Site.sql" />
     <Build Include="Security\NIM.sql" />
+    <Build Include="NIM\Tables\PhoneNumberCategory.sql" />
+    <Build Include="NIM\Tables\PhoneNumber.sql" />
+    <Build Include="NIM\Tables\NodeLocalAreaCode.sql" />
+    <Build Include="NIM\Tables\LAC.sql" />
   </ItemGroup>
 </Project>
