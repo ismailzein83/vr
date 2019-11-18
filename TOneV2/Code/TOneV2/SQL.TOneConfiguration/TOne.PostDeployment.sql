@@ -316,7 +316,9 @@ as (select * from (values
 ('E9B480FE-BE8F-4F1F-8D00-A3DF8EE74F7F', 'WhS_RouteSync_NumberLengthEvaluator_Fixed','Fixed','WhS_RouteSync_NumberLengthEvaluator','{"Editor":"whs-routesync-numberlength-fixed"}'),
 ('FAE24FC0-F549-41F7-8D3C-A581B63F7AFB', 'WhS_RouteSync_NumberLengthEvaluator_International','From International Number Length','WhS_RouteSync_NumberLengthEvaluator','{"Editor":"whs-routesync-numberlength-international"}'),
 ('E03E24AE-1985-455B-B843-1ED6A52DA9CE', 'WhS_RouteSync_CodeChargeEvaluator_Fixed','Fixed','WhS_RouteSync_CodeChargeEvaluator','{"Editor":"whs-routesync-codecharge-fixed"}'),
-('07ECEA2E-EEDD-4C65-B5D4-CC23BF680654', 'WhS_RouteSync_CodeChargeEvaluator_International','From International Code Charge','WhS_RouteSync_CodeChargeEvaluator','{"Editor":"whs-routesync-codecharge-international"}')             
+('07ECEA2E-EEDD-4C65-B5D4-CC23BF680654', 'WhS_RouteSync_CodeChargeEvaluator_International','From International Code Charge','WhS_RouteSync_CodeChargeEvaluator','{"Editor":"whs-routesync-codecharge-international"}'),
+
+('9F18087B-F323-4DEE-85BB-60D561789302', 'WhS_BE_MarginRule', 'Margin Rule', 'VR_GenericData_GenericRuleTypeConfig', '{"Editor":"vr-whs-be-genericruledefinitionsettings-marginrule","RuntimeEditor":"vr-whs-be-marginrulesettings", "RuleTypeFQTN":"TOne.WhS.BusinessEntity.Entities.MarginRule,TOne.WhS.BusinessEntity.Entities", "RuleManagerFQTN":"TOne.WhS.BusinessEntity.Business.MarginRuleManager, TOne.WhS.BusinessEntity.Business"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
