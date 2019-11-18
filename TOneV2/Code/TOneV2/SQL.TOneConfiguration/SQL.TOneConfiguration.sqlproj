@@ -160,6 +160,7 @@
     <Folder Include="VRJSON_PostScripts\Interconnect\SMS" />
     <Folder Include="VRJSON_PostScripts\NIM" />
     <Folder Include="VRJSON_PostScripts\CommonEntities" />
+    <Folder Include="VRJSON_PostScripts\CloudXPoint" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -1062,7 +1063,6 @@
     <None Include="VRJSON_PostScripts\PA\PATool.json" />
     <None Include="VRJSON_PostScripts\Inspkt\C5.json" />
     <None Include="VRJSON_PostScripts\Inspkt\C4.json" />
-    <None Include="VRJSON_PostScripts\TOne\VTel.json" />
     <None Include="VRJSON_PostScripts\CarrierPortal\TOne\SupplierPricelist.json" />
     <None Include="VRJSON_PostScripts\CarrierPortal\TOne\TOnePortal.json" />
     <None Include="VRJSON_PostScripts\CarrierPortal\Retail\RetailPortal.json" />
@@ -1088,5 +1088,7 @@
     <None Include="VRJSON_PostScripts\CommonEntities\VR_PersonProfile.json" />
     <None Include="VRJSON_PostScripts\CommonEntities\VR_Address.json" />
     <None Include="VRJSON_PostScripts\TOne\WhS_RouteAnalysis.json" />
+    <None Include="VRJSON_PostScripts\CloudXPoint\Cataleya.json" />
+    <None Include="VRJSON_PostScripts\CloudXPoint\CloudXPointBase.json" />
   </ItemGroup>
 </Project>

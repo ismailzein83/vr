@@ -1,0 +1,556 @@
+﻿{
+  "Scripts": [
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AssemblyID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "08d75302-b768-430a-9b8c-4fa60ea01f00",
+              "Name": "Cataleya",
+              "AssemblyID": null,
+              "CreatedTime": "2019-11-18T11:48:33.037",
+              "LastModifiedTime": "2019-11-18T11:48:33.037"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "ID = '08d75302-b768-430a-9b8c-4fa60ea01f00'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "common",
+      "TableName": "ExtensionConfiguration",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Title",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ConfigType",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "e0e15373-0f94-45a2-bbee-73aceb3d3301",
+              "DevProjectID": "08d75302-b768-430a-9b8c-4fa60ea01f00",
+              "Name": "VRCookieAuthConnectionInterceptor",
+              "Title": "Cookie Auth",
+              "ConfigType": "VR_HttpConnection_CallInterceptor",
+              "Settings": "{\"Editor\":\"vr-common-httpconnection-cookieauthinterceptor-editor\"}",
+              "CreatedTime": "2019-11-14T13:54:04.83",
+              "LastModifiedTime": "2019-11-14T13:54:04.83"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "d770f53b-057f-4bb8-bf20-883a2dbc510b",
+              "DevProjectID": "08d75302-b768-430a-9b8c-4fa60ea01f00",
+              "Name": "WhS_RouteSync_SwitchRouteSynchronizer_Cataleya",
+              "Title": "Cataleya Switch Synchronizer",
+              "ConfigType": "WhS_RouteSync_SwitchRouteSynchronizer",
+              "Settings": "{\"Editor\":\"whs-routesync-cataleya-swsync\"}",
+              "CreatedTime": "2019-03-13T10:42:38.473",
+              "LastModifiedTime": "2019-03-13T10:42:38.473"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "cad5f46b-f182-462a-aacc-b862acd11aeb",
+              "DevProjectID": "08d75302-b768-430a-9b8c-4fa60ea01f00",
+              "Name": "Whs_RouteSync_CataleyaDataManager_Postgres",
+              "Title": "Cataleya Postgres Data Manager",
+              "ConfigType": "WhS_RouteSync_CataleyaDataManager",
+              "Settings": "{\"Editor\":\"whs-routesync-cataleyapostgres-datamanager\"}",
+              "CreatedTime": "2019-11-08T13:36:30.097",
+              "LastModifiedTime": "2019-11-08T13:36:30.097"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "DevProjectID = '08d75302-b768-430a-9b8c-4fa60ea01f00'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "integration",
+      "TableName": "DataSource",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AdapterID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AdapterState",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "TaskId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "133f2a38-05e7-48eb-9a2b-f2c076d211ad",
+              "DevProjectID": "08d75302-b768-430a-9b8c-4fa60ea01f00",
+              "Name": "Import Cataleya CDR - Sample DataSource",
+              "AdapterID": "396a4933-df4f-49cd-9799-bf605b9f4597",
+              "AdapterState": "null",
+              "TaskId": "c3a4d5cb-da48-4444-ba42-7669b8f9c23e",
+              "Settings": "{\"$type\":\"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities\",\"AdapterArgument\":{\"$type\":\"Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments\",\"Extension\":\".dat\",\"Mask\":\"\",\"Directory\":\"/TONE/Cataleya\",\"ServerIP\":\"192.168.110.185\",\"UserName\":\"devftpuser\",\"Password\":\"P@ssw0rd\",\"ActionAfterImport\":0,\"CompressedFiles\":false,\"CompressionType\":0,\"FileCheckCriteria\":0,\"FileCompletenessCheckInterval\":5,\"MaxParallelRuntimeInstances\":1},\"MapperCustomCode\":\"var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();\\n            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(\\\"CDR\\\");\\n\\n            string dateTimeFormat = \\\"yyyyMMddHHmmssfff\\\";\\n\\n            List<string> reroutedCDRFields = new List<string>()\\n            {\\n                \\\"zone_id\\\", \\\"call_id\\\", \\\"zone_name\\\", \\\"sip_remote_addr\\\", \\\"inviting_ts\\\", \\\"response_ts\\\", \\\"failure_reason\\\",\\n                \\\"reason_phrase\\\", \\\"reason_hdr\\\", \\\"warning_hdr\\\", \\\"tgid\\\", \\\"calling_party\\\", \\\"pi\\\", \\\"extra_data\\\"\\n            };\\n\\n            var cdrs = new List<dynamic>();\\n\\n            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));\\n            System.IO.StreamReader sr = importedData.StreamReader;\\n\\n            string currentLine = sr.ReadLine();\\n            if (!string.IsNullOrEmpty(currentLine))\\n            {\\n                currentLine = currentLine.Replace(\\\"number_of_cdrs=\\\", \\\"\\\");\\n\\n                int numberOfCdrs;\\n                if (!int.TryParse(currentLine, out numberOfCdrs))\\n                    throw new Exception($\\\"Number of CDRs: '{currentLine}' is invalid\\\");\\n\\n                for (int i = 0; i < numberOfCdrs; i++)\\n                {\\n                    currentLine = sr.ReadLine();\\n                    string[] fields = currentLine.Split(',');\\n\\n                    dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;\\n                    cdr.SwitchId = 18;\\n\\n                    long idOnSwitch;\\n                    if (long.TryParse(fields[0], out idOnSwitch))\\n                        cdr.IDonSwitch = idOnSwitch;\\n\\n                    DateTime attemptDateTime;\\n                    if (DateTime.TryParseExact(fields[1], dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out attemptDateTime))\\n                        cdr.AttemptDateTime = attemptDateTime;\\n\\n                    DateTime alertDateTime;\\n                    if (DateTime.TryParseExact(fields[2], dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out alertDateTime))\\n                        cdr.AlertDateTime = alertDateTime;\\n\\n                    DateTime connectDateTime;\\n                    if (DateTime.TryParseExact(fields[3], dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out connectDateTime))\\n                        cdr.ConnectDateTime = connectDateTime;\\n\\n                    DateTime disconnectDateTime;\\n                    if (DateTime.TryParseExact(fields[4], dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out disconnectDateTime))\\n                        cdr.DisconnectDateTime = disconnectDateTime;\\n\\n                    cdr.InCarrier = fields[5];\\n                    cdr.InTrunk = fields[6];\\n                    cdr.OutCarrier = fields[7];\\n                    cdr.OutTrunk = fields[8];\\n\\n                    cdr.CGPN = fields[14];\\n                    cdr.CDPN = fields[15];\\n                    cdr.CDPNOut = fields[15];\\n                    cdr.CDPNIn = null;\\n\\n                    if (!string.IsNullOrEmpty(fields[16]))\\n                    {\\n                        decimal durationInSeconds;\\n                        if (!decimal.TryParse(fields[16], out durationInSeconds))\\n                            throw new Exception($\\\"DurationInSeconds '{fields[16]}' is invalid\\\");\\n\\n                        cdr.DurationInSeconds = durationInSeconds;\\n                    }\\n\\n                    cdr.InIP = fields[18];\\n                    cdr.OutIP = fields[19];\\n\\n                    switch (fields[21])\\n                    {\\n                        case \\\"1\\\": cdr.CauseFrom = \\\"A\\\"; cdr.CauseTo = \\\"B\\\"; break;\\n                        case \\\"2\\\": cdr.CauseFrom = \\\"B\\\"; cdr.CauseTo = \\\"A\\\"; break;\\n                        case \\\"3\\\": cdr.CauseFrom = \\\"S\\\"; cdr.CauseTo = \\\"S\\\"; break;\\n                        default: cdr.CauseFrom = cdr.CauseTo = null; break;\\n                    }\\n\\n                    cdr.Tag = importedData.Name;\\n                    cdr.SIP = \\\"YES\\\";\\n                    cdr.IsRerouted = false;\\n\\n                    Dictionary<string, string> extraFields = new Dictionary<string, string>();\\n                    extraFields[\\\"routelist_id\\\"] = fields[22];\\n                    extraFields[\\\"routelist_name\\\"] = fields[23];\\n                    extraFields[\\\"route_priority\\\"] = fields[24];\\n                    extraFields[\\\"trace_id\\\"] = fields[25];\\n                    extraFields[\\\"named_params\\\"] = fields[26];\\n                    cdr.ExtraFields = extraFields;\\n\\n                    int index = 29;\\n                    string reroutedCDRText = fields[index];\\n                    if (!string.IsNullOrEmpty(reroutedCDRText))\\n                    {\\n                        while (true)\\n                        {\\n                            reroutedCDRText = fields[index];\\n                            if (!reroutedCDRText.Contains(\\\"zone_id\\\"))\\n                                break;\\n\\n                            dynamic reroutedCDR = Activator.CreateInstance(cdrRuntimeType) as dynamic;\\n                            reroutedCDR.SwitchId = cdr.SwitchId;\\n                            reroutedCDR.IDonSwitch = cdr.IDonSwitch;\\n                            reroutedCDR.ConnectDateTime = cdr.ConnectDateTime;\\n                            reroutedCDR.DisconnectDateTime = cdr.DisconnectDateTime;\\n                            reroutedCDR.DurationInSeconds = cdr.DurationInSeconds;\\n                            reroutedCDR.CGPN = cdr.CGPN;\\n                            reroutedCDR.CDPN = cdr.CDPN;\\n                            reroutedCDR.CDPNIn = cdr.CDPNIn;\\n                            reroutedCDR.CDPNOut = cdr.CDPNOut;\\n                            reroutedCDR.InCarrier = cdr.InCarrier;\\n                            reroutedCDR.InTrunk = cdr.InTrunk;\\n                            reroutedCDR.InIP = cdr.InIP;\\n                            reroutedCDR.CauseFrom = cdr.CauseFrom;\\n                            reroutedCDR.CauseTo = cdr.CauseTo;\\n                            reroutedCDR.Tag = cdr.Tag;\\n                            reroutedCDR.SIP = cdr.SIP;\\n                            reroutedCDR.ExtraFields = cdr.ExtraFields;\\n                            reroutedCDR.IsRerouted = true;\\n\\n                            Dictionary<int, string> fieldNameByIndex = new Dictionary<int, string>();\\n                            Dictionary<string, string> fieldValueByName = new Dictionary<string, string>();\\n\\n                            foreach (var field in reroutedCDRFields)\\n                                fieldNameByIndex.Add(reroutedCDRText.IndexOf(field), field);\\n\\n                            foreach (var kvp in fieldNameByIndex)\\n                            {\\n                                int fieldNameIndex = kvp.Key;\\n                                string fieldName = kvp.Value;\\n\\n                                int startIndex = fieldNameIndex + fieldName.Length + 1;\\n                                int endIndex = startIndex;\\n                                while (true)\\n                                {\\n                                    if (fieldNameByIndex.ContainsKey(endIndex) || endIndex > reroutedCDRText.Length)\\n                                        break;\\n\\n                                    endIndex++;\\n                                }\\n                                endIndex--;\\n\\n                                if (endIndex > startIndex)\\n                                    fieldValueByName.Add(fieldName, reroutedCDRText.Substring(startIndex, endIndex - startIndex));\\n                                else\\n                                    fieldValueByName.Add(fieldName, null);\\n                            }\\n\\n                            reroutedCDR.OutCarrier = fieldValueByName[\\\"zone_id\\\"];\\n                            reroutedCDR.OutTrunk = fieldValueByName[\\\"zone_name\\\"];\\n                            reroutedCDR.OutIP = fieldValueByName[\\\"sip_remote_addr\\\"];\\n\\n                            string[] subFields = fieldValueByName[\\\"reason_hdr\\\"].Split(';');\\n                            foreach (var subField in subFields)\\n                            {\\n                                if (!subField.StartsWith(\\\"cause=\\\"))\\n                                    continue;\\n\\n                                reroutedCDR.CauseFromReleaseCode = subField.Replace(\\\"cause=\\\", \\\"\\\");\\n                                reroutedCDR.CauseToReleaseCode = reroutedCDR.CauseFromReleaseCode;\\n                                break;\\n                            }\\n\\n                            string attemptDateTimeField = fieldValueByName[\\\"inviting_ts\\\"];\\n                            if (!string.IsNullOrEmpty(attemptDateTimeField))\\n                            {\\n                                double reroutedCDRAttemptUnixTime;\\n                                if (!double.TryParse(attemptDateTimeField, out reroutedCDRAttemptUnixTime))\\n                                    throw new Exception($\\\"inviting_ts '{attemptDateTimeField}' is invalid\\\");\\n\\n                                reroutedCDR.AttemptDateTime = Vanrise.Common.Utilities.ConverUnixTimeToDateTime(reroutedCDRAttemptUnixTime);\\n                            }\\n\\n                            string alertDateTimeField = fieldValueByName[\\\"response_ts\\\"];\\n                            if (!string.IsNullOrEmpty(alertDateTimeField))\\n                            {\\n                                double reroutedCDRAlertUnixTime;\\n                                if (!double.TryParse(alertDateTimeField, out reroutedCDRAlertUnixTime))\\n                                    throw new Exception($\\\"response_ts '{alertDateTimeField}' is invalid\\\");\\n\\n                                reroutedCDR.AlertDateTime = Vanrise.Common.Utilities.ConverUnixTimeToDateTime(reroutedCDRAlertUnixTime);\\n                            }\\n\\n                            cdrs.Add(reroutedCDR);\\n\\n                            index++;\\n                        }\\n                    }\\n\\n                    for (int j = index; j < fields.Length; j++)\\n                    {\\n                        string currentField = fields[j];\\n                        if (currentField.Contains(\\\"cause=\\\"))\\n                        {\\n                            string[] subFields = currentField.Split(';');\\n                            foreach (var subField in subFields)\\n                            {\\n                                if (!subField.StartsWith(\\\"cause=\\\"))\\n                                    continue;\\n\\n                                cdr.CauseFromReleaseCode = subField.Replace(\\\"cause=\\\", \\\"\\\");\\n                                cdr.CauseToReleaseCode = cdr.CauseFromReleaseCode;\\n                                break;\\n                            }\\n                        }\\n                    }\\n\\n                    cdrs.Add(cdr);\\n                }\\n            }\\n\\n            long startingId;\\n            if (cdrs.Count > 0)\\n            {\\n                var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType(\\\"CDR\\\");\\n                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);\\n\\n                foreach (dynamic cdr in cdrs)\\n                    cdr.Id = startingId++;\\n\\n                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, \\\"#RECORDSCOUNT# of Raw CDRs\\\", \\\"CDR\\\");\\n                mappedBatches.Add(\\\"Distribute Raw CDRs Stage\\\", batch);\\n            }\\n\\n            MappingOutput result = new MappingOutput();\\n            result.Result = MappingResult.Valid;\\n            return result;\",\"ExecutionFlowId\":\"2799f9d0-8b71-47a1-861f-ab7c2850e8fc\"}",
+              "LastModifiedTime": "2019-10-15T15:26:23.367",
+              "CreatedTime": "2019-10-15T15:26:23.367"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "DevProjectID = '08d75302-b768-430a-9b8c-4fa60ea01f00'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "64a495ae-cc8d-4ee0-bd1a-bc93e35fdaa7",
+      "Schema": "runtime",
+      "TableName": "ScheduleTask",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Id",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "IsEnabled",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "TaskType",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "TriggerTypeId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ActionTypeId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "TaskSettings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "OwnerId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "Id": "c3a4d5cb-da48-4444-ba42-7669b8f9c23e",
+              "DevProjectID": "08d75302-b768-430a-9b8c-4fa60ea01f00",
+              "Name": "Data Source Task",
+              "IsEnabled": false,
+              "TaskType": 0,
+              "TriggerTypeId": "295b4fac-dbf9-456f-855e-60d0b176f86b",
+              "ActionTypeId": "b7cf41b9-f1b3-4c02-980d-b9fafb4cff68",
+              "TaskSettings": "{\"$type\":\"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities\",\"TaskTriggerArgument\":{\"$type\":\"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments\",\"Interval\":1.0,\"IntervalType\":2,\"TimerTriggerTypeFQTN\":\"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger\",\"IgnoreSkippedIntervals\":true},\"StartEffDate\":\"2019-10-14T15:24:00\"}",
+              "OwnerId": -1,
+              "CreatedTime": "2019-10-15T15:26:23.167",
+              "LastModifiedTime": "2019-11-18T15:45:04.773"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "DevProjectID = '08d75302-b768-430a-9b8c-4fa60ea01f00'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "c394639f-ff4a-4544-b26a-6641059d3c08",
+      "Schema": "TOneWhS_RouteSync",
+      "TableName": "RouteSyncDefinition",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "1"
+              },
+              "Name": "Cataleya",
+              "Settings": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "{\"$type\":\"TOne.WhS.RouteSync.Entities.RouteSyncDefinitionSettings, TOne.WhS.RouteSync.Entities\",\"RouteReader\":{\"$type\":\"TOne.WhS.Routing.Business.Extensions.RouteSyncReader, TOne.WhS.Routing.Business\",\"ConfigId\":\"c03ef53f-5022-443f-8833-639e67f88a62\",\"RangeType\":0},\"SwitchIds\":{\"$type\":\"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib\",\"$values\":[\"1\"]}}"
+              },
+              "LastModifiedTime": "2019-11-18T12:15:47.193",
+              "CreatedTime": "2019-11-18T12:15:47.193"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "ID = 4",
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "c394639f-ff4a-4544-b26a-6641059d3c08",
+      "Schema": "TOneWhS_BE",
+      "TableName": "Switch",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "SourceID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "1"
+              },
+              "Name": "Cataleya",
+              "Settings": "{\"$type\":\"TOne.WhS.BusinessEntity.Entities.SwitchSettings, TOne.WhS.BusinessEntity.Entities\",\"RouteSynchronizer\":{\"$type\":\"TOne.WhS.RouteSync.Cataleya.CataleyaSWSync, TOne.WhS.RouteSync.Cataleya\",\"ConfigId\":\"d770f53b-057f-4bb8-bf20-883a2dbc510b\",\"APIConnectionId\":\"23c06da0-ef6d-4c00-8b78-6ca746ed999d\",\"DataManager\":{\"$type\":\"TOne.WhS.RouteSync.Cataleya.Data.Postgres.CataleyaPostgresDataManager, TOne.WhS.RouteSync.Cataleya\",\"ConfigId\":\"cad5f46b-f182-462a-aacc-b862acd11aeb\",\"DatabaseConnection\":{\"$type\":\"TOne.WhS.RouteSync.Cataleya.Entities.DatabaseConnection, TOne.WhS.RouteSync.Cataleya\",\"DBConnectionId\":\"f5a1c9e6-6b84-4197-89c5-ec2c01d238af\"}},\"CarrierMappings\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[TOne.WhS.RouteSync.Cataleya.Entities.CarrierMapping, TOne.WhS.RouteSync.Cataleya]], mscorlib\"},\"NodeID\":1,\"SupportSyncWithinRouteBuild\":true,\"DontCloseMappingRules\":false,\"SupportPartialRouteSync\":false},\"SwitchCDRMappingConfiguration\":{\"$type\":\"TOne.WhS.BusinessEntity.Entities.SwitchCDRMappingConfiguration, TOne.WhS.BusinessEntity.Entities\"}}",
+              "SourceID": null,
+              "CreatedTime": "2019-11-18T12:12:03.17",
+              "CreatedBy": -1,
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-11-18T14:19:18.667"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "id = 18",
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    }
+  ]
+}
