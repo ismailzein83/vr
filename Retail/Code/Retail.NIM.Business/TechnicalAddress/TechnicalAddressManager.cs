@@ -68,7 +68,7 @@ namespace Retail.NIM.Business
          
         public GetTechnicalAddressOutput GetTechnicalAddressByPath(long pathId)
         {
-            var pathConnections = new PathManager().GetPathConnections(pathId);
+            var pathConnections = new PathConnectionManager().GetPathConnections(pathId);
 
             var output = new GetTechnicalAddressOutput
             {
