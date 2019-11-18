@@ -1425,7 +1425,7 @@ namespace TestRuntime
             LogVerbose("Finished");
             return result;
         }
-         
+
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_SQL_NokiaSiemens(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
             List<dynamic> cdrs = new List<dynamic>();
@@ -1539,7 +1539,7 @@ namespace TestRuntime
                     string[] fields = currentLine.Split(',');
 
                     dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
-                    cdr.SwitchId = 1;
+                    cdr.SwitchId = 18;
 
                     long idOnSwitch;
                     if (long.TryParse(fields[0], out idOnSwitch))
@@ -1585,14 +1585,12 @@ namespace TestRuntime
 
                     switch (fields[21])
                     {
-                        case "1": cdr.CauseFrom = cdr.CauseTo = "A side"; break;
-                        case "2": cdr.CauseFrom = cdr.CauseTo = "B side"; break;
-                        case "3": cdr.CauseFrom = cdr.CauseTo = "from switch"; break;
+                        case "1": cdr.CauseFrom = "A"; cdr.CauseTo = "B"; break;
+                        case "2": cdr.CauseFrom = "B"; cdr.CauseTo = "A"; break;
+                        case "3": cdr.CauseFrom = "S"; cdr.CauseTo = "S"; break;
                         default: cdr.CauseFrom = cdr.CauseTo = null; break;
                     }
 
-                    cdr.CauseFromReleaseCode = fields[27];
-                    cdr.CauseToReleaseCode = fields[28];
                     cdr.Tag = importedData.Name;
                     cdr.SIP = "YES";
                     cdr.IsRerouted = false;
@@ -1605,10 +1603,10 @@ namespace TestRuntime
                     extraFields["named_params"] = fields[26];
                     cdr.ExtraFields = extraFields;
 
-                    string reroutedCDRText = fields[29];
+                    int index = 29;
+                    string reroutedCDRText = fields[index];
                     if (!string.IsNullOrEmpty(reroutedCDRText))
                     {
-                        int index = 29;
                         while (true)
                         {
                             reroutedCDRText = fields[index];
@@ -1630,7 +1628,6 @@ namespace TestRuntime
                             reroutedCDR.InIP = cdr.InIP;
                             reroutedCDR.CauseFrom = cdr.CauseFrom;
                             reroutedCDR.CauseTo = cdr.CauseTo;
-                            reroutedCDR.CauseFromReleaseCode = cdr.CauseFromReleaseCode;
                             reroutedCDR.Tag = cdr.Tag;
                             reroutedCDR.SIP = cdr.SIP;
                             reroutedCDR.ExtraFields = cdr.ExtraFields;
@@ -1667,7 +1664,17 @@ namespace TestRuntime
                             reroutedCDR.OutCarrier = fieldValueByName["zone_id"];
                             reroutedCDR.OutTrunk = fieldValueByName["zone_name"];
                             reroutedCDR.OutIP = fieldValueByName["sip_remote_addr"];
-                            reroutedCDR.CauseToReleaseCode = fieldValueByName["reason_phrase"];
+
+                            string[] subFields = fieldValueByName["reason_hdr"].Split(';');
+                            foreach (var subField in subFields)
+                            {
+                                if (!subField.StartsWith("cause="))
+                                    continue;
+
+                                reroutedCDR.CauseFromReleaseCode = subField.Replace("cause=", "");
+                                reroutedCDR.CauseToReleaseCode = reroutedCDR.CauseFromReleaseCode;
+                                break;
+                            }
 
                             string attemptDateTimeField = fieldValueByName["inviting_ts"];
                             if (!string.IsNullOrEmpty(attemptDateTimeField))
@@ -1692,6 +1699,24 @@ namespace TestRuntime
                             cdrs.Add(reroutedCDR);
 
                             index++;
+                        }
+                    }
+
+                    for (int j = index; j < fields.Length; j++)
+                    {
+                        string currentField = fields[j];
+                        if (currentField.Contains("cause="))
+                        {
+                            string[] subFields = currentField.Split(';');
+                            foreach (var subField in subFields)
+                            {
+                                if (!subField.StartsWith("cause="))
+                                    continue;
+
+                                cdr.CauseFromReleaseCode = subField.Replace("cause=", "");
+                                cdr.CauseToReleaseCode = cdr.CauseFromReleaseCode;
+                                break;
+                            }
                         }
                     }
 
