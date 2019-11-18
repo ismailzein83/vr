@@ -1,12 +1,12 @@
 ﻿'use strict';
 
-app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'CP_WhS_RepeatedNumbersAPIService', 'VR_Analytic_AnalyticItemActionService', 'CP_WhS_AccountViewTypeEnum', 'CP_WhS_PhoneNumberEnum','CP_WhS_BillingCDROptionMeasureEnum',
+app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'CP_WhS_RepeatedNumbersAPIService', 'VR_Analytic_AnalyticItemActionService', 'CP_WhS_AccountViewTypeEnum', 'CP_WhS_PhoneNumberEnum', 'CP_WhS_BillingCDROptionMeasureEnum',
     function (UtilsService, VRUIUtilsService, VRNotificationService, CP_WhS_RepeatedNumbersAPIService, VR_Analytic_AnalyticItemActionService, CP_WhS_AccountViewTypeEnum, CP_WhS_PhoneNumberEnum, CP_WhS_BillingCDROptionMeasureEnum) {
         return {
             restrict: 'E',
             scope: {
                 onReady: '=',
-                accountviewtype:'='
+                accountviewtype: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -39,6 +39,13 @@ app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', '
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                    if (dataRetrievalInput.SortByColumnName == "CarrierName") {
+                        if (accountType == CP_WhS_AccountViewTypeEnum.Customer.value) {
+                            dataRetrievalInput.SortByColumnName = "CustomerName";
+                        } else {
+                            dataRetrievalInput.SortByColumnName = "SupplierName";
+                        }
+                    }
                     return CP_WhS_RepeatedNumbersAPIService.GetFilteredRepeatedNumbers(dataRetrievalInput).then(function (response) {
                         if (response != undefined && response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
