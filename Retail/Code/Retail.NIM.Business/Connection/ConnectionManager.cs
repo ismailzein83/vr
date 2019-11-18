@@ -188,12 +188,12 @@ namespace Retail.NIM.Business
                         {
                              new ObjectListRecordFilter
                              {
-                                 FieldName = "Port1Node",
+                                 FieldName = s_port1NodeFieldName,
                                  CompareOperator = ListRecordFilterOperator.In,
                                  Values =new List<object>{ nodeId }
                              },new ObjectListRecordFilter
                              {
-                                FieldName = "Port2Node",
+                                FieldName = s_port2NodeFieldName,
                                CompareOperator = ListRecordFilterOperator.In,
                                Values =new List<object>{ nodeId }
                              }
