@@ -26,8 +26,12 @@
     [DunningStatusID]         UNIQUEIDENTIFIER NULL,
     [StatusReasonID]          UNIQUEIDENTIFIER NULL,
     [NIMPathID]               BIGINT           NULL,
+    [TelephonyNodeID]         BIGINT           NULL,
+    [InternetNodeID]          BIGINT           NULL,
     CONSTRAINT [PK__Contract__3214EC2707C12930] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

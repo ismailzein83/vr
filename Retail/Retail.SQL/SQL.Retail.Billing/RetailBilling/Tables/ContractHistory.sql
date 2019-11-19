@@ -18,6 +18,10 @@
     [BET]                     DATETIME         NULL,
     [EET]                     DATETIME         NULL,
     [NIMPathID]               BIGINT           NULL,
+    [TelephonyNodeID]         BIGINT           NULL,
+    [InternetNodeID]          BIGINT           NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
