@@ -32,8 +32,12 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
                 if (importedRateEED.HasValue && maxCodeEED.HasValue && maxCodeEED.Value != importedRateEED.Value)
                     messages.Add($"Code EED is different than rate EED in zone {importedZone.ZoneName}");
+
                 if (importedRateEED.HasValue && importedZone.ImportedCodes.Any(item => !item.EED.HasValue))
                     messages.Add($"Cannot set rate EED for zone {importedZone.ZoneName} if no related code EED exist");
+
+                if (!importedRateEED.HasValue && importedZone.ImportedCodes.All(item => item.EED.HasValue))
+                    messages.Add($"Cannot set rate EED for zone {importedZone.ZoneName} if no related rate EED exist");
             }
 
             if (messages.Count > 0)
