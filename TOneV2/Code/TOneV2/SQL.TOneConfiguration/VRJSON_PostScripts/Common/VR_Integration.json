@@ -417,90 +417,14 @@
       "Title": "Merge"
     },
     {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "View",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "a28cb0e5-8553-4894-b3ca-002bd956ea82",
-              "DevProjectID": "84a7da1d-33b8-443d-970f-1cb46c5f02c7",
-              "Name": "Data Source",
-              "Title": "Data Source",
-              "Url": null,
-              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VR_Integration_DataProcesses: View Logs\",\"Directive\":\"vr-integration-log-search\",\"Title\":\"Data Source\",\"Data\":null}}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 2,
-              "CreatedTime": "2019-08-26T13:57:23.28",
-              "LastModifiedTime": "2019-08-26T13:57:23.28"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "6ffc27ce-0fb2-4d9a-9e8f-4ceb22b098f2",
-              "DevProjectID": "84a7da1d-33b8-443d-970f-1cb46c5f02c7",
-              "Name": "Imported Batch",
-              "Title": "Imported Batch",
-              "Url": null,
-              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VR_Integration_DataProcesses: View Logs\",\"Directive\":\"vr-integration-importedbatch-search\",\"Title\":\"Imported Batch\",\"Data\":null}}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 3,
-              "CreatedTime": "2019-08-26T13:57:23.28",
-              "LastModifiedTime": "2019-08-26T13:57:23.28"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "ffc528c2-bf74-40e5-b7fe-a3b6f04b76ed",
-              "DevProjectID": "84a7da1d-33b8-443d-970f-1cb46c5f02c7",
-              "Name": "Data Sources",
-              "Title": "Data Sources",
-              "Url": "#/view/Integration/Views/DataSourceManagement",
-              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
-              "ActionNames": "VR_Integration/DataSource/GetFilteredDataSources",
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.DataSources\",\"ViewNameResourceKey\":\"Common.DataSources\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 1,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:39.057"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "6e8852cc-6d8a-4b5f-9ebc-c5f21b7ea38b",
-              "DevProjectID": "84a7da1d-33b8-443d-970f-1cb46c5f02c7",
-              "Name": "Data Source Alerts",
-              "Title": "Data Source Alerts",
-              "Url": null,
-              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities\",\"VRNotificationTypeId\":\"7364c3e5-1138-4dcf-9ddb-70bebf246b67\"}]},\"ViewTitleResourceKey\":\"Common.DataSourceAlerts\",\"ViewNameResourceKey\":\"Common.DataSourceAlerts\"}",
-              "Type": "a196c40a-30b5-4297-b7b0-4344c41ce5a2",
-              "Rank": 20,
-              "CreatedTime": "2018-10-04T16:58:48.247",
-              "LastModifiedTime": "2019-08-09T17:06:39.06"
-            }
-          }
-        ],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -601,11 +525,88 @@
             "IncludeInUpdate": true
           }
         ],
-        "IsIdentity": false,
-        "Variables": [],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "a28cb0e5-8553-4894-b3ca-002bd956ea82",
+              "DevProjectID": "84a7da1d-33b8-443d-970f-1cb46c5f02c7",
+              "Name": "Data Source",
+              "Title": "Data Source",
+              "Url": null,
+              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VR_Integration_DataProcesses: View Logs\",\"Directive\":\"vr-integration-log-search\",\"Title\":\"Data Source\",\"Data\":null}}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 3,
+              "CreatedTime": "2019-08-26T13:57:23.28",
+              "LastModifiedTime": "2019-11-15T15:22:16.833"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "6ffc27ce-0fb2-4d9a-9e8f-4ceb22b098f2",
+              "DevProjectID": "84a7da1d-33b8-443d-970f-1cb46c5f02c7",
+              "Name": "Imported Batch",
+              "Title": "Imported Batch",
+              "Url": null,
+              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VR_Integration_DataProcesses: View Logs\",\"Directive\":\"vr-integration-importedbatch-search\",\"Title\":\"Imported Batch\",\"Data\":null}}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 3,
+              "CreatedTime": "2019-08-26T13:57:23.28",
+              "LastModifiedTime": "2019-08-26T13:57:23.28"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "ffc528c2-bf74-40e5-b7fe-a3b6f04b76ed",
+              "DevProjectID": "84a7da1d-33b8-443d-970f-1cb46c5f02c7",
+              "Name": "Data Sources",
+              "Title": "Data Sources",
+              "Url": "#/view/Integration/Views/DataSourceManagement",
+              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
+              "ActionNames": "VR_Integration/DataSource/GetFilteredDataSources",
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities\",\"ViewTitleResourceKey\":\"Common.DataSources\",\"ViewNameResourceKey\":\"Common.DataSources\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 1,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-08-09T17:06:39.057"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "6e8852cc-6d8a-4b5f-9ebc-c5f21b7ea38b",
+              "DevProjectID": "84a7da1d-33b8-443d-970f-1cb46c5f02c7",
+              "Name": "Data Source Alerts",
+              "Title": "Data Source Alerts",
+              "Url": null,
+              "Module": "551e5cae-69ca-478b-b823-8e2cedbc1841",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities\",\"VRNotificationTypeId\":\"7364c3e5-1138-4dcf-9ddb-70bebf246b67\"}]},\"ViewTitleResourceKey\":\"Common.DataSourceAlerts\",\"ViewNameResourceKey\":\"Common.DataSourceAlerts\"}",
+              "Type": "a196c40a-30b5-4297-b7b0-4344c41ce5a2",
+              "Rank": 20,
+              "CreatedTime": "2018-10-04T16:58:48.247",
+              "LastModifiedTime": "2019-08-09T17:06:39.06"
+            }
+          }
+        ],
+        "Variables": null,
         "LastWhereCondition": "DevProjectID = '84a7da1d-33b8-443d-970f-1cb46c5f02c7'",
         "LastJoinStatement": null,
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+        "IsIdentity": false
       },
       "Title": "Merge"
     },
