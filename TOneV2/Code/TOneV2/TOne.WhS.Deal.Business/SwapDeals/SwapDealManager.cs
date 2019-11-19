@@ -28,7 +28,7 @@ namespace TOne.WhS.Deal.Business
                 || swapDealSettings.BeginDate == new DateTime())
                 return null;
 
-            Dictionary<int, Interval> dealsIntervalByDealId = GetIntersectedDeals(swapDealSettings.CarrierAccountId, swapDealSettings.RealBED, swapDealSettings.RealEED);
+            Dictionary<int, Interval> dealsIntervalByDealId = GetIntersectedDeals(swapDealSettings.CarrierAccountId, swapDealSettings.RealBED, swapDealSettings.RealEED, deal.DealId);
             Dictionary<int, double> dealProgressByDealId = GetDealsReachedDurByDealId(dealsIntervalByDealId.Keys);
 
             var dealsCapacity = new List<DealCapacity>();
@@ -149,7 +149,7 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealDefinition in deals)
             {
-                if (dealDefinition.Settings.Status != DealStatus.Draft && isEffectiveDeal(beginDate, endDate, dealDefinition.Settings.RealBED, dealDefinition.Settings.RealEED))
+                if (dealDefinition.Settings.Status != DealStatus.Draft && IsEffectiveDeal(beginDate, endDate, dealDefinition.Settings.RealBED, dealDefinition.Settings.RealEED))
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;
@@ -475,7 +475,7 @@ namespace TOne.WhS.Deal.Business
 
             return volume;
         }
-        private Dictionary<int, Interval> GetIntersectedDeals(int carrierId, DateTime dealBED, DateTime? dealEED)
+        private Dictionary<int, Interval> GetIntersectedDeals(int carrierId, DateTime dealBED, DateTime? dealEED, int dealId)
         {
             var effectiveDeals = new SwapDealManager().GetSwapDealsBetweenDate(dealBED, dealEED);
 
@@ -485,6 +485,9 @@ namespace TOne.WhS.Deal.Business
             var dealIntervalsByDealId = new Dictionary<int, Interval>();
             foreach (var deal in effectiveDeals)
             {
+                if (deal.DealId == dealId)
+                    continue;
+
                 var dealSettings = deal.Settings.CastWithValidate<SwapDealSettings>("deal.Settings");
                 if (dealSettings != null)
                 {
@@ -496,7 +499,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dealIntervalsByDealId;
         }
-        private bool isEffectiveDeal(DateTime fromDate, DateTime? toDate, DateTime dealBED, DateTime? DealEED)
+        private bool IsEffectiveDeal(DateTime fromDate, DateTime? toDate, DateTime dealBED, DateTime? DealEED)
         {
             if (!DealEED.HasValue)
                 return true;
