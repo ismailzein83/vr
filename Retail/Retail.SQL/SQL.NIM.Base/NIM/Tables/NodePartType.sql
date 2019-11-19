@@ -7,6 +7,9 @@
     [LastModifiedTime]           DATETIME         NULL,
     [LastModifiedBy]             INT              NULL,
     [timestamp]                  ROWVERSION       NULL,
+    [DevProjectID]               UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_NodePartType] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

@@ -6,6 +6,9 @@
     [CreatedBy]                  INT              NULL,
     [LastModifiedTime]           DATETIME         NULL,
     [LastModifiedBy]             INT              NULL,
-    [timestamp]                  ROWVERSION       NULL
+    [timestamp]                  ROWVERSION       NULL,
+    [DevProjectID]               UNIQUEIDENTIFIER NULL
 );
+
+
 
