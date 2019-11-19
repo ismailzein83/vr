@@ -3,6 +3,7 @@
     [DevProjectID]     UNIQUEIDENTIFIER NULL,
     [UserID]           INT              NULL,
     [Name]             NVARCHAR (255)   NULL,
+    [Title]            NVARCHAR (255)   NULL,
     [AccessType]       INT              NULL,
     [Settings]         NVARCHAR (MAX)   NULL,
     [CreatedTime]      DATETIME         CONSTRAINT [DF_RealTimeReport_CreatedTime] DEFAULT (getdate()) NULL,
@@ -11,6 +12,8 @@
     CONSTRAINT [PK_RealTimeReport] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_RealTimeReport] UNIQUE NONCLUSTERED ([Name] ASC, [UserID] ASC)
 );
+
+
 
 
 
