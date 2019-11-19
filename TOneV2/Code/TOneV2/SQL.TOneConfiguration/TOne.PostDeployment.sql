@@ -574,7 +574,7 @@ as (select * from (values
 
 ('0674E516-7B8A-49F7-ACC2-D27A61FEC94B','Supplier Traffic Percentage','Supplier Traffic Percentage',null														,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"8626be7a-578c-4003-925e-d6444d7c0cd2"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',26),
 
-('F8A900E5-A16D-4474-843A-081AB55C4CD3','Margin Rule','Margin Rule',NULL,'1C7569FA-43C9-4853-AE4C-1152746A34FD',NULL,NULL,NULL,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["db3f662f-e770-4026-9f34-5c5c410b0776"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',2)
+('F8A900E5-A16D-4474-843A-081AB55C4CD3','Margin Rules','Margin Rules',NULL,'1C7569FA-43C9-4853-AE4C-1152746A34FD',NULL,NULL,NULL,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["db3f662f-e770-4026-9f34-5c5c410b0776"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',2)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
