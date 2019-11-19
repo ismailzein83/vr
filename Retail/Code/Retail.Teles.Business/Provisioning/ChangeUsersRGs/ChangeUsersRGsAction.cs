@@ -23,16 +23,46 @@ namespace Retail.Teles.Business
 
             ChangeUsersRGsActionDefinition changeUsersRGsActionDefinition = actionDefinition.Settings.ExtendedSettings.CastWithValidate<ChangeUsersRGsActionDefinition>("actionDefinition.Settings.ExtendedSettings", DefinitionId);
 
+
+
             long accountId;
             var outputRecords = payload.OutputRecords;
+
             if (outputRecords != null && outputRecords.Count > 0)
             {
-                accountId = (long)outputRecords.GetRecord("Company");
-                var account = _accountBEManager.GetAccount(changeUsersRGsActionDefinition.AccountBEDefinitionId, accountId);
-                account.ThrowIfNull("account", accountId);
-                List<UsersToChangeRG> usersToChangeRG = _changeUsersRGsManager.GetUsersToChangeRG(changeUsersRGsActionDefinition.AccountBEDefinitionId, account, changeUsersRGsActionDefinition.VRConnectionId, changeUsersRGsActionDefinition.CompanyTypeId, changeUsersRGsActionDefinition.SiteTypeId, changeUsersRGsActionDefinition.UserTypeId, changeUsersRGsActionDefinition.ExistingRoutingGroupCondition, changeUsersRGsActionDefinition.NewRoutingGroupCondition, changeUsersRGsActionDefinition.ExistingRGNoMatchHandling, changeUsersRGsActionDefinition.NewRGNoMatchHandling, changeUsersRGsActionDefinition.NewRGMultiMatchHandling);
-                _changeUsersRGsManager.ChangeRGsAndUpdateState(usersToChangeRG, changeUsersRGsActionDefinition.ActionType, changeUsersRGsActionDefinition.VRConnectionId, changeUsersRGsActionDefinition.SaveChangesToAccountState, changeUsersRGsActionDefinition.AccountBEDefinitionId);
-            }            
+                accountId = GetAccountId(outputRecords, changeUsersRGsActionDefinition.UserFieldName, changeUsersRGsActionDefinition.BranchFieldName, changeUsersRGsActionDefinition.CompanyFieldName);
+                if (accountId > -1)
+                {
+                    var account = _accountBEManager.GetAccount(changeUsersRGsActionDefinition.AccountBEDefinitionId, accountId);
+                    account.ThrowIfNull("account", accountId);
+                    List<UsersToChangeRG> usersToChangeRG = _changeUsersRGsManager.GetUsersToChangeRG(changeUsersRGsActionDefinition.AccountBEDefinitionId, account, changeUsersRGsActionDefinition.VRConnectionId, changeUsersRGsActionDefinition.CompanyTypeId, changeUsersRGsActionDefinition.SiteTypeId, changeUsersRGsActionDefinition.UserTypeId, changeUsersRGsActionDefinition.ExistingRoutingGroupCondition, changeUsersRGsActionDefinition.NewRoutingGroupCondition, changeUsersRGsActionDefinition.ExistingRGNoMatchHandling, changeUsersRGsActionDefinition.NewRGNoMatchHandling, changeUsersRGsActionDefinition.NewRGMultiMatchHandling);
+                    _changeUsersRGsManager.ChangeRGsAndUpdateState(usersToChangeRG, changeUsersRGsActionDefinition.ActionType, changeUsersRGsActionDefinition.VRConnectionId, changeUsersRGsActionDefinition.SaveChangesToAccountState, changeUsersRGsActionDefinition.AccountBEDefinitionId);
+                }
+            }
+        }
+
+        private long GetAccountId(Dictionary<string, dynamic> records, string userFieldName, string branchFieldName, string companyFieldName)
+        {
+            dynamic accountId;
+            if (!string.IsNullOrEmpty(userFieldName))
+            {
+                if (records.TryGetValue(userFieldName, out accountId) && accountId != null)
+                    return accountId;
+            }
+
+            if (!string.IsNullOrEmpty(branchFieldName))
+            {
+                if (records.TryGetValue(branchFieldName, out accountId) && accountId != null)
+                    return accountId;
+            }
+
+            if (!string.IsNullOrEmpty(companyFieldName))
+            {
+                if (records.TryGetValue(companyFieldName, out accountId) && accountId != null)
+                    return accountId;
+            }
+            accountId = -1;
+            return accountId;
         }
     }
 }

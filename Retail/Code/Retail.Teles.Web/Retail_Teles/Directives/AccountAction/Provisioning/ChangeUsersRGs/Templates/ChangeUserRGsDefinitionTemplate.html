@@ -5,8 +5,18 @@
     </vr-columns>
 
     <vr-columns width="1/3row" ng-if="scopeModel.saveChangesToAccountState">
-        <vr-textbox value="scopeModel.actionType" label="Action Type" isrequired="true"></vr-textbox>
+        <vr-textbox value="scopeModel.actionType" label="Action Type"></vr-textbox>
     </vr-columns>
+    <vr-columns width="1/3row" >
+        <vr-textbox value="scopeModel.companyFieldName" label="Company Field Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row" >
+        <vr-textbox value="scopeModel.branchFieldName" label="Branch Field Name"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row" >
+        <vr-textbox value="scopeModel.userFieldName" label="User Field Name" ></vr-textbox>
+    </vr-columns>
+
     <retail-be-accounttype-selector on-ready="scopeModel.onCompanyAccountTypeSelectorReady"
                                     normal-col-num="6"
                                     customlabel="Company Account Type"

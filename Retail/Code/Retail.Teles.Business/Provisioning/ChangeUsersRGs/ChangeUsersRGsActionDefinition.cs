@@ -18,6 +18,9 @@ namespace Retail.Teles.Business
         public override string RuntimeEditor { get { return "retail-teles-provisioner-action-changeusersrgs"; } }
         public Guid AccountBEDefinitionId { get; set; }
         public Guid VRConnectionId { get; set; }
+        public string CompanyFieldName { get; set; }
+        public string BranchFieldName { get; set; }
+        public string UserFieldName { get; set; }
         public Guid CompanyTypeId { get; set; }
         public Guid SiteTypeId { get; set; }
         public Guid? UserTypeId { get; set; }

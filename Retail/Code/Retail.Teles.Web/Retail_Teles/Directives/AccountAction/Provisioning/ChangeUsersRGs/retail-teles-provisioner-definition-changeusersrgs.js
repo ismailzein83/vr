@@ -92,6 +92,9 @@
                         if (settings != undefined) {
                             $scope.scopeModel.saveChangesToAccountState = settings.SaveChangesToAccountState;
                             $scope.scopeModel.actionType = settings.ActionType;
+                            $scope.scopeModel.companyFieldName = settings.CompanyFieldName;
+                            $scope.scopeModel.branchFieldName = settings.BranchFieldName;
+                            $scope.scopeModel.userFieldName = settings.UserFieldName;
                             $scope.scopeModel.selectedNewRGNoMatchHandling = UtilsService.getItemByVal($scope.scopeModel.newRGNoMatchHandlings, settings.NewRGNoMatchHandling, "value");
                             $scope.scopeModel.selectedNewRGMultiMatchHandling = UtilsService.getItemByVal($scope.scopeModel.newRGMultiMatchHandlings, settings.NewRGMultiMatchHandling, "value");
                             $scope.scopeModel.selectedExistingRGNoMatchHandling = UtilsService.getItemByVal($scope.scopeModel.existingRGNoMatchHandlings, settings.ExistingRGNoMatchHandling, "value");
@@ -195,6 +198,9 @@
                         $type: classFQTN,
                         SaveChangesToAccountState: $scope.scopeModel.saveChangesToAccountState,
                         ActionType: $scope.scopeModel.saveChangesToAccountState ? $scope.scopeModel.actionType : undefined,
+                        CompanyFieldName: $scope.scopeModel.companyFieldName,
+                        BranchFieldName: $scope.scopeModel.branchFieldName,
+                        UserFieldName: $scope.scopeModel.userFieldName,
                         NewRoutingGroupCondition: newRoutingGroupConditionAPI.getData(),
                         ExistingRoutingGroupCondition: existingRoutingGroupConditionAPI.getData(),
                         VRConnectionId: conectionTypeAPI.getSelectedIds(),
