@@ -228,8 +228,8 @@ namespace Retail.Runtime
 
         public static Vanrise.Integration.Entities.MappingOutput MapC5Records_CSV(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            var mtcObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 21, Destination = 3, DurationInSeconds = 23, DisconnectDateTime = 22, CallClassId = 33, IsOnNet = 160, SubscriberTypeId = 73, IMEI = 2, BTS = 9, Cell = 10, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, ServiceTypeID = 12, ServiceVASName = 15, InTrunkID = 7, OutTrunkID = 8, ReleaseCode = 27, MSISDNAreaCode = 54, DestinationAreaCode = -1, AttemptDateTime = 84, AlertDateTime = 85 };
-            var mocObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 24, Destination = 5, DurationInSeconds = 26, DisconnectDateTime = 25, CallClassId = 38, IsOnNet = 187, SubscriberTypeId = 82, IMEI = 2, BTS = 12, Cell = 13, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, ServiceTypeID = 182, ServiceVASName = 154, InTrunkID = 10, OutTrunkID = 11, ReleaseCode = 30, MSISDNAreaCode = -1, DestinationAreaCode = -1, AttemptDateTime = 92, AlertDateTime = 93 };
+            var mtcObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 21, Destination = 4, DurationInSeconds = 23, DisconnectDateTime = 22, CallClassId = 33, IsOnNet = 160, SubscriberTypeId = 73, IMEI = 2, BTS = 9, Cell = 10, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, ServiceTypeID = 12, ServiceVASName = 15, InTrunkId = 7, OutTrunkId = 8, ReleaseCode = 27, MSISDNAreaCode = 54, DestinationAreaCode = -1, AttemptDateTime = 84, AlertDateTime = 85 };
+            var mocObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 24, Destination = 5, DurationInSeconds = 26, DisconnectDateTime = 25, CallClassId = 38, IsOnNet = 187, SubscriberTypeId = 82, IMEI = 2, BTS = 12, Cell = 13, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, ServiceTypeID = 182, ServiceVASName = 154, InTrunkId = 10, OutTrunkId = 11, ReleaseCode = 30, MSISDNAreaCode = -1, DestinationAreaCode = -1, AttemptDateTime = 92, AlertDateTime = 93 };
 
             var cdrs = new List<dynamic>();
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
@@ -443,15 +443,13 @@ namespace Retail.Runtime
 
                     cdr.ServiceVASName = fields[temp.ServiceVASName];
 
-                    if (int.TryParse(fields[temp.InTrunkID], out int inTrunkID))
-                        cdr.InTrunkID = inTrunkID;
+                    cdr.InTrunkId = fields[temp.InTrunkId];
 
-                    if (int.TryParse(fields[temp.OutTrunkID], out int outTrunkID))
-                        cdr.OutTrunkID = outTrunkID;
+                    cdr.OutTrunkId = fields[temp.OutTrunkId];
 
                     cdr.ReleaseCode = fields[temp.ReleaseCode];
 
-                    if (temp.MSISDNAreaCode >= 0 )
+                    if (temp.MSISDNAreaCode >= 0)
                         cdr.MSISDNAreaCode = fields[temp.MSISDNAreaCode];
 
                     if (temp.DestinationAreaCode >= 0)
