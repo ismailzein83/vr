@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Entities;
-using Vanrise.GenericData.Business;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldArrayType : DataRecordFieldType
     {
-        public override Guid ConfigId { get { return new Guid("034021E9-3BA1-4971-8AA9-CCF6ED2C2C80"); } }
+        public override Guid ConfigId { get { return new Guid("82E04A93-5A3F-4C32-80A4-08E1DAFCF305"); } } 
 
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-array-runtimeeditor"; } }
 
@@ -40,6 +36,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return _nonNullableRuntimeType;
         }
+
         public override string GenerateValueCode(object value)
         {
             if (value == null)
@@ -47,6 +44,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             var valueItem = Utilities.ConvertJsonToList<dynamic>(value);
             return string.Concat("{", string.Join(",", valueItem), "}");
         }
+
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
             return new RDBDataRecordFieldAttribute
@@ -75,8 +73,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             throw new NotImplementedException();
         }
 
-        
-
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
             return originalValue;
@@ -92,8 +88,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             throw new NotImplementedException();
         }
 
-        public override bool StoreValueSerialized => true;
-
+        public override bool StoreValueSerialized { get { return true; } }
         public override string SerializeValue(ISerializeDataRecordFieldValueContext context)
         {
             context.ThrowIfNull("context");
@@ -111,6 +106,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             return Vanrise.Common.Serializer.Deserialize(context.Value, GetRuntimeType());
         }
+
         public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
         {
             FieldArrayType fieldArrayType = fieldType as FieldArrayType;
@@ -118,6 +114,5 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return false;
             return fieldArrayType.FieldType.IsCompatibleWithFieldType(this.FieldType);
         }
-
     }
 }
