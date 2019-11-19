@@ -51,7 +51,7 @@
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
               "ID": "08d75302-b768-430a-9b8c-4fa60ea01f00",
-              "Name": "Cataleya",
+              "Name": "cloudXcataleya",
               "AssemblyID": null,
               "CreatedTime": "2019-11-18T11:48:33.037",
               "LastModifiedTime": "2019-11-18T11:48:33.037"
@@ -393,8 +393,8 @@
     {
       "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "c394639f-ff4a-4544-b26a-6641059d3c08",
-      "Schema": "TOneWhS_RouteSync",
-      "TableName": "RouteSyncDefinition",
+      "Schema": "TOneWhS_BE",
+      "TableName": "Switch",
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
@@ -403,15 +403,99 @@
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "ID",
             "IncludeInInsert": true,
-            "IncludeInUpdate": true,
+            "IncludeInUpdate": false,
             "IsIdentifier": true
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
             "ColumnName": "Name",
             "IncludeInInsert": true,
-            "IncludeInUpdate": true,
+            "IncludeInUpdate": false,
             "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "SourceID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedBy",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": false
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "1"
+              },
+              "Name": "Cataleya",
+              "Settings": "*",
+              "SourceID": null,
+              "CreatedTime": "2019-11-18T12:12:03.17",
+              "CreatedBy": -1,
+              "LastModifiedBy": -1,
+              "LastModifiedTime": "2019-11-18T14:19:18.667"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "id = 18",
+        "IsIdentity": true
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "c394639f-ff4a-4544-b26a-6641059d3c08",
+      "Schema": "TOneWhS_RouteSync",
+      "TableName": "RouteSyncDefinition",
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
           },
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -439,11 +523,6 @@
           {
             "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
             "FieldValues": {
-              "ID": {
-                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
-                "IsOverridden": true,
-                "Value": "1"
-              },
               "Name": "Cataleya",
               "Settings": {
                 "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
@@ -457,97 +536,6 @@
         ],
         "Variables": null,
         "LastWhereCondition": "ID = 4",
-        "IsIdentity": false
-      },
-      "Title": "Merge"
-    },
-    {
-      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
-      "ConnectionId": "c394639f-ff4a-4544-b26a-6641059d3c08",
-      "Schema": "TOneWhS_BE",
-      "TableName": "Switch",
-      "Settings": {
-        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
-        "Columns": [
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "ID",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": true
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "Name",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "Settings",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "SourceID",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "CreatedTime",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "CreatedBy",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "LastModifiedBy",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
-            "ColumnName": "LastModifiedTime",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          }
-        ],
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": {
-                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
-                "IsOverridden": true,
-                "Value": "1"
-              },
-              "Name": "Cataleya",
-              "Settings": "{\"$type\":\"TOne.WhS.BusinessEntity.Entities.SwitchSettings, TOne.WhS.BusinessEntity.Entities\",\"RouteSynchronizer\":{\"$type\":\"TOne.WhS.RouteSync.Cataleya.CataleyaSWSync, TOne.WhS.RouteSync.Cataleya\",\"ConfigId\":\"d770f53b-057f-4bb8-bf20-883a2dbc510b\",\"APIConnectionId\":\"23c06da0-ef6d-4c00-8b78-6ca746ed999d\",\"DataManager\":{\"$type\":\"TOne.WhS.RouteSync.Cataleya.Data.Postgres.CataleyaPostgresDataManager, TOne.WhS.RouteSync.Cataleya\",\"ConfigId\":\"cad5f46b-f182-462a-aacc-b862acd11aeb\",\"DatabaseConnection\":{\"$type\":\"TOne.WhS.RouteSync.Cataleya.Entities.DatabaseConnection, TOne.WhS.RouteSync.Cataleya\",\"DBConnectionId\":\"f5a1c9e6-6b84-4197-89c5-ec2c01d238af\"}},\"CarrierMappings\":{\"$type\":\"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[TOne.WhS.RouteSync.Cataleya.Entities.CarrierMapping, TOne.WhS.RouteSync.Cataleya]], mscorlib\"},\"NodeID\":1,\"SupportSyncWithinRouteBuild\":true,\"DontCloseMappingRules\":false,\"SupportPartialRouteSync\":false},\"SwitchCDRMappingConfiguration\":{\"$type\":\"TOne.WhS.BusinessEntity.Entities.SwitchCDRMappingConfiguration, TOne.WhS.BusinessEntity.Entities\"}}",
-              "SourceID": null,
-              "CreatedTime": "2019-11-18T12:12:03.17",
-              "CreatedBy": -1,
-              "LastModifiedBy": -1,
-              "LastModifiedTime": "2019-11-18T14:19:18.667"
-            }
-          }
-        ],
-        "Variables": null,
-        "LastWhereCondition": "id = 18",
         "IsIdentity": false
       },
       "Title": "Merge"
