@@ -8,6 +8,7 @@ using Retail.Billing.Business;
 using Vanrise.Common.Business;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
+using Vanrise.Caching;
 
 namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 {
@@ -82,7 +83,7 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public Dictionary<Guid, ChargeTypeCustomCodeEvaluators> GetCachedCustomCodeChargeTypeEvaluators()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<VRComponentTypeManager.CacheManager>().GetOrCreateObject("GetCachedCustomCodeChargeTypeEvaluators",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustomCodeChargeTypeEvaluators",
                () =>
                {
                    return GetCustomCodeChargeTypesEvaluators();
@@ -187,6 +188,16 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
             var chargeTypeEvaluators = customCodeChargeTypeEvaluators.GetRecord(chargeTypeId);
 
             return chargeTypeEvaluators != null ? chargeTypeEvaluators.DescriptionEvaluator : null;
+        }
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            DateTime? _dataRecordTypeCacheLastCheck;
+            DateTime? _componentTypeCacheLastCheck;
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return CacheManagerFactory.GetCacheManager<DataRecordTypeManager.CacheManager>().IsCacheExpired(ref _dataRecordTypeCacheLastCheck) |
+                CacheManagerFactory.GetCacheManager<VRComponentTypeManager.CacheManager>().IsCacheExpired(ref _componentTypeCacheLastCheck);
+            }
         }
 
         public class ChargeTypeCustomCodeEvaluators
