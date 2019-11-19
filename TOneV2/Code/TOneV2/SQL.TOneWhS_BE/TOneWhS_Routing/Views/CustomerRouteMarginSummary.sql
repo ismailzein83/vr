@@ -1,8 +1,9 @@
-﻿CREATE VIEW TOneWhS_Routing.CustomerRouteMarginSummary AS
-SELECT c.ID
-	,c.CustomerID
-	,c.SaleZoneID
-	,c.SaleRate
+﻿
+CREATE VIEW [TOneWhS_Routing].[CustomerRouteMarginSummary] AS
+SELECT f.ID
+	,f.CustomerID
+	,f.SaleZoneID
+	,f.SaleRate
 
 	,c.MinSupplierRate			AS CurrentMinSupplierRate
 	,c.MaxMargin				AS CurrentMaxMargin
