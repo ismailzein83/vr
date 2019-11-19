@@ -54,7 +54,11 @@ BIStandAloneApplication
 BI.StandAloneApplication.PostDeployment.sql
 
 CloudXPoint
+CloudXPointBase.json
 CloudXPoint.PostDeployment.sql
+
+Cataleya
+Cataleya.json
 
 CloudXPoint_INSOFT
 INSOFT.PostDeployment.sql
