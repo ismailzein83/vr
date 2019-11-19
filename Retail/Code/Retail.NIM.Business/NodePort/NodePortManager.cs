@@ -28,8 +28,8 @@ namespace Retail.NIM.Business
 
         public static Guid s_freePortStatusDefinitionId = new Guid("a11d2835-89ed-442c-9646-c1f9b23ff213");
         public static Guid s_reservedPortStatusDefinitionId = new Guid("c51bb41b-b31a-45ba-b12e-8f521b0323eb");
-        public static Guid s_usedPortStatusDefinitionId = new Guid("e648730c-4a0c-4354-8c4e-5e0d8c34f855");
-        public static Guid s_faultyPortStatusDefinitionId = new Guid("dea67efd-d92b-4674-b982-4d6ba1bc6b10");
+        public static Guid s_usedPortStatusDefinitionId = new Guid("a9e7f47a-d908-4fd1-b8a6-6a7ab6828a8f");
+        public static Guid s_faultyPortStatusDefinitionId = new Guid("09e09543-7267-46c8-a235-bf2ec936d33e");
         #endregion
 
         #region Public Methods
