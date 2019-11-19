@@ -559,9 +559,9 @@
               "Content": null,
               "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VR_Integration_DataProcesses: View Logs\",\"Directive\":\"vr-integration-importedbatch-search\",\"Title\":\"Imported Batch\",\"Data\":null}}",
               "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 3,
+              "Rank": 4,
               "CreatedTime": "2019-08-26T13:57:23.28",
-              "LastModifiedTime": "2019-08-26T13:57:23.28"
+              "LastModifiedTime": "2019-11-15T15:22:16.833"
             }
           },
           {
