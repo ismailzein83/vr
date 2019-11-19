@@ -41,6 +41,7 @@ namespace BPMExtended.Main.Business
             string newDevice = w.NewDeviceId;
             string oldDevice = w.OldDeviceId;
             string servicesList = w.NetworkServices;
+            string secondaryContracts = w.SecondaryContracts;
 
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -74,7 +75,7 @@ namespace BPMExtended.Main.Business
                 string requestsTypeId = GetRequestType(EntityName);
                 string recordName = GetEntityName(EntityName, requestId);
                 workOrderId = initiateWorkOrder(contractId,requestId, requestsTypeId, type, recordName, type, pathId, phoneNumber, switchName, deviceName,
-                    supportsCommand, commands,newDevice,oldDevice, servicesList);
+                    supportsCommand, commands,newDevice,oldDevice, servicesList, secondaryContracts);
 
                 //update request
                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
@@ -286,7 +287,7 @@ namespace BPMExtended.Main.Business
         }
         private string initiateWorkOrder(string contractId,string requestId, string requestTypeId, string workOrderType, string recordName
             , string type, string pathId, string phoneNumber, string switchName, string deviceName, string supportsCommand, string commands
-            , string newDevice, string oldDevice, string servicesList)
+            , string newDevice, string oldDevice, string servicesList, string secondaryContracts)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StWorkOrder");
             Entity workorder = schema.CreateEntity(BPM_UserConnection);
@@ -310,6 +311,7 @@ namespace BPMExtended.Main.Business
             workorder.SetColumnValue("StOldDeviceId", oldDevice);
             workorder.SetColumnValue("StReservedDeviceId", newDevice);
             workorder.SetColumnValue("StFlags", servicesList);
+            workorder.SetColumnValue("StSecondaryContracts", secondaryContracts);
             workorder.Save();
 
             return workOrderId.ToString();

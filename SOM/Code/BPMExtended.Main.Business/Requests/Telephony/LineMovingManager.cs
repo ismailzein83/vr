@@ -67,6 +67,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StFloor");
             esq.AddColumn("StAddressNotes");
             esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StIsNewMDF");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StHasAnADSL");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -91,6 +94,9 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 var province = entities[0].GetColumnValue("StProvinceName");
                 var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var isNewMDF = entities[0].GetColumnValue("StIsNewMDF");
+                var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
 
 
                 SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
@@ -106,8 +112,11 @@ namespace BPMExtended.Main.Business
                         },
                         OldLinePathId = oldLinePathId.ToString(),
                         NewLinePathId = newLinePathID.ToString(),
+                        ADSLContractId = adslContractId.ToString(),
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
                         SameSwitch = !((bool)newSwitch),
+                        SameMDF = !((bool)isNewMDF),
+                        HasADSL = (bool)hasAnADSL,
                         Address = new Address
                         {
                             Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),//new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
@@ -158,21 +167,10 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StIsNewSwitch");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-            esq.AddColumn("StProvince");
-            esq.AddColumn("StProvince.Id");
-            esq.AddColumn("StCity");
-            esq.AddColumn("StCity.Id");
-            esq.AddColumn("StArea");
-            esq.AddColumn("StArea.Id");
-            esq.AddColumn("StTown");
-            esq.AddColumn("StTown.Id");
-            esq.AddColumn("StLocation");
-            esq.AddColumn("StLocation.Id");
-            esq.AddColumn("StStreet");
-            esq.AddColumn("StBuildingNumber");
-            esq.AddColumn("StFloor");
-            esq.AddColumn("StAddressNotes");
             esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StIsNewMDF");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StHasAnADSL");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -184,7 +182,9 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var oldLinePathId = entities[0].GetColumnValue("StOldLinePathId");
                 var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
-
+                var isNewMDF = entities[0].GetColumnValue("StIsNewMDF");
+                var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
 
                 SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
                 {
@@ -197,7 +197,10 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        OldLinePathId = oldLinePathId.ToString(),
+                        LinePathId = oldLinePathId.ToString(),
+                        SameMDF = !((bool)isNewMDF),
+                        HasADSL = (bool)hasAnADSL,
+                        ADSLContractId = adslContractId.ToString(),
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
                         
                     },
@@ -207,7 +210,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ProceedTelephonyDeleteSubscription/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeDeleteTelephonySubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -265,7 +268,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeTelephonyDeleteSubscription/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeDeleteADSLSubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -288,7 +291,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOldLinePathId");
             esq.AddColumn("StIsNewSwitch");
             esq.AddColumn("StRatePlanId");
-
+            esq.AddColumn("StIsNewMDF");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StHasAnADSL");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -301,7 +306,9 @@ namespace BPMExtended.Main.Business
                 var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
                 var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
-
+                var isNewMDF = entities[0].GetColumnValue("StIsNewMDF");
+                var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
 
                 SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
                 {
@@ -315,8 +322,10 @@ namespace BPMExtended.Main.Business
                             CustomerId = customerId.ToString()
                         },
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
-                        OldLinePathId = oldLinePathId.ToString(),
-                        NewLinePathId = newLinePathID.ToString()
+                        LinePathId = newLinePathID.ToString(),
+                        SameMDF = !((bool)isNewMDF),
+                        HasADSL = (bool)hasAnADSL,
+                        ADSLContractId = adslContractId.ToString()
                     },
                 };
 
@@ -325,6 +334,71 @@ namespace BPMExtended.Main.Business
                 using (var client = new SOMClient())
                 {
                     output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitTelephonyCreateSubscription/StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+
+        }
+
+        public void FinalizeCreateTelephonySubscription(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineMovingRequest");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StNewLinePathID");
+            esq.AddColumn("StOldLinePathId");
+            esq.AddColumn("StIsNewSwitch");
+            esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StIsNewMDF");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StHasAnADSL");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var oldLinePathId = entities[0].GetColumnValue("StOldLinePathId");
+                var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var isNewMDF = entities[0].GetColumnValue("StIsNewMDF");
+                var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+
+                SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
+                {
+
+                    InputArguments = new LineMovingInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
+                        },
+                        SameMDF = !((bool)isNewMDF),
+                        HasADSL = (bool)hasAnADSL,
+                        ADSLContractId = adslContractId.ToString(),
+                        IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
+                        LinePathId = newLinePathID.ToString(),
+                    },
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeCreateTelephonySubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -373,8 +447,7 @@ namespace BPMExtended.Main.Business
                             CustomerId = customerId.ToString()
                         },
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
-                        OldLinePathId = oldLinePathId.ToString(),
-                        NewLinePathId = newLinePathID.ToString()
+                        LinePathId = newLinePathID.ToString()
                     },
                 };
 
@@ -382,64 +455,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ProceedTelephonyCreateSubscription/StartProcess", somRequestInput);
-                }
-                var manager = new BusinessEntityManager();
-                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
-            }
-
-        }
-
-        public void FinalizeTelephonyCreateSubscription(Guid requestId)
-        {
-            //Get Data from StLineSubscriptionRequest table
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            SOMRequestOutput output;
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineMovingRequest");
-            esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StNewLinePathID");
-            esq.AddColumn("StOldLinePathId");
-            esq.AddColumn("StIsNewSwitch");
-            esq.AddColumn("StRatePlanId");
-
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
-            esq.Filters.Add(esqFirstFilter);
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                var contractId = entities[0].GetColumnValue("StContractID");
-                var oldLinePathId = entities[0].GetColumnValue("StOldLinePathId");
-                var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
-                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
-
-                SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
-                {
-
-                    InputArguments = new LineMovingInput
-                    {
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                            ContractId = contractId.ToString(),
-                            RequestId = requestId.ToString(),
-                            CustomerId = customerId.ToString()
-                        },
-                        IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
-                        NewLinePathId = newLinePathID.ToString()
-                    },
-                };
-
-
-                //call api
-                using (var client = new SOMClient())
-                {
-                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeTelephonyCreateSubscription/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeCreateADSLSubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -481,6 +497,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOldLinePathId");
             esq.AddColumn("StNewADSLLinePathId");
             esq.AddColumn("StFreeReservationSwitchID");
+            esq.AddColumn("StHasAnADSL");
+            esq.AddColumn("StADSLContractId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -509,7 +527,8 @@ namespace BPMExtended.Main.Business
                 var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
                 var newADSLLinePathId = entities[0].GetColumnValue("StNewADSLLinePathId");
                 var freeReservationSwitchID = entities[0].GetColumnValue("StFreeReservationSwitchID");
-
+                var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
 
                 SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
                 {
@@ -526,6 +545,8 @@ namespace BPMExtended.Main.Business
                         NewPhoneNumber = newPhoneNumber.ToString(),
                        // OldTelLinePathId = oldLinePathId.ToString(),
                         NewTelLinePathId = newLinePathID.ToString(),
+                        HasADSL = (bool)hasAnADSL,
+                        ADSLContractId = adslContractId.ToString(),
                         NewADSLLinePathId = newADSLLinePathId.ToString(),
                         NotApplicableServices = GetNotApplicableServicesOnSwitch(freeReservationSwitchID.ToString(),contractId.ToString()),
                         Address = new Address
@@ -597,6 +618,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOldLinePathId");
             esq.AddColumn("StNewADSLLinePathId");
             esq.AddColumn("StFreeReservationSwitchID");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StHasAnADSL");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -625,6 +648,9 @@ namespace BPMExtended.Main.Business
                 var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
                 var newADSLLinePathId = entities[0].GetColumnValue("StNewADSLLinePathId");
                 var freeReservationSwitchID = entities[0].GetColumnValue("StFreeReservationSwitchID");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+
 
                 SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
                 {
@@ -639,6 +665,8 @@ namespace BPMExtended.Main.Business
                         },
                         OldPhoneNumber = oldPhoneNumber.ToString(),
                         NewPhoneNumber = newPhoneNumber.ToString(),
+                        ADSLContractId = adslContractId.ToString(),
+                        HasADSL = (bool)hasAnADSL,
                         //OldTelLinePathId = oldLinePathId.ToString(),
                         NewTelLinePathId = newLinePathID.ToString(),
                         NewADSLLinePathId = newADSLLinePathId.ToString(),
@@ -712,6 +740,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOldLinePathId");
             esq.AddColumn("StNewADSLLinePathId");
             esq.AddColumn("StFreeReservationSwitchID");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StHasAnADSL");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -739,6 +769,8 @@ namespace BPMExtended.Main.Business
                 var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
                 var newADSLLinePathId = entities[0].GetColumnValue("StNewADSLLinePathId");
                 var freeReservationSwitchID = entities[0].GetColumnValue("StFreeReservationSwitchID");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
 
                 SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
                 {
@@ -753,6 +785,8 @@ namespace BPMExtended.Main.Business
                         },
                         OldPhoneNumber = oldPhoneNumber.ToString(),
                         NewPhoneNumber = newPhoneNumber.ToString(),
+                        ADSLContractId = adslContractId.ToString(),
+                        HasADSL = (bool)hasAnADSL,
                         //OldTelLinePathId = oldLinePathId.ToString(),
                         NewTelLinePathId = newLinePathID.ToString(),
                         NewADSLLinePathId = newADSLLinePathId.ToString(),
@@ -792,6 +826,126 @@ namespace BPMExtended.Main.Business
 
             }
         }
+
+
+
+        public void FinalizeSameSwitchTelephonyLineMove(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineMovingRequest");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StPhoneNumber");
+            esq.AddColumn("StNewPhoneNumber");
+            esq.AddColumn("StIsNewSwitch");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+            esq.AddColumn("StProvince");
+            esq.AddColumn("StProvince.Id");
+            esq.AddColumn("StCity");
+            esq.AddColumn("StCity.Id");
+            esq.AddColumn("StArea");
+            esq.AddColumn("StArea.Id");
+            esq.AddColumn("StTown");
+            esq.AddColumn("StTown.Id");
+            esq.AddColumn("StLocation");
+            esq.AddColumn("StLocation.Id");
+            esq.AddColumn("StStreet");
+            esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StFloor");
+            esq.AddColumn("StAddressNotes");
+            esq.AddColumn("StNewLinePathID");
+            esq.AddColumn("StOldLinePathId");
+            esq.AddColumn("StNewADSLLinePathId");
+            esq.AddColumn("StFreeReservationSwitchID");
+            esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StHasAnADSL");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var oldPhoneNumber = entities[0].GetColumnValue("StPhoneNumber");
+                var newPhoneNumber = entities[0].GetColumnValue("StNewPhoneNumber");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                var street = entities[0].GetColumnValue("StStreet");
+                var notes = entities[0].GetColumnValue("StAddressNotes");
+                var building = entities[0].GetColumnValue("StBuildingNumber");
+                var floor = entities[0].GetColumnValue("StFloor");
+                var city = entities[0].GetColumnValue("StCityName");
+                var area = entities[0].GetColumnValue("StAreaName");
+                var location = entities[0].GetColumnValue("StLocationName");
+                var town = entities[0].GetColumnValue("StTownName");
+                var province = entities[0].GetColumnValue("StProvinceName");
+                var oldLinePathId = entities[0].GetColumnValue("StOldLinePathId");
+                var newLinePathID = entities[0].GetColumnValue("StNewLinePathID");
+                var newADSLLinePathId = entities[0].GetColumnValue("StNewADSLLinePathId");
+                var freeReservationSwitchID = entities[0].GetColumnValue("StFreeReservationSwitchID");
+                var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+
+                SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
+                {
+
+                    InputArguments = new LineMovingInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
+                        },
+                        ADSLContractId = adslContractId.ToString(),
+                        HasADSL = (bool)hasAnADSL,
+                        OldLinePathId = oldLinePathId.ToString(),
+                        NewLinePathId = newLinePathID.ToString(),
+                        Address = new Address
+                        {
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),
+                            //new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
+                            StateProvince = province.ToString(),
+                            City = city.ToString(),
+                            Town = town.ToString(),
+                            Region = area.ToString(),
+                            Street = street.ToString(),
+                            Building = building.ToString(),
+                            Floor = floor.ToString(),
+                            Notes = notes.ToString(),
+                            LocationType = location.ToString()
+
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineMovingInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeSameSwitchTelephonyLineMove/StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+        }
+
+
         #endregion
     }
 }

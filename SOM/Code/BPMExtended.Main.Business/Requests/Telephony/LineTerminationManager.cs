@@ -73,10 +73,10 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        TelLinePathId = pathId.ToString(),
+                        LinePathId = pathId.ToString(),
                         HasADSL = hasADSL,
                         ADSLContractId = adslContractId.ToString(),
-                        ADSLLinePathId = adslLinePathId.ToString(),
+                        //ADSLLinePathId = adslLinePathId.ToString(),
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
                         //Reason = reason.ToString(),
                     }
@@ -146,8 +146,9 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        TelLinePathId = pathId.ToString(),
+                        LinePathId = pathId.ToString(),
                         HasADSL = hasADSL,
+                        SameMDF = false,
                         ADSLContractId = adslContractId.ToString(),
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
                         //Reason = reason.ToString(),
@@ -159,7 +160,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ProceedTelephonyDeleteSubscription/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeDeleteTelephonySubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -218,8 +219,7 @@ namespace BPMExtended.Main.Business
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         },
-                        ADSLContractId = adslContractId.ToString(),
-                        ADSLLinePathId = adslLinePathId.ToString(),
+                        LinePathId = pathId.ToString(),
                         IsVPN = new CatalogManager().GetDivisionByRatePlanId(ratePlanId.ToString()) == "VPN",
                         //Reason = reason.ToString(),
                     }
@@ -230,7 +230,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeTelephonyDeleteSubscription/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeDeleteADSLSubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

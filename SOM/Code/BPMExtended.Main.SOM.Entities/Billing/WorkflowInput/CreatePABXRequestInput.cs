@@ -25,6 +25,7 @@ namespace BPMExtended.Main.SOMAPI
     public class PabxContractInput
     {
         public string ContractId { get; set; }
+        public string LinePathId { get; set; }
         public string PhoneNumber { get; set; }
         public ServiceParameterValue PabxParameterValue { get; set; }
     }

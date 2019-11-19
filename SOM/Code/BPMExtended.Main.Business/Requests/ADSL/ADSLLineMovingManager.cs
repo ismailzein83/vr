@@ -195,6 +195,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StTelephonyContractId");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StSelectedTelephonyContract");
             esq.AddColumn("StSelectedDSLAMPort");
             esq.AddColumn("StFloor");
@@ -227,6 +228,7 @@ namespace BPMExtended.Main.Business
                 var newContractId = entities[0].GetColumnValue("StSelectedTelephonyContract");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 var newDSLAMPort = entities[0].GetColumnValue("StSelectedDSLAMPort");
                 var floor = entities[0].GetColumnValue("StFloor");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
@@ -257,7 +259,7 @@ namespace BPMExtended.Main.Business
                             Building = buildingNumber.ToString(),
                             Floor = floor.ToString(),
                             Street = street.ToString(),
-                            Sequence = new CatalogManager().GetSequenceNumberFromRequestHeader(requestId.ToString())
+                            Sequence = new ContractManager().GetTelephonyContract(contractId.ToString()).ContractAddress.Sequence
                         },
                         PaymentData = new PaymentData()
                         {

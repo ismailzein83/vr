@@ -173,6 +173,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
+            esq.AddColumn("StPathId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -188,6 +189,7 @@ namespace BPMExtended.Main.Business
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var parameterNumber = entities[0].GetColumnValue("StParameterNumber");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                string pathId = entities[0].GetColumnValue("StPathId").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
                 ServiceParameterValue pilotParameter = JsonConvert.DeserializeObject<ServiceParameterValue>(entities[0].GetColumnValue("StPilotContractParameter").ToString()); ;
                 List<PabxContractInput> selectedSecondaryContracts = JsonConvert.DeserializeObject<List<PabxContractInput>>(entities[0].GetColumnValue("StSelectedSecondaryContracts").ToString());
@@ -213,6 +215,7 @@ namespace BPMExtended.Main.Business
                             {
                                 ContractId = contractId.ToString(),
                                 PhoneNumber = phoneNumber.ToString(),
+                                LinePathId = pathId,
                                 PabxParameterValue = pilotParameter
 
                             },
@@ -232,7 +235,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<CreatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitPabx/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<CreatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitCreatePABXSubscription/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();
@@ -272,15 +275,8 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
-                var phoneNumber = entities[0].GetColumnValue("StPhoneNumber");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
-                var parameterNumber = entities[0].GetColumnValue("StParameterNumber");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-                ServiceParameterValue pilotParameter = JsonConvert.DeserializeObject<ServiceParameterValue>(entities[0].GetColumnValue("StPilotContractParameter").ToString()); ;
-                List<PabxContractInput> selectedSecondaryContracts = JsonConvert.DeserializeObject<List<PabxContractInput>>(entities[0].GetColumnValue("StSelectedSecondaryContracts").ToString());
 
 
                 SOMRequestInput<CreatePABXRequestInput> somRequestInput = new SOMRequestInput<CreatePABXRequestInput>
@@ -299,30 +295,13 @@ namespace BPMExtended.Main.Business
                             IsPaid = (bool)isPaid
                         },
                         SubmitPabxInput = new SubmitPabxInput()
-                        {
-                            PilotContract = new PabxContractInput()
-                            {
-                                ContractId = contractId.ToString(),
-                                PhoneNumber = phoneNumber.ToString(),
-                                PabxParameterValue = pilotParameter
-
-                            },
-                            Contracts = selectedSecondaryContracts,
-                            PabxService = new PabxService()
-                            {
-                                Id = new CatalogManager().GetPABXServiceId(),
-                                ParameterNumber = parameterNumber.ToString(),
-                                PackageId = "",
-                                ParameterId = ""
-                            }
-                        }
                     }
                 };
 
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<CreatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivatePABX/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<CreatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeCreatePABXSubscription/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();

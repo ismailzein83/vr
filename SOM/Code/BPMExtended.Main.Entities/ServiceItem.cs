@@ -10,5 +10,6 @@ namespace BPMExtended.Main.Entities
     {
         public string Id { get; set; }
         public string PackageId { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

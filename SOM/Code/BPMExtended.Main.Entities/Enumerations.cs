@@ -417,6 +417,8 @@ namespace BPMExtended.Main.Entities
 
         [Description("Suspension")]
         [EntitySchemaName("StSuspension")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("2CA16E4C-E33E-4935-A7B8-4C2E468061CA")]
         [CompletedStep("StTypeId")]
         [CompletedStepId("8340ad42-0c1e-4063-ba73-74b3cd917c2f")]
         Suspension = 46,

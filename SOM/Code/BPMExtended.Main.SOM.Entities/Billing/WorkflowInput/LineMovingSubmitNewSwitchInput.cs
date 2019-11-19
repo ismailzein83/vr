@@ -18,8 +18,9 @@ namespace BPMExtended.Main.SOMAPI
         public List<ServiceData> NotApplicableServices { get; set; }
         public bool SameSwitch { get; set; }
         public Address Address { get; set; }
-
+        public bool HasADSL { get; set; }
         public PaymentData PaymentData { get; set; }
+        public string ADSLContractId { get; set; }
 
     }
 }

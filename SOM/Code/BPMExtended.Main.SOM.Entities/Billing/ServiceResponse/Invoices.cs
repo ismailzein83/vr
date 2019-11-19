@@ -11,6 +11,7 @@ namespace BPMExtended.Main.SOMAPI
         public DateTime EntryDate { get; set; }
         public DateTime DueDate { get; set; }
         public decimal OriginalAmount { get; set; }
+        public decimal Amount { get; set; }
         public decimal OpenAmount { get; set; }
         public string DocumentCode { get; set; }
         public string LinePath { get; set; }

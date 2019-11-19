@@ -20,5 +20,8 @@ namespace BPMExtended.Main.SOMAPI
         public string RequestId { get; set; }
         public string LinePathId { get; set; }
         public string NewLinePath { get; set; }
+        public string ADSLContractId { get; set; }
+        public bool SameMDF { get; set; }
+        public bool HasADSL { get; set; }
     }
 }

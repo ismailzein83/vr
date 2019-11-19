@@ -226,7 +226,7 @@ namespace BPMExtended.Main.Business
                 InvoiceCode = item.DocumentCode,
                 InvoiceDate = Convert.ToString(item.EntryDate),
                 DueDate = Convert.ToString(item.DueDate),
-                OriginalAmount = Convert.ToString(item.OriginalAmount),
+                OriginalAmount = Convert.ToString(item.Amount),
                 OpenAmount = Convert.ToString(item.OpenAmount),
                 BillDispute = GetBillDisputeByEnumValue(item.BillDispute),
                 CurrencyCode = item.Currency,
