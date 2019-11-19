@@ -6,6 +6,10 @@
     [LastModifiedBy]   INT           NULL,
     [LastModifiedTime] DATETIME      NULL,
     [timestamp]        ROWVERSION    NULL,
+    [RegionID]         INT           NULL,
+    [CityID]           INT           NULL,
     CONSTRAINT [PK__Area__3214EC077F60ED59] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
