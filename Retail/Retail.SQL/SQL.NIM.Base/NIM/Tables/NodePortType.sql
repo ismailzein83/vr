@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [NIM].[NodePortType] (
     [ID]                         UNIQUEIDENTIFIER NOT NULL,
+    [DevProjectID]               UNIQUEIDENTIFIER NULL,
     [Name]                       NVARCHAR (255)   NULL,
     [BusinessEntityDefinitionID] UNIQUEIDENTIFIER NULL,
     [CreatedTime]                DATETIME         NULL,
@@ -7,9 +8,10 @@
     [LastModifiedTime]           DATETIME         NULL,
     [LastModifiedBy]             INT              NULL,
     [timestamp]                  ROWVERSION       NULL,
-    [DevProjectID]               UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_NodePortType] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

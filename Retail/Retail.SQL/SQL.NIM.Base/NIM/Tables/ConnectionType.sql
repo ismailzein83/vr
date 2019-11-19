@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [NIM].[ConnectionType] (
     [ID]                         UNIQUEIDENTIFIER NOT NULL,
+    [DevProjectID]               UNIQUEIDENTIFIER NULL,
     [Name]                       NVARCHAR (255)   NULL,
     [BusinessEntityDefinitionID] UNIQUEIDENTIFIER NULL,
     [CreatedTime]                DATETIME         NULL,
@@ -7,9 +8,10 @@
     [LastModifiedTime]           DATETIME         NULL,
     [LastModifiedBy]             INT              NULL,
     [timestamp]                  ROWVERSION       NULL,
-    [DevProjectID]               UNIQUEIDENTIFIER NULL,
-    PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK__Connecti__3214EC27184C96B4] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
