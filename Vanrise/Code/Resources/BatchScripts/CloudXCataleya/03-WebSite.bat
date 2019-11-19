@@ -22,5 +22,5 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\cloudXPoint-flat-iconheader.ico
 
 ::xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.RouteSync.Cataleya\bin\Release\TOne.WhS.RouteSync.Cataleya.dll" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\CloudXCataleya\%YYYYMMDD%\Bin\"
 
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity\Views\Switch\SingleSwitchManagement.html" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\CloudXPointV2\%YYYYMMDD%\Client\Modules\WhS_BusinessEntity\Views\Switch\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity\Views\Switch\SingleSwitchManagementController.js" /S /E /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\CloudXPointV2\%YYYYMMDD%\Client\Modules\WhS_BusinessEntity\Views\Switch\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity\Views\Switch\SingleSwitchManagement.html" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\CloudXCataleya\%YYYYMMDD%\Client\Modules\WhS_BusinessEntity\Views\Switch\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity\Views\Switch\SingleSwitchManagementController.js" /S /E /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\CloudXCataleya\%YYYYMMDD%\Client\Modules\WhS_BusinessEntity\Views\Switch\"
