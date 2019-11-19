@@ -844,10 +844,32 @@
                 "Value": "148EC616-4E67-4343-A3D4-5FA535238249"
               }
             }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "c365f8f3-5906-451e-bb0e-1bb3b52fc2bd",
+              "Module": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "148EC616-4E67-4343-A3D4-5FA535238249"
+              }
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "627e7877-4d3a-4d07-9ed4-c22431ed0026",
+              "Module": {
+                "$type": "Vanrise.DevTools.Entities.GeneratedScriptOverriddenData,Vanrise.DevTools.Entities",
+                "IsOverridden": true,
+                "Value": "148EC616-4E67-4343-A3D4-5FA535238249"
+              }
+            }
           }
         ],
         "Variables": null,
-        "LastWhereCondition": "[ID] IN (\t'11603625-2CF3-436D-9FAA-B5D04CB42F09','3F7327B6-0742-4C6D-8B2C-BE9B5D4DECD4','a01100f6-e5ca-43f2-8944-d78bd95cb4ee')",
+        "LastWhereCondition": "[ID] IN (\t'11603625-2CF3-436D-9FAA-B5D04CB42F09','3F7327B6-0742-4C6D-8B2C-BE9B5D4DECD4','a01100f6-e5ca-43f2-8944-d78bd95cb4ee','C365F8F3-5906-451E-BB0E-1BB3B52FC2BD','627E7877-4D3A-4D07-9ED4-C22431ED0026')",
         "IsIdentity": false
       },
       "Title": "Merge"
