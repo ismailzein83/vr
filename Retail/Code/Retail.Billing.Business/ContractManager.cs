@@ -178,14 +178,16 @@ namespace Retail.Billing.Business
                 StatusId = (Guid)contractEntity.FieldValues["Status"],
                 StatusReasonId = (Guid?)contractEntity.FieldValues["StatusReason"],
                 TechnologyId = (Guid?)contractEntity.FieldValues["Technology"],
+                NIMPathId = (long?)contractEntity.FieldValues["NIMPath"],
+                TelephonyNodeId = (long?)contractEntity.FieldValues["TelephonyNode"],
+                InternetNodeId = (long?)contractEntity.FieldValues["InternetNode"],
                 SpecialNumberCategoryId = (Guid?)contractEntity.FieldValues["SpecialNumberCategory"],
                 SpeedInMbps = (decimal?)contractEntity.FieldValues["SpeedInMbps"],
                 SpeedType = (int?)contractEntity.FieldValues["SpeedType"],
                 PackageLimitInGB = (int?)contractEntity.FieldValues["PackageLimitInGB"],
                 HasInternet = (bool?)contractEntity.FieldValues["HasInternet"],
                 HasTelephony = (bool?)contractEntity.FieldValues["HasTelephony"],
-                NbOfLinks = (int?)contractEntity.FieldValues["NbOfLinks"],
-                NIMPathId = (long?)contractEntity.FieldValues["NIMPath"]
+                NbOfLinks = (int?)contractEntity.FieldValues["NbOfLinks"]
             };
         }
 
@@ -319,6 +321,18 @@ namespace Retail.Billing.Business
             {
                 entityToAddFieldValues.Add("NIMPath", input.NIMPathId.Value);
                 historyFieldValues.Add("NIMPath", input.NIMPathId.Value);
+            }
+
+            if (input.TelephonyNodeId.HasValue)
+            {
+                entityToAddFieldValues.Add("TelephonyNode", input.TelephonyNodeId.Value);
+                historyFieldValues.Add("TelephonyNode", input.TelephonyNodeId.Value);
+            }
+
+            if (input.InternetNodeId.HasValue)
+            {
+                entityToAddFieldValues.Add("InternetNode", input.InternetNodeId.Value);
+                historyFieldValues.Add("InternetNode", input.InternetNodeId.Value);
             }
 
             if (input.HasInternet.HasValue)

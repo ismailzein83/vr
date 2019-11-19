@@ -27,6 +27,10 @@ namespace Retail.Billing.Entities
 
         public long? NIMPathId { get; set; }
 
+        public long? TelephonyNodeId { get; set; }
+
+        public long? InternetNodeId { get; set; }
+
         public Guid? SpecialNumberCategoryId { get; set; }
 
         public bool? HasTelephony { get; set; }
