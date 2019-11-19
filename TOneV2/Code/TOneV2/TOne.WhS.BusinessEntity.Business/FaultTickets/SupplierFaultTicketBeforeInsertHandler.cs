@@ -49,10 +49,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 if (entities != null && entities.Count > 0)
                 {
-                    {
-                        context.OutputResult.Result = false;
-                        context.OutputResult.Messages.Add("Same Supplier And SaleZone Already Exist In Another Fault Ticket");
-                    }
+                    context.OutputResult.Result = false;
+                    context.OutputResult.Messages.Add("Same supplier and supplier zone already exist in another fault ticket");
                 }
             }
         }
