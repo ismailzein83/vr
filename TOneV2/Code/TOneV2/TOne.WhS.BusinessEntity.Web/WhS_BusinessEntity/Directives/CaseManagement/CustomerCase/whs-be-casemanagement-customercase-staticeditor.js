@@ -71,10 +71,10 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 $scope.scopeModel.isReasonSelectorRequired = true;
 
                 $scope.removerow = function (dataItem) {
-                    if (!$scope.scopeModel.isEditMode) {
-                        var index = $scope.scopeModel.codeNumberList.indexOf(dataItem);
-                        $scope.scopeModel.codeNumberList.splice(index, 1);
-                    }
+
+
+                    var index = $scope.scopeModel.codeNumberList.indexOf(dataItem);
+                    $scope.scopeModel.codeNumberList.splice(index, 1);
                 };
 
                 $scope.scopeModel.onTicketContactSelectionChanged = function () {
@@ -145,8 +145,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     if (value != undefined) {
                         if (selectedCustomerPromiseDeferred != undefined)
                             selectedCustomerPromiseDeferred.resolve();
-                        else
-                        {
+                        else {
                             var setLoader = function (value) { $scope.scopeModel.isLoadingTicketDirective = value; };
                             var selectorPayload = {
                                 filter: {
@@ -209,10 +208,10 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
             function defineApi() {
                 var api = {};
                 api.load = function (payload) {
-                    var promises =[];
+                    var promises = [];
                     if (payload != undefined) {
                         selectedValues = payload.selectedValues;
-                        historyId= payload.historyId;
+                        historyId = payload.historyId;
                         if (selectedValues != undefined) {
 
                             selectedCustomerPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -220,7 +219,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                                 selectedTicketPromiseDeferred = UtilsService.createPromiseDeferred();
                                 promises.push(selectedTicketPromiseDeferred.promise);
                             }
-
+                            selectedCustomer = selectedValues.CustomerId;
                             zoneId = selectedValues.SaleZoneId;
                             oldZoneId = selectedValues.SaleZoneId;
 
@@ -233,7 +232,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.asr = selectedValues.ASR;
                             $scope.scopeModel.acd = selectedValues.ACD;
                             $scope.scopeModel.carrierReference = selectedValues.CarrierReference;
-                           // $scope.scopeModel.description = selectedValues.Description;
+                            // $scope.scopeModel.description = selectedValues.Description;
                             $scope.scopeModel.name = selectedValues.Name;
 
                             $scope.scopeModel.notes = selectedValues.Notes;
@@ -244,16 +243,14 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
 
                         }
                     }
-                   
+
                     promises.push(loadCustomerSelector());
                     promises.push(loadStatusSelector());
                     promises.push(loadWorkGroupSelector());
                     promises.push(loadAttachmentGrid());
 
-                    if (!$scope.scopeModel.isEditMode) {
-                        promises.push(loadReleaseCodeSelector());
-                        promises.push(loadReasonSelector());
-                    }
+                    promises.push(loadReleaseCodeSelector());
+                    promises.push(loadReasonSelector());
 
                     if ($scope.scopeModel.isEditMode) {
                         $scope.scopeModel.isReasonSelectorRequired = false;
@@ -278,13 +275,9 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                         caseManagementObject.ASR = $scope.scopeModel.asr;
                         caseManagementObject.ACD = $scope.scopeModel.acd;
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
-                        caseManagementObject.SaleZoneId = zoneId;
-                        caseManagementObject.TicketDetails = {
-                            $type: "TOne.WhS.BusinessEntity.Entities.CustomerFaultTicketDescriptionSettingCollection,TOne.WhS.BusinessEntity.Entities",
-                            $values: getCodeNumberListData()
-                        };
                     }
                     var attachments = attachmentGridAPI.getData();
+                    caseManagementObject.SaleZoneId = zoneId;
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                     //caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
@@ -294,8 +287,13 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
+                    caseManagementObject.WithAttachments = $scope.scopeModel.withAttachments;
                     caseManagementObject.Notes = $scope.scopeModel.notes;
                     caseManagementObject.AccountManager = $scope.scopeModel.accountManager;
+                    caseManagementObject.TicketDetails = {
+                        $type: "TOne.WhS.BusinessEntity.Entities.CustomerFaultTicketDescriptionSettingCollection,TOne.WhS.BusinessEntity.Entities",
+                        $values: getCodeNumberListData()
+                    };
                 };
 
                 if (ctrl.onReady != null)
@@ -413,7 +411,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
 
                 var codeList = [];
                 if (selectedValues.TicketDetails != null) {
-                    for (var i = 0 ; i < selectedValues.TicketDetails.length; i++) {
+                    for (var i = 0; i < selectedValues.TicketDetails.length; i++) {
                         var descriptionSettings = selectedValues.TicketDetails[i];
                         var customerCaseDescription = {
                             CodeNumber: descriptionSettings.CodeNumber,
@@ -440,11 +438,11 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 for (var i = 0; i < $scope.scopeModel.codeNumberList.length; i++) {
                     var codeNumberObject = $scope.scopeModel.codeNumberList[i];
                     var faultTicketDescriptionSetting =
-                        {
-                            $type: "TOne.WhS.BusinessEntity.Entities.CustomerFaultTicketDescriptionSetting,TOne.WhS.BusinessEntity.Entities",
-                            CodeNumber: codeNumberObject.CodeNumber,
-                            ReasonId: codeNumberObject.ReasonId,
-                        };
+                    {
+                        $type: "TOne.WhS.BusinessEntity.Entities.CustomerFaultTicketDescriptionSetting,TOne.WhS.BusinessEntity.Entities",
+                        CodeNumber: codeNumberObject.CodeNumber,
+                        ReasonId: codeNumberObject.ReasonId,
+                    };
                     if (codeNumberObject.InternationalReleaseCodeId != undefined)
                         faultTicketDescriptionSetting.InternationalReleaseCodeId = codeNumberObject.InternationalReleaseCodeId;
                     codeList.push(faultTicketDescriptionSetting);
@@ -458,14 +456,14 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     for (var i = 0; i < faultTicketDescriptionSettingEntity.DescriptionSettings.length; i++) {
                         var descriptionSettings = faultTicketDescriptionSettingEntity.DescriptionSettings[i];
                         var faultTicketDescriptionSetting =
-                            {
-                                CodeNumber: descriptionSettings.CodeNumber,
+                        {
+                            CodeNumber: descriptionSettings.CodeNumber,
 
-                                ReasonId: descriptionSettings.ReasonId,
-                                ReasonDescription: descriptionSettings.ReasonDescription,
-                                InternationalReleaseCodeId: descriptionSettings != undefined ? descriptionSettings.InternationalReleaseCodeId : undefined,
-                                InternationalReleaseCodeDescription: descriptionSettings != undefined ? descriptionSettings.InternationalReleaseCodeDescription : undefined,
-                            };
+                            ReasonId: descriptionSettings.ReasonId,
+                            ReasonDescription: descriptionSettings.ReasonDescription,
+                            InternationalReleaseCodeId: descriptionSettings != undefined ? descriptionSettings.InternationalReleaseCodeId : undefined,
+                            InternationalReleaseCodeDescription: descriptionSettings != undefined ? descriptionSettings.InternationalReleaseCodeDescription : undefined,
+                        };
                         codeList.push(faultTicketDescriptionSetting);
                     }
                 }

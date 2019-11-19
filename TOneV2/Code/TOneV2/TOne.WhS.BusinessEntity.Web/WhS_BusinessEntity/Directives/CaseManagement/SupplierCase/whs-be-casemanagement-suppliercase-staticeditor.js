@@ -102,10 +102,8 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                 };
 
                 $scope.removerow = function (dataItem) {
-                    if (!$scope.scopeModel.isEditMode) {
                         var index = $scope.scopeModel.codeNumberList.indexOf(dataItem);
                         $scope.scopeModel.codeNumberList.splice(index, 1);
-                    }
                 };
 
                 $scope.scopeModel.InternationalReleaseCodeSelectorReady = function (api) {
@@ -128,7 +126,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                                     ReasonDescription: $scope.scopeModel.reason.Name,
                                     InternationalReleaseCodeId: ($scope.scopeModel.internationalReleaseCode != undefined) ? $scope.scopeModel.internationalReleaseCode.GenericBusinessEntityId : undefined,
                                     InternationalReleaseCodeDescription: ($scope.scopeModel.internationalReleaseCode != undefined) ? $scope.scopeModel.internationalReleaseCode.Name : undefined
-                                };
+                                }; 
                                 if ((zoneId == oldZoneId || $scope.scopeModel.codeNumberList.length == 0) && $scope.scopeModel.zoneName != undefined) {
                                     $scope.scopeModel.codeNumberList.push(faultTicketDescription);
                                     $scope.scopeModel.errorMessage = undefined;
@@ -229,6 +227,9 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                                 selectedTicketPromiseDeferred = UtilsService.createPromiseDeferred();
                                 promises.push(selectedTicketPromiseDeferred.promise);
                             }
+                            zoneId = selectedValues.SupplierZoneId;
+                            oldZoneId = selectedValues.SupplierZoneId; 
+                            selectedSupplier = selectedValues.SupplierId;
                             $scope.scopeModel.fromDate = selectedValues.FromDate;
                             $scope.scopeModel.toDate = selectedValues.ToDate;
                             $scope.scopeModel.attempts = selectedValues.Attempts;
@@ -259,10 +260,8 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                     promises.push(loadWorkGroupSelector());
                     promises.push(loadAttachmentGrid());
 
-                    if (!$scope.scopeModel.isEditMode) {
                         promises.push(loadReasonSelector());
                         promises.push(loadReleaseCodeSelector());
-                    }
 
                     if ($scope.scopeModel.isEditMode) {
                         promises.push(loadTicketContactSelector());
@@ -283,17 +282,13 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
 
                         caseManagementObject.Attempts = $scope.scopeModel.attempts;
                         caseManagementObject.SupplierId = supplierSelectorAPI.getSelectedIds();
-                        caseManagementObject.SupplierZoneId = zoneId;
                         caseManagementObject.FromDate = $scope.scopeModel.fromDate;
                         caseManagementObject.ToDate = $scope.scopeModel.toDate;
-                        caseManagementObject.TicketDetails = {
-                            $type: "TOne.WhS.BusinessEntity.Entities.SupplierFaultTicketDescriptionSettingCollection,TOne.WhS.BusinessEntity.Entities",
-                            $values: getCodeNumberListData()
-                        };
+                     
                     }
                     var attachments = attachmentGridAPI.getData();
 
-
+                    caseManagementObject.SupplierZoneId = zoneId;
                     caseManagementObject.Attachments = attachments == undefined ? null : attachments;
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                    // caseManagementObject.Description = $scope.scopeModel.description;
@@ -301,10 +296,15 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
+                    caseManagementObject.WithAttachments = $scope.scopeModel.withAttachments;
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;
                     caseManagementObject.ContactEmails = $scope.scopeModel.email.join(';');
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
                     caseManagementObject.AccountManager = $scope.scopeModel.accountManager;
+                    caseManagementObject.TicketDetails = {
+                        $type: "TOne.WhS.BusinessEntity.Entities.SupplierFaultTicketDescriptionSettingCollection,TOne.WhS.BusinessEntity.Entities",
+                        $values: getCodeNumberListData()
+                    };
                 };
 
                 if (ctrl.onReady != null)
@@ -444,7 +444,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
 
                         if (response != undefined) {
 
-                            zoneId = response.SupplierZoneId;
+                            zoneId = response.SupplierZoneId; 
                             if ($scope.scopeModel.codeNumberList.length == 0 || oldZoneId == undefined)
                                 oldZoneId = response.SupplierZoneId;
                             $scope.scopeModel.zoneName = response.Name;
