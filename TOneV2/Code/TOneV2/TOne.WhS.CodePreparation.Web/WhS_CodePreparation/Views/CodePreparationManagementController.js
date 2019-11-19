@@ -283,8 +283,9 @@
         function loadLOBSelector() {
             var lobSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             lobSelectorReadyDeferred.promise.then(function () {
-                var lobSelectorPayload;
-
+                var lobSelectorPayload = {
+                    selectifsingleitem:true
+                };
                 VRUIUtilsService.callDirectiveLoad(lobSelectorAPI, lobSelectorPayload, lobSelectorLoadPromiseDeferred);
             });
             return lobSelectorLoadPromiseDeferred.promise;
