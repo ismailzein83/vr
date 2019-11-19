@@ -512,128 +512,14 @@
       "Title": "Merge"
     },
     {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
       "TableName": "View",
       "Note": null,
       "Settings": {
         "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
-        "DataRows": [
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "e32bce53-6433-4af1-b4c2-3f1cb2a21f1f",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "Name": "Processes Synchronisation",
-              "Title": "Processes Synchronisation",
-              "Url": "#/view/BusinessProcess/Views/ProcessSynchronisation/ProcessSynchronisationManagement",
-              "Module": "b7d68911-9501-48f4-a3ed-8af7cdbb1a2b",
-              "ActionNames": "BusinessProcess_BP/ProcessSynchronisation/GetFilteredProcessesSynchronisations",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 6,
-              "CreatedTime": "2019-09-11T12:07:48.76",
-              "LastModifiedTime": "2019-09-11T12:07:48.76"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "beeeeb03-8cb2-44f4-9769-a95b46d4f40d",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "Name": "BP Technical Definitions",
-              "Title": "BP Technical Definitions",
-              "Url": "#/view/BusinessProcess/Views/BPDefinition/BPTechnicalDefinitionManagement",
-              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
-              "ActionNames": "BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 5,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:38.883"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "6da6cc81-2716-4f39-93b9-b70a3e23d05a",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "Name": "Task Types",
-              "Title": "Task Types",
-              "Url": null,
-              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"d33fd65a-721f-4ae1-9d41-628be9425796\"}]}}",
-              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
-              "Rank": 15,
-              "CreatedTime": "2019-03-25T09:32:03.27",
-              "LastModifiedTime": "2019-08-09T17:06:38.883"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "e5d1c2a3-d58a-4cbf-ac49-e556aafde077",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "Name": "Business Process",
-              "Title": "Business Process",
-              "Url": null,
-              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VRCommon_System_Log: View General Logs\",\"Directive\":\"bp-instance-log-search\",\"Title\":\"Business Process\",\"Data\":null}}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 4,
-              "CreatedTime": "2019-08-26T13:57:23.28",
-              "LastModifiedTime": "2019-08-26T13:57:23.28"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "20cfa17a-1c79-4abe-bf85-f40c42b03fac",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "Name": "Workflows",
-              "Title": "Workflows",
-              "Url": "#/view/BusinessProcess/Views/VRWorkflow/VRWorkflowManagement",
-              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
-              "ActionNames": "BusinessProcess_BP/VRWorkflow/GetFilteredVRWorkflows",
-              "Audience": null,
-              "Content": null,
-              "Settings": null,
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 10,
-              "CreatedTime": "2018-08-30T10:12:46.033",
-              "LastModifiedTime": "2019-08-09T17:06:38.887"
-            }
-          },
-          {
-            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
-            "FieldValues": {
-              "ID": "1d10975d-5b1d-4ddc-bbf2-f8f9ba89ff5a",
-              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
-              "Name": "Management",
-              "Title": "Business Processes",
-              "Url": "#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement",
-              "Module": "b7d68911-9501-48f4-a3ed-8af7cdbb1a2b",
-              "ActionNames": null,
-              "Audience": null,
-              "Content": null,
-              "Settings": "{\"$type\":\"Vanrise.BusinessProcess.Entities.BPViewSettings, Vanrise.BusinessProcess.Entities\",\"ViewTitleResourceKey\":\"Common.Management\",\"ViewNameResourceKey\":\"Common.BusinessProcesses\"}",
-              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
-              "Rank": 2,
-              "CreatedTime": null,
-              "LastModifiedTime": "2019-08-09T17:06:39.063"
-            }
-          }
-        ],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
         "Columns": [
           {
             "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
@@ -734,11 +620,126 @@
             "IncludeInUpdate": true
           }
         ],
-        "IsIdentity": false,
-        "Variables": [],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "e32bce53-6433-4af1-b4c2-3f1cb2a21f1f",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "Name": "Processes Synchronisation",
+              "Title": "Processes Synchronisation",
+              "Url": "#/view/BusinessProcess/Views/ProcessSynchronisation/ProcessSynchronisationManagement",
+              "Module": "b7d68911-9501-48f4-a3ed-8af7cdbb1a2b",
+              "ActionNames": "BusinessProcess_BP/ProcessSynchronisation/GetFilteredProcessesSynchronisations",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 6,
+              "CreatedTime": "2019-09-11T12:07:48.76",
+              "LastModifiedTime": "2019-09-11T12:07:48.76"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "beeeeb03-8cb2-44f4-9769-a95b46d4f40d",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "Name": "BP Technical Definitions",
+              "Title": "BP Technical Definitions",
+              "Url": "#/view/BusinessProcess/Views/BPDefinition/BPTechnicalDefinitionManagement",
+              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
+              "ActionNames": "BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 5,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-08-09T17:06:38.883"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "6da6cc81-2716-4f39-93b9-b70a3e23d05a",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "Name": "Task Types",
+              "Title": "Task Types",
+              "Url": null,
+              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"d33fd65a-721f-4ae1-9d41-628be9425796\"}]}}",
+              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
+              "Rank": 15,
+              "CreatedTime": "2019-03-25T09:32:03.27",
+              "LastModifiedTime": "2019-08-09T17:06:38.883"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "e5d1c2a3-d58a-4cbf-ac49-e556aafde077",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "Name": "Business Process",
+              "Title": "Business Process",
+              "Url": null,
+              "Module": "26ab075a-62fc-4272-8234-5e5b32531cba",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.Common.Business.PageDirectiveHostViewSettings, Vanrise.Common.Business\",\"PageDirectiveHost\":{\"$type\":\"Vanrise.Common.Business.PageDirectiveHost, Vanrise.Common.Business\",\"PermissionName\":\"VRCommon_System_Log: View General Logs\",\"Directive\":\"bp-instance-log-search\",\"Title\":\"Business Process\",\"Data\":null}}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 5,
+              "CreatedTime": "2019-08-26T13:57:23.28",
+              "LastModifiedTime": "2019-11-15T15:22:16.833"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "20cfa17a-1c79-4abe-bf85-f40c42b03fac",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "Name": "Workflows",
+              "Title": "Workflows",
+              "Url": "#/view/BusinessProcess/Views/VRWorkflow/VRWorkflowManagement",
+              "Module": "fc9d12d3-9cbf-4d99-8748-5c2bdd6c5ed9",
+              "ActionNames": "BusinessProcess_BP/VRWorkflow/GetFilteredVRWorkflows",
+              "Audience": null,
+              "Content": null,
+              "Settings": null,
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 10,
+              "CreatedTime": "2018-08-30T10:12:46.033",
+              "LastModifiedTime": "2019-08-09T17:06:38.887"
+            }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "1d10975d-5b1d-4ddc-bbf2-f8f9ba89ff5a",
+              "DevProjectID": "512a75db-1c97-4d9e-949b-059aba855813",
+              "Name": "Management",
+              "Title": "Business Processes",
+              "Url": "#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement",
+              "Module": "b7d68911-9501-48f4-a3ed-8af7cdbb1a2b",
+              "ActionNames": null,
+              "Audience": null,
+              "Content": null,
+              "Settings": "{\"$type\":\"Vanrise.BusinessProcess.Entities.BPViewSettings, Vanrise.BusinessProcess.Entities\",\"ViewTitleResourceKey\":\"Common.Management\",\"ViewNameResourceKey\":\"Common.BusinessProcesses\"}",
+              "Type": "372ed3cb-4b7b-4464-9abf-59cd7b08bd23",
+              "Rank": 2,
+              "CreatedTime": null,
+              "LastModifiedTime": "2019-08-09T17:06:39.063"
+            }
+          }
+        ],
+        "Variables": null,
         "LastWhereCondition": "DevProjectID = '512a75db-1c97-4d9e-949b-059aba855813'",
         "LastJoinStatement": null,
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+        "IsIdentity": false
       },
       "Title": "Merge"
     },
