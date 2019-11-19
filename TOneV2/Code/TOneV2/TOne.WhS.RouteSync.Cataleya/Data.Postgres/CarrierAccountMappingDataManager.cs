@@ -90,7 +90,9 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
             query = query.Replace("#VERSION#", carrierAccountMappingToUpdate.Version.ToString());
             query = query.Replace("#CAID#", carrierAccountMappingToUpdate.CarrierId.ToString());
+            query = query.Replace("#ZONEID#", carrierAccountMappingToUpdate.ZoneID.ToString());
             query = query.Replace("#ROUTETABLENAME#", carrierAccountMappingToUpdate.RouteTableName);
+
             //query = query.Replace("#STATUS#", ((int)carrierAccountMappingToUpdate.Status).ToString());
 
             return query;
@@ -161,7 +163,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         const string AddCarrierAccountMapping_Query = @"INSERT INTO #TABLENAMEWITHSCHEMA# (Version, CAID,ZoneID,RouteTableName) VALUES ('#VERSION#','#CAID#','#ZONEID#','#ROUTETABLENAME#');";
 
-        const string UpdateCarrierAccountMapping_Query = @"UPDATE #TABLENAMEWITHSCHEMA# set Version = '#VERSION#' , RouteTableName = '#ROUTETABLENAME#' where CAID = '#CAID#';";
+        const string UpdateCarrierAccountMapping_Query = @"UPDATE #TABLENAMEWITHSCHEMA# set Version = '#VERSION#' , RouteTableName = '#ROUTETABLENAME#' , ZoneID = '#ZONEID#' where CAID = '#CAID#';";
 
         const string DeleteCarrierAccountMapping_Query = @"Delete from #TABLENAMEWITHSCHEMA# where CAID = '#CAID#';";
 
