@@ -146,9 +146,10 @@
                 };
 
                 dataItem.onSupplierSelectionChanged = function (selectedSupplier) {
+                    dataItem.selectedSupplierOutTrunks = undefined;
+                    dataItem.supplierOutTrunks = [];
+
                     if (selectedSupplier == undefined) {
-                        dataItem.selectedSupplierOutTrunks = undefined;
-                        dataItem.supplierOutTrunks = [];
                         return;
                     }
 
