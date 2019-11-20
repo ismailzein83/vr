@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.MainExtensions
@@ -16,6 +12,11 @@ namespace Vanrise.Common.MainExtensions
             DateTime yesterday = context.EffectiveDate.Date.AddDays(-1);
             context.FromTime = yesterday;
             context.ToTime = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 23, 59, 59, 998);
+        }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            return "Yesterday";
         }
     }
 }

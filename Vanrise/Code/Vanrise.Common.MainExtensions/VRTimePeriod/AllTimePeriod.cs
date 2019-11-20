@@ -12,5 +12,10 @@ namespace Vanrise.Common.MainExtensions
             context.FromTime = new DateTime(2000, 1, 1);
             context.ToTime = DateTime.Now;
         }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            return "All Period";
+        }
     }
 }

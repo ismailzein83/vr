@@ -6,6 +6,7 @@ namespace Vanrise.Entities
     {
         public abstract Guid ConfigId { get; }
         public abstract void GetTimePeriod(IVRTimePeriodContext context);
+        public abstract string GetDescription(IVRTimePeriodGetDescriptionContext context);
     }
 
     public interface IVRTimePeriodContext
@@ -21,4 +22,8 @@ namespace Vanrise.Entities
         public DateTime FromTime { get; set; }
         public DateTime ToTime { get; set; }
     }
+
+    public interface IVRTimePeriodGetDescriptionContext { }
+
+    public class VRTimePeriodGetDescriptionContext : IVRTimePeriodGetDescriptionContext { }
 }

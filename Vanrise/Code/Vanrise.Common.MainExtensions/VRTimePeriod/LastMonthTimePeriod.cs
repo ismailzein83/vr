@@ -13,5 +13,10 @@ namespace Vanrise.Common.MainExtensions
             context.FromTime = new DateTime(newDate.Year, newDate.Month, 1);
             context.ToTime = new DateTime(newDate.Year,newDate.Month,newDate.GetLastDayOfMonth().Day);
         }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            return "Last Month";
+        }
     }
 }

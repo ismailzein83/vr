@@ -1,10 +1,21 @@
 ﻿using System;
+using System.ComponentModel;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.MainExtensions
 {
     public enum TimeUnit { Year = 0, Month = 1, Day = 2, Hour = 3, Minute = 4, }
-    public enum StartingFrom { ExecutionTime = 0, Midnight = 1, ExecutionTimeWithOffset = 2 }
+
+    public enum StartingFrom
+    {
+        [Description("Execution Time")]
+        ExecutionTime = 0,
+        [Description("Midnight")]
+        Midnight = 1,
+        [Description("Execution Time With Offset")]
+        ExecutionTimeWithOffset = 2
+    }
+
     public class LastTimePeriod : VRTimePeriod
     {
         public override Guid ConfigId { get { return new Guid("6C4A3B8D-0E1E-4141-9A21-7F7A68DC25BE"); } }
@@ -53,6 +64,12 @@ namespace Vanrise.Common.MainExtensions
             }
 
             context.ToTime = effectiveDate;
+        }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            string offsetString = OffsetValue.HasValue ? $" {OffsetValue} {OffsetTimeUnit}{(OffsetValue > 1 ? "s" : "")}" : "";
+            return $"Last {TimeValue} {TimeUnit}{(TimeValue > 1 ? "s" : "")} starting from {Utilities.GetEnumDescription(StartingFrom)}{offsetString}";
         }
     }
 }

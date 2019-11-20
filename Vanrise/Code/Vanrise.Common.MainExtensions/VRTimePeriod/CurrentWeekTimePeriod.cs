@@ -11,5 +11,10 @@ namespace Vanrise.Common.MainExtensions
             context.FromTime = Utilities.GetMonday(context.EffectiveDate);
             context.ToTime = context.EffectiveDate;
         }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            return "Current Week";
+        }
     }
 }

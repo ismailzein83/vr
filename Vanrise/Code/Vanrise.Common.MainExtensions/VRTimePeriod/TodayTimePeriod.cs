@@ -12,5 +12,10 @@ namespace Vanrise.Common.MainExtensions
             context.FromTime = context.EffectiveDate.Date;
             context.ToTime = context.EffectiveDate;
         }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            return "Today";
+        }
     }
 }

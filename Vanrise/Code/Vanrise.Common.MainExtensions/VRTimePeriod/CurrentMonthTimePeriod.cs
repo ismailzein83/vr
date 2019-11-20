@@ -12,5 +12,10 @@ namespace Vanrise.Common.MainExtensions
             context.FromTime = new DateTime(context.EffectiveDate.Year, context.EffectiveDate.Month, 1);
             context.ToTime = context.EffectiveDate;
         }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            return "Current Month";
+        }
     }
 }
