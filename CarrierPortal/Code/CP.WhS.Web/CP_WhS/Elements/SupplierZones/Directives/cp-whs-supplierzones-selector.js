@@ -40,17 +40,19 @@ app.directive('cpWhsSupplierzonesSelector', ['UtilsService', 'VRUIUtilsService',
         function getSupplierZonesSelectorTemplate(attrs) {
 
             var multipleselection = "";
+            var hideselectall = "";
             var label = "Supplier Zone";
             if (attrs.ismultipleselection != undefined) {
                 label = "Supplier Zones";
                 multipleselection = "ismultipleselection";
+                hideselectall = "hideselectall";
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId" isrequired="ctrl.isrequired" '
-                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"' + hideselectall + '></vr-select>'
                 + '</vr-columns>';
         }
 
