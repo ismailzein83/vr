@@ -827,6 +827,7 @@
     <Content Include="Client\Libraries\Bower\codemirror\mode\gfm\gfm.js" />
     <Content Include="Client\Libraries\Bower\codemirror\mode\gherkin\gherkin.js" />
     <Content Include="Client\Libraries\Bower\codemirror\mode\go\go.js" />
+    <Content Include="Client\Libraries\AngularExtensions\GoJs\TableLayout.js" />
     <Content Include="Client\Libraries\Bower\codemirror\mode\groovy\groovy.js" />
     <Content Include="Client\Libraries\Bower\codemirror\mode\haml\haml.js" />
     <Content Include="Client\Libraries\Bower\codemirror\mode\handlebars\handlebars.js" />
