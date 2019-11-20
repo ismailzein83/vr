@@ -16,9 +16,11 @@ namespace Vanrise.Analytic.Business
         {
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
             DAProfCalcGenerateAlertInput daProfCalcGenerateAlertInput = context.IntanceToRun.InputArgument.CastWithValidate<DAProfCalcGenerateAlertInput>("context.IntanceToRun.InputArgument");
-            daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod.ThrowIfNull("daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod");
 
-            int maxDAProfCalcAnalysisPeriod = daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod.GetPeriodInMinutes();
+            if (daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod == null && daProfCalcGenerateAlertInput.MinDAProfCalcAnalysisPeriod == null)
+                throw new NullReferenceException("daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod and daProfCalcGenerateAlertInput.MinDAProfCalcAnalysisPeriod");
+
+            int maxDAProfCalcAnalysisPeriod = daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod != null ? daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod.GetPeriodInMinutes() : Int32.MaxValue;
             int minDAProfCalcAnalysisPeriod = daProfCalcGenerateAlertInput.MinDAProfCalcAnalysisPeriod != null ? daProfCalcGenerateAlertInput.MinDAProfCalcAnalysisPeriod.GetPeriodInMinutes() : 0;
 
             foreach (var startedBPInstance in context.GetStartedBPInstances())
@@ -26,7 +28,7 @@ namespace Vanrise.Analytic.Business
                 DAProfCalcGenerateAlertInput startedBPInstanceDAProfCalcGenerateAlertInputArg = startedBPInstance.InputArgument as DAProfCalcGenerateAlertInput;
                 if (startedBPInstanceDAProfCalcGenerateAlertInputArg != null && daProfCalcGenerateAlertInput.AlertRuleTypeId == startedBPInstanceDAProfCalcGenerateAlertInputArg.AlertRuleTypeId)
                 {
-                    int maxDAProfCalcAnalysisPeriodStartedInstance = startedBPInstanceDAProfCalcGenerateAlertInputArg.MaxDAProfCalcAnalysisPeriod.GetPeriodInMinutes();
+                    int maxDAProfCalcAnalysisPeriodStartedInstance = startedBPInstanceDAProfCalcGenerateAlertInputArg.MaxDAProfCalcAnalysisPeriod != null ? startedBPInstanceDAProfCalcGenerateAlertInputArg.MaxDAProfCalcAnalysisPeriod.GetPeriodInMinutes() : Int32.MaxValue;
                     int minDAProfCalcAnalysisPeriodStartedInstance = startedBPInstanceDAProfCalcGenerateAlertInputArg.MinDAProfCalcAnalysisPeriod != null ? startedBPInstanceDAProfCalcGenerateAlertInputArg.MinDAProfCalcAnalysisPeriod.GetPeriodInMinutes() : 0;
 
                     if (maxDAProfCalcAnalysisPeriod > minDAProfCalcAnalysisPeriodStartedInstance && maxDAProfCalcAnalysisPeriodStartedInstance > minDAProfCalcAnalysisPeriod)

@@ -120,6 +120,17 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                     return 'Min Analysis Period should be less than Max Analysis Period';
                 };
 
+                $scope.isAnalaysisPeriodRequired = function () {
+                    if (maxDataAnalysisPeriodAPI == undefined || minDataAnalysisPeriodAPI == undefined)
+                        return null;
+
+                    var maxAnalysisPeriod = maxDataAnalysisPeriodAPI.getData();
+                    var minAnalysisPeriod = minDataAnalysisPeriodAPI.getData();
+
+                    if (maxAnalysisPeriod == undefined && minAnalysisPeriod == undefined)
+                        return true;
+                };
+
                 defineAPI();
             }
 

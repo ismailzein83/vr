@@ -59,6 +59,8 @@ namespace Vanrise.Analytic.Business
                             daProfCalcNotificationData = new DAProfCalcNotificationData()
                             {
                                 DAProfCalcAlertRuleSettings = daProfCalcAlertRuleSettings,
+                                FromTime = daProfCalcExecInput.FromTime,
+                                ToTime = daProfCalcExecInput.ToTime,
                                 AlertRule = alertRule
                             };
                             daProfCalcNotificationDataDict.Add(alertRuleId, daProfCalcNotificationData);
@@ -83,10 +85,11 @@ namespace Vanrise.Analytic.Business
                 {
                     DAProfCalcNotificationData daProfCalcNotificationData = daProfCalcNotificationDataItem.Value;
 
-                    int numberOfMinutes = daProfCalcNotificationData.DAProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod.GetPeriodInMinutes();
-                    DateTime periodStart = EffectiveDate.AddMinutes(-1 * numberOfMinutes);
+                    var dAProfCalcAlertRuleSettings = daProfCalcNotificationData.DAProfCalcAlertRuleSettings;
 
-                    string description = string.Format("Analysis Period: {0}, Period Start: {1:yyyy-MM-dd HH:mm:ss}, Period End: {2:yyyy-MM-dd HH:mm:ss}, Rule: {3}", daProfCalcNotificationData.DAProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod.GetDescription(), periodStart, EffectiveDate, daProfCalcNotificationData.AlertRule.Name);
+                    string description = string.Format("Analysis Period: {0}, Period Start: {1:yyyy-MM-dd HH:mm:ss}, Period End: {2:yyyy-MM-dd HH:mm:ss}, Rule: {3}",
+                                                       dAProfCalcAlertRuleSettings.TimePeriod.GetDescription(new VRTimePeriodGetDescriptionContext() { }), 
+                                                       daProfCalcNotificationData.FromTime, daProfCalcNotificationData.ToTime, daProfCalcNotificationData.AlertRule.Name);
 
                     DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
                     int numberOfNotificationsCreated;
@@ -119,6 +122,8 @@ namespace Vanrise.Analytic.Business
             public VRAlertRule AlertRule { get; set; }
 
             public DAProfCalcAlertRuleSettings DAProfCalcAlertRuleSettings { get; set; }
+            public DateTime FromTime { get; set; }
+            public DateTime ToTime { get; set; }
         }
     }
 }

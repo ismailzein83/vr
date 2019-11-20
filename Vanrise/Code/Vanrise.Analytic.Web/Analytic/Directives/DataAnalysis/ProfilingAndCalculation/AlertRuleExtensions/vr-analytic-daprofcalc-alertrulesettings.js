@@ -150,7 +150,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         GroupingFieldNames: criteria.GroupingFieldNames,
                         Settings: dataRecordAlertRuleSettingsAPI.getData(),
                         MinNotificationInterval: criteria.MinNotificationInterval,
-                        DAProfCalcAnalysisPeriod: criteria.DAProfCalcAnalysisPeriod,
+                        TimePeriod: criteria.TimePeriod,
                         DAProfCalcAlertRuleFilter: criteria.DAProfCalcAlertRuleFilter,
                         ParameterValues: parameterValues
                     };
@@ -176,7 +176,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                             MinNotificationInterval: alertExtendedSettings.MinNotificationInterval,
                             DataAnalysisFilterGroup: alertExtendedSettings.DataAnalysisFilterGroup,
                             GroupingFieldNames: alertExtendedSettings.GroupingFieldNames,
-                            DAProfCalcAnalysisPeriod: alertExtendedSettings.DAProfCalcAnalysisPeriod,
+                            TimePeriod: alertExtendedSettings.TimePeriod,
                             DAProfCalcAlertRuleFilter: alertExtendedSettings.DAProfCalcAlertRuleFilter,
                         };
                         $scope.scopeModel.selectedAnalysisTypeId = alertExtendedSettings.OutputItemDefinitionId;

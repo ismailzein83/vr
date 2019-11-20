@@ -43,6 +43,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common.MainExtensions">
+      <HintPath>..\Output\Vanrise.Common.MainExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticDataProvider\AnalyticDataProviderTable\AnalyticDataProviderTableConfig.cs" />

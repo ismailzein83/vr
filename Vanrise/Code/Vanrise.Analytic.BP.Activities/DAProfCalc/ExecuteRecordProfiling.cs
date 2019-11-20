@@ -1,18 +1,18 @@
 ﻿using System;
+using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Activities;
-using Vanrise.BusinessProcess;
-using Vanrise.Queueing;
-using Vanrise.GenericData.Entities;
-using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions;
+using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
-using Vanrise.Common;
+using Vanrise.GenericData.Entities;
+using Vanrise.Queueing;
 
 namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 {
@@ -60,14 +60,10 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
         protected override ExecuteRecordProfilingOutput DoWorkWithResult(ExecuteRecordProfilingInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
-
-            DataAnalysisDefinitionManager dataAnalysisDefinitionManager = new DataAnalysisDefinitionManager();
-            DAProfCalcSettings daProfCalcSettings = dataAnalysisDefinitionManager.GetDataAnalysisDefinitionSettings<DAProfCalcSettings>(inputArgument.DAProfCalcDefinitionId);
+            DAProfCalcSettings daProfCalcSettings = new DataAnalysisDefinitionManager().GetDataAnalysisDefinitionSettings<DAProfCalcSettings>(inputArgument.DAProfCalcDefinitionId);
 
             Guid daDataRecordTypeId = daProfCalcSettings.DataRecordTypeId;
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            string dateTimeFieldName = dataRecordTypeManager.GetDataRecordType(daDataRecordTypeId).Settings.DateTimeField;
+            string dateTimeFieldName = new DataRecordTypeManager().GetDataRecordType(daDataRecordTypeId).Settings.DateTimeField;
 
             Dictionary<string, DataAnalysisInfo> dataAnalysisInfos = new Dictionary<string, DataAnalysisInfo>();
             Dictionary<Guid, RecordProfilingOutputSettings> daRecordProfilingOutputSettings = new Dictionary<Guid, RecordProfilingOutputSettings>();
@@ -79,7 +75,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 var dataAnalysisUniqueName = dAProfCalcExecInputItem.DataAnalysisUniqueName;
                 var daProfCalcPayload = dAProfCalcExecInputItem.DAProfCalcExecInput.DAProfCalcPayload;
 
-                var dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(outputItemDefinitionId);
+                var dataAnalysisItemDefinition = new DataAnalysisItemDefinitionManager().GetDataAnalysisItemDefinition(outputItemDefinitionId);
                 if (dataAnalysisItemDefinition == null)
                     throw new NullReferenceException(string.Format("dataAnalysisItemDefinition {0}", outputItemDefinitionId));
 
@@ -95,7 +91,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                     DataAnalysisItemDefinition = dataAnalysisItemDefinition,
                     DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor }, inputArgument.UseRemoteDataGrouper),
                     GroupingFieldNames = dAProfCalcExecInputItem.DAProfCalcExecInput.GroupingFieldNames,
-                    AnalysisStartDate = inputArgument.EffectiveDate.AddMinutes(-1 * dAProfCalcExecInputItem.DAProfCalcExecInput.DAProfCalcAnalysisPeriod.GetPeriodInMinutes()),
+                    AnalysisStartDate = dAProfCalcExecInputItem.DAProfCalcExecInput.FromTime,
+                    AnalysisEndDate = dAProfCalcExecInputItem.DAProfCalcExecInput.ToTime,
                     DAProfCalcAggregationFieldDetailsByName = daProfCalcAggregationFieldDetailDict,
                     ParameterValues = dAProfCalcExecInputItem.DAProfCalcExecInput.ParameterValues
                 });
@@ -123,7 +120,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                             foreach (dynamic cdr in recordBatch.Records)
                             {
                                 DateTime attemptDateTime = cdr.GetFieldValue(dateTimeFieldName);
-                                if (dataAnalysisInfo.Value.AnalysisStartDate > attemptDateTime)
+                                if (dataAnalysisInfo.Value.AnalysisStartDate > attemptDateTime || dataAnalysisInfo.Value.AnalysisEndDate < attemptDateTime)
                                     continue;
 
                                 DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, daDataRecordTypeId);
@@ -304,6 +301,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             public RecordFilterGroup DARecordFilterGroup { get; set; }
             public List<string> GroupingFieldNames { get; set; }
             public DateTime AnalysisStartDate { get; set; }
+            public DateTime AnalysisEndDate { get; set; }
             public Dictionary<string, DAProfCalcAggregationFieldDetail> DAProfCalcAggregationFieldDetailsByName { get; set; }
             public Dictionary<string, Object> ParameterValues { get; set; }
         }

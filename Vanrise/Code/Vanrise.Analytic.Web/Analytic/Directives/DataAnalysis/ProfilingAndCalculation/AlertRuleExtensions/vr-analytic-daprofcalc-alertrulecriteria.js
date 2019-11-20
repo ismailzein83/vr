@@ -236,12 +236,11 @@
                     function getDataAnalysisPeriodDirectiveLoadPromise() {
                         var dataAnalysisPeriodDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        dataAnalysisPeriodDirectiveReadyDeferred.promise.then(function (response) {
-
-                            var dataAnalysisPeriodDirectivePayload = { selectDefault: true };
+                        dataAnalysisPeriodDirectiveReadyDeferred.promise.then(function () {
+                            var dataAnalysisPeriodDirectivePayload;
 
                             if (payload != undefined && payload.criteria != undefined)
-                                dataAnalysisPeriodDirectivePayload.DAProfCalcAnalysisPeriod = payload.criteria.DAProfCalcAnalysisPeriod;
+                                dataAnalysisPeriodDirectivePayload = { timePeriod: payload.criteria.TimePeriod };
 
                             VRUIUtilsService.callDirectiveLoad(dataAnalysisPeriodDirectiveAPI, dataAnalysisPeriodDirectivePayload, dataAnalysisPeriodDirectiveLoadDeferred);
                         });
@@ -328,7 +327,7 @@
                         DataAnalysisFilterGroup: dataAnalysisRecordFilterDirectiveAPI.getData().filterObj,
                         GroupingFieldNames: groupingOutputFiledsAPI.getSelectedIds(),
                         MinNotificationInterval: $scope.scopeModel.minNotificationInterval,
-                        DAProfCalcAnalysisPeriod: dataAnalysisPeriodDirectiveAPI.getData(),
+                        TimePeriod: dataAnalysisPeriodDirectiveAPI.getData(),
                         DAProfCalcAlertRuleFilter: daProfCalcAlertRuleFilterDWAPI != undefined ? daProfCalcAlertRuleFilterDWAPI.getData() : undefined
                     };
                     return data;

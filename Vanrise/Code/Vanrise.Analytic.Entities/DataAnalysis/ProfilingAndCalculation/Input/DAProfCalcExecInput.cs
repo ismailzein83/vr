@@ -16,7 +16,9 @@ namespace Vanrise.Analytic.Entities
 
         public List<string> GroupingFieldNames { get; set; }
 
-        public DAProfCalcAnalysisPeriod DAProfCalcAnalysisPeriod { get; set; }
+        public DateTime FromTime { get; set; }
+
+        public DateTime ToTime { get; set; }
 
         public Dictionary<string, Object> ParameterValues { get; set; }
     }
