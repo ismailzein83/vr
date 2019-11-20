@@ -236,7 +236,7 @@
 
         </div>
 
-        <div id="divExpandableRowContent_{{$index}}" class="expandable-row-content " ng-class="{'row-content-expanded':dataItem.isRowExpanded , 'am-fade-and-slide-left': $parent.ctrl.isMobile }" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
+        <div id="divExpandableRowContent_{{$index}}" class="expandable-row-content " ng-class="{'row-content-expanded':dataItem.isRowExpanded}" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
             <div ng-if="!ctrl.isMobile" style="width: calc(100% - 9px);position:relative;">
                 <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
 
