@@ -12,5 +12,10 @@ namespace TOne.WhS.Deal.MainExtensions.DealTimePeriod
             context.ToTime = context.EffectiveDate;
             context.FromTime = context.EffectiveDate.AddDays(-1);
         }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            return "Last 24 Hours";
+        }
     } 
 }

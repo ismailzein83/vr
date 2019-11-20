@@ -28,6 +28,11 @@ namespace TOne.WhS.Deal.MainExtensions.DealTimePeriod
 
             context.ToTime = context.EffectiveDate;
             context.FromTime = fromTime;
-        } 
+        }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            return "Whole Deal";
+        }
     }
 }
