@@ -33,5 +33,11 @@ namespace Retail.RA.Business
              
             }
         }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

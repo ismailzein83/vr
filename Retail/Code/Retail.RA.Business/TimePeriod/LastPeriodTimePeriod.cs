@@ -28,5 +28,11 @@ namespace Retail.RA.Business
                 context.ToTime = context.EffectiveDate;
             }
         }
+
+        public override string GetDescription(IVRTimePeriodGetDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
