@@ -27,8 +27,6 @@
         function WidgetsChart($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-
-
             var dimensionSelectorAPI;
             var dimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -40,6 +38,9 @@
 
             var orderTypeSelectorAPI;
             var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var itemActionGridAPI;
+            var itemActionGridReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -101,6 +102,11 @@
                     if ($scope.scopeModel.selectedSeriesDimensions != undefined && $scope.scopeModel.selectedSeriesDimensions.length > 0 && $scope.scopeModel.measures.length !=undefined  && $scope.scopeModel.measures.length > 1)
                         return "Only One Measure can be selected when Series Dimension is not empty";
                     return null;
+                };
+
+                $scope.scopeModel.onAnalyticItemActionDirectiveReady = function (api) {
+                    itemActionGridAPI = api;
+                    itemActionGridReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -217,9 +223,17 @@
                     orderTypeSelectorLoadDeferred.promise.then(function () {
                     });
 
+                    //var loadItemActionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    //itemActionGridReadyDeferred.promise.then(function () {
+                    //    var payloadItemActionDirective = {
+                    //        context: getContext(),
+                    //        itemActions: payload != undefined && payload.widgetEntity != undefined ? payload.widgetEntity.ItemActions : undefined
+                    //    };
+                    //    VRUIUtilsService.callDirectiveLoad(itemActionGridAPI, payloadItemActionDirective, loadItemActionDirectivePromiseDeferred);
+                    //});
+                    //promises.push(loadItemActionDirectivePromiseDeferred.promise);
+
                     return UtilsService.waitMultiplePromises(promises);
-
-
                 };
 
 
@@ -240,7 +254,8 @@
                         AdvancedOrderOptions: orderTypeEntity != undefined ? orderTypeEntity.AdvancedOrderOptions : undefined,
                         AutoRefreshType: $scope.scopeModel.selectedAutoRefreshType != undefined ? $scope.scopeModel.selectedAutoRefreshType.value : undefined,
                         AutoRefreshInterval: $scope.scopeModel.autoRefreshInterval,
-                        NumberOfPoints: $scope.scopeModel.numberOfPoints
+                        NumberOfPoints: $scope.scopeModel.numberOfPoints,
+                        //ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined,
                     };
                     return data;
                 }
@@ -308,6 +323,27 @@
                 function setTopMeasure(measureName) {
                     $scope.scopeModel.topMeasure = UtilsService.getItemByVal($scope.scopeModel.measures, measureName, "Name");
                 }
+
+                function getContext() {
+                    var context = {
+                        getMeasures: function () {
+                            var selectedMeasures = [];
+                            for (var i = 0; i < $scope.scopeModel.selectedMeasures.length; i++) {
+                                var selectedMeasure = $scope.scopeModel.selectedMeasures[i];
+                                var matchItem = UtilsService.getItemByVal(measures, selectedMeasure.Name, "Name");
+                                if (matchItem != undefined) {
+                                    selectedMeasure.FieldType = matchItem.Config.FieldType;
+                                }
+                                selectedMeasures.push(selectedMeasure);
+                            }
+
+                            return selectedMeasures;
+
+                        }
+                    };
+                    return context;
+                }
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
