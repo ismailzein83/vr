@@ -93,6 +93,8 @@ namespace Vanrise.GenericData.Notification
         public string FieldName { get; set; }
 
         public string Header { get; set; }
+
+        public string HeaderDescription { get; set; }
     }
 
     public class DataRecordNotificationDetailEventPayload : VRNotificationDetailEventPayload
@@ -103,7 +105,7 @@ namespace Vanrise.GenericData.Notification
         {
             if (FieldValues == null || FieldValues.Count == 0)
                 return null;
-            
+
             return FieldValues.ToDictionary(item => item.Key, item => item.Value.Description as object);
         }
     }

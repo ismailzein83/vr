@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Analytic_DataRecordSourceEditorController" width="'60%'" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="Analytic_DataRecordSourceEditorController" width="'80%'" vr-loader="isLoading">
     <vr-modalbody maxheight="'500px'">
         <vr-form name="formDataRecordStorageEditor">
             <vr-tabs>
@@ -39,9 +39,12 @@
                                     <vr-validator validate="isFieldGridValid()">
                                         <vr-datagrid datasource="selectedFieldsGrid" norowhighlightonclick="true"
                                                      ondeleterow="removeField" hidegridmenu enabledraggablerow="true">
-                                            <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'Field Name'" field="'FieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                                             <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
                                                 <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
+                                            </vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'Field Description'" widthfactor="5" disablesorting="true">
+                                                <vr-textbox value="dataItem.FieldDescription"></vr-textbox>
                                             </vr-datagridcolumn>
                                             <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="5" disablesorting="true">
                                                 <vr-span vr-loader="dataItem.isFieldTextResourceSelectorLoading">
@@ -51,10 +54,10 @@
                                             <vr-datagridcolumn headertext="'Hidden'" fixedwidth="50" disablesorting="true">
                                                 <vr-switch value="dataItem.isHidden"></vr-switch>
                                             </vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
+                                            <vr-datagridcolumn headertext="'Width'" widthfactor="5" disablesorting="true">
                                                 <vr-common-gridcolumnwidth-editor on-ready="dataItem.onGridWidthFactorSelectorReady" hidelabel showhint></vr-common-gridcolumnwidth-editor>
                                             </vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'Column Style'" fixedwidth="'100'" disablesorting="true">
+                                            <vr-datagridcolumn headertext="'Column Style'" widthfactor="3" disablesorting="true">
                                                 <vr-common-styledefinition-selector on-ready="dataItem.onDataRecordGridStyleDefinitionReady" hidelabel usefullcolumn></vr-common-styledefinition-selector>
                                             </vr-datagridcolumn>
                                         </vr-datagrid>

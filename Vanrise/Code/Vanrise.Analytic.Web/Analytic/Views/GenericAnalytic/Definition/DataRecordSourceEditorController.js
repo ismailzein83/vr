@@ -2,7 +2,7 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService','VRLocalizationService'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService', 'VRLocalizationService'];
 
     function DataRecordSourceEditorController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum, Analytic_RecordSearchService, VRLocalizationService) {
 
@@ -132,6 +132,7 @@
                     FieldTitle: selectedField.Title,
                     TitleResourceKey: selectedField.TitleResourceKey
                 };
+
                 dataItem.onGridWidthFactorSelectorReady = function (api) {
                     dataItem.gridWidthFactorAPI = api;
                     var dataItemPayload = {
@@ -149,13 +150,16 @@
                     var setLoader = function (value) { $scope.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dataRecordGridStyleAPI, dataItemPayload, setLoader);
                 };
+
                 dataItem.onTextResourceSelectorReady = function (api) {
                     dataItem.textResourceSeletorAPI = api;
                     var setLoader = function (value) { dataItem.isFieldTextResourceSelectorLoading = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
                 };
+
                 $scope.selectedFieldsGrid.push(dataItem);
             };
+
             $scope.onSelectedFilter = function (selectedFilter) {
                 var dataItem = {
                     FieldName: selectedFilter.Name,
@@ -506,25 +510,30 @@
             return localizationTextResourceSelectorLoadPromiseDeferred.promise;
         }
         function addGridColumnAPI(gridField, payload) {
+
             var dataItemPayload = {
                 data: {
                     Width: VRCommon_GridWidthFactorEnum.Normal.value
                 }
             };
+
             var dataItem = {
                 FieldName: gridField.payload.Name,
                 FieldTitle: gridField.payload.Title
             };
+
             var stylePayload;
             var textResourcePayload;
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
+                dataItem.FieldDescription = payload.FieldDescription;
                 dataItemPayload.data = payload.ColumnSettings;
                 dataItem.isHidden = payload.IsHidden;
                 dataItem.oldTitleResourceKey = payload.TitleResourceKey;
                 stylePayload = { selectedIds: payload.ColumnStyleId };
-                textResourcePayload = { selectedValue: payload.TitleResourceKey};
+                textResourcePayload = { selectedValue: payload.TitleResourceKey };
             }
+
             dataItem.onGridWidthFactorSelectorReady = function (api) {
                 dataItem.gridWidthFactorAPI = api;
                 gridField.readyPromiseDeferred.resolve();
@@ -537,18 +546,16 @@
                 dataItem.textResourceSeletorAPI = api;
                 gridField.textResourceReadyPromiseDeferred.resolve();
             };
-            gridField.readyPromiseDeferred.promise
-                .then(function () {
-                    VRUIUtilsService.callDirectiveLoad(dataItem.gridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
-                });
-            gridField.styleReadyPromiseDeferred.promise
-                .then(function () {
-                    VRUIUtilsService.callDirectiveLoad(dataItem.dataRecordGridStyleAPI, stylePayload, gridField.styleLoadPromiseDeferred);
-                });
-            gridField.textResourceReadyPromiseDeferred.promise
-                .then(function () {
-                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridField.textResourceLoadPromiseDeferred);
-                });
+
+            gridField.readyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(dataItem.gridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
+            });
+            gridField.styleReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(dataItem.dataRecordGridStyleAPI, stylePayload, gridField.styleLoadPromiseDeferred);
+            });
+            gridField.textResourceReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridField.textResourceLoadPromiseDeferred);
+            });
 
             $scope.selectedFieldsGrid.push(dataItem);
         }
@@ -595,7 +602,7 @@
                 IsRequired: filter.payload.IsRequired
             };
             var textResourcePayload;
-           
+
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItem.IsRequired = payload.IsRequired;
@@ -636,6 +643,7 @@
                 columns.push({
                     FieldName: currentItem.FieldName,
                     FieldTitle: currentItem.FieldTitle,
+                    FieldDescription: currentItem.FieldDescription,
                     ColumnSettings: currentItem.gridWidthFactorAPI.getData(),
                     IsHidden: currentItem.isHidden,
                     ColumnStyleId: currentItem.dataRecordGridStyleAPI.getSelectedIds(),
@@ -650,7 +658,7 @@
                     FieldName: currentFilter.FieldName,
                     FieldTitle: currentFilter.FieldTitle,
                     IsRequired: currentFilter.IsRequired,
-                    TitleResourceKey: currentFilter.textResourceSeletorAPI != undefined ? currentFilter.textResourceSeletorAPI.getSelectedValues(): currentFilter.oldTitleResourceKey
+                    TitleResourceKey: currentFilter.textResourceSeletorAPI != undefined ? currentFilter.textResourceSeletorAPI.getSelectedValues() : currentFilter.oldTitleResourceKey
                 });
             }
 

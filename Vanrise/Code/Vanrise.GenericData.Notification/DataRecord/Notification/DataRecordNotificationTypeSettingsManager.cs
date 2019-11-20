@@ -10,8 +10,9 @@ namespace Vanrise.GenericData.Notification
     {
         public List<DataRecordGridColumnAttribute> GetNotificationGridColumnAttributes(Guid notificationTypeId)
         {
-            List<DataRecordGridColumnAttribute> results = new List<DataRecordGridColumnAttribute>();
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+
+            List<DataRecordGridColumnAttribute> results = new List<DataRecordGridColumnAttribute>();
 
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings<DataRecordNotificationTypeSettings>(notificationTypeId);
             Guid dataRecordTypeId = vrNotificationTypeExtendedSettings.DataRecordTypeId;
@@ -33,6 +34,7 @@ namespace Vanrise.GenericData.Notification
                     DetailViewerEditor = dataRecordField.Type.DetailViewerEditor
                 };
                 attribute.Attribute.HeaderText = gridColumnDefinition.Header;
+                attribute.Attribute.HeaderDescription = gridColumnDefinition.HeaderDescription;
 
                 results.Add(attribute);
             }
