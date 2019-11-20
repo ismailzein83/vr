@@ -60,6 +60,7 @@
                 var payLoad = {
                     settings: viewEntity.Settings,
                     ReportName: viewEntity.Name,
+                    ReportTitle: viewEntity.Title,
                     itemActionSettings: itemActionSettings,
                     preDefinedFilter:preDefinedFilter,
                     autoSearch: autoSearch,

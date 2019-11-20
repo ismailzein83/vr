@@ -39,6 +39,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var gridWidths;
             var currencyId;
             var reportName;
+            var reportTitle;
             var withSummary;
             var styleDefinitions;
             var autoRefresh = false;
@@ -135,6 +136,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             }
                             currencyId = payLoad.CurrencyId;
                             reportName = payLoad.ReportName;
+                            reportTitle = payLoad.ReportTitle;
                             UtilsService.waitMultiplePromises(promises).then(function () {
                                 loadGrid(payLoad).finally(function () {
                                     if (autoRefresh) {
@@ -452,6 +454,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     var queryFinalized = {
                         Filters: payLoad.DimensionFilters,
                         ReportName: reportName,
+                        ReportTitle: reportTitle,
                         DimensionFields: UtilsService.getPropValuesFromArray(groupingDimensions, 'DimensionName'),
                         DimensionTitles: UtilsService.getPropValuesFromArray(groupingDimensions, 'Title'),
                         MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),

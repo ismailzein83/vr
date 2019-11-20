@@ -98,6 +98,7 @@
             function loadStaticData() {
                 if (analyticReportEntity != undefined) {
                     $scope.scopeModel.reportName = analyticReportEntity.Name;
+                    $scope.scopeModel.reportTitle = analyticReportEntity.Title;
                     $scope.scopeModel.selectedAccessType = UtilsService.getItemByVal($scope.scopeModel.accessTypes, analyticReportEntity.AccessType, "value");
                 }
             } 
@@ -158,6 +159,7 @@
                 AnalyticReportId:analyticReportId,
                 AccessType: $scope.scopeModel.selectedAccessType !=undefined?$scope.scopeModel.selectedAccessType.value:undefined,
                 Name: $scope.scopeModel.reportName,
+                Title: $scope.scopeModel.reportTitle,
                 DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: analyticReportSettings,
             };

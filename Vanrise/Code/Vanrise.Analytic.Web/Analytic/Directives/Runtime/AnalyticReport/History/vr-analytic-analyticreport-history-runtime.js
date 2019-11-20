@@ -30,6 +30,7 @@
 
             var settings;
             var reportName;
+            var reportTitle;
             var filterObj;
 
             var currencySelectorAPI;
@@ -169,6 +170,7 @@
                    
                     if (payload != undefined) {
                         reportName = payload.ReportName ? payload.ReportName : "Analytic Report";
+                        reportTitle = payload.ReportTitle ? payload.ReportTitle : reportName;
                         settings = payload.settings;
                         if (settings != undefined && settings.SearchSettings != undefined && settings.SearchSettings.Legends != undefined && settings.SearchSettings.Legends.length >0) {
                             if (settings.SearchSettings.ShowLegend == true && UtilsService.getItemByVal(settings.SearchSettings.Legends, settings.AnalyticTableIds[0], "AnalyticTableId") != undefined)
@@ -456,7 +458,8 @@
                 }
                 var query = {
                     Settings: widgetPayload,
-                    ReportName:reportName,
+                    ReportName: reportName,
+                    ReportTitle: reportTitle,
                     DimensionFilters: dimensionFilters,
                     SelectedGroupingDimensions: groupingDimensions,
                     TableId: widgetPayload.AnalyticTableId,
