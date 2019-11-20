@@ -267,8 +267,8 @@ namespace Retail.Runtime
                     dynamic temp;
                     switch (recordType)
                     {
-                        case 0: temp = mocObj; cdr.RecordType = 1; cdr.RecorDirection = 1; break;
-                        case 1: temp = mtcObj; cdr.RecordType = 1; cdr.RecorDirection = 2; break;
+                        case 0: temp = mocObj; cdr.RecordType = 1; cdr.RecordDirection = 1; break;
+                        case 1: temp = mtcObj; cdr.RecordType = 1; cdr.RecordDirection = 2; break;
                         default: continue;
                     }
 
