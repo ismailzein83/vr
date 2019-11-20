@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VRTimerService', 'VR_Analytic_AutoRefreshType','VRDateTimeService',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, VRTimerService, VR_Analytic_AutoRefreshType, VRDateTimeService) {
+app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VRTimerService', 'VR_Analytic_AutoRefreshType', 'VRDateTimeService', 'VR_Analytic_TimeOnXAxis',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, VRTimerService, VR_Analytic_AutoRefreshType, VRDateTimeService, VR_Analytic_TimeOnXAxis) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -37,6 +37,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
             var query;
 
             var useSummaryValues = false;
+            var timeOnXAxis;
             function initializeController() {
 
                 ctrl.chartReady = function (api) {
@@ -54,6 +55,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                             query = getQuery(payload);
                             if (payload.Settings.AutoRefreshType == VR_Analytic_AutoRefreshType.SummaryValues.value) {
                                 useSummaryValues = true;
+                                timeOnXAxis = payload.Settings.TimeOnXAxis;
                             }
                             if (useSummaryValues) {
                                 if ($scope.jobIds) {
