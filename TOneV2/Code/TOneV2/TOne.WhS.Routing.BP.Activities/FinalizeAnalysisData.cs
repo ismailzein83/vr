@@ -25,9 +25,9 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
+            DateTime? effectiveDate = this.EffectiveDate.Get(context.ActivityContext);
             RoutingDatabaseType routingDatabaseType = this.RoutingDatabaseType.Get(context.ActivityContext);
             List<Guid> riskyMarginCategories = this.RiskyMarginCategories.Get(context.ActivityContext);
-            DateTime? effectiveDate = this.EffectiveDate.Get(context.ActivityContext);
 
             Action<string> trackStep = (trackingMsg) => { context.ActivityContext.WriteTrackingMessage(LogEntryType.Information, trackingMsg, null); };
 
@@ -113,7 +113,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     {
                         Guid? optimalSupplierZoneCategoryID = null;
 
-                        MarginRuleSettings marginRuleSettings = GetMarginRuleSettings(customerRouteMarginStaging, marginRuledefinitionID, marginRuleManager, carrierAccountManager, saleZoneManager);
+                        MarginRuleSettings marginRuleSettings = GetMarginRuleSettings(customerRouteMarginStaging, marginRuledefinitionID, effectiveDate, marginRuleManager, carrierAccountManager, saleZoneManager);
                         if (marginRuleSettings != null)
                             optimalSupplierZoneCategoryID = GetMarginCategory(marginRuleSettings, optimalMargin, systemCurrency.CurrencyId, effectiveDate);
 
@@ -139,14 +139,14 @@ namespace TOne.WhS.Routing.BP.Activities
                     Guid? supplierZoneCategoryID = null;
                     Guid? optimalSupplierZoneCategoryID = null;
 
-                    MarginRuleSettings marginRuleSettings = this.GetMarginRuleSettings(customerRouteMarginStaging, marginRuledefinitionID, marginRuleManager, carrierAccountManager, saleZoneManager);
+                    MarginRuleSettings marginRuleSettings = this.GetMarginRuleSettings(customerRouteMarginStaging, marginRuledefinitionID, effectiveDate, marginRuleManager, carrierAccountManager, saleZoneManager);
                     if (marginRuleSettings != null)
                     {
                         supplierZoneCategoryID = GetMarginCategory(marginRuleSettings, margin, systemCurrency.CurrencyId, effectiveDate);
                         optimalSupplierZoneCategoryID = GetMarginCategory(marginRuleSettings, optimalMargin, systemCurrency.CurrencyId, effectiveDate);
                     }
 
-                    bool isRisky = supplierZoneCategoryID.HasValue && riskyMarginCategories.Contains(supplierZoneCategoryID.Value);
+                    bool isRisky = supplierZoneCategoryID.HasValue && riskyMarginCategories != null && riskyMarginCategories.Contains(supplierZoneCategoryID.Value);
 
                     customerRouteMarginDict.Add(customerRouteMarginIdentifier, new CustomerRouteMargin()
                     {
@@ -234,7 +234,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 }
             }
 
-            long customerRouteMarginSummaryID = 1; 
+            long customerRouteMarginSummaryID = 1;
 
             foreach (var customerRouteMarginSummaryStaging in customerRouteMarginSummaryStagingDict.Values)
             {
@@ -244,7 +244,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 Guid? avgCategoryID = null;
 
                 MarginRuleSettings marginRuleSettings = this.GetMarginRuleSettings(customerRouteMarginSummaryStaging.CustomerID, customerRouteMarginSummaryStaging.SaleZoneID,
-                    marginRuledefinitionID, marginRuleManager, carrierAccountManager, saleZoneManager);
+                    marginRuledefinitionID, effectiveDate, marginRuleManager, carrierAccountManager, saleZoneManager);
 
                 if (marginRuleSettings != null)
                     avgCategoryID = GetMarginCategory(marginRuleSettings, avgMargin, systemCurrency.CurrencyId, effectiveDate);
@@ -271,20 +271,21 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        private MarginRuleSettings GetMarginRuleSettings(CustomerRouteMarginStaging customerRouteMarginStaging, Guid marginRuledefinitionID, MarginRuleManager marginRuleManager,
-            CarrierAccountManager carrierAccountManager, SaleZoneManager saleZoneManager)
+        private MarginRuleSettings GetMarginRuleSettings(CustomerRouteMarginStaging customerRouteMarginStaging, Guid marginRuledefinitionID, DateTime? effectiveDate,
+            MarginRuleManager marginRuleManager, CarrierAccountManager carrierAccountManager, SaleZoneManager saleZoneManager)
         {
-            return GetMarginRuleSettings(customerRouteMarginStaging.CustomerID, customerRouteMarginStaging.SaleZoneID, marginRuledefinitionID,
+            return GetMarginRuleSettings(customerRouteMarginStaging.CustomerID, customerRouteMarginStaging.SaleZoneID, marginRuledefinitionID, effectiveDate,
                 marginRuleManager, carrierAccountManager, saleZoneManager);
         }
 
-        private MarginRuleSettings GetMarginRuleSettings(int customerID, long saleZoneID, Guid marginRuledefinitionID, MarginRuleManager marginRuleManager,
-            CarrierAccountManager carrierAccountManager, SaleZoneManager saleZoneManager)
+        private MarginRuleSettings GetMarginRuleSettings(int customerID, long saleZoneID, Guid marginRuledefinitionID, DateTime? effectiveDate,
+            MarginRuleManager marginRuleManager, CarrierAccountManager carrierAccountManager, SaleZoneManager saleZoneManager)
         {
             SaleZone saleZone = saleZoneManager.GetSaleZone(saleZoneID);
             CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(customerID);
 
             var marginRuleTarget = new Vanrise.GenericData.Entities.GenericRuleTarget();
+            marginRuleTarget.EffectiveOn = effectiveDate;
             marginRuleTarget.TargetFieldValues = new Dictionary<string, object>();
             marginRuleTarget.TargetFieldValues.Add("CustomerId", customerID);
             marginRuleTarget.TargetFieldValues.Add("SellingProductId", carrierAccount.SellingProductId);
