@@ -65,8 +65,10 @@
     <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="RecordAnalysis\Tables\C5Record.sql" />
     <Build Include="RecordAnalysis\Tables\SuspiciousNumber.sql" />
     <Build Include="Security\RecordAnalysis.sql" />
+    <Build Include="RecordAnalysis\Tables\C5RawRecord.sql" />
+    <Build Include="RecordAnalysis\Tables\C5MappedRecord.sql" />
+    <Build Include="RecordAnalysis\Tables\C5InvalidRecord.sql" />
   </ItemGroup>
 </Project>
