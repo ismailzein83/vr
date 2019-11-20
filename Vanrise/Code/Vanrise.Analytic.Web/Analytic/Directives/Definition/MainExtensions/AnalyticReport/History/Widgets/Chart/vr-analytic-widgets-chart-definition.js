@@ -242,15 +242,15 @@
                     orderTypeSelectorLoadDeferred.promise.then(function () {
                     });
 
-                    //var loadItemActionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                    //itemActionGridReadyDeferred.promise.then(function () {
-                    //    var payloadItemActionDirective = {
-                    //        context: getContext(),
-                    //        itemActions: payload != undefined && payload.widgetEntity != undefined ? payload.widgetEntity.ItemActions : undefined
-                    //    };
-                    //    VRUIUtilsService.callDirectiveLoad(itemActionGridAPI, payloadItemActionDirective, loadItemActionDirectivePromiseDeferred);
-                    //});
-                    //promises.push(loadItemActionDirectivePromiseDeferred.promise);
+                    var loadItemActionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    itemActionGridReadyDeferred.promise.then(function () {
+                        var payloadItemActionDirective = {
+                            context: getContext(),
+                            itemActions: payload != undefined && payload.widgetEntity != undefined ? payload.widgetEntity.ItemActions : undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(itemActionGridAPI, payloadItemActionDirective, loadItemActionDirectivePromiseDeferred);
+                    });
+                    promises.push(loadItemActionDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -275,7 +275,7 @@
                         TimeOnXAxis: $scope.scopeModel.selectedTimeOnXAxis != undefined ? $scope.scopeModel.selectedTimeOnXAxis.value : undefined,
                         AutoRefreshInterval: $scope.scopeModel.autoRefreshInterval,
                         NumberOfPoints: $scope.scopeModel.numberOfPoints,
-                        //ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined,
+                        ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined,
                     };
                     return data;
                 }

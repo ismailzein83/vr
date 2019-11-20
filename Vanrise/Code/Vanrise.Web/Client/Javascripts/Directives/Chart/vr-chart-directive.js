@@ -39,9 +39,11 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         }
 
     };
+
     function formatNumber(num) {
         return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
+
     function Chart(ctrl, chartElement, $scope, VRModalService) {
         var chartObj;
         var currentChartSource;
@@ -54,6 +56,8 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         var counter = 0;
         var xAxisValues = [];
         var enablePoints = null;
+        var chartMenuActions;
+
         function initializeController() {
             ctrl.isSettingsVisible = function () {
                 return (ctrl.hidesettings == undefined || ctrl.hidesettings == false) && isChartAvailable;
@@ -169,6 +173,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             var chartData = chartSource.chartData;
             var chartDefinition = chartSource.chartDefinition;
             var seriesDefinitions = chartSource.seriesDefinitions;
+            chartMenuActions = chartSource.chartMenuActions;
 
             var series = [];
 
@@ -215,7 +220,8 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     series[i].data.push({
                         name: titleValue,
                         y: yValue,
-                        id: counter++
+                        id: counter++,
+                        drilldown: (chartMenuActions != undefined && chartMenuActions.length > 0)
                     }
                     );
                 }
@@ -330,8 +336,6 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 isChartAvailable = true;
                 $scope.$apply();
             }, 1);
-
-
         }
 
         function renderChart(chartSource) {
@@ -339,6 +343,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             var chartDefinition = chartSource.chartDefinition;
             var seriesDefinitions = chartSource.seriesDefinitions;
             var xAxisDefinition = chartSource.xAxisDefinition;
+            chartMenuActions = chartSource.chartMenuActions;
             xAxisValues = [];
             var series = [];
             // define Series
@@ -367,7 +372,6 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
 
 
                     series.push(serie);
-
                 }
             });
             function getSeriesName(title, unit) {
@@ -407,7 +411,12 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 for (var i = 0; i < series.length; i++) {
                     var serie = series[i];
                     var yValue = getYValue(serie.serieDefinition, dataItem);
-                    series[i].data.push(yValue);
+                    series[i].data.push({
+                        xRecordValue: getXRecordValue(dataItem),
+                        y: yValue,
+                        id: counter++,
+                        drilldown: (chartMenuActions != undefined && chartMenuActions.length > 0)
+                    });
                 }
             });
 
@@ -427,12 +436,23 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 events: {
                     load: function () {
                         chartAPI = this;
+                    },
+                    drilldown: function (event) {
+                        if (chartMenuActions == undefined || chartMenuActions.length == 0)
+                            return;
+
+                        if (chartMenuActions.length == 1) {
+                            var chartMenuAction = chartMenuActions[0];
+                            var itemAction = chartMenuAction.itemActionObject;
+                            chartMenuAction.clicked(event);
+                        }
+                        else {
+
+                        }
                     }
                 },
 
             };
-
-
 
             //titleSettings
             var titleSettings = {
@@ -534,29 +554,29 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     plotLines.push({
                         value: rangeObject.From != null ? rangeObject.From : null,
                         width: 1,
-                        color:'#808080',
+                        color: '#808080',
                         zIndex: 5,
-                        label: rangeObject.To == null ? customLabel:undefined,
+                        label: rangeObject.To == null ? customLabel : undefined,
                         dashStyle: 'ShortDash',
                     });
-                  //  if (rangeObject.From == null) {
-                        plotLines.push({
-                            value: rangeObject.To != null ? rangeObject.To : null,
-                            width: 1,
-                            color: '#808080',
-                            zIndex: 5,
-                            label: {
-                                text: rangeObject.Name,
-                                y:9,
-                                style: {
-                                    color: color,
-                                    fontSize: '10px'
-                                }
-                            },
-                            dashStyle: 'ShortDash',
-                        });
+                    //  if (rangeObject.From == null) {
+                    plotLines.push({
+                        value: rangeObject.To != null ? rangeObject.To : null,
+                        width: 1,
+                        color: '#808080',
+                        zIndex: 5,
+                        label: {
+                            text: rangeObject.Name,
+                            y: 9,
+                            style: {
+                                color: color,
+                                fontSize: '10px'
+                            }
+                        },
+                        dashStyle: 'ShortDash',
+                    });
                     //}
-                  //  }
+                    //  }
 
                 }
             }
@@ -644,6 +664,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 $scope.$apply();
             });
         }
+
         function getXValue(dataItem) {
             var xValue = eval('dataItem.' + currentChartSource.xAxisDefinition.titlePath);
             if (currentChartSource.xAxisDefinition.isDateTime)
@@ -655,8 +676,11 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 xValue = dateFormat((UtilsService.createDateFromString(xValue)), "dd-mmm-yy");// new Date(xValue);
 
             return xValue;
+        }
 
-
+        function getXRecordValue(dataItem) {
+            var xValue = eval('dataItem.' + currentChartSource.xAxisDefinition.valuePath);
+            return xValue;
         }
 
         function getYValue(sDef, dataItem) {
@@ -674,6 +698,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     chartElement.highcharts().destroy();
                 isChartAvailable = false;
             };
+
             api.addItem = function (item) {
                 var axes = chartAPI.xAxis;
                 var series = chartAPI.series;
@@ -691,6 +716,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
 
                 }
             };
+
             api.updateValues = function (items) {
                 if (currentChartSource != undefined) {
                     if (items != undefined && items.length > 0) {
@@ -748,12 +774,14 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     }
                 }
             };
-            api.renderSingleDimensionChart = function (chartData, chartDefinition, seriesDefinitions) {
+
+            api.renderSingleDimensionChart = function (chartData, chartDefinition, seriesDefinitions, chartMenuActions) {
                 currentChartSource = {
                     isSingleDimension: true,
                     chartData: chartData,
                     chartDefinition: chartDefinition,
-                    seriesDefinitions: seriesDefinitions
+                    seriesDefinitions: seriesDefinitions,
+                    chartMenuActions: chartMenuActions
                 };
                 //currentChartSource.isSingleDimension = false;
                 //currentChartSource.chartDefinition.type = "column";
@@ -764,14 +792,16 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 renderSingleDimensionChart(currentChartSource);
             };
 
-            api.renderChart = function (chartData, chartDefinition, seriesDefinitions, xAxisDefinition) {
+            api.renderChart = function (chartData, chartDefinition, seriesDefinitions, xAxisDefinition, chartMenuActions) {
                 currentChartSource = {
                     isSingleDimension: false,
                     chartData: chartData,
                     chartDefinition: chartDefinition,
                     seriesDefinitions: seriesDefinitions,
-                    xAxisDefinition: xAxisDefinition
+                    xAxisDefinition: xAxisDefinition,
+                    chartMenuActions: chartMenuActions
                 };
+
                 if (chartDefinition != undefined && chartDefinition.enablePoints != undefined)
                     enablePoints = chartDefinition.enablePoints;
                 initializeChartSettings();
@@ -800,6 +830,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         function defineMenu(menuActions) {
             menuActionsAttribute = menuActions;
         }
+
         function resizeChart(time) {
             setTimeout(function () {
                 if (chartElement.highcharts() != undefined)
@@ -807,6 +838,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
 
             }, time);
         }
+
         $(window).resize(function () {
             resizeChart(500);
 
