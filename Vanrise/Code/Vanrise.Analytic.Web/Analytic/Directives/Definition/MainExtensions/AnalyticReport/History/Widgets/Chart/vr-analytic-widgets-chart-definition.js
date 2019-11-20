@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetsChartDefinition.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_ChartDefinitionTypeEnum','VR_Analytic_AutoRefreshType'];
+    WidgetsChartDefinition.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_ChartDefinitionTypeEnum', 'VR_Analytic_AutoRefreshType', 'VR_Analytic_TimeOnXAxis'];
 
-    function WidgetsChartDefinition(UtilsService, VRUIUtilsService, VR_ChartDefinitionTypeEnum, VR_Analytic_AutoRefreshType) {
+    function WidgetsChartDefinition(UtilsService, VRUIUtilsService, VR_ChartDefinitionTypeEnum, VR_Analytic_AutoRefreshType, VR_Analytic_TimeOnXAxis) {
         return {
             restrict: "E",
             scope: {
@@ -27,6 +27,8 @@
         function WidgetsChart($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var timeOnXAxisReadyDeferred = UtilsService.createPromiseDeferred();
+
             var dimensionSelectorAPI;
             var dimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -46,6 +48,7 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.autoRefreshTypes = UtilsService.getArrayEnum(VR_Analytic_AutoRefreshType);
 
+
                 $scope.scopeModel.dimensions = [];
                 $scope.scopeModel.seriesDimensions = [];
                 $scope.scopeModel.measures = [];
@@ -63,11 +66,18 @@
                     return false;
                 };
 
+
                 $scope.scopeModel.onAutoRefreshTypeSelectionChanged = function () {
-                    if ($scope.scopeModel.selectedAutoRefreshType != undefined && $scope.scopeModel.selectedAutoRefreshType.value == VR_Analytic_AutoRefreshType.SummaryValues.value)
+                    if ($scope.scopeModel.selectedAutoRefreshType != undefined && $scope.scopeModel.selectedAutoRefreshType.value == VR_Analytic_AutoRefreshType.SummaryValues.value) {
                         $scope.scopeModel.showNumberOfPoints = true;
-                    else 
+                        $scope.scopeModel.timeOnXAxis = UtilsService.getArrayEnum(VR_Analytic_TimeOnXAxis);
+                        if (timeOnXAxisReadyDeferred != undefined)
+                            timeOnXAxisReadyDeferred.resolve();
+                    }
+                    else {
                         $scope.scopeModel.showNumberOfPoints = false;
+                        $scope.scopeModel.selectedTimeOnXAxis = undefined;
+                    }
                 };
                 $scope.scopeModel.onSeriesDimensionSelectorDirectiveReady = function (api) {
                     seriesDimensionSelectorAPI = api;
@@ -165,10 +175,19 @@
                                 }
                             }
                             if (payload.widgetEntity.AutoRefreshType != undefined) {
-                                $scope.scopeModel.selectedAutoRefreshType = UtilsService.getItemByVal($scope.scopeModel.autoRefreshTypes, payload.widgetEntity.AutoRefreshType, "value");;
+                                $scope.scopeModel.selectedAutoRefreshType = UtilsService.getItemByVal($scope.scopeModel.autoRefreshTypes, payload.widgetEntity.AutoRefreshType, "value");
                                 $scope.scopeModel.autoRefreshInterval = payload.widgetEntity.AutoRefreshInterval;
                                 $scope.scopeModel.numberOfPoints = payload.widgetEntity.NumberOfPoints;
+
+                                if (payload.widgetEntity.TimeOnXAxis != undefined) {
+                                    timeOnXAxisReadyDeferred.promise.then(function () {
+                                        $scope.scopeModel.selectedTimeOnXAxis = UtilsService.getItemByVal($scope.scopeModel.timeOnXAxis, payload.widgetEntity.TimeOnXAxis, "value");
+                                    }).finally(function () {
+                                        timeOnXAxisReadyDeferred = undefined;
+                                    });
+                                }
                             }
+
                             setTopMeasure(payload.widgetEntity.TopMeasure);
                             $scope.scopeModel.selectedChartType = UtilsService.getItemByVal($scope.scopeModel.chartTypes, payload.widgetEntity.ChartType, "value");
                           
@@ -253,6 +272,7 @@
                         RootDimensionsFromSearch: $scope.scopeModel.rootDimensionsFromSearch,
                         AdvancedOrderOptions: orderTypeEntity != undefined ? orderTypeEntity.AdvancedOrderOptions : undefined,
                         AutoRefreshType: $scope.scopeModel.selectedAutoRefreshType != undefined ? $scope.scopeModel.selectedAutoRefreshType.value : undefined,
+                        TimeOnXAxis: $scope.scopeModel.selectedTimeOnXAxis != undefined ? $scope.scopeModel.selectedTimeOnXAxis.value : undefined,
                         AutoRefreshInterval: $scope.scopeModel.autoRefreshInterval,
                         NumberOfPoints: $scope.scopeModel.numberOfPoints,
                         //ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined,

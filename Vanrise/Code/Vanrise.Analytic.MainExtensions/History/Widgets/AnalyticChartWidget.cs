@@ -11,6 +11,7 @@ using Vanrise.Common.Business;
 namespace Vanrise.Analytic.MainExtensions.History.Widgets
 {
     public enum AutoRefreshType { SummaryValues = 1 }
+    public enum TimeOnXAxis { DateTime = 0, Time = 1 }
     public class AnalyticChartWidget : AnalyticHistoryReportWidget
     {
         public override Guid ConfigId { get { return new Guid("D050DEB3-700E-437B-86D1-510A81C0C14C"); } }
@@ -24,6 +25,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public bool RootDimensionsFromSearch { get; set; }
         public int? AutoRefreshInterval { get; set; }
         public AutoRefreshType? AutoRefreshType { get; set; }
+        public TimeOnXAxis? TimeOnXAxis { get; set; }
         public int? NumberOfPoints { get; set; }
         public List<Entities.AnalyticItemAction> ItemActions { get; set; }
         public override List<string> GetMeasureNames()
@@ -35,7 +37,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
             AnalyticItemConfigManager configManager = new AnalyticItemConfigManager();
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
 
-            if (Dimensions!=null && Dimensions.Count > 0)
+            if (Dimensions != null && Dimensions.Count > 0)
             {
                 var dimensions = configManager.GetDimensions(context.AnalyticTableId);
 
