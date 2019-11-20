@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.APIEntities;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 using Vanrise.Security.Business;
 
 namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIAnalyticQueryInterceptor
@@ -23,17 +24,27 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIAnalyticQueryInte
             PortalConnectionManager portalConnectionManager = new PortalConnectionManager();
             var vrConnectionSettings = portalConnectionManager.GetConnectionSettings(context.VRConnectionId);
             var carrierAccounts = vrConnectionSettings.Get<CarrierProfileCarrierAccounts>(string.Format("/api/WhS_BE/CarrierProfile/GetCarrierProfileCarrierAccountsByUserId?userId={0}", userId));
-            if(carrierAccounts!=null && carrierAccounts.CarrierAccountIds!=null && carrierAccounts.CarrierAccountIds.Count > 0)
+            if(carrierAccounts == null || carrierAccounts.CarrierAccountIds ==null || carrierAccounts.CarrierAccountIds.Count == 0)
             {
-                if (context.Query.Filters == null)
-                    context.Query.Filters = new List<DimensionFilter>();
-
-                context.Query.Filters.Add(new DimensionFilter()
+                if (context.Query.FilterGroup == null)
+                    context.Query.FilterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup();
+                if (context.Query.FilterGroup.Filters == null)
+                    context.Query.FilterGroup.Filters = new List<Vanrise.GenericData.Entities.RecordFilter>();
+                context.Query.FilterGroup.Filters.Add(new EmptyRecordFilter
                 {
-                    Dimension = AccountDimensionName,
-                    FilterValues = carrierAccounts.CarrierAccountIds.Select<int, object>(x => x).ToList()
+                    FieldName = AccountDimensionName
                 });
+                return;
             }
+
+            if (context.Query.Filters == null)
+                context.Query.Filters = new List<DimensionFilter>();
+
+            context.Query.Filters.Add(new DimensionFilter()
+            {
+                Dimension = AccountDimensionName,
+                FilterValues = carrierAccounts.CarrierAccountIds.Select<int, object>(x => x).ToList()
+            });
         }
     }
 }
