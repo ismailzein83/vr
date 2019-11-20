@@ -1,12 +1,12 @@
 ﻿'use strict';
 
-app.directive('cpWhsReleasecodestatisticsGrid', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'CP_WhS_ReleaseCodeStatisticsAPIService',
-    function (UtilsService, VRUIUtilsService, VRNotificationService, CP_WhS_ReleaseCodeStatisticsAPIService) {
+app.directive('cpWhsReleasecodestatisticsGrid', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'CP_WhS_ReleaseCodeStatisticsAPIService', 'CP_WhS_AccountViewTypeEnum',
+    function (UtilsService, VRUIUtilsService, VRNotificationService, CP_WhS_ReleaseCodeStatisticsAPIService, CP_WhS_AccountViewTypeEnum) {
         return {
             restrict: 'E',
             scope: {
                 onReady: '=',
-                dimension:'='
+                dimension: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -31,6 +31,7 @@ app.directive('cpWhsReleasecodestatisticsGrid', ['UtilsService', 'VRUIUtilsServi
                 $scope.scopeModel = {};
                 $scope.scopeModel.releaseCodeStatistics = [];
                 $scope.scopeModel.gridMenuActions = [];
+                $scope.scopeModel.includeSupplierCol = false;
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -50,6 +51,11 @@ app.directive('cpWhsReleasecodestatisticsGrid', ['UtilsService', 'VRUIUtilsServi
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    if (query != undefined) {
+                        if (query.Filter != undefined) {
+                            $scope.scopeModel.includeSupplierCol = query.Filter.AccountType != CP_WhS_AccountViewTypeEnum.Customer.value;
+                        }
+                    }
                     return gridAPI.retrieveData(query);
                 };
 
