@@ -228,14 +228,14 @@ namespace Retail.Runtime
 
         public static Vanrise.Integration.Entities.MappingOutput MapC5Records_CSV(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            var mtcObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 21, Destination = 4, DurationInSeconds = 23, DisconnectDateTime = 22, CallClassId = 33, SubscriberTypeId = 73, IMEI = 2, BTS = 9, Cell = 10, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, ServiceTypeID = 12, ServiceVASName = 15, InTrunkId = 7, OutTrunkId = 8, ReleaseCode = 27, MSISDNAreaCode = 54, DestinationAreaCode = -1, AttemptDateTime = 84, AlertDateTime = 85, translatedNumber = 110 };
-            var mocObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 24, Destination = 5, DurationInSeconds = 26, DisconnectDateTime = 25, CallClassId = 38, SubscriberTypeId = 82, IMEI = 2, BTS = 12, Cell = 13, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, ServiceTypeID = 182, ServiceVASName = 154, InTrunkId = 10, OutTrunkId = 11, ReleaseCode = 30, MSISDNAreaCode = -1, DestinationAreaCode = -1, AttemptDateTime = 92, AlertDateTime = 93, translatedNumber = -1 };
+            var mtcObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 21, OtherPartyNumber = 4, DurationInSeconds = 23, DisconnectDateTime = 22, IMEI = 2, BTS = 9, Cell = 10, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, InTrunk = 7, OutTrunk = 8, AttemptDateTime = 84, AlertDateTime = 85, translatedNumber = 110 };
+            var mocObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 24, OtherPartyNumber = 5, DurationInSeconds = 26, DisconnectDateTime = 25, IMEI = 2, BTS = 12, Cell = 13, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, InTrunk = 10, OutTrunk = 11, AttemptDateTime = 92, AlertDateTime = 93, translatedNumber = -1 };
 
             var cdrs = new List<dynamic>();
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Record Analysis C5 Record");
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Record Analysis C5 Raw Record");
 
-            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Record Analysis C5 Record");
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Record Analysis C5 Raw Record");
 
             int rowCount = 0;
 
@@ -267,8 +267,8 @@ namespace Retail.Runtime
                     dynamic temp;
                     switch (recordType)
                     {
-                        case 0: temp = mocObj; cdr.CallType = 0; break;
-                        case 1: temp = mtcObj; cdr.CallType = 1; break;
+                        case 0: temp = mocObj; cdr.RecordType = 1; cdr.RecorDirection = 1; break;
+                        case 1: temp = mtcObj; cdr.RecordType = 1; cdr.RecorDirection = 2; break;
                         default: continue;
                     }
 
@@ -373,15 +373,15 @@ namespace Retail.Runtime
 
                     if (temp.translatedNumber > 0)
                     {
-                        string destination = fields[temp.translatedNumber];
-                        if (!string.IsNullOrEmpty(destination))
-                            cdr.Destination = destination;
+                        string otherPartyNumber = fields[temp.translatedNumber];
+                        if (!string.IsNullOrEmpty(otherPartyNumber))
+                            cdr.OtherPartyNumber = otherPartyNumber;
                         else
-                            cdr.Destination = fields[temp.Destination];
+                            cdr.OtherPartyNumber = fields[temp.OtherPartyNumber];
                     }
                     else
                     {
-                        cdr.Destination = fields[temp.Destination];
+                        cdr.OtherPartyNumber = fields[temp.OtherPartyNumber];
                     }
 
                     if (decimal.TryParse(fields[temp.DurationInSeconds], out decimal durationInSeconds))
@@ -419,17 +419,10 @@ namespace Retail.Runtime
                         cdr.DisconnectDateTime = new DateTime(year, month, day, hour, minute, second);
                     }
 
-                    if (int.TryParse(fields[temp.CallClassId], out int callClassId))
-                        cdr.CallClassId = callClassId;
-
-                    if (int.TryParse(fields[temp.SubscriberTypeId], out int subscriberTypeId))
-                        cdr.SubscriberTypeID = subscriberTypeId;
-
                     cdr.IMEI = fields[temp.IMEI];
                     cdr.BTS = fields[temp.BTS];
                     cdr.Cell = fields[temp.Cell];
-
-
+                    
                     decimal upVolume = 0;
                     if (temp.UpVolume >= 0 && decimal.TryParse(fields[temp.UpVolume], out upVolume))
                         cdr.UpVolume = upVolume;
@@ -446,22 +439,9 @@ namespace Retail.Runtime
                     if (temp.CellLongitude >= 0 && decimal.TryParse(fields[temp.CellLongitude], out cellLongitude))
                         cdr.CellLongitude = cellLongitude;
 
-                    if (int.TryParse(fields[temp.ServiceTypeID], out int serviceTypeId))
-                        cdr.ServiceTypeId = serviceTypeId;
+                    cdr.InTrunk = fields[temp.InTrunk];
 
-                    cdr.ServiceVASName = fields[temp.ServiceVASName];
-
-                    cdr.InTrunkId = fields[temp.InTrunkId];
-
-                    cdr.OutTrunkId = fields[temp.OutTrunkId];
-
-                    cdr.ReleaseCode = fields[temp.ReleaseCode];
-
-                    if (temp.MSISDNAreaCode >= 0)
-                        cdr.MSISDNAreaCode = fields[temp.MSISDNAreaCode];
-
-                    if (temp.DestinationAreaCode >= 0)
-                        cdr.DestinationAreaCode = fields[temp.DestinationAreaCode];
+                    cdr.OutTrunk = fields[temp.OutTrunk];
 
                     cdrs.Add(cdr);
 
@@ -485,8 +465,8 @@ namespace Retail.Runtime
                     currentCDRId++;
                 }
 
-                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of C5 Records", "Record Analysis C5 Record");
-                mappedBatches.Add("Store C5 Records", batch);
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of C5 Records", "Record Analysis C5 Raw Record");
+                mappedBatches.Add("Distribute C5 Records", batch);
             }
             else
             {
