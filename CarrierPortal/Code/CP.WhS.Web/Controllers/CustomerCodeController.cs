@@ -22,7 +22,7 @@ namespace CP.WhS.Web.Controllers
 		public object GetRemoteFilteredCustomerCodes(Vanrise.Entities.DataRetrievalInput<SaleCodeQueryHandlerInfoWrapper> input)
 		{
 			CustomerCodeManager manager = new CustomerCodeManager();
-			return GetWebResponse(input, manager.GetRemoteFilteredCustomerCodes(input), "Sale Codes");
+			return GetWebResponse(input, manager.GetRemoteFilteredCustomerCodes(input), "Customer Codes");
 		}
 
 	}

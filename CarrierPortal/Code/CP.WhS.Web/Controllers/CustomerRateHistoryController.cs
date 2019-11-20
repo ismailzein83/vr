@@ -20,7 +20,7 @@ namespace CP.WhS.Web.Controllers
 		[Route("GetFilteredCustomerRateHistoryRecords")]
 		public object GetFilteredCustomerRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
 		{
-			return GetWebResponse(input, new CustomerRateHistoryManager().GetFilteredCustomerRateHistoryRecords(input), "Sale Rate History");
+			return GetWebResponse(input, new CustomerRateHistoryManager().GetFilteredCustomerRateHistoryRecords(input), "Customer Rate History");
 		}
 	}
 

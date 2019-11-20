@@ -21,7 +21,7 @@ namespace CP.WhS.Web.Controllers
 		public object GetFilteredCustomerRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
 		{
 			CustomerRateManager manager = new CustomerRateManager();
-			return GetWebResponse(input, manager.GetFilteredCustomerRates(input), "Sale Rates");
+			return GetWebResponse(input, manager.GetFilteredCustomerRates(input), "Customer Rates");
 		}
 	}
 
