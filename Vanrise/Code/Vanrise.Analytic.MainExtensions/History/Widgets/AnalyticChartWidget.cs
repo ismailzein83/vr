@@ -25,6 +25,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public int? AutoRefreshInterval { get; set; }
         public AutoRefreshType? AutoRefreshType { get; set; }
         public int? NumberOfPoints { get; set; }
+        public List<Entities.AnalyticItemAction> ItemActions { get; set; }
         public override List<string> GetMeasureNames()
         {
             return this.Measures.Select(measure => measure.MeasureName).ToList();
