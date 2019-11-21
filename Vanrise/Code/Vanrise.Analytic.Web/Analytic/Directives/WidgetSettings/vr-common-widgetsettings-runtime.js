@@ -103,14 +103,17 @@
             function loadDirective() {
                 $scope.scopeModel.isLoading = true;
                 var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
                 directiveReadyDeferred.promise.then(function () {
+
                     var directivePayload = {
                         Settings: definitionSettings.Settings,
                         TableId: definitionSettings.AnalyticTableId,
-                        FromTime: from,
                         FilterGroup: definitionSettings.RecordFilter,
+                        Period: -1,
+                        FromTime: from,
                         ToTime: to,
-                        TimePeriod: definitionSettings.TimePeriod
+                        TimePeriod: definitionSettings.TimePeriod  
                     };
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadPromiseDeferred);
                 });
