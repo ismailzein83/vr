@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
@@ -26,6 +27,8 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
             if (context.SourceRoutes == null || context.SourceRoutes.Count == 0)
                 return null;
 
+            TechnicalCodeManager technicalCodeManager = new TechnicalCodeManager();
+
             foreach (var sourceRoute in context.SourceRoutes)
             {
                 result.Add(new EricssonConvertedRoute()
@@ -33,6 +36,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
                     BO = context.TargetBO,
                     Code = sourceRoute.Code,
                     RCNumber = sourceRoute.RCNumber,
+                    TRD = sourceRoute.TRD,
                     RouteType = sourceRoute.RouteType
                 });
             }
@@ -43,11 +47,17 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
                 {
                     foreach (var suffix in CodeGroupSuffixes)
                     {
+                        TechnicalCodePrefix technicalCodePrefix = technicalCodeManager.GetTechnicalCodeByNumberPrefix(codeGroupRoute.CodeGroup);
+                        if (technicalCodePrefix == null)
+                            throw new NullReferenceException($"No Technical Code Match is found for the following Code: '{codeGroupRoute.CodeGroup}'");
+                        var trd = technicalCodePrefix.ZoneID;
+
                         result.Add(new EricssonConvertedRoute()
                         {
                             BO = context.TargetBO,
                             Code = string.Concat(codeGroupRoute.CodeGroup, suffix.Suffix),
                             RCNumber = codeGroupRoute.RCNumber,
+                            TRD = trd,
                             RouteType = EricssonRouteType.BNumberServiceLanguage
                         });
                     }
@@ -76,7 +86,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
         List<CodeGroupRoute> CodeGroupRoutes { get; }
 
-        string TargetBO { get; }
+        int TargetBO { get; }
     }
 
     public class EricssonSpecialRoutingSettingContext : IEricssonSpecialRoutingSettingContext
@@ -85,6 +95,6 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
         public List<CodeGroupRoute> CodeGroupRoutes { get; set; }
 
-        public string TargetBO { get; set; }
+        public int TargetBO { get; set; }
     }
 }

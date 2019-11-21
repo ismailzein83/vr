@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="CustomerMappingDataManager.cs" />
     <Compile Include="CustomerMappingSucceededDataManager.cs" />
+    <Compile Include="NextBTableRouteDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeGroupRouteDataManager.cs" />
     <Compile Include="RouteDataManager.cs" />

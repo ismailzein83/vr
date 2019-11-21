@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         const string RouteUpdatedTableName = "Route_Updated";
         const string RouteDeletedTableName = "Route_Deleted";
 
-        readonly string[] columns = { "BO", "Code", "RCNumber", "RouteType" };
+        readonly string[] columns = { "BO", "Code", "RCNumber", "TRD", "NextBTable", "OriginCode", "RouteType" };
         public string SwitchId { get; set; }
         public string RouteSucceededTableName { get; set; }
         private string BCPTableName;
@@ -44,7 +44,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         public void WriteRecordToStream(EricssonConvertedRoute record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.BO, record.Code, record.RCNumber, (int)record.RouteType);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.BO, record.Code, record.RCNumber, record.TRD, record.NextBTable, record.OriginCode, (int)record.RouteType);
         }
 
         public void ApplyRoutesSucceededForDB(object preparedRoute)
@@ -52,7 +52,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
         }
 
-        public void SaveRoutesSucceededToDB(Dictionary<string, List<EricssonRouteWithCommands>> routesWithCommandsByBO)
+        public void SaveRoutesSucceededToDB(Dictionary<int, List<EricssonRouteWithCommands>> routesWithCommandsByBO)
         {
             if (routesWithCommandsByBO == null || routesWithCommandsByBO.Count == 0)
                 return;

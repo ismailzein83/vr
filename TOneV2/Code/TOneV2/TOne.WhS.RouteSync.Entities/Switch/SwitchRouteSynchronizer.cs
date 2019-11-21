@@ -293,12 +293,15 @@ namespace TOne.WhS.RouteSync.Entities
     {
         Func<int, string> GetCarrierAccountNameById { get; }
         List<string> ValidationMessages { set; }
+        string SwitchId { get; }
     }
     public class IsSwitchRouteSynchronizerValidContext : IIsSwitchRouteSynchronizerValidContext
     {
         public List<string> ValidationMessages { get; set; }
 
         public Func<int, string> GetCarrierAccountNameById { get; set; }
+
+        public string SwitchId { get; set; }
     }
 
     public interface ISwitchRouteSynchronizerApplyDifferentialRoutesContext

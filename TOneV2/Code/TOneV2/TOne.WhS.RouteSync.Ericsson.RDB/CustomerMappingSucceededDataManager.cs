@@ -60,10 +60,10 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
             var recordContext = bulkInsertContext.WriteRecord();
 
-            if (record.CustomerMapping.BO != null)
-                recordContext.Value(record.CustomerMapping.BO);
-            else
-                recordContext.Value(string.Empty);
+            if (!record.CustomerMapping.BO.HasValue)
+                throw new NullReferenceException("record.CustomerMapping.BO");
+
+            recordContext.Value(record.CustomerMapping.BO.Value);
 
             recordContext.Value(Helper.SerializeCustomerMapping(record.CustomerMapping));
 
@@ -98,7 +98,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
         private Dictionary<string, RDBTableColumnDefinition> GetRDBTableColumnDefinitionDictionary()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_BO, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_BO, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_CustomerMapping, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
             columns.Add(COL_Action, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             return columns;

@@ -9,6 +9,6 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
         string SwitchId { get; set; }
         void Initialize(ICodeGroupRouteInitializeContext context);
         void InsertRoutes(IEnumerable<CodeGroupRoute> routes);
-        Dictionary<string, List<CodeGroupRoute>> GetFilteredCodeGroupRouteByBO(IEnumerable<string> customerBOs);
+        Dictionary<int, List<CodeGroupRoute>> GetFilteredCodeGroupRouteByBO(IEnumerable<int> customerBOs);
     }
 }

@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
     public class EricssonManualRoute
     {
-        public List<string> Customers { get; set; }
+        public List<int> Customers { get; set; }
         public EricssonManualRouteOriginations ManualRouteOriginations { get; set; }
         public EricssonManualRouteDestinations ManualRouteDestinations { get; set; }
         public EricssonManualRouteAction ManualRouteAction { get; set; }
@@ -21,8 +21,8 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
     public class EricssonSpecialRoute
     {
-        public string TargetBO { get; set; }
-        public string SourceBO { get; set; }
+        public int TargetBO { get; set; }
+        public int SourceBO { get; set; }
         public EricssonSpecialRoutingSetting Settings { get; set; }
         public List<EricssonConvertedRoute> GetSpecialRoutes(IGetSpecialRoutesContext context)
         {

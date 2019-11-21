@@ -25,6 +25,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 	public class OutTrunk : BaseTrunk
 	{
 		public bool IsSwitch { get; set; }
+
+        // This property can store multiple codes seperated by semicolon
 		public string NationalCountryCode { get; set; }
 	}
 }

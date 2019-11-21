@@ -249,7 +249,7 @@ namespace TOne.WhS.BusinessEntity.Business
             additionalMessages = null;
 
             List<string> validationMessages = null;
-            bool isSwitchRouteSynchronizerValid = IsSwitchRouteSynchronizerValid(whsSwitch, out validationMessages);
+            bool isSwitchRouteSynchronizerValid = IsSwitchRouteSynchronizerValid(whsSwitch, out validationMessages, true);
 
             if (!isSwitchRouteSynchronizerValid && validationMessages != null)
             {
@@ -268,7 +268,7 @@ namespace TOne.WhS.BusinessEntity.Business
             additionalMessages = null;
 
             List<string> validationMessages = null;
-            bool isSwitchRouteSynchronizerValid = IsSwitchRouteSynchronizerValid(whsSwitch, out validationMessages);
+            bool isSwitchRouteSynchronizerValid = IsSwitchRouteSynchronizerValid(whsSwitch, out validationMessages, false);
 
             if (!isSwitchRouteSynchronizerValid && validationMessages != null)
             {
@@ -286,7 +286,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new MissingArgumentValidationException("Switch.Name");
         }
 
-        private bool IsSwitchRouteSynchronizerValid(BaseSwitch baseSwitch, out List<string> validationMessages)
+        private bool IsSwitchRouteSynchronizerValid(BaseSwitch baseSwitch, out List<string> validationMessages, bool isNewSwitch)
         {
             validationMessages = null;
 
@@ -303,6 +303,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     return carrierAccountManager.GetCarrierAccountName(carrierAccountId);
                 }
             };
+            if (!isNewSwitch)
+                context.SwitchId = baseSwitch.SwitchId.ToString();
 
             bool isSwitchValid = baseSwitch.Settings.RouteSynchronizer.IsSwitchRouteSynchronizerValid(context);
             validationMessages = context.ValidationMessages;

@@ -334,7 +334,10 @@ namespace TOne.WhS.RouteSync.Ericsson
                 return null;
 
             CustomerMapping customerMapping = new CustomerMapping();
-            customerMapping.BO = customerMappingPropertiesAsString[0];
+            int customerMappingBO;
+            if (!int.TryParse(customerMappingPropertiesAsString[0], out customerMappingBO))
+                throw new TypeAccessException(customerMappingPropertiesAsString[0]);
+            customerMapping.BO = customerMappingBO;
             customerMapping.NationalOBA = customerMappingPropertiesAsString[1];
             customerMapping.InternationalOBA = customerMappingPropertiesAsString[2];
 

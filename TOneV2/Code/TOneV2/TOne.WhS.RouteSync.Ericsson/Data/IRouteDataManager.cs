@@ -15,13 +15,13 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
         void InsertRoutesToTempTable(IEnumerable<EricssonConvertedRoute> routes);
         void RemoveRoutesFromTempTable(IEnumerable<EricssonConvertedRoute> routes);
         void UpdateRoutesInTempTable(IEnumerable<EricssonConvertedRoute> routes);
-        void CopyCustomerRoutesToTempTable(IEnumerable<string> customerBOs);
-        Dictionary<string, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByBO(IEnumerable<string> customerBOs);
+        void CopyCustomerRoutesToTempTable(IEnumerable<int> customerBOs);
+        Dictionary<int, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByBO(IEnumerable<int> customerBOs);
     }
 
     public interface IRouteSucceededDataManager : IBulkApplyDataManager<EricssonConvertedRoute>, IDataManager
     {
         string SwitchId { get; set; }
-        void SaveRoutesSucceededToDB(Dictionary<string, List<EricssonRouteWithCommands>> routesWithCommandsByBO);
+        void SaveRoutesSucceededToDB(Dictionary<int, List<EricssonRouteWithCommands>> routesWithCommandsByBO);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
@@ -18,11 +20,17 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
         {
             var manualRoutes = new List<EricssonConvertedRoute>();
             var customersForManualRoutes = (context.Customers != null && context.Customers.Count > 0) ? context.Customers : context.AllCustomers;
+            TechnicalCodeManager technicalCodeManager = new TechnicalCodeManager();
+
             foreach (var code in context.Codes)
             {
                 foreach (var customer in customersForManualRoutes)
                 {
-                    manualRoutes.Add(new EricssonConvertedRoute() { BO = customer, Code = code.ToString(), RouteType = EricssonRouteType.ANumber, RCNumber = context.BlockRCNumber });
+                    TechnicalCodePrefix technicalCodePrefix = technicalCodeManager.GetTechnicalCodeByNumberPrefix(code.ToString());
+                    if (technicalCodePrefix == null)
+                        throw new NullReferenceException($"No Technical Code Match is found for the following Code: '{code.ToString()}'");
+                    var trd = technicalCodePrefix.ZoneID;
+                    manualRoutes.Add(new EricssonConvertedRoute() { BO = customer, Code = code.ToString(), RouteType = EricssonRouteType.ANumber, RCNumber = context.BlockRCNumber, TRD = trd });
                 }
             }
             context.ManualConvertedRoutes = manualRoutes;
@@ -33,8 +41,8 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
     {
         List<EricssonConvertedRoute> ManualConvertedRoutes { get; set; }
         List<int> Codes { get; set; }
-        List<string> Customers { get; set; }
-        List<string> AllCustomers { get; set; }
+        List<int> Customers { get; set; }
+        List<int> AllCustomers { get; set; }
         int BlockRCNumber { get; set; }
     }
 
@@ -42,8 +50,8 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
     {
         public List<EricssonConvertedRoute> ManualConvertedRoutes { get; set; }
         public List<int> Codes { get; set; }
-        public List<string> Customers { get; set; }
-        public List<string> AllCustomers { get; set; }
+        public List<int> Customers { get; set; }
+        public List<int> AllCustomers { get; set; }
         public int BlockRCNumber { get; set; }
     }
 

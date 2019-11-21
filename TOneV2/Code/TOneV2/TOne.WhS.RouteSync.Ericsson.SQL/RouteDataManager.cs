@@ -17,7 +17,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         const string RouteUpdatedTableName = "Route_Updated";
         const string RouteDeletedTableName = "Route_Deleted";
 
-        readonly string[] columns = { "BO", "Code", "RCNumber", "RouteType" };
+        readonly string[] columns = { "BO", "Code", "RCNumber", "TRD", "NextBTable", "OriginCode", "RouteType" };
 
         public string SwitchId { get; set; }
         public RouteDataManager()
@@ -74,7 +74,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
         public void CompareTables(IRouteCompareTablesContext context)
         {
-            var differencesByBO = new Dictionary<string, EricssonConvertedRouteDifferences>();
+            var differencesByBO = new Dictionary<int, EricssonConvertedRouteDifferences>();
             var differences = new Dictionary<EricssonConvertedRouteIdentifier, List<EricssonConvertedRouteByCompare>>();
 
             string query = string.Format(query_CompareRouteTables, SwitchId, RouteTableName, RouteTempTableName);
@@ -83,7 +83,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                 while (reader.Read())
                 {
                     var convertedRouteByCompare = new EricssonConvertedRouteByCompare() { EricssonConvertedRoute = EricssonConvertedRouteMapper(reader), TableName = reader["tableName"] as string };
-                    var routeIdentifier = new EricssonConvertedRouteIdentifier() { BO = convertedRouteByCompare.EricssonConvertedRoute.BO, Code = convertedRouteByCompare.EricssonConvertedRoute.Code, RouteType = convertedRouteByCompare.EricssonConvertedRoute.RouteType };
+                    var routeIdentifier = new EricssonConvertedRouteIdentifier() { BO = convertedRouteByCompare.EricssonConvertedRoute.BO, Code = convertedRouteByCompare.EricssonConvertedRoute.Code, RouteType = convertedRouteByCompare.EricssonConvertedRoute.RouteType, TRD = convertedRouteByCompare.EricssonConvertedRoute.TRD };
                     List<EricssonConvertedRouteByCompare> tempRouteDifferences = differences.GetOrCreateItem(routeIdentifier);
                     tempRouteDifferences.Add(convertedRouteByCompare);
                 }
@@ -118,6 +118,9 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                     BO = route.EricssonConvertedRoute.BO,
                                     Code = route.EricssonConvertedRoute.Code,
                                     RCNumber = route.EricssonConvertedRoute.RCNumber,
+                                    TRD = route.EricssonConvertedRoute.TRD,
+                                    NextBTable = route.EricssonConvertedRoute.NextBTable,
+                                    OriginCode = route.EricssonConvertedRoute.OriginCode,
                                     RouteType = route.EricssonConvertedRoute.RouteType
                                 },
                                 OriginalValue = (routeOldValue != null) ? new EricssonConvertedRoute()
@@ -125,6 +128,9 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                     BO = routeOldValue.EricssonConvertedRoute.BO,
                                     Code = routeOldValue.EricssonConvertedRoute.Code,
                                     RCNumber = routeOldValue.EricssonConvertedRoute.RCNumber,
+                                    TRD = routeOldValue.EricssonConvertedRoute.TRD,
+                                    NextBTable = routeOldValue.EricssonConvertedRoute.NextBTable,
+                                    OriginCode = routeOldValue.EricssonConvertedRoute.OriginCode,
                                     RouteType = routeOldValue.EricssonConvertedRoute.RouteType
                                 } : null
                             });
@@ -158,7 +164,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         public void WriteRecordToStream(EricssonConvertedRoute record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.BO, record.Code, record.RCNumber, (int)record.RouteType);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.BO, record.Code, record.RCNumber, record.TRD, record.NextBTable, record.OriginCode, (int)record.RouteType);
         }
 
         public void ApplyRouteForDB(object preparedRoute)
@@ -212,7 +218,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             });
         }
 
-        public void CopyCustomerRoutesToTempTable(IEnumerable<string> customerBOs)
+        public void CopyCustomerRoutesToTempTable(IEnumerable<int> customerBOs)
         {
             if (customerBOs == null || !customerBOs.Any())
                 return;
@@ -221,9 +227,9 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             ExecuteNonQueryText(query, null);
         }
 
-        public Dictionary<string, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByBO(IEnumerable<string> customerBOs)
+        public Dictionary<int, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByBO(IEnumerable<int> customerBOs)
         {
-            var convertedRoutesByBO = new Dictionary<string, List<EricssonConvertedRoute>>();
+            var convertedRoutesByBO = new Dictionary<int, List<EricssonConvertedRoute>>();
 
             string filter = "";
 
@@ -246,9 +252,12 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         private DataTable BuildRouteTable(IEnumerable<EricssonConvertedRoute> routes)
         {
             DataTable dtRoutes = new DataTable();
-            dtRoutes.Columns.Add("BO", typeof(string));
+            dtRoutes.Columns.Add("BO", typeof(int));
             dtRoutes.Columns.Add("Code", typeof(string));
             dtRoutes.Columns.Add("RCNumber", typeof(int));
+            dtRoutes.Columns.Add("TRD", typeof(int));
+            dtRoutes.Columns.Add("NextBTable", typeof(int?));
+            dtRoutes.Columns.Add("OriginCode", typeof(int?));
             dtRoutes.Columns.Add("RouteType", typeof(int));
             dtRoutes.BeginLoadData();
             foreach (var route in routes)
@@ -257,6 +266,9 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                 dr["BO"] = route.BO;
                 dr["Code"] = route.Code;
                 dr["RCNumber"] = route.RCNumber;
+                dr["TRD"] = route.TRD;
+                dr["NextBTable"] = route.NextBTable;
+                dr["OriginCode"] = route.OriginCode;
                 dr["RouteType"] = (int)route.RouteType;
                 dtRoutes.Rows.Add(dr);
             }
@@ -274,9 +286,12 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         {
             return new EricssonConvertedRoute()
             {
-                BO = reader["BO"] as string,
+                BO = (int)reader["BO"],
                 Code = reader["Code"] as string,
                 RCNumber = (int)reader["RCNumber"],
+                TRD = (int)reader["TRD"],
+                NextBTable = GetReaderValue<int?>(reader, "NextBTable"),
+                OriginCode = reader["OriginCode"] as string,
                 RouteType = (EricssonRouteType)GetReaderValue<int>(reader, "RouteType")
             };
         }
@@ -289,41 +304,47 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                     END
 
                                                     CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
-                                                          BO varchar(255) NOT NULL,
-	                                                      Code varchar(20) NOT NULL,
-	                                                      RCNumber int NOT NULL,
-                                                          RouteType int NOT NULL
-                                                    CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{2}{1}] PRIMARY KEY CLUSTERED 
-                                                    (
-                                                        BO ASC,
-	                                                    Code ASC,
-                                                        RouteType ASC
-                                                    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+                                                        BO int NOT NULL,
+	                                                    Code varchar(20) NOT NULL,
+	                                                    RCNumber int NOT NULL,
+	                                                    TRD int NOT NULL,
+                                                        NextBTable int,
+                                                        OriginCode varchar(20),
+                                                        RouteType int NOT NULL
+                                                        CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{2}{1}] PRIMARY KEY CLUSTERED 
+                                                        (
+                                                            BO ASC,
+                                                            Code ASC,
+                                                            RouteType ASC
+                                                        )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 													) ON [PRIMARY]";
 
         const string query_CompareRouteTables = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
-                                                  BEGIN
-	                                                  SELECT [BO],[Code],[RCNumber], [RouteType], max(tableName) as tableName FROM (
-		                                                  SELECT [BO],[Code],[RCNumber],[RouteType], '{1}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{1}]
-		                                                  UNION ALL
-		                                                  SELECT [BO],[Code],[RCNumber],[RouteType], '{2}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{2}]
-	                                                  ) v
-	                                                  GROUP BY [BO],[Code],[RCNumber],[RouteType]
-	                                                  HAVING COUNT(1)=1
-                                                  END
-                                                  ELSE
-                                                  BEGIN
-	                                                  SELECT [BO],[Code],[RCNumber],[RouteType], '{2}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{2}]
-                                                  END";
+                                                    BEGIN
+                                                        SELECT [BO], [Code], [RCNumber], [TRD], [NextBTable], [OriginCode], [RouteType], max(tableName) as tableName 
+                                                            FROM 
+                                                                (
+                                                                    SELECT [BO], [Code], [RCNumber], [TRD], [NextBTable], [OriginCode], [RouteType], '{1}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{1}]
+                                                                    UNION ALL
+                                                                    SELECT [BO], [Code], [RCNumber], [TRD], [NextBTable], [OriginCode], [RouteType], '{2}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{2}]
+                                                                ) v
+                                                        GROUP BY [BO], [Code], [RCNumber], [TRD], [NextBTable], [OriginCode], [RouteType]
+                                                        HAVING COUNT(1)=1
+                                                    END
+                                                
+                                                ELSE
+                                                    BEGIN
+                                                        SELECT [BO], [Code], [RCNumber], [TRD], [NextBTable], [OriginCode], [RouteType], '{2}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{2}]
+                                                    END";
 
         const string query_SwapTables = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
+                                            BEGIN
+                                                IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}_old') AND s.type in (N'U'))
                                                     BEGIN
-															IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}_old') AND s.type in (N'U'))
-																	begin
-																		DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}_old
-																	end
-														EXEC sp_rename 'WhS_RouteSync_Ericsson_{0}.{1}', '{1}_old';
+                                                        DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}_old
                                                     END
+                                                EXEC sp_rename 'WhS_RouteSync_Ericsson_{0}.{1}', '{1}_old';
+                                            END
 
 	                                        EXEC sp_rename 'WhS_RouteSync_Ericsson_{0}.{2}', '{1}';";
 
@@ -337,111 +358,132 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 															END";
 
         const string query_SyncWithRouteUpdatedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
-                                                    BEGIN
-														MERGE INTO WhS_RouteSync_Ericsson_{0}.{1}  as routes 
-														USING WhS_RouteSync_Ericsson_{0}.{2} as updatedRoutes
-														ON routes.BO = updatedRoutes.BO and routes.Code = updatedRoutes.Code and routes.RouteType = updatedRoutes.RouteType
-														WHEN MATCHED THEN
-														UPDATE 
-														SET routes.RCNumber = updatedRoutes.RCNumber;
-
-														DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
-                                                    END";
+                                                            BEGIN
+														        MERGE INTO WhS_RouteSync_Ericsson_{0}.{1}  as routes 
+														        USING WhS_RouteSync_Ericsson_{0}.{2} as updatedRoutes
+														        ON routes.BO = updatedRoutes.BO and routes.Code = updatedRoutes.Code and routes.RouteType = updatedRoutes.RouteType
+														        WHEN MATCHED THEN
+														        UPDATE 
+														        SET routes.RCNumber = updatedRoutes.RCNumber,
+                                                                    routes.NextBTable = updatedRoutes.NextBTable,
+                                                                    routes.TRD = updatedRoutes.TRD;
+                                                    
+														        DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
+                                                            END";
 
         const string query_SyncWithRouteAddedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
-														BEGIN
-														BEGIN TRANSACTION
-															BEGIN TRY
-																INSERT INTO  WhS_RouteSync_Ericsson_{0}.{1} (BO, Code, RCNumber, RouteType)
-																SELECT BO, Code, RCNumber, RouteType  FROM WhS_RouteSync_Ericsson_{0}.{2}
-														
-																DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
-																COMMIT Transaction
-															END TRY
+                                                            BEGIN
+                                                                BEGIN TRANSACTION
+                                                                BEGIN TRY
+                                                                    INSERT INTO  WhS_RouteSync_Ericsson_{0}.{1} (BO, Code, RCNumber, TRD, NextBTable, OriginCode, RouteType)
+                                                                    SELECT BO, Code, RCNumber, TRD, NextBTable, OriginCode, RouteType  FROM WhS_RouteSync_Ericsson_{0}.{2}
+                                                            
+                                                                    DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
+                                                                    COMMIT Transaction
+                                                                END TRY
 
-															BEGIN CATCH
-																If @@TranCount>0
-																	ROLLBACK Transaction;
-																	DECLARE @ErrorMessage NVARCHAR(max);
-																	DECLARE @ErrorSeverity INT;
-																	DECLARE @ErrorState INT;
+                                                                BEGIN CATCH
+                                                                    If @@TranCount>0
+                                                                        ROLLBACK Transaction;
+                                                                        DECLARE @ErrorMessage NVARCHAR(max);
+                                                                        DECLARE @ErrorSeverity INT;
+                                                                        DECLARE @ErrorState INT;
 
-																	SELECT 
-																		@ErrorMessage = ERROR_MESSAGE() + ' Line ' + cast(ERROR_LINE() as nvarchar(5)),
-																		@ErrorSeverity = ERROR_SEVERITY(),
-																		@ErrorState = ERROR_STATE();
+                                                                        SELECT 
+                                                                            @ErrorMessage = ERROR_MESSAGE() + ' Line ' + cast(ERROR_LINE() as nvarchar(5)),
+                                                                            @ErrorSeverity = ERROR_SEVERITY(),
+                                                                            @ErrorState = ERROR_STATE();
 
-																	RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
-															END CATCH
-														END";
+                                                                        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+                                                                END CATCH
+                                                            END";
 
         const string query_CreateRouteTable = @"IF NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN
-                                                    CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
-                                                          BO varchar(255) NOT NULL,
-	                                                      Code varchar(20) NOT NULL,
-	                                                      RCNumber int NOT NULL,
-                                                          RouteType int NOT NULL
-                                                    CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{2}{1}] PRIMARY KEY CLUSTERED 
+                                                    CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}]
                                                     (
-                                                        BO ASC,
-	                                                    Code ASC,
-                                                        RouteType ASC
-                                                    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-                                                    ) ON [PRIMARY]
+                                                        BO int NOT NULL,
+                                                        Code varchar(20) NOT NULL,
+                                                        RCNumber int NOT NULL,
+                                                        TRD int NOT NULL,
+                                                        NextBTable int,
+                                                        OriginCode varchar(20),
+                                                        RouteType int NOT NULL
+                                                        CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{2}{1}] PRIMARY KEY CLUSTERED 
+                                                        (
+                                                            BO ASC,
+                                                            Code ASC,
+                                                            RouteType ASC
+                                                        )
+                                                        WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+                                                    )
+                                                    ON [PRIMARY]
 													END";
 
         const string query_CreateSucceedRouteTable = @"CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
-                                            BO varchar(255) NOT NULL,
-	                                        Code varchar(20) NOT NULL,
-	                                        RCNumber int NOT NULL,
-                                            RouteType int NOT NULL
-                                            CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.{2}{1}] PRIMARY KEY CLUSTERED 
-                                                (
-                                                  BO ASC,
-	                                              Code ASC,
-                                                  RouteType ASC
-                                                 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-                                            ) ON [PRIMARY]";
-
+                                                            BO int NOT NULL,
+                                                            Code varchar(20) NOT NULL,
+                                                            RCNumber int NOT NULL,
+                                                            TRD int NOT NULL,
+                                                            NextBTable int,
+                                                            OriginCode varchar(20),
+                                                            RouteType int NOT NULL
+                                                            CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.{2}{1}] PRIMARY KEY CLUSTERED 
+                                                                (
+                                                                    BO ASC,
+                                                                    Code ASC,
+                                                                    RouteType ASC
+                                                                )
+                                                                WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+                                                        )
+                                                        ON [PRIMARY]";
 
         const string query_DeleteRouteTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
 													BEGIN 
 														DROP TABLE WhS_RouteSync_Ericsson_{0}.{1} 
 													END";
 
-        const string query_CopyFromBaseTableToTempTable = @"INSERT INTO  WhS_RouteSync_Ericsson_{0}.{2} (BO, Code, RCNumber)
-														SELECT BO, Code, RCNumber, RouteType FROM WhS_RouteSync_Ericsson_{0}.{1}
-														#FILTER#";
+        const string query_CopyFromBaseTableToTempTable = @"INSERT INTO  WhS_RouteSync_Ericsson_{0}.{2} (BO, Code, RCNumber, TRD, NextBTable, OriginCode, RouteType)
+														    SELECT BO, Code, RCNumber, TRD, NextBTable, OriginCode, RouteType FROM WhS_RouteSync_Ericsson_{0}.{1}
+														    #FILTER#";
 
         const string query_EricssonRouteTableType = @"IF NOT EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'EricssonRouteTableType')
-                                         CREATE TYPE [EricssonRouteTableType] AS TABLE(
-	                                     [BO] [varchar](255) NOT NULL,
-	                                     [Code] [varchar](20) NOT NULL,
-	                                     [RCNumber] [int] NOT NULL,
-                                         [RouteType] [int] NOT NULL
-	                                     PRIMARY KEY CLUSTERED 
-                                         (
-											[BO] ASC,
-	                                        [Code] ASC,
-                                            [RouteType] ASC
-                                         )WITH (IGNORE_DUP_KEY = OFF)
-                                         )";
+                                                    CREATE TYPE [EricssonRouteTableType] AS TABLE
+                                                    (
+                                                        [BO] [int] NOT NULL,
+                                                        [Code] [varchar](20) NOT NULL,
+                                                        [RCNumber] [int] NOT NULL,
+                                                        [TRD] [int] NOT NULL,
+                                                        [NextBTable] [int],
+                                                        [OriginCode] varchar(20),
+                                                        [RouteType] [int] NOT NULL
+                                                        
+                                                        PRIMARY KEY CLUSTERED 
+                                                        (
+                                                            [BO] ASC,
+                                                            [Code] ASC,
+                                                            [RouteType] ASC
+                                                        )
+                                                        WITH (IGNORE_DUP_KEY = OFF)
+                                                    )";
 
         const string query_DeleteFromTempTable = @"DELETE WhS_RouteSync_Ericsson_{0}.{1}
-																FROM WhS_RouteSync_Ericsson_{0}.{1} as tempRoute join @Routes as route
-																ON route.BO = tempRoute.BO
-																and route.Code = tempRoute.Code
-																and route.RCNumber = tempRoute.RCNumber
-                                                                and route.RouteType = tempRoute.RouteType";
+                                                        FROM WhS_RouteSync_Ericsson_{0}.{1} as tempRoute join @Routes as route
+                                                        ON route.BO = tempRoute.BO
+                                                        and route.Code = tempRoute.Code
+                                                        and route.RCNumber = tempRoute.RCNumber
+                                                        and route.TRD = tempRoute.TRD
+                                                        and route.NextBTable = tempRoute.NextBTable
+                                                        and route.OriginCode = tempRoute.OriginCode
+                                                        and route.RouteType = tempRoute.RouteType";
 
 
         const string query_UpdateTempTable = @"UPDATE  tempRoutes 
-														set tempRoutes.RCNumber = routesToUpdate.RCNumber
-                                                    FROM [WhS_RouteSync_Ericsson_{0}].[{1}] as tempRoutes
-                                                    JOIN @Routes as routesToUpdate on routesToUpdate.BO = tempRoutes.BO and routesToUpdate.Code = tempRoutes.Code and routesToUpdate.RouteType = tempRoutes.RouteType";
+                                                SET tempRoutes.RCNumber = routesToUpdate.RCNumber, tempRoutes.TRD = routesToUpdate.TRD, tempRoutes.NextBTable = routesToUpdate.NextBTable
+                                                FROM [WhS_RouteSync_Ericsson_{0}].[{1}] as tempRoutes
+                                                JOIN @Routes as routesToUpdate on routesToUpdate.BO = tempRoutes.BO and routesToUpdate.Code = tempRoutes.Code and routesToUpdate.RouteType = tempRoutes.RouteType @Routes as routesToUpdate on routesToUpdate.BO = tempRoutes.BO and routesToUpdate.Code = tempRoutes.Code and routesToUpdate.RouteType = tempRoutes.RouteType";
 
-        const string query_GetFilteredRoute = @"Select BO,Code,RCNumber,RouteType
+        const string query_GetFilteredRoute = @"Select BO, Code, RCNumber, TRD, NextBTable, OriginCode, RouteType
                                                 FROM [WhS_RouteSync_Ericsson_{0}].[{1}]
                                                 #FILTER#";
 

@@ -40,7 +40,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
         #region Public Methods
 
-        public void SaveRoutesSucceededToDB(Dictionary<string, List<EricssonRouteWithCommands>> routesWithCommandsByBO)
+        public void SaveRoutesSucceededToDB(Dictionary<int, List<EricssonRouteWithCommands>> routesWithCommandsByBO)
         {
             if (routesWithCommandsByBO == null || routesWithCommandsByBO.Count == 0)
                 return;

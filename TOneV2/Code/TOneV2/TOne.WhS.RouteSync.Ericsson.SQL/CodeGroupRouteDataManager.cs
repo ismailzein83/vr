@@ -13,8 +13,8 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
     public class CodeGroupRouteDataManager : BaseSQLDataManager, ICodeGroupRouteDataManager
     {
         const string CodeGroupRouteTableName = "CodeGroupRoute";
-        
-        readonly string[] columns = { "BO", "Code", "RCNumber"};
+
+        readonly string[] columns = { "BO", "Code", "RCNumber" };
 
         public string SwitchId { get; set; }
 
@@ -76,9 +76,9 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
         }
 
-        public Dictionary<string, List<CodeGroupRoute>> GetFilteredCodeGroupRouteByBO(IEnumerable<string> customerBOs)
+        public Dictionary<int, List<CodeGroupRoute>> GetFilteredCodeGroupRouteByBO(IEnumerable<int> customerBOs)
         {
-            var convertedRoutesByBO = new Dictionary<string, List<CodeGroupRoute>>();
+            var convertedRoutesByBO = new Dictionary<int, List<CodeGroupRoute>>();
 
             string filter = "";
 
@@ -102,7 +102,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         {
             return new CodeGroupRoute()
             {
-                BO = reader["BO"] as string,
+                BO = (int)reader["BO"],
                 CodeGroup = reader["Code"] as string,
                 RCNumber = (int)reader["RCNumber"]
             };
@@ -116,7 +116,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                         END
 
                                                         CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
-                                                              BO varchar(255) NOT NULL,
+                                                              BO int NOT NULL,
 	                                                          Code varchar(20) NOT NULL,
 	                                                          RCNumber int NOT NULL
                                                         CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.CodeGroupRoute_{2}{1}] PRIMARY KEY CLUSTERED 

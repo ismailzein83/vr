@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
 		void Finalize(ICustomerMappingFinalizeContext context);
 		void ApplyCustomerMappingForDB(object preparedCustomerMapping);
 		void CompareTables(ICustomerMappingTablesContext context);
-		void RemoveCutomerMappingsFromTempTable(IEnumerable<string> failedRecordsBO);
+		void RemoveCutomerMappingsFromTempTable(IEnumerable<int> failedRecordsBO);
 		void UpdateCustomerMappingsInTempTable(IEnumerable<CustomerMapping> customerMappings);
 		void InsertCutomerMappingsToTempTable(IEnumerable<CustomerMapping> customerMappings);
 	}

@@ -26,12 +26,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 
     public interface IRouteCompareTablesContext
     {
-        Dictionary<string, EricssonConvertedRouteDifferences> RouteDifferencesByBO { set; }
+        Dictionary<int, EricssonConvertedRouteDifferences> RouteDifferencesByBO { set; }
     }
 
     public class RouteCompareTablesContext : IRouteCompareTablesContext
     {
-        public Dictionary<string, EricssonConvertedRouteDifferences> RouteDifferencesByBO { get; set; }
+        public Dictionary<int, EricssonConvertedRouteDifferences> RouteDifferencesByBO { get; set; }
     }
 
     public interface IRouteFinalizeContext
@@ -63,12 +63,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 
     }
 
-    public interface INextBTableRouteInitializeContext
+    public interface INextBTableInitializeContext
     {
 
     }
 
-    public class NextBTableRouteInitializeContext : INextBTableRouteInitializeContext
+    public class NextBTableInitializeContext : INextBTableInitializeContext
     {
 
     }

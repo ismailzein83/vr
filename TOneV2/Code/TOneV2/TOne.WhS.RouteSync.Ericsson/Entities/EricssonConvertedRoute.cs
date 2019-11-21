@@ -6,30 +6,35 @@ namespace TOne.WhS.RouteSync.Ericsson
 {
     public struct EricssonConvertedRouteIdentifier
     {
-        public string BO { get; set; }
+        public int BO { get; set; }
+
+        public int TRD { get; set; }
+
         public string Code { get; set; }
         public EricssonRouteType RouteType { get; set; }
         public override int GetHashCode()
         {
-            return BO.GetHashCode() + Code.GetHashCode() + RouteType.GetHashCode();
+            return BO.GetHashCode() + Code.GetHashCode() + RouteType.GetHashCode() + TRD.GetHashCode();
         }
     }
 
     public class EricssonConvertedRoute : ConvertedRouteWithCode
     {
-        public string BO { get; set; }
+        public int BO { get; set; }
         public int RCNumber { get; set; }
         public EricssonRouteType RouteType { get; set; }
-        public string NextBTable { get; set; }
+        public int? NextBTable { get; set; }
+        public int TRD { get; set; }
+        public string OriginCode { get; set; }
 
         public override string GetCustomer()
         {
-            return this.BO;
+            return this.BO.ToString();
         }
 
         public override string GetRouteOptionsIdentifier()
         {
-            return this.RCNumber.ToString();
+            return string.Format("{0}@{1}", this.RCNumber.ToString(), TRD.ToString());
         }
     }
 
@@ -89,7 +94,9 @@ namespace TOne.WhS.RouteSync.Ericsson
         [EricssonRouteType(IsARoute = false, IsSpecialRoute = true)]
         BNumberServiceLanguage = 2,
         [EricssonRouteType(IsARoute = true, IsSpecialRoute = true)]
-        ANumberServiceLanguage = 3
+        ANumberServiceLanguage = 3,
+        [EricssonRouteType(IsARoute = false, IsSpecialRoute = false)]
+        NextBTableRoute = 4
     }
 
     public class EricssonRouteTypeAttribute : Attribute
@@ -100,27 +107,11 @@ namespace TOne.WhS.RouteSync.Ericsson
 
     }
 
-
-    public class NextBTableConvertedRouteWithCommand
+    public class NextBTableDetails
     {
-        public List<string> Commands { get; set; }
-        public NextBTableConvertedRoute Route { get; set; }
+        public int BO { get; set; }
+        public string Prefix { get; set; }
+        public int NextBTable { get; set; }
     }
 
-    public class NextBTableConvertedRoute : ConvertedRouteWithCode
-    {
-        public string BO { get; set; }
-        public int RCNumber { get; set; }
-        public bool Synced { get; set; }
-
-        public override string GetCustomer()
-        {
-            return this.BO;
-        }
-
-        public override string GetRouteOptionsIdentifier()
-        {
-            return this.RCNumber.ToString();
-        }
-    }
 }

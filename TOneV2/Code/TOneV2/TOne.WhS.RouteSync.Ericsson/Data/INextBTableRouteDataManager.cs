@@ -7,14 +7,16 @@ using Vanrise.Data;
 
 namespace TOne.WhS.RouteSync.Ericsson.Data
 {
-    public interface INextBTableRouteDataManager : IDataManager, IBulkApplyDataManager<NextBTableConvertedRoute>
+    public interface INextBTableRouteDataManager : IDataManager, IBulkApplyDataManager<NextBTableDetails>
     {
         string SwitchId { get; set; }
+        
+        void Initialize(INextBTableInitializeContext context);
+        
+        Dictionary<int, List<NextBTableDetails>> GetNextBTableDetailsByCustomerBO();
+        
+        HashSet<int> GetAllNextBTables();
 
-        List<NextBTableConvertedRoute> GetAllNextBTableRoute();
-
-        void Initialize(INextBTableRouteInitializeContext context);
-
-        void InsertNextBTableRoutes(IEnumerable<NextBTableConvertedRoute> routes);
+        void InsertNextBTables(IEnumerable<NextBTableDetails> bTables);
     }
 }

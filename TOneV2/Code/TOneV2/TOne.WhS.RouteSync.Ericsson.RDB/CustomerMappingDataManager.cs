@@ -77,7 +77,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
         public void CompareTables(ICustomerMappingTablesContext context)
         {
-            var differences = new Dictionary<string, List<CustomerMappingByCompare>>();
+            var differences = new Dictionary<int, List<CustomerMappingByCompare>>();
 
             TryRegisterCommonTable(CustomerMappingTableName);
             var CustomerMapping_TABLE_NAME = TableNames[CustomerMappingTableName];
@@ -185,7 +185,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
         #region handleFailedRecords
 
-        public void RemoveCutomerMappingsFromTempTable(IEnumerable<string> failedRecordsBO)
+        public void RemoveCutomerMappingsFromTempTable(IEnumerable<int> failedRecordsBO)
         {
             if (failedRecordsBO == null || !failedRecordsBO.Any())
                 return;
@@ -228,7 +228,9 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
                 object dbApplyStream = InitialiazeStreamForDBApply();
                 foreach (var customerMapping in customerMappings)
                 {
-                    CustomerMappingSerialized customerMappingSerialized = new CustomerMappingSerialized() { BO = customerMapping.BO, CustomerMappingAsString = Helper.SerializeCustomerMapping(customerMapping) };
+                    if (!customerMapping.BO.HasValue)
+                        throw new NullReferenceException("customerMapping.BO");
+                    CustomerMappingSerialized customerMappingSerialized = new CustomerMappingSerialized() { BO = customerMapping.BO.Value, CustomerMappingAsString = Helper.SerializeCustomerMapping(customerMapping) };
                     WriteRecordToStream(customerMappingSerialized, dbApplyStream);
                 }
                 object obj = FinishDBApplyStream(dbApplyStream);
@@ -241,7 +243,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             TryRegisterCommonTable(CustomerMappingTempTableName);
-           var  CustomerMappingTempTable_TABLE_NAME = TableNames[CustomerMappingTempTableName];
+            var CustomerMappingTempTable_TABLE_NAME = TableNames[CustomerMappingTempTableName];
             var streamForBulkInsert = queryContext.StartBulkInsert();
             streamForBulkInsert.IntoTable(CustomerMappingTempTable_TABLE_NAME, '^', COL_BO, COL_CustomerMapping);
 
@@ -252,10 +254,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
             var recordContext = bulkInsertContext.WriteRecord();
 
-            if (record.BO != null)
-                recordContext.Value(record.BO);
-            else
-                recordContext.Value(string.Empty);
+            recordContext.Value(record.BO);
 
             recordContext.Value(record.CustomerMappingAsString);
         }
@@ -276,7 +275,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
         #region Private Methods
 
-        private void RemoveFailedRecords(IEnumerable<string> failedRecordsBO, string CustomerMappingTableName)
+        private void RemoveFailedRecords(IEnumerable<int> failedRecordsBO, string CustomerMappingTableName)
         {
             TryRegisterCommonTable(CustomerMappingTableName);
             var CustomerMapping_TABLE_NAME = TableNames[CustomerMappingTableName];
@@ -328,7 +327,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
             createTableQuery.DBTableName(TABLE_Schema, TABLE_NAME);
 
-            createTableQuery.AddColumn(COL_BO, RDBDataType.NVarchar, 255, null, true);
+            createTableQuery.AddColumn(COL_BO, RDBDataType.Int, null, null, true);
             createTableQuery.AddColumn(COL_CustomerMapping, RDBDataType.Varchar, null, null, true);
 
             var createIndexQuery = createTableQueryContext.AddCreateIndexQuery();
@@ -348,7 +347,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
             createTableQuery.DBTableName(TABLE_Schema, CustomerMappingSucceededTableName);
 
-            createTableQuery.AddColumn(COL_BO, RDBDataType.NVarchar, 255, null, true);
+            createTableQuery.AddColumn(COL_BO, RDBDataType.Int, null, null, true);
             createTableQuery.AddColumn(COL_CustomerMapping, RDBDataType.Varchar, null, null, true);
             createTableQuery.AddColumn(COL_Action, RDBDataType.Int, null, null, true);
 
@@ -490,7 +489,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
         private Dictionary<string, RDBTableColumnDefinition> GetSucceededTableColumnDefinitionDictionary()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_BO, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_BO, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_CustomerMapping, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
             columns.Add(COL_Action, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             return columns;
@@ -508,7 +507,9 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             {
                 var rowContext = insertMultipleRowsQuery.AddRow();
 
-                rowContext.Column(COL_BO).Value(cm.BO);
+                if (!cm.BO.HasValue)
+                    throw new NullReferenceException("cm.BO");
+                rowContext.Column(COL_BO).Value(cm.BO.Value);
                 rowContext.Column(COL_CustomerMapping).Value(Helper.SerializeCustomerMapping(cm));
             }
 
@@ -522,7 +523,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
         {
             return new CustomerMappingSerialized()
             {
-                BO = reader.GetString(COL_BO),
+                BO = reader.GetInt(COL_BO),
                 CustomerMappingAsString = reader.GetString(COL_CustomerMapping)
             };
         }

@@ -27,6 +27,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
         const string COL_BO = "BO";
         const string COL_Code = "Code";
+        const string COL_TRD = "RCNumber";
         const string COL_RCNumber = "RCNumber";
         const string COL_RouteType = "RouteType";
 
@@ -82,7 +83,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
         public void CompareTables(IRouteCompareTablesContext context)
         {
-            var differencesByBO = new Dictionary<string, EricssonConvertedRouteDifferences>();
+            var differencesByBO = new Dictionary<int, EricssonConvertedRouteDifferences>();
             var differences = new Dictionary<EricssonConvertedRouteIdentifier, List<EricssonConvertedRouteByCompare>>();
 
 
@@ -103,14 +104,14 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             if (checkIfTableExistsQueryContext.ExecuteScalar().IntValue > 0)
             {
                 var selectQuery = queryContext.AddSelectQuery();
-                selectQuery.SelectColumns().Columns(COL_BO, COL_Code, COL_RCNumber, COL_RouteType);
+                selectQuery.SelectColumns().Columns(COL_BO, COL_Code, COL_RCNumber, COL_TRD, COL_RouteType);
                 selectQuery.SelectAggregates().Aggregate(RDBNonCountAggregateType.MAX, "tableName");
 
                 var unionSelect = selectQuery.FromSelectUnion("v");
 
                 var firstSelect = unionSelect.AddSelect();
                 firstSelect.From(Route_TABLE_NAME, RouteTableName);
-                firstSelect.SelectColumns().Columns(COL_BO, COL_Code, COL_RCNumber, COL_RouteType);
+                firstSelect.SelectColumns().Columns(COL_BO, COL_Code, COL_RCNumber, COL_TRD, COL_RouteType);
                 firstSelect.SelectColumns().Expression("tableName").Value(RouteTableName);
 
                 var secondSelect = unionSelect.AddSelect();
@@ -120,7 +121,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
 
                 var groupByContext = selectQuery.GroupBy();
-                groupByContext.Select().Columns(COL_BO, COL_Code, COL_RCNumber, COL_RouteType);
+                groupByContext.Select().Columns(COL_BO, COL_Code, COL_RCNumber, COL_TRD, COL_RouteType);
                 groupByContext.Having().CompareCount(RDBCompareConditionOperator.Eq, 1);
             }
             else
@@ -137,7 +138,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
                 while (reader.Read())
                 {
                     var convertedRouteByCompare = new EricssonConvertedRouteByCompare() { EricssonConvertedRoute = EricssonConvertedRouteMapper(reader), TableName = reader.GetString("tableName") };
-                    var routeIdentifier = new EricssonConvertedRouteIdentifier() { BO = convertedRouteByCompare.EricssonConvertedRoute.BO, Code = convertedRouteByCompare.EricssonConvertedRoute.Code, RouteType = convertedRouteByCompare.EricssonConvertedRoute.RouteType };
+                    var routeIdentifier = new EricssonConvertedRouteIdentifier() { BO = convertedRouteByCompare.EricssonConvertedRoute.BO, Code = convertedRouteByCompare.EricssonConvertedRoute.Code, RouteType = convertedRouteByCompare.EricssonConvertedRoute.RouteType, TRD = convertedRouteByCompare.EricssonConvertedRoute.TRD };
                     List<EricssonConvertedRouteByCompare> tempRouteDifferences = differences.GetOrCreateItem(routeIdentifier);
                     tempRouteDifferences.Add(convertedRouteByCompare);
                 }
@@ -172,6 +173,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
                                     BO = route.EricssonConvertedRoute.BO,
                                     Code = route.EricssonConvertedRoute.Code,
                                     RCNumber = route.EricssonConvertedRoute.RCNumber,
+                                    TRD = route.EricssonConvertedRoute.TRD,
                                     RouteType = route.EricssonConvertedRoute.RouteType
                                 },
                                 OriginalValue = (routeOldValue != null) ? new EricssonConvertedRoute()
@@ -179,6 +181,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
                                     BO = routeOldValue.EricssonConvertedRoute.BO,
                                     Code = routeOldValue.EricssonConvertedRoute.Code,
                                     RCNumber = routeOldValue.EricssonConvertedRoute.RCNumber,
+                                    TRD = route.EricssonConvertedRoute.TRD,
                                     RouteType = routeOldValue.EricssonConvertedRoute.RouteType
                                 } : null
                             });
@@ -189,7 +192,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             }
         }
 
-        public void CopyCustomerRoutesToTempTable(IEnumerable<string> customerBOs)
+        public void CopyCustomerRoutesToTempTable(IEnumerable<int> customerBOs)
         {
             if (customerBOs == null || !customerBOs.Any())
                 return;
@@ -214,12 +217,12 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             queryContext.ExecuteNonQuery();
         }
 
-        public Dictionary<string, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByBO(IEnumerable<string> customerBOs)
+        public Dictionary<int, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByBO(IEnumerable<int> customerBOs)
         {
             TryRegisterTable(RouteTempTableName);
             var RouteTemp_TABLE_NAME = TableNames[RouteTempTableName];
 
-            var convertedRoutesByBO = new Dictionary<string, List<EricssonConvertedRoute>>();
+            var convertedRoutesByBO = new Dictionary<int, List<EricssonConvertedRoute>>();
 
             var queryContext = new RDBQueryContext(GetDataProvider());
 
@@ -283,6 +286,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             joinCondition.EqualsCondition(routeTableAlias, COL_BO, tempTableAlias, COL_BO);
             joinCondition.EqualsCondition(routeTableAlias, COL_Code, tempTableAlias, COL_Code);
             joinCondition.EqualsCondition(routeTableAlias, COL_RCNumber, tempTableAlias, COL_RCNumber);
+            joinCondition.EqualsCondition(routeTableAlias, COL_TRD, tempTableAlias, COL_TRD);
             joinCondition.EqualsCondition(routeTableAlias, COL_RouteType, tempTableAlias, COL_RouteType);
 
             queryContext.ExecuteNonQuery();
@@ -326,7 +330,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
             var queryContext = new RDBQueryContext(GetDataProvider());
             var streamForBulkInsert = queryContext.StartBulkInsert();
-            streamForBulkInsert.IntoTable(RouteTemp_TABLE_NAME, '^', COL_BO, COL_Code, COL_RCNumber, COL_RouteType);
+            streamForBulkInsert.IntoTable(RouteTemp_TABLE_NAME, '^', COL_BO, COL_Code, COL_RCNumber, COL_TRD, COL_RouteType);
 
             return streamForBulkInsert;
         }
@@ -346,6 +350,8 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             else
                 recordContext.Value(string.Empty);
 
+            recordContext.Value(record.TRD);
+
             recordContext.Value(record.RCNumber);
             recordContext.Value((int)record.RouteType);
         }
@@ -361,7 +367,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
         {
             preparedRoute.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream").Apply();
         }
-      
+
         #endregion
 
         #endregion
@@ -416,7 +422,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
 
             var fromSelectQuery = insertQuery.FromSelect();
             fromSelectQuery.From(RouteAdded_TABLE_NAME, RouteAddedTableName);
-            fromSelectQuery.SelectColumns().Columns(COL_BO, COL_Code, COL_RCNumber, COL_RouteType);
+            fromSelectQuery.SelectColumns().Columns(COL_BO, COL_Code, COL_RCNumber, COL_TRD, COL_RouteType);
 
             queryContext.AddDropTableQuery().TableName(RouteAdded_TABLE_NAME);
 
@@ -535,6 +541,7 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             createTableQuery.AddColumn(COL_BO, RDBDataType.NVarchar, 255, null, true);
             createTableQuery.AddColumn(COL_Code, RDBDataType.Varchar, 20, null, true);
             createTableQuery.AddColumn(COL_RCNumber, RDBDataType.Int, true);
+            createTableQuery.AddColumn(COL_TRD, RDBDataType.Int, true);
             createTableQuery.AddColumn(COL_RouteType, RDBDataType.Int, true);
 
 
@@ -616,9 +623,10 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
         {
             return new EricssonConvertedRoute()
             {
-                BO = reader.GetString(COL_BO),
+                BO = reader.GetInt(COL_BO),
                 Code = reader.GetString(COL_Code),
                 RCNumber = reader.GetInt(COL_RCNumber),
+                TRD = reader.GetInt(COL_TRD),
                 RouteType = (EricssonRouteType)reader.GetInt(COL_RouteType)
             };
         }
