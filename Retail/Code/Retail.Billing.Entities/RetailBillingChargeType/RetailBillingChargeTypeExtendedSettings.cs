@@ -20,7 +20,10 @@ namespace Retail.Billing.Entities
 
     public interface IRetailBillingChargeTypeCalculateChargeContext
     {
-        Guid ChargeTypeId { get; set; }
+        Guid ChargeTypeId { get; }
+        object BillingAccountId { get; }
+        DateTime? FromTime { get; }
+        DateTime? ToTime { get; }
         RetailBillingCharge Charge { get; }
         Dictionary<string, Object> TargetFieldValues { get; }
     }
@@ -32,6 +35,9 @@ namespace Retail.Billing.Entities
     public class RetailBillingChargeTypeCalculateChargeContext : IRetailBillingChargeTypeCalculateChargeContext
     {
         public Guid ChargeTypeId { get; set; }
+        public object BillingAccountId { get; set; }
+        public DateTime? FromTime { get; set; }
+        public DateTime? ToTime { get; set; }
         public RetailBillingCharge Charge { get; set; }
 
         public Dictionary<string, Object> TargetFieldValues { get; set; }
