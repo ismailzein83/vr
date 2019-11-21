@@ -109,17 +109,17 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public ServiceParameter GetPabxServiceParameterValues()
+        public List<ServiceParameter> GetPabxServiceParameterValues()
         {
-            var item = new ServiceParameter();
+            var parameters = new List<ServiceParameter>();
             string pabxServiceId = new CatalogManager().GetPABXServiceId();
 
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<ServiceParameter>(String.Format("api/SOM.ST/Billing/GetPabxServiceParameterValues?ServiceId={0}", pabxServiceId));
+                parameters = client.Get<List<ServiceParameter>>(String.Format("api/SOM.ST/Billing/GetServiceParameters?serviceId={0}", pabxServiceId));
             }
 
-            return item;
+            return parameters;
 
         }
 
@@ -174,6 +174,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StPathId");
+            esq.AddColumn("StParameterId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -190,8 +191,9 @@ namespace BPMExtended.Main.Business
                 var parameterNumber = entities[0].GetColumnValue("StParameterNumber");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 string pathId = entities[0].GetColumnValue("StPathId").ToString();
+                string parameterId = entities[0].GetColumnValue("StParameterId").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-                ServiceParameterValue pilotParameter = JsonConvert.DeserializeObject<ServiceParameterValue>(entities[0].GetColumnValue("StPilotContractParameter").ToString()); ;
+                PabxContractInput pilotContract = JsonConvert.DeserializeObject<PabxContractInput>(entities[0].GetColumnValue("StPilotContractParameter").ToString()); ;
                 List<PabxContractInput> selectedSecondaryContracts = JsonConvert.DeserializeObject<List<PabxContractInput>>(entities[0].GetColumnValue("StSelectedSecondaryContracts").ToString());
 
                 SOMRequestInput<CreatePABXRequestInput> somRequestInput = new SOMRequestInput<CreatePABXRequestInput>
@@ -211,22 +213,8 @@ namespace BPMExtended.Main.Business
                         },
                         SubmitPabxInput = new SubmitPabxInput()
                         {
-                            PilotContract = new PabxContractInput()
-                            {
-                                ContractId = contractId.ToString(),
-                                PhoneNumber = phoneNumber.ToString(),
-                                LinePathId = pathId,
-                                PabxParameterValue = pilotParameter
-
-                            },
-                            Contracts = selectedSecondaryContracts,
-                            PabxService = new PabxService()
-                            {
-                                Id = new CatalogManager().GetPABXServiceId(),
-                                ParameterNumber = parameterNumber.ToString(),
-                                PackageId = "",
-                                ParameterId = ""
-                            }
+                            PilotContract = pilotContract,
+                            Contracts = selectedSecondaryContracts
                         }
                     }
 

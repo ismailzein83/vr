@@ -19,7 +19,6 @@ namespace BPMExtended.Main.SOMAPI
     {
         public PabxContractInput PilotContract { get; set; }
         public List<PabxContractInput> Contracts { get; set; }
-        public PabxService PabxService { get; set; }
     }
 
     public class PabxContractInput
@@ -27,7 +26,8 @@ namespace BPMExtended.Main.SOMAPI
         public string ContractId { get; set; }
         public string LinePathId { get; set; }
         public string PhoneNumber { get; set; }
-        public ServiceParameterValue PabxParameterValue { get; set; }
+        public PabxService PabxService { get; set; }
+        //public ServiceParameterValue PabxParameterValue { get; set; }
     }
 
 
@@ -35,8 +35,7 @@ namespace BPMExtended.Main.SOMAPI
     {
         public string Id { get; set; }
         public string PackageId { get; set; }
-        public string ParameterId { get; set; }
-        public string ParameterNumber { get; set; }
+        public List<ServiceParameter> Parameters { get; set; }
     }
 
     public class ServiceParameterValue

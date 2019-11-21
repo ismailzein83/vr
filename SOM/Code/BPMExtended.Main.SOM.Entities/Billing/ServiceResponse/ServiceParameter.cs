@@ -12,6 +12,7 @@ namespace BPMExtended.Main.SOMAPI
         public string Id { get; set; }
         public string Description { get; set; }
         public string ParameterNumber { get; set; }
+        public ParameterType Type { get; set; }
         public List<ServiceParameterValue> Values { get; set; }
     }
 

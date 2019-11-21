@@ -267,13 +267,13 @@ namespace BPMExtended.Main.Business
             if (lob == "ADSL Subscription")
             {
                 packagesIds.Add(packages.Core);
-                //packagesIds.Add(packages.XDSL);
+                packagesIds.Add(packages.XDSL);
             }
 
             if (lob == "GSHDSL")
             {
                 packagesIds.Add(packages.Core);
-                //packagesIds.Add(packages.XDSL);
+                packagesIds.Add(packages.XDSL);
             }
 
             if (lob == "Leased Line")
