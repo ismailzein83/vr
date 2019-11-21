@@ -153,21 +153,24 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
                 foreach (var chargeType in chargeTypes)
                 {
-                    var evaluatorsFullTypes = chargeTypeFullTypeNamesByChargeTypeId.GetRecord(chargeType.VRComponentTypeId);
-
-                    var priceEvaluatorRuntimeType = compilationOutput.OutputAssembly.GetType(evaluatorsFullTypes.PriceEvaluatorFullTypeName);
-                    if (priceEvaluatorRuntimeType == null)
-                        throw new NullReferenceException($"priceEvaluatorRuntimeType for charge type Id:'{chargeType.VRComponentTypeId}'");
-
-                    var descriptionEvaluatorRuntimeType = compilationOutput.OutputAssembly.GetType(evaluatorsFullTypes.DescriptionEvaluatorFullTypeName);
-                    if (descriptionEvaluatorRuntimeType == null)
-                        throw new NullReferenceException($"descriptionEvaluatorRuntimeType for charge type Id:'{chargeType.VRComponentTypeId}'");
-
-                    chargeTypeFullTypesByChargeTypeId.Add(chargeType.VRComponentTypeId, new ChargeTypeCustomCodeEvaluators()
+                    if (chargeType.Settings.ExtendedSettings is RetailBillingCustomCodeChargeType)
                     {
-                        PriceEvaluator = priceEvaluatorRuntimeType,
-                        DescriptionEvaluator = descriptionEvaluatorRuntimeType
-                    });
+                        var evaluatorsFullTypes = chargeTypeFullTypeNamesByChargeTypeId.GetRecord(chargeType.VRComponentTypeId);
+
+                        var priceEvaluatorRuntimeType = compilationOutput.OutputAssembly.GetType(evaluatorsFullTypes.PriceEvaluatorFullTypeName);
+                        if (priceEvaluatorRuntimeType == null)
+                            throw new NullReferenceException($"priceEvaluatorRuntimeType for charge type Id:'{chargeType.VRComponentTypeId}'");
+
+                        var descriptionEvaluatorRuntimeType = compilationOutput.OutputAssembly.GetType(evaluatorsFullTypes.DescriptionEvaluatorFullTypeName);
+                        if (descriptionEvaluatorRuntimeType == null)
+                            throw new NullReferenceException($"descriptionEvaluatorRuntimeType for charge type Id:'{chargeType.VRComponentTypeId}'");
+
+                        chargeTypeFullTypesByChargeTypeId.Add(chargeType.VRComponentTypeId, new ChargeTypeCustomCodeEvaluators()
+                        {
+                            PriceEvaluator = priceEvaluatorRuntimeType,
+                            DescriptionEvaluator = descriptionEvaluatorRuntimeType
+                        });
+                    }
                 }
             }
 
