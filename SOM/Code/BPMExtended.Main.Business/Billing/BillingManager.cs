@@ -546,9 +546,14 @@ namespace BPMExtended.Main.Business
             }
             return new PaymentDetail
             {
+                Amount=item.CurrentAmount.ToString(),
+                CashAmount=item.CashAmount.ToString(),
+                Currency=item.Currency,
+                PaymentId=item.Id,
                 PaymentCode = item.Code,
                 PaymentDate = paymentDate,
                 CashierUserName = item.GLAccount,
+
             };
         }
 

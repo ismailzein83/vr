@@ -14,5 +14,9 @@ namespace BPMExtended.Main.Entities
         public string CashierUserName { get; set; } //GLAccount?
         public string PaymentType { get; set; } // PaymentMethodId (Id to Invoice/Cash) Enum
         public string CustomerID { get; set; }//??
+        public string Currency { get; set; }
+        public string CashAmount { get; set; }
+        public string Amount { get; set; }
+        public string PaymentId { get; set; }
     }
 }
