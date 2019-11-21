@@ -35,7 +35,7 @@
             var fieldValues;
             var genericBusinessEntityId;
             var gridAPI;
-
+            var isObjectValue = false;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -60,10 +60,10 @@
 
                         if (genericBEGridView != undefined && genericBEGridView.Settings != undefined) {
                             payload = {};
-                        
+
                             if (!canMap()) {
                                 promises.push(getGenericBusinessEntity());
-                            } 
+                            }
                         }
 
                     }
@@ -100,6 +100,7 @@
                 return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
                     if (response != undefined) {
                         fieldValues = response.FieldValues;
+                        isObjectValue = true;
                     }
                 });
             }
@@ -124,12 +125,12 @@
                     var currentMapping = genericBEGridView.Settings.Mappings[i];
                     var childName = currentMapping.SubviewColumnName;
                     var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
-                    if (parentFieldValue != undefined && childName != undefined && parentFieldValue.Value != undefined) {
-                        fields[childName] = {
-                            value: parentFieldValue.Value,
-                            isHidden: true ,//currentMapping.IsVisibile?false:true,
-                            isDisabled: true// currentMapping.IsEnabled?false:true
-                        };
+                    if (parentFieldValue != undefined && childName != undefined) {
+                        if (!isObjectValue && parentFieldValue.Value != undefined) {
+                            fields[childName] = fillMappingFields(parentFieldValue.Value);
+                        } else {
+                            fields[childName] = fillMappingFields(parentFieldValue);
+                        }
                     }
                 }
 
@@ -140,19 +141,27 @@
                 var fields = {};
                 for (var i = 0; i < genericBEGridView.Settings.Mappings.length; i++) {
                     var currentMapping = genericBEGridView.Settings.Mappings[i];
-                  //  if (!currentMapping.ExcludeFromFilter) {
-                        var childName = currentMapping.SubviewColumnName;
-                        var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
-                        if (parentFieldValue != undefined && childName != undefined && parentFieldValue.Value != undefined) {
-                            fields[childName] = {
-                                value: parentFieldValue.Value,
-                                isHidden: true,//currentMapping.IsVisibile?false:true,
-                                isDisabled: true// currentMapping.IsEnabled?false:true
-                            };
+                    //  if (!currentMapping.ExcludeFromFilter) {
+                    var childName = currentMapping.SubviewColumnName;
+                    var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
+                    if (parentFieldValue != undefined && childName != undefined) {
+                        if (!isObjectValue && parentFieldValue.Value != undefined) {
+                            fields[childName] = fillMappingFields(parentFieldValue.Value);
+                        } else {
+                            fields[childName] = fillMappingFields(parentFieldValue);
                         }
-                   // }
+                    }
+                    // }
                 }
                 return fields;
+            }
+
+            function fillMappingFields(value) {
+                return {
+                    value: value,
+                    isHidden: true,//currentMapping.IsVisibile?false:true,
+                    isDisabled: true// currentMapping.IsEnabled?false:true
+                };
             }
         }
     }
