@@ -52,7 +52,6 @@
     <Compile Include="ConnectionType\ConnectionTypeEntity.cs" />
     <Compile Include="Connection\Connection.cs" />
     <Compile Include="Connection\ReserveConnection.cs" />
-    <Compile Include="CopperPath\CopperPath.cs" />
     <Compile Include="NodePartType\NodePartType.cs" />
     <Compile Include="NodePartType\NodePartTypeInfo.cs" />
     <Compile Include="NodePartType\NodePartTypeInfoFilter.cs" />

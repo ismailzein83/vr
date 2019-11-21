@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="ConnectionType\ConnectionTypeManager.cs" />
     <Compile Include="Connection\ConnectionManager.cs" />
-    <Compile Include="CopperPath\CopperPathManager.cs" />
     <Compile Include="NodePartType\NodePartTypeManager.cs" />
     <Compile Include="NodePart\NodePartManager.cs" />
     <Compile Include="NodePort\NodePortManager.cs" />
