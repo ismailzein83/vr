@@ -44,6 +44,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildingAddress.cs" />
@@ -73,6 +76,9 @@
     <Compile Include="NodeType\NodeTypeInfoFilter.cs" />
     <Compile Include="Node\Node.cs" />
     <Compile Include="PathConnection\PathConnection.cs" />
+    <Compile Include="PathDiagram\PathDiagramData.cs" />
+    <Compile Include="PathDiagram\PathDiagramViewDefinition.cs" />
+    <Compile Include="PathDiagram\PathDiagramViewRuntime.cs" />
     <Compile Include="PathPort\PathPort.cs" />
     <Compile Include="Path\Path.cs" />
     <Compile Include="Path\SetPathReadyInput.cs" />
