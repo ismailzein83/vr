@@ -1,5 +1,10 @@
 ﻿using Retail.Billing.Entities;
 using System;
+using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
+using Vanrise.Common;
+using System.Collections.Generic;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 {
@@ -15,11 +20,52 @@ namespace Retail.Billing.MainExtensions.RetailBillingChargeType
 
         public string CurrencyMeasureName { get; set; }
 
-        public override string RuntimeEditor => throw new NotImplementedException();
+        public RecordFilterGroup FilterGroup { get; set; }
+
+        public override string RuntimeEditor { get { return "retail-billing-charge-analyticquery"; } }
 
         public override decimal CalculateCharge(IRetailBillingChargeTypeCalculateChargeContext context)
         {
-            return 1;
+            context.BillingAccountId.ThrowIfNull("context.BillingAccountId");
+
+            if (!context.FromTime.HasValue)
+                throw new NullReferenceException("context.FromTime");
+
+            if (!context.ToTime.HasValue)
+                throw new NullReferenceException("context.ToTime");
+
+            AnalyticManager anayticManager = new AnalyticManager();
+
+            var filters = new List<DimensionFilter>();
+            var dimensionFilter = new DimensionFilter()
+            {
+                Dimension = BillingAccountDimensionName,
+                FilterValues = new List<object>() { context.BillingAccountId }
+            };
+            filters.Add(dimensionFilter);
+
+            var analyticQuery = new AnalyticQuery()
+            {
+                TableId = AnalyticTableId,
+                MeasureFields = new List<string> { AmountMeasureName, CurrencyMeasureName },
+                FromTime=context.FromTime.Value,
+                ToTime=context.ToTime.Value,
+                FilterGroup = FilterGroup,
+                Filters = filters
+            };
+
+            var records = anayticManager.GetAllFilteredRecords(analyticQuery);
+            if (records != null && records.Count > 0)
+            {
+                var record = records[0];
+                if (record.MeasureValues != null)
+                {
+                    var amount = record.MeasureValues.GetRecord(AmountMeasureName);
+                    if (amount != null && amount.Value != null)
+                        return (decimal)amount.Value;
+                }
+            }
+            return 0;
         }
         public override string GetDescription(IRetailBillingChargeTypeGetDescriptionContext context)
         {

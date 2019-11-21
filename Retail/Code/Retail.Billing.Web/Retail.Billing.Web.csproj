@@ -163,6 +163,10 @@
   <ItemGroup>
     <Content Include="Retail_Billing\Constants\CustomerMessagesTypeEnum.js" />
     <Content Include="Retail_Billing\Constants\ModuleConfig.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\retail-billing-chargetype-analyticquery.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\Templates\AnalyticQueryChargeTypeTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\MainExtensions\retail-billing-charge-analyticquery.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingCharge\MainExtensions\Templates\AnalyticQueryChargeTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingContractService\retail-billing-contractservicechargeablecondition-beforesavehandler.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\retail-billing-chargetype-customcode.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingChargeType\MainExtensions\Templates\CustomCodeChargeTypeTemplate.html" />
