@@ -542,14 +542,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public PurchasePricelistSettings GetCompanyPurchasePricelistSettings(CompanySetting companySetting)
         {
             var configManager = new ConfigManager();
+            var vanriseCommonBusinessConfigManager = new Vanrise.Common.Business.ConfigManager();
 
-            Vanrise.Common.Business.ConfigManager vanriseCommonBusinessConfigManager = new Vanrise.Common.Business.ConfigManager();
-            CompanyPurchasePricelistSettings companyPricelistSettingsObj = vanriseCommonBusinessConfigManager.GetCompanyExtendedSettings<CompanyPurchasePricelistSettings>(companySetting);
-            PurchasePricelistSettings companyPricelistSettings = (companyPricelistSettingsObj != null)
-                ? companyPricelistSettingsObj.PricelistSettings
-                : default(PurchasePricelistSettings);
+            var companyPricelistSettingsObj = vanriseCommonBusinessConfigManager.GetCompanyExtendedSettings<CompanyPurchasePricelistSettings>(companySetting);
 
-            return configManager.MergePurchasePricelistSettings(configManager.GetPurchaseAreaPricelistSettings(), companyPricelistSettings);
+            return configManager.MergePurchasePricelistSettings(configManager.GetPurchaseAreaPricelistSettings(), companyPricelistSettingsObj.PricelistSettings);
         }
         public PricelistSettings GetCompanyPricelistSettings(CompanySetting companySetting)
         {

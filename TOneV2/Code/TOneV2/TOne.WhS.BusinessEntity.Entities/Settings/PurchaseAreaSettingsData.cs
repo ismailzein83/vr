@@ -15,7 +15,19 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int AcceptableZoneClosingPercentage { get; set; }
         public bool CodeGroupVerfifcation { get; set; }
         public bool AllowRateZero { get; set; }
-        public PurchasePricelistSettings PricelistSettings { get; set; }
+        // public PurchasePricelistSettings PricelistSettings { get; set; }
+        public PurchasePricelistSettings PricelistSettings
+        {
+            get
+            {
+                return _PricelistSettings;
+            }
+            set
+            {
+                _PricelistSettings = value;
+            }
+        }
+        public PurchasePricelistSettings _PricelistSettings = new PurchasePricelistSettings();
     }
 
     public class PricelistTypeMapping
