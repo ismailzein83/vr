@@ -33,6 +33,10 @@ namespace Retail.Teles.Business
                 {
                     return new TelesSiteManager().UnmapSiteToAccount(input);
                 }
+                else if (account.TypeId.Equals(unmappingTelesAccountActionSettings.UserTypeId))
+                {
+                    return new TelesUserManager().UnmapUserToAccount(input);
+                }
             }
 
             return new UpdateOperationOutput<AccountDetail>

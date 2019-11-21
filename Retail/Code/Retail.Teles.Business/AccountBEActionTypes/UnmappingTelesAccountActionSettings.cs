@@ -24,7 +24,7 @@ namespace Retail.Teles.Business.AccountBEActionTypes
 
         public Guid CompanyTypeId { get; set; }
         public Guid SiteTypeId { get; set; }
-
+        public Guid UserTypeId { get; set; }
         public UnmappingTelesAccountActionSecurity Security { get; set; }
 
         public override bool DoesUserHaveAccess(IAccountActionDefinitionCheckAccessContext context)

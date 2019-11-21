@@ -8,6 +8,7 @@
     AllowUserMap: { value: 6, description: 'Allow User Map' },
     CanChangeUserMapping: { value: 7, description: 'Can Change User Mapping' },
     CanUnmapCompany: { value: 8, description: 'Can Unmap Company' },
-    CanUnmapSite: { value: 9, description: 'Can Unmap Site' }
+    CanUnmapSite: { value: 9, description: 'Can Unmap Site' },
+    CanUnmapUser: { value: 10, description: 'Can Unmap User' }
 
 });

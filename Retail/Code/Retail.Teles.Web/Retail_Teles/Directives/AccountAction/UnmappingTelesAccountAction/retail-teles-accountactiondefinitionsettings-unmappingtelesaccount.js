@@ -23,8 +23,12 @@ app.directive('retailTelesAccountactiondefinitionsettingsUnmappingtelesaccount',
             var accountBEDefinitionId;
             var companyTypeAPI;
             var companyTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             var siteTypeAPI;
             var siteDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var userTypeAPI;
+            var userDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -38,8 +42,13 @@ app.directive('retailTelesAccountactiondefinitionsettingsUnmappingtelesaccount',
                     siteTypeAPI = api;
                     siteDirectiveReadyDeferred.resolve();
                 };
+                
+                $scope.scopeModel.onUserAccountTypeSelectorReady = function (api) {
+                    userTypeAPI = api;
+                    userDirectiveReadyDeferred.resolve();
+                };
 
-                UtilsService.waitMultiplePromises([companyTypeDirectiveReadyDeferred.promise, siteDirectiveReadyDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([companyTypeDirectiveReadyDeferred.promise, siteDirectiveReadyDeferred.promise, userDirectiveReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
                 
@@ -75,13 +84,24 @@ app.directive('retailTelesAccountactiondefinitionsettingsUnmappingtelesaccount',
                         return siteTypeAPI.load(siteTypePayload);
                     }
 
+                    promises.push(loadUserTypes());
+
+                    function loadUserTypes() {
+                        var userTypePayload;
+                        if (accountActionDefinitionSettings != undefined) {
+                            userTypePayload = { selectedIds: accountActionDefinitionSettings.UserTypeId };
+                        }
+                        return userTypeAPI.load(userTypePayload);
+                    }
+
                 };
 
                 api.getData = function () {
                     return {
                         $type: 'Retail.Teles.Business.AccountBEActionTypes.UnmappingTelesAccountActionSettings, Retail.Teles.Business',
                         CompanyTypeId: companyTypeAPI.getSelectedIds(),
-                        SiteTypeId: siteTypeAPI.getSelectedIds()
+                        SiteTypeId: siteTypeAPI.getSelectedIds(),
+                        UserTypeId: userTypeAPI.getSelectedIds()
                     };
                 };
 

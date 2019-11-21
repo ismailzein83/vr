@@ -100,6 +100,29 @@ namespace Retail.Teles.Business
             return updateOperationOutput;
 
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UnmapUserToAccount(TelesAccountToUnmap input)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool result = TryUnmapUserToAccount(input.AccountBEDefinitionId, input.AccountId);
+            if (result)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                _accountBEManager.TrackAndLogObjectCustomAction(input.AccountBEDefinitionId, input.AccountId, "Unmap Teles User", null, null);
+                updateOperationOutput.UpdatedObject = _accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
         public bool IsMapUserToAccountValid(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId)
         {
 
@@ -126,6 +149,11 @@ namespace Retail.Teles.Business
                 Status = status 
             };
             return _accountBEManager.UpdateAccountExtendedSetting<UserAccountMappingInfo>(accountBEDefinitionId, accountId, userAccountMappingInfo);
+        }
+
+        public bool TryUnmapUserToAccount(Guid accountBEDefinitionId, long accountId)
+        {
+            return _accountBEManager.DeleteAccountExtendedSetting<UserAccountMappingInfo>(accountBEDefinitionId, accountId);
         }
         public bool CanMapTelesUser(Guid accountBEDefinitionId, string userId)
         {
