@@ -91,8 +91,8 @@
             function buildPayload() {
                 return {
                     businessEntityDefinitionId: genericBEGridView.Settings.GenericBEDefinitionId,
-                    fieldValues: buildMappingfields(),
-                    filterValues: buildMappingfields()
+                    fieldValues: buildFieldsMappingfields(),
+                    filterValues: buildFiltersMappingfields()
                 };
             }
 
@@ -117,7 +117,7 @@
                 return canMap;
             }
 
-            function buildMappingfields() {
+            function buildFieldsMappingfields() {
 
                 var fields = {};
                 for (var i = 0; i < genericBEGridView.Settings.Mappings.length; i++) {
@@ -127,12 +127,31 @@
                     if (parentFieldValue != undefined && childName != undefined && parentFieldValue.Value != undefined) {
                         fields[childName] = {
                             value: parentFieldValue.Value,
-                            isHidden: true,
-                            isDisabled: true
+                            isHidden: true ,//currentMapping.IsVisibile?false:true,
+                            isDisabled: true// currentMapping.IsEnabled?false:true
                         };
                     }
                 }
 
+                return fields;
+            }
+
+            function buildFiltersMappingfields() {
+                var fields = {};
+                for (var i = 0; i < genericBEGridView.Settings.Mappings.length; i++) {
+                    var currentMapping = genericBEGridView.Settings.Mappings[i];
+                  //  if (!currentMapping.ExcludeFromFilter) {
+                        var childName = currentMapping.SubviewColumnName;
+                        var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
+                        if (parentFieldValue != undefined && childName != undefined && parentFieldValue.Value != undefined) {
+                            fields[childName] = {
+                                value: parentFieldValue.Value,
+                                isHidden: true,//currentMapping.IsVisibile?false:true,
+                                isDisabled: true// currentMapping.IsEnabled?false:true
+                            };
+                        }
+                   // }
+                }
                 return fields;
             }
         }
