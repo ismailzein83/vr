@@ -15,7 +15,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
             {
                 return Guid.NewGuid();
             }
-        };
+        }
         public dynamic DataRecord { get; set; }
     }
 }
