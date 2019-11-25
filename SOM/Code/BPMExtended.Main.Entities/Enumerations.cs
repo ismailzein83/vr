@@ -281,8 +281,10 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Deactivate PABX")]
         [EntitySchemaName("StDeactivatePabx")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("C666F283-43BB-470E-A104-A6AA5D25F42E")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("D81C2F66-3A3D-45E5-9BF1-3990C430F362")]
         DeactivatePABX = 27,
 
         //[LineOfBusiness(LineOfBusiness.Telephony)]
@@ -425,6 +427,8 @@ namespace BPMExtended.Main.Entities
 
         [Description("Revoke")]
         [EntitySchemaName("StRevoke")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("58867CC6-C872-40F3-AC39-C68FFD743E1B")]
         [CompletedStep("StTypeId")]
         [CompletedStepId("5e803dda-f776-4ddd-a971-345d87a99d96")]
         Revoke = 47,

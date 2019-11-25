@@ -123,6 +123,19 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public List<string> GetPABXSecondaryContracts(string pilotContractId)
+        {
+            var secondaryContracts = new List<string>();
+
+            using (SOMClient client = new SOMClient())
+            {
+                secondaryContracts = client.Get<List<string>>(String.Format("api/SOM.ST/Billing/GetPABXSecondaryContracts?contractId={0}", pilotContractId));
+            }
+
+            return secondaryContracts;
+
+        }
+
         public void CreatePabxSwitchTeamWorkOrder(string requestId)
         {
             string workOrderId = new CustomerRequestManager().CreateWorkOrder(requestId, "F60012C5-A0C3-4593-B7C4-B50A21988D54");

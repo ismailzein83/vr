@@ -11,8 +11,9 @@ namespace BPMExtended.Main.SOMAPI
     {
         public CommonInputArgument CommonInputArgument { get; set; }
         public PaymentData PaymentData { get; set; }
-        public string LinePathId { get; set; }
-        public List<PabxService> PabxServices { get; set; }
+        public string PABXServiceId { get; set; }
+        //public string LinePathId { get; set; }
+        //public List<PabxService> PabxServices { get; set; }
 
     }
 }

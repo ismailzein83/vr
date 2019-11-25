@@ -32,8 +32,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeactivatePabx");
-            esq.AddColumn("StContractId");
-            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
 
@@ -44,8 +43,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var pathId = entities[0].GetColumnValue("StLinePathId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
@@ -64,14 +62,15 @@ namespace BPMExtended.Main.Business
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
-                        LinePathId =pathId.ToString(),
-                        PabxServices = new List<PabxService>()
-                        {
-                            new PabxService()
-                            {
-                                 Id = new CatalogManager().GetPABXServiceId(),
-                            }
-                        }
+                        PABXServiceId = new CatalogManager().GetPABXServiceId()
+                        // LinePathId =pathId.ToString(),
+                        //PabxServices = new List<PabxService>()
+                        //{
+                        //    new PabxService()
+                        //    {
+                        //         Id = new CatalogManager().GetPABXServiceId(),
+                        //    }
+                        //}
                     }
 
                 };
@@ -79,7 +78,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<DeactivatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitDeactivatePabx/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<DeactivatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitDeactivatePABXSubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -88,7 +87,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void PostDeactivatePABXToOM(Guid requestId)
+        public void FinalizeDeactivatePABXSubscription(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
@@ -96,8 +95,7 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeactivatePabx");
-            esq.AddColumn("StContractId");
-            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StContractID");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
 
@@ -108,8 +106,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var pathId = entities[0].GetColumnValue("StLinePathId");
+                var contractId = entities[0].GetColumnValue("StContractID");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
@@ -127,14 +124,6 @@ namespace BPMExtended.Main.Business
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
-                        },
-                        LinePathId = pathId.ToString(),
-                        PabxServices = new List<PabxService>()
-                        {
-                            new PabxService()
-                            {
-                                 Id = new CatalogManager().GetPABXServiceId(),
-                            }
                         }
                     }
 
@@ -143,7 +132,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<DeactivatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_DeactivatePABX/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<DeactivatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeDeactivatePABXSubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

@@ -14,6 +14,7 @@ namespace BPMExtended.Main.Business
         const string attachmentStep = "692336A3-BD7D-49D1-8991-5E832B3EAED7";
         const string technicalStep = "C666F283-43BB-470E-A104-A6AA5D25F42E";
         const string completed = "D81C2F66-3A3D-45E5-9BF1-3990C430F362";
+        const string submitToOM = "F7D529B2-0B96-4208-9B96-612F4FC1BF6A";
 
         public string GetNextStep(string id, string currentStepId)
         {
@@ -24,7 +25,7 @@ namespace BPMExtended.Main.Business
                 case startingProcessStep: nextStepId = deactivationStep; break;
                 case deactivationStep: nextStepId = printStep; break;
                 case printStep: nextStepId = attachmentStep; break;
-                case attachmentStep: nextStepId = technicalStep; break;
+                case attachmentStep: nextStepId = submitToOM; break;
                 default: throw new InvalidOperationException(string.Format("Step not found. Id = {0}, current step id= {1}", id, currentStepId));
             }
             return nextStepId;
