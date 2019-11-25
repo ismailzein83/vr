@@ -37,7 +37,7 @@
 
                 $scope.scopeModel.onTrunkTrunkGroupGridReady = function (api) {
                     trunkTrunkGroupGridAPI = api;
-                    drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildTrunkTrunkGroupBackupDrillDownTabs(), trunkTrunkGroupGridAPI);
+                    //drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildTrunkTrunkGroupBackupDrillDownTabs(), trunkTrunkGroupGridAPI);
                     trunkTrunkGroupGridReadyDeferred.resolve();
                 };
 
@@ -49,7 +49,7 @@
                     };
 
                     extendTrunkTrunkGroup(trunkTrunkGroup, addedTrunk);
-                    drillDownManager.setDrillDownExtensionObject(trunkTrunkGroup);
+                    //drillDownManager.setDrillDownExtensionObject(trunkTrunkGroup);
 
                     $scope.scopeModel.trunkTrunkGroups.push(trunkTrunkGroup);
                 };
@@ -85,8 +85,8 @@
                         }
                     }
 
-                    if ($scope.scopeModel.loadSharing && !isPercentageExists)
-                        return 'At least one trunk must have percentage';
+                    //if ($scope.scopeModel.loadSharing && !isPercentageExists)
+                    //    return 'At least one trunk must have percentage';
 
                     if (isPercentageExists && sumOfPercentage != 100) {
                         return "Percentages summation should be 100";
@@ -115,7 +115,7 @@
                         trunkTrunkGroups = payload.trunkTrunkGroups;
                         supplierOutTrunksMappings = payload.supplierOutTrunksMappings;
 
-                        $scope.scopeModel.loadSharing = payload.LoadSharing;
+                        //$scope.scopeModel.loadSharing = payload.LoadSharing;
                     }
 
                     loadTrunkSelector();
@@ -159,7 +159,7 @@
                                     continue;
 
                                 extendTrunkTrunkGroup(currentTrunkTrunkGroup, currentTrunkInfo);
-                                drillDownManager.setDrillDownExtensionObject(currentTrunkTrunkGroup);
+                                //drillDownManager.setDrillDownExtensionObject(currentTrunkTrunkGroup);
 
                                 $scope.scopeModel.trunkTrunkGroups.push(currentTrunkTrunkGroup);
                             }
@@ -179,24 +179,24 @@
                     for (var i = 0; i < $scope.scopeModel.trunkTrunkGroups.length; i++) {
                         var currentTrunkTrunkGroup = $scope.scopeModel.trunkTrunkGroups[i];
 
-                        var currentTrunkTrunkGroupBackups;
-                        if (currentTrunkTrunkGroup.trunkTrunkGroupBackupDirectiveAPI != undefined) {
-                            currentTrunkTrunkGroupBackups = currentTrunkTrunkGroup.trunkTrunkGroupBackupDirectiveAPI.getData();
-                        } else {
-                            var loadedTrunkTrunkGroup = UtilsService.getItemByVal($scope.scopeModel.trunkTrunkGroups, currentTrunkTrunkGroup.TrunkTrunkGroupNb, 'TrunkTrunkGroupNb');
-                            currentTrunkTrunkGroupBackups = loadedTrunkTrunkGroup.Backups;
-                        }
+                        //var currentTrunkTrunkGroupBackups;
+                        //if (currentTrunkTrunkGroup.trunkTrunkGroupBackupDirectiveAPI != undefined) {
+                        //    currentTrunkTrunkGroupBackups = currentTrunkTrunkGroup.trunkTrunkGroupBackupDirectiveAPI.getData();
+                        //} else {
+                        //    var loadedTrunkTrunkGroup = UtilsService.getItemByVal($scope.scopeModel.trunkTrunkGroups, currentTrunkTrunkGroup.TrunkTrunkGroupNb, 'TrunkTrunkGroupNb');
+                        //    currentTrunkTrunkGroupBackups = loadedTrunkTrunkGroup.Backups;
+                        //}
 
                         trunkTrunkGroups.push({
                             TrunkId: currentTrunkTrunkGroup.TrunkId,
                             Percentage: currentTrunkTrunkGroup.Percentage,
-                            Backups: currentTrunkTrunkGroup.Percentage != undefined ? currentTrunkTrunkGroupBackups : undefined
+                            //Backups: currentTrunkTrunkGroup.Percentage != undefined ? currentTrunkTrunkGroupBackups : undefined
                         });
                     }
 
                     return {
                         TrunkTrunkGroups: trunkTrunkGroups,
-                        LoadSharing: $scope.scopeModel.loadSharing
+                        //LoadSharing: $scope.scopeModel.loadSharing
                     };
                 };
 
