@@ -12,8 +12,10 @@ namespace TOne.WhS.BusinessEntity.APIEntities
 		public int SupplierId { get; set; }
 		public string SupplierZoneName { get; set; }
 		public List<int> CountriesIds { get; set; }
+        public List<string> ColumnsToShow { get;set; }
 
 
-	}
+
+    }
 
 }

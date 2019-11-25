@@ -29,8 +29,9 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 				{
 					SupplierId = supplierRateQueryHandlerInfo.Query.SupplierId,
 					SupplierZoneName= supplierRateQueryHandlerInfo.Query.SupplierZoneName,
-					CountriesIds= supplierRateQueryHandlerInfo.Query.CountriesIds
-				},
+					CountriesIds= supplierRateQueryHandlerInfo.Query.CountriesIds,
+                    ColumnsToShow= supplierRateQueryHandlerInfo.Query.ColumnsToShow
+                },
 				EffectiveOn = supplierRateQueryHandlerInfo.Query.EffectiveOn,
 			};
 

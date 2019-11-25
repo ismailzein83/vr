@@ -260,37 +260,38 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Supplier Rates",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult?.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
+                    sheet.Rows = new List<ExportExcelRow>();
+                    if (context.BigResult?.Data != null)
                     {
-                        if (record.Entity != null)
+                        foreach (var record in context.BigResult.Data)
                         {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SupplierRateId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SupplierZoneName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.DisplayedRate });
-                            row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
-                            row.Cells.Add(new ExportExcelCell { Value = record.DisplayedCurrency });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                            if (record.Entity != null)
+                            {
+                                var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                                sheet.Rows.Add(row);
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.SupplierRateId });
+                                row.Cells.Add(new ExportExcelCell { Value = record.SupplierZoneName });
+                                row.Cells.Add(new ExportExcelCell { Value = record.DisplayedRate });
+                                row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
+                                row.Cells.Add(new ExportExcelCell { Value = record.DisplayedCurrency });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                            }
                         }
                     }
-                }
                 return sheet;
             }
             private ExportExcelSheet GetRateSheet(IConvertResultToExcelDataContext<SupplierRateDetail> context)
             {
+                SupplierRateQueryHandler supplierRateQuery = (SupplierRateQueryHandler)_query;
                 List<SupplierRateItem> supplierRateItems = GetRateItems(context);
 
                 var rateTypeManager = new RateTypeManager();
@@ -300,50 +301,136 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Supplier Rates",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "CodeGroup" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
-
-                var rateTypes = rateTypeManager.GetAllRateTypes();
-                foreach (var rateTypeInfo in rateTypes)
+                if (supplierRateQuery.Query.ColumnsToShow!=null && supplierRateQuery.Query.ColumnsToShow.Count>0)
                 {
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateTypeInfo.Name });
-                }
-                sheet.Rows = new List<ExportExcelRow>();
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Zone"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
 
-                foreach (var supplierRateItem in supplierRateItems)
-                {
-                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                    sheet.Rows.Add(row);
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ZoneName });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.Codes });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CodeGroupsId });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CountryNames });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.Rate });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ChangeDescription });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CurrencySymbol });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.RateBED });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.RateEED });
-                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ServicesSymbol });
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Code"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });
 
-                    foreach (var rateTypeInfo in rateTypes)
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("CodeGroup"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "CodeGroup" });
+
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Country"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
+
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Normal Rate"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
+
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Rate Change"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
+
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Currency"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Rate BE"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Rate EED"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                    if (supplierRateQuery.Query.ColumnsToShow.Contains("Services"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
+
+                    //var rateTypes = rateTypeManager.GetAllRateTypes();
+                    //foreach (var rateTypeInfo in rateTypes)
+                    //{
+                    //    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateTypeInfo.Name });
+                    //}
+                    sheet.Rows = new List<ExportExcelRow>();
+
+                    foreach (var supplierRateItem in supplierRateItems)
                     {
-                        var ratesByRateType = supplierRateItem.RatesByRateType;
-                        if (ratesByRateType != null && ratesByRateType.Any() && ratesByRateType.TryGetValue(rateTypeInfo.RateTypeId, out var supplierOtherRate))
-                        {
-                            row.Cells.Add(new ExportExcelCell { Value = supplierOtherRate.Rate });
-                        }
-                        else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Zone"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ZoneName });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Code"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.Codes });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("CodeGroup"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CodeGroupsId });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Country"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CountryNames });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Normal Rate"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.Rate });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Rate Change"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ChangeDescription });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Currency"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CurrencySymbol });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Rate BE"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.RateBED });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Rate EED"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.RateEED });
+
+                        if (supplierRateQuery.Query.ColumnsToShow.Contains("Services"))
+                            row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ServicesSymbol });
+
+                        //foreach (var rateTypeInfo in rateTypes)
+                        //{
+                        //    var ratesByRateType = supplierRateItem.RatesByRateType;
+                        //    if (ratesByRateType != null && ratesByRateType.Any() && ratesByRateType.TryGetValue(rateTypeInfo.RateTypeId, out var supplierOtherRate))
+                        //    {
+                        //        row.Cells.Add(new ExportExcelCell { Value = supplierOtherRate.Rate });
+                        //    }
+                        //    else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
+                        //}
                     }
                 }
+                else
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "CodeGroup" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
 
+                    var rateTypes = rateTypeManager.GetAllRateTypes();
+                    foreach (var rateTypeInfo in rateTypes)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateTypeInfo.Name });
+                    }
+                    sheet.Rows = new List<ExportExcelRow>();
+
+                    foreach (var supplierRateItem in supplierRateItems)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ZoneName });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.Codes });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CodeGroupsId });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CountryNames });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.Rate });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ChangeDescription });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CurrencySymbol });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.RateBED });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.RateEED });
+                        row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ServicesSymbol });
+
+                        foreach (var rateTypeInfo in rateTypes)
+                        {
+                            var ratesByRateType = supplierRateItem.RatesByRateType;
+                            if (ratesByRateType != null && ratesByRateType.Any() && ratesByRateType.TryGetValue(rateTypeInfo.RateTypeId, out var supplierOtherRate))
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = supplierOtherRate.Rate });
+                            }
+                            else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
+                        }
+                    }
+                }
                 return sheet;
             }
             private List<SupplierRateItem> GetRateItems(IConvertResultToExcelDataContext<SupplierRateDetail> context)
