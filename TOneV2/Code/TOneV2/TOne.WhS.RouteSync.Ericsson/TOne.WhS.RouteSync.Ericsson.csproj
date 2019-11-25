@@ -115,6 +115,7 @@
     <Compile Include="Data\IRouteDataManager.cs" />
     <Compile Include="Entities\BranchRoute.cs" />
     <Compile Include="Entities\BranchRouteSettings.cs" />
+    <Compile Include="Entities\TrunkBackupsMode.cs" />
     <Compile Include="Entities\BranchRouteSettingsConfig.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\CodeGroupRoute.cs" />

@@ -218,7 +218,6 @@
                     var switchLoggerList;
                     var numberLengthEvaluator;
                     var codeChargeEvaluator;
-                    //var trunkBackupsMode;
                     var branchRouteSettings;
                     var context;
 
@@ -236,7 +235,6 @@
                             $scope.scopeModel.percentagePrefix = ericssonSWSync.PercentagePrefix;
                             numberLengthEvaluator = ericssonSWSync.NumberLengthEvaluator;
                             codeChargeEvaluator = ericssonSWSync.CodeChargeEvaluator;
-                           // trunkBackupsMode = ericssonSWSync.TrunkBackupsMode;
                             branchRouteSettings = ericssonSWSync.BranchRouteSettings;
                             sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
                             switchLoggerList = ericssonSWSync.SwitchLoggerList;
@@ -263,9 +261,6 @@
                     var codeChargeDirectiveLoadPromise = getCodeChargeDirectiveLoadPromise();
                     promises.push(codeChargeDirectiveLoadPromise);
 
-                    ////Loading TrunkBackupsModeDirective
-                    //var trunkBackupsModeDirectiveLoadPromise = getTrunkBackupsModeDirectiveLoadPromise();
-                    //promises.push(trunkBackupsModeDirectiveLoadPromise);
 
                     //LoadingBranchRouteSettings
                     var branchRouteSettingsLoadPromise = getBranchRouteSettingsLoadPromise();
@@ -359,17 +354,6 @@
                         return codeChargeDirectiveLoadPromise.promise;
                     }
 
-                    //function getTrunkBackupsModeDirectiveLoadPromise() {
-                    //    var trunkBackupsModeDirectiveLoadPromise = UtilsService.createPromiseDeferred();
-
-                    //    trunkBackupsModeDirectiveReadyPromiseDeferred.promise.then(function () {
-                    //        var backupsModeDirectivePayload = { trunkBackupsMode: trunkBackupsMode };
-                    //        VRUIUtilsService.callDirectiveLoad(trunkBackupsModeDirectiveAPI, backupsModeDirectivePayload, trunkBackupsModeDirectiveLoadPromise);
-                    //    });
-
-                    //    return trunkBackupsModeDirectiveLoadPromise.promise;
-                    //}
-
                     function getBranchRouteSettingsLoadPromise() {
                         var branchRouteSettingsLoadPromise = UtilsService.createPromiseDeferred();
                         branchRouteSettingsReadyPromiseDeferred.promise.then(function () {
@@ -405,7 +389,6 @@
                         NumberOfBTables: $scope.scopeModel.numberOfBTables,
                         NumberLengthEvaluator: numberLengthDirectiveAPI != undefined ? numberLengthDirectiveAPI.getData() : undefined,
                         CodeChargeEvaluator: codeChargeDirectiveAPI != undefined ? codeChargeDirectiveAPI.getData() : undefined,
-                        //TrunkBackupsMode: trunkBackupsModeDirectiveAPI != undefined ? trunkBackupsModeDirectiveAPI.getData() : undefined,
                         BranchRouteSettings: (branchRouteSettingsAPI != undefined) ? branchRouteSettingsAPI.getData() : null,
                         ManualRouteSettings: getManualRoutesSettings(),
                         ReservedBTables: $scope.scopeModel.reservedBTables,
