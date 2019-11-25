@@ -40,6 +40,7 @@ namespace TOne.WhS.RouteSync.Ericsson
         public int NumberOfBTables { get; set; }
         public List<int> ReservedBTables { get; set; }
         public List<ReservedBTableRange> ReservedBTableRanges { get; set; }
+        public TrunkBackupsMode TrunkBackupsMode { get; set; }
         public int MinCodeLength { get; set; }
         public int MaxCodeLength { get; set; }
 
