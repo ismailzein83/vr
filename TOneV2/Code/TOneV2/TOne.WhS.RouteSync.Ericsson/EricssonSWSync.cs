@@ -2444,7 +2444,7 @@ namespace TOne.WhS.RouteSync.Ericsson
         private class EricssonConvertedRouteByCodeByPrefixLength : Dictionary<int, EricssonConvertedRouteByCode> { }
         private class EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefix : Dictionary<int, EricssonConvertedRouteByCodeByPrefixLength> { }
         private class EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefixByBO : Dictionary<int, EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefix> { }
-        private class RouteCaseOptionWithSupplier : IPercentageItem
+        public class RouteCaseOptionWithSupplier : IPercentageItem
         {
             public string SupplierId { get; set; }
             public int Percentage { get; set; }

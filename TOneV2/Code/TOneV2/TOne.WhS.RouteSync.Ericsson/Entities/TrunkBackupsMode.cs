@@ -6,6 +6,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Rules;
+using static TOne.WhS.RouteSync.Ericsson.EricssonSWSync;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
 {
