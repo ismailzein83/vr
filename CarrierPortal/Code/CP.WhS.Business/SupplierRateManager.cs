@@ -21,8 +21,9 @@ namespace CP.WhS.Business
 			var accessibleCarrierAccounts = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetSuppliers = true });
 			if (accessibleCarrierAccounts.FindRecord(x => x.AccountId == clonedInput.Query.SupplierId) == null)
 				return null;
+            clonedInput.Query.ColumnsToShow = new List<string>() { "Zone", "Code", "CodeGroup", "Country", "Normal Rate", "Rate Change", "Currency", "Rate BE", "Rate EED", "Services" };
 
-			if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
+            if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
 			{
 				return connectionSettings.Post<DataRetrievalInput<SupplierRateQueryHandlerInfo>, RemoteExcelResult<SupplierRateDetail>>("/api/WhS_BE/SupplierRate/GetSupplierRateQueryHandlerInfo", clonedInput);
 			}
