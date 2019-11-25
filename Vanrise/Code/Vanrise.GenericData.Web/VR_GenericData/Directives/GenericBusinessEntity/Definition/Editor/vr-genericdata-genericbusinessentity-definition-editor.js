@@ -131,7 +131,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                     var index = UtilsService.getItemIndexByVal(ctrl.sections, sectionObj.sectionTitle, 'sectionTitle');
                     ctrl.sections[index].rowsGridAPI.onAddRow(rowObj);
                 };
-                VR_GenericData_ExtensibleBEItemService.addRow(onRowAdded, getFilteredFields());
+                VR_GenericData_ExtensibleBEItemService.addRow(onRowAdded, getContext(), getFilteredFields());
             }
 
             function deleteSection(sectionObj)
@@ -159,16 +159,24 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
             function getContext() {
                 var context = {
                     getFilteredFields: getFilteredFields,
+                    getFieldType: getFieldType 
                 };
                 return context;
             }
-
+            function getFieldType(fieldName) {
+                for (var i = 0; i < recordTypeFields.length; i++) {
+                    var field = recordTypeFields[i];
+                    if (field.Name == fieldName)
+                        return field.Type;
+                }
+            }
             function getFilteredFields(exceptedFields) {
                 
                 var filteredFields = [];
                 //var filteredFields = recordTypeFields;
                 for (var i = 0; i < recordTypeFields.length; i++) {
-                    filteredFields.push({ FieldPath: recordTypeFields[i].Name });
+                    var field = recordTypeFields[i];
+                    filteredFields.push({ FieldPath: field.Name, FieldTitle: field.Title});
                 }
                 for(var i=0; i<recordTypeFields.length; i++)
                 {
