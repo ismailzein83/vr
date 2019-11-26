@@ -16,9 +16,8 @@ namespace Vanrise.Common.Business
         static VRLoggableEntityManager s_loggableEntityManager = new VRLoggableEntityManager();
         static VRActionAuditLKUPManager s_actionAuditLKUPManager = new VRActionAuditLKUPManager();
 
-        internal long TrackObjectAction(VRLoggableEntityBase loggableEntity, string objectId, Object obj, string action, string actionDescription, Object technicalInformation, VRActionAuditChangeInfo vrActionAuditChangeInfo)
+        internal long TrackObjectAction(int userId, VRLoggableEntityBase loggableEntity, string objectId, Object obj, string action, string actionDescription, Object technicalInformation, VRActionAuditChangeInfo vrActionAuditChangeInfo)
         {
-            int userId = ContextFactory.GetContext().GetLoggedInUserId();
             Guid loggableEntityId = s_loggableEntityManager.GetLoggableEntityId(loggableEntity);
             int actionId = s_actionAuditLKUPManager.GetLKUPId(VRActionAuditLKUPType.Action, action);
             return s_dataManager.Insert(userId, loggableEntityId, objectId, obj, actionId, actionDescription, technicalInformation, vrActionAuditChangeInfo);

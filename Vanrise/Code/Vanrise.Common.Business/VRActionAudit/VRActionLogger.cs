@@ -29,39 +29,69 @@ namespace Vanrise.Common.Business
 
         public void LogGetFilteredAction(VRLoggableEntityBase loggableEntity, DataRetrievalInput dataRetrievalInput)
         {
+            LogGetFilteredAction(null, loggableEntity, dataRetrievalInput);
+        }
+
+        public void LogGetFilteredAction(int? userId, VRLoggableEntityBase loggableEntity, DataRetrievalInput dataRetrievalInput)
+        {
             string action = dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultType.Normal ? "Search" : "Export";
-            LogAction(loggableEntity, action, null, null, null, null);
+            LogAction(userId, loggableEntity, action, null, null, null, null);
         }
 
         public void LogObjectCustomAction(VRLoggableEntityBase loggableEntity, string action, bool isObjectUpdated, Object obj, string actionDescription = null, Object technicalInformation = null)
         {
+            LogObjectCustomAction(null, loggableEntity, action, isObjectUpdated, obj, actionDescription, technicalInformation);
+        }
+
+        public void LogObjectCustomAction(int? userId, VRLoggableEntityBase loggableEntity, string action, bool isObjectUpdated, Object obj, string actionDescription = null, Object technicalInformation = null)
+        {
             if (isObjectUpdated)
             {
-                TrackAndLogObjectAction(loggableEntity, action, obj, technicalInformation, actionDescription, false,null);
+                TrackAndLogObjectAction(userId, loggableEntity, action, obj, technicalInformation, actionDescription, false,null);
             }
             else
             {
-                LogAction(loggableEntity, action, GetObjectId(loggableEntity, obj), GetObjectName(loggableEntity, obj), actionDescription, null);
+                LogAction(userId, loggableEntity, action, GetObjectId(loggableEntity, obj), GetObjectName(loggableEntity, obj), actionDescription, null);
             }
         }
+
         public void LogObjectViewed(VRLoggableEntityBase loggableEntity, Object obj)
         {
-            LogAction(loggableEntity, "View Item Detail", GetObjectId(loggableEntity, obj), GetObjectName(loggableEntity, obj), null, null);
+            LogObjectViewed(null, loggableEntity, obj);
+        }
+
+        public void LogObjectViewed(int? userId, VRLoggableEntityBase loggableEntity, Object obj)
+        {
+            LogAction(userId, loggableEntity, "View Item Detail", GetObjectId(loggableEntity, obj), GetObjectName(loggableEntity, obj), null, null);
         }
 
         public void TrackAndLogObjectAdded(VRLoggableEntityBase loggableEntity, Object obj)
         {
-            TrackAndLogObjectAction(loggableEntity, "Add", obj, null, null, true, null);
+            TrackAndLogObjectAdded(null, loggableEntity, obj);
+        }
+
+        public void TrackAndLogObjectAdded(int? userId, VRLoggableEntityBase loggableEntity, Object obj)
+        {
+            TrackAndLogObjectAction(userId, loggableEntity, "Add", obj, null, null, true, null);
         }
 
         public void TrackAndLogObjectUpdated(VRLoggableEntityBase loggableEntity, Object obj)
         {
-            TrackAndLogObjectAction(loggableEntity, "Update", obj,null, null, true,null);
+            TrackAndLogObjectUpdated(null, loggableEntity, obj);
+        }
+
+        public void TrackAndLogObjectUpdated(int? userId, VRLoggableEntityBase loggableEntity, Object obj)
+        {
+            TrackAndLogObjectAction(userId, loggableEntity, "Update", obj, null, null, true, null);
         }
 
         public void TrackAndLogObjectUpdated(VRLoggableEntityBase loggableEntity, Object newObjectValue, Object oldObjectValue)
         {
+            TrackAndLogObjectUpdated(null, loggableEntity, newObjectValue, oldObjectValue);
+        }
 
+        public void TrackAndLogObjectUpdated(int? userId, VRLoggableEntityBase loggableEntity, Object newObjectValue, Object oldObjectValue)
+        {
             var changeInfoDefinition = loggableEntity.GetChangeInfoDefinition(new VRLoggableEntityGetChangeInfoDefinitionContext());
             changeInfoDefinition.ThrowIfNull("changeInfoDefinition");
 
@@ -74,32 +104,38 @@ namespace Vanrise.Common.Business
 
             if (vrActionAuditChangeInfoResolveChangeInfoContext.NothingChanged)
                 return;
-              
-            TrackAndLogObjectAction(loggableEntity, "Update", oldObjectValue, null, vrActionAuditChangeInfoResolveChangeInfoContext.ChangeSummary, true, vrActionAuditChangeInfo);
-        
-        }
 
+            TrackAndLogObjectAction(userId, loggableEntity, "Update", oldObjectValue, null, vrActionAuditChangeInfoResolveChangeInfoContext.ChangeSummary, true, vrActionAuditChangeInfo);
+
+        }
         public void TrackAndLogObjectDeleted(VRLoggableEntityBase loggableEntity, Object obj)
         {
-            TrackAndLogObjectAction(loggableEntity, "Delete", obj,null, null, true,null);
+            TrackAndLogObjectDeleted(null, loggableEntity, obj);
+        }
+        public void TrackAndLogObjectDeleted(int? userId, VRLoggableEntityBase loggableEntity, Object obj)
+        {
+            TrackAndLogObjectAction(userId, loggableEntity, "Delete", obj,null, null, true,null);
         }
 
         #endregion
 
         #region Private Methods
 
-        private void TrackAndLogObjectAction(VRLoggableEntityBase loggableEntity, string action, Object obj, Object technicalInformation, string actionDescription, bool saveObject, VRActionAuditChangeInfo vrActionAuditChangeInfo)
+        private void TrackAndLogObjectAction(int? userId, VRLoggableEntityBase loggableEntity, string action, Object obj, Object technicalInformation, string actionDescription, bool saveObject, VRActionAuditChangeInfo vrActionAuditChangeInfo)
         {
-            action.ThrowIfNull("action"); 
+            action.ThrowIfNull("action");
             string objectId = GetObjectId(loggableEntity, obj);
             string objectName = GetObjectName(loggableEntity, obj);
 
-            long objectTrackingId = s_objectTrackingManager.TrackObjectAction(loggableEntity, objectId, saveObject ? obj : null, action, actionDescription, technicalInformation, vrActionAuditChangeInfo);
+            if (!userId.HasValue)
+                userId = Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
 
-            LogAction(loggableEntity, action, objectId, objectName, actionDescription, saveObject ? objectTrackingId : default(long?));
+            long objectTrackingId = s_objectTrackingManager.TrackObjectAction(userId.Value, loggableEntity, objectId, saveObject ? obj : null, action, actionDescription, technicalInformation, vrActionAuditChangeInfo);
+
+            LogAction(userId, loggableEntity, action, objectId, objectName, actionDescription, saveObject ? objectTrackingId : default(long?));
         }
 
-        private void LogAction(VRLoggableEntityBase loggableEntity, string action, string objectId, string objectName, string actionDescription, long? objectTrackingId)
+        private void LogAction(int? userId, VRLoggableEntityBase loggableEntity, string action, string objectId, string objectName, string actionDescription, long? objectTrackingId)
         {
             action.ThrowIfNull("action");
             string moduleName = loggableEntity.ModuleName;
@@ -111,7 +147,7 @@ namespace Vanrise.Common.Business
             {                
                 baseURL = VRWebContext.GetCurrentRequestBaseURL();
             }
-            s_actionAuditManager.AuditAction(baseURL, moduleName, loggableEntity.EntityDisplayName, action, objectId, objectName, actionDescription, objectTrackingId);
+            s_actionAuditManager.AuditAction(userId, baseURL, moduleName, loggableEntity.EntityDisplayName, action, objectId, objectName, actionDescription, objectTrackingId);
         }
 
         private string GetObjectId(VRLoggableEntityBase loggableEntity, Object obj)
