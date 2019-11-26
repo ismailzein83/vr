@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities
 {
+    public enum GroupingByCarrierType { Customer = 1, Supplier = 2}
     public class RepeatedNumberQuery
     {
+        public GroupingByCarrierType? GroupingByCarrierType { get; set; }
         public RepeatedNumberFilter Filter { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }

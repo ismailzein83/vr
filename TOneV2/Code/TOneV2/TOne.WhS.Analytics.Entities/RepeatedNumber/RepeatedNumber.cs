@@ -9,6 +9,7 @@ namespace TOne.WhS.Analytics.Entities
     public class RepeatedNumber
     {
         public long? SaleZoneId { get; set; }
+        public long? SupplierZoneId { get; set; }
         public int? CustomerId { get; set; }
         public int? SupplierId { get; set; }
         public int Attempt { get; set; }

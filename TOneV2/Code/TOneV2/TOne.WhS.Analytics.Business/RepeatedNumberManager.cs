@@ -17,11 +17,14 @@ namespace TOne.WhS.Analytics.Business
     {
         private readonly CarrierAccountManager _carrierAccountManager;
         private readonly SaleZoneManager _saleZoneManager;
+        private readonly SupplierZoneManager _supplierZoneManager;
 
         public RepeatedNumberManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
             _saleZoneManager = new SaleZoneManager();
+            _supplierZoneManager = new SupplierZoneManager();
+
         }
         public Vanrise.Entities.IDataRetrievalResult<RepeatedNumberDetail> GetAllFilteredRepeatedNumbers(Vanrise.Entities.DataRetrievalInput<RepeatedNumberQuery> input)
         {
@@ -33,13 +36,15 @@ namespace TOne.WhS.Analytics.Business
             string customerName = repeatedNumber.CustomerId.HasValue ? _carrierAccountManager.GetCarrierAccountName(repeatedNumber.CustomerId.Value) : null;
             string supplierName = repeatedNumber.SupplierId.HasValue ? _carrierAccountManager.GetCarrierAccountName(repeatedNumber.SupplierId.Value) : null;
             string saleZoneName = repeatedNumber.SaleZoneId.HasValue ? _saleZoneManager.GetSaleZoneName(repeatedNumber.SaleZoneId.Value) : null;
+            string supplierZoneName = repeatedNumber.SupplierZoneId.HasValue ? _supplierZoneManager.GetSupplierZoneName(repeatedNumber.SupplierZoneId.Value) : null;
 
             RepeatedNumberDetail repeatedNumberDetail = new RepeatedNumberDetail
             {
                 Entity = repeatedNumber,
                 CustomerName = customerName,
                 SupplierName = supplierName,
-                SaleZoneName = saleZoneName
+                SaleZoneName = saleZoneName,
+                SupplierZoneName = supplierZoneName
             };
             return repeatedNumberDetail;
         }
@@ -93,6 +98,8 @@ namespace TOne.WhS.Analytics.Business
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier", Width = 50 });
                     if (_query.Filter.ColumnsToShow.Contains("SaleZoneName"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 50 });
+                    if (_query.Filter.ColumnsToShow.Contains("SupplierZoneName"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 50 });
                     if (_query.Filter.ColumnsToShow.Contains("Attempt"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
                     if (_query.Filter.ColumnsToShow.Contains("DurationInMinutes"))
@@ -127,6 +134,8 @@ namespace TOne.WhS.Analytics.Business
                                     row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
                                 if (_query.Filter.ColumnsToShow.Contains("SaleZoneName"))
                                     row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
+                                if (_query.Filter.ColumnsToShow.Contains("SupplierZoneName"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.SupplierZoneName });
                                 if (_query.Filter.ColumnsToShow.Contains("Attempt"))
                                     row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });
                                 if (_query.Filter.ColumnsToShow.Contains("DurationInMinutes"))
