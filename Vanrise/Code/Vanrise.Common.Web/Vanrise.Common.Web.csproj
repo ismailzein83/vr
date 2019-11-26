@@ -225,6 +225,7 @@
     <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
+    <Content Include="Common\Services\APIServices\VRCompilationAPIService.js" />
     <Content Include="Common\Services\APIServices\PageDirectiveHostAPIService.js" />
     <Content Include="Common\Services\APIServices\ReceivedRequestLogAPIService.js" />
     <Content Include="Common\Services\APIServices\VRDevProjectAPIService.js" />
@@ -241,6 +242,7 @@
     <Content Include="Common\Services\APIServices\VRRestCurrencyAPIService.js" />
     <Content Include="Common\Services\FieldTypesService.js" />
     <Content Include="Common\Services\HttpProxyMethodService.js" />
+    <Content Include="Common\Services\VRCompilationService.js" />
     <Content Include="Common\Services\VRDynamicAPIModuleService.js" />
     <Content Include="Common\Services\VRDynamicAPIService.js" />
     <Content Include="Common\Services\TextPatternBuilderService.js" />
@@ -249,6 +251,8 @@
     <Content Include="Common\Views\NewFeaturesPageController.js" />
     <Content Include="Common\Views\PageDirectiveHost\PageDirectiveHostManagement.html" />
     <Content Include="Common\Views\PageDirectiveHost\PageDirectiveHostManagementController.js" />
+    <Content Include="Common\Views\VRCompilation\VRCompilationCompileResult.html" />
+    <Content Include="Common\Views\VRCompilation\VRCompilationCompileResultController.js" />
     <Content Include="Common\Views\VRDashboard\VRDashboardManagement.html" />
     <Content Include="Common\Views\VRDashboard\VRDashboardManagementController.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditor.html" />
@@ -271,6 +275,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRCompilationController.cs" />
     <Compile Include="Controllers\ReceivedRequestLogController.cs" />
     <Compile Include="Controllers\VRDevProjectController.cs" />
     <Compile Include="Controllers\ThemeExtendedController.cs" />

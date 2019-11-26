@@ -13,9 +13,16 @@
                 filter: filter
             });
         }
+        function TryCompileDevProject(devProjectId, buildOption) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "TryCompileDevProject"), {
+                devProjectId: devProjectId,
+                buildOption: buildOption
+            });
+        }
 
         return ({
-            GetVRDevProjectsInfo: GetVRDevProjectsInfo
+            GetVRDevProjectsInfo: GetVRDevProjectsInfo,
+            TryCompileDevProject: TryCompileDevProject
         });
     }
 
