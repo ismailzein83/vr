@@ -305,8 +305,10 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Deactivate Cpt")]
         [EntitySchemaName("StDeactivateCpt")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("14209AD6-E05E-4B76-B7D0-6A416A95F975")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("29E900B1-86F7-42E6-A1B3-0D9FB0BD6631")]
         DeactivateCpt = 29,
 
         //[LineOfBusiness(LineOfBusiness.Administrative)]

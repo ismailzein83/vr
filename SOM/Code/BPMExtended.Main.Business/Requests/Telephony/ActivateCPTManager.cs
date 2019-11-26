@@ -38,6 +38,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
             esq.AddColumn("StCptNumber");
+            esq.AddColumn("StLinePathId");
+
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -53,17 +55,13 @@ namespace BPMExtended.Main.Business
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
                 var cptNumber = entities[0].GetColumnValue("StCptNumber");
+                var linePathId= entities[0].GetColumnValue("StLinePathId");
 
                 SOMRequestInput<ActivateCptRequestInput> somRequestInput = new SOMRequestInput<ActivateCptRequestInput>
                 {
 
                     InputArguments = new ActivateCptRequestInput
                     {
-                        PaymentData = new PaymentData()
-                        {
-                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
-                            IsPaid = (bool)isPaid
-                        },
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -71,17 +69,15 @@ namespace BPMExtended.Main.Business
                             CustomerId = customerId.ToString()
                         },
                         CPTServiceId = new CatalogManager().GetCPTServiceId(),
-                        DirectoryNumber = phoneNumber.ToString(),
-                        CPTId= cptId.ToString(),
+                        LinePathId= linePathId.ToString(),
                         CPTNumber = cptNumber.ToString()
                     }
-
                 };
 
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ActivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitCPT/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ActivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitActivateCPT/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -121,10 +117,10 @@ namespace BPMExtended.Main.Business
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
-                SOMRequestInput<ActivateCptRequestInput> somRequestInput = new SOMRequestInput<ActivateCptRequestInput>
+                SOMRequestInput<FinalizeActivateCptRequestInput> somRequestInput = new SOMRequestInput<FinalizeActivateCptRequestInput>
                 {
 
-                    InputArguments = new ActivateCptRequestInput
+                    InputArguments = new FinalizeActivateCptRequestInput
                     {
                         PaymentData = new PaymentData()
                         {
@@ -139,7 +135,7 @@ namespace BPMExtended.Main.Business
                         },
                         CPTServiceId = new CatalogManager().GetCPTServiceId(),
                         CPTId = cptId.ToString(),
-                        CPTNumber = cptNumber.ToString()
+                        //CPTNumber = cptNumber.ToString()
                     }
 
                 };
@@ -147,7 +143,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ActivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateCPT/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<FinalizeActivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeActivateCPT/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

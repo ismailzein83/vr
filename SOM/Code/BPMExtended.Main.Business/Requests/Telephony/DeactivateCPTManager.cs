@@ -36,6 +36,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StLinePathId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -48,6 +49,7 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerID");
+                var linePathId = entities[0].GetColumnValue("StLinePathId");
 
                 SOMRequestInput<DeactivateCptRequestInput> somRequestInput = new SOMRequestInput<DeactivateCptRequestInput>
                 {
@@ -58,7 +60,8 @@ namespace BPMExtended.Main.Business
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                        }
+                            CustomerId = customerId.ToString()
+                        },
                     }
 
                 };
@@ -66,7 +69,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<DeactivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitDeactivateCPT/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<DeactivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitDeactivateCPT/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -121,7 +124,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<DeactivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP//ST_Tel_DeactivateCPT/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<DeactivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeDeactivateCPT/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
