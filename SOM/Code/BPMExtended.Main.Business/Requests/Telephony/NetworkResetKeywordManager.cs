@@ -10,7 +10,7 @@ using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
 {
-    public class NetworkResetPasswordManager
+    public class NetworkResetKeywordManager
     {
         #region User Connection
         public UserConnection BPM_UserConnection
@@ -23,16 +23,16 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region public
-        public void PostNetworkResetPasswordToOM(Guid requestId)
+        public void SubmitResetCustomerKeyword(Guid requestId)
         {
-            //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StNetworkResetPassword");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StNetwrokResetKeyword");
             esq.AddColumn("StContractID");
             esq.AddColumn("StCustomerId");
+            esq.AddColumn("StPathId");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
 
@@ -46,6 +46,7 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                string pathId = entities[0].GetColumnValue("StPathId").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<ResetNetworkServicePasswordRequestInput> somRequestInput = new SOMRequestInput<ResetNetworkServicePasswordRequestInput>
@@ -60,6 +61,68 @@ namespace BPMExtended.Main.Business
 
                         CommonInputArgument = new CommonInputArgument()
                         {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
+                        },
+                        LinePathId = pathId
+                    }
+
+                };
+
+                //call api
+
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitResetCustomerKeyword/StartProcess", somRequestInput);
+                }
+
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+
+        }
+
+        public void FinalizeResetCustomerKeyword(Guid requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StNetwrokResetKeyword");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StPathId");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                string pathId = entities[0].GetColumnValue("StPathId").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                SOMRequestInput<ResetNetworkServicePasswordRequestInput> somRequestInput = new SOMRequestInput<ResetNetworkServicePasswordRequestInput>
+                {
+                    InputArguments = new ResetNetworkServicePasswordRequestInput
+                    {
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                             CustomerId = customerId.ToString()
                         }
@@ -71,7 +134,7 @@ namespace BPMExtended.Main.Business
 
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitResetKeyword/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeResetCustomerKeyword/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();
@@ -81,62 +144,6 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void ActivateResetKeyword(string contractId, string requestId, string serviceId, string linePathId)
-        {
-            string processInstanceId = string.Empty;
-
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            SOMRequestOutput output;
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StNetwrokResetKeyword");
-            esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StOperationAddedFees");
-            esq.AddColumn("StIsPaid");
-
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
-            esq.Filters.Add(esqFirstFilter);
-
-            string fees = string.Empty;
-            bool isPaid = false;
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
-                isPaid = (bool)entities[0].GetColumnValue("StIsPaid");
-            }
-
-            var somRequestInput = new SOMRequestInput<ResetNetworkServicePasswordRequestInput>
-            {
-                InputArguments = new ResetNetworkServicePasswordRequestInput
-                {
-                    PaymentData = new PaymentData()
-                    {
-                        Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
-                        IsPaid = isPaid
-                    },
-
-                    CommonInputArgument = new CommonInputArgument()
-                    {
-                        ContractId = contractId,
-                        RequestId = requestId
-                    }
-                }
-            };
-
-            using (var client = new SOMClient())
-            {
-                output = client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateResetKeyword/StartProcess", somRequestInput);
-            }
-
-            var manager = new BusinessEntityManager();
-            manager.InsertSOMRequestToProcessInstancesLogs(Guid.Parse(requestId), output);
-
-
-        }
         #endregion
     }
 }

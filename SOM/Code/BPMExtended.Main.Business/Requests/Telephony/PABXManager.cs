@@ -207,7 +207,7 @@ namespace BPMExtended.Main.Business
                 string pathId = entities[0].GetColumnValue("StPathId").ToString();
                 string parameterId = entities[0].GetColumnValue("StParameterId").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-                PabxContractInput pilotContract = JsonConvert.DeserializeObject<PabxContractInput>(entities[0].GetColumnValue("StPilotContractParameter").ToString()); ;
+                PabxContractInput pilotContract = JsonConvert.DeserializeObject<PabxContractInput>(entities[0].GetColumnValue("StPilotContractParameter").ToString());
                 List<PabxContractInput> selectedSecondaryContracts = JsonConvert.DeserializeObject<List<PabxContractInput>>(entities[0].GetColumnValue("StSelectedSecondaryContracts").ToString());
 
                 SOMRequestInput<CreatePABXRequestInput> somRequestInput = new SOMRequestInput<CreatePABXRequestInput>

@@ -49,6 +49,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StPabxSecondaryContracts");
             esq.AddColumn("StIsPaid");
+            esq.AddColumn("StPilotContractParameter");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -62,7 +63,7 @@ namespace BPMExtended.Main.Business
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 List<PabxContractInput> selectedSecondaryContracts = JsonConvert.DeserializeObject<List<PabxContractInput>>(entities[0].GetColumnValue("StPabxSecondaryContracts").ToString());
-
+                PabxContractInput pilotContract = JsonConvert.DeserializeObject<PabxContractInput>(entities[0].GetColumnValue("StPilotContractParameter").ToString());
 
                 SOMRequestInput<EditPABXRequestInput> somRequestInput = new SOMRequestInput<EditPABXRequestInput>
                 {
@@ -81,7 +82,7 @@ namespace BPMExtended.Main.Business
                         },
                         SubmitPabxInput = new SubmitPabxInput()
                         {
-                            //PilotContract = pilotContract,
+                            PilotContract = pilotContract,
                             Contracts = selectedSecondaryContracts
                         }
                     }

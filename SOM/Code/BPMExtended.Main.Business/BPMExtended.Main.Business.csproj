@@ -169,7 +169,7 @@
     <Compile Include="Requests\Telephony\LineSubscriptionManager.cs" />
     <Compile Include="Requests\Telephony\LineTerminationManager.cs" />
     <Compile Include="Requests\Telephony\LineUnBlockingManager.cs" />
-    <Compile Include="Requests\Telephony\NetworkResetPasswordManager.cs" />
+    <Compile Include="Requests\Telephony\NetworkResetKeywordManager.cs" />
     <Compile Include="Requests\Telephony\OtherChargesManager.cs" />
     <Compile Include="Requests\Telephony\PABXManager.cs" />
     <Compile Include="Requests\Telephony\RemoveProffessionalDIManager.cs" />
