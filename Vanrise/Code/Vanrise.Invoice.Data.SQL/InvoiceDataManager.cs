@@ -540,6 +540,7 @@ namespace Vanrise.Invoice.Data.SQL
             {
                 case "Partner": return "PartnerID";
                 case "User": return "UserId";
+                case "Status": return "StatusID";
                 default: return fieldName;
             }
         }
