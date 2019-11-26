@@ -140,32 +140,27 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
-
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLineTermination");
             esq.AddColumn("StContractID");
             esq.AddColumn("StReason");
+            esq.AddColumn("StLinePathID");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
-
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var reason = entities[0].GetColumnValue("StReason");
+                var linePathId = entities[0].GetColumnValue("StLinePathID");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-
-
-                //ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
-
                 SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
-
                     InputArguments = new LineTerminationRequestInput
                     {
+                        LinePathId = linePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -178,52 +173,42 @@ namespace BPMExtended.Main.Business
                         },
                         Reason = reason.ToString(),
                     }
-
                 };
-
-
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/LeaseLineSubmitLineTermination/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitLeaseLineTermination/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
             }
-
         }
         public void ProceedLeasedLineTermination(Guid requestId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
-
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLineTermination");
             esq.AddColumn("StContractID");
             esq.AddColumn("StReason");
+            esq.AddColumn("StLinePathID");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
-
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var reason = entities[0].GetColumnValue("StReason");
+                var linePathId = entities[0].GetColumnValue("StLinePathID");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-
-
-                //ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
-
                 SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
-
                     InputArguments = new LineTerminationRequestInput
                     {
+                        LinePathId = linePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -236,18 +221,14 @@ namespace BPMExtended.Main.Business
                         },
                         Reason = reason.ToString(),
                     }
-
                 };
-
-
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/LeaseLineSubmitLineTermination/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ProceedLeaseLineTermination/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
             }
 
         }
@@ -256,32 +237,27 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
-
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLineTermination");
             esq.AddColumn("StContractID");
             esq.AddColumn("StReason");
+            esq.AddColumn("StLinePathID");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
-
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var reason = entities[0].GetColumnValue("StReason");
+                var linePathId = entities[0].GetColumnValue("StLinePathID");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-
-
-                //ContractEntity entity = new ContractManager().GetChildADSLContractByTelephonyContract(contractId.ToString());
-
                 SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
                 {
-
                     InputArguments = new LineTerminationRequestInput
                     {
+                        LinePathId = linePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -294,22 +270,16 @@ namespace BPMExtended.Main.Business
                         },
                         Reason = reason.ToString(),
                     }
-
                 };
-
-
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/LeaseLineSubmitLineTermination/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeLeaseLineTermination/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
             }
-
         }
-
         #endregion
     }
 }

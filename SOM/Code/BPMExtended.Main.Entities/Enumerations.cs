@@ -190,6 +190,8 @@ namespace BPMExtended.Main.Entities
         [EntitySchemaName("StLeasedLineTermination")]
         [CompletedStep("StStepId")]
         [CompletedStepId("94CA2192-D445-47D8-80C5-BF26E462CFC6")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("352722D4-9AFC-4C93-8206-1C30434EFD63")]
         LeasedLineTermination = 14,
 
         //[LineOfBusiness(LineOfBusiness.GSHDSL)]
