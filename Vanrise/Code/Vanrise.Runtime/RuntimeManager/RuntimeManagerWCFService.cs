@@ -12,6 +12,8 @@ namespace Vanrise.Runtime
     {
         public void UnlockFreezedTransactions(List<TransactionLockItem> freezedTransactionLocks)
         {
+            ValidateCurrentIsThePrimaryManager();
+
             if (freezedTransactionLocks != null)
             {
                 foreach (var transactionLockItem in freezedTransactionLocks)
@@ -26,6 +28,8 @@ namespace Vanrise.Runtime
 
         public bool TryLockRuntimeService(string serviceTypeUniqueName, int runtimeProcessId)
         {
+            ValidateCurrentIsThePrimaryManager();
+
             int currentLockedProcessId;
             if (s_runtimeServiceTypeProcessIds.TryGetValue(serviceTypeUniqueName, out currentLockedProcessId) && currentLockedProcessId == runtimeProcessId)
             {
@@ -59,6 +63,8 @@ namespace Vanrise.Runtime
 
         public GetServiceProcessIdResponse TryGetServiceProcessId(GetServiceProcessIdRequest request)
         {
+            ValidateCurrentIsThePrimaryManager();
+
             int currentLockedProcessId;
             if (s_runtimeServiceTypeProcessIds.TryGetValue(request.ServiceTypeUniqueName, out currentLockedProcessId))
             {
@@ -72,19 +78,31 @@ namespace Vanrise.Runtime
         }
 
 
-        public bool TryLock(Entities.TransactionLockItem lockItem, int maxAllowedConcurrency)
+        public bool TryLock(Entities.TransactionLockItem lockItem)
         {
+            ValidateCurrentIsThePrimaryManager();
+
             TransactionLockHandler transactionLockHandler = TransactionLockHandler.Current;
             if (transactionLockHandler == null)
                 throw new NullReferenceException("TransactionLockHandler.Current");
-            return transactionLockHandler.TryLock(lockItem, maxAllowedConcurrency);
+
+            return transactionLockHandler.TryLock(lockItem);
+        }
+
+        void ValidateCurrentIsThePrimaryManager()
+        {
+            if (!RuntimeManager.Current.IsCurrentTheValidPrimaryManager())
+                throw new Exception("Current Node is not the Primary Node");
         }
 
         public void UnLock(Entities.TransactionLockItem lockItem)
         {
+            ValidateCurrentIsThePrimaryManager();
+
             TransactionLockHandler transactionLockHandler = TransactionLockHandler.Current;
             if (transactionLockHandler == null)
                 throw new NullReferenceException("TransactionLockHandler.Current");
+
             transactionLockHandler.UnLock(lockItem);
         }
 

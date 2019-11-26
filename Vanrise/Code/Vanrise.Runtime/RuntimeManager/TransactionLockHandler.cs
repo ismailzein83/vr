@@ -45,12 +45,12 @@ namespace Vanrise.Runtime
 
         #region Public Methods
 
-        public bool TryLock(TransactionLockItem lockItem, int maxAllowedConcurrency)
+        public bool TryLock(TransactionLockItem lockItem)
         {
             lock (_memStore)
             {                
                 TransactionLocksById existingLocks = _memStore.TransactionLocksByTransName.GetOrCreateItem(lockItem.TransactionUniqueName);
-                if (existingLocks.Count >= maxAllowedConcurrency)
+                if (existingLocks.Count >= 1)
                     return false;
 
                 AddTransactionLockToDB(lockItem);

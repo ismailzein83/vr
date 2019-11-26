@@ -7,9 +7,9 @@ using Vanrise.Runtime.Entities;
 using Vanrise.Common;
 using System.Configuration;
 using Vanrise.Runtime.Data;
-using System.Threading;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Vanrise.Runtime
 {
@@ -50,6 +50,8 @@ namespace Vanrise.Runtime
 
         #region ctor
 
+        System.Timers.Timer _timerHeartbeatUpdater;
+
         internal RuntimeManager(RuntimeHost runtimeHost, Guid runtimeNodeId, Guid runtimeNodeInstanceId)
         {
             _runtimeHost = runtimeHost;
@@ -84,6 +86,35 @@ namespace Vanrise.Runtime
             else
             {
                 _lastHeartbeatTime = DateTime.Now;
+            }
+
+            _timerHeartbeatUpdater = new System.Timers.Timer(2000);
+            _timerHeartbeatUpdater.Elapsed += timerHeartbeatUpdater_Elapsed;
+            _timerHeartbeatUpdater.Start();
+        }
+
+        object _timerHeartbeatUpdaterLockObj = new object();
+        bool _timerHeartbeatUpdaterExecuting;
+
+        private void timerHeartbeatUpdater_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            lock (_timerHeartbeatUpdaterLockObj)
+            {
+                if (_timerHeartbeatUpdaterExecuting)
+                    return;
+                _timerHeartbeatUpdaterExecuting = true;
+            }
+            try
+            {
+                TryUpdateNodeHeartBeat();
+            }
+            catch (Exception ex)
+            {
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
+            }
+            lock (_timerHeartbeatUpdaterLockObj)
+            {
+                _timerHeartbeatUpdaterExecuting = false;
             }
         }
 
@@ -126,6 +157,7 @@ namespace Vanrise.Runtime
                     {
                         TransactionLockHandler.InitializeCurrent();
                         _isPrimaryNodeReady = true;
+                        LoggerFactory.GetLogger().WriteInformation($"Primary Node is switched to Node Id '{_runtimeNodeId}', Node Instance Id '{_runtimeNodeInstanceId}'");
                     }
                 }
                 DeleteRunningProcessesForTimedOutNodes();
@@ -245,7 +277,7 @@ namespace Vanrise.Runtime
 
         private bool IsThisThePrimaryNode()
         {
-            TryUpdateNodeHeartBeat();
+            //TryUpdateNodeHeartBeat();
             Guid? currentActiveRuntimeManagerInstanceId = _dataManager.GetNonTimedOutRuntimeManagerId(s_RuntimeNodeHeartBeatTimeout);
             if (currentActiveRuntimeManagerInstanceId.HasValue)
             {
@@ -262,7 +294,7 @@ namespace Vanrise.Runtime
                     else
                     {
                         Thread.Sleep(1000);
-                        TryUpdateNodeHeartBeat();
+                        //TryUpdateNodeHeartBeat();
                         currentActiveRuntimeManagerInstanceId = _dataManager.GetNonTimedOutRuntimeManagerId(s_RuntimeNodeHeartBeatTimeout);
                         if (currentActiveRuntimeManagerInstanceId.HasValue)
                             return currentActiveRuntimeManagerInstanceId.Value == _runtimeNodeInstanceId;
@@ -417,6 +449,11 @@ namespace Vanrise.Runtime
         {
             _runtimeServiceDataManager.DeleteByProcessId(processId);
             _runningProcessDataManager.DeleteRunningProcess(processId);
+        }
+
+        internal bool IsCurrentTheValidPrimaryManager()
+        {
+            return _isPrimaryNodeReady && (DateTime.Now - _lastHeartbeatTime) < s_RuntimeNodeHeartBeatTimeout;
         }
 
         #endregion

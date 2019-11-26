@@ -36,15 +36,10 @@ namespace Vanrise.Runtime
 
         public bool TryLock(string transactionUniqueName, Action lockAction)
         {
-            return TryLock(transactionUniqueName, 1, lockAction);
-        }
-
-        public bool TryLock(string transactionUniqueName, int maxAllowedConcurrency, Action lockAction)
-        {
             if (lockAction == null)
                 throw new ArgumentNullException("lockAction");
             TransactionLockItem lockItem;
-            if (TryLock(transactionUniqueName, maxAllowedConcurrency, out lockItem))
+            if (TryLock(transactionUniqueName, out lockItem))
             {
                 try
                 {
@@ -64,11 +59,6 @@ namespace Vanrise.Runtime
 
         public bool TryLock(string transactionUniqueName, out TransactionLockItem lockItem)
         {
-            return TryLock(transactionUniqueName, 1, out lockItem);
-        }
-
-        public bool TryLock(string transactionUniqueName, int maxAllowedConcurrency, out TransactionLockItem lockItem)
-        {
             lockItem = CreateLockItem(transactionUniqueName);
             bool isLocked = false;
             try
@@ -76,7 +66,7 @@ namespace Vanrise.Runtime
                 var lockItem_local = lockItem;
                 RuntimeManagerClient.CreateClient((client, primaryNodeRuntimeNodeInstanceId) =>
                 {
-                    isLocked = client.TryLock(lockItem_local, maxAllowedConcurrency);
+                    isLocked = client.TryLock(lockItem_local);
                 });
                 if (!isLocked)
                     lockItem = null;

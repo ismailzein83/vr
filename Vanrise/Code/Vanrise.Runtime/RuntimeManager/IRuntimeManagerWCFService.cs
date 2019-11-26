@@ -15,7 +15,7 @@ namespace Vanrise.Runtime
 
         GetServiceProcessIdResponse TryGetServiceProcessId(GetServiceProcessIdRequest request);
 
-        bool TryLock(TransactionLockItem lockItem, int maxAllowedConcurrency);
+        bool TryLock(TransactionLockItem lockItem);
 
         void UnLock(TransactionLockItem lockItem);
 
