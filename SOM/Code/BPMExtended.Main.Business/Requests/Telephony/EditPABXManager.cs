@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -22,7 +24,20 @@ namespace BPMExtended.Main.Business
 
         #region public
 
-        public void SubmitEditPABX(Guid requestId)
+        public List<PabxContractDetail> GetPABXSecondaryContractsDetails(string pilotContractId)
+        {
+            var secondaryContracts = new List<PabxContractDetail>();
+
+            using (SOMClient client = new SOMClient())
+            {
+                secondaryContracts = client.Get<List<PabxContractDetail>>(String.Format("api/SOM.ST/Billing/GetPABXSecondaryContractsDetails?contractId={0}", pilotContractId));
+            }
+
+            return secondaryContracts;
+
+        }
+
+        public void SubmitModifyPABXSubscription(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
@@ -30,12 +45,10 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StManagePabx");
-            esq.AddColumn("StContractId");
-            esq.AddColumn("StCustomerID");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StPabxSecondaryContracts");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -44,10 +57,12 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerID");
+                var contractId = entities[0].GetColumnValue("StContractID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                List<PabxContractInput> selectedSecondaryContracts = JsonConvert.DeserializeObject<List<PabxContractInput>>(entities[0].GetColumnValue("StPabxSecondaryContracts").ToString());
+
 
                 SOMRequestInput<EditPABXRequestInput> somRequestInput = new SOMRequestInput<EditPABXRequestInput>
                 {
@@ -56,11 +71,18 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            //AccountId = null,
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            // CustomerId = customerId.ToString()
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        SubmitPabxInput = new SubmitPabxInput()
+                        {
+                            //PilotContract = pilotContract,
+                            Contracts = selectedSecondaryContracts
                         }
                     }
 
@@ -69,7 +91,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<EditPABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitModifyPabx/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<EditPABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitModifyPABXSubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -78,7 +100,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void PostEditPABXToOM(Guid requestId)
+        public void FinalizeModifyPABXSubscription(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
@@ -86,12 +108,9 @@ namespace BPMExtended.Main.Business
             SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StManagePabx");
-            esq.AddColumn("StContractId");
-            esq.AddColumn("StCustomerID");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -100,10 +119,9 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerID");
+                var contractId = entities[0].GetColumnValue("StContractID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<EditPABXRequestInput> somRequestInput = new SOMRequestInput<EditPABXRequestInput>
                 {
@@ -112,11 +130,13 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            //AccountId = null,
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                            // CustomerId = customerId.ToString()
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
                         }
                     }
 
@@ -125,7 +145,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<EditPABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ModifyPabx/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<EditPABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeModifyPABXSubscription/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

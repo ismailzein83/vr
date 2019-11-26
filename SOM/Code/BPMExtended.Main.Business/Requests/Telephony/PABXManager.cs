@@ -109,14 +109,14 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public List<ServiceParameter> GetPabxServiceParameterValues()
+        public List<SOMAPI.ServiceParameter> GetPabxServiceParameterValues()
         {
-            var parameters = new List<ServiceParameter>();
+            var parameters = new List<SOMAPI.ServiceParameter>();
             string pabxServiceId = new CatalogManager().GetPABXServiceId();
 
             using (SOMClient client = new SOMClient())
             {
-                parameters = client.Get<List<ServiceParameter>>(String.Format("api/SOM.ST/Billing/GetServiceParameters?serviceId={0}", pabxServiceId));
+                parameters = client.Get<List<SOMAPI.ServiceParameter>>(String.Format("api/SOM.ST/Billing/GetServiceParameters?serviceId={0}", pabxServiceId));
             }
 
             return parameters;
@@ -135,6 +135,7 @@ namespace BPMExtended.Main.Business
             return secondaryContracts;
 
         }
+
 
         public void CreatePabxSwitchTeamWorkOrder(string requestId)
         {

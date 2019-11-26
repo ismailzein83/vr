@@ -204,7 +204,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public bool CheckServicesConsistency(List<ServiceParameter> services)
+        public bool CheckServicesConsistency(List<SOMAPI.ServiceParameter> services)
         {
            //TODO : validate services 
 
