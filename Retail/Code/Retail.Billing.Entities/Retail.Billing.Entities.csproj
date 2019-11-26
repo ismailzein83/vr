@@ -53,20 +53,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContractHistory\ContractHistory.cs" />
     <Compile Include="ContractResource\AddContractResourceInput.cs" />
     <Compile Include="ContractResource\AddContractResourceOutput.cs" />
     <Compile Include="ContractResource\CloseContractResourceInput.cs" />
     <Compile Include="ContractResource\CloseContractResourceOutput.cs" />
     <Compile Include="ContractServiceAction\AddContractServiceActionInput.cs" />
     <Compile Include="ContractServiceAction\AddContractServiceActionOutput.cs" />
+    <Compile Include="ContractServiceAction\ContractServiceAction.cs" />
     <Compile Include="ContractServiceType\ContractServiceType.cs" />
+    <Compile Include="ContractServiceHistory\ContractServiceHistory.cs" />
     <Compile Include="ContractService\ContractService.cs" />
     <Compile Include="Contract\Contract.cs" />
     <Compile Include="Deposit\AddDepositInput.cs" />
     <Compile Include="Deposit\AddDepositOutput.cs" />
     <Compile Include="DiscountRuleCondition\DiscountRuleCondition.cs" />
     <Compile Include="DiscountRuleTargetType\DiscountRuleTargetType.cs" />
-    <Compile Include="DiscountRuleTargetType\DiscountRuleTargetTypeExtendedSettings.cs" />
     <Compile Include="DiscountRuleTargetType\DiscountRuleTargetTypeSettings.cs" />
     <Compile Include="RetailBillingChargeType\RetailBillingCompilationOutput.cs" />
     <Compile Include="BillingInvoiceDetails.cs" />

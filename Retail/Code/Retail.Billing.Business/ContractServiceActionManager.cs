@@ -2,9 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.Billing.Business
 {
@@ -20,12 +19,64 @@ namespace Retail.Billing.Business
 
         #region Public Methods
 
+        public List<ContractServiceAction> GetContractServiceActions(RecordFilterGroup filterGroup, List<string> columnsNeeded = null)
+        {
+            return s_genericBEManager.GetAllGenericBusinessEntities(s_BusinessEntityDefinitionId_ContractServiceAction, columnsNeeded, filterGroup).MapRecords(ContractServiceActionMapper).ToList();
+        }
+        public List<ContractServiceAction> GetContractServiceActionsByContractIds(List<long> contractIds, DateTime fromTime, DateTime toTime)
+        {
+            var filterGroup = new RecordFilterGroup { Filters = new List<RecordFilter>() };
+            filterGroup.Filters.Add(new ObjectListRecordFilter()
+            {
+                FieldName = "Contract",
+                Values = contractIds.MapRecords(x => (object)x).ToList()
+            });
+
+            var orFilterGroup = new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>(),
+                LogicalOperator = RecordQueryLogicalOperator.Or
+            };
+            orFilterGroup.Filters.Add(new EmptyRecordFilter()
+            {
+                FieldName = "PaidCash"
+            });
+            orFilterGroup.Filters.Add(new BooleanRecordFilter()
+            {
+                FieldName = "PaidCash",
+                IsTrue = false
+            });
+
+            filterGroup.Filters.Add(orFilterGroup);
+            filterGroup.Filters.Add(new NumberRecordFilter()
+            {
+                FieldName = "Charge",
+                Value = 0,
+                CompareOperator = NumberRecordFilterOperator.Greater
+            });
+
+            filterGroup.Filters.Add(new DateTimeRecordFilter()
+            {
+                FieldName = "ChargeTime",
+                Value = fromTime,
+                CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals
+            });
+            filterGroup.Filters.Add(new DateTimeRecordFilter()
+            {
+                FieldName = "ChargeTime",
+                Value = toTime,
+                CompareOperator = DateTimeRecordFilterOperator.Less
+            });
+
+            return GetContractServiceActions(filterGroup);
+        }
+
         public AddContractServiceActionOutput AddContractServiceAction(AddContractServiceActionInput input)
         {
-            var itemToAdd = new Vanrise.GenericData.Entities.GenericBusinessEntityToAdd
+            var itemToAdd = new GenericBusinessEntityToAdd
             {
                 BusinessEntityDefinitionId = s_BusinessEntityDefinitionId_ContractServiceAction,
-                FieldValues = new System.Collections.Generic.Dictionary<string, object>()
+                FieldValues = new Dictionary<string, object>()
             };
 
             itemToAdd.FieldValues.Add("ContractService", input.ContractServiceId);
@@ -73,7 +124,9 @@ namespace Retail.Billing.Business
                 ServiceContractActionId = itemId
             };
         }
-
+        #endregion
+       
+        #region Private Methods
         private decimal CalculateActionCharge(AddContractServiceActionInput input)
         {
             var contractService = s_contractServiceManager.GetContractService(input.ContractServiceId);
@@ -99,6 +152,33 @@ namespace Retail.Billing.Business
             };
             var evaluationOutput = s_ratePlanManager.EvaluateActionCharge(evaluateActionChargeInput);
             return evaluationOutput != null ? evaluationOutput.Charge : 0;
+        }
+        private ContractServiceAction ContractServiceActionMapper(GenericBusinessEntity contractServiceActionEntity)
+        {
+            return new ContractServiceAction
+            {
+                ID = (long)contractServiceActionEntity.FieldValues["ID"],
+                Contract = (long)contractServiceActionEntity.FieldValues["Contract"],
+                ContractService = (long)contractServiceActionEntity.FieldValues["ContractService"],
+                ServiceType = (Guid)contractServiceActionEntity.FieldValues["ServiceType"],
+                ServiceTypeOption = (Guid?)contractServiceActionEntity.FieldValues["ServiceTypeOption"],
+                ActionType = (Guid)contractServiceActionEntity.FieldValues["ActionType"],
+                Charge = (decimal)contractServiceActionEntity.FieldValues["Charge"],
+                ChargeTime = (DateTime)contractServiceActionEntity.FieldValues["ChargeTime"],
+                ContractServiceHistory = (long?)contractServiceActionEntity.FieldValues["ContractServiceHistory"],
+                NewSpeedInMbps = (decimal?)contractServiceActionEntity.FieldValues["NewSpeedInMbps"],
+                OverriddenCharge = (decimal?)contractServiceActionEntity.FieldValues["OverriddenCharge"],
+                PaidCash = (bool)contractServiceActionEntity.FieldValues["PaidCash"],
+                OldServiceOption = (Guid?)contractServiceActionEntity.FieldValues["OldServiceOption"],
+                NewServiceOption = (Guid?)contractServiceActionEntity.FieldValues["NewServiceOption"],
+                OldServiceOptionActivationFee = (Decimal?)contractServiceActionEntity.FieldValues["OldServiceOptionActivationFee"],
+                NewServiceOptionActivationFee = (Decimal?)contractServiceActionEntity.FieldValues["NewServiceOptionActivationFee"],
+                OldSpeedInMbps = (Decimal?)contractServiceActionEntity.FieldValues["OldSpeedInMbps"],
+                CreatedTime = (DateTime)contractServiceActionEntity.FieldValues.GetRecord("CreatedTime"),
+                CreatedBy = (int)contractServiceActionEntity.FieldValues.GetRecord("CreatedBy"),
+                LastModifiedTime = (DateTime)contractServiceActionEntity.FieldValues.GetRecord("LastModifiedTime"),
+                LastModifiedBy = (int)contractServiceActionEntity.FieldValues.GetRecord("LastModifiedBy")
+            };
         }
 
         #endregion
