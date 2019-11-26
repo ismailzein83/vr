@@ -46,13 +46,24 @@ app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', '
                             dataRetrievalInput.SortByColumnName = "SupplierName";
                         }
                     }
+                    if (dataRetrievalInput.SortByColumnName == "ZoneName") {
+                        if (accountType == CP_WhS_AccountViewTypeEnum.Customer.value) {
+                            dataRetrievalInput.SortByColumnName = "SaleZoneName";
+                        } else {
+                            dataRetrievalInput.SortByColumnName = "SupplierZoneName";
+                        }
+                    }
                     return CP_WhS_RepeatedNumbersAPIService.GetFilteredRepeatedNumbers(dataRetrievalInput).then(function (response) {
                         if (response != undefined && response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 if (accountType == CP_WhS_AccountViewTypeEnum.Customer.value) {
                                     response.Data[i].CarrierName = response.Data[i].CustomerName;
+                                    response.Data[i].ZoneName = response.Data[i].SaleZoneName;
+
                                 } else {
                                     response.Data[i].CarrierName = response.Data[i].SupplierName;
+                                    response.Data[i].ZoneName = response.Data[i].SupplierZoneName;
+
                                 }
                             }
                         }

@@ -46,11 +46,12 @@ namespace CP.WhS.Business
                     CDRType = cdrType,
                     Filter = new RepeatedNumberFilter()
                     {
-                        ColumnsToShow = query.Query.Filter.AccountType == AccountViewType.Customer ? new List<string>() { "CustomerName", "SaleZoneName", "Attempt", "DurationInMinutes", "PhoneNumber" } : new List<string>() { "SupplierName", "SaleZoneName", "Attempt", "DurationInMinutes", "PhoneNumber" }
+                        ColumnsToShow = query.Query.Filter.AccountType == AccountViewType.Customer ? new List<string>() { "CustomerName", "SaleZoneName", "Attempt", "DurationInMinutes", "PhoneNumber" } : new List<string>() { "SupplierName", "SupplierZoneName", "Attempt", "DurationInMinutes", "PhoneNumber" }
                     },
                     PhoneNumber = query.Query.PhoneNumber,
                     PhoneNumberType = query.Query.PhoneNumberType,
-                    RepeatedMorethan = query.Query.RepeatedMorethan
+                    RepeatedMorethan = query.Query.RepeatedMorethan,
+                    GroupingByCarrierType = query.Query.Filter.AccountType == AccountViewType.Customer? GroupingByCarrierType.Customer: GroupingByCarrierType.Supplier
                 }
             };
             if (query.Query.Filter != null)
