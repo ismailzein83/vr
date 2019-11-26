@@ -637,41 +637,14 @@ namespace TOne.WhS.Deal.Business
             if (!deal.Settings.EEDToStore.HasValue)//we cannot reccur a deal without EED
                 return recurredDeals;
 
-            DateTime EEDToStore = deal.Settings.EEDToStore.Value;
-            DateTime beginDealDate = deal.Settings.BeginDate;
-            var dealLifeSpan = EEDToStore.Subtract(beginDealDate);
-            TimeSpan offSet = deal.Settings.OffSet ?? new TimeSpan();
-            DateTime endDealDate = deal.Settings.RealEED.Value.Add(offSet);
-            var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month);
-            bool isLastDayOfMonth = EEDToStore.GetLastDayOfMonth().Day == EEDToStore.Day;
-
-            for (int i = 0; i < recurringNumber; i++)
+            switch (recurringType)
             {
-                DealDefinition recurredDeal = new DealDefinition();
-                recurredDeal.Settings = deal.Settings.VRDeepCopy();
-                switch (recurringType)
-                {
-                    case RecurringType.Daily:
-                        recurredDeal.Settings.BeginDate = endDealDate;
-                        recurredDeal.Settings.EEDToStore = recurredDeal.Settings.BeginDate.Add(dealLifeSpan);
-                        endDealDate = recurredDeal.Settings.RealEED.Value.Add(offSet);
-                        break;
+                case RecurringType.Daily:
+                    return RecurDaily(deal, recurringNumber);
 
-                    case RecurringType.Monthly:
-                        int monthsToAdd = (monthsDifference + 1) * (i + 1);
-                        recurredDeal.Settings.BeginDate = deal.Settings.BeginDate.AddMonths(monthsToAdd);
-                        recurredDeal.Settings.EEDToStore = isLastDayOfMonth
-                                                            ? deal.Settings.EEDToStore.Value.AddMonths(monthsToAdd).GetLastDayOfMonth()
-                                                            : deal.Settings.EEDToStore.Value.AddMonths(monthsToAdd);
-                        break;
-                }
-
-                string dateFormat = Utilities.GetDateTimeFormat(DateTimeType.Date);
-                recurredDeal.Name = $"{deal.Name}-({recurredDeal.Settings.BeginDate.ToString(dateFormat)}-{recurredDeal.Settings.EEDToStore.Value.ToString(dateFormat)})";
-                recurredDeal.Settings.IsRecurrable = false;
-                recurredDeals.Add(recurredDeal);
+                case RecurringType.Monthly:
+                    return RecurMonthly(deal, recurringNumber);
             }
-            recurredDeals.Last().Settings.IsRecurrable = true;
             return recurredDeals;
         }
 
@@ -740,7 +713,57 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region Private Methods
+        private List<DealDefinition> RecurDaily(DealDefinition deal, int recurringNumber)
+        {
+            var recurredDeals = new List<DealDefinition>();
+            var dealLifeSpan = deal.Settings.EEDToStore.Value.Subtract(deal.Settings.BeginDate);
 
+            TimeSpan offSet = deal.Settings.OffSet ?? new TimeSpan();
+            DateTime endDealDate = deal.Settings.RealEED.Value.Add(offSet);
+
+            for (int i = 0; i < recurringNumber; i++)
+            {
+                var recurredDeal = new DealDefinition { Settings = deal.Settings.VRDeepCopy() };
+
+                recurredDeal.Settings.BeginDate = endDealDate;
+                recurredDeal.Settings.EEDToStore = recurredDeal.Settings.BeginDate.Add(dealLifeSpan);
+
+                endDealDate = recurredDeal.Settings.RealEED.Value.Add(offSet);
+
+                string dateFormat = Utilities.GetDateTimeFormat(DateTimeType.Date);
+                recurredDeal.Name = $"{deal.Name}-({recurredDeal.Settings.BeginDate.ToString(dateFormat)}-{recurredDeal.Settings.EEDToStore.Value.ToString(dateFormat)})";
+                recurredDeals.Add(recurredDeal);
+            }
+            return recurredDeals;
+        }
+        private List<DealDefinition> RecurMonthly(DealDefinition deal, int recurringNumber)
+        {
+            var recurredDeals = new List<DealDefinition>();
+
+            TimeSpan offSet = deal.Settings.OffSet ?? new TimeSpan();
+            DateTime endDealDate = deal.Settings.RealEED.Value.Add(offSet).AddDays(-1);
+
+            DateTime EEDToStore = deal.Settings.EEDToStore.Value;
+            DateTime beginDealDate = deal.Settings.BeginDate;
+
+            bool isLastDayOfMonth = EEDToStore.GetLastDayOfMonth().Day == EEDToStore.Day;
+
+            var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month) + 1;
+
+            for (int i = 0; i < recurringNumber; i++)
+            {
+                int recurredMonthes = monthsDifference * (i + 1);
+                var recurredDeal = new DealDefinition { Settings = deal.Settings.VRDeepCopy() };
+                recurredDeal.Settings.BeginDate = deal.Settings.BeginDate.AddMonths(recurredMonthes);
+                recurredDeal.Settings.EEDToStore = isLastDayOfMonth
+                                                    ? deal.Settings.EEDToStore.Value.AddMonths(recurredMonthes).GetLastDayOfMonth()
+                                                    : deal.Settings.EEDToStore.Value.AddMonths(recurredMonthes);
+                string dateFormat = Utilities.GetDateTimeFormat(DateTimeType.Date);
+                recurredDeal.Name = $"{deal.Name}-({recurredDeal.Settings.BeginDate.ToString(dateFormat)}-{recurredDeal.Settings.EEDToStore.Value.ToString(dateFormat)})";
+                recurredDeals.Add(recurredDeal);
+            }
+            return recurredDeals;
+        }
         private DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSaleZoneGroupTierWithoutRate dealSaleZoneGroupTier, decimal rate, int currencyId)
         {
             return new DealZoneGroupTierDetails()
