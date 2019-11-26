@@ -324,6 +324,8 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                         notRequiredPart.directiveAPI = api;
                         var directivePayload = {
                             partDefinition: partDefinition,
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            accountId:accountId,
                             partSettings: (accountEntity != undefined && accountEntity.Settings != null) ?
                                 accountEntity.Settings.Parts[partDefinition.AccountPartDefinitionId].Settings : undefined
                         };
