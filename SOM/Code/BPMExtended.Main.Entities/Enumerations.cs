@@ -276,8 +276,10 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Manage PABX")]
         [EntitySchemaName("StManagePabx")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("DFB53DD9-36C1-461B-AF90-080E3B0B5B60")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("4467A681-9D21-4577-8079-DA49D1B61616")]
         ManagePABX = 26,
 
         //[LineOfBusiness(LineOfBusiness.Telephony)]
