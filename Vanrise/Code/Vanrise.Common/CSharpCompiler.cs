@@ -171,142 +171,142 @@ namespace Vanrise.Common
 
         public static bool TryCompileClass(string assemblyNamePrefix, string assemblyNameSuffix, CSharpCodeFileToCompileCollection codeFiles, List<Guid> excludedDevProjectIdsFromReferences, out CSharpCompilationOutput output, bool ignoreNamespacesCompilation = false)
         {
-            output = null;
-            return false;
-            ////if (!ignoreNamespacesCompilation)
-            ////{
-            ////    IVRNamespaceManager vrNamespaceManager = BusinessManagerFactory.GetManager<IVRNamespaceManager>();
-            ////    vrNamespaceManager.CompileVRNamespacesAssembly();
-            ////}
-
-            //output = new CSharpCompilationOutput();
-
-            //string outputFileName = string.Empty;//this should be fixed
-            //List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
-            //foreach (var codeFile in codeFiles.Values)
+            //output = null;
+            //return false;
+            //if (!ignoreNamespacesCompilation)
             //{
-
-            //    if (!string.IsNullOrWhiteSpace(codeFile.Name) && !String.IsNullOrWhiteSpace(s_generatedCodePathInDevMode))
-            //    {
-            //        outputFileName = Path.Combine(s_generatedCodePathInDevMode, String.Concat(codeFile.Name.Replace(" ", ""), Guid.NewGuid().ToString().Replace("-", ""), ".cs"));
-            //        File.WriteAllText(outputFileName, codeFile.Code);
-            //    }
-
-            //    SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(codeFile.Code, path: !string.IsNullOrWhiteSpace(outputFileName) ? outputFileName : codeFile.Name, encoding: System.Text.Encoding.UTF8);
-            //    syntaxTrees.Add(syntaxTree);
+            //    IVRNamespaceManager vrNamespaceManager = BusinessManagerFactory.GetManager<IVRNamespaceManager>();
+            //    vrNamespaceManager.CompileVRNamespacesAssembly();
             //}
 
-            //string assemblyName;
-            //if (assemblyNamePrefix != null)
-            //{
-            //    assemblyName = $"{assemblyNamePrefix}_{Guid.NewGuid().ToString("N")}";
-            //}
-            //else
-            //{
-            //    assemblyName = $"RuntimeAssembly_{Guid.NewGuid().ToString("N")}";
-            //}
+            output = new CSharpCompilationOutput();
 
-            //if (!string.IsNullOrWhiteSpace(assemblyNameSuffix))
-            //    assemblyName += "_" + assemblyNameSuffix;
+            string outputFileName = string.Empty;//this should be fixed
+            List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
+            foreach (var codeFile in codeFiles.Values)
+            {
 
-            //List<MetadataReference> references = new List<MetadataReference>();
+                if (!string.IsNullOrWhiteSpace(codeFile.Name) && !String.IsNullOrWhiteSpace(s_generatedCodePathInDevMode))
+                {
+                    outputFileName = Path.Combine(s_generatedCodePathInDevMode, String.Concat(codeFile.Name.Replace(" ", ""), Guid.NewGuid().ToString().Replace("-", ""), ".cs"));
+                    File.WriteAllText(outputFileName, codeFile.Code);
+                }
 
-            //string path = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-            //if (VRWebContext.AreDllsInBinFolder())
-            //    path = Path.Combine(path, "bin");
+                SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(codeFile.Code, path: !string.IsNullOrWhiteSpace(outputFileName) ? outputFileName : codeFile.Name, encoding: System.Text.Encoding.UTF8);
+                syntaxTrees.Add(syntaxTree);
+            }
 
-            //foreach (string fileName in Directory.GetFiles(path, "*.dll"))
-            //{
-            //    FileInfo info = new FileInfo(fileName);
-            //    Assembly.LoadFile(info.FullName);
-            //}
+            string assemblyName;
+            if (assemblyNamePrefix != null)
+            {
+                assemblyName = $"{assemblyNamePrefix}_{Guid.NewGuid().ToString("N")}";
+            }
+            else
+            {
+                assemblyName = $"RuntimeAssembly_{Guid.NewGuid().ToString("N")}";
+            }
 
-            //HashSet<string> referencedAssembliesFullNames = new HashSet<string>();
+            if (!string.IsNullOrWhiteSpace(assemblyNameSuffix))
+                assemblyName += "_" + assemblyNameSuffix;
 
-            //foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            //{
-            //    try
-            //    {
-            //        if (assembly.GetName().Name.StartsWith(DEVPROJECT_ASSEMBLY_PREFIX) && assembly.GetName().Name.EndsWith(DEVPROJECT_ASSEMBLY_SUFFIX))
-            //            continue;
+            List<MetadataReference> references = new List<MetadataReference>();
 
-            //        if (!string.IsNullOrEmpty(assembly.Location) && !expiredAssemblies.Contains(assembly.FullName) && !referencedAssembliesFullNames.Contains(assembly.FullName))
-            //        {
-            //            references.Add(MetadataReference.CreateFromFile(assembly.Location));
-            //            referencedAssembliesFullNames.Add(assembly.FullName);
-            //        }
-            //    }
-            //    catch (NotSupportedException ex)
-            //    {
-            //    }
-            //}
+            string path = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+            if (VRWebContext.AreDllsInBinFolder())
+                path = Path.Combine(path, "bin");
 
-            //var compiledAssemblyManager = BusinessManagerFactory.GetManager<IVRCompiledAssemblyManager>();
-            //var compiledAssemblies = compiledAssemblyManager.GetAssembliesEffectiveForDevProjects();
+            foreach (string fileName in Directory.GetFiles(path, "*.dll"))
+            {
+                FileInfo info = new FileInfo(fileName);
+                Assembly.LoadFile(info.FullName);
+            }
 
-            //if (compiledAssemblies != null)
-            //{
-            //    foreach (var compiledAssembly in compiledAssemblies)
-            //    {
-            //        if (excludedDevProjectIdsFromReferences != null && excludedDevProjectIdsFromReferences.Contains(compiledAssembly.DevProjectId))
-            //            continue;
+            HashSet<string> referencedAssembliesFullNames = new HashSet<string>();
 
-            //        references.Add(MetadataReference.CreateFromStream(new MemoryStream(compiledAssembly.AssemblyContent)));
-            //        referencedAssembliesFullNames.Add(compiledAssembly.Name);
-            //    }
-            //}
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    if (assembly.GetName().Name.StartsWith(DEVPROJECT_ASSEMBLY_PREFIX) && assembly.GetName().Name.EndsWith(DEVPROJECT_ASSEMBLY_SUFFIX))
+                        continue;
 
-            //CSharpCompilation compilation = CSharpCompilation.Create(
-            //    assemblyName,
-            //    syntaxTrees: syntaxTrees,
-            //    references: references,
-            //    options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+                    if (!string.IsNullOrEmpty(assembly.Location) && !expiredAssemblies.Contains(assembly.FullName) && !referencedAssembliesFullNames.Contains(assembly.FullName))
+                    {
+                        references.Add(MetadataReference.CreateFromFile(assembly.Location));
+                        referencedAssembliesFullNames.Add(assembly.FullName);
+                    }
+                }
+                catch (NotSupportedException ex)
+                {
+                }
+            }
 
-            //bool outputResult;
-            //using (var ms = new MemoryStream())
-            //{
-            //    var pdbMs = new MemoryStream();
-            //    EmitResult result = compilation.Emit(ms, pdbMs);
+            var compiledAssemblyManager = BusinessManagerFactory.GetManager<IVRCompiledAssemblyManager>();
+            var compiledAssemblies = compiledAssemblyManager.GetAssembliesEffectiveForDevProjects();
 
-            //    if (!result.Success)
-            //    {
-            //        IEnumerable<Diagnostic> failures = result.Diagnostics.Where(diagnostic =>
-            //            diagnostic.IsWarningAsError ||
-            //            diagnostic.Severity == DiagnosticSeverity.Error);
+            if (compiledAssemblies != null)
+            {
+                foreach (var compiledAssembly in compiledAssemblies)
+                {
+                    if (excludedDevProjectIdsFromReferences != null && excludedDevProjectIdsFromReferences.Contains(compiledAssembly.DevProjectId))
+                        continue;
 
-            //        output = new CSharpCompilationOutput() { Errors = new List<CSharpCompilationError>(), ErrorMessages = new List<string>() };
-            //        foreach (Diagnostic diagnostic in failures)
-            //        {
-            //            CSharpCompilationError error = BuildCSharpCompilationError(diagnostic, outputFileName);
-            //            output.ErrorMessages.Add(diagnostic.ToString());
-            //            output.Errors.Add(error);
-            //        }
-            //        outputResult = false;
-            //    }
-            //    else
-            //    {
-            //        ms.Seek(0, SeekOrigin.Begin);
+                    references.Add(MetadataReference.CreateFromStream(new MemoryStream(compiledAssembly.AssemblyContent)));
+                    referencedAssembliesFullNames.Add(compiledAssembly.Name);
+                }
+            }
 
-            //        byte[] byteArray = ms.ToArray();
+            CSharpCompilation compilation = CSharpCompilation.Create(
+                assemblyName,
+                syntaxTrees: syntaxTrees,
+                references: references,
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-            //        string formatFileName = string.Format("{0}.dll", assemblyName);
-            //        string fullPath = Path.Combine(Path.GetTempPath(), formatFileName);
-            //        File.WriteAllBytes(fullPath, byteArray);
+            bool outputResult;
+            using (var ms = new MemoryStream())
+            {
+                var pdbMs = new MemoryStream();
+                EmitResult result = compilation.Emit(ms, pdbMs);
 
-            //        byte[] pdbByteArray = pdbMs.ToArray();
-            //        string formatPdbFileName = string.Format("{0}.pdb", assemblyName);
-            //        string pdbFullPath = Path.Combine(Path.GetTempPath(), formatPdbFileName);
-            //        File.WriteAllBytes(pdbFullPath, pdbByteArray);
+                if (!result.Success)
+                {
+                    IEnumerable<Diagnostic> failures = result.Diagnostics.Where(diagnostic =>
+                        diagnostic.IsWarningAsError ||
+                        diagnostic.Severity == DiagnosticSeverity.Error);
 
-            //        Assembly assembly = Assembly.LoadFrom(fullPath);
-            //        s_dynamicAssembliesByName.Add(assemblyName, assembly);
+                    output = new CSharpCompilationOutput() { Errors = new List<CSharpCompilationError>(), ErrorMessages = new List<string>() };
+                    foreach (Diagnostic diagnostic in failures)
+                    {
+                        CSharpCompilationError error = BuildCSharpCompilationError(diagnostic, outputFileName);
+                        output.ErrorMessages.Add(diagnostic.ToString());
+                        output.Errors.Add(error);
+                    }
+                    outputResult = false;
+                }
+                else
+                {
+                    ms.Seek(0, SeekOrigin.Begin);
 
-            //        output = new CSharpCompilationOutput() { AssemblyFile = byteArray, OutputAssembly = assembly };
-            //        outputResult = true;
-            //    }
-            //}
+                    byte[] byteArray = ms.ToArray();
 
-            //return outputResult;
+                    string formatFileName = string.Format("{0}.dll", assemblyName);
+                    string fullPath = Path.Combine(Path.GetTempPath(), formatFileName);
+                    File.WriteAllBytes(fullPath, byteArray);
+
+                    byte[] pdbByteArray = pdbMs.ToArray();
+                    string formatPdbFileName = string.Format("{0}.pdb", assemblyName);
+                    string pdbFullPath = Path.Combine(Path.GetTempPath(), formatPdbFileName);
+                    File.WriteAllBytes(pdbFullPath, pdbByteArray);
+
+                    Assembly assembly = Assembly.LoadFrom(fullPath);
+                    s_dynamicAssembliesByName.Add(assemblyName, assembly);
+
+                    output = new CSharpCompilationOutput() { AssemblyFile = byteArray, OutputAssembly = assembly };
+                    outputResult = true;
+                }
+            }
+
+            return outputResult;
         }
 
         private static CSharpCompilationError BuildCSharpCompilationError(Diagnostic diagnostic, string outputFileName)
