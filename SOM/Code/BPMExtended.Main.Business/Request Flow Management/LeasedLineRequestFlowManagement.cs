@@ -27,7 +27,7 @@ namespace BPMExtended.Main.Business
         const string print = "E7C4431A-615D-44A6-8811-8DD731A378DB"; // to technical
         const string attachmentStep = "013C02E5-203A-424C-8F7A-F10A82B1466E";
         const string technicalStep = "0545B38D-F1BA-4CD6-BC96-1BEFD85C9B3A";
-
+        const string submitToOMStep = "DAAEC57A-38F9-4576-9110-477220951BB9";
         public string GetNextStep(string id, string currentStepId)
         {
             string nextStepId = "";

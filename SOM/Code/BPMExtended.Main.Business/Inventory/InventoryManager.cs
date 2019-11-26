@@ -1212,6 +1212,14 @@ namespace BPMExtended.Main.Business
                 Name = r.Name
             }).ToList();
         }
-
+        public LeaseLineTechnicalDetails GetLeasedLineTechnicalDetailsByPath(string pathID) 
+        {
+            LeaseLineTechnicalDetails item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<LeaseLineTechnicalDetails>(String.Format("api/SOM.ST/Inventory/GetLeasedLineTechnicalDetails?linePathId={0}", pathID));
+            }
+            return item;
+        }
     }
 }
