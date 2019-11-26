@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
+
 namespace BPMExtended.Main.Business
 {
     public class LeasedLineSubscriptionManager
@@ -205,141 +206,138 @@ namespace BPMExtended.Main.Business
 
         public void SubmitActivateLeasedLineContract(Guid requestId)
         {
-            //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
-
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLine");
             esq.AddColumn("StContractID");
-
-
+            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
-
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
-
-                SOMRequestInput<ActivateTelephonyContractInput> somRequestInput = new SOMRequestInput<ActivateTelephonyContractInput>
+                var linePathId = entities[0].GetColumnValue("StLinePathID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+                SOMRequestInput<ActivateLeasedLineContractInput> somRequestInput = new SOMRequestInput<ActivateLeasedLineContractInput>
                 {
-
-                    InputArguments = new ActivateTelephonyContractInput
+                    InputArguments = new ActivateLeasedLineContractInput
                     {
+                        LinePathId = linePathId.ToString(),
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString()
                         }
                     }
-
                 };
-
-
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ActivateLeasedLineContractInput>, SOMRequestOutput>("/api/DynamicBusinessProcess_BP/SubmitActivateLeasedLineContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
-
             }
-
         }
         public void ProceedActivateLeasedLineContract(Guid requestId)
         {
-            //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
-
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLine");
             esq.AddColumn("StContractID");
-
-
+            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
-
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
-
-                SOMRequestInput<ActivateTelephonyContractInput> somRequestInput = new SOMRequestInput<ActivateTelephonyContractInput>
+                var linePathId = entities[0].GetColumnValue("StLinePathID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+                SOMRequestInput<ActivateLeasedLineContractInput> somRequestInput = new SOMRequestInput<ActivateLeasedLineContractInput>
                 {
-
-                    InputArguments = new ActivateTelephonyContractInput
+                    InputArguments = new ActivateLeasedLineContractInput
                     {
+                        LinePathId = linePathId.ToString(),
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString()
                         }
                     }
-
                 };
-
-
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ActivateLeasedLineContractInput>, SOMRequestOutput>("/api/DynamicBusinessProcess_BP/ProceedActivateLeasedLineContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
-
             }
-
         }
         public void FinalizeActivateLeasedLineContract(Guid requestId)
         {
-            //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
-
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLine");
             esq.AddColumn("StContractID");
-
-
+            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
-
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
-
-                SOMRequestInput<ActivateTelephonyContractInput> somRequestInput = new SOMRequestInput<ActivateTelephonyContractInput>
+                var linePathId = entities[0].GetColumnValue("StLinePathID");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+                SOMRequestInput<ActivateLeasedLineContractInput> somRequestInput = new SOMRequestInput<ActivateLeasedLineContractInput>
                 {
-
-                    InputArguments = new ActivateTelephonyContractInput
+                    InputArguments = new ActivateLeasedLineContractInput
                     {
+                        LinePathId = linePathId.ToString(),
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString()
                         }
                     }
-
                 };
-
-
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ActivateLeasedLineContractInput>, SOMRequestOutput>("/api/DynamicBusinessProcess_BP/FinalizeActivateLeasedLineContract/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
-
             }
-
         }
         public string GetConnectionType(string requestId)
         {

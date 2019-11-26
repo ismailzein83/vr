@@ -73,6 +73,7 @@
     <Compile Include="Billing\ServiceResponse\SOMRequestOutput.cs" />
     <Compile Include="Billing\ServiceResponse\SubmitToPOSResponse.cs" />
     <Compile Include="Billing\WorkflowInput\ActivateCptRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\ActivateLeasedLineContractInput.cs" />
     <Compile Include="Billing\WorkflowInput\ActivateTelephonyContractInput.cs" />
     <Compile Include="Billing\WorkflowInput\AddOtherChargesRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\AddProffessionalDIInput.cs" />

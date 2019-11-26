@@ -105,6 +105,8 @@ namespace BPMExtended.Main.Entities
         [Description("Leased Line Subscription")]
         [EntitySchemaName("StLeasedLine")]
         [CompletedStep("StStepId")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("0545B38D-F1BA-4CD6-BC96-1BEFD85C9B3A")]
         [CompletedStepId("DBEF5609-03E6-47D9-A901-6F48914A57F3")]
         LeasedLineSubscription = 4,
 
