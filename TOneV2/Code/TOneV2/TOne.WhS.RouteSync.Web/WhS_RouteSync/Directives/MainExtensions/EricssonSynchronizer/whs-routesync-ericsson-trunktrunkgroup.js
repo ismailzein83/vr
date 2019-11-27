@@ -5,6 +5,7 @@
     EricssonTrunkTrunkGroup.$inject = ["UtilsService", 'VRUIUtilsService'];
 
     function EricssonTrunkTrunkGroup(UtilsService, VRUIUtilsService) {
+
         return {
             restrict: "E",
             scope: {
@@ -34,6 +35,13 @@
                 $scope.scopeModel.trunksInfo = [];
                 $scope.scopeModel.selectedTrunksInfo = [];
                 $scope.scopeModel.trunkTrunkGroups = [];
+
+                $scope.scopeModel.onLoadSharingSwitchValueChanged = function () {
+                    for (var i = 0; i < $scope.scopeModel.trunkTrunkGroups.length; i++) {
+                        var trunkTrunkGroup = $scope.scopeModel.trunkTrunkGroups[i];
+                        expandOrCollapseRows(trunkTrunkGroup);
+                    }
+                };
 
                 $scope.scopeModel.onTrunkTrunkGroupGridReady = function (api) {
                     trunkTrunkGroupGridAPI = api;
@@ -95,7 +103,7 @@
                 };
 
                 $scope.scopeModel.isTrunkExapandable = function (trunkGroup) {
-                    return trunkGroup.Percentage != undefined && trunkGroup.Percentage != '';
+                    return !$scope.scopeModel.loadSharing && trunkGroup.Percentage != undefined && trunkGroup.Percentage != '';
                 };
 
                 defineAPI();
@@ -116,6 +124,7 @@
                         supplierOutTrunksMappings = payload.supplierOutTrunksMappings;
 
                         $scope.scopeModel.loadSharing = payload.LoadSharing;
+                        $scope.scopeModel.isBackup = (payload.context && payload.context.isBackup) ? payload.context.isBackup : undefined;
                     }
 
                     loadTrunkSelector();
@@ -170,7 +179,9 @@
                         return loadTrunkTrunkGroupGridDeferred.promise;
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        UtilsService.watchFunction($scope, 'scopeModel.isBackup()', updateBackupState);
+                    });
                 };
 
                 api.getData = function () {
@@ -228,12 +239,11 @@
             function extendTrunkTrunkGroup(trunkTrunkGroup, trunkInfo) {
                 trunkTrunkGroup.TrunkName = trunkInfo.description;
 
-                trunkTrunkGroup.onPercentageChanged = function (value) {
-                    if (value == undefined) {
-                        trunkTrunkGroupGridAPI.collapseRow(trunkTrunkGroup);
-                    } else {
-                        trunkTrunkGroupGridAPI.expandRow(trunkTrunkGroup);
-                    }
+                var isBackup = $scope.scopeModel.isBackup != undefined ? $scope.scopeModel.isBackup() : undefined;
+                trunkTrunkGroup.disablePercentage = isBackup;
+
+                trunkTrunkGroup.onPercentageChanged = function () {
+                    expandOrCollapseRows(trunkTrunkGroup);
                 };
             }
 
@@ -262,6 +272,42 @@
                 }
 
                 return drillDownTabs;
+            }
+
+            function expandOrCollapseRows(trunkTrunkGroup) {
+                if ($scope.scopeModel.isTrunkExapandable(trunkTrunkGroup)) {
+                    trunkTrunkGroupGridAPI.expandRow(trunkTrunkGroup);
+                } else {
+                    trunkTrunkGroupGridAPI.collapseRow(trunkTrunkGroup);
+
+                    trunkTrunkGroup.Backups = [];
+                    if (trunkTrunkGroup.trunkTrunkGroupBackupDirectiveAPI != undefined) {
+                        trunkTrunkGroup.trunkTrunkGroupBackupDirectiveAPI.clearDataSource();
+                    }
+                }
+            }
+
+            function updateBackupState() {
+                var isBackup = $scope.scopeModel.isBackup != undefined ? $scope.scopeModel.isBackup() : undefined;
+
+                $scope.scopeModel.disableLoadSharing = isBackup;
+                if (isBackup) {
+                    $scope.scopeModel.loadSharing = false;
+                }
+
+                for (var i = 0; i < $scope.scopeModel.trunkTrunkGroups.length; i++) {
+                    var currentTrunkTrunkGroup = $scope.scopeModel.trunkTrunkGroups[i];
+                    if (isBackup) {
+                        trunkTrunkGroupGridAPI.collapseRow(currentTrunkTrunkGroup);
+
+                        currentTrunkTrunkGroup.Percentage = undefined;
+                        currentTrunkTrunkGroup.Backups = [];
+                        if (currentTrunkTrunkGroup.trunkTrunkGroupBackupDirectiveAPI != undefined) {
+                            currentTrunkTrunkGroup.trunkTrunkGroupBackupDirectiveAPI.clearDataSource();
+                        }
+                    }
+                    currentTrunkTrunkGroup.disablePercentage = isBackup;
+                }
             }
         }
     }

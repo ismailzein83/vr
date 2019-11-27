@@ -83,7 +83,7 @@
                             </vr-whs-be-codegroup-selector>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Backup'" widthfactor="1" disablesorting>
-                            <vr-switch value="dataItem.IsBackup"></vr-switch>
+                            <vr-switch value="dataItem.IsBackup" onvaluechanged="dataItem.onBackupSwitchValueChanged"></vr-switch>
                         </vr-datagridcolumn>
 
                         <vr-datagridexpandablerow>

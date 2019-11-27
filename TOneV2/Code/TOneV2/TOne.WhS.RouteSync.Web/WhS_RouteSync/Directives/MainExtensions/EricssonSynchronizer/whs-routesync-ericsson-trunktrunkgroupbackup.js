@@ -31,6 +31,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.isLoading = true;
                 $scope.scopeModel.trunkTrunkGroupBackups = [];
 
                 $scope.scopeModel.onTrunkTrunkGroupBackupGridReady = function (api) {
@@ -94,11 +95,13 @@
                                 selectedTrunkIds: backups[i].Trunks[0].TrunkId
                             };
 
-                            extendBackupGrid(backup);
+                            promises.push(extendBackupGrid(backup));
                         }
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
                 };
 
                 api.getData = function () {
@@ -115,6 +118,10 @@
                         });
                     }
                     return backups;
+                };
+
+                api.clearDataSource = function () {
+                    $scope.scopeModel.trunkTrunkGroupBackups = [];
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

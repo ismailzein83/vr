@@ -1,6 +1,8 @@
 ﻿<vr-row>
     <vr-columns width="1/4row">
-        <vr-switch value="scopeModel.loadSharing" label="Load Sharing"></vr-switch>
+        <vr-switch value="scopeModel.loadSharing" onvaluechanged="scopeModel.onLoadSharingSwitchValueChanged" 
+                   label="Load Sharing" vr-disabled="scopeModel.disableLoadSharing">
+        </vr-switch>
     </vr-columns>
 </vr-row>
 <div style="height:125px">
@@ -27,7 +29,8 @@
                     <vr-datagridcolumn headertext="'Trunk Name'" field="'TrunkName'" widthfactor="2"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Percentage'" widthfactor="1">
                         <vr-textbox value="dataItem.Percentage" type="number" decimalprecision="0" minvalue="1" maxvalue="100"
-                                    onvaluechanged="dataItem.onPercentageChanged" tonextinput></vr-textbox>
+                                    onvaluechanged="dataItem.onPercentageChanged" vr-disabled="dataItem.disablePercentage" tonextinput>
+                        </vr-textbox>
                     </vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>
