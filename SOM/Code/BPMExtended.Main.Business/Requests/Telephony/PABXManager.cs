@@ -136,6 +136,20 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public List<SOMAPI.ServiceParameter> GetContractServiceParameters(string pilotContractId)
+        {
+            string pabxServiceId = new CatalogManager().GetPABXServiceId();
+            var parameters = new List<SOMAPI.ServiceParameter>();
+
+            using (SOMClient client = new SOMClient())
+            {
+                parameters = client.Get<List<SOMAPI.ServiceParameter>>(String.Format("api/SOM.ST/Billing/GetContractServiceParameters?contractId={0}&serviceId={1}", pilotContractId, pabxServiceId));
+            }
+
+            return parameters;
+
+        }
+
 
         public void CreatePabxSwitchTeamWorkOrder(string requestId)
         {
