@@ -7,9 +7,9 @@ namespace TOne.WhS.Routing.Data
 {
     public interface ICustomerRouteMarginDataManager : IDataManager, IBulkApplyDataManager<CustomerRouteMargin>
     {
-        void CreateCustomerRouteMarginTempTable(RoutingDatabaseType routingDatabaseType);
+        void CreateCustomerRouteMarginTempTable(RoutingDatabaseType routingDatabaseType, Action<string> trackStep);
 
-        void InsertCustomerRouteMarginsToDB(RoutingDatabaseType routingDatabaseType, List<CustomerRouteMargin> customerRouteMargins);
+        void InsertCustomerRouteMarginsToDB(RoutingDatabaseType routingDatabaseType, List<CustomerRouteMargin> customerRouteMargins, Action<string> trackStep);
 
         void CreateIndexes(RoutingDatabaseType routingDatabaseType, Action<string> trackStep);
 

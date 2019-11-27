@@ -49,24 +49,24 @@ namespace TOne.WhS.Routing.BP.Activities
                 out riskyCodesByCustomerRouteMarginID);
 
             CustomerRouteMarginManager customerRouteMarginManager = new CustomerRouteMarginManager();
-            customerRouteMarginManager.CreateCustomerRouteMarginTempTable(routingDatabaseType);
-            customerRouteMarginManager.InsertCustomerRouteMarginsToDB(routingDatabaseType, customerRouteMarginDict.Values.ToList());
+            customerRouteMarginManager.CreateCustomerRouteMarginTempTable(routingDatabaseType, trackStep);
+            customerRouteMarginManager.InsertCustomerRouteMarginsToDB(routingDatabaseType, customerRouteMarginDict.Values.ToList(), trackStep);
             customerRouteMarginManager.CreateIndexes(routingDatabaseType, trackStep);
             customerRouteMarginManager.SwapTables(routingDatabaseType);
 
             CustomerRouteMarginSummaryManager customerRouteMarginSummaryManager = new CustomerRouteMarginSummaryManager();
-            customerRouteMarginSummaryManager.CreateCustomerRouteMarginSummaryTempTable(routingDatabaseType);
-            customerRouteMarginSummaryManager.InsertCustomerRouteMarginSummariesToDB(routingDatabaseType, customerRouteMarginSummaryList);
+            customerRouteMarginSummaryManager.CreateCustomerRouteMarginSummaryTempTable(routingDatabaseType, trackStep);
+            customerRouteMarginSummaryManager.InsertCustomerRouteMarginSummariesToDB(routingDatabaseType, customerRouteMarginSummaryList, trackStep);
             customerRouteMarginSummaryManager.CreateIndexes(routingDatabaseType, trackStep);
             customerRouteMarginSummaryManager.SwapTables(routingDatabaseType);
 
             RiskyMarginCodeManager riskyMarginCodeManager = new RiskyMarginCodeManager();
-            riskyMarginCodeManager.CreateRiskyMarginCodeTempTable(routingDatabaseType);
+            riskyMarginCodeManager.CreateRiskyMarginCodeTempTable(routingDatabaseType, trackStep);
 
             if (riskyCodesByCustomerRouteMarginID != null && riskyCodesByCustomerRouteMarginID.Count > 0)
             {
                 List<RiskyMarginCode> riskyMarginCodes = GetRiskyMarginCodes(riskyCodesByCustomerRouteMarginID);
-                riskyMarginCodeManager.InsertRiskyMarginCodesToDB(routingDatabaseType, riskyMarginCodes);
+                riskyMarginCodeManager.InsertRiskyMarginCodesToDB(routingDatabaseType, riskyMarginCodes, trackStep);
             }
 
             riskyMarginCodeManager.CreateIndexes(routingDatabaseType, trackStep);

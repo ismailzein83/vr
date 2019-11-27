@@ -7,16 +7,16 @@ namespace TOne.WhS.Routing.Business
 {
     public class RiskyMarginCodeManager
     {
-        public void CreateRiskyMarginCodeTempTable(RoutingDatabaseType routingDatabaseType)
+        public void CreateRiskyMarginCodeTempTable(RoutingDatabaseType routingDatabaseType, Action<string> trackStep)
         {
             IRiskyMarginCodeDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRiskyMarginCodeDataManager>();
-            dataManager.CreateRiskyMarginCodeTempTable(routingDatabaseType);
+            dataManager.CreateRiskyMarginCodeTempTable(routingDatabaseType, trackStep);
         }
 
-        public void InsertRiskyMarginCodesToDB(RoutingDatabaseType routingDatabaseType, List<RiskyMarginCode> riskyMarginCodes)
+        public void InsertRiskyMarginCodesToDB(RoutingDatabaseType routingDatabaseType, List<RiskyMarginCode> riskyMarginCodes, Action<string> trackStep)
         {
             IRiskyMarginCodeDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRiskyMarginCodeDataManager>();
-            dataManager.InsertRiskyMarginCodesToDB(routingDatabaseType, riskyMarginCodes);
+            dataManager.InsertRiskyMarginCodesToDB(routingDatabaseType, riskyMarginCodes, trackStep);
         }
 
         public void CreateIndexes(RoutingDatabaseType routingDatabaseType, Action<string> trackStep)

@@ -102,7 +102,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Public Methods
 
-        public void CreateCustomerRouteMarginSummaryTempTable(RoutingDatabaseType routingDatabaseType)
+        public void CreateCustomerRouteMarginSummaryTempTable(RoutingDatabaseType routingDatabaseType, Action<string> trackStep)
         {
             tableName = GetTableName(routingDatabaseType, true);
             string dbTableName = GetDBTableName(routingDatabaseType, true);
@@ -136,12 +136,16 @@ namespace TOne.WhS.Routing.Data.SQL
             createTableQuery.AddColumn(COL_CreatedTime, RDBDataType.DateTime, true);
 
             queryContext.ExecuteNonQuery();
+
+            trackStep("Creating CustomerRouteMarginSummaryTemp table is done");
         }
 
-        public void InsertCustomerRouteMarginSummariesToDB(RoutingDatabaseType routingDatabaseType, List<CustomerRouteMarginSummary> customerRouteMarginSummaryList)
+        public void InsertCustomerRouteMarginSummariesToDB(RoutingDatabaseType routingDatabaseType, List<CustomerRouteMarginSummary> customerRouteMarginSummaryList, Action<string> trackStep)
         {
             if (customerRouteMarginSummaryList == null || customerRouteMarginSummaryList.Count == 0)
                 return;
+
+            trackStep("Starting save CustomerRouteMarginSummary Data");
 
             tableName = GetTableName(routingDatabaseType, true);
 
@@ -152,16 +156,18 @@ namespace TOne.WhS.Routing.Data.SQL
             }
             Object preparedAddRoutes = FinishDBApplyStream(dbApplyAddStream);
             ApplyCustomerRouteMarginForDB(preparedAddRoutes);
+
+            trackStep($"Finished save CustomerRouteMarginSummary Data. Events count: {customerRouteMarginSummaryList.Count}");
         }
 
         public void CreateIndexes(RoutingDatabaseType routingDatabaseType, Action<string> trackStep)
         {
-            string dummyGuid = Guid.NewGuid().ToString().Replace("-", "");
+            string dummyGuid = Guid.NewGuid().ToString("N");
             string dbTableName = GetDBTableName(routingDatabaseType, true);
 
             var queryContext = new RDBQueryContext(this.GetDataProvider());
 
-            trackStep("Starting create Indexes on CustomerRouteMarginSummary table.");
+            trackStep("Starting create Indexes on CustomerRouteMarginSummaryTemp table.");
 
             var createPrimaryKeyIndexQuery = queryContext.AddCreateIndexQuery();
             createPrimaryKeyIndexQuery.DBTableName(DBTableSchema, dbTableName);
@@ -182,9 +188,9 @@ namespace TOne.WhS.Routing.Data.SQL
             createSaleZoneNonClusteredIndexQuery.IndexType(RDBCreateIndexType.NonClustered);
             createSaleZoneNonClusteredIndexQuery.AddColumn(COL_SaleZoneID);
 
-            trackStep("Finished create Indexes on CustomerRouteMarginSummary table.");
-
             queryContext.ExecuteNonQuery();
+
+            trackStep("Finished create Indexes on CustomerRouteMarginSummaryTemp table.");
         }
 
         public void SwapTables(RoutingDatabaseType routingDatabaseType)

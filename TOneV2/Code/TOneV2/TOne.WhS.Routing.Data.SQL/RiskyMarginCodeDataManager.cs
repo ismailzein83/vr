@@ -69,7 +69,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Public Methods
 
-        public void CreateRiskyMarginCodeTempTable(RoutingDatabaseType routingDatabaseType)
+        public void CreateRiskyMarginCodeTempTable(RoutingDatabaseType routingDatabaseType, Action<string> trackStep)
         {
             tableName = GetTableName(routingDatabaseType, true);
             string dbTableName = GetDBTableName(routingDatabaseType, true);
@@ -86,12 +86,16 @@ namespace TOne.WhS.Routing.Data.SQL
             createTableQuery.AddColumn(COL_CreatedTime, RDBDataType.DateTime, true);
 
             queryContext.ExecuteNonQuery();
+
+            trackStep("Creating RiskyMarginCodeTemp table is done");
         }
 
-        public void InsertRiskyMarginCodesToDB(RoutingDatabaseType routingDatabaseType, List<RiskyMarginCode> riskyMarginCodes)
+        public void InsertRiskyMarginCodesToDB(RoutingDatabaseType routingDatabaseType, List<RiskyMarginCode> riskyMarginCodes, Action<string> trackStep)
         {
             if (riskyMarginCodes == null || riskyMarginCodes.Count == 0)
                 return;
+
+            trackStep("Starting save RiskyMarginCode Data");
 
             tableName = GetTableName(routingDatabaseType, true);
 
@@ -102,26 +106,28 @@ namespace TOne.WhS.Routing.Data.SQL
             }
             Object preparedAddRoutes = FinishDBApplyStream(dbApplyAddStream);
             ApplyCustomerRouteMarginForDB(preparedAddRoutes);
+
+            trackStep($"Finished save RiskyMarginCode Data. Events count: {riskyMarginCodes.Count}");
         }
 
         public void CreateIndexes(RoutingDatabaseType routingDatabaseType, Action<string> trackStep)
         {
-            string dummyGuid = Guid.NewGuid().ToString().Replace("-", "");
+            string dummyGuid = Guid.NewGuid().ToString("N");
             string dbTableName = GetDBTableName(routingDatabaseType, true);
 
             var queryContext = new RDBQueryContext(this.GetDataProvider());
 
-            trackStep("Starting create Indexes on RiskyMarginCode table.");
+            trackStep("Starting create Indexes on RiskyMarginCodeTemp table.");
 
             var createCustomerSaleZoneNonClusteredIndexQuery = queryContext.AddCreateIndexQuery();
             createCustomerSaleZoneNonClusteredIndexQuery.DBTableName(DBTableSchema, dbTableName);
             createCustomerSaleZoneNonClusteredIndexQuery.IndexName($"IX_RiskyMarginCode_CustomerRouteMarginID_{dummyGuid}");
             createCustomerSaleZoneNonClusteredIndexQuery.IndexType(RDBCreateIndexType.NonClustered);
             createCustomerSaleZoneNonClusteredIndexQuery.AddColumn(COL_CustomerRouteMarginID);
-
-            trackStep("Finished create Indexes on RiskyMarginCode table.");
-
+            
             queryContext.ExecuteNonQuery();
+
+            trackStep("Finished create Indexes on RiskyMarginCodeTemp table.");
         }
 
         public void SwapTables(RoutingDatabaseType routingDatabaseType)

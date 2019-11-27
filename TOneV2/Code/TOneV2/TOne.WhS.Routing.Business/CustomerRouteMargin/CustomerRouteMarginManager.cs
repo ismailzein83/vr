@@ -7,16 +7,16 @@ namespace TOne.WhS.Routing.Business
 {
     public class CustomerRouteMarginManager
     {
-        public void CreateCustomerRouteMarginTempTable(RoutingDatabaseType routingDatabaseType)
+        public void CreateCustomerRouteMarginTempTable(RoutingDatabaseType routingDatabaseType, Action<string> trackStep)
         {
             ICustomerRouteMarginDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteMarginDataManager>();
-            dataManager.CreateCustomerRouteMarginTempTable(routingDatabaseType);
+            dataManager.CreateCustomerRouteMarginTempTable(routingDatabaseType, trackStep);
         }
 
-        public void InsertCustomerRouteMarginsToDB(RoutingDatabaseType routingDatabaseType, List<CustomerRouteMargin> customerRouteMargins)
+        public void InsertCustomerRouteMarginsToDB(RoutingDatabaseType routingDatabaseType, List<CustomerRouteMargin> customerRouteMargins, Action<string> trackStep)
         {
             ICustomerRouteMarginDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteMarginDataManager>();
-            dataManager.InsertCustomerRouteMarginsToDB(routingDatabaseType, customerRouteMargins);
+            dataManager.InsertCustomerRouteMarginsToDB(routingDatabaseType, customerRouteMargins, trackStep);
         }
 
         public void CreateIndexes(RoutingDatabaseType routingDatabaseType, Action<string> trackStep)
