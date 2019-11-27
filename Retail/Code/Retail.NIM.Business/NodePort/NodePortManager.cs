@@ -224,6 +224,29 @@ namespace Retail.NIM.Business
             };
         }
 
+        internal bool CheckFreePortByNodeId(long nodeId)
+        {
+            var items = _genericBusinessEntityManager.GetAllGenericBusinessEntities(s_nodePortBEDefinitionId, null, new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>
+                {
+                    new ObjectListRecordFilter
+                    {
+                        FieldName = s_nodeIdFieldName,
+                        Values= new List<object>{ nodeId }
+                    },
+                    new ObjectListRecordFilter
+                    {
+                        FieldName = s_statusIdFieldName,
+                        Values= new List<object>{ s_freePortStatusDefinitionId.ToString() }
+                    }
+                }
+            });
+            if (items == null || items.Count == 0)
+                return false;
+            return true;
+        }
+
         #endregion
         
         #region Private Methods

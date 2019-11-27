@@ -292,29 +292,35 @@ namespace Retail.NIM.Business
 
                     if (subscriptionFeasible)
                     {
+                        NodePortManager nodePortManager = new NodePortManager();
                         var switchItem = _nodeManager.GetSwitchBySiteId(nodeItem.SiteId);
                         if (switchItem != null)
                         {
-                            item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
+                            if(nodePortManager.CheckFreePortByNodeId(switchItem.NodeId))
                             {
-                                ID = switchItem.NodeId,
-                                Number = switchItem.Number,
-                                Type = switchItem.NodeTypeId
-                            });
-                            item.TelephonyFeasible = true;
+                                item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
+                                {
+                                    ID = switchItem.NodeId,
+                                    Number = switchItem.Number,
+                                    Type = switchItem.NodeTypeId
+                                });
+                                item.TelephonyFeasible = true;
+                            }
                         }
                         var dslam = _nodeManager.GetDslamBySiteId(nodeItem.SiteId);
                         if (dslam != null)
                         {
-                            item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
+                            if (nodePortManager.CheckFreePortByNodeId(dslam.NodeId))
                             {
-                                ID = dslam.NodeId,
-                                Number = dslam.Number,
-                                Type = dslam.NodeTypeId
-                            });
-                            item.DataFeasible = true;
+                                item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
+                                {
+                                    ID = dslam.NodeId,
+                                    Number = dslam.Number,
+                                    Type = dslam.NodeTypeId
+                                });
+                                item.DataFeasible = true;
+                            }
                         }
-
                     }
                 }
             }
