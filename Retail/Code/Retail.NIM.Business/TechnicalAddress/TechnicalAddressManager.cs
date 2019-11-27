@@ -13,7 +13,7 @@ namespace Retail.NIM.Business
     public class TechnicalAddressManager
     {
         GenericBusinessEntityManager _genericBEManager = new GenericBusinessEntityManager();
-        
+
         #region Public Methods
         public GetTechnicalAddressOutput GetTechnicalAddress(TechnicalAddressNumberType numberType, string number)
         {
@@ -49,7 +49,6 @@ namespace Retail.NIM.Business
             output.StreetId = nodeNeeded.StreetId;
             output.BuildingDetails = nodeNeeded.Building;
 
-
             switch (numberType)
             {
                 case TechnicalAddressNumberType.DPNumber:
@@ -65,7 +64,7 @@ namespace Retail.NIM.Business
             }
             return output;
         }
-         
+
         public GetTechnicalAddressOutput GetTechnicalAddressByPath(long pathId)
         {
             var pathConnections = new PathConnectionManager().GetPathConnections(pathId);
@@ -124,7 +123,7 @@ namespace Retail.NIM.Business
                     output.TechnologyItems.Add(GetFDBTechnicalAddress(nodeEntity));
                     output.TechnologyItems.Add(GetDPTechnicalAddress(dpNode));
                 }
-                if(isDPFound)
+                if (isDPFound)
                 {
                     var fdbNode = nodeManager.GetNodeByAddress(StaticBEDefinitionIDs.FDBBEDefinitionId, output.AreaId, output.SiteId, output.RegionId, output.CityId, output.TownId, output.StreetId, output.BuildingDetails);
                     output.TechnologyItems.Add(GetFDBTechnicalAddress(fdbNode));
@@ -150,7 +149,7 @@ namespace Retail.NIM.Business
             var item = new GetTechnicalAddressOutputTechnologyItem
             {
                 Technology = StaticBEDefinitionIDs.FiberTechnology,
-                PanelNumber = node != null? node.Number:null
+                PanelNumber = node != null ? node.Number : null
             };
             if (node == null)
                 return item;
@@ -207,6 +206,24 @@ namespace Retail.NIM.Business
                 {
                     targetReach = true;
                     item.TechnologyAvailable = true;
+                    if (item.SubscriptionFeasible)
+                    {
+                        NodePortManager nodePortManager = new NodePortManager();
+                        var ims = _nodeManager.GetIMSBySiteId(nodeItem.SiteId);
+                        if (ims != null)
+                        {
+                            if (nodePortManager.CheckFreePortByNodeId(ims.NodeId))
+                            {
+                                item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
+                                {
+                                    ID = ims.NodeId,
+                                    Number = ims.Number,
+                                    Type = ims.NodeTypeId
+                                });
+                            }
+                        }
+                    }
+
                 }
             }
 
@@ -232,7 +249,7 @@ namespace Retail.NIM.Business
                 return item;
 
             bool targetReach = false;
-            var nodeId =  node.NodeId;
+            var nodeId = node.NodeId;
             item.NetworkElements = new List<GetTechnicalAddressOutputTechnologyItemNetworkElement>();
             item.Connections = new List<GetTechnicalAddressOutputTechnologyItemConnection>();
 
@@ -296,7 +313,7 @@ namespace Retail.NIM.Business
                         var switchItem = _nodeManager.GetSwitchBySiteId(nodeItem.SiteId);
                         if (switchItem != null)
                         {
-                            if(nodePortManager.CheckFreePortByNodeId(switchItem.NodeId))
+                            if (nodePortManager.CheckFreePortByNodeId(switchItem.NodeId))
                             {
                                 item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
                                 {

@@ -96,6 +96,25 @@ namespace Retail.NIM.Business
                 return null;
             return NodeMapper(dpItems.First());
         }
+
+        internal Node GetIMSBySiteId(long siteId)
+        {
+            var dpItems = _genericBusinessEntityManager.GetAllGenericBusinessEntities(StaticBEDefinitionIDs.IMSBEDefinitionId, null, new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>
+                        {
+                            new ObjectListRecordFilter
+                            {
+                                FieldName =s_siteIdFieldName,
+                                Values = new List<object>{ siteId } ,
+                            }
+                        }
+            });
+
+            if (dpItems == null || dpItems.Count == 0)
+                return null;
+            return NodeMapper(dpItems.First());
+        }
         internal Node GetNodeByAddress(Guid businessEntityDefinitionId, long areadId, long siteId, int regionId, int cityId, int townId, long streetId, string buildingDetails)
         {
             var filter = new RecordFilterGroup
