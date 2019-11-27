@@ -25,10 +25,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             var carrierAccountManager = new CarrierAccountManager();
             var supplierPricelistSettings = carrierAccountManager.GetSupplierPricelistSettings(supplierId);
 
-            if (!supplierPricelistSettings.SendEmail.HasValue || !supplierPricelistSettings.SendEmail.Value)
+            if (!supplierPricelistSettings.SendEmail.HasValue || !supplierPricelistSettings.SendEmail.Value || !supplierPricelistSettings.DefaultSupplierPLMailTemplateId.HasValue)
                 return;
 
             context.WriteTrackingMessage(LogEntryType.Information, "Start sending email.");
+
+            if (!supplierPricelistSettings.DefaultSupplierPLMailTemplateId.HasValue)
+                throw new NullReferenceException("supplierPricelistSettings.DefaultSupplierPLMailTemplateId");
+
             Guid salePlmailTemplateId = supplierPricelistSettings.DefaultSupplierPLMailTemplateId.Value;
             CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(supplierId);
             var objects = new Dictionary<string, dynamic>
