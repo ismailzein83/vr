@@ -33,14 +33,12 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeactivateCpt");
             esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerID");
+            esq.AddColumn("StCustomerId");
             esq.AddColumn("StContact");
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StLinePathId");
-            esq.AddColumn("StCptNumber");
-
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -52,9 +50,8 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
                 var linePathId = entities[0].GetColumnValue("StLinePathId");
-                var cptNumber = entities[0].GetColumnValue("StCptNumber");
 
                 SOMRequestInput<DeactivateCptRequestInput> somRequestInput = new SOMRequestInput<DeactivateCptRequestInput>
                 {
@@ -69,7 +66,6 @@ namespace BPMExtended.Main.Business
                         },
                         CPTServiceId = new CatalogManager().GetCPTServiceId(),
                         LinePathId = linePathId.ToString(),
-                        CPTNumber = cptNumber.ToString()
                     }
 
                 };
@@ -94,14 +90,13 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeactivateCpt");
             esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerID");
+            esq.AddColumn("StCustomerId");
             esq.AddColumn("StContact");
             esq.AddColumn("StContact.Id");
             esq.AddColumn("StAccount");
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-            esq.AddColumn("StCptId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -112,10 +107,9 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
-                var cptId = entities[0].GetColumnValue("StCptId");
 
                 SOMRequestInput<FinalizeDeactivateCptRequestInput> somRequestInput = new SOMRequestInput<FinalizeDeactivateCptRequestInput>
                 {
@@ -134,7 +128,6 @@ namespace BPMExtended.Main.Business
                             CustomerId = customerId.ToString()
                         },
                         CPTServiceId = new CatalogManager().GetCPTServiceId(),
-                        CPTId = cptId.ToString(),
                     }
 
                 };

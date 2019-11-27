@@ -12,7 +12,6 @@ namespace BPMExtended.Main.SOMAPI
         public CommonInputArgument CommonInputArgument { get; set; }
         public string CPTServiceId { get; set; }
         public string LinePathId { get; set; }
-        public string CPTNumber { get; set; }
     }
     public class FinalizeDeactivateCptRequestInput
     {
