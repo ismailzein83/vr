@@ -50,6 +50,15 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
                 }
             }
 
+            if (usedByTrunkGroup)
+            {
+                errorMessages.Add(new UpdateAdditionalMessage()
+                {
+                    Result = UpdateOperationResult.Failed,
+                    Message = $"Trunk '{trunkName}' is used by current supplier trunk groups"
+                });
+            }
+
             if (supplierIds.Count > 0)
             {
                 List<string> supplierNames = new List<string>();
@@ -62,15 +71,6 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
                 {
                     Result = UpdateOperationResult.Failed,
                     Message = $"Trunk '{trunkName}' is used as backup by the following suppliers: {string.Join(", ", supplierNames)}"
-                });
-            }
-
-            if (usedByTrunkGroup)
-            {
-                errorMessages.Add(new UpdateAdditionalMessage()
-                {
-                    Result = UpdateOperationResult.Failed,
-                    Message = $"Trunk '{trunkName}' is used by current supplier trunk groups"
                 });
             }
 
