@@ -40,9 +40,9 @@ namespace Vanrise.Common.Data.SQL
                  WHERE [ID] = @DevProjectID #ADDITIONALFILTER#");
 
             bool addExistingAssemblyIdParameter = false;
-            if(updateProjectOnlyIfExistingAssemblyNotChanged)
+            if (updateProjectOnlyIfExistingAssemblyNotChanged)
             {
-                if(existingAssemblyId.HasValue)
+                if (existingAssemblyId.HasValue)
                 {
                     queryBuilder.Replace("#ADDITIONALFILTER#", $" AND [AssemblyID] = @ExistingAssemblyID");
                     addExistingAssemblyIdParameter = true;
@@ -62,13 +62,15 @@ namespace Vanrise.Common.Data.SQL
                 {
                     cmd.Parameters.Add(new SqlParameter("@DevProjectID", devProjectId));
                     cmd.Parameters.Add(new SqlParameter("@AssemblyID", assemblyId));
-                    if(addExistingAssemblyIdParameter)
+                    if (addExistingAssemblyIdParameter)
                         cmd.Parameters.Add(new SqlParameter("@ExistingAssemblyID", existingAssemblyId.Value));
                 });
         }
 
         VRDevProject VRDevProjectMapper(IDataReader reader)
         {
+            var projectDependencies = reader["ProjectDependencies"] as string;
+
             return new VRDevProject
             {
                 VRDevProjectID = (Guid)reader["ID"],
@@ -76,6 +78,7 @@ namespace Vanrise.Common.Data.SQL
                 AssemblyId = GetReaderValue<Guid?>(reader, "AssemblyID"),
                 AssemblyName = reader["AssemblyName"] as string,
                 AssemblyCompiledTime = GetReaderValue<DateTime?>(reader, "AssemblyCompiledTime"),
+                ProjectDependencies = !string.IsNullOrEmpty(projectDependencies) ? Vanrise.Common.Serializer.Deserialize<List<VRDevProjectDependency>>(projectDependencies) : null,
                 CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime"),
                 LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };

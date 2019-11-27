@@ -16,8 +16,12 @@ namespace Vanrise.Entities
         public string AssemblyName { get; set; }
 
         public DateTime? AssemblyCompiledTime { get; set; }
-
+        public List<VRDevProjectDependency> ProjectDependencies { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? LastModifiedTime { get; set; }
+    }
+    public class VRDevProjectDependency
+    {
+        public Guid DepenedentProject { get; set; }
     }
 }
