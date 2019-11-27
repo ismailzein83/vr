@@ -99,13 +99,23 @@ namespace TOne.WhS.Routing.Data.SQL
 
             tableName = GetTableName(routingDatabaseType, true);
 
+            int riskyMarginCodeNB = 0;
+
             Object dbApplyAddStream = InitialiazeStreamForDBApply();
             foreach (var riskyMarginCode in riskyMarginCodes)
             {
                 WriteRecordToStream(riskyMarginCode, dbApplyAddStream);
+                riskyMarginCodeNB++;
+
+                if (riskyMarginCodeNB >= 100000)
+                {
+                    Object preparedAddRoutes = FinishDBApplyStream(dbApplyAddStream);
+                    ApplyCustomerRouteMarginForDB(preparedAddRoutes);
+
+                    riskyMarginCodeNB = 0;
+                    dbApplyAddStream = InitialiazeStreamForDBApply();
+                }
             }
-            Object preparedAddRoutes = FinishDBApplyStream(dbApplyAddStream);
-            ApplyCustomerRouteMarginForDB(preparedAddRoutes);
 
             trackStep($"Finished save RiskyMarginCode Data. Events count: {riskyMarginCodes.Count}");
         }
