@@ -6,7 +6,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 {
     public struct EricssonConvertedRouteIdentifier
     {
-        public int BO { get; set; }
+        public int OBA { get; set; }
 
         public int TRD { get; set; }
 
@@ -14,13 +14,13 @@ namespace TOne.WhS.RouteSync.Ericsson
         public EricssonRouteType RouteType { get; set; }
         public override int GetHashCode()
         {
-            return BO.GetHashCode() + Code.GetHashCode() + RouteType.GetHashCode() + TRD.GetHashCode();
+            return OBA.GetHashCode() + Code.GetHashCode() + RouteType.GetHashCode() + TRD.GetHashCode();
         }
     }
 
     public class EricssonConvertedRoute : ConvertedRouteWithCode
     {
-        public int BO { get; set; }
+        public int OBA { get; set; }
         public int RCNumber { get; set; }
         public EricssonRouteType RouteType { get; set; }
         public int? NextBTable { get; set; }
@@ -29,7 +29,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         public override string GetCustomer()
         {
-            return this.BO.ToString();
+            return this.OBA.ToString();
         }
 
         public override string GetRouteOptionsIdentifier()
@@ -109,7 +109,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
     public class NextBTableDetails
     {
-        public int BO { get; set; }
+        public int OBA { get; set; }
         public string Prefix { get; set; }
         public int NextBTable { get; set; }
     }

@@ -33,7 +33,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
             {
                 result.Add(new EricssonConvertedRoute()
                 {
-                    BO = context.TargetBO,
+                    OBA = context.TargetOBA,
                     Code = sourceRoute.Code,
                     RCNumber = sourceRoute.RCNumber,
                     TRD = sourceRoute.TRD,
@@ -54,7 +54,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
                         result.Add(new EricssonConvertedRoute()
                         {
-                            BO = context.TargetBO,
+                            OBA = context.TargetOBA,
                             Code = string.Concat(codeGroupRoute.CodeGroup, suffix.Suffix),
                             RCNumber = codeGroupRoute.RCNumber,
                             TRD = trd,
@@ -86,7 +86,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
         List<CodeGroupRoute> CodeGroupRoutes { get; }
 
-        int TargetBO { get; }
+        int TargetOBA { get; }
     }
 
     public class EricssonSpecialRoutingSettingContext : IEricssonSpecialRoutingSettingContext
@@ -95,6 +95,6 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
         public List<CodeGroupRoute> CodeGroupRoutes { get; set; }
 
-        public int TargetBO { get; set; }
+        public int TargetOBA { get; set; }
     }
 }

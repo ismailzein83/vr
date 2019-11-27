@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
     public class NextBTableRouteDataManager : BaseSQLDataManager, INextBTableRouteDataManager
     {
-        readonly string[] columns = { "BO", "Prefix", "NextBTable" };
+        readonly string[] columns = { "OBA", "Prefix", "NextBTable" };
 
         public string SwitchId { get; set; }
 
@@ -49,7 +49,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         public void WriteRecordToStream(NextBTableDetails record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.BO, record.Prefix, record.NextBTable);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.OBA, record.Prefix, record.NextBTable);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -88,9 +88,9 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             return nextBTables;
         }
 
-        public Dictionary<int, List<NextBTableDetails>> GetNextBTableDetailsByCustomerBO()
+        public Dictionary<int, List<NextBTableDetails>> GetNextBTableDetailsByCustomerOBA()
         {
-            var nextBTablesByCustomerBO = new Dictionary<int, List<NextBTableDetails>>();
+            var nextBTablesByCustomerOBA = new Dictionary<int, List<NextBTableDetails>>();
 
             string query = string.Format(query_GetNextBTablesByPrefixAndCustomer.Replace("#FILTER#", ""), SwitchId);
             ExecuteReaderText(query, (reader) =>
@@ -98,19 +98,19 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                 while (reader.Read())
                 {
                     NextBTableDetails nextBTableDetails = NextBTableDetailsMapper(reader);
-                    var customerNextBTables = nextBTablesByCustomerBO.GetOrCreateItem(nextBTableDetails.BO);
+                    var customerNextBTables = nextBTablesByCustomerOBA.GetOrCreateItem(nextBTableDetails.OBA);
                     customerNextBTables.Add(nextBTableDetails);
                 }
             }, null);
 
-            return nextBTablesByCustomerBO;
+            return nextBTablesByCustomerOBA;
         }
         
         NextBTableDetails NextBTableDetailsMapper(IDataReader reader)
         {
             return new NextBTableDetails()
             {
-                BO = (int)reader["BO"],
+                OBA = (int)reader["OBA"],
                 Prefix = reader["Prefix"] as string,
                 NextBTable = (int)reader["NextBTable"],
             };
@@ -120,24 +120,24 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         const string query_CreateNextBTableByPrifxAndCustomerTable = @"IF  NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.NextBTable') AND s.type in (N'U'))
 		                                                    BEGIN
 			                                                    CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[NextBTable](
-                                                                    BO int NOT NULL,
+                                                                    OBA int NOT NULL,
 	                                                                Prefix varchar(20) NOT NULL,
 	                                                                NextBTable int NOT NULL,
                                                                     CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.NextBTable] PRIMARY KEY CLUSTERED 
                                                                     (
-	                                                                    BO ASC,
+	                                                                    OBA ASC,
 	                                                                    Prefix ASC
                                                                     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
                                                                     ) ON [PRIMARY]
                                                                     
-                                                                    CREATE NONCLUSTERED INDEX [IX_WhS_RouteSync_Ericsson_{0}.NextBTable_BO] ON [WhS_RouteSync_Ericsson_{0}].[NextBTable]
+                                                                    CREATE NONCLUSTERED INDEX [IX_WhS_RouteSync_Ericsson_{0}.NextBTable_OBA] ON [WhS_RouteSync_Ericsson_{0}].[NextBTable]
 														            (
-															            [BO] ASC
+															            [OBA] ASC
 														            )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];
 
 													        END";
         const string query_GetNextBTablesByPrefixAndCustomer = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.NextBTable') AND s.type in (N'U'))
-                                                    SELECT btables.BO, btables.Prefix, btables.NextBTable
+                                                    SELECT btables.OBA, btables.Prefix, btables.NextBTable
                                                     FROM [WhS_RouteSync_Ericsson_{0}].[NextBTable] btables with(nolock) 
                                                     #FILTER#";
 

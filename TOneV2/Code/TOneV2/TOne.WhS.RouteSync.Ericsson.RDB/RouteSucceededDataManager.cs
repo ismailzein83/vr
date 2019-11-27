@@ -103,8 +103,8 @@ namespace TOne.WhS.RouteSync.Ericsson.RDB
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
             var recordContext = bulkInsertContext.WriteRecord();
 
-            if (record.BO != null)
-                recordContext.Value(record.BO);
+            if (record.OBA != null)
+                recordContext.Value(record.OBA);
             else
                 recordContext.Value(string.Empty);
 

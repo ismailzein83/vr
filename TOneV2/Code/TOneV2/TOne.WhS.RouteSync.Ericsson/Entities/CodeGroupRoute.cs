@@ -2,7 +2,7 @@
 {
     public class CodeGroupRoute
     {
-        public int BO { get; set; }
+        public int OBA { get; set; }
 
         public string CodeGroup { get; set; }
 

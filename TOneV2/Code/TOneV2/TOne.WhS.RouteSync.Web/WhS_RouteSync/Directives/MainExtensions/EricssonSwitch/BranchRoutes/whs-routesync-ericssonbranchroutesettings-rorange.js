@@ -22,6 +22,7 @@
         };
         function BranchRouteSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var context;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -38,7 +39,11 @@
                     else {
                         for (var i = 0; i < $scope.scopeModel.brList.length; i++) {
                             var item = $scope.scopeModel.brList[i];
-                            if (parseInt($scope.scopeModel.brFrom, 10) >= parseInt(item.From, 10) && (!$scope.scopeModel.isEmpty(item.To) && parseInt($scope.scopeModel.brFrom, 10) <= parseInt(item.To, 10)))
+
+                            if ($scope.scopeModel.isEmpty(item.To) && parseInt($scope.scopeModel.brFrom, 10) <= parseInt(item.From, 10) && !$scope.scopeModel.isEmpty($scope.scopeModel.brTo) && parseInt($scope.scopeModel.brTo, 10) >= parseInt(item.From, 10))
+                                return "Branch route overlapped with existing one.";
+
+                            else if (parseInt($scope.scopeModel.brFrom, 10) >= parseInt(item.From, 10) && (!$scope.scopeModel.isEmpty(item.To) && parseInt($scope.scopeModel.brFrom, 10) <= parseInt(item.To, 10)))
                                 return "Branch route overlapped with existing one.";
 
                             else if (!$scope.scopeModel.isEmpty($scope.scopeModel.brTo) && parseInt($scope.scopeModel.brTo, 10) >= parseInt(item.From, 10) && (!$scope.scopeModel.isEmpty(item.To) && parseInt($scope.scopeModel.brTo, 10) <= parseInt(item.To, 10)))
@@ -81,8 +86,17 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    if (payload != null)
+                    if (payload != null) {
                         $scope.scopeModel.brList = (payload.branchRouteSettings != undefined && payload.branchRouteSettings.RORangeBranchRoutes != undefined) ? payload.branchRouteSettings.RORangeBranchRoutes : [];
+                        context = payload.context;
+                    }
+
+                    if (context != undefined) {
+                        context.validateBranchRouteSettings = function () {
+                            if ($scope.scopeModel.brList == undefined || $scope.scopeModel.brList.length == 0)
+                                return "No branch routes";
+                        };
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

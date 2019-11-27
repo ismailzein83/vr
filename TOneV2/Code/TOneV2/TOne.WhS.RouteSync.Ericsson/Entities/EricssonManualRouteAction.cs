@@ -30,7 +30,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
                     if (technicalCodePrefix == null)
                         throw new NullReferenceException($"No Technical Code Match is found for the following Code: '{code.ToString()}'");
                     var trd = technicalCodePrefix.ZoneID;
-                    manualRoutes.Add(new EricssonConvertedRoute() { BO = customer, Code = code.ToString(), RouteType = EricssonRouteType.ANumber, RCNumber = context.BlockRCNumber, TRD = trd });
+                    manualRoutes.Add(new EricssonConvertedRoute() { OBA = customer, Code = code.ToString(), RouteType = EricssonRouteType.ANumber, RCNumber = context.BlockRCNumber, TRD = trd });
                 }
             }
             context.ManualConvertedRoutes = manualRoutes;

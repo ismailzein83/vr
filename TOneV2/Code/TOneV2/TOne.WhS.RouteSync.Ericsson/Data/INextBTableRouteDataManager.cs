@@ -13,7 +13,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
         
         void Initialize(INextBTableInitializeContext context);
         
-        Dictionary<int, List<NextBTableDetails>> GetNextBTableDetailsByCustomerBO();
+        Dictionary<int, List<NextBTableDetails>> GetNextBTableDetailsByCustomerOBA();
         
         HashSet<int> GetAllNextBTables();
 

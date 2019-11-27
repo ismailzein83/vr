@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         const string RouteUpdatedTableName = "Route_Updated";
         const string RouteDeletedTableName = "Route_Deleted";
 
-        readonly string[] columns = { "BO", "Code", "RCNumber", "TRD", "NextBTable", "OriginCode", "RouteType" };
+        readonly string[] columns = { "OBA", "Code", "RCNumber", "TRD", "NextBTable", "OriginCode", "RouteType" };
         public string SwitchId { get; set; }
         public string RouteSucceededTableName { get; set; }
         private string BCPTableName;
@@ -44,7 +44,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         public void WriteRecordToStream(EricssonConvertedRoute record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.BO, record.Code, record.RCNumber, record.TRD, record.NextBTable, record.OriginCode, (int)record.RouteType);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.OBA, record.Code, record.RCNumber, record.TRD, record.NextBTable, record.OriginCode, (int)record.RouteType);
         }
 
         public void ApplyRoutesSucceededForDB(object preparedRoute)
@@ -52,16 +52,16 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
         }
 
-        public void SaveRoutesSucceededToDB(Dictionary<int, List<EricssonRouteWithCommands>> routesWithCommandsByBO)
+        public void SaveRoutesSucceededToDB(Dictionary<int, List<EricssonRouteWithCommands>> routesWithCommandsByOBA)
         {
-            if (routesWithCommandsByBO == null || routesWithCommandsByBO.Count == 0)
+            if (routesWithCommandsByOBA == null || routesWithCommandsByOBA.Count == 0)
                 return;
 
             Object dbApplyAddStream = InitialiazeStreamForDBApply();
             Object dbApplyUpdateStream = InitialiazeStreamForDBApply();
             Object dbApplyDeleteStream = InitialiazeStreamForDBApply();
 
-            foreach (var routeKVP in routesWithCommandsByBO)
+            foreach (var routeKVP in routesWithCommandsByOBA)
             {
                 foreach (var routeWithCommands in routeKVP.Value)
                 {

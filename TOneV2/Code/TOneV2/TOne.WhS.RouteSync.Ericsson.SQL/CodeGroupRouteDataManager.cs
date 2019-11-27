@@ -14,7 +14,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
     {
         const string CodeGroupRouteTableName = "CodeGroupRoute";
 
-        readonly string[] columns = { "BO", "Code", "RCNumber" };
+        readonly string[] columns = { "OBA", "Code", "RCNumber" };
 
         public string SwitchId { get; set; }
 
@@ -68,7 +68,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         public void WriteRecordToStream(CodeGroupRoute record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.BO, record.CodeGroup, record.RCNumber);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.OBA, record.CodeGroup, record.RCNumber);
         }
 
         public void ApplyRouteForDB(object preparedRoute)
@@ -76,14 +76,14 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
         }
 
-        public Dictionary<int, List<CodeGroupRoute>> GetFilteredCodeGroupRouteByBO(IEnumerable<int> customerBOs)
+        public Dictionary<int, List<CodeGroupRoute>> GetFilteredCodeGroupRouteByOBA(IEnumerable<int> customerOBAs)
         {
-            var convertedRoutesByBO = new Dictionary<int, List<CodeGroupRoute>>();
+            var convertedRoutesByOBA = new Dictionary<int, List<CodeGroupRoute>>();
 
             string filter = "";
 
-            if (customerBOs != null && customerBOs.Any())
-                filter = string.Format(" Where BO in ({0})", string.Join(",", customerBOs));
+            if (customerOBAs != null && customerOBAs.Any())
+                filter = string.Format(" Where OBA in ({0})", string.Join(",", customerOBAs));
 
             string query = string.Format(query_GetFilteredRoute.Replace("#FILTER#", filter), SwitchId, CodeGroupRouteTableName);
             ExecuteReaderText(query, (reader) =>
@@ -91,18 +91,18 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                 while (reader.Read())
                 {
                     var convertedRoute = CodeGroupRouteMapper(reader);
-                    List<CodeGroupRoute> convertedRoutes = convertedRoutesByBO.GetOrCreateItem(convertedRoute.BO);
+                    List<CodeGroupRoute> convertedRoutes = convertedRoutesByOBA.GetOrCreateItem(convertedRoute.OBA);
                     convertedRoutes.Add(convertedRoute);
                 }
             }, null);
-            return convertedRoutesByBO;
+            return convertedRoutesByOBA;
         }
 
         CodeGroupRoute CodeGroupRouteMapper(IDataReader reader)
         {
             return new CodeGroupRoute()
             {
-                BO = (int)reader["BO"],
+                OBA = (int)reader["OBA"],
                 CodeGroup = reader["Code"] as string,
                 RCNumber = (int)reader["RCNumber"]
             };
@@ -116,17 +116,17 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                         END
 
                                                         CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
-                                                              BO int NOT NULL,
+                                                              OBA int NOT NULL,
 	                                                          Code varchar(20) NOT NULL,
 	                                                          RCNumber int NOT NULL
                                                         CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.CodeGroupRoute_{2}{1}] PRIMARY KEY CLUSTERED 
                                                         (
-                                                            BO ASC,
+                                                            OBA ASC,
 	                                                        Code ASC
                                                         )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 													    ) ON [PRIMARY]";
 
-        const string query_GetFilteredRoute = @"Select BO,Code,RCNumber
+        const string query_GetFilteredRoute = @"Select OBA,Code,RCNumber
                                                 FROM [WhS_RouteSync_Ericsson_{0}].[{1}]
                                                 #FILTER#";
 

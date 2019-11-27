@@ -21,15 +21,15 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
     public class EricssonSpecialRoute
     {
-        public int TargetBO { get; set; }
-        public int SourceBO { get; set; }
+        public int TargetOBA { get; set; }
+        public int SourceOBA { get; set; }
         public EricssonSpecialRoutingSetting Settings { get; set; }
         public List<EricssonConvertedRoute> GetSpecialRoutes(IGetSpecialRoutesContext context)
         {
             context.ThrowIfNull("context");
             this.Settings.ThrowIfNull("Settings");
 
-            return Settings.Execute(new EricssonSpecialRoutingSettingContext() { SourceRoutes = context.SourceRoutes, TargetBO = TargetBO, CodeGroupRoutes = context.CodeGroupRoutes });
+            return Settings.Execute(new EricssonSpecialRoutingSettingContext() { SourceRoutes = context.SourceRoutes, TargetOBA = TargetOBA, CodeGroupRoutes = context.CodeGroupRoutes });
         }
     }
 

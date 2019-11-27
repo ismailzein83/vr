@@ -19,9 +19,9 @@ namespace TOne.WhS.RouteSync.Ericsson
     {
         public int? BO { get; set; }
 
-        public string NationalOBA { get; set; }
+        public int? NationalOBA { get; set; }
 
-        public string InternationalOBA { get; set; }
+        public int? InternationalOBA { get; set; }
 
         //public List<InTrunk> InTrunks { get; set; }
     }

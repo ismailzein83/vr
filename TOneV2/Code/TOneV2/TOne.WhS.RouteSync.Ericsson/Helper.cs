@@ -338,8 +338,24 @@ namespace TOne.WhS.RouteSync.Ericsson
             if (!int.TryParse(customerMappingPropertiesAsString[0], out customerMappingBO))
                 throw new TypeAccessException(customerMappingPropertiesAsString[0]);
             customerMapping.BO = customerMappingBO;
-            customerMapping.NationalOBA = customerMappingPropertiesAsString[1];
-            customerMapping.InternationalOBA = customerMappingPropertiesAsString[2];
+
+            var nationalOBAAsString = customerMappingPropertiesAsString[1];
+            if (!string.IsNullOrEmpty(nationalOBAAsString))
+            {
+                int nationalOBA;
+                if (!int.TryParse(customerMappingPropertiesAsString[1], out nationalOBA))
+                    throw new TypeAccessException(customerMappingPropertiesAsString[1]);
+                customerMapping.NationalOBA = nationalOBA;
+            }
+
+            var internationalOBAAsString = customerMappingPropertiesAsString[2];
+            if (!string.IsNullOrEmpty(internationalOBAAsString))
+            {
+                int internationalOBA;
+                if (!int.TryParse(customerMappingPropertiesAsString[2], out internationalOBA))
+                    throw new TypeAccessException(customerMappingPropertiesAsString[2]);
+                customerMapping.InternationalOBA = internationalOBA;
+            }
 
             return customerMapping;
         }

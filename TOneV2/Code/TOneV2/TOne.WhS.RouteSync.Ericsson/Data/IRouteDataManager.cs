@@ -16,7 +16,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
         void RemoveRoutesFromTempTable(IEnumerable<EricssonConvertedRoute> routes);
         void UpdateRoutesInTempTable(IEnumerable<EricssonConvertedRoute> routes);
         void CopyCustomerRoutesToTempTable(IEnumerable<int> customerBOs);
-        Dictionary<int, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByBO(IEnumerable<int> customerBOs);
+        Dictionary<int, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByOBA(IEnumerable<int> customerOBAs);
     }
 
     public interface IRouteSucceededDataManager : IBulkApplyDataManager<EricssonConvertedRoute>, IDataManager

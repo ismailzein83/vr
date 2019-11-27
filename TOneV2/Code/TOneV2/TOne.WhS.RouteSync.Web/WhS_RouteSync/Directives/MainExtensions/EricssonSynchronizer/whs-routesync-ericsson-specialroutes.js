@@ -43,17 +43,17 @@ app.directive('whsRoutesyncEricssonSpecialroutes', ['UtilsService', 'VRUIUtilsSe
                         for (var j = i + 1; j < datasourceLength; j++) {
                             {
                                 var tempDataSource = datasource[j];
-                                if (currentDataSource.TargetBO == tempDataSource.TargetBO)
-                                    return 'Target BO should be added once';
+                                if (currentDataSource.TargetOBA == tempDataSource.TargetOBA)
+                                    return 'Target OBA should be added once';
                             }
                         }
                     }
                     return null;
                 };
 
-                $scope.scopeModel.validateBOs = function (dataItem) {
-                    if (dataItem != undefined && dataItem.TargetBO != undefined && dataItem.SourceBO != undefined && dataItem.TargetBO == dataItem.SourceBO)
-                        return 'Source and Target BOs should be different';
+                $scope.scopeModel.validateOBAs = function (dataItem) {
+                    if (dataItem != undefined && dataItem.TargetOBA != undefined && dataItem.SourceOBA != undefined && dataItem.TargetOBA == dataItem.SourceOBA)
+                        return 'Source and Target OBAs should be different';
 
                     return null;
                 };
@@ -102,8 +102,8 @@ app.directive('whsRoutesyncEricssonSpecialroutes', ['UtilsService', 'VRUIUtilsSe
                         for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
                             var currentDatasource = $scope.scopeModel.datasource[i];
                             var specialRoute = {
-                                TargetBO: currentDatasource.TargetBO,
-                                SourceBO: currentDatasource.SourceBO
+                                TargetOBA: currentDatasource.TargetOBA,
+                                SourceOBA: currentDatasource.SourceOBA
                             };
 
                             if (currentDatasource.typeAPI != undefined)

@@ -22,6 +22,7 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
 
             var isFirstLoad = true;
             var context;
+            var customerMappingExists = false;
 
             //var trunkGridAPI;
             //var trunkGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -29,7 +30,6 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
             function initializeController() {
                 $scope.scopeModel = {};
                 //$scope.scopeModel.trunks = [];
-                $scope.scopeModel.customerMappingExists = false;
                 //$scope.scopeModel.trunkTypes = UtilsService.getArrayEnum(WhS_RouteSync_TrunkTypeEnum);
 
                 //$scope.scopeModel.onTrunkGridReady = function (api) {
@@ -59,11 +59,11 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                     if (isFirstLoad)
                         return;
 
-					//if ($scope.scopeModel.trunks.length > 0)
-					//{
-                    //    $scope.scopeModel.customerMappingExists = true;
-					//} else{
-                        $scope.scopeModel.customerMappingExists = isBOMappingExists();
+                    //if ($scope.scopeModel.trunks.length > 0)
+                    //{
+                    //    customerMappingExists = true;
+                    //} else{
+                    customerMappingExists = isBOMappingExists();
                     //}
 
                     updateCustomerDescriptions();
@@ -73,8 +73,8 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                     if (!isFirstLoad) {
                         var trunks = $scope.scopeModel.trunks;
                         if (trunks.length == 0) {
-                            $scope.scopeModel.customerMappingExists = isBOMappingExists();
-                            if ($scope.scopeModel.customerMappingExists == true) {
+                            customerMappingExists = isBOMappingExists();
+                            if (customerMappingExists == true) {
                                 return "You should define at least one trunk";
                             }
                         } else {
@@ -173,6 +173,10 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                 var isNationalOBAFilled = nationalOBA != undefined && nationalOBA != "";
                 var isInternationalOBAFilled = internationalOBA != undefined && internationalOBA != "";
 
+                $scope.scopeModel.isBORequired = isNationalOBAFilled || isInternationalOBAFilled;
+                $scope.scopeModel.isNationalOBARequired = isBOFilled && !isInternationalOBAFilled;
+                $scope.scopeModel.isInternationalRequired = isBOFilled && !isNationalOBAFilled;
+
                 if (isBOFilled || isNationalOBAFilled || isInternationalOBAFilled) {
                     return true;
                 } else {
@@ -202,7 +206,7 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                 if (isFirstLoad || context == undefined)
                     return;
 
-                if ($scope.scopeModel.customerMappingExists) {
+                if (customerMappingExists) {
                     context.updateCustomerMappingDescription(getCustomerMappingEntity());
                 } else {
                     context.updateCustomerMappingDescription(null);
@@ -226,8 +230,8 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                 //}
 
                 //var inTrunks = getTrunks();
-				//if ($scope.scopeModel.bo == undefined && $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined && inTrunks == undefined)
-                if($scope.scopeModel.bo == undefined &&  $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined)
+                //if ($scope.scopeModel.bo == undefined && $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined && inTrunks == undefined)
+                if ($scope.scopeModel.bo == undefined && $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined)
                     return null;
 
                 return {
