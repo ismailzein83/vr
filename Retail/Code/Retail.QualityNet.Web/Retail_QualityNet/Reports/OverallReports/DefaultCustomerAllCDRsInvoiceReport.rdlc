@@ -984,7 +984,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(String.IsNullOrEmpty(Fields!CountryIdDescription.Value) , String.Empty,UCase(Fields!CountryIdDescription.Value))</Value>
+                              <Value>=Fields!CountryDescription.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1017,7 +1017,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ConnectDateTime.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=Fields!ConnectDate.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1050,7 +1050,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ConnectDateTime.Value).ToString("HH:mm:ss")</Value>
+                              <Value>=Fields!ConnectTime.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1083,7 +1083,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!DurationInSeconds.Value, 0)</Value>
+                              <Value>=Fields!DurationInSeconds.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1118,13 +1118,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value xml:space="preserve">  </Value>
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                              </Style>
-                            </TextRun>
-                            <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(System.Math.Round(Fields!TotalAmount.Value, 3), Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=Fields!TotalAmount.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -2308,9 +2302,13 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="ConnectDateTime">
-          <DataField>ConnectDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+        <Field Name="ConnectDate">
+          <DataField>ConnectDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ConnectTime">
+          <DataField>ConnectTime</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="CallingNumber">
           <DataField>CallingNumber</DataField>
@@ -2332,12 +2330,8 @@
           <DataField>TotalAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="CountryId">
-          <DataField>CountryId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CountryIdDescription">
-          <DataField>CountryIdDescription</DataField>
+        <Field Name="CountryDescription">
+          <DataField>CountryDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

@@ -1000,9 +1000,6 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
-                        <BottomBorder>
-                          <Width>=IIF(RowNumber("InvoiceItemDetails") = CountRows("InvoiceItemDetails"), "1.25pt", "1pt")</Width>
-                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1038,9 +1035,6 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
-                        <BottomBorder>
-                          <Width>=IIF(RowNumber("InvoiceItemDetails") = CountRows("InvoiceItemDetails"), "1.25pt", "1pt")</Width>
-                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1058,7 +1052,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(String.IsNullOrEmpty(Fields!CountryDescription.Value) , String.Empty,UCase(Fields!CountryDescription.Value))</Value>
+                              <Value>=Fields!CountryDescription.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1074,9 +1068,6 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
-                        <BottomBorder>
-                          <Width>=IIF(RowNumber("InvoiceItemDetails") = CountRows("InvoiceItemDetails"), "1.25pt", "1pt")</Width>
-                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1094,7 +1085,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ConnectDateTime.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=Fields!ConnectDate.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1110,9 +1101,6 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
-                        <BottomBorder>
-                          <Width>=IIF(RowNumber("InvoiceItemDetails") = CountRows("InvoiceItemDetails"), "1.25pt", "1pt")</Width>
-                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1130,7 +1118,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ConnectDateTime.Value).ToString("HH:mm:ss")</Value>
+                              <Value>=Fields!ConnectTime.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1146,16 +1134,12 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
-                        <BottomBorder>
-                          <Width>=IIF(RowNumber("InvoiceItemDetails") = CountRows("InvoiceItemDetails"), "1.25pt", "1pt")</Width>
-                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1167,7 +1151,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!DurationInSeconds.Value,0)</Value>
+                              <Value>=Fields!DurationInSeconds.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1183,9 +1167,6 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
-                        <BottomBorder>
-                          <Width>=IIF(RowNumber("InvoiceItemDetails") = CountRows("InvoiceItemDetails"), "1.25pt", "1pt")</Width>
-                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1203,7 +1184,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Round(Fields!TotalAmount.Value,3),Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=Fields!TotalAmount.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1219,9 +1200,6 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
-                        <BottomBorder>
-                          <Width>=IIF(RowNumber("InvoiceItemDetails") = CountRows("InvoiceItemDetails"), "1.25pt", "1pt")</Width>
-                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1235,7 +1213,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.05468in</Height>
+              <Height>0.23176in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1259,6 +1237,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1289,6 +1270,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1319,6 +1303,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1349,6 +1336,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1379,6 +1369,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1409,6 +1402,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1439,6 +1435,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1469,6 +1468,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1499,6 +1501,9 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
+                        <TopBorder>
+                          <Width>1.25pt</Width>
+                        </TopBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1859,7 +1864,7 @@
         <DataSetName>InvoiceItemDetails</DataSetName>
         <Top>0.01042in</Top>
         <Left>0.125in</Left>
-        <Height>1.18908in</Height>
+        <Height>1.36616in</Height>
         <Width>7.95533in</Width>
         <Style>
           <Border>
@@ -1868,7 +1873,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>3.04673cm</Height>
+    <Height>3.49652cm</Height>
     <Style />
   </Body>
   <Width>20.52404cm</Width>
@@ -1899,9 +1904,13 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="ConnectDateTime">
-          <DataField>ConnectDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+        <Field Name="ConnectDate">
+          <DataField>ConnectDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ConnectTime">
+          <DataField>ConnectTime</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="CustomerDescription">
           <DataField>CustomerDescription</DataField>
@@ -1922,10 +1931,6 @@
         <Field Name="TotalAmount">
           <DataField>TotalAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="Country">
-          <DataField>Country</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="CountryDescription">
           <DataField>CountryDescription</DataField>

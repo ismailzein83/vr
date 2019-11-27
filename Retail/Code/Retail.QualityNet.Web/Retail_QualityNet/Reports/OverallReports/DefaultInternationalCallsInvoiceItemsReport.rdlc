@@ -17,9 +17,13 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="ConnectDateTime">
-          <DataField>ConnectDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+        <Field Name="ConnectDate">
+          <DataField>ConnectDate</DataField>
+          <rd:TypeName>System.string</rd:TypeName>
+        </Field>
+        <Field Name="ConnectTime">
+          <DataField>ConnectTime</DataField>
+          <rd:TypeName>System.string</rd:TypeName>
         </Field>
         <Field Name="CallingNumber">
           <DataField>CallingNumber</DataField>
@@ -45,20 +49,8 @@
           <DataField>TotalAmountInArabicWords</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="CountryId">
-          <DataField>CountryId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CountryIdDescription">
-          <DataField>CountryIdDescription</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CountryInArabicId">
-          <DataField>CountryInArabicId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CountryInArabicIdDescription">
-          <DataField>CountryInArabicIdDescription</DataField>
+        <Field Name="CountryDescription">
+          <DataField>CountryDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -651,14 +643,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox113">
+                        <Textbox Name="TotalAmount">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Round(Fields!TotalAmount.Value,3),Parameters!NormalPrecisionValue.Value)</Value>
+                                  <Value>=Fields!TotalAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -669,7 +661,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox113</rd:DefaultName>
+                          <rd:DefaultName>TotalAmount</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -689,14 +681,14 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox8">
+                        <Textbox Name="DurationInSeconds">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Fields!DurationInSeconds.Value,0)</Value>
+                                  <Value>=Fields!DurationInSeconds.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -707,7 +699,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox8</rd:DefaultName>
+                          <rd:DefaultName>DurationInSeconds</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -722,14 +714,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox10">
+                        <Textbox Name="ConnectTime">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Fields!ConnectDateTime.Value).ToString("HH:mm:ss")</Value>
+                                  <Value>=Fields!ConnectTime.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -738,7 +730,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox10</rd:DefaultName>
+                          <rd:DefaultName>ConnectTime</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -749,19 +741,18 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox257">
+                        <Textbox Name="ConnectDate">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Fields!ConnectDateTime.Value).ToString("dd-MM-yyyy")</Value>
+                                  <Value>=Fields!ConnectDate.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -772,7 +763,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox257</rd:DefaultName>
+                          <rd:DefaultName>ConnectDate</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -790,14 +781,14 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox28">
+                        <Textbox Name="CountryDescription">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(String.IsNullOrEmpty(Fields!CountryInArabicIdDescription.Value) , UCase(IIF(String.IsNullOrEmpty(Fields!CountryIdDescription.Value) , String.Empty,UCase(Fields!CountryIdDescription.Value))),Fields!CountryInArabicIdDescription.Value)</Value>
+                                  <Value>=Fields!CountryDescription.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -806,7 +797,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox28</rd:DefaultName>
+                          <rd:DefaultName>CountryDescription</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -916,9 +907,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=iif(RowNumber("InternationalInvoiceItemDetails") = CountRows("InternationalInvoiceItemDetails"),
-	 FormatNumber(Parameters!TotalAmount.Value,Parameters!NormalPrecisionValue.Value),
-     "")</Value>
+                                  <Value>=FormatNumber(Parameters!TotalAmount.Value,Parameters!NormalPrecisionValue.Value)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
