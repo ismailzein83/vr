@@ -22,6 +22,6 @@ namespace Vanrise.Entities
     }
     public class VRDevProjectDependency
     {
-        public Guid DepenedentProject { get; set; }
+        public Guid DependentProject { get; set; }
     }
 }
