@@ -9,6 +9,7 @@ using Vanrise.Caching;
 using Vanrise.Security.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
+using System.Configuration;
 
 namespace Vanrise.Common.Business
 {
@@ -17,6 +18,13 @@ namespace Vanrise.Common.Business
         //static Guid businessEntityDefinitionId = new Guid("6954527C-6DE0-411C-859D-E044165D58AF");
         static VRCompiledAssemblyManager s_compiledAssemblyManager = new VRCompiledAssemblyManager();
         static IVRDevProjectDataManager s_dataManager = CommonDataManagerFactory.GetDataManager<IVRDevProjectDataManager>();
+        static bool shouldConcatenateTitleWithDevProjectName = false;
+        static VRDevProjectManager()
+        {
+            string shouldConcatente = ConfigurationManager.AppSettings["VRCommon_ConcatenateTitlesWithDevProjectName"];
+            if (!string.IsNullOrEmpty(shouldConcatente) && bool.Parse(shouldConcatente))
+                shouldConcatenateTitleWithDevProjectName = true;
+        }
 
         #region Public Methods
         public IEnumerable<VRDevProjectInfo> GetVRDevProjectsInfo(VRDevProjectInfoFilter filter)
@@ -46,6 +54,16 @@ namespace Vanrise.Common.Business
             return GetCachedVRDevProjects().GetRecord(devProjectId);
         }
 
+        public string ConcatenateTitleAndDevProjectName(Guid? devProjectId, string title)
+        {
+            if (!devProjectId.HasValue || !shouldConcatenateTitleWithDevProjectName)
+                return title;
+
+            var devProjectName = GetVRDevProjectName(devProjectId.Value);
+
+            return $"{title} ({devProjectName})";
+        }
+
         public bool TryGetDevProjectAssembly(Guid devProjectId, DateTime compiledAfter, out System.Reflection.Assembly assembly)
         {
             var devProject = GetVRDevProject(devProjectId);
@@ -72,6 +90,59 @@ namespace Vanrise.Common.Business
             return false;
         }
 
+        public VRDevProjectCompilationOutput TryCompileDevProject(Guid devProjectId, VRDevProjectCompilationBuildOption buildOption)
+        {
+            VRDevProjectCompilationOutput compilationOutput = new VRDevProjectCompilationOutput();
+            CSharpCompilationOutput cSharpCompilationOutput;
+
+            switch (buildOption)
+            {
+                case VRDevProjectCompilationBuildOption.Build:
+                    compilationOutput.Result = TryCompileDevProject(devProjectId, out cSharpCompilationOutput);
+                    if (cSharpCompilationOutput.ErrorMessages != null)
+                        compilationOutput.ErrorMessages = cSharpCompilationOutput.ErrorMessages;
+                    return compilationOutput;
+
+                case VRDevProjectCompilationBuildOption.BuildWithDependencies:
+                    return TryCompileDevProjetWithDependencies(devProjectId, compilationOutput, new HashSet<Guid>());
+
+                default: return compilationOutput;
+            }
+        }
+
+        public VRDevProjectCompilationOutput TryCompileDevProjetWithDependencies(Guid devProjectId, VRDevProjectCompilationOutput compilationOutput, HashSet<Guid> devProjectIds)
+        {
+            if (devProjectIds == null)
+                devProjectIds = new HashSet<Guid>();
+
+            devProjectIds.Add(devProjectId);
+
+            var devProject = GetVRDevProject(devProjectId);
+            if (devProject.ProjectDependencies != null && devProject.ProjectDependencies.Count > 0)
+            {
+                foreach (var dependency in devProject.ProjectDependencies)
+                {
+                    if (dependency.DependentProjectId != null && !devProjectIds.Contains(dependency.DependentProjectId))
+                    {
+                        if (!TryCompileDevProjetWithDependencies(dependency.DependentProjectId, compilationOutput, devProjectIds).Result)
+                            return compilationOutput;
+                    }
+                }
+            }
+
+            CSharpCompilationOutput cSharpCompilationOutput;
+            compilationOutput.Result = TryCompileDevProject(devProjectId, out cSharpCompilationOutput);
+
+            if (!compilationOutput.Result)
+            {
+                compilationOutput.ModuleName = devProject.Name;
+
+                if (cSharpCompilationOutput.ErrorMessages != null && cSharpCompilationOutput.ErrorMessages.Count > 0)
+                    compilationOutput.ErrorMessages = cSharpCompilationOutput.ErrorMessages;
+            }
+
+            return compilationOutput;
+        }
         public bool TryCompileDevProject(Guid devProjectId, out CSharpCompilationOutput output)
         {
             return TryCompileDevProject(devProjectId, false, null, out output);
@@ -90,18 +161,18 @@ namespace Vanrise.Common.Business
             DateTime compiledTime = utilityDataManager.GetNowDBTime();
 
             var codeFiles = new CSharpCodeFileToCompileCollection();
-            foreach(var codeFile in generateCodeContext.CodeFiles)
+            foreach (var codeFile in generateCodeContext.CodeFiles)
             {
                 codeFiles.Add(codeFile.Name, codeFile);
             }
 
             if (CSharpCompiler.TryCompileClass(
-                $"{CSharpCompiler.DEVPROJECT_ASSEMBLY_PREFIX}_{devProjectId.ToString("N")}", 
+                $"{CSharpCompiler.DEVPROJECT_ASSEMBLY_PREFIX}_{devProjectId.ToString("N")}",
                 CSharpCompiler.DEVPROJECT_ASSEMBLY_SUFFIX,
                 codeFiles,
-                new List<Guid> { devProjectId }, 
+                new List<Guid> { devProjectId },
                 out output))
-            {               
+            {
                 Guid assemblyId = Guid.NewGuid();
                 s_compiledAssemblyManager.AddAssembly(assemblyId, output.OutputAssembly.FullName, devProjectId, output.AssemblyFile, compiledTime);
 
@@ -212,7 +283,7 @@ namespace Vanrise.Common.Business
         #endregion
     }
 
-  public abstract class VRDevProjectCodeGenerator
+    public abstract class VRDevProjectCodeGenerator
     {
         public abstract void GenerateCode(IVRDevProjectCodeGeneratorGenerateCodeContext context);
     }
@@ -226,5 +297,13 @@ namespace Vanrise.Common.Business
         void AddCode(string code);
 
         void AddCodeFile(string fileName, string code);
+    }
+    public class VRDevProjectCompilationOutput
+    {
+        public string ModuleName { get; set; }
+
+        public List<string> ErrorMessages { get; set; }
+
+        public bool Result { get; set; }
     }
 }
