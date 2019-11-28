@@ -156,7 +156,8 @@
             var lobSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             lobSelectorReadyDeferred.promise.then(function () {
                 var lobSelectorPayload = {
-                    selectedIds: sellingNumberPlanEntity != undefined ? sellingNumberPlanEntity.LOBId : undefined
+                    selectedIds: sellingNumberPlanEntity != undefined ? sellingNumberPlanEntity.LOBId : undefined,
+                    selectifsingleitem:true
                 };
 
                 VRUIUtilsService.callDirectiveLoad(lobSelectorAPI, lobSelectorPayload, lobSelectorLoadPromiseDeferred);
