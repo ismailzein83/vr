@@ -214,7 +214,7 @@ namespace Vanrise.GenericData.Business
         {
             SummaryTransformationDefinitionInfo summaryTransformationDefinitionInfo = new SummaryTransformationDefinitionInfo();
             summaryTransformationDefinitionInfo.SummaryTransformationDefinitionId = summaryTransformationDefinitionObject.SummaryTransformationDefinitionId;
-            summaryTransformationDefinitionInfo.Name = summaryTransformationDefinitionObject.Name;
+            summaryTransformationDefinitionInfo.Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(summaryTransformationDefinitionObject.DevProjectId, summaryTransformationDefinitionObject.Name);
             return summaryTransformationDefinitionInfo;
         }
         #endregion

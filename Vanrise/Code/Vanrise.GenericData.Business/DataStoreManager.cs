@@ -198,7 +198,7 @@ namespace Vanrise.GenericData.Business
         {
             return new DataStoreInfo() {
                  DataStoreId = dataStore.DataStoreId,
-                 Name = dataStore.Name
+                 Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(dataStore.DevProjectId, dataStore.Name)
             };
         }
 

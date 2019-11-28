@@ -919,7 +919,7 @@ namespace Vanrise.GenericData.Business
         {
             DataRecordTypeInfo dataRecordTypeInfo = new DataRecordTypeInfo();
             dataRecordTypeInfo.DataRecordTypeId = dataRecordTypeObject.DataRecordTypeId;
-            dataRecordTypeInfo.Name = dataRecordTypeObject.Name;
+            dataRecordTypeInfo.Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(dataRecordTypeObject.DevProjectId, dataRecordTypeObject.Name);
             return dataRecordTypeInfo;
         }
 

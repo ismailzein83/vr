@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.Transformation
 {
     public class DataTransformationDefinitionManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         public IEnumerable<DataTransformationStepConfig> GetDataTransformationStepConfig()
@@ -274,7 +276,6 @@ namespace Vanrise.GenericData.Transformation
             dataTransformationDefinitionDetail.Entity = dataTransformationDefinition;
             if(dataTransformationDefinition.DevProjectId.HasValue)
             {
-                VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
                 dataTransformationDefinitionDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(dataTransformationDefinition.DevProjectId.Value);
             }
             return dataTransformationDefinitionDetail;
@@ -284,7 +285,7 @@ namespace Vanrise.GenericData.Transformation
         {
             DataTransformationDefinitionInfo dataTransformationDefinitionInfo = new DataTransformationDefinitionInfo();
             dataTransformationDefinitionInfo.DataTransformationDefinitionId = dataTransformationDefinition.DataTransformationDefinitionId;
-            dataTransformationDefinitionInfo.Name = dataTransformationDefinition.Name;
+            dataTransformationDefinitionInfo.Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(dataTransformationDefinition.DevProjectId, dataTransformationDefinition.Name);
             return dataTransformationDefinitionInfo;
         }
 

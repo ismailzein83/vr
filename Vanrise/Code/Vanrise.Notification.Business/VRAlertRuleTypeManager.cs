@@ -258,7 +258,7 @@ namespace Vanrise.Notification.Business
             VRAlertRuleTypeInfo vrAlertRuleTypeInfo = new VRAlertRuleTypeInfo()
             {
                 VRAlertRuleTypeId = vrAlertRuleType.VRAlertRuleTypeId,
-                Name = vrAlertRuleType.Name
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(vrAlertRuleType.DevProjectId, vrAlertRuleType.Name)
             };
             return vrAlertRuleTypeInfo;
         }

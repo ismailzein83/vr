@@ -296,7 +296,7 @@ namespace Vanrise.Analytic.Business
             return new AnalyticReportInfo()
             {
                 AnalyticReportId = analyticReport.AnalyticReportId,
-                Name = analyticReport.Name,
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(analyticReport.DevProjectId, analyticReport.Name),
             };
         }
 

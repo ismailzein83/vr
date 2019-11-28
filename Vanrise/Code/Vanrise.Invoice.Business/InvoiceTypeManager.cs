@@ -903,7 +903,7 @@ namespace Vanrise.Invoice.Business
             return new InvoiceTypeInfo
             {
                 InvoiceTypeId = invoiceTypeObject.InvoiceTypeId,
-                Name = invoiceTypeObject.Name
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(invoiceTypeObject.DevProjectId, invoiceTypeObject.Name)
             };
         }
         #endregion

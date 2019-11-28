@@ -212,7 +212,7 @@ namespace Vanrise.Common.Business
             VRObjectTypeDefinitionInfo vrObjectTypeDefinitionInfo = new VRObjectTypeDefinitionInfo()
             {
                 VRObjectTypeDefinitionId = vrObjectTypeDefinition.VRObjectTypeDefinitionId,
-                Name = vrObjectTypeDefinition.Name
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(vrObjectTypeDefinition.DevProjectId, vrObjectTypeDefinition.Name)
             };
             return vrObjectTypeDefinitionInfo;
         }

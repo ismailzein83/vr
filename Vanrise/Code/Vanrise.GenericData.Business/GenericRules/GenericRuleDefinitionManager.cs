@@ -788,8 +788,8 @@ namespace Vanrise.GenericData.Business
             return new GenericRuleDefinitionInfo()
             {
                 GenericRuleDefinitionId = genericRuleDefinition.GenericRuleDefinitionId,
-                Name = genericRuleDefinition.Name,
-                Title = genericRuleDefinition.Title
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(genericRuleDefinition.DevProjectId,genericRuleDefinition.Name),
+                Title = vrDevProjectManager.ConcatenateTitleAndDevProjectName(genericRuleDefinition.DevProjectId, genericRuleDefinition.Title)
             };
         }
         private GenericRuleDefinitionDetail GenericRuleDefinitionDetailMapper(GenericRuleDefinition genericRuleDefinitionObject)

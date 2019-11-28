@@ -338,8 +338,8 @@ namespace Vanrise.Common.Business
             return new ComponentTypeInfo()
             {
                 VRComponentTypeId = componentType.VRComponentTypeId,
-                Name = componentType.Name,
-             
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(componentType.DevProjectId, componentType.Name)
+
             };
         }
         private VRComponentTypeDetail VRComponentTypeDetailMapper(VRComponentType componentType)

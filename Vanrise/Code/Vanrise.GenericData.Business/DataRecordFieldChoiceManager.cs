@@ -200,7 +200,7 @@ namespace Vanrise.GenericData.Business
         {
             return new DataRecordFieldChoiceInfo() {
                  DataRecordFieldChoiceId = dataRecordFieldChoice.DataRecordFieldChoiceId,
-                 Name = dataRecordFieldChoice.Name
+                 Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(dataRecordFieldChoice.DevProjectId, dataRecordFieldChoice.Name)
             };
         }
 

@@ -154,7 +154,7 @@ namespace Vanrise.BEBridge.Business
             return new BEReceiveDefinitionInfo
             {
                 Id = beDefinition.BEReceiveDefinitionId,
-                Name = beDefinition.Name
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(beDefinition.DevProjectId, beDefinition.Name)
             };
         }
 

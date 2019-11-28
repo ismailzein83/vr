@@ -239,7 +239,7 @@ namespace Vanrise.Analytic.Business
             DataAnalysisDefinitionInfo dataAnalysisDefinitionInfo = new DataAnalysisDefinitionInfo()
             {
                 DataAnalysisDefinitionId = dataAnalysisDefinition.DataAnalysisDefinitionId,
-                Name = dataAnalysisDefinition.Name
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(dataAnalysisDefinition.DevProjectId, dataAnalysisDefinition.Name),
             };
             return dataAnalysisDefinitionInfo;
         }

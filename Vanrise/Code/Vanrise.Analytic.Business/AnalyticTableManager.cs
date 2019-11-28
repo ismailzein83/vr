@@ -359,7 +359,7 @@ namespace Vanrise.Analytic.Business
             return new AnalyticTableInfo()
             {
                 AnalyticTableId = analyticTable.AnalyticTableId,
-                Name = analyticTable.Name,
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(analyticTable.DevProjectId, analyticTable.Name),
                 StatusBEDefinitionId = analyticTable.Settings.StatusDefinitionBEId
 
             };

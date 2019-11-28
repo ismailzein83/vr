@@ -206,7 +206,7 @@ namespace Vanrise.Common.Business
             VRMailMessageTypeInfo vrMailMessageTypeInfo = new VRMailMessageTypeInfo()
             {
                 VRMailMessageTypeId = vrMailMessageType.VRMailMessageTypeId,
-                Name = vrMailMessageType.Name
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(vrMailMessageType.DevProjectId, vrMailMessageType.Name)
             };
             return vrMailMessageTypeInfo;
         }

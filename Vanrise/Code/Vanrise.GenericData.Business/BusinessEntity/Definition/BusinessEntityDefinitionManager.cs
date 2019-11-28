@@ -433,7 +433,7 @@ namespace Vanrise.GenericData.Business
             return new BusinessEntityDefinitionInfo()
             {
                 BusinessEntityDefinitionId = beDefinition.BusinessEntityDefinitionId,
-                Name = beDefinition.Title,
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(beDefinition.DevProjectId, beDefinition.Title),
                 SelectorFilterEditor = beDefinition.Settings.SelectorFilterEditor,
                 WorkFlowAddBEActivityEditor = beDefinition.Settings.WorkFlowAddBEActivityEditor,
                 WorkFlowUpdateBEActivityEditor = beDefinition.Settings.WorkFlowUpdateBEActivityEditor,
