@@ -46,6 +46,10 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
             var context;
             var extendedSettings;
             var partnerInvoiceFilters;
+            var status;
+            var effectiveDate;
+            var isEffectiveInFuture;
+
             function initializeController() {
 
                 ctrl.onDirectiveReady = function (api) {
@@ -55,7 +59,7 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
 
                 ctrl.onSelectionChanged = function (selectedAccount) {
                     if (selectedAccount != undefined && context != undefined) {
-                    
+
                         if (context.reloadBillingPeriod != undefined) {
                             context.reloadBillingPeriod();
                         }
@@ -78,7 +82,12 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
                         selectedIds = payload.selectedIds;
                         extendedSettings = payload.extendedSettings;
                         partnerInvoiceFilters = payload.partnerInvoiceFilters;
-                        
+
+                        if (payload.filter != undefined) {
+                            status = payload.filter.Status;
+                            effectiveDate = payload.filter.EffectiveDate;
+                            isEffectiveInFuture = payload.filter.IsEffectiveInFuture;
+                        }
                     }
                     var promises = [];
 
@@ -98,7 +107,7 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
                 api.getData = function () {
                     var selectedIds = directiveReadyAPI.getSelectedIds();
                     return {
-                     //   partnerPrefix: selectedIds,
+                        //   partnerPrefix: selectedIds,
                         selectedIds: selectedIds,
                     };
                 };
@@ -120,7 +129,14 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
                 var financialAccounts = {
                     $type: 'Retail.Invoice.Business.InvoiceEnabledAccountFilter, Retail.Invoice.Business',
                 };
+
                 filter.Filters.push(financialAccounts);
+
+                filter.Filters.push({
+                    $type: "Retail.BusinessEntity.Business.Filters.AccountInvoiceStatusFilter ,Retail.BusinessEntity.Business",
+                    Status: status
+                });
+
                 return filter;
             }
 

@@ -54,7 +54,16 @@ namespace Retail.QualityNet.Business
                     var financialAccounts = new AccountBEManager().GetFinancialAccounts(this.AccountBEDefinitionId);
                     if (financialAccounts == null)
                         return null;
-                    return financialAccounts.Select(x => x.AccountId.ToString());
+
+                    AccountBEManager accountBEManager = new AccountBEManager();
+                    List<string> activePartnerIds = new List<string>();
+                    foreach (var financialAccount in financialAccounts)
+                    {
+                        if (accountBEManager.IsAccountInvoiceActive(financialAccount))
+                            activePartnerIds.Add(financialAccount.AccountId.ToString());
+                    }
+
+                    return activePartnerIds.Count > 0 ? activePartnerIds : null;
                 default:
                     return null;
             }
