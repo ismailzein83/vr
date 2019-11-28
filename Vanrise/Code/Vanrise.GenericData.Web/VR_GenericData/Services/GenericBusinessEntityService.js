@@ -170,7 +170,17 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntitySendEmailEditor.html', parameters, settings);
         }
+        function CompileDevProject(devProjectId) {
+            var parameters = {
+                devProjectId: devProjectId,
+            };
+            var settings = {};
 
+            settings.onScopeReady = function (modalScope) {
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityCompileDevProjectEditor.html', parameters, settings);
+        }
         function openErrorMessageEditor(errorEntity) {
             var parameters = {
                 errorEntity: errorEntity,
@@ -259,7 +269,8 @@
             tryUpdateAllFieldValuesByFieldName: tryUpdateAllFieldValuesByFieldName,
             tryUpdateAllFieldValuesByFieldNames: tryUpdateAllFieldValuesByFieldNames,
             viewGenericBusinessEntity: viewGenericBusinessEntity,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            CompileDevProject: CompileDevProject
             //registerObjectTrackingDrillDownToGenericBusinessEntity: registerObjectTrackingDrillDownToGenericBusinessEntity
             //getDrillDownDefinition: getDrillDownDefinition
         });

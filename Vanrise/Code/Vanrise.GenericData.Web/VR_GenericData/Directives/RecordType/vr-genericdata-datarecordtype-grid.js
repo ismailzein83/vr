@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordTypeAPIService", "VR_GenericData_DataRecordTypeService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataRecordTypeService, VRUIUtilsService) {
+app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordTypeAPIService", "VR_GenericData_DataRecordTypeService", "VRUIUtilsService", "VR_GenericData_GenericBusinessEntityService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataRecordTypeService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityService) {
 
         var directiveDefinitionObject = {
 
@@ -74,11 +74,15 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
 
             function defineMenuActions() {
                 var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editDataRecordField,
-                    haspermission: hasEditDataRecordTypePermission
-                }];
+                    {
+                        name: "Edit",
+                        clicked: editDataRecordField,
+                        haspermission: hasEditDataRecordTypePermission
+                    }, {
+                        name: "Compile Project",
+                        clicked: compileDevProject,
+                    }
+                ];
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
@@ -95,6 +99,11 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                 };
 
                 VR_GenericData_DataRecordTypeService.editDataRecordType(dataItem.Entity.DataRecordTypeId, onDataRecordFieldUpdated);
+            }
+            function compileDevProject(dataItem) {
+                if (dataItem.Entity.DevProjectId == undefined)
+                    return;
+                VR_GenericData_GenericBusinessEntityService.CompileDevProject(dataItem.Entity.DevProjectId);
             }
         }
 

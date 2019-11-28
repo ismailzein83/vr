@@ -3,7 +3,7 @@
 
     'use strict';
 
-    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBEDefinitionAPIService','VR_GenericData_GenericBEDownloadActionAPIService'];
+    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBEDownloadActionAPIService'];
 
     function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBEDownloadActionAPIService) {
 
@@ -28,7 +28,7 @@
                                     childsactions: groupedActions.childActions
                                 });
                             }
-                           
+
                         } else {
                             var genericBEAction = UtilsService.getItemByVal(genericBEActions, genericBEGridAction.GenericBEActionId, "GenericBEActionId");
                             if (genericBEAction != undefined && genericBEAction.Settings != undefined) {
@@ -38,7 +38,7 @@
                                 }
                             }
                         }
-                    } 
+                    }
                 }
             }
 
@@ -229,10 +229,10 @@
                 ExecuteAction: function (payload) {
                     if (payload == undefined)
                         return;
-                    var businessEntityDefinitionId = payload.businessEntityDefinitionId; 
+                    var businessEntityDefinitionId = payload.businessEntityDefinitionId;
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
                     var genericBEAction = payload.genericBEAction;
-                    
+
                     VR_GenericData_GenericBusinessEntityService.sendEmailGenericBE(genericBusinessEntityId, businessEntityDefinitionId, genericBEAction);
                 }
             };
@@ -251,7 +251,7 @@
                         BusinessEntityDefinitionId: payload.businessEntityDefinitionId,
                     };
                     return VR_GenericData_GenericBEDownloadActionAPIService.DownloadGenericBEFile(downloadFileInput, payload.genericBEAction.Settings.OpenNewWindow).then(function (response) {
-                       
+
                         if (!payload.genericBEAction.Settings.OpenNewWindow)
                             UtilsService.downloadFile(response.data, response.headers);
                         else
@@ -261,6 +261,20 @@
             };
             registerActionType(sendEmailActionType);
         }
+
+        function registerCompileGenericBEAction() {
+            var compileActionType = {
+                ActionTypeName: "CompileGenericBEAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+                
+                    return VR_GenericData_GenericBusinessEntityService.CompileDevProject(payload.genericBusinessEntityId);
+                }
+            };
+            registerActionType(compileActionType);
+        }
+
         return ({
             defineGenericBEMenuActions: defineGenericBEMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,
@@ -268,7 +282,8 @@
             registerEditBEAction: registerEditBEAction,
             registerDeleteBEAction: registerDeleteBEAction,
             registerSendEmailGenericBEAction: registerSendEmailGenericBEAction,
-            registerDownloadFileGenericBEAction: registerDownloadFileGenericBEAction
+            registerDownloadFileGenericBEAction: registerDownloadFileGenericBEAction,
+            registerCompileGenericBEAction: registerCompileGenericBEAction
         });
     };
 

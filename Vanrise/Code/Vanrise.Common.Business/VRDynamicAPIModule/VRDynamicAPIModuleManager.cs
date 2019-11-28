@@ -177,6 +177,7 @@ namespace Vanrise.Common.Business
             {
                 Name = vrDynamicAPIModule.Name,
                 VRDynamicAPIModuleId = vrDynamicAPIModule.VRDynamicAPIModuleId,
+                DevProjectId= vrDynamicAPIModule.DevProjectId,
                 DevProjectName = devProjectName,
                 CreatedTime=vrDynamicAPIModule.CreatedTime,
                 CreatedByDescription = userManager.GetUserName(vrDynamicAPIModule.CreatedBy),

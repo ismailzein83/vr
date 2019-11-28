@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataTransformationDefinitionAPIService", "VR_GenericData_DataTransformationDefinitionService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataTransformationDefinitionAPIService, VR_GenericData_DataTransformationDefinitionService, VRUIUtilsService) {
+app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataTransformationDefinitionAPIService", "VR_GenericData_DataTransformationDefinitionService", "VRUIUtilsService", "VR_GenericData_GenericBusinessEntityService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataTransformationDefinitionAPIService, VR_GenericData_DataTransformationDefinitionService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityService) {
 
         var directiveDefinitionObject = {
 
@@ -75,18 +75,22 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
 
             function defineMenuActions() {
                 var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editDataTransformationDefinition,
-                    haspermission: hasEditDataTransformationDefinitionPermission
-                }];
+                    {
+                        name: "Edit",
+                        clicked: editDataTransformationDefinition,
+                        haspermission: hasEditDataTransformationDefinitionPermission
+                    },
+                    {
+                        name: "Compile Project",
+                        clicked: compileDevProject,
+                    }];
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
                 };
             }
 
-            function hasEditDataTransformationDefinitionPermission() {                
+            function hasEditDataTransformationDefinitionPermission() {
                 return VR_GenericData_DataTransformationDefinitionAPIService.HasUpdateDataTransformationDefinition();
             }
 
@@ -97,6 +101,12 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
                 };
 
                 VR_GenericData_DataTransformationDefinitionService.editDataTransformationDefinition(dataItem.Entity.DataTransformationDefinitionId, onDataTransformationDefinitionUpdated);
+            }
+
+            function compileDevProject(dataItem) {
+                if (dataItem.Entity.DevProjectId == undefined)
+                    return;
+                VR_GenericData_GenericBusinessEntityService.CompileDevProject(dataItem.Entity.DevProjectId);
             }
         }
 

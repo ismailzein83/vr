@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonNamespaceGrid', ['VRUIUtilsService', 'VRNotificationService', 'VRCommon_VRNamespaceAPIService', 'VRCommon_VRNamespaceService',
-    function (VRUIUtilsService, VRNotificationService, VRCommon_VRNamespaceAPIService, VRCommon_VRNamespaceService) {
+app.directive('vrCommonNamespaceGrid', ['VRUIUtilsService', 'VRNotificationService', 'VRCommon_VRNamespaceAPIService', 'VRCommon_VRNamespaceService', 'VR_GenericData_GenericBusinessEntityService',
+    function (VRUIUtilsService, VRNotificationService, VRCommon_VRNamespaceAPIService, VRCommon_VRNamespaceService, VR_GenericData_GenericBusinessEntityService) {
         return {
             restrict: 'E',
             scope: {
@@ -69,11 +69,16 @@ app.directive('vrCommonNamespaceGrid', ['VRUIUtilsService', 'VRNotificationServi
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.menuActions.push({
-                    name: 'Edit',
-                    clicked: editVRNamespace,
-                    haspermission: hasEditVRNamespacePermission
-                });
+                $scope.scopeModel.menuActions.push(
+                    {
+                        name: 'Edit',
+                        clicked: editVRNamespace,
+                        haspermission: hasEditVRNamespacePermission
+                    },
+                    {
+                        name: "Compile",
+                        clicked: compileDevProject,
+                    });
             }
             function editVRNamespace(vrNamespaceObj) {
                 var onVRNamespaceUpdated = function (updatedVRNamespace) {
@@ -82,6 +87,11 @@ app.directive('vrCommonNamespaceGrid', ['VRUIUtilsService', 'VRNotificationServi
                 };
 
                 VRCommon_VRNamespaceService.editVRNamespace(onVRNamespaceUpdated, vrNamespaceObj.VRNamespaceId);
+            }
+            function compileDevProject(vrNamespaceObj) {
+                if (vrNamespaceObj.DevProjectId == undefined)
+                    return;
+                VR_GenericData_GenericBusinessEntityService.CompileDevProject(vrNamespaceObj.DevProjectId);
             }
             function hasEditVRNamespacePermission() {
                 return VRCommon_VRNamespaceAPIService.HasEditVRNamespacePermission();

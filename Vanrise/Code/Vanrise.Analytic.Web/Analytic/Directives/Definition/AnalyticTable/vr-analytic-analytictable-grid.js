@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 'VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'UtilsService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRUIUtilsService', 'VR_Analytic_AnalyticItemConfigService',
-    function (VRCommon_ObjectTrackingService, VRNotificationService, VRModalService, VR_Analytic_AnalyticTableService, UtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_AnalyticTypeEnum, VRUIUtilsService, VR_Analytic_AnalyticItemConfigService) {
+app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 'VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'UtilsService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRUIUtilsService', 'VR_Analytic_AnalyticItemConfigService','VR_GenericData_GenericBusinessEntityService',
+    function (VRCommon_ObjectTrackingService, VRNotificationService, VRModalService, VR_Analytic_AnalyticTableService, UtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_AnalyticTypeEnum, VRUIUtilsService, VR_Analytic_AnalyticItemConfigService, VR_GenericData_GenericBusinessEntityService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -81,6 +81,10 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 
                     name: "Permanent Filter",
                     clicked: openPermanentFilter,
                 },
+                {
+                    name: "Compile Project",
+                    clicked: compileDevProject,
+                }
                 ];
             }
             function hasEditAnalyticTablePermission() {
@@ -100,6 +104,13 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 
             function openPermanentFilter(dataItem) {
                 VR_Analytic_AnalyticTableService.openPermanentFilter(dataItem.Entity.AnalyticTableId);
             }
+
+            function compileDevProject(dataItem) {
+                if (dataItem.Entity.DevProjectId == undefined)
+                    return;
+                VR_GenericData_GenericBusinessEntityService.CompileDevProject(dataItem.Entity.DevProjectId);
+            }
+
             function getGridDrillDownDefinitions() {
                 var drillDownDefinitions = [];
                 drillDownDefinitions.push(getDimensionDrillDownDefinition());

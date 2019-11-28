@@ -12,6 +12,7 @@
         VR_GenericData_GenericBEActionService.registerEditBEAction();
         VR_GenericData_GenericBEActionService.registerDeleteBEAction();
         VR_GenericData_GenericBEActionService.registerSendEmailGenericBEAction();
+        VR_GenericData_GenericBEActionService.registerCompileGenericBEAction();
         VR_GenericData_GenericEditorConditionalRuleContainerService.registerFieldValueConditionalRuleAction();
         VR_GenericData_GenericBECustomActionService.registerBulkAddCustomAction();
         VR_GenericData_GenericBEActionService.registerDownloadFileGenericBEAction();

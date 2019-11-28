@@ -442,7 +442,8 @@ namespace Vanrise.Common.Business
             {
                 VRNamespaceId = vrNamespace.VRNamespaceId,
                 Name = vrNamespace.Name,
-                DevProjectName = devProjectName
+                DevProjectName = devProjectName,
+                DevProjectId= vrNamespace.DevProjectId
             };
             return vrNamespaceDetail;
         }
@@ -451,7 +452,7 @@ namespace Vanrise.Common.Business
         {
             return new VRNamespaceInfo()
             {
-                Name = vrNamespace.Name,
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(vrNamespace.DevProjectId, vrNamespace.Name),
                 VRNamespaceId = vrNamespace.VRNamespaceId
             };
         }

@@ -217,6 +217,7 @@
     <Content Include="VR_GenericData\Constants\FieldNumberDataPrecisionEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldTextTextTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\GenericBEDefinitionBulkActionUpdateFieldStateEnum.js" />
+    <Content Include="VR_GenericData\Constants\GenericBEDefinitionActionCompileBuildOptionEnum.js" />
     <Content Include="VR_GenericData\Constants\GenericBEDefinitionTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ContainerTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\MappingDataTypeEnum.js" />
@@ -386,9 +387,12 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition-filtergroup.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\CompileGenericBEDefinitionActionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\SendEmailGenericBEDefinitionActionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\DownloadFileGenericBEDefinitionActionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-compilegenericaction-buildoption-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-downloadfileaction-definition.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-compilegenericaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-sendemailaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\GenericBEBulkActionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\Templates\GenericBEBulkActionSettingsUpdateTemplate.html" />
@@ -1192,7 +1196,9 @@
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorUploaderController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityErrorMessageEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityErrorMessageEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityCompileDevProjectController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntitySendEmailController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityCompileDevProjectEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntitySendEmailEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagement.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagementController.js" />

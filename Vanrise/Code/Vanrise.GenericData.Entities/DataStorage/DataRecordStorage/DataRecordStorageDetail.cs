@@ -9,5 +9,7 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordStorageDetail
     {
         public DataRecordStorage Entity { get; set; }
+
+        public Guid? DevProjectId { get; set; }
     }
 }

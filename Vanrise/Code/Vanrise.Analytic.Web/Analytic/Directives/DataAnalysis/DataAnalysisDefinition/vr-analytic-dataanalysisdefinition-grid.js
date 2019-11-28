@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DataAnalysisDefinitionService','VRNotificationService',
-    function (VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DataAnalysisDefinitionService, VRNotificationService) {
+app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DataAnalysisDefinitionService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService',
+    function (VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DataAnalysisDefinitionService, VRNotificationService, VR_GenericData_GenericBusinessEntityService) {
         return {
             restrict: 'E',
             scope: {
@@ -80,6 +80,9 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                     name: 'Edit',
                     clicked: editDataAnalysisDefinition,
                     haspermission: hasEditDataAnalysisDefinitionPermission
+                }, {
+                    name: "Compile Project",
+                    clicked: compileDevProject,
                 }];
             }
             function editDataAnalysisDefinition(dataAnalysisDefinitionItem) {
@@ -90,6 +93,13 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
 
                 VR_Analytic_DataAnalysisDefinitionService.editDataAnalysisDefinition(dataAnalysisDefinitionItem.Entity.DataAnalysisDefinitionId, onDataAnalysisDefinitionUpdated);
             }
+
+            function compileDevProject(dataAnalysisDefinitionItem) {
+                if (dataAnalysisDefinitionItem.Entity.DevProjectId == undefined)
+                    return;
+                VR_GenericData_GenericBusinessEntityService.CompileDevProject(dataAnalysisDefinitionItem.Entity.DevProjectId);
+            }
+
             function hasEditDataAnalysisDefinitionPermission() {
                 return VR_Analytic_DataAnalysisDefinitionAPIService.HasEditDataAnalysisDefinitionPermission();
             }

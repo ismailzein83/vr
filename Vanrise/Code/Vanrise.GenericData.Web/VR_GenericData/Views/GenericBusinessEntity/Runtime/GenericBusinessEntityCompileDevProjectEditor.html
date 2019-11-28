@@ -1,0 +1,15 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBusinessEntityCompileDevProjectController" vr-loader="scopeModel.isLoading" width="'35%'">
+    <vr-modalbody>
+        <vr-form name="formGenericCompileDecProjectEditor">
+            <vr-genericdata-genericbe-compilegenericaction-buildoption-selector on-ready="scopeModel.onBuildOptionSelectorReady" isrequired="true" normal-col-num="6"></vr-genericdata-genericbe-compilegenericaction-buildoption-selector>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Compile" formname="formGenericCompileDecProjectEditor" data-onclick="scopeModel.compile"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
