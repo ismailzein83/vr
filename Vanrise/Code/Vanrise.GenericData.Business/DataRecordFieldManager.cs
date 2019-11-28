@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vanrise.GenericData.Entities;
-using Vanrise.Common.Business;
-using Vanrise.Common;
 using System.Linq;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
     public class DataRecordFieldManager
     {
         #region Public Methods
+
         public GenericFieldDifferencesResolver TryResolveDifferences(string loggableEntityUniqueName, List<GenericFieldChangeInfo> fieldValues)
         {
             GenericFieldDifferencesResolver genericFieldDifferencesResolver = null;
@@ -65,6 +66,7 @@ namespace Vanrise.GenericData.Business
             }
             return genericFieldDifferencesResolver;
         }
+
         public IEnumerable<DataRecordFieldInfo> GetDataRecordFieldsInfo(Guid dataRecordTypeId, DataRecordFieldInfoFilter filter)
         {
             Dictionary<string, DataRecordField> dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(dataRecordTypeId);
@@ -94,10 +96,11 @@ namespace Vanrise.GenericData.Business
 
             return dataRecordFields.Values.MapRecords(DataRecordFieldInfoMapper, filterExpression);
         }
+
         public List<GenericBEDefinitionGridColumnAttribute> GetListDataRecordTypeGridViewColumnAtts(DataRecordTypeGridViewColumnsInput input)
         {
             List<GenericBEDefinitionGridColumnAttribute> columnsAttributes = null;
-            if (input != null && input.ColumnsInfo!=null && input.ColumnsInfo.Count > 0)
+            if (input != null && input.ColumnsInfo != null && input.ColumnsInfo.Count > 0)
             {
                 columnsAttributes = new List<GenericBEDefinitionGridColumnAttribute>();
 
@@ -129,6 +132,7 @@ namespace Vanrise.GenericData.Business
             }
             return columnsAttributes;
         }
+
         public IEnumerable<DataRecordFieldFormulaConfig> GetDataRecordFieldFormulaExtensionConfigs()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
@@ -149,22 +153,24 @@ namespace Vanrise.GenericData.Business
 
         public DataRecordFieldTypeInfo GetFieldTypeDescription(FieldTypeDescriptionInput input)
         {
-
             if (input.FieldType == null)
                 return null;
 
+            var dataRecordFieldStyleDefinitionContext = new DataRecordFieldStyleDefinitionContext { FieldValue = input.FieldValue };
+            input.FieldType.TryGetStyleDefinitionId(dataRecordFieldStyleDefinitionContext);
+
+            var dataRecordFieldTypeParseValueToFieldTypeContext = new DataRecordFieldTypeParseValueToFieldTypeContext(input.FieldValue);
+            dynamic parsedFieldValue = input.FieldType.ParseValueToFieldType(dataRecordFieldTypeParseValueToFieldTypeContext);
+
             var fieldTypeInfo = new DataRecordFieldTypeInfo()
             {
-                FieldDescription = input.FieldType.GetDescription(input.FieldValue),
+                FieldDescription = input.FieldType.GetDescription(parsedFieldValue),
+                StyleDefinitionId = dataRecordFieldStyleDefinitionContext.StyleDefinitionId
             };
-
-            var context = new DataRecordFieldStyleDefinitionContext { FieldValue = input.FieldValue };
-
-            input.FieldType.TryGetStyleDefinitionId(context);
-            fieldTypeInfo.StyleDefinitionId = context.StyleDefinitionId;
 
             return fieldTypeInfo;
         }
+
         public List<Dictionary<string, string>> GetFieldTypeListDescription(ListFieldTypeDescriptionInput input)
         {
             List<Dictionary<string, string>> fieldsDescription = null;
@@ -195,19 +201,20 @@ namespace Vanrise.GenericData.Business
             }
             return fieldsDescription;
         }
-        public List<Dictionary<string,string>> GetFieldsDescription(FieldsDescriptionInput input)
+
+        public List<Dictionary<string, string>> GetFieldsDescription(FieldsDescriptionInput input)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var fields = dataRecordTypeManager.GetDataRecordTypeFields(input.DataRecordTypeId);
             List<Dictionary<string, string>> fieldsDescription = null;
 
-            if (fields!=null && fields.Count > 0 && input.FieldsValues!=null && input.FieldsValues.Count>0)
+            if (fields != null && fields.Count > 0 && input.FieldsValues != null && input.FieldsValues.Count > 0)
             {
                 fieldsDescription = new List<Dictionary<string, string>>();
-                foreach(var rowValues in input.FieldsValues)
+                foreach (var rowValues in input.FieldsValues)
                 {
                     Dictionary<string, string> fieldsDescriptionRow;
-                    if(rowValues!=null && rowValues.Count > 0)
+                    if (rowValues != null && rowValues.Count > 0)
                     {
                         fieldsDescriptionRow = new Dictionary<string, string>();
                         foreach (var fieldValue in rowValues)
@@ -224,14 +231,17 @@ namespace Vanrise.GenericData.Business
             }
             return fieldsDescription;
         }
+
         #endregion
 
         #region Config
+
         public IEnumerable<FieldCustomObjectTypeSettingsConfig> GetFieldCustomObjectTypeSettingsConfig()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<FieldCustomObjectTypeSettingsConfig>(FieldCustomObjectTypeSettingsConfig.EXTENSION_TYPE);
         }
+
         #endregion
 
         #region Mappers
@@ -252,6 +262,7 @@ namespace Vanrise.GenericData.Business
         public string FieldName { get; set; }
         public Object Changes { get; set; }
     }
+
     public class GenericFieldChangeSimpleChange
     {
         public string FieldName { get; set; }
@@ -259,24 +270,26 @@ namespace Vanrise.GenericData.Business
         public string OldValueDescription { get; set; }
         public Object NewValue { get; set; }
         public string NewValueDescription { get; set; }
-
-
     }
+
     public class GenericFieldDifferencesResolver
     {
         public List<GenericFieldChangeDifferences> Differences { get; set; }
         public List<GenericFieldChangeSimpleChange> SimpleChanges { get; set; }
     }
+
     public class FieldTypeDescriptionInput
     {
         public DataRecordFieldType FieldType { get; set; }
-        public string FieldValue { get; set; }
+        public object FieldValue { get; set; }
     }
+
     public class ListFieldTypeDescriptionInput
     {
         public Dictionary<string, DataRecordFieldType> FieldTypes { get; set; }
-        public List<Dictionary<string,object>> FieldsValues { get; set; }
+        public List<Dictionary<string, object>> FieldsValues { get; set; }
     }
+
     public class FieldsDescriptionInput
     {
         public Guid DataRecordTypeId { get; set; }
