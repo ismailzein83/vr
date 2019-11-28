@@ -1,5 +1,5 @@
 ﻿<vr-form name="formFilter">
-    <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+    <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoading">
         <vr-row removeline>
             <vr-genericdata-genericbedefinition-selector ng-hide="scopeModel.hideBusinessEntityDefinitionSelector" normal-col-num="2" hideremoveicon on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady" selectedvalues="scopeModel.caseDefinition"
                                                          onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChange"
