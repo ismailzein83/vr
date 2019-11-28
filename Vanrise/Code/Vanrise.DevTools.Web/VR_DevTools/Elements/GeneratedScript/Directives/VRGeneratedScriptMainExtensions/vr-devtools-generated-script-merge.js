@@ -31,7 +31,6 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
             $scope.scopeModel = {};
 
             var entity = {};
-            var directivesReadyPromises = [];
             var identifierColumnExists = false;
 
             var isEditMode;
@@ -57,7 +56,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
             var variables;
             function initializeController() {
                 $scope.scopeModel = {};
-              
+
                 $scope.scopeModel.isIncludeAllInInsert = true;
                 $scope.scopeModel.isIncludeAllInUpdate = true;
 
@@ -96,7 +95,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                 $scope.scopeModel.onDataTabSelected = function () {
 
                     if (columnsDirectiveApi != undefined) {
-                  
+
                         $scope.scopeModel.isLoading = true;
 
                         setColumns();
@@ -154,19 +153,33 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                 };
                 $scope.scopeModel.validateColumnsSelection = function () {
                     identifierColumnExists = false;
-          
+                    var insertColumnExists = false;
+                    var updateColumnExists = false;
+
                     if (ctrl.datasource.length > 0) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var item = ctrl.datasource[i].data;
+
+                            if (item.IncludeInInsert)
+                                insertColumnExists = true;
+
+                            if (item.IncludeInUpdate)
+                                updateColumnExists = true;
+                        }
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var item = ctrl.datasource[i].data;
+
                             if (item.IsIdentifier) {
                                 identifierColumnExists = true;
-                                if (!item.IncludeInInsert)
+                                if (insertColumnExists && !item.IncludeInInsert)
                                     return 'Identifier Column Must Be Included In Insert Columns ';
                             }
                         }
                     }
                     if (!identifierColumnExists)
                         return 'You Should At Least Select One Identifier Column';
+                    if (!insertColumnExists && !updateColumnExists)
+                        return 'You Should Select At Least One Insert Or Update Column';
                     return null;
                 };
 
