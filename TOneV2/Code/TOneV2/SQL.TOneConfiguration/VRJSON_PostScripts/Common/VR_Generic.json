@@ -1847,6 +1847,19 @@
               "CreatedTime": "2019-11-12T12:34:00",
               "LastModifiedTime": "2019-11-12T12:34:43.84"
             }
+          },
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "637fd561-2daa-4bc3-8df6-c00245ef78ec",
+              "DevProjectID": "079044d8-3cf1-4af3-8eeb-34b10cc20012",
+              "Name": "Compile_Generic",
+              "Title": "Compile",
+              "ConfigType": "VR_GenericData_GenericBEActionDefinitionSettings",
+              "Settings": "{\"Editor\":\"vr-genericdata-genericbe-compilegenericaction-definition\"}",
+              "CreatedTime": "2019-11-25T16:00:00",
+              "LastModifiedTime": "2019-11-25T16:00:00"
+            }
           }
         ],
         "Variables": null,
