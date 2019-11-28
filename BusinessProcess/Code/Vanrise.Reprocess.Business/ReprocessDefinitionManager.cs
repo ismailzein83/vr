@@ -239,7 +239,7 @@ namespace Vanrise.Reprocess.Business
             return new ReprocessDefinitionInfo()
             {
                 ReprocessDefinitionId = reprocessDefinition.ReprocessDefinitionId,
-                Name = reprocessDefinition.Name,
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(reprocessDefinition.DevProjectId, reprocessDefinition.Name),
                 ForceUseTempStorage = reprocessDefinition.Settings != null ? reprocessDefinition.Settings.ForceUseTempStorage : false,
             };
         }

@@ -272,7 +272,7 @@ namespace Vanrise.Queueing
             QueueExecutionFlowDefinitionInfo queueExecutionFlowDefinitionInfo = new QueueExecutionFlowDefinitionInfo();
 
             queueExecutionFlowDefinitionInfo.ID = queueExecutionFlowDefinition.ID;
-            queueExecutionFlowDefinitionInfo.Title = queueExecutionFlowDefinition.Title;
+            queueExecutionFlowDefinitionInfo.Title = vrDevProjectManager.ConcatenateTitleAndDevProjectName(queueExecutionFlowDefinition.DevProjectId, queueExecutionFlowDefinition.Title);
             return queueExecutionFlowDefinitionInfo;
         }
 

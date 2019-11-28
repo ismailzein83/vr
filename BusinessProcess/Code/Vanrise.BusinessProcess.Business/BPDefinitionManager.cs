@@ -498,7 +498,7 @@ namespace Vanrise.BusinessProcess.Business
             return new BPDefinitionInfo()
             {
                 BPDefinitionID = bpDefinition.BPDefinitionID,
-                Name = bpDefinition.Title
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(bpDefinition.DevProjectId, bpDefinition.Title),
             };
         }
 
