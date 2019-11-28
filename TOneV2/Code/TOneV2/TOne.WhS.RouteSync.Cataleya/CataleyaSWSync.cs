@@ -352,15 +352,15 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
         {
-            HashSet<int> allZoneIDs = new HashSet<int>();
-            HashSet<int> duplicatedZoneIDs = new HashSet<int>();
-            HashSet<string> allInTrunks = new HashSet<string>();
-            HashSet<string> duplicatedInTrunks = new HashSet<string>();
-            HashSet<string> allOutTrunks = new HashSet<string>();
-            HashSet<string> duplicatedOutTrunks = new HashSet<string>();
-            HashSet<string> invalidInTrunkNames = new HashSet<string>();
-            HashSet<string> invalidOutTrunkNames = new HashSet<string>();
             char[] invalidCharacters = new char[] { trunkPercentageSeparatorAsChar, trunkBackupsSeparatorAsChar, backupsSeparatorAsChar, optionsSeparatorAsChar };
+
+            Dictionary<int, List<string>> carrierNamesByZoneID = new Dictionary<int, List<string>>();
+            Dictionary<string, List<string>> carrierNamesByInTrunk = new Dictionary<string, List<string>>(); 
+            Dictionary<string, List<string>> carrierNamesByOutTrunk = new Dictionary<string, List<string>>(); 
+            Dictionary<string, List<string>> invalidInTrunksByCarrierName = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> invalidOutTrunksByCarrierName = new Dictionary<string, List<string>>(); 
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
             if (CarrierMappings == null || CarrierMappings.Count == 0)
                 return true;
@@ -371,11 +371,10 @@ namespace TOne.WhS.RouteSync.Cataleya
                 if (carrierMapping == null)
                     continue;
 
-                int zoneID = carrierMapping.ZoneID;
-                if (allZoneIDs.Contains(zoneID))
-                    duplicatedZoneIDs.Add(zoneID);
+                string carrierName = carrierAccountManager.GetCarrierAccountName(carrierMapping.CarrierId);
 
-                allZoneIDs.Add(zoneID);
+                List<string> zoneIDCarrierNames = carrierNamesByZoneID.GetOrCreateItem(carrierMapping.ZoneID);
+                zoneIDCarrierNames.Add(carrierName);
 
                 CustomerMapping customerMapping = carrierMapping.CustomerMappings;
                 if (customerMapping != null && customerMapping.InTrunks != null && customerMapping.InTrunks.Count > 0)
@@ -383,12 +382,13 @@ namespace TOne.WhS.RouteSync.Cataleya
                     foreach (var inTrunk in customerMapping.InTrunks)
                     {
                         if (inTrunk.Trunk.IndexOfAny(invalidCharacters) != -1)
-                            invalidInTrunkNames.Add(inTrunk.Trunk);
+                        {
+                            List<string> invalidInTrunks = invalidInTrunksByCarrierName.GetOrCreateItem(carrierName);
+                            invalidInTrunks.Add(inTrunk.Trunk);
+                        }
 
-                        if (allInTrunks.Contains(inTrunk.Trunk))
-                            duplicatedInTrunks.Add(inTrunk.Trunk);
-
-                        allInTrunks.Add(inTrunk.Trunk);
+                        List<string> inTrunkCarrierNames = carrierNamesByInTrunk.GetOrCreateItem(inTrunk.Trunk);
+                        inTrunkCarrierNames.Add(carrierName);
                     }
                 }
 
@@ -398,40 +398,60 @@ namespace TOne.WhS.RouteSync.Cataleya
                     foreach (var outTrunk in supplierMapping.OutTrunks)
                     {
                         if (outTrunk.Trunk.IndexOfAny(invalidCharacters) != -1)
-                            invalidOutTrunkNames.Add(outTrunk.Trunk);
+                        {
+                            List<string> invalidOutTrunks = invalidOutTrunksByCarrierName.GetOrCreateItem(carrierName);
+                            invalidOutTrunks.Add(outTrunk.Trunk);
+                        }
 
-                        if (allOutTrunks.Contains(outTrunk.Trunk))
-                            duplicatedOutTrunks.Add(outTrunk.Trunk);
-
-                        allOutTrunks.Add(outTrunk.Trunk);
+                        List<string> outTrunkCarrierNames = carrierNamesByOutTrunk.GetOrCreateItem(outTrunk.Trunk);
+                        outTrunkCarrierNames.Add(carrierName);
                     }
                 }
             }
 
-            var apiConnectionValidationError = ValidateAPIConnection();
-
             List<string> validationMessages = new List<string>();
 
+            var apiConnectionValidationError = ValidateAPIConnection();
             if (!string.IsNullOrEmpty(apiConnectionValidationError))
                 validationMessages.Add(apiConnectionValidationError);
 
-            if (duplicatedZoneIDs.Count > 0)
-                validationMessages.Add($"Following ZoneIDs are Duplicated: {string.Join(", ", duplicatedZoneIDs)}");
+            foreach (var zoneID in carrierNamesByZoneID.Keys)
+            {
+                if (carrierNamesByZoneID[zoneID].Count > 1)
+                    validationMessages.Add($"Following Carrier Accounts are using the same ZoneID \"{zoneID}\": {string.Join(", ", carrierNamesByZoneID[zoneID])}");
+            }
 
-            if (duplicatedInTrunks.Count > 0)
-                validationMessages.Add($"Following In Trunks are Duplicated: {string.Join(", ", duplicatedInTrunks)}");
+            foreach (var inTrunk in carrierNamesByInTrunk.Keys)
+            {
+                if (carrierNamesByInTrunk[inTrunk].Count > 1)
+                    validationMessages.Add($"Following Carrier Accounts are using the same In Trunk \"{inTrunk}\": {string.Join(", ", carrierNamesByInTrunk[inTrunk])}");
+            }
 
-            if (duplicatedOutTrunks.Count > 0)
-                validationMessages.Add($"Following Out Trunks are Duplicated: {string.Join(", ", duplicatedOutTrunks)}");
+            foreach (var outTrunk in carrierNamesByOutTrunk.Keys)
+            {
+                if (carrierNamesByOutTrunk[outTrunk].Count > 1)
+                    validationMessages.Add($"Following Carrier Accounts are using the same Out Trunk \"{outTrunk}\": {string.Join(", ", carrierNamesByOutTrunk[outTrunk])}");
+            }
 
-            if (invalidInTrunkNames.Count > 0)
-                validationMessages.Add($"Following In Trunks are Invalid: {string.Join(", ", invalidInTrunkNames)}");
+            if (invalidInTrunksByCarrierName.Count > 0)
+            {
+                foreach (var carrierName in invalidInTrunksByCarrierName.Keys)
+                    validationMessages.Add($"Following Carrier Account \"{carrierName}\" has Invalid In Trunks: {string.Join(" - ", invalidInTrunksByCarrierName[carrierName])}");
+            }
 
-            if (invalidOutTrunkNames.Count > 0)
-                validationMessages.Add($"Following Out Trunks are Invalid: {string.Join(", ", invalidOutTrunkNames)}");
+            if (invalidOutTrunksByCarrierName.Count > 0)
+            {
+                foreach (var carrierName in invalidOutTrunksByCarrierName.Keys)
+                    validationMessages.Add($"Following Carrier Account \"{carrierName}\" has Invalid Out Trunks: {string.Join(" - ", invalidOutTrunksByCarrierName[carrierName])}");
+            }
 
             context.ValidationMessages = validationMessages.Count > 0 ? validationMessages : null;
             return validationMessages.Count == 0;
+        }
+
+        private void List<T>()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -441,7 +461,9 @@ namespace TOne.WhS.RouteSync.Cataleya
         private class SupplierTrunkOption : IPercentageItem
         {
             public string Trunk { get; set; }
+
             public int Percentage { get; set; }
+
             public string BackupsTrunksAsString { get; set; }
 
             public decimal? GetInputPercentage()
@@ -706,6 +728,7 @@ namespace TOne.WhS.RouteSync.Cataleya
 
             return string.Join("; ", cookiesAsString);
         }
+
         #endregion
     }
 }
