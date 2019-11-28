@@ -673,7 +673,7 @@ namespace BPMExtended.Main.Business
             return new ServiceHistoryRecordDetail()
             {
                 ServiceId = item.ServiceId,
-                Status = contractManager.GetContractStatusByEnumValue(item.Status.ToString()),
+                Status = GetContractServiceStatusByEnumValue(item.Status.ToString()),
                 Name = item.Name,
                 EntryDate = item.EntryDate,
                 ValidFromDate = item.ValidFromDate
