@@ -753,7 +753,15 @@ namespace BPMExtended.Main.Business
             return contractStatusDescription;
         }
 
-
+        public Address GetContractAddress(string contractId)
+        {
+            Address item = new Address();
+            using (SOMClient client = new SOMClient())
+            {
+               item  = client.Get<Address>(String.Format("api/SOM.ST/Billing/GetContractAddress?ContractId={0}", contractId));
+            }
+            return item;
+        }
         #region mappers
 
         //TODO: to be remove later

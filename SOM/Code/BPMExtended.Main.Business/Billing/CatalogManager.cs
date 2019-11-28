@@ -869,7 +869,29 @@ namespace BPMExtended.Main.Business
             }
             return null;
         }
+        public SaleService GetLastMileChangeVPNServiceFee()
+        {
+            string serviceId;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("StVPNServiceFeeId");
 
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "70EB3816-B2B8-4173-8006-A5FDDE4AB970");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                serviceId = entities[0].GetTypedColumnValue<string>("StVPNServiceFeeId");
+
+                return new SaleService()
+                {
+                    Id = serviceId
+                };
+            }
+            return null;
+        }
         public List<SaleService> GetADSLFeesForLineTermination()
         {
             List<SaleService> fees = new List<SaleService>();

@@ -40,5 +40,7 @@ namespace BPMExtended.Main.Entities
         public string Value { get; set; }
         public string Description { get; set; }
         public string SequenceNumber { get; set; }
-    }
+    }
+
+
 }

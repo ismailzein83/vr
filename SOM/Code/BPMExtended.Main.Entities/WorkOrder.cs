@@ -11,6 +11,8 @@ namespace BPMExtended.Main.Entities
         public string Id { get; set; }
         public string Title { get; set; }
         public string PathId { get; set; }
+        public string NewPathId { get; set; }
+
         public string SupportsCommands { get; set; }
         public string Commands { get; set; }
         public string PhoneNumber { get; set; }

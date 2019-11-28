@@ -415,6 +415,8 @@ namespace BPMExtended.Main.Entities
         [EntitySchemaName("StLastMileChange")]
         [CompletedStep("StTypeId")]
         [CompletedStepId("BDFC6820-9932-4FE1-A628-D3537EFF100E")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("839286F1-B57D-4543-811B-3BBBC0967703")]
         LastMileChange = 44,
 
         [Description("ADSL Take Over")]

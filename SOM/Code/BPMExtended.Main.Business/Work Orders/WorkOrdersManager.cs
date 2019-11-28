@@ -42,6 +42,7 @@ namespace BPMExtended.Main.Business
             string oldDevice = w.OldDeviceId;
             string servicesList = w.NetworkServices;
             string secondaryContracts = w.SecondaryContracts;
+            string newPathId = w.NewPathId;
 
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -75,7 +76,7 @@ namespace BPMExtended.Main.Business
                 string requestsTypeId = GetRequestType(EntityName);
                 string recordName = GetEntityName(EntityName, requestId);
                 workOrderId = initiateWorkOrder(contractId,requestId, requestsTypeId, type, recordName, type, pathId, phoneNumber, switchName, deviceName,
-                    supportsCommand, commands,newDevice,oldDevice, servicesList, secondaryContracts);
+                    supportsCommand, commands,newDevice,oldDevice, servicesList, secondaryContracts, newPathId);
 
                 //update request
                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
@@ -287,7 +288,7 @@ namespace BPMExtended.Main.Business
         }
         private string initiateWorkOrder(string contractId,string requestId, string requestTypeId, string workOrderType, string recordName
             , string type, string pathId, string phoneNumber, string switchName, string deviceName, string supportsCommand, string commands
-            , string newDevice, string oldDevice, string servicesList, string secondaryContracts)
+            , string newDevice, string oldDevice, string servicesList, string secondaryContracts,string newPathId)
         {
             EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StWorkOrder");
             Entity workorder = schema.CreateEntity(BPM_UserConnection);
@@ -312,6 +313,7 @@ namespace BPMExtended.Main.Business
             workorder.SetColumnValue("StReservedDeviceId", newDevice);
             workorder.SetColumnValue("StFlags", servicesList);
             workorder.SetColumnValue("StSecondaryContracts", secondaryContracts);
+            workorder.SetColumnValue("StNewLinePathId", newPathId);
             workorder.Save();
 
             return workOrderId.ToString();

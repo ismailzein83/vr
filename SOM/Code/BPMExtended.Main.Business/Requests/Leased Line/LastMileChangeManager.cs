@@ -30,7 +30,6 @@ namespace BPMExtended.Main.Business
             Random random = new Random();
             return random.Next(10) > 5 ? "Fiber" : "Copper";
         }
-
         public void SubmitLastMileChangeRequestToOM(Guid requestId)
         {
             bool isVPNServiceFound = false;
@@ -176,7 +175,6 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-
             esq.AddColumn("StCountry");
             esq.AddColumn("StCountry.Id");
             esq.AddColumn("StCity");
@@ -191,7 +189,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
 
-
+            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StOldLinePathId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -214,43 +213,33 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 var country = entities[0].GetColumnValue("StCountryName");
 
+                var linePathId = entities[0].GetColumnValue("StLinePathId");
+                var OldlinePathId = entities[0].GetColumnValue("StOldLinePathId");
+
                 ContractManager mngr = new ContractManager();
                 GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString());
                 var sequence = contractAddressOutput.Address.Sequence.ToString();
 
                 //check if one of the services is a vpn sevice
                 List<CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());
-                List<SaleService> vpnServices = new CatalogManager().GetVPNDivisionServices();
+                //List<SaleService> vpnServices = new CatalogManager().GetVPNDivisionServices();
 
-                isVPNServiceFound = contractServices.Any(x => vpnServices.Any(y => y.Id == x.Id));
-
-                /*  foreach (var item in vpnServices)
-                  {
-                      foreach(var Service in contractServices)
-                      {
-                          if (Service.Id == item.Id)
-                          {
-                              isVPNServiceFound = true;
-                              break;
-                          }
-                      }
-                      if (isVPNServiceFound) break;
-                  }*/
-
+                //isVPNServiceFound = contractServices.Any(x => vpnServices.Any(y => y.Id == x.Id));
+                
                 List<SaleService> feesServices = JsonConvert.DeserializeObject<List<SaleService>>(fees);
 
-                if (isVPNServiceFound)
-                {
-                    SaleService vpnServiceFee = new CatalogManager().GetVPNServiceFee();
-                    vpnServiceFee.UpFront = false;
-                    if (vpnServiceFee != null) feesServices.Add(vpnServiceFee);
-                }
-
+                //if (isVPNServiceFound)
+                //{
+                //    SaleService vpnServiceFee = new CatalogManager().GetVPNServiceFee();
+                //    vpnServiceFee.UpFront = false;
+                //    if (vpnServiceFee != null) feesServices.Add(vpnServiceFee);
+                //}
                 SOMRequestInput<LastMileChangeRequestInput> somRequestInput = new SOMRequestInput<LastMileChangeRequestInput>
                 {
-
                     InputArguments = new LastMileChangeRequestInput
                     {
+                        NewLinePathId = linePathId.ToString(),
+                        OldLinePathId = OldlinePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -276,7 +265,6 @@ namespace BPMExtended.Main.Business
                     }
 
                 };
-
                 //call api
                 using (var client = new SOMClient())
                 {
@@ -284,9 +272,7 @@ namespace BPMExtended.Main.Business
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
             }
-
         }
         public void ProceedLastMileChange(Guid requestId)
         {
@@ -304,7 +290,6 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-
             esq.AddColumn("StCountry");
             esq.AddColumn("StCountry.Id");
             esq.AddColumn("StCity");
@@ -319,7 +304,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
 
-
+            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StOldLinePathId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -342,43 +328,33 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 var country = entities[0].GetColumnValue("StCountryName");
 
+                var linePathId = entities[0].GetColumnValue("StLinePathId");
+                var OldlinePathId = entities[0].GetColumnValue("StOldLinePathId");
+
                 ContractManager mngr = new ContractManager();
                 GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString());
                 var sequence = contractAddressOutput.Address.Sequence.ToString();
 
                 //check if one of the services is a vpn sevice
                 List<CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());
-                List<SaleService> vpnServices = new CatalogManager().GetVPNDivisionServices();
+                //List<SaleService> vpnServices = new CatalogManager().GetVPNDivisionServices();
 
-                isVPNServiceFound = contractServices.Any(x => vpnServices.Any(y => y.Id == x.Id));
-
-                /*  foreach (var item in vpnServices)
-                  {
-                      foreach(var Service in contractServices)
-                      {
-                          if (Service.Id == item.Id)
-                          {
-                              isVPNServiceFound = true;
-                              break;
-                          }
-                      }
-                      if (isVPNServiceFound) break;
-                  }*/
+                //isVPNServiceFound = contractServices.Any(x => vpnServices.Any(y => y.Id == x.Id));
 
                 List<SaleService> feesServices = JsonConvert.DeserializeObject<List<SaleService>>(fees);
 
-                if (isVPNServiceFound)
-                {
-                    SaleService vpnServiceFee = new CatalogManager().GetVPNServiceFee();
-                    vpnServiceFee.UpFront = false;
-                    if (vpnServiceFee != null) feesServices.Add(vpnServiceFee);
-                }
-
+                //if (isVPNServiceFound)
+                //{
+                //    SaleService vpnServiceFee = new CatalogManager().GetVPNServiceFee();
+                //    vpnServiceFee.UpFront = false;
+                //    if (vpnServiceFee != null) feesServices.Add(vpnServiceFee);
+                //}
                 SOMRequestInput<LastMileChangeRequestInput> somRequestInput = new SOMRequestInput<LastMileChangeRequestInput>
                 {
-
                     InputArguments = new LastMileChangeRequestInput
                     {
+                        NewLinePathId = linePathId.ToString(),
+                        OldLinePathId = OldlinePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -404,20 +380,18 @@ namespace BPMExtended.Main.Business
                     }
 
                 };
-
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LastMileChangeRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitLastMileChange/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LastMileChangeRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ProceedLastMileChange/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
             }
-
         }
         public void FinalizeLastMileChange(Guid requestId)
         {
+
             bool isVPNServiceFound = false;
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -432,7 +406,6 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
-
             esq.AddColumn("StCountry");
             esq.AddColumn("StCountry.Id");
             esq.AddColumn("StCity");
@@ -447,7 +420,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
 
-
+            esq.AddColumn("StLinePathId");
+            esq.AddColumn("StOldLinePathId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -470,6 +444,9 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 var country = entities[0].GetColumnValue("StCountryName");
 
+                var linePathId = entities[0].GetColumnValue("StLinePathId");
+                var OldlinePathId = entities[0].GetColumnValue("StOldLinePathId");
+
                 ContractManager mngr = new ContractManager();
                 GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString());
                 var sequence = contractAddressOutput.Address.Sequence.ToString();
@@ -480,19 +457,6 @@ namespace BPMExtended.Main.Business
 
                 isVPNServiceFound = contractServices.Any(x => vpnServices.Any(y => y.Id == x.Id));
 
-                /*  foreach (var item in vpnServices)
-                  {
-                      foreach(var Service in contractServices)
-                      {
-                          if (Service.Id == item.Id)
-                          {
-                              isVPNServiceFound = true;
-                              break;
-                          }
-                      }
-                      if (isVPNServiceFound) break;
-                  }*/
-
                 List<SaleService> feesServices = JsonConvert.DeserializeObject<List<SaleService>>(fees);
 
                 if (isVPNServiceFound)
@@ -501,12 +465,12 @@ namespace BPMExtended.Main.Business
                     vpnServiceFee.UpFront = false;
                     if (vpnServiceFee != null) feesServices.Add(vpnServiceFee);
                 }
-
                 SOMRequestInput<LastMileChangeRequestInput> somRequestInput = new SOMRequestInput<LastMileChangeRequestInput>
                 {
-
                     InputArguments = new LastMileChangeRequestInput
                     {
+                        NewLinePathId = linePathId.ToString(),
+                        OldLinePathId = OldlinePathId.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -532,17 +496,14 @@ namespace BPMExtended.Main.Business
                     }
 
                 };
-
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<LastMileChangeRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitLastMileChange/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<LastMileChangeRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeLastMileChange/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
-
             }
-
         }
 
     }
