@@ -97,6 +97,8 @@ namespace BPMExtended.Main.Entities
         //[LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Change Phone Number")]
         [EntitySchemaName("StChangePhoneNumberRequest")]
+        [TechnicalStepFieldName("StWorkOrderStageId")]
+        [TechnicalStepId("2B8B0E7C-9925-4ABE-A9E7-145E96F77982")]
         [CompletedStep("StStepId")]
         [CompletedStepId("A359D1DA-9970-4C97-A669-8F30E7B31550")]
         TelephonyChangePhoneNumber = 3,

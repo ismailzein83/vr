@@ -55,7 +55,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void PostChangePhoneNumberToOM(Guid requestId)
+        public void SubmitChangePhoneNumber(Guid requestId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -77,6 +77,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
+            esq.AddColumn("StPathId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -95,6 +96,7 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var pathId = entities[0].GetColumnValue("StPathId");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
@@ -109,21 +111,22 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new ChangePhoneNumberRequestInput
                     {
-                        OldDirectoryNumber = oldDirectoryNumber.ToString(),
-                        NewDirectoryNumber = newDirectoryNumber.ToString(),
+                        OldPhoneNumber = oldDirectoryNumber.ToString(),
+                        NewPhoneNumber = newDirectoryNumber.ToString(),
                         OldRatePlanId = oldRatePlanId.ToString(),
+                        LinePathId = pathId.ToString(),
                         NewRatePlanId = (newRatePlanId == null || newRatePlanId.ToString() == "") ? oldRatePlanId.ToString() : newRatePlanId.ToString(),
-                        FeesToRemove = feesToRemove,
+                        ServicesToRemove = feesToRemove,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
                         },
-                        PaymentData = new PaymentData()
-                        {
-                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
-                            IsPaid = (bool)isPaid
-                        },
+                        //PaymentData = new PaymentData()
+                        //{
+                        //    Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                        //    IsPaid = (bool)isPaid
+                        //},
                     }
 
                 };
@@ -131,7 +134,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitChangePhoneNumberOnSameSwitch/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitChangePhoneNumber/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
@@ -140,7 +143,92 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void ActivateChangePhoneRequest(Guid requestId)
+        public void ProceedChangePhoneNumber(Guid requestId, string oldDeviceId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+            List<SaleService> feesToRemove = new List<SaleService>();
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangePhoneNumberRequest");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StPhoneNumber");
+            esq.AddColumn("StRatePlanId");
+            esq.AddColumn("StNewRatePlanId");
+            esq.AddColumn("StNewDirectoryNumber");
+            esq.AddColumn("StOldSubTypeClass");
+            esq.AddColumn("StIsDeclassify");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
+            esq.AddColumn("StPathId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var oldDirectoryNumber = entities[0].GetColumnValue("StPhoneNumber");
+                var oldRatePlanId = entities[0].GetColumnValue("StRatePlanId");
+                var newRatePlanId = entities[0].GetColumnValue("StNewRatePlanId");
+                var newDirectoryNumber = entities[0].GetColumnValue("StNewDirectoryNumber");
+                string oldSubTypeClass = (string)entities[0].GetColumnValue("StOldSubTypeClass");
+                bool isDeclassify = (bool)entities[0].GetColumnValue("StIsDeclassify");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var pathId = entities[0].GetColumnValue("StPathId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                //Get fees to remove if exist
+                if (isDeclassify && oldSubTypeClass != "Normal")
+                {
+                    feesToRemove = new CatalogManager().GetTelephonyPhoneCategoryFees(oldSubTypeClass);
+                }
+
+
+                SOMRequestInput<ChangePhoneNumberRequestInput> somRequestInput = new SOMRequestInput<ChangePhoneNumberRequestInput>
+                {
+                    InputArguments = new ChangePhoneNumberRequestInput
+                    {
+                        NewPhoneNumber = newDirectoryNumber.ToString(),
+                        LinePathId = pathId.ToString(),
+                        OldDeviceId = oldDeviceId,
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                        },
+                        //PaymentData = new PaymentData()
+                        //{
+                        //    Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                        //    IsPaid = (bool)isPaid
+                        //},
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ProceedChangePhoneNumber/StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+
+        }
+
+        public void FinalizeChangePhoneNumber(Guid requestId)
         {
 
             EntitySchemaQuery esq;
@@ -195,11 +283,8 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new ChangePhoneNumberRequestInput
                     {
-                        OldDirectoryNumber = oldDirectoryNumber.ToString(),
-                        NewDirectoryNumber = newDirectoryNumber.ToString(),
-                        OldRatePlanId = oldRatePlanId.ToString(),
-                        NewRatePlanId = (newRatePlanId == null || newRatePlanId.ToString() == "") ? oldRatePlanId.ToString() : newRatePlanId.ToString(),
-                        FeesToRemove = feesToRemove,
+                        OldPhoneNumber = oldDirectoryNumber.ToString(),
+                        NewPhoneNumber = newDirectoryNumber.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -217,7 +302,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateChangePhoneNumberOnSameSwitch/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeChangePhoneNumber/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
