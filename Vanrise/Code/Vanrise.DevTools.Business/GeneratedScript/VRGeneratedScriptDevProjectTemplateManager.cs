@@ -21,7 +21,6 @@ namespace Vanrise.DevTools.Business
             new VRGeneratedScriptTable() { Name = "BPBusinessRuleAction" } ,
             new VRGeneratedScriptTable() { Name ="BPBusinessRuleDefinition" },
             new VRGeneratedScriptTable() { Name ="BPDefinition" },
-            new VRGeneratedScriptTable() { Name ="BPDefinition" },
             new VRGeneratedScriptTable() { Name ="BPTaskType" } ,
             new VRGeneratedScriptTable() { Name = "VRWorkflow" } ,
             new VRGeneratedScriptTable() { Name ="ProcessSynchronisation" } ,
