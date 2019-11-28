@@ -50,9 +50,7 @@ namespace TOne.WhS.Routing.Business
 
             bool keepBackupsForRemovedOptions = new ConfigManager().GetCustomerRouteBuildKeepBackUpsForRemovedOptions();
 
-            CustomerRouteOptionMarginStaging optimalCustomerRouteOptionMarginStaging = null;
-            if (context.GenerateAnalysisData)
-                optimalCustomerRouteOptionMarginStaging = GetOptimalCustomerRouteOptionMarginStaging(context.SupplierCodeMatches);
+           IOrderedEnumerable<SupplierCodeMatchWithRate> orderedSupplierCodeMatchWithRates = context.SupplierCodeMatches.OrderBy(itm => itm.RateValue);
 
             if (context.SaleZoneDefintions != null)
             {
@@ -122,7 +120,7 @@ namespace TOne.WhS.Routing.Business
                                     customerRoutes.Add(route);
 
                                     if (context.GenerateAnalysisData)
-                                        CalculateAndAddRouteMargin(route, customerZoneDetail, context.SupplierCodeMatchesBySupplier, optimalCustomerRouteOptionMarginStaging, context.SaleZoneOptionsMarginStagingByCustomerSaleZone);
+                                        CalculateAndAddRouteMargin(route, customerZoneDetail, context.SupplierCodeMatchesBySupplier, orderedSupplierCodeMatchWithRates, context.SaleZoneOptionsMarginStagingByCustomerSaleZone);
                                 }
                             }
                             else
@@ -417,41 +415,12 @@ namespace TOne.WhS.Routing.Business
             return route;
         }
 
-        private CustomerRouteOptionMarginStaging GetOptimalCustomerRouteOptionMarginStaging(List<SupplierCodeMatchWithRate> supplierCodeMatches)
-        {
-            if (supplierCodeMatches == null || supplierCodeMatches.Count == 0)
-                return null;
-
-            SupplierCodeMatchWithRate firstSupplierCodeMatchWithRate = supplierCodeMatches.First();
-
-            CustomerRouteOptionMarginStaging optimalCustomerRouteOptionMarginStaging = new CustomerRouteOptionMarginStaging()
-            {
-                SupplierZoneID = firstSupplierCodeMatchWithRate.CodeMatch.SupplierZoneId,
-                SupplierServiceIDs = firstSupplierCodeMatchWithRate.SupplierServiceIds,
-                SupplierRate = firstSupplierCodeMatchWithRate.RateValue,
-                SupplierDealID = firstSupplierCodeMatchWithRate.DealId
-            };
-
-            foreach (var supplierCodeMatch in supplierCodeMatches)
-            {
-                if (optimalCustomerRouteOptionMarginStaging.SupplierRate <= supplierCodeMatch.RateValue)
-                    continue;
-
-                optimalCustomerRouteOptionMarginStaging.SupplierZoneID = supplierCodeMatch.CodeMatch.SupplierZoneId;
-                optimalCustomerRouteOptionMarginStaging.SupplierServiceIDs = supplierCodeMatch.SupplierServiceIds;
-                optimalCustomerRouteOptionMarginStaging.SupplierRate = supplierCodeMatch.RateValue;
-                optimalCustomerRouteOptionMarginStaging.SupplierDealID = supplierCodeMatch.DealId;
-            }
-
-            return optimalCustomerRouteOptionMarginStaging;
-        }
-
         private void CalculateAndAddRouteMargin(CustomerRoute route, CustomerZoneDetail customerZoneDetail, SupplierCodeMatchWithRateBySupplier supplierCodeMatchesBySupplier,
-            CustomerRouteOptionMarginStaging optimalCustomerRouteOptionMarginStaging, Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging> saleZoneOptionsMarginStagingByCustomerSaleZone)
+            IOrderedEnumerable<SupplierCodeMatchWithRate> orderedSupplierCodeMatchesWithRate, Dictionary<CustomerSaleZone, SaleZoneOptionsMarginStaging> saleZoneOptionsMarginStagingByCustomerSaleZone)
         {
             List<RouteOption> routeOptions = route.Options;
             if (routeOptions == null || routeOptions.Count == 0)
-                return;
+                return; 
 
             var firstOption = routeOptions.FirstOrDefault(itm => !itm.IsBlocked);
             if (firstOption == null)
@@ -488,6 +457,27 @@ namespace TOne.WhS.Routing.Business
                         SupplierDealID = currentSupplierCodeMatchWithRate.DealId
                     };
                     customerRouteOptionMarginStagingBySupplierZone.Add(currentRouteOption.SupplierZoneId, currentCustomerRouteOptionMarginStaging);
+                }
+            }
+
+            CustomerRouteOptionMarginStaging optimalCustomerRouteOptionMarginStaging = null;
+
+            CarrierAccount customer = _carrierAccounts.GetRecord(customerZoneDetail.CustomerId);  
+
+            foreach (var supplierCodeMatcheWithRate in orderedSupplierCodeMatchesWithRate) 
+            {
+                CarrierAccount supplier = _carrierAccounts.GetRecord(supplierCodeMatcheWithRate.CodeMatch.SupplierId); 
+
+                if (customer.CarrierProfileId != supplier.CarrierProfileId)
+                {
+                    optimalCustomerRouteOptionMarginStaging = new CustomerRouteOptionMarginStaging()
+                    {
+                        SupplierZoneID = supplierCodeMatcheWithRate.CodeMatch.SupplierZoneId,
+                        SupplierServiceIDs = supplierCodeMatcheWithRate.SupplierServiceIds,
+                        SupplierRate = supplierCodeMatcheWithRate.RateValue,
+                        SupplierDealID = supplierCodeMatcheWithRate.DealId
+                    };
+                    break;
                 }
             }
 
