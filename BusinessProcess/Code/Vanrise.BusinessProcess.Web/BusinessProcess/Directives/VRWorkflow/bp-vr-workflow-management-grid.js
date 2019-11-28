@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessVrWorkflowManagementGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "BusinessProcess_VRWorkflowAPIService", "BusinessProcess_VRWorkflowService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService) {
+app.directive("businessprocessVrWorkflowManagementGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "BusinessProcess_VRWorkflowAPIService", "BusinessProcess_VRWorkflowService","VR_GenericData_GenericBusinessEntityService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService, VR_GenericData_GenericBusinessEntityService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -48,9 +48,9 @@ app.directive("businessprocessVrWorkflowManagementGrid", ["UtilsService", "VRNot
                         }
                         onResponseReady(response);
                     })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
                 };
 
                 defineMenuActions();
@@ -73,11 +73,15 @@ app.directive("businessprocessVrWorkflowManagementGrid", ["UtilsService", "VRNot
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.gridMenuActions.push({
-                    name: 'Edit',
-                    clicked: editVRWorkflow,
-                    haspermission: hasEditVRWorkflowPermission
-                });
+                $scope.scopeModel.gridMenuActions.push(
+                    {
+                        name: 'Edit',
+                        clicked: editVRWorkflow,
+                        haspermission: hasEditVRWorkflowPermission
+                    }, {
+                        name: "Compile Project",
+                        clicked: compileDevProject,
+                    });
             }
 
             function editVRWorkflow(vrWorkflow) {
@@ -91,6 +95,12 @@ app.directive("businessprocessVrWorkflowManagementGrid", ["UtilsService", "VRNot
 
             function hasEditVRWorkflowPermission() {
                 return BusinessProcess_VRWorkflowAPIService.HasEditVRWorkflowPermission();
+            }
+
+            function compileDevProject(vrWorkflow) {
+                if (vrWorkflow.DevProjectId == undefined)
+                    return;
+                VR_GenericData_GenericBusinessEntityService.CompileDevProject(vrWorkflow.DevProjectId);
             }
         }
 

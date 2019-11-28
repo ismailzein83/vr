@@ -1010,6 +1010,7 @@ namespace Vanrise.BusinessProcess.Business
                 VRWorkflowID = vrWorkflow.VRWorkflowId,
                 Name = vrWorkflow.Name,
                 Title = vrWorkflow.Title,
+                DevProjectId=vrWorkflow.DevProjectId,
                 LastModifiedTime = vrWorkflow.LastModifiedTime
             };
             if (vrWorkflow.DevProjectId.HasValue)
@@ -1024,7 +1025,7 @@ namespace Vanrise.BusinessProcess.Business
             VRWorkflowInfo vrWorkflowInfo = new VRWorkflowInfo()
             {
                 VRWorkflowId = vrWorkflow.VRWorkflowId,
-                Name = vrWorkflow.Name
+                Name = vrDevProjectManager.ConcatenateTitleAndDevProjectName(vrWorkflow.DevProjectId, vrWorkflow.Name),
             };
             return vrWorkflowInfo;
         }

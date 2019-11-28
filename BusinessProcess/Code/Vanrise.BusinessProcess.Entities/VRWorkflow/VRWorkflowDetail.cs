@@ -9,5 +9,6 @@ namespace Vanrise.BusinessProcess.Entities
         public string Title { get; set; }
         public DateTime LastModifiedTime { get; set; }
         public string DevProjectName { get; set; }
+        public Guid? DevProjectId { get; set; }
     }
 }
