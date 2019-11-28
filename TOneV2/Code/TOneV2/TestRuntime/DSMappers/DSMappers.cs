@@ -1665,15 +1665,19 @@ namespace TestRuntime
                             reroutedCDR.OutTrunk = fieldValueByName["zone_name"];
                             reroutedCDR.OutIP = fieldValueByName["sip_remote_addr"];
 
-                            string[] subFields = fieldValueByName["reason_hdr"].Split(';');
-                            foreach (var subField in subFields)
+                            string reasonHDRField = fieldValueByName["reason_hdr"];
+                            if(!string.IsNullOrEmpty(reasonHDRField))
                             {
-                                if (!subField.StartsWith("cause="))
-                                    continue;
+                                string[] subFields = reasonHDRField.Split(';');
+                                foreach (var subField in subFields)
+                                {
+                                    if (!subField.StartsWith("cause="))
+                                        continue;
 
-                                reroutedCDR.CauseFromReleaseCode = subField.Replace("cause=", "");
-                                reroutedCDR.CauseToReleaseCode = reroutedCDR.CauseFromReleaseCode;
-                                break;
+                                    reroutedCDR.CauseFromReleaseCode = subField.Replace("cause=", "");
+                                    reroutedCDR.CauseToReleaseCode = reroutedCDR.CauseFromReleaseCode;
+                                    break;
+                                }
                             }
 
                             string attemptDateTimeField = fieldValueByName["inviting_ts"];
