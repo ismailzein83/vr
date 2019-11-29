@@ -275,55 +275,58 @@ namespace TOne.WhS.RouteSync.Huawei.RDB
 
         public void RemoveRoutesFromTempTable(IEnumerable<HuaweiConvertedRoute> routes)
         {
-            if (routes == null || !routes.Any())
-                return;
 
-            TryRegisterTable(RouteTempTableName);
-            var RouteTempTABLE_NAME = TableNames[RouteTempTableName];
+            throw new NotImplementedException("Need to be like SoftX3000");
+            //if (routes == null || !routes.Any())
+            //    return;
 
-            var queryContext = new RDBQueryContext(GetDataProvider());
+            //TryRegisterTable(RouteTempTableName);
+            //var RouteTempTABLE_NAME = TableNames[RouteTempTableName];
 
-            var tempTableContext = CreateRouteTempTableForJoin(routes, RouteTempTABLE_NAME, queryContext);
+            //var queryContext = new RDBQueryContext(GetDataProvider());
 
-            var deleteQuery = queryContext.AddDeleteQuery();
-            deleteQuery.FromTable(RouteTempTABLE_NAME);
+            //var tempTableContext = CreateRouteTempTableForJoin(routes, RouteTempTABLE_NAME, queryContext);
 
-            var joinStatement = deleteQuery.Join("tempRoute");
+            //var deleteQuery = queryContext.AddDeleteQuery();
+            //deleteQuery.FromTable(RouteTempTABLE_NAME);
 
-            var joinCondition = joinStatement.Join(tempTableContext, "route").On();
-            joinCondition.EqualsCondition("route", COL_RSSN, "tempRoute", COL_RSSN);
-            joinCondition.EqualsCondition("route", COL_Code, "tempRoute", COL_Code);
-            joinCondition.EqualsCondition("route", COL_RSName, "tempRoute", COL_RSName);
-            joinCondition.EqualsCondition("route", COL_DNSet, "tempRoute", COL_DNSet);
+            //var joinStatement = deleteQuery.Join("tempRoute");
 
-            queryContext.ExecuteNonQuery();
+            //var joinCondition = joinStatement.Join(tempTableContext, "route").On();
+            //joinCondition.EqualsCondition("route", COL_RSSN, "tempRoute", COL_RSSN);
+            //joinCondition.EqualsCondition("route", COL_Code, "tempRoute", COL_Code);
+            //joinCondition.EqualsCondition("route", COL_RSName, "tempRoute", COL_RSName);
+            //joinCondition.EqualsCondition("route", COL_DNSet, "tempRoute", COL_DNSet);
+
+            //queryContext.ExecuteNonQuery();
         }
 
         public void UpdateRoutesInTempTable(IEnumerable<HuaweiConvertedRoute> routes)
         {
-            if (routes == null || !routes.Any())
-                return;
+            throw new NotImplementedException("Need to be like SoftX3000");
+            //if (routes == null || !routes.Any())
+            //    return;
 
-            TryRegisterTable(RouteTempTableName);
-            var RouteTempTABLE_NAME = TableNames[RouteTempTableName];
+            //TryRegisterTable(RouteTempTableName);
+            //var RouteTempTABLE_NAME = TableNames[RouteTempTableName];
 
-            var queryContext = new RDBQueryContext(GetDataProvider());
+            //var queryContext = new RDBQueryContext(GetDataProvider());
 
-            var tempTableContext = CreateRouteTempTableForJoin(routes, RouteTempTABLE_NAME, queryContext);
+            //var tempTableContext = CreateRouteTempTableForJoin(routes, RouteTempTABLE_NAME, queryContext);
 
-            var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(RouteTempTABLE_NAME);
-            updateQuery.Column(COL_RSName).Column("routesToUpdate", COL_RSName);
-            updateQuery.Column(COL_DNSet).Column("routesToUpdate", COL_DNSet);
+            //var updateQuery = queryContext.AddUpdateQuery();
+            //updateQuery.FromTable(RouteTempTABLE_NAME);
+            //updateQuery.Column(COL_RSName).Column("routesToUpdate", COL_RSName);
+            //updateQuery.Column(COL_DNSet).Column("routesToUpdate", COL_DNSet);
 
-            var joinStatement = updateQuery.Join("tempRoutes");
+            //var joinStatement = updateQuery.Join("tempRoutes");
 
-            var joinCondition = joinStatement.Join(tempTableContext, "routesToUpdate").On();
-            joinCondition.EqualsCondition("routesToUpdate", COL_RSSN, "tempRoutes", COL_RSSN);
-            joinCondition.EqualsCondition("routesToUpdate", COL_Code, "tempRoutes", COL_Code);
-            joinCondition.EqualsCondition("routesToUpdate", COL_DNSet, "tempRoutes", COL_DNSet);
+            //var joinCondition = joinStatement.Join(tempTableContext, "routesToUpdate").On();
+            //joinCondition.EqualsCondition("routesToUpdate", COL_RSSN, "tempRoutes", COL_RSSN);
+            //joinCondition.EqualsCondition("routesToUpdate", COL_Code, "tempRoutes", COL_Code);
+            //joinCondition.EqualsCondition("routesToUpdate", COL_DNSet, "tempRoutes", COL_DNSet);
 
-            queryContext.ExecuteNonQuery();
+            //queryContext.ExecuteNonQuery();
         }
 
         private static RDBTempTableQuery CreateRouteTempTableForJoin(IEnumerable<HuaweiConvertedRoute> routes, string RouteTempTABLE_NAME, RDBQueryContext queryContext)
