@@ -226,6 +226,7 @@ namespace Vanrise.Data.Postgres
                     foreach (var objectItem in objectList)
                         inStream.WriteLine(objectItem.ConvertToString());
                 }
+                conn.Close();
             }
         }
 
