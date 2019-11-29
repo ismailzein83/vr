@@ -36,7 +36,6 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
                     $scope.scopeModel.gPVoiceCustomerNo =  payload.partSettings.GPVoiceCustomerNo ;
                     $scope.scopeModel.serviceId = payload.partSettings.ServiceId;
                     $scope.scopeModel.customerPO = payload.partSettings.CustomerPO;
-                    $scope.scopeModel.oracleId = payload.partSettings.OracleId;
                 }
 
             };
@@ -49,7 +48,6 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
                     ServiceType: $scope.scopeModel.serviceType,
                     CompanyId: $scope.scopeModel.companyId,
                     GPVoiceCustomerNo: $scope.scopeModel.gPVoiceCustomerNo,
-                    OracleId: $scope.scopeModel.oracleId,
                     ServiceId: $scope.scopeModel.serviceId,
                     CustomerPO: $scope.scopeModel.customerPO
                 };

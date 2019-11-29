@@ -54,12 +54,6 @@ namespace Retail.Zajil.MainExtensions
                     },
                     new GenericFieldDefinition()
                     {
-                        Name = "OracleId",
-                        Title = "Oracle Id",
-                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
-                    },
-                    new GenericFieldDefinition()
-                    {
                         Name = "ServiceId",
                         Title = "Service Id",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
