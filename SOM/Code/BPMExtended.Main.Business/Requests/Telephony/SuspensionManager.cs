@@ -72,7 +72,7 @@ namespace BPMExtended.Main.Business
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
-                        PhoneNumber = phoneNumber.ToString(),
+                        //PhoneNumber = phoneNumber.ToString(),
                         LinePathId = linePathId.ToString()
                     }
 
@@ -127,7 +127,6 @@ namespace BPMExtended.Main.Business
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
-                        RequestId = requestId.ToString()
                     }
 
                 };

@@ -51,7 +51,7 @@ namespace BPMExtended.Main.SOMAPI
         public string PhoneNumber { get; set; }
 
         public string LinePathId { get; set; }
-        public List<ContractService> ContractServices { get; set; }
+        public List<ContractService> Services { get; set; }
         public List<DepositDocument> DepositServices { get; set; }
 
     }

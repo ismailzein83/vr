@@ -12,6 +12,6 @@ namespace BPMExtended.Main.SOMAPI
         public CommonInputArgument CommonInputArgument { get; set; }
         public PaymentData PaymentData { get; set; }
         //public List<ContractService> ContractServices { get; set; }
-        //public string LinePathId { get; set; }
+        public string LinePathId { get; set; }
     }
 }

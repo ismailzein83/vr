@@ -123,7 +123,6 @@ namespace BPMExtended.Main.Business
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
-                        RequestId = requestId.ToString()
                     }
 
                 };

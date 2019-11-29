@@ -39,6 +39,70 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StNewRatePlanId");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
+            esq.AddColumn("StPathID");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                var newRatePlanId = entities[0].GetColumnValue("StNewRatePlanId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                string pathId = entities[0].GetColumnValue("StPathID").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                SOMRequestInput<ChangeRatePlanRequestInput> somRequestInput = new SOMRequestInput<ChangeRatePlanRequestInput>
+                {
+
+                    InputArguments = new ChangeRatePlanRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString()
+                        },
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        ServicesToRemove = new ServiceManager().ReadProductChangeServices(contractId.ToString(), newRatePlanId.ToString()).ServicesAreUnavailableInNewRP,
+                        LinePathId = pathId.ToString(),
+                        NewRatePlanId = newRatePlanId.ToString()
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ChangeRatePlanRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitChangeRatePlan/StartProcess", somRequestInput);
+                }
+                var manager = new BusinessEntityManager();
+                manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
+
+            }
+
+        }
+
+        public void FinalizeChangeRatePlan(Guid requestId)
+        {
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangeRatePlan");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StNewRatePlanId");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StIsPaid");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -77,7 +141,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ChangeRatePlanRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ChangeRatePlan/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ChangeRatePlanRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/FinalizeChangeRatePlan/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);

@@ -129,7 +129,7 @@ namespace BPMExtended.Main.Business
                         CountryId = "206",
                         CSO = info.csoBSCSId,//info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
-                        ContractServices = contractServices,
+                        Services = contractServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),
@@ -259,6 +259,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StContractID");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StIsPaid");
+            esq.AddColumn("StPathID");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -268,6 +269,7 @@ namespace BPMExtended.Main.Business
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                string pathId = entities[0].GetColumnValue("StPathID").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<ActivateTelephonyContractInput> somRequestInput = new SOMRequestInput<ActivateTelephonyContractInput>
@@ -280,6 +282,7 @@ namespace BPMExtended.Main.Business
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
+                        LinePathId = pathId,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
@@ -293,7 +296,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/SubmitActivateContractNoCabiling/StartProcess", somRequestInput);
                 }
                 var manager = new BusinessEntityManager();
                 manager.InsertSOMRequestToProcessInstancesLogs(requestId, output);
