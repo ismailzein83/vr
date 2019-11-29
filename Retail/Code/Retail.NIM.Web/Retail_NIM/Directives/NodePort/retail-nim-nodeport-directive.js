@@ -76,6 +76,7 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                 $scope.scopeModel.isLoadingNodeParts = true;
                 $scope.scopeModel.isNodeSelected = false;
                 $scope.scopeModel.isNodeDisabled = false;
+                $scope.scopeModel.hasChildren = true;
 
                 $scope.scopeModel.onNodePortTypeSelectorReady = function (api) {
                     nodePortTypeSelectorAPI = api;
@@ -235,31 +236,22 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                                     getChildNode: function () {
                                         var thirdPromises = [loadNodeTypeSelector()];
                                         if (nodeId != undefined) {
-                                            thirdPromises.push(loadNodeSelector());
+                                            nodePartTreeSelectedDeferred = UtilsService.createPromiseDeferred();
+                                            thirdPromises.push(loadNodeSelector(), nodeSelectedPromiseDeferred.promise, nodePartTreeReadyDeferred.promise);
                                         }
 
                                         return {
                                             promises: thirdPromises,
                                             getChildNode: function () {
                                                 var fourthPromises = [];
-                                                if (nodePartId != undefined) {
-                                                    nodePartTreeSelectedDeferred = UtilsService.createPromiseDeferred();
-                                                    fourthPromises.push(nodeSelectedPromiseDeferred.promise, nodePartTreeReadyDeferred.promise);
+                                                if (nodePortId != undefined) {
+                                                    fourthPromises.push(loadNodePortSelector());
+                                                }
+                                                if (nodeId != undefined) {
+                                                    fourthPromises.push(getNodeParts());
                                                 }
                                                 return {
-                                                    promises: fourthPromises,
-                                                    getChildNode: function () {
-                                                        var fifthPromises = [];
-                                                        if (nodePortId != undefined) {
-                                                            fifthPromises.push(loadNodePortSelector());
-                                                        }
-                                                        if (nodeId != undefined) {
-                                                            fifthPromises.push( getNodeParts());
-                                                        }
-                                                        return {
-                                                            promises: fifthPromises
-                                                        };
-                                                    }
+                                                    promises: fourthPromises
                                                 };
                                             }
                                         };
@@ -342,7 +334,7 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                         },
                         selectedIds: nodePortId,
                         isDisabled: disableNodePort,
-                        selectIfSingleItem: true
+                        //selectIfSingleItem: true
                     };
                     VRUIUtilsService.callDirectiveLoad(nodePortSelectorAPI, nodePortSelectorPayload, nodePortSelectorLoadPromiseDeferred);
                 });
@@ -363,7 +355,7 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                             }]
                         },
                         isDisabled: disableNode,
-                        selectIfSingleItem: true
+                        //selectIfSingleItem: true
                     };
                     VRUIUtilsService.callDirectiveLoad(nodeSelectorAPI, nodeSelectorPayload, nodeSelectorLoadPromiseDeferred);
                 });
@@ -379,13 +371,17 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                             Number: nodeNumber,
                             ChildNodes: response.ChildNodes
                         };
-                        nodeParts.push(rootNode);
+                        $scope.scopeModel.hasChildren = rootNode.ChildNodes.length > 0;
 
-                        buildNodePartTree();
+                        if ($scope.scopeModel.hasChildren) {
+                            nodeParts.push(rootNode);
 
-                        $scope.scopeModel.currentNodePartNode = nodePartId != undefined ? nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts, nodePartId, "nodePartId", "childParts") : undefined;
+                            buildNodePartTree();
 
-                        nodePartTreeAPI.refreshTree($scope.scopeModel.nodeParts);
+                            $scope.scopeModel.currentNodePartNode = nodePartId != undefined ? nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts, nodePartId, "nodePartId", "childParts") : nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts);
+
+                            nodePartTreeAPI.refreshTree($scope.scopeModel.nodeParts);
+                        }
                         $scope.scopeModel.isLoadingNodeParts = false;
 
                     }
@@ -454,7 +450,8 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                                 NodeId: nodeId,
                                 NodePartId: nodePartId,
                                 ConnectionDirection: connectionDirection
-                            }]
+                            }],
+                            IncludedIds: nodePortId != undefined ? [nodePortId] : undefined
                         },
                         selectIfSingleItem: true
                     };

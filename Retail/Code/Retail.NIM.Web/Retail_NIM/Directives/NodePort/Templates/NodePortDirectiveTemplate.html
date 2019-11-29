@@ -7,7 +7,7 @@
 </span>
 
 
-<vr-columns width="fullrow">
+<vr-columns width="fullrow" ng-show="scopeModel.hasChildren">
     <vr-section header="Port Location" ng-if="scopeModel.isNodeSelected" width="fullrow" vr-loader="scopeModel.isLoadingNodeParts">
         <vr-treeview on-ready="scopeModel.onNodePartTreeReady"
                      datachildrenfield="childParts"
