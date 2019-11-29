@@ -3541,6 +3541,12 @@ vr-label[fullwidth] .vr-control-label {
     display: inline-block !important;
     width: 100% !important;
 }
+
+vr-label[clickable] .vr-control-label {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 label[vr-alert].alert {
     padding: 5px;
     margin: 0px;
