@@ -33,6 +33,8 @@
                 if (tAttrs.isclickable != undefined)
                     clickclass = " hand-cursor ";
                 
+                if (tAttrs.onclick != undefined)
+                    clickclass = " clickable ";
                 var newElement = '<label ng-click="onLabelClick()" class="control-label vr-control-label ' + color + clickclass + ' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:normal;' : '') + hasbackgroundcolorSection + ' " >'
                     + tElement.html() + '</label>' + hintSection;
                 tElement.html(newElement);

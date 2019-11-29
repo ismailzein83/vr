@@ -3542,7 +3542,7 @@ vr-label[fullwidth] .vr-control-label {
     width: 100% !important;
 }
 
-vr-label[clickable] .vr-control-label {
+vr-label .vr-control-label.clickable {
     text-decoration: underline;
     cursor: pointer;
 }
