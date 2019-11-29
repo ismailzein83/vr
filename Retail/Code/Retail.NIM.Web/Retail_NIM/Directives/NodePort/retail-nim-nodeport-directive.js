@@ -330,7 +330,8 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                                 NodeId: nodeId,
                                 NodePartId: nodePartId,
                                 ConnectionDirection: connectionDirection
-                            }]
+                            }],
+                            IncludedIds: nodePortId != undefined ? [nodePortId] : undefined,
                         },
                         selectedIds: nodePortId,
                         isDisabled: disableNodePort,
