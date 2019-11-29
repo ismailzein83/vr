@@ -33,7 +33,8 @@ namespace Retail.Teles.Business
                                 TelesEnterpriseSiteFilterContext context = new TelesEnterpriseSiteFilterContext
                                 {
                                     AccountBEDefinitionId = filter.AccountBEDefinitionId,
-                                    EnterpriseSiteId = telesEnterpriseInfo.TelesSiteId
+                                    EnterpriseSiteId = telesEnterpriseInfo.TelesSiteId,
+                                    EnterpriseId = enterpriseId
                                 };
                                 if (item.IsExcluded(context))
                                     return false;
@@ -129,9 +130,9 @@ namespace Retail.Teles.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            if (CanMapTelesSite(input.AccountBEDefinitionId, input.AccountId, input.TelesSiteId) && IsMapSiteToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
+            if (CanMapTelesSite(input.AccountBEDefinitionId, input.AccountId, input.TelesSiteId, input.TelesEnterpriseId) && IsMapSiteToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
             {
-                bool result = TryMapSiteToAccount(input.AccountBEDefinitionId, input.AccountId, input.TelesSiteId);
+                bool result = TryMapSiteToAccount(input.AccountBEDefinitionId, input.AccountId, input.TelesSiteId, null, input.TelesEnterpriseId);
                 if (result)
                 {
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
@@ -169,11 +170,14 @@ namespace Retail.Teles.Business
             return updateOperationOutput;
         }
 
-        public bool CanMapTelesSite(Guid accountBEDefinitionId, long accountId, string enterpriseSiteId)
+        public bool CanMapTelesSite(Guid accountBEDefinitionId, long accountId, string enterpriseSiteId, string enterpriseId = null)
         {
-            var telesEnterpriseId = new TelesEnterpriseManager().GetParentAccountEnterpriseId(accountBEDefinitionId, accountId);
-            telesEnterpriseId.ThrowIfNull("telesEnterpriseId");
-            var cachedAccountsBySites = GetCachedAccountsBySites(accountBEDefinitionId, telesEnterpriseId);
+            if (string.IsNullOrEmpty(enterpriseId))
+            {
+                enterpriseId = new TelesEnterpriseManager().GetParentAccountEnterpriseId(accountBEDefinitionId, accountId);
+                enterpriseId.ThrowIfNull("telesEnterpriseId");
+            }
+            var cachedAccountsBySites = GetCachedAccountsBySites(accountBEDefinitionId, enterpriseId);
             if (cachedAccountsBySites != null && cachedAccountsBySites.ContainsKey(enterpriseSiteId))
                 return false;
             return true;
@@ -226,9 +230,9 @@ namespace Retail.Teles.Business
         {
             return _accountBEManager.DeleteAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, accountId);
         }
-        public bool TryMapSiteToAccount(Guid accountBEDefinitionId, long accountId, string telesSiteId, ProvisionStatus? status = null)
+        public bool TryMapSiteToAccount(Guid accountBEDefinitionId, long accountId, string telesSiteId, ProvisionStatus? status = null, string telesEnterpriseId = null)
         {
-            SiteAccountMappingInfo siteAccountMappingInfo = new SiteAccountMappingInfo { TelesSiteId = telesSiteId, Status = status };
+            SiteAccountMappingInfo siteAccountMappingInfo = new SiteAccountMappingInfo { TelesEnterpriseId = telesEnterpriseId, TelesSiteId = telesSiteId, Status = status };
             return _accountBEManager.UpdateAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, accountId, siteAccountMappingInfo);
         }
         public static void SetCacheExpired()

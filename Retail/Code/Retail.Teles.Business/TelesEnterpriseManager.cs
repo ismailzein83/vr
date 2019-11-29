@@ -144,7 +144,7 @@ namespace Retail.Teles.Business
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
-            
+
             return updateOperationOutput;
         }
 
@@ -238,8 +238,8 @@ namespace Retail.Teles.Business
             var parentAccount = _accountBEManager.GetParentAccount(accountBEDefinitionId, accountId);
             parentAccount.ThrowIfNull("parentAccount", accountId);
             EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(parentAccount);
-            enterpriseAccountMappingInfo.ThrowIfNull("enterpriseAccountMappingInfo", accountId);
-            return enterpriseAccountMappingInfo.TelesEnterpriseId;
+            //enterpriseAccountMappingInfo.ThrowIfNull("enterpriseAccountMappingInfo", accountId);
+            return enterpriseAccountMappingInfo != null ? enterpriseAccountMappingInfo.TelesEnterpriseId : null;
         }
         public bool DoesUserHaveExecutePermission(Guid accountBEDefinitionId)
         {

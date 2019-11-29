@@ -21,7 +21,11 @@ namespace Retail.Teles.Business
         CanChangeUserMapping = 7,
         CanUnmapCompany = 8,
         CanUnmapSite = 9,
-        CanUnmapUser = 10
+        CanUnmapUser = 10,
+        IsMapped = 11,
+        IsNotMapped = 12,
+        IsBlocked = 13,
+        IsNotBlocked = 14
     }
     public class TelesAccountCondition : AccountCondition
     {
@@ -55,12 +59,36 @@ namespace Retail.Teles.Business
                     return AllowUserMap(context.Account, this.UserTypeId);
                 case Business.ConditionType.CanChangeUserMapping:
                     return CanChangeUserMapping(context.Account, this.UserTypeId);
+
                 case Business.ConditionType.CanUnmapCompany:
                     return CanUnmapCompany(context.Account, this.CompanyTypeId);
                 case Business.ConditionType.CanUnmapSite:
                     return CanUnmapSite(context.Account, this.SiteTypeId);
                 case Business.ConditionType.CanUnmapUser:
                     return CanUnmapUser(context.Account, this.UserTypeId);
+
+                case Business.ConditionType.IsMapped:
+                    if(context.Account.TypeId.Equals(CompanyTypeId))
+                        return IsEnterpriseMapped(context.Account);
+                    else if (context.Account.TypeId.Equals(SiteTypeId))
+                        return IsSiteMapped(context.Account);
+                    else if (UserTypeId.HasValue && context.Account.TypeId.Equals(UserTypeId.Value))
+                        return IsUserMapped(context.Account);
+                    return false;
+
+                case Business.ConditionType.IsNotMapped:
+                    if (context.Account.TypeId.Equals(CompanyTypeId))
+                        return !IsEnterpriseMapped(context.Account);
+                    else if (context.Account.TypeId.Equals(SiteTypeId))
+                        return !IsSiteMapped(context.Account);
+                    else if (UserTypeId.HasValue && context.Account.TypeId.Equals(UserTypeId.Value))
+                        return !IsUserMapped(context.Account);
+                    return false;
+
+                case Business.ConditionType.IsBlocked:
+                    return IsChangedUserRGs(context.Account, false, null);
+                case Business.ConditionType.IsNotBlocked:
+                    return !IsChangedUserRGs(context.Account, false, null);
                 default:
                     return false;
             }

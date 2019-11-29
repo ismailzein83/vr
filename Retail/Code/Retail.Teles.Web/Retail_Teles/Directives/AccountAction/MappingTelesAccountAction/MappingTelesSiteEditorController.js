@@ -2,7 +2,7 @@
 
     "use strict";
 
-    MappingTelesSiteEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_Teles_SiteAPIService', 'Retail_BE_AccountBEDefinitionAPIService','Retail_Teles_EnterpriseAPIService','InsertOperationResultEnum'];
+    MappingTelesSiteEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_Teles_SiteAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_Teles_EnterpriseAPIService', 'InsertOperationResultEnum'];
 
     function MappingTelesSiteEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_Teles_SiteAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_Teles_EnterpriseAPIService, InsertOperationResultEnum) {
         var isEditMode;
@@ -14,8 +14,14 @@
         var accountBEDefinitionId;
         var actionDefinitionId;
 
+
+        var enterprisesDirectiveAPI;
+        var enterprisesDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var enterprisesSelectedDeferred;
+
         var sitesDirectiveAPI;
         var sitesDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -35,40 +41,95 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onEnterprisesDirectiveReady = function (api) {
+                enterprisesDirectiveAPI = api;
+                enterprisesDirectiveReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onSitesDirectiveReady = function (api) {
                 sitesDirectiveAPI = api;
                 sitesDirectiveReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onEnterprisesSelectionChanged = function (selectedItem) {
+                if (selectedItem != undefined) {
+                    if (enterprisesSelectedDeferred != undefined) {
+                        enterprisesSelectedDeferred.resolve();
+                    } else {
+                        var sitesDirectivePayload = {
+                            vrConnectionId: accountActionDefinitionEntity.ActionDefinitionSettings.VRConnectionId,
+                            enterpriseId: selectedItem.TelesEnterpriseId,
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.Teles.Business.SitesNotMappedToAccountFilter,Retail.Teles.Business",
+                                    EditedSiteId: telesInfoEntity != undefined ? telesInfoEntity.TelesSiteId : undefined,
+                                    AccountId: accountId
+                                }],
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            }
+                        };
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingSelector = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sitesDirectiveAPI, sitesDirectivePayload, setLoader);
+
+                    }
+                } else {
+                    sitesDirectiveAPI.clearDataSource();
+                }
+            };
+
             $scope.scopeModel.save = function () {
                 return insert();
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 
         function load() {
             $scope.scopeModel.isLoading = true;
             UtilsService.waitMultipleAsyncOperations([getAccountActionDefinition, getAccountEnterpriseId]).then(function () {
+                if (isEditMode) {
+                    enterpriseId = telesInfoEntity.TelesEnterpriseId != undefined ? telesInfoEntity.TelesEnterpriseId : enterpriseId;
+                }
+
+                if (accountActionDefinitionEntity != undefined && accountActionDefinitionEntity.ActionDefinitionSettings != undefined)
+                    $scope.scopeModel.showEnterprise = accountActionDefinitionEntity.ActionDefinitionSettings.ShowEnterprise;
+                if ($scope.scopeModel.showEnterprise) {
+                    if (enterpriseId != undefined) {
+                        enterprisesSelectedDeferred = UtilsService.createPromiseDeferred();
+                    }
+                }
+
                 loadAllControls();
             });
         }
-        function getAccountActionDefinition()
-        {
+        function getAccountActionDefinition() {
             return Retail_BE_AccountBEDefinitionAPIService.GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId).then(function (reponse) {
                 accountActionDefinitionEntity = reponse;
             });
         }
         function getAccountEnterpriseId() {
             return Retail_Teles_EnterpriseAPIService.GetParentAccountEnterpriseId(accountBEDefinitionId, accountId).then(function (response) {
-                enterpriseId = response
+                enterpriseId = response;
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
+            var promises = [setTitle, loadStaticData];
+            if ($scope.scopeModel.showEnterprise) {
+                promises.push(loadEnterprisesSelector);
+            }
+            if (enterpriseId != undefined) {
+                promises.push(loadSitesSelector);
+            }
+
+            return UtilsService.waitMultipleAsyncOperations(promises).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+                enterprisesSelectedDeferred = undefined;
             });
 
             function setTitle() {
@@ -76,15 +137,46 @@
             }
             function loadStaticData() {
             }
-            function loadSettingsDirective() {
-                var sitesDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                sitesDirectiveReadyDeferred.promise.then(function () {
+
+            function loadEnterprisesSelector() {
+                var enterprisesDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                enterprisesDirectiveReadyDeferred.promise.then(function () {
                     var enterprisesDirectivePayload;
                     if (accountActionDefinitionEntity != undefined && accountActionDefinitionEntity.ActionDefinitionSettings != undefined) {
                         enterprisesDirectivePayload = {
                             vrConnectionId: accountActionDefinitionEntity.ActionDefinitionSettings.VRConnectionId,
-                            enterpriseId:enterpriseId,
+                            selectedIds: enterpriseId,
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.Teles.Business.EnterpriseNotMappedToAccountFilter,Retail.Teles.Business",
+                                    EditedEnterpriseId: enterpriseId,
+                                }],
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            }
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(enterprisesDirectiveAPI, enterprisesDirectivePayload, enterprisesDirectiveLoadDeferred);
+                });
+
+                return enterprisesDirectiveLoadDeferred.promise;
+            }
+
+
+            function loadSitesSelector() {
+                var sitesDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                var promises = [sitesDirectiveReadyDeferred.promise];
+
+                if (enterprisesSelectedDeferred != undefined)
+                    promises.push(enterprisesSelectedDeferred.promise);
+
+                UtilsService.waitMultiplePromises(promises).then(function () {
+                    var enterprisesDirectivePayload;
+                    if (accountActionDefinitionEntity != undefined && accountActionDefinitionEntity.ActionDefinitionSettings != undefined) {
+                        enterprisesDirectivePayload = {
+                            vrConnectionId: accountActionDefinitionEntity.ActionDefinitionSettings.VRConnectionId,
+                            enterpriseId: enterpriseId,
                             selectedIds: telesInfoEntity != undefined ? telesInfoEntity.TelesSiteId : undefined,
                             filter: {
                                 Filters: [{
@@ -132,6 +224,7 @@
 
         function buildMapSiteToAccountObjFromScope() {
             return {
+                TelesEnterpriseId: $scope.scopeModel.showEnterprise ? enterprisesDirectiveAPI.getSelectedIds() : enterpriseId,
                 TelesSiteId: sitesDirectiveAPI.getSelectedIds(),
                 AccountBEDefinitionId: accountBEDefinitionId,
                 AccountId: accountId,

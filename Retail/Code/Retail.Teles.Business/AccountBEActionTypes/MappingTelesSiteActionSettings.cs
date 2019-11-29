@@ -20,6 +20,7 @@ namespace Retail.Teles.Business.AccountBEActionTypes
             get { return "MappingTelesSite"; }
         }
         public Guid VRConnectionId { get; set; }
+        public bool ShowEnterprise { get; set; }
 
         public MappingTelesSiteActionSecurity Security { get; set; }
 

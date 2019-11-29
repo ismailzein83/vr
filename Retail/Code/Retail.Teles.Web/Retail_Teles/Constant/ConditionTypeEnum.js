@@ -9,6 +9,9 @@
     CanChangeUserMapping: { value: 7, description: 'Can Change User Mapping' },
     CanUnmapCompany: { value: 8, description: 'Can Unmap Company' },
     CanUnmapSite: { value: 9, description: 'Can Unmap Site' },
-    CanUnmapUser: { value: 10, description: 'Can Unmap User' }
-
+    CanUnmapUser: { value: 10, description: 'Can Unmap User' },
+    IsMapped: { value: 11, description: 'Is Mapped' },
+    IsNotMapped: { value: 12, description: 'Is Not Mapped' },
+    IsBlocked: { value: 13, description: 'Is Blocked' },
+    IsNotBlocked: { value: 14, description: 'Is Not Blocked' },
 });

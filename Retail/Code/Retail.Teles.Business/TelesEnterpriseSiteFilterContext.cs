@@ -12,5 +12,7 @@ namespace Retail.Teles.Business
         public string EnterpriseSiteId { get; set; }
 
         public Guid AccountBEDefinitionId { get; set; }
+
+        public string EnterpriseId { get; set; }
     }
 }

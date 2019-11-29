@@ -9,6 +9,7 @@ namespace Retail.Teles.Entities
 {
     public class SiteAccountMappingInfo : BaseAccountExtendedSettings
     {
+        public string TelesEnterpriseId { get; set; }
         public string TelesSiteId { get; set; }
         public ProvisionStatus? Status { get; set; }
 

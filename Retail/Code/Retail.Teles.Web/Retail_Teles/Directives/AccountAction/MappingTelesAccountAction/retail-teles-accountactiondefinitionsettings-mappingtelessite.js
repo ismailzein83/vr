@@ -42,6 +42,7 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelessite', ['Ut
                 api.load = function (payload) {
                     if(payload != undefined && payload.accountActionDefinitionSettings != undefined)
                     {
+                        $scope.scopeModel.showEnterprise = payload.accountActionDefinitionSettings.ShowEnterprise;
                     }
                     var promises = [];
 
@@ -79,6 +80,7 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelessite', ['Ut
                     return {
                         $type: 'Retail.Teles.Business.AccountBEActionTypes.MappingTelesSiteActionSettings, Retail.Teles.Business',
                         VRConnectionId: conectionTypeAPI.getSelectedIds(),
+                        ShowEnterprise: $scope.scopeModel.showEnterprise,
                         Security:{
                             ExecutePermission: executePermissionAPI.getData()
                         }

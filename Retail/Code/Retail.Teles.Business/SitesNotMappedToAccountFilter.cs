@@ -19,10 +19,18 @@ namespace Retail.Teles.Business
             account.ThrowIfNull("account",this.AccountId);
             if(!account.ParentAccountId.HasValue)
              throw  new NullReferenceException("account.ParentAccountId");
-            EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, account.ParentAccountId.Value);
-            enterpriseAccountMappingInfo.ThrowIfNull("enterpriseAccountMappingInfo");
+
+            string enterpriseId = context.EnterpriseId;
+            if(enterpriseId == null)
+            {
+                EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, account.ParentAccountId.Value);
+                enterpriseAccountMappingInfo.ThrowIfNull("enterpriseAccountMappingInfo");
+                enterpriseId = enterpriseAccountMappingInfo.TelesEnterpriseId;
+            }
+
+
             TelesSiteManager telesSiteManager = new TelesSiteManager();
-            var cachedAccountsBySites = telesSiteManager.GetCachedAccountsBySites(context.AccountBEDefinitionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
+            var cachedAccountsBySites = telesSiteManager.GetCachedAccountsBySites(context.AccountBEDefinitionId, enterpriseId);
             if (this.EditedSiteId != null && EditedSiteId == context.EnterpriseSiteId)
                 return false;
             if (cachedAccountsBySites != null && cachedAccountsBySites.ContainsKey(context.EnterpriseSiteId))

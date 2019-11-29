@@ -12,6 +12,7 @@ namespace Retail.Teles.Entities
     }
     public interface ITelesEnterpriseSiteFilterContext
     {
+        string EnterpriseId { get; }
         string EnterpriseSiteId { get; }
         Guid AccountBEDefinitionId { get; set; }
     }

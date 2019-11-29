@@ -2,6 +2,9 @@
     <vr-tab header="'Definition'">
         <vr-row>
             <vr-common-connection-selector on-ready="scopeModel.onConectionTypeReady" normal-col-num="4" isrequired="true"></vr-common-connection-selector>
+            <vr-columns colnum="1">
+                <vr-switch value="scopeModel.showEnterprise" label="Show Enterprise"></vr-switch>
+            </vr-columns>
         </vr-row>
     </vr-tab>
     <vr-tab header="'Security'">
