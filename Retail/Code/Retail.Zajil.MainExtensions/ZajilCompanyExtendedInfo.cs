@@ -24,7 +24,7 @@ namespace Retail.Zajil.MainExtensions
         public int CompanyId { get; set; }
 
         public string GPVoiceCustomerNo { get; set; }
-
+        public string OracleId { get; set; }
         public string ServiceId { get; set; }
 
         public string CustomerPO { get; set; }
@@ -41,6 +41,7 @@ namespace Retail.Zajil.MainExtensions
                 case "GPVoiceCustomerNo": return this.GPVoiceCustomerNo;
                 case "ServiceId": return this.ServiceId;
                 case "CustomerPO": return this.CustomerPO;
+                case "OracleId": return this.OracleId;
                 default: return null;
             }
         }
