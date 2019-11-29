@@ -425,7 +425,12 @@ namespace BPMExtended.Main.Business
             new CRMCustomerManager().CancelRecordInWaitingListPoolIfExist(requestId);
             return "";
         }
-
+        public string SetRequestFailed(string requestId)
+        {
+            SetRequestHeaderFailed(requestId);
+            SetRequestObjectTypeAsEndProcess(requestId);
+            return "";
+        }
 
         public void SetRequestObjectTypeAsEndProcess(string requestId)
         {
@@ -470,6 +475,29 @@ namespace BPMExtended.Main.Business
                 }
             }
 
+        }
+        public string SetRequestHeaderFailed(string requestId)
+        {
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId));
+            var collections = eSQ.GetEntityCollection(UserConnection);
+
+            if (collections != null)
+            {
+                if (collections.Count > 0)
+                {
+                    recordEntity = collections[0];
+                    recordEntity.SetColumnValue("StStatusId", Constant.FAILED_STATUS);
+                    recordEntity.Save();
+                }
+            }
+            return "";
         }
         public string CancelRequestHeader(string requestId)
         {

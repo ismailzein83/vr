@@ -18,5 +18,6 @@ namespace BPMExtended.Main.Business
         public const string SUBMITTED_TO_OM_STATUS = "b6243a19-dc8b-483b-96a0-6b56d1e3b5ca";
         public const string PENDING_CUSTOMER_RETURN_STATUS = "9B7BA6FB-D4C2-4AE7-B940-2119C7BD460A";
         public const string REMOVED_STATUS = "466C99AD-A47E-4F96-A540-4F62DFCB9746";
+        public const string FAILED_STATUS = "794AAF92-4418-4849-B91A-3EBE8EE0C37B";
     }
 }
