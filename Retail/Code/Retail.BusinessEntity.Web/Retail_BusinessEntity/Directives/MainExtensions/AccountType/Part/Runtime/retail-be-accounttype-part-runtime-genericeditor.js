@@ -26,6 +26,7 @@ app.directive('retailBeAccounttypePartRuntimeGenericeditor', ['UtilsService', 'V
             var items;
             var context;
             var dataRecordTypeFields;
+            var getContextPromise;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -51,6 +52,9 @@ app.directive('retailBeAccounttypePartRuntimeGenericeditor', ['UtilsService', 'V
                         }
                         dataRecord = payload.partSettings != undefined ? payload.partSettings.DataRecord : undefined;
                     }
+
+                    getContextPromise = getContext();
+                    
                     $scope.scopeModel.tabItems = [];
 
                     if (items != undefined && items.length > 0) {
@@ -65,6 +69,7 @@ app.directive('retailBeAccounttypePartRuntimeGenericeditor', ['UtilsService', 'V
                             buildTabItems(tabItem);
                         }
                     }
+
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -96,7 +101,7 @@ app.directive('retailBeAccounttypePartRuntimeGenericeditor', ['UtilsService', 'V
                     tabItem.rootEditorRuntimeDirectiveAPI = api;
                     item.readyPromiseDeferred.resolve();
                 };
-                UtilsService.waitMultiplePromises([item.readyPromiseDeferred.promise, getContext()]).then(function () {
+                UtilsService.waitMultiplePromises([item.readyPromiseDeferred.promise, getContextPromise]).then(function () {
                     var runtimeEditorPayload = {
                         selectedValues: dataRecord,
                         dataRecordTypeId: dataRecordTypeId,
