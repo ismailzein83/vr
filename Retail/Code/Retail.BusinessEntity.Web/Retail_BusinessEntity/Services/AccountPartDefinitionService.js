@@ -28,9 +28,34 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionEditor.html', parameters, settings);
         };
+        
+        function addAccountPartGenericEditorItemDefinition(parameters, onAccountPartGenericEditorItemDefinitionAdded) {
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onAccountPartGenericEditorItemDefinitionAdded = onAccountPartGenericEditorItemDefinitionAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/AccountType/Part/Definition/Templates/AccountTypeGenericEditorPartDefinitionItemTemplate.html', parameters, settings);
+        }
+
+        function editAccountPartGenericEditorItemDefinition(parameters, onAccountPartGenericEditorItemDefinitionUpdated) {
+            
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onAccountPartGenericEditorItemDefinitionUpdated = onAccountPartGenericEditorItemDefinitionUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/AccountType/Part/Definition/Templates/AccountTypeGenericEditorPartDefinitionItemTemplate.html', parameters, settings);
+        }
+
         return {
             addAccountPartDefinition: addAccountPartDefinition,
             editAccountPartDefinition: editAccountPartDefinition,
+            addAccountPartGenericEditorItemDefinition: addAccountPartGenericEditorItemDefinition,
+            editAccountPartGenericEditorItemDefinition: editAccountPartGenericEditorItemDefinition
         };
     }
 
