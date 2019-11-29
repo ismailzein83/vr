@@ -117,6 +117,12 @@ namespace TOne.WhS.Routing.Data.SQL
                 }
             }
 
+            if(riskyMarginCodeNB > 0)
+            {
+                Object preparedAddRoutes = FinishDBApplyStream(dbApplyAddStream);
+                ApplyCustomerRouteMarginForDB(preparedAddRoutes);
+            }
+
             trackStep($"Finished save RiskyMarginCode Data. Events count: {riskyMarginCodes.Count}");
         }
 
