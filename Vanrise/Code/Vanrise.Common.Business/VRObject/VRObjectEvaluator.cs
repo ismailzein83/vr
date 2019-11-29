@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -12,14 +9,12 @@ namespace Vanrise.Common.Business
         Dictionary<string, VRObjectVariable> objectVariables = new Dictionary<string, VRObjectVariable>();
         Dictionary<string, dynamic> objects;
 
-        VRObjectTypeDefinitionManager vrObjectTypeDefinitionManager;
+        VRObjectTypeDefinitionManager vrObjectTypeDefinitionManager = new VRObjectTypeDefinitionManager();
 
-        public VRObjectEvaluator(VRObjectVariableCollection vrObjectVariableCollection, Dictionary<string, dynamic> objects) 
+        public VRObjectEvaluator(VRObjectVariableCollection vrObjectVariableCollection, Dictionary<string, dynamic> objects)
         {
             this.objectVariables = vrObjectVariableCollection;
             this.objects = objects;
-
-            vrObjectTypeDefinitionManager = new VRObjectTypeDefinitionManager();
         }
 
         public dynamic GetPropertyValue(string objectName, string propertyName)
@@ -27,19 +22,12 @@ namespace Vanrise.Common.Business
             dynamic obj;
             VRObjectType objectType;
             VRObjectTypePropertyDefinition objectTypePropertyDefinition;
-            dynamic propertyValue = null;
-
             GetObjectAndObjectType(objectName, propertyName, out obj, out objectType, out objectTypePropertyDefinition);
 
-            var propertyEvaluatorContext = new VRObjectPropertyEvaluatorContext
-            {
-                Object = obj,
-                ObjectType = objectType
-            };
-            
-            if(objectTypePropertyDefinition != null)
-                propertyValue = objectTypePropertyDefinition.PropertyEvaluator.GetPropertyValue(propertyEvaluatorContext);
+            objectTypePropertyDefinition.PropertyEvaluator.ThrowIfNull("objectTypePropertyDefinition.PropertyEvaluator");
 
+            var propertyEvaluatorContext = new VRObjectPropertyEvaluatorContext { Object = obj, ObjectType = objectType };
+            dynamic propertyValue = objectTypePropertyDefinition.PropertyEvaluator.GetPropertyValue(propertyEvaluatorContext);
             return propertyValue;
         }
 
@@ -48,42 +36,35 @@ namespace Vanrise.Common.Business
             obj = null;
             objectType = null;
             objectTypePropertyDefinition = null;
+
             VRObjectVariable objectVariable = null;
+            if (!objectVariables.TryGetValue(objectName, out objectVariable))
+                throw new NullReferenceException($"objectVariable '{objectName}'");
 
-            if (objectVariables.TryGetValue(objectName, out objectVariable))
-            {
-                VRObjectTypeDefinition objectTypeDefinition = GetObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId);
-                if (objectTypeDefinition != null)
-                    objectType = objectTypeDefinition.Settings.ObjectType;
+            VRObjectTypeDefinition objectTypeDefinition = GetObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId);
+            objectTypeDefinition.ThrowIfNull("objectTypeDefinition", objectVariable.VRObjectTypeDefinitionId);
+            objectTypeDefinition.Settings.ThrowIfNull("objectTypeDefinition.Settings", objectVariable.VRObjectTypeDefinitionId);
+            objectTypeDefinition.Settings.ObjectType.ThrowIfNull("objectTypeDefinition.Settings.ObjectType", objectVariable.VRObjectTypeDefinitionId);
 
-                if(objectType == null)
-                    throw new NullReferenceException(String.Format("objectType '{0}'", objectVariable.VRObjectTypeDefinitionId));
+            objectType = objectTypeDefinition.Settings.ObjectType;
 
-                if (!objectTypeDefinition.Settings.Properties.TryGetValue(propertyName, out objectTypePropertyDefinition))
-                    throw new NullReferenceException(String.Format("objectTypePropertyDefinition '{0}'", objectVariable.VRObjectTypeDefinitionId));
+            if (!objectTypeDefinition.Settings.Properties.TryGetValue(propertyName, out objectTypePropertyDefinition))
+                throw new NullReferenceException($"objectTypePropertyDefinition '{propertyName}' of objectTypeDefinition '{objectVariable.VRObjectTypeDefinitionId}'");
 
-                //if object is null GetDefaultValue
-                if (!objects.TryGetValue(objectName, out obj))
-                    obj = objectType.GetDefaultValue();
-                
-            }
-            else
-            {
-                throw new NullReferenceException(String.Format("objectVariable '{0}'", objectName));
-            }
+            if (objectTypePropertyDefinition.PropertyEvaluator == null)
+                throw new NullReferenceException($"objectTypePropertyDefinition.PropertyEvaluator '{propertyName}' of objectTypeDefinition '{objectVariable.VRObjectTypeDefinitionId}'");
+
+            //if object is null GetDefaultValue
+            if (!objects.TryGetValue(objectName, out obj))
+                obj = objectType.GetDefaultValue();
         }
 
         private VRObjectTypeDefinition GetObjectTypeDefinition(Guid objectTypeDefinitionId)
         {
             VRObjectTypeDefinition objectTypeDefinition = vrObjectTypeDefinitionManager.GetVRObjectTypeDefinition(objectTypeDefinitionId);
-            
-            if (objectTypeDefinition == null)
-                throw new NullReferenceException(String.Format("objectTypeDefinition '{0}'", objectTypeDefinitionId));
-            if (objectTypeDefinition.Settings == null)
-                throw new NullReferenceException(String.Format("objectTypeDefinition.Settings '{0}'", objectTypeDefinitionId));
-
+            objectTypeDefinition.ThrowIfNull("objectTypeDefinition", objectTypeDefinitionId);
+            objectTypeDefinition.Settings.ThrowIfNull("objectTypeDefinition.Settings", objectTypeDefinitionId);
             return objectTypeDefinition;
         }
-
     }
 }
