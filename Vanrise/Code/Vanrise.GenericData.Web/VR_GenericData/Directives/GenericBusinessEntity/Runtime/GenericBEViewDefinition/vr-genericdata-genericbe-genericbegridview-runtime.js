@@ -126,8 +126,9 @@
                     var childName = currentMapping.SubviewColumnName;
                     var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
                     if (parentFieldValue != undefined && childName != undefined) {
-                        if (!isObjectValue && parentFieldValue.Value != undefined) {
-                            fields[childName] = fillMappingFields(parentFieldValue.Value);
+                        if (!isObjectValue) {
+                            if (parentFieldValue.Value != undefined)
+                                fields[childName] = fillMappingFields(parentFieldValue.Value);
                         } else {
                             fields[childName] = fillMappingFields(parentFieldValue);
                         }
@@ -145,8 +146,9 @@
                     var childName = currentMapping.SubviewColumnName;
                     var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
                     if (parentFieldValue != undefined && childName != undefined) {
-                        if (!isObjectValue && parentFieldValue.Value != undefined) {
-                            fields[childName] = fillMappingFields(parentFieldValue.Value);
+                        if (!isObjectValue) {
+                            if (parentFieldValue.Value != undefined)
+                                fields[childName] = fillMappingFields(parentFieldValue.Value);
                         } else {
                             fields[childName] = fillMappingFields(parentFieldValue);
                         }
