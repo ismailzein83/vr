@@ -378,9 +378,9 @@ app.directive("retailNimNodeportDirective", ["VR_GenericData_GenericBusinessEnti
                             nodeParts.push(rootNode);
 
                             buildNodePartTree();
+                          
 
-                            $scope.scopeModel.currentNodePartNode = nodePartId != undefined ? nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts, nodePartId, "nodePartId", "childParts") : nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts);
-
+                            $scope.scopeModel.currentNodePartNode = nodePartId != undefined ? nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts, nodePartId) : nodePartTreeAPI.setSelectedNode($scope.scopeModel.nodeParts);
                             nodePartTreeAPI.refreshTree($scope.scopeModel.nodeParts);
                         }
                         $scope.scopeModel.isLoadingNodeParts = false;
