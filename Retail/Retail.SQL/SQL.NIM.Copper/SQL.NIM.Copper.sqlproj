@@ -97,5 +97,6 @@
     <Build Include="Security\VANRISE_wissam.ajamy.sql" />
     <Build Include="Security\VANRISE_development.sql" />
     <Build Include="Security\NIM_Copper.sql" />
+    <Build Include="NIM_Copper\Tables\Ethernet.sql" />
   </ItemGroup>
 </Project>

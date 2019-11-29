@@ -65,7 +65,6 @@
     <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="NIM_Fiber\Tables\Ethernet.sql" />
     <Build Include="NIM_Fiber\Tables\SplitterModel.sql" />
     <Build Include="NIM_Fiber\Tables\Splitter.sql" />
     <Build Include="NIM_Fiber\Tables\SDFModel.sql" />

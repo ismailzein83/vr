@@ -1,4 +1,4 @@
-﻿CREATE TABLE [NIM_Fiber].[Ethernet] (
+﻿CREATE TABLE [NIM_Copper].[Ethernet] (
     [ID]   BIGINT         NOT NULL,
     [Name] NVARCHAR (255) NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
