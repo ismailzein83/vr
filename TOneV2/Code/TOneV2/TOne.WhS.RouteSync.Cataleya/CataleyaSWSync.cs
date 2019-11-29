@@ -276,7 +276,7 @@ namespace TOne.WhS.RouteSync.Cataleya
                 }
             }
 
-            DataManager.Finalize(new CataleyaFinalizeContext() { FinalCustomerDataByAccountId = finalCustomerDataByAccountId, RouteTableNamesForIndexes = routeTableNamesForIndexes });
+            DataManager.Finalize(new CataleyaFinalizeContext() { FinalCustomerDataByAccountId = finalCustomerDataByAccountId, RouteTableNamesForIndexes = routeTableNamesForIndexes, WriteTrackingMessage = context.WriteTrackingMessage });
         }
 
         private List<CustomerIdentification> GetUpdatedItems(List<CustomerIdentification> firstListItems, List<CustomerIdentification> secondListItems)

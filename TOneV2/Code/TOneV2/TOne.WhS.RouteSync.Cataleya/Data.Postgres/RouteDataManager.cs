@@ -76,9 +76,9 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             return DropBackUpRouteTableIfExists_Query.Replace("#TABLENAMEWITHSCHEMA#", tableNameWithSchema);
         }
 
-        public string GetCreateRouteTablesIndexesQuery(List<string> routeTablesNames)
+        public Dictionary<string, string> GetCreateRouteTablesIndexesQuery(List<string> routeTablesNames)
         {
-            var query = new StringBuilder();
+            Dictionary<string, string> queries = new Dictionary<string, string>();
             string tableNamePrefix = string.IsNullOrEmpty(schemaName) ? "" : $"{schemaName}.";
 
             foreach (var routeTableName in routeTablesNames)
@@ -86,10 +86,10 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                 var createIndexQuery = Createindex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}");
                 createIndexQuery = createIndexQuery.Replace("#GUID#", Guid.NewGuid().ToString("N"));
 
-                query.AppendLine(createIndexQuery);
+                queries.Add($"Build index for {routeTableName}", createIndexQuery);
             }
 
-            return query.ToString();
+            return queries;
         }
 
         #endregion

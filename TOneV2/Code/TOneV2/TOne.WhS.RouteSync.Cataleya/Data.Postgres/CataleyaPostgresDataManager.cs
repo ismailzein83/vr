@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Common;
@@ -101,54 +102,53 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, ConnectionString);
             var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, ConnectionString);
 
-            ExecuteNonQuery(new string[] { carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery(),
-                customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery(),
-                routeDataManager.GetCreateRouteTablesIndexesQuery(context.RouteTableNamesForIndexes) });
+            Dictionary<string, string> queryCommands = routeDataManager.GetCreateRouteTablesIndexesQuery(context.RouteTableNamesForIndexes);
+
+            queryCommands.Add("Drop Temporary Carrier Account Mapping Table", carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery());
+            queryCommands.Add("Drop Temporary Customer Identification Table", customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery());
 
             var finalCustomerDataByAccountId = context.FinalCustomerDataByAccountId;
 
             foreach (var finalCustomerData in finalCustomerDataByAccountId.Values)
             {
-                var queryCommands = new List<string>();
-
                 if (finalCustomerData.CarrierAccountMappingToAdd != null)
                 {
-                    queryCommands.Add(carrierAccountDataManager.GetAddCarrierAccountMappingQuery(finalCustomerData.CarrierAccountMappingToAdd));
+                    queryCommands.Add($"Add Carrier Account Mapping for account {finalCustomerData.CarrierAccountMappingToAdd.CarrierId}", carrierAccountDataManager.GetAddCarrierAccountMappingQuery(finalCustomerData.CarrierAccountMappingToAdd));
                 }
 
                 if (finalCustomerData.CarrierAccountMappingToUpdate != null)
                 {
                     var carrierAccountMappingToUpdate = finalCustomerData.CarrierAccountMappingToUpdate;
-                    queryCommands.Add(carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate));
+                    queryCommands.Add($"Update Carrier Account Mapping for account {carrierAccountMappingToUpdate.CarrierId}", carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate));
 
                     if (!string.IsNullOrEmpty(carrierAccountMappingToUpdate.RouteTableName))
                     {
                         var backupVersionNumber = (carrierAccountMappingToUpdate.Version + 1) % 3;
                         string tableName = Helper.BuildRouteTableName(carrierAccountMappingToUpdate.CarrierId, backupVersionNumber);
                         var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
-                        queryCommands.Add(dropQuery);
+                        queryCommands.Add($"Drop Route table {tableName}", dropQuery);
                     }
                 }
                 if (finalCustomerData.CarrierAccountMappingToDelete != null)
                 {
                     var carrierAccountMappingToDelete = finalCustomerData.CarrierAccountMappingToDelete;
                     var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(carrierAccountMappingToDelete.RouteTableName);
-                    queryCommands.Add(dropQuery);
+                    queryCommands.Add($"Drop Route table {carrierAccountMappingToDelete.RouteTableName}", dropQuery);
 
                     var backupVersionNumber = (carrierAccountMappingToDelete.Version + 2) % 3;
                     string tableName = Helper.BuildRouteTableName(carrierAccountMappingToDelete.CarrierId, backupVersionNumber);
                     var dropBackupQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
 
-                    queryCommands.Add(carrierAccountDataManager.GetDeleteCarrierAccountMappingQuery(carrierAccountMappingToDelete));
+                    queryCommands.Add($"Delete Carrier Account Mapping for account {carrierAccountMappingToDelete.CarrierId}", carrierAccountDataManager.GetDeleteCarrierAccountMappingQuery(carrierAccountMappingToDelete));
 
-                    queryCommands.Add(dropBackupQuery);
+                    queryCommands.Add($"Drop Route table {tableName}", dropBackupQuery);
                 }
 
                 if (finalCustomerData.CustomerIdentificationsToAdd != null && finalCustomerData.CustomerIdentificationsToAdd.Count > 0)
                 {
                     foreach (var customerIdentificationToAdd in finalCustomerData.CustomerIdentificationsToAdd)
                     {
-                        queryCommands.Add(customerIdentificationDataManager.GeAddCustomerIdentificationQuery(customerIdentificationToAdd));
+                        queryCommands.Add($"Add Customer Identification for account {customerIdentificationToAdd.CarrierId} and trunk {customerIdentificationToAdd.Trunk}", customerIdentificationDataManager.GeAddCustomerIdentificationQuery(customerIdentificationToAdd));
                     }
                 }
 
@@ -156,12 +156,35 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                 {
                     foreach (var customerIdentificationToDelete in finalCustomerData.CustomerIdentificationsToDelete)
                     {
-                        queryCommands.Add(customerIdentificationDataManager.GetDeleteCustomerIdentificationQuery(customerIdentificationToDelete));
+                        queryCommands.Add($"Delete Customer Identification for account {customerIdentificationToDelete.CarrierId} and trunk {customerIdentificationToDelete.Trunk}", customerIdentificationDataManager.GetDeleteCustomerIdentificationQuery(customerIdentificationToDelete));
                     }
                 }
-
-                ExecuteNonQuery(queryCommands.ToArray());
             };
+
+            int index = 0;
+
+            Func<string> getNextQuery = () =>
+            {
+                if (index >= queryCommands.Count)
+                {
+                    var oldKvp = queryCommands.ElementAt(index - 1);
+                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Concat(oldKvp.Key, " has ended"), null);
+                    return null;
+                }
+
+                if (index != 0)
+                {
+                    var oldKvp = queryCommands.ElementAt(index - 1);
+                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Concat(oldKvp.Key, " has ended"), null);
+                }
+
+                var currentKvp = queryCommands.ElementAt(index++);
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Concat(currentKvp.Key, " has started"), null);
+
+                return currentKvp.Value;
+            };
+
+            ExecuteNonQuery(getNextQuery);
         }
 
         //public bool UpdateCarrierAccountMappingStatus(String customerId, CarrierAccountStatus status)
