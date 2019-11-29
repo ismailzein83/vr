@@ -12,9 +12,12 @@ namespace Retail.NIM.Entities
         public long PortId { get; set; }
         public long PathId { get; set; }
         public long PortNodeId { get; set; }
+        public string PortNodeNumber { get; set; }
         public Guid PortNodeTypeId { get; set; }
         public long? PortNodePartId { get; set; }
         public Guid? PortNodePartTypeId { get; set; }
+        public long? AreaId { get; set; }
+        public long? SiteId { get; set; }
     }
     public class PathPortInput
     {

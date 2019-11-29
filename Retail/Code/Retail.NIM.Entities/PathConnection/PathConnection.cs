@@ -24,6 +24,10 @@ namespace Retail.NIM.Entities
         public long? Port2NodePartId { get; set; }
         public Guid? Port2NodePartTypeId { get; set; }
 
+        public long? Node1AreaId { get; set; }
+        public long? Node1SiteId { get; set; }
+        public long? Node2AreaId { get; set; }
+        public long? Node2SiteId { get; set; }
     }
     public class PathConnectionInput
     {

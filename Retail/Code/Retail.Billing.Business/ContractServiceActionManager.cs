@@ -87,12 +87,14 @@ namespace Retail.Billing.Business
 
             itemToAdd.FieldValues.Add("PaidCash", input.PaidCash);
 
-            itemToAdd.FieldValues.Add("Charge", CalculateActionCharge(input));
+            var actionEvaluatedCharge = CalculateActionCharge(input);
+                        
+            itemToAdd.FieldValues.Add("EvaluatedCharge", actionEvaluatedCharge);
 
             if (input.OverriddenCharge.HasValue)
-                itemToAdd.FieldValues.Add("OverriddenCharge", input.OverriddenCharge);
-
-            var actionCharge = CalculateActionCharge(input);
+                itemToAdd.FieldValues.Add("Charge", input.OverriddenCharge.Value);
+            else
+                itemToAdd.FieldValues.Add("Charge", actionEvaluatedCharge);
 
             if (input.OldServiceOptionId.HasValue)
                 itemToAdd.FieldValues.Add("OldServiceOption", input.OldServiceOptionId.Value);

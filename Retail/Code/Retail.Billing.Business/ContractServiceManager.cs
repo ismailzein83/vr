@@ -326,6 +326,12 @@ namespace Retail.Billing.Business
                 historyFieldValues.Add("PackageLimitInGB", input.PackageLimitInGB.Value);
             }
 
+            if (input.NIMPathId.HasValue)
+            {
+                entityToAddFieldValues.Add("NIMPath", input.NIMPathId.Value);
+                historyFieldValues.Add("NIMPath", input.NIMPathId.Value);
+            }
+
             if (input.VoiceVolumeFixed.HasValue)
             {
                 entityToAddFieldValues.Add("VoiceVolumeFixed", input.VoiceVolumeFixed.Value);
@@ -494,6 +500,7 @@ namespace Retail.Billing.Business
                 SpeedInMbps = (decimal?)contractServiceEntity.FieldValues["SpeedInMbps"],
                 SpeedType = (int?)contractServiceEntity.FieldValues["SpeedType"],
                 PackageLimitInGB = (int?)contractServiceEntity.FieldValues["PackageLimitInGB"],
+                NIMPathId = (long?)contractServiceEntity.FieldValues["NIMPath"],
                 VoiceVolumeFixed = (int?)contractServiceEntity.FieldValues["VoiceVolumeFixed"],
                 VoiceVolumeMobile = (int?)contractServiceEntity.FieldValues["VoiceVolumeMobile"],
                 VoiceVolumePreferredNb = (int?)contractServiceEntity.FieldValues["VoiceVolumePreferredNb"]

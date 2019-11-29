@@ -106,6 +106,10 @@ namespace Retail.NIM.Business
                 Port1NodePartTypeId = (Guid?)genericBusinessEntity.FieldValues.GetRecord(s_port1NodePartTypeIdFieldName),
                 Port2NodePartId = (long?)genericBusinessEntity.FieldValues.GetRecord(s_port2NodePartIdFieldName),
                 Port2NodePartTypeId = (Guid?)genericBusinessEntity.FieldValues.GetRecord(s_port2NodePartTypeIdFieldName),
+                Node1AreaId = (long?)genericBusinessEntity.FieldValues["Node1Area"],
+                Node1SiteId = (long?)genericBusinessEntity.FieldValues["Node1Site"],
+                Node2AreaId = (long?)genericBusinessEntity.FieldValues["Node2Area"],
+                Node2SiteId = (long?)genericBusinessEntity.FieldValues["Node2Site"]
             };
         }
         #endregion

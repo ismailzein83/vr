@@ -28,6 +28,8 @@ namespace Retail.Billing.Entities
 
         public int? PackageLimitInGB { get; set; }
 
+        public long? NIMPathId { get; set; }
+
         public int? VoiceVolumeFixed { get; set; }
 
         public int? VoiceVolumeMobile { get; set; }
