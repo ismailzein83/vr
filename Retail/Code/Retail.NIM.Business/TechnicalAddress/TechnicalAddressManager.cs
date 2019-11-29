@@ -208,7 +208,6 @@ namespace Retail.NIM.Business
                     item.TechnologyAvailable = true;
                     if (item.SubscriptionFeasible)
                     {
-                        NodePortManager nodePortManager = new NodePortManager();
                         var ims = _nodeManager.GetIMSBySiteId(nodeItem.SiteId);
                         if (ims != null)
                         {
