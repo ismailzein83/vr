@@ -104,6 +104,7 @@
     <Compile Include="DataStorages\StaticSQLDataStoreSettings.cs" />
     <Compile Include="DataRecordFields\FieldGuidType.cs" />
     <Compile Include="GenericBusinessEntity\ActionFilterCondition\GenericFilterGroupCondition.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEActions\OpenBPTaskGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\CompileGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\DeleteGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\DownloadFileGenericBEAction.cs" />
