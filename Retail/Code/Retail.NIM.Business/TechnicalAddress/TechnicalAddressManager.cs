@@ -212,15 +212,12 @@ namespace Retail.NIM.Business
                         var ims = _nodeManager.GetIMSBySiteId(nodeItem.SiteId);
                         if (ims != null)
                         {
-                            if (nodePortManager.CheckFreePortByNodeId(ims.NodeId))
+                            item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
                             {
-                                item.NetworkElements.Add(new GetTechnicalAddressOutputTechnologyItemNetworkElement
-                                {
-                                    ID = ims.NodeId,
-                                    Number = ims.Number,
-                                    Type = ims.NodeTypeId
-                                });
-                            }
+                                ID = ims.NodeId,
+                                Number = ims.Number,
+                                Type = ims.NodeTypeId
+                            });
                         }
                     }
 
