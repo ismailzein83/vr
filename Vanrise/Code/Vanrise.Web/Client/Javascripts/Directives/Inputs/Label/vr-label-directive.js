@@ -7,14 +7,9 @@
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                color: "@",
-                onclick:"="
+                color: "@"
             },
             controller: function ($scope) {
-                $scope.onLabelClick = function () {
-                    if ($scope.onclick != undefined && typeof ($scope.onclick) == "function") $scope.onclick();
-                };
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -31,11 +26,9 @@
                     hasbackgroundcolorSection = ' color:white';
                 var clickclass = "";
                 if (tAttrs.isclickable != undefined)
-                    clickclass = " hand-cursor ";
-                
-                if (tAttrs.onclick != undefined)
-                    clickclass = " clickable ";
-                var newElement = '<label ng-click="onLabelClick()" class="control-label vr-control-label ' + color + clickclass + ' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:normal;' : '') + hasbackgroundcolorSection + ' " >'
+                    clickclass = " hand-cursor ";                
+             
+                var newElement = '<label  class="control-label vr-control-label ' + color + clickclass + ' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:normal;' : '') + hasbackgroundcolorSection + ' " >'
                     + tElement.html() + '</label>' + hintSection;
                 tElement.html(newElement);
             }

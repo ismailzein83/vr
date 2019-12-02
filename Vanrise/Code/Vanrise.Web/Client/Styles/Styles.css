@@ -3542,7 +3542,7 @@ vr-label[fullwidth] .vr-control-label {
     width: 100% !important;
 }
 
-vr-label .vr-control-label.clickable {
+vr-label-dynamic .vr-control-label.clickable {
     text-decoration: underline;
     cursor: pointer;
 }
@@ -3669,8 +3669,13 @@ vr-pagination .dropdown-menu {
     top: 7px;
     position: absolute;
     right: 1px;
+    color: #616F77;
+    font-size: 9px;
 }
 
+.view-selected-item:hover {
+    transform: scale(1.15,1.15);
+}
 .remove-selected-item {
     right: 2px !important;
 }
