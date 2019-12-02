@@ -36,6 +36,8 @@ namespace Retail.MultiNet.Business
         public DateTime? DueDate { get; set; }
         public MultiNetAccountType? AccountType { get; set; }
         public string GPSiteId { get; set; }
+        public string OracleId { get; set; }
+
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
             switch (context.FieldName)
@@ -58,6 +60,7 @@ namespace Retail.MultiNet.Business
                 case "BillingPeriod": return this.BillingPeriod;
                 case "DueDate": return this.DueDate;
                 case "GPSiteId": return this.GPSiteId;
+                case "OracleId": return this.OracleId;
 
                 default: return null;
             }

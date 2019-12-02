@@ -33,7 +33,12 @@ namespace Retail.MultiNet.Business
                         Name = "GPSiteId",
                         Title = "GP Site Id",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
-                    }  
+                    } ,new GenericFieldDefinition()
+                    {
+                        Name = "OracleId",
+                        Title = "Oracle Id",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                    },
                 };
         }
 

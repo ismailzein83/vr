@@ -54,6 +54,8 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
                     $scope.scopeModel.homeAddress = payload.partSettings.HomeAddress;
                     $scope.scopeModel.cNICExpiryDate = payload.partSettings.CNICExpiryDate;
                     $scope.scopeModel.gpSiteId = payload.partSettings.GPSiteId;
+                    $scope.scopeModel.oracleId = payload.partSettings.OracleId;
+
                 }
                 promises.push(loadAccountTypeSelector());
 
@@ -90,7 +92,8 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
                     HomeAddress: $scope.scopeModel.homeAddress,
                     AccountType: accountTypeAPI.getSelectedIds(),
                     CNICExpiryDate: $scope.scopeModel.cNICExpiryDate,
-                    GPSiteId: $scope.scopeModel.gpSiteId
+                    GPSiteId: $scope.scopeModel.gpSiteId,
+                    OracleId: $scope.scopeModel.oracleId,
                 }
             };
             if (ctrl.onReady != null)
