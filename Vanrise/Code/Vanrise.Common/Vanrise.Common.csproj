@@ -81,6 +81,13 @@
     <Reference Include="Rebex.Net.Ssh">
       <HintPath>..\Resources\DLLs\Rebex.Net.Ssh.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Net.Telnet">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Telnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.TerminalEmulation, Version=1.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Users\rodi.hassan\Desktop\SFTP\dlls\Rebex.TerminalEmulation.dll</HintPath>
+    </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>..\Resources\DLLs\Renci.SshNet.dll</HintPath>
     </Reference>
@@ -117,6 +124,8 @@
     <Compile Include="BusinessManagers\IVRNamespaceManager.cs" />
     <Compile Include="BusinessManagers\IVRActionLogger.cs" />
     <Compile Include="BusinessManagers\SecBusinessManagerFactory.cs" />
+    <Compile Include="Communicator\RemoteCommunicator.cs" />
+    <Compile Include="Communicator\TelnetCommunicator.cs" />
     <Compile Include="DataRetrieval\ConvertResultToExcelDataContext.cs" />
     <Compile Include="DataRetrieval\RemoteExcelManager.cs" />
     <Compile Include="DataRetrieval\ExcelManager.cs" />
