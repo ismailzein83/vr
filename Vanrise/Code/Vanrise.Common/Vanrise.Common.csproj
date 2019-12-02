@@ -84,9 +84,9 @@
     <Reference Include="Rebex.Net.Telnet">
       <HintPath>..\Resources\DLLs\Rebex.Net.Telnet.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.TerminalEmulation, Version=1.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Rebex.TerminalEmulation, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Users\rodi.hassan\Desktop\SFTP\dlls\Rebex.TerminalEmulation.dll</HintPath>
+      <HintPath>..\Resources\DLLs\Rebex.TerminalEmulation.dll</HintPath>
     </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>..\Resources\DLLs\Renci.SshNet.dll</HintPath>
