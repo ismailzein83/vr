@@ -15,6 +15,7 @@ using Vanrise.InvToAccBalanceRelation.Business;
 using Vanrise.InvToAccBalanceRelation.Entities;
 using Vanrise.NumberingPlan.Business;
 using Vanrise.Common.MainExtensions;
+using Newtonsoft.Json;
 
 namespace Retail.QualityNet.Business
 {
@@ -424,16 +425,45 @@ namespace Retail.QualityNet.Business
             public long SubscriberAccountId { get; set; }
             public DateTime AttemptDateTime { get; set; }
             public DateTime ConnectDateTime { get; set; }
+            [JsonIgnore]
+            public string ConnectDatePart { get { return ConnectDateTime.Date.ToString("dd/MM/yyyy"); } }
+            [JsonIgnore]
+            public string InternationalConnectDatePart { get { return ConnectDateTime.Date.ToString("dd-MM-yyyy"); } }
+            [JsonIgnore]
+            public string ConnectTimePart { get { return ConnectDateTime.ToString("HH:mm:ss"); } }
             public String CallingNumber { get; set; }
             public String CalledNumber { get; set; }
             public Guid ServiceTypeId { get; set; }
             public Decimal DurationInSeconds { get; set; }
+            [JsonIgnore]
+            public int FormatedDurationInSeconds { get { return (int)DurationInSeconds; } }
             public decimal SaleAmount { get; set; }
             public int SaleCurrencyId { get; set; }
             public int CountryId { get; set; }
+            [JsonIgnore]
+            public string CountryEnglishName
+            {
+                get
+                {
+                    return new CountryManager().GetCountryName(CountryId).ToUpper();
+                }
+            }
             public int CountryInArabicId { get; set; }
+            [JsonIgnore]
+            public string CountryArabicName
+            {
+                get
+                {
+                    string countryArabicName = new CountryInArabicManager().GetCountryInArabicName(CountryId);
+                    if (!String.IsNullOrEmpty(countryArabicName))
+                        return countryArabicName;
+                    return CountryEnglishName;
+                }
+            }
             public int TotalNumberOfCalls { get; set; }
             public decimal TotalAmount { get; set; }
+            [JsonIgnore]
+            public decimal RoundedTotalAmount { get { return decimal.Round(TotalAmount, 3); } }
             public string TotalAmountInArabicWords { get; set; }
         }
 

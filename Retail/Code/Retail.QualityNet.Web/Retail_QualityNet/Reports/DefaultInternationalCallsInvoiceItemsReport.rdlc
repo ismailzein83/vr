@@ -17,9 +17,13 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="ConnectDateTime">
-          <DataField>ConnectDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+        <Field Name="InternationalConnectDatePart">
+          <DataField>InternationalConnectDatePart</DataField>
+          <rd:TypeName>System.Date</rd:TypeName>
+        </Field>
+        <Field Name="ConnectTimePart">
+          <DataField>ConnectTimePart</DataField>
+          <rd:TypeName>System.Time</rd:TypeName>
         </Field>
         <Field Name="CallingNumber">
           <DataField>CallingNumber</DataField>
@@ -29,36 +33,24 @@
           <DataField>CalledNumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="DurationInSeconds">
-          <DataField>DurationInSeconds</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="FormatedDurationInSeconds">
+          <DataField>FormatedDurationInSeconds</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="TotalNumberOfCalls">
           <DataField>TotalNumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="TotalAmount">
-          <DataField>TotalAmount</DataField>
+        <Field Name="RoundedTotalAmount">
+          <DataField>RoundedTotalAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="TotalAmountInArabicWords">
           <DataField>TotalAmountInArabicWords</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="CountryId">
-          <DataField>CountryId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CountryIdDescription">
-          <DataField>CountryIdDescription</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CountryInArabicId">
-          <DataField>CountryInArabicId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CountryInArabicIdDescription">
-          <DataField>CountryInArabicIdDescription</DataField>
+        <Field Name="CountryArabicName">
+          <DataField>CountryArabicName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -658,7 +650,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Round(Fields!TotalAmount.Value,3),Parameters!NormalPrecisionValue.Value)</Value>
+                                  <Value>=Fields!RoundedTotalAmount.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -696,7 +688,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Fields!DurationInSeconds.Value,0)</Value>
+                                  <Value>=Fields!FormatedDurationInSeconds.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -729,7 +721,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Fields!ConnectDateTime.Value).ToString("HH:mm:ss")</Value>
+                                  <Value>=Fields!ConnectTimePart.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -760,7 +752,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Fields!ConnectDateTime.Value).ToString("dd-MM-yyyy")</Value>
+                                  <Value>=Fields!InternationalConnectDatePart.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -796,7 +788,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(String.IsNullOrEmpty(Fields!CountryInArabicIdDescription.Value) , UCase(Fields!CountryIdDescription.Value),Fields!CountryInArabicIdDescription.Value)</Value>
+                                  <Value>=Fields!CountryArabicName.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -915,9 +907,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=iif(RowNumber("InternationalInvoiceItemDetails") = CountRows("InternationalInvoiceItemDetails"),
-	 FormatNumber(Parameters!TotalAmount.Value,Parameters!NormalPrecisionValue.Value),
-     "")</Value>
+                                  <Value>=FormatNumber(Parameters!TotalAmount.Value,Parameters!NormalPrecisionValue.Value)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>

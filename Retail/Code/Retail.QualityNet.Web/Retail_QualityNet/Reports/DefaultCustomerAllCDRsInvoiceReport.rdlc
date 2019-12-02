@@ -944,7 +944,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=UCase(Fields!CountryIdDescription.Value)</Value>
+                              <Value>=Fields!CountryEnglishName.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -977,7 +977,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ConnectDateTime.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=Fields!ConnectDatePart.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1010,7 +1010,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ConnectDateTime.Value).ToString("HH:mm:ss")</Value>
+                              <Value>=Fields!ConnectTimePart.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1043,7 +1043,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!DurationInSeconds.Value, 0)</Value>
+                              <Value>=Fields!FormatedDurationInSeconds.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1084,7 +1084,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(System.Math.Round(Fields!TotalAmount.Value, 3), Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=Fields!RoundedTotalAmount.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1395,7 +1395,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!GrandTotal.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!GrandTotal.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2311,9 +2311,13 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="ConnectDateTime">
-          <DataField>ConnectDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+        <Field Name="ConnectDatePart">
+          <DataField>ConnectDatePart</DataField>
+          <rd:TypeName>System.Date</rd:TypeName>
+        </Field>
+        <Field Name="ConnectTimePart">
+          <DataField>ConnectTimePart</DataField>
+          <rd:TypeName>System.Time</rd:TypeName>
         </Field>
         <Field Name="CallingNumber">
           <DataField>CallingNumber</DataField>
@@ -2323,24 +2327,20 @@
           <DataField>CalledNumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="DurationInSeconds">
-          <DataField>DurationInSeconds</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="FormatedDurationInSeconds">
+          <DataField>FormatedDurationInSeconds</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="TotalNumberOfCalls">
           <DataField>TotalNumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="TotalAmount">
-          <DataField>TotalAmount</DataField>
+        <Field Name="RoundedTotalAmount">
+          <DataField>RoundedTotalAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="CountryId">
-          <DataField>CountryId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CountryIdDescription">
-          <DataField>CountryIdDescription</DataField>
+        <Field Name="CountryEnglishName">
+          <DataField>CountryEnglishName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
