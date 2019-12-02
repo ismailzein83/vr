@@ -7,10 +7,10 @@ using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
 {
-    public class EricssonSSHCommunication
+    public class EricssonCommunication
     {
         public bool IsActive { get; set; }
 
-        public SSHCommunicatorSettings SSHCommunicatorSettings { get; set; }
+        public RemoteCommunicatorSettings RemoteCommunicatorSettings { get; set; }
     }
 }

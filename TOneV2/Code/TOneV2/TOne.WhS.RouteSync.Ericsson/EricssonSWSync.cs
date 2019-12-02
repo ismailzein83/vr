@@ -31,7 +31,7 @@ namespace TOne.WhS.RouteSync.Ericsson
         public int LocalNumberLength { get; set; }
         public string InterconnectGeneralPrefix { get; set; }
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
-        public List<EricssonSSHCommunication> SwitchCommunicationList { get; set; }
+        public List<EricssonCommunication> SwitchCommunicationList { get; set; }
         public List<SwitchLogger> SwitchLoggerList { get; set; }
         public BranchRouteSettings BranchRouteSettings { get; set; }
         public string PercentagePrefix { get; set; }
@@ -460,17 +460,17 @@ namespace TOne.WhS.RouteSync.Ericsson
             var ericssonRoutesWithCommandsByOBA = GetEricssonRoutesWithCommands(context.SwitchId, customersToDeleteByOBA, ericssonRoutesToDeleteWithCommandsByOBA, ericssonARoutesToDeleteWithCommandsByOBA);
             #endregion
 
-            EricssonSSHCommunication ericssonSSHCommunication = null;
+            EricssonCommunication ericssonCommunication = null;
             if (SwitchCommunicationList != null)
             {
-                ericssonSSHCommunication = SwitchCommunicationList.FirstOrDefault(itm => itm.IsActive);
+                ericssonCommunication = SwitchCommunicationList.FirstOrDefault(itm => itm.IsActive);
             }
 
-            SSHCommunicator sshCommunicator = null;
+            RemoteCommunicator remoteCommunicator = null;
             try
             {
-                if (ericssonSSHCommunication != null)
-                    sshCommunicator = new SSHCommunicator(ericssonSSHCommunication.SSHCommunicatorSettings);
+                if (ericssonCommunication != null && ericssonCommunication.RemoteCommunicatorSettings != null)
+                    remoteCommunicator = ericssonCommunication.RemoteCommunicatorSettings.GetCommunicator();
 
                 DateTime finalizeTime = DateTime.Now;
 
@@ -478,7 +478,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                 List<string> faultCodes = null;
                 int maxNumberOfRetries = 0;
-                if (sshCommunicator != null)
+                if (remoteCommunicator != null)
                 {
                     var configManager = new TOne.WhS.RouteSync.Business.ConfigManager();
                     EricssonSwitchRouteSynchronizerSettings switchSettings = configManager.GetRouteSynchronizerSwitchSettings(ConfigId) as EricssonSwitchRouteSynchronizerSettings;
@@ -493,7 +493,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                 List<CustomerMappingWithCommands> failedCustomerMappingsWithCommands;
                 List<CustomerMappingWithCommands> succeedCustomerMappingsWithFailedTrunk;
 
-                var executeStatus = ExecuteCustomerMappingsCommands(customerMappingsWithCommands, ericssonSSHCommunication, sshCommunicator, commandResults, out succeedCustomerMappingsWithCommands, out failedCustomerMappingsWithCommands, out succeedCustomerMappingsWithFailedTrunk, faultCodes, maxNumberOfRetries);
+                var executeStatus = ExecuteCustomerMappingsCommands(customerMappingsWithCommands, ericssonCommunication, remoteCommunicator, commandResults, out succeedCustomerMappingsWithCommands, out failedCustomerMappingsWithCommands, out succeedCustomerMappingsWithFailedTrunk, faultCodes, maxNumberOfRetries);
                 LogCustomerMappingCommands(succeedCustomerMappingsWithCommands, failedCustomerMappingsWithCommands, ftpLogger, finalizeTime);
 
                 if (succeedCustomerMappingsWithCommands != null && succeedCustomerMappingsWithCommands.Count > 0)
@@ -527,7 +527,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                 List<RouteCaseWithCommands> succeedRouteCasesWithCommands;
                 List<RouteCaseWithCommands> failedRouteCasesWithCommands;
 
-                ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, ericssonSSHCommunication, sshCommunicator, commandResults, out succeedRouteCasesWithCommands, out failedRouteCasesWithCommands, routeCaseDataManager, maxNumberOfRetries);
+                ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, ericssonCommunication, remoteCommunicator, commandResults, out succeedRouteCasesWithCommands, out failedRouteCasesWithCommands, routeCaseDataManager, maxNumberOfRetries);
                 LogRouteCaseCommands(succeedRouteCasesWithCommands, failedRouteCasesWithCommands, ftpLogger, finalizeTime);
                 #endregion
 
@@ -552,11 +552,11 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                 if (ericssonRoutesWithCommandsByOBA != null)
                 {
-                    ExecuteRoutesCommands(ericssonRoutesWithCommandsByOBA.BNumberEricssonRouteWithCommands, ericssonSSHCommunication, sshCommunicator, customersToDeleteByOBA, commandResults,
+                    ExecuteRoutesCommands(ericssonRoutesWithCommandsByOBA.BNumberEricssonRouteWithCommands, ericssonCommunication, remoteCommunicator, customersToDeleteByOBA, commandResults,
                       out succeedEricssonRoutesWithCommandsByBo, out failedEricssonRoutesWithCommandsByBo, allFailedEricssonRoutesWithCommandsByBo, customerMappingsToDeleteSucceed, customerMappingsToDeleteFailed
                       , failedCustomerMappingBOs, failedRouteCaseNumbers, faultCodes, maxNumberOfRetries, false);
 
-                    ExecuteRoutesCommands(ericssonRoutesWithCommandsByOBA.ANumberEricssonRouteWithCommands, ericssonSSHCommunication, sshCommunicator, customersToDeleteByOBA, commandResults,
+                    ExecuteRoutesCommands(ericssonRoutesWithCommandsByOBA.ANumberEricssonRouteWithCommands, ericssonCommunication, remoteCommunicator, customersToDeleteByOBA, commandResults,
                       out succeedEricssonARoutesWithCommandsByBo, out failedEricssonARoutesWithCommandsByBo, allFailedEricssonRoutesWithCommandsByBo, customerMappingsToDeleteSucceed, customerMappingsToDeleteFailed
                       , failedCustomerMappingBOs, failedRouteCaseNumbers, faultCodes, maxNumberOfRetries, true);
                 }
@@ -620,8 +620,8 @@ namespace TOne.WhS.RouteSync.Ericsson
             {
                 try
                 {
-                    if (sshCommunicator != null)
-                        sshCommunicator.Dispose();
+                    if (remoteCommunicator != null)
+                        remoteCommunicator.Dispose();
                 }
                 catch (Exception ex)
                 {
@@ -1756,20 +1756,20 @@ namespace TOne.WhS.RouteSync.Ericsson
         }
         #endregion
 
-        #region SSH
-        private string OpenConnectionWithSwitch(SSHCommunicator sshCommunicator, List<CommandResult> commandResults)
+        #region Communicator
+        private string OpenConnectionWithSwitch(RemoteCommunicator remoteCommunicator, List<CommandResult> commandResults)
         {
             string response;
-            sshCommunicator.OpenConnection();
-            sshCommunicator.OpenShell();
-            sshCommunicator.ReadPrompt(">");
-            sshCommunicator.ExecuteCommand(EricssonCommands.MML_Command, "<", out response);
+            remoteCommunicator.OpenConnection();
+            remoteCommunicator.OpenShell();
+            remoteCommunicator.ReadPrompt(">");
+            remoteCommunicator.ExecuteCommand(EricssonCommands.MML_Command, "<", out response);
             commandResults.Add(new CommandResult() { Command = EricssonCommands.MML_Command, Output = new List<string>() { response } });
             return response;
         }
 
-        private bool ExecuteCustomerMappingsCommands(List<CustomerMappingWithCommands> customerMappingsWithCommands, EricssonSSHCommunication sshCommunication,
-        SSHCommunicator sshCommunicator, List<CommandResult> commandResults, out List<CustomerMappingWithCommands> succeededCustomerMappingsWithCommands,
+        private bool ExecuteCustomerMappingsCommands(List<CustomerMappingWithCommands> customerMappingsWithCommands, EricssonCommunication ericssonCommunication,
+        RemoteCommunicator remoteCommunicator, List<CommandResult> commandResults, out List<CustomerMappingWithCommands> succeededCustomerMappingsWithCommands,
         out List<CustomerMappingWithCommands> failedCustomerMappingsWithCommands, out List<CustomerMappingWithCommands> succeedCustomerMappingsWithFailedTrunk,
         IEnumerable<string> faultCodes, int maxNumberOfRetries)
         {
@@ -1780,7 +1780,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             if (customerMappingsWithCommands == null || customerMappingsWithCommands.Count == 0)
                 return false;
 
-            if (sshCommunication == null)
+            if (ericssonCommunication == null)
             {
                 succeededCustomerMappingsWithCommands = customerMappingsWithCommands;
                 return true;
@@ -1790,24 +1790,24 @@ namespace TOne.WhS.RouteSync.Ericsson
             int numberOfTriesDone = 0;
 
             string response;
-            response = OpenConnectionWithSwitch(sshCommunicator, commandResults);
+            response = OpenConnectionWithSwitch(remoteCommunicator, commandResults);
 
             while (!isPreTableSucceed && numberOfTriesDone < maxNumberOfRetries)
             {
                 try
                 {
-                    sshCommunicator.ExecuteCommand(EricssonCommands.PNBAR_Command, CommandPrompt, out response);
+                    remoteCommunicator.ExecuteCommand(EricssonCommands.PNBAR_Command, CommandPrompt, out response);
                     commandResults.Add(new CommandResult() { Command = EricssonCommands.PNBAR_Command, Output = new List<string>() { response } });
 
-                    sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
+                    remoteCommunicator.ExecuteCommand(";", CommandPrompt, out response);
                     commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
 
                     if (IsCommandFailed(response, faultCodes))
                     {
-                        sshCommunicator.ExecuteCommand(EricssonCommands.PNBZI_Command, CommandPrompt, out response);
+                        remoteCommunicator.ExecuteCommand(EricssonCommands.PNBZI_Command, CommandPrompt, out response);
                         commandResults.Add(new CommandResult() { Command = EricssonCommands.PNBZI_Command, Output = new List<string>() { response } });
 
-                        sshCommunicator.ExecuteCommand(EricssonCommands.PNBCI_Command, CommandPrompt, out response);
+                        remoteCommunicator.ExecuteCommand(EricssonCommands.PNBCI_Command, CommandPrompt, out response);
                         commandResults.Add(new CommandResult() { Command = EricssonCommands.PNBCI_Command, Output = new List<string>() { response } });
                     }
 
@@ -1831,7 +1831,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                                 foreach (var command in customerMappingWithCommands.OBACommands)
                                 {
-                                    sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
+                                    remoteCommunicator.ExecuteCommand(command, CommandPrompt, out response);
                                     commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                                     if (!IsCommandSucceed(response))
                                     {
@@ -1869,16 +1869,16 @@ namespace TOne.WhS.RouteSync.Ericsson
                         }
                     }
 
-                    sshCommunicator.ExecuteCommand(EricssonCommands.PNBAI_Command, CommandPrompt, out response);
+                    remoteCommunicator.ExecuteCommand(EricssonCommands.PNBAI_Command, CommandPrompt, out response);
                     commandResults.Add(new CommandResult() { Command = EricssonCommands.PNBAI_Command, Output = new List<string>() { response } });
 
-                    sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
+                    remoteCommunicator.ExecuteCommand(";", CommandPrompt, out response);
                     commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
 
-                    sshCommunicator.ExecuteCommand(EricssonCommands.Exit_Command, ">", out response);
+                    remoteCommunicator.ExecuteCommand(EricssonCommands.Exit_Command, ">", out response);
                     commandResults.Add(new CommandResult() { Command = EricssonCommands.Exit_Command, Output = new List<string>() { response } });
 
-                    sshCommunicator.ExecuteCommand(EricssonCommands.Exit_Command);
+                    remoteCommunicator.ExecuteCommand(EricssonCommands.Exit_Command);
                     commandResults.Add(new CommandResult() { Command = EricssonCommands.Exit_Command });
 
                     isPreTableSucceed = true;
@@ -1893,8 +1893,8 @@ namespace TOne.WhS.RouteSync.Ericsson
             return isPreTableSucceed;
         }
 
-        private void ExecuteRouteCasesCommands(List<RouteCaseWithCommands> routeCasesWithCommands, EricssonSSHCommunication sshCommunication,
-        SSHCommunicator sshCommunicator, List<CommandResult> commandResults, out List<RouteCaseWithCommands> succeedRouteCaseNumbers, out List<RouteCaseWithCommands> failedRouteCaseNumbers, IRouteCaseDataManager routeCaseDataManager, int maxNumberOfRetries)
+        private void ExecuteRouteCasesCommands(List<RouteCaseWithCommands> routeCasesWithCommands, EricssonCommunication ericssonCommunication,
+        RemoteCommunicator remoteCommunicator, List<CommandResult> commandResults, out List<RouteCaseWithCommands> succeedRouteCaseNumbers, out List<RouteCaseWithCommands> failedRouteCaseNumbers, IRouteCaseDataManager routeCaseDataManager, int maxNumberOfRetries)
         {
             int batchSize = 100;
             var routeCaseNumbersToUpdate = new List<int>();
@@ -1903,7 +1903,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             if (routeCasesWithCommands == null || routeCasesWithCommands.Count == 0)
                 return;
 
-            if (sshCommunication == null)
+            if (ericssonCommunication == null)
             {
                 succeedRouteCaseNumbers = routeCasesWithCommands;
                 routeCaseDataManager.UpdateSyncedRouteCases(succeedRouteCaseNumbers.Select(item => item.RouteCase.RCNumber));
@@ -1915,7 +1915,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
             string response;
 
-            response = OpenConnectionWithSwitch(sshCommunicator, commandResults);
+            response = OpenConnectionWithSwitch(remoteCommunicator, commandResults);
 
             foreach (var routeCaseWithCommands in routeCasesWithCommands)
             {
@@ -1928,25 +1928,25 @@ namespace TOne.WhS.RouteSync.Ericsson
                     try
                     {
                         string command = routeCaseWithCommands.Commands[0];
-                        sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
+                        remoteCommunicator.ExecuteCommand(command, CommandPrompt, out response);
                         commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                         if (!IsCommandSucceed(response))
                         {
                             string commandTemp = string.Format("{0}:RC={1};", EricssonCommands.ANRAR_Command, rcNumber);
-                            sshCommunicator.ExecuteCommand(commandTemp, CommandPrompt, out response);
+                            remoteCommunicator.ExecuteCommand(commandTemp, CommandPrompt, out response);
                             commandResults.Add(new CommandResult() { Command = commandTemp, Output = new List<string>() { response } });
 
-                            sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
+                            remoteCommunicator.ExecuteCommand(";", CommandPrompt, out response);
                             commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
 
                             if (IsCommandSucceed(response))
                             {
                                 commandTemp = string.Format("{0}:RC={1};", EricssonCommands.ANRZI_Command, rcNumber);
-                                sshCommunicator.ExecuteCommand(commandTemp, CommandPrompt, out response);
+                                remoteCommunicator.ExecuteCommand(commandTemp, CommandPrompt, out response);
                                 commandResults.Add(new CommandResult() { Command = commandTemp, Output = new List<string>() { response } });
                             }
 
-                            sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
+                            remoteCommunicator.ExecuteCommand(command, CommandPrompt, out response);
                             commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                             if (!IsCommandSucceed(response))
                             {
@@ -1958,7 +1958,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                         for (int i = 1; i < routeCaseWithCommands.Commands.Count; i++)
                         {
                             string routeCaseCommand = routeCaseWithCommands.Commands[i];
-                            sshCommunicator.ExecuteCommand(routeCaseCommand, CommandPrompt, out response);
+                            remoteCommunicator.ExecuteCommand(routeCaseCommand, CommandPrompt, out response);
                             commandResults.Add(new CommandResult() { Command = routeCaseCommand, Output = new List<string>() { response } });
                             if (!IsCommandSucceed(response))
                             {
@@ -1973,14 +1973,14 @@ namespace TOne.WhS.RouteSync.Ericsson
                             break;
                         }
                         command = string.Format("{0}:RC={1};", EricssonCommands.ANRAI_Command, rcNumber);
-                        sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
+                        remoteCommunicator.ExecuteCommand(command, CommandPrompt, out response);
                         commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                         if (!IsCommandSucceed(response))
                         {
                             failedRouteCaseNumbers.Add(routeCaseWithCommands);
                             break;
                         }
-                        sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
+                        remoteCommunicator.ExecuteCommand(";", CommandPrompt, out response);
                         commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
                         if (!IsCommandSucceed(response))
                         {
@@ -2016,8 +2016,8 @@ namespace TOne.WhS.RouteSync.Ericsson
             }
         }
 
-        private void ExecuteRoutesCommands(Dictionary<int, List<EricssonRouteWithCommands>> routesWithCommandsByOBA, EricssonSSHCommunication sshCommunication,
-        SSHCommunicator sshCommunicator, Dictionary<int, CustomerMappingWithActionType> customersToDeleteByOBA, List<CommandResult> commandResults, out Dictionary<int, List<EricssonRouteWithCommands>> succeededRoutesWithCommandsByOBA,
+        private void ExecuteRoutesCommands(Dictionary<int, List<EricssonRouteWithCommands>> routesWithCommandsByOBA, EricssonCommunication ericssonCommunication,
+        RemoteCommunicator remoteCommunicator, Dictionary<int, CustomerMappingWithActionType> customersToDeleteByOBA, List<CommandResult> commandResults, out Dictionary<int, List<EricssonRouteWithCommands>> succeededRoutesWithCommandsByOBA,
         out Dictionary<int, List<EricssonRouteWithCommands>> failedRoutesWithCommandsByOBA, Dictionary<int, List<EricssonRouteWithCommands>> allFailedRoutesWithCommandsByOBA,
         List<CustomerMappingWithActionType> customerMappingsToDeleteSucceed, List<CustomerMappingWithActionType> customerMappingsToDeleteFailed,
         IEnumerable<int> failedCustomerMappingOBAs, IEnumerable<int> faildRouteCaseNumbers, IEnumerable<string> faultCodes, int maxNumberOfRetries, bool isAroute)
@@ -2033,7 +2033,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                 var ericssonRoutesWithCommands = ericssonRouteWithCommandsKvp.Value;
                 ericssonRoutesWithCommands.Sort((x, y) => x.RouteCompareResult.Route.Code.CompareTo(y.RouteCompareResult.Route.Code));
             }
-            if (sshCommunication == null)
+            if (ericssonCommunication == null)
             {
                 succeededRoutesWithCommandsByOBA = routesWithCommandsByOBA;
                 if (customersToDeleteByOBA.Values != null && customersToDeleteByOBA.Values.Count > 0)
@@ -2068,24 +2068,24 @@ namespace TOne.WhS.RouteSync.Ericsson
                 aNxAICommand = EricssonCommands.ANAAI_Command;
             }
 
-            OpenConnectionWithSwitch(sshCommunicator, commandResults);
-            sshCommunicator.ExecuteCommand(aNxARCommand, CommandPrompt, out response);
+            OpenConnectionWithSwitch(remoteCommunicator, commandResults);
+            remoteCommunicator.ExecuteCommand(aNxARCommand, CommandPrompt, out response);
             commandResults.Add(new CommandResult() { Command = aNxARCommand, Output = new List<string>() { response } });
-            sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
+            remoteCommunicator.ExecuteCommand(";", CommandPrompt, out response);
             commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
 
             if (IsCommandFailed(response, faultCodes))
             {
-                sshCommunicator.ExecuteCommand(aNxZICommand, CommandPrompt, out response);
+                remoteCommunicator.ExecuteCommand(aNxZICommand, CommandPrompt, out response);
                 commandResults.Add(new CommandResult() { Command = aNxZICommand, Output = new List<string>() { response } });
                 Thread.Sleep(5000);
 
                 if (response.ToUpper().Contains(EricssonCommands.ORDERED))
                 {
-                    sshCommunicator.ExecuteCommand(EricssonCommands.Exit_Command, ">", out response);
+                    remoteCommunicator.ExecuteCommand(EricssonCommands.Exit_Command, ">", out response);
                     commandResults.Add(new CommandResult() { Command = EricssonCommands.Exit_Command, Output = new List<string>() { response } });
                     Thread.Sleep(2000);
-                    sshCommunicator.ExecuteCommand(EricssonCommands.MML_Command, "<", out response);
+                    remoteCommunicator.ExecuteCommand(EricssonCommands.MML_Command, "<", out response);
                     commandResults.Add(new CommandResult() { Command = EricssonCommands.MML_Command, Output = new List<string>() { response } });
                     Thread.Sleep(1000);
                 }
@@ -2094,22 +2094,22 @@ namespace TOne.WhS.RouteSync.Ericsson
                     throw new Exception(string.Format("{0} Not Executed", aNxARCommand));
                 }
 
-                sshCommunicator.ExecuteCommand(aNxCICommand, CommandPrompt, out response);
+                remoteCommunicator.ExecuteCommand(aNxCICommand, CommandPrompt, out response);
                 commandResults.Add(new CommandResult() { Command = aNxCICommand, Output = new List<string>() { response } });
 
                 Thread.Sleep(5000);
                 while (!response.ToUpper().Contains(EricssonCommands.ORDERED) && response.ToUpper().Contains("BUSY"))
                 {
-                    sshCommunicator.ExecuteCommand(aNxCICommand, CommandPrompt, out response);
+                    remoteCommunicator.ExecuteCommand(aNxCICommand, CommandPrompt, out response);
                     commandResults.Add(new CommandResult() { Command = aNxCICommand, Output = new List<string>() { response } });
                     Thread.Sleep(3000);
                 }
                 if (response.ToUpper().Contains(EricssonCommands.ORDERED))
                 {
-                    sshCommunicator.ExecuteCommand(EricssonCommands.Exit_Command, ">", out response);
+                    remoteCommunicator.ExecuteCommand(EricssonCommands.Exit_Command, ">", out response);
                     commandResults.Add(new CommandResult() { Command = EricssonCommands.Exit_Command, Output = new List<string>() { response } });
                     Thread.Sleep(2000);
-                    sshCommunicator.ExecuteCommand(EricssonCommands.MML_Command, "<", out response);
+                    remoteCommunicator.ExecuteCommand(EricssonCommands.MML_Command, "<", out response);
                     commandResults.Add(new CommandResult() { Command = EricssonCommands.MML_Command, Output = new List<string>() { response } });
                     Thread.Sleep(1000);
                 }
@@ -2165,12 +2165,12 @@ namespace TOne.WhS.RouteSync.Ericsson
                         {
                             foreach (var command in ericssonRouteWithCommands.Commands)
                             {
-                                sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
+                                remoteCommunicator.ExecuteCommand(command, CommandPrompt, out response);
                                 commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                                 while (response.ToUpper().Contains(EricssonCommands.FUNCTION_BUSY))
                                 {
                                     Thread.Sleep(3000);
-                                    sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
+                                    remoteCommunicator.ExecuteCommand(command, CommandPrompt, out response);
                                     commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                                 }
 
@@ -2227,15 +2227,15 @@ namespace TOne.WhS.RouteSync.Ericsson
                 }
             }
 
-            sshCommunicator.ExecuteCommand(aNxAICommand, CommandPrompt, out response);
+            remoteCommunicator.ExecuteCommand(aNxAICommand, CommandPrompt, out response);
             commandResults.Add(new CommandResult() { Command = aNxAICommand, Output = new List<string>() { response } });
-            sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
+            remoteCommunicator.ExecuteCommand(";", CommandPrompt, out response);
             commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
 
             Thread.Sleep(3000);
-            sshCommunicator.ExecuteCommand(EricssonCommands.Exit_Command, ">", out response);
+            remoteCommunicator.ExecuteCommand(EricssonCommands.Exit_Command, ">", out response);
             commandResults.Add(new CommandResult() { Command = EricssonCommands.Exit_Command, Output = new List<string>() { response } });
-            sshCommunicator.ExecuteCommand(EricssonCommands.Exit_Command);
+            remoteCommunicator.ExecuteCommand(EricssonCommands.Exit_Command);
             commandResults.Add(new CommandResult() { Command = EricssonCommands.Exit_Command });
         }
 

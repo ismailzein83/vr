@@ -126,7 +126,7 @@
     <Compile Include="Entities\EricssonCommands.cs" />
     <Compile Include="Entities\Context\CustomerMappingContext.cs" />
     <Compile Include="Entities\Enums.cs" />
-    <Compile Include="Entities\EricssonSSHCommunication.cs" />
+    <Compile Include="Entities\EricssonCommunication.cs" />
     <Compile Include="Entities\IncomingTrafficSupplier.cs" />
     <Compile Include="Entities\LocalSupplierMapping.cs" />
     <Compile Include="Entities\EricssonManualRouteDistinations.cs" />
