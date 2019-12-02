@@ -214,7 +214,7 @@
 
                     var ericssonSWSync;
                     var carrierMappings;
-                    var sshCommunicationList;
+                    var switchCommunicationList;
                     var switchLoggerList;
                     var numberLengthEvaluator;
                     var codeChargeEvaluator;
@@ -236,7 +236,7 @@
                             numberLengthEvaluator = ericssonSWSync.NumberLengthEvaluator;
                             codeChargeEvaluator = ericssonSWSync.CodeChargeEvaluator;
                             branchRouteSettings = ericssonSWSync.BranchRouteSettings;
-                            sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
+                            switchCommunicationList = ericssonSWSync.SwitchCommunicationList;
                             switchLoggerList = ericssonSWSync.SwitchLoggerList;
                             carrierMappings = ericssonSWSync.CarrierMappings;
                             if (ericssonSWSync.ReservedBTables != undefined)
@@ -310,7 +310,7 @@
                         switchCommunicationReadyPromiseDeferred.promise.then(function () {
                             var switchCommunicationPayload;
                             if (ericssonSWSync != undefined) {
-                                switchCommunicationPayload = { sshCommunicationList: sshCommunicationList, switchLoggerList: switchLoggerList };
+                                switchCommunicationPayload = { remoteCommunicationList: switchCommunicationList, switchLoggerList: switchLoggerList };
                             }
                             VRUIUtilsService.callDirectiveLoad(switchCommunicationAPI, switchCommunicationPayload, switchCommunicationLoadPromiseDeferred);
                         });
@@ -383,7 +383,7 @@
                         NumberOfMappings: $scope.scopeModel.numberOfMappings,
                         InterconnectGeneralPrefix: $scope.scopeModel.interconnectGeneralPrefix,
                         CarrierMappings: carrierAccountMappingGridAPI.getData(),
-                        SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
+                        SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.switchCommunicationList : undefined,
                         SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
                         FirstRCNumber: $scope.scopeModel.firstRCNumber,
                         NumberOfBTables: $scope.scopeModel.numberOfBTables,

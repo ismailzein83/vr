@@ -26,17 +26,17 @@
             var loggerGridAPI;
             var loggerGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var sshGridAPI;
-            var sshGridReadyDeferred = UtilsService.createPromiseDeferred();
+            var remoteGridAPI;
+            var remoteGridReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.switchSSHCommunications = [];
+                $scope.scopeModel.switchRemoteCommunications = [];
                 $scope.scopeModel.switchLoggers = [];
 
-                $scope.scopeModel.onSSHGridReady = function (api) {
-                    sshGridAPI = api;
-                    sshGridReadyDeferred.resolve();
+                $scope.scopeModel.onRemoteGridReady = function (api) {
+                    remoteGridAPI = api;
+                    remoteGridReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onLoggerGridReady = function (api) {
@@ -44,7 +44,7 @@
                     loggerGridReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.validateSSHCommunicationList = function () {
+                $scope.scopeModel.validateRemoteCommunicationList = function () {
                     return;
                 };
 
@@ -69,16 +69,16 @@
                 };
 
                 var initPromises = [];
-                initPromises.push(sshGridReadyDeferred.promise);
+                initPromises.push(remoteGridReadyDeferred.promise);
                 initPromises.push(loggerGridReadyDeferred.promise);
 
-                var loadSwitchSSHCommunicationsPromise = UtilsService.createPromiseDeferred();
+                var loadSwitchRemoteCommunicationsPromise = UtilsService.createPromiseDeferred();
                 WhS_RouteSync_EricssonSwitchLoggerAPIService.GetSwitchLoggerTemplates().then(function (response) {
                     $scope.scopeModel.loggerTypes = response;
-                    loadSwitchSSHCommunicationsPromise.resolve();
+                    loadSwitchRemoteCommunicationsPromise.resolve();
                 });
 
-                initPromises.push(loadSwitchSSHCommunicationsPromise.promise);
+                initPromises.push(loadSwitchRemoteCommunicationsPromise.promise);
 
                 UtilsService.waitMultiplePromises(initPromises).then(function () {
                     defineAPI();
@@ -91,27 +91,27 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var sshCommunication;
+                    var remoteCommunication;
                     var logger;
 
                     if (payload != undefined) {
-                        var sshCommunicationList = payload.sshCommunicationList;
-                        if (sshCommunicationList != undefined && sshCommunicationList.length > 0)
-                            sshCommunication = sshCommunicationList[0];
+                        var remoteCommunicationList = payload.remoteCommunicationList;
+                        if (remoteCommunicationList != undefined && remoteCommunicationList.length > 0)
+                            remoteCommunication = remoteCommunicationList[0];
 
                         var loggerList = payload.switchLoggerList;
                         if (loggerList != undefined && loggerList.length > 0)
                             logger = loggerList[0];
                     }
 
-                    var sshCommnunicationItem = {
+                    var remoteCommnunicationItem = {
                         isSelected: false,
                         isActive: false,
                         api: undefined
                     };
 
-                    extendSSHCommunicationItem(sshCommnunicationItem, sshCommunication);
-                    $scope.scopeModel.switchSSHCommunications.push(sshCommnunicationItem);
+                    extendRemoteCommunicationItem(remoteCommnunicationItem, remoteCommunication);
+                    $scope.scopeModel.switchRemoteCommunications.push(remoteCommnunicationItem);
 
 
                     var loggerItem = {
@@ -121,40 +121,40 @@
                     extendLoggerItem(loggerItem, logger);
                     $scope.scopeModel.switchLoggers.push(loggerItem);
 
-                    function extendSSHCommunicationItem(sshCommnunicationItem, sshCommunication) {
-                        sshCommnunicationItem.onSSHCommunicatorSettingsReady = function (api) {
-                            sshCommnunicationItem.api = api;
+                    function extendRemoteCommunicationItem(RemoteCommnunicationItem, RemoteCommunication) {
+                        RemoteCommnunicationItem.onRemoteCommunicatorSettingsReady = function (api) {
+                            RemoteCommnunicationItem.api = api;
 
-                            if (sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred != undefined) {
-                                sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred.resolve();
+                            if (RemoteCommnunicationItem.remoteCommunicatorSettingsReadyDeferred != undefined) {
+                                RemoteCommnunicationItem.remoteCommunicatorSettingsReadyDeferred.resolve();
                             }
                             else {
-                                sshCommnunicationItem.isActive = true;
+                                RemoteCommnunicationItem.isActive = true;
                                 var setLoader = function (value) {
-                                    setTimeout(function () { sshCommnunicationItem.isSwitchSSHCommunicationLoading = value; UtilsService.safeApply($scope); });
+                                    setTimeout(function () { RemoteCommnunicationItem.isSwitchRemoteCommunicationLoading = value; UtilsService.safeApply($scope); });
                                 };
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sshCommnunicationItem.api, undefined, setLoader);
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, RemoteCommnunicationItem.api, undefined, setLoader);
                             }
                         };
 
-                        if (sshCommunication != undefined) {
-                            sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred = UtilsService.createPromiseDeferred();
-                            sshCommnunicationItem.isSelected = true;
-                            sshCommnunicationItem.isActive = sshCommunication.IsActive;
+                        if (RemoteCommunication != undefined) {
+                            RemoteCommnunicationItem.remoteCommunicatorSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+                            RemoteCommnunicationItem.isSelected = true;
+                            RemoteCommnunicationItem.isActive = RemoteCommunication.IsActive;
 
-                            sshCommnunicationItem.sshCommunicationSettingsLoadPromise = getSSHCommunicationSettingsLoadPromise();
-                            promises.push(sshCommnunicationItem.sshCommunicationSettingsLoadPromise);
+                            RemoteCommnunicationItem.remoteCommunicationSettingsLoadPromise = getRemoteCommunicationSettingsLoadPromise();
+                            promises.push(RemoteCommnunicationItem.remoteCommunicationSettingsLoadPromise);
 
-                            function getSSHCommunicationSettingsLoadPromise() {
-                                var sshCommunicatorSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            function getRemoteCommunicationSettingsLoadPromise() {
+                                var remoteCommunicatorSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                                sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred.promise.then(function () {
-                                    sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred = undefined;
-                                    var sshCommunicatorSettingsPayload = { sshCommunicatorSettings: sshCommunication.SSHCommunicatorSettings };
-                                    VRUIUtilsService.callDirectiveLoad(sshCommnunicationItem.api, sshCommunicatorSettingsPayload, sshCommunicatorSettingsLoadPromiseDeferred);
+                                RemoteCommnunicationItem.remoteCommunicatorSettingsReadyDeferred.promise.then(function () {
+                                    RemoteCommnunicationItem.remoteCommunicatorSettingsReadyDeferred = undefined;
+                                    var remoteCommunicatorSettingsPayload = { remoteCommunicatorSettings: RemoteCommunication.RemoteCommunicatorSettings };
+                                    VRUIUtilsService.callDirectiveLoad(RemoteCommnunicationItem.api, remoteCommunicatorSettingsPayload, remoteCommunicatorSettingsLoadPromiseDeferred);
                                 });
 
-                                return sshCommunicatorSettingsLoadPromiseDeferred.promise;
+                                return remoteCommunicatorSettingsLoadPromiseDeferred.promise;
                             }
                         }
                     }
@@ -201,15 +201,15 @@
                 };
 
                 api.getData = function () {
-                    var switchSSHCommunicationItem = $scope.scopeModel.switchSSHCommunications[0];
-                    var sshCommunicatorSettings = switchSSHCommunicationItem.isSelected && switchSSHCommunicationItem.api != undefined ? switchSSHCommunicationItem.api.getData() : undefined;
+                    var switchRemoteCommunicationItem = $scope.scopeModel.switchRemoteCommunications[0];
+                    var remoteCommunicatorSettings = switchRemoteCommunicationItem.isSelected && switchRemoteCommunicationItem.api != undefined ? switchRemoteCommunicationItem.api.getData() : undefined;
 
                     var loggerItem = $scope.scopeModel.switchLoggers[0];
                     var loggerSettings = loggerItem.api != undefined ? loggerItem.api.getData() : undefined;
                     loggerSettings.IsActive = loggerItem.isActive;
 
                     var result = {
-                        sshCommunicationList: sshCommunicatorSettings != undefined ? [{ SSHCommunicatorSettings: sshCommunicatorSettings, IsActive: switchSSHCommunicationItem.isActive }] : undefined,
+                        switchCommunicationList: remoteCommunicatorSettings != undefined ? [{ RemoteCommunicatorSettings: remoteCommunicatorSettings, IsActive: switchRemoteCommunicationItem.isActive }] : undefined,
                         switchLoggerList: [loggerSettings]
                     };
 
