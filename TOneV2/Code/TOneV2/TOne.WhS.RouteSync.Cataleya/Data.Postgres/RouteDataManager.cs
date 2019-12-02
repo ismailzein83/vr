@@ -76,20 +76,44 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             return DropBackUpRouteTableIfExists_Query.Replace("#TABLENAMEWITHSCHEMA#", tableNameWithSchema);
         }
 
-        public Dictionary<string, string> GetCreateRouteTablesIndexesQuery(List<string> routeTablesNames)
+        public List<FinalizeItem> GetCreateRouteTablesIndexesQuery(List<string> routeTablesNames)
         {
-            Dictionary<string, string> queries = new Dictionary<string, string>();
+            List<FinalizeItem> queries = new List<FinalizeItem>();
             string tableNamePrefix = string.IsNullOrEmpty(schemaName) ? "" : $"{schemaName}.";
 
             foreach (var routeTableName in routeTablesNames)
             {
-                var createIndexQuery = Createindex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}");
-                createIndexQuery = createIndexQuery.Replace("#GUID#", Guid.NewGuid().ToString("N"));
+                var createGistIndexQuery = CreateGistIndex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}");
+                createGistIndexQuery = createGistIndexQuery.Replace("#GUID#", Guid.NewGuid().ToString("N"));
 
-                queries.Add($"Build index for {routeTableName}", createIndexQuery);
+                queries.Add(new FinalizeItem() { Description = $"Build GIST index for {routeTableName}", Query = createGistIndexQuery });
+
+                var createPrimaryIndexQuery = CreatePrimaryIndex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}");
+                createPrimaryIndexQuery = createPrimaryIndexQuery.Replace("#GUID#", Guid.NewGuid().ToString("N"));
+
+                queries.Add(new FinalizeItem() { Description = $"Build Primary index for {routeTableName}", Query = createPrimaryIndexQuery });
             }
 
             return queries;
+        }
+
+        public string GetUpdateCarrierRoutesQuery(string routeTableName, List<CataleyaConvertedRoute> cataleyaConvertedRoutes)
+        {
+            var queries = new StringBuilder();
+            string tableNamePrefix = string.IsNullOrEmpty(schemaName) ? "" : $"{schemaName}.";
+
+            foreach (var route in cataleyaConvertedRoutes)
+            {
+                var updateRouteQuery = UpdateRoute_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}");
+                updateRouteQuery = updateRouteQuery.Replace("#ISPERCENTAGE#", route.IsPercentage);
+                updateRouteQuery = updateRouteQuery.Replace("#OPTIONS#", route.Options);
+                updateRouteQuery = updateRouteQuery.Replace("#STATISTICS#", route.Statistics);
+                updateRouteQuery = updateRouteQuery.Replace("#CODE#", route.Code);
+
+                queries.AppendLine(updateRouteQuery);
+            }
+
+            return queries.ToString();
         }
 
         #endregion
@@ -115,14 +139,18 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         #region Queries 
         const string DropIfExistsCreateRouteTable_Query = @"DROP TABLE IF EXISTS #TABLENAMEWITHSCHEMA#;
                                                             CREATE TABLE  #TABLENAMEWITHSCHEMA#
-                                                            (Code character varying(30),
-                                                             IsPercentage character varying(10),
+                                                            (Code prefix_range NOT NULL,
+                                                             IsPercentage BIT(1),
                                                              Options varchar,
-                                                             Statics varchar);";
+                                                             Statistics varchar);";
 
         const string DropBackUpRouteTableIfExists_Query = @"Drop Table IF EXISTS #TABLENAMEWITHSCHEMA#;";
 
-        const string Createindex_Query = @"ALTER TABLE #TABLENAMEWITHSCHEMA# ADD constraint route_pkey_#GUID# PRIMARY KEY (Code);";
+        const string CreateGistIndex_Query = @"create index idx_#TABLENAMEWITHSCHEMA#_code on #TABLENAMEWITHSCHEMA#  using gist(code);";
+
+        const string CreatePrimaryIndex_Query = @"ALTER TABLE #TABLENAMEWITHSCHEMA# ADD constraint route_pkey_#GUID# PRIMARY KEY (Code);";
+
+        const string UpdateRoute_Query = @"UPDATE #TABLENAMEWITHSCHEMA# set IsPercentage = '#ISPERCENTAGE#' , Options = '#OPTIONS#' , Statistics = '#STATISTICS#' where Code = '#CODE#';";
 
         #endregion
     }

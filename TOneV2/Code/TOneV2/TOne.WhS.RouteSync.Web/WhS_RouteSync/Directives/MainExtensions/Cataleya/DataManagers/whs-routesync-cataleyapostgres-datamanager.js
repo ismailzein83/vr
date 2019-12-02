@@ -50,6 +50,7 @@
                         var cataleyaDataManager = payload.cataleyaDataManager;
                         if (cataleyaDataManager != undefined && cataleyaDataManager.DatabaseConnection != undefined) {
                             databaseConnection = cataleyaDataManager.DatabaseConnection;
+                            $scope.scopeModel.parallelIndexCount = cataleyaDataManager.ParallelIndexCount;
                             $scope.scopeModel.schemaName = databaseConnection.SchemaName;
                         }
                     }
@@ -84,6 +85,7 @@
                 api.getData = function () {
                     var data = {
                         $type: "TOne.WhS.RouteSync.Cataleya.Data.Postgres.CataleyaPostgresDataManager, TOne.WhS.RouteSync.Cataleya",
+                        ParallelIndexCount: $scope.scopeModel.parallelIndexCount,
                         DatabaseConnection: {
                             SchemaName: $scope.scopeModel.schemaName,
                             DBConnectionId: dbConnectionSelectorAPI.getSelectedIds()

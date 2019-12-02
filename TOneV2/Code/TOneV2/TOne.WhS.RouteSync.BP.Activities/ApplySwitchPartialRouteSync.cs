@@ -47,6 +47,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
                 {
                     SwitchId = inputArgument.SwitchInfo.SwitchId,
                     SwitchName = inputArgument.SwitchInfo.Name,
+                    WriteTrackingMessage = handle.SharedInstanceData.WriteTrackingMessage,
                     UpdatedRoutes = Helper.BuildRoutesFromCustomerRoutes(updatedCustomerRoutes),
                     WriteBusinessHandledException = handle.SharedInstanceData.WriteBusinessHandledException
                 };

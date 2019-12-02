@@ -20,8 +20,23 @@ namespace TOne.WhS.RouteSync.Cataleya
         public ICataleyaDataManager DataManager { get; set; }
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
         public int NodeID { get; set; }
+        public override bool SupportPartialRouteSync { get { return true; } }
 
-        const string blockedTrunk = "999999";
+        private string blockedCode;
+        public string BlockedCode
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(blockedCode))
+                    blockedCode = "999999";
+
+                return blockedCode;
+            }
+            set
+            {
+                blockedCode = value;
+            }
+        }
 
         const char optionsSeparatorAsChar = '|';
         const string optionsSeparatorAsString = "|";
@@ -34,6 +49,8 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         const char backupsSeparatorAsChar = ';';
         const string backupsSeparatorAsString = ";";
+
+        const string statisticsInitialValue = "0";
 
         #region Public Methods
 
@@ -118,11 +135,11 @@ namespace TOne.WhS.RouteSync.Cataleya
 
                 bool isPercentage;
                 string concatenatedOptions = null;
-                string statics = null;
+                string statistics = null;
 
                 if (route.Options == null || route.Options.Count == 0)
                 {
-                    concatenatedOptions = blockedTrunk;
+                    concatenatedOptions = BlockedCode;
                     isPercentage = false;
                 }
                 else
@@ -134,7 +151,7 @@ namespace TOne.WhS.RouteSync.Cataleya
                     }
                     else
                     {
-                        concatenatedOptions = BuildPercentageOptions(route.Options, out isPercentage, out statics);
+                        concatenatedOptions = BuildPercentageOptions(route.Options, out isPercentage, out statistics);
                     }
                 }
 
@@ -143,8 +160,8 @@ namespace TOne.WhS.RouteSync.Cataleya
                     CarrierID = carrierMapping.CarrierId,
                     Code = route.Code,
                     Options = concatenatedOptions,
-                    IsPercentage = isPercentage ? "Y" : "N",
-                    Statics = statics
+                    IsPercentage = isPercentage ? "1" : "0",
+                    Statistics = statistics
                 });
             }
             context.ConvertedRoutes = routes;
@@ -320,6 +337,8 @@ namespace TOne.WhS.RouteSync.Cataleya
             DataManager = null;
         }
 
+        #region Accounts Status Operations
+
         public override bool TryBlockCustomer(ITryBlockCustomerContext context)
         {
             return ChangeAccountStatus(context.CustomerId, "LockedGraceful");
@@ -350,15 +369,17 @@ namespace TOne.WhS.RouteSync.Cataleya
             return ChangeAccountStatus(context.CarrierAccountId, "Unlocked");
         }
 
+        #endregion 
+
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
         {
             char[] invalidCharacters = new char[] { trunkPercentageSeparatorAsChar, trunkBackupsSeparatorAsChar, backupsSeparatorAsChar, optionsSeparatorAsChar };
 
             Dictionary<int, List<string>> carrierNamesByZoneID = new Dictionary<int, List<string>>();
-            Dictionary<string, List<string>> carrierNamesByInTrunk = new Dictionary<string, List<string>>(); 
-            Dictionary<string, List<string>> carrierNamesByOutTrunk = new Dictionary<string, List<string>>(); 
+            Dictionary<string, List<string>> carrierNamesByInTrunk = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> carrierNamesByOutTrunk = new Dictionary<string, List<string>>();
             Dictionary<string, List<string>> invalidInTrunksByCarrierName = new Dictionary<string, List<string>>();
-            Dictionary<string, List<string>> invalidOutTrunksByCarrierName = new Dictionary<string, List<string>>(); 
+            Dictionary<string, List<string>> invalidOutTrunksByCarrierName = new Dictionary<string, List<string>>();
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
@@ -449,11 +470,38 @@ namespace TOne.WhS.RouteSync.Cataleya
             return validationMessages.Count == 0;
         }
 
-        private void List<T>()
+        public override void ApplyDifferentialRoutes(ISwitchRouteSynchronizerApplyDifferentialRoutesContext context)
         {
-            throw new NotImplementedException();
-        }
+            var convertRoutesContext = new SwitchRouteSynchronizerConvertRoutesContext() { Routes = context.UpdatedRoutes };
+            this.ConvertRoutes(convertRoutesContext);
 
+            if (convertRoutesContext.ConvertedRoutes == null || convertRoutesContext.ConvertedRoutes.Count == 0)
+                return;
+
+            var routesByRouteTableName = new Dictionary<string, List<CataleyaConvertedRoute>>();
+
+            List<CarrierAccountMapping> carrierAccountMappings = DataManager.GetCarrierAccountMappings(false);
+            if (carrierAccountMappings == null || carrierAccountMappings.Count == 0)
+                return;
+
+            var routeTableNameByCarrier = carrierAccountMappings.ToDictionary(itm => itm.CarrierId, itm => itm.RouteTableName);
+
+            foreach (CataleyaConvertedRoute route in convertRoutesContext.ConvertedRoutes)
+            {
+                if (!routeTableNameByCarrier.TryGetValue(route.CarrierID, out var routeTableName))
+                    continue;
+
+                List<CataleyaConvertedRoute> routes = routesByRouteTableName.GetOrCreateItem(routeTableName);
+                routes.Add(route);
+            }
+
+            var cataleyaApplyDifferentialRoutesContext = new CataleyaApplyDifferentialRoutesContext()
+            {
+                RoutesByRouteTableName = routesByRouteTableName,
+                WriteTrackingMessage = context.WriteTrackingMessage
+            };
+            this.DataManager.ApplyDifferentialRoutes(cataleyaApplyDifferentialRoutesContext);
+        }
         #endregion
 
         #region Private Methods
@@ -482,14 +530,14 @@ namespace TOne.WhS.RouteSync.Cataleya
             }
         }
 
-        private string BuildPercentageOptions(List<RouteOption> routeOptions, out bool hasValidPercentageOptions, out string staticsAsString)
+        private string BuildPercentageOptions(List<RouteOption> routeOptions, out bool hasValidPercentageOptions, out string statisticsAsString)
         {
             hasValidPercentageOptions = true;
-            staticsAsString = null;
+            statisticsAsString = null;
             var staticsList = new List<String>();
 
             if (routeOptions == null || routeOptions.Count == 0)
-                return blockedTrunk;
+                return BlockedCode;
 
             var concatenatedOptionsTrunksWithBackups = new List<string>();
             List<RouteOption> optionsWithoutPercentage = new List<RouteOption>();
@@ -552,7 +600,13 @@ namespace TOne.WhS.RouteSync.Cataleya
 
                 foreach (var optionMainTrunk in trunksWithPercentage)
                 {
-                    SupplierTrunkOption option = new SupplierTrunkOption() { Trunk = optionMainTrunk.Key, Percentage = optionMainTrunk.Value, BackupsTrunksAsString = concatenatedOptionBackupsTrunks };
+                    SupplierTrunkOption option = new SupplierTrunkOption()
+                    {
+                        Trunk = optionMainTrunk.Key,
+                        Percentage = optionMainTrunk.Value,
+
+                        BackupsTrunksAsString = concatenatedOptionBackupsTrunks
+                    };
                     supplierTrunkOptionList.Add(option);
                 }
             }
@@ -561,7 +615,7 @@ namespace TOne.WhS.RouteSync.Cataleya
             {
                 if (optionsWithoutPercentage.Count == 0)
                 {
-                    return blockedTrunk;
+                    return BlockedCode;
                 }
                 else
                 {
@@ -574,16 +628,16 @@ namespace TOne.WhS.RouteSync.Cataleya
 
             foreach (SupplierTrunkOption option in supplierTrunkOptionList)
             {
-                staticsList.Add(option.Percentage.ToString());
+                staticsList.Add(statisticsInitialValue);
 
                 if (!string.IsNullOrEmpty(option.BackupsTrunksAsString))
-                    concatenatedOptionsTrunksWithBackups.Add($"{option.Trunk}{trunkPercentageSeparatorAsString}{option.Percentage}{trunkBackupsSeparatorAsString}{option.BackupsTrunksAsString}");
+                    concatenatedOptionsTrunksWithBackups.Add($"{option.Trunk}{trunkPercentageSeparatorAsString}{option.Percentage}{ trunkBackupsSeparatorAsString}{ option.BackupsTrunksAsString}");
                 else
                     concatenatedOptionsTrunksWithBackups.Add($"{option.Trunk}{trunkPercentageSeparatorAsString}{option.Percentage}");
             }
 
             if (staticsList.Count > 0)
-                staticsAsString = string.Join(optionsSeparatorAsString, staticsList);
+                statisticsAsString = string.Join(optionsSeparatorAsString, staticsList);
 
             return string.Join(optionsSeparatorAsString, concatenatedOptionsTrunksWithBackups);
         }
@@ -599,7 +653,7 @@ namespace TOne.WhS.RouteSync.Cataleya
         private string BuildPriorityOptions(List<RouteOption> routeOptions)
         {
             if (routeOptions == null || routeOptions.Count == 0)
-                return blockedTrunk;
+                return BlockedCode;
 
             var allOptionsTrunks = new List<string>();
             foreach (var routeOption in routeOptions)
@@ -620,7 +674,7 @@ namespace TOne.WhS.RouteSync.Cataleya
             }
 
             if (allOptionsTrunks.Count == 0)
-                return blockedTrunk;
+                return BlockedCode;
 
             return string.Join(optionsSeparatorAsString, allOptionsTrunks);
         }
@@ -728,7 +782,6 @@ namespace TOne.WhS.RouteSync.Cataleya
 
             return string.Join("; ", cookiesAsString);
         }
-
         #endregion
     }
 }

@@ -21,4 +21,10 @@ namespace TOne.WhS.RouteSync.Cataleya.Entities
         public CarrierAccountMapping CarrierAccountMappingToDelete { get; set; }
 
     }
+
+    public class FinalizeItem
+    {
+        public string Description { get; set; }
+        public string Query { get; set; }
+    }
 }

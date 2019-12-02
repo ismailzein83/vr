@@ -19,6 +19,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data
         Object PrepareDataForApply(List<ConvertedRoute> routes);
         void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
         void Finalize(ICataleyaFinalizeContext context);
+        void ApplyDifferentialRoutes(ICataleyaApplyDifferentialRoutesContext context);
         //bool UpdateCarrierAccountMappingStatus(String customerId , CarrierAccountStatus status);
     }
 }

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Cataleya.Entities;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Common;
@@ -14,6 +17,22 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
         public Guid ConfigId { get { return new Guid("CAD5F46B-F182-462A-AACC-B862ACD11AEB"); } }
         public DatabaseConnection DatabaseConnection { get; set; }
 
+        int? parallelIndexCount { get; set; }
+        public int ParallelIndexCount
+        {
+            get
+            {
+                if (!parallelIndexCount.HasValue)
+                    parallelIndexCount = 1;
+
+                return parallelIndexCount.Value;
+            }
+            set
+            {
+                parallelIndexCount = value;
+            }
+        }
+
         string connectionString;
         string ConnectionString
         {
@@ -26,17 +45,14 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             }
         }
 
-        protected override string GetConnectionString()
-        {
-            return ConnectionString;
-        }
+        protected override string GetConnectionString() { return ConnectionString; }
 
-
+        object obj = new object();
         #region Carrier Account Mappings
 
         public List<CarrierAccountMapping> GetCarrierAccountMappings(bool getFromTemp)
         {
-            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, connectionString);
+            var carrierAccountDataManager = new CarrierAccountMappingDataManager(DatabaseConnection.SchemaName, ConnectionString);
             return carrierAccountDataManager.GetCarrierAccountMappings(getFromTemp);
         }
 
@@ -63,7 +79,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         public void InitializeCustomerIdentificationTable()
         {
-            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, connectionString);
+            var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, ConnectionString);
             customerIdentificationDataManager.Initialize();
         }
 
@@ -102,10 +118,19 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             var customerIdentificationDataManager = new CustomerIdentificationDataManager(DatabaseConnection.SchemaName, ConnectionString);
             var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, ConnectionString);
 
-            Dictionary<string, string> queryCommands = routeDataManager.GetCreateRouteTablesIndexesQuery(context.RouteTableNamesForIndexes);
+            ConcurrentQueue<FinalizeItem> queryCommands = new ConcurrentQueue<FinalizeItem>();
+            List<FinalizeItem> routeTableFinalizeItems = routeDataManager.GetCreateRouteTablesIndexesQuery(context.RouteTableNamesForIndexes);
+            if (routeTableFinalizeItems != null)
+            {
+                foreach (FinalizeItem item in routeTableFinalizeItems)
+                {
+                    queryCommands.Enqueue(item);
+                }
+            }
 
-            queryCommands.Add("Drop Temporary Carrier Account Mapping Table", carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery());
-            queryCommands.Add("Drop Temporary Customer Identification Table", customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery());
+            ConcurrentQueue<FinalizeItem> queryCommands2 = new ConcurrentQueue<FinalizeItem>();
+            queryCommands2.Enqueue(new FinalizeItem() { Description = "Drop Temporary Carrier Account Mapping Table", Query = carrierAccountDataManager.GetDropTempCarrierAccountMappingTableQuery() });
+            queryCommands2.Enqueue(new FinalizeItem() { Description = "Drop Temporary Customer Identification Table", Query = customerIdentificationDataManager.GetDropTempCustomerIdentificationTableQuery() });
 
             var finalCustomerDataByAccountId = context.FinalCustomerDataByAccountId;
 
@@ -113,42 +138,42 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             {
                 if (finalCustomerData.CarrierAccountMappingToAdd != null)
                 {
-                    queryCommands.Add($"Add Carrier Account Mapping for account {finalCustomerData.CarrierAccountMappingToAdd.CarrierId}", carrierAccountDataManager.GetAddCarrierAccountMappingQuery(finalCustomerData.CarrierAccountMappingToAdd));
+                    queryCommands2.Enqueue(new FinalizeItem() { Description = $"Add Carrier Account Mapping for account {finalCustomerData.CarrierAccountMappingToAdd.CarrierId}", Query = carrierAccountDataManager.GetAddCarrierAccountMappingQuery(finalCustomerData.CarrierAccountMappingToAdd) });
                 }
 
                 if (finalCustomerData.CarrierAccountMappingToUpdate != null)
                 {
                     var carrierAccountMappingToUpdate = finalCustomerData.CarrierAccountMappingToUpdate;
-                    queryCommands.Add($"Update Carrier Account Mapping for account {carrierAccountMappingToUpdate.CarrierId}", carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate));
+                    queryCommands2.Enqueue(new FinalizeItem() { Description = $"Update Carrier Account Mapping for account {carrierAccountMappingToUpdate.CarrierId}", Query = carrierAccountDataManager.GetUpdateCarrierAccountMappingQuery(carrierAccountMappingToUpdate) });
 
                     if (!string.IsNullOrEmpty(carrierAccountMappingToUpdate.RouteTableName))
                     {
                         var backupVersionNumber = (carrierAccountMappingToUpdate.Version + 1) % 3;
                         string tableName = Helper.BuildRouteTableName(carrierAccountMappingToUpdate.CarrierId, backupVersionNumber);
                         var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
-                        queryCommands.Add($"Drop Route table {tableName}", dropQuery);
+                        queryCommands2.Enqueue(new FinalizeItem() { Description = $"Drop Route table {tableName}", Query = dropQuery });
                     }
                 }
                 if (finalCustomerData.CarrierAccountMappingToDelete != null)
                 {
                     var carrierAccountMappingToDelete = finalCustomerData.CarrierAccountMappingToDelete;
                     var dropQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(carrierAccountMappingToDelete.RouteTableName);
-                    queryCommands.Add($"Drop Route table {carrierAccountMappingToDelete.RouteTableName}", dropQuery);
+                    queryCommands2.Enqueue(new FinalizeItem() { Description = $"Drop Route table {carrierAccountMappingToDelete.RouteTableName}", Query = dropQuery });
 
                     var backupVersionNumber = (carrierAccountMappingToDelete.Version + 2) % 3;
                     string tableName = Helper.BuildRouteTableName(carrierAccountMappingToDelete.CarrierId, backupVersionNumber);
                     var dropBackupQuery = routeDataManager.GetDropBackUpRouteTableIfExistsQuery(tableName);
 
-                    queryCommands.Add($"Delete Carrier Account Mapping for account {carrierAccountMappingToDelete.CarrierId}", carrierAccountDataManager.GetDeleteCarrierAccountMappingQuery(carrierAccountMappingToDelete));
+                    queryCommands2.Enqueue(new FinalizeItem() { Description = $"Delete Carrier Account Mapping for account {carrierAccountMappingToDelete.CarrierId}", Query = carrierAccountDataManager.GetDeleteCarrierAccountMappingQuery(carrierAccountMappingToDelete) });
 
-                    queryCommands.Add($"Drop Route table {tableName}", dropBackupQuery);
+                    queryCommands2.Enqueue(new FinalizeItem() { Description = $"Drop Route table {tableName}", Query = dropBackupQuery });
                 }
 
                 if (finalCustomerData.CustomerIdentificationsToAdd != null && finalCustomerData.CustomerIdentificationsToAdd.Count > 0)
                 {
                     foreach (var customerIdentificationToAdd in finalCustomerData.CustomerIdentificationsToAdd)
                     {
-                        queryCommands.Add($"Add Customer Identification for account {customerIdentificationToAdd.CarrierId} and trunk {customerIdentificationToAdd.Trunk}", customerIdentificationDataManager.GeAddCustomerIdentificationQuery(customerIdentificationToAdd));
+                        queryCommands2.Enqueue(new FinalizeItem() { Description = $"Add Customer Identification for account {customerIdentificationToAdd.CarrierId} and trunk {customerIdentificationToAdd.Trunk}", Query = customerIdentificationDataManager.GeAddCustomerIdentificationQuery(customerIdentificationToAdd) });
                     }
                 }
 
@@ -156,35 +181,83 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
                 {
                     foreach (var customerIdentificationToDelete in finalCustomerData.CustomerIdentificationsToDelete)
                     {
-                        queryCommands.Add($"Delete Customer Identification for account {customerIdentificationToDelete.CarrierId} and trunk {customerIdentificationToDelete.Trunk}", customerIdentificationDataManager.GetDeleteCustomerIdentificationQuery(customerIdentificationToDelete));
+                        queryCommands2.Enqueue(new FinalizeItem() { Description = $"Delete Customer Identification for account {customerIdentificationToDelete.CarrierId} and trunk {customerIdentificationToDelete.Trunk}", Query = customerIdentificationDataManager.GetDeleteCustomerIdentificationQuery(customerIdentificationToDelete) });
                     }
                 }
             };
 
-            int index = 0;
-
-            Func<string> getNextQuery = () =>
+            List<Task> tasks = new List<Task>();
+            int remainingIndexes = queryCommands.Count;
+            for (int i = 0; i < ParallelIndexCount; i++)
             {
-                if (index >= queryCommands.Count)
+                Task task = new Task(() =>
                 {
-                    var oldKvp = queryCommands.ElementAt(index - 1);
-                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Concat(oldKvp.Key, " has ended"), null);
+                    FinalizeItem item = null;
+                    Func<string> getNextQuery = () =>
+                        {
+                            if (!queryCommands.TryDequeue(out item))
+                                return null;
+                            return item.Query;
+                        };
+
+                    ExecuteNonQuery(getNextQuery, () =>
+                    {
+                        lock (obj)
+                        {
+                            remainingIndexes--;
+                            string text = remainingIndexes > 1 ? "es" : "";
+                            context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, $"{item.Description} is done. {remainingIndexes} index{text} remaining.", null);
+                        }
+                    });
+                });
+                tasks.Add(task);
+                task.Start();
+            }
+            Task.WaitAll(tasks.ToArray());
+
+            int remainingQueries = queryCommands2.Count;
+            FinalizeItem item2 = null;
+            Func<string> getNextQuery2 = () =>
+            {
+                if (!queryCommands2.TryDequeue(out item2))
                     return null;
-                }
-
-                if (index != 0)
-                {
-                    var oldKvp = queryCommands.ElementAt(index - 1);
-                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Concat(oldKvp.Key, " has ended"), null);
-                }
-
-                var currentKvp = queryCommands.ElementAt(index++);
-                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Concat(currentKvp.Key, " has started"), null);
-
-                return currentKvp.Value;
+                return item2.Query;
             };
 
-            ExecuteNonQuery(getNextQuery);
+            ExecuteNonQuery(getNextQuery2, () =>
+            {
+                remainingQueries--;
+                string text = remainingQueries > 1 ? "ies" : "y";
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, $"{item2.Description} is done. {remainingQueries} quer{text} remaining.", null);
+            });
+        }
+
+        public void ApplyDifferentialRoutes(ICataleyaApplyDifferentialRoutesContext context)
+        {
+            var routeDataManager = new RouteDataManager(DatabaseConnection.SchemaName, ConnectionString);
+            var updateRoutesQueryByRouteTableName = new ConcurrentQueue<FinalizeItem>();
+
+            foreach (var kvp in context.RoutesByRouteTableName)
+            {
+                var query = routeDataManager.GetUpdateCarrierRoutesQuery(kvp.Key, kvp.Value);
+                updateRoutesQueryByRouteTableName.Enqueue(new FinalizeItem() { Description = kvp.Key, Query = query });
+            }
+
+            int remainingTables = updateRoutesQueryByRouteTableName.Count;
+            FinalizeItem item = null;
+            Func<string> getNextQuery2 = () =>
+            {
+                if (!updateRoutesQueryByRouteTableName.TryDequeue(out item))
+                    return null;
+                return item.Query;
+            };
+
+            ExecuteNonQuery(getNextQuery2, () =>
+            {
+                remainingTables--;
+                string text = remainingTables > 1 ? "s" : "";
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, $"Updating table {item.Description} is done. {remainingTables} table{text} remaining.", null);
+            });
         }
 
         //public bool UpdateCarrierAccountMappingStatus(String customerId, CarrierAccountStatus status)

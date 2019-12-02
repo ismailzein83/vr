@@ -12,6 +12,8 @@ namespace TOne.WhS.RouteSync.Entities
 
         List<ConvertedRoute> ConvertedUpdatedRoutes { get; }
 
+        Action<LogEntryType, string, object[]> WriteTrackingMessage { get; }
+
         Action<Exception, bool> WriteBusinessHandledException { get; }
 
         SwitchSyncOutput SwitchSyncOutput { set; }
@@ -24,6 +26,8 @@ namespace TOne.WhS.RouteSync.Entities
         public string SwitchName { get; set; }
 
         public List<ConvertedRoute> ConvertedUpdatedRoutes { get; set; }
+
+        public Action<LogEntryType, string, object[]> WriteTrackingMessage { get; set; }
 
         public Action<Exception, bool> WriteBusinessHandledException { get; set; }
 

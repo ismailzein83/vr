@@ -18,7 +18,7 @@ namespace TOne.WhS.RouteSync.Entities
         {
 
         }
-		public virtual bool DontCloseMappingRules { get { return false; } }
+        public virtual bool DontCloseMappingRules { get { return false; } }
 
         public abstract Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context);
 
@@ -312,11 +312,13 @@ namespace TOne.WhS.RouteSync.Entities
 
         List<Route> UpdatedRoutes { get; }
 
+        Action<LogEntryType, string, object[]> WriteTrackingMessage { get; }
+
         Action<Exception, bool> WriteBusinessHandledException { get; }
 
         SwitchSyncOutput SwitchSyncOutput { set; }
-
     }
+
     public class SwitchRouteSynchronizerApplyDifferentialRoutesContext : ISwitchRouteSynchronizerApplyDifferentialRoutesContext
     {
         public string SwitchId { get; set; }
@@ -324,6 +326,8 @@ namespace TOne.WhS.RouteSync.Entities
         public string SwitchName { get; set; }
 
         public List<Route> UpdatedRoutes { get; set; }
+
+        public Action<LogEntryType, string, object[]> WriteTrackingMessage { get; set; }
 
         public Action<Exception, bool> WriteBusinessHandledException { get; set; }
 

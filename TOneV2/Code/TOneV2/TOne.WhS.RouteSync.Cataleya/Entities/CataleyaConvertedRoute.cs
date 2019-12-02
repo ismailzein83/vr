@@ -9,7 +9,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Entities
         public int CarrierID { get; set; }
         public string IsPercentage { get; set; }
         public string Options { get; set; }
-        public string Statics { get; set; }
+        public string Statistics { get; set; }
 
         public override string GetCustomer()
         {
@@ -23,7 +23,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Entities
 
         public string ConvertToString()
         {
-            return string.Format("{1}{0}{2}{0}{3}{0}{4}", "\t", Code, IsPercentage, Options, Statics);
+            return string.Format("{1}{0}{2}{0}{3}{0}{4}", "\t", Code, IsPercentage, Options, Statistics);
         }
     }
 }
