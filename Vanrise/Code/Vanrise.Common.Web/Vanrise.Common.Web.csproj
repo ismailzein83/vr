@@ -131,6 +131,10 @@
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCookieAuthInterceptorEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-httpconnection-cookieauthinterceptor-editor.js" />
+    <Content Include="Common\Directives\MainExtensions\RemoteCommunicatorSettingsTypes\Templates\SSHCommunicatorSettings.html" />
+    <Content Include="Common\Directives\MainExtensions\RemoteCommunicatorSettingsTypes\Templates\TelnetCommunicatorSettings.html" />
+    <Content Include="Common\Directives\MainExtensions\RemoteCommunicatorSettingsTypes\vr-common-remotecommunicatorsettings-ssh.js" />
+    <Content Include="Common\Directives\MainExtensions\RemoteCommunicatorSettingsTypes\vr-common-remotecommunicatorsettings-telnet.js" />
     <Content Include="Common\Directives\Personalization\NamedPersonalizationItemsEditorController.js" />
     <Content Include="Common\Directives\Personalization\Templates\NamedPersonalizationItemGridTemplate.html" />
     <Content Include="Common\Directives\Personalization\Templates\NamedPersonalizationItemsEditor.html" />
@@ -147,6 +151,7 @@
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\GeneralSettings\Templates\TemplateTheme.html" />
     <Content Include="Common\Directives\GeneralSettings\vr-common-themepreview.js" />
+    <Content Include="Common\Directives\RemoteCommunicatorSettings\vr-common-remotecommunicatorsettings-selective.js" />
     <Content Include="Common\Directives\ThemeExtended\vr-common-themeextended-selector.js" />
     <Content Include="Common\Directives\IconPath\vr-common-iconpath-selective.js" />
     <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsDefinitionTemplate.html" />
@@ -229,6 +234,7 @@
     <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
+    <Content Include="Common\Services\APIServices\RemoteCommunicatorSettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\VRCompilationAPIService.js" />
     <Content Include="Common\Services\APIServices\PageDirectiveHostAPIService.js" />
     <Content Include="Common\Services\APIServices\ReceivedRequestLogAPIService.js" />
@@ -279,6 +285,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RemoteCommunicatorSettingsController.cs" />
     <Compile Include="Controllers\VRCompilationController.cs" />
     <Compile Include="Controllers\ReceivedRequestLogController.cs" />
     <Compile Include="Controllers\VRDevProjectController.cs" />

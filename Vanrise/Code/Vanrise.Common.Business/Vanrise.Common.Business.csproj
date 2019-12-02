@@ -83,6 +83,7 @@
     <Compile Include="PageDirectiveHostManager.cs" />
     <Compile Include="PageDirectiveHostViewSettings.cs" />
     <Compile Include="ReceivedRequestLogManager.cs" />
+    <Compile Include="RemoteCommunicatorSettingsManager.cs" />
     <Compile Include="ThemeExtendedManager.cs" />
     <Compile Include="Filters\CommentBEDefinitionFilter.cs" />
     <Compile Include="VRCompiledAssemblyManager.cs" />

@@ -66,7 +66,7 @@ namespace Vanrise.Common
         public int ConnectionTimeOutInSeconds { get; set; }
     }
 
-    public class RemoteCommunicatorConfig : ExtensionConfiguration
+    public class RemoteCommunicatorSettingsConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VRCommon_RemoteCommunicatorSettings";
         public string Editor { get; set; }
