@@ -178,6 +178,29 @@ namespace Vanrise.Data.Postgres
             }
         }
 
+        public void ExecuteNonQuery(Func<string> getNextQuery, Action onQueryExecuted, int? commandTimeout = null)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(GetConnectionString()))
+            {
+                if (connection.State == ConnectionState.Closed) connection.Open();
+
+                while (true)
+                {
+                    string query = getNextQuery();
+                    if (string.IsNullOrEmpty(query))
+                        break;
+
+                    using (NpgsqlCommand command = CreateCommand(connection, query, commandTimeout))
+                    {
+                        command.ExecuteNonQuery();
+                        onQueryExecuted();
+                    }
+                }
+
+                connection.Close();
+            }
+        }
+
         protected int ExecuteNonQueryText(string cmdText, Action<NpgsqlCommand> prepareCommand, int? commandTimeout = null)
         {
             int rowsAffected;
