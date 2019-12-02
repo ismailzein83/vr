@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_NamedPersonalizationItemsEditorController" vr-loader="scopeModel.isLoading" size="medium">
+    <vr-modalbody>
+        <vr-row removeline>
+            <vr-columns colnum="6">
+                <vr-fieldset header="My Settings">
+                    <vr-row>
+                        <vr-columns colnum="12">
+                            <vr-common-namedpersonalizationitem-grid  on-ready="scopeModel.onMySettingsGridReady" onsettingsclicked="scopeModel.onSettingsClicked"></vr-common-namedpersonalizationitem-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-fieldset>
+            </vr-columns>
+            <vr-columns colnum="6">
+                <vr-fieldset header="Shared Settings">
+                    <vr-row>
+                        <vr-columns colnum="12">
+                            <vr-common-namedpersonalizationitem-grid  on-ready="scopeModel.onSharedSettingsGridReady" onsettingsclicked="scopeModel.onSettingsClicked"></vr-common-namedpersonalizationitem-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-fieldset>
+            </vr-columns>
+        </vr-row>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

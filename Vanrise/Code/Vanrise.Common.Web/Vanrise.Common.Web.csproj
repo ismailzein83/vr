@@ -131,6 +131,10 @@
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCookieAuthInterceptorEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-httpconnection-cookieauthinterceptor-editor.js" />
+    <Content Include="Common\Directives\Personalization\NamedPersonalizationItemsEditorController.js" />
+    <Content Include="Common\Directives\Personalization\Templates\NamedPersonalizationItemGridTemplate.html" />
+    <Content Include="Common\Directives\Personalization\Templates\NamedPersonalizationItemsEditor.html" />
+    <Content Include="Common\Directives\Personalization\vr-common-namedpersonalizationitem-grid.js" />
     <Content Include="Common\Directives\Personalization\vr-common-savetype-selector.js" />
     <Content Include="Common\Directives\ProgressBar\vr-common-progress-bar.js" />
     <Content Include="Common\Directives\ConnectionString\Templates\ConnectionStringTemplate.html" />

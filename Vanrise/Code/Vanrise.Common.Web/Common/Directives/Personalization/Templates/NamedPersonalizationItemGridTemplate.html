@@ -1,0 +1,9 @@
+﻿<vr-datagrid datasource="personalizationItems"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             getrowstyle="ctrl.markSelectedSettingRow"             
+             alternativecolor="false"
+             idfield="Name" enableautoexport="false">
+    <vr-datagridcolumn headertext="'Name'"   isclickable="true" onclicked="ctrl.onSettingClick" field="'Name'" type="'Text'"  ></vr-datagridcolumn>
+</vr-datagrid>
