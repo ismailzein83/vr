@@ -53,6 +53,7 @@ namespace Mediation.Mobilis.Business
                 inTrunkSwitchTarget.TargetFieldValues = new Dictionary<string, object>();
                 inTrunkSwitchTarget.TargetFieldValues.Add("Direction", InDirection);
                 inTrunkSwitchTarget.TargetFieldValues.Add("Trunks", incomingRoute);
+                inTrunkSwitchTarget.EffectiveOn = cdr.SetupTime;
                 var inTrunkSwitchRule = mappingRuleManager.GetMatchRule(s_SwitchTrunkIdentificationRule, inTrunkSwitchTarget);
 
                 if (inTrunkSwitchRule != null && (bool)inTrunkSwitchRule.Settings.Value)
@@ -71,6 +72,7 @@ namespace Mediation.Mobilis.Business
                 outTrunkSwitchTarget.TargetFieldValues = new Dictionary<string, object>();
                 outTrunkSwitchTarget.TargetFieldValues.Add("Direction", OutDirection);
                 outTrunkSwitchTarget.TargetFieldValues.Add("Trunks", outgoingRoute);
+                outTrunkSwitchTarget.EffectiveOn = cdr.SetupTime;
                 var outTrunkSwitchRule = mappingRuleManager.GetMatchRule(s_SwitchTrunkIdentificationRule, outTrunkSwitchTarget);
 
                 if (outTrunkSwitchRule != null && (bool)outTrunkSwitchRule.Settings.Value)
