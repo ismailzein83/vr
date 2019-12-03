@@ -229,7 +229,10 @@ namespace Retail.Runtime
         public static Vanrise.Integration.Entities.MappingOutput MapC5Records_CSV(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var mtcObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 21, OtherPartyNumber = 4, DurationInSeconds = 23, DisconnectDateTime = 22, IMEI = 2, BTS = 9, Cell = 10, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, InTrunk = 7, OutTrunk = 8, AttemptDateTime = 84, AlertDateTime = 85, translatedNumber = 110 };
+
             var mocObj = new { MSISDN = 3, IMSI = 1, ConnectDateTime = 24, OtherPartyNumber = 5, DurationInSeconds = 26, DisconnectDateTime = 25, IMEI = 2, BTS = 12, Cell = 13, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, InTrunk = 10, OutTrunk = 11, AttemptDateTime = 92, AlertDateTime = 93, translatedNumber = -1 };
+
+            var inGatewayObj = new { MSISDN = 2, IMSI = 53, ConnectDateTime = 7, OtherPartyNumber = 1, DurationInSeconds = 9, DisconnectDateTime = 8, IMEI = -1, BTS = 56, Cell = 57, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, InTrunk = 4, OutTrunk = 5, AttemptDateTime = 39, AlertDateTime = 40, translatedNumber = -1 };
 
             var cdrs = new List<dynamic>();
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
@@ -269,6 +272,7 @@ namespace Retail.Runtime
                     {
                         case 0: temp = mocObj; cdr.RecordType = 1; cdr.RecordDirection = 1; break;
                         case 1: temp = mtcObj; cdr.RecordType = 1; cdr.RecordDirection = 2; break;
+                        case 3: temp = inGatewayObj; cdr.RecordType = 4; cdr.RecordDirection = 2; break;
                         default: continue;
                     }
 
@@ -419,10 +423,12 @@ namespace Retail.Runtime
                         cdr.DisconnectDateTime = new DateTime(year, month, day, hour, minute, second);
                     }
 
-                    cdr.IMEI = fields[temp.IMEI];
+                    if (temp.IMEI > 0)
+                        cdr.IMEI = fields[temp.IMEI];
+
                     cdr.BTS = fields[temp.BTS];
                     cdr.Cell = fields[temp.Cell];
-                    
+
                     decimal upVolume = 0;
                     if (temp.UpVolume >= 0 && decimal.TryParse(fields[temp.UpVolume], out upVolume))
                         cdr.UpVolume = upVolume;
