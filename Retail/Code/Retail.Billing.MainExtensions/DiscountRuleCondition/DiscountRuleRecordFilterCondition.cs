@@ -9,7 +9,7 @@ namespace Retail.Billing.MainExtensions.DiscountRuleCondition
 {
     public class DiscountRuleRecordFilterCondition : Retail.Billing.Entities.DiscountRuleCondition
     {
-        public override Guid ConfigID => new Guid("7913C973-C1A7-4EA2-8002-F1540CCBB708");
+        public override Guid ConfigID { get { return new Guid("7913C973-C1A7-4EA2-8002-F1540CCBB708"); } }
 
         public Guid DataRecordTypeID { get; set; }
 
@@ -17,15 +17,32 @@ namespace Retail.Billing.MainExtensions.DiscountRuleCondition
 
         public override bool IsMatched(IDiscountRuleConditionIsMatchedContext context)
         {
-            throw new NotImplementedException();
+            return new RecordFilterManager().IsFilterGroupMatch(RecordFilterGroup, new DataRecordDictFilterGenericFieldMatchContext(context.FieldValues, context.DataRecordFields));
+        }
+
+        public override bool AreEqual(object comparedDiscountRuleCondition)
+        {
+            string newRecordFilterGroupExpression = null;
+            if (RecordFilterGroup != null)
+                newRecordFilterGroupExpression = BuildRecordFilterGroupExpression(RecordFilterGroup);
+
+            string oldRecordFilterGroupExpression = null;
+            if (comparedDiscountRuleCondition != null)
+            {
+                var oldDiscountRuleRecordFilterCondition = comparedDiscountRuleCondition as DiscountRuleRecordFilterCondition;
+                if (oldDiscountRuleRecordFilterCondition != null && oldDiscountRuleRecordFilterCondition.RecordFilterGroup != null)
+                    oldRecordFilterGroupExpression = BuildRecordFilterGroupExpression(oldDiscountRuleRecordFilterCondition.RecordFilterGroup);
+            }
+
+            return newRecordFilterGroupExpression == oldRecordFilterGroupExpression;
         }
 
         public override string GetDescription()
         {
-            if (this.RecordFilterGroup == null)
+            if (RecordFilterGroup == null)
                 return null;
 
-            return BuildRecordFilterGroupExpression(this.RecordFilterGroup);
+            return BuildRecordFilterGroupExpression(RecordFilterGroup);
         }
 
         private string BuildRecordFilterGroupExpression(RecordFilterGroup recordFilterGroup)
@@ -35,11 +52,11 @@ namespace Retail.Billing.MainExtensions.DiscountRuleCondition
             var dataRecordTypeFields = new DataRecordTypeManager().GetDataRecordTypeFields(this.DataRecordTypeID);
             if (dataRecordTypeFields != null)
             {
-                recordFilterFieldsInfo = dataRecordTypeFields.ToDictionary(x => x.Value.Name, x => new RecordFilterFieldInfo()
+                recordFilterFieldsInfo = dataRecordTypeFields.ToDictionary(itm => itm.Value.Name, itm => new RecordFilterFieldInfo()
                 {
-                    Name = x.Value.Name,
-                    Title = x.Value.Title,
-                    Type = x.Value.Type
+                    Name = itm.Value.Name,
+                    Title = itm.Value.Title,
+                    Type = itm.Value.Type
                 });
             }
 

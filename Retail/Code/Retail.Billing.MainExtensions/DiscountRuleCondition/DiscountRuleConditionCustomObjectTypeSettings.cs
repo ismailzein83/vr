@@ -5,31 +5,46 @@ namespace Retail.Billing.MainExtensions.DiscountRuleCondition
 {
     public class DiscountRuleConditionCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId => new Guid("866A226E-E75D-412B-AC0A-2F8AA89AB63E");
+        public override Guid ConfigId { get { return new Guid("866A226E-E75D-412B-AC0A-2F8AA89AB63E"); } }
+
+        public override string SelectorUIControl { get { return "retail-billing-discountrulecondition-customobject-runtime"; } }
 
         public override bool AreEqual(object newValue, object oldValue)
         {
-            throw new NotImplementedException();
+            var newDiscountRuleCondition = newValue as Entities.DiscountRuleCondition;
+            var oldDiscountRuleCondition = oldValue as Entities.DiscountRuleCondition;
+
+            if (newDiscountRuleCondition == null && oldDiscountRuleCondition == null)
+                return true;
+
+            if (newDiscountRuleCondition == null || oldDiscountRuleCondition == null)
+                return false;
+
+            return newDiscountRuleCondition.AreEqual(oldDiscountRuleCondition);
         }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            throw new NotImplementedException();
+            var discountRuleCondition = context.FieldValue as Retail.Billing.Entities.DiscountRuleCondition;
+            if (discountRuleCondition == null)
+                return null;
+
+            return discountRuleCondition.GetDescription();
         }
 
         public override Type GetNonNullableRuntimeType()
         {
-            throw new NotImplementedException();
-        }
-
-        public override string GetRuntimeTypeDescription()
-        {
-            throw new NotImplementedException();
+            return typeof(Retail.Billing.Entities.DiscountRuleCondition);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            throw new NotImplementedException();
+            return originalValue as Retail.Billing.Entities.DiscountRuleCondition;
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Discount Rule Condition Custom Object";
         }
     }
 }

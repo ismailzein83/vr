@@ -11,6 +11,11 @@ namespace Retail.Billing.Entities
         public abstract bool IsMatched(IDiscountRuleConditionIsMatchedContext context);
 
         public abstract string GetDescription();
+
+        public virtual bool AreEqual(object comparedDiscountRuleCondition) 
+        {
+            return true;
+        } 
     }
 
     public interface IDiscountRuleConditionIsMatchedContext

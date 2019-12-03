@@ -1,58 +1,57 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    DiscountRuleConditionCustomObjectDefinition.$inject = ['UtilsService', 'VRUIUtilsService'];
+    DiscountRuleConditionCustomObjectDefinition.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-//    function DiscountRuleConditionCustomObjectDefinition(UtilsService, VRUIUtilsService) {
+    function DiscountRuleConditionCustomObjectDefinition(UtilsService, VRUIUtilsService) {
 
-//        var directiveDefinitionObject = {
-//            restrict: 'E',
-//            scope: {
-//                onReady: '=',
-//                normalColNum: '@',
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var ctor = new DiscountRuleConditionCustomObjectDefinitionDirectiveCtor(ctrl, $scope, $attrs);
-//                ctor.initializeController();
-//            },
-//            controllerAs: 'ctrl',
-//            bindToController: true,
-//            templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingDiscountRule/Condition/Definition/Templates/DiscountRuleConditionDefinitionTemplate.html"
-//        };
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+                normalColNum: '@',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new DiscountRuleConditionCustomObjectDefinitionDirectiveCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingDiscountRule/Condition/Definition/Templates/DiscountRuleConditionDefinitionTemplate.html"
+        };
 
-//        function DiscountRuleConditionCustomObjectDefinitionDirectiveCtor(ctrl, $scope, attrs) {
-//            this.initializeController = initializeController;
+        function DiscountRuleConditionCustomObjectDefinitionDirectiveCtor(ctrl, $scope, attrs) {
+            this.initializeController = initializeController;
 
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
-//                defineAPI();
-//            }
+                defineAPI();
+            }
 
-//            function defineAPI() {
-//                var api = {};
+            function defineAPI() {
+                var api = {};
 
-//                api.load = function (payload) {
+                api.load = function (payload) {
+                    return UtilsService.waitPromiseNode({ promises: [] });
+                };
 
-//                    return UtilsService.waitPromiseNode({ promises: [] });
-//                };
+                api.getData = function () {
+                    return {
+                        $type: "Retail.Billing.MainExtensions.DiscountRuleCondition.DiscountRuleConditionCustomObjectTypeSettings, Retail.Billing.MainExtensions",
+                    };
+                };
 
-//                api.getData = function () {
-//                    return {
-//                        $type: "Retail.Billing.MainExtensions.DiscountRuleCondition.DiscountRuleConditionCustomObjectTypeSettings, Retail.Billing.MainExtensions",
-//                    };
-//                };
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+        }
 
-//                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-//                    ctrl.onReady(api);
-//                }
-//            }
-//        }
+        return directiveDefinitionObject;
+    }
 
-//        return directiveDefinitionObject;
-//    }
-
-//    app.directive('retailBillingDiscountruleconditionCustomobjectDefinition', DiscountRuleConditionCustomObjectDefinition);
-//})(app);
+    app.directive('retailBillingDiscountruleconditionCustomobjectDefinition', DiscountRuleConditionCustomObjectDefinition);
+})(app);

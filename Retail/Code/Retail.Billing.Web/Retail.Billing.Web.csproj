@@ -149,8 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\RetailBillingRatePlanController.cs" />
-    <Compile Include="Controllers\RetailBillingChargeController.cs" />
     <Compile Include="Controllers\RetailBillingCustomCodeChargeTypeController.cs" />
     <Compile Include="Controllers\RetailBillingChargeTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -188,14 +186,14 @@
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingContractService\Templates\ContractServiceChargeableConditionOnBeforeSaveHandler.html" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Definition\retail-billing-discountrulecondition-customobject-definition.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Definition\Templates\DiscountRuleConditionDefinitionTemplate.html" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Runtime\MainExtensions\retail-billing-discountrule-recordfiltercondition.js" />
+    <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Runtime\MainExtensions\Templates\DiscountRuleRecordFilterConditionTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Runtime\retail-billing-discountrulecondition-customobject-runtime.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\Condition\Runtime\Templates\DiscountRuleConditionRuntimeTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\TargetType\retail-billing-discountrule-targettype-settings.js" />
     <Content Include="Retail_Billing\Elements\Directives\RetailBillingDiscountRule\TargetType\Templates\DiscountRuleTargetTypeSettingsTemplate.html" />
     <Content Include="Retail_Billing\Elements\Directives\Templates\BillingInvoiceTypeSettingsTemplate.html" />
     <Content Include="Retail_Billing\Elements\Reports\Reporting.aspx" />
-    <Content Include="Retail_Billing\Elements\Services\APIServices\RatePlanAPIService.js" />
-    <Content Include="Retail_Billing\Elements\Services\APIServices\ChargeAPIService.js" />
     <Content Include="Retail_Billing\Elements\Services\APIServices\CustomCodeChargeTypeAPIService.js" />
     <Content Include="Retail_Billing\Elements\Services\APIServices\ChargeTypeAPIService.js" />
     <Content Include="Retail_Billing\Elements\Services\CustomCodeChargeTypeService.js" />

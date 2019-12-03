@@ -1,101 +1,90 @@
-﻿//"use strict";
+﻿"use strict";
 
-//app.directive("retailBillingDiscountruleTargettypeSettings", ["UtilsService", "VRUIUtilsService",
-//    function (UtilsService, VRUIUtilsService) {
+app.directive("retailBillingDiscountruleTargettypeSettings", ["UtilsService", "VRUIUtilsService",
+    function (UtilsService, VRUIUtilsService) {
 
-//        var directiveDefinitionObject = {
+        var directiveDefinitionObject = {
+            restrict: "E",
+            scope: {
+                onReady: "="
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new BillingDiscountRuleTargetTypeSettingsCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingDiscountRule/TargetType/Templates/DiscountRuleTargetTypeSettingsTemplate.html"
+        };
 
-//            restrict: "E",
-//            scope:
-//            {
-//                onReady: "="
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
+        function BillingDiscountRuleTargetTypeSettingsCtor($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-//                var ctor = new BillingDiscountRuleTargetTypeSettingsCtor($scope, ctrl, $attrs);
-//                ctor.initializeController();
-//            },
-//            controllerAs: "ctrl",
-//            bindToController: true,
-//            compile: function (element, attrs) {
+            var targetRecordTypeSelectorAPI;
+            var targetRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-//            },
-//            templateUrl: "/Client/Modules/Retail_Billing/Elements/Directives/RetailBillingDiscountRule/TargetType/Templates/DiscountRuleTargetTypeSettingsTemplate.html"
-//        };
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//        function BillingDiscountRuleTargetTypeSettingsCtor($scope, ctrl, $attrs) {
-//            this.initializeController = initializeController;
+                $scope.scopeModel.onTargetRecordTypeSelectorReady = function (api) {
+                    targetRecordTypeSelectorAPI = api;
+                    targetRecordTypeSelectorReadyDeferred.resolve();
+                };
 
-//            var targetRecordTypeSelectorAPI;
-//            var targetRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                defineAPI();
+            }
 
-//            function initializeController() {
+            function defineAPI() {
+                var api = {};
 
-//                $scope.scopeModel = {};
+                api.load = function (payload) {
 
-//                $scope.scopeModel.onTargetRecordTypeSelectorReady = function (api) {
-//                    targetRecordTypeSelectorAPI = api;
-//                    targetRecordTypeSelectorReadyDeferred.resolve();
-//                };
+                    var settings;
 
-//                defineAPI();
-//            }
+                    if (payload != undefined) {
+                        var targetTypeEntity = payload.componentType;
 
-//            function defineAPI() {
-//                var api = {};
+                        if (targetTypeEntity != undefined) {
+                            settings = targetTypeEntity.Settings;
+                            $scope.scopeModel.name = targetTypeEntity.Name;
+                        }
+                    }
 
-//                api.load = function (payload) {
+                    function loadTargetRecordTypeSelector() {
+                        var targetRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-//                    var targetTypeEntity;
-//                    var extendedSettings;
+                        targetRecordTypeSelectorReadyDeferred.promise.then(function () {
+                            var payload = {
+                                selectedIds: settings != undefined ? settings.TargetRecordTypeId : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(targetRecordTypeSelectorAPI, payload, targetRecordTypeSelectorLoadDeferred);
+                        });
 
-//                    if (payload != undefined) {
-//                        targetTypeEntity = payload.componentType; 
-//                        $scope.scopeModel.name = targetTypeEntity != undefined ? targetTypeEntity.Name : undefined;
-//                    }
+                        return targetRecordTypeSelectorLoadDeferred.promise;
+                    }
 
-//                    if (targetTypeEntity != undefined && targetTypeEntity.Settings != undefined) {
-//                        extendedSettings = targetTypeEntity.Settings.ExtendedSettings;
-//                    }
+                    return UtilsService.waitPromiseNode({ promises: [loadTargetRecordTypeSelector()] });
+                };
 
-//                    function loadTargetRecordTypeSelector() {
-//                        var targetRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                api.getData = function () {
 
-//                        targetRecordTypeSelectorReadyDeferred.promise.then(function () {
-//                            var payload = {
-//                                selectedIds: extendedSettings != undefined ? extendedSettings.TargetRecordTypeId : undefined
-//                            };
-//                            VRUIUtilsService.callDirectiveLoad(targetRecordTypeSelectorAPI, payload, targetRecordTypeSelectorLoadDeferred);
-//                        });
+                    var settings = {
+                        $type: "Retail.Billing.Entities.DiscountRuleTargetTypeSettings, Retail.Billing.Entities",
+                        TargetRecordTypeId: targetRecordTypeSelectorAPI.getSelectedIds()
+                    };
 
-//                        return targetRecordTypeSelectorLoadDeferred.promise;
-//                    }
+                    return {
+                        Name: $scope.scopeModel.name,
+                        Settings: settings
+                    };
+                };
 
-//                    return UtilsService.waitPromiseNode({ promises: [loadTargetRecordTypeSelector()] });
-//                };
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
+        }
 
-//                api.getData = function () {
-
-//                    var settings = {
-//                        $type: "Retail.Billing.Entities.DiscountRuleTargetTypeSettings,Retail.Billing.Entities",
-//                        ExtendedSettings: {
-//                            TargetRecordTypeId: targetRecordTypeSelectorAPI.getSelectedIds()
-//                        }
-//                    };
-
-//                    return {
-//                        Name: $scope.scopeModel.name,
-//                        Settings: settings
-//                    };
-//                };
-
-//                if (ctrl.onReady != null)
-//                    ctrl.onReady(api);
-//            }
-
-
-//        }
-//        return directiveDefinitionObject;
-//    }
-//]);
+        return directiveDefinitionObject;
+    }
+]);
