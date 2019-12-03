@@ -26,6 +26,7 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
         function customObjectCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
+
             var directiveAPI;
             var directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,13 +42,14 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
                 api.load = function (payload) {
 
                     var promises = [];
-
                     var fieldType;
                     var fieldValue;
+                    var allFieldValuesByName;
 
                     if (payload != undefined) {
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
+                        allFieldValuesByName = payload.allFieldValuesByName;
 
                         $scope.scopeModel.fieldTitle = payload.fieldTitle;
                     }
@@ -71,7 +73,8 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
                             var directivePayload = {
                                 fieldTitle: $scope.scopeModel.fieldTitle,
                                 fieldValue: fieldValue,
-                                fieldType: fieldType
+                                fieldType: fieldType,
+                                allFieldValuesByName: allFieldValuesByName
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadPromiseDeferred);
                         });
@@ -88,9 +91,16 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
                     UtilsService.setContextReadOnly($scope);
                 };
 
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames) { //allFieldValuesByFieldNames { field1: [value1, value2], ...}
+                    if (directiveAPI != undefined && directiveAPI.onFieldValueChanged != undefined && typeof (directiveAPI.onFieldValueChanged) == "function")
+                        return directiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+
+                    return UtilsService.waitPromiseNode({ promises: [] });
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
+            }           
         }
 
         function getDirectiveTemplate(attrs) {
@@ -102,7 +112,7 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
             function getSingleSelectionModeTemplate() {
 
                 return '<vr-directivewrapper ng-if="selector.directive != undefined" directive="selector.directive" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
-                     + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>';
+                    + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>';
             }
         }
 
