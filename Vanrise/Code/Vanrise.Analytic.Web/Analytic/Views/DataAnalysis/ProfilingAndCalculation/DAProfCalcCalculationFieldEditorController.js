@@ -72,6 +72,7 @@
                 $scope.scopeModel.fieldName = calculationFieldEntity.FieldName;
                 $scope.scopeModel.fieldTitle = calculationFieldEntity.FieldTitle;
                 $scope.scopeModel.expression = calculationFieldEntity.Expression;
+                $scope.scopeModel.isTechnical = calculationFieldEntity.IsTechnical;
             }
             function loadFieldTypeSelective() {
                 var fieldTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -113,7 +114,8 @@
                 FieldName: $scope.scopeModel.fieldName,
                 FieldTitle: $scope.scopeModel.fieldTitle,
                 FieldType: fieldTypeSelectiveAPI.getData(),
-                Expression: $scope.scopeModel.expression
+                Expression: $scope.scopeModel.expression,
+                IsTechnical: $scope.scopeModel.isTechnical
             };
         }
     }

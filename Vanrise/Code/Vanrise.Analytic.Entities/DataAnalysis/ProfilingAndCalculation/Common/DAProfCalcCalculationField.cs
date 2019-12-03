@@ -11,6 +11,8 @@ namespace Vanrise.Analytic.Entities
         public DataRecordFieldType FieldType { get; set; }
 
         public string Expression { get; set; }
+
+        public bool IsTechnical { get; set; }
     }
 
     public class DAProfCalcCalculationFieldDetail

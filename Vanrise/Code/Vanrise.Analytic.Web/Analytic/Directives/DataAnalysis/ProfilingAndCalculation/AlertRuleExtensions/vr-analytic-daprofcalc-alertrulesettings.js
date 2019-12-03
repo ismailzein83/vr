@@ -68,7 +68,8 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                     VR_Analytic_DAProfCalcNotificationAPIService.GetDAProfCalcNotificationTypeId(vrAlertRuleTypeId, analysisTypeId).then(function (response) {
                         notificationTypeId = response;
-                        VR_Analytic_DAProfCalcOutputSettingsAPIService.GetOutputFields(analysisTypeId).then(function (response) {
+
+                        VR_Analytic_DAProfCalcOutputSettingsAPIService.GetFilteredOutputFields(analysisTypeId).then(function (response) {
                             outputFields = response;
 
                             var dataRecordAlertRuleSettingsPayload = {
@@ -97,7 +98,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                 };
 
                 defineAPI();
-            };
+            }
 
             function defineAPI() {
                 var api = {};
@@ -158,7 +159,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
 
             function getCriteriaSectionLoadPromise() {
                 var loadCriteriaSectionPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -185,14 +186,15 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                 });
 
                 return loadCriteriaSectionPromiseDeferred.promise;
-            };
+            }
 
             function getDataRecordAlertRuleSettingsLoadPromise() {
                 var dataRecordAlertRuleSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 
                 VR_Analytic_DAProfCalcNotificationAPIService.GetDAProfCalcNotificationTypeId(vrAlertRuleTypeId, analysisTypeId).then(function (response) {
                     notificationTypeId = response;
-                    VR_Analytic_DAProfCalcOutputSettingsAPIService.GetOutputFields(analysisTypeId).then(function (response) {
+
+                    VR_Analytic_DAProfCalcOutputSettingsAPIService.GetFilteredOutputFields(analysisTypeId).then(function (response) {
                         outputFields = response;
 
                         dataRecordAlertRuleSettingReadyDeferred.promise.then(function () {
@@ -216,8 +218,9 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         });
                     });
                 });
+
                 return dataRecordAlertRuleSettingsLoadDeferred.promise;
-            };
+            }
 
             function buildContext(groupingFields) {
                 var availableDataRecordFieldNames = groupingFields != undefined ? groupingFields : getDefaultSelectedGroupingFields(outputFields);
@@ -227,7 +230,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     vrActionTargetType: buildDAProfCalcTargetType(analysisTypeId, availableDataRecordFieldNames),
                     notificationTypeId: notificationTypeId
                 };
-            };
+            }
 
             function buildRecordFields(fields) {
                 var recordFields = [];
@@ -240,9 +243,9 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         IsRequired: field.IsRequired,
                         IsSelected: field.IsSelected
                     });
-                };
+                }
                 return recordFields;
-            };
+            }
 
             function buildDAProfCalcTargetType(selectedAnalysisTypeId, groupingFields) {
                 return {
@@ -250,7 +253,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     DataAnalysisItemDefinitionId: selectedAnalysisTypeId,
                     AvailableDataRecordFieldNames: groupingFields
                 };
-            };
+            }
 
             function getDefaultSelectedGroupingFields(fields) {
                 var defaultSelectedFields = [];
@@ -258,7 +261,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     var field = fields[i];
                     if (field.IsSelected)
                         defaultSelectedFields.push(field.Name);
-                };
+                }
 
                 return defaultSelectedFields.length > 0 ? defaultSelectedFields : undefined;
             }

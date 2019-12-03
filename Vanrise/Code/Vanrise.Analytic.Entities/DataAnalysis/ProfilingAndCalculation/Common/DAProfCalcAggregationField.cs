@@ -17,6 +17,8 @@ namespace Vanrise.Analytic.Entities
 
         public string Expression { get; set; }
 
+        public bool IsTechnical { get; set; }
+
         //ToBeDeleted
         public TimeRangeFilter TimeRangeFilter { get; set; }
     }

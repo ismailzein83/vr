@@ -3,6 +3,7 @@
 app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCalcOutputSettingsAPIService', 'UtilsService', 'VRUIUtilsService',
 
     function (VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService) {
+
         return {
             restrict: 'E',
             scope: {
@@ -29,7 +30,6 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
 
                 var daprofcalcOutputfieldsSelector = new DaprofcalcOutputfieldsSelector(ctrl, $scope, $attrs);
                 daprofcalcOutputfieldsSelector.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -39,13 +39,13 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
         };
 
         function DaprofcalcOutputfieldsSelector(ctrl, $scope, attrs) {
-
             this.initializeController = initializeController;
 
             var selectorAPI;
             var requiredFieldTitles = [];
 
             function initializeController() {
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
@@ -82,8 +82,6 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
 
                         return requiredFieldsNotSelected.length > 0 ? "Required Fields: " + requiredFieldsNotSelected.join(', ') : null;
                     }
-
-                    return null;
                 };
             }
 
@@ -92,6 +90,7 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
 
                 api.load = function (payload) {
                     requiredFieldTitles.length = 0;
+
                     var selectedIds;
                     var filter;
                     var dataAnalysisItemDefinitionId;
@@ -102,12 +101,14 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
                         dataAnalysisItemDefinitionId = payload.dataAnalysisItemDefinitionId;
                     }
 
-                    var serializedFilter = UtilsService.serializetoJson(filter) != undefined ? UtilsService.serializetoJson(filter) : {};
+                    var serializedFilter = UtilsService.serializetoJson(filter);
 
                     return VR_Analytic_DAProfCalcOutputSettingsAPIService.GetFilteredOutputFields(dataAnalysisItemDefinitionId, serializedFilter).then(function (response) {
                         selectorAPI.clearDataSource();
+
                         if (response != null) {
                             var defaultSelectedIds = [];
+
                             for (var i = 0; i < response.length; i++) {
                                 var currentField = response[i];
                                 ctrl.datasource.push(currentField);

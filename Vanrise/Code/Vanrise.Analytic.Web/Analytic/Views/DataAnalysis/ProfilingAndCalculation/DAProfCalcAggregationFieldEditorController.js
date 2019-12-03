@@ -93,6 +93,7 @@
                 $scope.scopeModel.fieldName = aggregationFieldEntity.FieldName;
                 $scope.scopeModel.fieldTitle = aggregationFieldEntity.FieldTitle;
                 $scope.scopeModel.expression = aggregationFieldEntity.Expression;
+                $scope.scopeModel.isTechnical = aggregationFieldEntity.IsTechnical;
             }
             function loadRecordAggregateSelective() {
                 var recordAggregateSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -193,6 +194,7 @@
                 FieldName: $scope.scopeModel.fieldName,
                 FieldTitle: $scope.scopeModel.fieldTitle,
                 Expression: $scope.scopeModel.expression,
+                IsTechnical: $scope.scopeModel.isTechnical,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                 TimeFilter: timeFilter,
                 TimeRangeFilter: timeRangeFilterSelectiveAPI.getData(),

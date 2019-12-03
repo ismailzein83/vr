@@ -17,13 +17,6 @@ namespace Vanrise.Analytic.Web.Controllers
         DAProfCalcOutputSettingsManager _manager = new DAProfCalcOutputSettingsManager();
 
         [HttpGet]
-        [Route("GetOutputFields")]
-        public List<DAProfCalcOutputField> GetOutputFields(Guid dataAnalysisItemDefinitionId)
-        {
-            return _manager.GetOutputFields(dataAnalysisItemDefinitionId);
-        }
-
-        [HttpGet]
         [Route("GetFilteredOutputFields")]
         public IEnumerable<DAProfCalcOutputField> GetFilteredOutputFields(Guid dataAnalysisItemDefinitionId, string filter = null)
         {

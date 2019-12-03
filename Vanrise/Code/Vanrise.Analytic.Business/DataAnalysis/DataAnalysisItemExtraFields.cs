@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
 using System.Linq;
+using Vanrise.Common;
 
 namespace Vanrise.Analytic.Business
 {
@@ -21,7 +22,9 @@ namespace Vanrise.Analytic.Business
             DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(this.DataAnalysisItemDefinitionId);
 
             IDAProfCalcOutputSettingsGetOutputFieldsContext outputFieldContext = null;
-            List<DAProfCalcOutputField> daProfCalcOutputFields = daProfCalcOutputSettings.GetOutputFields(outputFieldContext);
+            List<DAProfCalcOutputField> allDAProfCalcOutputFields = daProfCalcOutputSettings.GetOutputFields(outputFieldContext);
+             
+            List<DAProfCalcOutputField> daProfCalcOutputFields = allDAProfCalcOutputFields.FindAllRecords(itm => !itm.IsTechnical).ToList();
             return BuildDataRecordFields(daProfCalcOutputFields);
         }
 
