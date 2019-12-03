@@ -907,7 +907,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Parameters!TotalAmount.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                                  <Value>=FormatNumber(Parameters!TotalAmount.Value,3)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>

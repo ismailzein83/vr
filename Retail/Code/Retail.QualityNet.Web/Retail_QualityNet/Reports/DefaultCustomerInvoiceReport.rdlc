@@ -886,7 +886,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!GrandTotal.Value,Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!GrandTotal.Value,3) + " " + Parameters!Currency.Value</Value>
                               <Style>
                                 <FontSize>11pt</FontSize>
                                 <FontWeight>Bold</FontWeight>

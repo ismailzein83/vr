@@ -210,7 +210,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Parameters!InternationalGrandTotalAmount.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
+                                  <Value>=FormatNumber(Parameters!InternationalGrandTotalAmount.Value, 3) + " " + Parameters!Currency.Value</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>

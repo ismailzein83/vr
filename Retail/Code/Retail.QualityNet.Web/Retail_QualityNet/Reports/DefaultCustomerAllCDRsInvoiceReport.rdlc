@@ -1078,12 +1078,6 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value xml:space="preserve">  </Value>
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                              </Style>
-                            </TextRun>
-                            <TextRun>
                               <Value>=Fields!RoundedTotalAmount.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
@@ -1395,7 +1389,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!GrandTotal.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!GrandTotal.Value, 3) + " " + Parameters!Currency.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>

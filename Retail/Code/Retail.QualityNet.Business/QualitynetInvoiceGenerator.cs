@@ -445,7 +445,7 @@ namespace Retail.QualityNet.Business
             {
                 get
                 {
-                    return new CountryManager().GetCountryName(CountryId).ToUpper();
+                    return CountryId > 0 ? new CountryManager().GetCountryName(CountryId).ToUpper() : string.Empty;
                 }
             }
             public int CountryInArabicId { get; set; }
@@ -454,16 +454,20 @@ namespace Retail.QualityNet.Business
             {
                 get
                 {
-                    string countryArabicName = new CountryInArabicManager().GetCountryInArabicName(CountryId);
-                    if (!String.IsNullOrEmpty(countryArabicName))
-                        return countryArabicName;
-                    return CountryEnglishName;
+                    if (CountryId > 0)
+                    {
+                        string countryArabicName = new CountryInArabicManager().GetCountryInArabicName(CountryId);
+                        if (!String.IsNullOrEmpty(countryArabicName))
+                            return countryArabicName;
+                        return CountryEnglishName;
+                    }
+                    return string.Empty;
                 }
             }
             public int TotalNumberOfCalls { get; set; }
             public decimal TotalAmount { get; set; }
             [JsonIgnore]
-            public decimal RoundedTotalAmount { get { return decimal.Round(TotalAmount, 3); } }
+            public string RoundedTotalAmount { get { return String.Format("{0:n3}", TotalAmount); } }
             public string TotalAmountInArabicWords { get; set; }
         }
 
