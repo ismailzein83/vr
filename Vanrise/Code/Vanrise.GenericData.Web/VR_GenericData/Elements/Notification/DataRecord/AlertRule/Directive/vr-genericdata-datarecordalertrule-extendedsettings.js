@@ -22,6 +22,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
 
             var dataRecordTypeId, identificationFields, notificationTypeId; //assigned from alertTypeSettings
             var dataRecordFieldsInfo;
+            var includedFieldNames;
 
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -31,7 +32,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
             var dataRecordAlertRuleSettingReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                $scope.scopeModel = {}; 
+                $scope.scopeModel = {};
                 $scope.scopeModel.tabObject = { showTab: false };
                 $scope.scopeModel.selectedDataRecordFields = [];
 
@@ -126,6 +127,16 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                             dataRecordTypeId = alertTypeSettings.DataRecordTypeId;
                             identificationFields = alertTypeSettings.IdentificationFields;
                             notificationTypeId = alertTypeSettings.NotificationTypeId;
+
+                            var advancedFilters = alertTypeSettings.AdvancedFilters;
+                            if (advancedFilters != undefined && advancedFilters.AvailableFields != undefined && advancedFilters.AvailableFields.length > 0) {
+                                includedFieldNames = [];
+
+                                var availableFields = advancedFilters.AvailableFields;
+                                for (var i = 0; i < availableFields.length; i++) {
+                                    includedFieldNames.push(availableFields[i].FieldName);
+                                }
+                            }
                         }
 
                         if (alertExtendedSettings != undefined) {
@@ -234,7 +245,13 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                 var loadDataRecordFieldsInfoPromise;
 
                 if (dataRecordFieldsInfo == undefined) {
-                    loadDataRecordFieldsInfoPromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId).then(function (response) {
+
+                    var serializedFilter;
+                    if (includedFieldNames != undefined) {
+                        serializedFilter = UtilsService.serializetoJson({ IncludedFieldNames: includedFieldNames });
+                    }
+
+                    loadDataRecordFieldsInfoPromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId, serializedFilter).then(function (response) {
                         dataRecordFieldsInfo = response;
                     });
                 } else {

@@ -208,6 +208,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_GenericData\Constants\AdvancedFilterFieldsRelationTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\CallRestAPIHTTPMethodEnum.js" />
     <Content Include="VR_GenericData\Constants\CompareToConstantOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateCounterTypeEnum.js" />

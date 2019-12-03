@@ -21,7 +21,7 @@ namespace Vanrise.Analytic.MainExtensions.RealTimeReport.SearchSettings
                 {
                     advancedFilters = new GenericSearchSettingsAdvancedFilters()
                     {
-                        FieldsRelationType = AdvancedFilterFieldsRelationType.AllFields
+                        FieldsRelationType = History.SearchSettings.AdvancedFilterFieldsRelationType.AllFields
                     };
                 }
                 return advancedFilters;

@@ -333,7 +333,25 @@
             }
 
             function loadFields() {
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo($scope.selectedDRSearchPageStorageSource.DataRecordTypeId).then(function (response) {
+
+                var includedFieldNames;
+
+                var advancedFilters = $scope.selectedDRSearchPageStorageSource.AdvancedFilters;
+                if (advancedFilters != undefined && advancedFilters.AvailableFields != undefined && advancedFilters.AvailableFields.length > 0) {
+                    includedFieldNames = [];
+
+                    var availableFields = advancedFilters.AvailableFields;
+                    for (var j = 0; j < availableFields.length; j++) {
+                        includedFieldNames.push(availableFields[j].FieldName);
+                    }
+                }
+
+                var serializedFilter;
+                if (includedFieldNames != undefined) {
+                    serializedFilter = UtilsService.serializetoJson({ IncludedFieldNames: includedFieldNames });
+                }
+
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo($scope.selectedDRSearchPageStorageSource.DataRecordTypeId, serializedFilter).then(function (response) {
                     if (response) {
                         fields.length = 0;
                         for (var i = 0; i < response.length; i++) {

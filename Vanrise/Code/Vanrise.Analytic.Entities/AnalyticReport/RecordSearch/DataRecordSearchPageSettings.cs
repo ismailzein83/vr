@@ -89,8 +89,21 @@ namespace Vanrise.Analytic.Entities
         public List<DRSearchPageSubviewDefinition> SubviewDefinitions { get; set; }
         public List<DRSearchPageSortColumn> SortColumns { get; set; }
         public List<DRSearchPageFilter> Filters { get; set; }
-        public RecordFilterGroup RecordFilter { get; set; }
         public bool HideTimeRange { get; set; }
+        public RecordFilterGroup RecordFilter { get; set; }
+        public DRSearchPageStorageSourceAdvancedFilters AdvancedFilters { get; set; }
+    }
+
+    public class DRSearchPageStorageSourceAdvancedFilters
+    {
+        public AdvancedFilterFieldsRelationType FieldsRelationType { get; set; }
+        public List<AdvancedFilterField> AvailableFields { get; set; }
+    }
+
+    public enum AdvancedFilterFieldsRelationType { AllFields = 0, SpecificFields = 1 }
+    public class AdvancedFilterField
+    {
+        public string FieldName { get; set; }
     }
 
     public class DRSearchPageFilter

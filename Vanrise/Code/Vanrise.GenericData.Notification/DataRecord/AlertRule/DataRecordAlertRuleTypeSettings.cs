@@ -13,9 +13,11 @@ namespace Vanrise.GenericData.Notification
 
         public Guid DataRecordTypeId { get; set; }
 
-        public List<AlertRuleTypeRecordField> IdentificationFields { get; set; }
-
         public Guid NotificationTypeId { get; set; }
+
+        public DRAlertRuleTypeSettingsAdvancedFilters AdvancedFilters { get; set; }
+
+        public List<AlertRuleTypeRecordField> IdentificationFields { get; set; }
     }
 
     public class AlertRuleTypeRecordField
@@ -25,5 +27,17 @@ namespace Vanrise.GenericData.Notification
         public bool IsRequired { get; set; }
 
         public bool IsSelected { get; set; }
+    }
+
+    public class DRAlertRuleTypeSettingsAdvancedFilters
+    {
+        public AdvancedFilterFieldsRelationType FieldsRelationType { get; set; }
+        public List<AdvancedFilterField> AvailableFields { get; set; }
+    }
+
+    public enum AdvancedFilterFieldsRelationType { AllFields = 0, SpecificFields = 1 }
+    public class AdvancedFilterField
+    {
+        public string FieldName { get; set; }
     }
 }

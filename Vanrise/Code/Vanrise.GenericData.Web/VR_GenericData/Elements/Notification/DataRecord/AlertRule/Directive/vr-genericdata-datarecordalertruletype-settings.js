@@ -1,7 +1,8 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_AdvancedFilterFieldsRelationType',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_AdvancedFilterFieldsRelationType) {
+
         return {
             restrict: 'E',
             scope: {
@@ -9,7 +10,7 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new DataRecordAlertRuleTypeSettings($scope, ctrl, $attrs);
+                var ctor = new DataRecordAlertRuleTypeSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -17,10 +18,11 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
             templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/AlertRule/Directive/Templates/DataRecordAlertRuleTypeSettingsTemplate.html'
         };
 
-        function DataRecordAlertRuleTypeSettings($scope, ctrl, $attrs) {
+        function DataRecordAlertRuleTypeSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var dataRecordTypeId;
+            var selectedAdvancedFilterFieldIds;
 
             var dataRecordTypeSelectorAPI;
             var dataRecordTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -32,29 +34,43 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var advancedFilterFieldsSelectorAPI;
+            var advancedFilterFieldsReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.selectedDataRecordFields = [];
                 $scope.scopeModel.gridDataRecordFields = [];
+                $scope.scopeModel.showAdvancedFilterFields = false;
+                $scope.scopeModel.advancedFilterFieldsRelationTypeDS = UtilsService.getArrayEnum(VR_GenericData_AdvancedFilterFieldsRelationType);
 
                 $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
                     dataRecordTypeSelectorPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.onAdvancedFilterFieldsSelectorDirectiveReady = function (api) {
+                    advancedFilterFieldsSelectorAPI = api;
+                    advancedFilterFieldsReadyDeferred.resolve();
+                };
+
                 $scope.scopeModel.onDataRecordTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem == undefined)
+                        return;
 
-                    if (selectedItem != undefined) {
-                        dataRecordTypeId = selectedItem.DataRecordTypeId;
+                    dataRecordTypeId = selectedItem.DataRecordTypeId;
 
-                        if (dataRecordTypeSelectorSelectionChangedDeferred != undefined) {
-                            dataRecordTypeSelectorSelectionChangedDeferred.resolve();
-                        }
-                        else {
-                            loadDataRecordTypeFieldsSelector();
-                            loadNotificationTypeSelector();
-                        }
+                    if (dataRecordTypeSelectorSelectionChangedDeferred != undefined) {
+                        dataRecordTypeSelectorSelectionChangedDeferred.resolve();
+                    }
+
+                    else {
+                        $scope.scopeModel.gridDataRecordFields = [];
+                        $scope.scopeModel.selectedAdvancedFilterFieldsRelationType = VR_GenericData_AdvancedFilterFieldsRelationType.AllFields;
+
+                        loadDataRecordTypeFieldsSelector();
+                        loadNotificationTypeSelector();
+                        loadAdvancedFilterFieldsSelector(); 
                     }
 
                     function loadDataRecordTypeFieldsSelector() {
@@ -83,6 +99,35 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
                             $scope.scopeModel.isNotificationTypeSettingsSelectorLoading = value;
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, vrNotificationTypeSettingsSelectorAPI, vrNotificationSelectorPayload, setLoader, undefined);
+                    }
+                    function loadAdvancedFilterFieldsSelector() {
+                        if (advancedFilterFieldsSelectorAPI == undefined)
+                            return;
+
+                        var advancedFilterFieldsPayload = {
+                            dataRecordTypeId: selectedItem.DataRecordTypeId
+                        };
+                        var setLoader = function (value) {
+                            $scope.isAdvancedFilterDirectiveLoading = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, advancedFilterFieldsSelectorAPI, advancedFilterFieldsPayload, setLoader);
+                    }
+                };
+
+                $scope.scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem == undefined)
+                        return;
+
+                    if (selectedItem.value == VR_GenericData_AdvancedFilterFieldsRelationType.AllFields.value) {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterFields = false;
+                            $scope.scopeModel.selectedAdvancedFilterFields = [];
+                        });
+                    }
+                    else {
+                        setTimeout(function () {
+                            $scope.scopeModel.showAdvancedFilterFields = true;
+                        });
                     }
                 };
 
@@ -132,6 +177,7 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
                 api.load = function (payload) {
                     var promises = [];
 
+                    var advancedFilters;
                     var identificationFields;
                     var notificationTypeId;
 
@@ -139,10 +185,27 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
                         dataRecordTypeId = payload.settings.DataRecordTypeId;
                         identificationFields = payload.settings.IdentificationFields;
                         notificationTypeId = payload.settings.NotificationTypeId;
+                        advancedFilters = payload.settings.AdvancedFilters;
 
                         if (identificationFields != undefined) {
                             $scope.scopeModel.gridDataRecordFields = identificationFields;
                         }
+                    }
+
+                    if (advancedFilters != undefined) {
+                        $scope.scopeModel.selectedAdvancedFilterFieldsRelationType =
+                            UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, advancedFilters.FieldsRelationType, "value");
+
+                        if ($scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value == VR_GenericData_AdvancedFilterFieldsRelationType.SpecificFields.value) {
+                            selectedAdvancedFilterFieldIds = [];
+                            for (var i = 0; i < advancedFilters.AvailableFields.length; i++) {
+                                var advancedFilterField = advancedFilters.AvailableFields[i];
+                                selectedAdvancedFilterFieldIds.push(advancedFilterField.FieldName);
+                            }
+                        }
+                    }
+                    else {
+                        $scope.scopeModel.selectedAdvancedFilterFieldsRelationType = VR_GenericData_AdvancedFilterFieldsRelationType.AllFields;
                     }
 
                     //Loading DataRecordType Selector
@@ -158,9 +221,9 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
                         var notificationTypeSelectorPromise = getNotificationTypeSelectorPromise();
                         promises.push(notificationTypeSelectorPromise);
 
-                        UtilsService.waitMultiplePromises([dataRecordTypeFieldsSelectorLoadPromise, notificationTypeSelectorPromise]).then(function () {
-                            dataRecordTypeSelectorSelectionChangedDeferred = undefined;
-                        });
+                        //Loading AdvancedFilterFields Selector
+                        var advancedFilterFieldsSelectorLoadPromise = getAdvancedFilterFieldsSelectorLoadPromise();
+                        promises.push(advancedFilterFieldsSelectorLoadPromise);
                     }
 
                     function getDataRecordTypeSelectorLoadPromise() {
@@ -219,7 +282,24 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
                         return dataRecordTypeFieldsSelectorLoadDeferred.promise;
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    function getAdvancedFilterFieldsSelectorLoadPromise() {
+                        var loadAdvancedFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        advancedFilterFieldsReadyDeferred.promise.then(function () {
+
+                            var payloadAdvancedFilterDirective = {
+                                dataRecordTypeId: dataRecordTypeId,
+                                selectedIds: selectedAdvancedFilterFieldIds
+                            };
+                            VRUIUtilsService.callDirectiveLoad(advancedFilterFieldsSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
+                        });
+
+                        return loadAdvancedFilterDirectivePromiseDeferred.promise;
+                    }
+
+                    return UtilsService.waitPromiseNode({ promises: promises }).then(function () {
+                        dataRecordTypeSelectorSelectionChangedDeferred = undefined;
+                    });
                 };
 
                 api.getData = function () {
@@ -228,7 +308,8 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
                         $type: 'Vanrise.GenericData.Notification.DataRecordAlertRuleTypeSettings, Vanrise.GenericData.Notification',
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         IdentificationFields: buildIdentificationFields(),
-                        NotificationTypeId: vrNotificationTypeSettingsSelectorAPI.getSelectedIds()
+                        NotificationTypeId: vrNotificationTypeSettingsSelectorAPI.getSelectedIds(),
+                        AdvancedFilters: buildAdvancedFilters()
                     };
 
                     function buildIdentificationFields() {
@@ -244,6 +325,20 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
                         }
 
                         return identificationFields;
+                    }
+                    function buildAdvancedFilters() {
+                        var advancedFilters = {};
+                        advancedFilters.FieldsRelationType = $scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value;
+
+                        if ($scope.scopeModel.showAdvancedFilterFields) {
+                            advancedFilters.AvailableFields = [];
+                            for (var i = 0; i < $scope.scopeModel.selectedAdvancedFilterFields.length; i++) {
+                                var advancedFilterField = $scope.scopeModel.selectedAdvancedFilterFields[i];
+                                advancedFilters.AvailableFields.push({ FieldName: advancedFilterField.Name });
+                            }
+                        }
+
+                        return advancedFilters;
                     }
 
                     return obj;

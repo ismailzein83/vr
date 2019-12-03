@@ -15,30 +15,54 @@
         </span>
     </vr-row>
     <vr-row>
-        <vr-span vr-loader="scopeModel.isDataRecordTypeFieldsSelectorLoading" ng-show="scopeModel.selectedDataRecordType != undefined">
-            <vr-columns width="1/3row">
-                <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
-                                                              onselectitem="scopeModel.onDataRecordFieldSelected"
-                                                              ondeselectitem="scopeModel.onDataRecordFieldDeselected"
-                                                              selectedvalues="scopeModel.selectedDataRecordFields"
-                                                              label="Identification Fields" isrequired="true"
-                                                              ismultipleselection hideremoveicon>
-                </vr-genericdata-datarecordtypefields-selector>
-            </vr-columns>
-            <vr-columns width="2/3row">
-                <vr-datagrid datasource="scopeModel.gridDataRecordFields"
-                             ondeleterow="scopeModel.onDataRecordFieldDeleted"
-                             enabledraggablerow="true" hidegridmenu>
-                    
-                    <vr-datagridcolumn headertext="'Field'" field="'Name'" widthfactor="2"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Required'" widthfactor="1">
-                        <vr-switch value="dataItem.IsRequired"></vr-switch>
-                    </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Selected'" widthfactor="1">
-                        <vr-switch value="dataItem.IsSelected"></vr-switch>
-                    </vr-datagridcolumn>
-                </vr-datagrid>
-            </vr-columns>
-        </vr-span>
+        <vr-columns width="fullrow">
+            <vr-section title="Action Rule">
+                <span ng-show="scopeModel.selectedDataRecordType != undefined">
+                    <vr-row>
+                        <vr-columns colnum="6">
+                            <vr-select datasource="scopeModel.advancedFilterFieldsRelationTypeDS"
+                                       datavaluefield="value" datatextfield="description"
+                                       selectedvalues="scopeModel.selectedAdvancedFilterFieldsRelationType"
+                                       onselectionchanged="scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged" label="Advanced Filter Fields" hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
+                        <span ng-show="scopeModel.showAdvancedFilterFields" vr-loader="isAdvancedFilterDirectiveLoading">
+                            <vr-columns colnum="6">
+                                <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onAdvancedFilterFieldsSelectorDirectiveReady" selectedvalues="scopeModel.selectedAdvancedFilterFields"
+                                                                              isrequired="scopeModel.showAdvancedFilterFields" label="Fields" ismultipleselection>
+                                </vr-genericdata-datarecordtypefields-selector>
+                            </vr-columns>
+                        </span>
+                    </vr-row>
+                </span>
+                <vr-row>
+                    <vr-span vr-loader="scopeModel.isDataRecordTypeFieldsSelectorLoading" ng-show="scopeModel.selectedDataRecordType != undefined">
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
+                                                                          onselectitem="scopeModel.onDataRecordFieldSelected"
+                                                                          ondeselectitem="scopeModel.onDataRecordFieldDeselected"
+                                                                          selectedvalues="scopeModel.selectedDataRecordFields"
+                                                                          label="Identification Fields" isrequired="true"
+                                                                          ismultipleselection hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                        <vr-columns width="2/3row">
+                            <vr-datagrid datasource="scopeModel.gridDataRecordFields"
+                                         ondeleterow="scopeModel.onDataRecordFieldDeleted"
+                                         enabledraggablerow="true" hidegridmenu>
+
+                                <vr-datagridcolumn headertext="'Field'" field="'Name'" widthfactor="2"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Required'" widthfactor="1">
+                                    <vr-switch value="dataItem.IsRequired"></vr-switch>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Selected'" widthfactor="1">
+                                    <vr-switch value="dataItem.IsSelected"></vr-switch>
+                                </vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-span>
+                </vr-row>
+            </vr-section>
+        </vr-columns>
     </vr-row>
 </vr-tab>

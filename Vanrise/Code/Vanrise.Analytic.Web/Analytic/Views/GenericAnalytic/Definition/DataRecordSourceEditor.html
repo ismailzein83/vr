@@ -66,6 +66,30 @@
                             </vr-row>
                         </vr-tab>
                         <vr-tab header="'Search Filters'">
+                            <vr-row>
+                                <vr-columns colnum="12" haschildcolumns>
+                                    <span ng-show="scopeModel.selectedDataRecordType != undefined">
+                                        <vr-columns colnum="3">
+                                            <vr-select datasource="scopeModel.advancedFilterFieldsRelationTypeDS"
+                                                       selectedvalues="scopeModel.selectedAdvancedFilterFieldsRelationType"
+                                                       onselectionchanged="scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged"
+                                                       datavaluefield="value" datatextfield="description" label="Advanced Filter Fields" hideremoveicon>
+                                            </vr-select>
+                                        </vr-columns>
+                                        <span ng-show="scopeModel.showAdvancedFilterFields" vr-loader="isAdvancedFilterDirectiveLoading">
+                                            <vr-columns colnum="3">
+                                                <vr-genericdata-datarecordtypefields-selector label="Fields" on-ready="scopeModel.onAdvancedFilterFieldsSelectorDirectiveReady" selectedvalues="scopeModel.selectedAdvancedFilterFields"
+                                                                                              isrequired="scopeModel.showAdvancedFilterFields" ismultipleselection>
+                                                </vr-genericdata-datarecordtypefields-selector>
+                                            </vr-columns>
+                                        </span>
+                                    </span>
+                                    <vr-columns colnum="3">
+                                        <vr-switch value="scopeModel.hideTimeRange" label="Hide Time Range"></vr-switch>
+                                    </vr-columns>
+                                </vr-columns>
+                            </vr-row>
+
                             <vr-row removeline>
                                 <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
                                     <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFilters" onselectitem="onSelectedFilter" ondeselectitem="onDeSelectedFilter"
@@ -155,12 +179,14 @@
                     </vr-tabs>
                 </vr-tab>
                 <vr-tab header="'Filters'">
-                    <vr-switch value="scopeModel.hideTimeRange" label="Hide Time Range"></vr-switch>
-                    <vr-section title="Record Filter" ng-show="scopeModel.selectedDataRecordType != undefined" vr-loader="scopeModel.isRecordFilterDirectiveLoading" collapsible>
-                        <vr-row>
-                            <vr-genericdata-recordfilter on-ready="onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
-                        </vr-row>
-                    </vr-section>
+
+                    <vr-row>
+                        <vr-columns colnum="12">
+                            <vr-section title="Record Filter" ng-show="scopeModel.selectedDataRecordType != undefined" vr-loader="scopeModel.isRecordFilterDirectiveLoading" collapsible>
+                                <vr-genericdata-recordfilter on-ready="onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

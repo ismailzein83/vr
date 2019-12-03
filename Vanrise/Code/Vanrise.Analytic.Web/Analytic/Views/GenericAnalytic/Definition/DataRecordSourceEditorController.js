@@ -2,13 +2,14 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService', 'VRLocalizationService'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService', 'VRLocalizationService', 'VR_Analytic_AdvancedFilterFieldsRelationType'];
 
-    function DataRecordSourceEditorController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum, Analytic_RecordSearchService, VRLocalizationService) {
+    function DataRecordSourceEditorController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum, Analytic_RecordSearchService, VRLocalizationService, VR_Analytic_AdvancedFilterFieldsRelationType) {
 
         var isEditMode;
         var dataRecordSource;
         var existingSources;
+        var selectedAdvancedFilterFieldNames;
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -25,6 +26,9 @@
 
         var localizationTextResourceSelectorAPI;
         var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var advancedFilterFieldsSelectorAPI;
+        var advancedFilterFieldsReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -44,6 +48,8 @@
             $scope.scopeModel = {};
             $scope.scopeModel.detailWidths = UtilsService.getArrayEnum(ColumnWidthEnum);
             $scope.scopeModel.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
+            $scope.scopeModel.showAdvancedFilterFields = false;
+            $scope.scopeModel.advancedFilterFieldsRelationTypeDS = UtilsService.getArrayEnum(VR_Analytic_AdvancedFilterFieldsRelationType);
 
             $scope.dataRecordTypeFields = [];
             $scope.selectedFields = [];
@@ -58,6 +64,10 @@
             $scope.selectedSortColumnsGrid = [];
             $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
 
+            $scope.scopeModel.onAdvancedFilterFieldsSelectorDirectiveReady = function (api) {
+                advancedFilterFieldsSelectorAPI = api;
+                advancedFilterFieldsReadyDeferred.resolve();
+            };
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
@@ -112,6 +122,7 @@
                     }
 
                     $scope.isRecordTypeFieldsLoading = true;
+
                     loadDataRecord(option.DataRecordTypeId).finally(function (response) {
                         $scope.isRecordTypeFieldsLoading = false;
 
@@ -122,6 +133,38 @@
                             $scope.scopeModel.isRecordFilterDirectiveLoading = value;
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterDirectivePayload, setLoader, dataRecordTypeSelectionChangedDeferred);
+                    });
+
+                    if (dataRecordTypeSelectionChangedDeferred == undefined) {
+                        $scope.scopeModel.selectedAdvancedFilterFieldsRelationType = VR_Analytic_AdvancedFilterFieldsRelationType.AllFields;
+
+                        if (advancedFilterFieldsSelectorAPI != undefined) {
+
+                            var advancedFilterFieldsPayload = {
+                                dataRecordTypeId: option.DataRecordTypeId
+                            };
+                            var setLoader = function (value) {
+                                $scope.isAdvancedFilterDirectiveLoading = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, advancedFilterFieldsSelectorAPI, advancedFilterFieldsPayload, setLoader);
+                        }
+                    }
+                }
+            };
+
+            $scope.scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged = function (selectedItem) {
+                if (selectedItem == undefined)
+                    return;
+
+                if (selectedItem.value == VR_Analytic_AdvancedFilterFieldsRelationType.AllFields.value) {
+                    setTimeout(function () {
+                        $scope.scopeModel.showAdvancedFilterFields = false;
+                        $scope.scopeModel.selectedAdvancedFilterFields = [];
+                    });
+                }
+                else {
+                    setTimeout(function () {
+                        $scope.scopeModel.showAdvancedFilterFields = true;
                     });
                 }
             };
@@ -328,7 +371,47 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, setData, loadDataRecordTypeSelector, loadDataRecordFields, loadRecordFilterDirectiveLoadPromise, loadSubviewGrid, loadLocalizationTextResourceSelector]).catch(function (error) {
+
+            setTitle();
+            setData();
+
+            return UtilsService.waitPromiseNode({
+                promises: [loadDataRecordTypeSelector(), loadDataRecordFields(), loadRecordFilterDirectiveLoadPromise(), loadSubviewGrid(), loadLocalizationTextResourceSelector()],
+                getChildNode: function () {
+
+                    var advancedFilters;
+                    var dataRecordTypeId;
+
+                    if (dataRecordSource != undefined) {
+                        dataRecordTypeId = dataRecordSource.DataRecordTypeId;
+                        advancedFilters = dataRecordSource.AdvancedFilters;
+                    }
+
+                    if (advancedFilters != undefined) {
+                        $scope.scopeModel.selectedAdvancedFilterFieldsRelationType =
+                            UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, advancedFilters.FieldsRelationType, "value");
+
+                        if ($scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
+                            selectedAdvancedFilterFieldNames = [];
+                            for (var i = 0; i < dataRecordSource.AdvancedFilters.AvailableFields.length; i++) {
+                                var advancedFilterField = dataRecordSource.AdvancedFilters.AvailableFields[i];
+                                selectedAdvancedFilterFieldNames.push(advancedFilterField.FieldName);
+                            }
+                        }
+                    }
+                    else {
+                        $scope.scopeModel.selectedAdvancedFilterFieldsRelationType = VR_Analytic_AdvancedFilterFieldsRelationType.AllFields;
+                    }
+
+                    var childPromises = [];
+
+                    if (dataRecordTypeId != undefined) {
+                        childPromises.push(loadAdvancedFilterSelector(dataRecordTypeId));
+                    }
+
+                    return { promises: childPromises };
+                }
+            }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -362,128 +445,150 @@
             return dataRecordTypeSelectorLoadDeferred.promise;
         }
         function loadDataRecordFields() {
+
             if (!isEditMode)
-                return;
+                return UtilsService.waitPromiseNode({ promises: [] });
 
-            var promises = [];
+            return UtilsService.waitPromiseNode({
+                promises: [dataRecordTypeSelectionChangedDeferred.promise],
+                getChildNode: function () {
+                    var promises = [];
 
-            UtilsService.waitMultiplePromises([dataRecordTypeSelectionChangedDeferred.promise]).then(function () {
-                $scope.selectedFields.length = 0;
-                $scope.selectedDetails.length = 0;
+                    $scope.selectedFields.length = 0;
+                    $scope.selectedDetails.length = 0;
 
-                if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
-                    for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
-                        var currentColumn = dataRecordSource.GridColumns[x];
-                        var selectedField = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentColumn.FieldName, "Name");
-                        if (selectedField != undefined) {
+                    if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
+                        for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
+                            var currentColumn = dataRecordSource.GridColumns[x];
+                            var selectedField = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentColumn.FieldName, "Name");
+                            if (selectedField != undefined) {
 
-                            $scope.selectedFields.push(selectedField);
+                                $scope.selectedFields.push(selectedField);
 
-                            var gridColumnItem = {
-                                payload: selectedField,
-                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                styleLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
-                            };
-                            promises.push(gridColumnItem.loadPromiseDeferred.promise);
-                            promises.push(gridColumnItem.styleLoadPromiseDeferred.promise);
-                            if ($scope.scopeModel.isLocalizationEnabled)
-                                promises.push(gridColumnItem.textResourceLoadPromiseDeferred.promise);
-                            addGridColumnAPI(gridColumnItem, currentColumn);
+                                var gridColumnItem = {
+                                    payload: selectedField,
+                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    styleLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                promises.push(gridColumnItem.loadPromiseDeferred.promise);
+                                promises.push(gridColumnItem.styleLoadPromiseDeferred.promise);
+                                if ($scope.scopeModel.isLocalizationEnabled)
+                                    promises.push(gridColumnItem.textResourceLoadPromiseDeferred.promise);
+                                addGridColumnAPI(gridColumnItem, currentColumn);
+                            }
                         }
                     }
-                }
-                if (dataRecordSource != undefined && dataRecordSource.ItemDetails) {
-                    for (var y = 0; y < dataRecordSource.ItemDetails.length; y++) {
-                        var currentDetail = dataRecordSource.ItemDetails[y];
-                        var selectedDetail = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentDetail.FieldName, "Name");
-                        if (selectedDetail != undefined) {
-                            $scope.selectedDetails.push(selectedDetail);
-                            var itemDetail = {
-                                payload: selectedDetail,
-                                textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
-                            };
-                            if ($scope.scopeModel.isLocalizationEnabled)
-                                promises.push(itemDetail.textResourceLoadPromiseDeferred.promise);
+                    if (dataRecordSource != undefined && dataRecordSource.ItemDetails) {
+                        for (var y = 0; y < dataRecordSource.ItemDetails.length; y++) {
+                            var currentDetail = dataRecordSource.ItemDetails[y];
+                            var selectedDetail = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentDetail.FieldName, "Name");
+                            if (selectedDetail != undefined) {
+                                $scope.selectedDetails.push(selectedDetail);
+                                var itemDetail = {
+                                    payload: selectedDetail,
+                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                if ($scope.scopeModel.isLocalizationEnabled)
+                                    promises.push(itemDetail.textResourceLoadPromiseDeferred.promise);
 
-                            addGridItemDetailAPI(itemDetail, currentDetail);
+                                addGridItemDetailAPI(itemDetail, currentDetail);
+                            }
                         }
                     }
-                }
-                if (dataRecordSource != undefined && dataRecordSource.SortColumns) {
-                    for (var z = 0; z < dataRecordSource.SortColumns.length; z++) {
-                        var currentSortColumn = dataRecordSource.SortColumns[z];
-                        var selectedSortColumn = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentSortColumn.FieldName, "Name");
-                        if (selectedSortColumn != undefined) {
-                            $scope.selectedSortColumns.push(selectedSortColumn);
+                    if (dataRecordSource != undefined && dataRecordSource.SortColumns) {
+                        for (var z = 0; z < dataRecordSource.SortColumns.length; z++) {
+                            var currentSortColumn = dataRecordSource.SortColumns[z];
+                            var selectedSortColumn = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentSortColumn.FieldName, "Name");
+                            if (selectedSortColumn != undefined) {
+                                $scope.selectedSortColumns.push(selectedSortColumn);
 
-                            var sortColumn = {
-                                payload: selectedSortColumn,
-                            };
-                            addSortColumnAPI(sortColumn, currentSortColumn);
+                                var sortColumn = {
+                                    payload: selectedSortColumn,
+                                };
+                                addSortColumnAPI(sortColumn, currentSortColumn);
+                            }
                         }
                     }
-                }
-                if (dataRecordSource != undefined && dataRecordSource.Filters) {
-                    for (var z = 0; z < dataRecordSource.Filters.length; z++) {
-                        var currentFilter = dataRecordSource.Filters[z];
-                        var selectedFilter = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentFilter.FieldName, "Name");
-                        if (selectedFilter != undefined) {
-                            $scope.selectedFilters.push(selectedFilter);
+                    if (dataRecordSource != undefined && dataRecordSource.Filters) {
+                        for (var z = 0; z < dataRecordSource.Filters.length; z++) {
+                            var currentFilter = dataRecordSource.Filters[z];
+                            var selectedFilter = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentFilter.FieldName, "Name");
+                            if (selectedFilter != undefined) {
+                                $scope.selectedFilters.push(selectedFilter);
 
-                            var filter = {
-                                payload: selectedFilter,
-                                textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
-                            };
-                            if ($scope.scopeModel.isLocalizationEnabled)
-                                promises.push(filter.textResourceLoadPromiseDeferred.promise);
+                                var filter = {
+                                    payload: selectedFilter,
+                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                if ($scope.scopeModel.isLocalizationEnabled)
+                                    promises.push(filter.textResourceLoadPromiseDeferred.promise);
 
-                            addFilterAPI(filter, currentFilter);
+                                addFilterAPI(filter, currentFilter);
+                            }
                         }
                     }
+                    return { promises: promises };
                 }
             });
-
-            return UtilsService.waitMultiplePromises(promises);
         }
         function loadRecordFilterDirectiveLoadPromise() {
             if (!isEditMode)
-                return;
+                return UtilsService.waitPromiseNode({ promises: [] });
 
-            var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            return UtilsService.waitPromiseNode({
+                promises: [recordFilterDirectiveReadyDeferred.promise, dataRecordTypeSelectionChangedDeferred.promise],
+                getChildNode: function () {
+                    var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            UtilsService.waitMultiplePromises([recordFilterDirectiveReadyDeferred.promise, dataRecordTypeSelectionChangedDeferred.promise]).then(function () {
+                    recordFilterDirectiveReadyDeferred.promise.then(function () {
+                        var recordFilterDirectivePayload = {};
+                        recordFilterDirectivePayload.context = buildContext();
+                        if (dataRecordSource != undefined && dataRecordSource.RecordFilter) {
+                            recordFilterDirectivePayload.FilterGroup = dataRecordSource.RecordFilter;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+                    });
 
-                var recordFilterDirectivePayload = {};
-                recordFilterDirectivePayload.context = buildContext();
-                if (dataRecordSource != undefined && dataRecordSource.RecordFilter) {
-                    recordFilterDirectivePayload.FilterGroup = dataRecordSource.RecordFilter;
+                    return { promises: [recordFilterDirectiveLoadDeferred.promise] };
                 }
-                VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+            });
+        }
+
+        function loadAdvancedFilterSelector(dataRecordTypeId) {
+            var loadAdvancedFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            advancedFilterFieldsReadyDeferred.promise.then(function () {
+
+                var payloadAdvancedFilterDirective = {
+                    dataRecordTypeId: dataRecordTypeId,
+                    selectedIds: selectedAdvancedFilterFieldNames
+                };
+                VRUIUtilsService.callDirectiveLoad(advancedFilterFieldsSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
             });
 
-            return recordFilterDirectiveLoadDeferred.promise;
+            return loadAdvancedFilterDirectivePromiseDeferred.promise;
         }
+
         function loadSubviewGrid() {
+
             if (!isEditMode)
-                return;
+                return UtilsService.waitPromiseNode({ promises: [] });
 
             var subviewGridLoadDeferred = UtilsService.createPromiseDeferred();
 
             subviewDefinitionGridReadyDeferred.promise.then(function () {
-
                 if (dataRecordSource != undefined && dataRecordSource.SubviewDefinitions) {
                     for (var index = 0; index < dataRecordSource.SubviewDefinitions.length; index++) {
                         var currentSubviewDefinition = dataRecordSource.SubviewDefinitions[index];
                         $scope.selectedSubviewDefinitionsGrid.push(currentSubviewDefinition);
                     }
                 }
-
                 subviewGridLoadDeferred.resolve();
             });
 
@@ -685,6 +790,18 @@
                 sortColumns.push({ FieldName: currentSortColumn.FieldName, IsDescending: currentSortColumn.SelectedOrderDirection.value });
             }
 
+            var advancedFilters = {};
+            advancedFilters.FieldsRelationType = $scope.scopeModel.selectedAdvancedFilterFieldsRelationType.value;
+
+            if ($scope.scopeModel.showAdvancedFilterFields) {
+                advancedFilters.AvailableFields = [];
+
+                for (var i = 0; i < $scope.scopeModel.selectedAdvancedFilterFields.length; i++) {
+                    var advancedFilterField = $scope.scopeModel.selectedAdvancedFilterFields[i];
+                    advancedFilters.AvailableFields.push({ FieldName: advancedFilterField.Name });
+                }
+            }
+
             var obj = {
                 Title: $scope.scopeModel.title,
                 Name: $scope.scopeModel.sourceName,
@@ -697,7 +814,8 @@
                 Filters: filters,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                 TitleResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined,
-                HideTimeRange: $scope.scopeModel.hideTimeRange
+                HideTimeRange: $scope.scopeModel.hideTimeRange,
+                AdvancedFilters: advancedFilters,
             };
             return obj;
         }
@@ -724,5 +842,4 @@
     }
 
     appControllers.controller('Analytic_DataRecordSourceEditorController', DataRecordSourceEditorController);
-
 })(appControllers);
