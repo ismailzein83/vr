@@ -379,11 +379,26 @@
                     if (controller.selectedvalues != undefined)
                         return item[controller.datavaluefield] == controller.selectedvalues[controller.datavaluefield];
                 }
-                function onViewHandler(obj) {
+                function onViewHandler(obj, e) {
+                    if (!includeOnViewHandler()) return;
                     hideAllOtherDropDown();
-                    var onViewHandler = $scope.$parent.$eval($attrs.onviewclicked);
-                    onViewHandler(obj);
+                    var onViewHandlerCallBack = $scope.$parent.$eval($attrs.onviewclicked);
+                    onViewHandlerCallBack(obj);
+                    e.stopPropagation();
+                    e.preventDefault();
                 }
+
+
+                controller.onSelectedItemViewClicked = function (e) {
+                    if (!controller.getSelectorButtonValueClass()) return;
+                    var selected = controller.selectedvalues;
+                    onViewHandler(selected, e);
+                };
+                controller.getSelectorButtonValueClass = function () {
+                    if (controller.includeOnViewHandler() && controller.showViewButton && !isMultiple() && controller.selectedvalues)
+                        return 'selected-item-view-container';
+                    return '';
+                };
 
                 function includeOnViewHandler() {
                     var onViewHandler = $scope.$parent.$eval($attrs.onviewclicked);
@@ -924,7 +939,7 @@
                         var noborder = attrs.noborder != undefined;
                         var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button"  '
                             + '   ' + validateButtonClass + '>'
-                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px );" ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'}" ng-class="ctrl.labelclass">{{ctrl.getLabel()}}</span>'
+                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px );" ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'}" ng-class="ctrl.labelclass"> <span ng-class="ctrl.getSelectorButtonValueClass()" ng-click="ctrl.onSelectedItemViewClicked($event)" > {{ctrl.getLabel()}} </span></span>'
                             + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
                             + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0 && !ctrl.isMobile "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);

@@ -330,6 +330,11 @@
     padding-right: 3px;
 }
 
+.rtl .view-icon {    
+    right: unset;
+    left: 3px;
+}
+
 .rtl .checked-item {
     position: absolute;
     top: 3px;

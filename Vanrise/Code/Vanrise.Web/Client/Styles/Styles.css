@@ -3031,7 +3031,8 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 }
 
 .divDisabled vr-validator > div .vr-dropdown-select {
-    opacity: 0.8 !important;
+    opacity: 0.9 !important;
+    background:#ddd;
 }
 
 .divDisabled .divDisabled vr-validator > div {
@@ -3615,9 +3616,18 @@ label[vr-alert].alert {
     display: inline-block;
     top: 6px;
     position: absolute;
-    right: 2px;
+    right: 3px;
+    color: #616F77;
+    font-size: 10px;
 }
 
+.vr-select-multiple .vr-select-height .view-icon {
+    right: 12px;
+}
+
+.view-icon:hover {
+    transform: scale(1.15,1.15);
+}
 .selected-container {
     display: inline-block;
     overflow: auto;
@@ -4267,6 +4277,16 @@ wysiwyg-edit .tinyeditor .sizer {
     text-align: left;
     position: absolute;
     height: 100% !important;
+    cursor:default;
+}
+
+.selected-item-view-container{
+    cursor:pointer;
+    pointer-events:initial;
+    opacity:1;
+}
+.selected-item-view-container:hover {
+    text-decoration: underline;    
 }
 /*vr-datetimepicker today class*/
 .datepicker-days .today {
