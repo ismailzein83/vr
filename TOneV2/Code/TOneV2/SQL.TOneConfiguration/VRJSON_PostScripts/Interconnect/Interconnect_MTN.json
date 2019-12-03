@@ -1,0 +1,287 @@
+﻿{
+  "Scripts": [
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AssemblyID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ProjectDependencies",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "48492f66-bfde-45ac-8431-fe08eeac00c5",
+              "Name": "Interconnect MTN",
+              "AssemblyID": null,
+              "CreatedTime": "2019-12-03T14:30:59.35",
+              "LastModifiedTime": "2019-12-03T14:30:59.35",
+              "ProjectDependencies": "[]"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "ID = '48492f66-bfde-45ac-8431-fe08eeac00c5'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "integration",
+      "TableName": "DataSource",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ID",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AdapterID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "AdapterState",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "TaskId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Settings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "ID": "38549daf-c60c-47b2-9a4a-3cbf877509e3",
+              "DevProjectID": "48492f66-bfde-45ac-8431-fe08eeac00c5",
+              "Name": "MTN ICX import",
+              "AdapterID": "396a4933-df4f-49cd-9799-bf605b9f4597",
+              "AdapterState": "null",
+              "TaskId": "8e977ed0-e3c2-450b-abdf-10763a540d9a",
+              "Settings": "{\"$type\":\"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities\",\"AdapterArgument\":{\"$type\":\"Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments\",\"Extension\":\".gz\",\"Mask\":\"\",\"Directory\":\"/Inspkt/C5\",\"ServerIP\":\"192.168.110.185\",\"UserName\":\"devftpuser\",\"Password\":\"P@ssw0rd\",\"ActionAfterImport\":-1,\"CompressedFiles\":true,\"CompressionType\":0,\"FileCheckCriteria\":0,\"FileCompletenessCheckInterval\":5,\"MaxParallelRuntimeInstances\":1},\"MapperCustomCode\":\"var mtcObj = new { RecordType = 0, IDOnSwitch = 102, CDPN = 3, CGPN = 4, IMSI = 1, ConnectDateTime = 21, DurationInSeconds = 23, DisconnectDateTime = 22, IMEI = 2, BTS = 9, Cell = 10, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, InTrunk = 7, OutTrunk = 8, AttemptDateTime = 84, AlertDateTime = 85, translatedNumber = 110, ReleaseCode = 27 };\\n            var mocObj = new { RecordType = 0, IDOnSwitch = 113, CDPN = 5, CGPN = 3, IMSI = 1, ConnectDateTime = 24, DurationInSeconds = 26, DisconnectDateTime = 25, IMEI = 2, BTS = 12, Cell = 13, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, InTrunk = 10, OutTrunk = 11, AttemptDateTime = 92, AlertDateTime = 93, translatedNumber = -1, ReleaseCode = 30 };\\n            var inGatewayObj = new { RecordType = 0, IDOnSwitch = 49, CDPN = 2, CGPN = 1, IMSI = 53, ConnectDateTime = 7, DurationInSeconds = 9, DisconnectDateTime = 8, IMEI = -1, BTS = 56, Cell = 57, UpVolume = -1, DownVolume = -1, CellLatitude = -1, CellLongitude = -1, InTrunk = 4, OutTrunk = 5, AttemptDateTime = 39, AlertDateTime = 40, translatedNumber = -1, ReleaseCode = 10 };\\n\\n            var cdrs = new List<dynamic>();\\n            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();\\n            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(\\\"ICX_CDR\\\");\\n\\n            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType(\\\"ICX_CDR\\\");\\n\\n            int rowCount = 0;\\n\\n            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));\\n            System.IO.StreamReader sr = importedData.StreamReader;\\n\\n            //Reading Headers Line\\n            if (!sr.EndOfStream)\\n                sr.ReadLine();\\n\\n            while (!sr.EndOfStream)\\n            {\\n                string cdrLine = sr.ReadLine();\\n                if (string.IsNullOrEmpty(cdrLine))\\n                    continue;\\n\\n                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;\\n\\n                try\\n                {\\n                    // Removing ; from end of line\\n                    cdrLine = cdrLine.Remove(cdrLine.Length - 1);\\n                    string[] fields = cdrLine.Split(',');\\n\\n                    cdr.DataSource = dataSourceId;\\n                    cdr.FileName = importedData.Name;\\n                    cdr.Switch = 9999;\\n                    int recordType = int.Parse(fields[0]);\\n\\n                    dynamic temp;\\n                    switch (recordType)\\n                    {\\n                        case 0: temp = mocObj; break;\\n                        case 1: temp = mtcObj; break;\\n                        case 3: temp = inGatewayObj; break;\\n                        default: continue;\\n                    }\\n\\n                    cdr.CDPN = fields[temp.CDPN];\\n\\n                    cdr.IDOnSwitch = fields[temp.IDOnSwitch];\\n                    cdr.ReleaseCode = fields[temp.ReleaseCode];\\n                    cdr.InTrunk = fields[temp.InTrunk];\\n\\n                    cdr.OutTrunk = fields[temp.OutTrunk];\\n                    string connectDateTimeAsString = fields[temp.ConnectDateTime];\\n                    if (!string.IsNullOrWhiteSpace(connectDateTimeAsString))\\n                    {\\n                        int year;\\n                        if (!int.TryParse(connectDateTimeAsString.Substring(0, 2), out year))\\n                            throw new Exception(String.Format(\\\"ConnectDateTime '{0}' contains invalid Year value\\\", connectDateTimeAsString));\\n\\n                        year += 2000;\\n\\n                        int month;\\n                        if (!int.TryParse(connectDateTimeAsString.Substring(2, 2), out month))\\n                            throw new Exception(String.Format(\\\"ConnectDateTime '{0}' contains invalid Month value\\\", connectDateTimeAsString));\\n\\n                        int day;\\n                        if (!int.TryParse(connectDateTimeAsString.Substring(4, 2), out day))\\n                            throw new Exception(String.Format(\\\"ConnectDateTime '{0}' contains invalid Day value\\\", connectDateTimeAsString));\\n\\n                        int hour;\\n                        if (!int.TryParse(connectDateTimeAsString.Substring(6, 2), out hour))\\n                            throw new Exception(String.Format(\\\"ConnectDateTime '{0}' contains invalid Hour value\\\", connectDateTimeAsString));\\n\\n                        int minute;\\n                        if (!int.TryParse(connectDateTimeAsString.Substring(8, 2), out minute))\\n                            throw new Exception(String.Format(\\\"ConnectDateTime '{0}' contains invalid Minute value\\\", connectDateTimeAsString));\\n\\n                        int second;\\n                        if (!int.TryParse(connectDateTimeAsString.Substring(10, 2), out second))\\n                            throw new Exception(String.Format(\\\"ConnectDateTime '{0}' contains invalid Second value\\\", connectDateTimeAsString));\\n\\n                        cdr.ConnectDateTime = new DateTime(year, month, day, hour, minute, second);\\n                    }\\n\\n                    string alertDateTimeAsString = fields[temp.AlertDateTime];\\n                    if (!string.IsNullOrWhiteSpace(alertDateTimeAsString))\\n                    {\\n                        int year;\\n                        if (!int.TryParse(alertDateTimeAsString.Substring(0, 2), out year))\\n                            throw new Exception(String.Format(\\\"AlertDateTime '{0}' contains invalid Year value\\\", alertDateTimeAsString));\\n\\n                        year += 2000;\\n\\n                        int month;\\n                        if (!int.TryParse(alertDateTimeAsString.Substring(2, 2), out month))\\n                            throw new Exception(String.Format(\\\"AlertDateTime '{0}' contains invalid Month value\\\", alertDateTimeAsString));\\n\\n                        int day;\\n                        if (!int.TryParse(alertDateTimeAsString.Substring(4, 2), out day))\\n                            throw new Exception(String.Format(\\\"AlertDateTime '{0}' contains invalid Day value\\\", alertDateTimeAsString));\\n\\n                        int hour;\\n                        if (!int.TryParse(alertDateTimeAsString.Substring(6, 2), out hour))\\n                            throw new Exception(String.Format(\\\"AlertDateTime '{0}' contains invalid Hour value\\\", alertDateTimeAsString));\\n\\n                        int minute;\\n                        if (!int.TryParse(alertDateTimeAsString.Substring(8, 2), out minute))\\n                            throw new Exception(String.Format(\\\"AlertDateTime '{0}' contains invalid Minute value\\\", alertDateTimeAsString));\\n\\n                        int second;\\n                        if (!int.TryParse(alertDateTimeAsString.Substring(10, 2), out second))\\n                            throw new Exception(String.Format(\\\"AlertDateTime '{0}' contains invalid Second value\\\", alertDateTimeAsString));\\n\\n                        cdr.AlertDateTime = new DateTime(year, month, day, hour, minute, second);\\n                    }\\n\\n                    string attemptDateTimeAsString = fields[temp.AttemptDateTime];\\n                    if (!string.IsNullOrWhiteSpace(attemptDateTimeAsString))\\n                    {\\n                        int year;\\n                        if (!int.TryParse(attemptDateTimeAsString.Substring(0, 2), out year))\\n                            throw new Exception(String.Format(\\\"AttemptDateTime '{0}' contains invalid Year value\\\", attemptDateTimeAsString));\\n\\n                        year += 2000;\\n\\n                        int month;\\n                        if (!int.TryParse(attemptDateTimeAsString.Substring(2, 2), out month))\\n                            throw new Exception(String.Format(\\\"AttemptDateTime '{0}' contains invalid Month value\\\", attemptDateTimeAsString));\\n\\n                        int day;\\n                        if (!int.TryParse(attemptDateTimeAsString.Substring(4, 2), out day))\\n                            throw new Exception(String.Format(\\\"AttemptDateTime '{0}' contains invalid Day value\\\", attemptDateTimeAsString));\\n\\n                        int hour;\\n                        if (!int.TryParse(attemptDateTimeAsString.Substring(6, 2), out hour))\\n                            throw new Exception(String.Format(\\\"AttemptDateTime '{0}' contains invalid Hour value\\\", attemptDateTimeAsString));\\n\\n                        int minute;\\n                        if (!int.TryParse(attemptDateTimeAsString.Substring(8, 2), out minute))\\n                            throw new Exception(String.Format(\\\"AttemptDateTime '{0}' contains invalid Minute value\\\", attemptDateTimeAsString));\\n\\n                        int second;\\n                        if (!int.TryParse(attemptDateTimeAsString.Substring(10, 2), out second))\\n                            throw new Exception(String.Format(\\\"AttemptDateTime '{0}' contains invalid Second value\\\", attemptDateTimeAsString));\\n\\n                        cdr.AttemptDateTime = new DateTime(year, month, day, hour, minute, second);\\n                    }\\n\\n                    if (temp.translatedNumber > 0)\\n                    {\\n                        string CGPN = fields[temp.translatedNumber];\\n                        if (!string.IsNullOrEmpty(CGPN))\\n                            cdr.CGPN = CGPN;\\n                        else\\n                            cdr.CGPN = fields[temp.CGPN];\\n                    }\\n                    else\\n                    {\\n                        cdr.CGPN = fields[temp.CGPN];\\n                    }\\n\\n                    if (decimal.TryParse(fields[temp.DurationInSeconds], out decimal durationInSeconds))\\n                        cdr.DurationInSeconds = durationInSeconds;\\n\\n                    string disconnectDateTimeAsString = fields[temp.DisconnectDateTime];\\n                    if (!string.IsNullOrWhiteSpace(disconnectDateTimeAsString))\\n                    {\\n                        int year;\\n                        if (!int.TryParse(disconnectDateTimeAsString.Substring(0, 2), out year))\\n                            throw new Exception(String.Format(\\\"DisconnectDateTime '{0}' contains invalid Year value\\\", disconnectDateTimeAsString));\\n\\n                        year += 2000;\\n\\n                        int month;\\n                        if (!int.TryParse(disconnectDateTimeAsString.Substring(2, 2), out month))\\n                            throw new Exception(String.Format(\\\"DisconnectDateTime '{0}' contains invalid Month value\\\", disconnectDateTimeAsString));\\n\\n                        int day;\\n                        if (!int.TryParse(disconnectDateTimeAsString.Substring(4, 2), out day))\\n                            throw new Exception(String.Format(\\\"DisconnectDateTime '{0}' contains invalid Day value\\\", disconnectDateTimeAsString));\\n\\n                        int hour;\\n                        if (!int.TryParse(disconnectDateTimeAsString.Substring(6, 2), out hour))\\n                            throw new Exception(String.Format(\\\"DisconnectDateTime '{0}' contains invalid Hour value\\\", disconnectDateTimeAsString));\\n\\n                        int minute;\\n                        if (!int.TryParse(disconnectDateTimeAsString.Substring(8, 2), out minute))\\n                            throw new Exception(String.Format(\\\"DisconnectDateTime '{0}' contains invalid Minute value\\\", disconnectDateTimeAsString));\\n\\n                        int second;\\n                        if (!int.TryParse(disconnectDateTimeAsString.Substring(10, 2), out second))\\n                            throw new Exception(String.Format(\\\"DisconnectDateTime '{0}' contains invalid Second value\\\", disconnectDateTimeAsString));\\n\\n                        cdr.DisconnectDateTime = new DateTime(year, month, day, hour, minute, second);\\n                    }\\n\\n                    cdr.ExtraFields = new Dictionary<string, string>();\\n                    cdr.ExtraFields.Add(\\\"IMSI\\\", fields[temp.IMSI]);\\n\\n                    if (temp.IMEI > 0)\\n                        cdr.ExtraFields.Add(\\\"IMEI\\\", fields[temp.IMEI]);\\n\\n                    cdr.ExtraFields.Add(\\\"BTS\\\", fields[temp.BTS]);\\n                    cdr.ExtraFields.Add(\\\"Cell\\\", fields[temp.Cell]);\\n                    cdr.ExtraFields.Add(\\\"RecordType\\\", fields[temp.RecordType]);\\n\\n                    if (temp.UpVolume > 0)\\n                        cdr.ExtraFields.Add(\\\"UpVolume\\\", fields[temp.UpVolume]);\\n\\n                    if (temp.DownVolume > 0)\\n                        cdr.ExtraFields.Add(\\\"DownVolume\\\", fields[temp.DownVolume]);\\n\\n                    if (temp.CellLatitude > 0)\\n                        cdr.ExtraFields.Add(\\\"CellLatitude\\\", fields[temp.CellLatitude]);\\n\\n                    if (temp.CellLongitude > 0)\\n                        cdr.ExtraFields.Add(\\\"CellLongitude\\\", fields[temp.CellLongitude]);\\n\\n                    cdrs.Add(cdr);\\n\\n                    rowCount++;\\n                }\\n                catch (Exception ex)\\n                {\\n                    failedRecordIdentifiers.Add(rowCount);\\n                }\\n            }\\n\\n            if (cdrs.Count > 0)\\n            {\\n                long startingId;\\n                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);\\n                long currentCDRId = startingId;\\n\\n                foreach (var cdr in cdrs)\\n                {\\n                    cdr.ID = currentCDRId;\\n                    currentCDRId++;\\n                }\\n\\n                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, \\\"#RECORDSCOUNT# of CDRs\\\", \\\"ICX_CDR\\\");\\n                mappedBatches.Add(\\\"Distribute Raw CDRs Stage\\\", batch);\\n            }\\n            else\\n            {\\n                importedData.IsEmpty = true;\\n            }\\n\\n            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\\n            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;\\n            LogVerbose(\\\"Finished\\\");\\n            return result;\",\"ExecutionFlowId\":\"e151eea9-b166-422d-8ca6-2c6a3f4025b5\"}",
+              "LastModifiedTime": "2019-12-03T14:12:01.337",
+              "CreatedTime": "2019-12-03T14:12:01.337"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "DevProjectID = '48492f66-bfde-45ac-8431-fe08eeac00c5'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    },
+    {
+      "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTable, Vanrise.DevTools.Entities",
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "runtime",
+      "TableName": "ScheduleTask",
+      "Note": null,
+      "Settings": {
+        "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItem, Vanrise.DevTools.Business",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842",
+        "Columns": [
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Id",
+            "IsIdentifier": true,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "DevProjectID",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "Name",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "IsEnabled",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "TaskType",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "TriggerTypeId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "ActionTypeId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "TaskSettings",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "OwnerId",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "CreatedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          },
+          {
+            "$type": "Vanrise.DevTools.Business.MergeGeneratedScriptItemColumn, Vanrise.DevTools.Business",
+            "ColumnName": "LastModifiedTime",
+            "IsIdentifier": false,
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true
+          }
+        ],
+        "DataRows": [
+          {
+            "$type": "Vanrise.DevTools.Entities.GeneratedScriptItemTableRow, Vanrise.DevTools.Entities",
+            "FieldValues": {
+              "Id": "8e977ed0-e3c2-450b-abdf-10763a540d9a",
+              "DevProjectID": "48492f66-bfde-45ac-8431-fe08eeac00c5",
+              "Name": "Data Source Task",
+              "IsEnabled": false,
+              "TaskType": 0,
+              "TriggerTypeId": "295b4fac-dbf9-456f-855e-60d0b176f86b",
+              "ActionTypeId": "b7cf41b9-f1b3-4c02-980d-b9fafb4cff68",
+              "TaskSettings": "{\"$type\":\"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities\",\"TaskTriggerArgument\":{\"$type\":\"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments\",\"Interval\":3.0,\"IntervalType\":2,\"TimerTriggerTypeFQTN\":\"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger\",\"IgnoreSkippedIntervals\":true},\"StartEffDate\":\"2019-12-03T14:09:37.506\"}",
+              "OwnerId": -1,
+              "CreatedTime": "2019-12-03T14:12:01.187",
+              "LastModifiedTime": "2019-12-03T14:25:45.937"
+            }
+          }
+        ],
+        "Variables": null,
+        "LastWhereCondition": "DevProjectID = '48492f66-bfde-45ac-8431-fe08eeac00c5'",
+        "LastJoinStatement": null,
+        "IsIdentity": false
+      },
+      "Title": "Merge"
+    }
+  ]
+}
