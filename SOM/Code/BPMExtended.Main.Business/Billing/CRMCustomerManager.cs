@@ -888,6 +888,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StProvince");
             esq.AddColumn("StProvince.Id");;
             esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StMailBox");
 
             esq.AddColumn("StAddressNotes");
             esq.AddColumn("StBirthDate");
@@ -933,6 +934,7 @@ namespace BPMExtended.Main.Business
                 var career = entities[0].GetColumnValue("StCareerName");
                 var documentIDType = entities[0].GetColumnValue("StDocumentIDTypeId");
                 var email = entities[0].GetColumnValue("StEmail");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
                 var faxNumber = entities[0].GetColumnValue("StFaxNumber");
                 var homePhone = entities[0].GetColumnValue("StHomePhone");
                 var languageId = entities[0].GetColumnValue("StLanguageId");
@@ -996,6 +998,7 @@ namespace BPMExtended.Main.Business
                         Nationality= nationalityNumber,
                         Title= customerTitle,
                         Town= town.ToString(),
+                        Mailbox = mailBox.ToString(),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             CustomerId = customerId.ToString(),
@@ -1458,14 +1461,14 @@ namespace BPMExtended.Main.Business
                 return CreateCustomer(CustomerCategoryId,paymentMethodId,contact.CityId,contact.GivenName,contact.SurName,contact.CSOId,contact.BankID,contact.BankAccountID,contact.BankName,contact.IBAN
                     ,contact.CountryId,"DefaultRatePlan",contact.NationalityId,contact.BirthDate,contact.BuildingNumber,contact.Career,contact.DocumentID,contact.DocumentIdTypeId,contact.Email,
                     contact.FaxNumber, contact.FloorNumber, contact.HomePhone,contact.MiddleName,contact.MobilePhone,contact.MotherName,contact.DistrictId,contact.Street,contact.RegionId,contact.LanguageId
-                    ,contact.Title,contact.TownId,contact.AddressNotes,contact.BusinessPhone,segmentId,"","");
+                    ,contact.Title,contact.TownId,contact.AddressNotes,contact.BusinessPhone,segmentId,"","",contact.Mailbox);
             else return null;
             
         }
         public CustomerCreationOutput CreateCustomer(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CSO,
             string BankCode, string AccountNumber, string BankName, string IBAN, string country, string DefaultRatePlan, string nationality, string birthDate, string building, string career,
             string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
-            string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId,string accountOwner,string debitCreditCard
+            string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId,string accountOwner,string debitCreditCard,string mailbox
             )
         {
             IDManager manager = new IDManager();
@@ -1525,6 +1528,7 @@ namespace BPMExtended.Main.Business
                 Street = street,
                 Building = building,
                 Floor = floor,
+                Mailbox = mailbox,
                 AddressNotes = addressNotes,
                 HomePhone = homePhone,
                 FaxNumber = faxNumber,
@@ -1560,7 +1564,7 @@ namespace BPMExtended.Main.Business
         public CustomerCreationOutput CreateAccount(string contactId ,string parentCustomerId, string CustomerCategoryId, string levelId, string companyName, string branch,string companyId,string FirstName, string LastName, string CSO,
          string BankCode, string AccountNumber, string BankName, string IBAN, string country, string nationality, string birthDate, string building, string career,string City,
          string documentId, string documentTypeId, string email, string faxNumber, string floor, string homePhone, string middleName, string mobilePhone, string motherName, string region,
-         string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId, string PaymentMethodId,string businessType,string accountOwner,string debitCreditCard
+         string street, string stateProvince, string language, string title, string town, string addressNotes, string businessPhone, string segmentId, string PaymentMethodId,string businessType,string accountOwner,string debitCreditCard, string mailBox
          )
         {
             IDManager manager = new IDManager();
@@ -1646,7 +1650,8 @@ namespace BPMExtended.Main.Business
                 BusinessType= businessType,
                 BankAddress= bankAddress,
                 DebitCreditCard=debitCreditCard,
-                AccountOwner=accountOwner
+                AccountOwner=accountOwner,
+                Mailbox = mailBox
             };
 
             using (var client = new SOMClient())
@@ -1961,6 +1966,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StLocation.Id");
             esq.AddColumn("StStreet");
             esq.AddColumn("StBuildingNumber");
+            esq.AddColumn("StMailBox");
+            esq.AddColumn("StSponsor");
+            esq.AddColumn("StSponsor.Id");
             esq.AddColumn("StFloor");
             esq.AddColumn("StSubTypes");
             esq.AddColumn("StSubTypes.Id");
@@ -1982,15 +1990,17 @@ namespace BPMExtended.Main.Business
                 var addressNotes = entities[0].GetColumnValue("StAddressNotes");
                 var floor = entities[0].GetColumnValue("StFloor");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
                 var street = entities[0].GetColumnValue("StStreet");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var subTypeId = entities[0].GetColumnValue("StSubTypesId");
                 var countryId = entities[0].GetColumnValue("StCountryId");
+                var sponsorId = entities[0].GetColumnValue("StSponsorId");
                 var city = entities[0].GetColumnValue("StCityName");
                     var area = entities[0].GetColumnValue("StAreaName");
                     var province = entities[0].GetColumnValue("StProvinceName");
                     var town = entities[0].GetColumnValue("StTownName");
-                var locationType = entities[0].GetColumnValue("StLocationName");
+                //var locationType = entities[0].GetColumnValue("StLocationName");
                 var subTypeName = entities[0].GetTypedColumnValue<string>(subType.Name);
 
 
@@ -2055,7 +2065,9 @@ namespace BPMExtended.Main.Business
                         Street= street.ToString(),
                         Region = area.ToString(),
                         CountryId = GetCountryNumber(countryId.ToString()),
-                        LocationType = locationType.ToString(),
+                        Mailbox = mailBox.ToString(),
+                        SponsorId = GetCRMCustomerInfo(sponsorId.ToString(),null).CustomerId,
+                        //LocationType = locationType.ToString(),
                         Notes = addressNotes.ToString(),
                         CSO = info.csoBSCSId,
                         RatePlanId = ratePlanId,

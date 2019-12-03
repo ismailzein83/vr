@@ -252,6 +252,75 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public string GetCareerIdByName(string career)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            Guid careerId = Guid.Empty;
+
+            //city
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCareer");
+            var IdCol = esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", career);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                careerId = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);
+            }
+
+            return careerId.ToString();
+        }
+
+        public string GetLanguageIdByName(string language)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            Guid languageId = Guid.Empty;
+
+            //city
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerLanguage");
+            var IdCol = esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", language);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                languageId = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);
+            }
+
+            return languageId.ToString();
+        }
+
+        public string GetBusinessTypeIdByName(string businessType)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            Guid businessTypeId = Guid.Empty;
+
+            //city
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StBusinessType");
+            var IdCol = esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", businessType);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                businessTypeId = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);
+            }
+
+            return businessTypeId.ToString();
+        }
+
         public int GetNumberOfAttachments(string schemaName , string requestId)
         {
             EntitySchemaQuery esq;
@@ -361,6 +430,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StBankAccountID");
             esq.AddColumn("StIBAN");
             esq.AddColumn("StStreet");
+            esq.AddColumn("StMailBox");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
             esq.Filters.Add(esqFirstFilter);
@@ -393,6 +463,7 @@ namespace BPMExtended.Main.Business
                 var districtId = entities[0].GetColumnValue("StDistrictId");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
                 var floorNumber = entities[0].GetColumnValue("StFloorNumber");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
                 var addressNotes = entities[0].GetColumnValue("StAddressNotes");
                 var homePhone = entities[0].GetColumnValue("HomePhone");
                 var faxNumber = entities[0].GetColumnValue("StFaxNumber");
@@ -444,9 +515,10 @@ namespace BPMExtended.Main.Business
                     BankName = bankName.ToString(),
                     BankAccountID = bankAccountID.ToString(),
                     IBAN = IBAN.ToString(),
-                    Street = street.ToString()
+                    Street = street.ToString(),
+                    Mailbox = mailBox.ToString()
 
-                    
+
                 };
             }
             return contact;

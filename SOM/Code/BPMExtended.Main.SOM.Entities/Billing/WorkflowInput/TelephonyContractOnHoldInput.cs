@@ -15,6 +15,8 @@ namespace BPMExtended.Main.SOMAPI
         public string SubType { get; set; }
         public string CountryId { get; set; }
         public string City { get; set; }
+        public string Mailbox { get; set; }
+        public string SponsorId { get; set; }
         public string Street { get; set; }
         public string Building { get; set; }
         public string Floor { get; set; }

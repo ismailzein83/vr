@@ -24,5 +24,14 @@ namespace BPMExtended.Main.SOMAPI
         public string ServiceId { get; set; }
         public string AddressSequence { get; set; }
 
+        public string Career { get; set; }
+        public string Language { get; set; }
+        public string HomePhone { get; set; }
+        public string FaxNumber { get; set; }
+        public string MobilePhone { get; set; }
+        public string GivenName { get; set; }
+        public string Mailbox { get; set; }
+
+
     }
 }

@@ -51,5 +51,6 @@ namespace BPMExtended.Main.SOMAPI
         public string BankAddress { get; set; }
         public string DebitCreditCard { get; set; }
         public string AccountOwner { get; set; }
+        public string Mailbox { get; set; }
     }
 }

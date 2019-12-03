@@ -242,7 +242,9 @@ namespace BPMExtended.Main.Business
             using (var client = new SOMClient())
             {
                 item = client.Get<GetContractAddressOutput>(String.Format("api/SOM.ST/Billing/GetContractAddressAndDirectoryInfo?ContractId={0}&ServiceId={1}", contractId, serviceId));
-
+                if(item.Language != null) item.Language = new CommonManager().GetLanguageIdByName(item.Language);
+                if (item.Career != null)  item.Career = new CommonManager().GetCareerIdByName(item.Career);
+                if (item.BusinessType != null)  item.BusinessType = new CommonManager().GetBusinessTypeIdByName(item.BusinessType);
             }
 
             return item;
@@ -791,6 +793,8 @@ namespace BPMExtended.Main.Business
                 ContractAddress = contract.ContractAddress,
                 ContractBalance = contract.CurrentBalance,
                 RatePlanId = contract.RateplanId,
+                SponsorId = contract.SponsorId,
+                WholeSale = contract.WholeSale,
                 RatePlanName = ratePlanName,
                 PathId = contract.LinePathId,
                 PhoneNumber = contract.PhoneNumber,

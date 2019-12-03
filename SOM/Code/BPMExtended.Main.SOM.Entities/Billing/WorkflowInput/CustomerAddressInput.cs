@@ -33,7 +33,8 @@ namespace BPMExtended.Main.SOMAPI
         public string Email { get; set; }
         public string Language { get; set; }
         public string Town { get; set; }
-        public string AddressNotes { get; set; }    
+        public string AddressNotes { get; set; }
+        public string Mailbox { get; set; }
         public CommonInputArgument CommonInputArgument { get; set; }
 
     }

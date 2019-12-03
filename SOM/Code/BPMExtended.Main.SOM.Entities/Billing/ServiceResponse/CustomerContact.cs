@@ -20,6 +20,8 @@ namespace BPMExtended.Main.SOMAPI
         public bool IsBlocked { get; set; }
         public string RatePlanName { get; set; }
         public string SubType { get; set; }
+        public string SponsorId { get; set; }
+        public string WholeSale { get; set; }
     }
 
     public class TelephonyContract

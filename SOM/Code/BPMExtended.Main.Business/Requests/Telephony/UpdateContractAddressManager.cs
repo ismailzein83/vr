@@ -74,6 +74,16 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
 
+            esq.AddColumn("StGivenName");
+            esq.AddColumn("StLanguage");
+            esq.AddColumn("StLanguage.Id");
+            esq.AddColumn("StCareer");
+            esq.AddColumn("StCareer.Id");
+            esq.AddColumn("StHomePhone");
+            esq.AddColumn("StMobilePhone");
+            esq.AddColumn("StFaxPhone");
+            esq.AddColumn("StMailBox");
+
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -98,6 +108,15 @@ namespace BPMExtended.Main.Business
                 var services = entities[0].GetColumnValue("StOperationAddedServices");
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
+                var homePhone = entities[0].GetColumnValue("StHomePhone");
+                var mobilePhone = entities[0].GetColumnValue("StMobilePhone");
+                var faxPhone = entities[0].GetColumnValue("StFaxPhone");
+                var givenName = entities[0].GetColumnValue("StGivenName");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
+                var languageId = entities[0].GetColumnValue("StLanguageId");
+                var career = entities[0].GetColumnValue("StCareerName");
+
+
                 if (status.ToString() == "1") action = DirectoryInquiry.Add;
                 if (status.ToString() == "2") action = DirectoryInquiry.Remove;
 
@@ -118,6 +137,13 @@ namespace BPMExtended.Main.Business
                         LocationType = locationType.ToString(),
                         Street = street.ToString(),
                         Action = action,
+                        Mailbox = mailBox.ToString(),
+                        Career = career.ToString(),
+                        GivenName = givenName.ToString(),
+                        HomePhone = homePhone.ToString(),
+                        MobilePhone = mobilePhone.ToString(),
+                        FaxNumber = faxPhone.ToString(),
+                        Language = new CRMCustomerManager().GetCustomerLanguage(languageId.ToString()),
                         PaymentData = new PaymentData()
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees.ToString()),

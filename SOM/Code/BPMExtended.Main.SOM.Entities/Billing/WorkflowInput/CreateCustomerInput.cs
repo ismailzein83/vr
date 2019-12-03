@@ -43,6 +43,7 @@ namespace BPMExtended.Main.SOMAPI
         public string Street { get; set; }
         public string Building { get; set; }
         public string Floor { get; set; }
+        public string Mailbox { get; set; }
         public string HomePhone { get; set; }
         public string FaxNumber { get; set; }
         public string MobilePhone { get; set; }

@@ -37,5 +37,6 @@ namespace BPMExtended.Main.Entities
         public string Language { get; set; }
         public string Career { get; set; }
         public bool isEmployee { get; set; }
+        public bool Mailbox { get; set; }
     }
 }

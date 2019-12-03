@@ -70,6 +70,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StIsNewMDF");
             esq.AddColumn("StADSLContractId");
             esq.AddColumn("StHasAnADSL");
+            esq.AddColumn("StMailBox");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -88,6 +89,7 @@ namespace BPMExtended.Main.Business
                 var notes = entities[0].GetColumnValue("StAddressNotes");
                 var building = entities[0].GetColumnValue("StBuildingNumber");
                 var floor = entities[0].GetColumnValue("StFloor");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
                 var city = entities[0].GetColumnValue("StCityName");
                 var area = entities[0].GetColumnValue("StAreaName");
                 var location = entities[0].GetColumnValue("StLocationName");
@@ -128,7 +130,8 @@ namespace BPMExtended.Main.Business
                             Building = building.ToString(),
                             Floor = floor.ToString(),
                             Notes = notes.ToString(),
-                            LocationType = location.ToString()
+                            Mailbox = mailBox.ToString()
+                            //LocationType = location.ToString()
 
                         },
                         PaymentData = new PaymentData()
@@ -499,6 +502,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StFreeReservationSwitchID");
             esq.AddColumn("StHasAnADSL");
             esq.AddColumn("StADSLContractId");
+            esq.AddColumn("StMailBox");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -529,6 +533,7 @@ namespace BPMExtended.Main.Business
                 var freeReservationSwitchID = entities[0].GetColumnValue("StFreeReservationSwitchID");
                 var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
                 var adslContractId = entities[0].GetColumnValue("StADSLContractId");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
 
                 SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
                 {
@@ -561,7 +566,8 @@ namespace BPMExtended.Main.Business
                             Building = building.ToString(),
                             Floor = floor.ToString(),
                             Notes = notes.ToString(),
-                            LocationType = location.ToString()
+                            Mailbox = mailBox.ToString()
+                            //LocationType = location.ToString()
 
                         },
                         PaymentData = new PaymentData()
@@ -620,6 +626,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StFreeReservationSwitchID");
             esq.AddColumn("StADSLContractId");
             esq.AddColumn("StHasAnADSL");
+            esq.AddColumn("StMailBox");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -650,7 +657,7 @@ namespace BPMExtended.Main.Business
                 var freeReservationSwitchID = entities[0].GetColumnValue("StFreeReservationSwitchID");
                 var adslContractId = entities[0].GetColumnValue("StADSLContractId");
                 var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
-
+                var mailBox = entities[0].GetColumnValue("StMailBox");
 
                 SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
                 {
@@ -683,7 +690,8 @@ namespace BPMExtended.Main.Business
                             Building = building.ToString(),
                             Floor = floor.ToString(),
                             Notes = notes.ToString(),
-                            LocationType = location.ToString()
+                            Mailbox = mailBox.ToString()
+                            //LocationType = location.ToString()
 
                         },
                         PaymentData = new PaymentData()
@@ -742,6 +750,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StFreeReservationSwitchID");
             esq.AddColumn("StADSLContractId");
             esq.AddColumn("StHasAnADSL");
+            esq.AddColumn("StMailBox");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -771,6 +780,7 @@ namespace BPMExtended.Main.Business
                 var freeReservationSwitchID = entities[0].GetColumnValue("StFreeReservationSwitchID");
                 var adslContractId = entities[0].GetColumnValue("StADSLContractId");
                 var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
 
                 SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
                 {
@@ -803,7 +813,8 @@ namespace BPMExtended.Main.Business
                             Building = building.ToString(),
                             Floor = floor.ToString(),
                             Notes = notes.ToString(),
-                            LocationType = location.ToString()
+                            Mailbox = mailBox.ToString()
+                            //LocationType = location.ToString()
 
                         },
                         PaymentData = new PaymentData()
@@ -864,6 +875,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StFreeReservationSwitchID");
             esq.AddColumn("StADSLContractId");
             esq.AddColumn("StHasAnADSL");
+            esq.AddColumn("StMailBox");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -893,6 +905,7 @@ namespace BPMExtended.Main.Business
                 var freeReservationSwitchID = entities[0].GetColumnValue("StFreeReservationSwitchID");
                 var adslContractId = entities[0].GetColumnValue("StADSLContractId");
                 var hasAnADSL = entities[0].GetColumnValue("StHasAnADSL");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
 
                 SOMRequestInput<LineMovingInput> somRequestInput = new SOMRequestInput<LineMovingInput>
                 {
@@ -921,7 +934,8 @@ namespace BPMExtended.Main.Business
                             Building = building.ToString(),
                             Floor = floor.ToString(),
                             Notes = notes.ToString(),
-                            LocationType = location.ToString()
+                            Mailbox = mailBox.ToString()
+                            //LocationType = location.ToString()
 
                         },
                         PaymentData = new PaymentData()

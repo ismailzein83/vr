@@ -32,6 +32,7 @@ namespace BPMExtended.Main.Entities
         public string DistrictId { get; set; }
         public string BuildingNumber { get; set; }
         public string FloorNumber { get; set; }
+        public string Mailbox { get; set; }
         public string AddressNotes { get; set; }
         public string HomePhone { get; set; }
         public string FaxNumber { get; set; }

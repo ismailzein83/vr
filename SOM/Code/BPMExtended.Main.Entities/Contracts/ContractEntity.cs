@@ -30,5 +30,6 @@ namespace BPMExtended.Main.Entities
         public string StatusChangeDate { get; set; }
 
         public bool IsBlocked { get; set; }
+        public string WholeSale { get; set; }
     }
 }
